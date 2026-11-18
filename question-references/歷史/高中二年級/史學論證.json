@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-26-hist2-史學論證-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以案例及歷史概念而非閱讀擷取考查史學論證",
+      "question": {
+        "q": "某報導稱「工業革命使所有人立即富裕」，證據卻只有一名工廠主財產增加。此論證最主要的缺陷是？",
+        "correct": "以單一特例推論不同群體的普遍經驗",
+        "wrong": [
+          "工廠主的財產資料必定無法使用",
+          "歷史事件不可以使用任何數據",
+          "只要是同時代資料就足以證明全體情況"
+        ],
+        "exp": "工廠主與工人所處條件不同，不能用一個特例代表所有階層。",
+        "subject": "歷史",
+        "sub_topic": "史學論證",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-史學論證",
+        "template_id": "extra-26-hist2-史學論證-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-26-hist2-史學論證-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以案例及歷史概念而非閱讀擷取考查史學論證",
+      "question": {
+        "q": "某史家解釋戰爭爆發時只提經濟競爭，卻忽視外交文件中的軍事同盟與民族主義。如何改善推論？",
+        "correct": "檢視經濟、外交與意識形態等因素的交互作用",
+        "wrong": [
+          "完全刪除經濟競爭因素",
+          "以時間最晚的事件充當唯一原因",
+          "只憑史家個人立場決定論證結果"
+        ],
+        "exp": "戰爭涉及長短期多重成因，需要結合互相獨立的證據。",
+        "subject": "歷史",
+        "sub_topic": "史學論證",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-史學論證",
+        "template_id": "extra-26-hist2-史學論證-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-26-hist2-史學論證-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以案例及歷史概念而非閱讀擷取考查史學論證",
+      "question": {
+        "q": "甲研究依據政府公文，乙研究加入工人日記，兩者對政策效果的評價不同。最合理的分析方向是？",
+        "correct": "比較史料來源及不同社會位置造成的觀點差異",
+        "wrong": [
+          "兩研究有差異代表政策從未實施",
+          "官方公文一定不可能有偏向",
+          "個人日記能直接代表所有國民意見"
+        ],
+        "exp": "官方與民間資料有不同視角，都須經脈絡分析及交叉比對。",
+        "subject": "歷史",
+        "sub_topic": "史學論證",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-史學論證",
+        "template_id": "extra-26-hist2-史學論證-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

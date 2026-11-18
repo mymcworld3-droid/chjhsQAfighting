@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-26-hist2-民族國家與民主思潮-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以案例及歷史概念而非閱讀擷取考查民族國家與民主思潮",
+      "question": {
+        "q": "十九世紀幾個城邦的居民以共同語言、文化與歷史主張成立統一國家。此訴求主要反映哪種思潮？",
+        "correct": "民族主義",
+        "wrong": [
+          "封建領主的采邑義務",
+          "重商主義的殖民壟斷",
+          "冷戰時期不結盟外交"
+        ],
+        "exp": "民族主義以共同政治文化認同建構民族與國家的連結。",
+        "subject": "歷史",
+        "sub_topic": "民族國家與民主思潮",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "hist-高中二年級-民族國家與民主思潮",
+        "template_id": "extra-26-hist2-民族國家與民主思潮-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-26-hist2-民族國家與民主思潮-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以案例及歷史概念而非閱讀擷取考查民族國家與民主思潮",
+      "question": {
+        "q": "一部近代憲法宣稱政府權力源自被統治者的同意，而非君主世襲身分。其核心觀念是？",
+        "correct": "人民主權與政治正當性的重新界定",
+        "wrong": [
+          "君權神授與無限世襲",
+          "只保障貴族家族的封地",
+          "以軍事征服完全取代政治制度"
+        ],
+        "exp": "人民主權把政治權力的合法性連結到人民，而非統治家族血統。",
+        "subject": "歷史",
+        "sub_topic": "民族國家與民主思潮",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "hist-高中二年級-民族國家與民主思潮",
+        "template_id": "extra-26-hist2-民族國家與民主思潮-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-26-hist2-民族國家與民主思潮-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以案例及歷史概念而非閱讀擷取考查民族國家與民主思潮",
+      "question": {
+        "q": "某國已有議會與憲法，卻仍排除婦女及無產者投票。這最能說明什麼？",
+        "correct": "代議制度出現不代表普選權立刻普及",
+        "wrong": [
+          "有憲法就必然實現所有人的政治平等",
+          "議會從不涉及選舉權改革",
+          "政治權利在近代一直完全沒有變化"
+        ],
+        "exp": "近代民主化是選舉資格逐步擴大的過程，各國推進速度不同。",
+        "subject": "歷史",
+        "sub_topic": "民族國家與民主思潮",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "hist-高中二年級-民族國家與民主思潮",
+        "template_id": "extra-26-hist2-民族國家與民主思潮-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

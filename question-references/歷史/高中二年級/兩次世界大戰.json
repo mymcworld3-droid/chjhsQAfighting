@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-26-hist2-兩次世界大戰-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以案例及歷史概念而非閱讀擷取考查兩次世界大戰",
+      "question": {
+        "q": "評論認為一戰只因薩拉耶佛暗殺事件而起，不必討論結盟、軍備與民族矛盾。其主要問題是？",
+        "correct": "混淆短期導火線與長期結構性原因",
+        "wrong": [
+          "否認暗殺事件可能影響外交",
+          "認為軍備競賽發生在一戰前",
+          "認為同盟制度會影響戰爭擴大"
+        ],
+        "exp": "暗殺是導火線，衝突擴大還涉及同盟及戰略競爭。",
+        "subject": "歷史",
+        "sub_topic": "兩次世界大戰",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中二年級-兩次世界大戰",
+        "template_id": "extra-26-hist2-兩次世界大戰-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-26-hist2-兩次世界大戰-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以案例及歷史概念而非閱讀擷取考查兩次世界大戰",
+      "question": {
+        "q": "兩次大戰之間，某國經濟危機伴隨失業增加及極端政治團體得票上升。哪種判斷最合適？",
+        "correct": "經濟困境可能為激進政治動員提供條件，但不是唯一成因",
+        "wrong": [
+          "凡有失業問題的國家必定走向極權",
+          "選舉結果與當時政治制度完全無關",
+          "失業增加必然代表戰爭已經結束"
+        ],
+        "exp": "危機可能改變政治支持，仍需分析國家制度及社會因素。",
+        "subject": "歷史",
+        "sub_topic": "兩次世界大戰",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中二年級-兩次世界大戰",
+        "template_id": "extra-26-hist2-兩次世界大戰-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-26-hist2-兩次世界大戰-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以案例及歷史概念而非閱讀擷取考查兩次世界大戰",
+      "question": {
+        "q": "史家比較一戰後國際聯盟和二戰後聯合國的成立背景，最恰當的共同研究問題是？",
+        "correct": "戰後國家如何嘗試透過多邊制度維護集體安全",
+        "wrong": [
+          "兩組織是否都建於中世紀歐洲",
+          "組織成立能否保證永久沒有任何戰爭",
+          "兩組織是否從未存在會員差異"
+        ],
+        "exp": "兩次戰後均嘗試建立國際安全合作，但制度與效果需個別評估。",
+        "subject": "歷史",
+        "sub_topic": "兩次世界大戰",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中二年級-兩次世界大戰",
+        "template_id": "extra-26-hist2-兩次世界大戰-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
