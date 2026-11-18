@@ -110,7 +110,7 @@ test('all skills learned and level 10 avoids fabricated next goal',()=>{
   const g=nextManualExpedition(s,'sword-wind',Catalog);
   assert.equal(g.targetLevel,null);
   assert.equal(g.estimatedKills,null);
-  assert.match(g.nextGoal,/功法已達 Lv. 10/);
+  assert.match(g.nextGoal,/可繼續修煉至 Lv. 20/);
 });
 
 test('markup escapes untrusted names and rendering never changes server data',()=>{
@@ -159,4 +159,12 @@ test('the compact trial strip has one CTA, no repeated book cover or next-goal p
   assert.doesNotMatch(html,/manual-expedition-cover/);
   assert.doesNotMatch(html,/manual-expedition-main/);
   assert.match(html,/<details class="manual-expedition-more">/);
+});
+
+test('fully maxed Lv20 books do not promise additional experience milestones',()=>{
+  const s=state(4180);
+  const g=nextManualExpedition(s,'sword-wind',Catalog);
+  assert.equal(g.targetLevel,null);
+  assert.equal(g.estimatedKills,null);
+  assert.match(g.nextGoal,/功法已達 Lv. 20/);
 });
