@@ -6,6 +6,7 @@ import {
   subscribeDungeonRoom,heartbeatDungeonRoom
 } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
+import { showDungeonMap, hideDungeonMap, updateDungeonMapRoom } from './dungeon-map-view.js';
 
 // Only the lobby is implemented here. The server controls all membership,
 // readiness, host and assembly decisions. No battle or reward state lives here.
@@ -20,7 +21,7 @@ let entry,root,body,notice,open=false,room=null,account='',pending=false,refresh
 let list=[],listLoading=false,lastListAt=0,clock=null,requestSerial=0,initialFocus=null,roomRevision=-1;
 let streamStop=null,streamRoomId='',streamConnected=false,heartbeatBusy=false,lastHeartbeatAt=0;
 let fallbackFailures=0,nextFallbackAt=0,roomViewSignature='';
-let emptyRoomCheckAt=0,emptyRoomBusy=false;
+let emptyRoomCheckAt=0,emptyRoomBusy=false,autoPreviewRoomId='';
 const HEARTBEAT_MS=20000,PRESENCE_STALE_MS=60000;
 const $=selector=>root?.querySelector(selector);
 function loadStyle(){
@@ -84,6 +85,8 @@ function stopRoomStream(){
   stop?.();
 }
 function clearRoom(){
+  hideDungeonMap();
+  autoPreviewRoomId='';
   room=null;roomRevision=-1;roomViewSignature='';
   stopRoomStream();
   fallbackFailures=0;nextFallbackAt=0;lastHeartbeatAt=0;
@@ -174,8 +177,11 @@ function renderRoom(){
     '<button data-dg="copy">複製</button></div>'+
     '<div class="dg-section-heading"><h3>隊伍成員</h3><span>'+readyCount+' / '+memberList.length+' 已準備</span></div>'+
     '<div class="dg-members">'+members+'</div>'+
-    (assembled?'<p class="dg-assembled" role="status"><i class="fa-solid fa-check-circle"></i> 全隊集結完成。探索地圖將於後續階段開放，目前不會消耗入場券。</p>':
+    (assembled?'<p class="dg-assembled" role="status"><i class="fa-solid fa-check-circle"></i> 全隊集結完成，可查看秘境地圖。移動與戰鬥將在後續階段開放。</p>':
       '<p class="dg-helper">隊員各自確認準備。全員準備後，隊長才能確認集結出發。</p>')+
+    '<section class="dg-map-teaser"><div><strong><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> 秘境地圖</strong>'+
+    '<small>四種地貌 · 蜿蜒主線與支線 · 支援雙指縮放</small></div>'+
+    '<button data-dg="preview-map" aria-label="檢視合作副本地圖">檢視地圖</button></section>'+
     '<div class="dg-actions dg-room-actions">'+
     (!assembled?'<button class="dg-primary" data-dg="ready">'+(me.ready?'取消準備':'我已準備')+'</button>':'')+
     (host&&!assembled?'<button data-dg="assemble" '+(!fullyReady?'disabled':'')+
@@ -195,8 +201,19 @@ function render(){
   markBusy(pending);
   body.scrollTop=top;
 }
+async function previewDungeonMap(){
+  if(!room||!open||!room.members?.[account])return;
+  const uid=account,serial=requestSerial,current=room;
+  try{
+    await showDungeonMap({room:current,playerUid:uid});
+  }catch(error){
+    if(validSession(uid,serial)&&room?.id===current.id)
+      announce(error?.message||'目前無法檢視秘境地圖');
+  }
+}
 function acceptRoom(next){
   if(!next||!safeRoomId(next.id))return false;
+  const oldRoomId=room?.id,oldStatus=room?.status;
   const revision=Number(next.revision);
   if(!Number.isFinite(revision))return false;
   if(room?.id===next.id&&revision<roomRevision)return false;
@@ -207,9 +224,21 @@ function acceptRoom(next){
   const signature=roomSignature(next);
   const needsRender=signature!==roomViewSignature;
   room=next;roomRevision=revision;roomViewSignature=signature;
+  updateDungeonMapRoom(next);
+  if(next.status==='waiting'&&oldStatus==='assembled')autoPreviewRoomId='';
   if(needsRender)render();
   else renderPresence();
   startRoomStream();
+  // The assembled state is a view-only entry until multiplayer movement
+  // arrives. Each device opens its own local preview once per assembly.
+  if(next.status==='assembled'&&autoPreviewRoomId!==next.id){
+    autoPreviewRoomId=next.id;
+    const uid=account,serial=requestSerial,roomId=next.id;
+    queueMicrotask(()=>{
+      if(validSession(uid,serial)&&room?.id===roomId&&room.status==='assembled')
+        void previewDungeonMap();
+    });
+  }
   return true;
 }
 function streamInvalidated(error,roomId){
@@ -357,6 +386,7 @@ async function openLobby(){
   }
 }
 function close(){
+  hideDungeonMap();
   if(!open)return;
   open=false;requestSerial++;clearInterval(clock);clock=null;
   stopRoomStream();
@@ -404,6 +434,7 @@ async function handleClick(event){
   if(!target||!root.contains(target)||target.disabled)return;
   const action=target.dataset.dg;
   if(action==='close')return close();
+  if(action==='preview-map')return previewDungeonMap();
   if(pending)return;
   if(action==='create')return mutate(()=>createDungeonRoom('private'));
   if(action==='create-public')return mutate(()=>createDungeonRoom('public'));
@@ -419,7 +450,7 @@ async function handleClick(event){
       announce('隊伍代碼已複製');
     }catch(_){announce('請手動複製代碼：'+room.code);}
   }else if(action==='ready')return mutate(()=>setDungeonReady(roomId,room.members?.[account]?.ready!==true));
-  else if(action==='assemble'&&host)return mutate(()=>assembleDungeonRoom(roomId),{message:'全隊集結完成。副本地圖尚未開放。'});
+  else if(action==='assemble'&&host)return mutate(()=>assembleDungeonRoom(roomId),{message:'全隊集結完成，現在可以預覽秘境地圖。'});
   else if(action==='cancel-assemble'&&host)return mutate(()=>cancelDungeonAssembly(roomId),{message:'已返回等待室，請隊友重新準備。'});
   else if(action==='visibility'&&host)return mutate(
     ()=>setDungeonRoomVisibility(roomId,room.visibility==='public'?'private':'public'));
