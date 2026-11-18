@@ -47,6 +47,14 @@
     return [stageIdentity(state),state.width,state.height,state.terrain,
       state.trial?.biome||'',state.trial?.title||'',terrain,blocks].join('|');
   }
+  // Cap offscreen backing pixels without changing the visible CSS stage,
+  // camera hit tests, or the game's fixed portrait/landscape aspect ratio.
+  function pixelRatioFor(width,height,deviceRatio=1,memoryGB=null){
+    const pixels=Math.max(1,Number(width)||1)*Math.max(1,Number(height)||1);
+    const ratio=clamp(Number(deviceRatio)||1,1,3);
+    const budget=Number(memoryGB)>0&&Number(memoryGB)<=4?2200000:3300000;
+    return clamp(Math.min(ratio,Math.sqrt(budget/pixels)),1,3);
+  }
   function random(seed){
     let h=seed>>>0;
     return ()=>{h+=0x6D2B79F5;let t=Math.imul(h^(h>>>15),1|h);
@@ -198,5 +206,5 @@
     }
     ctx.restore();
   }
-  return Object.freeze({themes,themeFor,hash,stageIdentity,mapIdentity,prepare,idlePose,drawDetails,drawAtmosphere,rasterize});
+  return Object.freeze({themes,themeFor,hash,stageIdentity,mapIdentity,pixelRatioFor,prepare,idlePose,drawDetails,drawAtmosphere,rasterize});
 });
