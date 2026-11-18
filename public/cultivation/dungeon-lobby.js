@@ -94,8 +94,9 @@ function clearRoom(){
 function roomSignature(next){
   const members=Object.entries(next?.members||{}).sort(([a],[b])=>a.localeCompare(b))
     .map(([uid,m])=>[uid,m.name,m.realm,m.ready,m.joinedAtMs]);
+  const explored=Object.values(next?.members||{}).some(m=>Number(m.moveSeq)>0);
   return JSON.stringify([next?.id,next?.revision===undefined?null:next?.status,
-    next?.hostUid,next?.visibility,next?.code,next?.assembledAtMs,members]);
+    next?.hostUid,next?.visibility,next?.code,next?.assembledAtMs,explored,members]);
 }
 function memberOnline(member){
   const last=Number(member?.heartbeatAtMs)||0;
@@ -156,6 +157,7 @@ function renderRoom(){
   const host=room.hostUid===account,me=room.members?.[account];
   if(!me){clearRoom();return renderHome();}
   const readyCount=memberList.filter(member=>member.ready===true).length;
+  const exploring=assembled&&memberList.some(member=>Number(member.moveSeq)>0);
   const fullyReady=memberList.length>0&&readyCount===memberList.length;
   const members=memberList.map(member=>{
     const leader=member.uid===room.hostUid,isMe=member.uid===account;
@@ -177,16 +179,17 @@ function renderRoom(){
     '<button data-dg="copy">複製</button></div>'+
     '<div class="dg-section-heading"><h3>隊伍成員</h3><span>'+readyCount+' / '+memberList.length+' 已準備</span></div>'+
     '<div class="dg-members">'+members+'</div>'+
-    (assembled?'<p class="dg-assembled" role="status"><i class="fa-solid fa-check-circle"></i> 全隊集結完成，可查看秘境地圖。移動與戰鬥將在後續階段開放。</p>':
+    (assembled?'<p class="dg-assembled" role="status"><i class="fa-solid fa-check-circle"></i> 已進入副本探索，可在地圖中使用方向按鈕或 WASD 移動；每移動一格消耗 1 點探索體力。戰鬥尚未開放。</p>':
       '<p class="dg-helper">隊員各自確認準備。全員準備後，隊長才能確認集結出發。</p>')+
     '<section class="dg-map-teaser"><div><strong><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> 秘境地圖</strong>'+
     '<small>四種地貌 · 蜿蜒主線與支線 · 支援雙指縮放</small></div>'+
-    '<button data-dg="preview-map" aria-label="檢視合作副本地圖">檢視地圖</button></section>'+
+    '<button data-dg="preview-map" aria-label="檢視合作副本地圖">'+
+    (assembled?'進入探索':'預覽地圖')+'</button></section>'+
     '<div class="dg-actions dg-room-actions">'+
     (!assembled?'<button class="dg-primary" data-dg="ready">'+(me.ready?'取消準備':'我已準備')+'</button>':'')+
     (host&&!assembled?'<button data-dg="assemble" '+(!fullyReady?'disabled':'')+
       ' data-dg-disabled="'+(!fullyReady)+'">確認集結出發</button>':'')+
-    (host&&assembled?'<button data-dg="cancel-assemble">返回等待室</button>':'')+
+    (host&&assembled&&!exploring?'<button data-dg="cancel-assemble">返回等待室</button>':'')+
     (host&&!assembled?'<button data-dg="visibility">'+(room.visibility==='public'?'改為私人':'開放招募')+'</button>':'')+
     (host&&!assembled?'<button data-dg="invite">邀請好友</button>':'')+
     '<button data-dg="leave">離開隊伍</button>'+
@@ -456,7 +459,7 @@ async function handleClick(event){
       announce('隊伍代碼已複製');
     }catch(_){announce('請手動複製代碼：'+room.code);}
   }else if(action==='ready')return mutate(()=>setDungeonReady(roomId,room.members?.[account]?.ready!==true));
-  else if(action==='assemble'&&host)return mutate(()=>assembleDungeonRoom(roomId),{message:'全隊集結完成，現在可以預覽秘境地圖。'});
+  else if(action==='assemble'&&host)return mutate(()=>assembleDungeonRoom(roomId),{message:'全隊已集結，現在可以進入秘境移動探索。'});
   else if(action==='cancel-assemble'&&host)return mutate(()=>cancelDungeonAssembly(roomId),{message:'已返回等待室，請隊友重新準備。'});
   else if(action==='visibility'&&host)return mutate(
     ()=>setDungeonRoomVisibility(roomId,room.visibility==='public'?'private':'public'));
@@ -485,6 +488,10 @@ function init(){
     if(!open||localUser()!==account){void openLobby();return;}
     // A room invite can be accepted while the screen was already open.
     void refreshRemoteMembership({force:true});
+  });
+  window.addEventListener('xiuxian:dungeon-room-state',event=>{
+    const next=event.detail?.room;
+    if(open&&next?.id===room?.id&&localUser()===account)acceptRoom(next);
   });
   window.addEventListener('xiuxian:user-ready',entryMount);
   window.addEventListener('pageshow',entryMount);
