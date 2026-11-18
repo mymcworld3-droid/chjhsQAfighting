@@ -76,7 +76,7 @@ function ensure(){
   if(!document.getElementById('manual-training-streamlined-style')){
     const link=document.createElement('link');link.rel='stylesheet';
     link.id='manual-training-streamlined-style';
-    link.href='/styles/manual-training-streamlined.css?v=20261118-one-source-of-truth-v2';
+    link.href='/styles/manual-training-streamlined.css?v=20261118-level20-ranks-v1';
     document.head.append(link);
   }
   return root;
