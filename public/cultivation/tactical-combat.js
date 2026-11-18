@@ -886,12 +886,13 @@ function showModal(html,{quiz=false,encounter=false}={}){
   introDemo?.destroy();introDemo=null;
   modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}${encounter?' tc-encounter':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
   $('[data-main]').inert=true;$('[data-close]').disabled=true;renderer?.setPaused(true);
+  beastInspector?.refresh();
   $('[data-modal] .tc-dialog').focus({preventScroll:true});
   const modal=$('[data-modal]');
   const mathFields=[...modal.querySelectorAll('[data-question-text], .quiz-rich-option, .tc-feedback-text')];
   window.quizMathTypeset?.(mathFields.length?mathFields:modal);
 }
-function hideModal(){if(!root)return;window.currentTacticalQuiz=null;closePairWhiteboard();introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
+function hideModal(){if(!root)return;window.currentTacticalQuiz=null;closePairWhiteboard();introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);beastInspector?.refresh();}
 function showBeastDemo(species){
   if(!state||state.mode!=='pve'||!R.MONSTERS[Number(species)])return;
   const beast=R.monsterProfile(species);
