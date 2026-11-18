@@ -155,11 +155,12 @@ function createHandler({
             status:closed?'closed':'waiting',hostUid,members,
             ...(closed?{closedAtMs:at}:{})};
           const codeRef=db.collection(CODES).doc(room.code);
-          if(closed)await tx.get(codeRef); // read before writes
+          const codeSnap=closed?await tx.get(codeRef):null; // read before writes
           tx.update(roomRef,{revision:updated.revision,status:updated.status,
             hostUid,members,...(closed?{closedAtMs:at}:{})});
           tx.set(pointerRef,{roomId:null,updatedAtMs:at});
-          if(closed)tx.set(codeRef,{roomId,status:'closed',expiresAtMs:room.expiresAtMs});
+          if(closed&&codeSnap?.exists&&codeSnap.data()?.roomId===roomId)
+            tx.set(codeRef,{roomId,status:'closed',expiresAtMs:room.expiresAtMs});
           return {id:roomId,room:updated};
         });
         return respond(outcome?.id,outcome?.room);

@@ -25,7 +25,7 @@ function store(initial={}){
     read:(collection,id)=>snap(doc(collection,id))
   };
 }
-function fixture(){
+function fixture({codeFactory}={}){
   const users=Object.fromEntries('abcdef'.split('').map(uid=>['users/'+uid,
     {uid,displayName:'修士'+uid,raidTickets:{count:3},stats:{totalScore:10}}]));
   const a=store(users),c=store(),at=1800000000000;
@@ -36,6 +36,7 @@ function fixture(){
     }}}),
     resolveC:()=>({db:c}),
     clock:()=>at,
+    codeFactory,
     logger:{error(){}}
   });
   async function call(uid,action,props={},authorized=true){
@@ -146,4 +147,29 @@ test('existing raid room API and tactical core remain separately wired',()=>{
   assert.match(client,/authenticatedMainFetch/);
   assert.match(client,/reconnectDungeonRoom/);
   assert.doesNotMatch(client,/localStorage/);
+});
+
+test('closing an expired lobby cannot invalidate a newer lobby reusing its old code',async()=>{
+  const f=fixture({codeFactory:()=> 'AAAAAA'});
+  const old=(await f.call('a','create')).body;
+  const oldPath=API.ROOMS+'/'+old.roomId, codePath=API.CODES+'/AAAAAA';
+  f.c.records.get(oldPath).expiresAtMs=f.at-1;
+  f.c.records.get(codePath).expiresAtMs=f.at-1;
+  const newer=(await f.call('b','create')).body;
+  assert.equal(newer.room.code,'AAAAAA');
+  assert.notEqual(newer.roomId,old.roomId);
+  assert.equal((await f.call('a','leave',{roomId:old.roomId})).status,200);
+  assert.equal(f.c.records.get(codePath).roomId,newer.roomId);
+  assert.equal((await f.call('c','join-code',{roomCode:'AAAAAA'})).status,200);
+});
+
+test('room codes reserve transactionally and retry collisions instead of leaking another party',async()=>{
+  const codes=['BBBBBB','BBBBBB','CCCCCC'];let n=0;
+  const f=fixture({codeFactory:()=>codes[n++]||'DDDDDD'});
+  const a=(await f.call('a','create')).body,b=(await f.call('b','create')).body;
+  assert.equal(a.room.code,'BBBBBB');
+  assert.equal(b.room.code,'CCCCCC');
+  assert.notEqual(a.roomId,b.roomId);
+  assert.equal((await f.call('c','join-code',{roomCode:'BBBBBB'})).body.roomId,a.roomId);
+  assert.equal((await f.call('d','join-code',{roomCode:'CCCCCC'})).body.roomId,b.roomId);
 });
