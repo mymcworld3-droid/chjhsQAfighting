@@ -327,6 +327,22 @@ async function main(){
     const afterGesture=await read(view);
     assert.equal(afterGesture.revision,initial.revision,'dragging and pinching commit no actions');
     assert.equal(afterGesture.actors[0].stamina,initial.actors[0].stamina);
+    const drawCount=await view.evaluate(()=>window.__battleDraws||0);
+    await view.evaluate(()=>{
+      const c=document.querySelector('.tc-arena canvas'),r=c.getBoundingClientRect();
+      const x=r.left+r.width*.50,y=r.top+r.height*.51;
+      const pointer=(type,clientX)=>c.dispatchEvent(new PointerEvent(type,{
+        pointerId:608,pointerType:'touch',isPrimary:true,clientX,clientY:y,
+        bubbles:true,cancelable:true
+      }));
+      pointer('pointerdown',x);
+      for(let i=1;i<=26;i++)pointer('pointermove',x+i*1.5);
+      pointer('pointerup',x+39);
+    });
+    await view.page.waitForTimeout(95);
+    const drawDifference=(await view.evaluate(()=>window.__battleDraws||0))-drawCount;
+    assert.ok(drawDifference<=7,'26 fast pointer movements should coalesce into a few canvas frames');
+    assert.equal((await read(view)).revision,initial.revision);
 
     // The authoritative room can advance while retaining the SAME room ID
     // and tile dimensions. That must invalidate the cached habitat and camera.
