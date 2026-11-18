@@ -219,6 +219,40 @@ async function main(){
     }
     await view.locator('[data-modal]').waitFor({state:'hidden'});
   }
+  async function ambientVisualChecks(view){
+    const before=await read(view);
+    const details=await view.evaluate(()=>{
+      const game=document.querySelector('#tactical-combat .tc-arena canvas');
+      const lib=window.QATacticalAmbience;
+      return {library:!!lib,theme:game?.dataset.ambientTheme,
+        width:game?.width,height:game?.height,draws:window.__battleDraws||0};
+    });
+    assert.equal(details.library,true,'the decorative-only renderer module must load');
+    assert.equal(details.theme,
+      await view.evaluate(room=>window.QATacticalAmbience.themeFor(room),before),
+      'battle visuals must use the actual habitat');
+    assert.ok(details.width>100&&details.height>100,'battle canvas renders at real resolution');
+    await view.page.waitForTimeout(370);
+    const later=await view.evaluate(()=>window.__battleDraws||0);
+    assert.ok(later>details.draws,'idle creatures and air particles continue to animate');
+    assert.ok(later-details.draws<=14,'idle rendering is rate-limited');
+
+    await view.page.emulateMedia({reducedMotion:'reduce'});
+    await view.page.waitForTimeout(130);
+    const frozen=await view.evaluate(()=>window.__battleDraws||0);
+    await view.page.waitForTimeout(280);
+    const stopped=await view.evaluate(()=>window.__battleDraws||0);
+    assert.ok(stopped-frozen<=1,'reduced motion stops the ambient render loop');
+    await view.page.emulateMedia({reducedMotion:'no-preference'});
+    await view.page.waitForTimeout(150);
+    const resumed=await view.evaluate(()=>window.__battleDraws||0);
+    assert.ok(resumed>stopped,'ambient motion resumes when allowed');
+    const after=await read(view);
+    assert.equal(after.revision,before.revision,'visual ambience never changes battle state');
+    assert.equal(after.actors[0].stamina,before.actors[0].stamina);
+    await view.screenshot({path:path.join(output,'phase2-ambience-bamboo.png')});
+  }
+
   async function beastInspectorChecks(view){
     const initial=await read(view),living=initial.actors.filter(a=>a.bot&&a.hp>0),monster=living[0];
     assert.ok(monster,'first PvE stage has at least one living creature');
@@ -537,6 +571,7 @@ async function main(){
         await quick.locator('[data-intro-ack]').waitFor({state:'detached'});
       }
       await beastInspectorChecks(quick);
+      await ambientVisualChecks(quick);
       const validate=async()=>{
         const layout=await quick.evaluate(()=>{
           const root=document.querySelector('#tactical-combat');
@@ -661,7 +696,7 @@ async function main(){
     await mobile.reload();await mobile.locator('#entry').click();await mobile.locator('.tc-arena canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
     assert.equal(await mobile.locator('[data-intro-ack]').count(),0,'acknowledged species does not repeat after refresh');
     assert.equal(await mobile.locator('[data-start],[data-map],[data-branch]').count(),0,'trial entry skips both pickers');
-    assert.equal((await read(mobile)).trial.stage,1);await beastInspectorChecks(mobile);await correct(mobile);
+    assert.equal((await read(mobile)).trial.stage,1);await beastInspectorChecks(mobile);await ambientVisualChecks(mobile);await correct(mobile);
     assert.equal((await read(mobile)).actors[0].stamina,6);
     assert.equal(await mobile.evaluate(()=>getCurrentUserData().stats.totalScore),31,'answer progress updates the existing account UI immediately');
     const beforeMove=await read(mobile),pos=Rules.neighbours(beforeMove,beforeMove.actors[0]).find(p=>!Rules.at(beforeMove,p));
