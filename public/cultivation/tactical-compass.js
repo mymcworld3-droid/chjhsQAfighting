@@ -31,14 +31,18 @@
     const dx=x-centerX,dy=y-centerY;
     const minX=27,maxX=Math.max(27,g.width-27);
     const minY=Math.min(66,Math.max(29,g.height*.18));
-    // Never put map indicators inside the two quarter-circle controls.
-    const maxY=Math.max(minY+10,Math.min(g.height-30,g.height*.71));
+    // Keep beacons entirely above the quarter-circle controls on portrait
+    // AND short landscape screens; a beacon hidden by a wheel is unclickable.
+    const dial=g.width<g.height?
+      Math.min(g.width*.50,g.height*.34):
+      Math.min(g.width*.30,g.height*.50);
+    const maxY=Math.max(minY+10,Math.min(g.height-dial-12,g.height*.69));
     const tx=dx<0?(minX-centerX)/dx:dx>0?(maxX-centerX)/dx:Infinity;
     const ty=dy<0?(minY-centerY)/dy:dy>0?(maxY-centerY)/dy:Infinity;
     const t=Math.min(Math.max(0,tx),Math.max(0,ty));
     return {screenX:clamp(centerX+dx*t,minX,maxX),
       screenY:clamp(centerY+dy*t,minY,maxY),
-      angle:Math.atan2(dy,dx)};
+      angle:Math.atan2(dy,dx),minY,maxY};
   }
   function derive(state,uid,g){
     if(state?.mode!=='pve'||state?.status!=='active'||!g||
@@ -77,8 +81,8 @@
       const p=placement(q,g);
       // Keep badges separated instead of stacking three on the same edge.
       if(shown.some(a=>Math.hypot(a.screenX-p.screenX,a.screenY-p.screenY)<37)){
-        const shift=[-42,42,-84,84].map(delta=>({...p,screenY:clamp(p.screenY+delta,35,
-          Math.max(45,g.height*.72))})).find(test=>
+        const shift=[-42,42,-84,84].map(delta=>({...p,screenY:clamp(p.screenY+delta,p.minY,
+          p.maxY)})).find(test=>
           shown.every(a=>Math.hypot(a.screenX-test.screenX,a.screenY-test.screenY)>=36));
         if(!shift)continue;
         Object.assign(p,shift);
