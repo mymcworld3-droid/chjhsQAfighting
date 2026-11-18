@@ -4,7 +4,8 @@ import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-re
 import {manualXpDelta,renderManualXpToast} from './tactical-manual-xp-feedback.js';
 import {manualRoomExp,battleBreakthroughEstimate,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
 import './tactical-rules.js?v=20261116-pve-v4';
-import {TacticalRenderer} from './tactical-renderer.js?v=20261118-visual-phase2-v1';
+import {TacticalRenderer} from './tactical-renderer.js?v=20261118-visual-phase3-v1';
+import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
 import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-pve-v4';
 import {BeastInspector} from './tactical-beast-inspector.js?v=20261118-phase1-v1';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
@@ -12,6 +13,7 @@ import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
 
 const R=globalThis.QATactical;
 const Manuals=globalThis.QAManuals;
+const CombatImpact=globalThis.QATacticalImpact;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const rich=v=>window.quizMathRichText?.(String(v||''))||esc(v);
 const id=()=>globalThis.crypto.randomUUID();
@@ -23,6 +25,7 @@ let manualRecapCache=null,manualRecapLoadingKey='',manualXpTimer=null,battleMast
 const battlefieldMode=()=>action==='manual'?'manual:'+selectedManualSkill:action;
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
+let bossIntroSeenRoom='',bossTransitionPending=null,bossBannerTimer=null;
 let autoQuizKey='',quizContext=null;
 let pairQuestions=[],pairChoices=[],pairReviews=[],pairDisplayIndex=0;
 let pairGeneration=0,pairFollowupPromise=null,pairFollowupError='';
@@ -205,6 +208,11 @@ function ensure(){
     document.head.append(link);
   }
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
+  if(!document.getElementById('tactical-boss-presentation-style')){
+    const link=document.createElement('link');link.id='tactical-boss-presentation-style';
+    link.rel='stylesheet';link.href='/styles/tactical-boss-presentation.css?v=20261118-combat-phase3-v1';
+    document.head.append(link);
+  }
   if(!document.getElementById('tactical-beast-style')){
     const link=document.createElement('link');link.id='tactical-beast-style';link.rel='stylesheet';
     link.href='/styles/tactical-beast-inspector.css?v=20261118-phase1-v1';document.head.append(link);
@@ -311,6 +319,7 @@ function ensure(){
 }
 function destroyRenderer(){renderer?.destroy();renderer=null;}
 function renderHub(){
+  hideBossBanner();bossTransitionPending=null;
   destroyRenderer();beastInspector?.reset();root.classList.remove('tc-quarter-layout');
   $('[data-title]').textContent='鬥法論道';$('[data-turn]').textContent='';
   $('[data-main]').className='tc-main tc-hub';
@@ -505,7 +514,16 @@ function selectWheel(value){
 function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
   root.classList.toggle('tc-quarter-layout',state?.mode==='pve');
-  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-objective" data-objective role="status" aria-live="polite" hidden></div><div class="tc-selection" data-selection role="status" aria-live="polite" aria-atomic="true">點選地格，預覽路線與體力消耗</div><div class="tc-action-feedback" data-action-feedback role="status" aria-live="polite" aria-atomic="true" hidden></div></section>
+  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-objective" data-objective role="status" aria-live="polite" hidden></div>
+      <section class="tc-boss-hud" data-boss-hud data-phase="1" data-boss-kind="rock" aria-label="首領生命與攻擊預告" hidden>
+        <div class="tc-boss-line"><strong class="tc-boss-name" data-boss-name></strong><span class="tc-boss-phase" data-boss-phase>第一階段</span></div>
+        <div class="tc-boss-health" data-boss-health role="progressbar" aria-label="首領生命">
+          <div class="tc-boss-fill" data-boss-fill></div><div class="tc-boss-half" aria-hidden="true"></div>
+        </div>
+        <div class="tc-boss-subline"><span class="tc-boss-intent" data-boss-intent></span><span class="tc-boss-number" data-boss-number></span></div>
+      </section>
+      <div class="tc-boss-announcement" data-boss-announcement role="status" aria-live="polite" hidden></div>
+      <div class="tc-selection" data-selection role="status" aria-live="polite" aria-atomic="true">點選地格，預覽路線與體力消耗</div><div class="tc-action-feedback" data-action-feedback role="status" aria-live="polite" aria-atomic="true" hidden></div></section>
     <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" data-quiz>答題</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">普通攻擊 · 2</button></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><details class="tc-skill-info"><summary data-skill-title>操作說明</summary><div data-skill></div></details><div class="tc-turn-buttons"><button type="button" data-guard>護身</button><button type="button" data-end>結束回合</button></div></section>
     <div class="tc-game-footer"><details class="tc-history"><summary>戰況與詳情</summary><div class="tc-combat-info" data-combat-info></div><div class="tc-log" data-log role="log" aria-label="戰況紀錄"></div></details><button type="button" data-sync>同步</button><button type="button" data-leave>離開</button></div></aside>`;
   if(state?.mode==='pvp')syncPvpSkillTabs();
@@ -688,6 +706,52 @@ function buildGame(){
     else if(!renderer.isAnimating&&!modalOpen&&state.quizRound)schedule();
   },(actorUid,kind)=>beastInspector?.inspect(actorUid,kind));
 }
+function hideBossBanner(){
+  clearTimeout(bossBannerTimer);bossBannerTimer=null;
+  const el=$('[data-boss-announcement]');
+  if(el)el.hidden=true;
+}
+function updateBossHud(){
+  const node=$('[data-boss-hud]');if(!node)return;
+  const boss=CombatImpact.bossStatus(state);
+  node.hidden=!boss||!boss.alive;
+  if(!boss||!boss.alive)return;
+  node.dataset.phase=String(boss.phase);
+  node.dataset.bossKind=boss.kind;
+  node.querySelector('[data-boss-name]').textContent=boss.name;
+  node.querySelector('[data-boss-phase]').textContent=boss.phase===2?'第二階段':'第一階段';
+  node.querySelector('[data-boss-intent]').textContent=boss.intent;
+  node.querySelector('[data-boss-number]').textContent=Math.ceil(boss.hp)+' / '+Math.ceil(boss.maxHp);
+  const meter=node.querySelector('[data-boss-health]');
+  meter.setAttribute('aria-valuemin','0');meter.setAttribute('aria-valuemax',String(Math.ceil(boss.maxHp)));
+  meter.setAttribute('aria-valuenow',String(Math.ceil(boss.hp)));
+  node.querySelector('[data-boss-fill]').style.width=(boss.ratio*100).toFixed(2)+'%';
+}
+function showBossBanner(kind,name){
+  const node=$('[data-boss-announcement]');
+  if(!node||!state||state.mode!=='pve')return;
+  hideBossBanner();node.dataset.kind=kind;
+  const title=kind==='phase'?'靈壓暴漲 · 第二階段':'鎮關靈獸現身';
+  const subtitle=kind==='phase'?'攻擊形態已改變，留意地面的紅色預告格':'觀察首領攻擊意圖，避開危險範圍';
+  node.innerHTML='<small>'+esc(title)+'</small><strong>'+esc(name)+'</strong><span>'+esc(subtitle)+'</span>';
+  // Reinsert only the passive announcement; none of the battle controls move.
+  node.hidden=false;
+  try{window.QAGameAudio?.play('spirit-pulse',{volume:kind==='phase'?.36:.27});}catch(_){}
+  bossBannerTimer=setTimeout(()=>{if(node.isConnected)node.hidden=true;bossBannerTimer=null;},1400);
+}
+function maybeAnnounceBoss(){
+  if(modalOpen||state?.mode!=='pve'||state?.status!=='active'||state.newEnemies?.length)return;
+  const boss=CombatImpact.bossStatus(state);
+  if(!boss||!boss.alive)return;
+  if(bossTransitionPending?.roomId===state.id){
+    const pending=bossTransitionPending;bossTransitionPending=null;
+    bossIntroSeenRoom=state.id;
+    showBossBanner('phase',pending.name);return;
+  }
+  if(bossIntroSeenRoom!==state.id){
+    bossIntroSeenRoom=state.id;showBossBanner('entry',boss.name);
+  }
+}
 function paint({preserveModal=false}={}){
   if(!state)return renderHub();syncEquippedAttack();if(!preserveModal)hideModal();
   renderBattleLoadouts();
@@ -729,11 +793,12 @@ function paint({preserveModal=false}={}){
   }else $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
   renderer.update(state,uid,battlefieldMode(),selection);updateControls();updateClock();
-  beastInspector?.refresh();
+  beastInspector?.refresh();updateBossHud();
   // Resume/open through room-state polling also prefetches before any click.
   if(!modalOpen)preloadTacticalQuestions();
   if(state.status==='finished'&&!renderer.isAnimating&&!modalOpen)resultDialog();
   else if(state.mode==='pve'&&state.newEnemies?.length)showEnemyIntro();
+  else maybeAnnounceBoss();
 }
 function updateControls(){
   if(!$('[data-selection]')||!state)return;
@@ -881,7 +946,7 @@ function updateClock(){
   if(state.status==='active'&&(state.deadlineMs&&now>=state.deadlineMs||answerExpired)&&!busy&&Date.now()>=deadlineSyncAt){deadlineSyncAt=Date.now()+retryMs;void sync();}
 }
 function showModal(html,{quiz=false,encounter=false}={}){
-  beastInspector?.dismiss();
+  hideBossBanner();beastInspector?.dismiss();
   loadoutMenuOpen=false;renderBattleLoadouts();
   introDemo?.destroy();introDemo=null;
   modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}${encounter?' tc-encounter':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
@@ -992,12 +1057,15 @@ function accept(next,serial){
   // New rooms, repeated snapshots and older revisions must not replay XP.
   const expDelta=manualXpDelta(state,next,uid,Manuals);
   const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
+  const bossTransition=CombatImpact.phaseTransition(state,next);
   if(state?.id!==next?.id){
+    hideBossBanner();bossTransitionPending=null;
     beastInspector?.dismiss();
     battleLoadouts=null;loadoutFetchedFor='';loadoutMenuOpen=false;
     battleMasteryBaseline=null;
     clearLiveManualXp();
   }
+  if(bossTransition)bossTransitionPending={roomId:next.id,...bossTransition};
   state=next;if(!keepSelection)selection=null;
   // EXP sound and animated cue are emitted after paint, never from a guessed kill.
   if(next?.manualDrops?.[uid])window.dispatchEvent(new CustomEvent('xiuxian:manual-loot'));
@@ -1714,6 +1782,7 @@ async function open(nextMode='pve'){
 }
 function close(){
   if(!root)return;
+  hideBossBanner();bossTransitionPending=null;
   beastInspector?.dismiss();
   window.QATrialQuestion?.close();keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;manualRecapCache=null;manualRecapLoadingKey='';battleMasteryBaseline=null;clearLiveManualXp();clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
