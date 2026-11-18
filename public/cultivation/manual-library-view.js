@@ -41,7 +41,7 @@ export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt
   const near=anticipation&&['near','imminent'].includes(anticipation.status);
   const current=book.id===focusId;
   const learned=(book.skills||[]).filter(skill=>skill.unlocked).length;
-  const stage=Number(book.level)>=10?'圓滿':near?
+  const stage=Number(book.level)>=20?'圓滿':near?
     anticipation.status==='imminent'?'突破在即':'接近突破':
     learned===3?'三招皆已領悟':visual.label;
   const cover=bookArt(book.id);
@@ -61,7 +61,7 @@ export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt
       <span class="manual-library-name-row"><strong>${esc(book.name)}</strong>
         <span class="manual-library-level">Lv. ${visual.level}</span></span>
       <span class="manual-library-brief">
-        <span>${esc(label(book.school))}</span>
+        <span>${esc(label(book.school))} · ${esc(book.tierRealm||'煉氣')}功法</span>
         <span class="manual-library-brief-state ${near?'is-approaching':''}">${esc(stage)}</span>
       </span>
     </span>
