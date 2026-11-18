@@ -245,6 +245,9 @@ export class TacticalRenderer{
     this.canvas.dataset.ambientTheme=this.ambience?.theme||'none';
     if(newStage||this.state?.width!==state.width||this.state?.height!==state.height){
       this.compassMarkers=[];this.focusBeastIndex=0;
+      delete this.canvas.dataset.hoverPreviewCost;
+      delete this.canvas.dataset.hoverPreviewValid;
+      delete this.canvas.dataset.hoverPreviewTargets;
       this.queue=[];this.scene=null;this.hoverSelection=null;this.hoverPlan=null;this.camera=Camera.create();this.touches.clear();this.dragging=false;this.pinch=null;this.inspectedUid=null;this.hoverUid=null;this.clearLongPress();
       this.suppressClickUntil=Date.now()+120;
       if(state.mode==='pve'&&state.width>=11){
