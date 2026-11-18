@@ -73,6 +73,12 @@ function ensure(){
     link.href='/styles/manual-expedition-guide.css?v=20261118-expedition-phase10-v1';
     document.head.append(link);
   }
+  if(!document.getElementById('manual-training-streamlined-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='manual-training-streamlined-style';
+    link.href='/styles/manual-training-streamlined.css?v=20261118-one-source-of-truth-v1';
+    document.head.append(link);
+  }
   return root;
 }
 async function request(url,body){
