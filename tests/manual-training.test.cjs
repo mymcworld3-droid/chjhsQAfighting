@@ -664,6 +664,9 @@ test('server adds the manuscript bonus to actual battle attack and keeps existin
   assert.equal(actor.baseAtk-baseline.baseAtk,30);
   assert.equal(actor.enemyScaleAttack,baseline.enemyScaleAttack);
   assert.equal(snapshot.battleAttack,actor.atk);
+  const started=await API.start(db,'u1',{mode:'pve'},now);
+  assert.equal(started.actors[0].atk,actor.atk,
+    'actual PvE actor must include all owned-manual levels');
   assert.equal(user.stats.attack,db.records.get('users/u1').stats.attack,
     'raw player attack is not modified');
 });
