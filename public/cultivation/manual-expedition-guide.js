@@ -47,57 +47,43 @@ export function nextManualExpedition(state,requestedBookId,rules) {
   };
 }
 
-export function renderManualExpedition(guide,{esc,bookArt}={}) {
+export function renderManualExpedition(guide,{esc}={}) {
   if(!guide)return '';
   const safe=typeof esc==='function'?esc:value=>String(value??'');
-  const artwork=typeof bookArt==='function'?bookArt:()=>null;
-  const cover=artwork(guide.bookId);
-  const art=cover?
-    `<img src="${safe(cover)}" alt="" loading="lazy" decoding="async">`:
-    '<i class="fa-solid fa-scroll" aria-hidden="true"></i>';
-  const canBattle=guide.path==='ready';
-  const actionText=canBattle?'前往問道試煉':guide.action==='skills'?'查看招式解鎖條件':'前往配置招式';
-  const caption=canBattle?
-    `已在使用中的「${safe(guide.activeLoadoutName)}」裝備 ${safe(guide.activeSkillName)}`:
-    guide.path==='locked'?'此功法目前沒有符合條件的已領悟招式，需先提升修煉進度或境界':
-    `目前使用中的「${safe(guide.activeLoadoutName)}」尚未裝備這本功法的招式`;
+  const actionText=guide.action==='battle'?'前往問道試煉':
+    guide.action==='skills'?'查看招式解鎖條件':'前往配置招式';
   const estimate=guide.estimatedKills?
-    `<strong>約 ${formatAmount(guide.estimatedKills)} 次</strong><small>以本關對應境界的靈獸、皆由此功法完成擊殺估算</small>`:
-    '<strong>—</strong><small>已達等級門檻，或目前沒有下一個招式等級目標</small>';
+    `<strong>約 ${formatAmount(guide.estimatedKills)} 次</strong>
+     <span>皆由此功法完成擊殺估算，並非保證次數</span>`:
+    '<span>已達等級門檻，或目前沒有下一個招式等級目標</span>';
+  const readiness=guide.path==='ready'?
+    `使用中的「${safe(guide.activeLoadoutName)}」已裝備 ${safe(guide.activeSkillName)}`:
+    guide.path==='needs-loadout'?
+      `使用中的「${safe(guide.activeLoadoutName)}」尚未裝備此功法招式`:
+      '目前尚無符合條件的已領悟招式，請先提升修煉等級或境界';
   return `<section class="manual-expedition manual-expedition--${guide.school==='body'?'body':'sword'}"
     data-manual-expedition data-manual-expedition-book="${safe(guide.bookId)}"
-    aria-label="下一場修煉作戰指引">
-    <div class="manual-expedition-heading">
-      <span class="manual-expedition-eyebrow">修煉懸賞 · 下一場試煉</span>
-      <h3><i class="fa-solid fa-compass" aria-hidden="true"></i> ${safe(guide.title)}</h3>
-    </div>
-    <div class="manual-expedition-main">
-      <div class="manual-expedition-book">
-        <span class="manual-expedition-cover">${art}</span>
-        <div class="manual-expedition-book-copy">
-          <small>目前修煉功法</small>
-          <strong>${safe(guide.bookName)}</strong>
-          <span>${safe(guide.nextGoal)}</span>
-        </div>
-      </div>
-      <div class="manual-expedition-forecast">
-        <div><small>下一關</small><strong>第 ${formatAmount(guide.stage)} 關</strong></div>
-        <div><small>對應靈獸境界</small><strong>${safe(guide.enemyRealm)}境</strong></div>
-        <div><small>功法擊殺 EXP</small><strong>+${formatAmount(guide.xpPerKill)} <em>／隻</em></strong></div>
-        <div class="manual-expedition-kills"><small>距等級門檻估計</small>${estimate}</div>
-      </div>
-    </div>
-    <div class="manual-expedition-footer">
-      <div class="manual-expedition-readiness ${canBattle?'is-ready':'is-not-ready'}">
-        <i class="fa-solid ${canBattle?'fa-circle-check':'fa-circle-info'}" aria-hidden="true"></i>
-        <span>${caption}</span>
+    aria-label="下一場問道試煉">
+    <div class="manual-expedition-strip">
+      <div class="manual-expedition-summary">
+        <span class="manual-expedition-eyebrow"><i class="fa-solid fa-compass" aria-hidden="true"></i> 下一場試煉</span>
+        <strong>第 ${formatAmount(guide.stage)} 關 · ${safe(guide.enemyRealm)}境</strong>
+        <span class="manual-expedition-reward">功法擊殺 <b>+${formatAmount(guide.xpPerKill)} EXP</b>／隻</span>
       </div>
       <button type="button" class="manual-expedition-action"
         data-manual-expedition-action="${guide.action}" data-manual-expedition-id="${safe(guide.bookId)}">
         ${actionText} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       </button>
     </div>
-    <p class="manual-expedition-disclaimer">依下一關與現有功法規則估算；只有以該功法完成擊殺才取得對應 EXP。
-      戰場無法自行指定靈獸境界，實際收穫依出現的靈獸與伺服器結算為準。</p>
+    <details class="manual-expedition-more">
+      <summary>查看擊殺估算與出戰條件</summary>
+      <div class="manual-expedition-advanced">
+        <p><strong>目前出戰狀態：</strong>${readiness}</p>
+        <p><strong>下一招等級目標：</strong>${safe(guide.nextGoal)}</p>
+        <p><strong>距等級門檻估計：</strong>${estimate}</p>
+        <small>依下一關與現有功法規則估算；只有以該功法完成擊殺才取得對應 EXP。
+          戰場無法自行指定靈獸境界，實際收穫依出現的靈獸與伺服器結算為準。</small>
+      </div>
+    </details>
   </section>`;
 }
