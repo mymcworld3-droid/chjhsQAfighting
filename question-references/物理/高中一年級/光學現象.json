@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-phy1-光學現象-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用光學現象的學科知識解決數值或生活問題",
+      "question": {
+        "q": "某透明材料折射率為1.5，取真空光速3.0×10⁸ m/s。光在材料內的速率約多少？",
+        "correct": "2.0×10⁸ m/s",
+        "wrong": [
+          "4.5×10⁸ m/s",
+          "3.0×10⁸ m/s",
+          "1.5×10⁸ m/s"
+        ],
+        "exp": "折射率n=c/v，故v=c/n=3.0×10⁸/1.5=2.0×10⁸ m/s。",
+        "subject": "物理",
+        "sub_topic": "光學現象",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-光學現象",
+        "template_id": "extra-20261118-phy1-光學現象-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-光學現象-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用光學現象的學科知識解決數值或生活問題",
+      "question": {
+        "q": "焦距為10 cm的理想凸透鏡，物體置於鏡前20 cm。所成的像最可能是哪一種？",
+        "correct": "鏡後20 cm處的倒立實像",
+        "wrong": [
+          "鏡前20 cm處的正立虛像",
+          "鏡後10 cm處的正立虛像",
+          "不成像且無任何光線折射"
+        ],
+        "exp": "1/f=1/u+1/v，1/10=1/20+1/v，得v=20 cm。物距大於焦距，形成倒立實像。",
+        "subject": "物理",
+        "sub_topic": "光學現象",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-光學現象",
+        "template_id": "extra-20261118-phy1-光學現象-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-光學現象-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用光學現象的學科知識解決數值或生活問題",
+      "question": {
+        "q": "白光通過三稜鏡後分成不同顏色。這主要因為什麼？",
+        "correct": "材料的折射率隨光波長而不同",
+        "wrong": [
+          "各色光在真空中的速率大不相同",
+          "三稜鏡把光子轉換成不同元素",
+          "白光本來只有單一波長"
+        ],
+        "exp": "色散源於不同波長在介質中的折射率不同，偏折程度因而不同。",
+        "subject": "物理",
+        "sub_topic": "光學現象",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-光學現象",
+        "template_id": "extra-20261118-phy1-光學現象-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

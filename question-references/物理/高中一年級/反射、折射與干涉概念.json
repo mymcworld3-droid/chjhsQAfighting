@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-phy1-反射、折射與干涉概念-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用反射、折射與干涉概念的學科知識解決數值或生活問題",
+      "question": {
+        "q": "雷射光照到平面鏡，入射光與法線夾角35°。依反射定律，反射角是多少？",
+        "correct": "35°",
+        "wrong": [
+          "55°",
+          "70°",
+          "0°"
+        ],
+        "exp": "入射角與反射角都以法線為基準，兩者相等。",
+        "subject": "物理",
+        "sub_topic": "反射、折射與干涉概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-反射、折射與干涉概念",
+        "template_id": "extra-20261118-phy1-反射、折射與干涉概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-反射、折射與干涉概念-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用反射、折射與干涉概念的學科知識解決數值或生活問題",
+      "question": {
+        "q": "光由折射率1.0的空氣射入折射率1.5的透明材料。若入射角的正弦值為0.60，折射角正弦值約多少？",
+        "correct": "0.40",
+        "wrong": [
+          "0.90",
+          "0.60",
+          "1.50"
+        ],
+        "exp": "司乃耳定律n1 sinθ1=n2 sinθ2，故sinθ2=1.0×0.60/1.5=0.40。",
+        "subject": "物理",
+        "sub_topic": "反射、折射與干涉概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-反射、折射與干涉概念",
+        "template_id": "extra-20261118-phy1-反射、折射與干涉概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-反射、折射與干涉概念-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用反射、折射與干涉概念的學科知識解決數值或生活問題",
+      "question": {
+        "q": "兩列同頻且振幅相等的水波於某點波峰與波峰重疊，若可線性疊加，該瞬間位移如何？",
+        "correct": "成為單一波峰位移的兩倍",
+        "wrong": [
+          "完全抵銷成零",
+          "波速立即變成兩倍",
+          "兩列波此後都停止傳播"
+        ],
+        "exp": "同相波峰疊加屬相長干涉，位移相加，波的傳播並不因此停止。",
+        "subject": "物理",
+        "sub_topic": "反射、折射與干涉概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-反射、折射與干涉概念",
+        "template_id": "extra-20261118-phy1-反射、折射與干涉概念-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

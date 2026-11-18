@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-phy1-建立假設與變因控制-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用建立假設與變因控制的學科知識解決數值或生活問題",
+      "question": {
+        "q": "一組學生要比較不同地面材質對球反彈高度的影響。哪項設計最合適？",
+        "correct": "使用同一顆球並固定落下高度，只改變接觸地面材質",
+        "wrong": [
+          "每次同時更換球與落下高度",
+          "每種材質只做一次且選最高的值",
+          "每組都讓環境條件完全不同"
+        ],
+        "exp": "操縱變因為地面材質，球種、落高及測量方式都應控制。",
+        "subject": "物理",
+        "sub_topic": "建立假設與變因控制",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-建立假設與變因控制",
+        "template_id": "extra-20261118-phy1-建立假設與變因控制-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-建立假設與變因控制-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用建立假設與變因控制的學科知識解決數值或生活問題",
+      "question": {
+        "q": "研究不同杯子材質對熱水降溫速率的影響，哪種條件最應維持一致？",
+        "correct": "杯子形狀大小、水量、初溫與環境條件",
+        "wrong": [
+          "每種材質搭配不同水量和溫度",
+          "只要求杯子顏色相同",
+          "每組杯子放在不同的風速環境"
+        ],
+        "exp": "隔熱比較需控制影響散熱的面積、溫差與周圍條件，才能隔離材質作用。",
+        "subject": "物理",
+        "sub_topic": "建立假設與變因控制",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-建立假設與變因控制",
+        "template_id": "extra-20261118-phy1-建立假設與變因控制-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-建立假設與變因控制-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用建立假設與變因控制的學科知識解決數值或生活問題",
+      "question": {
+        "q": "某實驗要研究加在滑車上的水平拉力大小對加速度的影響。要讓因果解釋較清楚，最合理的安排是？",
+        "correct": "固定小車質量和軌道條件，改變淨拉力並重複量測",
+        "wrong": [
+          "同時改變小車質量與拉力但不紀錄",
+          "只比較兩張不同車型的廣告",
+          "故意讓軌道傾斜角度每次不同"
+        ],
+        "exp": "F=ma中質量及摩擦條件都會影響結果，應控制並重複試驗。",
+        "subject": "物理",
+        "sub_topic": "建立假設與變因控制",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-建立假設與變因控制",
+        "template_id": "extra-20261118-phy1-建立假設與變因控制-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-phy1-生活中的電磁應用-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用生活中的電磁應用的學科知識解決數值或生活問題",
+      "question": {
+        "q": "理想變壓器初級線圈100圈、次級1000圈，初級接12 V交流電。次級交流電壓約多少？",
+        "correct": "120 V",
+        "wrong": [
+          "1.2 V",
+          "12 V",
+          "1200 V"
+        ],
+        "exp": "理想變壓器V2/V1=N2/N1=10，所以次級為120 V。",
+        "subject": "物理",
+        "sub_topic": "生活中的電磁應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-生活中的電磁應用",
+        "template_id": "extra-20261118-phy1-生活中的電磁應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-生活中的電磁應用-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用生活中的電磁應用的學科知識解決數值或生活問題",
+      "question": {
+        "q": "手機無線充電盤透過線圈傳遞能量，最主要採取何種物理機制？",
+        "correct": "變動磁場在接收線圈產生感應電壓",
+        "wrong": [
+          "永久不變磁場不耗能持續產生電流",
+          "依熱膨脹直接把電荷送到手機",
+          "用重力讓電子穿越空氣間隙"
+        ],
+        "exp": "無線充電依電磁感應，需要發射端的交變電流產生變動磁場。",
+        "subject": "物理",
+        "sub_topic": "生活中的電磁應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-生活中的電磁應用",
+        "template_id": "extra-20261118-phy1-生活中的電磁應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-生活中的電磁應用-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用生活中的電磁應用的學科知識解決數值或生活問題",
+      "question": {
+        "q": "水力發電機藉渦輪帶動線圈或磁場系統旋轉，電能來源主要是哪種轉換？",
+        "correct": "水的機械能經發電機轉成電能",
+        "wrong": [
+          "電能自動轉為水的重力位能且無損失",
+          "電能只由金屬顏色決定",
+          "磁鐵不需任何外來能量即可無限發電"
+        ],
+        "exp": "發電機以機械運動改變磁通量，使機械能轉成電能。",
+        "subject": "物理",
+        "sub_topic": "生活中的電磁應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-生活中的電磁應用",
+        "template_id": "extra-20261118-phy1-生活中的電磁應用-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

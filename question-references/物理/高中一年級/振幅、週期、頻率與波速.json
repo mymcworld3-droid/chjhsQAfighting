@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-phy1-振幅、週期、頻率與波速-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用振幅、週期、頻率與波速的學科知識解決數值或生活問題",
+      "question": {
+        "q": "某海岸觀測站測得水波週期0.25 s、波長0.80 m。若波速等於波長乘頻率，其波速為何？",
+        "correct": "3.2 m/s",
+        "wrong": [
+          "0.20 m/s",
+          "1.25 m/s",
+          "0.32 m/s"
+        ],
+        "exp": "頻率f=1/0.25=4 Hz，波速v=λf=0.80×4=3.2 m/s。",
+        "subject": "物理",
+        "sub_topic": "振幅、週期、頻率與波速",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中一年級-振幅、週期、頻率與波速",
+        "template_id": "extra-20261118-phy1-振幅、週期、頻率與波速-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-振幅、週期、頻率與波速-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用振幅、週期、頻率與波速的學科知識解決數值或生活問題",
+      "question": {
+        "q": "同一條張力固定的弦上，將小振幅橫波的振幅由1 cm增為2 cm，其他條件相同。依理想線性波模型，波速如何變化？",
+        "correct": "波速大致不變",
+        "wrong": [
+          "波速必定加倍",
+          "波速必定減半",
+          "波速必定變為四倍"
+        ],
+        "exp": "線性弦波波速主要由張力和線密度決定，振幅在小振幅近似下不決定波速。",
+        "subject": "物理",
+        "sub_topic": "振幅、週期、頻率與波速",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中一年級-振幅、週期、頻率與波速",
+        "template_id": "extra-20261118-phy1-振幅、週期、頻率與波速-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-振幅、週期、頻率與波速-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用振幅、週期、頻率與波速的學科知識解決數值或生活問題",
+      "question": {
+        "q": "某振動器在0.40秒內完成兩個完整週期，且振動均勻。頻率為何？",
+        "correct": "5 Hz",
+        "wrong": [
+          "0.2 Hz",
+          "2 Hz",
+          "10 Hz"
+        ],
+        "exp": "兩週期用0.40秒，單一週期T=0.20秒，f=1/T=5 Hz。",
+        "subject": "物理",
+        "sub_topic": "振幅、週期、頻率與波速",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中一年級-振幅、週期、頻率與波速",
+        "template_id": "extra-20261118-phy1-振幅、週期、頻率與波速-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

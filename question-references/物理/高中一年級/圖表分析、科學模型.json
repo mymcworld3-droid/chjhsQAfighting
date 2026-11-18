@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-phy1-圖表分析、科學模型-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用圖表分析、科學模型的學科知識解決數值或生活問題",
+      "question": {
+        "q": "位置—時間圖是一條向右上方的直線，物體位置由t=0的2 m變為t=4 s的18 m。其平均速度為何？",
+        "correct": "4 m/s",
+        "wrong": [
+          "5 m/s",
+          "16 m/s",
+          "8 m/s"
+        ],
+        "exp": "平均速度是斜率(18−2)/(4−0)=4 m/s，圖為直線也表示速度固定。",
+        "subject": "物理",
+        "sub_topic": "圖表分析、科學模型",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-圖表分析、科學模型",
+        "template_id": "extra-20261118-phy1-圖表分析、科學模型-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-圖表分析、科學模型-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用圖表分析、科學模型的學科知識解決數值或生活問題",
+      "question": {
+        "q": "彈簧實驗中，力—伸長量圖呈過原點直線；伸長0.02 m時需要2 N的力。依虎克定律，其彈簧常數為何？",
+        "correct": "100 N/m",
+        "wrong": [
+          "0.01 N/m",
+          "4 N/m",
+          "40 N/m"
+        ],
+        "exp": "F=kx，k=F/x=2/0.02=100 N/m，單位為牛頓每公尺。",
+        "subject": "物理",
+        "sub_topic": "圖表分析、科學模型",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-圖表分析、科學模型",
+        "template_id": "extra-20261118-phy1-圖表分析、科學模型-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-圖表分析、科學模型-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用圖表分析、科學模型的學科知識解決數值或生活問題",
+      "question": {
+        "q": "某小車的速度—時間圖是從t=0時0 m/s線性增加到t=3 s時6 m/s的直線。加速度為何？",
+        "correct": "2 m/s²",
+        "wrong": [
+          "18 m/s²",
+          "6 m/s²",
+          "0.5 m/s²"
+        ],
+        "exp": "速度對時間的斜率等於加速度，a=(6−0)/(3−0)=2 m/s²。",
+        "subject": "物理",
+        "sub_topic": "圖表分析、科學模型",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-圖表分析、科學模型",
+        "template_id": "extra-20261118-phy1-圖表分析、科學模型-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

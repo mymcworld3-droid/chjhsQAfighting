@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-phy1-測量與誤差-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用測量與誤差的學科知識解決數值或生活問題",
+      "question": {
+        "q": "同學測單擺一次週期約1秒，人工按秒錶的反應時間造成明顯誤差。哪種方法較能降低相對誤差？",
+        "correct": "連續量測20次完整週期總時間，再除以20",
+        "wrong": [
+          "只計時半次擺動使時間更短",
+          "每次量測都改變擺長",
+          "只報秒錶顯示最多小數位的一次"
+        ],
+        "exp": "多個週期的總測量時間較長，可降低啟停反應時間所占比例。",
+        "subject": "物理",
+        "sub_topic": "測量與誤差",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量與誤差",
+        "template_id": "extra-20261118-phy1-測量與誤差-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-測量與誤差-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用測量與誤差的學科知識解決數值或生活問題",
+      "question": {
+        "q": "電子秤未歸零，空載時仍顯示+0.5 g。若量得物件讀數10.5 g且偏差恆定，校正後質量約為何？",
+        "correct": "10.0 g",
+        "wrong": [
+          "11.0 g",
+          "10.5 g",
+          "5.25 g"
+        ],
+        "exp": "零點固定偏高0.5 g，應從讀數扣除，得10.0 g。這是系統性零點誤差。",
+        "subject": "物理",
+        "sub_topic": "測量與誤差",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量與誤差",
+        "template_id": "extra-20261118-phy1-測量與誤差-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-測量與誤差-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用測量與誤差的學科知識解決數值或生活問題",
+      "question": {
+        "q": "某學生重複量測100次取平均，但儀器始終固定高估2℃。這種平均作法能達成什麼？",
+        "correct": "可降低部分隨機散布，但不能直接消除固定偏差",
+        "wrong": [
+          "一定使固定高估2℃完全消失",
+          "重複越多就能保證量測值等於真值",
+          "平均後儀器會自動完成零點校正"
+        ],
+        "exp": "重複平均能降低隨機誤差影響，系統偏差需另外校正。",
+        "subject": "物理",
+        "sub_topic": "測量與誤差",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量與誤差",
+        "template_id": "extra-20261118-phy1-測量與誤差-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

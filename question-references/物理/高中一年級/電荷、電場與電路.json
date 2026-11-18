@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-phy1-電荷、電場與電路-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用電荷、電場與電路的學科知識解決數值或生活問題",
+      "question": {
+        "q": "一個6 Ω電阻接在12 V理想直流電源兩端。若電阻固定，通過它的電流為何？",
+        "correct": "2 A",
+        "wrong": [
+          "0.5 A",
+          "6 A",
+          "72 A"
+        ],
+        "exp": "依歐姆定律I=V/R=12/6=2 A。",
+        "subject": "物理",
+        "sub_topic": "電荷、電場與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-電荷、電場與電路",
+        "template_id": "extra-20261118-phy1-電荷、電場與電路-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-電荷、電場與電路-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用電荷、電場與電路的學科知識解決數值或生活問題",
+      "question": {
+        "q": "兩個分別為4 Ω與12 Ω的電阻並聯。忽略導線電阻，等效電阻為何？",
+        "correct": "3 Ω",
+        "wrong": [
+          "8 Ω",
+          "16 Ω",
+          "48 Ω"
+        ],
+        "exp": "並聯1/R=1/4+1/12=1/3，所以等效電阻3 Ω，比任一支路電阻小。",
+        "subject": "物理",
+        "sub_topic": "電荷、電場與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-電荷、電場與電路",
+        "template_id": "extra-20261118-phy1-電荷、電場與電路-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-電荷、電場與電路-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用電荷、電場與電路的學科知識解決數值或生活問題",
+      "question": {
+        "q": "某帶電小球帶有+1.6×10⁻⁶ C淨電荷，取基本電荷量1.6×10⁻¹⁹ C。這代表小球相對中性狀態少了約多少電子？",
+        "correct": "10¹³個",
+        "wrong": [
+          "10⁶個",
+          "10⁻¹³個",
+          "10¹⁹個"
+        ],
+        "exp": "正電表示失去電子，數目Q/e=1.6×10⁻⁶/1.6×10⁻¹⁹=10¹³。",
+        "subject": "物理",
+        "sub_topic": "電荷、電場與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-電荷、電場與電路",
+        "template_id": "extra-20261118-phy1-電荷、電場與電路-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

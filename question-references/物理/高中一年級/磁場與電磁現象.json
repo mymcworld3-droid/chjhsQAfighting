@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-phy1-磁場與電磁現象-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用磁場與電磁現象的學科知識解決數值或生活問題",
+      "question": {
+        "q": "一直導線電流垂直紙面向外流出。依右手定則，紙面上的磁場環繞方向為何？",
+        "correct": "逆時針",
+        "wrong": [
+          "順時針",
+          "只沿導線向右",
+          "只沿導線向左"
+        ],
+        "exp": "右手拇指指向紙面外，彎曲四指所指即磁場逆時針方向。",
+        "subject": "物理",
+        "sub_topic": "磁場與電磁現象",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-磁場與電磁現象",
+        "template_id": "extra-20261118-phy1-磁場與電磁現象-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-磁場與電磁現象-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用磁場與電磁現象的學科知識解決數值或生活問題",
+      "question": {
+        "q": "一塊磁鐵和旁邊的固定線圈都保持靜止，且通過線圈的磁通量未改變。理想情況下線圈的感應電動勢為何？",
+        "correct": "0 V",
+        "wrong": [
+          "必定等於磁鐵表面磁場強度",
+          "必定持續增大",
+          "與磁通量變化率無關而固定為1 V"
+        ],
+        "exp": "法拉第定律要求磁通量隨時間改變才會有感應電動勢。",
+        "subject": "物理",
+        "sub_topic": "磁場與電磁現象",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-磁場與電磁現象",
+        "template_id": "extra-20261118-phy1-磁場與電磁現象-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-phy1-磁場與電磁現象-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用磁場與電磁現象的學科知識解決數值或生活問題",
+      "question": {
+        "q": "一匝線圈的磁通量在0.5秒內線性增加0.20 Wb。若增加量相同但只需0.25秒，平均感應電動勢大小如何？",
+        "correct": "變成原來兩倍",
+        "wrong": [
+          "變成原來一半",
+          "維持不變",
+          "變成原來四倍"
+        ],
+        "exp": "感應電動勢大小與磁通量變化率成正比，同樣ΔΦ在一半時間完成會使平均電動勢加倍。",
+        "subject": "物理",
+        "sub_topic": "磁場與電磁現象",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-磁場與電磁現象",
+        "template_id": "extra-20261118-phy1-磁場與電磁現象-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
