@@ -27,9 +27,13 @@ async function main(){
     const page=await browser.newPage({viewport:{width:393,height:852}}),errors=[];
     page.on('pageerror',e=>errors.push(e.message));
     await page.goto(`http://127.0.0.1:${server.address().port}/test`);
-    await page.locator('[data-manual-book="sword-wind"] summary').click();
+    await page.locator('[data-manual-book="sword-wind"] .manual-library-choice').waitFor();
     await page.locator('[data-manual-jump-skill="wind-slash"]').click();
-    await page.locator('[data-manual-book="sword-wind"][open]').waitFor();
+    await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
+    assert.equal(await page.locator('.manual-focus-skill').count(),1);
+    assert.equal(await page.locator('.manual-summary').count(),0);
+    assert.equal(await page.locator('.manual-hero-roster').count(),0);
+    assert.equal(await page.locator('.manual-hero-goal').count(),0);
     // Next-stage expedition guidance is bound to the same authenticated state.
     const quest=page.locator('[data-manual-expedition]');
     await quest.waitFor();
@@ -48,7 +52,7 @@ async function main(){
     await quest.locator('[data-manual-expedition-action="battle"]').click();
     assert.deepEqual(await page.evaluate(()=>window.__expeditionLaunches),['pve'],
       'battle shortcut must invoke only the actual PvE entry point');
-    assert.equal(await page.locator('.manual-hero-book-tab.is-current').count(),1);
+    assert.equal(await page.locator('[data-manual-book="sword-wind"] .manual-library-choice[aria-pressed="true"]').count(),1);
     assert.equal(await page.locator('.manual-hero-cover').count(),1);
     // The permanent visual stage must come from the actual manual level.
     assert.equal(await page.locator('.manual-hero').getAttribute('data-manual-visual-stage'),'seed');
@@ -79,8 +83,8 @@ async function main(){
     await page.evaluate(()=>{window.savedArt=[...document.querySelectorAll('.manual-book-art,.manual-skill-art')];});
     const verifyArt=async()=>{
       assert.equal(await page.evaluate(()=>window.savedArt.length>0&&window.savedArt.every((img,i)=>img===document.querySelectorAll('.manual-book-art,.manual-skill-art')[i]&&img.isConnected)),true,'unchanged artwork must keep its original DOM node');
-      assert.equal(await page.locator('[data-manual-book="sword-wind"]').evaluate(e=>e.open),true);
-      assert.equal(await page.locator('.manual-hero-book-tab.is-current').count(),1);
+      assert.equal(await page.locator('[data-manual-book="sword-wind"] .manual-library-choice').getAttribute('aria-pressed'),'true');
+      assert.equal(await page.locator('[data-manual-book="sword-wind"] .manual-library-choice[aria-pressed="true"]').count(),1);
       assert.equal(await page.locator('.manual-hero-cover').count(),1);
     };
     await page.locator('[data-manual-remove="wind-slash"]').click();await verifyArt();
@@ -113,6 +117,7 @@ async function main(){
     await page.locator('[data-manual-picker]').waitFor({state:'detached'});
     await page.locator('[data-manual-slot="0"] .manual-slot-art').waitFor();
     assert.equal(await page.locator('[data-loadout-select="0"]').getAttribute('class').then(v=>v.includes('is-active')),true);
+    await page.locator('.manual-deck-name-settings summary').click();
     await page.locator('[data-loadout-name]').fill('劍氣出戰');
     await page.locator('[data-loadout-rename]').click();
     await page.locator('[data-loadout-select="1"]').getByText('劍氣出戰').waitFor();
@@ -132,28 +137,29 @@ async function main(){
     // the selected battle deck. Card selection updates the hero, not equipment.
     const activePresetBefore=await page.locator('[data-loadout-select="1"]').getAttribute('class');
     const library=page.locator('.manual-library');
-    assert.equal(await library.locator('details[data-manual-book]').count(),2);
+    assert.equal(await library.locator('article[data-manual-book]').count(),2);
     await page.locator('[data-manual-collection-filter="sword"]').click();
-    assert.equal(await library.locator('details[data-manual-book]').count(),1);
+    assert.equal(await library.locator('article[data-manual-book]').count(),1);
     assert.equal(await library.locator('[data-manual-book="body-rock"]').count(),0);
     await page.locator('[data-manual-collection-filter="body"]').click();
     assert.equal(await library.locator('[data-manual-book="body-rock"]').count(),1);
     assert.equal(await library.locator('[data-manual-book="sword-wind"]').count(),0);
-    await library.locator('[data-manual-book="body-rock"] summary').click();
-    assert.equal(await library.locator('[data-manual-book="body-rock"]').evaluate(e=>e.open),true);
+    await library.locator('[data-manual-book="body-rock"] .manual-library-choice').click();
+    assert.equal(await library.locator('[data-manual-book="body-rock"] .manual-library-choice').getAttribute('aria-pressed'),'true');
     assert.equal(await page.locator('.manual-hero-title-row h3').textContent(),'玄嶽鍛體訣');
     assert.equal(await page.locator('[data-manual-expedition]').getAttribute('data-manual-expedition-book'),'body-rock');
     assert.equal(await page.locator('[data-manual-expedition-action="loadout"]').count(),1,
       'a manuscript without an equipped technique should lead to a loadout, not a fake battle-ready promise');
     assert.equal(await library.locator('.manual-book.is-featured').count(),1);
-    assert.equal(await library.locator('[data-manual-book="body-rock"] .manual-library-skill-picture').count(),3);
+    assert.equal(await library.locator('[data-manual-book="body-rock"] .manual-library-skill-picture').count(),0);
+    assert.equal(await library.locator('[data-manual-book="body-rock"] .manual-book-art').count(),1);
     assert.equal(await page.locator('[data-loadout-select="1"]').getAttribute('class'),activePresetBefore);
     await page.locator('[data-manual-collection-filter="all"]').click();
-    assert.equal(await library.locator('details[data-manual-book]').count(),2);
-    await library.locator('[data-manual-book="sword-wind"] summary').click();
+    assert.equal(await library.locator('article[data-manual-book]').count(),2);
+    await library.locator('[data-manual-book="sword-wind"] .manual-library-choice').click();
     assert.equal(await page.locator('.manual-hero-title-row h3').textContent(),'流風劍訣');
     const featured=library.locator('[data-manual-book="sword-wind"]');
-    assert.equal(await featured.evaluate(e=>e.open),true);
+    assert.equal(await featured.locator('.manual-library-choice').getAttribute('aria-pressed'),'true');
     await featured.locator('[data-manual-focus-hero]').click();
     assert.equal(await page.locator('.manual-hero-title-row h3').textContent(),'流風劍訣');
     const mobileGallery=await library.evaluate(node=>({scroll:node.scrollWidth,client:node.clientWidth}));
@@ -226,7 +232,7 @@ async function main(){
     await page.locator('[data-manual-refresh]').click();
     await page.locator('.manual-celebration--discovery').waitFor();
     assert.equal(await page.locator('.manual-celebration-name').textContent(),'龍象真身訣');
-    assert.equal(await library.locator('details[data-manual-book]').count(),3);
+    assert.equal(await library.locator('article[data-manual-book]').count(),3);
     await page.locator('[data-manual-celebration-dismiss]').click();
     await page.locator('[data-manual-refresh]').click();
     assert.equal(await page.locator('.manual-celebration-backdrop').count(),0,
