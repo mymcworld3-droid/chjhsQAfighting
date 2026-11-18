@@ -121,8 +121,11 @@ test('markup escapes untrusted names and rendering never changes server data',()
   const prior=JSON.stringify(s);
   const g=nextManualExpedition(s,'sword-wind',Catalog);
   const html=renderManualExpedition(g,opts);
-  assert.match(html,/&lt;svg onload=/);
+  assert.doesNotMatch(html,/&lt;svg onload=/);
   assert.match(html,/&lt;img src=x onerror=/);
+  assert.doesNotMatch(html,/manual-expedition-cover/);
+  assert.match(html,/manual-expedition-more/);
+  assert.match(html,/查看擊殺估算與出戰條件/);
   assert.doesNotMatch(html,/<svg onload=/);
   assert.doesNotMatch(html,/<img src=x onerror=/);
   assert.equal(JSON.stringify(s),prior);
@@ -144,4 +147,16 @@ test('source stage from trusted manuals endpoint, not user-chosen controls',asyn
   delete user.tacticalTrialV1;
   db.records.set('users/u1',user);
   assert.equal((await service.manualsState(db,'u1')).trialStage,1);
+});
+
+test('the compact trial strip has one CTA, no repeated book cover or next-goal panel',()=>{
+  const html=renderManualExpedition(guide(250),opts);
+  assert.equal((html.match(/data-manual-expedition-action=/g)||[]).length,1);
+  assert.equal((html.match(/manual-expedition-more/g)||[]).length,1);
+  assert.match(html,/第 1 關/);
+  assert.match(html,/功法擊殺/);
+  assert.doesNotMatch(html,/manual-expedition-book-copy/);
+  assert.doesNotMatch(html,/manual-expedition-cover/);
+  assert.doesNotMatch(html,/manual-expedition-main/);
+  assert.match(html,/<details class="manual-expedition-more">/);
 });
