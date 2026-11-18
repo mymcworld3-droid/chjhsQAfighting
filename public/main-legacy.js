@@ -4911,6 +4911,7 @@ async function invitationServerRequest(path, body = {}, signal = undefined) {
 }
 
 function inviteHandlerReady(invite) {
+    if (Number(invite?.dungeonVersion) > 0) return true;
     if (Number(invite?.raidVersion) > 0) return typeof window.joinRaidRoomInvite === 'function';
     if (Number(invite?.modeVersion) > 0) return typeof window.joinBattleRoomV2 === 'function';
     return true;
@@ -5106,7 +5107,7 @@ function showInviteToast(inviteId, data) {
     }
     // Modern duel / raid invitations use their own room protocols.
     if (data.raidVersion && typeof window.joinRaidRoomInvite !== 'function') return;
-    if (!data.raidVersion && data.modeVersion && typeof window.joinBattleRoomV2 !== 'function') return;
+    if (!data.dungeonVersion && !data.raidVersion && data.modeVersion && typeof window.joinBattleRoomV2 !== 'function') return;
     const container = document.getElementById('toast-container');
     if (!container || container.querySelector('[data-duel-invite="' + inviteId + '"]')) return;
     const toast = document.createElement('div');
@@ -5126,6 +5127,7 @@ function showInviteToast(inviteId, data) {
     };
     
     const avatarHtml = getAvatarHtml(equippedData, "w-12 h-12");
+    const dungeonInvite = Number(data.dungeonVersion) === 1;
 
     toast.innerHTML = `
         <div class="flex-shrink-0">
@@ -5134,10 +5136,10 @@ function showInviteToast(inviteId, data) {
         
         <div class="flex-1 min-w-0 z-10">
             <h4 class="font-bold text-sm truncate text-yellow-400 flex items-center gap-2">
-                <i class="fa-solid ${data.raidVersion ? 'fa-users-rays' : 'fa-swords'}"></i> ${data.raidVersion ? '團本邀請！' : '對戰邀請！'}
+                <i class="fa-solid ${dungeonInvite || data.raidVersion ? 'fa-users-rays' : 'fa-swords'}"></i> ${dungeonInvite ? '合作副本邀請！' : data.raidVersion ? '團本邀請！' : '對戰邀請！'}
             </h4>
             <p class="text-xs text-gray-300 truncate mb-2 mt-1">
-                <span class="text-white font-bold">${escapeHtml(String(data.hostName || '修士'))}</span> ${data.raidVersion ? '邀請你挑戰大師姐' : '邀請你鬥法'}
+                <span class="text-white font-bold">${escapeHtml(String(data.hostName || '修士'))}</span> ${dungeonInvite ? '邀請你共同探索秘境' : data.raidVersion ? '邀請你挑戰大師姐' : '邀請你鬥法'}
             </p>
             <div class="flex gap-2">
                 <button id="btn-acc-${inviteId}" class="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white text-xs px-3 py-1.5 rounded font-bold transition shadow-lg">
@@ -5162,7 +5164,25 @@ function showInviteToast(inviteId, data) {
             toast.remove();
             return;
         }
-        if (data.raidVersion) {
+        if (dungeonInvite) {
+            if (dongtianActive()) return;
+            const button = document.getElementById(`btn-acc-${inviteId}`);
+            if (button) button.disabled = true;
+            try {
+                const joined = await invitationServerRequest('/api/dungeon/room', {
+                    action: 'join-code', roomCode: data.dungeonCode
+                });
+                await removeInvite(inviteId, toast);
+                window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-joined', {
+                    detail: { roomId: joined.roomId }
+                }));
+                alert('已加入合作副本隊伍。副本隊伍管理介面將在下一階段開放。');
+            } catch (error) {
+                if (button) button.disabled = false;
+                alert(error?.message || '副本已失效、額滿或無法加入');
+                await removeInvite(inviteId, toast);
+            }
+        } else if (data.raidVersion) {
             if (dongtianActive()) return;
             const active = window.getRaidMvpState?.();
             if (active?.roomId && !['finished','hub'].includes(active.status)) {

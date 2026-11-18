@@ -154,6 +154,22 @@ async function validateRoom(invitation, uid, { a, c }) {
   const roomId = safeRoomId(invitation?.roomId || invitation?.raidRoomId);
   if (!roomId) throw Object.assign(new Error('邀請房間代碼無效'), { status: 400 });
 
+  if (Number(invitation?.dungeonVersion) > 0) {
+    const code=safeRaidCode(invitation?.dungeonCode);
+    if(Number(invitation.dungeonVersion)!==1||!code||
+        Number(invitation?.raidVersion)>0||Number(invitation?.modeVersion)>0)
+      throw Object.assign(new Error('副本邀請格式無效'),{status:400});
+    const snap=await c.db.collection('dungeonRooms').doc(roomId).get();
+    const room=snap.exists?(snap.data()||{}):null;
+    const members=room?.members||{};
+    if(!room||room.mode!=='dungeon'||room.version!==1||
+        room.status!=='waiting'||room.hostUid!==uid||
+        !Object.prototype.hasOwnProperty.call(members,uid)||
+        room.code!==code||Number(room.expiresAtMs)<=Date.now()||
+        Object.keys(members).length>=4)
+      throw Object.assign(new Error('副本房間已失效、已滿或你不是房主'),{status:409});
+    return {dungeonVersion:1,dungeonCode:code,dungeonRoomId:roomId};
+  }
   if (Number(invitation?.raidVersion) > 0) {
     const code = safeRaidCode(invitation?.raidCode);
     if (!code) throw Object.assign(new Error('團本邀請代碼無效'), { status: 400 });

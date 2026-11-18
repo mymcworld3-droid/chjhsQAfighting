@@ -1,15 +1,15 @@
-# 多人副本 · 第 0～1 階段（私人房間基礎）
+# 多人副本：第 0～2 階段（房間、公開招募、好友邀請）
 
-此階段只交付獨立的多人副本私人房間 API 與前端請求函式，尚未推出副本入口頁面、準備狀態、地圖、即時戰鬥及公開招募。後續階段才能在遊戲畫面中操作。
+本階段提供獨立的副本隊伍服務與好友邀請通知。**第 3 階段才新增正式組隊、準備及出發介面**；目前尚無副本地圖、即時戰鬥、獎勵或啟動副本指令。
 
-- 伺服器：`POST /api/dungeon/room`，須使用主帳號 Firebase A Bearer token。
-- 動作：`create`、`join-code`（body: `roomCode`）、`get`（`roomId`）、`reconnect`、`leave`（`roomId`）。
-- 前端：`public/cultivation/dungeon-room.js` 暴露五個同名功能的英文函式，可於後續組隊畫面使用。
-- 副本房間採獨立 `dungeonRooms`、`dungeonRoomCodes`、`dungeonRoomMemberships`（Firebase C/raidRepository），不共用舊團本的 `raidRooms`，沒有入場券或戰鬥獎勵操作。
-- 玩家顯示名稱取自 Firebase A 玩家資料。房碼六位大寫字母及數字，隨機安全生成；在 C 資料庫以代碼文件預留，於交易中避免重複房碼。
-- 每名玩家至多一個有效副本房間；重複建立/加入請求不產生第二個座位；最多四人；私人房詳情只有已驗證成員可讀；隊長離開自動交接；最後一人離開會關閉房碼。
-- 等待室硬性期限暫定兩小時。之後心跳/重連階段會再設計狀態與過期延續。房間內的 `ready` 目前只是預留欄位，不接受準備或開戰指令。
-- 讀取房間不直接建立/更改玩家存檔，也不讀寫舊團本票券。房間資料、成員、房碼及成員索引由 Firebase C 交易更新。
-- 單人允許開房。後續第 2～4 階段才接公開招募、隊伍 UI、正式準備及即時同步。
+- 驗證：所有 `POST /api/dungeon/room` 動作使用主帳號 Firebase A 的登入票證，副本房間資料存在 Firebase C，與舊 `raidRooms`、`tacticalBattleRooms` 分離。
+- 私人房間：`create`（預設私人）／`join-code`／`get`／`reconnect`／`leave`，六碼房碼只有隊員才看得到。
+- 公開招募：`create` 可指定 `visibility:"public"`；`set-visibility` 僅房主可切換；`list-public` 只呈現未過期、尚未滿四人、有效房主仍在隊伍內的等待中公開房間。公開資料不包含房碼、UID 或隊員詳細資料。
+- 公開加入：`join-public` 透過房間 ID 入隊，交易內再次檢查公開狀態、剩餘名額與過期時間。即使知道私人房間 ID 也不能藉此加入。
+- 快速組隊：`quick` 優先加入人數較多的公開隊伍；無可加入隊伍則建立公開房。已在有效隊伍中的玩家直接返回原房間（不擅自公開私人房）。
+- 好友邀請：`inviteDungeonFriends(room, friendUids)` 使用現有 `/api/invitations/send`，伺服器重新驗證邀請者為目前有效房主、房碼正確、房間尚有名額，只向已確認為好友的接收者推送；接受時呼叫 `join-code` 再次驗證。舊主頁邀請通知已支援「合作副本邀請」與加入事件。
+- 伺服器的好友通知沿用既有短時佇列（目前 2 分鐘），跨多個 Render instance 的長期可靠通知與正式房間即時同步仍屬後續第 4 階段。
+- 預留 `ready` 欄位但不啟用 `start`；第 3 階段新增正式遊戲內隊伍、準備介面，第 4 階段新增持續同步。
+- 副本不消耗舊團本入場券，不寫入舊戰場紀錄，也不發放獎勵。
 
-驗證：`node --test tests/dungeon-room-api.test.cjs`、`npm test`、`npm run check:module-versions`。
+驗收：`node --test tests/dungeon-room-api.test.cjs tests/dungeon-public-recruitment.test.cjs tests/dungeon-friend-invitations.test.cjs`、`npm test`、`npm run check:module-versions`。
