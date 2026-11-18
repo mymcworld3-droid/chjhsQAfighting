@@ -151,9 +151,26 @@
       const travel=(seconds*.11*mote.speed+mote.phase/TAU)%1;
       const px=ox+((mote.x+travel*period)%plan.width)*cell;
       const py=oy+((mote.y-travel*period*.35%plan.height+plan.height)%plan.height)*cell;
-      ctx.globalAlpha=(quality==='low'?.19:.27)*(.65+.35*Math.sin(seconds*1.3+mote.phase));
-      ctx.fillStyle=colors.mote;
-      ctx.beginPath();ctx.arc(px,py,clamp(mote.size*cell/46,.7,2),0,TAU);ctx.fill();
+      ctx.save();
+      ctx.globalAlpha=(quality==='low'?.17:.26)*(.55+.45*Math.sin(seconds*1.3+mote.phase));
+      ctx.fillStyle=colors.mote;ctx.strokeStyle=colors.mote;
+      const radius=clamp(mote.size*cell/46,.7,2);
+      if(plan.theme==='bamboo'){
+        ctx.translate(px,py);ctx.rotate(mote.phase+seconds*.35);
+        ctx.beginPath();ctx.ellipse(0,0,radius*2.3,radius*.6,-.4,0,TAU);ctx.fill();
+      }else if(plan.theme==='desert'){
+        ctx.lineWidth=Math.max(.8,radius*.65);ctx.beginPath();
+        ctx.moveTo(px-radius*2,py+radius*.4);ctx.lineTo(px+radius*2.5,py-radius*.5);ctx.stroke();
+      }else if(plan.theme==='snow'){
+        ctx.lineWidth=Math.max(.65,radius*.5);ctx.beginPath();
+        ctx.moveTo(px-radius*1.5,py);ctx.lineTo(px+radius*1.5,py);
+        ctx.moveTo(px,py-radius*1.5);ctx.lineTo(px,py+radius*1.5);ctx.stroke();
+      }else if(plan.theme==='water'){
+        ctx.beginPath();ctx.ellipse(px,py,radius*1.55,radius*.6,0,0,TAU);ctx.stroke();
+      }else{
+        ctx.beginPath();ctx.arc(px,py,radius,0,TAU);ctx.fill();
+      }
+      ctx.restore();
     }
     if(quality!=='low'&&plan.lamps.length){
       for(const lamp of plan.lamps.slice(0,5)){
