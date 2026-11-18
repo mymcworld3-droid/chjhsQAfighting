@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-人口、產業與區域整合-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用人口、產業與區域整合",
+      "question": {
+        "q": "某都會核心有大量就業機會，周邊區域居住人口較多，通勤流明顯。最適合的規畫方式是？",
+        "correct": "跨行政區整合公共運輸與住宅、就業布局",
+        "wrong": [
+          "只要求核心城區獨自處理所有通勤",
+          "將每個行政區視為毫無互動",
+          "僅比較城市名稱即可決定票價"
+        ],
+        "exp": "功能區往往跨行政邊界，需要整合交通與土地利用。",
+        "subject": "地理",
+        "sub_topic": "人口、產業與區域整合",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口、產業與區域整合",
+        "template_id": "extra-2026-geo2-人口、產業與區域整合-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-人口、產業與區域整合-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用人口、產業與區域整合",
+      "question": {
+        "q": "某地研發集中在科技園區，但零件供應商分布於周邊縣市。如何判讀其區域經濟？",
+        "correct": "產業聚集與跨區域供應鏈同時存在",
+        "wrong": [
+          "所有研發成果必定只由園區內企業生產",
+          "產業園區與物流網絡完全無關",
+          "只要周邊有工廠就表示核心不具吸引力"
+        ],
+        "exp": "研發聚集和生產分工可形成互補的區域網絡。",
+        "subject": "地理",
+        "sub_topic": "人口、產業與區域整合",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口、產業與區域整合",
+        "template_id": "extra-2026-geo2-人口、產業與區域整合-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-人口、產業與區域整合-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用人口、產業與區域整合",
+      "question": {
+        "q": "某縣市青年人口持續遷出，地方企業招工困難。若要分析產業與人口的循環影響，應優先研究什麼？",
+        "correct": "就業機會、人口年齡結構與公共服務供需",
+        "wrong": [
+          "只看縣市面積大小",
+          "人口外移必定使企業需求立刻歸零",
+          "只看單一年出生數不需觀察遷移"
+        ],
+        "exp": "產業與人口可能形成相互強化的發展差距。",
+        "subject": "地理",
+        "sub_topic": "人口、產業與區域整合",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口、產業與區域整合",
+        "template_id": "extra-2026-geo2-人口、產業與區域整合-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

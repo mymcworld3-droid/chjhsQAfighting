@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-區域發展與環境議題-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用區域發展與環境議題",
+      "question": {
+        "q": "某山區發展觀光，居民收入增加但水源地垃圾與坡地破壞加劇。如何制定發展策略較合理？",
+        "correct": "訂定遊客承載與廢棄物管理，評估收益和生態成本",
+        "wrong": [
+          "只要觀光收入增加就不用計算環境成本",
+          "山區產業不會影響河川水質",
+          "所有觀光設施都必定不能改善民生"
+        ],
+        "exp": "區域發展需衡量經濟收益與環境承載。",
+        "subject": "地理",
+        "sub_topic": "區域發展與環境議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域發展與環境議題",
+        "template_id": "extra-2026-geo2-區域發展與環境議題-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-區域發展與環境議題-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用區域發展與環境議題",
+      "question": {
+        "q": "某工業區位於河川上游，下游農業區擔心廢水污染。規畫時最應採取哪種方式？",
+        "correct": "以流域為單位監測排放並協調上下游用水",
+        "wrong": [
+          "只在工業區行政邊界內檢查環境",
+          "上游污染完全不可能影響下游",
+          "只測量工廠員工人數即可判定水質"
+        ],
+        "exp": "污染移動跨越行政界線，需流域協作。",
+        "subject": "地理",
+        "sub_topic": "區域發展與環境議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域發展與環境議題",
+        "template_id": "extra-2026-geo2-區域發展與環境議題-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-區域發展與環境議題-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用區域發展與環境議題",
+      "question": {
+        "q": "某低窪海岸發展新住宅區，預報未來暴潮風險提高。最合適的都市規畫方向是？",
+        "correct": "採用風險分區與建築防洪標準，限制高暴露土地開發",
+        "wrong": [
+          "只依目前房價決定是否需要防洪",
+          "把所有防洪預算用於景觀廣告",
+          "認為風險只會隨都市人口增加而下降"
+        ],
+        "exp": "未來風險需反映在土地使用與韌性設計。",
+        "subject": "地理",
+        "sub_topic": "區域發展與環境議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域發展與環境議題",
+        "template_id": "extra-2026-geo2-區域發展與環境議題-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

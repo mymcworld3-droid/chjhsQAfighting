@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-人口、都市與產業-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用人口、都市與產業",
+      "question": {
+        "q": "某地新開工廠帶來就業，住宅需求與租金隨之增加。這反映何種關聯？",
+        "correct": "產業聚集可能改變人口移入及住宅市場",
+        "wrong": [
+          "工廠就業增加必定使住宅需求減少",
+          "租金只能由政府名稱決定",
+          "產業政策與人口遷移沒有關係"
+        ],
+        "exp": "職缺可形成遷移拉力，進而影響聚落與地價。",
+        "subject": "地理",
+        "sub_topic": "人口、都市與產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口、都市與產業",
+        "template_id": "extra-2026-geo2-人口、都市與產業-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-人口、都市與產業-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用人口、都市與產業",
+      "question": {
+        "q": "甲都市白天人口140萬，夜間常住人口100萬。這類差異最常反映什麼？",
+        "correct": "大量跨區通勤進入都市工作或就學",
+        "wrong": [
+          "都市常住人口必定達140萬",
+          "夜間人口較少代表白天居民全部遷入",
+          "兩者差值能直接代表出生人數"
+        ],
+        "exp": "日夜人口反映活動人口與常住人口不同。",
+        "subject": "地理",
+        "sub_topic": "人口、都市與產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口、都市與產業",
+        "template_id": "extra-2026-geo2-人口、都市與產業-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-人口、都市與產業-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用人口、都市與產業",
+      "question": {
+        "q": "某製造業城市的工廠逐漸移出，舊廠房轉為展演與住宅空間。最適合用哪個概念描述？",
+        "correct": "產業轉型與都市土地再利用",
+        "wrong": [
+          "城市必然完全失去任何經濟活動",
+          "工廠移出必然使人口全部離開",
+          "舊建築用途不可能因需求改變"
+        ],
+        "exp": "產業結構改變會帶動都市空間的再發展。",
+        "subject": "地理",
+        "sub_topic": "人口、都市與產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口、都市與產業",
+        "template_id": "extra-2026-geo2-人口、都市與產業-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-臺灣自然環境-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用臺灣自然環境",
+      "question": {
+        "q": "臺灣西部某平原地下水長期超抽後地層下陷，部分地區更容易受海水倒灌。最直接的機制是？",
+        "correct": "含水層壓力下降使地面高程降低，提高沿海淹水暴露",
+        "wrong": [
+          "地下水超抽會使海平面立刻下降",
+          "地層下陷只能由火山爆發造成",
+          "沿海淹水完全不受地面高程影響"
+        ],
+        "exp": "超抽使地層壓密及地面下降，低窪地區受潮汐與暴潮影響可能增加。",
+        "subject": "地理",
+        "sub_topic": "臺灣自然環境",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-6",
+            "name": "臺灣地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-臺灣自然環境",
+        "template_id": "extra-2026-geo2-臺灣自然環境-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-臺灣自然環境-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用臺灣自然環境",
+      "question": {
+        "q": "臺灣東西兩側河川比較，東部部分河川短而坡陡，西部平原河流下游曲流較發達。主因最相關的是？",
+        "correct": "地形高差、流域長度與地質條件的差異",
+        "wrong": [
+          "東西兩岸的地球自轉方向不同",
+          "東部河水不受重力影響",
+          "河流形態只由行政區人口決定"
+        ],
+        "exp": "中央山脈與平原分布影響河川坡度、侵蝕及沉積。",
+        "subject": "地理",
+        "sub_topic": "臺灣自然環境",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-6",
+            "name": "臺灣地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-臺灣自然環境",
+        "template_id": "extra-2026-geo2-臺灣自然環境-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-臺灣自然環境-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用臺灣自然環境",
+      "question": {
+        "q": "夏季颱風接近臺灣東岸，強降雨集中於迎風山坡。若判讀降雨機制，應優先考慮？",
+        "correct": "颱風氣流方向與中央山脈造成的地形抬升",
+        "wrong": [
+          "只依當日月相判斷雨區",
+          "所有地區必然有相同降雨量",
+          "地形不會改變氣流及降雨"
+        ],
+        "exp": "環流帶來濕氣時，迎風坡抬升可增加地形降雨。",
+        "subject": "地理",
+        "sub_topic": "臺灣自然環境",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-6",
+            "name": "臺灣地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-臺灣自然環境",
+        "template_id": "extra-2026-geo2-臺灣自然環境-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

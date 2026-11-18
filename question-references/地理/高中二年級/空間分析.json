@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-空間分析-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用空間分析",
+      "question": {
+        "q": "市府選擇消防分隊新址，希望五分鐘內能到達最多高風險住宅。使用GIS時最適合哪組資料？",
+        "correct": "道路行車時間網絡、人口分布與建物風險圖層",
+        "wrong": [
+          "只用地圖上的直線距離作全部依據",
+          "只看各里地名長短",
+          "用土地總面積代替道路路網"
+        ],
+        "exp": "服務可及性需要網絡時間而非單純直線距離。",
+        "subject": "地理",
+        "sub_topic": "空間分析",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-空間分析",
+        "template_id": "extra-2026-geo2-空間分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-空間分析-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用空間分析",
+      "question": {
+        "q": "某商家想選新門市位置，甲址人潮大但競爭店多，乙址人潮中等且交通接近。分析時最合理的方式是？",
+        "correct": "套疊顧客來源、交通及競爭店分布，建立多準則評估",
+        "wrong": [
+          "只以某一天路人的最高值決定全部成本",
+          "門市周圍競爭者與消費需求完全無關",
+          "只按店址經度大小排名"
+        ],
+        "exp": "零售區位需比較市場潛力與競爭及可達性。",
+        "subject": "地理",
+        "sub_topic": "空間分析",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-空間分析",
+        "template_id": "extra-2026-geo2-空間分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-空間分析-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用空間分析",
+      "question": {
+        "q": "淹水潛勢圖顯示低地風險高，但新社區位於較高台地。要判斷真正風險還須納入什麼？",
+        "correct": "建築排水、坡面逕流及雨量條件",
+        "wrong": [
+          "只看社區建築外觀顏色",
+          "高台地必定永遠不淹水",
+          "只用海拔可完全排除所有積水可能"
+        ],
+        "exp": "局部排水與極端降雨會影響高地積水，空間模型需多條件。",
+        "subject": "地理",
+        "sub_topic": "空間分析",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-空間分析",
+        "template_id": "extra-2026-geo2-空間分析-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-區域比較-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用區域比較",
+      "question": {
+        "q": "甲區全年降水1200毫米，乾季六個月；乙區同樣1200毫米但全年均勻分布。比較農業風險時最適當？",
+        "correct": "考量水量季節分配與作物需水期，而不只比較總量",
+        "wrong": [
+          "因年雨量相同就確定缺水機率相同",
+          "乙區所有作物必定不需灌溉",
+          "甲區乾季一定沒有任何地下水"
+        ],
+        "exp": "氣候的時間分布對農業供水可能比總量更重要。",
+        "subject": "地理",
+        "sub_topic": "區域比較",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域比較",
+        "template_id": "extra-2026-geo2-區域比較-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-區域比較-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用區域比較",
+      "question": {
+        "q": "兩個港口城市人口相同，甲以貨運與製造為主，乙以觀光服務為主。若全球旅遊需求下降，哪種分析合理？",
+        "correct": "乙對觀光需求波動較直接敏感，但應考量產業多元程度",
+        "wrong": [
+          "甲因製造業而絕不受外部市場影響",
+          "兩城人口相同代表就業風險相同",
+          "只用港口面積就能決定失業變化"
+        ],
+        "exp": "區域功能與經濟結構使外在衝擊的傳導不同。",
+        "subject": "地理",
+        "sub_topic": "區域比較",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域比較",
+        "template_id": "extra-2026-geo2-區域比較-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-區域比較-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用區域比較",
+      "question": {
+        "q": "甲地平均所得高，但物價及房租亦高；乙地所得較低但生活成本較低。比較生活水準應優先使用？",
+        "correct": "物價調整後的所得與必要支出負擔",
+        "wrong": [
+          "單純比較名目薪資即可決定",
+          "房價高必定代表當地居民均有自有住宅",
+          "只看人口密度而忽略收入"
+        ],
+        "exp": "區域比較應統一購買力與生活成本基準。",
+        "subject": "地理",
+        "sub_topic": "區域比較",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域比較",
+        "template_id": "extra-2026-geo2-區域比較-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

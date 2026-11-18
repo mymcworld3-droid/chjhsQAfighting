@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-地圖與統計圖-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用地圖與統計圖",
+      "question": {
+        "q": "比較兩縣醫師總數，甲有500名、人口20萬，乙有600名、人口40萬。以每萬人口醫師數比較，何者較高？",
+        "correct": "甲為25名，高於乙15名",
+        "wrong": [
+          "乙為30名，高於甲20名",
+          "兩縣同為25名",
+          "因乙醫師總數多，所以乙密度必較高"
+        ],
+        "exp": "甲500除以20萬乘1萬等於25，乙600除以40萬乘1萬等於15。",
+        "subject": "地理",
+        "sub_topic": "地圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-地圖與統計圖",
+        "template_id": "extra-2026-geo2-地圖與統計圖-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-地圖與統計圖-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用地圖與統計圖",
+      "question": {
+        "q": "某地氣候圖的年雨量總值近似相同，但甲年集中夏季降雨、乙年較均勻。推論缺水風險最應注意什麼？",
+        "correct": "降雨季節分配與用水需求高峰是否錯開",
+        "wrong": [
+          "只比較年總雨量便可確定全年供水",
+          "每月降雨比例必由地名決定",
+          "雨量年總值相同就表示水庫需求相同"
+        ],
+        "exp": "時間分布與需求匹配影響水資源可靠度。",
+        "subject": "地理",
+        "sub_topic": "地圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-地圖與統計圖",
+        "template_id": "extra-2026-geo2-地圖與統計圖-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-地圖與統計圖-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用地圖與統計圖",
+      "question": {
+        "q": "一張區域圖用深色表示總人口，另一張用深色表示人口密度。比較時最容易發生哪種誤判？",
+        "correct": "把總量高誤認為單位面積人口也高",
+        "wrong": [
+          "總人口與人口密度的分母完全相同",
+          "任何地圖色階都不能傳遞數據",
+          "只要兩圖顏色相近就代表數值相同"
+        ],
+        "exp": "總量與密度分別代表不同指標，圖例及分母必須核對。",
+        "subject": "地理",
+        "sub_topic": "地圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-地圖與統計圖",
+        "template_id": "extra-2026-geo2-地圖與統計圖-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

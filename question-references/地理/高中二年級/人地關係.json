@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-人地關係-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用人地關係",
+      "question": {
+        "q": "某地水庫可穩定供水，但阻斷魚類洄游。從人地關係角度，最合適的評估是？",
+        "correct": "比較供水效益與生態連通損失，設計減輕措施",
+        "wrong": [
+          "只要水庫供水就代表沒有任何自然影響",
+          "阻斷魚類活動必定增加全部物種數",
+          "供水需求和生態議題完全不能同時研究"
+        ],
+        "exp": "人類工程與自然系統相互影響，應平衡不同目標。",
+        "subject": "地理",
+        "sub_topic": "人地關係",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人地關係",
+        "template_id": "extra-2026-geo2-人地關係-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-人地關係-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用人地關係",
+      "question": {
+        "q": "某都市擴張使農田與透水地面減少，暴雨排水負擔增加。哪種規畫更符合調適？",
+        "correct": "保留滯洪空間並增加透水及分散式排水措施",
+        "wrong": [
+          "只增加不透水停車場就能改善排水",
+          "因土地由都市使用便不再受降雨影響",
+          "只依都市人口數可決定所有排水設計"
+        ],
+        "exp": "土地利用會改變逕流與水循環，需規畫綠藍基盤。",
+        "subject": "地理",
+        "sub_topic": "人地關係",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人地關係",
+        "template_id": "extra-2026-geo2-人地關係-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-人地關係-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用人地關係",
+      "question": {
+        "q": "某山地社區近年將部分林地改為茶園，坡地侵蝕增加。要研究原因，應檢查什麼？",
+        "correct": "坡度、土地覆蓋、農耕方式與降雨變化",
+        "wrong": [
+          "只依茶葉產值推定所有侵蝕量",
+          "認為林地改變與土壤完全沒有關係",
+          "只測試空氣溫度即可判定坡地穩定"
+        ],
+        "exp": "自然條件與人類使用方式共同決定侵蝕風險。",
+        "subject": "地理",
+        "sub_topic": "人地關係",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人地關係",
+        "template_id": "extra-2026-geo2-人地關係-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

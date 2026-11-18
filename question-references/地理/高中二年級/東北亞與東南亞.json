@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-東北亞與東南亞-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用東北亞與東南亞",
+      "question": {
+        "q": "某東南亞國家與東北亞企業合作設立電子組裝廠，零件跨國運輸。此模式最直接反映什麼？",
+        "correct": "區域供應鏈與不同地區勞動技術條件的分工",
+        "wrong": [
+          "東南亞與東北亞不存在任何產業往來",
+          "組裝地必定掌握全部研發專利",
+          "跨國製造完全不需要港口與交通"
+        ],
+        "exp": "不同國家可在同一價值鏈承擔不同環節。",
+        "subject": "地理",
+        "sub_topic": "東北亞與東南亞",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-東北亞與東南亞",
+        "template_id": "extra-2026-geo2-東北亞與東南亞-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-東北亞與東南亞-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用東北亞與東南亞",
+      "question": {
+        "q": "若要比較日本與印尼面對地震與火山災害的共同原因，首先應注意什麼？",
+        "correct": "兩地均鄰近板塊邊界，但地質構造及人口暴露不同",
+        "wrong": [
+          "兩國因氣候相同才有火山",
+          "火山只能形成於內陸平原",
+          "所有地震災損都與人口密度無關"
+        ],
+        "exp": "板塊活動是重要危害來源，實際風險還須考慮社會條件。",
+        "subject": "地理",
+        "sub_topic": "東北亞與東南亞",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-東北亞與東南亞",
+        "template_id": "extra-2026-geo2-東北亞與東南亞-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-東北亞與東南亞-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "透過臺灣或區域空間情境運用東北亞與東南亞",
+      "question": {
+        "q": "某東南亞三角洲人口稠密、出口稻米多，遇海平面上升可能面臨什麼挑戰？",
+        "correct": "鹽水入侵與農地、水源及沿海聚落的暴露",
+        "wrong": [
+          "海平面上升必定使地下淡水增加",
+          "三角洲完全不受河川泥砂變化影響",
+          "稻作只受國際市場影響與水質無關"
+        ],
+        "exp": "低平三角洲容易受海水侵入與土地沉降共同影響。",
+        "subject": "地理",
+        "sub_topic": "東北亞與東南亞",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-東北亞與東南亞",
+        "template_id": "extra-2026-geo2-東北亞與東南亞-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
