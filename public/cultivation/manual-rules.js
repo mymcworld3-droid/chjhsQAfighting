@@ -7,7 +7,7 @@
   'use strict';
   // Each successful manual killing blow earns XP for that scripture.
   // Lv. 1 -> 2 costs 40 XP; each following level costs 20 XP more.
-  const EXP_PER_KILL=50,MAX_EXP=100000000,MAX_SKILL_LEVEL=5;
+  const EXP_PER_KILL=50,MAX_LEVEL=20,MAX_EXP=10*(MAX_LEVEL-1)*(MAX_LEVEL+2),MAX_SKILL_LEVEL=5;
   // Exactly the existing cultivation score cutoffs, with human-readable realm labels.
   const REALMS=Object.freeze([
     {name:'煉氣',score:1,stage:1,exp:20},
@@ -41,12 +41,14 @@
   }
   function mastery(raw){
     const exp=Math.max(0,Math.min(MAX_EXP,Math.floor(Number(raw)||0)));
-    const level=levelForExp(exp),current=exp-totalExpForLevel(level),needed=xpForNextLevel(level);
+    const level=levelForExp(exp);
+    if(level===MAX_LEVEL)return {level,exp,totalExp:exp,expInLevel:0,expToNext:0,progress:100};
+    const current=exp-totalExpForLevel(level),needed=xpForNextLevel(level);
     return {level,exp,totalExp:exp,expInLevel:current,expToNext:needed,progress:Math.min(100,Math.floor(current/needed*100))};
   }
   function upgradeQuote(raw){
     const {level,exp}=mastery(raw);
-    if(level>=10)return null;
+    if(level>=MAX_LEVEL)return null;
     const targetLevel=level+1,targetExp=totalExpForLevel(targetLevel);
     return {targetLevel,targetExp,gold:(targetExp-exp)*2};
   }
@@ -61,8 +63,8 @@
   }
   const technique=(id,name,cost,range,kind,power,description,extra={})=>
     Object.freeze({id,name,cost,range,kind,power,description,...extra,cooldown:0});
-  const book=(id,name,school,description,skills,realms=[1,6,28])=>Object.freeze({
-    id,name,school,description,skills:Object.freeze(skills.map((skill,index)=>
+  const book=(id,name,school,description,skills,realms=[1,6,28],tierRealm='煉氣')=>Object.freeze({
+    id,name,school,description,tierRealm,skills:Object.freeze(skills.map((skill,index)=>
       Object.freeze({...skill,moveId:skill.moveId||skill.id,manualId:id,school,
         levelRequired:[1,5,10][index],realmRequired:realms[index]})))
   });
@@ -85,7 +87,7 @@
         '在自身直線三格內的空地召劍。再用此招可讓飛劍直線移動最多四格，穿過敵人時造成傷害。每回合最多用兩次。',
         {travel:4,cooldown:0}),
       shared(breakLine,'flight-break')
-    ],[6,6,28]),
+    ],[6,6,28],'築基'),
     // Preserve the former 青霄劍典 book and slot IDs in existing saves.
     book('sword-sky','八方劍典','sword','以多路劍氣交擊一點，兼及周圍敵人。',[
       shared(straight,'sky-pierce'),
@@ -95,7 +97,7 @@
       technique('sky-sever','八方合劍',6,4,'sword-array',1.25,
         '選擇四格內的中心。正向各延伸三格、斜向各延伸兩格，八路劍氣向中心匯聚。',
         {orthogonal:3,diagonal:2,centerPower:2.4})
-    ],[6,28,68]),
+    ],[6,28,68],'元嬰'),
     book('body-rock','玄嶽鍛體訣','body','突進破陣，將敵人擊退。',[
       straightFist,
       technique('rock-quake','突進震拳',3,3,'dash-cleave',1.15,
@@ -109,14 +111,14 @@
         '最多四段。每段攻擊前方一排並將敵人推退一格，再前進一格。敵人無法被推退時追加撞擊傷害；前路受阻則停止。',{steps:4,collisionPower:.45}),
       technique('dragon-roar','蓄勢',7,0,'fist-focus',0,
         '立即結束回合。接下來自己的兩個回合各可出手三次，其他拳法體力消耗減半並向上取整。',{cooldown:3})
-    ],[6,28,68]),
+    ],[6,28,68],'元嬰'),
     book('body-tiger','伏虎擒拿訣','body','以步法貼近敵人，借力改變敵人的站位。',[
       shared(straightFist,'tiger-fist'),
       technique('tiger-step','踏步連拳',4,2,'dash-cleave',1.5,
         '直線踏步最多兩格，再攻擊落點前方橫排三格兩次。',{hits:2}),
       technique('tiger-throw','翻摔',4,1,'fist-throw',1.5,
         '將身前橫排三格內的敵人摔到身後的對應格，落地時造成傷害。若對應落點有障礙或被占用，該目標留在原地。')
-    ],[6,28,68])
+    ],[6,28,68],'築基')
   ]);
   const BY_BOOK=Object.freeze(Object.fromEntries(BOOKS.map(book=>[book.id,book])));
   const BY_SKILL=Object.freeze(Object.fromEntries(BOOKS.flatMap(book=>book.skills.map(skill=>[skill.id,skill]))));
@@ -274,11 +276,18 @@
     // Do not expose undiscovered scriptures to the cultivation UI.
     const library=BOOKS.filter(book=>!!s.books[book.id]).map(book=>{
       const levelInfo=mastery(s.books[book.id].exp);
-      return {id:book.id,name:book.name,school:book.school,description:book.description,
+      return {id:book.id,name:book.name,school:book.school,tierRealm:book.tierRealm,description:book.description,
         owned:true,...levelInfo,upgrade:upgradeQuote(levelInfo.exp),skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level,score,s.skillLevels[skill.id]))};
     });
-    return {...s,realmScore:score,realmName:realmForScore(score).name,library};
+    return {...s,realmScore:score,realmName:realmForScore(score).name,
+      attackBonus:manualAttackBonus(s),maxManualLevel:MAX_LEVEL,library};
+  }
+  // Sum all owned manuscript levels, including a Lv.1 manuscript (+1).
+  // This is derived from the owned books; never increment the saved user attack.
+  function manualAttackBonus(raw){
+    const state=normalize(raw);
+    return Object.values(state.books).reduce((sum,row)=>sum+levelForExp(row.exp),0);
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,unlocked,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,unlocked,manualAttackBonus,publicState,starterFor});
 });
