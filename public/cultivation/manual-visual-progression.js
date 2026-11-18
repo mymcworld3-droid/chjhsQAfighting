@@ -8,7 +8,7 @@ export function manualVisualState(book) {
   const stage=level===10?'complete':level>=8?'surge':level>=5?'inscribed':'seed';
   const descriptors={
     seed:{label:'初息',description:'靈息初聚，逐步打通招式脈絡',light:0.30},
-    inscribed:{label:'凝紋',description:'靈紋凝成，功法氣象漸顯',light:0.55},
+    inscribed:{label:'凝紋',description:'靈紋凝成，靈息沿經脈流轉',light:0.55},
     surge:{label:'盛氣',description:'靈氣充盈，功法威勢更加鮮明',light:0.76},
     complete:{label:'圓滿',description:'功法修至最高等級，靈紋完整',light:1}
   };
@@ -22,27 +22,28 @@ export function manualSkillVisualState(skill) {
   return 'level-locked';
 }
 
+// Single integrated mastery rail: 10 stations, three raised round acupoints.
+// The continuous fill reflects authoritative current-level EXP.
 export function renderManualVisualMilestones(book,esc) {
-  const {level,stage,label,description}=manualVisualState(book);
-  const anchors=new Map([[1,'入門'],[5,'第二招門檻'],[10,'第三招門檻']]);
+  const {level,stage}=manualVisualState(book);
+  const currentFraction=level>=10?1:Math.max(0,Math.min(1,(Number(book?.progress)||0)/100));
+  const fraction=level>=10?1:(level-1+currentFraction)/9;
+  const percentage=Math.max(0,Math.min(100,fraction*100));
+  const milestoneNames={1:'入門',5:'第二招等級門檻',10:'第三招等級門檻'};
   const marks=Array.from({length:10},(_,index)=>{
-    const n=index+1,passed=n<=level,current=n===level,anchor=anchors.get(n);
-    return `<span class="manual-growth-mark ${passed?'is-reached':'is-pending'} ${current?'is-current':''} ${anchor?'is-milestone':''}"
-      aria-hidden="true" title="功法 Lv. ${n}${anchor?' · '+anchor:''}">
-      ${anchor?`<small>${n}</small>`:''}
-    </span>`;
+    const n=index+1,reached=n<=level,current=n===level;
+    const milestone=Object.prototype.hasOwnProperty.call(milestoneNames,n);
+    return `<span class="manual-growth-mark ${reached?'is-reached':'is-pending'} ${current?'is-current':''} ${milestone?'is-milestone':''}"
+        aria-hidden="true" title="功法 Lv. ${n}${milestone?' · '+milestoneNames[n]:''}">
+        ${milestone?`<small>${n}</small>`:''}
+      </span>`;
   }).join('');
-  return `<div class="manual-growth" data-manual-growth-stage="${stage}">
-    <div class="manual-growth-header">
-      <span class="manual-growth-heading">功法氣象 <strong>${esc(label)}</strong></span>
-      <span class="manual-growth-level">Lv. ${level} / 10</span>
-    </div>
-    <div class="manual-growth-marks" role="img" aria-label="功法等級 ${level} / 10。第一、五、十級為功法成長節點；技能仍需符合修士境界才解鎖。">
+  return `<div class="manual-growth-marks" data-manual-growth-stage="${stage}" role="progressbar"
+      aria-label="${esc(book?.name||'功法')}整體熟練度：Lv. ${level} / 10。Lv. 5 與 Lv. 10 為招式等級門檻，領悟仍需達到修士境界"
+      aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(percentage)}">
+      <span class="manual-growth-flow" aria-hidden="true">
+        <span class="manual-growth-flow-fill" style="width:${percentage.toFixed(2)}%"></span>
+      </span>
       ${marks}
-    </div>
-    <div class="manual-growth-footnote">
-      <span>${esc(description)}</span>
-      <small>氣象為視覺成長，不增加額外戰力</small>
-    </div>
-  </div>`;
+    </div>`;
 }
