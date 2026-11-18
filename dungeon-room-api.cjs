@@ -5,6 +5,7 @@
 const crypto = require('node:crypto');
 const { playerRepository, raidRepository } = require('./server-repositories.cjs');
 const { verifyMainIdentity } = require('./raid-question-ticket.cjs');
+const {streamDungeonRoom} = require('./dungeon-room-stream.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -15,6 +16,9 @@ const MAX_MEMBERS=4;
 const PUBLIC_SCAN_LIMIT=120;
 const PUBLIC_RESULT_LIMIT=24;
 const LOBBY_TTL_MS=2*60*60*1000;
+const HEARTBEAT_MIN_MS=12000;
+const PRESENCE_STALE_MS=60000;
+const RENEW_IF_LESS_THAN_MS=30*60*1000;
 const ALPHABET='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const err=(message,status=409)=>Object.assign(new Error(message),{status});
 const safeRoomId=value=>/^[A-Za-z0-9_-]{8,160}$/.test(String(value||''))?String(value):'';
@@ -27,13 +31,16 @@ const sessionRoom=(room,at)=>validRoom(room,at)||
     Number(room.expiresAtMs)>at);
 const membersOf=room=>room?.members&&typeof room.members==='object'&&!Array.isArray(room.members)?room.members:{};
 const hasMember=(room,uid)=>Object.prototype.hasOwnProperty.call(membersOf(room),uid);
-const publicRoom=(roomId,room)=>({
+const memberOnline=(member,at)=>Number(member?.heartbeatAtMs)>0 &&
+  Math.max(0,at-Number(member.heartbeatAtMs))<=PRESENCE_STALE_MS;
+const publicRoom=(roomId,room,at=Date.now())=>({
   id:roomId,mode:'dungeon',version:room.version,revision:room.revision,
   status:room.status,visibility:room.visibility==='public'?'public':'private',code:room.code,
   hostUid:room.hostUid,createdAtMs:room.createdAtMs,
   assembledAtMs:room.assembledAtMs||0,
   expiresAtMs:room.expiresAtMs,maxMembers:MAX_MEMBERS,
-  members:membersOf(room)
+  members:Object.fromEntries(Object.entries(membersOf(room)).map(([id,member])=>
+    [id,{...member,online:memberOnline(member,at)}]))
 });
 const safeName=(value,uid)=>{
   const name=String(value||'').trim().slice(0,32);
@@ -46,7 +53,7 @@ const REALM_TIERS=Object.freeze([
 const makeMember=(uid,name,at,player={})=>{
   const score=trainingAccess.score(player);
   const realm=REALM_TIERS.find(([threshold])=>score>=threshold)?.[1]||'凡人';
-  return {uid,name,joinedAtMs:at,ready:false,realm,accessScore:score};
+  return {uid,name,joinedAtMs:at,ready:false,realm,accessScore:score,heartbeatAtMs:at};
 };
 // Public recruitment discloses only safe presentation fields, never codes,
 // member identifiers, or complete room state.
@@ -83,7 +90,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -96,7 +103,7 @@ function createHandler({
         const room=roomSnap.exists?roomSnap.data():null;
         return sessionRoom(room,at)&&hasMember(room,uid)?{id:pointed,room}:null;
       };
-      const respond=(roomId,room)=>res.json({ok:true,roomId:roomId||null,room:room?publicRoom(roomId,room):null});
+      const respond=(roomId,room)=>res.json({ok:true,roomId:roomId||null,room:room?publicRoom(roomId,room,at):null});
       const addMember=async(tx,roomId,room,name,player,{reuseExisting=false}={})=>{
         const current=await existing(tx);
         if(current&&current.id!==roomId){
@@ -232,6 +239,43 @@ function createHandler({
       const roomId=safeRoomId(req.body?.roomId);
       if(!roomId)throw err('副本房間編號無效',400);
       const roomRef=db.collection(ROOMS).doc(roomId);
+      if(action==='subscribe'){
+        const snap=await roomRef.get();
+        if(!snap.exists)throw err('副本房間不存在',404);
+        const current=snap.data();
+        if(!hasMember(current,uid))throw err('你不是此副本的隊員',403);
+        if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
+        return streamDungeonRoom({req,res,ref:roomRef,uid,initialRoom:current,
+          project:publicRoom,isActive:room=>sessionRoom(room,clock()),clock,logger});
+      }
+      if(action==='heartbeat'){
+        const updated=await db.runTransaction(async tx=>{
+          const snap=await tx.get(roomRef);
+          const current=snap.exists?snap.data():null;
+          if(!current||!hasMember(current,uid))throw err('你不是此副本的隊員',403);
+          if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
+          const member=membersOf(current)[uid],last=Number(member.heartbeatAtMs)||0;
+          const shouldTouch=last<=0||at-last>=HEARTBEAT_MIN_MS;
+          const shouldRenew=Number(current.expiresAtMs)-at<RENEW_IF_LESS_THAN_MS;
+          if(!shouldTouch&&!shouldRenew)return current;
+          const codeRef=db.collection(CODES).doc(current.code);
+          const codeSnap=shouldRenew?await tx.get(codeRef):null;
+          if(shouldRenew&&(!codeSnap?.exists||codeSnap.data()?.roomId!==roomId||
+              codeSnap.data()?.status!=='active'))
+            throw err('房間代碼已失效，請重新建立隊伍',409);
+          const expiresAtMs=shouldRenew?at+LOBBY_TTL_MS:current.expiresAtMs;
+          const members=shouldTouch?{...membersOf(current),
+            [uid]:{...member,heartbeatAtMs:at}}:membersOf(current);
+          const next={...current,members,expiresAtMs,revision:current.revision+1};
+          tx.update(roomRef,{members,expiresAtMs,revision:next.revision});
+          if(shouldRenew)tx.set(codeRef,{roomId,status:'active',expiresAtMs});
+          return next;
+        });
+        // Heartbeats acknowledge the request without echoing a potentially
+        // stale room: the snapshot stream is the source of state updates.
+        return res.json({ok:true,roomId,revision:updated.revision,
+          heartbeatAtMs:Number(membersOf(updated)[uid]?.heartbeatAtMs)||0});
+      }
       if(action==='get'){
         const snap=await roomRef.get();
         if(!snap.exists)throw err('副本房間不存在',404);
@@ -370,4 +414,5 @@ function createHandler({
 function registerDungeonRoomApi(app){app.post('/api/dungeon/room',createHandler());}
 module.exports=registerDungeonRoomApi;
 module.exports.__test={ROOMS,CODES,MEMBERSHIPS,VERSION,MAX_MEMBERS,LOBBY_TTL_MS,
-  safeRoomId,safeCode,validRoom,sessionRoom,hasMember,publicRoom,recruitmentCard,listPublicRooms,makeMember,createHandler};
+  safeRoomId,safeCode,validRoom,sessionRoom,hasMember,memberOnline,publicRoom,recruitmentCard,listPublicRooms,makeMember,createHandler,
+  HEARTBEAT_MIN_MS,PRESENCE_STALE_MS,RENEW_IF_LESS_THAN_MS};
