@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-制度與社會變遷-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用制度與社會變遷觀念",
+      "question": {
+        "q": "某國廢除傳統身分限制後，低收入群體仍難以取得教育。這說明哪種情況？",
+        "correct": "法律上的制度改變不一定立即消除社會資源差距",
+        "wrong": [
+          "廢除身分限制必定讓所有人收入相同",
+          "教育機會完全不受家庭資源影響",
+          "制度改革只可能造成負面效果"
+        ],
+        "exp": "法律平等和實質機會可能存在時間差。",
+        "subject": "歷史",
+        "sub_topic": "制度與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-制度與社會變遷",
+        "template_id": "extra-2026-h3-制度與社會變遷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-制度與社會變遷-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用制度與社會變遷觀念",
+      "question": {
+        "q": "某政府改用新的稅制後，商人投資增加，部分小農卻抱怨負擔提高。分析政策效果應怎麼做？",
+        "correct": "分群比較成本、所得與納稅情形",
+        "wrong": [
+          "只計算商人總收入就代表社會全體",
+          "因小農抗議就斷定商人數據必定虛假",
+          "稅制只影響政府而不影響人民"
+        ],
+        "exp": "制度會改變不同群體誘因，需分析分配效果。",
+        "subject": "歷史",
+        "sub_topic": "制度與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-制度與社會變遷",
+        "template_id": "extra-2026-h3-制度與社會變遷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-制度與社會變遷-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用制度與社會變遷觀念",
+      "question": {
+        "q": "某地工業化後形成新型工會與商會。哪項解釋最合理？",
+        "correct": "經濟活動模式轉變可能促成新的社會組織",
+        "wrong": [
+          "工廠成立就代表所有傳統社群立即消失",
+          "勞工團體不可能影響政策",
+          "組織形式永遠與就業方式無關"
+        ],
+        "exp": "生產關係轉變常引起組織與制度調整。",
+        "subject": "歷史",
+        "sub_topic": "制度與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-制度與社會變遷",
+        "template_id": "extra-2026-h3-制度與社會變遷-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

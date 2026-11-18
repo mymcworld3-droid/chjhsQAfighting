@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-全球互動-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用全球互動觀念",
+      "question": {
+        "q": "十九世紀某地因歐洲工業需求增加而擴大原料出口。這反映哪種歷史聯繫？",
+        "correct": "地方生產與跨洲市場需求逐步相互依賴",
+        "wrong": [
+          "全球貿易出現後各地經濟完全獨立",
+          "出口增加代表全體居民一定均等致富",
+          "原料產區必定同時掌握國際定價權"
+        ],
+        "exp": "全球市場可影響地方土地與勞動配置，但利益分配不均。",
+        "subject": "歷史",
+        "sub_topic": "全球互動",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-全球互動",
+        "template_id": "extra-2026-h3-全球互動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-全球互動-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用全球互動觀念",
+      "question": {
+        "q": "一種疾病沿陸路商隊與海路港口擴散。研究傳播路徑時最有力的證據組合是？",
+        "correct": "不同地區的時間紀錄、移動路線與接觸網絡",
+        "wrong": [
+          "只憑某位旅行者的一句傳言",
+          "以各港口名字的相似度判斷",
+          "只比較今日人口而忽略過去路線"
+        ],
+        "exp": "傳播研究需要時間與空間交叉證據。",
+        "subject": "歷史",
+        "sub_topic": "全球互動",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-全球互動",
+        "template_id": "extra-2026-h3-全球互動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-全球互動-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用全球互動觀念",
+      "question": {
+        "q": "某國以提高關稅回應跨國市場衝擊，鄰國也調整貿易政策。這最能說明什麼？",
+        "correct": "國內政策選擇可能引發跨境相互反應",
+        "wrong": [
+          "每個國家的政策永遠不受外部環境影響",
+          "關稅政策不涉及任何商品交易",
+          "國際互動只可能由戰爭構成"
+        ],
+        "exp": "全球互動涉及競爭、協商與政策連鎖。",
+        "subject": "歷史",
+        "sub_topic": "全球互動",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-全球互動",
+        "template_id": "extra-2026-h3-全球互動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

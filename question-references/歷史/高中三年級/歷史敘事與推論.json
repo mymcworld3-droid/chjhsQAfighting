@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-歷史敘事與推論-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用歷史敘事與推論觀念",
+      "question": {
+        "q": "某紀錄片先呈現工廠冒煙，再旁白說「因此所有居民都患病」。此敘事主要有何問題？",
+        "correct": "從局部影像推斷普遍疾病，缺乏健康與暴露證據",
+        "wrong": [
+          "任何工廠排放都與生活無關",
+          "只要是紀錄片就必定不需查證",
+          "研究健康影響不能使用任何影像"
+        ],
+        "exp": "影像可呈現環境條件，但普遍因果需資料支持。",
+        "subject": "歷史",
+        "sub_topic": "歷史敘事與推論",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-歷史敘事與推論",
+        "template_id": "extra-2026-h3-歷史敘事與推論-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-歷史敘事與推論-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用歷史敘事與推論觀念",
+      "question": {
+        "q": "某故事把某位領袖塑造為社會改革的唯一原因，完全忽略其他組織。最合適的史學批評是？",
+        "correct": "忽略結構條件及集體行動，過度集中單一人物",
+        "wrong": [
+          "歷史人物完全不能影響任何制度",
+          "改革一定沒有相關領袖",
+          "故事有主人翁就必然全篇不真實"
+        ],
+        "exp": "人物敘事可以有焦點，但不能直接排除多重因素。",
+        "subject": "歷史",
+        "sub_topic": "歷史敘事與推論",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-歷史敘事與推論",
+        "template_id": "extra-2026-h3-歷史敘事與推論-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-歷史敘事與推論-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用歷史敘事與推論觀念",
+      "question": {
+        "q": "兩位史家以同一場抗議為主題，一位寫官員決策，另一位寫參與者生活。怎樣理解較好？",
+        "correct": "不同史學問題與視角可能產生互補的敘事",
+        "wrong": [
+          "只要事件相同就必須逐字一致",
+          "只要有兩種敘事就表示一方必定造假",
+          "參與者的生活不能成為史料"
+        ],
+        "exp": "歷史敘事是有依據的取材與解釋，須分別檢驗證據。",
+        "subject": "歷史",
+        "sub_topic": "歷史敘事與推論",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-歷史敘事與推論",
+        "template_id": "extra-2026-h3-歷史敘事與推論-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

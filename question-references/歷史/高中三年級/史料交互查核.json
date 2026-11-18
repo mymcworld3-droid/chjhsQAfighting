@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-史料交互查核-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用史料交互查核觀念",
+      "question": {
+        "q": "兩份歷史報導說法一致，查證後發現均引用同一匿名社群貼文。為何不能視為獨立互證？",
+        "correct": "資訊來源相同，兩份報導沒有增加獨立證據",
+        "wrong": [
+          "媒體名稱不同就保證來源獨立",
+          "報導數量越多就必定真實",
+          "匿名來源永遠不能記載任何事實"
+        ],
+        "exp": "互證需檢查資訊是否源自不同證據鏈。",
+        "subject": "歷史",
+        "sub_topic": "史料交互查核",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-史料交互查核",
+        "template_id": "extra-2026-h3-史料交互查核-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-史料交互查核-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用史料交互查核觀念",
+      "question": {
+        "q": "研究某次罷工，官方紀錄稱參加一千人，工會報告稱兩千人。下一步最適當的工作是？",
+        "correct": "比對統計日期、區域範圍及其他同時期紀錄",
+        "wrong": [
+          "只採數字較大的一方",
+          "把兩數相加當成參與人數",
+          "因數字不同就斷定罷工沒有發生"
+        ],
+        "exp": "數量差異可能是口徑或立場所致，需逐項查核。",
+        "subject": "歷史",
+        "sub_topic": "史料交互查核",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-史料交互查核",
+        "template_id": "extra-2026-h3-史料交互查核-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-史料交互查核-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用史料交互查核觀念",
+      "question": {
+        "q": "一張照片被標示為某次示威現場，但建築外觀與當年地圖不符。研究者應如何處理？",
+        "correct": "追溯照片原始來源並核對地標與日期",
+        "wrong": [
+          "只看社群貼文按讚次數",
+          "直接認定照片顏色有誤就代表示威不存在",
+          "以拍攝者姓名長短判定地點"
+        ],
+        "exp": "照片定位可透過時間、空間與其他影像互證。",
+        "subject": "歷史",
+        "sub_topic": "史料交互查核",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-史料交互查核",
+        "template_id": "extra-2026-h3-史料交互查核-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

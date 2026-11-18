@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-歷史分期-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用歷史分期觀念",
+      "question": {
+        "q": "某史書把一地的「近代」起點定為鐵路興建，另一研究以政治制度改革為起點。這種差異主要反映什麼？",
+        "correct": "歷史分期取決於研究問題及所選轉折指標",
+        "wrong": [
+          "只有一個日期能適用所有地區與議題",
+          "鐵路通車必然與政治改革同一天發生",
+          "只要年代相同社會變化就完全一致"
+        ],
+        "exp": "歷史分期是分析工具，不是所有現象共同的自然界線。",
+        "subject": "歷史",
+        "sub_topic": "歷史分期",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-歷史分期",
+        "template_id": "extra-2026-h3-歷史分期-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-歷史分期-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用歷史分期觀念",
+      "question": {
+        "q": "某地進入工業化後，農村生產方式仍維持多年。應如何理解不同社會領域的轉型速度？",
+        "correct": "政治、經濟與日常生活可能有不同的歷史轉折時間",
+        "wrong": [
+          "工業化開始後所有產業必須當日更新",
+          "農村延續表示全社會完全沒有變化",
+          "歷史時期只能用單一發明定義"
+        ],
+        "exp": "各面向變化未必同步，應區分結構及區域差異。",
+        "subject": "歷史",
+        "sub_topic": "歷史分期",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-歷史分期",
+        "template_id": "extra-2026-h3-歷史分期-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-歷史分期-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用歷史分期觀念",
+      "question": {
+        "q": "比較兩地的「殖民時期」時，一地開始於海上據點建立，另一地始於正式行政統治。研究者最該注意什麼？",
+        "correct": "分期所依據的統治形式與事件定義可能不同",
+        "wrong": [
+          "時代名稱相同就表示年份必然一致",
+          "有外國商人在場就必有正式殖民政府",
+          "只看分期的字數就可比較政權"
+        ],
+        "exp": "界定研究範圍需說明分期依據，避免錯置比較。",
+        "subject": "歷史",
+        "sub_topic": "歷史分期",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-歷史分期",
+        "template_id": "extra-2026-h3-歷史分期-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

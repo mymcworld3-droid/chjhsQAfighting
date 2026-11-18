@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-冷戰及當代議題-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用冷戰及當代議題觀念",
+      "question": {
+        "q": "冷戰期間某地爆發內戰，美蘇分別支持不同勢力。這種介入最常被稱為？",
+        "correct": "代理人戰爭中的大國間接競逐",
+        "wrong": [
+          "列強完全停止地緣政治參與",
+          "中世紀十字軍統治制度",
+          "跨國貿易的自由競爭"
+        ],
+        "exp": "超級強權可能藉支援地方陣營進行間接競爭。",
+        "subject": "歷史",
+        "sub_topic": "冷戰及當代議題",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-冷戰及當代議題",
+        "template_id": "extra-2026-h3-冷戰及當代議題-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-冷戰及當代議題-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用冷戰及當代議題觀念",
+      "question": {
+        "q": "某國在美蘇對立時拒絕正式加入任一軍事集團，爭取自主外交。這最接近哪種政策？",
+        "correct": "不結盟或策略自主",
+        "wrong": [
+          "自動接受兩方共同直接統治",
+          "完全停止所有國際交流",
+          "必定加入華沙公約組織"
+        ],
+        "exp": "部分國家試圖在兩極格局中保留自主空間。",
+        "subject": "歷史",
+        "sub_topic": "冷戰及當代議題",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-冷戰及當代議題",
+        "template_id": "extra-2026-h3-冷戰及當代議題-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-冷戰及當代議題-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用冷戰及當代議題觀念",
+      "question": {
+        "q": "冷戰結束後跨國供應鏈快速成長，但區域衝突仍存在。哪個論述最適當？",
+        "correct": "兩極對抗結束並不等於所有政治與經濟風險消失",
+        "wrong": [
+          "冷戰結束代表全球不再有戰爭",
+          "經濟全球化必然消除民族衝突",
+          "所有地區都在相同時間完成民主化"
+        ],
+        "exp": "國際格局變化與地方衝突有不同成因和節奏。",
+        "subject": "歷史",
+        "sub_topic": "冷戰及當代議題",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-冷戰及當代議題",
+        "template_id": "extra-2026-h3-冷戰及當代議題-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

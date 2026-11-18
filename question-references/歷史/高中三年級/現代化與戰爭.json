@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-現代化與戰爭-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用現代化與戰爭觀念",
+      "question": {
+        "q": "戰爭期間某國大量投資鋼鐵與運輸工業，戰後相關設備轉為民用。這反映何種關係？",
+        "correct": "軍事動員可能推動部分產業技術，並產生戰後轉用",
+        "wrong": [
+          "戰爭必然只會摧毀全部技術",
+          "軍用生產無法轉為任何民生用途",
+          "所有產業發展都只由戰爭決定"
+        ],
+        "exp": "戰爭與技術發展相互影響，但造成的人力損失不可忽略。",
+        "subject": "歷史",
+        "sub_topic": "現代化與戰爭",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-現代化與戰爭",
+        "template_id": "extra-2026-h3-現代化與戰爭-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-現代化與戰爭-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用現代化與戰爭觀念",
+      "question": {
+        "q": "某國利用現代媒體動員民眾參戰，同時進行訊息審查。哪項分析較恰當？",
+        "correct": "新傳播技術可擴大公共動員，也可能成為政治控制工具",
+        "wrong": [
+          "媒體越現代就必定越自由",
+          "資訊審查與戰時政治完全沒有關係",
+          "宣傳活動等於所有居民自願支持"
+        ],
+        "exp": "技術並不自動決定政治自由，其用途受制度影響。",
+        "subject": "歷史",
+        "sub_topic": "現代化與戰爭",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-現代化與戰爭",
+        "template_id": "extra-2026-h3-現代化與戰爭-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-現代化與戰爭-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "從歷史制度或證據應用現代化與戰爭觀念",
+      "question": {
+        "q": "若某戰後城市人口迅速增加，研究者想知道是否與工業重建有關，應蒐集什麼？",
+        "correct": "就業、住房、人口遷移與工業投資的長期資料",
+        "wrong": [
+          "只看戰前一張街道照片",
+          "只根據市長演說決定全部原因",
+          "不比較其他城市就宣稱工業是唯一原因"
+        ],
+        "exp": "經濟復甦與人口遷移常互動，需多項資料檢證。",
+        "subject": "歷史",
+        "sub_topic": "現代化與戰爭",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-現代化與戰爭",
+        "template_id": "extra-2026-h3-現代化與戰爭-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
