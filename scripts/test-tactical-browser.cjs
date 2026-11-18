@@ -680,8 +680,46 @@ async function main(){
           assert.equal((await read(quick)).objective.points[0].hp,1);
         }
       }
+      // Phase-three boss UI: use the same local authoritative room fixture.
+      // Inspect both phases without altering the existing control layout.
+      {
+        const roomKey=service.ROOMS+'/'+result.id,saved=db.records.get(roomKey);
+        const bossRoom=Rules.create({id:result.id,mode:'pve',players:[saved.actors[0]],
+          trial:{seed:'browser-v4-boss-visual',stage:10,layoutVersion:4}});
+        bossRoom.pendingIntroductions={u1:[]};bossRoom.revision=saved.revision+1;
+        const boss=bossRoom.actors.find(a=>a.boss);
+        assert.ok(boss,'stage 10 must contain a real 2×2 boss');
+        db.records.set(roomKey,bossRoom);
+        await quick.setViewportSize({width:393,height:852});
+        await quick.reload();await quick.locator('#entry').click();
+        await quick.locator('.tc-arena canvas').waitFor();
+        await quick.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+        await quick.locator('[data-boss-hud]').waitFor({state:'visible'});
+        assert.ok((await quick.locator('[data-boss-name]').textContent()).includes(boss.name));
+        assert.equal(await quick.locator('[data-boss-phase]').textContent(),'第一階段');
+        assert.equal(await quick.locator('[data-boss-health]').getAttribute('aria-valuenow'),String(boss.hp));
+        await ratio(quick);
+        await quick.screenshot({path:path.join(output,'boss-phase-one-portrait.png')});
+        boss.hp=Math.floor(boss.maxHp*.43);boss.phase=2;boss.revision++;
+        bossRoom.revision++;
+        boss.intent={...boss.intent,text:'下次：第二階段攻擊'};
+        await quick.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
+        await quick.waitForFunction(()=>document.querySelector('[data-boss-phase]')?.textContent==='第二階段');
+        assert.equal(await quick.locator('[data-boss-hud]').getAttribute('data-phase'),'2');
+        assert.equal(await quick.locator('[data-boss-health]').getAttribute('aria-valuenow'),String(boss.hp));
+        assert.match(await quick.locator('[data-boss-intent]').textContent(),/第二階段攻擊/);
+        await quick.locator('[data-boss-announcement]').waitFor({state:'visible'});
+        assert.match(await quick.locator('[data-boss-announcement]').textContent(),/靈壓暴漲/);
+        await quick.screenshot({path:path.join(output,'boss-second-phase-portrait.png')});
+        await quick.setViewportSize({width:844,height:390});await ratio(quick);
+        await quick.screenshot({path:path.join(output,'boss-second-phase-landscape.png')});
+        const current=await read(quick);await quick.page.waitForTimeout(220);
+        assert.equal((await read(quick)).revision,current.revision,
+          'boss effects never commit a battle action');
+        assert.equal((await read(quick)).actors[0].stamina,current.actors[0].stamina);
+      }
       assert.deepEqual(errors,[]);
-      console.log('Exact sketch browser check passed: only the required controls in three viewport orientations, real server attack triggered by one tile tap.');
+      console.log('Tactical browser layout, creature inspector, boss phases and real server attacks passed.');
       return;
     }
     const mobile=await make('u1',{width:393,height:852});
