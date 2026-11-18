@@ -404,7 +404,7 @@ class DungeonMapView{
     const miniCtx=mini.getContext('2d');
     if(miniCtx){
       miniCtx.setTransform(dpr,0,0,dpr,0,0);
-      drawMinimap(miniCtx,m,geometry,mw,mh);
+      drawMinimap(miniCtx,m,geometry,mw,mh,{members:this.members(),selfUid:this.uid});
     }
     this.$('[data-dm-zoom]').textContent=Math.round(this.camera.zoom*100)+'%';
   }
