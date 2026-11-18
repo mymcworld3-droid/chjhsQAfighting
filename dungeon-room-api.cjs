@@ -11,6 +11,8 @@ const CODES='dungeonRoomCodes';
 const MEMBERSHIPS='dungeonRoomMemberships';
 const VERSION=1;
 const MAX_MEMBERS=4;
+const PUBLIC_SCAN_LIMIT=120;
+const PUBLIC_RESULT_LIMIT=24;
 const LOBBY_TTL_MS=2*60*60*1000;
 const ALPHABET='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const err=(message,status=409)=>Object.assign(new Error(message),{status});
@@ -23,7 +25,7 @@ const membersOf=room=>room?.members&&typeof room.members==='object'&&!Array.isAr
 const hasMember=(room,uid)=>Object.prototype.hasOwnProperty.call(membersOf(room),uid);
 const publicRoom=(roomId,room)=>({
   id:roomId,mode:'dungeon',version:room.version,revision:room.revision,
-  status:room.status,visibility:'private',code:room.code,
+  status:room.status,visibility:room.visibility==='public'?'public':'private',code:room.code,
   hostUid:room.hostUid,createdAtMs:room.createdAtMs,
   expiresAtMs:room.expiresAtMs,maxMembers:MAX_MEMBERS,
   members:membersOf(room)
@@ -33,6 +35,29 @@ const safeName=(value,uid)=>{
   return name||('修士'+String(uid).slice(0,8));
 };
 const makeMember=(uid,name,at)=>({uid,name,joinedAtMs:at,ready:false});
+// Public recruitment discloses only safe presentation fields, never codes,
+// member identifiers, or complete room state.
+function recruitmentCard(roomId,room,at){
+  if(!safeRoomId(roomId)||!validRoom(room,at)||room.visibility!=='public'||
+      !hasMember(room,room.hostUid))return null;
+  const members=Object.values(membersOf(room));
+  if(!members.length||members.length>=MAX_MEMBERS)return null;
+  return {
+    roomId,mode:'dungeon',status:'waiting',joinable:true,
+    hostName:safeName(membersOf(room)[room.hostUid]?.name,room.hostUid),
+    playerCount:members.length,maxMembers:MAX_MEMBERS,
+    readyCount:members.filter(member=>member.ready===true).length,
+    createdAtMs:room.createdAtMs,expiresAtMs:room.expiresAtMs
+  };
+}
+async function listPublicRooms(db,at){
+  // An equality query and in-process filtering need no composite index.
+  const snap=await db.collection(ROOMS).where('status','==','waiting')
+    .limit(PUBLIC_SCAN_LIMIT).get();
+  return snap.docs.map(row=>recruitmentCard(row.id,row.data(),at)).filter(Boolean)
+    .sort((a,b)=>b.playerCount-a.playerCount||b.createdAtMs-a.createdAtMs)
+    .slice(0,PUBLIC_RESULT_LIMIT);
+}
 
 function createHandler({
   resolveA=()=>playerRepository.resolve(),
@@ -45,7 +70,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','get','reconnect','leave'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -59,8 +84,51 @@ function createHandler({
         return validRoom(room,at)&&hasMember(room,uid)?{id:pointed,room}:null;
       };
       const respond=(roomId,room)=>res.json({ok:true,roomId:roomId||null,room:room?publicRoom(roomId,room):null});
+      const addMember=async(tx,roomId,room,name,{reuseExisting=false}={})=>{
+        const current=await existing(tx);
+        if(current&&current.id!==roomId){
+          if(reuseExisting)return current;
+          throw err('請先離開目前的副本隊伍',409);
+        }
+        if(hasMember(room,uid))return {id:roomId,room};
+        const members=membersOf(room);
+        if(Object.keys(members).length>=MAX_MEMBERS)throw err('副本隊伍已滿四人',409);
+        const updated={...room,revision:room.revision+1,
+          members:{...members,[uid]:makeMember(uid,name,at)}};
+        tx.update(db.collection(ROOMS).doc(roomId),{
+          revision:updated.revision,members:updated.members
+        });
+        tx.set(pointerRef,{roomId,updatedAtMs:at});
+        return {id:roomId,room:updated};
+      };
+      if(action==='list-public')
+        return res.json({ok:true,rooms:await listPublicRooms(db,at)});
+      if(action==='quick'){
+        const current=await db.runTransaction(existing);
+        if(current)return respond(current.id,current.room);
+        const user=await resolveA().db.collection('users').doc(uid).get();
+        if(!user.exists)throw err('玩家資料不存在',404);
+        const name=safeName(user.data()?.displayName||user.data()?.name,uid);
+        for(const card of await listPublicRooms(db,at)){
+          try{
+            const joined=await db.runTransaction(async tx=>{
+              const snap=await tx.get(db.collection(ROOMS).doc(card.roomId));
+              const room=snap.exists?snap.data():null;
+              if(!validRoom(room,at)||room.visibility!=='public'||
+                  !hasMember(room,room.hostUid))throw err('公開隊伍已停止招募',409);
+              return addMember(tx,card.roomId,room,name,{reuseExisting:true});
+            });
+            return respond(joined.id,joined.room);
+          }catch(error){
+            if(![404,409].includes(error?.status))throw error;
+          }
+        }
+      }
 
-      if(action==='create'){
+      if(action==='create'||action==='quick'){
+        if(action==='create'&&req.body?.visibility!==undefined&&
+            !['public','private'].includes(req.body.visibility))
+          throw err('公開狀態無效',400);
         const playerSnap=await resolveA().db.collection('users').doc(uid).get();
         if(!playerSnap.exists)throw err('玩家資料不存在',404);
         const name=safeName(playerSnap.data()?.displayName||playerSnap.data()?.name,uid);
@@ -76,7 +144,7 @@ function createHandler({
             if(previous?.status==='active'&&Number(previous.expiresAtMs)>at)return {collision:true};
             const room={
               mode:'dungeon',version:VERSION,revision:1,status:'waiting',
-              visibility:'private',code,hostUid:uid,createdAtMs:at,
+              visibility:action==='quick'||req.body?.visibility==='public'?'public':'private',code,hostUid:uid,createdAtMs:at,
               expiresAtMs:at+LOBBY_TTL_MS,maxMembers:MAX_MEMBERS,
               members:{[uid]:makeMember(uid,name,at)}
             };
@@ -106,19 +174,43 @@ function createHandler({
           const roomSnap=await tx.get(roomRef);
           const room=roomSnap.exists?roomSnap.data():null;
           if(!validRoom(room,at)||room.code!==code)throw err('副本房間已關閉或過期',409);
-          const active=await existing(tx);
-          if(active&&active.id!==roomId)throw err('請先離開目前的副本隊伍',409);
-          if(hasMember(room,uid))return {id:roomId,room};
-          const members=membersOf(room);
-          if(Object.keys(members).length>=MAX_MEMBERS)throw err('副本隊伍已滿四人',409);
-          const update={...room,revision:room.revision+1,members:{
-            ...members,[uid]:makeMember(uid,name,at)
-          }};
-          tx.update(roomRef,{revision:update.revision,members:update.members});
-          tx.set(pointerRef,{roomId,updatedAtMs:at});
-          return {id:roomId,room:update};
+          return addMember(tx,roomId,room,name);
         });
         return respond(outcome.id,outcome.room);
+      }
+      if(action==='join-public'){
+        const roomId=safeRoomId(req.body?.roomId);
+        if(!roomId)throw err('公開副本房間編號無效',400);
+        const player=await resolveA().db.collection('users').doc(uid).get();
+        if(!player.exists)throw err('玩家資料不存在',404);
+        const name=safeName(player.data()?.displayName||player.data()?.name,uid);
+        const outcome=await db.runTransaction(async tx=>{
+          const snap=await tx.get(db.collection(ROOMS).doc(roomId));
+          const room=snap.exists?snap.data():null;
+          if(!validRoom(room,at)||room.visibility!=='public'||
+              !hasMember(room,room.hostUid))throw err('公開副本隊伍已關閉招募',409);
+          return addMember(tx,roomId,room,name);
+        });
+        return respond(outcome.id,outcome.room);
+      }
+      if(action==='set-visibility'){
+        const roomId=safeRoomId(req.body?.roomId);
+        const visibility=req.body?.visibility;
+        if(!roomId||!['public','private'].includes(visibility))
+          throw err('副本房間或公開狀態無效',400);
+        const ref=db.collection(ROOMS).doc(roomId);
+        const outcome=await db.runTransaction(async tx=>{
+          const snap=await tx.get(ref);
+          const room=snap.exists?snap.data():null;
+          if(!room||room.hostUid!==uid||!hasMember(room,uid))
+            throw err('只有房主可以調整副本招募',403);
+          if(!validRoom(room,at))throw err('副本已開始、關閉或過期',409);
+          if(room.visibility===visibility)return room;
+          const update={...room,visibility,revision:room.revision+1};
+          tx.update(ref,{visibility,revision:update.revision});
+          return update;
+        });
+        return respond(roomId,outcome);
       }
       if(action==='reconnect'){
         const outcome=await db.runTransaction(existing);
@@ -175,4 +267,4 @@ function createHandler({
 function registerDungeonRoomApi(app){app.post('/api/dungeon/room',createHandler());}
 module.exports=registerDungeonRoomApi;
 module.exports.__test={ROOMS,CODES,MEMBERSHIPS,VERSION,MAX_MEMBERS,LOBBY_TTL_MS,
-  safeRoomId,safeCode,validRoom,hasMember,publicRoom,createHandler};
+  safeRoomId,safeCode,validRoom,hasMember,publicRoom,recruitmentCard,listPublicRooms,createHandler};
