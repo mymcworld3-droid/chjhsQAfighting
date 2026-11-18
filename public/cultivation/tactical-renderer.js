@@ -17,7 +17,7 @@ const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/wo
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.ambienceBlocks=-1;this.destroyed=false;this.paused=false;this.range=[];this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
@@ -87,7 +87,13 @@ export class TacticalRenderer{
       }
     };
     this.onPointerEnd=e=>{
-      if(!this.touches.has(e.pointerId))return;
+      const prior=this.touches.get(e.pointerId);
+      if(!prior)return;
+      // A final movement or system cancellation still counts as a drag.
+      // Browsers differ in whether they deliver the last pointermove.
+      const finalPoint=point(e);
+      if(Math.hypot(finalPoint.x-prior.startX,finalPoint.y-prior.startY)>8)this.dragging=true;
+      if(e.type==='pointercancel'||e.type==='lostpointercapture')this.dragging=true;
       this.clearLongPress();
       if(this.longPressTriggered){this.suppressClickUntil=Date.now()+800;this.longPressTriggered=false;}
       if(this.dragging)this.suppressClickUntil=Date.now()+500;
@@ -147,16 +153,18 @@ export class TacticalRenderer{
   }
   update(state,uid,mode,selection){
     this.preview=null;
-    // Rebuild only when the finite map changes; no new network calls or state writes.
-    if(state.mode==='pve'&&(this.ambience?.id!==state.id||
-      this.ambienceBlocks!==(state.blocks?.length||0)||this.ambience?.width!==state.width||
-      this.ambience?.height!==state.height)){
-      this.ambience=Ambience.prepare(state);this.ambienceBlocks=state.blocks?.length||0;
+    // A single room can contain several stages of identical size. The map
+    // layout and stage identities must be checked independently of room ID.
+    const stageKey=Ambience.stageIdentity(state),newStage=this.stageKey!==stageKey;
+    const mapKey=state.mode==='pve'?Ambience.mapIdentity(state):'';
+    if(state.mode==='pve'&&this.ambience?.key!==mapKey){
+      this.ambience=Ambience.prepare(state);
       this.ambienceLayer=Ambience.rasterize(this.ambience,()=>document.createElement('canvas'));
-    }else if(state.mode!=='pve'){this.ambience=null;this.ambienceLayer=null;this.ambienceBlocks=-1;}
+    }else if(state.mode!=='pve'){this.ambience=null;this.ambienceLayer=null;}
     this.canvas.dataset.ambientTheme=this.ambience?.theme||'none';
-    if(this.state?.id!==state.id||this.state?.width!==state.width||this.state?.height!==state.height){
+    if(newStage||this.state?.width!==state.width||this.state?.height!==state.height){
       this.queue=[];this.scene=null;this.camera=Camera.create();this.touches.clear();this.dragging=false;this.pinch=null;this.inspectedUid=null;this.hoverUid=null;this.clearLongPress();
+      this.suppressClickUntil=Date.now()+120;
       if(state.mode==='pve'&&state.width>=11){
         const rect=this.canvas.getBoundingClientRect(),view={x:0,y:0,width:state.width,height:state.height},hero=state.actors.find(a=>a.uid===uid);
         if(rect.width&&rect.height&&hero){
@@ -166,7 +174,8 @@ export class TacticalRenderer{
         }
       }
     }
-    if(!this.reducedMotion.matches)this.queue.push(...A.plan(this.state,state,uid));
+    this.stageKey=stageKey;
+    if(!newStage&&!this.reducedMotion.matches)this.queue.push(...A.plan(this.state,state,uid));
     if(this.state!==state||this.uid!==uid||this.mode!==mode){
       const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
       this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,attackSkill(me,mode))):[];
@@ -174,7 +183,7 @@ export class TacticalRenderer{
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
   present(state,uid,scene=null,progress=0,view=null){
-    this.ambience=null;this.ambienceLayer=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.draw();
+    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.draw();
   }
   get isAnimating(){return !!this.scene||this.queue.length>0;}
   get currentAction(){return (this.scene||this.queue[0])?.label||'';}
@@ -200,7 +209,7 @@ export class TacticalRenderer{
   }
   setPaused(value){if(this.paused===value)return;this.paused=value;this.draw();}
   resetView(){this.camera=Camera.create();this.draw();}
-  destroy(){this.destroyed=true;this.queue=[];this.scene=null;this.ambienceLayer=null;clearTimeout(this.ambientTimer);this.ambientTimer=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.resize.disconnect();cancelAnimationFrame(this.frame);document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
+  destroy(){this.destroyed=true;this.queue=[];this.scene=null;this.ambienceLayer=null;this.ambience=null;this.stageKey=null;clearTimeout(this.ambientTimer);this.ambientTimer=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.resize.disconnect();cancelAnimationFrame(this.frame);document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const img of Object.values(this.images)){img.onload=null;img.onerror=null;}for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
   sprite(id,sx,sy,sw,sh,x,y,w,h){
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;
@@ -390,7 +399,8 @@ export class TacticalRenderer{
     if(this.reducedMotion.matches&&this.isAnimating){this.queue=[];this.scene=null;this.activity();}
     const progress=this.preview?this.preview.progress:this.advance(now),scene=this.preview?this.preview.scene:this.scene,animating=!!scene||this.isAnimating;
     const {canvas,ctx:c,state:s}=this,rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;
-    const dpr=Math.min(3,window.devicePixelRatio||1),w=rect.width,h=rect.height;
+    const w=rect.width,h=rect.height;
+    const dpr=Ambience.pixelRatioFor(w,h,window.devicePixelRatio||1,navigator.deviceMemory);
     if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
     c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
     const view=this.preview?.view||{x:0,y:0,width:s.width,height:s.height};
@@ -430,7 +440,7 @@ export class TacticalRenderer{
       }
     }
     const fill=(p,color,stroke)=>{const x=ox+p.x*cell,y=oy+p.y*cell;c.fillStyle=color;c.fillRect(x+1,y+1,cell-2,cell-2);if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.strokeRect(x+2,y+2,cell-4,cell-4);}};
-    c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
+    c.imageSmoothingEnabled=true;c.imageSmoothingQuality=w*h*dpr*dpr>2800000?'medium':'high';
     // Finite map: show only tiles within the actual battlefield dimensions.
     // The surrounding canvas stays empty for drag/zoom without fake terrain.
     for(let y=view.y;y<view.y+view.height;y++)for(let x=view.x;x<view.x+view.width;x++){
