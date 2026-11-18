@@ -17,7 +17,7 @@
 }
 #manual-training-root .manual-expedition::before{
   content:"";pointer-events:none;position:absolute;z-index:0;
-  width:90px;height:90px;right:-26px;top:-35px;border-radius:50%;
+  width:90px;height:90px;right:7px;top:6px;border-radius:50%;
   border:2px dashed var(--me-line);box-shadow:0 0 27px var(--me-glow);
   opacity:.6;
 }
