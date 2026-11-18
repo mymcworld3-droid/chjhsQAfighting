@@ -6,10 +6,14 @@ const path=require('node:path');
 const vm=require('node:vm');
 
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-library-view.js'),'utf8');
+const strip=s=>s.replace(/^import\s+.*;\s*$/gm,'')
+  .replaceAll('export function ','function ');
+const auxiliary=['manual-visual-progression.js','manual-anticipation.js']
+  .map(name=>strip(fs.readFileSync(path.join(__dirname,'../public/cultivation',name),'utf8')));
 const {filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary}=
-  vm.runInNewContext(source.replaceAll('export function ','function ')+
-    '\n({filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary})',{},
-    {filename:'manual-library-view.js'});
+  vm.runInNewContext([...auxiliary,strip(source),
+    '({filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary})'].join('\n'),
+    {},{filename:'manual-library-view.js'});
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[c]);
