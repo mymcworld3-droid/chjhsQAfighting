@@ -5,6 +5,7 @@ import './tactical-skill-effects.js?v=20261116-long-line-afterglow-v1';
 import './tactical-camera.js';
 import './tactical-ambience.js?v=20261118-pve-visual-v2';
 import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
+import './tactical-threat-visuals.js?v=20261118-phase5-v1';
 const R=globalThis.QATactical;
 const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
 const A=globalThis.QATacticalAnimation;
@@ -12,12 +13,13 @@ const SkillEffects=globalThis.QATacticalSkillEffects;
 const Camera=globalThis.QATacticalCamera;
 const Ambience=globalThis.QATacticalAmbience;
 const Impact=globalThis.QATacticalImpact;
+const Threats=globalThis.QATacticalThreats;
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
   monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
@@ -189,10 +191,13 @@ export class TacticalRenderer{
       const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
       this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,attackSkill(me,mode))):[];
     }
+    this.threatPlan=Threats.derive(state,uid,mode,this.range);
+    this.canvas.setAttribute('aria-description',this.threatPlan.description+
+      '。紅色斜紋和邊框代表敵方預告，青綠標記僅代表能避開目前預告。');
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
   present(state,uid,scene=null,progress=0,view=null){
-    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.draw();
+    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.canvas.removeAttribute('aria-description');this.draw();
   }
   get isAnimating(){return !!this.scene||this.queue.length>0;}
   get currentAction(){return (this.scene||this.queue[0])?.label||'';}
@@ -511,7 +516,14 @@ export class TacticalRenderer{
     }
     if(!animating){
       for(const e of s.effects)for(const p of e.cells)fill(p,'#9b7aec55','#d5b8ff');
-      c.setLineDash([3,3]);for(const a of s.actors.filter(a=>a.bot&&R.alive(a)))for(const p of a.intent?.cells||[])fill(p,'#e2564518','#ff8871');c.setLineDash([]);
+      if(s.mode==='pve')Threats.drawGround(c,this.threatPlan,
+        {ox,oy,cell,width:s.width,height:s.height});
+      else{
+        c.setLineDash([3,3]);
+        for(const a of s.actors.filter(a=>a.bot&&R.alive(a)))
+          for(const p of a.intent?.cells||[])fill(p,'#e2564518','#ff8871');
+        c.setLineDash([]);
+      }
     }
     if(myTurn&&this.mode==='move'&&this.selection){
       const route=R.path(s,mine,this.selection,mine.uid);if(route&&route.length>1){
@@ -605,6 +617,12 @@ export class TacticalRenderer{
       this.drawEffect(scene,progress,true);
     }
     if(this.selection&&!animating)fill(this.selection,'#fff0','#fff1ba');
+    if(!animating&&s.mode==='pve'){
+      const viewport={ox,oy,cell,width:s.width,height:s.height};
+      Threats.drawContours(c,this.threatPlan,viewport);
+      if(myTurn&&this.mode==='move')
+        Threats.drawGuidance(c,this.threatPlan,viewport,reduced);
+    }
     if(!frameless){c.strokeStyle='#d9c69380';c.lineWidth=1.5;c.strokeRect(ox+view.x*cell,oy+view.y*cell,cell*view.width,cell*view.height);}
     if(weight)c.restore();
     if(!this.preview&&animating){
