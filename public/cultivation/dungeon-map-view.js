@@ -1,6 +1,6 @@
 import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
-import { getDungeonMap } from './dungeon-room.js';
+import { getDungeonMap, moveDungeonMember, getDungeonRoom } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 
 // Read-only expedition blueprint. Pointer and keyboard events manipulate only
@@ -22,7 +22,7 @@ class DungeonMapView{
     this.root=null;this.stage=null;this.canvas=null;this.mini=null;this.ctx=null;
     this.map=null;this.room=null;this.roomId='';this.uid='';
     this.camera=Camera.initialCamera();this.follow=false;this.routes=false;
-    this.opened=false;this.seq=0;this.pointers=new Map();
+    this.opened=false;this.seq=0;this.pointers=new Map();this.movePending=false;
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
     this.onResize=()=>this.resize();
     this.onVisibility=()=>{if(!document.hidden&&this.opened)this.resize();};
@@ -57,7 +57,16 @@ class DungeonMapView{
       '<button type="button" data-dm="fit" title="縮放至全圖">全圖</button>'+
       '<button type="button" data-dm="focus" aria-pressed="false" title="定位預留出生點">定位</button>'+
       '<button type="button" data-dm="route" aria-pressed="false" title="顯示路線">路線</button>'+
-      '</div><div class="dm-legend" aria-hidden="true">'+
+      '</div><div class="dm-movement" data-dm-movement hidden>'+
+      '<div class="dm-energy"><span>探索體力</span><strong data-dm-energy>100 / 100</strong>'+
+      '<span data-dm-location>（待命）</span></div>'+
+      '<div class="dm-dpad" role="group" aria-label="角色移動，一次一格">'+
+      '<button type="button" data-dm="up" aria-label="向上移動一格">↑</button>'+
+      '<button type="button" data-dm="left" aria-label="向左移動一格">←</button>'+
+      '<button type="button" data-dm="down" aria-label="向下移動一格">↓</button>'+
+      '<button type="button" data-dm="right" aria-label="向右移動一格">→</button>'+
+      '</div><small data-dm-move-alert role="status" aria-live="polite"></small></div>'+
+      '<div class="dm-legend" aria-hidden="true">'+
       '<span>● 起點</span><span>◇ 傳送陣</span><span>◆ 守護者</span></div></div>'+
       '<footer class="dm-foot"><span data-dm-status>地圖展示 · 尚未開放移動與戰鬥</span>'+
       '<span data-dm-zoom>100%</span></footer></div>';
@@ -103,7 +112,7 @@ class DungeonMapView{
     this.previousFocus=document.activeElement;
     this.room=room;this.roomId=room.id;this.uid=playerUid;
     this.map=null;this.camera=Camera.initialCamera();
-    this.follow=false;this.routes=false;this.pointers.clear();this.opened=true;
+    this.follow=false;this.routes=false;this.pointers.clear();this.opened=true;this.movePending=false;
     this.root.hidden=false;
     this.$('[data-dm="focus"]').setAttribute('aria-pressed','false');
     this.$('[data-dm="route"]').setAttribute('aria-pressed','false');
@@ -137,7 +146,7 @@ class DungeonMapView{
       this.$('[data-dm-biome-box]').hidden=false;
       this.$('[data-dm-overview]').hidden=false;
       this.camera=Camera.initialCamera();this.alert('');
-      this.resize();
+      this.resize();this.updateMovementHUD();
     }catch(error){
       if(!this.isCurrent()||request!==this.seq)return;
       this.alert(error?.message||'無法載入地圖',true);
@@ -149,14 +158,83 @@ class DungeonMapView{
   }
   selfPad(){
     if(!this.map)return {x:0,y:0};
-    const index=Math.max(0,this.members().findIndex(member=>member.uid===this.uid));
+    const pos=this.room?.members?.[this.uid]?.position;
+    if(pos&&Number.isInteger(pos.x)&&Number.isInteger(pos.y)&&
+      pos.x>=0&&pos.y>=0&&pos.x<this.map.width&&pos.y<this.map.height&&
+      this.map.tiles[pos.y*this.map.width+pos.x]>0)return pos;
+    const index=Math.max(0,this.members().findIndex(m=>m.uid===this.uid));
     return this.map.spawnPads[index]||this.map.spawn;
+  }
+  updateMovementHUD(){
+    const active=this.room?.status==='assembled';
+    const holder=this.$('[data-dm-movement]');
+    if(holder)holder.hidden=!active||!this.map;
+    const own=this.room?.members?.[this.uid];
+    const stamina=Number.isSafeInteger(own?.explorationStamina)?
+      own.explorationStamina:100;
+    const energy=this.$('[data-dm-energy]');
+    if(energy)energy.textContent=stamina+' / 100';
+    const p=this.selfPad(),node=this.$('[data-dm-location]');
+    if(node)node.textContent='座標 '+p.x+'，'+p.y;
+    this.root?.querySelectorAll('.dm-dpad button').forEach(button=>{
+      button.disabled=!active||!this.map||this.movePending||stamina<1;
+    });
+  }
+  moveAlert(message=''){
+    const node=this.$('[data-dm-move-alert]');
+    if(node)node.textContent=message;
+  }
+  async move(dx,dy){
+    if(this.movePending||!this.map||!this.isCurrent()||
+      this.room?.status!=='assembled')return;
+    const member=this.room.members?.[this.uid];
+    if(!member)return;
+    const step=(Number.isSafeInteger(member.moveSeq)?member.moveSeq:0)+1;
+    const token=this.seq,roomId=this.roomId;
+    this.movePending=true;this.updateMovementHUD();this.moveAlert('');
+    try{
+      const result=await moveDungeonMember(roomId,dx,dy,step);
+      if(!this.isCurrent()||token!==this.seq||roomId!==this.roomId)return;
+      if(result?.room){
+        this.updateRoom(result.room);
+        window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
+          detail:{room:result.room}
+        }));
+      }
+      if(!this.follow){
+        this.follow=true;
+        this.camera=Camera.zoomAt(this.camera,Math.max(this.camera.zoom,2.6),
+          this.width/2,this.height/2,this.map,this.width,this.height);
+        this.$('[data-dm="focus"]').setAttribute('aria-pressed','true');
+      }
+      this.camera=Camera.focusOn(this.camera,this.selfPad(),this.map,
+        this.width,this.height);
+      this.drawSoon();
+    }catch(error){
+      if(!this.isCurrent()||token!==this.seq)return;
+      this.moveAlert(error?.message||'移動失敗，請重試');
+      if(error?.status===409){
+        try{
+          const response=await getDungeonRoom(roomId);
+          if(this.isCurrent()&&token===this.seq&&response?.room){
+            this.updateRoom(response.room);
+            window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
+              detail:{room:response.room}
+            }));
+          }
+        }catch(_){}
+      }
+    }finally{
+      this.movePending=false;
+      if(this.isCurrent()&&token===this.seq)this.updateMovementHUD();
+    }
   }
   updateStatus(){
     const state=this.$('[data-dm-status]');
     if(state)state.textContent=this.room?.status==='assembled'?
-      '全隊已集結 · 可預覽地圖，移動與戰鬥於下一階段開放':
+      '探索中 · WASD 或方向按鈕移動，1 格耗費 1 體力 · 尚無戰鬥':
       '等待隊伍集結 · 地圖預覽不消耗體力';
+    this.updateMovementHUD();
   }
   updateRoom(room){
     if(!this.opened)return;
@@ -164,6 +242,7 @@ class DungeonMapView{
       !['waiting','assembled'].includes(room.status)){
       this.close();return;
     }
+    if(Number(room.revision)<Number(this.room?.revision||0))return;
     this.room=room;
     this.updateStatus();
     if(this.map&&this.follow){
@@ -172,7 +251,7 @@ class DungeonMapView{
     this.drawSoon();
   }
   close(){
-    ++this.seq;this.opened=false;this.pointers.clear();
+    ++this.seq;this.opened=false;this.pointers.clear();this.movePending=false;
     this.observer?.disconnect();this.observer=null;
     window.removeEventListener('resize',this.onResize);
     window.removeEventListener('orientationchange',this.onResize);
@@ -187,6 +266,8 @@ class DungeonMapView{
   action(name){
     if(name==='close'){this.close();return;}
     if(name==='retry'){void this.load();return;}
+    const directions={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
+    if(directions[name]){void this.move(...directions[name]);return;}
     if(!this.map||!this.isCurrent())return;
     const w=this.width,h=this.height,m=this.map;
     switch(name){
@@ -222,6 +303,11 @@ class DungeonMapView{
       return;
     }
     if(!this.map||event.target.closest('button'))return;
+    const walking={w:[0,-1],a:[-1,0],s:[0,1],d:[1,0],
+      W:[0,-1],A:[-1,0],S:[0,1],D:[1,0]};
+    if(walking[event.key]&&!event.ctrlKey&&!event.altKey&&!event.metaKey){
+      event.preventDefault();void this.move(...walking[event.key]);return;
+    }
     const moves={ArrowLeft:[45,0],ArrowRight:[-45,0],ArrowUp:[0,45],ArrowDown:[0,-45]};
     if(moves[event.key]){
       event.preventDefault();this.follow=false;
