@@ -259,9 +259,21 @@ async function main(){
     // default focus and must still obey one-cell server validation.
     const nextMove=moveFor('a');
     const key={up:'w',right:'d',down:'s',left:'a'}[nextMove];
+    await a.page.locator('#dungeon-map-view [data-dm="focus"]').focus();
     await a.page.keyboard.press(key);
-    await a.page.waitForFunction(()=>document.querySelector('[data-dm-energy]')
-      ?.textContent==='98 / 100');
+    try{
+      await a.page.waitForFunction(()=>document.querySelector('[data-dm-energy]')
+        ?.textContent==='98 / 100',null,{timeout:6000});
+    }catch(error){
+      console.error('[Dungeon WASD diagnostics]',{key,nextMove,requests,
+        a:room.members.a,errors,focus:await a.page.evaluate(()=>({
+          tag:document.activeElement?.tagName,
+          action:document.activeElement?.getAttribute('data-dm'),
+          energy:document.querySelector('[data-dm-energy]')?.textContent,
+          error:document.querySelector('[data-dm-move-alert]')?.textContent
+        }))});
+      throw error;
+    }
     assert.equal(room.members.a.moveSeq,2);
     assert.equal(room.members.a.explorationStamina,98);
     assert.deepStrictEqual(errors,[]);
