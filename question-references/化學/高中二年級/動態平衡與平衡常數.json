@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-動態平衡與平衡常數-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用動態平衡與平衡常數",
+      "question": {
+        "q": "對反應N₂(g)+3H₂(g)⇌2NH₃(g)，若以濃度寫平衡常數Kc，何者正確？",
+        "correct": "[NH₃]²/([N₂][H₂]³)",
+        "wrong": [
+          "[N₂][H₂]/[NH₃]",
+          "[NH₃]/([N₂]+[H₂])",
+          "[N₂]³[H₂]/[NH₃]²"
+        ],
+        "exp": "平衡常數以產物濃度乘積除以反應物濃度乘積，指數取平衡係數。",
+        "subject": "化學",
+        "sub_topic": "動態平衡與平衡常數",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-動態平衡與平衡常數",
+        "template_id": "extra-2026-chem2-動態平衡與平衡常數-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-動態平衡與平衡常數-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用動態平衡與平衡常數",
+      "question": {
+        "q": "某可逆反應在密閉容器中達動態平衡，且溫度不變。下列哪個描述正確？",
+        "correct": "正反應與逆反應仍持續，速率相等",
+        "wrong": [
+          "反應物與產物分子都停止運動",
+          "反應物濃度必等於產物濃度",
+          "一到平衡反應速率必變為零"
+        ],
+        "exp": "平衡是兩方向反應速率相同，使宏觀濃度不再隨時間變化。",
+        "subject": "化學",
+        "sub_topic": "動態平衡與平衡常數",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-動態平衡與平衡常數",
+        "template_id": "extra-2026-chem2-動態平衡與平衡常數-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-動態平衡與平衡常數-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用動態平衡與平衡常數",
+      "question": {
+        "q": "某反應在固定溫度下已達平衡，研究者增加反應物濃度使系統重新達平衡。平衡常數K如何變化？",
+        "correct": "只要溫度未變，K維持相同",
+        "wrong": [
+          "K必隨反應物濃度增加一倍",
+          "只要體積改變，K便完全無法定義",
+          "K只由容器形狀決定"
+        ],
+        "exp": "平衡常數取決於反應及溫度，改變濃度會改變反應商與平衡組成，不直接改變K。",
+        "subject": "化學",
+        "sub_topic": "動態平衡與平衡常數",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-動態平衡與平衡常數",
+        "template_id": "extra-2026-chem2-動態平衡與平衡常數-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

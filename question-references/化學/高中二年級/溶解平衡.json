@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-溶解平衡-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用溶解平衡",
+      "question": {
+        "q": "在純水中，AgCl(s)⇌Ag⁺+Cl⁻的莫耳溶解度為1.0×10⁻⁵ M，忽略其他來源及活度。Ksp約為多少？",
+        "correct": "1.0×10⁻¹⁰",
+        "wrong": [
+          "1.0×10⁻⁵",
+          "2.0×10⁻⁵",
+          "1.0×10⁻¹⁵"
+        ],
+        "exp": "純水中[Ag⁺]=[Cl⁻]=s，Ksp=s²=(10⁻⁵)²=10⁻¹⁰。",
+        "subject": "化學",
+        "sub_topic": "溶解平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中二年級-溶解平衡",
+        "template_id": "extra-2026-chem2-溶解平衡-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-溶解平衡-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用溶解平衡",
+      "question": {
+        "q": "向AgCl的飽和水溶液加入少量NaCl，且溫度不變、忽略離子強度影響。AgCl溶解度通常如何？",
+        "correct": "下降，因共同離子Cl⁻使平衡偏向固體",
+        "wrong": [
+          "增加，因NaCl必會消除所有Ag⁺",
+          "維持相同，因Cl⁻不參與平衡",
+          "AgCl立即全部分解成金屬銀"
+        ],
+        "exp": "增加共同離子Cl⁻使AgCl(s)⇌Ag⁺+Cl⁻平衡傾向左側，溶解度下降。",
+        "subject": "化學",
+        "sub_topic": "溶解平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中二年級-溶解平衡",
+        "template_id": "extra-2026-chem2-溶解平衡-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-溶解平衡-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用溶解平衡",
+      "question": {
+        "q": "AgCl的Ksp為1×10⁻¹⁰，某混合溶液的[Ag⁺]=1×10⁻⁴ M、[Cl⁻]=1×10⁻³ M。忽略活度及其他配位作用，預期何者？",
+        "correct": "離子積1×10⁻⁷大於Ksp，可能析出AgCl沉澱",
+        "wrong": [
+          "離子積小於Ksp，必不可能沉澱",
+          "離子積恰等於Ksp，溶液必完全沒有固體",
+          "只要存在Na⁺便無法發生沉澱"
+        ],
+        "exp": "Qsp=[Ag⁺][Cl⁻]=10⁻⁷＞10⁻¹⁰，過飽和狀態傾向沉澱直到重新平衡。",
+        "subject": "化學",
+        "sub_topic": "溶解平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中二年級-溶解平衡",
+        "template_id": "extra-2026-chem2-溶解平衡-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

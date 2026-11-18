@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-酸鹼平衡-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用酸鹼平衡",
+      "question": {
+        "q": "弱酸HA在水中平衡HA⇌H⁺+A⁻。若以濃度近似寫Ka，哪個式子正確？",
+        "correct": "[H⁺][A⁻]/[HA]",
+        "wrong": [
+          "[HA]/([H⁺][A⁻])",
+          "[H⁺]+[A⁻]+[HA]",
+          "[HA][H⁺][A⁻]"
+        ],
+        "exp": "弱酸解離常數為產物活度乘積除以未解離酸活度；稀溶液可用濃度近似。",
+        "subject": "化學",
+        "sub_topic": "酸鹼平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中二年級-酸鹼平衡",
+        "template_id": "extra-2026-chem2-酸鹼平衡-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-酸鹼平衡-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用酸鹼平衡",
+      "question": {
+        "q": "25℃下比較0.10 M HCl與0.10 M醋酸水溶液，若忽略活度差異，何者通常pH較高？",
+        "correct": "醋酸，因弱酸只部分解離",
+        "wrong": [
+          "HCl，因強酸不能提供H⁺",
+          "兩者pH必完全相等",
+          "醋酸一定呈強鹼性"
+        ],
+        "exp": "同形式濃度下強酸近乎完全解離，弱酸只有部分解離，弱酸的[H⁺]通常較低。",
+        "subject": "化學",
+        "sub_topic": "酸鹼平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中二年級-酸鹼平衡",
+        "template_id": "extra-2026-chem2-酸鹼平衡-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-酸鹼平衡-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用酸鹼平衡",
+      "question": {
+        "q": "醋酸CH₃COOH與醋酸鈉CH₃COONa配成緩衝液。加入少量強酸時，主要由哪個成分消耗額外H⁺？",
+        "correct": "CH₃COO⁻",
+        "wrong": [
+          "Na⁺",
+          "未電離的Cl₂分子",
+          "純水中的氫氧原子各自消失"
+        ],
+        "exp": "緩衝系統的共軛鹼醋酸根接受H⁺形成醋酸，減少pH劇烈下降。",
+        "subject": "化學",
+        "sub_topic": "酸鹼平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中二年級-酸鹼平衡",
+        "template_id": "extra-2026-chem2-酸鹼平衡-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

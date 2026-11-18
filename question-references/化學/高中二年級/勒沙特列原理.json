@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-勒沙特列原理-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用勒沙特列原理",
+      "question": {
+        "q": "某可逆反應2SO₂(g)+O₂(g)⇌2SO₃(g)為放熱反應。若降低溫度並讓系統重新平衡，平衡較傾向哪一側？",
+        "correct": "生成SO₃的一側",
+        "wrong": [
+          "生成SO₂和O₂的一側",
+          "兩側濃度必完全不變",
+          "必使所有氣體凝成液態"
+        ],
+        "exp": "放熱反應可把熱視作產物，降溫使平衡偏向放熱方向。",
+        "subject": "化學",
+        "sub_topic": "勒沙特列原理",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-勒沙特列原理",
+        "template_id": "extra-2026-chem2-勒沙特列原理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-勒沙特列原理-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用勒沙特列原理",
+      "question": {
+        "q": "在固定溫度下，反應N₂(g)+3H₂(g)⇌2NH₃(g)處於平衡。若壓縮體積提高總壓力，平衡一般往哪側移動？",
+        "correct": "氣體莫耳數較少的NH₃側",
+        "wrong": [
+          "氣體莫耳數較多的N₂與H₂側",
+          "必不受壓力改變影響",
+          "必使平衡常數增為兩倍"
+        ],
+        "exp": "反應物氣體總係數4，產物2，壓力增加偏向氣體莫耳數較少的一方。",
+        "subject": "化學",
+        "sub_topic": "勒沙特列原理",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-勒沙特列原理",
+        "template_id": "extra-2026-chem2-勒沙特列原理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-勒沙特列原理-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用勒沙特列原理",
+      "question": {
+        "q": "可逆反應A+B⇌C在固定溫度下達平衡，若突然加入C且各物質仍處於同一均勻相，之後平衡通常如何移動？",
+        "correct": "向左，傾向消耗新增C",
+        "wrong": [
+          "向右，進一步持續生成更多C",
+          "一定完全不變且反應停止",
+          "K必變成原來三倍"
+        ],
+        "exp": "加產物使反應商增加，系統傾向逆向消耗部分C以重新達平衡。",
+        "subject": "化學",
+        "sub_topic": "勒沙特列原理",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-勒沙特列原理",
+        "template_id": "extra-2026-chem2-勒沙特列原理-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

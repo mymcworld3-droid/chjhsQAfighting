@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-電池與電解-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用電池與電解",
+      "question": {
+        "q": "鋅銅原電池自發放電時，鋅電極發生Zn→Zn²⁺+2e⁻。鋅電極屬於何種電極？",
+        "correct": "陽極，發生氧化",
+        "wrong": [
+          "陰極，發生還原",
+          "陰極，發生氧化",
+          "陽極，發生還原"
+        ],
+        "exp": "任何電化學電池的陽極都是氧化反應位置；原電池中鋅為陽極。",
+        "subject": "化學",
+        "sub_topic": "電池與電解",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-電池與電解",
+        "template_id": "extra-2026-chem2-電池與電解-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-電池與電解-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用電池與電解",
+      "question": {
+        "q": "將含Cu²⁺的適當電解液用於銅電鍍，被鍍物品連接負極成為陰極。銅沉積在物品表面的半反應為何？",
+        "correct": "Cu²⁺+2e⁻→Cu",
+        "wrong": [
+          "Cu→Cu²⁺+2e⁻",
+          "Cu²⁺→Cu³⁺+e⁻",
+          "Cu+2H⁺→Cu²⁺+H₂在陰極進行"
+        ],
+        "exp": "鍍銅時銅離子從外電路得到電子並還原成金屬銅沉積，非氧化。",
+        "subject": "化學",
+        "sub_topic": "電池與電解",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-電池與電解",
+        "template_id": "extra-2026-chem2-電池與電解-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-電池與電解-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用電池與電解",
+      "question": {
+        "q": "在鋅銅原電池放電時，外電路中的電子通常由何處流向何處？",
+        "correct": "由鋅陽極流向銅陰極",
+        "wrong": [
+          "由銅陰極流向鋅陽極",
+          "由鹽橋中的陰離子直接流入導線",
+          "電子完全不經外電路而只在水中移動"
+        ],
+        "exp": "鋅失去電子，電子經外電路流向銅電極，銅離子在陰極接受電子。",
+        "subject": "化學",
+        "sub_topic": "電池與電解",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-電池與電解",
+        "template_id": "extra-2026-chem2-電池與電解-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

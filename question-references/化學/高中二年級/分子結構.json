@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-分子結構-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用分子結構",
+      "question": {
+        "q": "某實驗想用分子極性解釋CO₂雖有極性C=O鍵，整個分子卻近似非極性。哪項結構因素最關鍵？",
+        "correct": "CO₂為線形且兩個C=O鍵偶極方向相反，彼此抵銷",
+        "wrong": [
+          "CO₂必定具有三角錐形",
+          "每個C=O鍵都沒有任何偶極",
+          "CO₂由離子晶格而非分子組成"
+        ],
+        "exp": "CO₂線形對稱，鍵偶極向量相消，故分子整體非極性。",
+        "subject": "化學",
+        "sub_topic": "分子結構",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中二年級-分子結構",
+        "template_id": "extra-2026-chem2-分子結構-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-分子結構-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用分子結構",
+      "question": {
+        "q": "水分子H₂O的中心氧原子有兩對非鍵結電子對。若依VSEPR模型，分子形狀主要為何？",
+        "correct": "折線形",
+        "wrong": [
+          "直線形",
+          "正四面體四個原子",
+          "平面正三角形"
+        ],
+        "exp": "中心氧有兩組成鍵電子對及兩組孤對電子，電子域分布近四面體，但原子排列呈折線形。",
+        "subject": "化學",
+        "sub_topic": "分子結構",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中二年級-分子結構",
+        "template_id": "extra-2026-chem2-分子結構-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-分子結構-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以化學平衡或微觀模型運用分子結構",
+      "question": {
+        "q": "甲烷CH₄中心碳原子與四個氫原子形成四個鍵，沒有孤對電子。依VSEPR，甲烷最可能呈何種構型？",
+        "correct": "正四面體",
+        "wrong": [
+          "直線形",
+          "平面正方形",
+          "三角錐形"
+        ],
+        "exp": "四組成鍵電子域彼此排斥，取正四面體排列，理想鍵角約109.5°。",
+        "subject": "化學",
+        "sub_topic": "分子結構",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中二年級-分子結構",
+        "template_id": "extra-2026-chem2-分子結構-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
