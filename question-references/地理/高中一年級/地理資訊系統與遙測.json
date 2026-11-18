@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-地理資訊系統與遙測-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用地理資訊系統與遙測",
+      "question": {
+        "q": "市府想找出距捷運站步行500公尺內且人口密度高的街區，最適合使用哪項GIS功能？",
+        "correct": "將車站可達範圍圖層與人口資料進行空間套疊",
+        "wrong": [
+          "只依全市平均人口數分配各區",
+          "只看捷運站名稱判斷密度",
+          "只取單一衛星照片便不用人口資料"
+        ],
+        "exp": "空間緩衝及套疊分析可結合距離與人口條件。",
+        "subject": "地理",
+        "sub_topic": "地理資訊系統與遙測",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地理資訊系統與遙測",
+        "template_id": "extra-2026-geo1-地理資訊系統與遙測-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-地理資訊系統與遙測-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用地理資訊系統與遙測",
+      "question": {
+        "q": "某衛星影像顯示山坡在豪雨前後植被反射特徵不同。要辨識崩塌位置，最先應做什麼？",
+        "correct": "影像配準並排除雲影及季節差異造成的假變化",
+        "wrong": [
+          "直接比較兩張影像檔案大小",
+          "把所有色彩差異視為崩塌",
+          "只用影像來源的檔名判斷位置"
+        ],
+        "exp": "不同時期影像需對齊位置並控制非災害因素。",
+        "subject": "地理",
+        "sub_topic": "地理資訊系統與遙測",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地理資訊系統與遙測",
+        "template_id": "extra-2026-geo1-地理資訊系統與遙測-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-地理資訊系統與遙測-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用地理資訊系統與遙測",
+      "question": {
+        "q": "民眾上傳道路積水點位，想將資料轉成淹水風險圖。除了點位，還需什麼資料較合理？",
+        "correct": "地勢高低、雨量與排水系統等空間資訊",
+        "wrong": [
+          "只看上傳者的暱稱",
+          "只看積水照片是否彩色",
+          "只採用第一個通報點"
+        ],
+        "exp": "風險分析需結合地形及排水條件，單純點位不代表完整機制。",
+        "subject": "地理",
+        "sub_topic": "地理資訊系統與遙測",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地理資訊系統與遙測",
+        "template_id": "extra-2026-geo1-地理資訊系統與遙測-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

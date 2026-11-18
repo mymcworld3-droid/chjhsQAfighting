@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-經緯度、時區-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用經緯度、時區",
+      "question": {
+        "q": "假設甲地位於東經120度、乙地東經135度，只按地方太陽時估計，乙地比甲地約早多少時間？",
+        "correct": "1小時",
+        "wrong": [
+          "15分鐘",
+          "2小時",
+          "4小時"
+        ],
+        "exp": "地球每15度轉約1小時，乙位於甲東側15度，地方時較早。",
+        "subject": "地理",
+        "sub_topic": "經緯度、時區",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-經緯度、時區",
+        "template_id": "extra-2026-geo1-經緯度、時區-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-經緯度、時區-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用經緯度、時區",
+      "question": {
+        "q": "某地經度由東經120度往東移到東經121度，緯度不變。哪個描述正確？",
+        "correct": "向東移動約一度經度，但實際距離還取決於緯度",
+        "wrong": [
+          "向北移動一度緯度",
+          "向西移動一度經度",
+          "不同緯度每一度經度的地面距離完全相同"
+        ],
+        "exp": "經度表示東西方向位置，經線會朝兩極會聚。",
+        "subject": "地理",
+        "sub_topic": "經緯度、時區",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-經緯度、時區",
+        "template_id": "extra-2026-geo1-經緯度、時區-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-經緯度、時區-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用經緯度、時區",
+      "question": {
+        "q": "某航班從UTC+8地區於當地中午12時起飛，飛行3小時到UTC+9地區，不計日期變動。抵達當地時間是？",
+        "correct": "16時",
+        "wrong": [
+          "14時",
+          "15時",
+          "17時"
+        ],
+        "exp": "出發時UTC為4時，飛行3小時至UTC7時，抵達時區加9為16時。",
+        "subject": "地理",
+        "sub_topic": "經緯度、時區",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-經緯度、時區",
+        "template_id": "extra-2026-geo1-經緯度、時區-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

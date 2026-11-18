@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-天氣與地圖判讀-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用天氣與地圖判讀",
+      "question": {
+        "q": "某氣象圖顯示低壓中心及密集等壓線，其他條件相近時哪項判斷較合理？",
+        "correct": "等壓線較密處水平氣壓梯度通常較大，風勢可能較強",
+        "wrong": [
+          "等壓線密集代表風必定停止",
+          "只有氣壓值最高處才可能有風",
+          "風向完全不受地球自轉影響"
+        ],
+        "exp": "壓力梯度是驅動風的重要因素，仍需考慮摩擦及科氏力。",
+        "subject": "地理",
+        "sub_topic": "天氣與地圖判讀",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-天氣與地圖判讀",
+        "template_id": "extra-2026-geo1-天氣與地圖判讀-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-天氣與地圖判讀-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用天氣與地圖判讀",
+      "question": {
+        "q": "某地冷鋒通過後出現降溫與風向變化。最合理的天氣機制是？",
+        "correct": "不同氣團交界移動造成氣溫及環流變化",
+        "wrong": [
+          "冷鋒代表地球軌道突然改變",
+          "所有降雨都只由海嘯引起",
+          "鋒面通過必定沒有雲層或降水"
+        ],
+        "exp": "冷鋒與冷暖氣團交界有關，可能造成天氣轉變。",
+        "subject": "地理",
+        "sub_topic": "天氣與地圖判讀",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-天氣與地圖判讀",
+        "template_id": "extra-2026-geo1-天氣與地圖判讀-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-天氣與地圖判讀-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用天氣與地圖判讀",
+      "question": {
+        "q": "某地雨量圖中，甲月200毫米、乙月50毫米。若比較兩月降雨量，何項正確？",
+        "correct": "甲月雨量為乙月的4倍",
+        "wrong": [
+          "甲月比乙月少150毫米",
+          "乙月比甲月多4倍",
+          "兩月雨量完全相同"
+        ],
+        "exp": "200除以50等於4，須分清倍數與差值。",
+        "subject": "地理",
+        "sub_topic": "天氣與地圖判讀",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-天氣與地圖判讀",
+        "template_id": "extra-2026-geo1-天氣與地圖判讀-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

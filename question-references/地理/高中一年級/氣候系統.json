@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-氣候系統-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用氣候系統",
+      "question": {
+        "q": "某沿海城市夏季受海風調節，日間高溫較內陸緩和。主要因為什麼？",
+        "correct": "海陸受熱差異與海洋較大的熱容量",
+        "wrong": [
+          "海水溫度在所有季節都完全不變",
+          "海風只能在夜間形成",
+          "沿海與內陸的地表條件必定完全相同"
+        ],
+        "exp": "海洋溫度變化較慢，海陸氣溫差可驅動局地環流。",
+        "subject": "地理",
+        "sub_topic": "氣候系統",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-氣候系統",
+        "template_id": "extra-2026-geo1-氣候系統-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-氣候系統-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用氣候系統",
+      "question": {
+        "q": "某山脈迎風坡降雨較多、背風坡乾燥。最合理的機制是？",
+        "correct": "潮濕氣流迎山抬升冷卻凝結，背風側下沉增溫",
+        "wrong": [
+          "背風側空氣一定始終上升",
+          "山脈完全不影響氣流高度",
+          "降水分布只由經度決定"
+        ],
+        "exp": "地形雨與焚風或雨影效應反映抬升和下沉氣流。",
+        "subject": "地理",
+        "sub_topic": "氣候系統",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-氣候系統",
+        "template_id": "extra-2026-geo1-氣候系統-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-氣候系統-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用氣候系統",
+      "question": {
+        "q": "某地全年平均氣溫上升，但單一冬季仍有寒流。哪種判斷較合理？",
+        "correct": "長期氣候趨勢與短期天氣波動可以同時存在",
+        "wrong": [
+          "一次寒流即可證明長期暖化不存在",
+          "全年平均等於每天相同溫度",
+          "天氣和氣候使用相同時間尺度"
+        ],
+        "exp": "氣候描述長期統計，短期極端事件不直接否定趨勢。",
+        "subject": "地理",
+        "sub_topic": "氣候系統",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-氣候系統",
+        "template_id": "extra-2026-geo1-氣候系統-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

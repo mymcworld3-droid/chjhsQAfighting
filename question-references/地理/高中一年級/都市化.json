@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-都市化-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用都市化",
+      "question": {
+        "q": "某城市郊區新建捷運後，沿線住宅密度增加。最可能反映什麼土地利用機制？",
+        "correct": "交通可達性改善使部分區位更適合居住開發",
+        "wrong": [
+          "捷運出現後所有市區人口必定歸零",
+          "住宅價格永遠不受交通影響",
+          "都市發展與公共運輸完全無關"
+        ],
+        "exp": "交通成本及可達性改變可影響區位需求。",
+        "subject": "地理",
+        "sub_topic": "都市化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-都市化",
+        "template_id": "extra-2026-geo1-都市化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-都市化-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用都市化",
+      "question": {
+        "q": "某都市中心白天人口遠高於夜間人口，周邊衛星城鎮則相反。最可能的解釋是？",
+        "correct": "中心就業集中與跨區通勤",
+        "wrong": [
+          "中心居民完全沒有居住需求",
+          "衛星城鎮只從事採礦",
+          "白天和夜間人口差異只能由氣候造成"
+        ],
+        "exp": "就業與居住空間分布不一致可造成通勤流。",
+        "subject": "地理",
+        "sub_topic": "都市化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-都市化",
+        "template_id": "extra-2026-geo1-都市化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-都市化-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用都市化",
+      "question": {
+        "q": "某地快速都市化後，透水地面減少，暴雨積水加劇。對都市規畫最有幫助的措施是？",
+        "correct": "增加滯洪、透水鋪面與排水容量評估",
+        "wrong": [
+          "只增加道路面積而不管排水",
+          "將所有雨水直接導向地下室",
+          "完全不需考慮土地覆蓋變化"
+        ],
+        "exp": "不透水面提高逕流，都市調適需兼顧排水及滯洪。",
+        "subject": "地理",
+        "sub_topic": "都市化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-都市化",
+        "template_id": "extra-2026-geo1-都市化-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-板塊、地形與外營力-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用板塊、地形與外營力",
+      "question": {
+        "q": "某山脈位於兩個板塊聚合地帶，地震頻繁且地層受到擠壓。最可能的地形形成機制是？",
+        "correct": "板塊聚合與地殼擠壓抬升",
+        "wrong": [
+          "板塊遠離但沒有任何張力",
+          "只由河川沉積產生全部高山",
+          "山脈只可能是人造堆土"
+        ],
+        "exp": "聚合邊界可造成褶皺與抬升，形成山地。",
+        "subject": "地理",
+        "sub_topic": "板塊、地形與外營力",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-2",
+            "name": "地形與地貌"
+          }
+        ],
+        "concept_id": "geo-高中一年級-板塊、地形與外營力",
+        "template_id": "extra-2026-geo1-板塊、地形與外營力-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-板塊、地形與外營力-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用板塊、地形與外營力",
+      "question": {
+        "q": "某河流下游曲流發達，洪水時常在河漫灘堆積細砂。哪種外營力作用最相關？",
+        "correct": "河流搬運與沉積",
+        "wrong": [
+          "地核對流直接把砂石送到河岸",
+          "板塊隱沒立即形成所有曲流",
+          "岩漿噴出製造全部河漫灘"
+        ],
+        "exp": "曲流及河漫灘由流水侵蝕與沉積共同形成。",
+        "subject": "地理",
+        "sub_topic": "板塊、地形與外營力",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-2",
+            "name": "地形與地貌"
+          }
+        ],
+        "concept_id": "geo-高中一年級-板塊、地形與外營力",
+        "template_id": "extra-2026-geo1-板塊、地形與外營力-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-板塊、地形與外營力-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用板塊、地形與外營力",
+      "question": {
+        "q": "海岸陡崖底部受強浪反覆侵蝕形成凹槽，後來上方岩體崩落。這主要屬於哪種地形作用？",
+        "correct": "海浪侵蝕造成崖腳淘蝕與崩塌",
+        "wrong": [
+          "主要由冰川堆積形成",
+          "因海水蒸發直接形成火山",
+          "只由人為填海形成"
+        ],
+        "exp": "波浪侵蝕削弱崖腳穩定，可能引發崖壁崩落。",
+        "subject": "地理",
+        "sub_topic": "板塊、地形與外營力",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-2",
+            "name": "地形與地貌"
+          }
+        ],
+        "concept_id": "geo-高中一年級-板塊、地形與外營力",
+        "template_id": "extra-2026-geo1-板塊、地形與外營力-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

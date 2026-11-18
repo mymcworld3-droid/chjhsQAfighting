@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-地圖要素與比例尺-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用地圖要素與比例尺",
+      "question": {
+        "q": "某地圖比例尺為1：50000，圖上兩村距離4公分，實際直線距離約為多少？",
+        "correct": "2公里",
+        "wrong": [
+          "0.2公里",
+          "20公里",
+          "200公里"
+        ],
+        "exp": "圖上1公分代表500公尺，4公分即2公里。",
+        "subject": "地理",
+        "sub_topic": "地圖要素與比例尺",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地圖要素與比例尺",
+        "template_id": "extra-2026-geo1-地圖要素與比例尺-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-地圖要素與比例尺-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用地圖要素與比例尺",
+      "question": {
+        "q": "甲圖比例尺1：10000，乙圖1：100000，若同樣以紙面一公分表示距離，哪項判讀正確？",
+        "correct": "甲圖能呈現更小的實地範圍，通常可標示較細部資訊",
+        "wrong": [
+          "乙圖的比例尺較大",
+          "兩圖一公分都代表相同實地距離",
+          "甲圖涵蓋的實地範圍必定較乙圖廣"
+        ],
+        "exp": "1：10000比例尺較大，適用細部地理資訊；1：100000適合較廣範圍。",
+        "subject": "地理",
+        "sub_topic": "地圖要素與比例尺",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地圖要素與比例尺",
+        "template_id": "extra-2026-geo1-地圖要素與比例尺-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-地圖要素與比例尺-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用地圖要素與比例尺",
+      "question": {
+        "q": "一張地形圖等高線距離很密，另一區等高線較疏。相同比例尺與等高距下，哪個解釋合理？",
+        "correct": "等高線較密處坡度通常較陡",
+        "wrong": [
+          "等高線較疏處坡度必定更陡",
+          "等高線疏密只反映土地所有權",
+          "等高線距離與坡度沒有關聯"
+        ],
+        "exp": "相同高度差在較短水平距離內完成，表示坡度較大。",
+        "subject": "地理",
+        "sub_topic": "地圖要素與比例尺",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地圖要素與比例尺",
+        "template_id": "extra-2026-geo1-地圖要素與比例尺-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-人口成長與遷移-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用人口成長與遷移",
+      "question": {
+        "q": "某城出生1000人、死亡600人、遷入800人、遷出900人。忽略其他因素，人口淨增加多少？",
+        "correct": "300人",
+        "wrong": [
+          "400人",
+          "100人",
+          "1300人"
+        ],
+        "exp": "自然增加400人，社會增加負100人，合計增加300人。",
+        "subject": "地理",
+        "sub_topic": "人口成長與遷移",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-人口成長與遷移",
+        "template_id": "extra-2026-geo1-人口成長與遷移-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-人口成長與遷移-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用人口成長與遷移",
+      "question": {
+        "q": "某地青年人口持續外移，幼年人口比例降低。長期最需關注哪項變化？",
+        "correct": "勞動人口與老年人口撫養負擔可能改變",
+        "wrong": [
+          "人口年齡結構必定維持原狀",
+          "外移只影響地名不影響公共服務",
+          "青年外移必定讓每個家庭收入同幅增加"
+        ],
+        "exp": "人口遷移會改變勞動力及教育醫療需求。",
+        "subject": "地理",
+        "sub_topic": "人口成長與遷移",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-人口成長與遷移",
+        "template_id": "extra-2026-geo1-人口成長與遷移-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-人口成長與遷移-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用人口成長與遷移",
+      "question": {
+        "q": "一個區域工作機會增加，吸引外地居民遷入。這屬於哪種遷移因素？",
+        "correct": "工作機會形成的拉力因素",
+        "wrong": [
+          "自然災害造成的推力因素",
+          "原居地戰亂造成的推力",
+          "只由行政區名稱改變造成"
+        ],
+        "exp": "遷入地的就業機會屬吸引人口的拉力。",
+        "subject": "地理",
+        "sub_topic": "人口成長與遷移",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-人口成長與遷移",
+        "template_id": "extra-2026-geo1-人口成長與遷移-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

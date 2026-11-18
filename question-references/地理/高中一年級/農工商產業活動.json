@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-農工商產業活動-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用農工商產業活動",
+      "question": {
+        "q": "某農業地區將部分耕地改種出口高價作物，但日常糧食依賴進口。應評估哪種風險？",
+        "correct": "出口價格波動與本地糧食供應的脆弱性",
+        "wrong": [
+          "出口越多糧食自給率必定越高",
+          "農產品價格永遠不受國際需求影響",
+          "不同作物的用水需求完全相同"
+        ],
+        "exp": "專業化可能提高收益，也增加對市場和外部供應的依賴。",
+        "subject": "地理",
+        "sub_topic": "農工商產業活動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-農工商產業活動",
+        "template_id": "extra-2026-geo1-農工商產業活動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-農工商產業活動-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用農工商產業活動",
+      "question": {
+        "q": "甲工廠靠近原料產地，乙工廠靠近大型消費市場。比較區位條件，最適合考慮什麼？",
+        "correct": "原料運輸成本與產品配送成本的差異",
+        "wrong": [
+          "只比較工廠招牌字體大小",
+          "工廠位置必定不影響物流費",
+          "所有產業都需要完全相同區位"
+        ],
+        "exp": "產業區位決定受原料與市場的相對運輸成本影響。",
+        "subject": "地理",
+        "sub_topic": "農工商產業活動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-農工商產業活動",
+        "template_id": "extra-2026-geo1-農工商產業活動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-農工商產業活動-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以空間資料、地理原理與情境應用農工商產業活動",
+      "question": {
+        "q": "跨國企業將研發放在高技能都市、組裝放在勞動力成本較低地區。這主要反映何種現象？",
+        "correct": "產業鏈依功能與區域條件進行分工",
+        "wrong": [
+          "每個地區都必須完成所有生產階段",
+          "國際分工等於完全停止技術交流",
+          "勞動力與研發資源分布完全一致"
+        ],
+        "exp": "全球產業可在不同區域安排高附加價值及製造環節。",
+        "subject": "地理",
+        "sub_topic": "農工商產業活動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-農工商產業活動",
+        "template_id": "extra-2026-geo1-農工商產業活動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
