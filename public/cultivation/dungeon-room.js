@@ -67,7 +67,7 @@ export const assembleDungeonRoom=roomId=>request('start',{roomId});
 export const cancelDungeonAssembly=roomId=>request('cancel-start',{roomId});
 
 // Only one active subscription per visible dungeon lobby is necessary.
-// Credentials stay in the signed POST header, never in a URL or localStorage.
+// Credentials stay in the signed POST header, never in a URL or persistent browser storage.
 export function subscribeDungeonRoom(roomId,onRoom,onError,onConnection){
   if(!/^[A-Za-z0-9_-]{8,160}$/.test(String(roomId||'')))
     throw new Error('副本房間編號無效');
