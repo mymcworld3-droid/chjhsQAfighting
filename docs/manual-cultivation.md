@@ -43,7 +43,10 @@
 - **視覺表現與限制：** 劍修青藍、體修金橙的結算卡，短暫顯示本場 EXP 與熟練度進度條動效；系統設定減少動態效果時自動停用。此功能只回顧戰場伺服器已記錄的經驗，**不會重新發獎、額外升級、覆寫功法或更改試煉獎勵**。接續下一關／前往功法閣的原按鈕全部保留。
 - **戰鬥中即時 EXP 回饋（第七階段）：** 在同一場 PvE 戰鬥的兩份伺服器狀態之間，依 `manualExp` 的每本功法增量及舊戰場 `manualKills × EXP_PER_KILL` 顯示青藍／金橙小型浮動提示（`public/cultivation/tactical-manual-xp-feedback.js`）。提示只佔戰場頂端中央，不攔截滑鼠與觸控操作，短暫顯示後自動收起，最多列出前三本有 EXP 變化的功法與其餘本數。動畫尊重減少動態效果設定，音效使用玩家既有的開關與音量系統。
 - **避免虛假回饋：** 初次載入、不同房間、PvP、舊版快照、同資料重送、其他玩家的紀錄及不認識的功法 ID 均不觸發。只閱讀伺服器已確認的房間經驗帳本，不額外發放經驗，也不改變通關、戰鬥、裝備、功法解鎖或實際的結算流程。戰鬥中新增 EXP 與伺服器永久保存的功法等級需明確區分，後者仍以戰後的 `GET /api/tactical/manuals` 與修煉頁同步結果為準。
-- **驗證：** `tests/manual-training-hero.test.cjs`、`tests/manual-training-loadout.test.cjs`、`tests/manual-training-library.test.cjs`、`tests/manual-training-celebration.test.cjs`、`tests/manual-training-growth.test.cjs`、`tests/tactical-manual-recap.test.cjs`、`tests/tactical-manual-xp-feedback.test.cjs`，以及 `scripts/test-manual-training-browser.cjs`、`scripts/test-tactical-browser.cjs`。
+- **接近突破的持續回饋（第八階段）：** 修煉頁依伺服器已確認的功法 `totalExp` 與 `totalExpForLevel` 計算 Lv.5、Lv.10 下一招等級門檻的**階段進度**。門檻進度達 75% 顯示「靈氣漸滿」、達 90% 顯示「突破在即」，主展示熟練度條與下一招節點法陣加強外圍光暈；藏經閣卡牌同步顯示接近突破標記。**節點內仍保持灰階上鎖**，直到伺服器真正回傳 `unlocked=true`；若等級達標但修士境界不足，改顯示「境界待突破」，不宣稱技能已領悟。
+- **戰場預感（唯讀試算）：** 現有即時 EXP 浮窗可在功法接近 Lv.5 或 Lv.10 時加上一條精簡的門檻進度。以戰鬥中擷取的已確認功法快照為基礎，**僅計入該快照之後、同一房間增加的 EXP**，並明示「本場僅為試算，正式 EXP 與領悟以伺服器結算為準」。玩家換房、換帳號或無法取得可信的基準快照，就不顯示戰鬥門檻試算。無附加獎勵、推播或新的升級計算。
+- **動效與驗證：** 只有「突破在即」時的熟練度光效輕微呼吸；遵守 `prefers-reduced-motion`，畫面不阻擋戰場操控與手機觸控。新增 `tests/manual-anticipation.test.cjs`，並擴充 `scripts/test-manual-training-browser.cjs` 驗證接近門檻及境界阻擋情形。
+- **驗證：** `tests/manual-training-hero.test.cjs`、`tests/manual-training-loadout.test.cjs`、`tests/manual-training-library.test.cjs`、`tests/manual-training-celebration.test.cjs`、`tests/manual-training-growth.test.cjs`、`tests/manual-anticipation.test.cjs`、`tests/tactical-manual-recap.test.cjs`、`tests/tactical-manual-xp-feedback.test.cjs`，以及 `scripts/test-manual-training-browser.cjs`、`scripts/test-tactical-browser.cjs`。
 
 
 
