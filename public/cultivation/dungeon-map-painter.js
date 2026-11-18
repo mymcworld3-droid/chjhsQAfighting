@@ -95,8 +95,23 @@ export function drawWorld(ctx,map,camera,width,height,{members=[],selfUid='',sho
   marker(map.portalSite,'傳送陣',palette.trim,'◇');
   marker(map.spawn,'起點','#bde9ab','●');
   members.slice(0,4).forEach((member,index)=>{
-    const point=map.spawnPads[index];if(!point)return;
-    const sx=g.ox+(point.x+.5)*cell,sy=g.oy+(point.y+.5)*cell;
+    const validPos=member?.position&&Number.isInteger(member.position.x)&&
+      Number.isInteger(member.position.y)&&member.position.x>=0&&
+      member.position.y>=0&&member.position.x<map.width&&
+      member.position.y<map.height&&
+      map.tiles[member.position.y*map.width+member.position.x]!==0;
+    const point=validPos?member.position:map.spawnPads[index];
+    if(!point)return;
+    // Players may cross or share a tile. Offset markers locally rather than
+    // inventing a server collision with teammates.
+    const occupancy=members.slice(0,4).filter((other,j)=>{
+      const q=other.position||map.spawnPads[j];
+      return q?.x===point.x&&q?.y===point.y;
+    });
+    const slot=Math.max(0,occupancy.findIndex(other=>other.uid===member.uid));
+    const offset=occupancy.length>1?(.22*cell):0;
+    const sx=g.ox+(point.x+.5)*cell+offset*(slot%2?1:-1),
+      sy=g.oy+(point.y+.5)*cell+offset*(slot>=2?1:-1);
     const radius=clamp(cell*.26,3,9);
     ctx.beginPath();ctx.arc(sx,sy,radius,0,Math.PI*2);
     ctx.fillStyle=partyColors[index];ctx.fill();
