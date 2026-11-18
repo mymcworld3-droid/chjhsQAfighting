@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-社會階層與不平等-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用社會階層與不平等的課內概念",
+      "question": {
+        "q": "兩名成績相近的學生，甲可負擔補習與交通、乙必須打工。若比較升學機會，最需要考量？",
+        "correct": "家庭資源差異可能影響教育機會的實質平等",
+        "wrong": [
+          "成績相同就保證所有機會完全相同",
+          "只要努力就一定不受經濟條件影響",
+          "交通成本與教育機會完全沒有關係"
+        ],
+        "exp": "形式規則相同不代表資源與機會條件相同。",
+        "subject": "公民",
+        "sub_topic": "社會階層與不平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會階層與不平等",
+        "template_id": "extra-2026-civ1-社會階層與不平等-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-社會階層與不平等-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用社會階層與不平等的課內概念",
+      "question": {
+        "q": "某城市住房價格上升，但平均所得略有增加。若要判斷居住負擔，哪種指標更適合？",
+        "correct": "不同所得群體的房價所得比與租金負擔",
+        "wrong": [
+          "只看全市平均薪資",
+          "只數城市高樓的數量",
+          "只比較住宅外牆顏色"
+        ],
+        "exp": "分配及負擔指標比單一平均數更能呈現階層差異。",
+        "subject": "公民",
+        "sub_topic": "社會階層與不平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會階層與不平等",
+        "template_id": "extra-2026-civ1-社會階層與不平等-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-社會階層與不平等-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用社會階層與不平等的課內概念",
+      "question": {
+        "q": "某就業調查顯示不同群體的職位比例差異，但尚未控制教育與經驗。最合理的結論是？",
+        "correct": "觀察到差異不代表已確認原因，需檢查其他因素及制度障礙",
+        "wrong": [
+          "只憑比例差異就確定每名雇主故意歧視",
+          "比例接近就證明不存在任何不平等",
+          "調查數據不能用於研究社會階層"
+        ],
+        "exp": "要從相關推到因果，應加入背景因素與機制分析。",
+        "subject": "公民",
+        "sub_topic": "社會階層與不平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會階層與不平等",
+        "template_id": "extra-2026-civ1-社會階層與不平等-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

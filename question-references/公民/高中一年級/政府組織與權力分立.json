@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-政府組織與權力分立-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用政府組織與權力分立的課內概念",
+      "question": {
+        "q": "某政府機關自行訂定法律、執行並裁決其違法爭議，外部機關無法制衡。這最可能產生哪種制度風險？",
+        "correct": "權力過度集中而缺乏獨立監督",
+        "wrong": [
+          "增加各權力機關相互監督程度",
+          "使法律解釋完全與政治權力分離",
+          "提高法院的獨立審查能力"
+        ],
+        "exp": "權力分立用以避免同一機關兼掌制定、執行和裁判全部權力。",
+        "subject": "公民",
+        "sub_topic": "政府組織與權力分立",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政府組織與權力分立",
+        "template_id": "extra-2026-civ1-政府組織與權力分立-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-政府組織與權力分立-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用政府組織與權力分立的課內概念",
+      "question": {
+        "q": "某議會要求行政部門說明公共建設支出，並審查預算。這最能體現哪項機制？",
+        "correct": "民意機關對行政權的監督與制衡",
+        "wrong": [
+          "行政機關完全取代司法裁判",
+          "司法機關直接主導所有選舉",
+          "以個別官員好惡代替預算程序"
+        ],
+        "exp": "預算審議是立法部門制衡行政部門的重要制度工具。",
+        "subject": "公民",
+        "sub_topic": "政府組織與權力分立",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政府組織與權力分立",
+        "template_id": "extra-2026-civ1-政府組織與權力分立-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-政府組織與權力分立-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用政府組織與權力分立的課內概念",
+      "question": {
+        "q": "若行政機關的決定可能侵犯人民權利，獨立法院可依法律進行審查。這最主要保障什麼？",
+        "correct": "公權力行使受到法律及司法程序限制",
+        "wrong": [
+          "行政處分可不受任何法律拘束",
+          "司法審查僅依新聞聲量決定",
+          "法院應直接服從每一項行政命令"
+        ],
+        "exp": "司法獨立與依法審查有助保障權利及限制政府。",
+        "subject": "公民",
+        "sub_topic": "政府組織與權力分立",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政府組織與權力分立",
+        "template_id": "extra-2026-civ1-政府組織與權力分立-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-家庭、學校與社會互動-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用家庭、學校與社會互動的課內概念",
+      "question": {
+        "q": "某學生在家庭學習語言，在學校學習公共規則，也透過朋友學會合作。這反映哪種過程？",
+        "correct": "多種社會化機構共同影響個人",
+        "wrong": [
+          "社會化只在出生當日完成",
+          "學校是唯一可能影響行為的場所",
+          "家庭與同儕永遠不會影響價值"
+        ],
+        "exp": "個人透過家庭、學校、同儕等途徑學習規範與互動。",
+        "subject": "公民",
+        "sub_topic": "家庭、學校與社會互動",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-家庭、學校與社會互動",
+        "template_id": "extra-2026-civ1-家庭、學校與社會互動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-家庭、學校與社會互動-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用家庭、學校與社會互動的課內概念",
+      "question": {
+        "q": "某校推動反霸凌制度，除校規外也邀請家長及社區參與。這最適合哪種治理思路？",
+        "correct": "學校問題可能需要家庭與社會多方協力",
+        "wrong": [
+          "只依單一教師意見即可解決所有衝突",
+          "家庭與學校完全不能溝通",
+          "既有問題出現就表示校規完全無用"
+        ],
+        "exp": "學生所處環境交織，合作可協助預防和處理問題。",
+        "subject": "公民",
+        "sub_topic": "家庭、學校與社會互動",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-家庭、學校與社會互動",
+        "template_id": "extra-2026-civ1-家庭、學校與社會互動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-家庭、學校與社會互動-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用家庭、學校與社會互動的課內概念",
+      "question": {
+        "q": "某家庭原本由單一成員照顧長者，後來透過社區服務分擔。從社會制度角度可如何分析？",
+        "correct": "私人照顧需求可與公共及社區支持網絡相連",
+        "wrong": [
+          "家庭責任只能由單一性別承擔",
+          "使用社區服務等於完全不存在家庭關係",
+          "公共照顧資源不可能影響生活安排"
+        ],
+        "exp": "照顧工作涉及家庭、社區與公共資源之間的分工。",
+        "subject": "公民",
+        "sub_topic": "家庭、學校與社會互動",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-家庭、學校與社會互動",
+        "template_id": "extra-2026-civ1-家庭、學校與社會互動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

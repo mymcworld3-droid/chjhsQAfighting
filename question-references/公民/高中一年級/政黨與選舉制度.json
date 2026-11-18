@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-政黨與選舉制度-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用政黨與選舉制度的課內概念",
+      "question": {
+        "q": "某選區只選一名代表，得票最多的候選人當選，即使票數未過半。此制度較接近？",
+        "correct": "單一選區相對多數決",
+        "wrong": [
+          "比例代表制依政黨票分配全部席次",
+          "兩輪制必定進入第二輪",
+          "所有候選人依得票比例各當選一部分"
+        ],
+        "exp": "單一席次由最高票當選，可能不需獲得過半票數。",
+        "subject": "公民",
+        "sub_topic": "政黨與選舉制度",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政黨與選舉制度",
+        "template_id": "extra-2026-civ1-政黨與選舉制度-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-政黨與選舉制度-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用政黨與選舉制度的課內概念",
+      "question": {
+        "q": "兩個政黨的得票比例相近，但某制度下席次差距很大。研究時最應優先分析？",
+        "correct": "選區大小、席次分配公式及投票制度",
+        "wrong": [
+          "只看政黨海報主色",
+          "只比較候選人姓名的筆畫",
+          "以投票所外觀推算全部席次"
+        ],
+        "exp": "得票與席次的轉換取決於制度設計，而非僅由票數比例決定。",
+        "subject": "公民",
+        "sub_topic": "政黨與選舉制度",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政黨與選舉制度",
+        "template_id": "extra-2026-civ1-政黨與選舉制度-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-政黨與選舉制度-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用政黨與選舉制度的課內概念",
+      "question": {
+        "q": "某候選人散播對手未經查證的犯罪指控以影響選舉。公民應採取哪種判斷方式？",
+        "correct": "查核具體證據和可信來源，避免以未證實訊息投票",
+        "wrong": [
+          "因訊息由候選人提出就必然為真",
+          "只看訊息轉傳量決定可信度",
+          "任何選舉消息都不需區分事實與評論"
+        ],
+        "exp": "選舉資訊會影響公共選擇，應以可驗證資料判斷。",
+        "subject": "公民",
+        "sub_topic": "政黨與選舉制度",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政黨與選舉制度",
+        "template_id": "extra-2026-civ1-政黨與選舉制度-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

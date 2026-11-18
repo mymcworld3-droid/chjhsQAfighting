@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-資訊與假訊息-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用資訊與假訊息的課內概念",
+      "question": {
+        "q": "某則網路貼文引用過時的統計數據，宣稱「今天」政策已造成相同效果。最重要的查核是？",
+        "correct": "確認數據年份、統計定義及是否真的適用於當前政策",
+        "wrong": [
+          "只看貼文瀏覽次數",
+          "只因圖片印有政府標誌就直接相信",
+          "刪除資料日期以免混淆"
+        ],
+        "exp": "錯置時間與情境可能造成誤導，需查核原始資料。",
+        "subject": "公民",
+        "sub_topic": "資訊與假訊息",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-資訊與假訊息",
+        "template_id": "extra-2026-civ1-資訊與假訊息-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-資訊與假訊息-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用資訊與假訊息的課內概念",
+      "question": {
+        "q": "同一新聞被五個網站轉載，但全數引用單一匿名帳號。這對資訊可信度意味什麼？",
+        "correct": "五次轉載不等於有五份獨立證據",
+        "wrong": [
+          "網站數量可直接當作事實的證明",
+          "任何匿名訊息都必然完全正確",
+          "只要文字相同就能省略來源查核"
+        ],
+        "exp": "傳播量與來源獨立性不同，應追溯最初資料及佐證。",
+        "subject": "公民",
+        "sub_topic": "資訊與假訊息",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-資訊與假訊息",
+        "template_id": "extra-2026-civ1-資訊與假訊息-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-資訊與假訊息-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用資訊與假訊息的課內概念",
+      "question": {
+        "q": "有張照片被配上與拍攝日期不符的事件標題，造成大量轉傳。若要判斷真偽，最適合？",
+        "correct": "尋找原始照片與拍攝時間，核對事件脈絡",
+        "wrong": [
+          "只看照片是否清晰",
+          "因有文字說明就認定照片代表現場",
+          "把轉傳數當作拍攝日期"
+        ],
+        "exp": "真實照片也可能被錯誤脈絡挪用，需來源查證。",
+        "subject": "公民",
+        "sub_topic": "資訊與假訊息",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-資訊與假訊息",
+        "template_id": "extra-2026-civ1-資訊與假訊息-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

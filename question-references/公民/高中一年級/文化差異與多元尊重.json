@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-文化差異與多元尊重-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用文化差異與多元尊重的課內概念",
+      "question": {
+        "q": "某學校招生活動中，不同文化背景的學生希望保留各自飲食習慣。哪種措施最符合多元尊重？",
+        "correct": "在基本衛生與安全規範下提供多種可選擇的餐食",
+        "wrong": [
+          "要求所有學生只能選擇多數人的食物",
+          "將少數文化學生另外隔離用餐",
+          "禁止學生討論文化差異"
+        ],
+        "exp": "文化尊重是在合理共同規範下讓不同需求有表達與選擇空間。",
+        "subject": "公民",
+        "sub_topic": "文化差異與多元尊重",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-文化差異與多元尊重",
+        "template_id": "extra-2026-civ1-文化差異與多元尊重-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-文化差異與多元尊重-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用文化差異與多元尊重的課內概念",
+      "question": {
+        "q": "某社區想辦節慶活動，居民對傳統表演的宗教含義意見不同。哪種公共討論方式較合理？",
+        "correct": "讓不同群體說明理由並討論共同參與或替代方案",
+        "wrong": [
+          "只讓人數最多的一群決定所有細節",
+          "預先假設少數居民的主張不值得聽取",
+          "把文化差異視為必須由政府消除的問題"
+        ],
+        "exp": "多元社會需要兼顧參與、程序公平與對不同信仰的尊重。",
+        "subject": "公民",
+        "sub_topic": "文化差異與多元尊重",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-文化差異與多元尊重",
+        "template_id": "extra-2026-civ1-文化差異與多元尊重-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-文化差異與多元尊重-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用文化差異與多元尊重的課內概念",
+      "question": {
+        "q": "有人說「文化習慣不同就是能力較差」。若依平等尊重觀念，哪種回應最有根據？",
+        "correct": "文化差異本身不能作為判斷個人能力的證據",
+        "wrong": [
+          "只要文化不同就不能一起工作",
+          "對不同文化的評價只能由多數決決定",
+          "所有文化習慣都必須在任何場合完全相同"
+        ],
+        "exp": "應區分可檢驗能力與文化刻板印象，不可將群體特徵推論到個人。",
+        "subject": "公民",
+        "sub_topic": "文化差異與多元尊重",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-文化差異與多元尊重",
+        "template_id": "extra-2026-civ1-文化差異與多元尊重-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

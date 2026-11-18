@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-自我認同與社會角色-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用自我認同與社會角色的課內概念",
+      "question": {
+        "q": "某學生同時是球隊隊員、家中兄姊與班級幹部，在不同情境有不同責任。這反映什麼？",
+        "correct": "個人可以同時擁有多重社會角色",
+        "wrong": [
+          "每個人一生只能有單一角色",
+          "社會角色只能由出生地決定",
+          "不同情境的規範完全相同"
+        ],
+        "exp": "角色隨社會關係與情境而變，可能有不同期待。",
+        "subject": "公民",
+        "sub_topic": "自我認同與社會角色",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-自我認同與社會角色",
+        "template_id": "extra-2026-civ1-自我認同與社會角色-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-自我認同與社會角色-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用自我認同與社會角色的課內概念",
+      "question": {
+        "q": "某學生在社團會議與家庭聚會中受到不同規範期待，因時間不足感到衝突。這最接近哪個概念？",
+        "correct": "角色衝突：不同社會角色的期待難以兼顧",
+        "wrong": [
+          "社會化必定已完全停止",
+          "所有角色責任已自動消失",
+          "個人沒有任何選擇空間"
+        ],
+        "exp": "不同角色可能有競爭性要求，需協商時間與責任。",
+        "subject": "公民",
+        "sub_topic": "自我認同與社會角色",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-自我認同與社會角色",
+        "template_id": "extra-2026-civ1-自我認同與社會角色-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-自我認同與社會角色-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用自我認同與社會角色的課內概念",
+      "question": {
+        "q": "校園活動鼓勵學生說明各自的多元文化背景，但不要求每人只認同一個群體。這最符合何種理解？",
+        "correct": "認同可能同時包含多種群體與生活經驗",
+        "wrong": [
+          "所有認同都只由法律身分決定",
+          "多重認同必定互相排斥",
+          "認同一旦形成就完全不會變化"
+        ],
+        "exp": "個人的認同具有多重性及動態性，不必只屬單一類別。",
+        "subject": "公民",
+        "sub_topic": "自我認同與社會角色",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-自我認同與社會角色",
+        "template_id": "extra-2026-civ1-自我認同與社會角色-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

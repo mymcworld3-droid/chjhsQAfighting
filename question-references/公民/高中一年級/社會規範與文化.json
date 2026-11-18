@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-社會規範與文化-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用社會規範與文化的課內概念",
+      "question": {
+        "q": "某社區長期形成排隊禮讓慣例，即使沒有明文罰則也多數遵守。這屬於哪類規範？",
+        "correct": "社會習俗或非正式規範",
+        "wrong": [
+          "必須由法院制定的刑事法律",
+          "只在國際條約中存在的義務",
+          "完全沒有共同期待的個人喜好"
+        ],
+        "exp": "非正式規範可由群體期待維持，不一定有國家強制處罰。",
+        "subject": "公民",
+        "sub_topic": "社會規範與文化",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會規範與文化",
+        "template_id": "extra-2026-civ1-社會規範與文化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-社會規範與文化-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用社會規範與文化的課內概念",
+      "question": {
+        "q": "某公司要求員工遵守內部守則，違反者可能被警告。與國家法律比較，最該區分什麼？",
+        "correct": "規範制定權源、適用對象與制裁方式",
+        "wrong": [
+          "公司守則必然高於憲法",
+          "所有內規都等於刑法",
+          "只要有規範便無須考量正當性"
+        ],
+        "exp": "不同規範的權威及制裁來源不同，不能混為一談。",
+        "subject": "公民",
+        "sub_topic": "社會規範與文化",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會規範與文化",
+        "template_id": "extra-2026-civ1-社會規範與文化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-社會規範與文化-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用社會規範與文化的課內概念",
+      "question": {
+        "q": "某地文化從重視大家庭同住逐漸轉向小家庭，但兩種形式仍並存。較合理的理解是？",
+        "correct": "社會規範會隨經濟條件與世代需求改變",
+        "wrong": [
+          "家庭型態變化等於親屬關係消失",
+          "文化規範不可能在同一社會並存",
+          "只要有一項新型態就代表全部住戶都改變"
+        ],
+        "exp": "文化不是固定不變的單一模式。",
+        "subject": "公民",
+        "sub_topic": "社會規範與文化",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會規範與文化",
+        "template_id": "extra-2026-civ1-社會規範與文化-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

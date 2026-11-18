@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-性別平等-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用性別平等的課內概念",
+      "question": {
+        "q": "企業招聘一份工作，規定僅男性可投履歷，但實際職務與性別無直接關係。最可能涉及哪項議題？",
+        "correct": "以性別而非職務能力作不合理的差別待遇",
+        "wrong": [
+          "依工作需要評估專業證照",
+          "安排所有求職者接受相同測驗",
+          "依申請者實際技能安排培訓"
+        ],
+        "exp": "任用標準應與職務能力相關，無正當理由排除某性別涉及歧視。",
+        "subject": "公民",
+        "sub_topic": "性別平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-性別平等",
+        "template_id": "extra-2026-civ1-性別平等-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-性別平等-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用性別平等的課內概念",
+      "question": {
+        "q": "某學校發現女生選修資訊課的比例低，想了解原因。哪種調查設計較合理？",
+        "correct": "檢視課程宣傳、選課障礙及學生興趣，避免先假定能力差異",
+        "wrong": [
+          "直接認定女生天生不適合資訊課",
+          "只統計男生分數作為全部原因",
+          "把選課比例差異視為不能研究的事"
+        ],
+        "exp": "觀察到比例差異不能直接推導天生能力，需調查制度與環境因素。",
+        "subject": "公民",
+        "sub_topic": "性別平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-性別平等",
+        "template_id": "extra-2026-civ1-性別平等-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-性別平等-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以公共案例運用性別平等的課內概念",
+      "question": {
+        "q": "一項家務分工調查發現，兩人都有全職工作但照顧責任極不平均。若運用性別平等觀念，何種方案較適當？",
+        "correct": "協商時間與資源，讓照顧責任不由性別刻板印象單方決定",
+        "wrong": [
+          "依傳統性別角色自動分派全部照顧",
+          "因兩人都有工作就推定照顧負擔一致",
+          "只比較薪資便不必討論無酬照顧"
+        ],
+        "exp": "平等也涉及無酬勞動分配與協商機制。",
+        "subject": "公民",
+        "sub_topic": "性別平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-性別平等",
+        "template_id": "extra-2026-civ1-性別平等-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
