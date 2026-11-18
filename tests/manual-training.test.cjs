@@ -115,8 +115,11 @@ test('manual mastery charges two gold per missing EXP and honors the quoted pric
   }
   assert.equal(db.records.get(userRef).stats.gold,7);
   assert.equal(bookRecord(db).books['sword-wind'].exp,40);
-  assert.deepEqual(Catalog.upgradeQuote(Catalog.totalExpForLevel(10)),
-    {targetLevel:11,targetExp:1300,gold:440});
+  assert.equal(Catalog.MAX_GOLD_LEVEL,10);
+  assert.deepEqual(Catalog.upgradeQuote(Catalog.totalExpForLevel(9)),
+    {targetLevel:10,targetExp:1080,gold:400});
+  assert.equal(Catalog.upgradeQuote(Catalog.totalExpForLevel(10)),null);
+  assert.equal(Catalog.upgradeQuote(Catalog.totalExpForLevel(14)),null);
   assert.equal(Catalog.upgradeQuote(Catalog.totalExpForLevel(20)),null);
 });
 
@@ -671,24 +674,38 @@ test('server adds the manuscript bonus to actual battle attack and keeps existin
     'raw player attack is not modified');
 });
 
-test('level-19 to level-20 manual upgrade works and further upgrade is rejected',async()=>{
+test('gold upgrades stop at Lv10, but PvE mastery XP still reaches Lv20',async()=>{
   const db=database(),user=db.records.get('users/u1');
   await API.chooseSchool(db,'u1',{school:'sword'});
-  bookRecord(db).books['sword-wind'].exp=Catalog.totalExpForLevel(19);
+  const record=bookRecord(db);
+  record.books['sword-wind'].exp=Catalog.totalExpForLevel(9);
   user.stats.gold=5000;
-  const initial=await API.manualsState(db,'u1');
-  const price=initial.library[0].upgrade;
-  assert.deepEqual(price,{targetLevel:20,targetExp:4180,gold:800});
-  assert.equal(initial.library[0].level,19);
-  const result=await API.upgradeManual(db,'u1',{
-    bookId:'sword-wind',targetLevel:20,expectedGold:800
+  let initial=await API.manualsState(db,'u1');
+  assert.equal(initial.library[0].level,9);
+  assert.deepEqual(initial.library[0].upgrade,{targetLevel:10,targetExp:1080,gold:400});
+  const purchased=await API.upgradeManual(db,'u1',{
+    bookId:'sword-wind',targetLevel:10,expectedGold:400
   });
-  assert.equal(result.library[0].level,20);
-  assert.equal(result.library[0].upgrade,null);
-  assert.equal(result.attackBonus,20);
-  assert.equal(result.gold,4200);
-  assert.equal(bookRecord(db).books['sword-wind'].exp,4180);
-  await assert.rejects(API.upgradeManual(db,'u1',{
-    bookId:'sword-wind',targetLevel:21,expectedGold:0
-  }),/功法升級資料無效/);
+  assert.equal(purchased.library[0].level,10);
+  assert.equal(purchased.library[0].upgrade,null);
+  assert.equal(purchased.gold,4600);
+  // Reject direct/faked requests regardless of the user's gold balance.
+  for(const targetLevel of [11,14,20,21]){
+    await assert.rejects(API.upgradeManual(db,'u1',{
+      bookId:'sword-wind',targetLevel,expectedGold:0
+    }),/Lv. 10 之後只能透過 PvE/);
+  }
+  assert.equal(user.stats.gold,4600);
+  assert.equal(record.books['sword-wind'].exp,1080);
+  // The existing combat reward route writes authoritative EXP. No currency
+  // quote is available from Lv10 onward, including Lv19->20.
+  for(const level of [11,14,19,20]){
+    record.books['sword-wind'].exp=Catalog.totalExpForLevel(level);
+    initial=await API.manualsState(db,'u1');
+    assert.equal(initial.library[0].level,level);
+    assert.equal(initial.library[0].upgrade,null);
+    assert.equal(initial.attackBonus,level);
+    assert.equal(initial.gold,4600);
+  }
+  assert.equal(record.books['sword-wind'].exp,4180);
 });
