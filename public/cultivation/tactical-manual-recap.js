@@ -25,7 +25,7 @@ function masteryHint(book,manuals) {
   if(!book)return null;
   const level=count(book.level)||1, exp=count(book.totalExp??book.exp);
   const next=(book.skills||[]).find(skill=>!skill.unlocked);
-  const maxed=level>=10;
+  const maxed=level>=20;
   const progress=Math.min(100,Math.max(0,Number(book.progress)||0));
   let headline='';
   if(next){
