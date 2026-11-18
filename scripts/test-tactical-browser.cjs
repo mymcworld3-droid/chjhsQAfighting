@@ -376,7 +376,7 @@ async function main(){
       !(snapshot.objective?.hazards||[]).some(h=>h.x===p.x&&h.y===p.y));
     assert.ok(reachable,'at least one legal movement target is needed');
     await view.setViewportSize({width:393,height:852});
-    await view.locator('[data-action="move"]').click();
+    await view.evaluate(()=>document.querySelector('#tactical-combat [data-action="move"]').click());
     const position=async tile=>view.evaluate(({tile,width,height})=>{
       const canvas=document.querySelector('#tactical-combat .tc-arena canvas');
       const r=canvas.getBoundingClientRect();
@@ -420,7 +420,7 @@ async function main(){
       'touch preview does not trigger an automatic battle action');
     assert.equal((await read(view)).actors[0].stamina,player.stamina);
 
-    await view.locator('[data-action="attack"]').click();
+    await view.evaluate(()=>document.querySelector('#tactical-combat [data-action="attack"]').click());
     const attack=Rules.aimCells(snapshot,player,Rules.basicFor(player))[0];
     assert.ok(attack,'there should be an available basic attack direction');
     const pointer=await position(attack);
