@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-2-史料可信度-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "分析事件與史料的可靠性：史料可信度",
+      "question": {
+        "q": "網路流傳一張宣稱拍攝於1910年的彩色照片，沒有典藏資訊。研究者最應先確認什麼？",
+        "correct": "原始出處、影像製作技術及標示年代是否相符",
+        "wrong": [
+          "轉發次數越多就越可信",
+          "只看衣服顏色便能確定拍攝年份",
+          "照片清晰就代表絕無修圖或上色"
+        ],
+        "exp": "確認來源、影像技術和原始脈絡是史料鑑別的重要步驟。",
+        "subject": "歷史",
+        "sub_topic": "史料可信度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-史料可信度",
+        "template_id": "ext-2026-history-2-史料可信度-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-史料可信度-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "分析事件與史料的可靠性：史料可信度",
+      "question": {
+        "q": "某回憶錄稱一場戰役有50萬人參戰，同期軍隊編制紀錄只有數萬人。應如何處理？",
+        "correct": "比對統計口徑、時間與其他獨立資料",
+        "wrong": [
+          "一律採用數字最大者",
+          "一律採用印刷較新的版本",
+          "兩種數字不同就證明戰役完全不存在"
+        ],
+        "exp": "數量落差可能來自範圍、記憶偏差或記錄錯誤，須查證。",
+        "subject": "歷史",
+        "sub_topic": "史料可信度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-史料可信度",
+        "template_id": "ext-2026-history-2-史料可信度-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-史料可信度-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "分析事件與史料的可靠性：史料可信度",
+      "question": {
+        "q": "兩家媒體同時報導某史料發現，但全文都轉引同一匿名貼文。這算兩個獨立來源嗎？",
+        "correct": "不算，因兩份報導可能依賴同一份未核實的訊息",
+        "wrong": [
+          "算，因媒體名稱不同就必然獨立",
+          "算，因新聞數量一定等於來源數量",
+          "不算，因新聞從來不能用於歷史研究"
+        ],
+        "exp": "轉載同源訊息不能作為彼此獨立的互證，需追溯原始記錄。",
+        "subject": "歷史",
+        "sub_topic": "史料可信度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-史料可信度",
+        "template_id": "ext-2026-history-2-史料可信度-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

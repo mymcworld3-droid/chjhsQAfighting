@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-2-海報、照片與統計-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "分析事件與史料的可靠性：海報、照片與統計",
+      "question": {
+        "q": "戰時海報把敵國士兵畫成兇猛怪獸，並號召民眾捐款。史家利用海報研究時，最合理的用途是？",
+        "correct": "分析當時政治宣傳如何塑造敵人形象與動員民眾",
+        "wrong": [
+          "把圖像當作敵國士兵的客觀肖像",
+          "據此精確計算敵軍死亡人數",
+          "證明敵國全體人民有相同外貌"
+        ],
+        "exp": "宣傳海報反映動員意圖與圖像修辭，不是中立現場報告。",
+        "subject": "歷史",
+        "sub_topic": "海報、照片與統計",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-海報、照片與統計",
+        "template_id": "ext-2026-history-2-海報、照片與統計-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-海報、照片與統計-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "分析事件與史料的可靠性：海報、照片與統計",
+      "question": {
+        "q": "一張二十世紀初工廠照片有數名女性正在操作機器。哪項推論超出照片能直接支持的範圍？",
+        "correct": "當年全國所有女性都享有與男性同等薪資",
+        "wrong": [
+          "當時某地確實有女性參與工廠生產",
+          "照片可提示女性勞動研究方向",
+          "需要其他薪資資料才能比較待遇"
+        ],
+        "exp": "照片是局部影像證據，不能推導全國薪資或權利狀況。",
+        "subject": "歷史",
+        "sub_topic": "海報、照片與統計",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-海報、照片與統計",
+        "template_id": "ext-2026-history-2-海報、照片與統計-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-海報、照片與統計-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "分析事件與史料的可靠性：海報、照片與統計",
+      "question": {
+        "q": "某國人口統計顯示總人口增加，但同時期死亡率也上升。若要解釋此現象，應加入哪類資料？",
+        "correct": "出生人數、移民淨流入與各年度統計口徑",
+        "wrong": [
+          "只憑死亡率上升斷定人口必然下降",
+          "只比較各城市名稱的字數",
+          "把兩份資料相加當作人口總數"
+        ],
+        "exp": "人口增減同時受出生、死亡與移動影響，需完整資料才能判斷。",
+        "subject": "歷史",
+        "sub_topic": "海報、照片與統計",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-海報、照片與統計",
+        "template_id": "ext-2026-history-2-海報、照片與統計-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-2-多元歷史觀點-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "分析事件與史料的可靠性：多元歷史觀點",
+      "question": {
+        "q": "研究一項殖民政策時，史家取得政府公文、商人日記與農民請願書。怎樣寫作較符合多元史觀？",
+        "correct": "分別分析不同群體立場與利益，再對照其共同及衝突之處",
+        "wrong": [
+          "以官方報告排除所有其他材料",
+          "只選字數最長的一份作為歷史結論",
+          "把各種不同經驗強行整理成相同意見"
+        ],
+        "exp": "政策可能讓不同群體承受不同效果，應多方檢證而非只採單一觀點。",
+        "subject": "歷史",
+        "sub_topic": "多元歷史觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-多元歷史觀點",
+        "template_id": "ext-2026-history-2-多元歷史觀點-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-多元歷史觀點-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "分析事件與史料的可靠性：多元歷史觀點",
+      "question": {
+        "q": "甲研究指出土地改革增加農民收益，乙研究卻發現部分地主損失增加。最合理的解讀是？",
+        "correct": "同一改革可能對不同社會階層產生差異影響",
+        "wrong": [
+          "結論不同就表示改革從未實施",
+          "土地改革必定讓所有人的利益完全相同",
+          "只有地主的資料才算正式史料"
+        ],
+        "exp": "兩份研究可以同時描述不同群體的分配效果，需查核方法與樣本。",
+        "subject": "歷史",
+        "sub_topic": "多元歷史觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-多元歷史觀點",
+        "template_id": "ext-2026-history-2-多元歷史觀點-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-多元歷史觀點-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "分析事件與史料的可靠性：多元歷史觀點",
+      "question": {
+        "q": "某歷史展覽新增移民女性及少數群體的口述訪談。這項安排的主要史學意義是？",
+        "correct": "補充傳統官方記錄較難呈現的日常經驗",
+        "wrong": [
+          "所有口述歷史都無需進一步考證",
+          "新增訪談就表示官方史料不再能用",
+          "證明所有受訪者有完全一致的記憶"
+        ],
+        "exp": "多元材料可呈現被忽略的經驗，但口述資料仍需交叉比對。",
+        "subject": "歷史",
+        "sub_topic": "多元歷史觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-多元歷史觀點",
+        "template_id": "ext-2026-history-2-多元歷史觀點-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
