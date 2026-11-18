@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-官能基與異構物-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用官能基與異構物",
+      "question": {
+        "q": "某有機分子結構為CH₃CH₂OH。若辨認主要官能基，它屬於哪一類？",
+        "correct": "醇類的羥基—OH",
+        "wrong": [
+          "羧酸的—COOH",
+          "酯類的—COO—",
+          "醛類的—CHO"
+        ],
+        "exp": "CH₃CH₂OH為乙醇，含有與飽和碳結合的羥基。",
+        "subject": "化學",
+        "sub_topic": "官能基與異構物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-官能基與異構物",
+        "template_id": "extra-2026-chem3-官能基與異構物-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-官能基與異構物-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用官能基與異構物",
+      "question": {
+        "q": "乙醇CH₃CH₂OH與甲氧基甲烷CH₃OCH₃均為C₂H₆O。兩者彼此屬於什麼？",
+        "correct": "構造異構物，原子連結方式不同",
+        "wrong": [
+          "同一物質的不同書寫而無結構差異",
+          "氯元素的同位素",
+          "所有碳原子均以離子鍵相連的同種物質"
+        ],
+        "exp": "分子式相同，但一個是醇、一個是醚，原子連結不同。",
+        "subject": "化學",
+        "sub_topic": "官能基與異構物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-官能基與異構物",
+        "template_id": "extra-2026-chem3-官能基與異構物-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-官能基與異構物-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用官能基與異構物",
+      "question": {
+        "q": "丙烷-1-醇與丙烷-2-醇的分子式相同，羥基在碳鏈位置不同。兩者的關係為何？",
+        "correct": "位置異構物",
+        "wrong": [
+          "同位素",
+          "不同元素形成的同一化合物",
+          "完全相同而不需區分名稱"
+        ],
+        "exp": "兩者皆為C₃H₈O，但—OH連接在不同碳位置，屬位置異構。",
+        "subject": "化學",
+        "sub_topic": "官能基與異構物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-官能基與異構物",
+        "template_id": "extra-2026-chem3-官能基與異構物-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

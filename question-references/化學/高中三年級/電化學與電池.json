@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-電化學與電池-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用電化學與電池",
+      "question": {
+        "q": "標準還原電位E°(Cu²⁺/Cu)=+0.34 V、E°(Zn²⁺/Zn)=−0.76 V。標準鋅銅原電池電動勢約為何？",
+        "correct": "1.10 V",
+        "wrong": [
+          "−1.10 V",
+          "0.42 V",
+          "0.34 V"
+        ],
+        "exp": "原電池E°=陰極還原電位−陽極還原電位=0.34−(−0.76)=1.10 V。",
+        "subject": "化學",
+        "sub_topic": "電化學與電池",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-電化學與電池",
+        "template_id": "extra-2026-chem3-電化學與電池-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-電化學與電池-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用電化學與電池",
+      "question": {
+        "q": "鋅銅原電池自發放電時，電子由哪個電極沿外電路流向哪個電極？",
+        "correct": "鋅陽極流向銅陰極",
+        "wrong": [
+          "銅陰極流向鋅陽極",
+          "只由鹽橋陰離子直接進入外導線",
+          "兩電極都只接收電子"
+        ],
+        "exp": "鋅發生氧化釋出電子，銅電極還原Cu²⁺消耗電子，電子在外電路由鋅到銅。",
+        "subject": "化學",
+        "sub_topic": "電化學與電池",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-電化學與電池",
+        "template_id": "extra-2026-chem3-電化學與電池-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-電化學與電池-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用電化學與電池",
+      "question": {
+        "q": "某電解槽需要外部直流電源才能持續分解反應物。此類反應相較自發原電池反應的主要特性是？",
+        "correct": "依賴外加電能驅動非自發反應",
+        "wrong": [
+          "必定不涉及電子轉移",
+          "不需要遵守物質守恆",
+          "兩電極一定同時發生氧化"
+        ],
+        "exp": "電解把電能轉化為化學能，兩電極仍分別進行氧化與還原。",
+        "subject": "化學",
+        "sub_topic": "電化學與電池",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-電化學與電池",
+        "template_id": "extra-2026-chem3-電化學與電池-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

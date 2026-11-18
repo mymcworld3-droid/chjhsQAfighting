@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-氧化還原配平-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用氧化還原配平",
+      "question": {
+        "q": "氧化半反應Fe²⁺→Fe³⁺需要在右側補入多少電子才能電荷守恆？",
+        "correct": "1個電子",
+        "wrong": [
+          "2個電子",
+          "3個電子",
+          "完全不需電子"
+        ],
+        "exp": "Fe²⁺→Fe³⁺+e⁻，左側電荷+2，右側+3−1=+2，故需一電子。",
+        "subject": "化學",
+        "sub_topic": "氧化還原配平",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-氧化還原配平",
+        "template_id": "extra-2026-chem3-氧化還原配平-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-氧化還原配平-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用氧化還原配平",
+      "question": {
+        "q": "鎂與氧反應的平衡式2Mg+O₂→2MgO，若每個Mg由0變為+2，兩個Mg總共失去多少電子？",
+        "correct": "4個",
+        "wrong": [
+          "2個",
+          "1個",
+          "8個"
+        ],
+        "exp": "每個鎂失去2電子形成Mg²⁺，兩個鎂合計失去4電子，與氧所接受者平衡。",
+        "subject": "化學",
+        "sub_topic": "氧化還原配平",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-氧化還原配平",
+        "template_id": "extra-2026-chem3-氧化還原配平-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-氧化還原配平-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用氧化還原配平",
+      "question": {
+        "q": "酸性溶液中，MnO₄⁻還原成Mn²⁺需要5電子。若由Fe²⁺氧化成Fe³⁺提供電子，每1 mol MnO₄⁻需多少mol Fe²⁺？",
+        "correct": "5 mol",
+        "wrong": [
+          "1 mol",
+          "2 mol",
+          "10 mol"
+        ],
+        "exp": "每個Fe²⁺失去1電子，MnO₄⁻需5電子，故電子平衡要求5 mol Fe²⁺。",
+        "subject": "化學",
+        "sub_topic": "氧化還原配平",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-氧化還原配平",
+        "template_id": "extra-2026-chem3-氧化還原配平-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

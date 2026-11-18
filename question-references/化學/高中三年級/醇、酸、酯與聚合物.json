@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-醇、酸、酯與聚合物-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用醇、酸、酯與聚合物",
+      "question": {
+        "q": "在適當氧化條件下，乙醇經氧化可進一步形成哪一類有機物？",
+        "correct": "乙酸等羧酸",
+        "wrong": [
+          "烷類必直接變成氯化鈉",
+          "所有氧化都只能生成甲烷",
+          "氧化會使碳原子全部消失"
+        ],
+        "exp": "一級醇可氧化成醛並進一步氧化成羧酸；乙醇可產生乙酸。",
+        "subject": "化學",
+        "sub_topic": "醇、酸、酯與聚合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-醇、酸、酯與聚合物",
+        "template_id": "extra-2026-chem3-醇、酸、酯與聚合物-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-醇、酸、酯與聚合物-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用醇、酸、酯與聚合物",
+      "question": {
+        "q": "醋酸與乙醇在適當酸催化條件下反應形成乙酸乙酯與水。主要反應類型是？",
+        "correct": "酯化反應",
+        "wrong": [
+          "單純金屬置換",
+          "氧化鋅的分解",
+          "只有氣體擴散"
+        ],
+        "exp": "羧酸與醇脫水生成酯，是常見的酯化反應。",
+        "subject": "化學",
+        "sub_topic": "醇、酸、酯與聚合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-醇、酸、酯與聚合物",
+        "template_id": "extra-2026-chem3-醇、酸、酯與聚合物-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-醇、酸、酯與聚合物-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用醇、酸、酯與聚合物",
+      "question": {
+        "q": "聚乙烯的製造可由大量乙烯C₂H₄分子反應形成長鏈。這種聚合主要屬於？",
+        "correct": "加成聚合",
+        "wrong": [
+          "酸鹼滴定",
+          "氣液相平衡",
+          "金屬的電解精煉"
+        ],
+        "exp": "乙烯雙鍵可開啟並連接形成聚乙烯長鏈，通常不需每個單體間脫去小分子。",
+        "subject": "化學",
+        "sub_topic": "醇、酸、酯與聚合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-醇、酸、酯與聚合物",
+        "template_id": "extra-2026-chem3-醇、酸、酯與聚合物-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

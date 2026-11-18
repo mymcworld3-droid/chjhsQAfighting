@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-碳氫化合物-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用碳氫化合物",
+      "question": {
+        "q": "飽和開鏈烷類的一般分子式為CₙH₂ₙ₊₂。若n=4，其化學式為？",
+        "correct": "C₄H₁₀",
+        "wrong": [
+          "C₄H₈",
+          "C₄H₆",
+          "C₄H₄"
+        ],
+        "exp": "依CₙH₂ₙ₊₂，n=4時氫數為10，故丁烷C₄H₁₀。",
+        "subject": "化學",
+        "sub_topic": "碳氫化合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-碳氫化合物",
+        "template_id": "extra-2026-chem3-碳氫化合物-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-碳氫化合物-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用碳氫化合物",
+      "question": {
+        "q": "乙烯C₂H₄含碳碳雙鍵，與溴水在適當條件下反應，使溴水褪色。主要反應類型是？",
+        "correct": "加成反應",
+        "wrong": [
+          "單純酸鹼中和",
+          "烷類完全燃燒",
+          "水解生成氫氣"
+        ],
+        "exp": "碳碳雙鍵可進行加成反應，使溴加到雙鍵兩端。",
+        "subject": "化學",
+        "sub_topic": "碳氫化合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-碳氫化合物",
+        "template_id": "extra-2026-chem3-碳氫化合物-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-碳氫化合物-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用碳氫化合物",
+      "question": {
+        "q": "丙烷完全燃燒生成CO₂及H₂O，已平衡反應C₃H₈+5O₂→3CO₂+4H₂O。1 mol丙烷需多少mol氧氣？",
+        "correct": "5 mol",
+        "wrong": [
+          "3 mol",
+          "4 mol",
+          "8 mol"
+        ],
+        "exp": "直接由反應係數可知1 mol丙烷需5 mol氧氣。",
+        "subject": "化學",
+        "sub_topic": "碳氫化合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-碳氫化合物",
+        "template_id": "extra-2026-chem3-碳氫化合物-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-實驗數據分析-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用實驗數據分析",
+      "question": {
+        "q": "某溶液反應物濃度由0.80 M於10秒內降至0.60 M。以濃度減少量計算平均消耗速率為何？",
+        "correct": "0.020 M/s",
+        "wrong": [
+          "0.20 M/s",
+          "0.080 M/s",
+          "0.060 M/s"
+        ],
+        "exp": "平均消耗速率=−Δ[A]/Δt=(0.80−0.60)/10=0.020 M/s。",
+        "subject": "化學",
+        "sub_topic": "實驗數據分析",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-實驗數據分析",
+        "template_id": "extra-2026-chem3-實驗數據分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-實驗數據分析-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用實驗數據分析",
+      "question": {
+        "q": "熱量計中100 g水升溫5℃，取c=4.2 J/(g·℃)，忽略熱量計熱容與散熱。水吸熱量為何？",
+        "correct": "2100 J",
+        "wrong": [
+          "420 J",
+          "840 J",
+          "500 J"
+        ],
+        "exp": "Q=mcΔT=100×4.2×5=2100 J。",
+        "subject": "化學",
+        "sub_topic": "實驗數據分析",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-實驗數據分析",
+        "template_id": "extra-2026-chem3-實驗數據分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-實驗數據分析-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用實驗數據分析",
+      "question": {
+        "q": "同一滴定實驗三次耗用量為10.0、10.1、12.7 mL。最合理的數據處理為何？",
+        "correct": "先查核12.7 mL是否有操作或終點判讀異常，並重測確認",
+        "wrong": [
+          "不看原因直接刪除12.7且宣稱已無誤差",
+          "把12.7當作唯一正確值",
+          "三次讀值不同就認定滴定方法完全不能使用"
+        ],
+        "exp": "異常值應調查原因及重複試驗，不能依期待答案任意取捨。",
+        "subject": "化學",
+        "sub_topic": "實驗數據分析",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-實驗數據分析",
+        "template_id": "extra-2026-chem3-實驗數據分析-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

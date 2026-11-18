@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-酸鹼滴定與緩衝液-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用酸鹼滴定與緩衝液",
+      "question": {
+        "q": "以0.20 M NaOH滴定20.0 mL未知濃度HCl，至當量點耗用25.0 mL NaOH。若HCl為一元強酸，濃度是多少？",
+        "correct": "0.25 M",
+        "wrong": [
+          "0.16 M",
+          "0.20 M",
+          "0.50 M"
+        ],
+        "exp": "當量點酸鹼莫耳數相等，C酸×20.0=0.20×25.0，C酸=0.25 M。",
+        "subject": "化學",
+        "sub_topic": "酸鹼滴定與緩衝液",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-酸鹼滴定與緩衝液",
+        "template_id": "extra-2026-chem3-酸鹼滴定與緩衝液-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-酸鹼滴定與緩衝液-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用酸鹼滴定與緩衝液",
+      "question": {
+        "q": "25℃下醋酸緩衝液中[CH₃COO⁻]與[CH₃COOH]相等。已知醋酸pKa=4.76，忽略活度影響，溶液pH約為何？",
+        "correct": "4.76",
+        "wrong": [
+          "7.00",
+          "9.52",
+          "2.38"
+        ],
+        "exp": "亨德森—哈塞爾巴爾赫式pH=pKa+log([A⁻]/[HA])；比值1時log1=0。",
+        "subject": "化學",
+        "sub_topic": "酸鹼滴定與緩衝液",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-酸鹼滴定與緩衝液",
+        "template_id": "extra-2026-chem3-酸鹼滴定與緩衝液-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-酸鹼滴定與緩衝液-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用酸鹼滴定與緩衝液",
+      "question": {
+        "q": "25℃下用NaOH滴定醋酸，當量點時主要含醋酸鈉且濃度不極稀。當量點的pH通常為何？",
+        "correct": "大於7",
+        "wrong": [
+          "恰等於7",
+          "小於1",
+          "必定等於醋酸pKa"
+        ],
+        "exp": "醋酸根為弱酸的共軛鹼，會水解生成OH⁻，故弱酸強鹼滴定的當量點一般偏鹼。",
+        "subject": "化學",
+        "sub_topic": "酸鹼滴定與緩衝液",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-酸鹼滴定與緩衝液",
+        "template_id": "extra-2026-chem3-酸鹼滴定與緩衝液-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

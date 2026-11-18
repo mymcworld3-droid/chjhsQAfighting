@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-莫耳與濃度換算-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用莫耳與濃度換算",
+      "question": {
+        "q": "食鹽NaCl莫耳質量58.5 g/mol。取5.85 g配成500 mL溶液，濃度約多少？",
+        "correct": "0.20 M",
+        "wrong": [
+          "0.10 M",
+          "0.50 M",
+          "2.00 M"
+        ],
+        "exp": "5.85/58.5=0.100 mol，體積0.500 L，C=0.100/0.500=0.20 M。",
+        "subject": "化學",
+        "sub_topic": "莫耳與濃度換算",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-莫耳與濃度換算",
+        "template_id": "extra-2026-chem3-莫耳與濃度換算-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-莫耳與濃度換算-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用莫耳與濃度換算",
+      "question": {
+        "q": "100 mL、2.0 M的溶液加水稀釋至400 mL，假設溶質莫耳數不變。末濃度為何？",
+        "correct": "0.50 M",
+        "wrong": [
+          "8.0 M",
+          "2.0 M",
+          "0.20 M"
+        ],
+        "exp": "C1V1=C2V2，C2=2.0×100/400=0.50 M。",
+        "subject": "化學",
+        "sub_topic": "莫耳與濃度換算",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-莫耳與濃度換算",
+        "template_id": "extra-2026-chem3-莫耳與濃度換算-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-莫耳與濃度換算-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用莫耳與濃度換算",
+      "question": {
+        "q": "0.10 M CaCl₂溶液體積200 mL，假設CaCl₂完全解離。溶液內Cl⁻的莫耳數為何？",
+        "correct": "0.040 mol",
+        "wrong": [
+          "0.020 mol",
+          "0.010 mol",
+          "0.200 mol"
+        ],
+        "exp": "CaCl₂莫耳數0.10×0.200=0.020 mol，每mol CaCl₂可產生2 mol Cl⁻，共0.040 mol。",
+        "subject": "化學",
+        "sub_topic": "莫耳與濃度換算",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-莫耳與濃度換算",
+        "template_id": "extra-2026-chem3-莫耳與濃度換算-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

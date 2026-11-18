@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-溶解度積-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用溶解度積",
+      "question": {
+        "q": "AgCl在純水中的Ksp=1.0×10⁻¹⁰，忽略其他平衡。莫耳溶解度約為多少？",
+        "correct": "1.0×10⁻⁵ M",
+        "wrong": [
+          "1.0×10⁻¹⁰ M",
+          "1.0×10⁻²⁰ M",
+          "2.0×10⁻⁵ M"
+        ],
+        "exp": "AgCl(s)⇌Ag⁺+Cl⁻，Ksp=s²，s=√10⁻¹⁰=10⁻⁵ M。",
+        "subject": "化學",
+        "sub_topic": "溶解度積",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-溶解度積",
+        "template_id": "extra-2026-chem3-溶解度積-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-溶解度積-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用溶解度積",
+      "question": {
+        "q": "在固定溫度、忽略離子強度影響下，向BaSO₄飽和水溶液加入Na₂SO₄，使SO₄²⁻增加。BaSO₄的莫耳溶解度如何變化？",
+        "correct": "下降",
+        "wrong": [
+          "上升",
+          "恆為原來兩倍",
+          "不受SO₄²⁻濃度影響"
+        ],
+        "exp": "共同離子SO₄²⁻使溶解平衡偏向固體，減少BaSO₄的溶解度。",
+        "subject": "化學",
+        "sub_topic": "溶解度積",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-溶解度積",
+        "template_id": "extra-2026-chem3-溶解度積-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-溶解度積-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以定量、反應或材料背景應用溶解度積",
+      "question": {
+        "q": "AgCl的Ksp為1×10⁻¹⁰，某混合液的[Ag⁺]=1×10⁻⁴ M、[Cl⁻]=1×10⁻⁵ M。忽略配位及活度影響，最可能出現？",
+        "correct": "離子積大於Ksp，可能形成AgCl沉澱",
+        "wrong": [
+          "離子積小於Ksp而一定不沉澱",
+          "離子積恰等於Ksp",
+          "只要溶液無色就不可能沉澱"
+        ],
+        "exp": "Qsp=10⁻⁴×10⁻⁵=10⁻⁹，大於10⁻¹⁰，為過飽和狀態。",
+        "subject": "化學",
+        "sub_topic": "溶解度積",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-溶解度積",
+        "template_id": "extra-2026-chem3-溶解度積-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
