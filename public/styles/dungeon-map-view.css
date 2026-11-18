@@ -1,0 +1,143 @@
+/* Stage 6: full-viewport read-only cooperative dungeon map. */
+#dungeon-map-view{
+  position:fixed;inset:0;z-index:24030;padding:clamp(5px,1.8vw,20px);
+  box-sizing:border-box;display:flex;align-items:center;justify-content:center;
+  color:#f0e4c8;background:rgba(5,12,10,.94);overscroll-behavior:contain;
+  font-family:"Noto Serif TC",serif;
+}
+#dungeon-map-view[hidden],#dungeon-map-view [hidden]{display:none!important}
+#dungeon-map-view *{box-sizing:border-box}
+#dungeon-map-view .dm-shell{
+  display:flex;flex-direction:column;min-width:0;min-height:0;
+  width:min(1220px,100%);height:min(920px,94dvh);height:min(920px,94svh);
+  overflow:hidden;background:#122019;border:1px solid #b7a371;
+  box-shadow:0 20px 90px #030806b8;border-radius:16px;
+}
+#dungeon-map-view .dm-head{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  gap:14px;padding:12px 19px;border-bottom:1px solid #aa9b6e66;
+  background:linear-gradient(115deg,#27392b,#19271e);
+}
+#dungeon-map-view .dm-head small{font-size:11px;letter-spacing:.12em;color:#b5c5a7}
+#dungeon-map-view .dm-head h2{
+  margin:3px 0 0;font:600 clamp(18px,2.5vw,26px)/1.4 "Noto Serif TC",serif;
+  color:#ecd9ad;
+}
+#dungeon-map-view .dm-head-actions{display:flex;gap:12px;align-items:center}
+#dungeon-map-view .dm-badge{
+  white-space:nowrap;border:1px solid #a9966982;border-radius:99px;
+  padding:5px 11px;color:#e0d1ad;font-size:11px;
+}
+#dungeon-map-view button{
+  font:inherit;font-size:12px;font-weight:600;border:1px solid #ad986b;
+  background:#2a382c;color:#f0e5c9;border-radius:10px;cursor:pointer;
+  padding:9px 12px;min-height:40px;touch-action:manipulation;
+}
+#dungeon-map-view button:hover{background:#40553d;border-color:#e3cc91}
+#dungeon-map-view button:focus-visible,
+#dungeon-map-view canvas:focus-visible{outline:2px solid #ffdf99;outline-offset:3px}
+#dungeon-map-view button:disabled{opacity:.5;cursor:not-allowed}
+#dungeon-map-view .dm-head button span{margin-left:8px;font-size:17px}
+#dungeon-map-view .dm-stage{
+  position:relative;flex:1;min-height:0;overflow:hidden;
+  background:radial-gradient(ellipse at 47% 40%,#1d3024 0%,#091611 76%);
+}
+#dungeon-map-view .dm-world{
+  display:block;width:100%;height:100%;position:absolute;inset:0;
+  touch-action:none!important;overscroll-behavior:contain;
+  -webkit-user-select:none!important;user-select:none!important;
+  -webkit-touch-callout:none!important;-webkit-tap-highlight-color:transparent;
+  cursor:grab;
+}
+#dungeon-map-view .dm-world:active{cursor:grabbing}
+#dungeon-map-view .dm-biome{
+  position:absolute;top:13px;left:14px;pointer-events:none;
+  display:grid;gap:4px;max-width:60%;
+  background:#0b1b17d9;border:1px solid #c3b1847a;
+  border-radius:12px;padding:11px 14px;backdrop-filter:blur(6px);
+  box-shadow:0 6px 18px #050b094d;
+}
+#dungeon-map-view .dm-biome small{font-size:10px;letter-spacing:.13em;color:#aabda9}
+#dungeon-map-view .dm-biome strong{font-size:17px;line-height:1.4;color:var(--dm-accent,#d7c38f)}
+#dungeon-map-view .dm-biome span{font-size:11px;color:#d5d8c7}
+#dungeon-map-view .dm-overview{
+  position:absolute;top:13px;right:14px;display:grid;justify-items:center;
+  gap:3px;border:1px solid #c3b1847a;border-radius:11px;padding:7px 8px;
+  background:#0c1917e9;pointer-events:none;backdrop-filter:blur(4px);
+}
+#dungeon-map-view .dm-overview canvas{display:block;width:140px;height:114px}
+#dungeon-map-view .dm-overview span{font-size:10px;color:#b8c4ae}
+#dungeon-map-view .dm-controls{
+  position:absolute;bottom:15px;left:14px;display:flex;align-items:center;
+  flex-wrap:wrap;gap:7px;max-width:calc(100% - 18px);
+  background:#0d1c17cd;border-radius:13px;padding:7px;
+  border:1px solid #7d806454;backdrop-filter:blur(6px);
+}
+#dungeon-map-view .dm-controls button{min-width:43px}
+#dungeon-map-view .dm-controls button[aria-pressed="true"]{
+  color:#132217;background:var(--dm-accent,#ddc28e);border-color:#f1ddb0;
+}
+#dungeon-map-view .dm-legend{
+  position:absolute;bottom:16px;right:15px;display:flex;flex-direction:column;
+  align-items:flex-start;gap:7px;border:1px solid #798c6d69;
+  background:#0c1d18d9;padding:9px 12px;border-radius:10px;
+  pointer-events:none;font-size:11px;color:#e5dcc1;
+}
+#dungeon-map-view .dm-legend span:first-child{color:#bde9ab}
+#dungeon-map-view .dm-legend span:nth-child(2){color:#d0e1b2}
+#dungeon-map-view .dm-legend span:nth-child(3){color:#e6acaa}
+#dungeon-map-view .dm-message{
+  position:absolute;z-index:2;top:50%;left:50%;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;gap:13px;
+  max-width:min(420px,85%);min-width:150px;text-align:center;
+  padding:20px 25px;border:1px solid #aa936f;border-radius:13px;
+  background:#172c21f0;box-shadow:0 7px 32px #0008;
+  font-size:13px;line-height:1.7;color:#ebddbc;
+}
+#dungeon-map-view .dm-message button{min-height:36px;padding:8px 13px}
+#dungeon-map-view .dm-foot{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:10px 18px;border-top:1px solid #a79b6555;
+  color:#cbd2bf;background:#17241b;font-size:11px;line-height:1.4;
+}
+#dungeon-map-view .dm-foot span:last-child{color:#edd7a2;font-variant-numeric:tabular-nums}
+@media(max-width:720px){
+  #dungeon-map-view{padding:4px}
+  #dungeon-map-view .dm-shell{
+    height:calc(100dvh - 8px);height:calc(100svh - 8px);
+    width:100%;border-radius:9px;
+  }
+  #dungeon-map-view .dm-head{padding:9px 12px}
+  #dungeon-map-view .dm-badge{display:none}
+  #dungeon-map-view .dm-head small{font-size:9px}
+  #dungeon-map-view .dm-head h2{font-size:18px}
+  #dungeon-map-view .dm-head button{min-height:37px;padding:6px 10px}
+  #dungeon-map-view .dm-biome{top:9px;left:9px;padding:8px 10px}
+  #dungeon-map-view .dm-biome strong{font-size:14px}
+  #dungeon-map-view .dm-biome span{font-size:10px}
+  #dungeon-map-view .dm-overview{top:9px;right:9px;padding:4px 5px}
+  #dungeon-map-view .dm-overview canvas{width:98px;height:85px}
+  #dungeon-map-view .dm-overview span{font-size:9px}
+  #dungeon-map-view .dm-controls{bottom:12px;left:8px;gap:4px;padding:5px}
+  #dungeon-map-view .dm-controls button{padding:6px;min-width:37px;min-height:39px;font-size:11px}
+  #dungeon-map-view .dm-legend{
+    bottom:77px;right:9px;flex-direction:row;gap:8px;
+    padding:7px 9px;font-size:9px;
+  }
+  #dungeon-map-view .dm-foot{font-size:10px;padding:7px 10px}
+}
+@media(max-width:430px){
+  #dungeon-map-view .dm-legend{bottom:67px;left:8px;right:auto}
+  #dungeon-map-view .dm-controls{right:8px;max-width:none;justify-content:space-evenly}
+  #dungeon-map-view .dm-controls button{flex:1}
+}
+@media(max-height:430px) and (orientation:landscape){
+  #dungeon-map-view .dm-head{padding:5px 12px}
+  #dungeon-map-view .dm-head small{display:none}
+  #dungeon-map-view .dm-head h2{font-size:16px}
+  #dungeon-map-view .dm-head button{min-height:32px;padding:4px 10px}
+  #dungeon-map-view .dm-foot{padding:5px 10px}
+  #dungeon-map-view .dm-controls{bottom:6px}
+  #dungeon-map-view .dm-overview canvas{height:66px;width:85px}
+  #dungeon-map-view .dm-legend{display:none}
+}
