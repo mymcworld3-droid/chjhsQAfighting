@@ -116,6 +116,7 @@ test('a level-10 manual reads 大成, while a level-20 manual is actually 圓滿
   assert.match(refined,/Lv. 10/);
   assert.match(refined,/大成/);
   assert.match(refined,/元嬰功法/);
+  assert.match(refined,/manual-library-school-tag is-tier-nascent/);
   assert.doesNotMatch(refined,/圓滿/);
   const max=draw(book('sword-wind','sword',{level:20,progress:100,tierRealm:'元嬰'}));
   assert.match(max,/圓滿/);
