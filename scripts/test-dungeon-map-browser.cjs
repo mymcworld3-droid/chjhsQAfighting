@@ -119,6 +119,19 @@ async function main(){
     const b=await client('b',{width:990,height:570});
     await b.page.locator('#dungeon-lobby [data-dg-code]').fill('ABCDEF');
     await b.page.locator('#dungeon-lobby [data-dg="join-code"]').click();
+    try{
+      await b.page.locator('#dungeon-lobby [data-dg="ready"]').waitFor({timeout:6500});
+    }catch(error){
+      console.error('[Dungeon join diagnostics]',{requests,room,errors,
+        browser:await b.page.evaluate(()=>({
+          uid:sessionStorage.mockUid,
+          notice:document.querySelector('[data-dg-notice]')?.textContent,
+          body:document.querySelector('#dungeon-lobby [data-dg-body]')?.innerText,
+          buttons:[...document.querySelectorAll('#dungeon-lobby button')]
+            .map(node=>({label:node.textContent,disabled:node.disabled}))
+        }))});
+      throw error;
+    }
     await b.page.locator('#dungeon-lobby [data-dg="ready"]').click();
     await a.page.locator('#dungeon-lobby [data-dg="ready"]').click();
     await a.page.locator('#dungeon-lobby [data-dg="assemble"]:not([disabled])').waitFor();
