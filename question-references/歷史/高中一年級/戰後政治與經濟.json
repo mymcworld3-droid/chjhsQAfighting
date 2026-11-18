@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-1-戰後政治與經濟-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用戰後政治與經濟之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "二戰後初期臺灣物價上漲、貨幣與行政制度變更，若研究民生壓力應同時查核什麼？",
+        "correct": "市場物價、工資與政府政策變化的時間資料",
+        "wrong": [
+          "只由當時人口總數判定所有物價變動",
+          "只看某一種產品售價就代表完整經濟",
+          "因制度更換就假設市場交換完全停止"
+        ],
+        "exp": "戰後經濟秩序轉換涉及多項制度與供需因素，需綜合資料。",
+        "subject": "歷史",
+        "sub_topic": "戰後政治與經濟",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-戰後政治與經濟",
+        "template_id": "ext-2026-history-1-戰後政治與經濟-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-戰後政治與經濟-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用戰後政治與經濟之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "戰後臺灣出口產業從勞力密集製造逐步向技術密集轉型。這最適合分析哪種歷史問題？",
+        "correct": "產業政策、國際市場與教育勞動力如何共同影響發展",
+        "wrong": [
+          "所有產業在同一年同時完成轉型",
+          "出口升級必然沒有任何就業調整",
+          "工業發展與全球市場完全無關"
+        ],
+        "exp": "產業結構變化常由政策、技術、人力與市場互動推動。",
+        "subject": "歷史",
+        "sub_topic": "戰後政治與經濟",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-戰後政治與經濟",
+        "template_id": "ext-2026-history-1-戰後政治與經濟-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-戰後政治與經濟-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用戰後政治與經濟之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "若有人僅以經濟成長率說明戰後臺灣社會全部變化，哪項批評較合理？",
+        "correct": "還應納入政治權利、教育與所得分配等社會指標",
+        "wrong": [
+          "經濟成長率完全不能用於歷史分析",
+          "經濟發展必定與政治制度完全一致",
+          "只要成長率高就代表所有人收入相等"
+        ],
+        "exp": "經濟成長是重要面向，但不能涵蓋政治與社會經驗。",
+        "subject": "歷史",
+        "sub_topic": "戰後政治與經濟",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-戰後政治與經濟",
+        "template_id": "ext-2026-history-1-戰後政治與經濟-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

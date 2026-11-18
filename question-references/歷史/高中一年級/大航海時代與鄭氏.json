@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-1-大航海時代與鄭氏-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用大航海時代與鄭氏之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "十七世紀臺灣某港口同時見到歐洲商船、中國商人及地方居民交易。這反映了？",
+        "correct": "臺灣在東亞海上貿易網絡中的中介位置",
+        "wrong": [
+          "臺灣是唯一參與全球貿易的港口",
+          "當時中國商人完全不參與海運",
+          "航海貿易不可能影響臺灣地方社會"
+        ],
+        "exp": "臺灣位於東亞航線要衝，各方商貿與政權競逐互相影響。",
+        "subject": "歷史",
+        "sub_topic": "大航海時代與鄭氏",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-大航海時代與鄭氏",
+        "template_id": "ext-2026-history-1-大航海時代與鄭氏-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-大航海時代與鄭氏-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用大航海時代與鄭氏之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "鄭氏政權在臺灣開墾農地並建立軍政組織，其措施最可能與何種需求相關？",
+        "correct": "維持軍隊、糧食供應與政權治理",
+        "wrong": [
+          "完全消除地方土地需求",
+          "只為發展十九世紀鐵路工業",
+          "取消任何軍事防衛功能"
+        ],
+        "exp": "鄭氏政權需支持軍政人口及防衛，拓墾與行政組織有治理目的。",
+        "subject": "歷史",
+        "sub_topic": "大航海時代與鄭氏",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-大航海時代與鄭氏",
+        "template_id": "ext-2026-history-1-大航海時代與鄭氏-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-大航海時代與鄭氏-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用大航海時代與鄭氏之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "比較荷蘭東印度公司與鄭氏政權在臺灣的治理，最恰當的研究問題是？",
+        "correct": "商業收益、軍事力量與政治統治如何相互結合",
+        "wrong": [
+          "兩者是否都是十九世紀民主共和國",
+          "兩者是否從未與海外貿易發生關係",
+          "兩者是否使用完全相同的統治結構"
+        ],
+        "exp": "不同統治者的經貿與軍事目的均重要，應比較差異而非先假定一致。",
+        "subject": "歷史",
+        "sub_topic": "大航海時代與鄭氏",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-大航海時代與鄭氏",
+        "template_id": "ext-2026-history-1-大航海時代與鄭氏-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

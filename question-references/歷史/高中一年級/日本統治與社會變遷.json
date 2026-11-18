@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-1-日本統治與社會變遷-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用日本統治與社會變遷之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "日治時期某城鎮設立新式醫院與衛生制度，同時由殖民政府嚴格管制居民集會。對此政策影響最適當的理解是？",
+        "correct": "公共衛生改善與殖民政治控制可能同時存在",
+        "wrong": [
+          "衛生政策出現就代表政治權利完全平等",
+          "殖民治理只影響政治而絕不涉及生活",
+          "有醫院就表示當地從未發生傳染病"
+        ],
+        "exp": "殖民建設可能有實際生活效果，卻不能因此忽略統治權力的不對等。",
+        "subject": "歷史",
+        "sub_topic": "日本統治與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-日本統治與社會變遷",
+        "template_id": "ext-2026-history-1-日本統治與社會變遷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-日本統治與社會變遷-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用日本統治與社會變遷之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "某日治時期報紙關注臺灣人的議會設置請願，要求地方政治參與。這反映何種社會現象？",
+        "correct": "受教育群體以制度改革爭取政治權利",
+        "wrong": [
+          "臺灣人從未試圖以合法方式表達訴求",
+          "請願等於臺灣立即取得完全自治",
+          "地方議會在此之前已具普選制度"
+        ],
+        "exp": "臺灣議會設置請願運動反映近代政治參與的訴求，結果須與訴求區分。",
+        "subject": "歷史",
+        "sub_topic": "日本統治與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-日本統治與社會變遷",
+        "template_id": "ext-2026-history-1-日本統治與社會變遷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-日本統治與社會變遷-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用日本統治與社會變遷之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "某工業統計表顯示日治後期臺灣糖業出口提高，但農民收入並非同步增加。史家應優先分析？",
+        "correct": "殖民經濟的生產、利潤與所得分配方式",
+        "wrong": [
+          "出口量增加必定讓所有生產者等量致富",
+          "農民收入與土地、價格制度完全無關",
+          "只看出口總額即可判定全體生活水準"
+        ],
+        "exp": "出口增長與所得分配不同，應考慮產業控制、租佃與價格。",
+        "subject": "歷史",
+        "sub_topic": "日本統治與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-日本統治與社會變遷",
+        "template_id": "ext-2026-history-1-日本統治與社會變遷-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

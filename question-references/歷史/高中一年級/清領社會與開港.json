@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-1-清領社會與開港-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用清領社會與開港之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "清代臺灣某港口開放對外貿易後，洋行與茶葉出口商增加。這較能顯示什麼？",
+        "correct": "對外通商改變地方產業與商業網絡",
+        "wrong": [
+          "港口開放後所有傳統產業立即消失",
+          "出口貿易必定使居民均等受益",
+          "臺灣在開港後才首次出現任何農業"
+        ],
+        "exp": "開港帶動出口與新商業組織，但不同地區與階層受益情形需區分。",
+        "subject": "歷史",
+        "sub_topic": "清領社會與開港",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-清領社會與開港",
+        "template_id": "ext-2026-history-1-清領社會與開港-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-清領社會與開港-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用清領社會與開港之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "清領地方官設立隘線以處理不同移住群體與原住社群接觸。研究時最應考量？",
+        "correct": "土地拓墾、邊界政策與族群權力關係",
+        "wrong": [
+          "只用地圖上的行政名稱推定所有人同意",
+          "隘線一定完全阻斷所有文化交流",
+          "各群體對土地的權利主張必然相同"
+        ],
+        "exp": "拓墾與邊界制度涉及土地使用和族群互動，不能簡化為單純地理界線。",
+        "subject": "歷史",
+        "sub_topic": "清領社會與開港",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-清領社會與開港",
+        "template_id": "ext-2026-history-1-清領社會與開港-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-清領社會與開港-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用清領社會與開港之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "某清領地方契約包含土地買賣與租佃條款。若想研究開墾社會，該資料最適合回答？",
+        "correct": "土地權利如何交易與分配，以及租佃如何運作",
+        "wrong": [
+          "全臺灣所有住民的日常飲食是否相同",
+          "某場戰役的具體軍隊人數",
+          "當時全球工業產值的精確排名"
+        ],
+        "exp": "契約是土地經濟的直接材料，但有其地域與樣本限制。",
+        "subject": "歷史",
+        "sub_topic": "清領社會與開港",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-清領社會與開港",
+        "template_id": "ext-2026-history-1-清領社會與開港-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-1-民主化與社會文化-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用民主化與社會文化之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "臺灣解除長期戒嚴後，新聞媒體與公民團體活動空間逐步擴大。這最適合說明哪種轉變？",
+        "correct": "公民自由與公共參與機會逐漸增加",
+        "wrong": [
+          "解除戒嚴等於所有政治爭議立即消失",
+          "社會團體從此不再需要法律保障",
+          "政治自由改變不可能影響文化表達"
+        ],
+        "exp": "民主化通常涉及言論、結社與政治參與權利的擴張。",
+        "subject": "歷史",
+        "sub_topic": "民主化與社會文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-民主化與社會文化",
+        "template_id": "ext-2026-history-1-民主化與社會文化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-民主化與社會文化-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用民主化與社會文化之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "某展覽比較臺灣不同年代的族群語言政策與地方文化活動，最適合探討什麼？",
+        "correct": "政治制度與文化認同的互動變化",
+        "wrong": [
+          "文化表達永遠與公共政策無關",
+          "各年代所有族群語言使用完全相同",
+          "只能依一則宣傳海報推論全部文化政策"
+        ],
+        "exp": "語言與文化表達受到制度環境影響，也反映社會主體的行動。",
+        "subject": "歷史",
+        "sub_topic": "民主化與社會文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-民主化與社會文化",
+        "template_id": "ext-2026-history-1-民主化與社會文化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-民主化與社會文化-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用民主化與社會文化之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "研究者訪問不同世代對民主化的記憶，長者與年輕人對同一事件評價不同。應如何處理？",
+        "correct": "分析其時代經驗並與其他史料互證",
+        "wrong": [
+          "直接採用年紀最大的說法為唯一正解",
+          "因意見不同便全部排除受訪者",
+          "認定口述記憶從不受事後經驗影響"
+        ],
+        "exp": "世代經驗形塑政治記憶，口述資料可補充但仍需核查。",
+        "subject": "歷史",
+        "sub_topic": "民主化與社會文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-民主化與社會文化",
+        "template_id": "ext-2026-history-1-民主化與社會文化-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

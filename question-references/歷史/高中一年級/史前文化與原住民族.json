@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-1-史前文化與原住民族-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用史前文化與原住民族之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "一處臺灣史前遺址發現大量陶器與磨製石器，卻沒有文字記錄。若要推論生活形態，最適合？",
+        "correct": "結合器物功能、地層年代與聚落遺跡分析",
+        "wrong": [
+          "因無文字就認定當地沒有文化",
+          "只憑陶器顏色判定所有居民姓名",
+          "把今日族群習俗直接視為史前完全相同"
+        ],
+        "exp": "考古資料可重建技術及生活方式，仍需避免過度推論。",
+        "subject": "歷史",
+        "sub_topic": "史前文化與原住民族",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史前文化與原住民族",
+        "template_id": "ext-2026-history-1-史前文化與原住民族-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-史前文化與原住民族-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用史前文化與原住民族之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "某展示將臺灣原住民族統稱為「完全相同的單一文化」。最需要補充哪項觀點？",
+        "correct": "不同族群語言、社會制度與文化具有多樣性",
+        "wrong": [
+          "所有原住民族都只居住同一地點",
+          "不同族群不可能互相交流",
+          "族群文化只能由一項器物決定"
+        ],
+        "exp": "原住民族之間存在明顯差異，研究應尊重歷史與文化多樣性。",
+        "subject": "歷史",
+        "sub_topic": "史前文化與原住民族",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史前文化與原住民族",
+        "template_id": "ext-2026-history-1-史前文化與原住民族-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-史前文化與原住民族-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用史前文化與原住民族之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "海岸史前遺址發現外地來源的玉器原料。下列哪個推論最合適？",
+        "correct": "可能存在跨地區物資交流，但仍須檢驗來源與年代",
+        "wrong": [
+          "當時一定已存在現代國際航運公司",
+          "所有居民都曾親自前往原料產地",
+          "外地原料必然代表軍事征服"
+        ],
+        "exp": "非本地原料提示流通網絡，直接或間接交換需其他證據。",
+        "subject": "歷史",
+        "sub_topic": "史前文化與原住民族",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史前文化與原住民族",
+        "template_id": "ext-2026-history-1-史前文化與原住民族-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

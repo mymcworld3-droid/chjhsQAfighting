@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-1-史料種類與判讀-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用史料種類與判讀之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "研究日治學校制度，取得當年的招生名冊與近年學者論文。若想確認學生入學人數，優先使用哪種資料？",
+        "correct": "檢驗名冊原件及統計口徑，再與其他檔案互證",
+        "wrong": [
+          "只使用近期論文的標題",
+          "只看當年校舍外觀照片判定學生數",
+          "以記者未署名的回憶取代所有紀錄"
+        ],
+        "exp": "招生名冊能提供直接量化線索，但完整性及統計定義需要確認。",
+        "subject": "歷史",
+        "sub_topic": "史料種類與判讀",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料種類與判讀",
+        "template_id": "ext-2026-history-1-史料種類與判讀-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-史料種類與判讀-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用史料種類與判讀之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "一份官員報告稱某政策廣受歡迎，地方請願書卻有反對聲音。史家最應如何評價？",
+        "correct": "考量官方與民間的立場差異，並查詢其他證據",
+        "wrong": [
+          "因官員撰寫便永遠不需查證",
+          "請願書只要有人簽名就代表全體意見",
+          "兩材料不同就否定該政策曾存在"
+        ],
+        "exp": "原始資料可能帶有利益與立場，需要多方查核。",
+        "subject": "歷史",
+        "sub_topic": "史料種類與判讀",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料種類與判讀",
+        "template_id": "ext-2026-history-1-史料種類與判讀-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-史料種類與判讀-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用史料種類與判讀之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "某張歷史照片的出版年份為1950年，但照片可能攝於更早時期。哪項處理正確？",
+        "correct": "區分拍攝日期與刊載日期，再檢驗說明文字",
+        "wrong": [
+          "把出版年份必定當成拍攝年份",
+          "只根據照片色調確定事件地點",
+          "刊載年份不同就表示照片必然偽造"
+        ],
+        "exp": "影像再出版常有時間差，年代考證須分清形成與傳播。",
+        "subject": "歷史",
+        "sub_topic": "史料種類與判讀",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料種類與判讀",
+        "template_id": "ext-2026-history-1-史料種類與判讀-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

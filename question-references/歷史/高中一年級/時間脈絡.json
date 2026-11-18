@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-1-時間脈絡-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用時間脈絡之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "某評論將十九世紀的民族主義運動描述成二十一世紀社群平台發動的活動。這種寫法的主要問題是？",
+        "correct": "將後世技術及社會條件錯置到歷史事件中",
+        "wrong": [
+          "民族主義從不涉及群眾動員",
+          "所有時代的資訊傳播方式完全相同",
+          "十九世紀不存在任何印刷媒體"
+        ],
+        "exp": "研究歷史需使用當時可用的技術與制度，不可把現代條件強加過去。",
+        "subject": "歷史",
+        "sub_topic": "時間脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-時間脈絡",
+        "template_id": "ext-2026-history-1-時間脈絡-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-時間脈絡-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用時間脈絡之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "檔案顯示工廠建於1905年，勞工抗議發生於1912年，安全法令於1915年通過。最審慎的推論是？",
+        "correct": "事件次序允許探討抗議與立法關聯，但不能單憑先後證明因果",
+        "wrong": [
+          "法令通過一定早於工廠建造",
+          "時間先後必然證明抗議是法令唯一原因",
+          "各事件年代無須核對就能建立因果"
+        ],
+        "exp": "時間次序是因果論證的必要線索之一，仍須檢驗動機和其他因素。",
+        "subject": "歷史",
+        "sub_topic": "時間脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-時間脈絡",
+        "template_id": "ext-2026-history-1-時間脈絡-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-時間脈絡-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用時間脈絡之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "研究者把同一百年間早期與晚期的政治制度視為毫無差別。怎樣改善較好？",
+        "correct": "界定較細時間分期，分析各階段制度變化",
+        "wrong": [
+          "只挑最後一年代表全部時期",
+          "直接省略改革及衝突年代",
+          "以不同地區的傳說取代全部時間資料"
+        ],
+        "exp": "長時段內可能有重大轉折，分期可避免過度概括。",
+        "subject": "歷史",
+        "sub_topic": "時間脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-時間脈絡",
+        "template_id": "ext-2026-history-1-時間脈絡-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

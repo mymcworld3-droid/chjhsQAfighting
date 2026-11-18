@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-1-因果與多元觀點-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用因果與多元觀點之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "某地鐵路通車後商業活動增加，但同期也修港口與調降關稅。哪個推論最合理？",
+        "correct": "不能只把商業成長歸因鐵路，還需分析其他同步因素",
+        "wrong": [
+          "只要鐵路先通車就能排除其他原因",
+          "商業活動增加證明港口從未使用",
+          "只要有多重因素就無法做任何歷史研究"
+        ],
+        "exp": "多項政策共同變動時需比較不同因果機制，避免單因解釋。",
+        "subject": "歷史",
+        "sub_topic": "因果與多元觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中一年級-因果與多元觀點",
+        "template_id": "ext-2026-history-1-因果與多元觀點-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-因果與多元觀點-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用因果與多元觀點之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "某政權官方紀錄讚揚土地改革，部分地主與佃農卻有不同回憶。史家應如何整理？",
+        "correct": "區分各群體的利益與經驗，檢查政策的差異效果",
+        "wrong": [
+          "只保留官方宣傳而忽略個別經驗",
+          "任何回憶都能直接取代法律文本",
+          "政策對每個人一定造成完全相同結果"
+        ],
+        "exp": "多元觀點有助分析政策分配效果，但仍要檢驗材料可信度。",
+        "subject": "歷史",
+        "sub_topic": "因果與多元觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中一年級-因果與多元觀點",
+        "template_id": "ext-2026-history-1-因果與多元觀點-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-1-因果與多元觀點-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用因果與多元觀點之史實與因果判斷，而非單純擷取文章",
+      "question": {
+        "q": "甲研究強調教育普及促進社會流動，乙指出階層仍限制升學。這兩個發現最可能如何共存？",
+        "correct": "教育機會擴大與結構性不平等仍可能同時存在",
+        "wrong": [
+          "有教育擴張就代表所有階層差異消失",
+          "階層差異存在就證明教育從未擴張",
+          "兩份研究結論不同表示都沒有史料基礎"
+        ],
+        "exp": "社會變遷可能有整體進步與不均等效果，需辨識研究對象。",
+        "subject": "歷史",
+        "sub_topic": "因果與多元觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中一年級-因果與多元觀點",
+        "template_id": "ext-2026-history-1-因果與多元觀點-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
