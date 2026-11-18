@@ -693,6 +693,8 @@ export class TacticalRenderer{
     this.compassMarkers=!animating&&!this.preview?
       Compass.derive(s,this.uid,{ox,oy,cell,width:w,height:h}):[];
     canvas.dataset.compassCount=String(this.compassMarkers.length);
+    canvas.dataset.compassMarkers=JSON.stringify(this.compassMarkers.map(m=>
+      [m.kind,Math.round(m.screenX),Math.round(m.screenY)]));
     Compass.draw(c,this.compassMarkers,{width:w,height:h});
     if(scene)this.drawEffect(scene,progress,false);
     const actors=scene?A.sample(scene,progress):s.actors;
