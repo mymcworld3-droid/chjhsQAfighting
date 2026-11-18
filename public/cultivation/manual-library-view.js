@@ -49,7 +49,7 @@ export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt
     alt="" loading="lazy" decoding="async">`:
     '<span class="manual-library-cover-fallback" aria-hidden="true">功法</span>';
   return `<button type="button" class="manual-book-top manual-library-choice"
-      data-feature-book="${esc(book.id)}" aria-pressed="${current}"
+      data-feature-book="${esc(book.id)}" data-manual-focus-hero="true" aria-pressed="${current}"
       aria-label="展示${esc(book.name)}，Lv. ${visual.level}，${esc(stage)}">
     <span class="manual-library-art-zone" data-manual-stage="${visual.stage}"
       data-manual-approach="${near?anticipation.status:'none'}">
