@@ -47,6 +47,9 @@
 - **接近突破的持續回饋（第八階段）：** 修煉頁依伺服器已確認的功法 `totalExp` 與 `totalExpForLevel` 計算 Lv.5、Lv.10 下一招等級門檻的**階段進度**。門檻進度達 75% 顯示「靈氣漸滿」、達 90% 顯示「突破在即」，主展示熟練度條與下一招節點法陣加強外圍光暈；藏經閣卡牌同步顯示接近突破標記。**節點內仍保持灰階上鎖**，直到伺服器真正回傳 `unlocked=true`；若等級達標但修士境界不足，改顯示「境界待突破」，不宣稱技能已領悟。
 - **戰場預感（唯讀試算）：** 現有即時 EXP 浮窗可在功法接近 Lv.5 或 Lv.10 時加上一條精簡的門檻進度。以戰鬥中擷取的已確認功法快照為基礎，**僅計入該快照之後、同一房間增加的 EXP**，並明示「本場僅為試算，正式 EXP 與領悟以伺服器結算為準」。玩家換房、換帳號或無法取得可信的基準快照，就不顯示戰鬥門檻試算。無附加獎勵、推播或新的升級計算。
 - **動效與驗證：** 只有「突破在即」時的熟練度光效輕微呼吸；遵守 `prefers-reduced-motion`，畫面不阻擋戰場操控與手機觸控。新增 `tests/manual-anticipation.test.cjs`，並擴充 `scripts/test-manual-training-browser.cjs` 驗證接近門檻及境界阻擋情形。
+- **第十階段：修煉作戰指引：** 每本已擁有功法的展示區下方，顯示一張與實際 PvE 進度連動的修煉懸賞卡。伺服器只回傳玩家 `tacticalTrialV1.stage` 的下一關編號（沒有的玩家預設第一關），不暴露種子碼，沒有讓用戶任選靈獸境界的功能。客戶端使用既有 `QAManuals.realmForStage`／`expForBeast` 推估該關對應的靈獸境界與「功法完成擊殺」的每隻 EXP；對 Lv.5／Lv.10 下一招門檻，若還差 EXP，顯示 `ceil(剩餘 EXP / 每隻 EXP)` 次**條件式估計**。並明確說明本數量不是實際掉落、保證擊殺次數，也不改寫關卡、試煉進度或功法經驗。
+- **實際出戰準備檢查：** 懸賞卡用目前伺服器的 `activeLoadout`（不是玩家正在預覽編輯的配置）確認本功法是否有已領悟且正裝備的招式：若有，提供真正的 `openTacticalCombat('pve')` 戰場入口；若沒有但有招式可用，跳至「戰場技能配置」並選取目前使用中的那組；若尚無符合條件的已領悟招式，帶玩家查看「三招修行路線」。換功法、換配置、升級、同步下一關後整張卡會以已確認資料更新，不做額外的伺服器寫入。
+- **介面與測試：** 使用跟劍修／體修一致的配色，將懸賞卡置於功法主展示與戰場配置之間，手機寬度採兩欄緊湊資訊，不增加浮動按鈕或額外彈窗。純函式測試 `tests/manual-expedition-guide.test.cjs` 覆蓋各境界 EXP、次數估算、境界不足、三招圓滿、未裝備／未習得、驗證資料來源及跳轉狀態；手機瀏覽器測試則確認切換功法與下一關、實際問道試煉入口及不超出版面。
 - **驗證：** `tests/manual-training-hero.test.cjs`、`tests/manual-training-loadout.test.cjs`、`tests/manual-training-library.test.cjs`、`tests/manual-training-celebration.test.cjs`、`tests/manual-training-growth.test.cjs`、`tests/manual-anticipation.test.cjs`、`tests/tactical-manual-recap.test.cjs`、`tests/tactical-manual-xp-feedback.test.cjs`，以及 `scripts/test-manual-training-browser.cjs`、`scripts/test-tactical-browser.cjs`。
 
 
