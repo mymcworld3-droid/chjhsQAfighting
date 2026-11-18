@@ -1,4 +1,4 @@
-import './manual-rules.js?v=20261118-level20-attack-v1';
+import './manual-rules.js?v=20261118-gold-cap10-v1';
 import {skillArt,bookArt} from './manual-art.js';
 import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-recap.js';
 import {manualXpDelta,renderManualXpToast} from './tactical-manual-xp-feedback.js';
