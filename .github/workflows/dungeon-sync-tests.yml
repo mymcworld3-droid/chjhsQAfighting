@@ -10,6 +10,7 @@ on:
       - 'invitation-api.cjs'
       - 'public/cultivation/dungeon-*.js'
       - 'public/styles/dungeon-lobby.css'
+      - 'public/styles/dungeon-map-view.css'
       - 'public/module-versions.json'
       - 'tests/dungeon-*.test.cjs'
       - '.github/workflows/dungeon-sync-tests.yml'
@@ -35,5 +36,10 @@ jobs:
           node --check dungeon-map-generator.cjs
           node --check dungeon-room-stream.cjs
           node --check invitation-api.cjs
+      - name: Check map ES modules parse
+        run: |
+          for module in public/cultivation/dungeon-map-camera.js public/cultivation/dungeon-map-painter.js public/cultivation/dungeon-map-view.js; do
+            node --input-type=module --check < "$module"
+          done
       - name: Test multiplayer lobby, SSE, reconnect and permissions
         run: node --test tests/dungeon-*.test.cjs
