@@ -59,7 +59,7 @@ app.post('/api/dungeon/room',(req,res)=>{
     res.flushHeaders?.();
     watchers.add(res);
     res.write('data: '+JSON.stringify({room:clone(room)})+'\n\n');
-    req.on('close',()=>watchers.delete(res));return;
+    res.on('close',()=>watchers.delete(res));return;
   }
   if(action==='ready'){
     room.members[uid].ready=Boolean(req.body.ready);room.revision++;
