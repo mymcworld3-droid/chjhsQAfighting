@@ -89,3 +89,26 @@ body.ui-cleanup #home-dungeon-entry{min-height:68px;margin-top:4px}
   #dungeon-lobby .dg-members{grid-template-columns:1fr}
   #dungeon-lobby .dg-room-code strong{font-size:18px;letter-spacing:.12em}
 }
+
+/* Presence is derived from server-issued heartbeat timestamps. This is a
+   lobby indicator, never a permission or a reason to expel someone. */
+#dungeon-lobby .dg-room-status{flex-wrap:wrap}
+#dungeon-lobby .dg-sync{
+  flex:0 0 auto;padding:5px 9px;border:1px solid #8f875e82;border-radius:999px;
+  background:#3b3526;color:#e6cf9c;font-size:11px;white-space:nowrap;
+}
+#dungeon-lobby .dg-sync[data-online="true"]{
+  border-color:#6f9f7a;background:#24402c;color:#c8f1d1;
+}
+#dungeon-lobby .dg-presence{
+  display:flex;align-items:center;gap:5px;color:#b8ada0;font-size:10px;
+}
+#dungeon-lobby .dg-presence::before{
+  content:"";width:7px;height:7px;flex:0 0 7px;border-radius:50%;
+  background:#9b8880;
+}
+#dungeon-lobby .dg-presence.is-online{color:#b6e2b8}
+#dungeon-lobby .dg-presence.is-online::before{background:#85cf94}
+@media(max-width:620px),(orientation:portrait){
+  #dungeon-lobby .dg-sync{font-size:10px}
+}
