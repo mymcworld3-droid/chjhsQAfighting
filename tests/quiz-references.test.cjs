@@ -20,7 +20,7 @@ test('finds the same concept for live battle and formatted background warmup', (
   assert.equal(require.cache[group], loadedGroup);
   assert.doesNotMatch(JSON.stringify(reference), /https?:\/\//);
   assert.equal(questionQualityIssue(reference.question), '');
-  assert.match(referencePrompt([reference]), /同觀念的人類命題範例/);
+  assert.match(referencePrompt([reference]), /同觀念命題參考例/);
   assert.match(referencePrompt([reference]), /同層次/);
   assert.match(referencePrompt([reference]), /荒謬情節/);
   assert.equal(quizReferences({ ...target, topic:'高中二年級／第一學期／數學：平面向量 (核心考點細項：向量內積)' })[0].id, reference.id);
@@ -92,4 +92,13 @@ test('grade 11 Chinese first semester references follow exact fine concepts', ()
   assert.ok(formatted.every(ref => ref.question.sub_topic === '意象、典故與詩風'));
   assert.deepEqual(quizReferences({ ...target, topic: '意象、典故與詩風', exclusions:['排除典故相關題型'] }), []);
   assert.deepEqual(quizReferences({ ...target, topic: '高中三年級寫作技巧' }), []);
+});
+
+test('all five expanded history references appear across seeded samples',()=>{
+ const query={subject:'歷史',level:'高中二年級',topic:'宗教與社會'};
+ const all=require('../question-references/歷史/高中二年級/宗教與社會.json').references;
+ assert.equal(all.length,5);
+ const ids=new Set();
+ for(let i=0;i<100;i++) for(const ref of quizReferences({...query,referenceSeed:'seed-'+i}))ids.add(ref.id);
+ assert.deepEqual(ids,new Set(all.map(r=>r.id)));
 });

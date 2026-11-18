@@ -10,7 +10,7 @@ const labels = value => {
   return [...new Set([normalize(text), ...split(/[/／:：()（）]/), ...split(/[/／:：()（）,，、]/)])];
 };
 
-function quizReferences({ subject, level, topic, scope, facet, exclusions = [] }) {
+function quizReferences({ subject, level, topic, scope, facet, exclusions = [], referenceSeed = '' }) {
   if (exclusions.length) return [];
   if (!Object.hasOwn(index, subject) || !Object.hasOwn(index[subject], level)) return [];
   const concepts = index[subject][level];
@@ -32,7 +32,15 @@ function quizReferences({ subject, level, topic, scope, facet, exclusions = [] }
     const group = require(path.join(__dirname, 'question-references', subject, level, key + '.json'));
     if (!selectedKeys.has(key) && !group.units.some(unit => selected.includes(normalize(unit)))) continue;
     if (group.excludedConcepts.some(word => scopeText.some(value => value.includes(word)))) continue;
-    references.push(...group.references.slice(0, 3 - references.length));
+    const pool = group.references;
+    let start = 0;
+    if (referenceSeed && pool.length > 3) {
+      const seed = String(referenceSeed) + ':' + subject + ':' + level + ':' + key;
+      for (const ch of seed) start = (Math.imul(start, 33) + ch.codePointAt(0)) >>> 0;
+      start %= pool.length;
+    }
+    references.push(...Array.from({ length: Math.min(pool.length, 3 - references.length) },
+      (_, i) => pool[(start + i) % pool.length]));
     if (references.length === 3) break;
   }
   return references;
@@ -40,7 +48,7 @@ function quizReferences({ subject, level, topic, scope, facet, exclusions = [] }
 
 function referencePrompt(references) {
   if (!references.length) return '';
-  return '\n[同觀念的人類命題範例]\n' +
+  return '\n[同觀念命題參考例]\n' +
     '以下 JSON 僅供分析。先在內部整理核心觀念、必要條件、解題步驟及干擾選項對應的迷思，再寫全新題目。' +
     '改用不同情境或表示法，不得照抄或只換數字。' +
     '干擾選項必須與正解同層次、在同一學習範圍內，且能對應常見而合理的迷思；不得用荒謬情節、無關領域、明顯不可能或極端絕對措辭湊出錯誤選項。' +
