@@ -8,7 +8,7 @@ const vm=require('node:vm');
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-hero-view.js'),'utf8');
 const strip=s=>s.replace(/^import\s+.*;\s*$/gm,'')
   .replaceAll('export function ','function ');
-const auxiliary=['manual-visual-progression.js','manual-anticipation.js']
+const auxiliary=['manual-visual-progression.js','manual-anticipation.js','manual-skill-detail-view.js']
   .map(name=>strip(fs.readFileSync(path.join(__dirname,'../public/cultivation',name),'utf8')));
 const render=vm.runInNewContext([...auxiliary,strip(source),'renderManualHero'].join('\n'),
   {}, {filename:'manual-hero-view.js'});
@@ -49,17 +49,20 @@ test('show only owned manuals, preferring the currently selected school',()=>{
   const view=draw([sword,hidden,body]);
   assert.equal(view.bookId,'body-rock');
   assert.doesNotMatch(view.html,/尚未得到的功法/);
-  assert.match(view.html,/data-feature-book="sword-wind"/);
+  assert.doesNotMatch(view.html,/data-feature-book=/);
+  assert.match(view.html,/玄嶽鍛體訣/);
   const switched=draw([sword,body],'sword-wind');
   assert.equal(switched.bookId,'sword-wind');
-  assert.match(switched.html,/aria-pressed="true"/);
+  assert.match(switched.html,/流風劍訣/);
+  assert.doesNotMatch(switched.html,/manual-hero-roster/);
 });
 
 test('show level, XP, next milestone, realm requirements and three original skills',()=>{
   const view=draw([makeBook()]);
   assert.match(view.html,/Lv. 4/);
   assert.match(view.html,/72 \/ 100 EXP/);
-  assert.match(view.html,/下一招 · 突進震拳/);
+  assert.doesNotMatch(view.html,/class="manual-hero-goal"/);
+  assert.doesNotMatch(view.html,/class="manual-anticipation"/);
   assert.match(view.html,/功法 Lv. 5/);
   assert.equal((view.html.match(/data-manual-jump-skill=/g)||[]).length,3);
   assert.match(view.html,/金丹境/);
@@ -77,7 +80,8 @@ test('max-level and fully unlocked books show completion without a fabricated up
   const view=draw([makeBook('body-rock',{
     level:10,progress:100,expInLevel:0,expToNext:0,skills,upgrade:null
   })]);
-  assert.match(view.html,/三招皆已領悟/);
+  assert.match(view.html,/功法已達最高等級/);
+  assert.doesNotMatch(view.html,/class="manual-hero-goal"/);
   assert.match(view.html,/aria-valuenow="100"/);
   assert.doesNotMatch(view.html,/data-manual-upgrade=/);
 });
@@ -91,4 +95,36 @@ test('untrusted book and skill display strings are escaped',()=>{
   assert.doesNotMatch(view.html,/<img src=x onerror=alert\(1\)>/);
   assert.match(view.html,/&lt;img src=x/);
   assert.match(view.html,/&lt;b&gt;假技能&lt;\/b&gt;/);
+});
+
+test('clicking one skill reveals a single authoritative detail with equipment and upgrade',()=>{
+  const book=makeBook('body-rock');
+  book.skills[0].upgrade={targetLevel:2,gold:20};
+  const view=render({library:[book],school:'body',gold:50},'body-rock',{
+    ...helpers,selectedSkillId:'first',equipped:[],
+    moveIdOf:id=>id,
+    descriptionWithDamage:(_,skill)=>skill.name+' 的傷害說明'
+  });
+  assert.match(view.html,/data-manual-skill="first"/);
+  assert.match(view.html,/data-manual-equip="first"/);
+  assert.match(view.html,/data-skill-upgrade="first"/);
+  assert.match(view.html,/data-manual-close-skill/);
+  assert.match(view.html,/aria-expanded="true"/);
+  assert.match(view.html,/直拳 的傷害說明/);
+  assert.equal((view.html.match(/class="manual-focus-skill /g)||[]).length,1);
+  const closed=draw([book]).html;
+  assert.doesNotMatch(closed,/data-manual-equip="first"/);
+  assert.doesNotMatch(closed,/data-skill-upgrade="first"/);
+});
+
+test('a locked technique remains inspectable without an equipment or upgrade button',()=>{
+  const book=makeBook();
+  const view=render({library:[book],school:'body',gold:500},book.id,{
+    ...helpers,selectedSkillId:'second',moveIdOf:id=>id,
+    descriptionWithDamage:()=> '招式說明'
+  });
+  assert.match(view.html,/data-manual-skill="second"/);
+  assert.match(view.html,/尚需 功法 Lv. 5/);
+  assert.doesNotMatch(view.html,/data-manual-equip="second"/);
+  assert.doesNotMatch(view.html,/data-skill-upgrade="second"/);
 });
