@@ -161,8 +161,9 @@ test('the compact trial strip has one CTA, no repeated book cover or next-goal p
   assert.match(html,/<details class="manual-expedition-more">/);
 });
 
-test('fully maxed Lv20 books do not promise additional experience milestones',()=>{
+test('fully maxed Lv20 books with all three skills learned have no future level targets',()=>{
   const s=state(4180);
+  s.library[0].skills=s.library[0].skills.map(skill=>({...skill,unlocked:true,mastered:true,realmReady:true}));
   const g=nextManualExpedition(s,'sword-wind',Catalog);
   assert.equal(g.targetLevel,null);
   assert.equal(g.estimatedKills,null);
