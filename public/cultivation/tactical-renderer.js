@@ -137,6 +137,7 @@ export class TacticalRenderer{
     // Pointermove and ResizeObserver may fire far faster than the display.
     // Coalesce those updates without delaying input or tactical state changes.
     if(this.destroyed||this.gestureFrame)return;
+    if(this.frame){cancelAnimationFrame(this.frame);this.frame=0;}
     this.gestureFrame=requestAnimationFrame(()=>{
       this.gestureFrame=0;this.draw();
     });
