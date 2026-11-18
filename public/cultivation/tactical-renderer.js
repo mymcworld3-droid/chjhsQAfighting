@@ -4,12 +4,14 @@ import './tactical-animation.js?v=20261116-stability-v1';
 import './tactical-skill-effects.js?v=20261116-long-line-afterglow-v1';
 import './tactical-camera.js';
 import './tactical-ambience.js?v=20261118-pve-visual-v2';
+import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
 const R=globalThis.QATactical;
 const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
 const A=globalThis.QATacticalAnimation;
 const SkillEffects=globalThis.QATacticalSkillEffects;
 const Camera=globalThis.QATacticalCamera;
 const Ambience=globalThis.QATacticalAmbience;
+const Impact=globalThis.QATacticalImpact;
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
   monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
 
@@ -399,7 +401,23 @@ export class TacticalRenderer{
     const cell=this.cell=g.cell,ox=this.ox=g.ox,oy=this.oy=g.oy;
     const mine=s.actors.find(a=>a.uid===this.uid),myTurn=!animating&&s.status==='active'&&s.turnUid===this.uid&&(!s.quizRound||s.phase==='action'),reduced=this.reducedMotion.matches;
     const cutImpact=reduced?null:A.crossCutImpact(scene,progress);
-    const weight=!reduced&&scene?(cutImpact?.strength??A.impactPulse(scene,progress)):0;
+    const contact=!reduced&&!this.preview&&s.mode==='pve'?
+      Impact.shake(scene,progress,A):0;
+    const weight=!reduced&&scene?
+      Math.max(cutImpact?.strength??A.impactPulse(scene,progress),contact):0;
+    if(!this.preview&&s.mode==='pve'&&scene&&!reduced){
+      // Once per committed impact beat, while preserving the player's
+      // existing sound preferences and the audio manager's own cooldown.
+      const windows=Impact.hitWindows(scene,A);
+      if(windows.length){
+        scene._playedImpactCues||=new Set();
+        for(let i=0;i<windows.length;i++){
+          if(progress<windows[i].at||scene._playedImpactCues.has(i))continue;
+          scene._playedImpactCues.add(i);
+          try{window.QAGameAudio?.play('combat-impact',{volume:.27});}catch(_){}
+        }
+      }
+    }
     if(weight){
       c.save();
       if(cutImpact){
@@ -407,7 +425,7 @@ export class TacticalRenderer{
         const kick=Math.cos(cutImpact.phase*Math.PI*2)*Math.min(4.5,cell*.085)*weight;
         c.translate(direction*kick,kick*.55);
       }else{
-        const q=(progress-scene.impactStart)/.22,amount=Math.min(2.5,cell*.05)*weight;
+        const q=(progress-(scene.impactStart??(scene.kind==='damage'?.12:.40)))/.22,amount=Math.min(2.5,cell*.05)*weight;
         c.translate(Math.sin(q*Math.PI*4)*amount,Math.cos(q*Math.PI*4)*amount*.45);
       }
     }
@@ -428,6 +446,9 @@ export class TacticalRenderer{
       if(this.ambienceLayer)c.drawImage(this.ambienceLayer,ox,oy,cell*s.width,cell*s.height);
       else Ambience.drawDetails(c,this.ambience,visual);
       Ambience.drawAtmosphere(c,this.ambience,visual,now,reduced,quality);
+    }
+    if(s.mode==='pve'&&!this.preview){
+      Impact.drawBossPresence(c,Impact.bossFor(s),{ox,oy,cell,width:s.width,height:s.height},now,reduced);
     }
     const objective=s.objective,markers=[];
     if(objective?.type==='transport'){
@@ -555,7 +576,14 @@ export class TacticalRenderer{
         this.drawFlyingSword(position,own?'#d1efe1':'#f6c8a9',moving?1:Math.min(1,progress*3),angle);
       }else if(sword)this.drawFlyingSword(sword,own?'#d1efe1':'#f6c8a9');
     }
-    if(scene)this.drawEffect(scene,progress,true);
+    if(scene){
+      if(s.mode==='pve'&&!this.preview&&!reduced){
+        const viewport={ox,oy,cell,width:s.width,height:s.height};
+        Impact.drawHitEffects(c,scene,progress,viewport,A);
+        Impact.drawPhaseWave(c,scene,progress,viewport);
+      }
+      this.drawEffect(scene,progress,true);
+    }
     if(this.selection&&!animating)fill(this.selection,'#fff0','#fff1ba');
     if(!frameless){c.strokeStyle='#d9c69380';c.lineWidth=1.5;c.strokeRect(ox+view.x*cell,oy+view.y*cell,cell*view.width,cell*view.height);}
     if(weight)c.restore();
