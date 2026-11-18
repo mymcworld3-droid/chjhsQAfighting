@@ -27,7 +27,7 @@ export function renderManualCollectionHeader(state, filter, {esc}) {
     <div class="manual-library-heading-copy">
       <span class="manual-library-kicker">問道 · 藏經閣</span>
       <h3>功法收藏 <span class="manual-library-owned-count">${owned.length} 本</span></h3>
-      <p>每本功法都有獨立的修煉進度。選擇卡片可查看詳情，並同步上方展示。</p>
+      <p>選擇功法，即可在上方集中修煉與強化。</p>
     </div>
     <button type="button" class="manual-refresh" data-manual-refresh title="同步功法資料"
       aria-label="更新功法資料"><i class="fa-solid fa-rotate" aria-hidden="true"></i> 更新</button>
@@ -35,79 +35,35 @@ export function renderManualCollectionHeader(state, filter, {esc}) {
   </div>`;
 }
 
-export function renderManualCollectionSummary(book, focusId, equipped, {esc,bookArt,skillArt,label,totalExpForLevel}) {
-  const fmt=v=>Math.max(0,Math.round(Number(v)||0)).toLocaleString('zh-TW');
+export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt,label,totalExpForLevel}) {
   const visual=manualVisualState(book);
   const anticipation=manualAnticipation(book,totalExpForLevel);
   const near=anticipation&&['near','imminent'].includes(anticipation.status);
-  const level=Math.max(1,Math.min(10,Math.round(Number(book.level)||1)));
-  const capped=level>=10;
-  const progress=capped?100:Math.min(100,Math.max(0,Number(book.progress)||0));
-  const learned=book.skills.filter(skill=>skill.unlocked).length;
-  const selected=book.id===focusId;
-  const equippedCount=book.skills.filter(skill=>equipped.includes(skill.id)).length;
-  const upcoming=book.skills.find(skill=>!skill.unlocked);
-  const blocked=upcoming?[
-    !upcoming.mastered?`功法 Lv. ${fmt(upcoming.levelRequired)}`:null,
-    !upcoming.realmReady?`${upcoming.realmName}境`:null
-  ].filter(Boolean):[];
-  const nextLabel=upcoming?`下一招：${upcoming.name}`:'三招皆已領悟';
-  const nextHint=upcoming?(blocked.join(' · ')||'待符合解鎖條件'):'功法技能已完整領悟';
+  const current=book.id===focusId;
+  const learned=(book.skills||[]).filter(skill=>skill.unlocked).length;
+  const stage=Number(book.level)>=10?'圓滿':near?
+    anticipation.status==='imminent'?'突破在即':'接近突破':
+    learned===3?'三招皆已領悟':visual.label;
   const cover=bookArt(book.id);
-  const coverElement=cover
-    ?`<img class="manual-book-art manual-library-cover" src="${esc(cover)}" alt="" loading="lazy" decoding="async">`
-    :'<span class="manual-library-cover-fallback" aria-hidden="true">功法</span>';
-  const skills=book.skills.map((skill,i)=>{
-    const art=skillArt(skill);
-    const skillStage=manualSkillVisualState(skill);
-    const stateText=skillStage==='learned'?'已領悟':skillStage==='realm-locked'?'修士境界不足':'功法等級未達';
-    return `<span class="manual-library-skill ${skill.unlocked?'is-learned':'is-locked'} is-${skillStage}"
-      title="${esc(skill.name)}：${esc(stateText)}">
-      <span class="manual-library-skill-picture">
-        ${art?`<img class="manual-library-skill-art" src="${esc(art)}" alt="" loading="lazy" decoding="async">`:
-          '<i class="fa-solid fa-star" aria-hidden="true"></i>'}
-        ${skill.unlocked?'':'<i class="fa-solid fa-lock manual-library-skill-lock" aria-hidden="true"></i>'}
-      </span>
-      <small>第 ${i+1} 招</small>
-    </span>`;
-  }).join('');
-  const bonus=equippedCount
-    ?`<span class="manual-library-equipped"><i class="fa-solid fa-khanda" aria-hidden="true"></i>
-      此配置已裝 ${equippedCount} 招</span>`:'';
-  return `<summary class="manual-book-top" data-manual-visual-stage="${visual.stage}"
-    aria-label="查看${esc(book.name)}功法詳情，功法氣象${esc(visual.label)}">
-    <span class="manual-library-art-zone" data-manual-stage="${visual.stage}" data-manual-approach="${near?anticipation.status:'none'}">
+  const art=cover?`<img class="manual-book-art manual-library-cover" src="${esc(cover)}"
+    alt="" loading="lazy" decoding="async">`:
+    '<span class="manual-library-cover-fallback" aria-hidden="true">功法</span>';
+  return `<button type="button" class="manual-book-top manual-library-choice"
+      data-feature-book="${esc(book.id)}" aria-pressed="${current}"
+      aria-label="展示${esc(book.name)}，Lv. ${visual.level}，${esc(stage)}">
+    <span class="manual-library-art-zone" data-manual-stage="${visual.stage}"
+      data-manual-approach="${near?anticipation.status:'none'}">
       <span class="manual-library-cover-glow" aria-hidden="true"></span>
-      <span class="manual-library-cover-wrap">${coverElement}</span>
-      <span class="manual-library-school-tag">
-        <i class="fa-solid ${book.school==='sword'?'fa-khanda':'fa-hand-fist'}" aria-hidden="true"></i>
-        ${label(book.school)}</span>
-      <span class="manual-library-stage-badge" title="視覺成長階段，不影響戰鬥數值">
-        <i class="fa-solid fa-sparkles" aria-hidden="true"></i> ${esc(visual.label)}</span>
-      ${selected?'<span class="manual-library-featured-tag">展示中</span>':''}
-      ${near?`<span class="manual-library-breakthrough-tag">${anticipation.status==='imminent'?'即將突破':'接近突破'} · Lv. ${anticipation.targetLevel}</span>`:''}
+      <span class="manual-library-cover-wrap">${art}</span>
+      ${current?'<span class="manual-library-featured-tag">展示中</span>':''}
     </span>
     <span class="manual-library-card-info">
       <span class="manual-library-name-row"><strong>${esc(book.name)}</strong>
-        <span class="manual-library-level">Lv. ${fmt(level)}</span></span>
-      <span class="manual-library-submeta">
-        <span><i class="fa-solid fa-seedling" aria-hidden="true"></i> 已領悟 ${learned} / 3 招</span>
-        ${bonus}
-      </span>
-      <span class="manual-library-mastery">
-        <span class="manual-library-mastery-head"><span>${capped?'功法已達最高等級':'本級修煉熟練度'}</span>
-          <span>${capped?'Lv. 10':fmt(book.expInLevel)+' / '+fmt(book.expToNext)+' EXP'}</span></span>
-        <span class="manual-library-exp-track" role="progressbar"
-          aria-label="${esc(book.name)}熟練度" aria-valuemin="0" aria-valuemax="100"
-          aria-valuenow="${progress}"><span style="width:${progress}%"></span></span>
-      </span>
-      <span class="manual-library-three-skills" aria-label="三招領悟進度">${skills}</span>
-      <span class="manual-library-next-goal">
-        <span><i class="fa-solid fa-bullseye" aria-hidden="true"></i>
-          ${esc(nextLabel)}<small>${esc(nextHint)}
-          ${near?` · 尚差 ${fmt(anticipation.remaining)} EXP 達等級門檻`:''}</small></span>
-        <i class="fa-solid fa-chevron-down manual-library-disclosure" aria-hidden="true"></i>
+        <span class="manual-library-level">Lv. ${visual.level}</span></span>
+      <span class="manual-library-brief">
+        <span>${esc(label(book.school))}</span>
+        <span class="manual-library-brief-state ${near?'is-approaching':''}">${esc(stage)}</span>
       </span>
     </span>
-  </summary>`;
+  </button>`;
 }
