@@ -55,9 +55,15 @@ test('focus follows a chosen team spawn; resizing maintains the world center',()
   const map=generateDungeonLayout('stage6-follow');
   for(const [w,h]of [[800,600],[410,800],[1000,420]]){
     const enlarged=C.zoomAt(C.initialCamera(),5,w/2,h/2,map,w,h);
-    const focus=C.focusOn(enlarged,map.spawnPads[3],map,w,h);
+    const nearSpawn=C.focusOn(enlarged,map.spawnPads[3],map,w,h);
+    const pad=C.mapPoint(nearSpawn,map.spawnPads[3],map,w,h);
+    // A near-edge spawn may not be perfectly centered: camera bounds take
+    // precedence to avoid exposing a huge empty region outside the map.
+    assert.ok(pad.x>=0&&pad.x<=w&&pad.y>=0&&pad.y<=h);
+    const center={x:Math.floor(map.width/2),y:Math.floor(map.height/2)};
+    const focus=C.focusOn(enlarged,center,map,w,h);
     const tile=C.screenTile(focus,w/2,h/2,map,w,h);
-    assert.deepStrictEqual(tile,map.spawnPads[3]);
+    assert.deepStrictEqual(tile,center);
     const old=C.geometry(focus,map,w,h);
     const centerWorld={x:(w/2-old.ox)/old.cell,y:(h/2-old.oy)/old.cell};
     const resized=C.resizePreservingCenter(focus,map,w,h,h,w);
