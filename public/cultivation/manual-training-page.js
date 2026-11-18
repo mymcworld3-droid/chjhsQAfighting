@@ -61,6 +61,12 @@ function ensure(){
     link.href='/styles/manual-training-growth.css?v=20261117-growth-phase5';
     document.head.append(link);
   }
+  if(!document.getElementById('manual-training-anticipation-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='manual-training-anticipation-style';
+    link.href='/styles/manual-anticipation.css?v=20261118-breakthrough-phase8';
+    document.head.append(link);
+  }
   return root;
 }
 async function request(url,body){
@@ -84,7 +90,7 @@ function skillDetails(id){
   return base&&current?.library.find(book=>book.id===base.manualId)?.skills.find(skill=>skill.id===id);
 }
 function featuredHeroMarkup(){
-  const view=renderManualHero(current,featuredBookId,{esc,bookArt,skillArt,label});
+  const view=renderManualHero(current,featuredBookId,{esc,bookArt,skillArt,label,totalExpForLevel:Catalog.totalExpForLevel});
   featuredBookId=view.bookId;
   return view.html;
 }
@@ -140,7 +146,7 @@ function markup(expandedBooks){
     </div>`;
     const focus=book.id===featuredBookId;
     const collectionCover=renderManualCollectionSummary(book,featuredBookId,equipped,{
-      esc,bookArt,skillArt,label
+      esc,bookArt,skillArt,label,totalExpForLevel:Catalog.totalExpForLevel
     });
     return `<details class="manual-book ${book.school==='sword'?'is-sword':'is-body'} ${focus?'is-featured':''}"
       data-manual-book="${esc(book.id)}"${expandedBooks.has(book.id)?' open':''}>
