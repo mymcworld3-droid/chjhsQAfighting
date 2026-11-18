@@ -192,8 +192,21 @@ export class TacticalRenderer{
       this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,attackSkill(me,mode))):[];
     }
     this.threatPlan=Threats.derive(state,uid,mode,this.range);
-    this.canvas.setAttribute('aria-description',this.threatPlan.description+
-      '。紅色斜紋和邊框代表敵方預告，青綠標記僅代表能避開目前預告。');
+    const alert=this.canvas.parentElement?.querySelector('[data-threat-a11y]');
+    if(state.mode==='pve'){
+      const message=this.threatPlan.description+
+        '。紅色斜紋框為目前預告範圍，青綠標記只能避開目前已標示的危險格。';
+      this.canvas.setAttribute('aria-description',message);
+      this.canvas.dataset.threatCells=String(this.threatPlan.cells.length);
+      this.canvas.dataset.threatened=String(this.threatPlan.playerThreatened);
+      if(alert&&alert.textContent!==this.threatPlan.description)
+        alert.textContent=this.threatPlan.description;
+    }else{
+      this.canvas.removeAttribute('aria-description');
+      delete this.canvas.dataset.threatCells;
+      delete this.canvas.dataset.threatened;
+      if(alert)alert.textContent='';
+    }
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
   present(state,uid,scene=null,progress=0,view=null){
