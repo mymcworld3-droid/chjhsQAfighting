@@ -90,65 +90,121 @@
 #manual-training-root .manual-hero--tier-complete .manual-hero-qi-spark--two{
   animation-delay:-1.9s;
 }
-#manual-training-root .manual-growth{
-  display:grid;gap:8px;padding:11px 12px 10px;
-  border:1px solid var(--mh-line);border-radius:11px;
-  background:linear-gradient(140deg,rgba(5,19,14,.7),var(--mh-soft));
-  min-width:0;
+/* Consolidated mastery card: one status, one rail, three raised acupoints. */
+#manual-training-root .manual-hero-mastery{
+  display:grid;gap:10px;min-width:0;padding:15px 15px 13px;
+  border:1px solid var(--mh-line);border-radius:13px;
+  background:radial-gradient(ellipse at 80% 105%,var(--mh-glow),transparent 75%),
+    linear-gradient(145deg,rgba(6,23,17,.86),var(--mh-soft));
+  box-shadow:inset 0 1px rgba(255,255,255,.06);
 }
-#manual-training-root .manual-growth-header{
-  display:flex;align-items:baseline;justify-content:space-between;
-  flex-wrap:wrap;gap:5px 12px;
+#manual-training-root .manual-hero-mastery-heading{
+  display:flex;justify-content:space-between;align-items:baseline;
+  flex-wrap:wrap;gap:4px 10px;
 }
-#manual-training-root .manual-growth-heading{
-  font-size:12px;color:#c5d5c4;
+#manual-training-root .manual-hero-mastery-heading>strong{
+  font-size:13px;color:#f5e7c9;font-weight:840;
 }
-#manual-training-root .manual-growth-heading strong{
-  padding:2px 8px;border:1px solid var(--mh-line);border-radius:20px;
-  margin-left:7px;color:var(--mh-accent);white-space:nowrap;
-  font-size:12px;font-weight:800;
+#manual-training-root .manual-hero-mastery-level{
+  color:var(--mh-warm);font-size:15px;font-weight:850;
+  white-space:nowrap;font-variant-numeric:tabular-nums;
 }
-#manual-training-root .manual-growth-level{
-  font-size:12px;color:#f7dfaa;font-weight:800;
-  font-variant-numeric:tabular-nums;
+#manual-training-root .manual-hero-mastery-summary{
+  display:flex;align-items:center;flex-wrap:wrap;gap:7px 9px;
+  color:#e5e0cc;font-size:13px;min-width:0;line-height:1.35;
 }
+#manual-training-root .manual-hero-stage-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  flex:0 0 auto;min-height:26px;padding:4px 11px;
+  border-radius:22px;border:1px solid var(--mh-accent);
+  background:linear-gradient(145deg,rgba(52,103,81,.67),rgba(14,43,33,.8));
+  box-shadow:inset 0 1px rgba(255,255,255,.11);
+  color:#f8e9c9;font-size:12px;font-weight:850;
+}
+#manual-training-root .manual-hero--body .manual-hero-stage-badge{
+  background:linear-gradient(145deg,rgba(116,81,40,.75),rgba(62,43,23,.88));
+}
+#manual-training-root .manual-hero-mastery[data-manual-mastery-stage="complete"] .manual-hero-stage-badge{
+  border-color:#f7dc9b;
+  background:linear-gradient(125deg,#715528,#ad8849);
+  box-shadow:inset 0 1px rgba(255,255,255,.25),0 0 14px rgba(224,182,91,.26);
+  color:#fff2ca;text-shadow:0 1px 2px rgba(0,0,0,.4);
+}
+#manual-training-root .manual-hero-mastery-status{
+  font-size:13px;font-weight:760;overflow-wrap:anywhere;
+  color:#f3e5c5;font-variant-numeric:tabular-nums;
+}
+#manual-training-root .manual-hero-mastery-description{
+  margin:0;font-size:11px;color:#c6d4c5;line-height:1.45;
+}
+#manual-training-root .manual-hero-mastery-footnote{
+  display:block;font-size:10px;line-height:1.5;color:#b4c7ba;
+}
+/* The ten stations are evenly spaced. The flowing line joins the centre of
+   Lv.1 to Lv.10 (5%-95% of the same track), so all milestones line up. */
 #manual-training-root .manual-growth-marks{
-  display:grid;grid-template-columns:repeat(10,minmax(0,1fr));align-items:end;
-  gap:4px;width:100%;min-height:19px;
+  position:relative;isolation:isolate;
+  display:grid;grid-template-columns:repeat(10,minmax(0,1fr));
+  align-items:center;justify-items:center;
+  width:100%;height:63px;min-width:0;
+  margin:2px 0 0;overflow:visible;
+}
+#manual-training-root .manual-growth-flow{
+  display:block;position:absolute;z-index:0;
+  left:5%;right:5%;top:calc(50% - 6px);
+  height:12px;overflow:hidden;padding:2px;
+  border:1px solid #83998173;border-radius:99px;
+  background:#06150f;box-shadow:inset 0 2px 5px rgba(0,0,0,.6);
+}
+#manual-training-root .manual-growth-flow-fill{
+  display:block;height:100%;border-radius:99px;
+  background:linear-gradient(90deg,#559978 0%,var(--mh-accent) 63%,#f5e2ae 100%);
+  box-shadow:0 0 11px var(--mh-glow);
+  transition:width .5s ease-out;
 }
 #manual-training-root .manual-growth-mark{
-  display:flex;align-items:center;justify-content:center;
-  min-width:0;height:8px;border:1px solid #607765;
-  border-radius:4px;background:#0b1a13;
+  position:relative;z-index:1;display:grid;place-items:center;
+  justify-self:center;align-self:center;
+  width:4px;height:12px;min-width:0;
+  background:#718776;border:1px solid #88a68a7a;
+  border-radius:6px;box-shadow:0 0 0 2px rgba(6,21,14,.6);
 }
-#manual-training-root .manual-growth-mark.is-reached{
-  background:linear-gradient(110deg,#498c72,var(--mh-accent));
-  border-color:var(--mh-accent);box-shadow:0 0 5px var(--mh-glow);
+#manual-training-root .manual-growth-mark.is-reached:not(.is-milestone){
+  border-color:var(--mh-accent);background:#b3e1c2;
+  box-shadow:0 0 7px var(--mh-glow);
 }
 #manual-training-root .manual-growth-mark.is-milestone{
-  height:19px;border-color:#b4a46f;
+  width:27px;height:27px;flex:0 0 auto;border-radius:50%;
+  border:2px solid #9ba899;
+  color:#a6b9ac;background:radial-gradient(circle at 30% 22%,#41524a,#142a20 70%);
+  box-shadow:0 3px 9px #0008,inset 0 1px 2px rgba(255,255,255,.14);
+}
+#manual-training-root .manual-growth-mark.is-milestone:nth-last-child(6){
+  width:33px;height:33px;
+}
+#manual-training-root .manual-growth-mark.is-milestone:last-child{
+  width:39px;height:39px;
 }
 #manual-training-root .manual-growth-mark.is-milestone.is-reached{
-  background:linear-gradient(145deg,#b5b177,#e9d7a0);
-  border-color:#ffe2a0;
+  border-color:#f3dca0;
+  color:#253b2b;
+  background:radial-gradient(circle at 30% 20%,#fff9d4 0%,#f4d996 33%,#c49b57 75%);
+  box-shadow:0 0 0 3px rgba(224,185,101,.15),0 4px 12px #0008,
+    0 0 16px rgba(234,202,132,.42),inset 0 2px 4px rgba(255,255,255,.8);
+}
+#manual-training-root .manual-growth-mark.is-milestone.is-current{
+  outline:2px solid #ffebaa;outline-offset:3px;
+}
+#manual-training-root .manual-growth-mark.is-milestone:last-child.is-current{
+  box-shadow:0 0 0 4px rgba(246,218,156,.2),
+    0 0 25px rgba(250,207,124,.48),inset 0 2px 5px rgba(255,255,255,.7);
 }
 #manual-training-root .manual-growth-mark small{
-  font-size:10px;line-height:1;color:#c4d4be;font-weight:700;
+  display:block;margin:0;padding:0;line-height:1;
+  font-size:11px;font-weight:900;font-variant-numeric:tabular-nums;
+  color:inherit;
 }
-#manual-training-root .manual-growth-mark.is-reached small{color:#1f382c}
-#manual-training-root .manual-growth-mark.is-current{
-  outline:1px solid #f9e9b4;outline-offset:2px;
-}
-#manual-training-root .manual-growth-footnote{
-  display:flex;justify-content:space-between;align-items:baseline;
-  flex-wrap:wrap;gap:3px 9px;
-}
-#manual-training-root .manual-growth-footnote span{
-  font-size:11px;color:#d5dfcb;line-height:1.45;
-}
-#manual-training-root .manual-growth-footnote small{
-  font-size:10px;color:#a9bbac;line-height:1.4;
-}
+#manual-training-root .manual-growth-mark:last-child small{font-size:12px}
 #manual-training-root .manual-hero-path-grid{position:relative;isolation:isolate}
 #manual-training-root .manual-hero-path-grid::before{
   content:"";position:absolute;z-index:-1;
@@ -241,21 +297,23 @@
 }
 @media(max-width:700px){
   #manual-training-root .manual-hero-qi-ring{width:min(99%,140px);top:46%}
-  #manual-training-root .manual-growth{padding:10px 9px;gap:7px}
-  #manual-training-root .manual-growth-marks{gap:3px}
-  #manual-training-root .manual-growth-footnote small{font-size:9px}
+  #manual-training-root .manual-hero-mastery{padding:12px 10px}
 }
 @media(max-width:440px){
   #manual-training-root .manual-hero-qi-ring{width:min(98%,105px);top:43%}
   #manual-training-root .manual-hero-qi-spark--one{left:9%;top:17%}
   #manual-training-root .manual-hero-qi-spark--two{right:6%;bottom:22%}
-  #manual-training-root .manual-growth-marks{gap:2px}
-  #manual-training-root .manual-growth-heading{font-size:11px}
-  #manual-training-root .manual-growth-level{font-size:11px}
-  #manual-training-root .manual-growth-footnote span{font-size:10px}
+  #manual-training-root .manual-hero-mastery{gap:8px;padding:10px 9px}
+  #manual-training-root .manual-hero-mastery-level{font-size:13px}
+  #manual-training-root .manual-growth-marks{height:57px}
+  #manual-training-root .manual-growth-mark.is-milestone{width:25px;height:25px}
+  #manual-training-root .manual-growth-mark.is-milestone:nth-last-child(6){width:30px;height:30px}
+  #manual-training-root .manual-growth-mark.is-milestone:last-child{width:35px;height:35px}
   #manual-training-root .manual-hero-path-grid::before{display:none}
 }
 @media(prefers-reduced-motion:reduce){
+  #manual-training-root .manual-growth-flow-fill{transition:none!important}
+
   #manual-training-root .manual-hero-qi-ring,
   #manual-training-root .manual-hero-qi-spark{transition:none!important;}
   #manual-training-root .manual-hero-qi-orbit,
