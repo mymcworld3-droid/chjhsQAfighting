@@ -20,7 +20,7 @@ export class BeastInspector {
   constructor(root,{getState,getRenderer,getManuals,openDemo}){
     this.root=root;this.getState=getState;this.getRenderer=getRenderer;
     this.getManuals=getManuals;this.openDemo=openDemo;
-    this.hoverUid=null;this.pinnedUid=null;this.rosterOpen=false;
+    this.hoverUid=null;this.pinnedUid=null;this.rosterOpen=false;this.returnFocus=null;this.contentCache=new WeakMap();
     this.toggle=document.createElement('button');
     this.toggle.type='button';this.toggle.dataset.beastToggle='';
     this.toggle.className='tc-beast-toggle';this.toggle.hidden=true;
@@ -35,10 +35,10 @@ export class BeastInspector {
     this.roster=document.createElement('section');
     this.roster.className='tc-beast-roster';this.roster.id='tc-beast-roster';
     this.roster.dataset.beastRoster='';this.roster.hidden=true;
-    this.roster.setAttribute('role','dialog');this.roster.setAttribute('aria-label','本關靈獸清單');
+    this.roster.setAttribute('role','dialog');this.roster.setAttribute('aria-label','本關靈獸清單');this.roster.setAttribute('aria-modal','true');
     this.panel=document.createElement('section');this.panel.className='tc-beast-panel';
     this.panel.dataset.beastPanel='';this.panel.hidden=true;
-    this.panel.setAttribute('role','dialog');this.panel.setAttribute('aria-label','靈獸戰鬥資料');
+    this.panel.setAttribute('role','dialog');this.panel.setAttribute('aria-label','靈獸戰鬥資料');this.panel.setAttribute('aria-modal','true');
     this.peek=document.createElement('aside');this.peek.className='tc-beast-peek';
     this.peek.dataset.beastPeek='';this.peek.hidden=true;
     this.peek.setAttribute('aria-label','靈獸快速資訊');
@@ -54,10 +54,28 @@ export class BeastInspector {
   }
   find(uid){return this.beasts().find(a=>a.uid===uid)||null;}
   isOpen(){return this.rosterOpen||!!this.pinnedUid;}
+  dialogElement(){return this.rosterOpen?this.roster:this.pinnedUid?this.panel:null;}
+  rememberFocus(){
+    if(!this.isOpen())this.returnFocus=this.root.contains(document.activeElement)&&document.activeElement!==document.body?
+      document.activeElement:this.toggle;
+  }
+  setContent(element,html){
+    if(this.contentCache.get(element)===html)return;
+    const oldTop=element.scrollTop,active=document.activeElement;
+    const focused=element.contains(active)&&active instanceof Element?active:null;
+    const key=['data-beast-select','data-beast-close','data-beast-back','data-beast-demo']
+      .find(attribute=>focused?.hasAttribute(attribute));
+    const value=key?focused.getAttribute(key):null;
+    element.innerHTML=html;
+    this.contentCache.set(element,html);
+    element.scrollTop=oldTop;
+    if(key)[...element.querySelectorAll('button['+key+']')]
+      .find(button=>button.getAttribute(key)===value)?.focus({preventScroll:true});
+  }
   handleButton(button){
     if(button.hasAttribute('data-beast-toggle')){this.toggleRoster();return true;}
     if(button.hasAttribute('data-beast-dismiss')||button.hasAttribute('data-beast-close')){
-      this.dismiss();return true;
+      this.dismiss({restoreFocus:true});return true;
     }
     if(button.hasAttribute('data-beast-select')){
       this.inspect(button.dataset.beastSelect,'pin');return true;
@@ -89,29 +107,38 @@ export class BeastInspector {
       return;
     }
     if(!actor)return;
-    this.hoverUid=null;this.rosterOpen=false;this.pinnedUid=actor.uid;
+    this.rememberFocus();this.hoverUid=null;this.rosterOpen=false;this.pinnedUid=actor.uid;
     this.refresh();
     this.panel.querySelector('[data-beast-close]')?.focus({preventScroll:true});
   }
   toggleRoster(){
     if(!this.active())return;
+    this.rememberFocus();
     const opening=!this.rosterOpen;
     this.pinnedUid=null;this.hoverUid=null;
     this.rosterOpen=opening;this.refresh();
     if(opening)this.roster.querySelector('[data-beast-close]')?.focus({preventScroll:true});
     else this.toggle.focus({preventScroll:true});
   }
-  dismiss(){
+  dismiss({restoreFocus=false}={}){
+    const focus=this.returnFocus;
+    this.returnFocus=null;
     this.rosterOpen=false;this.pinnedUid=null;this.hoverUid=null;
     this.scrim.hidden=true;this.roster.hidden=true;this.panel.hidden=true;this.peek.hidden=true;
+    const main=this.root.querySelector('[data-main]');
+    if(main)main.inert=false;
     this.toggle.setAttribute('aria-expanded','false');
     this.getRenderer()?.setInspectTarget(null);
+    if(restoreFocus){
+      const target=focus?.isConnected?focus:this.toggle;
+      if(target&&!target.hidden)target.focus({preventScroll:true});
+    }
   }
   reset(){this.dismiss();this.toggle.hidden=true;this.toggle.querySelector('[data-beast-count]').textContent='0';}
   renderRoster(){
     const actors=this.beasts().slice().sort((a,b)=>Number(b.hp>0)-Number(a.hp>0));
     const living=actors.filter(a=>a.hp>0).length;
-    this.roster.innerHTML='<header class="tc-beast-card-title"><div><small>問道試煉 · 妖獸圖鑑</small><h2>本關靈獸 <span>'+living+' / '+actors.length+'</span></h2></div>'+
+    const html='<header class="tc-beast-card-title"><div><small>問道試煉 · 妖獸圖鑑</small><h2>本關靈獸 <span>'+living+' / '+actors.length+'</span></h2></div>'+
       '<button type="button" data-beast-close aria-label="關閉靈獸清單">×</button></header>'+
       '<p class="tc-beast-helper">點選靈獸查看攻擊、移動與應對方法；查看資料不消耗體力。</p>'+
       '<div class="tc-beast-list">'+(actors.length?actors.map(actor=>{
@@ -122,6 +149,7 @@ export class BeastInspector {
           '<small>'+esc(beast?.attackName||'尚無招式資料')+' · '+esc(down?'已擊敗':Math.ceil(positive(actor.hp))+' / '+actor.maxHp+' 生命')+'</small></span>'+
           '<i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>';
       }).join(''):'<p class="tc-beast-empty">本關沒有靈獸。</p>')+'</div>';
+    this.setContent(this.roster,html);
   }
   renderPanel(){
     const actor=this.find(this.pinnedUid);
@@ -129,7 +157,7 @@ export class BeastInspector {
     const beast=profile(actor),manuals=this.getManuals(),realm=manuals?.realmForStage?.(actor.level);
     const statuses=[actor.shield?'護盾 '+actor.shield:'',actor.slow?'緩速':'',actor.guard?'護身':'',actor.hp<=0?'已擊敗':''].filter(Boolean);
     const threat=actor.intent?.text||'目前沒有已鎖定的攻擊預告';
-    this.panel.innerHTML='<header class="tc-beast-card-title"><div><small>戰場資料 · 即時狀態</small><h2>'+esc(actor.name||beast?.name)+'</h2></div>'+
+    const html='<header class="tc-beast-card-title"><div><small>戰場資料 · 即時狀態</small><h2>'+esc(actor.name||beast?.name)+'</h2></div>'+
       '<button type="button" data-beast-close aria-label="關閉靈獸資料">×</button></header>'+
       '<div class="tc-beast-identity">'+portrait(actor)+'<div><small>'+esc(actor.boss?'首領靈獸':'靈獸')+
       (realm?' · '+esc(realm.name)+'境':'')+'</small>'+health(actor)+
@@ -141,6 +169,7 @@ export class BeastInspector {
       '<section class="tc-beast-advice"><strong>應對建議</strong><p>'+esc(beast?.tip||'觀察紅色危險格並確認移動範圍。')+'</p></section>'+
       '<footer class="tc-beast-footer"><button type="button" data-beast-back>本關清單</button>'+
       '<button type="button" data-beast-demo>觀看招式演練</button></footer>';
+    this.setContent(this.panel,html);
   }
   renderPeek(){
     const actor=this.find(this.hoverUid);
@@ -148,10 +177,11 @@ export class BeastInspector {
       this.peek.hidden=true;return;
     }
     const beast=profile(actor);
-    this.peek.innerHTML='<div class="tc-beast-peek-head">'+portrait(actor)+
+    const html='<div class="tc-beast-peek-head">'+portrait(actor)+
       '<span><strong>'+esc(actor.name||beast?.name)+'</strong><small>'+esc(beast?.attackName||'未知招式')+
       '</small></span></div>'+health(actor)+
       '<p>'+esc(actor.intent?.text||beast?.tip||'')+'</p><small class="tc-beast-peek-hint">長按靈獸或點頂部「靈獸」查看詳細資料</small>';
+    this.setContent(this.peek,html);
     this.peek.hidden=false;
   }
   refresh(){
@@ -165,6 +195,8 @@ export class BeastInspector {
     this.scrim.hidden=!this.isOpen();
     this.roster.hidden=!this.rosterOpen;
     this.panel.hidden=!this.pinnedUid;
+    const main=this.root.querySelector('[data-main]');
+    if(main)main.inert=this.isOpen();
     if(this.rosterOpen)this.renderRoster();
     if(this.pinnedUid)this.renderPanel();
     this.renderPeek();
