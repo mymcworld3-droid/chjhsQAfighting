@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-不同公共立場-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用不同公共立場",
+      "question": {
+        "q": "一項都市更新計畫中，住戶重視居住安全，商家重視人流，政府重視財務可行性。討論時應如何處理？",
+        "correct": "釐清各方目標、利益衝突及可妥協條件",
+        "wrong": [
+          "只因政府有預算就忽略住戶",
+          "只選擇最先發言者的提案",
+          "把所有立場當作完全相同"
+        ],
+        "exp": "公共協商需辨識不同利害關係人及其理由。",
+        "subject": "公民",
+        "sub_topic": "不同公共立場",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-不同公共立場",
+        "template_id": "extra-2026-civ3-不同公共立場-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-不同公共立場-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用不同公共立場",
+      "question": {
+        "q": "某媒體引用環境團體與產業協會對同一法規的不同成本估算。讀者最適合先查核什麼？",
+        "correct": "各自使用的基準年、成本範圍與假設",
+        "wrong": [
+          "只看哪個團體名稱較長",
+          "不同立場一定不能引用同一資料",
+          "只要估算不同就代表兩者都造假"
+        ],
+        "exp": "差異可能來自假設，需先確定可比性。",
+        "subject": "公民",
+        "sub_topic": "不同公共立場",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-不同公共立場",
+        "template_id": "extra-2026-civ3-不同公共立場-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-不同公共立場-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用不同公共立場",
+      "question": {
+        "q": "某公共論壇參與者都認同安全重要，但有人支持管制、有人支持教育。這代表什麼？",
+        "correct": "共享目標仍可能對政策工具與成本有不同判斷",
+        "wrong": [
+          "只要目標相同政策選擇必定一致",
+          "任何工具不同就代表沒有共同價值",
+          "不同意見必然不能進行理性討論"
+        ],
+        "exp": "公共立場差異可能來自對效果、代價與制度的評估。",
+        "subject": "公民",
+        "sub_topic": "不同公共立場",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-不同公共立場",
+        "template_id": "extra-2026-civ3-不同公共立場-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

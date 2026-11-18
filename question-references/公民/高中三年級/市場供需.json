@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-市場供需-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用市場供需",
+      "question": {
+        "q": "某市場因生產技術改善使供給增加，需求不變。一般競爭市場的均衡通常如何改變？",
+        "correct": "價格下降、交易數量上升",
+        "wrong": [
+          "價格上升、數量下降",
+          "價格與數量必定同時上升",
+          "供給增加直接使需求歸零"
+        ],
+        "exp": "供給曲線右移會使均衡價格下降且數量增加。",
+        "subject": "公民",
+        "sub_topic": "市場供需",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-市場供需",
+        "template_id": "extra-2026-civ3-市場供需-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-市場供需-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用市場供需",
+      "question": {
+        "q": "政府設定低於均衡價格的有效價格上限。若需求及供給曲線正常，較可能出現什麼？",
+        "correct": "需求量超過供給量，形成短缺",
+        "wrong": [
+          "供給量大於需求量而過剩",
+          "每個買方均必定買到商品",
+          "均衡價格不可能因管制受影響"
+        ],
+        "exp": "上限使市場價格偏低，造成超額需求。",
+        "subject": "公民",
+        "sub_topic": "市場供需",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-市場供需",
+        "template_id": "extra-2026-civ3-市場供需-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-市場供需-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用市場供需",
+      "question": {
+        "q": "某產品需求價格彈性較小，售價上升10%時購買量只下降2%。短期總銷售收入可能如何變化？",
+        "correct": "增加，因價格增幅大於需求量減幅",
+        "wrong": [
+          "下降約12%",
+          "必定不變",
+          "需求量必定增加10%"
+        ],
+        "exp": "原收入P×Q，後約1.10×0.98=1.078倍，收入約增加7.8%。",
+        "subject": "公民",
+        "sub_topic": "市場供需",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-市場供需",
+        "template_id": "extra-2026-civ3-市場供需-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

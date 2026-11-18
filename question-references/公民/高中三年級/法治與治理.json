@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-法治與治理-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用法治與治理",
+      "question": {
+        "q": "某行政機關因不滿民眾批評，撤銷其符合法定要件的許可。最直接的法治問題是？",
+        "correct": "公權力濫用裁量，未依合法目的行使權限",
+        "wrong": [
+          "行政行為可以任意報復批評者",
+          "所有許可都只能由私人公司決定",
+          "批評政府即代表放棄合法申請權"
+        ],
+        "exp": "依法行政要求決策基於法定事實及正當目的。",
+        "subject": "公民",
+        "sub_topic": "法治與治理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中三年級-法治與治理",
+        "template_id": "extra-2026-civ3-法治與治理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-法治與治理-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用法治與治理",
+      "question": {
+        "q": "政府推動數位服務，演算法拒絕部分申請卻不提供理由。治理上最需要改善什麼？",
+        "correct": "決策透明、可申訴性與可檢驗的程序",
+        "wrong": [
+          "只要運用電腦就不可能有錯誤",
+          "自動化決策完全不需法定依據",
+          "申請者不得知道自己的申請狀態"
+        ],
+        "exp": "科技治理仍須遵守責任與程序保障。",
+        "subject": "公民",
+        "sub_topic": "法治與治理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中三年級-法治與治理",
+        "template_id": "extra-2026-civ3-法治與治理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-法治與治理-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用法治與治理",
+      "question": {
+        "q": "某主管機關聲稱為提升效率，可以在沒有授權下創設新的罰款。這違反哪種基本要求？",
+        "correct": "行政處罰須有適當法律依據",
+        "wrong": [
+          "行政效率一定高於法律位階",
+          "只要金額不大便無須法律",
+          "政府公告可以永久取代所有法律"
+        ],
+        "exp": "處罰權不能單由行政便利自行創設。",
+        "subject": "公民",
+        "sub_topic": "法治與治理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中三年級-法治與治理",
+        "template_id": "extra-2026-civ3-法治與治理-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

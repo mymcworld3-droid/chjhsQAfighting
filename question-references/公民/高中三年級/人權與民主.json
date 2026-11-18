@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-人權與民主-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用人權與民主",
+      "question": {
+        "q": "某國透過多數決通過法律，卻禁止少數宗教進行一般集會。哪項原則最能用來檢驗？",
+        "correct": "憲政民主中多數決須受宗教自由及平等權限制",
+        "wrong": [
+          "只要過半贊成就能取消所有基本權",
+          "法律通過後人權不再具有意義",
+          "宗教自由只保障多數信仰者"
+        ],
+        "exp": "多數治理不能無限侵害受憲法保障的基本權。",
+        "subject": "公民",
+        "sub_topic": "人權與民主",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中三年級-人權與民主",
+        "template_id": "extra-2026-civ3-人權與民主-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-人權與民主-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用人權與民主",
+      "question": {
+        "q": "選舉前政府限制反對派使用公共媒體，卻讓執政者自由宣傳。這對民主有何主要影響？",
+        "correct": "可能破壞政治競爭與資訊表達的公平性",
+        "wrong": [
+          "只要選舉仍舉行就保證公平",
+          "不平等媒體接觸與選民判斷完全無關",
+          "政府可完全任意決定誰具有言論自由"
+        ],
+        "exp": "民主須有基本表達自由及政治競爭條件。",
+        "subject": "公民",
+        "sub_topic": "人權與民主",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中三年級-人權與民主",
+        "template_id": "extra-2026-civ3-人權與民主-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-人權與民主-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用人權與民主",
+      "question": {
+        "q": "某社會團體支持修法改善身心障礙者投票場所的無障礙設施。這最能促進哪種民主價值？",
+        "correct": "降低參與障礙，增加實質政治平等",
+        "wrong": [
+          "排除部分選民以提高投票速度",
+          "用特殊設施取代選舉權",
+          "只重視形式相同而忽略實際可及性"
+        ],
+        "exp": "民主參與權需要可行的制度與環境支持。",
+        "subject": "公民",
+        "sub_topic": "人權與民主",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中三年級-人權與民主",
+        "template_id": "extra-2026-civ3-人權與民主-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

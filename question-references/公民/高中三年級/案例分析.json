@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-案例分析-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用案例分析",
+      "question": {
+        "q": "某城市評估交通新制後，平均車速提高但部分行人事故增加。完整分析應避免什麼？",
+        "correct": "只憑單一平均車速指標斷定政策全面成功",
+        "wrong": [
+          "檢查不同用路人的事故率",
+          "分析道路條件與交通量",
+          "追蹤政策前後較長時段資料"
+        ],
+        "exp": "單一指標可能掩蓋分配與風險差異。",
+        "subject": "公民",
+        "sub_topic": "案例分析",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-案例分析",
+        "template_id": "extra-2026-civ3-案例分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-案例分析-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用案例分析",
+      "question": {
+        "q": "某政策實施後地方失業率下降，但同期有大量人口外移。若判定政策成效，應注意什麼？",
+        "correct": "人口移動與勞動參與變化可能影響失業率",
+        "wrong": [
+          "失業率下降必然表示新增同數量職缺",
+          "人口外移永遠不影響統計分母",
+          "只看一個百分比即可確認政策因果"
+        ],
+        "exp": "失業率是勞動力中失業者比例，須檢查人口及就業結構。",
+        "subject": "公民",
+        "sub_topic": "案例分析",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-案例分析",
+        "template_id": "extra-2026-civ3-案例分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-案例分析-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用案例分析",
+      "question": {
+        "q": "某政府宣稱補助政策使所有人生活改善，但只提供受補助者滿意度。哪種補充較有說服力？",
+        "correct": "比較實際所得、非受補助群體及政策成本",
+        "wrong": [
+          "只加大滿意度圖表標題",
+          "完全忽略未獲補助的民眾",
+          "把滿意度等同所有客觀成效"
+        ],
+        "exp": "政策分析需檢視選樣偏差、效果與成本。",
+        "subject": "公民",
+        "sub_topic": "案例分析",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-案例分析",
+        "template_id": "extra-2026-civ3-案例分析-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

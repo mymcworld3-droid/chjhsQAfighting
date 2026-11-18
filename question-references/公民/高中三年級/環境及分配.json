@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-環境及分配-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用環境及分配",
+      "question": {
+        "q": "某城市開徵污染排放費後，低收入家庭的能源支出占比提高。政策評估最應補充什麼？",
+        "correct": "分析減排效果與不同所得群體負擔，設計適當配套",
+        "wrong": [
+          "只看總排放而不考慮分配",
+          "直接免除所有高排放者責任",
+          "只因低收入家庭受影響就否定所有環境政策"
+        ],
+        "exp": "環境政策需兼顧效率及公平，可搭配補助或返還機制。",
+        "subject": "公民",
+        "sub_topic": "環境及分配",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-環境及分配",
+        "template_id": "extra-2026-civ3-環境及分配-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-環境及分配-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用環境及分配",
+      "question": {
+        "q": "一座垃圾處理設施服務全市，卻集中設在已承受多個污染源的社區。這最涉及哪種正義議題？",
+        "correct": "環境負擔的空間分配與程序參與是否公平",
+        "wrong": [
+          "只要設施服務全市便不存在任何地方負擔",
+          "社區人口較少即可忽略健康風險",
+          "設施所在地無須參與公共討論"
+        ],
+        "exp": "環境正義重視不同群體負擔與決策參與。",
+        "subject": "公民",
+        "sub_topic": "環境及分配",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-環境及分配",
+        "template_id": "extra-2026-civ3-環境及分配-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-環境及分配-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用環境及分配",
+      "question": {
+        "q": "兩種能源轉型方案同樣減少排放，甲成本較低但使偏鄉交通更困難。如何比較比較完整？",
+        "correct": "同時考慮減排成本、地區分配與可行補救",
+        "wrong": [
+          "只看電價便可代表社會所有影響",
+          "只因方案有環境效益就忽略交通",
+          "只比較宣傳口號即可決定"
+        ],
+        "exp": "環境政策的分配後果會影響可接受性與實際成效。",
+        "subject": "公民",
+        "sub_topic": "環境及分配",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-環境及分配",
+        "template_id": "extra-2026-civ3-環境及分配-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-總體經濟-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用總體經濟",
+      "question": {
+        "q": "物價指數由100升至104，名目薪資由30000元升至30900元。實質購買力最可能如何？",
+        "correct": "下降，因薪資增幅3%低於物價增幅4%",
+        "wrong": [
+          "上升4%",
+          "完全不變",
+          "增加7%"
+        ],
+        "exp": "實質薪資近似以名目增幅扣通膨增幅比較，約下降1%。",
+        "subject": "公民",
+        "sub_topic": "總體經濟",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-7",
+            "name": "貨幣與金融"
+          }
+        ],
+        "concept_id": "civics-高中三年級-總體經濟",
+        "template_id": "extra-2026-civ3-總體經濟-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-總體經濟-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用總體經濟",
+      "question": {
+        "q": "一國在景氣低迷時增加政府公共支出，其他條件不變，最直接採取哪種工具？",
+        "correct": "擴張性財政政策",
+        "wrong": [
+          "緊縮性貨幣政策",
+          "只由民間企業決定的進口報價",
+          "直接變更外國稅率"
+        ],
+        "exp": "增加政府支出屬財政政策，可能刺激總需求。",
+        "subject": "公民",
+        "sub_topic": "總體經濟",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-7",
+            "name": "貨幣與金融"
+          }
+        ],
+        "concept_id": "civics-高中三年級-總體經濟",
+        "template_id": "extra-2026-civ3-總體經濟-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-總體經濟-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用總體經濟",
+      "question": {
+        "q": "某國名目GDP成長8%，GDP平減指數成長5%。實質GDP增幅近似多少？",
+        "correct": "約2.9%",
+        "wrong": [
+          "13%",
+          "8%",
+          "負5%"
+        ],
+        "exp": "實質成長約1.08除以1.05減一，約2.86%。",
+        "subject": "公民",
+        "sub_topic": "總體經濟",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-7",
+            "name": "貨幣與金融"
+          }
+        ],
+        "concept_id": "civics-高中三年級-總體經濟",
+        "template_id": "extra-2026-civ3-總體經濟-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

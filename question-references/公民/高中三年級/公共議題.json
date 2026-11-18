@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-公共議題-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用公共議題",
+      "question": {
+        "q": "某市為減少交通壅塞考慮收取擁擠費，通勤者與環境團體意見不同。何種討論最有助決策？",
+        "correct": "比較交通量、污染、所得負擔與替代運輸措施",
+        "wrong": [
+          "只看哪一方在社群留言較多",
+          "直接假設所有通勤者收入相同",
+          "只用最熱門的一句標語作政策依據"
+        ],
+        "exp": "公共決策需要多目標資料與受影響群體分析。",
+        "subject": "公民",
+        "sub_topic": "公共議題",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-公共議題",
+        "template_id": "extra-2026-civ3-公共議題-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-公共議題-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用公共議題",
+      "question": {
+        "q": "某學校有兩種手機管理方案，甲可減少干擾但限制緊急聯絡，乙彈性較高但管理成本增加。較合理的決策是？",
+        "correct": "設定學習、安全與管理等評估指標後比較方案",
+        "wrong": [
+          "只挑限制最多的方案就代表效果最好",
+          "只依單一學生的偏好判斷全校需求",
+          "只要兩方案有優缺點便不能決定"
+        ],
+        "exp": "政策選擇要清楚權衡目標及成本。",
+        "subject": "公民",
+        "sub_topic": "公共議題",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-公共議題",
+        "template_id": "extra-2026-civ3-公共議題-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-公共議題-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用公共議題",
+      "question": {
+        "q": "某公共議題討論中，兩方都引用不同年份的統計資料。最需要先做哪項工作？",
+        "correct": "統一時間、地區及統計定義後再比較",
+        "wrong": [
+          "只看數值較大的一方",
+          "把年份刪掉以免影響討論",
+          "認為兩方資料只要不同就都不可信"
+        ],
+        "exp": "可比性是運用資料進行公共辯論的前提。",
+        "subject": "公民",
+        "sub_topic": "公共議題",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-公共議題",
+        "template_id": "extra-2026-civ3-公共議題-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-國際貿易與政策-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用國際貿易與政策",
+      "question": {
+        "q": "某國提高進口家電關稅，本國家電廠獲益，但消費者支付更高價格。這顯示何種政策效果？",
+        "correct": "保護措施可能在產業與消費者之間造成利益移轉",
+        "wrong": [
+          "所有群體必定同時以相同比例受益",
+          "關稅不可能影響進口商品價格",
+          "關稅只有外交象徵而無經濟效果"
+        ],
+        "exp": "關稅影響價格與競爭，產生不同分配效果。",
+        "subject": "公民",
+        "sub_topic": "國際貿易與政策",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-國際貿易與政策",
+        "template_id": "extra-2026-civ3-國際貿易與政策-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-國際貿易與政策-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用國際貿易與政策",
+      "question": {
+        "q": "兩國簽訂降稅協議後，跨境交易增加，但部分勞工需轉職。較完整的分析是？",
+        "correct": "比較總體貿易利益及產業調整與勞動轉型成本",
+        "wrong": [
+          "只看出口總額就代表各勞工境遇",
+          "只因有人轉職就證明協議毫無利益",
+          "任何降稅協議都必定讓全部職業收入一樣"
+        ],
+        "exp": "貿易利益與調整成本常由不同群體承擔。",
+        "subject": "公民",
+        "sub_topic": "國際貿易與政策",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-國際貿易與政策",
+        "template_id": "extra-2026-civ3-國際貿易與政策-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-國際貿易與政策-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以經濟或公共事件情境應用國際貿易與政策",
+      "question": {
+        "q": "某國想降低關鍵原料供應風險，考慮與多國簽長期契約。這主要是在管理何種問題？",
+        "correct": "進口供應集中與國際政策變化風險",
+        "wrong": [
+          "只因契約較長就必定無價格風險",
+          "完全取消國際分工的需要",
+          "所有國家的原料品質必然相同"
+        ],
+        "exp": "多來源安排可增加韌性，但仍需評估成本與條件。",
+        "subject": "公民",
+        "sub_topic": "國際貿易與政策",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-國際貿易與政策",
+        "template_id": "extra-2026-civ3-國際貿易與政策-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
