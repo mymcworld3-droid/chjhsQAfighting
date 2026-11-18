@@ -68,7 +68,31 @@ app.post('/api/dungeon/room',(req,res)=>{
   if(action==='start'){
     if(uid!==room.hostUid||!Object.values(room.members).every(member=>member.ready))
       return res.status(409).json({ok:false,error:'not ready'});
-    room.status='assembled';room.revision++;publish();return success();
+    room.status='assembled';
+    Object.values(room.members).sort((a,b)=>a.joinedAtMs-b.joinedAtMs)
+      .forEach((member,i)=>{
+        member.position={...map.spawnPads[i]};
+        member.explorationStamina=100;member.moveSeq=0;member.lastMove=null;
+      });
+    room.revision++;publish();return success();
+  }
+  if(action==='move'){
+    if(room.status!=='assembled')return res.status(409).json({ok:false,error:'not assembled'});
+    const {dx,dy,step}=req.body,member=room.members[uid];
+    if(!Number.isInteger(dx)||!Number.isInteger(dy)||Math.abs(dx)+Math.abs(dy)!==1)
+      return res.status(400).json({ok:false,error:'invalid direction'});
+    if(step===member.moveSeq&&member.lastMove?.dx===dx&&member.lastMove?.dy===dy)
+      return success();
+    if(!Number.isSafeInteger(step)||step!==member.moveSeq+1)
+      return res.status(409).json({ok:false,error:'stale step'});
+    const next={x:member.position.x+dx,y:member.position.y+dy};
+    if(next.x<0||next.y<0||next.x>=map.width||next.y>=map.height||
+       !map.tiles[next.y*map.width+next.x])
+      return res.status(409).json({ok:false,error:'wall'});
+    if(member.explorationStamina<1)return res.status(409).json({ok:false,error:'no energy'});
+    member.position=next;member.explorationStamina--;member.moveSeq=step;
+    member.lastMove={dx,dy,step};room.revision++;publish();
+    return success();
   }
   res.status(400).json({ok:false,error:'unknown action'});
 });
@@ -180,10 +204,37 @@ async function main(){
       const canvas=document.querySelector('.dm-world'),r=canvas.getBoundingClientRect();
       return r.width>700&&r.height>300&&canvas.width>=r.width*1.9;
     });
+    // One move per player, each visible to both browsers through the same SSE.
+    const names={up:[0,-1],right:[1,0],down:[0,1],left:[-1,0]};
+    const moveFor=uid=>{
+      const p=room.members[uid].position;
+      return Object.entries(names).find(([,v])=>{
+        const x=p.x+v[0],y=p.y+v[1];
+        return x>=0&&y>=0&&x<map.width&&y<map.height&&
+          map.tiles[y*map.width+x]!==0;
+      })[0];
+    };
+    const firstMove=moveFor('a');
+    await a.page.locator('#dungeon-map-view [data-dm="'+firstMove+'"]').click();
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-energy]')
+      ?.textContent==='99 / 100');
+    await b.page.waitForFunction(()=>document.querySelector('#dungeon-lobby .dg-room-status')
+      ?.textContent.includes('已集結'));
+    assert.equal(room.members.a.moveSeq,1);
+    assert.equal(room.members.a.explorationStamina,99);
+    assert.equal(room.members.b.moveSeq,0);
+    const secondMove=moveFor('b');
+    await b.page.locator('#dungeon-map-view [data-dm="'+secondMove+'"]').click();
+    await b.page.waitForFunction(()=>document.querySelector('[data-dm-energy]')
+      ?.textContent==='99 / 100');
+    assert.equal(room.members.b.moveSeq,1);
+    assert.equal(room.members.a.explorationStamina,99);
+    assert.equal(room.members.b.explorationStamina,99);
     assert.deepStrictEqual(errors,[]);
-    assert.ok(!requests.some(action=>/move|attack|reward|damage/.test(action)));
+    assert.equal(requests.filter(action=>action==='move').length,2);
+    assert.ok(!requests.some(action=>/attack|reward|damage/.test(action)));
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two players, portrait/landscape, assembly, canvas, zoom, pinch, fit, follow, resize');
+    console.log('[Dungeon map browser] PASS: dual independent movement, shared state, stamina, portrait/landscape, pinch, fit and resize');
   }finally{
     await browser?.close();
     await new Promise(resolve=>server.close(resolve));
