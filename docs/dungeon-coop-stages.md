@@ -36,3 +36,25 @@
 - **本階段仍未開放副本地圖或戰鬥**。伺服器 `start` 只代表集結完成的 `assembled` 狀態，將於下一批地圖階段接入實際進場。
 
 測試：`node --test tests/dungeon-*.test.cjs`、`npm test`、`npm run check:module-versions`。
+
+## 第 5 階段：種子碼副本地圖 v1（生成與驗證）
+
+此階段僅交付**伺服器權威地圖資料**，第 6 階段才加入 Canvas 地圖檢視與拖移縮放，第 7 階段再加入玩家移動及障礙碰撞。**目前按下「確認集結出發」仍僅進入 assembled 隊伍狀態，沒有啟用戰鬥或獎勵。**
+
+### 地圖與資料契約
+
+- 純演算法 `dungeon-map-generator.cjs`：`generateDungeonLayout(seed)` 產生 `layoutVersion:1` 的可重現地圖；在 Node.js 與不同 Render instance 上同種子必然得到相同的 JSON。禁止修改 v1 的已發布生成規則；未來新增變化應開新版本。
+- 建立副本房間時由**伺服器**產生密碼學隨機的 24 碼十六進位 `mapSeed`，與 `mapVersion` 一起持久化於 Firebase C `dungeonRooms`。玩家不能指定／覆寫種子。邀請碼與地圖種子碼互相獨立。
+- `POST /api/dungeon/room` 的 `get-map`（body 僅需要 `roomId`），必須使用 Firebase A 登入 Token，且需要實際在該個未關閉、未過期的房間中。當玩家被踢、退出、房間解散或逾時，均不再開放讀取。
+- 此路徑不寫入地圖文件，也不消耗舊團本票券、體力或獎勵。多人玩家、斷線重連與不同後端 instance 可透過儲存的 `mapSeed` 重新取得完全一致的藍圖；舊版本已建立、沒有 `mapSeed` 的等待中房間以 `legacy:<roomId>` 派生固定種子，毋須遷移資料。
+- `publicRoom`／SSE 房間快照與公開招募列表**不透露** `mapSeed`；地圖內容只在隊員授權讀取時傳回。前端 `getDungeonMap(roomId)` 對應此 API，未在瀏覽器自行產生或覆寫地圖。
+- 地圖 `tiles` 為 row-major 長度 `width*height`：`0` 為不可通行牆面、`1` 為通道地面、`2` 為較開闊的地面；地圖四周必為牆，所有可通行格構成**同一個 4-方向連通分量**。
+- 11～12 × 9～10 個邏輯地格經放大形成約 **47～51 × 39～43** 的實際格網。生成器以隨機化深度優先迷宮樹抽取**非自交、蜿蜒主路線**（至少 5 個轉彎），另添 **2～4 條實際接通且有盡頭的支線**，預留不規則空地與至少 2 格寬的通道。
+- 地圖包含 `spawn`、四個不同的 `spawnPads`、`mainRoute`、`branches[]`（`entrance`／`end`／`route`）、`deepest`、`guardianSite`、`portalSite`、`biome` 與 `layoutId`。`guardianSite` 位在主線最深端，支線出口不會比它更深；`portalSite` 在最深端前方四格，供後續階段使用。
+- 四種地貌名稱：青竹幽徑／殘碑古道／霜嶺石窟／雲隱荒澤。現階段是**生成資料與地貌主題**，不是已完成美術或遊戲場景。
+
+### 驗收
+
+- `tests/dungeon-map-generator.test.cjs`：1,200 個種子碼的決定性、支線數量、轉彎數、牆邊界、主支線逐格連通、四人出生點、唯一連通分量、支線深度、地貌多樣性及不可變版本。
+- `tests/dungeon-map-api.test.cjs`：伺服器種子保存、請求端不能自訂種子、四名隊員／兩個 server instance 的地圖完全相同、未授權拒絕、集結後不更動、解散後不可讀、舊房間無種子時的穩定 fallback。
+- 專用 CI `Dungeon co-op synchronization acceptance` 會一併檢查 `dungeon-map-generator.cjs` 語法並執行所有 `tests/dungeon-*.test.cjs`。

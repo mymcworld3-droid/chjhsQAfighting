@@ -139,3 +139,13 @@ export function subscribeDungeonRoom(roomId,onRoom,onError,onConnection){
   };
 }
 export const heartbeatDungeonRoom=roomId=>request('heartbeat',{roomId});
+
+// Phase 5: fetch the server-authored blueprint. No browser-selected seed and
+// no local map regeneration; everyone in the same room receives one layout.
+export async function getDungeonMap(roomId){
+  const {map}=await request('get-map',{roomId});
+  if(map?.mode!=='dungeon'||map.layoutVersion!==1||
+      !Array.isArray(map.tiles)||map.tiles.length!==map.width*map.height)
+    throw new Error('副本地圖資料不完整，請重新整理後再試');
+  return map;
+}
