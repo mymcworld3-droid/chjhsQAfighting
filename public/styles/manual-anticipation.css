@@ -1,0 +1,150 @@
+/* Phase 8: controlled anticipation for the next skill-mastery threshold.
+ * A highlighted threshold is NOT the same as an unlocked skill.
+ * No global page animation or changes to combat/experience mechanics.
+ */
+#manual-training-root .manual-anticipation{
+  --ma-track:#77beb6;--ma-light:rgba(74,181,161,.19);
+  display:grid;gap:8px;min-width:0;padding:12px 13px;
+  border:1px solid rgba(116,166,141,.48);border-radius:11px;
+  background:linear-gradient(135deg,rgba(16,37,29,.88),rgba(13,29,25,.9));
+}
+#manual-training-root .manual-anticipation--near{
+  --ma-track:#ead18a;--ma-light:rgba(218,176,87,.19);
+  border-color:#c3aa69b0;
+  background:linear-gradient(120deg,rgba(53,52,32,.82),rgba(29,42,31,.84));
+}
+#manual-training-root .manual-anticipation--imminent{
+  --ma-track:#ffe09e;--ma-light:rgba(240,202,115,.29);
+  border-color:#e6c783;
+  box-shadow:inset 0 0 20px var(--ma-light),0 0 15px var(--ma-light);
+  background:linear-gradient(123deg,rgba(65,55,30,.91),rgba(32,38,28,.94));
+}
+#manual-training-root .manual-anticipation--realm{
+  --ma-track:#daaf80;--ma-light:rgba(217,166,86,.15);
+  border-color:rgba(219,155,91,.65);
+}
+#manual-training-root .manual-anticipation--pending{
+  --ma-track:#9cb0a4;
+}
+#manual-training-root .manual-anticipation-head,
+#manual-training-root .manual-anticipation-target{
+  display:flex;align-items:baseline;justify-content:space-between;gap:8px;min-width:0;
+}
+#manual-training-root .manual-anticipation-head>span{
+  display:inline-flex;align-items:baseline;gap:6px;
+  color:#c9d6c0;font-size:11px;font-weight:720;line-height:1.3;
+}
+#manual-training-root .manual-anticipation-head strong{
+  color:#f1d7a1;font-size:12px;font-weight:850;white-space:nowrap;
+}
+#manual-training-root .manual-anticipation-target{
+  color:#f7e8c8;font-size:13px;line-height:1.4;font-weight:750;
+  overflow-wrap:anywhere;
+}
+#manual-training-root .manual-anticipation-target>span:last-child{
+  flex:0 0 auto;color:var(--ma-track);font-variant-numeric:tabular-nums;
+}
+#manual-training-root .manual-anticipation-track{
+  height:10px;padding:2px;overflow:hidden;border-radius:25px;
+  border:1px solid rgba(143,161,128,.56);
+  background:#08160f;box-shadow:inset 0 2px 5px rgba(0,0,0,.35);
+}
+#manual-training-root .manual-anticipation-track>span{
+  display:block;height:100%;border-radius:20px;min-width:0;
+  background:linear-gradient(95deg,#427a65,var(--ma-track),#fff1ce);
+  box-shadow:0 0 9px var(--ma-light);
+  transition:width .55s ease-out;
+}
+#manual-training-root .manual-anticipation--imminent .manual-anticipation-track>span{
+  animation:manual-anticipation-glow 2.7s ease-in-out infinite alternate;
+}
+#manual-training-root .manual-anticipation p,
+#manual-training-root .manual-anticipation small{
+  margin:0;line-height:1.55;
+}
+#manual-training-root .manual-anticipation p{
+  font-size:11px;color:#d7ddc5;font-weight:680;
+}
+#manual-training-root .manual-anticipation small{
+  color:#aab8ab;font-size:10px;
+}
+#manual-training-root .manual-hero--approaching .manual-hero-track{
+  border-color:#e2c984;box-shadow:inset 0 1px 4px #0008,0 0 9px rgba(215,180,101,.18);
+}
+#manual-training-root .manual-hero--imminent .manual-hero-track{
+  border-color:#ffe4a3;box-shadow:0 0 15px rgba(245,202,117,.34),inset 0 1px 4px #0009;
+}
+#manual-training-root .manual-hero--imminent .manual-hero-progress{
+  background:linear-gradient(90deg,#4b9977,#dfbf79,#ffedba);
+}
+#manual-training-root .manual-hero-step.is-next.is-approaching:not(.is-unlocked){
+  border-color:#e7c981;
+  background:linear-gradient(155deg,rgba(68,55,33,.85),rgba(18,36,26,.93));
+  box-shadow:inset 0 0 11px rgba(240,207,129,.17),0 0 9px rgba(228,186,97,.12);
+}
+#manual-training-root .manual-hero-step.is-next.is-approaching .manual-hero-node{
+  border-color:#e8c78a;box-shadow:0 0 14px rgba(235,192,102,.29);
+}
+#manual-training-root .manual-hero-step.is-next.is-approaching .manual-hero-node-status{
+  color:#f0d19c;
+}
+/* The art remains dim/locked; only the surrounding rune is illuminated. */
+#manual-training-root .manual-library-breakthrough-tag{
+  position:absolute;z-index:2;left:9px;bottom:9px;
+  padding:5px 8px;border-radius:7px;
+  color:#fae4b5;background:rgba(52,40,21,.9);
+  border:1px solid #dec184;
+  font-size:10px;font-weight:800;pointer-events:none;
+  box-shadow:0 1px 12px rgba(239,193,108,.16);
+}
+#manual-training-root .manual-library-art-zone[data-manual-approach="imminent"]::before{
+  border-color:#f0d99f;box-shadow:0 0 21px rgba(237,197,116,.26);
+}
+#tactical-combat .tc-manual-breakthrough{
+  display:grid;gap:6px;min-width:0;
+  margin-top:9px;padding:9px 10px;
+  background:rgba(75,56,27,.52);border:1px solid rgba(230,193,115,.65);
+  border-radius:9px;color:#f7e1b5;
+}
+#tactical-combat .tc-manual-breakthrough--realm{
+  background:rgba(61,45,29,.75);border-color:rgba(215,158,94,.7);
+}
+#tactical-combat .tc-manual-breakthrough-title{
+  display:flex;gap:8px;align-items:baseline;justify-content:space-between;min-width:0;
+}
+#tactical-combat .tc-manual-breakthrough-title strong{
+  font-size:11px;color:#ffdf98;line-height:1.35;overflow-wrap:anywhere;
+}
+#tactical-combat .tc-manual-breakthrough-title small{
+  color:#ffeca9;white-space:nowrap;font-size:11px;font-variant-numeric:tabular-nums;
+}
+#tactical-combat .tc-manual-breakthrough-track{
+  height:8px;border-radius:20px;background:rgba(9,22,16,.95);
+  border:1px solid rgba(219,194,126,.52);padding:1px;overflow:hidden;
+}
+#tactical-combat .tc-manual-breakthrough-track>span{
+  display:block;height:100%;border-radius:15px;min-width:0;
+  background:linear-gradient(90deg,#6b9470,#e2bf76,#fff1b1);
+  box-shadow:0 0 9px rgba(235,190,112,.36);
+  transition:width .4s ease-out;
+}
+#tactical-combat .tc-manual-breakthrough>small{
+  font-size:10px;color:#d5c9ad;line-height:1.5;
+}
+@keyframes manual-anticipation-glow{
+  from{filter:brightness(.9)}
+  to{filter:brightness(1.2)}
+}
+@media(max-width:440px){
+  #manual-training-root .manual-anticipation{padding:9px 10px;gap:6px}
+  #manual-training-root .manual-anticipation-head strong{font-size:11px}
+  #manual-training-root .manual-anticipation-target{font-size:11px}
+  #manual-training-root .manual-anticipation p{font-size:10px}
+  #manual-training-root .manual-anticipation small{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  #manual-training-root .manual-anticipation-track>span,
+  #tactical-combat .tc-manual-breakthrough-track>span{
+    animation:none!important;transition:none!important;
+  }
+}
