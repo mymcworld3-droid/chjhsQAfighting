@@ -119,6 +119,17 @@
     }
     ctx.restore();
   }
+  function rasterize(plan,createCanvas){
+    if(!plan||typeof createCanvas!=='function')return null;
+    const canvas=createCanvas();
+    if(!canvas?.getContext)return null;
+    const cell=64;
+    canvas.width=plan.width*cell;canvas.height=plan.height*cell;
+    const ctx=canvas.getContext('2d');
+    if(!ctx)return null;
+    drawDetails(ctx,plan,{ox:0,oy:0,cell});
+    return canvas;
+  }
   function drawAtmosphere(ctx,plan,view,time=0,reduced=false,quality='normal'){
     if(!plan||!ctx||reduced)return;
     const {ox,oy,cell}=view,colors=themes[plan.theme];
@@ -155,5 +166,5 @@
     }
     ctx.restore();
   }
-  return Object.freeze({themes,themeFor,hash,prepare,idlePose,drawDetails,drawAtmosphere});
+  return Object.freeze({themes,themeFor,hash,prepare,idlePose,drawDetails,drawAtmosphere,rasterize});
 });
