@@ -6,6 +6,7 @@ import {manualRoomExp,battleBreakthroughEstimate,renderBattleBreakthroughEstimat
 import './tactical-rules.js?v=20261116-pve-v4';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261116-pve-v4';
 import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-pve-v4';
+import {BeastInspector} from './tactical-beast-inspector.js?v=20261118-phase1-v1';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
 
@@ -15,7 +16,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const rich=v=>window.quizMathRichText?.(String(v||''))||esc(v);
 const id=()=>globalThis.crypto.randomUUID();
 const localUser=()=>window.getCurrentUserData?.()||{};
-let root=null,keyboardGuard=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
+let root=null,keyboardGuard=null,renderer=null,beastInspector=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
 let attackChoice='attack',selectedManualSkill='',wheelIgnoreClickUntil=0;
 let battleLoadouts=null,loadoutFetchedFor='',loadoutFetchingFor='',loadoutMenuOpen=false;
 let manualRecapCache=null,manualRecapLoadingKey='',manualXpTimer=null,battleMasteryBaseline=null;
@@ -204,6 +205,10 @@ function ensure(){
     document.head.append(link);
   }
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
+  if(!document.getElementById('tactical-beast-style')){
+    const link=document.createElement('link');link.id='tactical-beast-style';link.rel='stylesheet';
+    link.href='/styles/tactical-beast-inspector.css?v=20261118-phase1-v1';document.head.append(link);
+  }
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261115-field-ink';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" class="tc-loadout-toggle" data-loadout-toggle aria-expanded="false" hidden>配置</button><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
@@ -232,6 +237,8 @@ function ensure(){
   root.addEventListener('click',event=>{
     const b=event.target.closest('button');if(!b||b.disabled)return;
     if(b.closest('.tc-quarter-action')&&Date.now()<wheelIgnoreClickUntil)return;
+    if(b.hasAttribute('data-beast-toggle')){loadoutMenuOpen=false;renderBattleLoadouts();}
+    if(beastInspector?.handleButton(b))return;
     if(b.dataset.mode){if(b.dataset.mode==='pve')void open('pve');else{mode='pvp';renderHub();}}
     else if(b.dataset.map){map=b.dataset.map;renderHub();}
     else if(b.hasAttribute('data-start'))void start();
@@ -287,7 +294,7 @@ function ensure(){
   root.addEventListener('pointerup',pairWhiteboardPointerUp);
   root.addEventListener('pointercancel',pairWhiteboardPointerUp);
   root.addEventListener('keydown',event=>{
-    if(event.key==='Escape'){event.preventDefault();if($('[data-pair-whiteboard-panel]:not(.hidden)')){closePairWhiteboard();return;}if($('[data-question-tool]:not([hidden])')){closeQuestionTool();return;}$('[data-intro-ack]')?close():modalOpen?hideModal():close();}
+    if(event.key==='Escape'){event.preventDefault();if(beastInspector?.isOpen()){beastInspector.dismiss();return;}if($('[data-pair-whiteboard-panel]:not(.hidden)')){closePairWhiteboard();return;}if($('[data-question-tool]:not([hidden])')){closeQuestionTool();return;}$('[data-intro-ack]')?close():modalOpen?hideModal():close();}
     if(event.key==='Tab'){
       const scope=$('[data-question-tool]:not([hidden])')||(modalOpen?$('[data-modal]'):root),focusable=[...scope.querySelectorAll('button:not(:disabled),input,textarea,canvas[tabindex],summary')].filter(el=>el.getClientRects().length);
       if(!focusable.length)return;const first=focusable[0],last=focusable.at(-1);
@@ -295,10 +302,16 @@ function ensure(){
       else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
     }
   });
+  beastInspector=new BeastInspector(root,{
+    getState:()=>state,
+    getRenderer:()=>renderer,
+    getManuals:()=>Manuals,
+    openDemo:species=>showBeastDemo(species)
+  });
 }
 function destroyRenderer(){renderer?.destroy();renderer=null;}
 function renderHub(){
-  destroyRenderer();root.classList.remove('tc-quarter-layout');
+  destroyRenderer();beastInspector?.reset();root.classList.remove('tc-quarter-layout');
   $('[data-title]').textContent='鬥法論道';$('[data-turn]').textContent='';
   $('[data-main]').className='tc-main tc-hub';
   $('[data-main]').innerHTML=`<div class="tc-hub-config">
@@ -673,7 +686,7 @@ function buildGame(){
     if(!opened||!state||!renderer)return;updateControls();
     if(!renderer.isAnimating&&state.status==='finished'&&!modalOpen)resultDialog();
     else if(!renderer.isAnimating&&!modalOpen&&state.quizRound)schedule();
-  });
+  },(actorUid,kind)=>beastInspector?.inspect(actorUid,kind));
 }
 function paint({preserveModal=false}={}){
   if(!state)return renderHub();syncEquippedAttack();if(!preserveModal)hideModal();
@@ -716,6 +729,7 @@ function paint({preserveModal=false}={}){
   }else $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
   renderer.update(state,uid,battlefieldMode(),selection);updateControls();updateClock();
+  beastInspector?.refresh();
   // Resume/open through room-state polling also prefetches before any click.
   if(!modalOpen)preloadTacticalQuestions();
   if(state.status==='finished'&&!renderer.isAnimating&&!modalOpen)resultDialog();
@@ -867,6 +881,7 @@ function updateClock(){
   if(state.status==='active'&&(state.deadlineMs&&now>=state.deadlineMs||answerExpired)&&!busy&&Date.now()>=deadlineSyncAt){deadlineSyncAt=Date.now()+retryMs;void sync();}
 }
 function showModal(html,{quiz=false,encounter=false}={}){
+  beastInspector?.dismiss();
   loadoutMenuOpen=false;renderBattleLoadouts();
   introDemo?.destroy();introDemo=null;
   modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}${encounter?' tc-encounter':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
@@ -877,6 +892,28 @@ function showModal(html,{quiz=false,encounter=false}={}){
   window.quizMathTypeset?.(mathFields.length?mathFields:modal);
 }
 function hideModal(){if(!root)return;window.currentTacticalQuiz=null;closePairWhiteboard();introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
+function showBeastDemo(species){
+  if(!state||state.mode!=='pve'||!R.MONSTERS[Number(species)])return;
+  const beast=R.monsterProfile(species);
+  showModal('<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="'+esc(beast.name)+
+    '" style="background-position:'+(species%5/4*100)+'% '+(Math.floor(species/5)/3*100)+'%"></div>'+
+    '<div><small>戰場靈獸 · 招式資料</small><h2>'+esc(beast.name)+'</h2>'+
+    '<small>第 '+beast.unlockStage+' 關起登場</small></div></div>'+
+    '<div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>'+esc(beast.attackName)+'</h3>'+
+    '<p>'+esc(beast.attackText)+'</p></section>'+
+    '<figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b>'+
+    '<span data-demo-mode>自動循環</span></div>'+
+    '<canvas role="img" aria-label="'+esc(beast.name)+'的移動與招式演練"></canvas>'+
+    '<figcaption data-demo-caption role="status" aria-live="polite"></figcaption>'+
+    '<div class="tc-demo-tools"><span>紅框：攻擊預告 · 金圈：修士</span>'+
+    '<button type="button" data-demo-toggle>暫停</button><button type="button" data-demo-next hidden>下一步</button>'+
+    '<button type="button" data-demo-replay>重播</button></div></figure>'+
+    '<dl class="tc-enemy-details"><dt>移動方式</dt><dd>'+esc(beast.moveText)+'</dd>'+
+    '<dt>應對方式</dt><dd>'+esc(beast.tip)+'</dd></dl></div>'+
+    '<div class="tc-enemy-footer"><button type="button" class="tc-primary" data-dismiss>返回戰場</button></div>',
+    {encounter:true});
+  introDemo=new EnemyDemo($('[data-enemy-demo]'),species);
+}
 function showEnemyIntro(error=''){
   const species=state.newEnemies[0],p=R.monsterProfile(species),remaining=state.newEnemies.length,
     beastRealm=Manuals.realmForStage(state.trial?.stage||1);
@@ -955,6 +992,7 @@ function accept(next,serial){
   const expDelta=manualXpDelta(state,next,uid,Manuals);
   const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
   if(state?.id!==next?.id){
+    beastInspector?.dismiss();
     battleLoadouts=null;loadoutFetchedFor='';loadoutMenuOpen=false;
     battleMasteryBaseline=null;
     clearLiveManualXp();
@@ -1675,6 +1713,7 @@ async function open(nextMode='pve'){
 }
 function close(){
   if(!root)return;
+  beastInspector?.dismiss();
   window.QATrialQuestion?.close();keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;manualRecapCache=null;manualRecapLoadingKey='';battleMasteryBaseline=null;clearLiveManualXp();clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
