@@ -5,7 +5,7 @@ const API=require('../dungeon-room-api.cjs').__test;
 
 function store(initial={}){
   const records=new Map(Object.entries(initial));let next=0,chain=Promise.resolve();
-  const doc=(collection,id)=>({id:id||'dungeon'+String(++next).padStart(8,'0'),key:collection+'/'+(id||'dungeon'+String(next).padStart(8,'0'))});
+  const doc=(collection,id)=>{const name=id||'dungeon'+String(++next).padStart(8,'0');const ref={id:name,key:collection+'/'+name};ref.get=async()=>snap(ref);return ref;};
   const snap=ref=>({id:ref.id,exists:records.has(ref.key),data:()=>structuredClone(records.get(ref.key))});
   return {records,collection(name){return {doc:id=>doc(name,id),get:()=>null};},
     runTransaction(fn){
