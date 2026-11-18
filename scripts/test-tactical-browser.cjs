@@ -253,6 +253,45 @@ async function main(){
     await view.screenshot({path:path.join(output,'phase2-ambience-bamboo.png')});
   }
 
+  async function liveCreatureCardChecks(view){
+    const initial=await read(view),key=service.ROOMS+'/'+initial.id;
+    const room=db.records.get(key),monster=room.actors.find(a=>a.bot&&a.hp>0);
+    assert.ok(monster,'stage must have at least one inspectable living creature');
+    const hp=monster.hp,startingRevision=room.revision;
+    await view.setViewportSize({width:393,height:852});
+    await view.locator('[data-beast-toggle]').click();
+    await view.locator('[data-beast-select]').first().click();
+    await view.locator('[data-beast-panel]').waitFor({state:'visible'});
+    await view.locator('[data-beast-demo]').focus();
+    const position=await view.evaluate(()=>{
+      const panel=document.querySelector('[data-beast-panel]');
+      panel.scrollTop=Math.min(48,Math.max(0,panel.scrollHeight-panel.clientHeight));
+      return panel.scrollTop;
+    });
+    monster.hp=Math.max(1,hp-1);room.revision++;
+    // A visibility sync goes through the real client-side acceptance path;
+    // the inspector is open, so the hidden sync control cannot be clicked.
+    await view.evaluate(()=>document.dispatchEvent(new Event('visibilitychange')));
+    await view.waitForFunction(expected=>
+      document.querySelector('[data-beast-panel] .tc-beast-hp-row b')
+        ?.textContent.trim().startsWith(expected+' /'),Math.max(1,hp-1));
+    assert.equal(await view.evaluate(()=>document.activeElement?.hasAttribute('data-beast-demo')),
+      true,'refresh preserves focus on the same inspector action');
+    const afterScroll=await view.evaluate(()=>document.querySelector('[data-beast-panel]').scrollTop);
+    assert.ok(Math.abs(afterScroll-position)<3,'refresh preserves card reading position');
+    assert.equal(await view.evaluate(()=>document.querySelector('.tc-main').inert),true);
+    monster.hp=hp;room.revision++;
+    await view.evaluate(()=>document.dispatchEvent(new Event('visibilitychange')));
+    await view.waitForFunction(expected=>
+      document.querySelector('[data-beast-panel] .tc-beast-hp-row b')
+        ?.textContent.trim().startsWith(expected+' /'),hp);
+    await view.locator('[data-beast-close]').last().click();
+    assert.equal(await view.evaluate(()=>document.querySelector('.tc-main').inert),false);
+    assert.equal(room.revision,startingRevision+2);
+    assert.equal((await read(view)).actors[0].stamina,initial.actors[0].stamina,
+      'refreshing live creature data cannot consume player energy');
+  }
+
   async function visualResilienceChecks(view){
     const initial=await read(view),key=service.ROOMS+'/'+initial.id,room=db.records.get(key);
     const original=structuredClone(room);
@@ -652,6 +691,7 @@ async function main(){
         await quick.locator('[data-intro-ack]').waitFor({state:'detached'});
       }
       await beastInspectorChecks(quick);
+      await liveCreatureCardChecks(quick);
       await ambientVisualChecks(quick);
       await visualResilienceChecks(quick);
       const validate=async()=>{
