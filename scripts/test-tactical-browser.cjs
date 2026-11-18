@@ -1014,6 +1014,50 @@ async function main(){
         await quick.screenshot({path:path.join(output,'boss-second-phase-portrait.png')});
         await quick.setViewportSize({width:844,height:390});await ratio(quick);
         await quick.screenshot({path:path.join(output,'boss-second-phase-landscape.png')});
+        // Zoom into the real stage-ten room: at least one living creature
+        // should move outside the camera, receiving a non-command edge badge.
+        await quick.evaluate(()=>{
+          const canvas=document.querySelector('#tactical-combat .tc-arena canvas');
+          const r=canvas.getBoundingClientRect();
+          canvas.dispatchEvent(new WheelEvent('wheel',{
+            deltaY:-2200,clientX:r.left+r.width*.45,
+            clientY:r.top+r.height*.48,bubbles:true,cancelable:true
+          }));
+        });
+        await quick.waitForFunction(()=>Number(document.querySelector('.tc-arena canvas')?.dataset.compassCount)>0);
+        const marker=await quick.evaluate(()=>{
+          const canvas=document.querySelector('.tc-arena canvas');
+          const items=JSON.parse(canvas.dataset.compassMarkers||'[]');
+          return items.find(item=>item[0]==='boss')||
+            items.find(item=>item[0]==='self')||items[0];
+        });
+        assert.ok(marker&&['self','boss','monster','objective'].includes(marker[0]),
+          'an offscreen creature must have a usable compass marker');
+        assert.ok(marker[1]>10&&marker[1]<1280-10,'edge marker stays inside the battle canvas');
+        await quick.screenshot({path:path.join(output,'phase7-offscreen-compass-landscape.png')});
+        const navigationBefore=await read(quick);
+        await quick.evaluate(item=>{
+          const canvas=document.querySelector('.tc-arena canvas'),r=canvas.getBoundingClientRect();
+          canvas.dispatchEvent(new MouseEvent('click',{
+            clientX:r.left+item[1],clientY:r.top+item[2],
+            bubbles:true,cancelable:true
+          }));
+        },marker);
+        if(marker[0]==='self'||marker[0]==='boss'){
+          await quick.waitForFunction(kind=>
+            !JSON.parse(document.querySelector('.tc-arena canvas')?.dataset.compassMarkers||'[]')
+              .some(item=>item[0]===kind),marker[0]);
+        }
+        assert.equal((await read(quick)).revision,navigationBefore.revision,
+          'clicking an offscreen camera compass must not submit a battle action');
+        assert.equal((await read(quick)).actors[0].stamina,navigationBefore.actors[0].stamina);
+        await quick.evaluate(()=>{
+          const canvas=document.querySelector('.tc-arena canvas');
+          canvas.dispatchEvent(new KeyboardEvent('keydown',{key:'0',bubbles:true}));
+        });
+        await quick.waitForFunction(()=>document.querySelector('.tc-arena canvas')?.dataset.compassCount==='0');
+        const shortcuts=await quick.locator('.tc-arena canvas').getAttribute('aria-keyshortcuts');
+        assert.match(shortcuts,/Home.*B.*N.*0/);
         const current=await read(quick);await quick.page.waitForTimeout(220);
         assert.equal((await read(quick)).revision,current.revision,
           'boss effects never commit a battle action');
