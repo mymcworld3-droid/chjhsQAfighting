@@ -107,7 +107,12 @@ function manualLoadout(manualRecord,trainingAccessScore){
 function playerActor(user,uid,selection,catalog,manualRecord){
   const trusted=trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalog),type=trusted.goldenCore?.type||'none';
   const branch=Rules.savedBranch(user,type).id;
+  const manualAttackBonus=Manuals.manualAttackBonus(manualRecord);
   return {...trusted,...manualLoadout(manualRecord,TrainingAccess.score(user)),
+    atk:trusted.atk+manualAttackBonus,
+    baseAtk:trusted.baseAtk+manualAttackBonus,
+    manualAttackBonus,
+    // Do not raise enemy scaling along with the new manuscript attack bonus.
     enemyScaleAttack:trusted.atk,core:type,branch,gender:user.storyProgressV1?.gender==='female'?'female':'male',shield:0};
 }
 function trialProgress(raw,seed){
@@ -179,7 +184,8 @@ function manualResponse(record,user,gold=Rules.num(user.stats?.gold)){
   // Use the same authoritative, artifact-free attack snapshot as a new
   // tactical trial. Browser projections may omit timed attack modifiers.
   const combatUser={...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}};
-  const battleAttack=trustedRaidPlayerSnapshot(combatUser,String(user.uid||''),{}).atk;
+  const battleAttack=trustedRaidPlayerSnapshot(combatUser,String(user.uid||''),{}).atk+
+    Manuals.manualAttackBonus(record);
   // The existing PvE progression automatically determines the NEXT stage.
   // Reveal only this numeric stage, not room seeds or selectable difficulties.
   const trialStage=Math.max(1,Math.min(1000000,Rules.num(user.tacticalTrialV1?.stage)||1));
@@ -269,7 +275,7 @@ async function updateLoadout(db,uid,input){
 async function upgradeManual(db,uid,input){
   const {bookId,targetLevel,expectedGold}=input||{};
   if(typeof bookId!=='string'||!Object.hasOwn(Manuals.BY_BOOK,bookId)||
-    !Number.isInteger(targetLevel)||targetLevel<2||targetLevel>10)throw error('功法升級資料無效',400);
+    !Number.isInteger(targetLevel)||targetLevel<2||targetLevel>Manuals.MAX_LEVEL)throw error('功法升級資料無效',400);
   const userRef=db.collection('users').doc(uid),manualRef=db.collection(MANUALS).doc(uid);
   return db.runTransaction(async tx=>{
     const [userSnap,record]=await Promise.all([tx.get(userRef),tx.get(manualRef)]);
