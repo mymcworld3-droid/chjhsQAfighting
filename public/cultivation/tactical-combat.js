@@ -4,10 +4,10 @@ import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-re
 import {manualXpDelta,renderManualXpToast} from './tactical-manual-xp-feedback.js';
 import {manualRoomExp,battleBreakthroughEstimate,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
 import './tactical-rules.js?v=20261116-pve-v4';
-import {TacticalRenderer} from './tactical-renderer.js?v=20261118-visual-phase3-v1';
+import {TacticalRenderer} from './tactical-renderer.js?v=20261118-visual-phase4-v1';
 import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
 import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-pve-v4';
-import {BeastInspector} from './tactical-beast-inspector.js?v=20261118-phase1-v1';
+import {BeastInspector} from './tactical-beast-inspector.js?v=20261118-phase4-focus-v1';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
 
@@ -302,9 +302,9 @@ function ensure(){
   root.addEventListener('pointerup',pairWhiteboardPointerUp);
   root.addEventListener('pointercancel',pairWhiteboardPointerUp);
   root.addEventListener('keydown',event=>{
-    if(event.key==='Escape'){event.preventDefault();if(beastInspector?.isOpen()){beastInspector.dismiss();return;}if($('[data-pair-whiteboard-panel]:not(.hidden)')){closePairWhiteboard();return;}if($('[data-question-tool]:not([hidden])')){closeQuestionTool();return;}$('[data-intro-ack]')?close():modalOpen?hideModal():close();}
+    if(event.key==='Escape'){event.preventDefault();if(beastInspector?.isOpen()){beastInspector.dismiss({restoreFocus:true});return;}if($('[data-pair-whiteboard-panel]:not(.hidden)')){closePairWhiteboard();return;}if($('[data-question-tool]:not([hidden])')){closeQuestionTool();return;}$('[data-intro-ack]')?close():modalOpen?hideModal():close();}
     if(event.key==='Tab'){
-      const scope=$('[data-question-tool]:not([hidden])')||(modalOpen?$('[data-modal]'):root),focusable=[...scope.querySelectorAll('button:not(:disabled),input,textarea,canvas[tabindex],summary')].filter(el=>el.getClientRects().length);
+      const scope=$('[data-question-tool]:not([hidden])')||(modalOpen?$('[data-modal]'):null)||beastInspector?.dialogElement()||root,focusable=[...scope.querySelectorAll('button:not(:disabled),input,textarea,canvas[tabindex],summary')].filter(el=>el.getClientRects().length);
       if(!focusable.length)return;const first=focusable[0],last=focusable.at(-1);
       if(event.shiftKey&&(document.activeElement===first||!scope.contains(document.activeElement))){event.preventDefault();last.focus();}
       else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
