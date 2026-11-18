@@ -31,7 +31,7 @@ function fixture(){
   const hub={isOnline:uid=>uid==='b',push:(uid,value)=>events.push({uid,value}),listen(){},remove(){}};
   const app={post:(url,fn)=>handlers.set(url,fn)};
   registerInvitationApi(app,{resolveA:()=>collections.a,
-    resolveC:()=>collections.db,hub,logger:{error(){}}});
+    resolveC:()=>({db:collections.db}),hub,logger:{error(){}}});
   async function send(uid,invitation,friendUids=['b','c']){
     let status=200,body;
     await handlers.get('/api/invitations/send')({
