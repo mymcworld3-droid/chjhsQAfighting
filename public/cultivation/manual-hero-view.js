@@ -44,7 +44,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
   const fmt=value=>Math.max(0,Math.round(Number(value)||0)).toLocaleString('zh-TW');
   const maxed=Number(book.level)>=20;
   const next=book.skills.find(skill=>!skill.unlocked);
-  const progressLabel=maxed?'功法已達最高等級':
+  const progressLabel=maxed?'靈紋完整':
     `${fmt(book.expInLevel)} / ${fmt(book.expToNext)} EXP`;
   const ownAttack=Math.max(1,Number(book.level)||1);
   const allAttack=Number.isFinite(Number(state.attackBonus))?
@@ -86,7 +86,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
       <i class="fa-solid fa-arrow-up-right-dots" aria-hidden="true"></i>
       ${needGold?'靈石不足 · ':''}升至 Lv. ${fmt(upgrade.targetLevel)}
       <span>${fmt(upgrade.gold)} 靈石</span></button>`
-    :`<span class="manual-hero-max-level">${maxed?'可繼續強化已領悟的招式':'熟練度持續累積中'}</span>`;
+    :maxed?'':`<span class="manual-hero-max-level">Lv.10 後需以功法技能擊殺靈獸累積 EXP</span>`;
 
   return {
     bookId:book.id,
@@ -114,7 +114,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
           <div class="manual-hero-mastery" data-manual-mastery-stage="${visual.stage}">
             <div class="manual-hero-mastery-heading">
               <strong>修煉熟練度</strong>
-              <span class="manual-hero-mastery-level">Lv. ${visual.level} / 20</span>
+              <span class="manual-hero-mastery-level">Lv. ${visual.level}</span>
             </div>
             <div class="manual-hero-mastery-summary">
               <span class="manual-hero-stage-badge">${esc(visual.label)}</span>
@@ -125,7 +125,9 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
             ${nextNote?`<small class="manual-hero-next-inline">${esc(nextNote)}</small>`:''}
             <small class="manual-hero-mastery-footnote">Lv.5、10 為招式等級門檻，真正領悟仍需符合修士境界。</small>
           </div>
-          <div class="manual-hero-actions">${action}<span class="manual-hero-tip">升級僅使用現有靈石與熟練度規則</span></div>
+          <div class="manual-hero-actions">${action}
+            ${upgrade?'<span class="manual-hero-tip">靈石只可升至 Lv.10；之後需戰鬥修煉</span>':''}
+          </div>
         </div>
       </div>
       <div class="manual-hero-path">
