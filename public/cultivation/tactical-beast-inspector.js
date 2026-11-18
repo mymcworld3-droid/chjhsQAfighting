@@ -49,7 +49,8 @@ export class BeastInspector {
     return battle?.mode==='pve'?(battle.actors||[]).filter(a=>a.bot):[];
   }
   active(){
-    return this.getState()?.mode==='pve'&&!!this.root.querySelector('.tc-main.tc-game canvas');
+    return this.getState()?.mode==='pve'&&!!this.root.querySelector('.tc-main.tc-game canvas')&&
+      this.root.querySelector('[data-modal]')?.hidden===true;
   }
   find(uid){return this.beasts().find(a=>a.uid===uid)||null;}
   isOpen(){return this.rosterOpen||!!this.pinnedUid;}
