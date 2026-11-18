@@ -369,6 +369,50 @@ async function main(){
     await ratio(view);
   }
 
+  async function threatReadabilityChecks(view){
+    const initial=await read(view),key=service.ROOMS+'/'+initial.id;
+    const room=db.records.get(key),original=structuredClone(room);
+    const hero=room.actors.find(a=>a.uid==='u1');
+    const wolf=room.actors.find(a=>a.bot&&a.hp>0);
+    assert.ok(hero&&wolf,'a living hero and an enemy are required');
+    await view.setViewportSize({width:393,height:852});
+    const near={x:hero.x,y:hero.y};
+    wolf.intent={version:2,kind:'attack',origin:{x:wolf.x,y:wolf.y},
+      target:near,cells:[near,near],text:'下次：鎖定攻擊'};
+    room.revision++;
+    await view.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
+    await view.waitForFunction(()=>document.querySelector('.tc-arena canvas')?.dataset.threatened==='true');
+    const visible=await view.evaluate(()=>{
+      const canvas=document.querySelector('.tc-arena canvas');
+      const live=document.querySelector('[data-threat-a11y]');
+      const src=window.QATacticalThreats;
+      return {module:!!src,cells:Number(canvas.dataset.threatCells),
+        description:canvas.getAttribute('aria-description'),alert:live?.textContent,
+        alive:!!live,hidden:getComputedStyle(live).clipPath};
+    });
+    assert.equal(visible.module,true,'battlefield loads the threat projection module');
+    assert.ok(visible.cells>=1,'a locked attack is visible on the current tile');
+    assert.match(visible.description,/紅色斜紋框/);
+    assert.match(visible.alert,/受到攻擊或場地危險預告/);
+    assert.match(visible.hidden,/inset/,'accessible danger narration is not a new visual panel');
+    await view.screenshot({path:path.join(output,'phase5-danger-mobile.png')});
+    await ratio(view);
+    // An enemy displaced after locking its intent cannot attack from a stale origin.
+    wolf.intent.origin={x:-4,y:-4};room.revision++;
+    await view.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
+    await view.waitForFunction(()=>document.querySelector('.tc-arena canvas')?.dataset.threatened==='false');
+    Object.assign(room,{actors:original.actors,objective:original.objective,
+      revision:room.revision+1});
+    await view.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
+    await view.waitForFunction(expected=>
+      document.querySelector('.tc-arena canvas')?.dataset.threatCells===String(expected),
+      await view.evaluate(room=>QATacticalThreats.derive(room,'u1').cells.length,initial));
+    assert.equal((await read(view)).actors[0].stamina,initial.actors[0].stamina,
+      'warning visuals never submit actions or consume stamina');
+    await view.setViewportSize({width:844,height:390});
+    await ratio(view);
+  }
+
   async function beastInspectorChecks(view){
     const initial=await read(view),living=initial.actors.filter(a=>a.bot&&a.hp>0),monster=living[0];
     assert.ok(monster,'first PvE stage has at least one living creature');
@@ -710,6 +754,7 @@ async function main(){
       await liveCreatureCardChecks(quick);
       await ambientVisualChecks(quick);
       await visualResilienceChecks(quick);
+      await threatReadabilityChecks(quick);
       const validate=async()=>{
         const layout=await quick.evaluate(()=>{
           const root=document.querySelector('#tactical-combat');
