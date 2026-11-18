@@ -253,6 +253,67 @@ async function main(){
     await view.screenshot({path:path.join(output,'phase2-ambience-bamboo.png')});
   }
 
+  async function visualResilienceChecks(view){
+    const initial=await read(view),key=service.ROOMS+'/'+initial.id,room=db.records.get(key);
+    const original=structuredClone(room);
+    await view.setViewportSize({width:393,height:852});
+    const dimensions=await view.evaluate(()=>{
+      const c=document.querySelector('#tactical-combat .tc-arena canvas');
+      const r=c.getBoundingClientRect();
+      return {pixels:c.width*c.height,ratio:c.width/c.height,
+        stageWidth:r.width,stageHeight:r.height,
+        deviceRatio:devicePixelRatio,
+        ambient:c.dataset.ambientTheme};
+    });
+    assert.ok(dimensions.pixels<=3300000+1,'canvas backing store respects memory budget');
+    assert.ok(dimensions.stageWidth>0&&dimensions.stageHeight>0);
+    assert.equal(dimensions.ambient,
+      await view.evaluate(room=>QATacticalAmbience.themeFor(room),initial));
+    await view.evaluate(()=>{
+      const c=document.querySelector('#tactical-combat .tc-arena canvas');
+      const r=c.getBoundingClientRect(),x=r.left+r.width*.43,y=r.top+r.height*.44;
+      const event=(type,id,clientX,clientY)=>c.dispatchEvent(new PointerEvent(type,{
+        pointerId:id,pointerType:'touch',isPrimary:id===601||id===602,
+        clientX,clientY,bubbles:true,cancelable:true
+      }));
+      // Missing the last move event must not turn a drag into an attack.
+      event('pointerdown',601,x,y);event('pointerup',601,x+24,y+13);
+      c.dispatchEvent(new MouseEvent('click',{clientX:x+24,clientY:y+13,bubbles:true}));
+      // A two-finger pinch must never turn into a grid command.
+      event('pointerdown',602,x-25,y);event('pointerdown',603,x+25,y);
+      event('pointermove',603,x+60,y+2);
+      event('pointerup',603,x+60,y+2);event('pointerup',602,x-25,y);
+      c.dispatchEvent(new MouseEvent('click',{clientX:x+60,clientY:y,bubbles:true}));
+    });
+    const afterGesture=await read(view);
+    assert.equal(afterGesture.revision,initial.revision,'dragging and pinching commit no actions');
+    assert.equal(afterGesture.actors[0].stamina,initial.actors[0].stamina);
+
+    // The authoritative room can advance while retaining the SAME room ID
+    // and tile dimensions. That must invalidate the cached habitat and camera.
+    room.trial={...room.trial,stage:(room.trial?.stage||1)+1,
+      layoutHash:'phase4-new-layout-same-dimensions',biome:'荒漠殘垣',title:'荒漠殘垣'};
+    room.terrain=13;
+    room.ground=Array(room.width*room.height).fill(13);
+    room.blocks=original.blocks.map(block=>({...block,kind:'rock'}));
+    room.revision=initial.revision+1;
+    await view.locator('[data-sync]').click();
+    await view.waitForFunction(()=>document.querySelector('.tc-arena canvas')?.dataset.ambientTheme==='desert');
+    assert.equal((await read(view)).id,initial.id);
+    await view.screenshot({path:path.join(output,'phase4-same-size-desert.png')});
+    Object.assign(room,{trial:original.trial,terrain:original.terrain,ground:original.ground,
+      blocks:original.blocks,revision:room.revision+1});
+    await view.locator('[data-sync]').click();
+    await view.waitForFunction(expected=>
+      document.querySelector('.tc-arena canvas')?.dataset.ambientTheme===expected,
+      await view.evaluate(room=>QATacticalAmbience.themeFor(room),initial));
+    const final=await read(view);
+    assert.equal(final.trial.stage,initial.trial.stage);
+    assert.equal(final.actors[0].stamina,initial.actors[0].stamina);
+    assert.equal(final.revision,initial.revision+2,'only fixture revisions changed');
+    await ratio(view);
+  }
+
   async function beastInspectorChecks(view){
     const initial=await read(view),living=initial.actors.filter(a=>a.bot&&a.hp>0),monster=living[0];
     assert.ok(monster,'first PvE stage has at least one living creature');
@@ -270,10 +331,30 @@ async function main(){
     assert.equal(await view.locator('[data-beast-dismiss]').isVisible(),true,'inspection catches accidental map taps');
     await view.screenshot({path:path.join(output,'beast-inspector-mobile.png')});
     await ratio(view);
+    // Keyboard focus must stay inside the open dialog, not wander to the
+    // action wheels behind it. Closing returns to its original trigger.
+    await view.locator('[data-beast-demo]').focus();
+    await view.page.keyboard.press('Tab');
+    assert.equal(await view.evaluate(()=>document.activeElement?.hasAttribute('data-beast-close')),true);
+    await view.page.keyboard.press('Shift+Tab');
+    assert.equal(await view.evaluate(()=>document.activeElement?.hasAttribute('data-beast-demo')),true);
+    await view.page.keyboard.press('Escape');
+    await view.locator('[data-beast-panel]').waitFor({state:'hidden'});
+    assert.equal(await view.evaluate(()=>document.activeElement?.hasAttribute('data-beast-toggle')),true,
+      'Escape restores the previous keyboard focus');
+    assert.equal(await view.evaluate(()=>document.querySelector('.tc-main').inert),false);
+    await view.locator('[data-beast-toggle]').click();
+    await view.locator('[data-beast-select]').first().click();
+    await view.locator('[data-beast-panel]').waitFor({state:'visible'});
+    assert.equal(await view.locator('[data-beast-demo]').count(),1);
     await view.locator('[data-beast-demo]').click();
     await view.locator('[data-enemy-demo] canvas').waitFor();
+    assert.equal(await view.evaluate(()=>document.querySelector('.tc-main').inert),true,
+      'question and creature demo modals retain their keyboard isolation');
     assert.equal(await view.locator('.tc-encounter h2').textContent(),beast.name);
     await view.locator('[data-dismiss]').click();
+    assert.equal(await view.evaluate(()=>document.querySelector('.tc-main').inert),false,
+      'closing a modal restores battlefield controls');
     await view.locator('[data-beast-panel]').waitFor({state:'hidden'});
     assert.equal(await view.locator('[data-beast-toggle]').isVisible(),true);
 
@@ -572,6 +653,7 @@ async function main(){
       }
       await beastInspectorChecks(quick);
       await ambientVisualChecks(quick);
+      await visualResilienceChecks(quick);
       const validate=async()=>{
         const layout=await quick.evaluate(()=>{
           const root=document.querySelector('#tactical-combat');
