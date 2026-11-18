@@ -7,7 +7,7 @@
   'use strict';
   // Each successful manual killing blow earns XP for that scripture.
   // Lv. 1 -> 2 costs 40 XP; each following level costs 20 XP more.
-  const EXP_PER_KILL=50,MAX_LEVEL=20,MAX_EXP=10*(MAX_LEVEL-1)*(MAX_LEVEL+2),MAX_SKILL_LEVEL=5;
+  const EXP_PER_KILL=50,MAX_LEVEL=20,MAX_GOLD_LEVEL=10,MAX_EXP=10*(MAX_LEVEL-1)*(MAX_LEVEL+2),MAX_SKILL_LEVEL=5;
   // Exactly the existing cultivation score cutoffs, with human-readable realm labels.
   const REALMS=Object.freeze([
     {name:'煉氣',score:1,stage:1,exp:20},
@@ -48,7 +48,8 @@
   }
   function upgradeQuote(raw){
     const {level,exp}=mastery(raw);
-    if(level>=MAX_LEVEL)return null;
+    // Gold can only bridge missing EXP to Lv.10; Lv.11–20 are earned in PvE.
+    if(level>=MAX_GOLD_LEVEL)return null;
     const targetLevel=level+1,targetExp=totalExpForLevel(targetLevel);
     return {targetLevel,targetExp,gold:(targetExp-exp)*2};
   }
@@ -289,5 +290,5 @@
     return Object.values(state.books).reduce((sum,row)=>sum+levelForExp(row.exp),0);
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,unlocked,manualAttackBonus,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_GOLD_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,unlocked,manualAttackBonus,publicState,starterFor});
 });
