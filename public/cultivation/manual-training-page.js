@@ -1,6 +1,7 @@
 import './manual-rules.js?v=20261116-loadout-presets-v1';
 import {bookArt,skillArt} from './manual-art.js';
 import {renderManualHero} from './manual-hero-view.js';
+import {nextManualExpedition,renderManualExpedition} from './manual-expedition-guide.js';
 import {renderManualLoadout,selectSkillForSlot} from './manual-loadout-view.js';
 import {filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary} from './manual-library-view.js';
 import {detectManualCelebration,renderManualCelebration} from './manual-celebration.js';
@@ -67,6 +68,12 @@ function ensure(){
     link.href='/styles/manual-anticipation.css?v=20261118-merged-mastery-v1';
     document.head.append(link);
   }
+  if(!document.getElementById('manual-expedition-guide-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='manual-expedition-guide-style';
+    link.href='/styles/manual-expedition-guide.css?v=20261118-expedition-phase10-v1';
+    document.head.append(link);
+  }
   return root;
 }
 async function request(url,body){
@@ -97,6 +104,7 @@ function featuredHeroMarkup(){
 function markup(expandedBooks){
   if(!current)return '<div class="manual-loading">正在讀取功法…</div>';
   const hero=featuredHeroMarkup();
+  const expedition=renderManualExpedition(nextManualExpedition(current,featuredBookId,Catalog),{esc,bookArt});
   const owned=current.library.filter(item=>item.owned).length;
   const equipped=current.loadouts?.[selectedLoadout]?.skillIds||[];
   const gold=Number(current.gold)||0;
@@ -165,7 +173,7 @@ function markup(expandedBooks){
       </div>
     </details>`;
   }).join('');
-  return `${hero}<div class="manual-summary"><div><b>${owned} 本</b><span>已獲得功法</span></div>
+  return `${hero}${expedition}<div class="manual-summary"><div><b>${owned} 本</b><span>已獲得功法</span></div>
       <div><b>${(current.equipped||[]).length} / 3</b><span>已裝備技能</span></div>
       <div><b>${gold.toLocaleString('zh-TW')}</b><span>可用靈石</span></div>
       <div class="manual-power-summary"><b>${rating?fmt(rating.total):'—'}</b><span>戰棋戰力</span>
@@ -369,6 +377,35 @@ function boot(){
       return;
     }
     const button=event.target.closest('button');if(!button)return;
+    if(button.dataset.manualExpeditionAction){
+      const guide=nextManualExpedition(current,featuredBookId,Catalog);
+      if(!guide||guide.bookId!==button.dataset.manualExpeditionId)return;
+      if(guide.action==='battle'){
+        const start=window.openTacticalCombat||window.startQuizFlow;
+        if(typeof start!=='function'){
+          paint('戰場尚未準備完成，請從宗門的「問道試煉」入口進入。');
+          return;
+        }
+        try{
+          Promise.resolve(start('pve')).catch(error=>{
+            if(visible())paint(error?.message||'無法進入問道試煉，請稍後重試。');
+          });
+        }catch(error){paint(error?.message||'無法進入問道試煉，請稍後重試。');}
+      }else if(guide.action==='loadout'){
+        selectedLoadout=guide.activeLoadout;
+        pickerSlot=null;paint();
+        requestAnimationFrame(()=>root?.querySelector('.manual-loadout')?.scrollIntoView({
+          behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
+          block:'start'
+        }));
+      }else{
+        requestAnimationFrame(()=>root?.querySelector('.manual-hero-path')?.scrollIntoView({
+          behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
+          block:'nearest'
+        }));
+      }
+      return;
+    }
     if(button.dataset.featureBook){
       if(current?.library.some(book=>book.owned&&book.id===button.dataset.featureBook)){
         featuredBookId=button.dataset.featureBook;
