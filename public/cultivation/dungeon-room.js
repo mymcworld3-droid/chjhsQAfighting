@@ -1,6 +1,7 @@
 // New dungeon co-op lobby transport. The server owns room membership and
 // invitation codes; no browser-side Firestore access or cached member state.
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
+import { readRoomEvents } from './data/room-event-stream.js';
 
 const ENDPOINT='/api/dungeon/room';
 async function request(action,payload={}){
@@ -64,3 +65,77 @@ export const kickDungeonMember=(roomId,targetUid)=>request('kick',{roomId,target
 export const disbandDungeonRoom=roomId=>request('disband',{roomId});
 export const assembleDungeonRoom=roomId=>request('start',{roomId});
 export const cancelDungeonAssembly=roomId=>request('cancel-start',{roomId});
+
+// Only one active subscription per visible dungeon lobby is necessary.
+// Credentials stay in the signed POST header, never in a URL or localStorage.
+export function subscribeDungeonRoom(roomId,onRoom,onError,onConnection){
+  if(!/^[A-Za-z0-9_-]{8,160}$/.test(String(roomId||'')))
+    throw new Error('副本房間編號無效');
+  const uid=getMainUser()?.uid;
+  if(!uid)throw new Error('請先登入');
+  let stopped=false,controller=null,retryTimer=null,retryDelay=1000;
+  let lastRevision=-1,connected=false;
+  const status=next=>{
+    if(connected!==next){connected=next;onConnection?.(next);}
+  };
+  async function connect(){
+    if(stopped)return;
+    const current=new AbortController();
+    controller=current;
+    let watchdog=setTimeout(()=>current.abort(),8000);
+    const progress=()=>{
+      clearTimeout(watchdog);
+      watchdog=setTimeout(()=>current.abort(),30000);
+      status(true);
+    };
+    try{
+      if(getMainUser()?.uid!==uid)
+        throw Object.assign(new Error('登入帳號已變更'),{status:401});
+      const response=await authenticatedMainFetch(ENDPOINT,{
+        method:'POST',
+        body:JSON.stringify({action:'subscribe',roomId}),
+        signal:current.signal
+      });
+      await readRoomEvents(response,packet=>{
+        if(stopped||getMainUser()?.uid!==uid){current.abort();return;}
+        const next=packet?.room;
+        if(!next||next.id!==roomId)return;
+        const revision=Number(next.revision);
+        if(!Number.isFinite(revision)||revision<=lastRevision)return;
+        lastRevision=revision;
+        retryDelay=1000;
+        onRoom?.(next);
+      },current.signal,progress);
+    }catch(error){
+      if(stopped)return;
+      if(getMainUser()?.uid!==uid){
+        stopped=true;
+        status(false);
+        onError?.(Object.assign(new Error('登入帳號已切換'),{status:401}));
+        return;
+      }
+      if(error?.name!=='AbortError')onError?.(error);
+      else onError?.(new Error('即時連線逾時，正在嘗試重新連線'));
+      if([401,403,404,410].includes(error?.status)){
+        stopped=true;status(false);return;
+      }
+    }finally{
+      clearTimeout(watchdog);
+      current.abort();
+      if(controller===current)controller=null;
+      status(false);
+      if(!stopped){
+        retryTimer=setTimeout(connect,retryDelay);
+        retryDelay=Math.min(30000,retryDelay*2);
+      }
+    }
+  }
+  void connect();
+  return ()=>{
+    stopped=true;
+    clearTimeout(retryTimer);retryTimer=null;
+    controller?.abort();controller=null;
+    status(false);
+  };
+}
+export const heartbeatDungeonRoom=roomId=>request('heartbeat',{roomId});
