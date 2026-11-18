@@ -618,6 +618,19 @@ export class TacticalRenderer{
         c.fillStyle='#56594c';c.fillRect(x+cell*.14,y+cell*.1,cell*.72,cell*.8);
       }
     }
+    // Tactical warnings, skill reach and target rings are ground markings.
+    // Paint their complete outlines before any actor sprite, status icon or
+    // HP bar so neither heroes nor beasts can be crossed by a range frame.
+    // The paint order is: terrain > warnings/selection > actors > hit VFX.
+    if(this.selection&&!animating)fill(this.selection,'#fff0','#fff1ba');
+    if(myTurn&&s.mode==='pve'&&!animating)
+      Targets.drawFocus(c,this.hoverPlan||this.targetPlan,{ox,oy,cell,width:s.width,height:s.height});
+    if(!animating&&s.mode==='pve'){
+      const viewport={ox,oy,cell,width:s.width,height:s.height};
+      Threats.drawContours(c,this.threatPlan,viewport);
+      if(myTurn&&this.mode==='move')
+        Threats.drawGuidance(c,this.threatPlan,viewport,reduced);
+    }
     if(scene)this.drawEffect(scene,progress,false);
     const actors=scene?A.sample(scene,progress):s.actors;
     const positions=actors.filter(R.alive).sort((a,b)=>a.y-b.y);
@@ -681,15 +694,6 @@ export class TacticalRenderer{
         Impact.drawPhaseWave(c,scene,progress,viewport);
       }
       this.drawEffect(scene,progress,true);
-    }
-    if(this.selection&&!animating)fill(this.selection,'#fff0','#fff1ba');
-    if(myTurn&&s.mode==='pve'&&!animating)
-      Targets.drawFocus(c,this.hoverPlan||this.targetPlan,{ox,oy,cell,width:s.width,height:s.height});
-    if(!animating&&s.mode==='pve'){
-      const viewport={ox,oy,cell,width:s.width,height:s.height};
-      Threats.drawContours(c,this.threatPlan,viewport);
-      if(myTurn&&this.mode==='move')
-        Threats.drawGuidance(c,this.threatPlan,viewport,reduced);
     }
     if(!frameless){c.strokeStyle='#d9c69380';c.lineWidth=1.5;c.strokeRect(ox+view.x*cell,oy+view.y*cell,cell*view.width,cell*view.height);}
     if(weight)c.restore();
