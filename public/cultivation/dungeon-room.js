@@ -149,3 +149,8 @@ export async function getDungeonMap(roomId){
     throw new Error('副本地圖資料不完整，請重新整理後再試');
   return map;
 }
+
+// Only the movement direction and expected per-player step are accepted.
+// Position and stamina come exclusively from the server room snapshot.
+export const moveDungeonMember=(roomId,dx,dy,step)=>
+  request('move',{roomId,dx,dy,step});
