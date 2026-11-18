@@ -756,3 +756,20 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
   white-space:nowrap;pointer-events:none;
   left:0;top:0;margin:0;padding:0;border:0;
 }
+
+/* Native iOS callout / text-selection blue overlay must not steal deliberate
+   map long-press inspection. Quiz dialogs keep their selection and inputs. */
+#tactical-combat .tc-main.tc-game,
+#tactical-combat .tc-main.tc-game .tc-arena,
+#tactical-combat .tc-main.tc-game .tc-arena>canvas,
+#tactical-combat.tc-quarter-layout .tc-quarter,
+#tactical-combat.tc-quarter-layout .tc-quarter *{
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+#tactical-combat .tc-main.tc-game .tc-arena>canvas{
+  touch-action:none!important;
+  overscroll-behavior:contain;
+}

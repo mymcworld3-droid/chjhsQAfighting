@@ -130,6 +130,10 @@ export class TacticalRenderer{
       if(this.hoverUid){this.hoverUid=null;this.onInspect(null,'hover');}
       if(!this.touches.size)this.setHoverPreview(null);
     };
+    // Suppress native touch selection/callouts without blocking our 500ms
+    // press-and-hold creature inspection.
+    this.onContextMenu=event=>event.preventDefault();
+    canvas.addEventListener('contextmenu',this.onContextMenu);
     canvas.addEventListener('pointerleave',this.onPointerLeave);
     canvas.addEventListener('pointerdown',this.onPointerDown);
     canvas.addEventListener('pointermove',this.onPointerMove);
@@ -352,7 +356,7 @@ export class TacticalRenderer{
     this.draw();return true;
   }
   resetView(){this.camera=Camera.create();this.focusBeastIndex=0;this.setHoverPreview(null);this.draw();}
-  destroy(){this.destroyed=true;this.canvas.removeEventListener('click',this.onCanvasClick);this.canvas.removeEventListener('keydown',this.onCanvasKeyDown);this.queue=[];this.scene=null;this.ambienceLayer=null;this.ambience=null;this.stageKey=null;clearTimeout(this.ambientTimer);this.ambientTimer=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.resize.disconnect();cancelAnimationFrame(this.frame);cancelAnimationFrame(this.gestureFrame);this.gestureFrame=0;document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const img of Object.values(this.images)){img.onload=null;img.onerror=null;}for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
+  destroy(){this.destroyed=true;this.canvas.removeEventListener('click',this.onCanvasClick);this.canvas.removeEventListener('keydown',this.onCanvasKeyDown);this.queue=[];this.scene=null;this.ambienceLayer=null;this.ambience=null;this.stageKey=null;clearTimeout(this.ambientTimer);this.ambientTimer=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.canvas.removeEventListener('contextmenu',this.onContextMenu);this.resize.disconnect();cancelAnimationFrame(this.frame);cancelAnimationFrame(this.gestureFrame);this.gestureFrame=0;document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const img of Object.values(this.images)){img.onload=null;img.onerror=null;}for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
   sprite(id,sx,sy,sw,sh,x,y,w,h){
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;

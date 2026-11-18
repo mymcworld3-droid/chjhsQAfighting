@@ -58,3 +58,9 @@ export const acceptDungeonInvitation=invite=>{
     throw new Error('副本邀請無效');
   return joinDungeonRoomByCode(invite.dungeonCode);
 };
+
+export const setDungeonReady=(roomId,ready)=>request('ready',{roomId,ready:!!ready});
+export const kickDungeonMember=(roomId,targetUid)=>request('kick',{roomId,targetUid});
+export const disbandDungeonRoom=roomId=>request('disband',{roomId});
+export const assembleDungeonRoom=roomId=>request('start',{roomId});
+export const cancelDungeonAssembly=roomId=>request('cancel-start',{roomId});

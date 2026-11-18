@@ -13,3 +13,12 @@
 - 副本不消耗舊團本入場券，不寫入舊戰場紀錄，也不發放獎勵。
 
 驗收：`node --test tests/dungeon-room-api.test.cjs tests/dungeon-public-recruitment.test.cjs tests/dungeon-friend-invitations.test.cjs`、`npm test`、`npm run check:module-versions`。
+
+## 第 3 階段：集結與隊長管理
+
+- 已加入 `ready`、`kick`、`disband`、`start`、`cancel-start` 的伺服器權威操作。僅隊員可以準備；踢人、解散及集結／取消集結僅隊長操作。相同準備值、重複開始與取消不重複增加版本。
+- `start` 會在全隊準備後，將房間狀態從 `waiting` 轉為 `assembled`。這只是**集結完成**，不代表已進入未實作的探索地圖；可由隊長 `cancel-start` 回到等待室，重新要求全員準備。集結中不接受新玩家加入。
+- 隊員在集結中仍可離開，剩餘隊伍重回等待室；隊長離開則轉交新隊長。解散房間在交易內撤銷各成員指向該房間的索引，並關閉房碼。
+- 隊員的境界／修為由伺服器主專案可信快照推算，不依賴前端提供。
+- 前端新 `public/cultivation/dungeon-lobby.js` 提供宗門「合作副本」入口、獨立集結畫面、隊員資訊與準備狀態、隊長管理、六碼複製與好友邀請、公開列表與快速組隊。暫以五秒間隔同步已開啟的等待室；第四階段會接正式即時串流。
+- 額外修正既有問道試煉 Canvas 的長按原生選取／藍色反白及 iOS callout；`touch-action:none` 只限制戰場互動區域，問答文字及輸入框仍可正常選取。
