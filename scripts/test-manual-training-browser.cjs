@@ -31,7 +31,15 @@ async function main(){
     await page.locator('[data-manual-jump-skill="wind-slash"]').click();
     await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
     assert.equal(await page.locator('.manual-focus-skill').count(),1);
+    assert.equal(await page.locator('[data-manual-jump-skill="wind-slash"]').getAttribute('aria-expanded'),'true');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('.manual-focus-skill').count(),0);
+    assert.equal(await page.locator('[data-manual-jump-skill="wind-slash"]').getAttribute('aria-expanded'),'false');
+    await page.locator('[data-manual-jump-skill="wind-slash"]').click();
+    await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
     assert.equal(await page.locator('.manual-summary').count(),0);
+    assert.equal(await page.locator('[data-manual-status]').evaluate(node=>
+      node.compareDocumentPosition(document.querySelector('.manual-loadout')) & Node.DOCUMENT_POSITION_FOLLOWING),4);
     assert.equal(await page.locator('.manual-hero-roster').count(),0);
     assert.equal(await page.locator('.manual-hero-goal').count(),0);
     // Next-stage expedition guidance is bound to the same authenticated state.
