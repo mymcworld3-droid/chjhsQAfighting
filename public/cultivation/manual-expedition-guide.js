@@ -30,11 +30,11 @@ export function nextManualExpedition(state,requestedBookId,rules) {
   const action=path==='ready'?'battle':path==='needs-loadout'?'loadout':'skills';
   const title=missingRealm?'先突破修士境界':
     anticipation?'朝下一招的門檻前進':
-    Number(book.level)>=10?'圓滿之後，精進已領悟招式':'持續鍛鍊功法';
+    Number(book.level)>=20?'功法圓滿，精進已領悟招式':Number(book.level)>=10?'第三招門檻已達，繼續淬鍊功法':'持續鍛鍊功法';
   const nextGoal=missingRealm?
     '功法等級已達成，仍需符合'+anticipation.realmName+'境門檻':
     anticipation?('距 Lv. '+anticipation.targetLevel+' 還差 '+formatAmount(anticipation.remaining)+' EXP'):
-    Number(book.level)>=10?'功法已達 Lv. 10':'可持續累積功法修煉經驗';
+    Number(book.level)>=20?'功法已達 Lv. 20':Number(book.level)>=10?'可繼續修煉至 Lv. 20，增加攻擊力':'可持續累積功法修煉經驗';
   return {
     bookId:book.id,bookName:book.name,school:book.school,
     stage,enemyRealm:enemyRealm.name,xpPerKill:Number(enemyRealm.exp),
