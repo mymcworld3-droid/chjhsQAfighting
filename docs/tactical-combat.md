@@ -230,5 +230,6 @@ node scripts/test-tactical-browser.cjs
 - 指標控制在觸控 `pointerup` 才收到超過 8px 位移、或遇到 `pointercancel`／`lostpointercapture` 時，一樣視為拖曳／取消操作，阻止後續合成 click 誤選地格。雙指縮放仍保持原本相機與地格映射。
 - 靈獸資訊卡和清單現在只在內容變更時替換 DOM，保留捲動位置與原本聚焦按鈕；對話框加入 `aria-modal`、Tab／Shift+Tab 焦點限制、Escape 返回開啟來源，展示資訊時背景戰場設為 inert。進入題目與演練的彈窗依舊保留背景 inert，不讓資訊卡的清理將其意外解除。
 - 離開戰場時清除場景快取與背景計時器，解除圖集圖片 onload/onerror 的監聽；已存在的低頻環境動畫及 reduced-motion 行為保持。
+- 高頻 `pointermove`、滾輪縮放與 `ResizeObserver` 現在以 `requestAnimationFrame` 合併重繪；一個顯示影格內即使收到多次拖曳事件，也只重畫一次，保留每次手勢累積的實際鏡頭位置。關閉時連預約中的手勢影格一併取消。
 
 驗證：`tests/tactical-ambience.test.cjs` 新增同尺寸不同關卡、同數量障礙、改動水面地格、回合／生命改動不刷新與 DPR 記憶體預算。`scripts/test-tactical-browser.cjs` 新增手機尺寸的拖曳／雙指捏合誤觸、同房間換場景、靈獸資訊卡鍵盤焦點、題目／招式示範背景隔離與畫布像素上限驗證。
