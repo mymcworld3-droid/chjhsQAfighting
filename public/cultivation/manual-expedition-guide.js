@@ -27,7 +27,7 @@ export function nextManualExpedition(state,requestedBookId,rules) {
     ?Math.max(0,Math.trunc(anticipation.remaining)):null;
   const kills=upcoming>0?Math.ceil(upcoming/enemyRealm.exp):null;
   const path=activeSkill?'ready':enabledSkills.length?'needs-loadout':'locked';
-  const action=path==='ready'?'battle':'loadout';
+  const action=path==='ready'?'battle':path==='needs-loadout'?'loadout':'skills';
   const title=missingRealm?'先突破修士境界':
     anticipation?'朝下一招的門檻前進':
     Number(book.level)>=10?'圓滿之後，精進已領悟招式':'持續鍛鍊功法';
@@ -56,7 +56,7 @@ export function renderManualExpedition(guide,{esc,bookArt}={}) {
     `<img src="${safe(cover)}" alt="" loading="lazy" decoding="async">`:
     '<i class="fa-solid fa-scroll" aria-hidden="true"></i>';
   const canBattle=guide.path==='ready';
-  const actionText=canBattle?'前往問道試煉':'前往配置招式';
+  const actionText=canBattle?'前往問道試煉':guide.action==='skills'?'查看招式解鎖條件':'前往配置招式';
   const caption=canBattle?
     `已在使用中的「${safe(guide.activeLoadoutName)}」裝備 ${safe(guide.activeSkillName)}`:
     guide.path==='locked'?'此功法目前沒有符合條件的已領悟招式，需先提升修煉進度或境界':
