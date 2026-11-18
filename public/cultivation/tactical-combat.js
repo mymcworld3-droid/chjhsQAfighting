@@ -514,7 +514,7 @@ function selectWheel(value){
 function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
   root.classList.toggle('tc-quarter-layout',state?.mode==='pve');
-  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-objective" data-objective role="status" aria-live="polite" hidden></div>
+  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><span data-threat-a11y class="tc-threat-a11y" role="status" aria-live="polite" aria-atomic="true"></span><div class="tc-objective" data-objective role="status" aria-live="polite" hidden></div>
       <section class="tc-boss-hud" data-boss-hud data-phase="1" data-boss-kind="rock" aria-label="首領生命與攻擊預告" hidden>
         <div class="tc-boss-line"><strong class="tc-boss-name" data-boss-name></strong><span class="tc-boss-phase" data-boss-phase>第一階段</span></div>
         <div class="tc-boss-health" data-boss-health role="progressbar" aria-label="首領生命">
