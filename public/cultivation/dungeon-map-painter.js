@@ -127,7 +127,7 @@ export function drawWorld(ctx,map,camera,width,height,{members=[],selfUid='',sho
   ctx.fillStyle=shadow;ctx.fillRect(0,0,width,height);
   return g;
 }
-export function drawMinimap(ctx,map,geometry,width,height){
+export function drawMinimap(ctx,map,geometry,width,height,{members=[],selfUid=''}={}){
   const p=BIOMES[map.biome]||BIOMES.ruins;
   ctx.fillStyle=p.void;ctx.fillRect(0,0,width,height);
   const scale=Math.min((width-10)/map.width,(height-10)/map.height);
@@ -146,6 +146,16 @@ export function drawMinimap(ctx,map,geometry,width,height){
     ctx.arc(ox+(point.x+.5)*scale,oy+(point.y+.5)*scale,Math.max(2,scale),0,Math.PI*2);
     ctx.fill();
   }
+  // Team positions are drawn from authoritative member snapshots.
+  members.slice(0,4).forEach((member,index)=>{
+    const position=member.position||map.spawnPads[index];
+    if(!position||position.x<0||position.y<0||position.x>=map.width||
+       position.y>=map.height||map.tiles[position.y*map.width+position.x]===0)return;
+    const x=ox+(position.x+.5)*scale,y=oy+(position.y+.5)*scale;
+    ctx.fillStyle=partyColors[index];ctx.beginPath();
+    ctx.arc(x,y,Math.max(1.6,member.uid===selfUid?scale*.95:scale*.7),
+      0,Math.PI*2);ctx.fill();
+  });
   const x0=clamp((-geometry.ox)/geometry.cell,0,map.width);
   const y0=clamp((-geometry.oy)/geometry.cell,0,map.height);
   const x1=clamp((geometry.width-geometry.ox)/geometry.cell,0,map.width);
