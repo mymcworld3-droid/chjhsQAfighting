@@ -221,3 +221,14 @@ node scripts/test-tactical-browser.cjs
 - `prefers-reduced-motion: reduce` 時，不加裝飾性衝擊粒子及鏡頭震動，也不延長回合操作。被動式首領血條與階段提示仍清楚可讀。
 
 檢驗：`tests/tactical-impact-presentation.test.cjs` 覆蓋純視覺事件、雙段命中、護盾命中、首領階段變化、Canvas 座標與資料不可變性；`scripts/test-tactical-browser.cjs` 用第 10 關真實規則生成的 2×2 首領測試手機直橫式 HUD、已提交階段切換、訊息展示與戰場版本／體力不變。
+
+## 第四階段：效能、輸入與響應式驗收（2026-11-18）
+
+- 場景快取改用 `Ambience.mapIdentity()`：包含關卡種子／布局、地形、地面圖集值與障礙物座標及類型，不再僅以 room ID 或障礙數量判斷。相同房間進入下一關、即使地圖大小與障礙物數量一樣，也會重新生成正確的靜態圖層。角色生命、移動、回合變動不會觸發此快取重建。
+- `Ambience.stageIdentity()` 獨立判斷戰場關卡的轉換：切換關卡時清空已排隊但屬於上一關的演出、清除手勢與選中目標，鏡頭回到新關卡初始視野；同關回合更新則保留玩家拖曳的鏡頭、不中斷既有技能演出。
+- `Ambience.pixelRatioFor()` 將畫布 backing store 限制在記憶體預算（低記憶體裝置約 220 萬 pixels；一般裝置約 330 萬 pixels）。可視 CSS 尺寸、地格 hit test、16:9／9:16 固定舞台不變；適合的手機仍盡可能保留高解析度。
+- 指標控制在觸控 `pointerup` 才收到超過 8px 位移、或遇到 `pointercancel`／`lostpointercapture` 時，一樣視為拖曳／取消操作，阻止後續合成 click 誤選地格。雙指縮放仍保持原本相機與地格映射。
+- 靈獸資訊卡和清單現在只在內容變更時替換 DOM，保留捲動位置與原本聚焦按鈕；對話框加入 `aria-modal`、Tab／Shift+Tab 焦點限制、Escape 返回開啟來源，展示資訊時背景戰場設為 inert。進入題目與演練的彈窗依舊保留背景 inert，不讓資訊卡的清理將其意外解除。
+- 離開戰場時清除場景快取與背景計時器，解除圖集圖片 onload/onerror 的監聽；已存在的低頻環境動畫及 reduced-motion 行為保持。
+
+驗證：`tests/tactical-ambience.test.cjs` 新增同尺寸不同關卡、同數量障礙、改動水面地格、回合／生命改動不刷新與 DPR 記憶體預算。`scripts/test-tactical-browser.cjs` 新增手機尺寸的拖曳／雙指捏合誤觸、同房間換場景、靈獸資訊卡鍵盤焦點、題目／招式示範背景隔離與畫布像素上限驗證。
