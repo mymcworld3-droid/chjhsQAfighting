@@ -6,6 +6,7 @@ on:
     paths:
       - 'dungeon-room-*.cjs'
       - 'dungeon-map-generator.cjs'
+      - 'dungeon-movement.cjs'
       - 'dungeon-room-api.cjs'
       - 'invitation-api.cjs'
       - 'public/cultivation/dungeon-*.js'
@@ -34,6 +35,7 @@ jobs:
         run: |
           node --check dungeon-room-api.cjs
           node --check dungeon-map-generator.cjs
+          node --check dungeon-movement.cjs
           node --check dungeon-room-stream.cjs
           node --check invitation-api.cjs
       - name: Check map ES modules parse
