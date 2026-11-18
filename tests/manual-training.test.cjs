@@ -24,7 +24,7 @@ test('each of the six manuals has exactly three skills unlocked at Lv.1 / Lv.5 /
 
 test('XP required increases with every level and exact level boundaries are respected',()=>{
   assert.deepEqual([1,2,3,4,5].map(Catalog.xpForNextLevel),[40,60,80,100,120]);
-  for(let level=1;level<=100;level++){
+  for(let level=1;level<=Catalog.MAX_LEVEL;level++){
     const next=Catalog.totalExpForLevel(level);
     assert.equal(Catalog.levelForExp(next),level);
     assert.equal(Catalog.mastery(next).expInLevel,0);
@@ -35,6 +35,14 @@ test('XP required increases with every level and exact level boundaries are resp
   assert.equal(Catalog.totalExpForLevel(10),1080);
   assert.equal(Catalog.levelForExp(279),4);
   assert.equal(Catalog.levelForExp(1079),9);
+  assert.equal(Catalog.MAX_LEVEL,20);
+  assert.equal(Catalog.totalExpForLevel(20),4180);
+  assert.equal(Catalog.levelForExp(4179),19);
+  assert.equal(Catalog.levelForExp(4180),20);
+  assert.equal(Catalog.levelForExp(100000000),20);
+  assert.equal(Catalog.mastery(4180).progress,100);
+  assert.equal(Catalog.mastery(4180).expToNext,0);
+  assert.equal(Catalog.mastery(100000000).exp,4180);
   const raw={school:'sword',books:{'sword-wind':{exp:280}},
     equipped:['wind-slash','wind-step','wind-thousand']};
   assert.deepEqual(Catalog.normalize(raw).equipped,['wind-slash','wind-step']);
@@ -107,7 +115,9 @@ test('manual mastery charges two gold per missing EXP and honors the quoted pric
   }
   assert.equal(db.records.get(userRef).stats.gold,7);
   assert.equal(bookRecord(db).books['sword-wind'].exp,40);
-  assert.equal(Catalog.upgradeQuote(Catalog.totalExpForLevel(10)),null);
+  assert.deepEqual(Catalog.upgradeQuote(Catalog.totalExpForLevel(10)),
+    {targetLevel:11,targetExp:1300,gold:440});
+  assert.equal(Catalog.upgradeQuote(Catalog.totalExpForLevel(20)),null);
 });
 
 test('skill upgrades preserve manual XP and other skills and charge concurrent retries once',async()=>{
@@ -609,4 +619,73 @@ test('manual training UI omits redundant preset instructions and power calculati
   assert.match(source,/data-loadout-select/);
   assert.match(source,/manual-slot-grid/);
   assert.match(source,/manual-power-summary/);
+});
+
+test('manual realm tiers are explicit and independent of original skill/possession requirements',()=>{
+  const tiers=Object.fromEntries(Catalog.BOOKS.map(book=>[book.id,book.tierRealm]));
+  assert.deepEqual(tiers,{
+    'sword-wind':'煉氣','sword-flight':'築基','sword-sky':'元嬰',
+    'body-rock':'煉氣','body-dragon':'元嬰','body-tiger':'築基'
+  });
+  assert.deepEqual(Catalog.BY_BOOK['sword-sky'].skills.map(skill=>skill.realmRequired),[6,28,68]);
+  const publicBook=Catalog.publicState({books:{'sword-sky':{exp:0}}}).library[0];
+  assert.equal(publicBook.tierRealm,'元嬰');
+  assert.equal(publicBook.skills[0].realmReady,false);
+});
+
+test('every owned manual level grants exactly one attack; no unowned or double-counted bonus',()=>{
+  const record={books:{
+    'sword-wind':{exp:0},
+    'body-rock':{exp:Catalog.totalExpForLevel(7)},
+    'sword-sky':{exp:Catalog.totalExpForLevel(20)},
+    unknown:{exp:99999}
+  }};
+  assert.equal(Catalog.manualAttackBonus(record),28);
+  assert.equal(Catalog.manualAttackBonus(record),28,'read-only recomputation is idempotent');
+  assert.equal(Catalog.publicState(record).attackBonus,28);
+  assert.equal(Catalog.manualAttackBonus(null),0);
+  const raw=JSON.stringify(record);
+  Catalog.manualAttackBonus(record);
+  assert.equal(JSON.stringify(record),raw);
+});
+
+test('server adds the manuscript bonus to actual battle attack and keeps existing enemy scaling',async()=>{
+  const db=database(),user=db.records.get('users/u1');
+  await API.chooseSchool(db,'u1',{school:'sword'});
+  const record=bookRecord(db);
+  record.books['sword-wind'].exp=Catalog.totalExpForLevel(10);
+  record.books['sword-sky']={exp:Catalog.totalExpForLevel(20)};
+  const snapshot=await API.manualsState(db,'u1');
+  assert.equal(snapshot.attackBonus,30);
+  assert.equal(snapshot.library.find(b=>b.id==='sword-sky').tierRealm,'元嬰');
+  const actor=API.playerActor(user,'u1',{}, {},record);
+  const baseline=API.playerActor(user,'u1',{}, {},null);
+  assert.equal(actor.atk-baseline.atk,30);
+  assert.equal(actor.baseAtk-baseline.baseAtk,30);
+  assert.equal(actor.enemyScaleAttack,baseline.enemyScaleAttack);
+  assert.equal(snapshot.battleAttack,actor.atk);
+  assert.equal(user.stats.attack,db.records.get('users/u1').stats.attack,
+    'raw player attack is not modified');
+});
+
+test('level-19 to level-20 manual upgrade works and further upgrade is rejected',async()=>{
+  const db=database(),user=db.records.get('users/u1');
+  await API.chooseSchool(db,'u1',{school:'sword'});
+  bookRecord(db).books['sword-wind'].exp=Catalog.totalExpForLevel(19);
+  user.stats.gold=5000;
+  const initial=await API.manualsState(db,'u1');
+  const price=initial.library[0].upgrade;
+  assert.deepEqual(price,{targetLevel:20,targetExp:4180,gold:800});
+  assert.equal(initial.library[0].level,19);
+  const result=await API.upgradeManual(db,'u1',{
+    bookId:'sword-wind',targetLevel:20,expectedGold:800
+  });
+  assert.equal(result.library[0].level,20);
+  assert.equal(result.library[0].upgrade,null);
+  assert.equal(result.attackBonus,20);
+  assert.equal(result.gold,4200);
+  assert.equal(bookRecord(db).books['sword-wind'].exp,4180);
+  await assert.rejects(API.upgradeManual(db,'u1',{
+    bookId:'sword-wind',targetLevel:21,expectedGold:0
+  }),/功法升級資料無效/);
 });
