@@ -17,13 +17,13 @@ const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/wo
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
       const img=new Image();img.onload=()=>this.draw();img.onerror=()=>this.draw();img.src=url;this.images[id]=img;
     }
-    this.resize=new ResizeObserver(()=>this.draw());this.resize.observe(canvas);
+    this.resize=new ResizeObserver(()=>this.requestDraw());this.resize.observe(canvas);
 
     // Pointer Events support one-finger/map drag, two-finger pinch and
     // mouse drag. A dragged gesture is NEVER interpreted as a grid command.
@@ -76,13 +76,13 @@ export class TacticalRenderer{
           this.camera=Camera.pan(this.camera,next.x-this.pinch.x,next.y-this.pinch.y,w,h,v);
           this.camera=Camera.zoomAt(this.camera,this.camera.zoom*next.gap/this.pinch.gap,next.x,next.y,w,h,v);
           this.pinch=next;this.dragging=true;
-          this.draw();e.preventDefault();
+          this.requestDraw();e.preventDefault();
         }
       }else{
         if(Math.hypot(after.x-before.startX,after.y-before.startY)>7)this.dragging=true;
         if(this.dragging){
           this.camera=Camera.pan(this.camera,deltaX,deltaY,w,h,v);
-          this.draw();e.preventDefault();
+          this.requestDraw();e.preventDefault();
         }
       }
     };
@@ -109,7 +109,7 @@ export class TacticalRenderer{
       e.preventDefault();
       const p=point(e),{w,h}=size();
       this.camera=Camera.zoomAt(this.camera,this.camera.zoom*Math.exp(-e.deltaY*.0013),p.x,p.y,w,h,view());
-      this.draw();
+      this.requestDraw();
     };
     this.onPointerLeave=()=>{
       if(this.hoverUid){this.hoverUid=null;this.onInspect(null,'hover');}
@@ -131,6 +131,14 @@ export class TacticalRenderer{
       if(!this.state||this.preview||this.isAnimating||this.paused)return;const delta={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[event.key];
       if(!delta)return;event.preventDefault();const p=this.selection||this.state.actors.find(a=>a.uid===this.uid)||{x:0,y:0};
       const next={x:p.x+delta[0],y:p.y+delta[1]};if(R.inside(this.state,next))this.onSelect(next);
+    });
+  }
+  requestDraw(){
+    // Pointermove and ResizeObserver may fire far faster than the display.
+    // Coalesce those updates without delaying input or tactical state changes.
+    if(this.destroyed||this.gestureFrame)return;
+    this.gestureFrame=requestAnimationFrame(()=>{
+      this.gestureFrame=0;this.draw();
     });
   }
   clearLongPress(){
@@ -209,7 +217,7 @@ export class TacticalRenderer{
   }
   setPaused(value){if(this.paused===value)return;this.paused=value;this.draw();}
   resetView(){this.camera=Camera.create();this.draw();}
-  destroy(){this.destroyed=true;this.queue=[];this.scene=null;this.ambienceLayer=null;this.ambience=null;this.stageKey=null;clearTimeout(this.ambientTimer);this.ambientTimer=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.resize.disconnect();cancelAnimationFrame(this.frame);document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const img of Object.values(this.images)){img.onload=null;img.onerror=null;}for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
+  destroy(){this.destroyed=true;this.queue=[];this.scene=null;this.ambienceLayer=null;this.ambience=null;this.stageKey=null;clearTimeout(this.ambientTimer);this.ambientTimer=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.resize.disconnect();cancelAnimationFrame(this.frame);cancelAnimationFrame(this.gestureFrame);this.gestureFrame=0;document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const img of Object.values(this.images)){img.onload=null;img.onerror=null;}for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
   sprite(id,sx,sy,sw,sh,x,y,w,h){
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;
@@ -391,6 +399,7 @@ export class TacticalRenderer{
   }
   draw(){
     cancelAnimationFrame(this.frame);this.frame=0;
+    cancelAnimationFrame(this.gestureFrame);this.gestureFrame=0;
     clearTimeout(this.ambientTimer);this.ambientTimer=null;
     if(this.destroyed||!this.state)return;
     const now=performance.now();
