@@ -40,8 +40,8 @@ test('milestone thresholds exactly match the canonical server mastery formula',(
 });
 
 test('progress rises from training to near to imminent without unlocking skills',()=>{
-  assert.equal(hint(209).status,'training');
-  assert.equal(hint(210).status,'near');
+  assert.equal(hint(208).status,'training');
+  assert.equal(hint(209).status,'near');
   assert.equal(hint(251).status,'imminent');
   assert.equal(hint(251).remaining,29);
   assert.equal(hint(251).targetLevel,5);
