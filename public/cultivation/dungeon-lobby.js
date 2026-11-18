@@ -17,7 +17,7 @@ const roomCode=value=>String(value||'').trim().toUpperCase().replace(/[^A-Z2-9]/
 const safeRoomId=value=>/^[A-Za-z0-9_-]{8,160}$/.test(String(value||''))?String(value):'';
 const nameOf=member=>member?.name||'無名修士';
 const localUser=()=>getMainUser()?.uid||'';
-let entry,root,body,notice,open=false,room=null,account='',pending=false,refreshing=false;
+let entry,root,body,notice,open=false,room=null,account='',pending=false,refreshing=false,initializing=false;
 let list=[],listLoading=false,lastListAt=0,clock=null,requestSerial=0,initialFocus=null,roomRevision=-1;
 let streamStop=null,streamRoomId='',streamConnected=false,heartbeatBusy=false,lastHeartbeatAt=0;
 let fallbackFailures=0,nextFallbackAt=0,roomViewSignature='';
@@ -197,7 +197,13 @@ function renderRoom(){
 function render(){
   if(!root||!open)return;
   const top=body.scrollTop;
-  if(room)renderRoom();else renderHome();
+  if(initializing){
+    // Keep invitation/code inputs out of the DOM until the first reconnect
+    // resolves; otherwise its late response can replace a code being typed.
+    body.innerHTML='<div class="dg-intro" role="status"><div><h3>正在恢復副本隊伍…</h3>'+
+      '<p>確認帳號及隊伍狀態後，即可建立或加入隊伍。</p></div></div>';
+  }else if(room)renderRoom();
+  else renderHome();
   markBusy(pending);
   body.scrollTop=top;
 }
@@ -362,7 +368,7 @@ async function openLobby(){
      window.isXiuxianBattleInviteBlocked?.()||window.isXiuxianRaidInviteBlocked?.()){
     window.showToast?.('請先離開目前的戰鬥，再進入合作副本');return;
   }
-  mount();account=uid;open=true;requestSerial++;
+  mount();account=uid;open=true;requestSerial++;initializing=true;
   clearRoom();list=[];listLoading=false;refreshing=false;heartbeatBusy=false;lastListAt=0;pending=false;
   emptyRoomCheckAt=Date.now();emptyRoomBusy=false;
   initialFocus=document.activeElement;
@@ -373,7 +379,7 @@ async function openLobby(){
   try{
     const result=await reconnectDungeonRoom();
     if(!validSession(uid,serial))return;
-    announce('');
+    initializing=false;announce('');
     if(result.room){
       acceptRoom(result.room);
       void sendHeartbeat({force:true});
@@ -382,20 +388,20 @@ async function openLobby(){
       void refreshList({force:true});
     }
   }catch(error){
-    if(validSession(uid,serial)){announce(error?.message||'目前無法連線至副本隊伍');render();}
+    if(validSession(uid,serial)){initializing=false;announce(error?.message||'目前無法連線至副本隊伍');render();}
   }
 }
 function close(){
   hideDungeonMap();
   if(!open)return;
-  open=false;requestSerial++;clearInterval(clock);clock=null;
+  open=false;requestSerial++;initializing=false;clearInterval(clock);clock=null;
   stopRoomStream();
   root.hidden=true;announce('');
   const target=initialFocus;initialFocus=null;
   if(target?.isConnected)target.focus({preventScroll:true});
 }
 async function mutate(operation,{clear=false,message=''}={}){
-  if(pending||!open||!account)return;
+  if(pending||initializing||!open||!account)return;
   const uid=account,serial=requestSerial;
   markBusy(true);announce('');
   try{
