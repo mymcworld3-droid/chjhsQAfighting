@@ -236,9 +236,6 @@
 #manual-training-root .manual-hero-step.is-level-locked .manual-hero-node-status{
   color:#aab8b0;
 }
-#manual-training-root .manual-hero--tier-complete .manual-hero-level b{
-  color:#fff0ad;text-shadow:0 0 16px var(--mh-glow);
-}
 #manual-training-root .manual-library-art-zone[data-manual-stage="seed"]{
   --mv-card-brightness:.55;
 }
