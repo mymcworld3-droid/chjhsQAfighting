@@ -302,12 +302,13 @@ class DungeonMapView{
       else if(!event.shiftKey&&event.target===last){event.preventDefault();first?.focus();}
       return;
     }
-    if(!this.map||event.target.closest('button'))return;
+    if(!this.map)return;
     const walking={w:[0,-1],a:[-1,0],s:[0,1],d:[1,0],
       W:[0,-1],A:[-1,0],S:[0,1],D:[1,0]};
     if(walking[event.key]&&!event.ctrlKey&&!event.altKey&&!event.metaKey){
       event.preventDefault();void this.move(...walking[event.key]);return;
     }
+    if(event.target.closest('button'))return;
     const moves={ArrowLeft:[45,0],ArrowRight:[-45,0],ArrowUp:[0,45],ArrowDown:[0,-45]};
     if(moves[event.key]){
       event.preventDefault();this.follow=false;
