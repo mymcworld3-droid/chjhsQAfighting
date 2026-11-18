@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-滴定與圖表-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用滴定與圖表觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "以0.10 M NaOH滴定10.0 mL、0.20 M HCl，恰達當量點需多少mL NaOH？",
+        "correct": "20.0 mL",
+        "wrong": [
+          "10.0 mL",
+          "40.0 mL",
+          "5.0 mL"
+        ],
+        "exp": "HCl的莫耳數0.20×0.0100=0.0020 mol，NaOH體積0.0020/0.10=0.0200 L=20.0 mL。",
+        "subject": "化學",
+        "sub_topic": "滴定與圖表",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-滴定與圖表",
+        "template_id": "extra-2026-chem3-滴定與圖表-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-滴定與圖表-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用滴定與圖表觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "強酸與強鹼滴定的pH—加入體積曲線中，當量點附近常見的圖形特色為何？",
+        "correct": "pH變化迅速，曲線出現陡峭區段",
+        "wrong": [
+          "pH在整個滴定過程絕對不變",
+          "只要加鹼pH必立即等於14",
+          "滴定曲線只需測量溫度而不用測pH"
+        ],
+        "exp": "當量點附近少量滴定液即可使溶液由酸性向鹼性迅速轉變。",
+        "subject": "化學",
+        "sub_topic": "滴定與圖表",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-滴定與圖表",
+        "template_id": "extra-2026-chem3-滴定與圖表-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-滴定與圖表-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用滴定與圖表觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "某弱酸用強鹼滴定，在當量點前到達半當量點。若適用弱酸緩衝近似，哪個關係最常見？",
+        "correct": "pH約等於pKa",
+        "wrong": [
+          "pH必等於14",
+          "[HA]必比[A⁻]高100倍",
+          "pH必等於0"
+        ],
+        "exp": "半當量點弱酸與共軛鹼的量近似相等，亨德森式給pH=pKa。",
+        "subject": "化學",
+        "sub_topic": "滴定與圖表",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-滴定與圖表",
+        "template_id": "extra-2026-chem3-滴定與圖表-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

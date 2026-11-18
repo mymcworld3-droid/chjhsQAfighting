@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-反應速率與平衡-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用反應速率與平衡觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "某反應在定溫下已達平衡，加入催化劑後較快達到新的動態狀態。下列哪個敘述合理？",
+        "correct": "催化劑降低反應活化能，但不改變該溫度下的平衡常數",
+        "wrong": [
+          "催化劑必讓K增加兩倍",
+          "催化劑只影響逆反應而不影響正反應",
+          "催化劑使所有反應物完全消失"
+        ],
+        "exp": "催化劑改變到達平衡的速率，不改變固定溫度下的熱力學K。",
+        "subject": "化學",
+        "sub_topic": "反應速率與平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-反應速率與平衡",
+        "template_id": "extra-2026-chem3-反應速率與平衡-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-反應速率與平衡-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用反應速率與平衡觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "對可逆反應A(g)⇌B(g)，已知同一溫度平衡常數Kc=4.0。此時測得[B]/[A]=2.0。若反應商Q=2.0，反應初始傾向何方？",
+        "correct": "向生成B方向進行",
+        "wrong": [
+          "向生成A方向進行",
+          "已達平衡而不再有淨變化",
+          "Kc必瞬間變成2.0"
+        ],
+        "exp": "Q<K時，系統往正反應方向進行使Q增至K。",
+        "subject": "化學",
+        "sub_topic": "反應速率與平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-反應速率與平衡",
+        "template_id": "extra-2026-chem3-反應速率與平衡-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-反應速率與平衡-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用反應速率與平衡觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "實驗比較同一化學反應在25℃與45℃的初期速率，其餘濃度與催化條件相同。一般預期何者較快？",
+        "correct": "45℃，因具足夠活化能的碰撞比例增加",
+        "wrong": [
+          "25℃必然較快，因溫度愈低粒子動得愈快",
+          "兩者速率必完全相同",
+          "45℃時所有反應物必定立刻成為元素"
+        ],
+        "exp": "溫度升高通常增加有效碰撞比例，導致反應速率加快。",
+        "subject": "化學",
+        "sub_topic": "反應速率與平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-反應速率與平衡",
+        "template_id": "extra-2026-chem3-反應速率與平衡-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

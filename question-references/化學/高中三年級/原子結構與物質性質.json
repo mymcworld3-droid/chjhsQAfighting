@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-原子結構與物質性質-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用原子結構與物質性質觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "兩原子Na與Cl位於同一週期，Na在左、Cl在右。若比較一般原子半徑趨勢，何者較大？",
+        "correct": "Na",
+        "wrong": [
+          "Cl",
+          "兩者必定相等",
+          "只由中子數決定而不能比較"
+        ],
+        "exp": "同週期有效核電荷通常向右增加，原子半徑由左往右縮小。",
+        "subject": "化學",
+        "sub_topic": "原子結構與物質性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中三年級-原子結構與物質性質",
+        "template_id": "extra-2026-chem3-原子結構與物質性質-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-原子結構與物質性質-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用原子結構與物質性質觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "純固態NaCl不易導電，但熔融NaCl可導電。這與哪項微觀變化最相關？",
+        "correct": "熔融後離子可自由移動，而固體中離子位置受晶格限制",
+        "wrong": [
+          "熔融後原子核全部失去電荷",
+          "固態NaCl完全不含帶電粒子",
+          "導電性只由樣品顏色決定"
+        ],
+        "exp": "離子導電需可移動帶電粒子，熔融提供可遷移的離子。",
+        "subject": "化學",
+        "sub_topic": "原子結構與物質性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中三年級-原子結構與物質性質",
+        "template_id": "extra-2026-chem3-原子結構與物質性質-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-原子結構與物質性質-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用原子結構與物質性質觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "碳-12與碳-14兩種中性原子在化學反應中通常具有近似的價電子性質。主要原因是？",
+        "correct": "兩者質子數與電子排列相同，中子數不同",
+        "wrong": [
+          "兩者中子數完全相同",
+          "兩者化學元素不同而價電子相同",
+          "兩者原子質量完全相等"
+        ],
+        "exp": "同位素質子數相同，中性時電子數與電子配置相同，通常化學性質近似。",
+        "subject": "化學",
+        "sub_topic": "原子結構與物質性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中三年級-原子結構與物質性質",
+        "template_id": "extra-2026-chem3-原子結構與物質性質-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

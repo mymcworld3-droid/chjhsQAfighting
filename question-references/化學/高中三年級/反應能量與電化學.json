@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-反應能量與電化學-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用反應能量與電化學觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "標準電池中陰極標準還原電位+0.80 V，陽極標準還原電位−0.20 V。標準電動勢為何？",
+        "correct": "1.00 V",
+        "wrong": [
+          "0.60 V",
+          "−1.00 V",
+          "−0.60 V"
+        ],
+        "exp": "E°cell=E°cathode−E°anode=0.80−(−0.20)=1.00 V。",
+        "subject": "化學",
+        "sub_topic": "反應能量與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-反應能量與電化學",
+        "template_id": "extra-2026-chem3-反應能量與電化學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-反應能量與電化學-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用反應能量與電化學觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "一反應每進行1 mol放熱50 kJ，若條件相同且進行3 mol，總焓變為何？",
+        "correct": "−150 kJ",
+        "wrong": [
+          "+150 kJ",
+          "−50 kJ",
+          "+16.7 kJ"
+        ],
+        "exp": "放熱的ΔH為負，進行量增加三倍時焓變−50×3=−150 kJ。",
+        "subject": "化學",
+        "sub_topic": "反應能量與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-反應能量與電化學",
+        "template_id": "extra-2026-chem3-反應能量與電化學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-反應能量與電化學-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用反應能量與電化學觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "電解槽利用電源讓非自發反應進行，電流通過電解液。這說明哪一種能量轉換？",
+        "correct": "電能部分轉為化學反應的能量，亦可能伴隨熱損失",
+        "wrong": [
+          "電解讓總能量無條件增加",
+          "電池和電解槽都不涉及電子轉移",
+          "電解完全不需要電極"
+        ],
+        "exp": "電解需要外部電能，非自發反應由外加電壓驅動。",
+        "subject": "化學",
+        "sub_topic": "反應能量與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-反應能量與電化學",
+        "template_id": "extra-2026-chem3-反應能量與電化學-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

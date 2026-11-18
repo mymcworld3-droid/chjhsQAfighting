@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-材料與藥物-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用材料與藥物觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "某塑膠製品標示為熱塑性材料，受熱可軟化並重新成形。最能解釋這種特性的因素是？",
+        "correct": "聚合物鏈間作用與網狀交聯程度影響材料受熱行為",
+        "wrong": [
+          "所有塑膠受熱都必定形成金屬",
+          "熱塑性代表其原子核會被加熱切開",
+          "塑膠能否塑形只由顏色決定"
+        ],
+        "exp": "熱塑性聚合物可因鏈間作用變化而加工，不同於高度交聯熱固性材料。",
+        "subject": "化學",
+        "sub_topic": "材料與藥物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-材料與藥物",
+        "template_id": "extra-2026-chem3-材料與藥物-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-材料與藥物-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用材料與藥物觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "兩種製藥配方含相同活性成分，但溶出速度不同，造成吸收時間差異。最合理的判斷是？",
+        "correct": "劑型與溶出性可能影響藥物釋放和體內吸收",
+        "wrong": [
+          "只要化學名稱相同，所有劑型必定在同一秒吸收",
+          "藥物劑量與吸收完全沒有關係",
+          "任何藥物都可不經安全測試直接使用"
+        ],
+        "exp": "活性成分相同不等於釋放與吸收時間相同，製劑性質有重要影響。",
+        "subject": "化學",
+        "sub_topic": "材料與藥物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-材料與藥物",
+        "template_id": "extra-2026-chem3-材料與藥物-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-材料與藥物-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用材料與藥物觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "某醫療材料必須長時間與人體接觸，選材時除了強度與耐用性還應重視什麼？",
+        "correct": "生物相容性及可能的物質釋出風險",
+        "wrong": [
+          "只需確認材料顏色好看",
+          "只要價格便宜就不用考慮毒性",
+          "任何硬度相同的材料都完全等效"
+        ],
+        "exp": "醫療材料需兼顧機械、化學與生物安全，避免不良反應。",
+        "subject": "化學",
+        "sub_topic": "材料與藥物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-材料與藥物",
+        "template_id": "extra-2026-chem3-材料與藥物-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

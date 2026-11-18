@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-有機反應-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用有機反應觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "乙烯CH₂=CH₂與溴Br₂在適當條件下反應，溴加在雙鍵兩端。這主要是哪種反應？",
+        "correct": "加成反應",
+        "wrong": [
+          "酯化反應",
+          "單純酸鹼中和",
+          "核分裂反應"
+        ],
+        "exp": "不飽和碳碳雙鍵可開啟並與溴進行加成。",
+        "subject": "化學",
+        "sub_topic": "有機反應",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-有機反應",
+        "template_id": "extra-2026-chem3-有機反應-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-有機反應-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用有機反應觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "甲烷與氯氣在光照等適當條件下反應，一個氫被氯取代生成CH₃Cl與HCl。這屬於哪種反應？",
+        "correct": "自由基取代反應",
+        "wrong": [
+          "酯化反應",
+          "碳碳雙鍵加成反應",
+          "電離生成氯化鈉"
+        ],
+        "exp": "烷烴與鹵素在適當條件下可進行自由基鹵化，氯取代氫。",
+        "subject": "化學",
+        "sub_topic": "有機反應",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-有機反應",
+        "template_id": "extra-2026-chem3-有機反應-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-有機反應-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用有機反應觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "乙酸乙酯在酸或鹼催化且含水條件下水解，可產生哪類物質？",
+        "correct": "乙醇與乙酸或其共軛鹼",
+        "wrong": [
+          "甲烷與氧氣",
+          "氯氣與氫氣",
+          "聚乙烯與氮氣"
+        ],
+        "exp": "酯水解會斷裂酯鍵，酸性條件生成醇及羧酸，鹼性則生成羧酸鹽。",
+        "subject": "化學",
+        "sub_topic": "有機反應",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-有機反應",
+        "template_id": "extra-2026-chem3-有機反應-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

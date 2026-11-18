@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-安全與變因控制-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用安全與變因控制觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "學生想比較鹽酸濃度對碳酸鈣反應速率的影響，採用不同濃度HCl。最需要固定哪組條件？",
+        "correct": "碳酸鈣顆粒大小、用量、溫度與攪拌方式",
+        "wrong": [
+          "同時任意改變溫度及顆粒大小",
+          "不同組使用完全不同形狀容器且不記錄",
+          "只要反應物名稱相同便不用控制條件"
+        ],
+        "exp": "要比較濃度影響，應控制其他影響碰撞和接觸面積的因素。",
+        "subject": "化學",
+        "sub_topic": "安全與變因控制",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-安全與變因控制",
+        "template_id": "extra-2026-chem3-安全與變因控制-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-安全與變因控制-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用安全與變因控制觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "實驗需稀釋濃硫酸，哪項操作最安全？",
+        "correct": "將濃酸緩慢加入水中並攪拌及使用防護具",
+        "wrong": [
+          "直接把水快速倒入大量濃酸",
+          "用手摸容器判斷是否安全",
+          "把濃酸與未知清潔劑混合"
+        ],
+        "exp": "濃硫酸稀釋放熱，酸入水可降低局部暴沸噴濺風險。",
+        "subject": "化學",
+        "sub_topic": "安全與變因控制",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-安全與變因控制",
+        "template_id": "extra-2026-chem3-安全與變因控制-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-安全與變因控制-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用安全與變因控制觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "實驗室使用揮發性有機溶劑，瓶上有易燃標示。哪個操作最合適？",
+        "correct": "遠離火源並在適當通風設施下操作",
+        "wrong": [
+          "靠近酒精燈加熱開口容器",
+          "只要戴手套就可不理會火源",
+          "將溶劑倒入一般飲水容器保存"
+        ],
+        "exp": "揮發性易燃溶劑有燃燒及吸入風險，需防火與通風管理。",
+        "subject": "化學",
+        "sub_topic": "安全與變因控制",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-安全與變因控制",
+        "template_id": "extra-2026-chem3-安全與變因控制-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

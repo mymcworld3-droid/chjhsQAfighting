@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-環境中的化學-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用環境中的化學觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "某地降水酸度升高，監測顯示燃燒排放的SO₂及NOₓ增加。下列哪個機制較合理？",
+        "correct": "硫氧化物與氮氧化物經大氣反應形成酸性物質",
+        "wrong": [
+          "所有SO₂與NOₓ都必然生成純氧",
+          "酸性降水只能由海水蒸發造成",
+          "降水pH下降表示氫離子濃度降低"
+        ],
+        "exp": "SO₂及部分NOₓ可氧化水合形成酸，增加降水酸度。",
+        "subject": "化學",
+        "sub_topic": "環境中的化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-環境中的化學",
+        "template_id": "extra-2026-chem3-環境中的化學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-環境中的化學-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用環境中的化學觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "湖泊周圍過量施肥導致磷、氮營養鹽流入，出現藻類大量繁殖及缺氧。這最可能是哪種現象？",
+        "correct": "優養化",
+        "wrong": [
+          "臭氧層增厚",
+          "所有水中養分完全消失",
+          "水一定轉變成強酸"
+        ],
+        "exp": "營養鹽過剩可促成藻華與有機物分解耗氧，影響水生生態。",
+        "subject": "化學",
+        "sub_topic": "環境中的化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-環境中的化學",
+        "template_id": "extra-2026-chem3-環境中的化學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-環境中的化學-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用環境中的化學觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "某城市比較電動車與燃油車的環境負擔，只計算行駛時尾氣排放。這項比較的主要限制是？",
+        "correct": "應納入發電方式、車輛製造及回收等生命週期環節",
+        "wrong": [
+          "沒有尾氣代表整個生命週期零排放",
+          "只比較車輛顏色即可推估二氧化碳",
+          "生命週期分析完全不涉及能源來源"
+        ],
+        "exp": "不同技術的環境影響需依完整系統邊界比較，不能只看使用端。",
+        "subject": "化學",
+        "sub_topic": "環境中的化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-環境中的化學",
+        "template_id": "extra-2026-chem3-環境中的化學-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

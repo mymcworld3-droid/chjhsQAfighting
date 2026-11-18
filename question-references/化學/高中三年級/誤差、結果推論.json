@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem3-誤差、結果推論-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用誤差、結果推論觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "某學生以NaOH滴定HCl，因終點判斷過晚使NaOH體積讀值偏高。若依該體積計算HCl濃度，結果傾向如何？",
+        "correct": "高估HCl濃度",
+        "wrong": [
+          "低估HCl濃度",
+          "完全不變",
+          "必得到負濃度"
+        ],
+        "exp": "C酸=C鹼V鹼/V酸；若滴定NaOH體積過高，算得酸濃度偏高。",
+        "subject": "化學",
+        "sub_topic": "誤差、結果推論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-誤差、結果推論",
+        "template_id": "extra-2026-chem3-誤差、結果推論-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-誤差、結果推論-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用誤差、結果推論觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "量測化學樣品質量時，電子秤空盤固定顯示+0.20 g，且沒有歸零。最合理的誤差判斷為何？",
+        "correct": "存在固定零點偏差，應校正或扣除",
+        "wrong": [
+          "多量測幾次平均就必消除0.20 g",
+          "只有增加顯示小數位就能恢復準確",
+          "因讀值穩定就可當作沒有誤差"
+        ],
+        "exp": "固定偏高是系統誤差，不會自動隨重複平均消失。",
+        "subject": "化學",
+        "sub_topic": "誤差、結果推論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-誤差、結果推論",
+        "template_id": "extra-2026-chem3-誤差、結果推論-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem3-誤差、結果推論-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "運用誤差、結果推論觀念解釋實驗、數據或社會情境",
+      "question": {
+        "q": "某滴定三次使用相同器材，耗用量為15.0、15.1、18.6 mL。最合理的後續處理是？",
+        "correct": "查核18.6 mL的操作與終點判讀，必要時重測",
+        "wrong": [
+          "直接挑最接近課本預期的一次當唯一答案",
+          "把18.6 mL當成所有試次的真值",
+          "因結果不同就宣稱化學反應沒有固定莫耳比"
+        ],
+        "exp": "離群讀值需調查原因、儀器與操作條件，不能任意刪除或採納。",
+        "subject": "化學",
+        "sub_topic": "誤差、結果推論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-誤差、結果推論",
+        "template_id": "extra-2026-chem3-誤差、結果推論-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
