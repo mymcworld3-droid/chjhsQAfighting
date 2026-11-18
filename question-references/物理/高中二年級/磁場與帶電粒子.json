@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-磁場與帶電粒子-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用磁場與帶電粒子的學科觀念",
+      "question": {
+        "q": "一帶正電2 μC的粒子以10 m/s速度垂直射入0.5 T均勻磁場，磁力大小為何？",
+        "correct": "1×10⁻⁵ N",
+        "wrong": [
+          "1×10⁻⁶ N",
+          "1×10⁻⁴ N",
+          "0 N"
+        ],
+        "exp": "F=qvB sin90°=2×10⁻⁶×10×0.5=1×10⁻⁵ N。",
+        "subject": "物理",
+        "sub_topic": "磁場與帶電粒子",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-磁場與帶電粒子",
+        "template_id": "ext-2026-phy2-磁場與帶電粒子-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-磁場與帶電粒子-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用磁場與帶電粒子的學科觀念",
+      "question": {
+        "q": "一帶電粒子進入均勻磁場作圓周運動，磁力始終與速度垂直。若忽略其他力，粒子的動能如何？",
+        "correct": "維持不變",
+        "wrong": [
+          "每圈增加一倍",
+          "每圈減少一半",
+          "等於零且無法運動"
+        ],
+        "exp": "磁力與瞬時位移垂直不做功，改變速度方向但不改變速率。",
+        "subject": "物理",
+        "sub_topic": "磁場與帶電粒子",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-磁場與帶電粒子",
+        "template_id": "ext-2026-phy2-磁場與帶電粒子-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-磁場與帶電粒子-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用磁場與帶電粒子的學科觀念",
+      "question": {
+        "q": "帶電粒子垂直進入均勻磁場，半徑r=mv/(|q|B)。若只將磁場強度加倍，軌道半徑如何？",
+        "correct": "變成原來一半",
+        "wrong": [
+          "增加一倍",
+          "維持不變",
+          "變成四倍"
+        ],
+        "exp": "粒子質量、速度與電荷量不變時，r與磁場強度B成反比。",
+        "subject": "物理",
+        "sub_topic": "磁場與帶電粒子",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-磁場與帶電粒子",
+        "template_id": "ext-2026-phy2-磁場與帶電粒子-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-幾何光學與聲音-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用幾何光學與聲音的學科觀念",
+      "question": {
+        "q": "一人站在平面鏡前2.0 m，假定鏡面無厚度。人與鏡中虛像相距多少？",
+        "correct": "4.0 m",
+        "wrong": [
+          "2.0 m",
+          "1.0 m",
+          "0 m"
+        ],
+        "exp": "平面鏡成像位於鏡後等距處，實體距鏡2 m，虛像在鏡後2 m，合計4 m。",
+        "subject": "物理",
+        "sub_topic": "幾何光學與聲音",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-幾何光學與聲音",
+        "template_id": "ext-2026-phy2-幾何光學與聲音-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-幾何光學與聲音-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用幾何光學與聲音的學科觀念",
+      "question": {
+        "q": "焦距10 cm的理想凸透鏡，物體放在鏡前15 cm。所成實像距透鏡多遠？",
+        "correct": "30 cm",
+        "wrong": [
+          "6 cm",
+          "15 cm",
+          "10 cm"
+        ],
+        "exp": "薄透鏡公式1/10=1/15+1/v，得1/v=1/30，v=30 cm；因物距大於焦距而為實像。",
+        "subject": "物理",
+        "sub_topic": "幾何光學與聲音",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-幾何光學與聲音",
+        "template_id": "ext-2026-phy2-幾何光學與聲音-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-幾何光學與聲音-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用幾何光學與聲音的學科觀念",
+      "question": {
+        "q": "救護車以固定警笛頻率遠離靜止觀察者，且空氣中的聲速保持近似不變。觀察者聽到的頻率相較靜止車輛會如何？",
+        "correct": "較低",
+        "wrong": [
+          "較高",
+          "完全不受車輛速度影響",
+          "必定恰好變為兩倍"
+        ],
+        "exp": "聲源遠離使連續波前間距增加，接收頻率降低，屬多普勒效應。",
+        "subject": "物理",
+        "sub_topic": "幾何光學與聲音",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-幾何光學與聲音",
+        "template_id": "ext-2026-phy2-幾何光學與聲音-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

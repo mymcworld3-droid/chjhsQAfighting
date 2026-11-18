@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-熱與氣體-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用熱與氣體的學科觀念",
+      "question": {
+        "q": "一瓶剛性密閉容器內的定量理想氣體，初始溫度300 K、壓力1.0 atm；加熱至450 K且容積不變。最終壓力約為何？",
+        "correct": "1.5 atm",
+        "wrong": [
+          "0.67 atm",
+          "2.0 atm",
+          "0.50 atm"
+        ],
+        "exp": "理想氣體在定容、定莫耳數下P/T為常數，P2=1.0×450/300=1.5 atm。",
+        "subject": "物理",
+        "sub_topic": "熱與氣體",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-熱與氣體",
+        "template_id": "ext-2026-phy2-熱與氣體-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-熱與氣體-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用熱與氣體的學科觀念",
+      "question": {
+        "q": "一氣球內理想氣體在定壓下由250 K升至300 K，原本體積2.0 L。若氣體量不變，末體積為何？",
+        "correct": "2.4 L",
+        "wrong": [
+          "1.67 L",
+          "2.0 L",
+          "3.0 L"
+        ],
+        "exp": "查理定律V/T固定，V2=2.0×300/250=2.4 L，溫度需使用絕對溫標。",
+        "subject": "物理",
+        "sub_topic": "熱與氣體",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-熱與氣體",
+        "template_id": "ext-2026-phy2-熱與氣體-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-熱與氣體-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用熱與氣體的學科觀念",
+      "question": {
+        "q": "某封閉系統吸收600 J熱量，並對外做功250 J。若採熱力學第一定律ΔU=Q−W，內能變化為何？",
+        "correct": "增加350 J",
+        "wrong": [
+          "增加850 J",
+          "減少350 J",
+          "增加250 J"
+        ],
+        "exp": "Q=+600 J，W=+250 J，故ΔU=600−250=+350 J。",
+        "subject": "物理",
+        "sub_topic": "熱與氣體",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-熱與氣體",
+        "template_id": "ext-2026-phy2-熱與氣體-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

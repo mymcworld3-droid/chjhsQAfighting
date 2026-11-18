@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-電容與直流電路-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用電容與直流電路的學科觀念",
+      "question": {
+        "q": "一個電容5 μF的電容器加上6 V電壓，若電容為常數，儲存電量為何？",
+        "correct": "30 μC",
+        "wrong": [
+          "1.2 μC",
+          "11 μC",
+          "300 μC"
+        ],
+        "exp": "電容定義C=Q/V，故Q=CV=5 μF×6 V=30 μC。",
+        "subject": "物理",
+        "sub_topic": "電容與直流電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電容與直流電路",
+        "template_id": "ext-2026-phy2-電容與直流電路-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-電容與直流電路-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用電容與直流電路的學科觀念",
+      "question": {
+        "q": "一個20 V理想電源串聯4 Ω與6 Ω兩個電阻，忽略電源內阻。電路電流為何？",
+        "correct": "2 A",
+        "wrong": [
+          "5 A",
+          "3.3 A",
+          "10 A"
+        ],
+        "exp": "串聯等效電阻4+6=10 Ω，I=V/R=20/10=2 A。",
+        "subject": "物理",
+        "sub_topic": "電容與直流電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電容與直流電路",
+        "template_id": "ext-2026-phy2-電容與直流電路-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-電容與直流電路-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用電容與直流電路的學科觀念",
+      "question": {
+        "q": "電阻6 Ω與3 Ω並聯，兩端接同一電壓。等效電阻為何？",
+        "correct": "2 Ω",
+        "wrong": [
+          "9 Ω",
+          "3 Ω",
+          "18 Ω"
+        ],
+        "exp": "並聯1/Req=1/6+1/3=1/2，Req=2 Ω，小於任何一支路。",
+        "subject": "物理",
+        "sub_topic": "電容與直流電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電容與直流電路",
+        "template_id": "ext-2026-phy2-電容與直流電路-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-繞射與駐波-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用繞射與駐波的學科觀念",
+      "question": {
+        "q": "兩端固定長1.2 m的琴弦，其橫波波速60 m/s。若振動在基頻模式，頻率為何？",
+        "correct": "25 Hz",
+        "wrong": [
+          "50 Hz",
+          "72 Hz",
+          "12.5 Hz"
+        ],
+        "exp": "兩端固定的基頻波長λ=2L=2.4 m，f=v/λ=60/2.4=25 Hz。",
+        "subject": "物理",
+        "sub_topic": "繞射與駐波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-繞射與駐波",
+        "template_id": "ext-2026-phy2-繞射與駐波-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-繞射與駐波-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用繞射與駐波的學科觀念",
+      "question": {
+        "q": "兩端固定的弦長L，振動於第二諧波模式。此模式的波長為何？",
+        "correct": "L",
+        "wrong": [
+          "2L",
+          "L/2",
+          "4L"
+        ],
+        "exp": "兩端固定弦的第n諧波滿足L=nλ/2；n=2時λ=L。",
+        "subject": "物理",
+        "sub_topic": "繞射與駐波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-繞射與駐波",
+        "template_id": "ext-2026-phy2-繞射與駐波-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-繞射與駐波-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用繞射與駐波的學科觀念",
+      "question": {
+        "q": "水波從寬狹縫通過後改用寬度接近波長的狹縫，其他條件相同。波的繞射現象通常如何？",
+        "correct": "更明顯，狹縫後的波向側方擴散",
+        "wrong": [
+          "完全消失，因狹縫較窄",
+          "波速必定增加為兩倍",
+          "波長一定變成零"
+        ],
+        "exp": "狹縫尺度接近波長時繞射較顯著；同介質下波速並不因狹縫而自動加倍。",
+        "subject": "物理",
+        "sub_topic": "繞射與駐波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-繞射與駐波",
+        "template_id": "ext-2026-phy2-繞射與駐波-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-電場與電位-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用電場與電位的學科觀念",
+      "question": {
+        "q": "一粒子帶正電2.0 μC，置於均勻電場300 N/C。若無其他電荷造成額外影響，所受電力大小為何？",
+        "correct": "6.0×10⁻⁴ N",
+        "wrong": [
+          "1.5×10⁸ N",
+          "6.0×10⁻⁶ N",
+          "6.0×10⁻² N"
+        ],
+        "exp": "F=qE=2.0×10⁻⁶×300=6.0×10⁻⁴ N，方向與電場同向。",
+        "subject": "物理",
+        "sub_topic": "電場與電位",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電場與電位",
+        "template_id": "ext-2026-phy2-電場與電位-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-電場與電位-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用電場與電位的學科觀念",
+      "question": {
+        "q": "帶正電2 μC的小球從電位12 V移至7 V，電荷量不變。其電位能變化ΔU為何？",
+        "correct": "−10 μJ",
+        "wrong": [
+          "+10 μJ",
+          "−24 μJ",
+          "+14 μJ"
+        ],
+        "exp": "ΔU=q(V後−V前)=2 μC×(7−12)V=−10 μJ，正電荷移往低電位時電位能下降。",
+        "subject": "物理",
+        "sub_topic": "電場與電位",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電場與電位",
+        "template_id": "ext-2026-phy2-電場與電位-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-電場與電位-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用電場與電位的學科觀念",
+      "question": {
+        "q": "一個正電荷3 C由12 V位置移到0 V位置。若電場力為唯一做功的力，電場力做功多少？",
+        "correct": "+36 J",
+        "wrong": [
+          "−36 J",
+          "+4 J",
+          "0 J"
+        ],
+        "exp": "電場力做功W=−ΔU=q(V初−V末)=3×(12−0)=36 J。",
+        "subject": "物理",
+        "sub_topic": "電場與電位",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電場與電位",
+        "template_id": "ext-2026-phy2-電場與電位-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

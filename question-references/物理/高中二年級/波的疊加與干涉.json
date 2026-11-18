@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-波的疊加與干涉-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用波的疊加與干涉的學科觀念",
+      "question": {
+        "q": "兩個相干波源發出同相同頻的波。在某點兩波路徑差恰好為兩倍波長。該點最可能發生何種干涉？",
+        "correct": "相長干涉",
+        "wrong": [
+          "完全相消干涉",
+          "必定沒有任何波到達",
+          "波在該點永久停止傳播"
+        ],
+        "exp": "初始同相且路徑差是整數倍波長，兩波同相抵達，發生相長干涉。",
+        "subject": "物理",
+        "sub_topic": "波的疊加與干涉",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-波的疊加與干涉",
+        "template_id": "ext-2026-phy2-波的疊加與干涉-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-波的疊加與干涉-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用波的疊加與干涉的學科觀念",
+      "question": {
+        "q": "兩列相干且同相的等振幅水波，在某點的路徑差為1.5個波長。理想情況下，合成振幅如何？",
+        "correct": "因相消干涉而接近零",
+        "wrong": [
+          "為單一波的兩倍",
+          "維持為單一波的振幅",
+          "必定持續變成四倍"
+        ],
+        "exp": "路徑差為半整數波長，兩波反相抵達且振幅相等，位移互相抵銷。",
+        "subject": "物理",
+        "sub_topic": "波的疊加與干涉",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-波的疊加與干涉",
+        "template_id": "ext-2026-phy2-波的疊加與干涉-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-波的疊加與干涉-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以生活或實驗資料運用波的疊加與干涉的學科觀念",
+      "question": {
+        "q": "兩個接近的聲音頻率分別為440 Hz與444 Hz，同時傳到聽者耳中。可觀察到的拍頻約為何？",
+        "correct": "4 Hz",
+        "wrong": [
+          "442 Hz",
+          "884 Hz",
+          "110 Hz"
+        ],
+        "exp": "拍頻為兩頻率差的絕對值|444−440|=4 Hz，是聲音強弱緩慢起伏的頻率。",
+        "subject": "物理",
+        "sub_topic": "波的疊加與干涉",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-波的疊加與干涉",
+        "template_id": "ext-2026-phy2-波的疊加與干涉-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
