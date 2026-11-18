@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-城鄉發展-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用城鄉發展",
+      "question": {
+        "q": "某都市工作集中，但周邊鄉鎮人口外移且學校招生不足。若要推動區域平衡，何種策略較合理？",
+        "correct": "整合區域交通、在地就業與公共服務可及性",
+        "wrong": [
+          "只在都市中心增加辦公大樓就可解決所有鄉村問題",
+          "將所有鄉村居民強制移入都市",
+          "只用行政區面積判斷是否需要學校"
+        ],
+        "exp": "城鄉差異涉及產業與服務機會，應從區域系統整體改善。",
+        "subject": "地理",
+        "sub_topic": "城鄉發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-城鄉發展",
+        "template_id": "extra-2026-geo1-城鄉發展-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-城鄉發展-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用城鄉發展",
+      "question": {
+        "q": "某鄉鎮人口減少後，固定路線公車班次下降，居民就醫困難。哪種方案較符合人口稀少地區需求？",
+        "correct": "評估需求反應式交通或跨鄉鎮接駁，提高必要服務可達性",
+        "wrong": [
+          "所有路線一律安排與都市捷運相同班距",
+          "因搭車人少便認定醫療需求不存在",
+          "只增加鄉鎮入口意象工程"
+        ],
+        "exp": "低密度地區可用彈性運輸補足基本可達性。",
+        "subject": "地理",
+        "sub_topic": "城鄉發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-城鄉發展",
+        "template_id": "extra-2026-geo1-城鄉發展-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-城鄉發展-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用城鄉發展",
+      "question": {
+        "q": "甲城鎮人口成長快，乙城鎮人口停滯。若要比較是否存在過度都市集中，應優先查看？",
+        "correct": "通勤流、住宅負擔、就業機會及公共設施供需",
+        "wrong": [
+          "只比較兩城鎮地名長度",
+          "人口增加便可直接判定所有居民生活改善",
+          "只看單一年人口總數而忽略遷移"
+        ],
+        "exp": "都市集聚有機會與成本，需多指標判斷。",
+        "subject": "地理",
+        "sub_topic": "城鄉發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-城鄉發展",
+        "template_id": "extra-2026-geo1-城鄉發展-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

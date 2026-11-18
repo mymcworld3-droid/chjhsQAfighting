@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-人地關係-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用人地關係",
+      "question": {
+        "q": "某河川下游人口增加後，建物占用原有滯洪區，暴雨淹水損失提高。這最能反映什麼？",
+        "correct": "土地利用使人類暴露於自然洪水風險的程度改變",
+        "wrong": [
+          "只有降雨強度決定全部災害損失",
+          "人口增加會使河川流量永遠下降",
+          "滯洪區開發不可能影響水患風險"
+        ],
+        "exp": "人地關係涉及自然危害與人類利用方式。",
+        "subject": "地理",
+        "sub_topic": "人地關係",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-人地關係",
+        "template_id": "extra-2026-geo1-人地關係-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-人地關係-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用人地關係",
+      "question": {
+        "q": "某沿岸地區漁獲下降，居民同時面臨海水暖化與過度捕撈。要擬定管理措施，較合理的方向是？",
+        "correct": "結合海洋環境監測與漁業資源管理，分辨不同成因",
+        "wrong": [
+          "只因水溫升高就不必檢查漁撈量",
+          "漁業活動不可能影響魚群數量",
+          "只依單次漁獲決定長期生態趨勢"
+        ],
+        "exp": "自然變遷與人類活動常共同作用，需綜合治理。",
+        "subject": "地理",
+        "sub_topic": "人地關係",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-人地關係",
+        "template_id": "extra-2026-geo1-人地關係-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-人地關係-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用人地關係",
+      "question": {
+        "q": "山區開發觀光道路增加就業，但破壞棲地連通與坡地穩定。評估方案最適合考量？",
+        "correct": "就業效益與地質、生態成本及替代路線的取捨",
+        "wrong": [
+          "只看短期遊客人數就能代表全部利益",
+          "只因有生態影響便可忽略所有居民生計",
+          "道路建設必定不影響坡地排水"
+        ],
+        "exp": "永續人地關係需兼顧自然承載與社會需求。",
+        "subject": "地理",
+        "sub_topic": "人地關係",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-人地關係",
+        "template_id": "extra-2026-geo1-人地關係-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

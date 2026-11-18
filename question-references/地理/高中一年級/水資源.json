@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-水資源-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用水資源",
+      "question": {
+        "q": "某河川上游興建水庫後，下游枯水期供水較穩定，但泥砂量減少。若分析水庫效益，何者最合理？",
+        "correct": "須同時評估蓄水調節與下游泥砂、河口地形變化",
+        "wrong": [
+          "水庫只會影響水量而完全不影響泥砂",
+          "泥砂減少一定使河口自然增生更多土地",
+          "有水庫就可完全避免任何乾旱"
+        ],
+        "exp": "水庫具有調節流量功能，也可能截留沉積物並改變下游環境。",
+        "subject": "地理",
+        "sub_topic": "水資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-水資源",
+        "template_id": "extra-2026-geo1-水資源-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-水資源-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用水資源",
+      "question": {
+        "q": "某都市日用水量10萬噸，管線漏水率從20%降至10%。若供水量固定為10萬噸，實際可使用水量增加多少？",
+        "correct": "1萬噸",
+        "wrong": [
+          "2萬噸",
+          "9萬噸",
+          "10萬噸"
+        ],
+        "exp": "原可用8萬噸，改善後9萬噸，增加1萬噸；需區分供水量與到戶量。",
+        "subject": "地理",
+        "sub_topic": "水資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-水資源",
+        "template_id": "extra-2026-geo1-水資源-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-水資源-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用水資源",
+      "question": {
+        "q": "某農業區地下水抽取長期大於補注，部分區域地層下陷。最符合永續用水的管理方案為何？",
+        "correct": "評估安全出水量並減抽、提高用水效率及補注",
+        "wrong": [
+          "只把水井挖得更深而不控制取水量",
+          "因地下水看不見就假定儲量無限",
+          "用一次暴雨量代表整年地下水補注量"
+        ],
+        "exp": "地下水超抽使含水層壓力與水位下降，需長期水文管理。",
+        "subject": "地理",
+        "sub_topic": "水資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-水資源",
+        "template_id": "extra-2026-geo1-水資源-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

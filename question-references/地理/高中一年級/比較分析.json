@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-比較分析-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用比較分析",
+      "question": {
+        "q": "比較甲乙兩區人口密度，甲人口10萬、面積50平方公里；乙人口12萬、面積100平方公里。何者較高？",
+        "correct": "甲區每平方公里2000人，高於乙區1200人",
+        "wrong": [
+          "乙區每平方公里2400人，高於甲區",
+          "兩區人口密度相同",
+          "因乙人口較多所以乙密度必較高"
+        ],
+        "exp": "人口密度要除以面積；甲100000/50=2000、乙120000/100=1200。",
+        "subject": "地理",
+        "sub_topic": "比較分析",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-比較分析",
+        "template_id": "extra-2026-geo1-比較分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-比較分析-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用比較分析",
+      "question": {
+        "q": "兩地年降雨總量相同，甲雨季集中3個月，乙全年分布均勻。比較農業用水需求時，最合理的分析是？",
+        "correct": "甲可能更需要蓄水調節，因降雨季節分配不同",
+        "wrong": [
+          "總雨量相同便代表逐月缺水風險完全相同",
+          "乙全年均勻降雨就必定不需灌溉",
+          "只依年平均雨量即可判定作物生長完全一致"
+        ],
+        "exp": "年總量不能代表季節分配及作物需水時間。",
+        "subject": "地理",
+        "sub_topic": "比較分析",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-比較分析",
+        "template_id": "extra-2026-geo1-比較分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-比較分析-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用比較分析",
+      "question": {
+        "q": "甲地平均每人所得高於乙地，但甲地住房支出占所得比例也較高。要比較生活負擔，哪種方法適當？",
+        "correct": "同時考慮可支配所得、住房支出及物價差異",
+        "wrong": [
+          "只用名目薪資高低決定居民生活水準",
+          "收入較高的地區住房成本必較低",
+          "物價差異不能用於地理比較"
+        ],
+        "exp": "生活條件需同時評估收入與區域成本，不是單指標排名。",
+        "subject": "地理",
+        "sub_topic": "比較分析",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-比較分析",
+        "template_id": "extra-2026-geo1-比較分析-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

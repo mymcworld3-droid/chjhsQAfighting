@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-交通與資訊連結-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用交通與資訊連結",
+      "question": {
+        "q": "新高速鐵路通車後，甲市與乙市間的旅行時間減少一半。最直接可能改變哪種地理現象？",
+        "correct": "兩城的時間距離縮短，通勤與商業往來成本可能降低",
+        "wrong": [
+          "兩城之間的地面直線距離也立即減半",
+          "城市經緯度會因鐵路通車改變",
+          "所有居民必定每日跨城通勤"
+        ],
+        "exp": "交通改善改變可達性與互動，並非改變地理座標。",
+        "subject": "地理",
+        "sub_topic": "交通與資訊連結",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-交通與資訊連結",
+        "template_id": "extra-2026-geo1-交通與資訊連結-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-交通與資訊連結-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用交通與資訊連結",
+      "question": {
+        "q": "甲村有高速網路但缺乏數位技能培訓，乙村網速較慢但居民熟悉線上公共服務。比較數位落差時應考量？",
+        "correct": "網路基礎建設、設備與使用能力皆影響資訊可及性",
+        "wrong": [
+          "只看最高傳輸速度即可確定每人數位能力",
+          "有網路便代表所有人都能使用同等服務",
+          "數位落差只與地形無關也與教育無關"
+        ],
+        "exp": "資訊連結不僅是基礎建設，也需使用資源與能力。",
+        "subject": "地理",
+        "sub_topic": "交通與資訊連結",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-交通與資訊連結",
+        "template_id": "extra-2026-geo1-交通與資訊連結-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-交通與資訊連結-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用交通與資訊連結",
+      "question": {
+        "q": "某偏鄉修建新公路後，居民到區域醫院時間由90分鐘降為50分鐘。若評估成果，何種指標最貼近公共服務可及性？",
+        "correct": "居民到醫院的實際旅行時間與就醫機會變化",
+        "wrong": [
+          "道路總長就能代表所有人就醫方便程度",
+          "只比較新舊公路的顏色",
+          "只看公路施工費用而忽略居民路程"
+        ],
+        "exp": "可達性反映人與服務之間的實際移動成本。",
+        "subject": "地理",
+        "sub_topic": "交通與資訊連結",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-交通與資訊連結",
+        "template_id": "extra-2026-geo1-交通與資訊連結-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

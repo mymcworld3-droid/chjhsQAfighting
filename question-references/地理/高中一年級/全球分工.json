@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-全球分工-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用全球分工",
+      "question": {
+        "q": "某手機由甲國設計晶片、乙國製造零件、丙國組裝。這主要顯示什麼？",
+        "correct": "生產階段可依技術、勞動力與供應網絡分散在不同區域",
+        "wrong": [
+          "每個國家必須自行完成全部製造程序",
+          "產品在哪組裝就代表所有附加價值都在當地",
+          "跨國分工使運輸成本永遠等於零"
+        ],
+        "exp": "全球價值鏈將不同環節分布於具相對優勢的地區。",
+        "subject": "地理",
+        "sub_topic": "全球分工",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-全球分工",
+        "template_id": "extra-2026-geo1-全球分工-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-全球分工-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用全球分工",
+      "question": {
+        "q": "某公司把所有關鍵零件集中在一座海外工廠，該地停電後全球產線受影響。最合理的改善方向為何？",
+        "correct": "衡量供應集中風險，建立替代來源或合理庫存",
+        "wrong": [
+          "只因工廠成本低就認定沒有任何斷料風險",
+          "將全部物流改為同一條單一路線",
+          "認為跨國生產無法出現區域事件"
+        ],
+        "exp": "產業鏈需在成本效率與供應韌性之間權衡。",
+        "subject": "地理",
+        "sub_topic": "全球分工",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-全球分工",
+        "template_id": "extra-2026-geo1-全球分工-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-全球分工-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用全球分工",
+      "question": {
+        "q": "某地區負責高附加價值研發，另一地區負責大量組裝。若研究兩地所得差異，應先考量什麼？",
+        "correct": "產業功能、勞動技能與附加價值分配",
+        "wrong": [
+          "只以員工人數判定平均薪資必然相等",
+          "產品價格完全不受研發投入影響",
+          "所有組裝工作都具有相同工資水準"
+        ],
+        "exp": "生產鏈不同環節的技術與議價能力可能影響所得。",
+        "subject": "地理",
+        "sub_topic": "全球分工",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-全球分工",
+        "template_id": "extra-2026-geo1-全球分工-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

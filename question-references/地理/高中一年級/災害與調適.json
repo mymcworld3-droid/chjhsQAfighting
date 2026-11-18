@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-災害與調適-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用災害與調適",
+      "question": {
+        "q": "山區道路旁邊坡曾多次滑動，預報有連日豪雨。哪種防災決策最能降低風險？",
+        "correct": "依雨量警戒及地質監測實施交通管制和預警疏散",
+        "wrong": [
+          "只依當天是否看見落石決定要不要關路",
+          "因過去滑動過便認定今後不會再滑",
+          "只在道路旁設立觀光告示就能減少崩塌"
+        ],
+        "exp": "災害風險管理需考量危害、暴露及脆弱度，提前管制較有效。",
+        "subject": "地理",
+        "sub_topic": "災害與調適",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-災害與調適",
+        "template_id": "extra-2026-geo1-災害與調適-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-災害與調適-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用災害與調適",
+      "question": {
+        "q": "某沿海低窪社區常因暴潮淹水。若比較短期與長期調適，哪組措施最合理？",
+        "correct": "短期建立預警與避難，長期評估土地利用、防潮工程及遷移",
+        "wrong": [
+          "只在颱風當日增加海岸廣告看板",
+          "因上次沒有受災就停止所有預警",
+          "僅提高房屋外牆顏色來應對海面升高"
+        ],
+        "exp": "調適結合非工程和工程手段，需依暴露條件與成本規畫。",
+        "subject": "地理",
+        "sub_topic": "災害與調適",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-災害與調適",
+        "template_id": "extra-2026-geo1-災害與調適-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-災害與調適-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用災害與調適",
+      "question": {
+        "q": "甲村與乙村面對相同震度的地震，但甲村耐震建築比例較高。若其他條件接近，何種推論較合理？",
+        "correct": "甲村的建築損害風險可能較低，因脆弱度不同",
+        "wrong": [
+          "兩村地震危害相同就必定有完全一樣的損失",
+          "耐震能力只能影響地震發生機率",
+          "所有地震損失只與震央距離有關"
+        ],
+        "exp": "危害程度相同時，建物耐震與人口暴露仍會影響災害風險。",
+        "subject": "地理",
+        "sub_topic": "災害與調適",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-災害與調適",
+        "template_id": "extra-2026-geo1-災害與調適-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

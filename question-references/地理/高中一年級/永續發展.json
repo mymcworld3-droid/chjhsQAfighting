@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-永續發展-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用永續發展",
+      "question": {
+        "q": "某城市準備淘汰柴油公車改為電動公車，但電力仍主要來自化石燃料。如何合理評估環境效益？",
+        "correct": "比較兩種車輛全生命週期排放及當地空氣污染變化",
+        "wrong": [
+          "只看車輛是否冒黑煙便斷定完全零排放",
+          "只比較購車價格而不看使用階段",
+          "把發電端排放忽略後宣稱所有排放為零"
+        ],
+        "exp": "能源轉型評估需含電力來源、製造與營運等階段。",
+        "subject": "地理",
+        "sub_topic": "永續發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-永續發展",
+        "template_id": "extra-2026-geo1-永續發展-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-永續發展-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用永續發展",
+      "question": {
+        "q": "某偏鄉太陽能計畫提高能源自給率，但占用農業用地。較符合永續發展的規畫方式為何？",
+        "correct": "比較發電效益、耕地價值及生態影響，尋找低衝突區位",
+        "wrong": [
+          "凡有再生能源便可完全忽略土地利用",
+          "只因農地價格低就必定是最適合地點",
+          "再生能源計畫與地方居民無須溝通"
+        ],
+        "exp": "永續需同時考量能源、糧食及社會參與。",
+        "subject": "地理",
+        "sub_topic": "永續發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-永續發展",
+        "template_id": "extra-2026-geo1-永續發展-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-永續發展-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用永續發展",
+      "question": {
+        "q": "某地區平均收入提高，但用水污染加劇、部分居民失去生計。若只以GDP評估發展，主要會忽略什麼？",
+        "correct": "環境成本、所得分配及生活品質等面向",
+        "wrong": [
+          "GDP必定已直接扣除所有生態損失",
+          "所有居民收入會與平均值同步增加",
+          "只要經濟成長便沒有任何公共政策問題"
+        ],
+        "exp": "永續發展不等同短期產值增加，需多維度指標。",
+        "subject": "地理",
+        "sub_topic": "永續發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-永續發展",
+        "template_id": "extra-2026-geo1-永續發展-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo1-區域特徵-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用區域特徵",
+      "question": {
+        "q": "兩個緯度相近的城市，甲位於海洋西岸、乙位於內陸。兩地氣溫年較差不同，最應優先考量何種因素？",
+        "correct": "海陸位置及盛行風、洋流等氣候控制因素",
+        "wrong": [
+          "只以城市人口判斷全年氣溫",
+          "相同緯度就必定有完全相同氣候",
+          "內陸城市的溫度完全不受季節變化"
+        ],
+        "exp": "海洋調節與氣流影響各地熱量變化。",
+        "subject": "地理",
+        "sub_topic": "區域特徵",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-區域特徵",
+        "template_id": "extra-2026-geo1-區域特徵-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-區域特徵-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用區域特徵",
+      "question": {
+        "q": "某區域河川密集、地勢低平，農業與運輸集中於河道附近。要理解此區域特色，何種分析最好？",
+        "correct": "連結地形、水文與聚落產業分布",
+        "wrong": [
+          "只依區域名稱判斷產業型態",
+          "把河川數量等同人口數",
+          "因地勢平坦便推論沒有水患可能"
+        ],
+        "exp": "地理區域特徵由自然與人文因素互相作用形成。",
+        "subject": "地理",
+        "sub_topic": "區域特徵",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-區域特徵",
+        "template_id": "extra-2026-geo1-區域特徵-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo1-區域特徵-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以人地互動或空間資料應用區域特徵",
+      "question": {
+        "q": "甲區依賴觀光、乙區依賴製造業，當國際旅遊需求下降時，哪個判斷較合理？",
+        "correct": "甲區可能受較直接衝擊，但影響程度須看產業結構與替代收入",
+        "wrong": [
+          "乙區一定完全沒有任何間接影響",
+          "甲區所有居民必定同時失業",
+          "只靠地區面積便可判斷衝擊大小"
+        ],
+        "exp": "產業專業化讓區域暴露於不同外部需求風險。",
+        "subject": "地理",
+        "sub_topic": "區域特徵",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-區域特徵",
+        "template_id": "extra-2026-geo1-區域特徵-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
