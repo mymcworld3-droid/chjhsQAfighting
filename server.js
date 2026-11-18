@@ -32,6 +32,7 @@ const registerAdminArtifactDeleteApi = require('./admin-artifact-delete-api.cjs'
 const { registerItemImageApi } = require('./item-image-api.cjs');
 const registerRaidRewardApi = require('./raid-reward-api.cjs');
 const registerRaidRoomApi = require('./raid-room-api.cjs');
+const registerDungeonRoomApi = require('./dungeon-room-api.cjs');
 const registerBattleRewardApi = require('./battle-reward-api.cjs');
 const registerDongtianSettlementApi = require('./dongtian-settlement-api.cjs');
 const registerImmortalsCleanupApi = require('./world-immortals-cleanup-api.cjs');
@@ -106,6 +107,7 @@ registerFriendChatApi(app);
 registerAdminArtifactDeleteApi(app);
 registerItemImageApi(app);
 registerRaidRoomApi(app);
+registerDungeonRoomApi(app);
 registerRaidRewardApi(app);
 registerBattleRewardApi(app);
 registerDongtianSettlementApi(app);
