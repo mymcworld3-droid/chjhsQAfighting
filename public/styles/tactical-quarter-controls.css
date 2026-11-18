@@ -744,3 +744,15 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
     font-size:clamp(7px,1.85vw,9px);
   }
 }
+
+
+/* Stage-five accessible telegraph status: screen reader only, never an extra
+   button or visual panel in the fixed quarter-circle battlefield layout. */
+#tactical-combat .tc-threat-a11y{
+  position:absolute!important;
+  width:1px!important;height:1px!important;
+  min-width:0!important;min-height:0!important;
+  overflow:hidden!important;clip-path:inset(50%)!important;
+  white-space:nowrap;pointer-events:none;
+  left:0;top:0;margin:0;padding:0;border:0;
+}
