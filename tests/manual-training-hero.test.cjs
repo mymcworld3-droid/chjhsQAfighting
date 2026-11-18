@@ -6,10 +6,12 @@ const path=require('node:path');
 const vm=require('node:vm');
 
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-hero-view.js'),'utf8');
-const render=vm.runInNewContext(
-  source.replace('export function renderManualHero','function renderManualHero')+'\nrenderManualHero;',
-  {}, {filename:'manual-hero-view.js'}
-);
+const strip=s=>s.replace(/^import\s+.*;\s*$/gm,'')
+  .replaceAll('export function ','function ');
+const auxiliary=['manual-visual-progression.js','manual-anticipation.js']
+  .map(name=>strip(fs.readFileSync(path.join(__dirname,'../public/cultivation',name),'utf8')));
+const render=vm.runInNewContext([...auxiliary,strip(source),'renderManualHero'].join('\n'),
+  {}, {filename:'manual-hero-view.js'});
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[c]);
