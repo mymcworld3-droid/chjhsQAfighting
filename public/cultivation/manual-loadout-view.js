@@ -124,19 +124,18 @@ export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skill
     <div class="manual-deck-heading">
       <div><span class="manual-deck-kicker">戰前準備 · SKILL LOADOUT</span>
         <h3><i class="fa-solid fa-layer-group" aria-hidden="true"></i> 戰場技能配置</h3>
-        <p>最多三招，選取其他配置後按「套用」才會切換。編輯使用中的配置會直接更新出戰招式；問道試煉可在戰場切換。</p>
       </div>
-      <span class="manual-deck-count"><strong>${equipped.length}<small> / 3</small></strong><span>已裝備招式</span></span>
     </div>
     <div class="manual-presets" role="group" aria-label="功法配置">${presetTabs}</div>
     <div class="manual-deck-workspace">
       <div class="manual-deck-toolbar">
+        <details class="manual-deck-name-settings"><summary><i class="fa-solid fa-pen" aria-hidden="true"></i> 編輯配置名稱</summary>
         <div class="manual-deck-edit-name"><label for="manual-loadout-name">配置名稱</label>
           <div class="manual-deck-name-row"><input id="manual-loadout-name" data-loadout-name
             maxlength="20" value="${esc(preset.name||'')}"
             placeholder="為這組戰術命名" aria-label="編輯目前配置名稱">
             <button type="button" data-loadout-rename><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> 儲存名稱</button></div>
-        </div>
+        </div></details>
         <div class="manual-deck-apply">
           <span class="manual-deck-state ${active?'is-live':'is-draft'}">
             <i class="fa-solid ${active?'fa-circle-check':'fa-eye'}" aria-hidden="true"></i>
@@ -148,7 +147,7 @@ export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skill
         </div>
       </div>
       <div class="manual-deck-slots-header"><strong>招式裝備欄</strong>
-        <small>點擊卡片替換技能 · 空欄由前向後依序裝備</small></div>
+        <small>點擊技能槽可選擇或更換招式</small></div>
       <div class="manual-slot-grid">${slotCards}</div>
       <div class="manual-deck-feedback" data-manual-loadout-status role="status" aria-live="polite"></div>
       ${picker}
