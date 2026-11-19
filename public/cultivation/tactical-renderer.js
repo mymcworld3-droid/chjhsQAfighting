@@ -736,7 +736,7 @@ export class TacticalRenderer{
       for(const p of markers){
         const seal=p.seal;if(!seal)continue;
         const x=ox+(p.x+.5)*cell,y=oy+(p.y+.5)*cell;
-        const column=R.SEAL_KIN.indexOf(seal.kind);
+        const column=R.SEAL_KINDS.indexOf(seal.kind);
         const row=seal.broken||seal.hp<=0?2:seal.hp<seal.maxHp?1:0;
         const size=cell*(cell<27?1.10:1.22);
         c.save();
