@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-chem2-thermo-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "能量守恆、反應焓與熱化學數據判讀",
+      "question": {
+        "q": "在近似絕熱的簡易量熱實驗中，某反應使100 g水的溫度上升5.0 °C。若水的比熱為4.2 J/(g·°C)，忽略容器吸熱，該反應放出的熱量約為多少？",
+        "correct": "2.1 kJ",
+        "wrong": [
+          "0.21 kJ",
+          "21 kJ",
+          "8.4 kJ"
+        ],
+        "exp": "水吸收熱量q=mcΔT=100×4.2×5.0=2100 J=2.1 kJ；依能量守恆，反應放出相同大小的熱量。",
+        "subject": "化學",
+        "sub_topic": "熱化學與反應熱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-熱化學與反應熱",
+        "template_id": "ref-20261119-chem2-thermo-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chem2-thermo-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "能量守恆、反應焓與熱化學數據判讀",
+      "question": {
+        "q": "已知某放熱反應之ΔH=−80 kJ/mol（以反應式進行1次為基準）。若把整個化學反應式的係數全部乘以3，對應的反應焓變為何？",
+        "correct": "−240 kJ",
+        "wrong": [
+          "−80 kJ",
+          "+240 kJ",
+          "−26.7 kJ"
+        ],
+        "exp": "反應焓是廣延量，反應式的所有係數乘以3，焓變也乘以3：3×(−80)=−240 kJ。此處焓變以新反應式進行一次計。",
+        "subject": "化學",
+        "sub_topic": "熱化學與反應熱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-熱化學與反應熱",
+        "template_id": "ref-20261119-chem2-thermo-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chem2-thermo-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "能量守恆、反應焓與熱化學數據判讀",
+      "question": {
+        "q": "已知CH₄(g)、CO₂(g)、H₂O(l)的標準生成焓依序為−75、−394、−286 kJ/mol，O₂(g)為0。對CH₄+2O₂→CO₂+2H₂O(l)，標準反應焓約為何？",
+        "correct": "−891 kJ/mol",
+        "wrong": [
+          "−605 kJ/mol",
+          "−319 kJ/mol",
+          "+891 kJ/mol"
+        ],
+        "exp": "利用生成焓：ΔH°=[−394+2(−286)]−[−75+2(0)]=−891 kJ；以消耗1 mol CH₄計為−891 kJ/mol。",
+        "subject": "化學",
+        "sub_topic": "熱化學與反應熱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-熱化學與反應熱",
+        "template_id": "ref-20261119-chem2-thermo-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
