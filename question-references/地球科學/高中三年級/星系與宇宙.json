@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth3-星系與宇宙-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估星系與宇宙",
+      "question": {
+        "q": "觀測遠方星系的光譜，發現同一組譜線整體往較長波長偏移。最直接的觀測量是？",
+        "correct": "紅移，可用於估計星系退行與宇宙膨脹關係",
+        "wrong": [
+          "星系必定正在向地球靠近",
+          "譜線波長變長代表恆星溫度必然為零",
+          "任何紅移都只由地球自轉造成"
+        ],
+        "exp": "宇宙學紅移反映光在膨脹宇宙中波長被拉長，近距離也可能有特殊速度效應。",
+        "subject": "地球科學",
+        "sub_topic": "星系與宇宙",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-星系與宇宙",
+        "template_id": "extra-2026-earth3-星系與宇宙-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-星系與宇宙-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估星系與宇宙",
+      "question": {
+        "q": "若兩個遠方星系分別距離約100 Mpc與200 Mpc，且近似遵守哈伯定律，較遠星系的平均退行速度約如何？",
+        "correct": "約為較近星系的兩倍",
+        "wrong": [
+          "約為一半",
+          "兩者必定完全相同",
+          "較遠者必定向地球運動"
+        ],
+        "exp": "哈伯定律v≈H₀d，在適用範圍內退行速度與距離近似成正比。",
+        "subject": "地球科學",
+        "sub_topic": "星系與宇宙",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-星系與宇宙",
+        "template_id": "extra-2026-earth3-星系與宇宙-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-星系與宇宙-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估星系與宇宙",
+      "question": {
+        "q": "宇宙微波背景輻射具有接近2.7 K黑體光譜。這項觀測最重要的意義是？",
+        "correct": "提供早期宇宙高溫緻密階段的證據",
+        "wrong": [
+          "證明所有星系年齡完全相同",
+          "表示宇宙現在每一處物質都是2.7 K",
+          "直接測得所有恆星的表面溫度"
+        ],
+        "exp": "微波背景是早期宇宙冷卻後留下的輻射，是大霹靂宇宙模型的重要證據。",
+        "subject": "地球科學",
+        "sub_topic": "星系與宇宙",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-星系與宇宙",
+        "template_id": "extra-2026-earth3-星系與宇宙-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth3-氣候資料-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估氣候資料",
+      "question": {
+        "q": "兩座測站的年平均氣溫分別上升1°C與0.5°C，但甲站從農地變成市中心。評估區域氣候趨勢應先做什麼？",
+        "correct": "檢查都市熱島、測站搬遷與觀測方法，再做均質化比較",
+        "wrong": [
+          "直接把甲站所有升溫當成全球趨勢",
+          "只因乙站升溫較低就認定甲站偽造",
+          "將測站海拔全部設定為零"
+        ],
+        "exp": "長期氣候序列須處理站點環境變動與量測一致性。",
+        "subject": "地球科學",
+        "sub_topic": "氣候資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-氣候資料",
+        "template_id": "extra-2026-earth3-氣候資料-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-氣候資料-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估氣候資料",
+      "question": {
+        "q": "某報導以某年單一颱風造成的豪雨，宣稱當地未來十年年雨量必然逐年增加。其推論哪裡不足？",
+        "correct": "單一極端事件不足以確定長期年雨量趨勢",
+        "wrong": [
+          "豪雨事件完全不屬於氣候研究",
+          "只要有颱風就代表整年雨量為零",
+          "長期趨勢永遠不需要統計檢驗"
+        ],
+        "exp": "應比較長時間序列與變異範圍，單次極端事件無法確定單調趨勢。",
+        "subject": "地球科學",
+        "sub_topic": "氣候資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-氣候資料",
+        "template_id": "extra-2026-earth3-氣候資料-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-氣候資料-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估氣候資料",
+      "question": {
+        "q": "比較兩個時段的平均溫度時，甲用30年資料、乙只用2年資料。哪種警覺較合理？",
+        "correct": "兩時段的樣本量及年際變異不同，應評估不確定性",
+        "wrong": [
+          "兩年平均必定比三十年平均更具代表性",
+          "資料越多必然使氣溫平均值越高",
+          "只要單位相同就不用看時段長度"
+        ],
+        "exp": "氣候平均需要足夠期間，短時段易受年際波動影響。",
+        "subject": "地球科學",
+        "sub_topic": "氣候資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-氣候資料",
+        "template_id": "extra-2026-earth3-氣候資料-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

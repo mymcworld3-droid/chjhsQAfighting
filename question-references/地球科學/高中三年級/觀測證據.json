@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth3-觀測證據-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估觀測證據",
+      "question": {
+        "q": "某天文影像出現模糊光點，研究者聲稱發現一顆新行星。要排除相機雜訊，最重要的步驟是？",
+        "correct": "不同時間重複觀測，並與其他儀器或測量方式交叉確認",
+        "wrong": [
+          "只要影像亮點夠大就無須驗證",
+          "刪除原始影像再公布結論",
+          "只依照片檔名推論天體軌道"
+        ],
+        "exp": "可重複及獨立觀測有助區分真實訊號與儀器噪音。",
+        "subject": "地球科學",
+        "sub_topic": "觀測證據",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-觀測證據",
+        "template_id": "extra-2026-earth3-觀測證據-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-觀測證據-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估觀測證據",
+      "question": {
+        "q": "研究者發現恆星光譜週期性紅藍移動，想推測是否有系外行星。這主要利用何種方法？",
+        "correct": "視向速度法，從恆星受引力擾動的光譜都卜勒位移推論",
+        "wrong": [
+          "只看恆星的表面顏色",
+          "用單次影像直接量出行星半徑",
+          "利用地球潮汐高度決定行星是否存在"
+        ],
+        "exp": "行星引力使恆星繞質心微小運動，造成視向速度週期變化。",
+        "subject": "地球科學",
+        "sub_topic": "觀測證據",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-觀測證據",
+        "template_id": "extra-2026-earth3-觀測證據-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-觀測證據-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估觀測證據",
+      "question": {
+        "q": "某科學家主張地球內部有新型深層構造，但只有單一地震站的一次量測。若要提升可信度，應加入什麼？",
+        "correct": "多站地震波到時、不同事件及獨立地球物理資料",
+        "wrong": [
+          "只把結論寫得更確定",
+          "不記錄測站位置",
+          "刪除與假說不符的波形"
+        ],
+        "exp": "地球內部構造推論需多路徑波速及地球物理證據互證。",
+        "subject": "地球科學",
+        "sub_topic": "觀測證據",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-觀測證據",
+        "template_id": "extra-2026-earth3-觀測證據-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

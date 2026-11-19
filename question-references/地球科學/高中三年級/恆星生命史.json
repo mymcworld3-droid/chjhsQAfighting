@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth3-恆星生命史-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估恆星生命史",
+      "question": {
+        "q": "質量遠大於太陽的恆星在演化晚期可能發生核心坍縮超新星。其重要條件是？",
+        "correct": "核心核融合無法持續提供足夠壓力支撐，重力導致坍縮",
+        "wrong": [
+          "恆星因完全沒有重力而爆炸",
+          "所有恆星都以相同質量和時間成為超新星",
+          "行星的自轉直接引發恆星核心坍縮"
+        ],
+        "exp": "大質量恆星核心演化至不再可有效提供壓力支撐時，可能發生重力坍縮。",
+        "subject": "地球科學",
+        "sub_topic": "恆星生命史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-恆星生命史",
+        "template_id": "extra-2026-earth3-恆星生命史-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-恆星生命史-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估恆星生命史",
+      "question": {
+        "q": "某星團的高質量藍色恆星已消失，卻仍有大量較低質量主序星。這可提供什麼線索？",
+        "correct": "高質量主序星壽命較短，可用主序轉折估計星團年齡",
+        "wrong": [
+          "高質量恆星一定比低質量恆星活得更久",
+          "所有星團恆星必定在同一天死亡",
+          "主序轉折點與年齡完全無關"
+        ],
+        "exp": "高質量恆星耗能快、主序壽命短，轉折點能用於推定年齡。",
+        "subject": "地球科學",
+        "sub_topic": "恆星生命史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-恆星生命史",
+        "template_id": "extra-2026-earth3-恆星生命史-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-恆星生命史-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估恆星生命史",
+      "question": {
+        "q": "一顆與太陽質量相近的恆星耗盡核心氫燃料後，較可能經歷哪種演化？",
+        "correct": "膨脹成紅巨星，最終留下白矮星",
+        "wrong": [
+          "必定直接成為高質量黑洞",
+          "永遠停留在原來的主序狀態",
+          "立即變成氣態巨行星"
+        ],
+        "exp": "太陽質量等級恆星通常經紅巨星與行星狀星雲階段，留下白矮星。",
+        "subject": "地球科學",
+        "sub_topic": "恆星生命史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-恆星生命史",
+        "template_id": "extra-2026-earth3-恆星生命史-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

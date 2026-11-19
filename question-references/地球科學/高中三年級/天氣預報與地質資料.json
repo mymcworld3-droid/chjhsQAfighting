@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth3-天氣預報與地質資料-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估天氣預報與地質資料",
+      "question": {
+        "q": "某天氣模式預報三天後降雨機率80%，但當地只下一場短暫小雨。應如何理解80%？",
+        "correct": "它描述在既定預報條件下可測降雨事件發生的機率，不保證雨量多寡",
+        "wrong": [
+          "表示當天有80%的時間一定下雨",
+          "表示全市所有地點雨量都必定是80毫米",
+          "80%機率預報只要有一處未下雨就一定錯誤"
+        ],
+        "exp": "降雨機率與降雨量、持續時間不同，評估預報需長期校驗。",
+        "subject": "地球科學",
+        "sub_topic": "天氣預報與地質資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中三年級-天氣預報與地質資料",
+        "template_id": "extra-2026-earth3-天氣預報與地質資料-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-天氣預報與地質資料-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估天氣預報與地質資料",
+      "question": {
+        "q": "地質剖面顯示沉積層A被斷層切斷，而上覆地層B未受此斷層錯動。哪項事件順序最合理？",
+        "correct": "A沉積後發生斷層活動，再沉積B",
+        "wrong": [
+          "B一定先於A沉積",
+          "斷層必定在所有地層之前出現",
+          "A與B必定同時形成"
+        ],
+        "exp": "切割關係顯示斷層晚於A，未切割B代表B可能在此次錯動之後形成。",
+        "subject": "地球科學",
+        "sub_topic": "天氣預報與地質資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中三年級-天氣預報與地質資料",
+        "template_id": "extra-2026-earth3-天氣預報與地質資料-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-天氣預報與地質資料-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估天氣預報與地質資料",
+      "question": {
+        "q": "某斷層危害圖僅表示可能有較強震動的區域。若要評估建築倒塌風險，還應納入什麼？",
+        "correct": "建物耐震能力、地盤條件及暴露人口",
+        "wrong": [
+          "只看地圖顏色不看建物",
+          "地震規模越小所有建物必定更危險",
+          "所有地盤對地震波放大效果都完全相同"
+        ],
+        "exp": "危害強度和實際災害風險不同，後者須考量脆弱度及暴露程度。",
+        "subject": "地球科學",
+        "sub_topic": "天氣預報與地質資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中三年級-天氣預報與地質資料",
+        "template_id": "extra-2026-earth3-天氣預報與地質資料-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

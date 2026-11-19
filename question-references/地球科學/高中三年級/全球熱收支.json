@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth3-全球熱收支-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估全球熱收支",
+      "question": {
+        "q": "假設地球吸收的太陽平均輻射為240 W/m²，向外長波輻射也是240 W/m²。這代表什麼？",
+        "correct": "在該平均尺度上，地球整體輻射能量收支近似平衡",
+        "wrong": [
+          "地球完全沒有任何熱量流動",
+          "海陸兩地溫度必定相等",
+          "大氣沒有溫室氣體"
+        ],
+        "exp": "全球平均入射吸收與向外放射相等時，淨輻射近似零，但仍有內部能量交換。",
+        "subject": "地球科學",
+        "sub_topic": "全球熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-全球熱收支",
+        "template_id": "extra-2026-earth3-全球熱收支-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-全球熱收支-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估全球熱收支",
+      "question": {
+        "q": "某行星反照率從0.30升至0.35，其他條件不變。對吸收的太陽輻射有何直接影響？",
+        "correct": "吸收比例減少，可能帶來冷卻效應",
+        "wrong": [
+          "吸收比例增加",
+          "反照率與能量吸收完全無關",
+          "行星自轉速度必定增加"
+        ],
+        "exp": "吸收比例約等於一減反照率；反照率升高意味更多短波被反射。",
+        "subject": "地球科學",
+        "sub_topic": "全球熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-全球熱收支",
+        "template_id": "extra-2026-earth3-全球熱收支-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-全球熱收支-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估全球熱收支",
+      "question": {
+        "q": "某研究指出溫室氣體增加，使地表發出的部分紅外輻射更易被大氣吸收與再放射。這主要改變哪個過程？",
+        "correct": "地表與大氣之間的長波輻射傳輸與向外能量散失",
+        "wrong": [
+          "太陽核心的核融合反應",
+          "地球磁場立即消失",
+          "所有短波輻射都被反射而無法到達地表"
+        ],
+        "exp": "溫室氣體影響長波能量傳輸，使系統需重新達到輻射平衡。",
+        "subject": "地球科學",
+        "sub_topic": "全球熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-全球熱收支",
+        "template_id": "extra-2026-earth3-全球熱收支-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

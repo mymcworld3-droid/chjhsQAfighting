@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth3-大氣動力-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估大氣動力",
+      "question": {
+        "q": "在北半球遠離地表摩擦的高空，若氣壓梯度力與科氏力大致平衡，風通常如何吹？",
+        "correct": "大致沿等壓線吹拂",
+        "wrong": [
+          "必然永遠垂直等壓線由低壓往高壓吹",
+          "風向完全不受地球自轉影響",
+          "所有高空風都必定靜止"
+        ],
+        "exp": "地轉平衡使風近似平行等壓線，地表摩擦則會使風斜穿等壓線。",
+        "subject": "地球科學",
+        "sub_topic": "大氣動力",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中三年級-大氣動力",
+        "template_id": "extra-2026-earth3-大氣動力-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-大氣動力-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估大氣動力",
+      "question": {
+        "q": "某地白天陸地升溫比海面快，近地面形成由海向陸吹的風。主要驅動機制是？",
+        "correct": "海陸差異加熱造成近地面氣壓差與局部環流",
+        "wrong": [
+          "海水必定比陸地升溫更快",
+          "陸地從不產生對流上升",
+          "風只能由月球引力形成"
+        ],
+        "exp": "陸地受熱較快易形成較低近地面氣壓，帶動海風與補償環流。",
+        "subject": "地球科學",
+        "sub_topic": "大氣動力",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中三年級-大氣動力",
+        "template_id": "extra-2026-earth3-大氣動力-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-大氣動力-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估大氣動力",
+      "question": {
+        "q": "北半球某低壓系統周圍的近地面氣流受摩擦影響。其一般環流方向較接近？",
+        "correct": "逆時針並向中心輻合",
+        "wrong": [
+          "順時針並向外輻散",
+          "只能沿正東方向吹",
+          "完全沒有垂直運動"
+        ],
+        "exp": "北半球低壓近地面常逆時針輻合，空氣可在中心附近上升。",
+        "subject": "地球科學",
+        "sub_topic": "大氣動力",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中三年級-大氣動力",
+        "template_id": "extra-2026-earth3-大氣動力-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

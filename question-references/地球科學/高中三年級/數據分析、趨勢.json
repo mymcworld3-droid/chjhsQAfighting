@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth3-數據分析、趨勢-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估數據分析、趨勢",
+      "question": {
+        "q": "某區年平均氣溫連續十年為上下波動但線性趨勢微升，這可以直接證明什麼？",
+        "correct": "資料顯示所選期間的估計趨勢，但仍需評估不確定性及較長期背景",
+        "wrong": [
+          "每一年都一定比前一年更熱",
+          "任何十年趨勢都必然等於全球趨勢",
+          "只要回歸線向上便沒有統計誤差"
+        ],
+        "exp": "線性趨勢描述平均變化方向，不能取代顯著性與時序背景分析。",
+        "subject": "地球科學",
+        "sub_topic": "數據分析、趨勢",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-數據分析、趨勢",
+        "template_id": "extra-2026-earth3-數據分析、趨勢-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-數據分析、趨勢-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估數據分析、趨勢",
+      "question": {
+        "q": "某海平面資料從100毫米上升至160毫米，歷時20年。若近似線性，其平均上升速率是多少？",
+        "correct": "3毫米／年",
+        "wrong": [
+          "8毫米／年",
+          "20毫米／年",
+          "60毫米／年"
+        ],
+        "exp": "高度差60毫米除以20年，平均每年3毫米；這是資料所示區間的平均值。",
+        "subject": "地球科學",
+        "sub_topic": "數據分析、趨勢",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-數據分析、趨勢",
+        "template_id": "extra-2026-earth3-數據分析、趨勢-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-數據分析、趨勢-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估數據分析、趨勢",
+      "question": {
+        "q": "兩組年降雨資料的平均數皆為2000毫米，甲標準差100毫米、乙標準差500毫米。哪組年際變化較大？",
+        "correct": "乙組，因標準差較大",
+        "wrong": [
+          "甲組，因平均數相同",
+          "兩組完全沒有年際差異",
+          "不能比較，因標準差與變異無關"
+        ],
+        "exp": "標準差衡量資料相對平均的散布，乙組的年雨量波動較大。",
+        "subject": "地球科學",
+        "sub_topic": "數據分析、趨勢",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-數據分析、趨勢",
+        "template_id": "extra-2026-earth3-數據分析、趨勢-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

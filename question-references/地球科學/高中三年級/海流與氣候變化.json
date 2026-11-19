@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth3-海流與氣候變化-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估海流與氣候變化",
+      "question": {
+        "q": "某沿岸受冷海流影響，海面氣溫較低且水氣不易強烈上升。這可能使沿岸呈現哪種氣候傾向？",
+        "correct": "較乾燥且大氣穩定的條件較常見",
+        "wrong": [
+          "冷海流必然造成全年每日豪雨",
+          "海流與沿岸氣溫完全無關",
+          "所有冷海流沿岸都不可能出現霧"
+        ],
+        "exp": "冷海流可降低海面溫度及對流強度，但霧等現象仍可能出現。",
+        "subject": "地球科學",
+        "sub_topic": "海流與氣候變化",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中三年級-海流與氣候變化",
+        "template_id": "extra-2026-earth3-海流與氣候變化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-海流與氣候變化-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估海流與氣候變化",
+      "question": {
+        "q": "某年赤道太平洋中東部海溫偏暖，東太平洋上升流減弱。若屬聖嬰事件，最合理的說明是？",
+        "correct": "海氣耦合環流改變，可能影響不同地區降雨與溫度",
+        "wrong": [
+          "所有全球地區降雨必定同時增加",
+          "太平洋海水從此完全停止流動",
+          "聖嬰只和陸地火山活動有關"
+        ],
+        "exp": "聖嬰涉及赤道太平洋海溫、信風及沃克環流異常，氣候效應具區域差異。",
+        "subject": "地球科學",
+        "sub_topic": "海流與氣候變化",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中三年級-海流與氣候變化",
+        "template_id": "extra-2026-earth3-海流與氣候變化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-海流與氣候變化-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估海流與氣候變化",
+      "question": {
+        "q": "某研究比較海洋表層水溫與深海溫度，發現熱量逐年向深層傳遞。這對氣候系統意味什麼？",
+        "correct": "海洋可吸收並儲存大量熱量，延緩部分大氣溫度變化",
+        "wrong": [
+          "海洋熱容量可忽略不計",
+          "深海溫度永遠不能改變",
+          "海溫變化只影響魚類而與氣候無關"
+        ],
+        "exp": "海洋具有巨大熱容量，熱輸送與熱儲存是地球能量收支的重要部分。",
+        "subject": "地球科學",
+        "sub_topic": "海流與氣候變化",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中三年級-海流與氣候變化",
+        "template_id": "extra-2026-earth3-海流與氣候變化-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

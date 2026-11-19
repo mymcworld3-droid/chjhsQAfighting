@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth3-遙測與地圖-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估遙測與地圖",
+      "question": {
+        "q": "衛星影像以每個像素代表250公尺的地表範圍。若欲監測寬10公尺的河道細節，最主要的限制是？",
+        "correct": "像素尺寸太大，細小地物可能被混合到鄰近地表",
+        "wrong": [
+          "像素越大細節越完整",
+          "影像解析度與地物辨識無關",
+          "只要放大畫面就一定新增真實資訊"
+        ],
+        "exp": "粗解析度像素會混合多種地物，數位放大無法創造原始細節。",
+        "subject": "地球科學",
+        "sub_topic": "遙測與地圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中三年級-遙測與地圖",
+        "template_id": "extra-2026-earth3-遙測與地圖-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-遙測與地圖-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估遙測與地圖",
+      "question": {
+        "q": "某研究將火山溫度影像與居民分布圖重疊評估風險，但兩圖座標系統不同。應優先做什麼？",
+        "correct": "統一座標參考系統後檢查疊合誤差",
+        "wrong": [
+          "直接讓兩張圖具有相同顏色",
+          "將人口數全部設為一",
+          "忽略地圖比例尺和坐標"
+        ],
+        "exp": "不同投影或基準易造成空間偏移，需轉換後才可評估暴露區域。",
+        "subject": "地球科學",
+        "sub_topic": "遙測與地圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中三年級-遙測與地圖",
+        "template_id": "extra-2026-earth3-遙測與地圖-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-遙測與地圖-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估遙測與地圖",
+      "question": {
+        "q": "某降雨雷達圖顯示強降雨區逐漸向東移動，但地面雨量站尚未觀測到降水。怎麼解釋較合理？",
+        "correct": "雷達回波與地面降雨不必完全一致，仍需分析雨滴蒸發及觀測時間差",
+        "wrong": [
+          "雷達一旦出現回波地面必定同時有大雨",
+          "所有雷達回波都是地面儀器故障",
+          "地面雨量站只能測風速不能測雨量"
+        ],
+        "exp": "雷達偵測空中散射體，地表雨量須地面驗證及判斷降水過程。",
+        "subject": "地球科學",
+        "sub_topic": "遙測與地圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中三年級-遙測與地圖",
+        "template_id": "extra-2026-earth3-遙測與地圖-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

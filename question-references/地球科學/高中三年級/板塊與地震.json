@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth3-板塊與地震-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估板塊與地震",
+      "question": {
+        "q": "某海溝附近的地震震源從海溝向內陸逐漸加深。最合理的板塊構造解釋為何？",
+        "correct": "一塊板塊向另一板塊下方隱沒，形成傾斜震源帶",
+        "wrong": [
+          "兩板塊沿中洋脊相互遠離且震源持續加深",
+          "所有地震都由表面風化造成",
+          "岩石圈沒有相對運動"
+        ],
+        "exp": "隱沒板塊沿深部延伸，常形成由淺至深的班尼奧夫地震帶。",
+        "subject": "地球科學",
+        "sub_topic": "板塊與地震",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中三年級-板塊與地震",
+        "template_id": "extra-2026-earth3-板塊與地震-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-板塊與地震-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估板塊與地震",
+      "question": {
+        "q": "甲、乙兩測站離震央距離不同；乙站P波與S波到達時間差較大。其他條件相近時哪項推論較合理？",
+        "correct": "乙站通常離震央較遠",
+        "wrong": [
+          "乙站地震規模一定較大",
+          "乙站地殼一定完全沒有裂縫",
+          "P與S波在任何介質速度都相同"
+        ],
+        "exp": "P波通常比S波快，兩波到時差隨傳播距離增加而變大。",
+        "subject": "地球科學",
+        "sub_topic": "板塊與地震",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中三年級-板塊與地震",
+        "template_id": "extra-2026-earth3-板塊與地震-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth3-板塊與地震-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "以模型、觀測數據與自然機制評估板塊與地震",
+      "question": {
+        "q": "某地位於兩板塊水平錯動邊界，地震頻繁但缺乏大型火山鏈。最可能屬哪種邊界？",
+        "correct": "轉形板塊邊界",
+        "wrong": [
+          "典型中洋脊張裂中心",
+          "海洋板塊隱沒形成的島弧",
+          "完全沒有活動的板塊內部"
+        ],
+        "exp": "轉形斷層以水平剪切為主，可引發淺源地震而不必形成火山弧。",
+        "subject": "地球科學",
+        "sub_topic": "板塊與地震",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中三年級-板塊與地震",
+        "template_id": "extra-2026-earth3-板塊與地震-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
