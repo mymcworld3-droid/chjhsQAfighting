@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-chi1-poetry-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從律詩對仗、押韻與平仄辨認近體詩形式",
+      "question": {
+        "q": "近體詩的八句律詩通常要求哪兩聯對仗？",
+        "correct": "頷聯與頸聯（第三、四句及第五、六句）",
+        "wrong": [
+          "首聯與尾聯且中間不得對仗",
+          "只有第一句與第八句對仗",
+          "所有八句必須每句文字完全相同"
+        ],
+        "exp": "律詩分首、頷、頸、尾四聯，格律上通常要求頷聯和頸聯對仗。",
+        "subject": "國文",
+        "sub_topic": "古詩與近體詩基本格律",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-古詩與近體詩基本格律",
+        "template_id": "ref-20261119-b2-chi1-poetry-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-chi1-poetry-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從律詩對仗、押韻與平仄辨認近體詩形式",
+      "question": {
+        "q": "關於近體詩的押韻慣例，下列何者正確？",
+        "correct": "一般在偶數句末押同一韻，首句可押可不押",
+        "wrong": [
+          "所有詩句末字必須完全相同",
+          "只有奇數句才可押韻",
+          "近體詩完全不講究押韻"
+        ],
+        "exp": "近體詩多在第二、四等偶數句末押韻；第一句有時也入韻，故不能斷言每句都押韻。",
+        "subject": "國文",
+        "sub_topic": "古詩與近體詩基本格律",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-古詩與近體詩基本格律",
+        "template_id": "ref-20261119-b2-chi1-poetry-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-chi1-poetry-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從律詩對仗、押韻與平仄辨認近體詩形式",
+      "question": {
+        "q": "「近體詩」比起一般古體詩，最具代表性的形式要求為何？",
+        "correct": "句數與字數等格式較固定，並重視平仄和押韻",
+        "wrong": [
+          "一律不許押韻",
+          "每句長度都必須不同",
+          "必須全部用白話文寫成"
+        ],
+        "exp": "近體詩如律詩、絕句通常有較規範的句數、字數、平仄和用韻要求。",
+        "subject": "國文",
+        "sub_topic": "古詩與近體詩基本格律",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-古詩與近體詩基本格律",
+        "template_id": "ref-20261119-b2-chi1-poetry-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
