@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-m2-planeeq-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "空間中的平面z=−4包含哪個點？",
+        "correct": "(2,3,−4)",
+        "wrong": [
+          "(2,−4,3)",
+          "(−4,3,2)",
+          "(0,0,4)"
+        ],
+        "exp": "平面z=−4上所有點的第三坐標均為−4，前兩坐標可任意。",
+        "subject": "數學",
+        "sub_topic": "平面方程式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-平面方程式",
+        "template_id": "ref-20261119-b11-m2-planeeq-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-planeeq-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "平面2x+y−z=5是否包含點P(1,2,−1)？",
+        "correct": "包含，因為代入左式為5",
+        "wrong": [
+          "不包含，因為代入左式為3",
+          "不包含，因為代入左式為−1",
+          "包含，因為點P的三個坐標和為5"
+        ],
+        "exp": "代入得2×1+2−(−1)=5，與右端相同，故P在平面上。",
+        "subject": "數學",
+        "sub_topic": "平面方程式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-平面方程式",
+        "template_id": "ref-20261119-b11-m2-planeeq-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-planeeq-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "哪個平面與xy平面平行，且通過點(1,2,7)？",
+        "correct": "z=7",
+        "wrong": [
+          "x=7",
+          "y=7",
+          "x+y=7"
+        ],
+        "exp": "xy平面為z=0，與其平行的平面皆可寫成z=c；通過給定點故c=7。",
+        "subject": "數學",
+        "sub_topic": "平面方程式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-平面方程式",
+        "template_id": "ref-20261119-b11-m2-planeeq-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
