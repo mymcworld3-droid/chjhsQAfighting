@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-eng1-adverb-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "______ she was tired, Mia finished her homework before going to bed.",
+        "correct": "Although",
+        "wrong": [
+          "Because of",
+          "Despite",
+          "Unless of"
+        ],
+        "exp": "Although can introduce a full finite clause and expresses a contrast between tiredness and completing the homework; 'because of' and 'despite' require noun phrases.",
+        "subject": "英文",
+        "sub_topic": "副詞子句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中一年級-副詞子句",
+        "template_id": "ref-20261119-b3-eng1-adverb-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-eng1-adverb-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "You may borrow my camera ______ you promise to take good care of it.",
+        "correct": "as long as",
+        "wrong": [
+          "even though",
+          "in spite of",
+          "so that of"
+        ],
+        "exp": "'As long as' introduces a condition: the camera can be borrowed provided that it is handled carefully.",
+        "subject": "英文",
+        "sub_topic": "副詞子句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中一年級-副詞子句",
+        "template_id": "ref-20261119-b3-eng1-adverb-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-eng1-adverb-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "The students stayed indoors ______ the heavy rain stopped.",
+        "correct": "until",
+        "wrong": [
+          "unless of",
+          "although of",
+          "because of"
+        ],
+        "exp": "'Until' is followed by a clause and indicates the time when staying indoors ends; the other choices do not fit the grammar or intended meaning.",
+        "subject": "英文",
+        "sub_topic": "副詞子句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中一年級-副詞子句",
+        "template_id": "ref-20261119-b3-eng1-adverb-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
