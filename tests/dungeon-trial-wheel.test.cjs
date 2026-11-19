@@ -73,11 +73,11 @@ test('server commits multi-step paths atomically, charging one stamina each',()=
   const map=plainMap();
   const vectors=mapTools.dungeonRoute(map,{x:2,y:2},{x:4,y:5});
   const own={uid:'a',joinedAtMs:100,position:{x:2,y:2},
-    explorationStamina:50,moveSeq:0,battleHealth:100};
+    explorationStamina:10,moveSeq:0,battleHealth:100};
   const room={mode:'dungeon',status:'assembled',members:{a:own},enemies:[]};
   const result=M.moveRouteOnMap(room,'a',map,{vectors,step:1});
   assert.deepEqual(result.member.position,{x:4,y:5});
-  assert.equal(result.member.explorationStamina,50-vectors.length);
+  assert.equal(result.member.explorationStamina,10-vectors.length);
   assert.equal(result.member.moveSeq,vectors.length);
   assert.deepEqual(own.position,{x:2,y:2},'original snapshot stays immutable');
   const retry=M.moveRouteOnMap({...room,members:result.members},
