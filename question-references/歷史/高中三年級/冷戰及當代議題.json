@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-hist3-coldwar-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "北大西洋公約組織於1949年成立，華沙公約組織於1955年成立。兩者最能反映冷戰時期何種國際局勢？",
+        "correct": "美蘇主導的兩大軍事陣營對立",
+        "wrong": [
+          "一戰後歐洲各國完全取消軍事合作",
+          "兩組織都是十九世紀殖民貿易公司",
+          "冷戰時所有國家均加入同一軍事聯盟"
+        ],
+        "exp": "北約與華沙公約組織分別連結西方與東方陣營，反映冷戰時期政治軍事結盟及對峙。",
+        "subject": "歷史",
+        "sub_topic": "冷戰及當代議題",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-冷戰及當代議題",
+        "template_id": "ref-20261119-b4-hist3-coldwar-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-hist3-coldwar-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "1961年柏林圍牆開始興建，將城市東西兩部分隔離。這最直接反映了哪個歷史脈絡？",
+        "correct": "德國及柏林在冷戰中的政治與制度分裂",
+        "wrong": [
+          "羅馬帝國東西分治的直接延續",
+          "聯合國解散後所有歐洲國家停止往來",
+          "德國在十九世紀完成的統一運動"
+        ],
+        "exp": "柏林圍牆象徵東西德及美蘇陣營在歐洲的分裂，也影響當地居民遷徙與生活。",
+        "subject": "歷史",
+        "sub_topic": "冷戰及當代議題",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-冷戰及當代議題",
+        "template_id": "ref-20261119-b4-hist3-coldwar-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-hist3-coldwar-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "1991年蘇聯解體後，國際政治格局發生重要變化。下列哪項敘述較符合歷史實況？",
+        "correct": "美蘇兩極冷戰格局告一段落，但各地衝突並未因此全部消失",
+        "wrong": [
+          "全球所有國家立刻改採完全相同的制度",
+          "所有軍事組織在1991年同時解散",
+          "國際貿易與區域衝突自此都停止發生"
+        ],
+        "exp": "蘇聯解體是冷戰結束的重要象徵，但國際關係並未從此沒有戰爭、競爭或其他矛盾。",
+        "subject": "歷史",
+        "sub_topic": "冷戰及當代議題",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中三年級-冷戰及當代議題",
+        "template_id": "ref-20261119-b4-hist3-coldwar-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
