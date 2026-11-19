@@ -173,3 +173,30 @@ test('room codes reserve transactionally and retry collisions instead of leaking
   assert.equal((await f.call('c','join-code',{roomCode:'BBBBBB'})).body.roomId,a.roomId);
   assert.equal((await f.call('d','join-code',{roomCode:'CCCCCC'})).body.roomId,b.roomId);
 });
+
+test('A-side isAdmin alone authorizes dungeon-wide fixed stamina; browser flags are ignored',async()=>{
+  const f=fixture();
+  const adminUser=f.a.records.get('users/a');
+  const normalUser=f.a.records.get('users/b');
+  adminUser.isAdmin=true;normalUser.isAdmin=false;
+  const created=await f.call('a','create',{dungeonAdmin:false,isAdmin:false});
+  assert.equal(created.status,200);
+  assert.equal(created.body.room.members.a.dungeonAdmin,true);
+  const join=await f.call('b','join-code',{
+    roomCode:created.body.room.code,dungeonAdmin:true,isAdmin:true
+  });
+  assert.equal(join.status,200);
+  assert.equal(join.body.room.members.b.dungeonAdmin,false,
+    'a regular player cannot claim the administrator privilege in a request');
+  // Read permissions again at departure, including changes made in A after
+  // creating the room. Browser content cannot set that bit.
+  adminUser.isAdmin=false;normalUser.isAdmin=true;
+  await f.call('a','ready',{roomId:created.roomId,ready:true});
+  await f.call('b','ready',{roomId:created.roomId,ready:true});
+  const started=await f.call('a','start',{roomId:created.roomId});
+  assert.equal(started.status,200,JSON.stringify(started.body));
+  assert.equal(started.body.room.members.a.dungeonAdmin,false);
+  assert.equal(started.body.room.members.b.dungeonAdmin,true);
+  assert.equal(started.body.room.members.b.explorationStamina,10);
+  assert.equal(started.body.room.members.a.explorationStamina,10);
+});
