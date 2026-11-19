@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-ch2-imagery-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "聚焦經典文本的思想、修辭與表達，非單純文字搜尋",
+      "question": {
+        "q": "李白〈黃鶴樓送孟浩然之廣陵〉寫道：「孤帆遠影碧空盡，唯見長江天際流。」此景物描寫主要如何傳達送別情感？",
+        "correct": "以友人船影消失後仍凝望長江的視線，呈現依依不捨",
+        "wrong": [
+          "以長江水流證明兩人從未離別",
+          "藉船帆數量推定當時港口的精確吞吐量",
+          "透過晴朗天空表示詩人完全不在乎友人遠去"
+        ],
+        "exp": "由孤帆漸遠到只見江水，視線延伸而友人已去，以景寫情表達惜別。",
+        "subject": "國文",
+        "sub_topic": "意象、典故與詩風",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-意象、典故與詩風",
+        "template_id": "ref-20261119-b6-ch2-imagery-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-ch2-imagery-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "聚焦經典文本的思想、修辭與表達，非單純文字搜尋",
+      "question": {
+        "q": "李商隱〈無題〉「春蠶到死絲方盡，蠟炬成灰淚始乾」以蠶吐絲、燭燃燒的形象，主要凸顯何種情感特質？",
+        "correct": "綿長而不輕易終止的深情與付出",
+        "wrong": [
+          "面對任何關係都保持冷淡與疏離",
+          "只為說明蠟燭燃燒速度與蠶絲產量",
+          "對一時喜悅的輕快描寫"
+        ],
+        "exp": "春蠶至死才盡絲、蠟炬成灰才乾淚，透過消耗自身的形象象徵情感綿延與投入。",
+        "subject": "國文",
+        "sub_topic": "意象、典故與詩風",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-意象、典故與詩風",
+        "template_id": "ref-20261119-b6-ch2-imagery-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-ch2-imagery-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "聚焦經典文本的思想、修辭與表達，非單純文字搜尋",
+      "question": {
+        "q": "蘇軾〈水調歌頭〉「但願人長久，千里共嬋娟」中，「嬋娟」借指明月。此句最適合如何理解？",
+        "correct": "盼彼此平安長久，即使相隔千里也能共享月色寄託思念",
+        "wrong": [
+          "要求遠方親友必須立即前往同一地點賞月",
+          "認為只要相隔千里，感情就一定無法維繫",
+          "用月亮當成地理測量工具以計算兩地距離"
+        ],
+        "exp": "「人長久」表達祝願，「千里共嬋娟」以共賞明月跨越空間距離，寄寓對親人的思念。",
+        "subject": "國文",
+        "sub_topic": "意象、典故與詩風",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-意象、典故與詩風",
+        "template_id": "ref-20261119-b6-ch2-imagery-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
