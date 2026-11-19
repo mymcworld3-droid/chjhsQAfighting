@@ -7,6 +7,7 @@ import {
 } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 import { showDungeonMap, hideDungeonMap, updateDungeonMapRoom } from './dungeon-map-view.js';
+import { listRecentDungeonVictories, claimDungeonBossReward } from './dungeon-room.js';
 
 // Only the lobby is implemented here. The server controls all membership,
 // readiness, host and assembly decisions. No battle or reward state lives here.
@@ -22,6 +23,7 @@ let list=[],listLoading=false,lastListAt=0,clock=null,requestSerial=0,initialFoc
 let streamStop=null,streamRoomId='',streamConnected=false,heartbeatBusy=false,lastHeartbeatAt=0;
 let fallbackFailures=0,nextFallbackAt=0,roomViewSignature='';
 let emptyRoomCheckAt=0,emptyRoomBusy=false,autoPreviewRoomId='';
+let recentVictories=[],victoryRequestSeq=0;
 const HEARTBEAT_MS=20000,PRESENCE_STALE_MS=60000;
 const $=selector=>root?.querySelector(selector);
 function loadStyle(){
@@ -125,10 +127,64 @@ function markBusy(value){
     button.disabled=value || button.dataset.dgDisabled==='true';
   });
 }
+// Read-only inbox: the server verifies C's saved victory and A's reward
+// receipt. This is not client-generated loot or an unverified toast.
+function renderVictoryHistory(){
+  if(!recentVictories.length)return '';
+  const visible=recentVictories.slice(0,6);
+  const pendingCount=recentVictories.filter(v=>!v.claimed).length;
+  return '<section class="dg-victory-history" data-dg-victories>'+
+    '<div class="dg-section-heading"><h3>副本勝利紀錄</h3><span>'+
+    (pendingCount?pendingCount+' 筆待領取':'獎勵已入帳')+'</span></div>'+
+    visible.map(v=>{
+      const id=safeRoomId(v.roomId);
+      if(!id)return '';
+      const date=Number.isFinite(Number(v.archivedAtMs))&&Number(v.archivedAtMs)>0?
+        new Date(Number(v.archivedAtMs)).toLocaleDateString('zh-TW'):'近期';
+      return '<div class="dg-victory-row"><div><strong>玄炎鎮殿 · '+
+        esc(date)+'</strong><small>'+Math.max(1,Math.min(4,Number(v.partySize)||1))+
+        ' 人合作 · 120 靈石＋3 修為 · '+
+        (v.claimed?'已領取':'可補領')+'</small></div>'+
+        (v.claimed?'<span class="dg-victory-claimed">✓ 已入帳</span>':
+          '<button data-dg="claim-recovered" data-room-id="'+id+
+          '">領取獎勵</button>')+'</div>';
+    }).join('')+'</section>';
+}
+async function refreshVictories(){
+  if(!open||!account)return;
+  const uid=account,serial=requestSerial,ticket=++victoryRequestSeq;
+  try{
+    const rows=await listRecentDungeonVictories();
+    if(!validSession(uid,serial)||ticket!==victoryRequestSeq)return;
+    recentVictories=rows.filter(row=>safeRoomId(row.roomId)).slice(0,16);
+    if(!initializing)render();
+  }catch(_){
+    // Prior builds of a server instance may not yet support the new action.
+    // Keep the lobby usable and allow retrying on the next open/claim.
+  }
+}
+async function claimRecovered(roomId){
+  if(pending||initializing||!open||!safeRoomId(roomId))return;
+  const uid=account,serial=requestSerial;
+  markBusy(true);announce('正在驗證勝利並將獎勵存入角色帳號…');
+  try{
+    const result=await claimDungeonBossReward(roomId);
+    if(!validSession(uid,serial))return;
+    announce(result?.reward?.status==='duplicate'?
+      '這場勝利先前已領取，不會重複發放。':
+      '副本獎勵已入帳：120 靈石、3 修為。');
+    await refreshVictories();
+  }catch(error){
+    if(validSession(uid,serial))announce(error?.message||'暫時無法領取，請稍後再試');
+  }finally{
+    if(validSession(uid,serial))markBusy(false);
+  }
+}
 function renderHome(){
   const count=list.length;
   body.innerHTML='<div class="dg-intro"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>'+
     '<div><h3>秘境集結</h3><p>召集道友、隨時答題充能，一起深入秘境挑戰守鑰靈獸與玄炎鎮殿獸。</p></div></div>'+
+    renderVictoryHistory()+
     '<div class="dg-actions"><button class="dg-primary" data-dg="quick">快速組隊</button>'+
     '<button data-dg="create">建立私人隊伍</button>'+
     '<button data-dg="create-public">建立公開隊伍</button></div>'+
@@ -196,6 +252,7 @@ function renderRoom(){
     (assembled?'<p class="dg-assembled" role="status"><i class="fa-solid fa-check-circle"></i> 探索進行中 · '+esc(mission)+
       ' 可隨時答題充能、施放功法或移動（一格耗 1 體力），靈獸依伺服器時鐘自行行動。</p>':
       '<p class="dg-helper">隊員各自確認準備。全員準備後，隊長才能確認集結出發。</p>')+
+    renderVictoryHistory()+
     '<section class="dg-map-teaser"><div><strong><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> 秘境地圖</strong>'+
     '<small>四種地貌 · 蜿蜒主線與支線 · 支援雙指縮放</small></div>'+
     '<button data-dg="preview-map" aria-label="檢視合作副本地圖">'+
@@ -238,6 +295,8 @@ async function previewDungeonMap(){
 function acceptRoom(next){
   if(!next||!safeRoomId(next.id))return false;
   const oldRoomId=room?.id,oldStatus=room?.status;
+  const newVictory=room?.bossEncounter?.status!=='defeated'&&
+    next?.bossEncounter?.status==='defeated';
   const revision=Number(next.revision);
   if(!Number.isFinite(revision))return false;
   if(room?.id===next.id&&revision<roomRevision)return false;
@@ -253,6 +312,7 @@ function acceptRoom(next){
   if(needsRender)render();
   else renderPresence();
   startRoomStream();
+  if(newVictory)void refreshVictories();
   // The assembled state is a view-only entry until multiplayer movement
   // arrives. Each device opens its own local preview once per assembly.
   if(next.status==='assembled'&&autoPreviewRoomId!==next.id){
@@ -387,6 +447,7 @@ async function openLobby(){
     window.showToast?.('請先離開目前的戰鬥，再進入合作副本');return;
   }
   mount();account=uid;open=true;requestSerial++;initializing=true;
+  recentVictories=[];victoryRequestSeq++;
   clearRoom();list=[];listLoading=false;refreshing=false;heartbeatBusy=false;lastListAt=0;pending=false;
   emptyRoomCheckAt=Date.now();emptyRoomBusy=false;
   initialFocus=document.activeElement;
@@ -405,6 +466,7 @@ async function openLobby(){
       clearRoom();render();
       void refreshList({force:true});
     }
+    void refreshVictories();
   }catch(error){
     if(validSession(uid,serial)){initializing=false;announce(error?.message||'目前無法連線至副本隊伍');render();}
   }
@@ -429,6 +491,7 @@ async function mutate(operation,{clear=false,message=''}={}){
       clearRoom();list=[];lastListAt=0;
       announce(message||'已離開隊伍');render();
       void refreshList({force:true});
+      void refreshVictories();
     }else{
       acceptRoom(result.room);
       announce(message);
@@ -466,6 +529,7 @@ async function handleClick(event){
   if(action==='join-code')return joinCode();
   if(action==='refresh-list')return refreshList({force:true});
   if(action==='join-public')return mutate(()=>joinPublicDungeonRoom(safeRoomId(target.dataset.roomId)));
+  if(action==='claim-recovered')return claimRecovered(safeRoomId(target.dataset.roomId));
   if(!room?.id)return;
   const roomId=room.id,host=room.hostUid===account;
   if(action==='copy'){
@@ -491,9 +555,15 @@ async function handleClick(event){
     if(!member||targetUid===account)return;
     return confirmAction('確定將「'+nameOf(member)+'」移出副本隊伍？',
       ()=>kickDungeonMember(roomId,targetUid));
-  }else if(action==='disband'&&host)return confirmAction('確定解散目前的合作副本隊伍？所有隊員都會離開。',
+  }else if(action==='disband'&&host)return confirmAction(
+    room.bossEncounter?.status==='defeated'?
+      '確定解散隊伍？本場勝利已保存，尚未領取的隊員之後仍可從副本入口補領。':
+      '確定解散目前的合作副本隊伍？所有隊員都會離開。',
     ()=>disbandDungeonRoom(roomId),{clear:true,message:'隊伍已解散'});
-  else if(action==='leave')return confirmAction('確定離開目前的合作副本隊伍？',
+  else if(action==='leave')return confirmAction(
+    room.bossEncounter?.status==='defeated'?
+      '確定離開已完成的副本？本場勝利已保存，可稍後回副本入口領取尚未入帳的獎勵。':
+      '確定離開目前的合作副本隊伍？',
     ()=>leaveDungeonRoom(roomId),{clear:true,message:'已離開隊伍'});
 }
 function init(){
