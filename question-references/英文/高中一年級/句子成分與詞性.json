@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-e1-pos-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "Choose the word that correctly completes the sentence: 'The new teacher explained the difficult idea very ______.'",
+        "correct": "clearly",
+        "wrong": [
+          "clear",
+          "clarity",
+          "clearness"
+        ],
+        "exp": "An adverb is needed to modify the verb 'explained'; 'clearly' is the adverb form.",
+        "subject": "英文",
+        "sub_topic": "句子成分與詞性",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中一年級-句子成分與詞性",
+        "template_id": "ref-20261119-b6-e1-pos-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e1-pos-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "Choose the correct form: 'The rapid ______ in water use surprised the researchers.'",
+        "correct": "reduction",
+        "wrong": [
+          "reduce",
+          "reduced",
+          "reductively"
+        ],
+        "exp": "The adjective 'rapid' modifies a noun in the subject phrase, and 'reduction' is the required noun.",
+        "subject": "英文",
+        "sub_topic": "句子成分與詞性",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中一年級-句子成分與詞性",
+        "template_id": "ref-20261119-b6-e1-pos-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e1-pos-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "Choose the correct word: 'The committee will discuss the ______ at tomorrow's meeting.'",
+        "correct": "proposal",
+        "wrong": [
+          "propose",
+          "proposedly",
+          "proposing"
+        ],
+        "exp": "After 'the', the object of 'discuss' should be a noun: 'proposal', meaning a suggested plan.",
+        "subject": "英文",
+        "sub_topic": "句子成分與詞性",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中一年級-句子成分與詞性",
+        "template_id": "ref-20261119-b6-e1-pos-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
