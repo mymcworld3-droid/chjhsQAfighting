@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-pointview-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "閱讀：「妹妹把成績單收進抽屜，以為父親不會發現。然而父親早在學校電話中得知了結果，決定等她自己開口。」這段敘事最明顯使用何種觀點？",
+        "correct": "第三人稱敘述者可同時呈現不同人物所知的資訊",
+        "wrong": [
+          "第一人稱敘述者只能知道妹妹心中的想法",
+          "只從妹妹的視角出發，無法得知父親的計畫",
+          "全篇以第二人稱命令讀者採取行動"
+        ],
+        "exp": "敘述者知道妹妹的誤以為，也知道父親已掌握消息及打算等待，超越單一人物能直接得知的內容。",
+        "subject": "國文",
+        "sub_topic": "敘事觀點、人物與情節",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-敘事觀點、人物與情節",
+        "template_id": "ref-20261119-b8-ch1-pointview-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-pointview-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "閱讀：「我記得那天風很大，大家都說船晚了兩小時。但多年後翻到港口紀錄，才發現它其實只晚了半小時。」這段敘事最值得注意哪個特徵？",
+        "correct": "敘事者以後來取得的資料修正自己原先的記憶",
+        "wrong": [
+          "敘事者從頭到尾都掌握無可質疑的精確紀錄",
+          "港口紀錄證明風向與船班毫無關聯",
+          "此文沒有時間先後或資訊落差"
+        ],
+        "exp": "前後對照主觀記憶與港口紀錄，揭示記憶可能不精確，並以後見資訊重新詮釋過往。",
+        "subject": "國文",
+        "sub_topic": "敘事觀點、人物與情節",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-敘事觀點、人物與情節",
+        "template_id": "ref-20261119-b8-ch1-pointview-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-pointview-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "某短篇小說先由孩子描述「爸爸總忘記我的生日」，結尾才寫父親長期在夜班工作，並在孩子睡著後留下一張手寫卡片。這個結尾對人物形象產生何種作用？",
+        "correct": "補入先前敘事者不知道的資訊，使讀者重新理解父親的行動",
+        "wrong": [
+          "證明孩子從一開始便完全知道父親所有行動",
+          "改用場景描寫取消父親與孩子之間的所有關係",
+          "只增加卡片尺寸細節，不影響對人物的判斷"
+        ],
+        "exp": "故事前段受孩子有限認知影響，結尾提供新資訊，促使讀者修正對父親態度的推論。",
+        "subject": "國文",
+        "sub_topic": "敘事觀點、人物與情節",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-敘事觀點、人物與情節",
+        "template_id": "ref-20261119-b8-ch1-pointview-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
