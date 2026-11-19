@@ -29,7 +29,19 @@ export function dungeonQuarterControlsHTML(){
     '<div class="dm-wheel-core dm-wheel-core-move" data-dm-wheel-move hidden>'+
     '<div data-dm-move-slot></div></div>'+
     '<span class="dm-wheel-select-arc" aria-hidden="true"></span></div>'+
+    '<output class="dm-focus-indicator" data-dm-focus-indicator hidden aria-live="polite" aria-label="蓄勢剩餘次數">✦ 蓄勢 6/6</output>'+
     '<button type="button" class="dm-loadout-toggle" data-dm="loadouts" aria-expanded="false" hidden>切換配置</button>';
+}
+
+// The skill costs and six-cast duration are server-owned. These helpers
+// interpret a received room snapshot without adding any client-side power.
+export function dungeonFocusCharges(member){
+  return Number.isSafeInteger(member?.focusCharges)?
+    Math.max(0,Math.min(6,member.focusCharges)):0;
+}
+export function dungeonFocusEmpowers(member,skill){
+  return dungeonFocusCharges(member)>0&&
+    skill?.school==='body'&&skill?.kind!=='fist-focus';
 }
 
 export function energyRingFill(stamina){
