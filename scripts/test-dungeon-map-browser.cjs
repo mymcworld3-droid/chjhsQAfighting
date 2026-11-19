@@ -490,8 +490,11 @@ async function main(){
     assert.equal(room.members.a.explorationStamina,9);
     await a.page.waitForFunction(()=>window.__dungeonMotionFrames?.includes('walking'),
       null,{timeout:5000});
-    await a.page.waitForFunction(()=>window.__dungeonMotionFrames?.includes('idle'),
-      null,{timeout:5000});
+    await a.page.waitForFunction(()=>{
+      const frames=window.__dungeonMotionFrames||[];
+      return frames.indexOf('walking')>=0&&
+        frames.lastIndexOf('idle')>frames.indexOf('walking');
+    },null,{timeout:5000});
     const motionFrames=await a.page.evaluate(()=>window.__dungeonMotionFrames);
     assert.ok(motionFrames.indexOf('walking')<motionFrames.lastIndexOf('idle'),
       'the dungeon should animate, then finish at the confirmed tile');
