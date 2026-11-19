@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-p3-emwaves-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "一交流電壓頻率為50 Hz，問其週期是多少秒？",
+        "correct": "0.020 s",
+        "wrong": [
+          "0.050 s",
+          "0.20 s",
+          "50 s"
+        ],
+        "exp": "週期T=1/f=1/50=0.020 s。",
+        "subject": "物理",
+        "sub_topic": "交流電與電磁波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-交流電與電磁波",
+        "template_id": "ref-20261119-b5-p3-emwaves-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-p3-emwaves-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "在真空中傳播的電磁波，波長為0.60 m。取光速3.0×10⁸ m/s，頻率是多少？",
+        "correct": "5.0×10⁸ Hz",
+        "wrong": [
+          "1.8×10⁸ Hz",
+          "2.0×10⁷ Hz",
+          "5.0×10⁶ Hz"
+        ],
+        "exp": "由c=λf，f=c/λ=(3.0×10⁸)/0.60=5.0×10⁸ Hz。",
+        "subject": "物理",
+        "sub_topic": "交流電與電磁波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-交流電與電磁波",
+        "template_id": "ref-20261119-b5-p3-emwaves-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-p3-emwaves-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "理想變壓器的原線圈匝數為200，副線圈匝數50。原線圈接120 V有效值交流電，副線圈電壓有效值為何？",
+        "correct": "30 V",
+        "wrong": [
+          "480 V",
+          "60 V",
+          "120 V"
+        ],
+        "exp": "理想變壓器V₂/V₁=N₂/N₁=50/200=1/4，所以V₂=120/4=30 V。",
+        "subject": "物理",
+        "sub_topic": "交流電與電磁波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-交流電與電磁波",
+        "template_id": "ref-20261119-b5-p3-emwaves-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
