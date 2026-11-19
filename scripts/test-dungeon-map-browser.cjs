@@ -691,6 +691,7 @@ async function main(){
     assert.equal(room.members.a.explorationStamina,priorStamina);
     assert.equal(room.members.a.quizCreditSeq,2);
     assert.ok(requests.filter(action=>action==='generate-quiz').length>=2);
+    await b.page.locator('[data-dq="collapse"]').click();
     // Stage 14: server-owned guardian, party key and validated portal opening.
     assert.equal(room.dungeonProgress.portalStatus,'sealed');
     const guardian=Objectives.spawn(map,[]).enemies[0];
