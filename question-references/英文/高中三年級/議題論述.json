@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-e3-argument-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "語境、論證、證據與推論均需合理，避免只靠關鍵字",
+      "question": {
+        "q": "For an argumentative essay on whether schools should offer more vegetarian meals, which thesis is the most balanced and specific?",
+        "correct": "Schools should expand vegetarian options while monitoring nutritional quality and student demand.",
+        "wrong": [
+          "Every student must eat the same meal because there is only one acceptable diet.",
+          "The cafeteria has tables, chairs, and two serving lines.",
+          "No decision about school meals should ever consider nutrition or student preference."
+        ],
+        "exp": "A defensible thesis states a clear proposal and acknowledges relevant implementation conditions, making it possible to develop evidence-based arguments.",
+        "subject": "英文",
+        "sub_topic": "議題論述",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-議題論述",
+        "template_id": "ref-20261119-b6-e3-argument-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e3-argument-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "語境、論證、證據與推論均需合理，避免只靠關鍵字",
+      "question": {
+        "q": "A writer argues: 'Adding shaded walking paths could encourage students to walk to school.' Which evidence best tests this claim?",
+        "correct": "Comparable counts of walking trips before and after the improvement, together with weather and enrollment data",
+        "wrong": [
+          "The number of school uniforms sold over the past decade",
+          "A collection of photographs showing different path colors",
+          "A single teacher's favorite route without any comparison"
+        ],
+        "exp": "To test whether walking increases, the writer should use before-and-after behavior data and consider other factors that affect walking.",
+        "subject": "英文",
+        "sub_topic": "議題論述",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-議題論述",
+        "template_id": "ref-20261119-b6-e3-argument-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e3-argument-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "語境、論證、證據與推論均需合理，避免只靠關鍵字",
+      "question": {
+        "q": "A critic argues that planting more street trees is too expensive to maintain. Which response most effectively addresses this counterargument?",
+        "correct": "Maintenance creates costs, so the proposal should compare those costs with cooling benefits and choose suitable species.",
+        "wrong": [
+          "Maintenance does not matter because any environmental project is automatically free.",
+          "Street trees are attractive, so no further evidence about maintenance is needed.",
+          "If costs are mentioned, the city should immediately abandon all green-space planning."
+        ],
+        "exp": "A strong rebuttal acknowledges the legitimate cost concern while offering a concrete way to evaluate benefits, expenses, and feasible alternatives.",
+        "subject": "英文",
+        "sub_topic": "議題論述",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-議題論述",
+        "template_id": "ref-20261119-b6-e3-argument-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
