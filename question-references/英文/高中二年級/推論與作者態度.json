@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-e2-attitude-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "語境、論證、證據與推論均需合理，避免只靠關鍵字",
+      "question": {
+        "q": "Read: 'The new textbook offers clear explanations and useful examples, although several topics would benefit from more practice exercises.' What is the author's overall attitude?",
+        "correct": "Generally positive, with a specific reservation",
+        "wrong": [
+          "Entirely negative about every part of the textbook",
+          "Unconditionally enthusiastic with no criticisms",
+          "Neutral because no opinion is stated"
+        ],
+        "exp": "The praise for explanations and examples expresses approval; the suggestion for more exercises is a limited criticism.",
+        "subject": "英文",
+        "sub_topic": "推論與作者態度",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-推論與作者態度",
+        "template_id": "ref-20261119-b6-e2-attitude-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e2-attitude-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "語境、論證、證據與推論均需合理，避免只靠關鍵字",
+      "question": {
+        "q": "Read: 'The survey results are encouraging, but the sample includes only one neighborhood. We should not apply the findings to the entire city yet.' What does the writer imply?",
+        "correct": "More representative evidence is needed before making citywide conclusions.",
+        "wrong": [
+          "The results already represent every resident in the city.",
+          "The survey must be deliberately fraudulent.",
+          "Neighborhood-level data cannot ever be useful."
+        ],
+        "exp": "The writer finds the results promising but cautions against generalizing from a restricted sample.",
+        "subject": "英文",
+        "sub_topic": "推論與作者態度",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-推論與作者態度",
+        "template_id": "ref-20261119-b6-e2-attitude-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e2-attitude-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "語境、論證、證據與推論均需合理，避免只靠關鍵字",
+      "question": {
+        "q": "Read: 'The museum's digital exhibit is engaging; nevertheless, visitors who need audio descriptions may find some sections difficult to use.' Which concern is the writer raising?",
+        "correct": "The exhibit's accessibility is incomplete.",
+        "wrong": [
+          "The exhibit contains no visual materials.",
+          "The writer believes museums should never use technology.",
+          "All visitors have identical accessibility needs."
+        ],
+        "exp": "The 'nevertheless' clause recognizes a limitation related to audio descriptions despite the overall engaging experience.",
+        "subject": "英文",
+        "sub_topic": "推論與作者態度",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-推論與作者態度",
+        "template_id": "ref-20261119-b6-e2-attitude-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
