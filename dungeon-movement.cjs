@@ -26,7 +26,8 @@ function startExplorationMembers(room,map){
     const position={...(map.spawnPads[index]||map.spawn)};
     return [member.uid,{...member,position,explorationStamina:START_STAMINA,
       battleHealth:100,battleMaxHealth:100,downed:false,lastDamage:null,
-      moveSeq:0,lastMove:null,strikeSeq:0,lastStrike:null}];
+      moveSeq:0,lastMove:null,strikeSeq:0,lastStrike:null,
+      quizCreditSeq:0,lastQuizCredit:null}];
   }));
 }
 const validVector=(dx,dy)=>Number.isInteger(dx)&&Number.isInteger(dy)&&

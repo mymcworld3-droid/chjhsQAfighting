@@ -13,6 +13,7 @@ const {initialEnemies,advanceWorld,ENEMY_AI_VERSION} = require('./dungeon-enemy-
 const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
 const {strikeEnemy,maxHealth}=require('./dungeon-player-combat.cjs');
 const Skills=require('./dungeon-skill-combat.cjs');
+const QuizCredit=require('./dungeon-quiz-credit.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -115,7 +116,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','clock'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','clock'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -437,6 +438,30 @@ function createHandler({
         });
         return respond(roomId,updated);
       }
+      if(action==='quiz-credit'){
+        // The graded receipt belongs to Firebase A. Never accept a claimed
+        // correctness, reward, or signed-looking payload from the browser.
+        const questionId=req.body?.questionId;
+        const snapA=await resolveA().db.collection('dungeonQuizStates').doc(uid).get();
+        const graded=snapA.exists?snapA.data():null;
+        const updated=await db.runTransaction(async tx=>{
+          const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
+          if(!current||!hasMember(current,uid))
+            throw err('你不是此副本的隊員',403);
+          if(!sessionRoom(current,at))throw err('副本已結束或房間已過期',410);
+          if(current.status!=='assembled')throw err('副本尚未開始',409);
+          const map=roomMap(current,roomId);
+          const battleDelta=advanceWorld(current,map,at);
+          const evolved={...current,...(battleDelta||{})};
+          const result=QuizCredit.credit(evolved,uid,graded,questionId,roomId);
+          if(result.duplicate&&!battleDelta)return current;
+          const next={...evolved,members:result.members,revision:current.revision+1};
+          tx.update(roomRef,{...(battleDelta||{}),members:next.members,
+            revision:next.revision});
+          return next;
+        });
+        return respond(roomId,updated);
+      }
       if(action==='ready'){ 
         if(typeof req.body?.ready!=='boolean')throw err('準備狀態無效',400);
         const updated=await db.runTransaction(async tx=>{
@@ -513,7 +538,7 @@ function createHandler({
                 battleHealth,battleMaxHealth,downed,lastDamage,
                 strikeSeq,lastStrike,skillSeq,lastSkill,dungeonLoadoutIndex,
                 dungeonLoadoutNames,dungeonSkillIds,dungeonSkills,dungeonAttack,
-                flyingSword,focusCharges,...previous}=m;
+                flyingSword,focusCharges,quizCreditSeq,lastQuizCredit,...previous}=m;
               return [key,{...previous,ready:false}];
             }));
           const clockState={battleClockVersion:null,battleStartedAtMs:null,
@@ -599,7 +624,7 @@ function createHandler({
                 battleHealth,battleMaxHealth,downed,lastDamage,
                 strikeSeq,lastStrike,skillSeq,lastSkill,dungeonLoadoutIndex,
                 dungeonLoadoutNames,dungeonSkillIds,dungeonSkills,dungeonAttack,
-                flyingSword,focusCharges,...previous}=member;
+                flyingSword,focusCharges,quizCreditSeq,lastQuizCredit,...previous}=member;
               members[key]={...previous,ready:false};
             }
           }
