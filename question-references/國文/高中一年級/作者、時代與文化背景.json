@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-literary-history-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "比較司馬遷《史記》與班固《漢書》，哪一項敘述符合兩書的史學體例？",
+        "correct": "《史記》為紀傳體通史，《漢書》主要記述西漢歷史，屬紀傳體斷代史",
+        "wrong": [
+          "《史記》是編年體斷代史，《漢書》是以詩歌為主的韻文集",
+          "兩書皆為戰國時代完成的諸子寓言",
+          "《史記》只記單一朝代，《漢書》從黃帝寫至漢武帝"
+        ],
+        "exp": "《史記》以本紀、世家、列傳等記述多個時代，《漢書》集中書寫西漢史事；二者同屬紀傳體但通史、斷代史性質不同。",
+        "subject": "國文",
+        "sub_topic": "作者、時代與文化背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-作者、時代與文化背景",
+        "template_id": "ref-20261119-b8-ch1-literary-history-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-literary-history-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "某生要依時代先後排列下列作品：甲《詩經》、乙杜甫律詩、丙關漢卿元雜劇。哪個順序正確？",
+        "correct": "甲 → 乙 → 丙",
+        "wrong": [
+          "乙 → 甲 → 丙",
+          "甲 → 丙 → 乙",
+          "丙 → 乙 → 甲"
+        ],
+        "exp": "《詩經》主要形成於先秦，杜甫是唐代詩人，關漢卿為元代雜劇作家，故先後為先秦、唐、元。",
+        "subject": "國文",
+        "sub_topic": "作者、時代與文化背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-作者、時代與文化背景",
+        "template_id": "ref-20261119-b8-ch1-literary-history-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-literary-history-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "研究宋代文人蘇軾的詩詞時，若要理解其作品中對仕宦與山水的思考，哪種研究方法最適當？",
+        "correct": "結合作品語句、作者生平及北宋政治文化脈絡相互參照",
+        "wrong": [
+          "只因蘇軾曾任官，就認定所有作品都是官府公文",
+          "只看詞牌名便能確定每篇作品創作的確切日期",
+          "將今天對山水旅遊的想法直接視為北宋讀者的唯一觀點"
+        ],
+        "exp": "作品詮釋可參考作者經歷與時代環境，但仍須以作品文本為依據，避免單一傳記資訊或現代觀點取代閱讀。",
+        "subject": "國文",
+        "sub_topic": "作者、時代與文化背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-作者、時代與文化背景",
+        "template_id": "ref-20261119-b8-ch1-literary-history-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
