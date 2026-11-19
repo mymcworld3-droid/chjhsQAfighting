@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-chem2-eq-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以反應商與平衡常數比較推論反應方向",
+      "question": {
+        "q": "在固定溫度下，對反應A(g)+B(g)⇌C(g)，已知Kc=4。某時刻[A]=[B]=[C]=1.0 M。假設此時尚未達平衡，系統接下來的淨反應方向為何？",
+        "correct": "向右生成較多C",
+        "wrong": [
+          "向左生成較多A和B",
+          "已必定處於平衡",
+          "因各濃度相等而無法判斷"
+        ],
+        "exp": "Q=[C]/([A][B])=1，小於Kc=4，淨反應傾向往生成物方向進行，直到Q達到K。",
+        "subject": "化學",
+        "sub_topic": "動態平衡與平衡常數",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-動態平衡與平衡常數",
+        "template_id": "ref-20261119-chem2-eq-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chem2-eq-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以反應商與平衡常數比較推論反應方向",
+      "question": {
+        "q": "對氣相平衡2NO₂(g)⇌N₂O₄(g)，若以莫耳濃度表示平衡常數Kc，應寫成哪一式？",
+        "correct": "[N₂O₄]/[NO₂]²",
+        "wrong": [
+          "[NO₂]²/[N₂O₄]",
+          "[N₂O₄]/[NO₂]",
+          "[NO₂]×[N₂O₄]"
+        ],
+        "exp": "平衡常數寫作產物濃度乘冪除以反應物濃度乘冪，各物種的指數為化學反應式係數；所以Kc=[N₂O₄]/[NO₂]²。",
+        "subject": "化學",
+        "sub_topic": "動態平衡與平衡常數",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-動態平衡與平衡常數",
+        "template_id": "ref-20261119-chem2-eq-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chem2-eq-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以反應商與平衡常數比較推論反應方向",
+      "question": {
+        "q": "已達平衡的氣相反應H₂(g)+I₂(g)⇌2HI(g)，某固定溫度下Kc=16。若量得[H₂]=0.10 M、[I₂]=0.10 M、[HI]=0.40 M，應如何判斷？",
+        "correct": "反應商等於Kc，符合平衡條件",
+        "wrong": [
+          "Q=4，反應必向右進行",
+          "Q=0.16，反應必向右進行",
+          "Q=160，反應必向左進行"
+        ],
+        "exp": "Q=[HI]²/([H₂][I₂])=(0.40)²/(0.10×0.10)=16，與Kc相等，符合該溫度下的化學平衡條件。",
+        "subject": "化學",
+        "sub_topic": "動態平衡與平衡常數",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-動態平衡與平衡常數",
+        "template_id": "ref-20261119-chem2-eq-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
