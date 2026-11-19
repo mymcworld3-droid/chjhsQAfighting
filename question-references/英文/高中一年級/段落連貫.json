@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-e1-coherence-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "A paragraph reads: 'Many students now bring their own cups to school. ______. As a result, the cafeteria has reduced its use of disposable cups.' Which sentence best fills the blank?",
+        "correct": "The cafeteria also gives a small discount to students who reuse cups.",
+        "wrong": [
+          "The cafeteria stopped selling all drinks last year.",
+          "Students generally drink less water during summer.",
+          "Some cups are made in different colors."
+        ],
+        "exp": "The missing sentence should add a relevant reason for reusable-cup use, so that 'As a result' logically introduces the decrease in disposable cups.",
+        "subject": "英文",
+        "sub_topic": "段落連貫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "english-段落連貫",
+        "template_id": "ref-20261119-b6-e1-coherence-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e1-coherence-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "Which sentence best follows this topic sentence? 'A short walk after dinner can have several benefits.'",
+        "correct": "It may help people relax and add gentle physical activity to their day.",
+        "wrong": [
+          "Dinner is often served on different kinds of plates.",
+          "A walk is always exactly thirty minutes long.",
+          "There are many possible designs for kitchen chairs."
+        ],
+        "exp": "A supporting sentence should develop the stated benefits rather than introduce unrelated information or an unsupported universal claim.",
+        "subject": "英文",
+        "sub_topic": "段落連貫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "english-段落連貫",
+        "template_id": "ref-20261119-b6-e1-coherence-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e1-coherence-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "Read: 'The new bus service is affordable and frequent. However, it does not stop near the hospital. ______' Which conclusion is most coherent?",
+        "correct": "Adding a hospital stop could make the service more useful to patients.",
+        "wrong": [
+          "The hospital was founded many decades ago.",
+          "The service has solved every transportation problem.",
+          "Its low fare proves that route locations do not matter."
+        ],
+        "exp": "The contrast concerns an accessibility limitation, so the conclusion should address the missing stop without dismissing the bus service's benefits.",
+        "subject": "英文",
+        "sub_topic": "段落連貫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "english-段落連貫",
+        "template_id": "ref-20261119-b6-e1-coherence-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
