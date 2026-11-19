@@ -18,7 +18,8 @@ function fakeCanvas(){
     beginPath:()=>count('beginPath'),arc:()=>count('arc'),
     fill:()=>count('fill'),stroke:()=>count('stroke'),
     moveTo:()=>count('moveTo'),lineTo:()=>count('lineTo'),
-    fillText:()=>count('fillText'),measureText:value=>({width:String(value).length*11}),
+    fillText:()=>count('fillText'),strokeText:()=>count('strokeText'),
+    measureText:value=>({width:String(value).length*11}),
     createRadialGradient:()=>({addColorStop:()=>count('gradientStop')})};
   return {context,operations};
 }
@@ -62,7 +63,8 @@ test('map viewer is wired to authorized room blueprint and contains no movement 
   const css=fs.readFileSync(path.join(__dirname,'../public/styles/dungeon-map-view.css'),'utf8');
   assert.match(source,/getDungeonMap\(roomId\)/);
   assert.match(source,/drawWorld\(/);
-  assert.match(source,/drawMinimap\(/);
+  assert.doesNotMatch(source,/drawMinimap\(/);
+  assert.match(source,/Camera\.lockToPlayer\(this\.selfPad\(\),m,w,h\)/);
   assert.match(source,/pointerDown\(event\)/);
   assert.match(source,/pointerMove\(event\)/);
   assert.match(source,/pointerUp\(event\)/);
