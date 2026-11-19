@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-description-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "若想描寫「第一次上臺報告前的緊張」，下列哪句最能透過具體動作呈現？",
+        "correct": "我把講稿的折角撫平又捏皺，聽見自己的呼吸聲比台下的談話還清楚",
+        "wrong": [
+          "我當時真的非常緊張，緊張程度高達百分之一百",
+          "報告是一種常見的課堂活動，許多學生會參加",
+          "教室有二十張桌子、四扇窗戶和一塊白板"
+        ],
+        "exp": "講稿被反覆捏皺與呼吸聲放大，透過動作、聽覺細節間接展現心理狀態，比抽象宣告更有畫面。",
+        "subject": "國文",
+        "sub_topic": "記敘與描寫",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-記敘與描寫",
+        "template_id": "ref-20261119-b8-ch1-description-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-description-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "某生寫市場清晨：「鐵門才拉起，青菜上的水珠沿著葉緣滑落；攤販一面排貨，一面高聲招呼早到的客人。」這段描寫主要結合哪些感官線索？",
+        "correct": "視覺與聽覺",
+        "wrong": [
+          "嗅覺與味覺",
+          "味覺與觸覺",
+          "只有嗅覺"
+        ],
+        "exp": "水珠、排貨屬視覺畫面，攤販高聲招呼屬聽覺描寫；文本沒有明確的品嚐或氣味細節。",
+        "subject": "國文",
+        "sub_topic": "記敘與描寫",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-記敘與描寫",
+        "template_id": "ref-20261119-b8-ch1-description-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-description-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "作文題是「停電的一夜」。作者先寫屋裡突然黑暗，接著寫鄰居拿手電筒敲門分享蠟燭，末段寫大家在樓梯間交談。哪項結尾最能呼應事件的情感變化？",
+        "correct": "那夜的燈雖熄了，陌生鄰居之間卻多了一點彼此照應的光",
+        "wrong": [
+          "停電的主要原因一定是全世界的電網同時故障",
+          "社區每棟房子的屋頂材質都一模一樣",
+          "故事其實不需要停電，也沒有任何人物互動"
+        ],
+        "exp": "由停電造成不便轉向鄰里互助，結尾以「光」回扣黑暗並象徵人際溫暖，呼應敘事事件。",
+        "subject": "國文",
+        "sub_topic": "記敘與描寫",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-記敘與描寫",
+        "template_id": "ref-20261119-b8-ch1-description-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
