@@ -33,7 +33,7 @@ export function hashCell(map,x,y){
 export function drawWorld(ctx,map,camera,width,height,
   {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0,
     aimTile=null,visualTimeMs=0,objectives=null,art=null,
-    rangeTiles=[],rangeKind='move'}={}){
+    rangeTiles=[],rangeKind='move',animationUnderlay=null,animationOverlay=null}={}){
   const palette=BIOMES[map.biome]||BIOMES.ruins;
   const g=Camera.geometry(camera,map,width,height);
   const v=Camera.visibleTiles(camera,map,width,height);
@@ -114,32 +114,12 @@ export function drawWorld(ctx,map,camera,width,height,
     }
     ctx.restore();
   }
-  // Stage 13: server-confirmed strike paths briefly gild or cool the FLOOR.
-  // These are translucent underlays, not character-covering target masks.
-  // No combat geometry or power is derived from browser animation state.
-  for(const member of members){
-    const skill=member?.lastSkill;
-    if(skill?.visualVersion!==1||!Number.isSafeInteger(skill.tick)||
-        currentTick<skill.tick||currentTick-skill.tick>1||
-        !Array.isArray(skill.effectCells))continue;
-    const gold=skill.focusEmpowered===true||skill.focusActivated===true;
-    const shimmer=(.18+.07*Math.sin(visualTimeMs/190));
-    for(const p of skill.effectCells.slice(0,72)){
-      if(!Number.isSafeInteger(p?.x)||!Number.isSafeInteger(p?.y)||
-          !walk(p.x,p.y)||p.x<v.x0||p.x>v.x1||p.y<v.y0||p.y>v.y1)continue;
-      const x=g.ox+p.x*cell,y=g.oy+p.y*cell;
-      ctx.save();
-      ctx.fillStyle=gold?'#ffd36d':'#73d9e6';
-      ctx.globalAlpha=shimmer;
-      ctx.fillRect(x+1,y+1,Math.max(1,cell-2),Math.max(1,cell-2));
-      ctx.globalAlpha=.55;
-      ctx.lineWidth=clamp(cell*.085,1,2.5);
-      ctx.strokeStyle=gold?'#fff0ac':'#b0f1ff';
-      ctx.strokeRect(x+1.5,y+1.5,Math.max(1,cell-3),Math.max(1,cell-3));
-      ctx.restore();
-    }
-  }
-  // Attack telegraphs are painted after the skill floor trace but below
+  // Reuse the trial's actual animated skill underlay; no old static
+  // floor-square flashes remain to double-render the same attack.
+  if(typeof animationUnderlay==='function')
+    animationUnderlay(ctx,{ox:g.ox,oy:g.oy,cell,width:map.width,
+      height:map.height},visualTimeMs);
+  // Attack telegraphs are painted after the animated skill underlay but below
   // all beast/player sprites, preserving legible red danger outlines.
   // A warning cell never masks the player or overwrites a creature marker.
   for(const beast of enemies){
@@ -376,6 +356,11 @@ export function drawWorld(ctx,map,camera,width,height,
       ctx.restore();
     }
   });
+  // Trial manual VFX are split into two passes, preserving character
+  // readability: target marks below sprites, glowing cuts and impacts above.
+  if(typeof animationOverlay==='function')
+    animationOverlay(ctx,{ox:g.ox,oy:g.oy,cell,width:map.width,
+      height:map.height},visualTimeMs);
   const shadow=ctx.createRadialGradient(width/2,height/2,Math.min(width,height)*.2,
     width/2,height/2,Math.max(width,height)*.78);
   shadow.addColorStop(0,'rgba(0,0,0,0)');shadow.addColorStop(1,'rgba(0,0,0,.43)');
