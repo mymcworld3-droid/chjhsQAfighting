@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-m1-factor-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "多項式P(x)=x³−4x²+x+6，已知x−2是因式。將P(x)完全因式分解，下列何者正確？",
+        "correct": "(x−2)(x−3)(x+1)",
+        "wrong": [
+          "(x−2)(x+3)(x−1)",
+          "(x+2)(x−3)(x−1)",
+          "(x−2)(x²−x+3)"
+        ],
+        "exp": "以x−2除P(x)得x²−2x−3=(x−3)(x+1)，所以P(x)=(x−2)(x−3)(x+1)。",
+        "subject": "數學",
+        "sub_topic": "多項式四則與因式定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h1-多項式四則與因式定理",
+        "template_id": "ref-20261119-b5-m1-factor-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-m1-factor-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "若P(x)=x³+ax²−5x+3同時可被x−1整除，實數a為何？",
+        "correct": "1",
+        "wrong": [
+          "−1",
+          "3",
+          "−3"
+        ],
+        "exp": "由因式定理P(1)=0，即1+a−5+3=a−1=0，因此a=1。",
+        "subject": "數學",
+        "sub_topic": "多項式四則與因式定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h1-多項式四則與因式定理",
+        "template_id": "ref-20261119-b5-m1-factor-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-m1-factor-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "將(x²−9)與(x²−6x+9)的最大公因式寫成首項係數為1的多項式，應為何？",
+        "correct": "x−3",
+        "wrong": [
+          "x+3",
+          "x²−9",
+          "(x−3)²"
+        ],
+        "exp": "x²−9=(x−3)(x+3)，x²−6x+9=(x−3)²，兩式共有一次因式x−3。",
+        "subject": "數學",
+        "sub_topic": "多項式四則與因式定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h1-多項式四則與因式定理",
+        "template_id": "ref-20261119-b5-m1-factor-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
