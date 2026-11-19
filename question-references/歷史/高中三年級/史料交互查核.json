@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-h3-crosscheck-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "研究者找到三篇不同網站文章，都說某演講發生在1935年，但追查發現三篇均抄自同一本未註明資料來源的書。這三篇文章的證據關係應如何判斷？",
+        "correct": "屬共用單一來源的轉載，不能視作三份獨立互證",
+        "wrong": [
+          "因網站數量有三個便構成三份互不相關的一手史料",
+          "只要三篇文字相同，就可認定原始演講錄音存在",
+          "轉載越多越不需要追查原始來源"
+        ],
+        "exp": "獨立互證需有相互獨立的形成或查證來源；同源轉載只能重複相同主張，不能增加獨立證據。",
+        "subject": "歷史",
+        "sub_topic": "史料交互查核",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-史料交互查核",
+        "template_id": "ref-20261119-b5-h3-crosscheck-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-h3-crosscheck-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "一張新聞照片標示「某年某市洪災」，但照片中的橋梁在標示年份之後才完工。哪種處理最合理？",
+        "correct": "暫不採信原標示，核對橋梁建造年代與照片原始來源",
+        "wrong": [
+          "只看照片色調決定標示必定正確",
+          "照片中有水就證明標示的所有時間、地點皆無誤",
+          "將橋梁名稱改掉即可避免任何年代矛盾"
+        ],
+        "exp": "若地標在所稱年代尚不存在，便出現具體時間矛盾，應追查影像來源及可能的後製或錯置。",
+        "subject": "歷史",
+        "sub_topic": "史料交互查核",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-史料交互查核",
+        "template_id": "ref-20261119-b5-h3-crosscheck-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-h3-crosscheck-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "研究某地人口，甲史料使用舊行政區界，乙史料使用十年後合併的新行政區界。直接比較人口總數可能出現何種問題？",
+        "correct": "統計空間範圍改變，使人口增減被錯誤解讀",
+        "wrong": [
+          "只要統計單位為「人」就可以無條件比較",
+          "人口一定會因行政區合併而在生理上增加",
+          "較新的表格必定不含歷史資料"
+        ],
+        "exp": "人口統計須先確認時間與區界是否可比，必要時重建同一地理範圍的數據，才能判定趨勢。",
+        "subject": "歷史",
+        "sub_topic": "史料交互查核",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-史料交互查核",
+        "template_id": "ref-20261119-b5-h3-crosscheck-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
