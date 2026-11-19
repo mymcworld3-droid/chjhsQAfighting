@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-phy2-collision-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單位與物理定律條件明確；附計算步驟及可識別的常見迷思選項",
+      "question": {
+        "q": "光滑水平面上，2 kg滑車以3 m/s向右撞上靜止1 kg滑車，碰後兩車黏在一起，取右為正。共同速度為何？",
+        "correct": "2 m/s向右",
+        "wrong": [
+          "1 m/s向右",
+          "3 m/s向右",
+          "2 m/s向左"
+        ],
+        "exp": "水平方向外力衝量忽略，動量守恆：2×3+1×0=(2+1)v，故v=2 m/s向右。",
+        "subject": "物理",
+        "sub_topic": "碰撞與動量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-碰撞與動量守恆",
+        "template_id": "ref-20261119-b11-phy2-collision-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-phy2-collision-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單位與物理定律條件明確；附計算步驟及可識別的常見迷思選項",
+      "question": {
+        "q": "一維完全非彈性碰撞中，兩物體黏在一起且系統外力衝量可忽略。碰撞前後哪項物理量必須守恆？",
+        "correct": "系統總動量",
+        "wrong": [
+          "系統總動能",
+          "每個物體各自的動量",
+          "每個物體各自的速度"
+        ],
+        "exp": "外力衝量可忽略使系統總動量守恆；黏合碰撞通常有動能轉成其他形式，因此總動能不必守恆。",
+        "subject": "物理",
+        "sub_topic": "碰撞與動量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-碰撞與動量守恆",
+        "template_id": "ref-20261119-b11-phy2-collision-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-phy2-collision-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單位與物理定律條件明確；附計算步驟及可識別的常見迷思選項",
+      "question": {
+        "q": "兩台質量各1 kg的小車在光滑直線軌道上，以+4 m/s及−2 m/s相向運動後黏在一起。取正方向為右，合體速度為何？",
+        "correct": "+1 m/s",
+        "wrong": [
+          "0 m/s",
+          "+3 m/s",
+          "−1 m/s"
+        ],
+        "exp": "初始總動量=1×4+1×(−2)=2 kg·m/s，合體質量2 kg，故v=2/2=+1 m/s。",
+        "subject": "物理",
+        "sub_topic": "碰撞與動量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-碰撞與動量守恆",
+        "template_id": "ref-20261119-b11-phy2-collision-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
