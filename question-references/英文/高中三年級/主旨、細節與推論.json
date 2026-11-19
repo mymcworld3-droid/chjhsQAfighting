@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-en3-main-infer-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Read: 'The town introduced a free shuttle to its central market. Ridership rose steadily, but a survey found that many passengers had previously walked rather than driven.' Which conclusion is best supported?",
+        "correct": "The shuttle became more popular, but its effect on reducing car use remains uncertain.",
+        "wrong": [
+          "Higher ridership proves that every new rider stopped driving.",
+          "The survey proves that no one has ever driven to the market.",
+          "Free transport cannot serve any purpose unless it replaces car trips."
+        ],
+        "exp": "Ridership growth is observed, but many users previously walked, so the evidence does not establish a matching reduction in car trips.",
+        "subject": "英文",
+        "sub_topic": "主旨、細節與推論",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "english-主旨、細節與推論",
+        "template_id": "ref-20261119-b9-en3-main-infer-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en3-main-infer-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Read: 'A museum extended its hours on two evenings each week. During the trial, visitors with daytime jobs reported greater access, although the museum spent more on staffing.' Which detail is explicitly stated?",
+        "correct": "The trial increased staffing costs.",
+        "wrong": [
+          "The museum closed on all weekend days.",
+          "Every visitor attended only during evening hours.",
+          "The museum reduced staffing to zero."
+        ],
+        "exp": "The passage explicitly notes spending more on staffing during the extended-hours trial.",
+        "subject": "英文",
+        "sub_topic": "主旨、細節與推論",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "english-主旨、細節與推論",
+        "template_id": "ref-20261119-b9-en3-main-infer-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en3-main-infer-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Read: 'Researchers compared two districts before and after a tree-planting program. One district also resurfaced several roads with cooler materials. Both districts recorded lower surface temperatures.' Which inference is most defensible?",
+        "correct": "Temperature decreases were observed, but the separate road project may complicate attributing the effect to trees alone.",
+        "wrong": [
+          "Tree planting must be the only cause of cooling in both districts.",
+          "The separate road work has been proved to have no effect.",
+          "The data show that temperatures increased in both districts."
+        ],
+        "exp": "Different simultaneous interventions and a before–after comparison mean attributing all cooling to a single policy needs further evidence.",
+        "subject": "英文",
+        "sub_topic": "主旨、細節與推論",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "english-主旨、細節與推論",
+        "template_id": "ref-20261119-b9-en3-main-infer-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
