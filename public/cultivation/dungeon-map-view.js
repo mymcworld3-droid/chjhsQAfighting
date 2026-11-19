@@ -11,8 +11,7 @@ import { skillArt } from './manual-art.js';
 import './manual-rules.js';
 import './tactical-animation.js';
 import './tactical-skill-effects.js';
-import {dungeonAnimationEvents,paintDungeonScene,drawDungeonHitNumbers}
-  from './dungeon-skill-animation.js';
+import {dungeonAnimationEvents,paintDungeonScene,drawDungeonHitNumbers} from './dungeon-skill-animation.js';
 
 // The dungeon shares the trial's fullscreen quarter-dial presentation;
 // its exploration, combat and questions remain live, server-authoritative actions.
