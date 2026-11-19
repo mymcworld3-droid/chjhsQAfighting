@@ -219,7 +219,11 @@ test('real boss death atomically archives a permanent C victory and personal inb
   room.dungeonProgress={...room.dungeonProgress,
     guardianStatus:'defeated',keyAcquired:true,portalStatus:'open'};
   room.members.a.position={...f.map.portalSite};
+  room.members.b.position={...f.map.portalSite};
   assert.equal((await f.call('a','enter-boss',{roomId:f.roomId})).status,200);
+  assert.equal(f.raw().dungeonArena,'exploration');
+  assert.equal((await f.call('b','enter-boss',{roomId:f.roomId},1)).status,200);
+  assert.equal(f.raw().dungeonArena,'boss');
   assert.equal((await f.call('a','recent-victories')).body.rewards.length,0,
     'live boss cannot be mistaken for a completed victory');
   const fight=f.raw();
@@ -253,11 +257,11 @@ test('real boss death atomically archives a permanent C victory and personal inb
   assert.equal((await f.call('visitor','recent-victories')).body.rewards.length,0);
   assert.equal((await f.call('visitor','claim-boss-reward',
     {roomId:f.roomId})).status,403);
-  // Leaving an assembled room resets combat for everyone. The immutable
-  // archive and each member's inbox must remain intact and redeemable.
+  // A departure preserves the surviving party, and immutable victory
+  // records and each member's inbox remain intact and redeemable.
   assert.equal((await f.call('b','leave',{roomId:f.roomId},1)).status,200);
-  assert.equal(f.raw().status,'waiting');
-  assert.equal(f.raw().bossEncounter,null);
+  assert.equal(f.raw().status,'assembled');
+  assert.equal(f.raw().bossEncounter.status,'defeated');
   assert.equal((await f.call('a','disband',{roomId:f.roomId})).status,200);
   assert.equal(f.raw().status,'closed');
   const [claimedB,claimedA,replayedB]=await Promise.all([
@@ -319,8 +323,13 @@ test('a legitimate equipped manual kill also writes the same durable C victory p
   prior.dungeonProgress={...prior.dungeonProgress,
     guardianStatus:'defeated',keyAcquired:true,portalStatus:'open'};
   prior.members.a.position={...f.map.portalSite};
+  prior.members.b.position={...f.map.portalSite};
   assert.equal((await f.call('a','enter-boss',
     {roomId:f.roomId})).status,200);
+  assert.equal(f.raw().dungeonArena,'exploration');
+  assert.equal((await f.call('b','enter-boss',
+    {roomId:f.roomId},1)).status,200);
+  assert.equal(f.raw().dungeonArena,'boss');
   const battle=f.raw();
   battle.members.a.position={x:11,y:8};
   battle.enemies[0].battleHealth=20;
