@@ -10,6 +10,7 @@ import './tactical-target-visuals.js?v=20261118-phase6-v1';
 import './tactical-compass.js?v=20261118-phase7-v1';
 import './tactical-seal-ranges.js?v=20261119-seal-ranges-v1';
 import './tactical-seal-targeting.js?v=20261119-seal-target-v1';
+import './tactical-objective-visuals.js?v=20261119-objective-vfx-v1';
 const R=globalThis.QATactical;
 const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
 const A=globalThis.QATacticalAnimation;
@@ -22,14 +23,17 @@ const Targets=globalThis.QATacticalTargetVisuals;
 const Compass=globalThis.QATacticalCompass;
 const SealRanges=globalThis.QATacticalSealRanges;
 const SealTargets=globalThis.QATacticalSealTargeting;
+const ObjectiveVFX=globalThis.QATacticalObjectiveVisuals;
 const SEAL_ATLAS='/assets/seals/seal-atlas.webp';
 const SEAL_FRAME_SIZE=128; // 4 columns: shield, hazard, rage, maze; 3 rows: intact, damaged, broken.
+const GUARDIAN_ATLAS='/assets/shrines/guardian-atlas.webp';
+const GUARDIAN_FRAME_SIZE=160; // three columns: intact, damaged, collapsed
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
   monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{},onSealPeek=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.onSealPeek=onSealPeek;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.focusBeastIndex=0;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;this.sealRangePlan={seals:[]};this.sealRangeMode='all';this.sealRangeFocusId=null;this.sealTargetPlan={seals:[]};
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.onSealPeek=onSealPeek;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.focusBeastIndex=0;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;this.sealRangePlan={seals:[]};this.sealRangeMode='all';this.sealRangeFocusId=null;this.sealTargetPlan={seals:[]};this.objectiveCues=[];
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
@@ -274,7 +278,7 @@ export class TacticalRenderer{
     }else if(state.mode!=='pve'){this.ambience=null;this.ambienceLayer=null;}
     this.canvas.dataset.ambientTheme=this.ambience?.theme||'none';
     if(newStage||this.state?.width!==state.width||this.state?.height!==state.height){
-      this.compassMarkers=[];this.focusBeastIndex=0;
+      this.compassMarkers=[];this.focusBeastIndex=0;this.objectiveCues=[];
       delete this.canvas.dataset.hoverPreviewCost;
       delete this.canvas.dataset.hoverPreviewValid;
       delete this.canvas.dataset.hoverPreviewTargets;
@@ -290,7 +294,12 @@ export class TacticalRenderer{
       }
     }
     this.stageKey=stageKey;
-    if(!newStage&&!this.reducedMotion.matches)this.queue.push(...A.plan(this.state,state,uid));
+    if(!newStage&&!this.reducedMotion.matches){
+      this.queue.push(...A.plan(this.state,state,uid));
+      const changes=ObjectiveVFX.transitions(this.state,state);
+      if(changes.length)this.objectiveCues.push(...changes.map(cue=>({...cue,started:null})));
+      if(this.objectiveCues.length>12)this.objectiveCues=this.objectiveCues.slice(-12);
+    }
     if(this.state!==state||this.uid!==uid||this.mode!==mode){
       const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
       this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,attackSkill(me,mode))):[];
@@ -336,7 +345,7 @@ export class TacticalRenderer{
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
   present(state,uid,scene=null,progress=0,view=null){
-    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.sealRangePlan={seals:[]};this.sealTargetPlan={seals:[]};this.canvas.removeAttribute('aria-description');this.canvas.removeAttribute('aria-keyshortcuts');this.draw();
+    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.sealRangePlan={seals:[]};this.sealTargetPlan={seals:[]};this.objectiveCues=[];this.canvas.removeAttribute('aria-description');this.canvas.removeAttribute('aria-keyshortcuts');this.draw();
   }
   get isAnimating(){return !!this.scene||this.queue.length>0;}
   get currentAction(){return (this.scene||this.queue[0])?.label||'';}
@@ -394,6 +403,13 @@ export class TacticalRenderer{
     img.onload=()=>{if(!this.destroyed)this.requestDraw();};
     img.onerror=()=>{if(!this.destroyed)this.requestDraw();};
     img.src=SEAL_ATLAS;
+  }
+  ensureGuardianAtlas(){
+    if(this.images.guardian||this.destroyed)return;
+    const img=new Image();this.images.guardian=img;img.decoding='async';
+    img.onload=()=>{if(!this.destroyed)this.requestDraw();};
+    img.onerror=()=>{if(!this.destroyed)this.requestDraw();};
+    img.src=GUARDIAN_ATLAS;
   }
   drawFlyingSword(p,color,opacity=1,angle=Math.PI/5){
     const c=this.ctx,cell=this.cell,x=this.ox+(p.x+.5)*cell,y=this.oy+(p.y+.28)*cell;
@@ -577,7 +593,9 @@ export class TacticalRenderer{
     if(this.destroyed||!this.state)return;
     const now=performance.now();
     if(this.paused||document.hidden){this.heldAt??=now;return;}
-    if(this.heldAt!==null){if(this.scene)this.scene.started+=now-this.heldAt;this.heldAt=null;}
+    if(this.heldAt!==null){const pausedFor=now-this.heldAt;if(this.scene)this.scene.started+=pausedFor;
+      for(const cue of this.objectiveCues||[])if(cue.started!=null)cue.started+=pausedFor;
+      this.heldAt=null;}
     if(this.reducedMotion.matches&&this.isAnimating){this.queue=[];this.scene=null;this.activity();}
     const progress=this.preview?this.preview.progress:this.advance(now),scene=this.preview?this.preview.scene:this.scene,animating=!!scene||this.isAnimating;
     const {canvas,ctx:c,state:s}=this,rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;
@@ -660,9 +678,11 @@ export class TacticalRenderer{
         color:p.activated?'#b5c4b7':seal?.color||'#a7e8ff'});
     }
     if(markers.some(p=>p.seal))this.ensureSealAtlas();
+    if(objective?.type==='defense'&&s.trial?.layoutVersion===4)this.ensureGuardianAtlas();
     for(const p of objective?.hazards||[])fill(p,'#f24c4866','#ffb1a3');
     for(const p of markers){
-      if(p.seal)continue; // Sprite cores are drawn after ground warnings, before characters.
+      if(p.seal||objective?.type==='defense'&&s.trial?.layoutVersion===4)continue;
+      // Sprite cores are drawn after ground warnings, before characters.
       const x=ox+(p.x+.5)*cell,y=oy+(p.y+.5)*cell;c.save();c.strokeStyle=p.color;c.fillStyle='#102b2bcc';c.lineWidth=Math.max(2,cell*.06);
       c.beginPath();c.arc(x,y,cell*.34,0,Math.PI*2);c.fill();c.stroke();c.fillStyle=p.color;c.font=`bold ${Math.max(10,cell*.3)}px system-ui`;c.textAlign='center';c.textBaseline='middle';c.fillText(p.label,x,y);c.restore();
       if(objective?.type==='defense'){
@@ -761,6 +781,35 @@ export class TacticalRenderer{
       [m.kind,Math.round(m.screenX),Math.round(m.screenY)]));
     Compass.draw(c,this.compassMarkers,{width:w,height:h});
     if(scene)this.drawEffect(scene,progress,false);
+    // A dedicated guardian altar replaces the old '守' circle in v4 defense.
+    // The same authoritative objective.hp/maxHp controls sprite damage state
+    // and the legible bar. We keep the fallback if loading is delayed or fails.
+    if(objective?.type==='defense'&&s.trial?.layoutVersion===4&&objective.shrine){
+      const p=objective.shrine,x=ox+(p.x+.5)*cell,y=oy+(p.y+.5)*cell;
+      const frame=ObjectiveVFX.guardianFrame(objective);
+      const size=cell*(cell<27?1.14:1.28);
+      const painted=this.sprite('guardian',frame*GUARDIAN_FRAME_SIZE,0,
+        GUARDIAN_FRAME_SIZE,GUARDIAN_FRAME_SIZE,x-size/2,y-size*.61,size,size);
+      if(!painted){
+        c.save();c.strokeStyle='#94edc5';c.fillStyle='#102e27df';
+        c.lineWidth=Math.max(2,cell*.06);c.beginPath();
+        c.arc(x,y,cell*.34,0,Math.PI*2);c.fill();c.stroke();
+        c.fillStyle='#b7f7d2';c.font=`bold ${Math.max(10,cell*.3)}px system-ui`;
+        c.textAlign='center';c.textBaseline='middle';c.fillText('守',x,y);c.restore();
+      }
+      const fraction=objective.maxHp>0?Math.max(0,Math.min(1,objective.hp/objective.maxHp)):0;
+      const barWidth=Math.max(24,cell*.78),barHeight=Math.max(3,cell*.083),
+        barX=x-barWidth/2,barY=y-cell*.48;
+      c.save();c.fillStyle='#10231bdb';c.fillRect(barX-1,barY-1,barWidth+2,barHeight+2);
+      c.fillStyle=fraction>.5?'#83e8bb':fraction>0?'#efba7c':'#ab8f89';
+      c.fillRect(barX,barY,barWidth*fraction,barHeight);
+      if(cell>=32){
+        c.fillStyle='#e1fff0';c.font=`600 ${Math.max(9,cell*.18)}px system-ui`;
+        c.textAlign='center';c.textBaseline='bottom';
+        c.fillText('靈陣 '+Math.ceil(Math.max(0,objective.hp))+'/'+objective.maxHp,x,barY-3);
+      }
+      c.restore();
+    }
     // Seal art: keep the floor glyph and floating crystal below every hero,
     // beast and HP label while preserving all combat telegraph outlines.
     if(objective?.type==='sealing'&&s.trial?.layoutVersion===4){
@@ -798,6 +847,11 @@ export class TacticalRenderer{
         }
       }
     }
+    // Play the committed hit / shatter / dispersal effects AFTER game animations
+    // and BEFORE heroes and beasts, never obscuring units or warning tiles.
+    const objectiveFxActive=!this.preview&&!animating?
+      ObjectiveVFX.draw(c,this.objectiveCues,now,
+        {ox,oy,cell,width:s.width,height:s.height},reduced):false;
     // Quiet attackable emblems + exact durability above the altar art and
     // BELOW every character sprite. Ready is shown only when real skill
     // geometry and server-side resource validation both allow an action.
@@ -899,7 +953,7 @@ export class TacticalRenderer{
     if(!this.preview&&animating){
       // Combat animations keep their original smooth frame timing.
       this.frame=requestAnimationFrame(()=>this.draw());
-    }else if(!this.preview&&!reduced&&(ambienceActive||
+    }else if(!this.preview&&!reduced&&(objectiveFxActive||ambienceActive||
       myTurn&&this.mode==='move'&&this.range.length)){
       // Lightweight, capped ambient refresh; no perpetual 60fps idle redraw.
       this.ambientTimer=setTimeout(()=>this.draw(),w*h>1350000?100:66);
