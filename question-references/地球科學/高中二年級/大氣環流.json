@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-ea2-circulation-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "在北半球，若空氣沿近乎水平的路徑運動且受到科氏力影響，科氏力方向相對其運動方向通常如何？",
+        "correct": "向右偏",
+        "wrong": [
+          "向左偏",
+          "必定與運動方向完全相同",
+          "永遠朝地球中心"
+        ],
+        "exp": "地球自轉造成的科氏偏向在北半球使運動空氣相對行進方向向右偏轉，南半球則相反。",
+        "subject": "地球科學",
+        "sub_topic": "大氣環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-大氣環流",
+        "template_id": "ref-20261119-b5-ea2-circulation-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ea2-circulation-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "熱帶輻合帶（ITCZ）附近常有旺盛上升氣流與對流降雨，主要與哪種低層環流特徵有關？",
+        "correct": "兩側信風在低緯度匯聚，促使暖濕空氣上升",
+        "wrong": [
+          "低層空氣持續下沉並增強乾燥穩定",
+          "中緯度西風永久停止流動",
+          "高緯度冷空氣只在地面向外輻散"
+        ],
+        "exp": "赤道附近的低層輻合及加熱有利空氣上升、冷卻凝結，促進對流雲和降雨。",
+        "subject": "地球科學",
+        "sub_topic": "大氣環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-大氣環流",
+        "template_id": "ref-20261119-b5-ea2-circulation-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ea2-circulation-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "在北半球中緯度，忽略摩擦且接近地轉平衡時，風向一般與等壓線呈現何種關係？",
+        "correct": "大致平行等壓線",
+        "wrong": [
+          "恆定垂直穿越等壓線直指低壓中心",
+          "完全不受氣壓梯度力影響",
+          "風向只能朝正北方"
+        ],
+        "exp": "高空近似地轉平衡時，氣壓梯度力與科氏力平衡，水平風通常大致平行等壓線吹。",
+        "subject": "地球科學",
+        "sub_topic": "大氣環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-大氣環流",
+        "template_id": "ref-20261119-b5-ea2-circulation-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
