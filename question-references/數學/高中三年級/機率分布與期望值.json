@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-math3-expectation-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，統計及應用數據均有可核驗推導",
+      "question": {
+        "q": "公平六面骰擲一次，若點數為1或2得0分、3或4得3分、5或6得6分，則分數期望值為何？",
+        "correct": "3分",
+        "wrong": [
+          "2分",
+          "4分",
+          "6分"
+        ],
+        "exp": "各分數0、3、6均有2/6=1/3的機率，E(X)=0×1/3+3×1/3+6×1/3=3。",
+        "subject": "數學",
+        "sub_topic": "機率分布與期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-機率分布與期望值",
+        "template_id": "ref-20261119-b9-math3-expectation-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math3-expectation-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，統計及應用數據均有可核驗推導",
+      "question": {
+        "q": "某隨機變數X的分布為P(X=0)=0.2、P(X=2)=0.5、P(X=5)=0.3。E(X)為何？",
+        "correct": "2.5",
+        "wrong": [
+          "2.0",
+          "3.0",
+          "3.5"
+        ],
+        "exp": "期望值E(X)=0×0.2+2×0.5+5×0.3=1+1.5=2.5。",
+        "subject": "數學",
+        "sub_topic": "機率分布與期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-機率分布與期望值",
+        "template_id": "ref-20261119-b9-math3-expectation-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math3-expectation-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，統計及應用數據均有可核驗推導",
+      "question": {
+        "q": "某遊戲單次淨損益只有兩種：中獎賺80元（機率1/4），未中獎賠20元（機率3/4）。其單次淨損益期望值為何？",
+        "correct": "5元",
+        "wrong": [
+          "0元",
+          "20元",
+          "−5元"
+        ],
+        "exp": "E=80×1/4+(−20)×3/4=20−15=5元；期望值是長期平均，不保證單次一定賺5元。",
+        "subject": "數學",
+        "sub_topic": "機率分布與期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-機率分布與期望值",
+        "template_id": "ref-20261119-b9-math3-expectation-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
