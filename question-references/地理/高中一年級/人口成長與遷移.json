@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-geo1-pop-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以人口率、年齡結構與社會需求進行分析",
+      "question": {
+        "q": "某地年中人口約20,000人，一年出生200人、死亡100人，未考慮遷移。該年人口自然增加率約為多少？",
+        "correct": "5‰",
+        "wrong": [
+          "0.5‰",
+          "10‰",
+          "50‰"
+        ],
+        "exp": "自然增加人數=200−100=100；自然增加率=100/20,000×1,000‰=5‰，不是總人口成長率。",
+        "subject": "地理",
+        "sub_topic": "人口成長與遷移",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-人口成長與遷移",
+        "template_id": "ref-20261119-geo1-pop-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-geo1-pop-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以人口率、年齡結構與社會需求進行分析",
+      "question": {
+        "q": "某地0～14歲人口有1,200人、15～64歲有4,000人、65歲以上有800人。依上述年齡界線，扶養比約為何？",
+        "correct": "50%",
+        "wrong": [
+          "20%",
+          "30%",
+          "67%"
+        ],
+        "exp": "扶養比=(幼年人口+老年人口)/工作年齡人口×100%=(1,200+800)/4,000×100%=50%。",
+        "subject": "地理",
+        "sub_topic": "人口成長與遷移",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-人口成長與遷移",
+        "template_id": "ref-20261119-geo1-pop-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-geo1-pop-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以人口率、年齡結構與社會需求進行分析",
+      "question": {
+        "q": "某地長期出生數減少、平均壽命增加，且青年人口持續外移。若其他條件不變，對地方公共服務的需求最可能出現何種趨勢？",
+        "correct": "高齡照護需求增加，部分學校面臨招生減少",
+        "wrong": [
+          "幼兒園需求必定快速增加",
+          "老年人口比例必定下降",
+          "醫療與長照需求必定歸零"
+        ],
+        "exp": "少子化使學齡人口可能減少；壽命延長與青年外移可提升高齡人口占比，增加長照與醫療服務需求。",
+        "subject": "地理",
+        "sub_topic": "人口成長與遷移",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-人口成長與遷移",
+        "template_id": "ref-20261119-geo1-pop-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
