@@ -1,9 +1,10 @@
 'use strict';
 
-// Stage 9: deterministic co-op NPC movement, committed with the battle tick.
-// No damage, aggro attacks, drops, player state changes or rewards yet.
+// Stage 9/10: deterministic autonomous NPC movement with server-owned
+// telegraphs and health. No player attacks, rewards or respawn yet.
 const {walkable}=require('./dungeon-map-generator.cjs');
-const {dueTick,advanceClock,isRunning}=require('./dungeon-battle-clock.cjs');
+const {dueTick,isRunning}=require('./dungeon-battle-clock.cjs');
+const Combat=require('./dungeon-enemy-combat.cjs');
 const ENEMY_AI_VERSION=1;
 const MAX_CATCHUP_TICKS=24;
 const DIRECTIONS=Object.freeze([[0,-1],[1,0],[0,1],[-1,0]]);
@@ -54,7 +55,8 @@ function initialEnemies(map){
       zone:spec.zone,position,spawn:{...position},patrolIndex:pathIndex,
       patrolDirection:pathIndex===path.length-1?-1:1,
       cadence:type.cadence,aggroRange:type.aggroRange,
-      intent:'patrol',targetUid:null,lastActionTick:0});
+      intent:'patrol',targetUid:null,lastActionTick:0,
+      attack:null,lastAttack:null,lastAttackTick:0});
   }
   return out;
 }
@@ -81,7 +83,8 @@ function shortestStep(map,from,to,maxSteps=map.width*map.height){
   return null;
 }
 function legalPlayers(members,map){
-  return Object.entries(members||{}).filter(([,m])=>walkable(map,m?.position))
+  return Object.entries(members||{}).filter(([,m])=>
+    walkable(map,m?.position)&&Combat.isAlive(m))
     .sort(([a],[b])=>a.localeCompare(b));
 }
 function nextEnemy(map,enemy,members,tick,occupied){
@@ -114,7 +117,8 @@ function nextEnemy(map,enemy,members,tick,occupied){
       step=path[patrolIndex];
     }
   }
-  if(step&&(occupied.has(key(step))||playerTiles.some(([,p])=>same(p.position,step)))){
+  if(step&&(occupied.has(key(step))||Object.values(members||{}).some(
+    p=>walkable(map,p?.position)&&same(p.position,step)))){
     step=null;
     // A blocked patrol step must not advance its waypoint index: otherwise
     // the next legal tick could attempt a nonadjacent leap.
@@ -141,6 +145,52 @@ function simulate(map,enemies,members,startTick,endTick){
   }
   return next;
 }
+
+function simulateCombat(map,enemies,members,startTick,endTick,
+  {safeCatchup=false}={}){
+  let currentMembers=members;
+  let next=enemies.map(enemy=>({
+    ...enemy,position:{...enemy.position},
+    // A return after an idle gap cannot resolve a warning that players
+    // were never able to see on their devices.
+    ...(safeCatchup?{attack:null}: {})
+  }));
+  for(let tick=startTick;tick<=endTick;tick++){
+    const occupied=new Set(next.map(e=>key(e.position)));
+    const updated=[];
+    for(const enemy of next){
+      occupied.delete(key(enemy.position));
+      let out=enemy;
+      const attack=enemy.attack;
+      // During catch-up we simulate patrol/pathing only. At the *last*
+      // replay tick a new telegraph may begin, but no retroactive hits occur.
+      if(safeCatchup&&tick<endTick){
+        out=nextEnemy(map,enemy,currentMembers,tick,occupied);
+      }else if(attack&&tick>=attack.resolvesAtTick){
+        const result=Combat.resolveAttack(enemy,currentMembers,tick);
+        currentMembers=result.members;
+        out={...enemy,attack:null,lastAttack:{
+          tick,kind:attack.kind,label:attack.label,
+          damage:attack.damage,cells:attack.cells,
+          hits:result.hits
+        },lastAttackTick:tick,
+        intent:'recover',targetUid:null,lastActionTick:tick};
+      }else if(attack){
+        out=enemy;
+      }else if(tick%enemy.cadence===0){
+        const planned=Combat.planAttack(map,enemy,currentMembers,tick);
+        if(planned){
+          out={...enemy,attack:planned,intent:'windup',
+            targetUid:planned.targetUid,lastActionTick:tick};
+        }else out=nextEnemy(map,enemy,currentMembers,tick,occupied);
+      }else out=enemy;
+      occupied.add(key(out.position));
+      updated.push(out);
+    }
+    next=updated;
+  }
+  return {enemies:next,members:currentMembers};
+}
 function advanceWorld(room,map,now){
   if(!isRunning(room))return null;
   const applied=Number.isSafeInteger(room.battleAppliedTick)&&room.battleAppliedTick>=0?
@@ -155,9 +205,14 @@ function advanceWorld(room,map,now){
   // When no one was connected, skip the historical idle gap, then simulate
   // only the most recent bounded window. No retroactive attacks or rewards.
   const start=Math.max(applied+1,due-MAX_CATCHUP_TICKS+1);
-  const enemies=due>applied?simulate(map,base,room.members,start,due):base;
-  return {enemies,enemyAiVersion:ENEMY_AI_VERSION,
+  const safeCatchup=due-applied>Combat.SAFE_CATCHUP_TICKS;
+  const outcome=due>applied?
+    simulateCombat(map,base,room.members,start,due,{safeCatchup}):
+    {enemies:base,members:room.members};
+  return {enemies:outcome.enemies,enemyAiVersion:ENEMY_AI_VERSION,
+    ...(outcome.members!==room.members?{members:outcome.members}:{}),
     ...(due>applied?{battleAppliedTick:due,battleAppliedAtMs:now}:{})};
 }
 module.exports={ENEMY_AI_VERSION,MAX_CATCHUP_TICKS,KINDS,DIRECTIONS,
-  initialEnemies,routeFor,shortestStep,nextEnemy,simulate,advanceWorld};
+  initialEnemies,routeFor,shortestStep,nextEnemy,simulate,
+  simulateCombat,advanceWorld};
