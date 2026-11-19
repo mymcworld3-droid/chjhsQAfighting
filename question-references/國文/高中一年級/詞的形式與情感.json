@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-ch1-ci-form-feeling-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文體、修辭與論證原理明確，附可核查的文本依據",
+      "question": {
+        "q": "下列關於宋詞詞牌的說明，何者最正確？",
+        "correct": "詞牌主要規定詞作的句式、字數與相關聲律形式，並不等於作品必須描寫的主題",
+        "wrong": [
+          "詞牌就是每首詞的作者姓名，與形式無關",
+          "使用同一詞牌的作品，必須寫完全相同的情感和故事",
+          "只要是詞，便必定全部使用七字一句且恰好八句"
+        ],
+        "exp": "詞牌原與曲調相關，後成為形式格律的依據；同一詞牌下可以有不同作者、題材和情感。",
+        "subject": "國文",
+        "sub_topic": "詞的形式與情感",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-詞的形式與情感",
+        "template_id": "ref-20261119-b9-ch1-ci-form-feeling-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch1-ci-form-feeling-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文體、修辭與論證原理明確，附可核查的文本依據",
+      "question": {
+        "q": "閱讀自編詞句：「舊院秋深，梧桐影瘦；故人不至，燈火猶溫。」在「影瘦」與「燈火猶溫」的對比中，最適當的情感分析為何？",
+        "correct": "秋日冷清與等待故人的餘情並置，呈現孤寂中仍有牽念",
+        "wrong": [
+          "只強調院落氣溫變暖，與等待無關",
+          "秋景描寫完全否定了人物對故人的思念",
+          "句中所有景物都在表達歡慶重逢的熱鬧"
+        ],
+        "exp": "「秋深」「影瘦」描寫蕭索，「故人不至」明示未能相見；「猶溫」則顯示情感尚未消退，形成反差。",
+        "subject": "國文",
+        "sub_topic": "詞的形式與情感",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-詞的形式與情感",
+        "template_id": "ref-20261119-b9-ch1-ci-form-feeling-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch1-ci-form-feeling-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文體、修辭與論證原理明確，附可核查的文本依據",
+      "question": {
+        "q": "某詞分上下兩片：上片描寫江邊潮退、遠帆消失；下片轉寫思念離去的友人。哪項分析最符合詞的篇章與抒情安排？",
+        "correct": "由景入情，利用上下片轉換使離別情緒逐漸明確",
+        "wrong": [
+          "上下片若同屬一首詞，就不可能有情緒轉折",
+          "上片出現江水，表示下片必須只討論水文知識",
+          "有上下兩片便代表每一行字數必須完全一致"
+        ],
+        "exp": "上片景物提供離別情境，下片直接抒情，屬景物鋪陳後轉入情感的布局，符合長短句作品常見的組織方法。",
+        "subject": "國文",
+        "sub_topic": "詞的形式與情感",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-詞的形式與情感",
+        "template_id": "ref-20261119-b9-ch1-ci-form-feeling-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
