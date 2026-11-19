@@ -1,6 +1,7 @@
 import * as Camera from './dungeon-map-camera.js';
 import {dungeonBossVisualPlan,drawBossTelegraph,drawBossAura,drawBossTransition} from './dungeon-boss-visuals.js';
 import {drawDungeonEnvironment,drawDungeonCastWindup} from './dungeon-environment-effects.js';
+import {dungeonWindupPose,dungeonHitPose,drawDungeonBeastWindup,drawDungeonEnemyImpacts} from './dungeon-enemy-animation.js';
 
 // Stage-6-only deterministic canvas presentation. No gameplay mutations.
 export const BIOMES=Object.freeze({
@@ -38,6 +39,7 @@ export function drawWorld(ctx,map,camera,width,height,
     rangeTiles=[],rangeKind='move',animationUnderlay=null,animationOverlay=null,
     dangerPlan=null,showDangerGuidance=false,ambiencePlan=null,
     environmentPlan=null,bossTransition=null,displayTick=currentTick,
+    windupTick=displayTick,enemyImpactScenes=[],
     reducedMotion=false,pendingAction=null}={}){
   const palette=BIOMES[map.biome]||BIOMES.ruins;
   const g=Camera.geometry(camera,map,width,height);
@@ -250,10 +252,17 @@ export function drawWorld(ctx,map,camera,width,height,
     const pos=enemy?.position;
     if(!Number.isFinite(pos?.x)||!Number.isFinite(pos?.y)||
         !walk(Math.floor(pos.x),Math.floor(pos.y)))continue;
-    const x=g.ox+(pos.x+.5)*cell,
-      y=g.oy+(pos.y+.5)*cell-(Number(enemy.visualLift)||0)*cell;
+    const pose=dungeonWindupPose(enemy,windupTick,visualTimeMs,reducedMotion);
+    const x=g.ox+(pos.x+.5+(pose?.dx||0))*cell,
+      y=g.oy+(pos.y+.5+(pose?.dy||0))*cell-
+        (Number(enemy.visualLift)||0)*cell;
     if(x<-35||y<-35||x>width+35||y>height+35)continue;
     const color=BEAST_COLORS[enemy.kind]||'#e5bc9e';
+    // Draw a subtle server-telegraph-linked charge around ordinary beasts
+    // before their sprites; strike results remain separate committed events.
+    if(enemy.kind!=='boss')
+      drawDungeonBeastWindup(ctx,enemy,{ox:g.ox,oy:g.oy,cell},
+        windupTick,visualTimeMs,reducedMotion);
     if(enemy.kind==='boss'){
       // A single 2x2 animated-looking painted beast. All attack cells,
       // players and HP derive from one server entity, never four fake NPCs.
@@ -343,9 +352,11 @@ export function drawWorld(ctx,map,camera,width,height,
     const slot=Math.max(0,occupancy.findIndex(other=>other.uid===member.uid));
     // Keep the local hero at the literal center, even when allies overlap.
     const offset=member.uid===selfUid?0:(occupancy.length>1?.22*cell:0);
-    const sx=g.ox+(point.x+.5)*cell+offset*(slot%2?1:-1),
+    const recoil=dungeonHitPose(member.uid,enemyImpactScenes,reducedMotion);
+    const sx=g.ox+(point.x+.5)*cell+offset*(slot%2?1:-1)+
+        (recoil?.dx||0)*cell,
       sy=g.oy+(point.y+.5)*cell+offset*(slot>=2?1:-1)-
-        (Number(member.visualLift)||0)*cell;
+        (Number(member.visualLift)||0)*cell+(recoil?.dy||0)*cell;
     const radius=clamp(cell*.26,3,9);
     const sex=String(member?.gender||member?.avatarGender||
       member?.appearance?.gender||'male').toLowerCase();
@@ -409,7 +420,7 @@ export function drawWorld(ctx,map,camera,width,height,
       ctx.lineJoin='round';ctx.lineWidth=2.8;ctx.strokeStyle='#15241b';
       ctx.strokeText(hpText,sx,barY+5,cell*.97);
       ctx.fillStyle='#fff4de';ctx.fillText(hpText,sx,barY+5,cell*.97);
-      if(member.lastDamage&&Number.isSafeInteger(currentTick)&&
+      if(reducedMotion&&member.lastDamage&&Number.isSafeInteger(currentTick)&&
         currentTick-member.lastDamage.tick>=0&&
         currentTick-member.lastDamage.tick<=2){
         ctx.fillStyle='#ffd0b4';ctx.textBaseline='middle';
@@ -424,6 +435,10 @@ export function drawWorld(ctx,map,camera,width,height,
   if(typeof animationOverlay==='function')
     animationOverlay(ctx,{ox:g.ox,oy:g.oy,cell,width:map.width,
       height:map.height},visualTimeMs);
+  // Narrow impact rings and confirmed damage numbers follow the actors;
+  // no hitbox, health, or position in the server room is changed here.
+  drawDungeonEnemyImpacts(ctx,enemyImpactScenes,{ox:g.ox,oy:g.oy,cell},
+    members,reducedMotion);
   const shadow=ctx.createRadialGradient(width/2,height/2,Math.min(width,height)*.2,
     width/2,height/2,Math.max(width,height)*.78);
   shadow.addColorStop(0,'rgba(0,0,0,0)');shadow.addColorStop(1,'rgba(0,0,0,.43)');
