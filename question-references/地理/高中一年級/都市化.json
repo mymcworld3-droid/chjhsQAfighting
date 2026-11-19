@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-g1-urban-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "某地總人口由100萬增至120萬，都市人口由50萬增至72萬。該地都市人口占比如何改變？",
+        "correct": "由50%上升至60%",
+        "wrong": [
+          "由50%下降至40%",
+          "由60%上升至72%",
+          "維持50%"
+        ],
+        "exp": "原都市化率50/100=50%；後都市化率72/120=60%，增加10個百分點。",
+        "subject": "地理",
+        "sub_topic": "都市化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-都市化",
+        "template_id": "ref-20261119-b5-g1-urban-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-g1-urban-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "一都市大量新建低密度住宅區，居民須長距離開車通勤，農地因而被逐步開發。這最接近哪種都市發展現象？",
+        "correct": "都市蔓延（urban sprawl）",
+        "wrong": [
+          "高密度混合使用的緊湊型都市",
+          "由單一地震事件造成的地層抬升",
+          "都市人口自然增加率必定為負"
+        ],
+        "exp": "低密度、向外擴張及汽車依賴是都市蔓延的常見特徵，可能增加土地消耗與交通需求。",
+        "subject": "地理",
+        "sub_topic": "都市化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-都市化",
+        "template_id": "ref-20261119-b5-g1-urban-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-g1-urban-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "夏季夜晚，密集建築區氣溫常高於鄰近綠地。若要改善都市熱島效應，下列何種組合較合理？",
+        "correct": "增加樹冠遮蔭及適當透水綠地，並改善建物隔熱",
+        "wrong": [
+          "以更多深色不透水鋪面取代綠地",
+          "全面縮小都市通風空間並增加廢熱排放",
+          "只在室內安裝溫度計而不調整熱環境"
+        ],
+        "exp": "植被遮蔭與蒸散、改善建物熱性能與通風可協助降低都市熱負荷，須依地方條件設計。",
+        "subject": "地理",
+        "sub_topic": "都市化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-都市化",
+        "template_id": "ref-20261119-b5-g1-urban-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
