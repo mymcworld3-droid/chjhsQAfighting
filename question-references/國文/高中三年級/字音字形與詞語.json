@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-word-form-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "篇章觀點與經典語義清晰，解析附具體文本依據",
+      "question": {
+        "q": "下列四句，何者完全沒有錯別字？",
+        "correct": "面對資料矛盾，研究者仍一絲不苟地重新查核。",
+        "wrong": [
+          "為了提高效率，團隊決定按步就班地完成任務。",
+          "無論別人如何勸說，他依然剛愎自用、執迷不誤。",
+          "活動原訂昨日舉行，卻因大雨而臨時廷期。"
+        ],
+        "exp": "「一絲不苟」正確；「按步就班」應為「按部就班」，「執迷不誤」應為「執迷不悟」，「廷期」應為「延期」。",
+        "subject": "國文",
+        "sub_topic": "字音字形與詞語",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-字音字形與詞語",
+        "template_id": "ref-20261119-b9-ch3-word-form-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-word-form-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "篇章觀點與經典語義清晰，解析附具體文本依據",
+      "question": {
+        "q": "「這份資料只是初步調查，結論仍待商榷。」句中「商榷」最接近何義？",
+        "correct": "共同討論、斟酌是否妥當",
+        "wrong": [
+          "毫無保留地完全同意",
+          "公開宣布永不修正",
+          "立刻撤回所有記載"
+        ],
+        "exp": "「商榷」指商量討論、斟酌，文中表示結論仍需檢討而非已獲完全確認。",
+        "subject": "國文",
+        "sub_topic": "字音字形與詞語",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-字音字形與詞語",
+        "template_id": "ref-20261119-b9-ch3-word-form-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-word-form-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "篇章觀點與經典語義清晰，解析附具體文本依據",
+      "question": {
+        "q": "「某篇評論列出數百項案例，但其核心結論仍屬以偏概全。」這裡的「以偏概全」最精確的意思是什麼？",
+        "correct": "將不足以代表整體的部分情況推廣成全面判斷",
+        "wrong": [
+          "先詳細說明所有可得證據，再謹慎保留不確定性",
+          "將複雜問題分成幾個階段依序處理",
+          "只討論自己親眼所見而完全不提出結論"
+        ],
+        "exp": "即使案例很多，仍須檢視樣本是否具有代表性；「以偏概全」指以局部概括全體的不當推論。",
+        "subject": "國文",
+        "sub_topic": "字音字形與詞語",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-字音字形與詞語",
+        "template_id": "ref-20261119-b9-ch3-word-form-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
