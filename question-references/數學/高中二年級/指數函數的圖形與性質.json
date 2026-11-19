@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-math2-exp-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨認指數成長、衰減及指數方程式",
+      "question": {
+        "q": "函數f(x)=2^(x+1)。求f(2)的值。",
+        "correct": "8",
+        "wrong": [
+          "4",
+          "6",
+          "16"
+        ],
+        "exp": "將x=2代入，f(2)=2^(2+1)=2³=8，注意先處理指數中的加法。",
+        "subject": "數學",
+        "sub_topic": "指數函數的圖形與性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "h2-指數函數的圖形與性質",
+        "template_id": "ref-20261119-b2-math2-exp-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-math2-exp-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨認指數成長、衰減及指數方程式",
+      "question": {
+        "q": "若3^x=1/27，則實數x為何？",
+        "correct": "−3",
+        "wrong": [
+          "−2",
+          "3",
+          "1/3"
+        ],
+        "exp": "27=3³，1/27=3^(−3)，所以同底數的指數相等，x=−3。",
+        "subject": "數學",
+        "sub_topic": "指數函數的圖形與性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "h2-指數函數的圖形與性質",
+        "template_id": "ref-20261119-b2-math2-exp-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-math2-exp-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨認指數成長、衰減及指數方程式",
+      "question": {
+        "q": "關於函數f(x)=(1/2)^x的圖形，下列何者正確？",
+        "correct": "函數值恆為正，且隨x增加而遞減",
+        "wrong": [
+          "函數值可能小於0",
+          "函數通過(0,0)",
+          "函數隨x增加而嚴格遞增"
+        ],
+        "exp": "底數介於0與1之間的指數函數為遞減函數，且任何實數x下的函數值皆大於0，f(0)=1。",
+        "subject": "數學",
+        "sub_topic": "指數函數的圖形與性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "h2-指數函數的圖形與性質",
+        "template_id": "ref-20261119-b2-math2-exp-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
