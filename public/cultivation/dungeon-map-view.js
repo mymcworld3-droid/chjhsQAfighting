@@ -292,6 +292,88 @@ class DungeonMapView{
     this.updateRescueHUD();this.updateGuardHUD();this.updateVictoryHUD();
     this.updateStrikeHUD();this.updateSkillHUD();
   }
+  updateGuardHUD(){
+    const box=this.$('[data-dm-guards]');
+    if(!box)return;
+    const fighting=this.room?.status==='assembled'&&
+      this.room?.dungeonArena==='boss'&&
+      this.room?.bossEncounter?.status==='fighting'&&!!this.map;
+    const own=this.room?.members?.[this.uid];
+    if(!fighting||!own){
+      box.hidden=true;this.guardSignature='';
+      box.replaceChildren();return;
+    }
+    const roster=this.members();
+    const signature=roster.map(m=>String(m.uid)+'|'+String(m.name||'')).join(';');
+    if(this.guardSignature!==signature){
+      box.replaceChildren(...roster.map(member=>{
+        const button=document.createElement('button');
+        button.type='button';button.dataset.dm='guard';
+        button.dataset.targetUid=member.uid;
+        return button;
+      }));
+      this.guardSignature=signature;
+    }
+    const tick=Number(this.room?.battleClock?.appliedTick)||0;
+    const stamina=Math.max(0,Number(own.explorationStamina)||0);
+    const ownAlive=own.downed!==true&&Number(own.battleHealth)>0;
+    box.querySelectorAll('[data-dm="guard"]').forEach(button=>{
+      const member=this.room.members[button.dataset.targetUid];
+      if(!member)return;
+      const self=member.uid===this.uid,cost=self?6:3;
+      const nearby=own.position&&member.position&&
+        Math.abs(own.position.x-member.position.x)+
+        Math.abs(own.position.y-member.position.y)<=2;
+      const protectedNow=member.bossGuard&&
+        Number(member.bossGuard.expiresAtTick)>=tick;
+      const name=self?'自己':String(member.name||'隊友').slice(0,7);
+      button.textContent=protectedNow?'✓ '+name+' · 掩護中':
+        '🛡 '+(self?'自守':'掩護 '+name)+' · '+cost+' 體力';
+      button.disabled=this.guardPending||!ownAlive||
+        member.downed===true||Number(member.battleHealth)<=0||
+        !nearby||stamina<cost||!!protectedNow;
+      button.title=protectedNow?'可抵擋一次 Boss 預告攻擊的一半傷害':
+        !nearby?'需與目標相距兩格以內':
+        stamina<cost?'先答題補充體力':
+        '持續最多 5 秒，承受一次 Boss 傷害後消失；不影響原本的救援技能';
+    });
+    box.hidden=false;
+  }
+  async guard(targetUid){
+    if(this.guardPending||!this.isCurrent()||!this.map||
+      this.room?.dungeonArena!=='boss')return;
+    const own=this.room?.members?.[this.uid];
+    if(!own)return;
+    const seq=(Number.isSafeInteger(own.guardSeq)?own.guardSeq:0)+1;
+    const roomId=this.roomId,token=this.seq;
+    this.guardPending=true;this.updateGuardHUD();
+    try{
+      const data=await guardDungeonTeammate(roomId,targetUid,seq);
+      if(!this.isCurrent()||this.seq!==token||this.roomId!==roomId)return;
+      if(data?.room){
+        this.updateRoom(data.room);
+        window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
+          detail:{room:data.room}
+        }));
+        this.moveAlert(targetUid===this.uid?'🛡 已進入守護姿態':
+          '🛡 已替隊友準備防護');
+      }
+    }catch(error){
+      if(this.isCurrent()&&this.seq===token){
+        this.moveAlert(error?.message||'隊友掩護失敗');
+        if(error?.status===409){
+          try{
+            const fresh=await getDungeonRoom(roomId);
+            if(this.isCurrent()&&this.seq===token&&fresh?.room)
+              this.updateRoom(fresh.room);
+          }catch(_){}
+        }
+      }
+    }finally{
+      this.guardPending=false;
+      if(this.isCurrent()&&this.seq===token)this.updateGuardHUD();
+    }
+  }
   updateRescueHUD(){
     const box=this.$('[data-dm-rescues]');
     if(!box)return;
@@ -863,6 +945,28 @@ class DungeonMapView{
         this.$('[data-dm-boss-meter]').style.width=
           Math.round(hp/Math.max(1,max)*100)+'%';
         bossBar.dataset.phase=String(phase);
+        const shieldNode=this.$('[data-dm-boss-shield]');
+        const hint=this.$('[data-dm-teamwork-hint]');
+        if(shieldNode){
+          shieldNode.hidden=!boss;
+          if(boss){
+            const shield=Math.max(0,Number(boss.shield)||0);
+            const shieldMax=Math.max(1,Number(boss.shieldMax)||180);
+            this.$('[data-dm-shield-value]').textContent=
+              shield?shield+'/'+shieldMax:'已破盾';
+            this.$('[data-dm-shield-meter]').style.width=
+              Math.round(100*shield/shieldMax)+'%';
+          }
+        }
+        if(hint){
+          const tick=Number(this.room?.battleClock?.appliedTick)||0;
+          const remaining=Math.max(0,(Number(boss?.exposedUntilTick)||0)-tick);
+          const last=boss?.lastTeamHit;
+          hint.textContent=!boss?'首領已擊敗':Number(boss.shield)>0?
+            '護盾減傷 30% · 交替攻擊可合擊 +20%':
+            '破盾！'+(remaining?'破綻剩 '+remaining+' 秒 · 傷害 +25%':'')+
+            (last?.combo&&tick-(last.tick||0)<=2?' · 合擊 +20%':'');
+        }
       }
     }
     const entry=this.$('[data-dm="enter-boss"]');
