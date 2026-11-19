@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-math1-circles-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "圓(x−2)²+(y+3)²=25的圓心與半徑為何？",
+        "correct": "圓心(2,−3)、半徑5",
+        "wrong": [
+          "圓心(−2,3)、半徑5",
+          "圓心(2,3)、半徑25",
+          "圓心(−2,−3)、半徑25"
+        ],
+        "exp": "標準式(x−a)²+(y−b)²=r²；可讀出圓心(2,−3)及r=√25=5。",
+        "subject": "數學",
+        "sub_topic": "圓方程式、點線圓位置關係",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-圓方程式、點線圓位置關係",
+        "template_id": "ref-20261119-b3-math1-circles-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math1-circles-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "圓心為(0,0)、半徑5的圓與直線3x+4y=25的位置關係為何？",
+        "correct": "相切",
+        "wrong": [
+          "相離",
+          "相交於兩點",
+          "直線通過圓心"
+        ],
+        "exp": "圓心到直線距離d=|−25|/√(3²+4²)=25/5=5，恰等於半徑，所以相切。",
+        "subject": "數學",
+        "sub_topic": "圓方程式、點線圓位置關係",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-圓方程式、點線圓位置關係",
+        "template_id": "ref-20261119-b3-math1-circles-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math1-circles-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "圓x²+y²=16與直線y=0的交點為何？",
+        "correct": "(−4,0)與(4,0)",
+        "wrong": [
+          "(0,−4)與(0,4)",
+          "只有(0,0)",
+          "(−2,0)與(2,0)"
+        ],
+        "exp": "令y=0代入圓方程式，得x²=16，所以x=±4，交點為(±4,0)。",
+        "subject": "數學",
+        "sub_topic": "圓方程式、點線圓位置關係",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-圓方程式、點線圓位置關係",
+        "template_id": "ref-20261119-b3-math1-circles-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
