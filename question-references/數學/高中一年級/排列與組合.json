@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-math1-combinatorics-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "五位不同學生中選出班長、副班長和總務各一人，且同一人不可兼任，共有多少種安排？",
+        "correct": "60種",
+        "wrong": [
+          "10種",
+          "20種",
+          "125種"
+        ],
+        "exp": "三個職位彼此不同，依序有5、4、3種人選；乘法原理得到5×4×3＝60種。",
+        "subject": "數學",
+        "sub_topic": "排列與組合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h1-排列與組合",
+        "template_id": "ref-20261119-b3-math1-combinatorics-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math1-combinatorics-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "有6本互不相同的書，其中甲、乙兩本必須相鄰，將全部排成一列，有多少種排列？",
+        "correct": "240種",
+        "wrong": [
+          "120種",
+          "360種",
+          "720種"
+        ],
+        "exp": "將甲乙視為一個區塊，與其餘4本共5個不同單位，可排5!種；甲乙內部有2!種，共5!×2＝240種。",
+        "subject": "數學",
+        "sub_topic": "排列與組合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h1-排列與組合",
+        "template_id": "ref-20261119-b3-math1-combinatorics-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math1-combinatorics-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "某社團有4位男生、3位女生，隨機選2位代表，要求至少有一位女生，共有多少種選法？",
+        "correct": "15種",
+        "wrong": [
+          "12種",
+          "18種",
+          "21種"
+        ],
+        "exp": "全部兩人組合C(7,2)=21種，扣掉兩位皆男生的C(4,2)=6種，得到15種。",
+        "subject": "數學",
+        "sub_topic": "排列與組合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h1-排列與組合",
+        "template_id": "ref-20261119-b3-math1-combinatorics-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
