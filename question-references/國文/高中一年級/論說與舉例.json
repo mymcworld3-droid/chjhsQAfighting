@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-ch1-argument-examples-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文體、修辭與論證原理明確，附可核查的文本依據",
+      "question": {
+        "q": "某生主張「校園增加遮陰休息區可改善夏季戶外活動的舒適度」。以下何者最能作為直接且可靠的論據？",
+        "correct": "比較增設前後相似天氣下休息區的溫度與使用者感受，並說明調查方式",
+        "wrong": [
+          "只列出遮陰設施的外觀設計與顏色",
+          "引用一位學生說樹蔭很好看，就推論全校感受都改善",
+          "只比較施工前後校徽的設計，忽略溫度及活動狀況"
+        ],
+        "exp": "要支持舒適度改善，資料應對應氣溫、熱感與實際使用情境；調查方式和可比性也影響可信度。",
+        "subject": "國文",
+        "sub_topic": "論說與舉例",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-論說與舉例",
+        "template_id": "ref-20261119-b9-ch1-argument-examples-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch1-argument-examples-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文體、修辭與論證原理明確，附可核查的文本依據",
+      "question": {
+        "q": "一篇文章說：「兩位參加志工活動的同學後來考試進步，因此志工活動一定能提高所有人的成績。」其主要論證問題是什麼？",
+        "correct": "以極少數個案推論所有人，且沒有排除其他影響成績的因素",
+        "wrong": [
+          "因為使用實際案例，所以結論必定完全正確",
+          "只要考試成績有變動，便不可能討論志工活動的影響",
+          "文章若使用「因此」一詞，就不必再提出任何證據"
+        ],
+        "exp": "兩個個案的結果不足以概括群體，更無法排除學習時間、課程難度等其他因素造成的變化。",
+        "subject": "國文",
+        "sub_topic": "論說與舉例",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-論說與舉例",
+        "template_id": "ref-20261119-b9-ch1-argument-examples-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch1-argument-examples-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文體、修辭與論證原理明確，附可核查的文本依據",
+      "question": {
+        "q": "甲文主張「學校應保留課後自習室」；乙文說「自習室開放需增派管理人力」。若撰寫回應乙文的論證，何者最周全？",
+        "correct": "承認管理有人力成本，並提出預約制度或分時段試辦以評估需求與成本",
+        "wrong": [
+          "堅稱自習室永遠不會產生任何管理費用",
+          "只因學生想使用，就完全不需要回應人力限制",
+          "接受所有管理疑慮，直接斷言課後自習完全沒有價值"
+        ],
+        "exp": "健全論證應正面處理反方提出的真實限制，並以具體方案與可觀察指標檢驗可行性。",
+        "subject": "國文",
+        "sub_topic": "論說與舉例",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-論說與舉例",
+        "template_id": "ref-20261119-b9-ch1-argument-examples-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
