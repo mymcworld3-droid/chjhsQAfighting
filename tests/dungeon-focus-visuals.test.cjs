@@ -5,12 +5,16 @@ const fs=require('node:fs');
 const path=require('node:path');
 const read=file=>fs.readFileSync(path.join(__dirname,'..',file),'utf8');
 const quarter=read('public/cultivation/dungeon-quarter-controls.js');
-const {dungeonFocusCharges,dungeonFocusEmpowers,dungeonQuarterControlsHTML}=
+const {dungeonFocusCharges,dungeonFocusEmpowers,dungeonEnergySegments}=
   new Function(quarter.replace(/^export /gm,'')+
-    '\nreturn {dungeonFocusCharges,dungeonFocusEmpowers,dungeonQuarterControlsHTML};')();
+    '\nreturn {dungeonFocusCharges,dungeonFocusEmpowers,dungeonEnergySegments};')();
 const view=read('public/cultivation/dungeon-map-view.js');
 const effectCss=read('public/styles/dungeon-map-view.css');
-const wheelCss=read('public/styles/dungeon-quarter-controls.css');
+const wheelCss=read('public/styles/dungeon-trial-wheel.css');
+const wheelSource=read('public/cultivation/dungeon-trial-wheel.js');
+const {dungeonTrialWheelHTML}=new Function('dungeonEnergySegments',
+  wheelSource.replace(/^import .*$/gm,'').replace(/^export /gm,'')+
+  '\nreturn {dungeonTrialWheelHTML};')(dungeonEnergySegments);
 const painterSource=read('public/cultivation/dungeon-map-painter.js');
 const camSource=read('public/cultivation/dungeon-map-camera.js');
 const camera=new Function(camSource.replace(/^export /gm,'')+
@@ -38,9 +42,9 @@ test('only non-focus body techniques become golden, never sword or focus activat
 });
 
 test('right action wheel receives actual gold styling, including not-yet-aimed buttons',()=>{
-  assert.match(wheelCss,/\.dm-wheel-core button\.is-focus-empowered\{/);
+  assert.match(wheelCss,/\.tc-wheel-options>\.tc-sector\[data-wheel-choice\]\.is-focus-empowered\[aria-pressed\]\{/);
   assert.match(wheelCss,/background:linear-gradient\(115deg,#fff3c1/);
-  assert.match(wheelCss,/\.dm-wheel-core button\.is-focus-empowered:disabled\{[^}]*opacity:\.86!important/s);
+  assert.match(wheelCss,/\.tc-wheel-detail-marker\.is-focus-empowered\{/);
   assert.match(wheelCss,/@keyframes dmFocusGoldSkill/);
   assert.doesNotMatch(wheelCss,/is-focus-empowered\{\s*color:#ffebb5/);
   assert.match(quarter,/dungeonFocusEmpowers/);
@@ -49,7 +53,7 @@ test('right action wheel receives actual gold styling, including not-yet-aimed b
 });
 
 test('a persistent focus badge is wired to room updates and vanishes at zero',()=>{
-  assert.match(dungeonQuarterControlsHTML(),/data-dm-focus-indicator hidden/);
+  assert.match(dungeonTrialWheelHTML(),/data-dm-focus-indicator hidden/);
   assert.match(view,/badge\.hidden=!active\|\|charges===0/);
   assert.match(view,/badge\.textContent=charges>0\?'✦ 金身蓄勢 '/);
   assert.match(view,/renderDungeonTrialWheel\(wheel/);
@@ -75,7 +79,7 @@ function fakeContext(){
     setLineDash(){},arc(){circles++}
   };
   for(const op of ['save','restore','fillRect','strokeRect','beginPath',
-      'moveTo','lineTo','fill','stroke','fillText'])context[op]=()=>{};
+      'moveTo','lineTo','fill','stroke','fillText','strokeText'])context[op]=()=>{};
   return {ctx:context,circles:()=>circles};
 }
 test('canvas paints extra surrounding golden rings only for actively focused living players',()=>{
