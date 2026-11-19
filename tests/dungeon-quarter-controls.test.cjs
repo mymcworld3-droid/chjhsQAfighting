@@ -44,7 +44,7 @@ test('stamina ring clamps and is monotone across player energy',()=>{
 
 test('existing server-authorized quiz, strike and four movement buttons are MOVED, not cloned',()=>{
   assert.match(viewer,/append\(charge\)/);
-  assert.match(viewer,/charge\.append\(bolt,stamina,label\)/);
+  assert.match(viewer,/charge\.append\(stamina,label\)/);
   assert.match(viewer,/data-dm-strike-slot[^]*?append\([\s\S]*?data-dm="strike"/);
   assert.match(viewer,/data-dm-move-slot[^]*?append\([\s\S]*?\.dm-dpad/);
   assert.match(viewer,/getDungeonMap\(roomId\)/);
@@ -61,7 +61,7 @@ test('skill controls remain usable without opening the optional loadout popup',(
   assert.match(viewer,/if\(name==='wheel-attack'\)/);
   assert.match(viewer,/if\(name==='wheel-move'\)/);
   assert.match(viewer,/if\(name==='loadouts'\)/);
-  assert.match(viewer,/this\.wheelSwipeSuppressUntil=Date\.now\(\)\+180/);
+  assert.match(viewer,/this\.wheelSwipeSuppressUntil=Date\.now\(\)\+350/);
 });
 
 test('map canvas is full bleed and both quarter wheels fit landscape and portrait',()=>{
