@@ -33,7 +33,9 @@ export function hashCell(map,x,y){
 export function drawWorld(ctx,map,camera,width,height,
   {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0,
     aimTile=null,visualTimeMs=0,objectives=null,art=null,
-    rangeTiles=[],rangeKind='move',animationUnderlay=null,animationOverlay=null}={}){
+    rangeTiles=[],rangeKind='move',animationUnderlay=null,animationOverlay=null,
+    dangerPlan=null,showDangerGuidance=false,ambiencePlan=null,
+    reducedMotion=false,pendingAction=null}={}){
   const palette=BIOMES[map.biome]||BIOMES.ruins;
   const g=Camera.geometry(camera,map,width,height);
   const v=Camera.visibleTiles(camera,map,width,height);
@@ -79,6 +81,19 @@ export function drawWorld(ctx,map,camera,width,height,
       }
     }
   }
+  // Same trial ambience engine. Screen-space motes remain decorative;
+  // they never imply safe terrain or change the collision map.
+  const ambience=globalThis.QATacticalAmbience;
+  if(ambiencePlan&&ambience?.drawAtmosphere&&
+      typeof ctx.clip==='function'&&
+      typeof ctx.createLinearGradient==='function'&&!reducedMotion){
+    ctx.save();ctx.beginPath();ctx.rect(0,0,width,height);ctx.clip();
+    ambience.drawAtmosphere(ctx,ambiencePlan,{
+      ox:0,oy:0,cell:Math.max(width/ambiencePlan.width,
+        height/ambiencePlan.height)
+    },visualTimeMs,false,'low');
+    ctx.restore();
+  }
   if(showRoutes){
     const paintPath=(points,color,alpha)=>{
       if(!Array.isArray(points)||!points.length)return;
@@ -119,27 +134,59 @@ export function drawWorld(ctx,map,camera,width,height,
   if(typeof animationUnderlay==='function')
     animationUnderlay(ctx,{ox:g.ox,oy:g.oy,cell,width:map.width,
       height:map.height},visualTimeMs);
-  // Attack telegraphs are painted after the animated skill underlay but below
-  // all beast/player sprites, preserving legible red danger outlines.
-  // A warning cell never masks the player or overwrites a creature marker.
-  for(const beast of enemies){
-    const warning=beast?.attack;
-    if(!Array.isArray(warning?.cells))continue;
-    for(const p of warning.cells){
-      if(!walk(p.x,p.y)||p.x<v.x0||p.x>v.x1||p.y<v.y0||p.y>v.y1)continue;
-      const x=g.ox+p.x*cell,y=g.oy+p.y*cell;
-      ctx.save();
-      ctx.fillStyle='rgba(231,74,56,.23)';
-      ctx.fillRect(x+.7,y+.7,Math.max(1,cell-1.4),Math.max(1,cell-1.4));
-      ctx.strokeStyle='#ff785f';ctx.lineWidth=clamp(cell*.095,1,3);
-      ctx.strokeRect(x+1.2,y+1.2,Math.max(1,cell-2.4),Math.max(1,cell-2.4));
-      if(cell>=13){
-        ctx.fillStyle='#ffe4bb';ctx.textAlign='center';ctx.textBaseline='middle';
-        ctx.font='bold '+Math.round(clamp(cell*.55,10,18))+'px sans-serif';
-        ctx.fillText('!',x+cell*.5,y+cell*.5);
+  // Identical warning ground/contour renderer to 問道試煉.
+  // Server-published C-room attack cells remain the only danger source.
+  const threats=globalThis.QATacticalThreats;
+  if(dangerPlan&&threats?.drawGround&&threats?.drawContours&&
+      typeof ctx.clip==='function'&&typeof ctx.rect==='function'){
+    const viewport={ox:g.ox,oy:g.oy,cell,
+      width:map.width,height:map.height};
+    threats.drawGround(ctx,dangerPlan,viewport);
+    ctx.save();
+    ctx.globalAlpha=reducedMotion?1:.78+.22*
+      Math.sin(visualTimeMs*.005);
+    threats.drawContours(ctx,dangerPlan,viewport);
+    ctx.restore();
+    if(showDangerGuidance&&threats.drawGuidance)
+      threats.drawGuidance(ctx,dangerPlan,viewport,reducedMotion);
+  }else{
+    // Attack telegraphs are painted after the animated skill underlay but below
+    // all beast/player sprites, preserving legible red danger outlines.
+    // A warning cell never masks the player or overwrites a creature marker.
+    for(const beast of enemies){
+      const warning=beast?.attack;
+      if(!Array.isArray(warning?.cells))continue;
+      for(const p of warning.cells){
+        if(!walk(p.x,p.y)||p.x<v.x0||p.x>v.x1||p.y<v.y0||p.y>v.y1)continue;
+        const x=g.ox+p.x*cell,y=g.oy+p.y*cell;
+        ctx.save();
+        ctx.fillStyle='rgba(231,74,56,.23)';
+        ctx.fillRect(x+.7,y+.7,Math.max(1,cell-1.4),Math.max(1,cell-1.4));
+        ctx.strokeStyle='#ff785f';ctx.lineWidth=clamp(cell*.095,1,3);
+        ctx.strokeRect(x+1.2,y+1.2,Math.max(1,cell-2.4),Math.max(1,cell-2.4));
+        if(cell>=13){
+          ctx.fillStyle='#ffe4bb';ctx.textAlign='center';ctx.textBaseline='middle';
+          ctx.font='bold '+Math.round(clamp(cell*.55,10,18))+'px sans-serif';
+          ctx.fillText('!',x+cell*.5,y+cell*.5);
+        }
+        ctx.restore();
       }
-      ctx.restore();
     }
+  
+  }
+  // Immediate non-authoritative input cue while combat is validated
+  // remotely. It never draws damage, hit numbers or enemy displacement.
+  if(pendingAction?.target&&walk(pendingAction.target.x,pendingAction.target.y)){
+    const centerX=g.ox+(pendingAction.target.x+.5)*cell,
+      centerY=g.oy+(pendingAction.target.y+.5)*cell;
+    const phase=reducedMotion?0:Math.sin(visualTimeMs*.018);
+    ctx.save();ctx.strokeStyle=pendingAction.kind==='skill'?
+      '#f5cf87':'#c8eed1';
+    ctx.globalAlpha=.68+.25*phase;
+    ctx.lineWidth=Math.max(1.7,cell*.055);
+    ctx.beginPath();ctx.arc(centerX,centerY,
+      Math.max(5,cell*(.28+.055*phase)),0,Math.PI*2);
+    ctx.stroke();ctx.restore();
   }
   // Player-selected aim is an outline under every character marker, not a
   // filled overlay that hides the NPC or player on the selected tile.
@@ -287,7 +334,8 @@ export function drawWorld(ctx,map,camera,width,height,
     // Keep the local hero at the literal center, even when allies overlap.
     const offset=member.uid===selfUid?0:(occupancy.length>1?.22*cell:0);
     const sx=g.ox+(point.x+.5)*cell+offset*(slot%2?1:-1),
-      sy=g.oy+(point.y+.5)*cell+offset*(slot>=2?1:-1);
+      sy=g.oy+(point.y+.5)*cell+offset*(slot>=2?1:-1)-
+        (Number(member.visualLift)||0)*cell;
     const radius=clamp(cell*.26,3,9);
     const sex=String(member?.gender||member?.avatarGender||
       member?.appearance?.gender||'male').toLowerCase();
