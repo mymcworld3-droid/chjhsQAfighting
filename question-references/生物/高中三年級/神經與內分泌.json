@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-bio3-neuroendocrine-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "區分生物學機制、比較必要條件與明確生理作用",
+      "question": {
+        "q": "某神經細胞受到達閾值的刺激後發生動作電位，其快速去極化上升期通常主要來自何種離子流動？",
+        "correct": "電壓門控Na⁺通道開啟、Na⁺進入細胞",
+        "wrong": [
+          "K⁺大量進入細胞使膜內更負",
+          "Na⁺全部被主動排出，使膜內更負",
+          "Ca²⁺從骨骼直接流入神經元細胞核"
+        ],
+        "exp": "典型神經元動作電位上升期由電壓門控鈉通道開啟，Na⁺依電化學梯度快速內流造成膜電位去極化。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經與內分泌",
+        "template_id": "ref-20261119-b11-bio3-neuroendocrine-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-bio3-neuroendocrine-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "區分生物學機制、比較必要條件與明確生理作用",
+      "question": {
+        "q": "血糖下降時升糖素分泌增加，促使肝臟釋出葡萄糖，血糖回升後又抑制升糖素持續分泌。此現象主要是哪種調節？",
+        "correct": "負回饋調節",
+        "wrong": [
+          "正回饋擴大原始變化",
+          "完全不依血糖變化的固定分泌",
+          "只透過細胞分裂調節血糖"
+        ],
+        "exp": "血糖下降促使升糖素分泌，使血糖上升，而回升後降低原先刺激，屬負回饋。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經與內分泌",
+        "template_id": "ref-20261119-b11-bio3-neuroendocrine-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-bio3-neuroendocrine-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "區分生物學機制、比較必要條件與明確生理作用",
+      "question": {
+        "q": "某激素隨血液流經多種器官，但只有部分細胞明顯回應。最直接的原因通常為何？",
+        "correct": "目標細胞具有能辨識該激素的特定受體",
+        "wrong": [
+          "激素只會接觸具有細胞核的細胞",
+          "血液不會流到沒有產生反應的器官",
+          "所有細胞對激素的反應必定完全一致"
+        ],
+        "exp": "激素經循環到達各處，是否能引發特定訊息傳遞，取決於目標細胞受體及後續訊息途徑。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經與內分泌",
+        "template_id": "ref-20261119-b11-bio3-neuroendocrine-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
