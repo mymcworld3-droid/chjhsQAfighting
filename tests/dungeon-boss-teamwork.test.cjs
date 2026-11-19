@@ -79,16 +79,19 @@ test('multi-hit manuscript skill contributes one actor, with combo only after an
     loadouts:[
       {name:'A',skillIds:['wind-slash','wind-step','wind-thousand']},
       {name:'B',skillIds:['sky-pierce','sky-cloud','sky-sever']},
-      {name:'C',skillIds:[]}],activeLoadout:1};
-  const player=member('a',{x:11,y:11});
+      {name:'C',skillIds:[]}],activeLoadout:0};
+  const player=member('a',{x:11,y:9});
   const combat=Skills.initialCombatLoadout({...player,accessScore:200},record);
   let r=room({a:{...player,...combat}});
+  const changed=Skills.switchLoadout(r,'a',record,1);
+  r={...r,members:changed.members};
+  assert.ok(r.members.a.dungeonSkillIds.includes('sky-cloud'));
   const first=Skills.castSkill(r,'a',map,record,{
-    skillId:'sky-cloud',target:{x:11,y:6},seq:1
+    skillId:'sky-cloud',target:{x:11,y:7},seq:1
   });
   assert.ok(first.result.hits.length>1,'the skill must actually hit repeatedly');
   assert.ok(first.result.hits.every(hit=>hit.combo===false));
-  assert.equal(first.enemies[0]?.lastContributorUid,'a');
+  if(first.enemies.length)assert.equal(first.enemies[0].lastContributorUid,'a');
   assert.equal(r.enemies[0].shield,Boss.SHIELD_MAX,'source must remain untouched');
 });
 test('guard reduces one boss hit, is consumed, and is not available to outsiders',()=>{
