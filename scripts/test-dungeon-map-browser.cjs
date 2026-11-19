@@ -7,6 +7,15 @@ const express=require('express');
 const {generateDungeonLayout}=require('../dungeon-map-generator.cjs');
 const AI=require('../dungeon-enemy-ai.cjs');
 const PlayerCombat=require('../dungeon-player-combat.cjs');
+const SkillCombat=require('../dungeon-skill-combat.cjs');
+const manualRecord={
+  school:'sword',books:{'sword-wind':{exp:2500}},
+  equipped:['wind-slash'],
+  loadouts:[{name:'直線',skillIds:['wind-slash']},
+    {name:'突進',skillIds:['wind-step']},
+    {name:'空白',skillIds:[]}],
+  activeLoadout:0
+};
 let playwright;try{playwright=require('playwright');}
 catch(_){playwright=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright');}
 const app=express();app.use(express.json());
@@ -118,6 +127,25 @@ app.post('/api/dungeon/room',(req,res)=>{
         member.strikeSeq=0;member.lastStrike=null;
       });
     room.revision++;publish();return success();
+  }
+  if(action==='skill'){
+    try{
+      const out=SkillCombat.castSkill(room,uid,map,
+        uid==='a'?manualRecord:null,{
+          skillId:req.body.skillId,target:req.body.target,seq:req.body.seq
+        });
+      if(out.duplicate)return success();
+      room.members=out.members;room.enemies=out.enemies;
+      room.revision++;publish();return success();
+    }catch(error){return res.status(error.status||409).json({ok:false,error:error.message});}
+  }
+  if(action==='loadout'){
+    try{
+      const out=SkillCombat.switchLoadout(room,uid,
+        uid==='a'?manualRecord:null,req.body.index);
+      if(out.duplicate)return success();
+      room.members=out.members;room.revision++;publish();return success();
+    }catch(error){return res.status(error.status||409).json({ok:false,error:error.message});}
   }
   if(action==='strike'){
     try{
@@ -425,8 +453,42 @@ async function main(){
     assert.equal(room.members.b.explorationStamina,99);
     assert.equal(requests.filter(action=>action==='strike').length,2);
     assert.ok(!requests.some(action=>/reward|damage/.test(action)));
+    // The previously unarmed player now receives a trusted skill snapshot.
+    // Verify the new buttons against the real deterministic combat module,
+    // without breaking the earlier stage-11A basic-strike acceptance.
+    room.members.a.accessScore=50;
+    room.members.a={...room.members.a,
+      ...SkillCombat.initialCombatLoadout(room.members.a,manualRecord)};
+    room.enemies=[{...wolf,position:candidate,attack:null,cadence:999999,
+      battleHealth:60,battleMaxHealth:60}];
+    room.revision++;publish();
+    await a.page.locator('#dungeon-map-view [data-dm="cast"][data-skill-id="wind-slash"]')
+      .waitFor({timeout:5000});
+    await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
+    await a.page.locator('#dungeon-map-view [data-dm-beast-list] button').first().click();
+    const skillButton=a.page.locator('#dungeon-map-view [data-dm="cast"][data-skill-id="wind-slash"]');
+    await skillButton.click();
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-skill-alert]')
+      ?.textContent.includes('流風斬'));
+    assert.equal(room.members.a.skillSeq,1);
+    assert.ok(room.enemies[0].battleHealth<60);
+    await b.page.waitForFunction(()=>document.querySelector('[data-dm="beasts"]')
+      ?.textContent.includes('靈獸 1'));
+    await skillButton.click();
+    await b.page.waitForFunction(()=>document.querySelector('[data-dm="beasts"]')
+      ?.textContent.includes('靈獸 0'));
+    assert.equal(room.enemies.length,0);
+    assert.equal(room.members.a.skillSeq,2);
+    assert.equal(room.members.a.explorationStamina,90);
+    assert.equal(requests.filter(action=>action==='skill').length,2);
+    await a.page.locator('#dungeon-map-view [data-dm="loadout"][data-loadout-index="1"]')
+      .click();
+    await a.page.locator('#dungeon-map-view [data-dm="cast"][data-skill-id="wind-step"]')
+      .waitFor();
+    assert.equal(room.members.a.dungeonLoadoutIndex,1);
+    assert.ok(room.members.a.dungeonSkillIds.includes('wind-step'));
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two clients, moving NPCs, warning/hit, synchronized HP, two melee strikes and shared kill');
+    console.log('[Dungeon map browser] PASS: two clients, NPC AI, synced HP, melee and manual casts, shared kills, three saved presets');
   }finally{
     clearInterval(clockLoop);
     clockLoop=null;
