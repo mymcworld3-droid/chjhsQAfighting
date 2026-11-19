@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-editing-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "短文主題是「校園冷氣節能」，三段分別為甲：提出設定合理溫度與定期清潔濾網；乙：列出夏季用電增加的現象；丙：分析冷氣設定過低與設備老舊等原因。若採問題—原因—對策的安排，順序為何？",
+        "correct": "乙 → 丙 → 甲",
+        "wrong": [
+          "甲 → 乙 → 丙",
+          "丙 → 甲 → 乙",
+          "乙 → 甲 → 丙"
+        ],
+        "exp": "先由乙說明問題，再用丙分析原因，最後用甲提出可執行方案，符合作文所需的因果推進。",
+        "subject": "國文",
+        "sub_topic": "文章安排與修訂",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文章安排與修訂",
+        "template_id": "ref-20261119-b8-ch1-editing-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-editing-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "原句：「因為社區設置了許多座椅，所以每位居民一定每天都到公園運動。」若現有資料只顯示入園人次增加，哪種改寫最嚴謹？",
+        "correct": "增設座椅後入園人次增加，但仍須資料判斷是否與運動習慣改變有關",
+        "wrong": [
+          "增設座椅已證明所有居民都會每日運動",
+          "入園人次增加表示每個人的運動時間必定相同",
+          "只要公園有座椅，就不需要考慮其他使用因素"
+        ],
+        "exp": "資料支持入園人次的變化，卻不足以證明個別居民每天運動或確定單一因果，修訂須避免過度推論。",
+        "subject": "國文",
+        "sub_topic": "文章安排與修訂",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文章安排與修訂",
+        "template_id": "ref-20261119-b8-ch1-editing-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-editing-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "某文章前兩段說明河川垃圾的來源與清理困難，結尾原寫：「總之，這真的很重要。」哪一種結尾更能回扣全文並提出具體方向？",
+        "correct": "因此除了定期清理，更應從減少一次性用品與加強源頭分類著手",
+        "wrong": [
+          "因此我們應忘記前兩段討論過的河川問題",
+          "因此文章已經寫完，不必再提任何內容",
+          "因此只要換一個漂亮標題，河川垃圾就會消失"
+        ],
+        "exp": "有效結尾應統整來源與清理兩種問題，並提出與前文相符的可行方向，避免空泛重複。",
+        "subject": "國文",
+        "sub_topic": "文章安排與修訂",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文章安排與修訂",
+        "template_id": "ref-20261119-b8-ch1-editing-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
