@@ -12,6 +12,9 @@ on:
       - 'dungeon-enemy-combat.cjs'
       - 'dungeon-player-combat.cjs'
       - 'dungeon-skill-combat.cjs'
+      - 'dungeon-quiz-api.cjs'
+      - 'dungeon-quiz-credit.cjs'
+      - 'server.js'
       - 'dungeon-room-api.cjs'
       - 'invitation-api.cjs'
       - 'public/cultivation/dungeon-*.js'
@@ -46,11 +49,14 @@ jobs:
           node --check dungeon-enemy-combat.cjs
           node --check dungeon-player-combat.cjs
           node --check dungeon-skill-combat.cjs
+          node --check dungeon-quiz-api.cjs
+          node --check dungeon-quiz-credit.cjs
+          node --check server.js
           node --check dungeon-room-stream.cjs
           node --check invitation-api.cjs
       - name: Check map ES modules parse
         run: |
-          for module in public/cultivation/dungeon-map-camera.js public/cultivation/dungeon-map-painter.js public/cultivation/dungeon-map-view.js; do
+          for module in public/cultivation/dungeon-map-camera.js public/cultivation/dungeon-map-painter.js public/cultivation/dungeon-map-view.js public/cultivation/dungeon-quiz-panel.js; do
             node --input-type=module --check < "$module"
           done
       - name: Test multiplayer lobby, SSE, reconnect and permissions
