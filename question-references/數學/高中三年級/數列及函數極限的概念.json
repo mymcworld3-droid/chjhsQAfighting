@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-seqlimit-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "求數列aₙ=(4n²+1)/(2n²−n)當n→∞的極限。",
+        "correct": "2",
+        "wrong": [
+          "4",
+          "1/2",
+          "不存在"
+        ],
+        "exp": "分子與分母同除n²，得(4+1/n²)/(2−1/n)，當n→∞時趨近4/2=2。",
+        "subject": "數學",
+        "sub_topic": "數列及函數極限的概念",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-數列及函數極限的概念",
+        "template_id": "ref-20261119-b10-m3-seqlimit-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-seqlimit-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "求lim(x→3)(x²−9)/(x−3)，其中x≠3。",
+        "correct": "6",
+        "wrong": [
+          "3",
+          "0",
+          "不存在"
+        ],
+        "exp": "分解x²−9=(x−3)(x+3)，對x≠3可約分，極限為3+3=6。",
+        "subject": "數學",
+        "sub_topic": "數列及函數極限的概念",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-數列及函數極限的概念",
+        "template_id": "ref-20261119-b10-m3-seqlimit-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-seqlimit-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "設aₙ=(−1)ⁿ/n，n為正整數。當n→∞時aₙ如何？",
+        "correct": "收斂至0",
+        "wrong": [
+          "收斂至1",
+          "收斂至−1",
+          "因正負交替而必定發散"
+        ],
+        "exp": "−1/n≤(−1)ⁿ/n≤1/n，兩端均趨近0，依夾擠定理aₙ→0。",
+        "subject": "數學",
+        "sub_topic": "數列及函數極限的概念",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-數列及函數極限的概念",
+        "template_id": "ref-20261119-b10-m3-seqlimit-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
