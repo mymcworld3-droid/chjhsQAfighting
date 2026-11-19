@@ -32,7 +32,8 @@ export function hashCell(map,x,y){
 }
 export function drawWorld(ctx,map,camera,width,height,
   {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0,
-    aimTile=null,visualTimeMs=0,objectives=null,art=null}={}){
+    aimTile=null,visualTimeMs=0,objectives=null,art=null,
+    rangeTiles=[],rangeKind='move'}={}){
   const palette=BIOMES[map.biome]||BIOMES.ruins;
   const g=Camera.geometry(camera,map,width,height);
   const v=Camera.visibleTiles(camera,map,width,height);
@@ -92,6 +93,26 @@ export function drawWorld(ctx,map,camera,width,height,
     };
     paintPath(map.mainRoute,palette.trim,.62);
     for(const branch of map.branches||[])paintPath(branch.route,palette.line,.55);
+  }
+  // 問道試煉 matching floor selection hints. Render before all danger
+  // outlines and actors, so no attack/range mask hides their sprites.
+  const moveOverlay=rangeKind==='move';
+  const fillColor=moveOverlay?'rgba(166,176,180,.18)':
+    rangeKind==='dash'?'rgba(245,199,111,.17)':'rgba(226,86,74,.17)';
+  const strokeColor=moveOverlay?'rgba(223,229,236,.46)':
+    rangeKind==='dash'?'rgba(251,219,131,.62)':'rgba(255,142,126,.58)';
+  if(Array.isArray(rangeTiles)&&rangeTiles.length){
+    ctx.save();ctx.fillStyle=fillColor;ctx.strokeStyle=strokeColor;
+    ctx.lineWidth=clamp(cell*.05,.6,1.7);
+    for(const p of rangeTiles){
+      if(!p||p.x<v.x0||p.x>v.x1||p.y<v.y0||p.y>v.y1||
+        !walk(p.x,p.y))continue;
+      const x=g.ox+p.x*cell,y=g.oy+p.y*cell;
+      ctx.fillRect(x+.7,y+.7,Math.max(1,cell-1.4),Math.max(1,cell-1.4));
+      if(cell>=12)ctx.strokeRect(x+1.3,y+1.3,
+        Math.max(1,cell-2.6),Math.max(1,cell-2.6));
+    }
+    ctx.restore();
   }
   // Stage 13: server-confirmed strike paths briefly gild or cool the FLOOR.
   // These are translucent underlays, not character-covering target masks.
