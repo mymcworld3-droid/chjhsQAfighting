@@ -61,7 +61,7 @@ test('server NPCs render distinctly on the world and minimap without mutating bl
   Painter.drawMinimap(minimap.ctx,map,g,150,120,{enemies});
   assert.ok((minimap.count.get('arc')||0)>=enemies.length+3);
   assert.deepStrictEqual(Object.keys(Painter.BEAST_COLORS).sort(),
-    ['golem','wisp','wolf']);
+    ['golem','guardian','wisp','wolf']);
 });
 test('single tap on an NPC shows its information without issuing a move',()=>{
   const view=createViewer(),beast=view.room.enemies[0];
