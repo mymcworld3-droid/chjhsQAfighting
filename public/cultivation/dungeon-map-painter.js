@@ -297,6 +297,28 @@ export function drawWorld(ctx,map,camera,width,height,
     }
     const hp=Number.isSafeInteger(member.battleHealth)?
       Math.max(0,Math.min(100,member.battleHealth)):100;
+    // Canvas-level fallback for the CSS-animated 金身蓄勢 halo. The gold
+    // outline stays visible even on browsers that suppress animations or
+    // compositor effects; all rings are outside the player sprite.
+    if(Number.isSafeInteger(member.focusCharges)&&member.focusCharges>0&&
+        !member.downed&&hp>0){
+      const radius=clamp(cell*.56,10,31);
+      ctx.save();ctx.strokeStyle='#ffe097';
+      ctx.lineWidth=clamp(cell*.09,2,4);
+      ctx.shadowColor='#ffc252';ctx.shadowBlur=clamp(cell*.32,7,22);
+      ctx.globalAlpha=.94;
+      ctx.beginPath();ctx.arc(sx,sy,radius,0,Math.PI*2);ctx.stroke();
+      ctx.shadowBlur=0;
+      ctx.fillStyle='#fff1ad';ctx.globalAlpha=.9;
+      for(const angle of [-Math.PI*.62,-Math.PI*.13,Math.PI*.37,Math.PI*.85]){
+        ctx.beginPath();
+        ctx.arc(sx+Math.cos(angle)*radius,
+          sy+Math.sin(angle)*radius,
+          clamp(cell*.068,1.5,3.4),0,Math.PI*2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
     if(member.downed||hp===0){
       ctx.save();ctx.strokeStyle='#f3aaa2';ctx.lineWidth=2;
       ctx.beginPath();ctx.moveTo(sx-radius*.56,sy-radius*.56);
