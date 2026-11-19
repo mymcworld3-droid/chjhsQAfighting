@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-chi1-idiom-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "將成語放入具體資訊判斷與生活事件",
+      "question": {
+        "q": "某評論者只看到一段被截取的訪談，就斷言受訪者對整件事情的立場，忽略完整上下文。若要指出這種判斷上的問題，哪個成語最貼切？",
+        "correct": "以偏概全",
+        "wrong": [
+          "集思廣益",
+          "就事論事",
+          "實事求是"
+        ],
+        "exp": "「以偏概全」指僅憑局部就推斷整體；這位評論者未考慮完整訪談便概括受訪者立場。",
+        "subject": "國文",
+        "sub_topic": "成語與語境",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-成語與語境",
+        "template_id": "ref-20261119-chi1-idiom-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chi1-idiom-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "將成語放入具體資訊判斷與生活事件",
+      "question": {
+        "q": "學校在颱風季開始前檢查排水、準備沙包及建立緊急聯絡方式，以降低突發災害的損失。下列何者最能概括其做法？",
+        "correct": "有備無患",
+        "wrong": [
+          "亡羊補牢",
+          "臨渴掘井",
+          "緣木求魚"
+        ],
+        "exp": "「有備無患」強調事先做好準備可減少後患；「亡羊補牢」與「臨渴掘井」偏向問題發生後才補救。",
+        "subject": "國文",
+        "sub_topic": "成語與語境",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-成語與語境",
+        "template_id": "ref-20261119-chi1-idiom-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chi1-idiom-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "將成語放入具體資訊判斷與生活事件",
+      "question": {
+        "q": "某人使用過時的交通資訊規劃路線，即使道路早已改道，仍堅持以昔日標記作為現況依據。哪個成語最能形容這種做法？",
+        "correct": "刻舟求劍",
+        "wrong": [
+          "隨機應變",
+          "因地制宜",
+          "見賢思齊"
+        ],
+        "exp": "「刻舟求劍」比喻不知情勢已變，仍拘守舊方法；道路改變而堅持沿用過時資訊正符合此義。",
+        "subject": "國文",
+        "sub_topic": "成語與語境",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-成語與語境",
+        "template_id": "ref-20261119-chi1-idiom-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
