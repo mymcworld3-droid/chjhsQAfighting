@@ -53,6 +53,7 @@ test('admin basic attacks and equipped skills retain ten energy after repeated c
   admin.enemies=[enemy];ordinary.enemies=[enemy];
   let state=admin;
   for(let seq=1;seq<=7;seq++){
+    state={...state,enemies:[{...enemy}]};
     const out=Strike.strikeEnemy(state,'a',map,{enemyId:'beast-1',seq});
     assert.equal(out.members.a.explorationStamina,10);
     state=next(state,out);
@@ -69,6 +70,8 @@ test('admin basic attacks and equipped skills retain ten energy after repeated c
       battleHealth:10000,battleMaxHealth:10000}
   ]};
   for(let seq=1;seq<=7;seq++){
+    magic={...magic,enemies:[{id:'beast-1',kind:'golem',
+      position:{x:5,y:2},battleHealth:90,battleMaxHealth:90}]};
     const out=Skills.castSkill(magic,'a',map,record,{
       skillId:'dragon-strike',target:{x:5,y:2},seq});
     assert.equal(out.members.a.explorationStamina,10);
