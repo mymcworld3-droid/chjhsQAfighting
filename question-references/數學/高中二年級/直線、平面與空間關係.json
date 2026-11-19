@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-m2-space-relations-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "空間直線L：x=1、y=2、z=t，其與平面z=−3相交於何點？",
+        "correct": "(1,2,−3)",
+        "wrong": [
+          "(1,−3,2)",
+          "(−3,2,1)",
+          "不相交"
+        ],
+        "exp": "L中z可取任何實數，令t=−3即得交點(1,2,−3)。",
+        "subject": "數學",
+        "sub_topic": "直線、平面與空間關係",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-直線、平面與空間關係",
+        "template_id": "ref-20261119-b11-m2-space-relations-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-space-relations-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "下列哪兩個平面互相平行且不重合？",
+        "correct": "z=1與z=4",
+        "wrong": [
+          "x=1與y=1",
+          "x=0與z=0",
+          "z=2與z=2"
+        ],
+        "exp": "兩個平面z=常數互相平行；z值不同故不重合。x=1、y=1及x=0、z=0均相交，z=2與自身則重合。",
+        "subject": "數學",
+        "sub_topic": "直線、平面與空間關係",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-直線、平面與空間關係",
+        "template_id": "ref-20261119-b11-m2-space-relations-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-space-relations-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "若空間中的直線同時位於平面z=0與平面y=0之上，該直線必是哪一條？",
+        "correct": "x軸",
+        "wrong": [
+          "y軸",
+          "z軸",
+          "直線x=1、y=0"
+        ],
+        "exp": "兩個平面的交線同時滿足y=0及z=0，x可任意，所以是x軸。",
+        "subject": "數學",
+        "sub_topic": "直線、平面與空間關係",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-直線、平面與空間關係",
+        "template_id": "ref-20261119-b11-m2-space-relations-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
