@@ -761,10 +761,73 @@ async function main(){
     });
     assert.equal(retryPortal,200);
     assert.equal(room.revision,beforePortal+1,'retries never reopen the key portal');
-    assert.ok(!requests.some(action=>action==='start-boss'),
-      'boss phase must not be faked before its implementation');
+    // Stage 15: a member at the open portal brings the whole team through.
+    const bossEntry=b.page.locator('[data-dm="enter-boss"]');
+    await bossEntry.waitFor({state:'visible'});
+    await b.page.waitForFunction(()=>
+      !document.querySelector('[data-dm="enter-boss"]')?.disabled);
+    const enteringRevision=room.revision;
+    const aEnergy=room.members.a.explorationStamina,
+      bEnergy=room.members.b.explorationStamina;
+    await bossEntry.click();
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-dm-title]')?.textContent.includes('首領戰'),
+      null,{timeout:7000});
+    await b.page.waitForFunction(()=>
+      document.querySelector('[data-dm-title]')?.textContent.includes('首領戰'),
+      null,{timeout:7000});
+    assert.equal(room.dungeonArena,'boss');
+    assert.equal(room.bossEncounter.status,'fighting');
+    assert.equal(room.enemies.length,1);
+    assert.equal(room.enemies[0].id,Boss.ID);
+    assert.equal(room.enemies[0].battleHealth,Boss.HP);
+    assert.equal(room.revision,enteringRevision+1);
+    assert.equal(room.members.a.explorationStamina,aEnergy);
+    assert.equal(room.members.b.explorationStamina,bEnergy);
+    for(const {page} of [a,b]){
+      assert.equal(await page.locator('[data-dm-boss-value]').innerText(),'900/900');
+      await page.locator('[data-dm-boss-health]:not([hidden])').waitFor();
+      assert.equal(await page.locator('[data-dm="enter-boss"]').isHidden(),true);
+      assert.match(await page.locator('[data-dm-summary]').innerText(),/2×2 巨獸/);
+    }
+    const enterRetry=await a.page.evaluate(async()=>{
+      const response=await fetch('/api/dungeon/room',{method:'POST',
+        headers:{'content-type':'application/json','x-test-user':'a'},
+        body:JSON.stringify({action:'enter-boss',roomId:'dungroom000001',
+          bossHealth:0,position:{x:0,y:0}})});
+      return response.status;
+    });
+    assert.equal(enterRetry,200);
+    assert.equal(room.revision,enteringRevision+1,
+      'two players cannot create duplicate bosses or teleports');
+    await b.page.waitForFunction(()=>
+      document.querySelector('[data-dm-boss-health]')?.getAttribute('data-phase')==='1');
+    // A deterministic C room update positions the fighter near the massive
+    // boss to exercise genuine martial-art targeting of all four body tiles.
+    room.members.a.position={x:11,y:8};
+    room.enemies[0].battleHealth=20;
+    room.revision++;publish();
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-dm-boss-value]')?.textContent==='20/900');
+    assert.equal(await a.page.locator('[data-dm-boss-health]')
+      .getAttribute('data-phase'),'3');
+    await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
+    await a.page.locator('[data-dm-beast-list] button').first().click();
+    await a.page.locator('[data-dm="cast"][data-skill-id="dragon-strike"]').click();
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-dm-objective]')?.textContent.includes('已擊敗玄炎鎮殿獸'));
+    await b.page.waitForFunction(()=>
+      document.querySelector('[data-dm-objective]')?.textContent.includes('已擊敗玄炎鎮殿獸'));
+    assert.equal(room.bossEncounter.status,'defeated');
+    assert.equal(room.bossEncounter.defeatedByUid,'a');
+    assert.equal(room.enemies.length,0);
+    assert.equal(await b.page.locator('[data-dm-boss-value]').innerText(),'0/900');
+    assert.equal(quizState.a.answered,2,'questions survive the portal');
+    assert.equal(quizState.b.answered,1,'teammate study state remains private');
+    assert.equal(room.dungeonProgress.keyAcquired,true);
+    assert.ok(!room.rewards,'no unimplemented loot/experience granted');
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two clients, NPC AI, melee, six golden charges, independent quizzes, guardian key and shared portal');
+    console.log('[Dungeon map browser] PASS: two clients, autonomous enemies, golden focus, quizzes, shared guardian key, portal, boss arena, 2x2 hits and shared victory');
   }finally{
     clearInterval(clockLoop);
     clockLoop=null;
