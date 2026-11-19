@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-m2-spacedistance-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "點P(−2,5,−7)到xy平面的最短距離是多少？",
+        "correct": "7",
+        "wrong": [
+          "2",
+          "5",
+          "√78"
+        ],
+        "exp": "xy平面為z=0，點到該平面距離等於z坐標絕對值，故|−7|=7。",
+        "subject": "數學",
+        "sub_topic": "垂直、平行、夾角與距離",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-垂直、平行、夾角與距離",
+        "template_id": "ref-20261119-b11-m2-spacedistance-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-spacedistance-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "兩個互相平行的平面x=−2及x=4之間的最短距離為何？",
+        "correct": "6",
+        "wrong": [
+          "2",
+          "4",
+          "√20"
+        ],
+        "exp": "兩平面都垂直於x軸，距離等於固定x值之差|4−(−2)|=6。",
+        "subject": "數學",
+        "sub_topic": "垂直、平行、夾角與距離",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-垂直、平行、夾角與距離",
+        "template_id": "ref-20261119-b11-m2-spacedistance-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-spacedistance-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "空間中直線L滿足x=3、y=−1、z=t（t為實數）。下列哪個平面與此直線垂直？",
+        "correct": "z=5",
+        "wrong": [
+          "x=5",
+          "y=5",
+          "x+y=5"
+        ],
+        "exp": "L的方向沿z軸，平面z=5與z軸垂直；其他選項平面皆平行z軸方向。",
+        "subject": "數學",
+        "sub_topic": "垂直、平行、夾角與距離",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-垂直、平行、夾角與距離",
+        "template_id": "ref-20261119-b11-m2-spacedistance-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
