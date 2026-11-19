@@ -72,6 +72,7 @@ function fixture(){
 
 const {walkable}=require('../dungeon-map-generator.cjs');
 const AI=require('../dungeon-enemy-ai.cjs');
+const Objectives=require('../dungeon-objectives.cjs');
 const ROOMS='dungeonRooms';
 const cardinal=(layout,p)=>[[1,0],[0,1],[-1,0],[0,-1]]
   .find(([dx,dy])=>walkable(layout,{x:p.x+dx,y:p.y+dy}));
@@ -84,12 +85,15 @@ async function assembled(f,withFriend=true){
   assert.equal(started.status,200);
   return {id,room:started.body.room,map:generateDungeonLayout(SECRET)};
 }
-test('server assembles 4-6 NPCs transactionally, without harming character or account resources',async()=>{
+test('server assembles ordinary NPCs plus one guardian transactionally, without harming accounts',async()=>{
   const f=fixture(),first=structuredClone(f.a.records.get('users/a'));
   const {id,room,map}=await assembled(f);
   const saved=f.c.records.get(ROOMS+'/'+id);
   assert.equal(saved.enemyAiVersion,AI.ENEMY_AI_VERSION);
-  assert.ok(room.enemies.length>=4&&room.enemies.length<=6);
+  assert.equal(room.enemies.length,AI.initialEnemies(map).length+1);
+  assert.equal(room.enemies.filter(e=>e.id===Objectives.GUARDIAN_ID).length,1);
+  assert.equal(room.dungeonProgress.keyAcquired,false);
+  assert.equal(room.dungeonProgress.portalStatus,'sealed');
   assert.equal(room.enemies.length,saved.enemies.length);
   for(const beast of room.enemies){
     assert.equal(walkable(map,beast.position),true);
@@ -113,8 +117,8 @@ test('two backend instances coalesce a due tick and publish exactly one NPC stat
   const saved=f.c.records.get(ROOMS+'/'+id);
   assert.equal(saved.battleAppliedTick,2);
   assert.equal(saved.revision,room.revision+1);
-  assert.deepStrictEqual(saved.enemies,AI.simulate(map,AI.initialEnemies(map),
-    saved.members,1,2));
+  assert.deepStrictEqual(saved.enemies,AI.simulate(map,
+    Objectives.spawn(map,AI.initialEnemies(map)).enemies,saved.members,1,2));
   assert.equal((await f.call('a','clock',{roomId:id})).body.clock.tick,2);
   assert.equal(f.c.records.get(ROOMS+'/'+id).revision,saved.revision);
 });
