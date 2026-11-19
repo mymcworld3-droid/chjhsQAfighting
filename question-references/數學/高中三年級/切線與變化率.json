@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-tangent-change-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "曲線y=x³−2x在x=1處的切線斜率為何？",
+        "correct": "1",
+        "wrong": [
+          "−1",
+          "3",
+          "0"
+        ],
+        "exp": "導數y′=3x²−2，代入x=1得3−2=1。",
+        "subject": "數學",
+        "sub_topic": "切線與變化率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-切線與變化率",
+        "template_id": "ref-20261119-b10-m3-tangent-change-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-tangent-change-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "曲線y=x²+1在點(−1,2)的切線方程式為何？",
+        "correct": "y=−2x",
+        "wrong": [
+          "y=2x+4",
+          "y=−2x+2",
+          "y=2x"
+        ],
+        "exp": "導數y′=2x，在x=−1處斜率−2；切線y−2=−2(x+1)，化簡為y=−2x。",
+        "subject": "數學",
+        "sub_topic": "切線與變化率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-切線與變化率",
+        "template_id": "ref-20261119-b10-m3-tangent-change-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-tangent-change-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "物體位置函數s(t)=3t²−2t（公尺），t以秒計。t=2秒時瞬時速度為何？",
+        "correct": "10公尺/秒",
+        "wrong": [
+          "8公尺/秒",
+          "6公尺/秒",
+          "12公尺/秒"
+        ],
+        "exp": "瞬時速度為導數v(t)=s′(t)=6t−2，t=2時v=12−2=10公尺/秒。",
+        "subject": "數學",
+        "sub_topic": "切線與變化率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-切線與變化率",
+        "template_id": "ref-20261119-b10-m3-tangent-change-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
