@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-b3-homeostasis-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "人體在高溫環境中核心體溫上升，皮膚血管擴張及出汗有助於散熱。當體溫降低回接近正常值，這些散熱反應通常會如何？",
+        "correct": "逐漸減弱，屬負回饋調節",
+        "wrong": [
+          "持續無限增強，直到體溫降為零",
+          "必然立即改由免疫抗體調節",
+          "體溫改變與神經內分泌調節毫無關聯"
+        ],
+        "exp": "負回饋會在偏離目標時啟動修正，當體溫回到較接近恆定值時，修正訊號通常減弱。",
+        "subject": "生物",
+        "sub_topic": "恆定與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-恆定與調節",
+        "template_id": "ref-20261119-b5-b3-homeostasis-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-b3-homeostasis-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "一名健康成人因短時間大量出汗而失水，血液滲透壓升高。若體內調節正常，抗利尿激素（ADH）通常如何變化？",
+        "correct": "增加，使腎臟集合管再吸收較多水",
+        "wrong": [
+          "減少，使尿量立刻增加",
+          "完全不變，因ADH只與血糖相關",
+          "直接使腎絲球不再有任何血流"
+        ],
+        "exp": "體液滲透壓升高刺激ADH分泌，使集合管對水的通透性提高，增加水再吸收，以降低失水。",
+        "subject": "生物",
+        "sub_topic": "恆定與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-恆定與調節",
+        "template_id": "ref-20261119-b5-b3-homeostasis-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-b3-homeostasis-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "某人在兩餐之間血糖下降，身體分泌升糖素增加。這有助於哪一個生理反應？",
+        "correct": "促進肝臟分解肝醣並釋放葡萄糖",
+        "wrong": [
+          "立即抑制肝臟所有葡萄糖釋放",
+          "直接使血糖降得更低",
+          "使肌肉停止使用所有能量"
+        ],
+        "exp": "升糖素在血糖偏低時促進肝醣分解與葡萄糖生成，有助於提高血糖，參與負回饋恆定。",
+        "subject": "生物",
+        "sub_topic": "恆定與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-恆定與調節",
+        "template_id": "ref-20261119-b5-b3-homeostasis-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
