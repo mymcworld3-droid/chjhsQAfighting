@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-自然災害與永續-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與自然災害與永續的自然科學原理",
+      "question": {
+        "q": "某坡地持續開發並移除植被，豪雨時易發生沖蝕及崩塌。下列哪種管理最有助降低風險？",
+        "correct": "保留適當植被、管控坡地利用並設置排水與監測",
+        "wrong": [
+          "增加坡面裸露面積",
+          "只在崩塌後補寫標語",
+          "將所有雨水集中灌入不穩定坡體"
+        ],
+        "exp": "坡地穩定受根系、坡度、水與地質影響，需整合土地管理及工程。",
+        "subject": "地球科學",
+        "sub_topic": "自然災害與永續",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中一年級-自然災害與永續",
+        "template_id": "extra-2026-earth1-自然災害與永續-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-自然災害與永續-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與自然災害與永續的自然科學原理",
+      "question": {
+        "q": "某沿海地區常受颱風風暴潮威脅，政府在風險區擴建大量住宅。若評估災害風險，還應注意什麼？",
+        "correct": "暴露人口增加可能使總損失風險提高，即使颱風強度未變",
+        "wrong": [
+          "住宅越多風暴潮就必定消失",
+          "只看颱風名字可判斷所有災損",
+          "防災只需分析海水顏色"
+        ],
+        "exp": "風險取決於危害、暴露與脆弱度，土地規畫很重要。",
+        "subject": "地球科學",
+        "sub_topic": "自然災害與永續",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中一年級-自然災害與永續",
+        "template_id": "extra-2026-earth1-自然災害與永續-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-自然災害與永續-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與自然災害與永續的自然科學原理",
+      "question": {
+        "q": "某城市為降低短時豪雨積水，在公園增設透水鋪面與滯洪設施。這較接近哪種策略？",
+        "correct": "以增加入滲與暫存逕流調適都市洪水風險",
+        "wrong": [
+          "增加全部地面不透水比例",
+          "只用行政區更名排除洪水",
+          "讓河流改為沒有水的通道"
+        ],
+        "exp": "透水及滯洪設施可緩和部分逕流洪峰，仍須配合整體流域管理。",
+        "subject": "地球科學",
+        "sub_topic": "自然災害與永續",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中一年級-自然災害與永續",
+        "template_id": "extra-2026-earth1-自然災害與永續-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

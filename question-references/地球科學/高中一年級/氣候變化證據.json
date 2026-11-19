@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-氣候變化證據-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與氣候變化證據的自然科學原理",
+      "question": {
+        "q": "科學家分析冰芯中保存的氣泡，最直接可研究過去哪種氣候相關資訊？",
+        "correct": "古大氣中某些氣體成分及其濃度",
+        "wrong": [
+          "當代城市所有居民的姓名",
+          "每年所有颱風的精確路徑",
+          "所有海底岩石的磁性"
+        ],
+        "exp": "冰芯氣泡保存部分過去大氣，有助重建溫室氣體變化。",
+        "subject": "地球科學",
+        "sub_topic": "氣候變化證據",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中一年級-氣候變化證據",
+        "template_id": "extra-2026-earth1-氣候變化證據-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-氣候變化證據-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與氣候變化證據的自然科學原理",
+      "question": {
+        "q": "某湖底沉積物花粉組成隨地層年代改變。這種資料可提供什麼線索？",
+        "correct": "過去植被與環境氣候條件的變化",
+        "wrong": [
+          "當時每一位居民的收入",
+          "所有地震震央的精確位置",
+          "花粉數量可直接等於全球氣溫"
+        ],
+        "exp": "植物群落對氣候與環境敏感，花粉可作古環境代理指標，但需其他證據校核。",
+        "subject": "地球科學",
+        "sub_topic": "氣候變化證據",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中一年級-氣候變化證據",
+        "template_id": "extra-2026-earth1-氣候變化證據-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-氣候變化證據-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與氣候變化證據的自然科學原理",
+      "question": {
+        "q": "某地百年氣溫資料因測站搬遷出現突然跳升。若要分析長期趨勢，應如何處理？",
+        "correct": "評估站點變動並進行資料均質化或採可靠對照站",
+        "wrong": [
+          "把跳升全部當成全球暖化證據",
+          "只保留最高溫一天",
+          "直接刪掉所有搬遷紀錄"
+        ],
+        "exp": "觀測條件改變可造成非氣候訊號，需要校正。",
+        "subject": "地球科學",
+        "sub_topic": "氣候變化證據",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中一年級-氣候變化證據",
+        "template_id": "extra-2026-earth1-氣候變化證據-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

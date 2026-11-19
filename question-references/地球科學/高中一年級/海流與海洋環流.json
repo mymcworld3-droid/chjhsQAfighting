@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-海流與海洋環流-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與海流與海洋環流的自然科學原理",
+      "question": {
+        "q": "北半球大洋環流受盛行風與科氏力影響，副熱帶環流大致如何旋轉？",
+        "correct": "順時針",
+        "wrong": [
+          "逆時針且與風無關",
+          "所有洋流都只往正北移動",
+          "完全沒有閉合環流"
+        ],
+        "exp": "北半球副熱帶大洋環流通常為順時針，南半球多為逆時針。",
+        "subject": "地球科學",
+        "sub_topic": "海流與海洋環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海流與海洋環流",
+        "template_id": "extra-2026-earth1-海流與海洋環流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-海流與海洋環流-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與海流與海洋環流的自然科學原理",
+      "question": {
+        "q": "某沿岸有離岸的表層海水輸送，較冷而富含營養鹽的深層海水上升。此現象稱為？",
+        "correct": "沿岸湧升流",
+        "wrong": [
+          "海水完全蒸發",
+          "海嘯向岸推進",
+          "海水被迫變成固態"
+        ],
+        "exp": "離岸流促使下層水補充至表層，常增加海洋生產力。",
+        "subject": "地球科學",
+        "sub_topic": "海流與海洋環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海流與海洋環流",
+        "template_id": "extra-2026-earth1-海流與海洋環流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-海流與海洋環流-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與海流與海洋環流的自然科學原理",
+      "question": {
+        "q": "某北大西洋海域表層海水冷卻且鹽度偏高，導致下沉。這可能參與何種大尺度運動？",
+        "correct": "與密度差有關的溫鹽環流",
+        "wrong": [
+          "完全由月相決定的表面浪花",
+          "地表岩漿對流",
+          "只有河流入海才能形成的潮汐"
+        ],
+        "exp": "低溫高鹽海水密度高，可下沉並驅動深層環流的一部分。",
+        "subject": "地球科學",
+        "sub_topic": "海流與海洋環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海流與海洋環流",
+        "template_id": "extra-2026-earth1-海流與海洋環流-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

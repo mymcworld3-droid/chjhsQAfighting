@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-溫室效應-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與溫室效應的自然科學原理",
+      "question": {
+        "q": "地表吸收太陽輻射後向外放射紅外線，二氧化碳主要如何參與能量交換？",
+        "correct": "吸收並再放射部分長波紅外輻射",
+        "wrong": [
+          "直接阻擋所有可見光到達地面",
+          "把地表紅外輻射全變成紫外線",
+          "只影響地球地磁場"
+        ],
+        "exp": "溫室氣體改變地表與大氣間的長波輻射傳輸。",
+        "subject": "地球科學",
+        "sub_topic": "溫室效應",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中一年級-溫室效應",
+        "template_id": "extra-2026-earth1-溫室效應-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-溫室效應-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與溫室效應的自然科學原理",
+      "question": {
+        "q": "某人認為「臭氧層破洞就是全球暖化的唯一原因」。最適當的科學澄清是？",
+        "correct": "臭氧耗損與溫室氣體造成的暖化是不同機制，雖可能互相影響但不能混同",
+        "wrong": [
+          "臭氧與紫外線完全無關",
+          "二氧化碳只會在平流層形成臭氧",
+          "溫室效應完全不涉及紅外輻射"
+        ],
+        "exp": "臭氧層影響紫外線吸收，增強溫室效應主要與長波吸收的改變有關。",
+        "subject": "地球科學",
+        "sub_topic": "溫室效應",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中一年級-溫室效應",
+        "template_id": "extra-2026-earth1-溫室效應-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-溫室效應-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與溫室效應的自然科學原理",
+      "question": {
+        "q": "兩顆類似行星接收的太陽輻射近似相同，但甲大氣的紅外吸收能力較強。若其他因素相近，甲地表溫度可能如何？",
+        "correct": "較高，因大氣阻礙部分長波能量向外散失",
+        "wrong": [
+          "必然較低，因紅外吸收越強越不會增溫",
+          "兩者必須完全相同",
+          "只因行星名稱不同而改變"
+        ],
+        "exp": "較強溫室效應使地表需要較高溫度達到整體輻射平衡。",
+        "subject": "地球科學",
+        "sub_topic": "溫室效應",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中一年級-溫室效應",
+        "template_id": "extra-2026-earth1-溫室效應-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

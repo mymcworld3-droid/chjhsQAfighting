@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-鋒面、颱風與天氣圖-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與鋒面、颱風與天氣圖的自然科學原理",
+      "question": {
+        "q": "冷鋒通過某地時，若冷空氣推擠暖空氣快速上升，較可能出現哪種天氣？",
+        "correct": "短時較強降雨及通過後降溫",
+        "wrong": [
+          "必定全年無雲",
+          "氣溫永遠只上升不下降",
+          "風向與雲量完全不會變化"
+        ],
+        "exp": "冷鋒抬升暖濕空氣可造成積雨雲與降水，過境後常轉冷。",
+        "subject": "地球科學",
+        "sub_topic": "鋒面、颱風與天氣圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-鋒面、颱風與天氣圖",
+        "template_id": "extra-2026-earth1-鋒面、颱風與天氣圖-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-鋒面、颱風與天氣圖-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與鋒面、颱風與天氣圖的自然科學原理",
+      "question": {
+        "q": "北半球颱風中心附近風較弱的眼區外側，常伴隨劇烈對流。哪個構造最對應這種強降雨區？",
+        "correct": "眼牆",
+        "wrong": [
+          "高空臭氧層",
+          "海底地函",
+          "無雲的副熱帶高壓中心"
+        ],
+        "exp": "颱風眼牆聚集強對流、強風和豪雨，是核心危險區。",
+        "subject": "地球科學",
+        "sub_topic": "鋒面、颱風與天氣圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-鋒面、颱風與天氣圖",
+        "template_id": "extra-2026-earth1-鋒面、颱風與天氣圖-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-鋒面、颱風與天氣圖-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與鋒面、颱風與天氣圖的自然科學原理",
+      "question": {
+        "q": "某氣象圖出現低壓中心與周圍緊密等壓線。居民準備戶外活動時，應優先留意哪種風險？",
+        "correct": "較強風與伴隨的天氣變化，並查最新預報",
+        "wrong": [
+          "等壓線密集保證完全無風",
+          "低壓中心必定代表晴朗無雲",
+          "只看氣壓數值便能判定所有降雨量"
+        ],
+        "exp": "氣壓梯度大可能帶來較強風，降雨仍須結合鋒面與水氣判斷。",
+        "subject": "地球科學",
+        "sub_topic": "鋒面、颱風與天氣圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-鋒面、颱風與天氣圖",
+        "template_id": "extra-2026-earth1-鋒面、颱風與天氣圖-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

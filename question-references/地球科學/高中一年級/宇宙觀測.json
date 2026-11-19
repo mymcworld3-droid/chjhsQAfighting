@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-宇宙觀測-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與宇宙觀測的自然科學原理",
+      "question": {
+        "q": "天文學家想觀測極暗的星系，若其他條件相近，使用口徑較大的望遠鏡主要有何優點？",
+        "correct": "可收集較多光子，提高偵測微弱光源的能力",
+        "wrong": [
+          "必定讓星系距離縮短",
+          "能直接改變恆星的質量",
+          "所有望遠鏡口徑都與集光能力無關"
+        ],
+        "exp": "理想集光面積與口徑平方相關，較大口徑可蒐集更多光。",
+        "subject": "地球科學",
+        "sub_topic": "宇宙觀測",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中一年級-宇宙觀測",
+        "template_id": "extra-2026-earth1-宇宙觀測-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-宇宙觀測-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與宇宙觀測的自然科學原理",
+      "question": {
+        "q": "地面光學望遠鏡影像受大氣擾動而模糊。哪種技術較有助減輕此問題？",
+        "correct": "自適應光學或使用太空望遠鏡",
+        "wrong": [
+          "只把照片檔案名稱改長",
+          "增加觀測者姓名數",
+          "讓地球自轉停止"
+        ],
+        "exp": "大氣湍流造成影像變形，自適應光學可補償部分波前畸變，太空觀測則避開大氣。",
+        "subject": "地球科學",
+        "sub_topic": "宇宙觀測",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中一年級-宇宙觀測",
+        "template_id": "extra-2026-earth1-宇宙觀測-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-宇宙觀測-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與宇宙觀測的自然科學原理",
+      "question": {
+        "q": "研究者觀測同一恆星的亮度每隔固定時間略為下降，希望尋找系外行星。最直接運用哪種觀測方法？",
+        "correct": "凌日法",
+        "wrong": [
+          "放射性碳定年",
+          "地震波斷層掃描",
+          "海洋溫鹽循環"
+        ],
+        "exp": "當行星經過恆星前方時可能遮擋部分星光，造成週期性微小亮度下降。",
+        "subject": "地球科學",
+        "sub_topic": "宇宙觀測",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中一年級-宇宙觀測",
+        "template_id": "extra-2026-earth1-宇宙觀測-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

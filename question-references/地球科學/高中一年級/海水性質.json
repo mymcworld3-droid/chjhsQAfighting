@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-海水性質-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與海水性質的自然科學原理",
+      "question": {
+        "q": "兩杯海水溫度相同，甲的鹽度35、乙的鹽度30。若其他條件相同，哪杯海水密度通常較大？",
+        "correct": "甲杯，因鹽度較高",
+        "wrong": [
+          "乙杯，因鹽度較低",
+          "兩杯密度必定完全相同",
+          "海水密度只由容器形狀決定"
+        ],
+        "exp": "在相同溫度和壓力下，鹽度高通常使海水密度增加。",
+        "subject": "地球科學",
+        "sub_topic": "海水性質",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海水性質",
+        "template_id": "extra-2026-earth1-海水性質-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-海水性質-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與海水性質的自然科學原理",
+      "question": {
+        "q": "某海面受強烈蒸發而降雨少，且無大量淡水流入。其他條件相近時，表層海水鹽度可能如何變化？",
+        "correct": "升高",
+        "wrong": [
+          "降低至完全無鹽",
+          "完全不變且與蒸發無關",
+          "立即形成純淡水湖"
+        ],
+        "exp": "蒸發移走水分但鹽分多留在海中，使鹽度可能上升。",
+        "subject": "地球科學",
+        "sub_topic": "海水性質",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海水性質",
+        "template_id": "extra-2026-earth1-海水性質-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-海水性質-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與海水性質的自然科學原理",
+      "question": {
+        "q": "某河口雨季有大量淡水流入，表面水鹽度比下方低，容易產生何種垂直結構？",
+        "correct": "較輕淡水在上形成密度分層",
+        "wrong": [
+          "高鹽水必定漂浮在最表層",
+          "淡水流入不可能改變密度",
+          "上下兩層必定立即完全混合"
+        ],
+        "exp": "鹽度差可造成密度分層，混合程度還受風與潮流影響。",
+        "subject": "地球科學",
+        "sub_topic": "海水性質",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海水性質",
+        "template_id": "extra-2026-earth1-海水性質-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

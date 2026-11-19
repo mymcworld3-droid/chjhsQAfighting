@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-氣壓、風與水循環-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與氣壓、風與水循環的自然科學原理",
+      "question": {
+        "q": "某地海平面氣壓圖上兩區域等壓線密度不同。在相近條件下，等壓線較密處通常代表什麼？",
+        "correct": "水平氣壓梯度較大，風速可能較強",
+        "wrong": [
+          "氣壓梯度為零",
+          "所有風向必定朝正東",
+          "該地氣溫必定最低"
+        ],
+        "exp": "等壓線間距較小通常表示同距離壓差較大，但實際風仍受摩擦與科氏力影響。",
+        "subject": "地球科學",
+        "sub_topic": "氣壓、風與水循環",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-氣壓、風與水循環",
+        "template_id": "extra-2026-earth1-氣壓、風與水循環-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-氣壓、風與水循環-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與氣壓、風與水循環的自然科學原理",
+      "question": {
+        "q": "某空氣團持續冷卻至露點，若有足夠凝結核且水氣含量未明顯減少，較可能發生什麼？",
+        "correct": "水氣凝結形成雲霧或露",
+        "wrong": [
+          "水氣立即全部轉變成氮氣",
+          "相對溼度必定降到零",
+          "空氣不可能有任何相變"
+        ],
+        "exp": "達飽和時水氣可凝結，形成雲滴、霧滴或地表露水。",
+        "subject": "地球科學",
+        "sub_topic": "氣壓、風與水循環",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-氣壓、風與水循環",
+        "template_id": "extra-2026-earth1-氣壓、風與水循環-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-氣壓、風與水循環-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與氣壓、風與水循環的自然科學原理",
+      "question": {
+        "q": "白天沿海陸地受熱較快，近地面氣流從海面吹向陸地。此局地環流稱為？",
+        "correct": "海風",
+        "wrong": [
+          "陸風",
+          "極地東風",
+          "地球引力消失"
+        ],
+        "exp": "海陸差異加熱造成氣壓差，白天常形成海向陸的海風。",
+        "subject": "地球科學",
+        "sub_topic": "氣壓、風與水循環",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-氣壓、風與水循環",
+        "template_id": "extra-2026-earth1-氣壓、風與水循環-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-大氣結構與熱收支-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與大氣結構與熱收支的自然科學原理",
+      "question": {
+        "q": "對流層內一般高度升高氣溫下降，而平流層部分高度升高氣溫反而上升。平流層升溫與哪個因素較相關？",
+        "correct": "臭氧吸收紫外線能量",
+        "wrong": [
+          "海底火山直接加熱平流層",
+          "平流層含有大量液態海水",
+          "地球自轉使溫度必定隨高度下降"
+        ],
+        "exp": "平流層臭氧吸收太陽紫外線，使垂直溫度結構不同於對流層。",
+        "subject": "地球科學",
+        "sub_topic": "大氣結構與熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-大氣結構與熱收支",
+        "template_id": "extra-2026-earth1-大氣結構與熱收支-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-大氣結構與熱收支-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與大氣結構與熱收支的自然科學原理",
+      "question": {
+        "q": "假設地球平均吸收太陽輻射240 W/m²、向太空放射長波238 W/m²。若忽略其他項目，此時淨能量收支為何？",
+        "correct": "正2 W/m²，表示淨吸收能量",
+        "wrong": [
+          "負2 W/m²，表示淨失去能量",
+          "零，表示完全平衡",
+          "正478 W/m²"
+        ],
+        "exp": "淨輻射等於吸收減放射，240減238為正2 W/m²。",
+        "subject": "地球科學",
+        "sub_topic": "大氣結構與熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-大氣結構與熱收支",
+        "template_id": "extra-2026-earth1-大氣結構與熱收支-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-大氣結構與熱收支-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "結合實際觀測與大氣結構與熱收支的自然科學原理",
+      "question": {
+        "q": "某地雲層增加，白天反射較多陽光，夜間又減少部分地表長波散熱。這反映什麼？",
+        "correct": "雲同時影響短波反射與長波輻射，淨效應依條件而異",
+        "wrong": [
+          "雲只能讓地表永久增溫",
+          "雲完全不影響任何輻射",
+          "所有雲層都在白天與夜晚產生相同淨影響"
+        ],
+        "exp": "雲的短波與長波效應不同，與高度、厚度及地表性質相關。",
+        "subject": "地球科學",
+        "sub_topic": "大氣結構與熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-大氣結構與熱收支",
+        "template_id": "extra-2026-earth1-大氣結構與熱收支-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
