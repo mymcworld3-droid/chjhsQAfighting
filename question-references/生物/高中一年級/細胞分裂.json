@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-bio1-cellcycle-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "區分生物學機制、比較必要條件與明確生理作用",
+      "question": {
+        "q": "一般動物體細胞在有絲分裂前，DNA已完成複製。若原細胞有8條染色體，正常完成有絲分裂後每個子細胞有幾條染色體？",
+        "correct": "8條",
+        "wrong": [
+          "4條",
+          "16條",
+          "32條"
+        ],
+        "exp": "有絲分裂將複製後的姐妹染色分體分離，正常子細胞的染色體數維持與親代相同，均為8條。",
+        "subject": "生物",
+        "sub_topic": "細胞分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-細胞分裂",
+        "template_id": "ref-20261119-b11-bio1-cellcycle-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-bio1-cellcycle-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "區分生物學機制、比較必要條件與明確生理作用",
+      "question": {
+        "q": "一般二倍體生物在減數分裂第一次分裂時，最主要分離的是哪一種染色體組合？",
+        "correct": "同源染色體",
+        "wrong": [
+          "細胞膜與細胞壁",
+          "各基因內的鹼基",
+          "所有染色體的兩條姐妹染色分體"
+        ],
+        "exp": "減數第一次分裂主要使同源染色體分離，姐妹染色分體通常在第二次分裂時才分開。",
+        "subject": "生物",
+        "sub_topic": "細胞分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-細胞分裂",
+        "template_id": "ref-20261119-b11-bio1-cellcycle-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-bio1-cellcycle-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "區分生物學機制、比較必要條件與明確生理作用",
+      "question": {
+        "q": "某動物正常體細胞2n=10，若配子形成時染色體數減半，正常成熟配子應具有幾條染色體？",
+        "correct": "5條",
+        "wrong": [
+          "10條",
+          "20條",
+          "2條"
+        ],
+        "exp": "二倍體細胞2n=10，減數分裂形成單倍體配子n=10/2=5。",
+        "subject": "生物",
+        "sub_topic": "細胞分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-細胞分裂",
+        "template_id": "ref-20261119-b11-bio1-cellcycle-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
