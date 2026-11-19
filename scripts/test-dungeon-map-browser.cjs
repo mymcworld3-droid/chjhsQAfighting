@@ -579,6 +579,14 @@ async function main(){
     await a.page.waitForFunction(()=>
       document.querySelector('[data-dm-wheel] [data-wheel-choice="dragon-guard"]')
         ?.getAttribute('aria-pressed')==='true',null,{timeout:5000});
+    await a.page.evaluate(()=>{
+      const canvas=document.querySelector('[data-dm-world]');
+      window.__chainVisualPoints=[];
+      new MutationObserver(()=>{
+        const raw=canvas.dataset.visualHero;
+        if(raw)window.__chainVisualPoints.push(raw.split(',').map(Number));
+      }).observe(canvas,{attributes:true,attributeFilter:['data-visual-hero']});
+    });
     const tilePixel=await a.page.evaluate(async({origin,tile,area})=>{
       const Camera=await import('/cultivation/dungeon-map-camera.js');
       const canvas=document.querySelector('[data-dm-world]'),
@@ -606,6 +614,14 @@ async function main(){
     assert.match(reported,/完成 4 段/);
     assert.match(reported,/前進 4 格/);
     assert.equal(room.enemies.length,0);
+    const visualPoints=await a.page.evaluate(()=>window.__chainVisualPoints);
+    assert.ok(visualPoints.length>=12,'real Chromium must paint intermediate frames');
+    const xs=visualPoints.map(p=>p[0]);
+    assert.ok(Math.max(...xs)-Math.min(...xs)>3.5,
+      'canvas should visually traverse FOUR tiles, not just the first tile');
+    for(let step=1;step<=3;step++)
+      assert.ok(xs.some(x=>Math.abs(x-(lane.from.x+step))<.16),
+        'animation must pass through committed stage '+step);
     // Restore the exploration scenario before the guardian/boss suite.
     activeManual=manualRecord;
     room.members=savedParty;room.enemies=savedBeasts;

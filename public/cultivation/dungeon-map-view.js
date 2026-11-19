@@ -1722,6 +1722,12 @@ class DungeonMapView{
     // This is never used as input to movement, collision or combat rules.
     const motionState=travelActive?'walking':'idle';
     if(this.canvas.dataset.motion!==motionState)this.canvas.dataset.motion=motionState;
+    // Read-only animation coordinate used by browser regression diagnostics.
+    // Never replace authoritative member.position with this fraction.
+    if(travelActive)
+      this.canvas.dataset.visualHero=visualHero.x.toFixed(3)+','+visualHero.y.toFixed(3);
+    else if(this.canvas.hasAttribute('data-visual-hero'))
+      this.canvas.removeAttribute('data-visual-hero');
     if((scenes.length||queuedScenes)&&!reduceMotion)this.drawSoon();
     if(travelActive&&!reduceMotion)this.drawSoon();
 
