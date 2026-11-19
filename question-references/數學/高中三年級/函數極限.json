@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-math3-limit-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "利用因式分解、有理化及左右極限判斷函數極限",
+      "question": {
+        "q": "求lim(x→3) (x²−9)/(x−3)的值（考慮x≠3）。",
+        "correct": "6",
+        "wrong": [
+          "0",
+          "3",
+          "不存在"
+        ],
+        "exp": "x²−9=(x−3)(x+3)，當x≠3時原式=x+3，令x趨近3得6。",
+        "subject": "數學",
+        "sub_topic": "函數極限",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數極限",
+        "template_id": "ref-20261119-b2-math3-limit-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-math3-limit-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "利用因式分解、有理化及左右極限判斷函數極限",
+      "question": {
+        "q": "求lim(x→0) [√(4+x)−2]/x的值。",
+        "correct": "1/4",
+        "wrong": [
+          "1/2",
+          "0",
+          "4"
+        ],
+        "exp": "分子分母同乘√(4+x)+2後化為1/[√(4+x)+2]，所以極限為1/(2+2)=1/4。",
+        "subject": "數學",
+        "sub_topic": "函數極限",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數極限",
+        "template_id": "ref-20261119-b2-math3-limit-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-math3-limit-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "利用因式分解、有理化及左右極限判斷函數極限",
+      "question": {
+        "q": "定義f(x)：當x<2時f(x)=x+1；當x>2時f(x)=5−x；在x=2時f(2)=7。求lim(x→2)f(x)。",
+        "correct": "3",
+        "wrong": [
+          "7",
+          "2",
+          "不存在"
+        ],
+        "exp": "由左側x+1趨近3，由右側5−x也趨近3，左右極限相等為3；f(2)=7不影響極限。",
+        "subject": "數學",
+        "sub_topic": "函數極限",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數極限",
+        "template_id": "ref-20261119-b2-math3-limit-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
