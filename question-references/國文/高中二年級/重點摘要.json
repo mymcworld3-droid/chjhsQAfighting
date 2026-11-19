@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-ch2-summarykey-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文本觀念、情境語用與摘要可信度相結合",
+      "question": {
+        "q": "閱讀資訊：「某市試行夜間公車三個月，搭乘人次逐月增加，但部分站點利用率偏低。交通局決定延長試辦一個月，並調整低利用率站點的班次。」哪項摘要最精確？",
+        "correct": "夜間公車試辦搭乘量增加，但部分站點需求較低，市府延長試辦並調整班次",
+        "wrong": [
+          "夜間公車試辦後所有站點需求一致，市府決定全面停止服務",
+          "三個月內搭乘量持續降低，因此市府取消所有站點",
+          "市府已確認夜間公車在所有區域都具相同成本效益"
+        ],
+        "exp": "摘要須保留成長趨勢、站點差異及後續調整三個核心資訊，不應將試辦結果寫成全區同等有效。",
+        "subject": "國文",
+        "sub_topic": "重點摘要",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-重點摘要",
+        "template_id": "ref-20261119-b9-ch2-summarykey-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch2-summarykey-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文本觀念、情境語用與摘要可信度相結合",
+      "question": {
+        "q": "閱讀：「學校增設雨水回收設施，春季可供應部分澆灌用水；但夏季降雨不穩定，仍需補充自來水。環保社建議依月份記錄蓄水量後，再評估是否擴建。」哪項摘要最符合原文？",
+        "correct": "雨水設施能補充部分澆灌，但供水受季節限制，擴建前應分析各月蓄水資料",
+        "wrong": [
+          "雨水回收已使學校所有月份都不再需要自來水",
+          "環保社主張立刻擴建，且無須比較不同季節",
+          "設施完全無法提供用水，學校因此決定拆除"
+        ],
+        "exp": "原文同時描述實際效益與季節限制，結論是先持續測量再決定是否擴建。",
+        "subject": "國文",
+        "sub_topic": "重點摘要",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-重點摘要",
+        "template_id": "ref-20261119-b9-ch2-summarykey-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch2-summarykey-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文本觀念、情境語用與摘要可信度相結合",
+      "question": {
+        "q": "閱讀：「閱讀推廣活動向全校學生開放，但今年參加者多來自高一；主辦單位將在高二、高三增加宣傳，並調查上課與社團時間是否影響參與。」何種摘要最嚴謹？",
+        "correct": "活動雖對全校開放，參與者仍集中高一，主辦方將改善宣傳並調查時段因素",
+        "wrong": [
+          "活動原本規定只准高一參加，高二、高三完全被排除",
+          "參與差異已證明高二、高三學生一定不喜歡閱讀",
+          "主辦單位決定停止所有宣傳，也不再收集意見"
+        ],
+        "exp": "開放資格與實際參與分布須區分；原文只說要調查時段因素，不能把尚未確認的原因當成定論。",
+        "subject": "國文",
+        "sub_topic": "重點摘要",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-重點摘要",
+        "template_id": "ref-20261119-b9-ch2-summarykey-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
