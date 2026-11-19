@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-chem2-lechatelier-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "理想氣體的可逆反應H₂(g)+I₂(g)⇌2HI(g)已達平衡。固定溫度下縮小容器體積，且不涉及凝結，平衡組成的莫耳比例通常如何？",
+        "correct": "不因這次壓縮而改變",
+        "wrong": [
+          "向右明顯移動",
+          "向左明顯移動",
+          "平衡常數自動增加兩倍"
+        ],
+        "exp": "反應兩側氣體莫耳數皆為2，縮小體積後反應商的濃度倍率相消，因此在理想氣體假設下不引起平衡組成比例的改變。",
+        "subject": "化學",
+        "sub_topic": "勒沙特列原理",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-勒沙特列原理",
+        "template_id": "ref-20261119-b4-chem2-lechatelier-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chem2-lechatelier-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "對吸熱反應A(g)⇌B(g)，已知正向ΔH>0。若其他條件固定、升高溫度後重新達平衡，平衡較傾向哪一側？",
+        "correct": "B側（吸熱方向）",
+        "wrong": [
+          "A側（放熱方向）",
+          "兩側濃度一定同時歸零",
+          "溫度上升使反應停止"
+        ],
+        "exp": "升溫有利吸熱方向；因正向為吸熱反應，平衡傾向生成B。",
+        "subject": "化學",
+        "sub_topic": "勒沙特列原理",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-勒沙特列原理",
+        "template_id": "ref-20261119-b4-chem2-lechatelier-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chem2-lechatelier-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "某氣相反應在固定溫度、固定容器體積下已達平衡。若加入不參與反應的理想惰性氣體，而反應物與生成物莫耳數均未變，平衡通常如何？",
+        "correct": "保持原有平衡組成",
+        "wrong": [
+          "必定朝氣體莫耳數較多的一側移動",
+          "必定朝氣體莫耳數較少的一側移動",
+          "平衡常數必定隨總壓升高而增大"
+        ],
+        "exp": "定溫定容加入惰性氣體，反應組分的分壓及濃度不變，反應商不改變，故不因總壓增加而移動平衡。",
+        "subject": "化學",
+        "sub_topic": "勒沙特列原理",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-勒沙特列原理",
+        "template_id": "ref-20261119-b4-chem2-lechatelier-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
