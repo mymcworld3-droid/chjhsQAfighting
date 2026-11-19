@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-math1-quadratic-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "二次函數f(x)=x²−6x+5的最小值為何？",
+        "correct": "−4",
+        "wrong": [
+          "−6",
+          "4",
+          "5"
+        ],
+        "exp": "配方得f(x)=(x−3)²−4，平方項最小為0，因此最小值為−4。",
+        "subject": "數學",
+        "sub_topic": "函數圖形、一次與二次函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "h1-函數圖形、一次與二次函數",
+        "template_id": "ref-20261119-b3-math1-quadratic-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math1-quadratic-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "拋物線y=−2(x+1)²+8的頂點座標為何？",
+        "correct": "(−1,8)",
+        "wrong": [
+          "(1,8)",
+          "(−1,−8)",
+          "(2,8)"
+        ],
+        "exp": "頂點式y=a(x−h)²+k的頂點是(h,k)；此處h=−1，k=8。",
+        "subject": "數學",
+        "sub_topic": "函數圖形、一次與二次函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "h1-函數圖形、一次與二次函數",
+        "template_id": "ref-20261119-b3-math1-quadratic-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math1-quadratic-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "已知f(x)=x²−5x+6，與x軸交於兩點。兩交點的x座標之和為何？",
+        "correct": "5",
+        "wrong": [
+          "−5",
+          "6",
+          "−6"
+        ],
+        "exp": "因式分解f(x)=(x−2)(x−3)，零點為2與3，和為5；亦可用根與係數關係−b/a=5。",
+        "subject": "數學",
+        "sub_topic": "函數圖形、一次與二次函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "h1-函數圖形、一次與二次函數",
+        "template_id": "ref-20261119-b3-math1-quadratic-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
