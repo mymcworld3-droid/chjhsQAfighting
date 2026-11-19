@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-ch2-structure-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文本觀念、情境語用與摘要可信度相結合",
+      "question": {
+        "q": "某篇議論文章的段落重點為：甲，提出校園廚餘量逐年增加；乙，分析供餐份量與學生需求不符；丙，說明試辦彈性份量與每月追蹤廚餘的方案。若按「問題—成因—對策」布局，最佳順序為何？",
+        "correct": "甲 → 乙 → 丙",
+        "wrong": [
+          "乙 → 丙 → 甲",
+          "丙 → 甲 → 乙",
+          "甲 → 丙 → 乙"
+        ],
+        "exp": "先提出現象，再分析原因，最後提出具有追蹤機制的解決方法，才能形成連貫的問題解決結構。",
+        "subject": "國文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-篇章結構",
+        "template_id": "ref-20261119-b9-ch2-structure-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch2-structure-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文本觀念、情境語用與摘要可信度相結合",
+      "question": {
+        "q": "短文開頭描述「公車站沒有遮陽設施，長者候車困難」；中段列出候車實測溫度與使用者回饋；末段建議增設遮蔭棚並試辦。中段最主要的論述功能為何？",
+        "correct": "提供實際證據，將開頭所述困難連結到後文建議",
+        "wrong": [
+          "直接證明所有公車站均已完成改善",
+          "偏離候車主題，主要介紹長者的個人生平",
+          "提前宣布建議完全成功，不需實施"
+        ],
+        "exp": "中段測量與訪談資料支持開頭的問題，並為結尾的政策建議建立具體依據。",
+        "subject": "國文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-篇章結構",
+        "template_id": "ref-20261119-b9-ch2-structure-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch2-structure-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文本觀念、情境語用與摘要可信度相結合",
+      "question": {
+        "q": "一篇評論先提出「新增自行車道一定能降低交通事故」的看法，再呈現部分路口事故反而增加的資料，結尾主張應依路口設計評估。這種安排主要達成何種效果？",
+        "correct": "以反例檢驗過度概括的主張，再提出更有條件的結論",
+        "wrong": [
+          "先以資料否定所有自行車道存在的必要性",
+          "只使用支持主張的例子，沒有考慮其他可能",
+          "把交通安全問題完全改寫成歷史事件記敘"
+        ],
+        "exp": "由絕對主張切入，以反例凸顯條件差異，最後提出更謹慎的解釋，形成論證修正的結構。",
+        "subject": "國文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-篇章結構",
+        "template_id": "ref-20261119-b9-ch2-structure-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
