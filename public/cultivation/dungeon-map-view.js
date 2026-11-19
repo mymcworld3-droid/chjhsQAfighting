@@ -1092,8 +1092,10 @@ class DungeonMapView{
       Math.abs(a.x-self.x)+Math.abs(a.y-self.y)-
       Math.abs(b.x-self.x)-Math.abs(b.y-self.y));
     this.aimTile={...cells[0]};
-    // Selecting an enemy updates its inspector/aim, never the camera.
+    // Inspecting a beast must never pull the centered player off-screen.
     this.follow=true;this.followBeast=false;
+    this.camera=Camera.lockToPlayer(this.selfPad(),
+      this.map,this.width,this.height);
     this.updateBeastHUD();this.updateStrikeHUD();this.updateSkillHUD();this.drawSoon();
   }
   inspectAt(screen){
