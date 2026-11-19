@@ -776,3 +776,128 @@
 @media(max-height:450px) and (orientation:landscape){
  #dungeon-map-view .dm-victory-panel{top:40px;max-height:42%}
 }
+
+
+/* Match the 問道試煉 free-question study sheet while keeping the autonomous
+   dungeon battle in its own background layer. No AI chat panel. */
+#dungeon-map-view .dm-quiz-panel{
+  top:0;bottom:0;align-items:stretch;z-index:30;
+  background:linear-gradient(110deg,rgba(8,25,22,.97),rgba(7,19,17,.99));
+  padding:clamp(10px,2.5vw,26px);
+}
+#dungeon-map-view .dm-quiz-sheet{
+  width:min(920px,100%);margin:0 auto;
+  background:transparent;border:0;box-shadow:none;
+  border-radius:0;padding:clamp(8px,1.8vw,20px);
+  color:#f1e9d5;font-family:var(--xq-serif,'Noto Serif TC',serif);
+}
+#dungeon-map-view .dm-quiz-top{
+  border-bottom:1px solid #c7b58550;padding-bottom:14px;
+}
+#dungeon-map-view .dm-quiz-top h3{font-size:clamp(18px,3vw,26px)}
+#dungeon-map-view .dm-quiz-top small{color:#b8bba3}
+#dungeon-map-view .dm-quiz-info{color:#b9c9bd}
+#dungeon-map-view .dm-quiz-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;margin-top:14px;
+  font-size:12px;color:#dec894;
+}
+#dungeon-map-view .dm-quiz-toolbar button{
+  border:1px solid #bcb68d80;border-radius:4px;
+  background:#1b3b30;color:#f5efd8;
+  min-height:35px;padding:6px 12px;font-size:12px;
+}
+#dungeon-map-view .dm-quiz-question-sheet.tc-question-sheet{
+  position:relative;margin:14px 0 16px;padding:40px 28px 28px;
+  background:linear-gradient(110deg,#efe7cf,#e0d6b9);
+  border:1px solid #c5b480;border-left:5px solid #8c7750;
+  border-radius:4px;color:#213b2e;
+  box-shadow:0 14px 35px #04151140,inset 0 0 35px #947b4620;
+}
+#dungeon-map-view .dm-quiz-question-badge{
+  display:inline-block;background:#c9b98e33;border:1px solid #96855760;
+  border-radius:4px;color:#64573a;padding:4px 8px;font-size:11px;
+  margin-bottom:16px;
+}
+#dungeon-map-view .dm-quiz-question-sheet .dm-quiz-question,
+#dungeon-map-view .dm-quiz-question-sheet .dm-quiz-question *{
+  color:#172d25!important;text-shadow:none!important;
+}
+#dungeon-map-view .dm-quiz-question-sheet .dm-quiz-question{
+  font-weight:500;font-size:clamp(16px,2.1vw,20px);
+  line-height:1.95;margin:0;overflow-wrap:anywhere;
+}
+#dungeon-map-view .dm-quiz-options{
+  display:grid;grid-template-columns:minmax(0,1fr);gap:12px;
+}
+#dungeon-map-view .dm-quiz-options .dm-quiz-option{
+  display:flex;align-items:center;gap:12px;min-height:65px;
+  margin:0;padding:14px 18px;text-align:left;
+  color:#eee8d5;background:#173128;
+  border:1px solid #b4ae8650;border-radius:5px;
+  font-size:14px;line-height:1.7;opacity:1!important;
+}
+#dungeon-map-view .dm-quiz-options button.dm-quiz-option:not(:disabled):hover{
+  background:#254534;border-color:#d1bd7d;
+}
+#dungeon-map-view .dm-quiz-options .dm-quiz-letter{
+  display:grid;place-items:center;flex:0 0 34px;
+  width:34px;height:34px;border:1px solid #a7ac7750;
+  border-radius:3px;background:#a5b58a12;color:#decb98;
+  font-size:13px;font-weight:700;
+}
+#dungeon-map-view .dm-quiz-options .quiz-rich-option{
+  flex:1;min-width:0;overflow-wrap:anywhere;
+}
+#dungeon-map-view .dm-quiz-options .dm-quiz-option.is-correct{
+  background:#285a40;border-color:#a8d1a4;
+}
+#dungeon-map-view .dm-quiz-options .dm-quiz-option.is-wrong{
+  background:#6b3830;border-color:#d9a492;
+}
+#dungeon-map-view .dm-quiz-feedback.tc-feedback-section{
+  margin-top:24px;padding:20px;border:1px solid #a6b78d70;
+  border-radius:6px;background:linear-gradient(135deg,#1f372d,#112520);
+  color:#f1e9d5;
+}
+#dungeon-map-view .dm-quiz-feedback .tc-correct{color:#9fd4a8}
+#dungeon-map-view .dm-quiz-feedback .tc-wrong{color:#efb496}
+#dungeon-map-view .dm-quiz-feedback>strong{font-size:20px}
+#dungeon-map-view .dm-quiz-explanation{color:#eee8d5}
+#dungeon-map-view .dm-quiz-actions{
+  justify-content:flex-end;gap:12px;margin-top:26px;
+}
+#dungeon-map-view .dm-quiz-actions button{
+  min-width:130px;min-height:46px;background:#284b38;
+  border:1px solid #bdb482;color:#f1e9d5;border-radius:5px;
+}
+#dungeon-map-view .dm-quiz-whiteboard{
+  margin-top:18px;padding:12px;border:1px solid #bcb68d88;
+  border-radius:5px;background:#243a2e;
+}
+#dungeon-map-view .dm-quiz-whiteboard[hidden]{display:none!important}
+#dungeon-map-view .dm-quiz-whiteboard-head{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px;margin-bottom:10px;
+}
+#dungeon-map-view .dm-quiz-whiteboard-head>div{display:flex;gap:7px}
+#dungeon-map-view .dm-quiz-whiteboard-head button{
+  padding:5px 10px;border:1px solid #d0bf9a88;
+  border-radius:4px;background:#365447;color:#f9f2de;font-size:12px;
+}
+#dungeon-map-view [data-dq-whiteboard-canvas]{
+  display:block;width:100%;height:auto;max-height:300px;
+  aspect-ratio:18/7;background:#f3f0e2;border-radius:3px;
+  touch-action:none;cursor:crosshair;
+}
+@media(max-width:720px){
+  #dungeon-map-view .dm-quiz-panel{top:0;bottom:0;padding:8px}
+  #dungeon-map-view .dm-quiz-sheet{padding:7px}
+  #dungeon-map-view .dm-quiz-question-sheet.tc-question-sheet{
+    padding:24px 16px 20px;
+  }
+  #dungeon-map-view .dm-quiz-options .dm-quiz-option{
+    padding:12px 11px;min-height:58px;
+  }
+  #dungeon-map-view .dm-quiz-actions button{min-width:100px}
+}
