@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-math1-expected-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "某抽獎每次須付15元，抽中獎金100元的機率為1/5，未中獎則獎金0元。若以獎金減報名費為淨收益，一次抽獎淨收益的期望值為何？",
+        "correct": "5元",
+        "wrong": [
+          "20元",
+          "15元",
+          "−5元"
+        ],
+        "exp": "獎金期望值=100×(1/5)+0×(4/5)=20元；減去固定報名費15元，淨收益期望值為5元。",
+        "subject": "數學",
+        "sub_topic": "期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-期望值",
+        "template_id": "ref-20261119-b7-math1-expected-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-expected-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "隨機變數X分別以1/4、1/2、1/4的機率取值0、2、4。E(X)為何？",
+        "correct": "2",
+        "wrong": [
+          "1",
+          "3",
+          "4"
+        ],
+        "exp": "E(X)=0×1/4+2×1/2+4×1/4=0+1+1=2。",
+        "subject": "數學",
+        "sub_topic": "期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-期望值",
+        "template_id": "ref-20261119-b7-math1-expected-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-expected-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "某隨機變數X的期望值E(X)=3。若每次所得分數定義為Y=2X−1，則E(Y)為何？",
+        "correct": "5",
+        "wrong": [
+          "6",
+          "2",
+          "7"
+        ],
+        "exp": "利用期望值的線性性質，E(Y)=2E(X)−1=2×3−1=5。",
+        "subject": "數學",
+        "sub_topic": "期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-期望值",
+        "template_id": "ref-20261119-b7-math1-expected-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
