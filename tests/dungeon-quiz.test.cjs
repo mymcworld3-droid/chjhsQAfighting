@@ -92,6 +92,15 @@ test('graded answer changes only answering player progression and C credit is on
   assert.equal(duplicated.review.questionId,q.id);
   assert.equal(a.records.get('users/a').stats.totalAnswered,1);
   assert.equal([...a.records.keys()].filter(v=>v.startsWith('exam_logs/')).length,1);
+  assert.equal((await Q.state(a,c,'a',roomId,at)).lastReview.questionId,q.id);
+  await assert.rejects(Q.acknowledge(a,c,'b',{
+    roomId,questionId:q.id},at),/不同步/);
+  const cleared=await Q.acknowledge(a,c,'a',{roomId,questionId:q.id},at);
+  assert.equal(cleared.state.lastReview,null);
+  const repeated=await Q.answer(a,c,'a',{roomId,questionId:q.id,choice},at);
+  assert.equal(repeated.review.questionId,q.id);
+  assert.equal(a.records.get('users/a').stats.totalAnswered,1);
+  assert.equal((await Q.state(a,c,'a',roomId,at)).lastReview,null);
 });
 test('two independent answers, out-of-order credits forbidden and cap enforced',async()=>{
   const {a,c,room}=environment();
@@ -135,6 +144,12 @@ test('answering advances only the individual question cursor, never the C world 
   await Q.answer(a,c,'a',{roomId,questionId:first.id,
     choice:first.opts.indexOf(item(context.subject).correct)},at);
   const state=await Q.state(a,c,'a',roomId,at);
+  assert.equal(state.lastReview.questionId,first.id);
+  const nextQuestion=state.question;
+  await assert.rejects(Q.answer(a,c,'a',{roomId,
+    questionId:nextQuestion.id,choice:0},at),/先查看本題解析/);
+  await Q.acknowledge(a,c,'a',{roomId,questionId:first.id},at);
+  assert.equal((await Q.state(a,c,'a',roomId,at)).lastReview,null);
   assert.equal(state.answered,1);
   assert.equal(state.stock,1);
   assert.equal(state.pendingCredits.length,1);
