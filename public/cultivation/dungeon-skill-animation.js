@@ -26,10 +26,18 @@ const arrayRays=(cells,target,directions)=>{
 // Preserve the exact two crossed cut lines of the trial's sky-cloud animation.
 // A wall truncates the cut at the first absent tile, never draws through it.
 const skyCuts=(cells,target)=>{
-  const rays=arrayRays(cells,target,[[1,1],[-1,-1],[1,-1],[-1,1]]);
-  const [a=[],b=[],c=[],d=[]]=rays;
-  const cut1=[...b].reverse().concat([target],a);
-  const cut2=[...d].reverse().concat([target],c);
+  const set=new Set(cells.filter(validPoint).map(p=>p.x+','+p.y));
+  const arm=(dx,dy)=>{
+    const out=[];
+    for(let i=1;i<=5;i++){
+      const p={x:target.x+dx*i,y:target.y+dy*i};
+      if(!set.has(p.x+','+p.y))break;
+      out.push(p);
+    }
+    return out;
+  };
+  const cut1=arm(-1,-1).reverse().concat([target],arm(1,1));
+  const cut2=arm(-1,1).reverse().concat([target],arm(1,-1));
   return [cut1,cut2].filter(cut=>cut.length>=2);
 };
 const skyRays=(cells,target)=>arrayRays(cells,target,
