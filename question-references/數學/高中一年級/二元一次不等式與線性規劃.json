@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-math1-lp-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "找出線性限制的可行頂點，再比較目標函數",
+      "question": {
+        "q": "x、y滿足x≥0、y≥0、x+y≤6、2x+y≤8。目標函數3x+2y的最大值為何？",
+        "correct": "14",
+        "wrong": [
+          "12",
+          "16",
+          "10"
+        ],
+        "exp": "可行區域頂點為(0,0)、(4,0)、(2,4)、(0,6)，各自目標值為0、12、14、12，最大為14。",
+        "subject": "數學",
+        "sub_topic": "二元一次不等式與線性規劃",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中一年級-二元一次不等式與線性規劃",
+        "template_id": "ref-20261119-b2-math1-lp-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-math1-lp-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "找出線性限制的可行頂點，再比較目標函數",
+      "question": {
+        "q": "平面上點(x,y)須同時滿足x≥0、y≥0、2x+y≤10、x+2y≤8。下列哪一點符合全部限制？",
+        "correct": "(3,2)",
+        "wrong": [
+          "(4,3)",
+          "(1,4)",
+          "(0,5)"
+        ],
+        "exp": "(3,2)符合2×3+2=8≤10與3+2×2=7≤8；其餘三點至少違反一個上界不等式。",
+        "subject": "數學",
+        "sub_topic": "二元一次不等式與線性規劃",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中一年級-二元一次不等式與線性規劃",
+        "template_id": "ref-20261119-b2-math1-lp-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-math1-lp-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "找出線性限制的可行頂點，再比較目標函數",
+      "question": {
+        "q": "x、y滿足x≥0、y≥0、x+y≥5、x+2y≥8。目標函數2x+y的最小值為何？",
+        "correct": "5",
+        "wrong": [
+          "7",
+          "8",
+          "10"
+        ],
+        "exp": "可行區域下方頂點為(0,5)、(2,3)、(8,0)，目標值依序5、7、16，故最小值5。",
+        "subject": "數學",
+        "sub_topic": "二元一次不等式與線性規劃",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中一年級-二元一次不等式與線性規劃",
+        "template_id": "ref-20261119-b2-math1-lp-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
