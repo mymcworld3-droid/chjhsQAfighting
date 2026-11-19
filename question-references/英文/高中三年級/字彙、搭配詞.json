@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-e3-collocation-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "The committee will ______ the possible risks before approving the project.",
+        "correct": "assess",
+        "wrong": [
+          "assume away",
+          "insist",
+          "respond"
+        ],
+        "exp": "Assess risks意為評估風險，並與before approving搭配；其餘動詞無法在此表達評估的意思。",
+        "subject": "英文",
+        "sub_topic": "字彙、搭配詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中三年級-字彙、搭配詞",
+        "template_id": "ref-20261119-b5-e3-collocation-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-e3-collocation-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "The report provides ______ evidence that the new insulation reduced energy use, although more tests are needed.",
+        "correct": "preliminary",
+        "wrong": [
+          "irrelevant",
+          "contradictory",
+          "imaginary"
+        ],
+        "exp": "Preliminary evidence指初步證據，與後面尚需進一步測試呼應；其他形容詞不符合報告提出有用但尚未定論的證據。",
+        "subject": "英文",
+        "sub_topic": "字彙、搭配詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中三年級-字彙、搭配詞",
+        "template_id": "ref-20261119-b5-e3-collocation-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-e3-collocation-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "The company's decision to rely on one supplier made it more ______ to supply disruptions.",
+        "correct": "vulnerable",
+        "wrong": [
+          "resistant",
+          "indifferent",
+          "immune"
+        ],
+        "exp": "Be vulnerable to為固定搭配，表示容易受某事影響；只依賴單一供應商會提高供應中斷風險。",
+        "subject": "英文",
+        "sub_topic": "字彙、搭配詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中三年級-字彙、搭配詞",
+        "template_id": "ref-20261119-b5-e3-collocation-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
