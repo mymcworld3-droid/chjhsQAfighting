@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-mixed-graph-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料與文體依據充分，兼顧文本結構、比較與論證，避免只靠字面關鍵詞",
+      "question": {
+        "q": "學校公布自習室各時段的「座位容量／已預約」：上午09:00–12:00為40／38；下午13:00–16:00為30／30；晚間17:00–20:00為50／45。四人小組希望在同一時段各有座位，不拆開預約。哪個時段尚能容納？",
+        "correct": "晚間17:00–20:00",
+        "wrong": [
+          "上午09:00–12:00",
+          "下午13:00–16:00",
+          "三個時段都能容納"
+        ],
+        "exp": "上午剩2位，下午剩0位，晚間剩5位，只有晚間仍可供四人同時預約。",
+        "subject": "國文",
+        "sub_topic": "混合題及圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-混合題及圖表判讀",
+        "template_id": "ref-20261119-b10-ch3-mixed-graph-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-mixed-graph-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料與文體依據充分，兼顧文本結構、比較與論證，避免只靠字面關鍵詞",
+      "question": {
+        "q": "某問卷彙整兩組結果：甲組150人中60人支持提案；乙組100人中55人支持。下列哪項比較最正確？",
+        "correct": "甲支持人數較多，但乙支持比例較高",
+        "wrong": [
+          "甲支持人數與比例均較高",
+          "乙支持人數較多，但甲支持比例較高",
+          "兩組支持比例相同，均為40%"
+        ],
+        "exp": "甲支持率60/150=40%，乙55/100=55%；甲支持人數60大於55，但乙的支持比例較高。",
+        "subject": "國文",
+        "sub_topic": "混合題及圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-混合題及圖表判讀",
+        "template_id": "ref-20261119-b10-ch3-mixed-graph-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-mixed-graph-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料與文體依據充分，兼顧文本結構、比較與論證，避免只靠字面關鍵詞",
+      "question": {
+        "q": "一份活動經費表列出：會場租金1,200元、器材費600元、保險費300元，另有交通費預估400元。若總預算上限2,300元且四項均須支付，何項判斷正確？",
+        "correct": "預估總支出2,500元，超出上限200元",
+        "wrong": [
+          "預估總支出2,100元，尚餘200元",
+          "預估總支出2,500元，未超過預算",
+          "預估總支出2,300元，恰好用盡預算"
+        ],
+        "exp": "四項合計1,200+600+300+400=2,500元，比上限2,300元多200元；整理表格時不可漏算交通。",
+        "subject": "國文",
+        "sub_topic": "混合題及圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-混合題及圖表判讀",
+        "template_id": "ref-20261119-b10-ch3-mixed-graph-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
