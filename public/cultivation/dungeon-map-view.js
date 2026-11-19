@@ -825,7 +825,7 @@ class DungeonMapView{
     this.pointers.delete(event.pointerId);
     this.touchOrigins.delete(event.pointerId);
     if(!this.pointers.size)this.gestureMulti=false;
-    if(tapped&&!this.inspectAt(at)){
+    if(tapped&&this.map&&this.isCurrent()&&!this.inspectAt(at)){
       const g=Camera.geometry(this.camera,this.map,this.width,this.height);
       const p={x:Math.floor((at.x-g.ox)/g.cell),
         y:Math.floor((at.y-g.oy)/g.cell)};
