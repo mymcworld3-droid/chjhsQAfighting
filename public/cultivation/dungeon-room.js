@@ -160,6 +160,11 @@ export const moveDungeonMember=(roomId,dx,dy,step)=>
 export const strikeDungeonBeast=(roomId,enemyId,seq)=>
   request('strike',{roomId,enemyId,seq});
 
+export const castDungeonSkill=(roomId,skillId,target,seq)=>
+  request('skill',{roomId,skillId,target,seq});
+export const switchDungeonLoadout=(roomId,index)=>
+  request('loadout',{roomId,index});
+
 // The server computes clock ticks from its own assembly epoch. This request
 // never accepts client timestamps or a requested tick value.
 export const synchronizeDungeonBattleClock=roomId=>request('clock',{roomId});
