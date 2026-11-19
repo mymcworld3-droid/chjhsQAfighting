@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-b2-genereg-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "某細菌在有乳糖、缺乏葡萄糖的環境下，乳糖分解相關基因的轉錄量增加。這最符合哪個調控概念？",
+        "correct": "細胞可依營養環境調整特定基因的表現",
+        "wrong": [
+          "所有基因都必須不分環境維持相同轉錄量",
+          "乳糖只會改變細菌的原子序",
+          "轉錄增加代表細胞的DNA必定增加一倍"
+        ],
+        "exp": "基因表現能受環境訊號調控，例如乳糖代謝相關基因在合適條件下提高轉錄，使細胞更有效利用養分。",
+        "subject": "生物",
+        "sub_topic": "基因調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-基因調控",
+        "template_id": "ref-20261119-b5-b2-genereg-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-b2-genereg-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "兩種人體細胞含有大致相同的基因組，但一種大量製造胰島素、另一種主要製造肌肉收縮蛋白。最合理的說明是？",
+        "correct": "不同細胞選擇性表現不同基因",
+        "wrong": [
+          "不同細胞必須擁有完全不同的染色體種類",
+          "每一個基因在所有細胞的表現量必定相同",
+          "分化後的細胞不再含有任何DNA"
+        ],
+        "exp": "多數體細胞保有相近的遺傳資訊，細胞類型差異主要與哪些基因被啟動或抑制及其表現量有關。",
+        "subject": "生物",
+        "sub_topic": "基因調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-基因調控",
+        "template_id": "ref-20261119-b5-b2-genereg-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-b2-genereg-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "某基因的啟動子遭到破壞，RNA聚合酶因而較難在該處啟動轉錄。若沒有其他補償機制，最可能觀察到何種結果？",
+        "correct": "該基因產生的mRNA量下降",
+        "wrong": [
+          "該基因的所有mRNA必然增加",
+          "直接使所有核糖體數目增為兩倍",
+          "一定使整個基因組的序列完全改變"
+        ],
+        "exp": "啟動子參與轉錄起始；若RNA聚合酶難以有效啟動該基因的轉錄，預期其mRNA產量降低。",
+        "subject": "生物",
+        "sub_topic": "基因調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-基因調控",
+        "template_id": "ref-20261119-b5-b2-genereg-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
