@@ -70,9 +70,9 @@
         "q": "A report first describes noise near a hospital, then compares three traffic-management options, and ends by recommending a trial of quieter delivery hours. What is its organization?",
         "correct": "Problem → comparison of solutions → recommendation",
         "wrong": [
-          "Personal biography → holiday schedule → conclusion",
-          "Recommendation → unrelated story → definition",
-          "Sequence of three unrelated historical events"
+          "Problem → recommendation → comparison of alternatives",
+          "Comparison of solutions → problem → recommendation",
+          "Solution → problem → comparison of solutions"
         ],
         "exp": "The text identifies a problem, evaluates alternative responses and chooses a trial solution.",
         "subject": "英文",
@@ -99,9 +99,9 @@
         "q": "A passage begins with 'Many libraries now lend digital devices.' The next paragraph begins, 'However, equipment loans also require staff training and maintenance.' What is the second paragraph's main function?",
         "correct": "To qualify an identified benefit by discussing practical limitations",
         "wrong": [
-          "To repeat the first paragraph without adding information",
-          "To prove that lending devices has never helped anyone",
-          "To replace the topic of libraries with an unrelated biography"
+          "To summarize only the benefits of lending devices, without examining implementation",
+          "To present a specific example of successful equipment loans, reinforcing the first paragraph",
+          "To replace the discussion of equipment loans with a broader account of library history"
         ],
         "exp": "'However' introduces a counterbalancing concern: the operational requirements of an otherwise useful service.",
         "subject": "英文",
@@ -128,9 +128,9 @@
         "q": "Three paragraphs discuss: A. the results of a school's rainwater project; B. why the school wanted to reduce tap-water use; C. how rainwater tanks were installed and monitored. Which order forms a clear explanation from motivation to action to results?",
         "correct": "B → C → A",
         "wrong": [
-          "A → B → C",
-          "C → A → B",
-          "B → A → C"
+          "C → B → A",
+          "B → A → C",
+          "A → C → B"
         ],
         "exp": "A logical report first explains motivation (B), then implementation (C), and finally outcomes (A).",
         "subject": "英文",
