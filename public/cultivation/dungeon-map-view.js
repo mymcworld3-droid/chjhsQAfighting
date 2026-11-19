@@ -1762,7 +1762,7 @@ class DungeonMapView{
     const now=performance.now(),scenes=[];
     const reduceMotion=typeof window!=='undefined'&&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    let travelActive=false;
+    let travelActive=false,heroTravelActive=false;
     const visualActor=(actor,key)=>{
       const entry=this.travelScenes.get(key);
       if(!entry||reduceMotion){
@@ -1787,6 +1787,7 @@ class DungeonMapView{
         this.travelScenes.delete(key);return actor;
       }
       travelActive=true;
+      if(key==='member:'+this.uid)heroTravelActive=true;
       return {...actor,position:sampled.position,visualLift:sampled.lift};
     };
     const visualMembers=this.members().map(member=>
@@ -1847,7 +1848,9 @@ class DungeonMapView{
     this.updateFocusAuras(geometry,visualMembers);
     // Expose presentation activity for browser acceptance and accessibility.
     // This is never used as input to movement, collision or combat rules.
-    const motionState=travelActive?'walking':'idle';
+    // Autonomous beasts may move continuously. Only the local hero controls
+    // the movement indicator; enemy steps must not keep it stuck on 'walking'.
+    const motionState=heroTravelActive?'walking':'idle';
     if(this.canvas.dataset.motion!==motionState)this.canvas.dataset.motion=motionState;
     // Read-only animation coordinate used by browser regression diagnostics.
     // Never replace authoritative member.position with this fraction.
