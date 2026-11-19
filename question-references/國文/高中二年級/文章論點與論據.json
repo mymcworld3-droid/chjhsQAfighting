@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-chi2-argument-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "某人主張：「新增自行車道一定能讓全市汽車排放量下降。」若要嚴謹檢驗此因果主張，哪種證據最有說服力？",
+        "correct": "比較實施前後交通量與排放數據，並控制油價、人口與其他交通政策等因素",
+        "wrong": [
+          "僅引用一位騎士對新車道的好評",
+          "只計算自行車道鋪面顏色種類",
+          "直接假設任何人都會放棄汽車改騎車"
+        ],
+        "exp": "主張涉及政策造成排放變化，須蒐集具有可比性的前後與對照資料，並排除其他可能解釋。",
+        "subject": "國文",
+        "sub_topic": "文章論點與論據",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-文章論點與論據",
+        "template_id": "ref-20261119-b4-chi2-argument-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chi2-argument-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "某社區主張：「增設行人庇護島能減少寬道路口的行人風險。」以下哪項資料最能直接支持此主張？",
+        "correct": "比較增設前後同類路口的行人事故與穿越暴露量，並說明觀察期間",
+        "wrong": [
+          "統計社區居民最喜歡的路燈顏色",
+          "只展示庇護島啟用典禮照片",
+          "以附近咖啡店的營業額作為唯一依據"
+        ],
+        "exp": "論證安全效益宜以與行人事故及穿越暴露量相關的指標評估，而非無關的形象或商業資訊。",
+        "subject": "國文",
+        "sub_topic": "文章論點與論據",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-文章論點與論據",
+        "template_id": "ref-20261119-b4-chi2-argument-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chi2-argument-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "某文章指出：「三個月內回收量增加40%，所以居民的環保意識一定提高40%。」此推論主要存在哪個問題？",
+        "correct": "將回收量的變化直接等同於難以直接測量的環保意識變化",
+        "wrong": [
+          "回收量增加必定代表回收系統完全失效",
+          "百分比只可用在氣象資料",
+          "任何量化資料都不可能用於公共議題分析"
+        ],
+        "exp": "回收量受收集制度、人口與分類方式等影響，不能直接把數量的增幅視作環保意識的相同百分比增幅。",
+        "subject": "國文",
+        "sub_topic": "文章論點與論據",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-文章論點與論據",
+        "template_id": "ref-20261119-b4-chi2-argument-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
