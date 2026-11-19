@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-eng3-readwrite-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "跨句推論、圖表與論證綜合，結論與資料界限一致",
+      "question": {
+        "q": "Read: 'A town introduced shared scooters to reduce short car trips. Early data showed many rentals, but researchers could not tell whether users had switched from driving or walking.' Which sentence is the strongest thesis for a report on the program?",
+        "correct": "The program's environmental impact depends on which travel modes scooter rides actually replace.",
+        "wrong": [
+          "High rental numbers alone prove that all traffic emissions have fallen.",
+          "Because scooters are shared, every rental must replace a car journey.",
+          "The program's effect can be assessed without studying residents' previous travel habits."
+        ],
+        "exp": "A strong thesis identifies the key causal question: replacing car trips may reduce emissions, while replacing walking trips does not have the same implication.",
+        "subject": "英文",
+        "sub_topic": "閱讀與寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中三年級-閱讀與寫作",
+        "template_id": "ref-20261119-b7-eng3-readwrite-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng3-readwrite-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "跨句推論、圖表與論證綜合，結論與資料界限一致",
+      "question": {
+        "q": "Read: 'A school plans to replace paper notices with an app. Most surveyed students have smartphones, but several families lack reliable internet access.' Which recommendation best follows the evidence?",
+        "correct": "Introduce the app while retaining an accessible alternative for families without reliable internet.",
+        "wrong": [
+          "Stop communicating with households that cannot use the app.",
+          "Assume that the surveyed majority proves every family has internet access.",
+          "Require all paper notices to be discarded before checking actual access."
+        ],
+        "exp": "A responsible recommendation preserves the efficiency opportunity while addressing the identified access limitation.",
+        "subject": "英文",
+        "sub_topic": "閱讀與寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中三年級-閱讀與寫作",
+        "template_id": "ref-20261119-b7-eng3-readwrite-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng3-readwrite-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "跨句推論、圖表與論證綜合，結論與資料界限一致",
+      "question": {
+        "q": "Writing task: 'Explain whether school lunches should include more locally grown food. Discuss one benefit, one difficulty, and a practical response.' Which outline fits best?",
+        "correct": "Benefit to local producers → seasonal supply or price difficulty → purchasing plan with flexible menus",
+        "wrong": [
+          "History of the school building → favorite sports → holiday calendar",
+          "Benefits only → unrelated conclusion → no practical response",
+          "Costs only → no argument → unsupported claim that no local food is available"
+        ],
+        "exp": "The prompt requires a benefit, a difficulty and a practical response; the selected outline explicitly develops all three.",
+        "subject": "英文",
+        "sub_topic": "閱讀與寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中三年級-閱讀與寫作",
+        "template_id": "ref-20261119-b7-eng3-readwrite-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
