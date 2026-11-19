@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-phy1-wave-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "某波在均勻介質中的傳播速率為6 m/s、波長為1.5 m，其頻率為多少？",
+        "correct": "4 Hz",
+        "wrong": [
+          "9 Hz",
+          "0.25 Hz",
+          "12 Hz"
+        ],
+        "exp": "由v=λf，f=v/λ=6/1.5=4 Hz。",
+        "subject": "物理",
+        "sub_topic": "振幅、週期、頻率與波速",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中一年級-振幅、週期、頻率與波速",
+        "template_id": "ref-20261119-b4-phy1-wave-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-phy1-wave-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "一個振動物體相對平衡位置的最大位移為4 cm，最上方與最下方位置相距8 cm，其振幅是多少？",
+        "correct": "4 cm",
+        "wrong": [
+          "8 cm",
+          "2 cm",
+          "16 cm"
+        ],
+        "exp": "振幅是離開平衡位置的最大距離4 cm，而不是兩個極端位置的距離8 cm。",
+        "subject": "物理",
+        "sub_topic": "振幅、週期、頻率與波速",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中一年級-振幅、週期、頻率與波速",
+        "template_id": "ref-20261119-b4-phy1-wave-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-phy1-wave-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "平面水波向右傳遞時，漂浮在水面上的小浮標主要在原位置附近上下振動。這最能說明哪項物理觀念？",
+        "correct": "波可傳遞能量，而介質微粒不必隨波前進相同距離",
+        "wrong": [
+          "浮標必然以波速一路向右移動",
+          "波不會傳遞任何能量",
+          "浮標振動週期必等於零"
+        ],
+        "exp": "機械波是介質的擾動傳播；浮標可在平衡位置附近振動，並不代表水粒子隨波形遠距離前進。",
+        "subject": "物理",
+        "sub_topic": "振幅、週期、頻率與波速",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中一年級-振幅、週期、頻率與波速",
+        "template_id": "ref-20261119-b4-phy1-wave-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
