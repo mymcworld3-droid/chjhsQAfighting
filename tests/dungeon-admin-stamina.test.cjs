@@ -13,7 +13,7 @@ const Credits=require('../dungeon-quiz-credit.cjs');
 const API=require('../dungeon-room-api.cjs').__test;
 const map={width:32,height:16,tiles:Array(32*16).fill(1),
   spawn:{x:2,y:2},spawnPads:[{x:2,y:2},{x:4,y:2}]};
-const actor=(uid,admin=false,x=2,y=2)=>({uid,name:uid,
+const actor=(uid,admin=false,x=2,y=2)=>({uid,name:uid,accessScore:200,
   dungeonAdmin:admin,position:{x,y},explorationStamina:10,
   battleHealth:100,battleMaxHealth:100,downed:false,
   moveSeq:0,strikeSeq:0,skillSeq:0,rescueSeq:0,guardSeq:0});

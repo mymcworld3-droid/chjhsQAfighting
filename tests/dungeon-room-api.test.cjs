@@ -63,7 +63,7 @@ test('dungeon uses separate private C-domain storage, A auth, and does not spend
   assert.equal(f.c.records.size,3);
   assert.equal([...f.c.records.keys()].some(k=>k.startsWith('raidRooms/')),false);
   const duplicate=await f.call('a','create');
-  assert.equal(duplicate.body.roomId,created.roomId,'lost create reply is idempotent');
+  assert.equal(duplicate.body.roomId,created.body.roomId,'lost create reply is idempotent');
   assert.equal(duplicate.body.room.revision,1);
 });
 test('joining by normalized six-digit code is atomic and capped at four users',async()=>{
