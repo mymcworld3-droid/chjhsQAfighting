@@ -52,6 +52,8 @@ const actorsFor=room=>{
     .map(e=>actor(e.id,e.position,{...e,kind:e.kind||'enemy'}));
   return [...party,...enemies];
 };
+// Align each punch with one server-confirmed step and movement sample.
+const CHAIN_BEAT_MS=360;
 const durationFor=id=>{
   const move=dungeonVisualMove(id);
   return move==='dragon-guard'?460:
@@ -115,6 +117,34 @@ function buildSkill(uid,result,previous,next){
   if(move==='sky-sever')scene.rays=skyRays(cells,target);
   return scene;
 }
+// A single four-step cast is four distinct visual beats, not one
+// giant shove. Replay only the ordered impacts authorized by the C-room.
+function buildChain(uid,result,previous,next){
+  const steps=Array.isArray(result.chainSteps)?
+    result.chainSteps.slice(0,4):[];
+  let before=actorsFor(previous);
+  const events=[];
+  for(const [index,step] of steps.entries()){
+    if(!validPoint(step.origin)||!validPoint(step.target)||
+        !validPoint(step.position))break;
+    const beat={...result,origin:step.origin,target:step.target,
+      position:step.position,effectCells:step.cells||[],
+      hits:step.hits||[],visualMoves:step.visualMoves||[]};
+    const scene=buildSkill(uid,beat,previous,next);
+    if(!scene)break;
+    scene.before=before.map(a=>({...a}));
+    scene.step=step.step;
+    scene.duration=CHAIN_BEAT_MS;
+    scene.delayMs=index*CHAIN_BEAT_MS;
+    events.push({key:uid+':skill:'+result.seq+':step:'+step.step,scene});
+    before=before.map(a=>{
+      const changed=step.visualMoves?.find(m=>m.enemyId===a.uid);
+      const p=a.uid===uid?step.position:changed?.to;
+      return p?{...a,x:p.x,y:p.y}:a;
+    });
+  }
+  return events;
+}
 function buildStrike(uid,result,previous){
   const origin=result.origin||previous?.members?.[uid]?.position;
   const oldEnemy=previous?.enemies?.find(e=>e.id===result.enemyId);
@@ -138,8 +168,13 @@ export function dungeonAnimationEvents(previous,next){
     const lastSkill=member.lastSkill,priorSkill=old.lastSkill;
     if(lastSkill?.visualVersion===1&&Number.isSafeInteger(lastSkill.seq)&&
         lastSkill.seq>(Number(priorSkill?.seq)||0)){
-      const scene=buildSkill(uid,lastSkill,previous,next);
-      if(scene)events.push({key:uid+':skill:'+lastSkill.seq,scene});
+      if(lastSkill.skillId==='dragon-guard'&&
+          Array.isArray(lastSkill.chainSteps)&&lastSkill.chainSteps.length)
+        events.push(...buildChain(uid,lastSkill,previous,next));
+      else{
+        const scene=buildSkill(uid,lastSkill,previous,next);
+        if(scene)events.push({key:uid+':skill:'+lastSkill.seq,scene});
+      }
     }
     const strike=member.lastStrike,priorStrike=old.lastStrike;
     if(Number.isSafeInteger(strike?.seq)&&

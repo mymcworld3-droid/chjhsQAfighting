@@ -104,3 +104,33 @@ test('locked camera and fractional avatar marker follow smooth animation center'
   near(cam.mapPoint(c,{x:2.35,y:4.7},map,390,810).x,195);
   near(cam.mapPoint(c,{x:2.35,y:4.7},map,390,810).y,405);
 });
+
+test('four-step chain samples one smoothed step per beat, including beast pushes',()=>{
+  const old=room(),next=structuredClone(old);
+  const stages=Array.from({length:4},(_,i)=>({
+    step:i+1,origin:{x:2+i,y:2},position:{x:3+i,y:2},
+    visualMoves:[{enemyId:'beast-1',from:{x:6+i,y:6},
+      to:{x:7+i,y:6}}]
+  }));
+  next.members.a.position={x:6,y:2};
+  next.members.a.lastSkill={seq:1,skillId:'dragon-guard',
+    visualVersion:1,position:{x:6,y:2},chainSteps:stages,
+    visualMoves:[{enemyId:'beast-1',from:{x:6,y:6},to:{x:10,y:6}}]};
+  next.enemies[0].position={x:10,y:6};
+  const events=dungeonMovementEvents(old,next,map);
+  const hero=events.find(e=>e.key==='member:a');
+  const beast=events.find(e=>e.key==='enemy:beast-1');
+  assert.ok(hero);assert.ok(beast);
+  assert.equal(hero.scene.style,'chain');
+  assert.equal(hero.scene.duration,4*360);
+  assert.deepStrictEqual(hero.scene.moves[0].path.map(p=>p.x),[2,3,4,5,6]);
+  assert.deepStrictEqual(beast.scene.moves[0].path.map(p=>p.x),[6,7,8,9,10]);
+  for(let i=0;i<4;i++){
+    near(sampleDungeonMovement({...hero,startedAt:0},i*360+180,A).position.x,
+      2+i+.5);
+    near(sampleDungeonMovement({...beast,startedAt:0},i*360+180,A).position.x,
+      6+i+.5);
+  }
+  assert.deepStrictEqual(sample({...hero},1).position,{x:6,y:2});
+  assert.equal(dungeonMovementEvents(next,structuredClone(next),map).length,0);
+});

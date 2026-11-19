@@ -140,3 +140,32 @@ test('only the trial skill engine is imported; old square-flash VFX are removed'
   assert.match(read('dungeon-skill-combat.cjs'),/origin:\{\.\.\.origin\}/);
   assert.match(read('dungeon-player-combat.cjs'),/origin:\{\.\.\.member\.position\}/);
 });
+
+test('four-step shove replays four distinct impacts in time order, never one combined push',()=>{
+  const {previous,next}=sample('dragon-guard');
+  const seq=next.members.hero.lastSkill;
+  seq.chainSteps=Array.from({length:4},(_,i)=>({
+    step:i+1,origin:{x:8+i,y:6},target:{x:9+i,y:6},
+    position:{x:9+i,y:6},cells:[{x:9+i,y:6}],
+    hits:[{enemyId:'beast-1',damage:12}],
+    visualMoves:[{enemyId:'beast-1',
+      from:{x:9+i,y:6},to:{x:10+i,y:6}}]
+  }));
+  next.members.hero.position={x:12,y:6};
+  next.enemies[0].position={x:13,y:6};
+  const before=JSON.stringify(next);
+  const events=fx.dungeonAnimationEvents(previous,next);
+  assert.equal(events.length,4);
+  assert.deepStrictEqual(events.map(e=>e.scene.step),[1,2,3,4]);
+  assert.deepStrictEqual(events.map(e=>e.scene.delayMs),[0,360,720,1080]);
+  assert.deepStrictEqual(events.map(e=>e.scene.origin.x),[8,9,10,11]);
+  assert.deepStrictEqual(events.map(e=>e.scene.target.x),[9,10,11,12]);
+  assert.ok(events.every(e=>e.scene.duration===360));
+  assert.ok(events.every(e=>e.scene.moves.some(m=>m.timing==='chain-advance')));
+  assert.deepStrictEqual(events.map(e=>e.scene.moves.find(m=>
+    m.uid==='beast-1').path[1].x),[10,11,12,13]);
+  const ctx=mockCanvas().ctx;
+  for(const event of events)fx.paintDungeonScene(ctx,event.scene,.66,image,true,shared);
+  assert.deepStrictEqual(next,JSON.parse(before),'VFX cannot mutate shared combat state');
+  assert.equal(fx.dungeonAnimationEvents(next,structuredClone(next)).length,0);
+});

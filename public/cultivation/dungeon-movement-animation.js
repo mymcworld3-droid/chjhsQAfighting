@@ -8,6 +8,7 @@ const step=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y)===1;
 const onMap=(map,p)=>point(p)&&p.x>=0&&p.y>=0&&
   p.x<map?.width&&p.y<map?.height&&map.tiles?.[p.y*map.width+p.x]>0;
 const clamp=n=>Math.max(0,Math.min(1,n));
+const CHAIN_BEAT_MS=360;
 function routeFor(oldMember,newMember,map){
   const from=oldMember?.position,to=newMember?.position;
   if(!onMap(map,from)||!onMap(map,to)||same(from,to))return null;
@@ -40,7 +41,8 @@ function routeFor(oldMember,newMember,map){
 }
 const travel=(key,path,style='walk',bot=false)=>{
   // Trial timing and easing are provided by the trial's shared sampler.
-  const duration=style==='dash'||style==='push'?300:
+  const duration=style==='chain'?(path.length-1)*CHAIN_BEAT_MS:
+    style==='dash'||style==='push'?300:
     style==='throw'?420:Math.min(800,180+(path.length-1)*105);
   const uid=key;
   return {key,scene:{kind:'move',style,actor:uid,visualVersion:1,
@@ -62,6 +64,26 @@ export function dungeonMovementEvents(previous,next,map){
     // Server-approved dash/fist advance must move the actual sprite as
     // well as its already shared sword/fist VFX.
     const cast=member.lastSkill;
+    const chain=cast?.visualVersion===1&&
+      Number.isSafeInteger(cast.seq)&&
+      cast.seq>(Number(old.lastSkill?.seq)||0)&&
+      Array.isArray(cast.chainSteps)&&cast.chainSteps.length<=4?
+      cast.chainSteps:null;
+    if(chain?.length&&onMap(map,old.position)){
+      const path=[copy(old.position)];
+      for(const beat of chain){
+        const from=path.at(-1),to=beat.position;
+        if(!same(from,beat.origin)||!onMap(map,to)||
+            (!same(from,to)&&!step(from,to)))break;
+        path.push(copy(to));
+      }
+      if(path.length===chain.length+1&&
+          same(path.at(-1),member.position)&&
+          path.some(p=>!same(p,path[0]))){
+        events.push(travel('member:'+uid,path,'chain'));
+        continue;
+      }
+    }
     if(point(old.position)&&point(member.position)&&
         onMap(map,old.position)&&onMap(map,member.position)&&
         !same(old.position,member.position)&&
@@ -71,18 +93,37 @@ export function dungeonMovementEvents(previous,next,map){
       events.push(travel('member:'+uid,[copy(old.position),copy(member.position)],'dash'));
   }
   const oldEnemies=new Map((previous.enemies||[]).map(e=>[e.id,e]));
-  const casts=Object.values(next.members||{}).flatMap(member=>{
+  const recentCasts=Object.values(next.members||{}).flatMap(member=>{
     const old=previous.members?.[member.uid],cast=member.lastSkill;
     return cast?.visualVersion===1&&Number.isSafeInteger(cast.seq)&&
-      cast.seq>(Number(old?.lastSkill?.seq)||0)&&
-      Array.isArray(cast.visualMoves)?cast.visualMoves:[];
+      cast.seq>(Number(old?.lastSkill?.seq)||0)?[cast]:[];
   });
+  const casts=recentCasts.flatMap(cast=>Array.isArray(cast.visualMoves)?
+    cast.visualMoves:[]);
   const advanced=(Number(next.battleAppliedTick)||0)>(Number(previous.battleAppliedTick)||0);
   for(const enemy of next.enemies||[]){
     if(enemy.kind==='boss')continue;
     const old=oldEnemies.get(enemy.id);
     if(!old||!onMap(map,old.position)||!onMap(map,enemy.position)||
         same(old.position,enemy.position))continue;
+    const chain=recentCasts.find(c=>c.skillId==='dragon-guard'&&
+      Array.isArray(c.chainSteps)&&c.chainSteps.length>0&&
+      c.chainSteps.length<=4);
+    if(chain){
+      const path=[copy(old.position)];
+      for(const beat of chain.chainSteps){
+        const last=path.at(-1),move=(beat.visualMoves||[]).find(m=>
+          m.enemyId===enemy.id&&same(m.from,last));
+        const to=move?.to||last;
+        if(!onMap(map,to)||(!same(last,to)&&!step(last,to)))break;
+        path.push(copy(to));
+      }
+      if(path.length===chain.chainSteps.length+1&&
+          same(path.at(-1),enemy.position)){
+        events.push(travel('enemy:'+enemy.id,path,'chain',true));
+        continue;
+      }
+    }
     const pushed=casts.find(m=>m.enemyId===enemy.id&&
       same(m.from,old.position)&&same(m.to,enemy.position));
     if(pushed){
@@ -98,8 +139,19 @@ export function dungeonMovementEvents(previous,next,map){
 export function sampleDungeonMovement(entry,now,shared=globalThis.QATacticalAnimation){
   const scene=entry?.scene;
   if(!scene)return null;
-  const progress=clamp((now-entry.startedAt)/Math.max(1,scene.duration));
-  const actor=shared?.sample?.(scene,progress)?.[0];
+  const elapsed=Math.max(0,now-entry.startedAt);
+  const progress=clamp(elapsed/Math.max(1,scene.duration));
+  let pose=scene;
+  let local=progress;
+  if(scene.style==='chain'){
+    const path=scene.moves[0].path,beats=path.length-1;
+    const index=Math.min(beats-1,Math.floor(elapsed/CHAIN_BEAT_MS));
+    local=clamp((elapsed-index*CHAIN_BEAT_MS)/CHAIN_BEAT_MS);
+    pose={...scene,style:'walk',
+      before:[{...scene.before[0],x:path[index].x,y:path[index].y}],
+      moves:[{uid:scene.actor,path:[path[index],path[index+1]]}]};
+  }
+  const actor=shared?.sample?.(pose,local)?.[0];
   if(!actor||!Number.isFinite(actor.x)||!Number.isFinite(actor.y))return null;
   return {position:{x:actor.x,y:actor.y},
     lift:Number.isFinite(actor.lift)?actor.lift:0,active:progress<1};

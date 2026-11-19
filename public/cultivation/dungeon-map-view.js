@@ -1374,7 +1374,8 @@ class DungeonMapView{
       }
       for(const {key,scene} of dungeonAnimationEvents(previous,room)){
         if(!this.visualScenes.has(key))
-          this.visualScenes.set(key,{scene,startedAt:now,soundPlayed:false});
+          this.visualScenes.set(key,{scene,
+            startedAt:now+(scene.delayMs||0),soundPlayed:false});
       }
       while(this.visualScenes.size>12)
         this.visualScenes.delete(this.visualScenes.keys().next().value);
@@ -1663,8 +1664,10 @@ class DungeonMapView{
     const visualHero=visualMembers.find(member=>member.uid===this.uid)?.position||this.selfPad();
     this.camera=Camera.lockToPlayer(visualHero,m,w,h);
     this.updateRangePlan();
+    let queuedScenes=false;
     for(const [key,entry] of this.visualScenes||[]){
       const elapsed=now-entry.startedAt;
+      if(elapsed<0){queuedScenes=true;continue;}
       if(elapsed>=entry.scene.duration){
         this.visualScenes.delete(key);continue;
       }
@@ -1707,7 +1710,7 @@ class DungeonMapView{
     // This is never used as input to movement, collision or combat rules.
     const motionState=travelActive?'walking':'idle';
     if(this.canvas.dataset.motion!==motionState)this.canvas.dataset.motion=motionState;
-    if(scenes.length&&!reduceMotion)this.drawSoon();
+    if((scenes.length||queuedScenes)&&!reduceMotion)this.drawSoon();
     if(travelActive&&!reduceMotion)this.drawSoon();
 
   }
