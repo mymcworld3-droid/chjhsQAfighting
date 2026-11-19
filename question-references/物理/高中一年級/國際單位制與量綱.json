@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-phy1-units-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單位與物理定律條件明確；附計算步驟及可識別的常見迷思選項",
+      "question": {
+        "q": "依動能公式E=½mv²，若m的單位為kg、v為m/s，E的SI基本單位為何？",
+        "correct": "kg·m²/s²",
+        "wrong": [
+          "kg·m/s",
+          "kg·m/s²",
+          "kg·m²/s"
+        ],
+        "exp": "mv²的單位kg×(m/s)²=kg·m²/s²，也就是焦耳J的SI基本單位表示。",
+        "subject": "物理",
+        "sub_topic": "國際單位制與量綱",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-國際單位制與量綱",
+        "template_id": "ref-20261119-b11-phy1-units-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-phy1-units-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單位與物理定律條件明確；附計算步驟及可識別的常見迷思選項",
+      "question": {
+        "q": "某實驗測得質量0.25 kg、加速度8 m/s²。依牛頓第二定律，合力是多少牛頓？",
+        "correct": "2 N",
+        "wrong": [
+          "0.03125 N",
+          "8.25 N",
+          "32 N"
+        ],
+        "exp": "F=ma=0.25 kg×8 m/s²=2 kg·m/s²=2 N。",
+        "subject": "物理",
+        "sub_topic": "國際單位制與量綱",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-國際單位制與量綱",
+        "template_id": "ref-20261119-b11-phy1-units-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-phy1-units-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單位與物理定律條件明確；附計算步驟及可識別的常見迷思選項",
+      "question": {
+        "q": "一輛車等速以54 km/h行駛，換算成m/s為何？",
+        "correct": "15 m/s",
+        "wrong": [
+          "10 m/s",
+          "19.44 m/s",
+          "150 m/s"
+        ],
+        "exp": "54 km/h=54×1000/3600 m/s=15 m/s。",
+        "subject": "物理",
+        "sub_topic": "國際單位制與量綱",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-國際單位制與量綱",
+        "template_id": "ref-20261119-b11-phy1-units-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
