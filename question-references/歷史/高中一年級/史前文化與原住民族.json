@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-h1-prehistory-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "某臺灣史前遺址同時發現磨製石器、陶器與農作物遺存。若推論該聚落的生業方式，哪項解釋最有根據？",
+        "correct": "居民可能已從事農耕，並使用磨製工具與陶器",
+        "wrong": [
+          "僅憑陶器即可判定居民完全不從事採集",
+          "磨製石器證明當時已採用現代機械工業",
+          "所有出土陶器必定由海外輸入而非當地製作"
+        ],
+        "exp": "農作物遺存可提供耕作線索，磨製石器與陶器反映工藝；但單一遺址不能證明居民完全不進行其他生業。",
+        "subject": "歷史",
+        "sub_topic": "史前文化與原住民族",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史前文化與原住民族",
+        "template_id": "ref-20261119-b5-h1-prehistory-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-h1-prehistory-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "史家結合原住民族口傳故事、傳統地名與考古器物研究聚落遷移。最嚴謹的方法為何？",
+        "correct": "釐清各資料形成的時間和目的，再比較是否互相支持",
+        "wrong": [
+          "以最早被文字記錄的版本直接取代所有口傳資料",
+          "只以現代地名決定史前聚落所在，不檢查地名變遷",
+          "若口傳與考古材料不完全一致，就直接認定兩者都沒有研究價值"
+        ],
+        "exp": "口述、地名與物質遺存有不同限制與優點；交互檢證可建立較審慎的歷史解釋。",
+        "subject": "歷史",
+        "sub_topic": "史前文化與原住民族",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史前文化與原住民族",
+        "template_id": "ref-20261119-b5-h1-prehistory-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-h1-prehistory-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "某海岸遺址出土的玉器經原料分析確認來自遠方地區，但沒有直接航行紀錄。哪項推論最適當？",
+        "correct": "當地可能參與直接或間接的跨區域交換網絡",
+        "wrong": [
+          "一定有當地居民親自搭船到原料產區採集",
+          "可以確定所有玉器都在原料產區完成加工",
+          "足以證明當地已存在由同一中央政府統治的跨海帝國"
+        ],
+        "exp": "非本地原料能支持物資移動或交換的推論，但交易可能經由中介，不能直接確定移動者及政治體制。",
+        "subject": "歷史",
+        "sub_topic": "史前文化與原住民族",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史前文化與原住民族",
+        "template_id": "ref-20261119-b5-h1-prehistory-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
