@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-argumentpara-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "Claim: 'Schools should provide covered bicycle parking because rain damages students' bicycles.' Which evidence best supports this specific claim?",
+        "correct": "A survey comparing bicycle damage reports before and after covered parking was installed.",
+        "wrong": [
+          "A list of students' favorite bicycle frame colors.",
+          "A history of the school's basketball team.",
+          "A report measuring only the number of cars on nearby highways."
+        ],
+        "exp": "Evidence about bicycle damage and the introduction of covered parking directly tests the proposed reason; unrelated preferences or traffic counts do not.",
+        "subject": "英文",
+        "sub_topic": "論述段落",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-論述段落",
+        "template_id": "ref-20261119-b7-eng2-argumentpara-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-argumentpara-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "A paragraph argues that a city should keep both online and in-person application services. Which topic sentence is most suitable?",
+        "correct": "Providing both application methods can improve access for residents with different needs.",
+        "wrong": [
+          "Online forms are always used by every resident without difficulty.",
+          "In-person services must be removed before any research is done.",
+          "Application services are unrelated to residents' access to public programs."
+        ],
+        "exp": "The topic sentence establishes a defensible position and anticipates a paragraph about varied needs, rather than assuming everyone has the same access.",
+        "subject": "英文",
+        "sub_topic": "論述段落",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-論述段落",
+        "template_id": "ref-20261119-b7-eng2-argumentpara-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-argumentpara-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "A writer claims that longer library hours increased student reading. The only evidence is that more books were borrowed in the same month. Which revision would make the argument stronger?",
+        "correct": "Compare borrowing and reading patterns with earlier months and similar schools, accounting for enrollment and other changes.",
+        "wrong": [
+          "State that every extra book borrowed must have been fully read.",
+          "Remove the month and school from the data to make the claim seem universal.",
+          "Assume that longer hours explain every change without investigating alternatives."
+        ],
+        "exp": "Borrowing data alone cannot establish that reading increased because of longer hours; comparable evidence and alternative explanations are needed.",
+        "subject": "英文",
+        "sub_topic": "論述段落",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-論述段落",
+        "template_id": "ref-20261119-b7-eng2-argumentpara-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
