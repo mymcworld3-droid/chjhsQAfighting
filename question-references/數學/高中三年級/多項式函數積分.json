@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-polyintegral-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "求不定積分∫(3x²−4x+1)dx。",
+        "correct": "x³−2x²+x+C",
+        "wrong": [
+          "x³−4x²+x+C",
+          "6x−4+C",
+          "3x³−2x²+x+C"
+        ],
+        "exp": "逐項積分：∫3x²dx=x³、∫(−4x)dx=−2x²、∫1dx=x，再加積分常數C。",
+        "subject": "數學",
+        "sub_topic": "多項式函數積分",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式函數積分",
+        "template_id": "ref-20261119-b10-m3-polyintegral-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-polyintegral-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "計算定積分∫₁²(x+1)dx的值。",
+        "correct": "5/2",
+        "wrong": [
+          "3/2",
+          "7/2",
+          "2"
+        ],
+        "exp": "反導函數F(x)=x²/2+x，故F(2)−F(1)=(2+2)−(1/2+1)=5/2。",
+        "subject": "數學",
+        "sub_topic": "多項式函數積分",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式函數積分",
+        "template_id": "ref-20261119-b10-m3-polyintegral-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-polyintegral-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "若多項式F(x)滿足F′(x)=6x²且F(0)=4，則F(x)為何？",
+        "correct": "2x³+4",
+        "wrong": [
+          "6x³+4",
+          "2x³",
+          "3x²+4"
+        ],
+        "exp": "積分6x²得F(x)=2x³+C，代入F(0)=4得C=4。",
+        "subject": "數學",
+        "sub_topic": "多項式函數積分",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式函數積分",
+        "template_id": "ref-20261119-b10-m3-polyintegral-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
