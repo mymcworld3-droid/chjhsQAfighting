@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-math3-contlimit-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "求lim(x→2)(x²−4)/(x−2)，其中x≠2。",
+        "correct": "4",
+        "wrong": [
+          "2",
+          "0",
+          "不存在"
+        ],
+        "exp": "x²−4=(x−2)(x+2)，對x≠2可約分，原式趨近x+2，令x→2得4。",
+        "subject": "數學",
+        "sub_topic": "連續函數與極限運算",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-連續函數與極限運算",
+        "template_id": "ref-20261119-b7-math3-contlimit-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math3-contlimit-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "設f(x)在x<1時為x²+k，在x≥1時為3x。若f在x=1連續，則k為何？",
+        "correct": "2",
+        "wrong": [
+          "1",
+          "3",
+          "−2"
+        ],
+        "exp": "左極限為1+k，右極限與函數值f(1)皆為3；連續要求1+k=3，故k=2。",
+        "subject": "數學",
+        "sub_topic": "連續函數與極限運算",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-連續函數與極限運算",
+        "template_id": "ref-20261119-b7-math3-contlimit-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math3-contlimit-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "求lim(x→0)[√(9+x)−3]/x。",
+        "correct": "1/6",
+        "wrong": [
+          "1/3",
+          "1/9",
+          "0"
+        ],
+        "exp": "分子有理化得[√(9+x)−3]/x=1/[√(9+x)+3]（x≠0），令x→0得1/6。",
+        "subject": "數學",
+        "sub_topic": "連續函數與極限運算",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-連續函數與極限運算",
+        "template_id": "ref-20261119-b7-math3-contlimit-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
