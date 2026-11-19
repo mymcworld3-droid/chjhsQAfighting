@@ -55,3 +55,11 @@ test('dungeon uses the actual trial ambience and contour painters',()=>{
   assert.match(view,/this\.ambientTimer=setTimeout\(/);
   assert.match(view,/!document\.hidden/);
 });
+
+test('the running dungeon canvas passes the defined reduced-motion flag',()=>{
+  const view=read('public/cultivation/dungeon-map-view.js');
+  assert.match(view,/const reduceMotion=typeof window/);
+  assert.match(view,/reducedMotion:reduceMotion/);
+  assert.doesNotMatch(view,/\n\s*reducedMotion,\s*\n/,
+    'an undefined shorthand aborts every animation frame');
+});
