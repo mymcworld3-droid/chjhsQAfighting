@@ -903,6 +903,62 @@ class DungeonMapView{
     }
     this.ctx?.setTransform(dpr,0,0,dpr,0,0);this.drawSoon();
   }
+  updateFocusAuras(geometry){
+    const layer=this.$('[data-dm-effects]');
+    if(!layer||!this.map||!geometry)return;
+    const present=new Set(),members=this.members();
+    if(this.room?.status==='assembled'){
+      members.forEach((member,index)=>{
+        const charges=member?.focusCharges;
+        if(!Number.isSafeInteger(charges)||charges<=0||member.downed||
+            Number(member.battleHealth)===0)return;
+        const pos=member.position||this.map.spawnPads[index];
+        if(!pos||!Number.isSafeInteger(pos.x)||!Number.isSafeInteger(pos.y)||
+            pos.x<0||pos.y<0||pos.x>=this.map.width||pos.y>=this.map.height||
+            this.map.tiles[pos.y*this.map.width+pos.x]===0)return;
+        // Exactly match the position offsets of overlapping teammate sprites.
+        const companions=members.filter((other,j)=>{
+          const q=other.position||this.map.spawnPads[j];
+          return q?.x===pos.x&&q?.y===pos.y;
+        });
+        const slot=Math.max(0,companions.findIndex(x=>x.uid===member.uid));
+        const shift=companions.length>1?.22*geometry.cell:0;
+        const x=geometry.ox+(pos.x+.5)*geometry.cell+
+          shift*(slot%2?1:-1);
+        const y=geometry.oy+(pos.y+.5)*geometry.cell+
+          shift*(slot>=2?1:-1);
+        if(x< -80||x>this.width+80||y< -80||y>this.height+80)return;
+        present.add(member.uid);
+        let aura=this.focusAuras.get(member.uid);
+        if(!aura){
+          // GPU-friendly CSS animations: never redraw the full maze on a
+          // timer. Sparks and double rings surround, not cover, the avatar.
+          aura=document.createElement('div');
+          aura.className='dm-focus-aura';
+          aura.dataset.focusUid=member.uid;
+          aura.innerHTML='<span class="dm-focus-ring"></span>'+
+            '<span class="dm-focus-orbit"></span>'+
+            '<span class="dm-focus-spark dm-spark-a"></span>'+
+            '<span class="dm-focus-spark dm-spark-b"></span>'+
+            '<span class="dm-focus-spark dm-spark-c"></span>'+
+            '<span class="dm-focus-spark dm-spark-d"></span>'+
+            '<span class="dm-focus-count"></span>';
+          this.focusAuras.set(member.uid,aura);
+          layer.append(aura);
+        }
+        aura.style.left=x+'px';aura.style.top=y+'px';
+        aura.style.setProperty('--dm-focus-size',
+          clamp(geometry.cell*1.65,42,104)+'px');
+        aura.dataset.charges=String(charges);
+        aura.querySelector('.dm-focus-count').textContent=
+          member.uid===this.uid?'✦ '+charges:'✦';
+        aura.title='蓄勢金身 · 剩餘 '+charges+' 招';
+      });
+    }
+    for(const [uid,aura] of this.focusAuras){
+      if(!present.has(uid)){aura.remove();this.focusAuras.delete(uid);}
+    }
+  }
   drawSoon(){
     if(!this.opened||this.frame)return;
     this.frame=requestAnimationFrame(()=>{this.frame=0;this.draw();});
@@ -915,8 +971,10 @@ class DungeonMapView{
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:this.members(),selfUid:this.uid,showRoutes:this.routes,
       enemies:this.creatures(),aimTile:this.currentAim(),
-      currentTick:Number(this.room?.battleClock?.appliedTick)||0
+      currentTick:Number(this.room?.battleClock?.appliedTick)||0,
+      visualTimeMs:performance.now()
     });
+    this.updateFocusAuras(geometry);
     const mini=this.mini,miniBounds=mini.getBoundingClientRect();
     const mw=Math.max(1,Math.round(miniBounds.width)),mh=Math.max(1,Math.round(miniBounds.height));
     const dpr=clamp(window.devicePixelRatio||1,1,2);
