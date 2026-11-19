@@ -302,8 +302,10 @@ export function drawWorld(ctx,map,camera,width,height,
       ctx.beginPath();ctx.arc(sx,sy,radius+3,0,Math.PI*2);
       ctx.strokeStyle='#fff5d1';ctx.lineWidth=1.5;ctx.stroke();
     }
+    const healthMax=Number.isSafeInteger(member.battleMaxHealth)&&
+      member.battleMaxHealth>0?member.battleMaxHealth:100;
     const hp=Number.isSafeInteger(member.battleHealth)?
-      Math.max(0,Math.min(100,member.battleHealth)):100;
+      Math.max(0,Math.min(healthMax,member.battleHealth)):healthMax;
     // Canvas-level fallback for the CSS-animated 金身蓄勢 halo. The gold
     // outline stays visible even on browsers that suppress animations or
     // compositor effects; all rings are outside the player sprite.

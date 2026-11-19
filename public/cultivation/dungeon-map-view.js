@@ -334,13 +334,15 @@ class DungeonMapView{
     this.root.querySelectorAll('[data-dm-energy-segment]').forEach((segment,index)=>
       segment.classList.toggle('is-filled',index<energyRingFill(stamina)));
     const p=this.selfPad();
+    const maximum=Number.isSafeInteger(own?.battleMaxHealth)&&
+      own.battleMaxHealth>0?own.battleMaxHealth:100;
     const hp=Number.isSafeInteger(own?.battleHealth)?
-      Math.max(0,own.battleHealth):100;
+      Math.max(0,Math.min(maximum,own.battleHealth)):maximum;
     const downed=own?.downed===true||hp===0;
     const health=this.$('[data-dm-health]');
     if(health){
-      health.textContent=downed?'倒地 · 等待救援':'生命 '+hp+'/100';
-      health.classList.toggle('is-critical',hp<=25);
+      health.textContent=downed?'倒地 · 等待救援':'生命 '+hp+'/'+maximum;
+      health.classList.toggle('is-critical',hp/maximum<=.25);
     }
     const threatened=this.creatures().filter(beast=>
       beast?.attack?.cells?.some(tile=>tile.x===p.x&&tile.y===p.y));
@@ -360,8 +362,10 @@ class DungeonMapView{
       const friends=this.members();
       party.hidden=friends.length<2||!active;
       if(!party.hidden)party.textContent=friends.map(m=>{
-        const value=Number.isSafeInteger(m.battleHealth)?m.battleHealth:100;
-        return String(m.name||'修士').slice(0,10)+' '+(m.downed?'倒地':value+' HP');
+        const max=Number.isSafeInteger(m.battleMaxHealth)?m.battleMaxHealth:100;
+        const value=Number.isSafeInteger(m.battleHealth)?m.battleHealth:max;
+        return String(m.name||'修士').slice(0,10)+' '+
+          (m.downed?'倒地':value+'/'+max+' HP');
       }).join(' · ');
     }
     const charge=this.$('[data-dm="quiz"]');

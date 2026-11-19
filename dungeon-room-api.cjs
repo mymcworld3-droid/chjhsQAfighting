@@ -8,6 +8,7 @@ const { verifyMainIdentity } = require('./raid-question-ticket.cjs');
 const {streamDungeonRoom} = require('./dungeon-room-stream.cjs');
 const {LAYOUT_VERSION,generateDungeonLayout} = require('./dungeon-map-generator.cjs');
 const {roomMap,startExplorationMembers,moveOnMap,moveRouteOnMap} = require('./dungeon-movement.cjs');
+const {trustedRaidPlayerSnapshot}=require('./raid-authority.cjs');
 const {initialClock,projectClock} = require('./dungeon-battle-clock.cjs');
 const {initialEnemies,advanceWorld,ENEMY_AI_VERSION} = require('./dungeon-enemy-ai.cjs');
 const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
@@ -92,6 +93,12 @@ const REALM_TIERS=Object.freeze([
   [1868,'渡劫'],[1268,'大乘'],[788,'合體'],[428,'煉虛'],
   [188,'化神'],[68,'元嬰'],[28,'金丹'],[6,'築基'],[0,'凡人']
 ]);
+const dungeonTrialVitals=(player,uid)=>{
+  // Identical trusted HP calculation and artifact exclusion as tactical PvE.
+  const user={...player,artifactSystem:{...(player?.artifactSystem||{}),equipped:{}}};
+  const trusted=trustedRaidPlayerSnapshot(user,uid,{});
+  return {battleMaxHealth:trusted.maxHp,battleAttack:trusted.atk};
+};
 const makeMember=(uid,name,at,player={})=>{
   const score=trainingAccess.score(player);
   const realm=REALM_TIERS.find(([threshold])=>score>=threshold)?.[1]||'凡人';
@@ -157,17 +164,35 @@ function createHandler({
         const user=await resolveA().db.collection('users').doc(uid).get();
         const privileged=user.exists&&user.data()?.isAdmin===true;
         const member=membersOf(room)[uid];
+        const migration=room.status==='assembled'&&user.exists&&
+          (!Number.isSafeInteger(member.battleMaxHealth)||
+           member.battleMaxHealth===100)?
+          dungeonTrialVitals(user.data(),uid):null;
+        const needVitals=Boolean(migration&&migration.battleMaxHealth!==
+          (member.battleMaxHealth||100));
         if(member.dungeonAdmin===privileged&&
-            (!privileged||member.explorationStamina===10))return room;
+            (!privileged||member.explorationStamina===10)&&!needVitals)
+          return room;
         const ref=db.collection(ROOMS).doc(roomId);
         return db.runTransaction(async tx=>{
           const snap=await tx.get(ref),current=snap.exists?snap.data():null;
           if(!current||!hasMember(current,uid)||!sessionRoom(current,at))return current;
           const existing=membersOf(current)[uid];
+          const vitals=migration&&
+            (!Number.isSafeInteger(existing.battleMaxHealth)||
+              existing.battleMaxHealth===100)&&
+            migration.battleMaxHealth!==(existing.battleMaxHealth||100)?
+            migration:null;
           if(existing.dungeonAdmin===privileged&&
-              (!privileged||existing.explorationStamina===10))return current;
+              (!privileged||existing.explorationStamina===10)&&!vitals)
+            return current;
+          const previousMax=Math.max(1,existing.battleMaxHealth||100);
+          const previousHp=Math.max(0,Math.min(previousMax,
+            existing.battleHealth??previousMax));
           const nextMember={...existing,dungeonAdmin:privileged,
-            explorationStamina:privileged?10:clampStamina(existing.explorationStamina)};
+            explorationStamina:privileged?10:clampStamina(existing.explorationStamina),
+            ...(vitals?{...vitals,battleHealth:Math.round(
+              previousHp/previousMax*vitals.battleMaxHealth)}:{})};
           const members={...current.members,[uid]:nextMember};
           const revision=current.revision+1;
           tx.update(ref,{members,revision});
@@ -697,7 +722,8 @@ function createHandler({
               resolveA().db.collection('users').doc(id).get()
             ]);
             return {manual:manual.exists?manual.data():null,
-              isAdmin:user.exists&&user.data()?.isAdmin===true};
+              isAdmin:user.exists&&user.data()?.isAdmin===true,
+              vitals:user.exists?dungeonTrialVitals(user.data(),id):null};
           }));
           manualByUid=Object.fromEntries(ids.map((id,i)=>[id,records[i]]));
         }
@@ -726,6 +752,10 @@ function createHandler({
                 // Refresh A-side admin privilege at departure. A client cannot
                 // grant this by setting any field in a dungeon HTTP request.
                 dungeonAdmin:manualByUid[id].isAdmin,
+                ...(manualByUid[id].vitals?{
+                  ...manualByUid[id].vitals,
+                  battleHealth:manualByUid[id].vitals.battleMaxHealth
+                }:{}),
                 ...Skills.initialCombatLoadout(startingMembers[id],manualByUid[id].manual)};
             }
             const clockState=initialClock(at);

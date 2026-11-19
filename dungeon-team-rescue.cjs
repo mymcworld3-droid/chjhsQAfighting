@@ -2,7 +2,7 @@
 // Co-op dungeon aid: always computed inside the Firebase C room transaction.
 // There is no client-specified HP, price, distance, or resurrection count.
 const {walkable}=require('./dungeon-map-generator.cjs');
-const {isAlive,clampHealth,HEALTH_MAX}=require('./dungeon-enemy-combat.cjs');
+const {isAlive,clampHealth,HEALTH_MAX,maxHealth}=require('./dungeon-enemy-combat.cjs');
 const {MAX_STAMINA,staminaFor,staminaAfterCost}=require('./dungeon-stamina-rules.cjs');
 // Self-revive remains obtainable under a ten-point stamina cap.
 const ALLY_COST=8,ALLY_HP=40,ALLY_LIMIT=2,SELF_COST=MAX_STAMINA,SELF_HP=25,SELF_LIMIT=1;
@@ -29,7 +29,7 @@ function help(room,uid,map,{targetUid,seq}={}){
   if(isAlive(target))throw fail('隊友尚未倒地，不能重複救援');
   const self=targetUid===uid;
   const price=self?SELF_COST:ALLY_COST;
-  const hp=self?SELF_HP:ALLY_HP;
+  const hp=Math.max(1,Math.round(maxHealth(target)*(self?SELF_HP:ALLY_HP)/HEALTH_MAX));
   if(self){
     if((member.selfRescueCount||0)>=SELF_LIMIT)
       throw fail('本場副本已使用過凝神復起，請等待隊友救援');
@@ -44,7 +44,7 @@ function help(room,uid,map,{targetUid,seq}={}){
   if(stamina<price)
     throw fail('救援體力不足，可以繼續答題補充體力');
   const result={seq,targetUid,kind:self?'self':'ally',cost:price,
-    recoveredHp:Math.min(HEALTH_MAX,hp),
+    recoveredHp:Math.min(maxHealth(target),hp),
     tick:Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0};
   const members={...room.members};
   if(self)members[uid]={...member,downed:false,battleHealth:hp,

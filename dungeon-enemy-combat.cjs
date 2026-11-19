@@ -16,11 +16,16 @@ const DIRS=Object.freeze([[0,-1],[1,0],[0,1],[-1,0]]);
 const same=(a,b)=>a?.x===b?.x&&a?.y===b?.y;
 const key=p=>p.x+','+p.y;
 const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
+const maxHealth=member=>Number.isSafeInteger(member?.battleMaxHealth)&&
+  member.battleMaxHealth>0?member.battleMaxHealth:HEALTH_MAX;
 const clampHealth=member=>{
+  const max=maxHealth(member);
   const n=Number.isSafeInteger(member?.battleHealth)?
-    member.battleHealth:HEALTH_MAX;
-  return Math.max(0,Math.min(HEALTH_MAX,n));
+    member.battleHealth:max;
+  return Math.max(0,Math.min(max,n));
 };
+const scaledDamage=(base,member)=>
+  Math.max(1,Math.round(Math.max(0,base)*maxHealth(member)/HEALTH_MAX));
 const isAlive=member=>member?.downed!==true&&clampHealth(member)>0;
 const attackRule=enemy=>ATTACK_RULES[enemy?.kind]||null;
 function directionToward(from,to){
@@ -73,10 +78,11 @@ function resolveAttack(enemy,members,tick){
   let next=members;
   for(const [uid,member]of Object.entries(members||{})){
     if(!isAlive(member)||!attack.cells.some(cell=>same(cell,member.position)))continue;
-    const health=Math.max(0,clampHealth(member)-attack.damage);
+    const damage=scaledDamage(attack.damage,member);
+    const health=Math.max(0,clampHealth(member)-damage);
     if(next===members)next={...members};
     next[uid]={...member,battleHealth:health,downed:health===0,
-      lastDamage:{sourceId:enemy.id,amount:attack.damage,tick}};
+      lastDamage:{sourceId:enemy.id,amount:damage,tick}};
     hits.push(uid);
   }
   return {members:next,hits};
@@ -92,6 +98,6 @@ function isWarned(room,uid){
   return Boolean(member&&room?.enemies?.some(enemy=>
     enemy.attack?.cells?.some(p=>same(p,member.position))));
 }
-module.exports={HEALTH_MAX,WINDUP_TICKS,SAFE_CATCHUP_TICKS,ATTACK_RULES,
+module.exports={HEALTH_MAX,maxHealth,scaledDamage,WINDUP_TICKS,SAFE_CATCHUP_TICKS,ATTACK_RULES,
   DIRS,isAlive,clampHealth,attackRule,warningCells,planAttack,resolveAttack,
   pendingPublic,isWarned};

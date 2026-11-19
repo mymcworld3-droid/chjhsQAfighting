@@ -161,13 +161,14 @@ function resolveGuardedAttack(boss,members,tick){
       tick>=protection.grantedAtTick&&
       Number.isSafeInteger(protection.expiresAtTick)&&
       tick<=protection.expiresAtTick;
-    const reduced=guarded?Math.max(1,Math.ceil(attack.damage/2)):attack.damage;
+    const base=Combat.scaledDamage(attack.damage,member);
+    const reduced=guarded?Math.max(1,Math.ceil(base/2)):base;
     const remaining=Math.max(0,Combat.clampHealth(member)-reduced);
     if(next===members)next={...members};
     next[uid]={...member,battleHealth:remaining,downed:remaining===0,
       bossGuard:null,lastDamage:{sourceId:boss.id,amount:reduced,tick,
         ...(guarded?{guardedByUid:protection.sourceUid,
-          blockedAmount:attack.damage-reduced}:{})}};
+          blockedAmount:base-reduced}:{})}};
     hits.push(uid);
   }
   return {members:next,hits};
