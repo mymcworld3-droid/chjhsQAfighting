@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-e2-context-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "Read: 'The mayor described the proposal as promising, but insisted on a six-month pilot before citywide adoption.' What is the mayor's attitude?",
+        "correct": "Cautiously supportive",
+        "wrong": [
+          "Completely opposed",
+          "Certain it will succeed everywhere",
+          "Uninterested in evaluation"
+        ],
+        "exp": "Calling the plan promising signals support, but requiring a pilot shows caution and a desire for evidence before expansion.",
+        "subject": "英文",
+        "sub_topic": "語境推理",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-語境推理",
+        "template_id": "ref-20261119-b5-e2-context-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-e2-context-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "Read: 'Despite the restaurant's new online ordering system, customers still waited outside because the kitchen could not prepare meals quickly enough.' What is the main bottleneck?",
+        "correct": "Food preparation capacity",
+        "wrong": [
+          "The lack of an ordering website",
+          "Customers not knowing the menu",
+          "A shortage of seats being the only confirmed cause"
+        ],
+        "exp": "Online ordering has already been introduced, yet the text explicitly attributes the continuing wait to the kitchen's preparation speed.",
+        "subject": "英文",
+        "sub_topic": "語境推理",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-語境推理",
+        "template_id": "ref-20261119-b5-e2-context-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-e2-context-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "Read: 'The scientist called the findings preliminary and urged the team to repeat the measurements under different conditions.' The word 'preliminary' most nearly means ______.",
+        "correct": "not yet final",
+        "wrong": [
+          "fully confirmed",
+          "deliberately false",
+          "unrelated to measurement"
+        ],
+        "exp": "The call for additional measurements means the findings are initial rather than definitive; preliminary means early-stage or not final.",
+        "subject": "英文",
+        "sub_topic": "語境推理",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-語境推理",
+        "template_id": "ref-20261119-b5-e2-context-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
