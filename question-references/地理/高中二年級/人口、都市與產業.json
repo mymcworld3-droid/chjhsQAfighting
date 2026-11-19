@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-g2-cityindustry-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "某都市白天在場人口130萬、夜間常住人口100萬。若沒有大型觀光或其他特殊事件，最可能的成因為何？",
+        "correct": "有大量外地居民白天通勤進城工作或就學",
+        "wrong": [
+          "白天出生人口比夜間多30萬人",
+          "夜間全市人口必定停止任何活動",
+          "兩項人口數不同證明統計一定錯誤"
+        ],
+        "exp": "工作與教育功能集中的都市可吸引外圍地區人口白天進城，形成日間人口高於夜間常住人口。",
+        "subject": "地理",
+        "sub_topic": "人口、都市與產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口、都市與產業",
+        "template_id": "ref-20261119-b5-g2-cityindustry-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-g2-cityindustry-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "某縣原以傳統製造業為主，近十年研發與高階服務業比重上升，原工廠地區逐步轉為辦公與住宅。此現象最適合描述為何？",
+        "correct": "產業結構轉型伴隨都市土地利用改變",
+        "wrong": [
+          "農業活動完全消失是都市變遷的唯一原因",
+          "都市土地使用完全不受產業結構影響",
+          "產業變動只影響產品名稱，不影響就業或區位"
+        ],
+        "exp": "產業結構轉變可影響工作職缺、通勤與土地需求，並促使舊工業地區再利用。",
+        "subject": "地理",
+        "sub_topic": "人口、都市與產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口、都市與產業",
+        "template_id": "ref-20261119-b5-g2-cityindustry-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-g2-cityindustry-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "甲城市老年人口占30%，乙城市占10%，但兩市人口總量不同。若比較高齡照護的實際服務規模，還應優先補充哪項資訊？",
+        "correct": "兩市人口總數及老年人口絕對人數",
+        "wrong": [
+          "僅比較兩市的平均海拔",
+          "只比較市中心距海岸的距離",
+          "認為占比較高就必定有更多老年人口，不需人口總數"
+        ],
+        "exp": "高齡人口比率不能直接表示人數；規劃服務容量還須考量總人口、需求程度與實際可及性。",
+        "subject": "地理",
+        "sub_topic": "人口、都市與產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口、都市與產業",
+        "template_id": "ref-20261119-b5-g2-cityindustry-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
