@@ -940,13 +940,35 @@ async function main(){
     assert.ok(!room.rewards,'no rewards are minted by the C-room combat engine');
     await a.page.locator('[data-dm-victory]:not([hidden])').waitFor();
     await b.page.locator('[data-dm-victory]:not([hidden])').waitFor();
-    await a.page.locator('[data-dm="claim-victory"]').click();
-    await b.page.locator('[data-dm="claim-victory"]').click();
-    await Promise.all([a,b].map(({page})=>page.waitForFunction(()=>
-      document.querySelector('[data-dm-reward-status]')?.textContent.includes('已成功存入'))));
+    assert.equal(victoryArchives.size,1,'boss must issue a single permanent C archive');
+    assert.equal(victoryInbox.a.length,1);
+    assert.equal(victoryInbox.b.length,1);
+    await b.page.waitForFunction(()=>
+      document.querySelector('#dungeon-lobby [data-dg="claim-recovered"]')!==null);
+    // A completes the full flow: claim A's permanent reward first, then
+    // leave C's now-finished room. B must be able to claim afterwards.
+    await a.page.locator('#dungeon-map-view [data-dm="close"]').click();
+    await a.page.evaluate(()=>{window.openConfirm=()=>Promise.resolve(true);});
+    const finish=a.page.locator('#dungeon-lobby [data-dg="settle-and-leave"]');
+    await finish.waitFor({state:'visible'});
+    await finish.click();
+    await a.page.waitForFunction(()=>
+      document.querySelector('#dungeon-lobby [data-dg="settle-and-leave"]')===null,
+      null,{timeout:7000});
     assert.equal(playerRewards.a.gold,120);
-    assert.equal(playerRewards.b.gold,120);
     assert.equal(playerRewards.a.cultivation,3);
+    assert.equal(room.status,'waiting','the remaining team can reassemble');
+    assert.equal(room.bossEncounter,null,'old live boss removed from room');
+    assert.ok(victoryArchives.has('dungroom000001'),
+      'C victory archive must survive teammate departure and room reset');
+    await b.page.locator('#dungeon-map-view [data-dm="close"]').click();
+    const recover=b.page.locator('#dungeon-lobby [data-dg="claim-recovered"]');
+    await recover.waitFor({state:'visible',timeout:7000});
+    await recover.click();
+    await b.page.waitForFunction(()=>
+      document.querySelector('#dungeon-lobby .dg-victory-claimed')!==null);
+    assert.equal(playerRewards.b.gold,120);
+    assert.equal(playerRewards.b.cultivation,3);
     assert.equal(victoryReceipts.size,2);
     const repeated=await a.page.evaluate(async()=>{
       const response=await fetch('/api/dungeon/room',{method:'POST',
@@ -958,7 +980,7 @@ async function main(){
     assert.equal(repeated.status,'duplicate');
     assert.equal(playerRewards.a.gold,120);
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two clients, golden focus, independent quizzes, guardian/key/portal, true 2x2 boss, ally+self rescue and per-account victory receipt');
+    console.log('[Dungeon map browser] PASS: two players, autonomous NPCs, focus, quizzes, guardian/portal, boss, rescue, atomic settlement exit and delayed A reward recovery');
   }finally{
     clearInterval(clockLoop);
     clockLoop=null;
