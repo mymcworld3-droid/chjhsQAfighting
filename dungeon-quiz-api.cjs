@@ -162,8 +162,12 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
     const user=exists(userSnap);if(!user)throw fail('玩家資料不存在',404);
     const scopeKey=Scope.key(Scope.snapshot(user));
     const s=matching(exists(recordSnap),roomId,sessionKey,scopeKey);
-    if(s.lastReview?.questionId===input.questionId)
-      return {review:s.lastReview,state:view(s)};
+    // Any recent receipt can be replayed without mutating the user stats,
+    // even if another question was answered in a second browser meanwhile.
+    if(s.reviews?.[input.questionId])
+      return {review:s.reviews[input.questionId],state:view(s)};
+    if(s.lastReview)
+      throw fail('請先查看本題解析並按「下一題」',409);
     const index=count(s.answered),q=s.questions?.[index];
     if(!q||q.id!==input.questionId||q.scopeKey!==scopeKey)
       throw fail('此題已失效或尚未完成出題',409);
@@ -246,6 +250,25 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
     return {review,state:view(s)};
   });
 }
+async function acknowledge(dbA,dbC,uid,input,now=Date.now()){
+  const roomId=safeRoom(input?.roomId);
+  if(!roomId)throw fail('副本房間代碼無效',400);
+  const {sessionKey}=await session(dbC,uid,roomId,now);
+  return dbA.runTransaction(async tx=>{
+    const userRef=dbA.collection('users').doc(uid),ref=dbA.collection(COLLECTION).doc(uid);
+    const [userSnap,recordSnap]=await Promise.all([tx.get(userRef),tx.get(ref)]);
+    const user=exists(userSnap);if(!user)throw fail('玩家資料不存在',404);
+    const s=matching(exists(recordSnap),roomId,sessionKey,Scope.key(Scope.snapshot(user)));
+    if(s.lastReview?.questionId!==input.questionId){
+      if(s.reviews?.[input.questionId]&&!s.lastReview)
+        return {state:view(s)};
+      throw fail('此題解析不同步，請重新整理題目',409);
+    }
+    s.lastReview=null;
+    tx.set(ref,s);
+    return {state:view(s)};
+  });
+}
 function register(app,{resolveA=()=>playerRepository.resolve(),
   resolveC=()=>raidRepository.resolve(),verify=verifyMainIdentity,
   clock=Date.now,logger=console}={}){
@@ -265,7 +288,9 @@ function register(app,{resolveA=()=>playerRepository.resolve(),
     ({state:await state(a,c,uid,String(req.body?.roomId||''),now)})));
   app.post('/api/dungeon/quiz/answer',route(async(a,c,uid,req,now)=>
     await answer(a,c,uid,req.body,now)));
+  app.post('/api/dungeon/quiz/next',route(async(a,c,uid,req,now)=>
+    await acknowledge(a,c,uid,req.body,now)));
 }
 module.exports=register;
 module.exports.__test={COLLECTION,MAX_BUFFER,validSession,session,matching,view,
-  prepareQuestion,commitQuestion,answer,state,register};
+  prepareQuestion,commitQuestion,answer,acknowledge,state,register};
