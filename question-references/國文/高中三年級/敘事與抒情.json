@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-narr-lyrical-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料與文體依據充分，兼顧文本結構、比較與論證，避免只靠字面關鍵詞",
+      "question": {
+        "q": "自編短文：「車站廣播了三次開車訊息，我卻一直捏著那張車票。直到母親轉身走下月臺，我才發現票角已被揉出深深的折痕。」哪項寫法分析最貼切？",
+        "correct": "以反覆動作及車票折痕間接呈現離別時的緊張與不捨",
+        "wrong": [
+          "因為沒有直說「不捨」，所以文字不可能表達任何情感",
+          "車票折痕只是票務規定，與人物動作及情緒無關",
+          "廣播次數可以直接證明敘事者已經錯過當日所有列車"
+        ],
+        "exp": "捏票、折痕與母親離去互相呼應，將情緒寓於動作與物件細節，而非抽象宣告。",
+        "subject": "國文",
+        "sub_topic": "敘事與抒情",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-敘事與抒情",
+        "template_id": "ref-20261119-b10-ch3-narr-lyrical-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-narr-lyrical-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料與文體依據充分，兼顧文本結構、比較與論證，避免只靠字面關鍵詞",
+      "question": {
+        "q": "閱讀自編散文：「父親總把晚餐留在鍋裡，字條只寫『記得熱一下』。多年後，我在外地第一次為別人留下晚餐，才明白那四個字其實很長。」此處敘事和抒情如何結合？",
+        "correct": "先以日常照顧的經驗鋪陳，再用自身行動重新體會父親的關愛",
+        "wrong": [
+          "字條內容簡短，因此作者認為父親的關心同樣微不足道",
+          "後段離開原先事件，改為純粹討論烹飪技術",
+          "作者以父親的行動證明所有家庭必定採相同的相處方式"
+        ],
+        "exp": "前段記錄具體生活，後段因角色轉換而產生理解，情感從行動中自然浮現。",
+        "subject": "國文",
+        "sub_topic": "敘事與抒情",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-敘事與抒情",
+        "template_id": "ref-20261119-b10-ch3-narr-lyrical-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-narr-lyrical-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料與文體依據充分，兼顧文本結構、比較與論證，避免只靠字面關鍵詞",
+      "question": {
+        "q": "自編回憶短文：「十年前，我嫌社區廣播聲吵。搬離後，每逢黃昏聽到遠處相似的旋律，卻會在原地多站一會兒。」哪項最能說明前後時間安排的效果？",
+        "correct": "以同一聲音在不同時期引發的感受，呈現成長後對故鄉的重新理解",
+        "wrong": [
+          "兩段時間相隔十年，因此聲音不可能成為記憶線索",
+          "後段停下腳步表示敘事者從未改變對廣播的厭惡",
+          "作者只在測量廣播音量，沒有比較人物的感受"
+        ],
+        "exp": "從「嫌吵」到聽見類似旋律而駐足，利用時間對照展現情緒轉變與鄉愁。",
+        "subject": "國文",
+        "sub_topic": "敘事與抒情",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-敘事與抒情",
+        "template_id": "ref-20261119-b10-ch3-narr-lyrical-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
