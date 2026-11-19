@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-光合作用與呼吸作用-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查光合作用與呼吸作用的課內知識",
+      "question": {
+        "q": "某植物放在暗處一整天，仍能持續產生少量CO₂。這最可能來自哪種作用？",
+        "correct": "細胞呼吸仍在進行",
+        "wrong": [
+          "黑暗中葉綠素大量進行光反應放氧",
+          "根部不需要任何能量",
+          "所有植物在暗處立即停止代謝"
+        ],
+        "exp": "植物即使無光仍進行呼吸以供應ATP，可能釋放CO₂。",
+        "subject": "生物",
+        "sub_topic": "光合作用與呼吸作用",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-光合作用與呼吸作用",
+        "template_id": "extra-2026-bio1-光合作用與呼吸作用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-光合作用與呼吸作用-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查光合作用與呼吸作用的課內知識",
+      "question": {
+        "q": "光照充足時提升CO₂濃度，植物光合作用速率先上升後不再增加。較合理原因是？",
+        "correct": "光照、溫度或酵素反應等其他因素開始限制速率",
+        "wrong": [
+          "CO₂濃度越高必然無限增加速率",
+          "光合作用完全不需要光",
+          "只要速率平台就表示植物沒有生命"
+        ],
+        "exp": "光合作用受多種因素共同限制，單一物質增加不會使速率無限提高。",
+        "subject": "生物",
+        "sub_topic": "光合作用與呼吸作用",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-光合作用與呼吸作用",
+        "template_id": "extra-2026-bio1-光合作用與呼吸作用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-光合作用與呼吸作用-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查光合作用與呼吸作用的課內知識",
+      "question": {
+        "q": "某細胞缺氧時由有氧呼吸轉為乳酸發酵，若比較每分子葡萄糖ATP產量，通常如何？",
+        "correct": "發酵產量較少",
+        "wrong": [
+          "發酵必定產生與有氧呼吸一樣多ATP",
+          "發酵產生無限多ATP",
+          "發酵不需要任何葡萄糖分解"
+        ],
+        "exp": "發酵主要依靠糖解作用產生少量ATP，缺少有氧電子傳遞鏈的高產量。",
+        "subject": "生物",
+        "sub_topic": "光合作用與呼吸作用",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-光合作用與呼吸作用",
+        "template_id": "extra-2026-bio1-光合作用與呼吸作用-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

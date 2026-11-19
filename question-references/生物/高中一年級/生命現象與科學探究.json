@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-生命現象與科學探究-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查生命現象與科學探究的課內知識",
+      "question": {
+        "q": "某實驗比較兩種光源對植物生長的影響，但甲組施肥量較多。若要辨識光源效果，應怎麼調整？",
+        "correct": "讓兩組施肥量相同，僅改變光源",
+        "wrong": [
+          "同時增加甲組的澆水量",
+          "只挑最高的一株作為全部結果",
+          "忽略施肥差異而直接比較高度"
+        ],
+        "exp": "施肥量是可能的干擾變因，需控制才能檢驗光源對生長的影響。",
+        "subject": "生物",
+        "sub_topic": "生命現象與科學探究",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生命現象與科學探究",
+        "template_id": "extra-2026-bio1-生命現象與科學探究-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-生命現象與科學探究-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查生命現象與科學探究的課內知識",
+      "question": {
+        "q": "某科學家提出一種藥物能抑制細菌生長。哪組設計較適合驗證？",
+        "correct": "設置有藥物與無藥物對照組並重複培養，控制其他條件",
+        "wrong": [
+          "只觀察單一培養皿的顏色",
+          "把不同溫度與不同藥量一起改變且不記錄",
+          "只記錄符合原先預期的資料"
+        ],
+        "exp": "對照及重複能提高因果判斷與量測可靠性。",
+        "subject": "生物",
+        "sub_topic": "生命現象與科學探究",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生命現象與科學探究",
+        "template_id": "extra-2026-bio1-生命現象與科學探究-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-生命現象與科學探究-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查生命現象與科學探究的課內知識",
+      "question": {
+        "q": "某研究結果三次都偏離已知標準值，但彼此數據非常接近。這最可能表示？",
+        "correct": "精密度較高，但可能存在系統誤差影響準確度",
+        "wrong": [
+          "數值接近就必然完全準確",
+          "所有生物量測都不存在系統誤差",
+          "只要測三次就無須校正儀器"
+        ],
+        "exp": "重複性良好不代表沒有偏差，準確度需與可信標準比較。",
+        "subject": "生物",
+        "sub_topic": "生命現象與科學探究",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生命現象與科學探究",
+        "template_id": "extra-2026-bio1-生命現象與科學探究-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-酵素與代謝-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查酵素與代謝的課內知識",
+      "question": {
+        "q": "某酵素在37°C活性高，但在90°C加熱後活性大幅下降，主要原因可能是？",
+        "correct": "蛋白質構形被破壞，活性部位改變",
+        "wrong": [
+          "酵素必定因高溫變成新的元素",
+          "所有酵素越熱活性越無限上升",
+          "高溫只影響水分而不影響蛋白質"
+        ],
+        "exp": "高溫可能使酵素變性，失去適合與受質結合的立體構形。",
+        "subject": "生物",
+        "sub_topic": "酵素與代謝",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-酵素與代謝",
+        "template_id": "extra-2026-bio1-酵素與代謝-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-酵素與代謝-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查酵素與代謝的課內知識",
+      "question": {
+        "q": "某酵素在pH7活性最佳，但在強酸環境活性降低。最合理的解釋是？",
+        "correct": "酸鹼度影響酵素的電荷狀態與結構",
+        "wrong": [
+          "pH只影響溶液顏色",
+          "所有酵素的最適pH必定等於7",
+          "酵素活性完全不受環境條件影響"
+        ],
+        "exp": "活性部位的離子化與蛋白質構形會受pH影響，不同酵素有不同最適環境。",
+        "subject": "生物",
+        "sub_topic": "酵素與代謝",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-酵素與代謝",
+        "template_id": "extra-2026-bio1-酵素與代謝-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-酵素與代謝-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查酵素與代謝的課內知識",
+      "question": {
+        "q": "固定酵素量並提高受質濃度後，反應速率逐漸達到平台。可能原因是？",
+        "correct": "多數酵素活性部位已被受質占用而接近飽和",
+        "wrong": [
+          "酵素在任何濃度下都能無限提高速率",
+          "受質濃度越高必定使所有酵素量增加",
+          "速率平台直接證明受質已全部消失"
+        ],
+        "exp": "受質增加時速率可上升，但酵素數量固定使最大催化速率有限。",
+        "subject": "生物",
+        "sub_topic": "酵素與代謝",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-酵素與代謝",
+        "template_id": "extra-2026-bio1-酵素與代謝-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

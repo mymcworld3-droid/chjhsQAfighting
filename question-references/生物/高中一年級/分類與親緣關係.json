@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-分類與親緣關係-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查分類與親緣關係的課內知識",
+      "question": {
+        "q": "兩物種的前肢骨骼排列相似，但一個用於飛行，另一個用於游泳。這最適合作為哪種演化證據？",
+        "correct": "同源構造反映可能具有共同祖先",
+        "wrong": [
+          "兩者功能不同便不可能有共同祖先",
+          "任何相似骨骼都必定來自同一現生物種",
+          "只有外觀顏色能判定親緣關係"
+        ],
+        "exp": "同源構造可在不同功能下保留祖先基本結構。",
+        "subject": "生物",
+        "sub_topic": "分類與親緣關係",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中一年級-分類與親緣關係",
+        "template_id": "extra-2026-bio1-分類與親緣關係-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-分類與親緣關係-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查分類與親緣關係的課內知識",
+      "question": {
+        "q": "某親緣樹中甲乙共同祖先節點比甲丙的共同祖先節點更近。最合理推論為何？",
+        "correct": "依所用證據甲乙的親緣關係較近",
+        "wrong": [
+          "甲必定是乙現存的直接祖先",
+          "丙必定完全不含DNA",
+          "親緣樹的分支順序可以任意交換而不影響任何關係"
+        ],
+        "exp": "親緣樹用分支與共同祖先描述演化關係，而非現生物種直接祖先。",
+        "subject": "生物",
+        "sub_topic": "分類與親緣關係",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中一年級-分類與親緣關係",
+        "template_id": "extra-2026-bio1-分類與親緣關係-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-分類與親緣關係-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查分類與親緣關係的課內知識",
+      "question": {
+        "q": "若只依兩物種外表相似就宣稱同科，卻未比較DNA與同源構造，主要可能出現什麼問題？",
+        "correct": "趨同演化可能使親緣較遠的生物形成相似外形",
+        "wrong": [
+          "外表相似必定證明DNA完全相同",
+          "分類永遠不需要演化資料",
+          "任何不同物種都不可能具有相同功能"
+        ],
+        "exp": "環境選擇可產生相似適應，分類宜整合多種證據。",
+        "subject": "生物",
+        "sub_topic": "分類與親緣關係",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中一年級-分類與親緣關係",
+        "template_id": "extra-2026-bio1-分類與親緣關係-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

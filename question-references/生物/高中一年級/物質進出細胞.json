@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-物質進出細胞-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查物質進出細胞的課內知識",
+      "question": {
+        "q": "某動物細胞放入高張溶液後體積減小。最直接的水分移動方向為何？",
+        "correct": "水透過細胞膜淨流向細胞外",
+        "wrong": [
+          "水必定淨流入細胞",
+          "溶液中所有鹽分立即轉成水",
+          "細胞膜完全阻止水移動"
+        ],
+        "exp": "高張外液水勢較低，使水由細胞內向外淨流動。",
+        "subject": "生物",
+        "sub_topic": "物質進出細胞",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-物質進出細胞",
+        "template_id": "extra-2026-bio1-物質進出細胞-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-物質進出細胞-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查物質進出細胞的課內知識",
+      "question": {
+        "q": "某運輸蛋白利用ATP將離子逆濃度梯度送出細胞。此作用最適合歸類為？",
+        "correct": "主動運輸",
+        "wrong": [
+          "簡單擴散",
+          "完全不需能量的滲透",
+          "只有氣體分子才會發生的自由擴散"
+        ],
+        "exp": "逆梯度且需ATP的運輸屬主動運輸。",
+        "subject": "生物",
+        "sub_topic": "物質進出細胞",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-物質進出細胞",
+        "template_id": "extra-2026-bio1-物質進出細胞-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-物質進出細胞-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查物質進出細胞的課內知識",
+      "question": {
+        "q": "某葡萄糖分子經膜蛋白沿濃度梯度進入細胞，且無直接ATP消耗。這較接近哪種方式？",
+        "correct": "促進性擴散",
+        "wrong": [
+          "主動運輸且必定逆濃度梯度",
+          "DNA複製",
+          "細胞吞噬大型固體"
+        ],
+        "exp": "促進性擴散利用特定膜蛋白沿梯度傳輸，不直接耗ATP。",
+        "subject": "生物",
+        "sub_topic": "物質進出細胞",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-物質進出細胞",
+        "template_id": "extra-2026-bio1-物質進出細胞-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

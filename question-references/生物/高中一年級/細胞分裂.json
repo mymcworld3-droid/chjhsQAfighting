@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-細胞分裂-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查細胞分裂的課內知識",
+      "question": {
+        "q": "一個二倍體細胞有2n=8條染色體，完成DNA複製後尚未分裂。此時染色體數與DNA分子數分別約為多少？",
+        "correct": "8條染色體、16個DNA分子",
+        "wrong": [
+          "16條染色體、8個DNA分子",
+          "4條染色體、8個DNA分子",
+          "8條染色體、8個DNA分子"
+        ],
+        "exp": "DNA複製使每條染色體具有兩條姐妹染色分體，染色體仍按著絲點計數為8，DNA分子16。",
+        "subject": "生物",
+        "sub_topic": "細胞分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-細胞分裂",
+        "template_id": "extra-2026-bio1-細胞分裂-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-細胞分裂-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查細胞分裂的課內知識",
+      "question": {
+        "q": "研究者發現減數分裂第一次分裂時同源染色體未正常分離。最可能導致什麼結果？",
+        "correct": "部分配子染色體數異常",
+        "wrong": [
+          "所有配子都必定具有完全相同DNA",
+          "減數分裂直接形成兩個與母細胞同染色體數的體細胞",
+          "細胞會停止產生任何蛋白質"
+        ],
+        "exp": "同源染色體不分離可造成配子多一條或少一條染色體。",
+        "subject": "生物",
+        "sub_topic": "細胞分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-細胞分裂",
+        "template_id": "extra-2026-bio1-細胞分裂-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-細胞分裂-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查細胞分裂的課內知識",
+      "question": {
+        "q": "生物形成配子時，同源染色體間發生互換。其對遺傳變異的主要作用是？",
+        "correct": "增加同一染色體上等位基因的重組組合",
+        "wrong": [
+          "讓染色體總數每次加倍",
+          "使每個配子完全相同",
+          "直接把所有基因變成新的元素"
+        ],
+        "exp": "互換可形成新的等位基因排列，是有性生殖變異來源之一。",
+        "subject": "生物",
+        "sub_topic": "細胞分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-細胞分裂",
+        "template_id": "extra-2026-bio1-細胞分裂-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

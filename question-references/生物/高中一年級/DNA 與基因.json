@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-DNA 與基因-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查DNA 與基因的課內知識",
+      "question": {
+        "q": "一段雙股DNA中已知一股序列為5'-AGTC-3'。其互補股依3'到5'方向應寫成什麼？",
+        "correct": "3'-TCAG-5'",
+        "wrong": [
+          "3'-AGTC-5'",
+          "3'-UCAG-5'",
+          "3'-CCCC-5'"
+        ],
+        "exp": "DNA雙股反向平行，A配T、G配C，故互補股為3'-TCAG-5'。",
+        "subject": "生物",
+        "sub_topic": "DNA 與基因",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-DNA 與基因",
+        "template_id": "extra-2026-bio1-DNA 與基因-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-DNA 與基因-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查DNA 與基因的課內知識",
+      "question": {
+        "q": "肝細胞與神經細胞具有相同的某基因，但只有肝細胞大量製造其蛋白質。最合理的原因是？",
+        "correct": "細胞類型不同造成基因表現受到不同調控",
+        "wrong": [
+          "神經細胞所有基因均已消失",
+          "基因只要存在便必須在所有細胞等量表現",
+          "蛋白質合成永遠不受細胞內訊號影響"
+        ],
+        "exp": "不同組織可透過轉錄因子等調節基因表現，而非必須改變全部DNA序列。",
+        "subject": "生物",
+        "sub_topic": "DNA 與基因",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-DNA 與基因",
+        "template_id": "extra-2026-bio1-DNA 與基因-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-DNA 與基因-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查DNA 與基因的課內知識",
+      "question": {
+        "q": "某段編碼DNA發生鹼基替換，但蛋白質胺基酸序列未變。最合理的解釋為何？",
+        "correct": "因遺傳密碼具退化性，改變後仍可能對應同一胺基酸",
+        "wrong": [
+          "DNA變動必定導致所有蛋白質降解",
+          "只要有替換便一定產生新的染色體",
+          "編碼DNA不可能發生突變"
+        ],
+        "exp": "不同密碼子可指定相同胺基酸，所以可發生同義的沉默突變。",
+        "subject": "生物",
+        "sub_topic": "DNA 與基因",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-DNA 與基因",
+        "template_id": "extra-2026-bio1-DNA 與基因-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

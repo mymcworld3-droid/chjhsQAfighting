@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-細胞構造與功能-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查細胞構造與功能的課內知識",
+      "question": {
+        "q": "研究者以藥物抑制某細胞粒線體的電子傳遞鏈，細胞在氧氣充足時仍出現ATP產量下降。這最直接影響哪項功能？",
+        "correct": "有氧呼吸中的氧化磷酸化",
+        "wrong": [
+          "細胞核中全部DNA立即消失",
+          "細胞膜從此完全不透水",
+          "葉綠體的葉綠素立刻轉變成核糖體"
+        ],
+        "exp": "粒線體內膜的電子傳遞與ATP合成耦合，受阻會降低有氧呼吸能量產生。",
+        "subject": "生物",
+        "sub_topic": "細胞構造與功能",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-細胞構造與功能",
+        "template_id": "extra-2026-bio1-細胞構造與功能-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-細胞構造與功能-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查細胞構造與功能的課內知識",
+      "question": {
+        "q": "某植物葉肉細胞具有葉綠體，但其根部細胞通常不進行光合作用。主要原因為何？",
+        "correct": "根部細胞通常缺乏具功能的葉綠體及足夠光照",
+        "wrong": [
+          "根細胞完全沒有細胞膜",
+          "所有植物根都不含DNA",
+          "根部細胞永遠不需要ATP"
+        ],
+        "exp": "光合作用需具適當色素的葉綠體與光能，根部組織通常不具備條件。",
+        "subject": "生物",
+        "sub_topic": "細胞構造與功能",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-細胞構造與功能",
+        "template_id": "extra-2026-bio1-細胞構造與功能-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-細胞構造與功能-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查細胞構造與功能的課內知識",
+      "question": {
+        "q": "某研究顯示一種藥物抑制核糖體上的蛋白質合成。最直接會減少哪類細胞產物？",
+        "correct": "由胺基酸組成的新生蛋白質",
+        "wrong": [
+          "細胞中所有水分子",
+          "細胞核內全部染色體",
+          "細胞膜所有磷脂都被立即分解"
+        ],
+        "exp": "核糖體負責以mRNA為模板轉譯多肽，抑制它會影響蛋白質生成。",
+        "subject": "生物",
+        "sub_topic": "細胞構造與功能",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-細胞構造與功能",
+        "template_id": "extra-2026-bio1-細胞構造與功能-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

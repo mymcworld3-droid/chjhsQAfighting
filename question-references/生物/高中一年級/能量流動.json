@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-能量流動-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查能量流動的課內知識",
+      "question": {
+        "q": "某生態系生產者固定10000 kJ能量，假設相鄰營養級約有10%能量傳遞，初級消費者可得到多少？",
+        "correct": "約1000 kJ",
+        "wrong": [
+          "約10000 kJ",
+          "約100 kJ",
+          "約100000 kJ"
+        ],
+        "exp": "以10%粗略轉移效率估算，初級消費者能取得約一成能量。",
+        "subject": "生物",
+        "sub_topic": "能量流動",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-能量流動",
+        "template_id": "extra-2026-bio1-能量流動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-能量流動-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查能量流動的課內知識",
+      "question": {
+        "q": "食物鏈為草→兔→狐。若兔族群短期大量減少，其他條件不變，對狐最直接的可能影響是？",
+        "correct": "可利用獵物減少，狐可能需要尋找其他食物或數量下降",
+        "wrong": [
+          "狐一定因兔變少而立即無限增長",
+          "草一定在同一天完全消失",
+          "所有生物的營養需求會立即歸零"
+        ],
+        "exp": "食物網中獵物可用量影響較高營養級，但仍需考量替代食物。",
+        "subject": "生物",
+        "sub_topic": "能量流動",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-能量流動",
+        "template_id": "extra-2026-bio1-能量流動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-能量流動-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以實驗或機制考查能量流動的課內知識",
+      "question": {
+        "q": "比較草原生態系的生產者與頂級肉食者，哪個原因最能解釋高階生物可用能量較少？",
+        "correct": "各級生物呼吸代謝與未被利用物質造成能量損失",
+        "wrong": [
+          "能量在每一營養級都必定完全轉移",
+          "肉食者從不消耗能量",
+          "生產者無法固定任何太陽能"
+        ],
+        "exp": "能量沿食物鏈傳遞時有代謝及轉移損失，形成能量金字塔。",
+        "subject": "生物",
+        "sub_topic": "能量流動",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-能量流動",
+        "template_id": "extra-2026-bio1-能量流動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
