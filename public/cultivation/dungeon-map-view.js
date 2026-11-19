@@ -50,6 +50,12 @@ class DungeonMapView{
       style.href='/styles/dungeon-map-view.css?v=20261119-quarter-dials-v1';
       document.head.append(style);
     }
+    if(!document.getElementById('dungeon-quarter-controls-style')){
+      const stylesheet=document.createElement('link');
+      stylesheet.id='dungeon-quarter-controls-style';stylesheet.rel='stylesheet';
+      stylesheet.href='/styles/dungeon-quarter-controls.css?v=20261119-trial-style-v1';
+      document.head.append(stylesheet);
+    }
     const root=document.createElement('section');
     root.id='dungeon-map-view';root.hidden=true;
     root.classList.add('dm-quarter-layout');
