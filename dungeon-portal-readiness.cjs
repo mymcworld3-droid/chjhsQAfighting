@@ -75,8 +75,11 @@ function vote(room,uid,map,at,ready,roomId=''){
   }
   // The requesting member's heartbeat is refreshed, so this is a real
   // presence update even when their ready flag is unchanged.
-  return {transitioned:false,changed:!before||!ready||!online(member,at)||
-    Number(member.heartbeatAtMs)!==at,room:updated,state};
+  return {transitioned:false,
+    changed:ready?!before||Number(member.heartbeatAtMs)!==at:
+      Object.prototype.hasOwnProperty.call(previous,uid)||
+      Number(member.heartbeatAtMs)!==at,
+    room:updated,state};
 }
 module.exports={VERSION,ONLINE_GRACE_MS,validRoom,online,near,
   matchingVote,project,vote};
