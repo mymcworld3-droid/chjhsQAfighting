@@ -69,7 +69,8 @@ test('only a living member standing near activated portal can teleport all teamm
   assert.deepStrictEqual(outcome.room.members.a.position,Boss.mapFor(seed).spawnPads[0]);
   assert.deepStrictEqual(outcome.room.members.b.position,Boss.mapFor(seed).spawnPads[1]);
   assert.equal(outcome.room.members.a.battleHealth,76);
-  assert.equal(outcome.room.members.a.explorationStamina,82);
+  assert.equal(outcome.room.members.a.explorationStamina,10);
+  assert.equal(outcome.room.members.b.explorationStamina,10);
   assert.equal(outcome.room.members.a.focusCharges,4);
   assert.equal(outcome.room.members.a.moveSeq,21);
   assert.equal(outcome.room.members.a.flyingSword,null);
