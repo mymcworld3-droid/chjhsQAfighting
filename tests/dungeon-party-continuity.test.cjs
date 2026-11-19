@@ -200,7 +200,8 @@ test('cancel vote, changed position and missing consent prevent premature boss e
   assert.equal(room.bossPortalReady.readyCount,0);
   await f.call('a','boss-ready',{roomId,ready:true});
   await f.call('b','boss-ready',{roomId,ready:true});
-  stored.members.a.moveSeq=1; // invalidates the recorded position/step token
+  f.c.records.get(API.ROOMS+'/'+roomId).members.a.moveSeq=1;
+  // A committed movement invalidates the previous position/step vote token.
   const moved=(await f.call('a','get',{roomId})).body.room;
   assert.equal(moved.bossPortalReady.readyCount,1);
   const missing=await f.call('c','enter-boss',{roomId});
