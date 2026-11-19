@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-math3-conics-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "拋物線y²=8x的焦點坐標為何？",
+        "correct": "(2,0)",
+        "wrong": [
+          "(4,0)",
+          "(0,2)",
+          "(−2,0)"
+        ],
+        "exp": "與標準式y²=4px比較得4p=8，所以p=2；焦點為(p,0)=(2,0)。",
+        "subject": "數學",
+        "sub_topic": "橢圓、雙曲線、拋物線的性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-橢圓、雙曲線、拋物線的性質",
+        "template_id": "ref-20261119-b7-math3-conics-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math3-conics-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "橢圓x²/36+y²/16=1的焦點到中心距離是多少？",
+        "correct": "2√5",
+        "wrong": [
+          "6",
+          "4",
+          "√52"
+        ],
+        "exp": "橢圓a²=36、b²=16，故c²=a²−b²=20，焦點到中心距離c=√20=2√5。",
+        "subject": "數學",
+        "sub_topic": "橢圓、雙曲線、拋物線的性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-橢圓、雙曲線、拋物線的性質",
+        "template_id": "ref-20261119-b7-math3-conics-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math3-conics-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "雙曲線x²/16−y²/9=1的兩條漸近線方程式為何？",
+        "correct": "y=±(3/4)x",
+        "wrong": [
+          "y=±(4/3)x",
+          "y=±(9/16)x",
+          "y=±4x"
+        ],
+        "exp": "標準式x²/a²−y²/b²=1的漸近線y=±(b/a)x；此處a=4、b=3，故y=±(3/4)x。",
+        "subject": "數學",
+        "sub_topic": "橢圓、雙曲線、拋物線的性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-橢圓、雙曲線、拋物線的性質",
+        "template_id": "ref-20261119-b7-math3-conics-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
