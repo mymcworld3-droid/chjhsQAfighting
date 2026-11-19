@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-geo1-water-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "地理資料需保持分母及單位可比較，遵守統計推論限制",
+      "question": {
+        "q": "某城市日供水量為12萬噸，原管線漏水率20%，改善後降至12%。若供水量不變，每日可供實際使用的水增加多少噸？",
+        "correct": "9,600噸",
+        "wrong": [
+          "2,400噸",
+          "14,400噸",
+          "24,000噸"
+        ],
+        "exp": "原可用12萬×0.80=96,000噸，改善後12萬×0.88=105,600噸，增加9,600噸。",
+        "subject": "地理",
+        "sub_topic": "水資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-水資源",
+        "template_id": "ref-20261119-b11-geo1-water-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-geo1-water-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "地理資料需保持分母及單位可比較，遵守統計推論限制",
+      "question": {
+        "q": "甲乙兩地全年降水均為1,200毫米。甲地90%集中於四個月，乙地降水分布較平均。若其他條件相近，哪項比較最恰當？",
+        "correct": "甲地更需要考量雨季蓄水與乾季供水調節",
+        "wrong": [
+          "兩地年雨量相等，因此乾旱季節的供水風險必定相同",
+          "乙地雨量較平均，所以每月用水需求也必定相同",
+          "甲地雨量集中意味蓄水設施完全不可能發揮功能"
+        ],
+        "exp": "年雨量相同不代表季節分配相同；集中降雨地區更需評估跨季節儲水與調度。",
+        "subject": "地理",
+        "sub_topic": "水資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-水資源",
+        "template_id": "ref-20261119-b11-geo1-water-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-geo1-water-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "地理資料需保持分母及單位可比較，遵守統計推論限制",
+      "question": {
+        "q": "某農業區長年抽取地下水量高於自然補注量，地下水位持續下降。何種方案最符合長期管理原則？",
+        "correct": "減少超額抽取並提升灌溉效率，同時監測補注量與地下水位",
+        "wrong": [
+          "只擴大抽水井數量，不需要評估長期水位",
+          "地下水既然位於地底，就不受人類取用量影響",
+          "以單次豪雨代替所有年份的補注量評估"
+        ],
+        "exp": "抽取長期高於補注會造成地下水儲量減少；需同時管控需求、提高效率並長期觀測。",
+        "subject": "地理",
+        "sub_topic": "水資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-水資源",
+        "template_id": "ref-20261119-b11-geo1-water-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
