@@ -164,7 +164,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   const advance=(object,d,steps,maxDistance=steps)=>{
     let total=0;
     for(let n=0;n<steps&&total<maxDistance;n++){
-      const p=forward(object,d,1);
+      const p=forward(object.position,d,1);
       if(!tile(map,p)||occupied(p,enemies,object.id)||present(members,p))break;
       object.position={...p};total++;
     }
