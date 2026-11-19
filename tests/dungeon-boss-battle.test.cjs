@@ -41,7 +41,7 @@ test('600 arena seeds create stable fully walkable boss footprint and disjoint f
 test('only a living member standing near activated portal can teleport all teammates once',()=>{
   const {map,room}=fixture();
   assert.throws(()=>Boss.enter({...room,dungeonProgress:{
-    keyAcquired:false,portalStatus:'open'}},'a',map,FROM),/密鑰/);
+    keyAcquired:false,portalStatus:'open'}},'a',map,FROM),/傳送門/);
   assert.throws(()=>Boss.enter(room,'intruder',map,FROM),/不是此副本/);
   assert.throws(()=>Boss.enter({...room,members:{...room.members,
     a:{...room.members.a,downed:true}}},'a',map,FROM),/倒地/);
