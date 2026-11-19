@@ -5,6 +5,7 @@
 const crypto=require('node:crypto');
 const Boss=require('./dungeon-boss-battle.cjs');
 const GOLD=120,CULTIVATION=3,RECEIPTS='dungeonVictoryClaims';
+const ARCHIVES='dungeonVictoryRecords',INBOXES='dungeonVictoryInbox',MAX_RECENT=16;
 const fail=(msg,status=409)=>Object.assign(new Error(msg),{status});
 const amount=v=>Number.isFinite(Number(v))?
   Math.max(0,Math.floor(Number(v))):0;
@@ -33,6 +34,82 @@ function validate(roomId,room,uid){
   return {roomId,session:roomId+':'+room.assembledAtMs,
     uid,partySize:Object.keys(room.members).length,
     defeatedAtTick:b.defeatedAtTick};
+}
+// Stored in Firebase C at the same moment as the boss's actual death.
+// The archive deliberately contains no map seed, battle inventory, quiz
+// answers, login tokens or other members' private account fields.
+function makeArchive(roomId,room,at=Date.now()){
+  const winner=room?.bossEncounter?.defeatedByUid;
+  validate(roomId,room,winner);
+  const b=room.bossEncounter;
+  const record={
+    recordVersion:1,roomId,archivedAtMs:at,
+    mode:'dungeon',version:1,status:'assembled',
+    assembledAtMs:room.assembledAtMs,dungeonArena:'boss',
+    dungeonProgress:{guardianStatus:'defeated',keyAcquired:true,
+      portalStatus:'open'},
+    bossEncounter:{version:Boss.VERSION,status:'defeated',
+      enteredAtTick:b.enteredAtTick,defeatedAtTick:b.defeatedAtTick,
+      defeatedByUid:b.defeatedByUid},
+    enemies:[],
+    members:Object.fromEntries(Object.keys(room.members).map(uid=>
+      [uid,{uid}]))
+  };
+  validate(roomId,record,winner);
+  return record;
+}
+function verifiedArchive(roomId,record,uid){
+  if(record?.recordVersion!==1||record.roomId!==roomId)
+    throw fail('找不到可信的副本結算存檔',409);
+  return validate(roomId,record,uid);
+}
+// Called ONLY on fighting -> defeated transition in a C room transaction.
+// Collect all reads before making any writes (Firestore requirement).
+async function prepareArchive(tx,db,roomId,room,at=Date.now()){
+  const record=makeArchive(roomId,room,at),uids=Object.keys(record.members);
+  const refs=uids.map(uid=>db.collection(INBOXES).doc(uid));
+  const snapshots=await Promise.all(refs.map(ref=>tx.get(ref)));
+  const archiveRef=db.collection(ARCHIVES).doc(roomId);
+  const rows=refs.map((ref,i)=>{
+    const previous=Array.isArray(snapshots[i].exists?
+      snapshots[i].data()?.recent:null)?snapshots[i].data().recent:[];
+    const sanitized=previous.filter(row=>
+      row&&typeof row.roomId==='string'&&
+      /^[A-Za-z0-9_-]{8,160}$/.test(row.roomId)&&row.roomId!==roomId);
+    return {ref,data:{version:1,uid:uids[i],
+      recent:[{roomId,assembledAtMs:record.assembledAtMs,
+        archivedAtMs:at},...sanitized].slice(0,MAX_RECENT)}};
+  });
+  return ()=>{
+    tx.set(archiveRef,record);
+    for(const row of rows)tx.set(row.ref,row.data);
+  };
+}
+// Each user only sees their own recent archived victories. The archive is
+// permanent; an inbox is only a bounded discovery index, not the proof.
+async function recent(dbA,dbC,uid){
+  const snap=await dbC.collection(INBOXES).doc(uid).get();
+  const rows=snap.exists&&Array.isArray(snap.data()?.recent)?
+    snap.data().recent.slice(0,MAX_RECENT):[];
+  const results=[];
+  for(const row of rows){
+    const roomId=row?.roomId;
+    if(!/^[A-Za-z0-9_-]{8,160}$/.test(String(roomId||'')))continue;
+    const archive=await dbC.collection(ARCHIVES).doc(roomId).get();
+    if(!archive.exists)continue;
+    let proof;
+    try{proof=verifiedArchive(roomId,archive.data(),uid);}
+    catch(_){continue;}
+    const receipt=await dbA.collection(RECEIPTS)
+      .doc(receiptId(roomId,proof.session,uid)).get();
+    results.push({roomId,archivedAtMs:archive.data().archivedAtMs||0,
+      defeatedAtTick:proof.defeatedAtTick,
+      partySize:proof.partySize,
+      claimed:receipt.exists,
+      claimedAtMs:receipt.exists?(receipt.data()?.claimedAtMs||0):0,
+      gold:GOLD,cultivation:CULTIVATION});
+  }
+  return results;
 }
 async function claim(db,roomId,room,uid,now=Date.now()){
   const proof=validate(roomId,room,uid);
@@ -68,4 +145,5 @@ async function claim(db,roomId,room,uid,now=Date.now()){
       roomId,session:proof.session,claimedAtMs:now};
   });
 }
-module.exports={GOLD,CULTIVATION,RECEIPTS,receiptId,validate,claim};
+module.exports={GOLD,CULTIVATION,RECEIPTS,ARCHIVES,INBOXES,MAX_RECENT,
+  receiptId,validate,makeArchive,verifiedArchive,prepareArchive,recent,claim};
