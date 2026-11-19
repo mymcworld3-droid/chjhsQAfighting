@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-實驗設計-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷實驗設計",
+      "question": {
+        "q": "某藥物研究中治療組平均年齡較高，結果出現健康差異。若要分辨藥物效果，最需要處理什麼？",
+        "correct": "將年齡等可能混淆因子納入分組或分析",
+        "wrong": [
+          "只看哪組平均值較大",
+          "忽略受試者原有健康狀態",
+          "把藥物名稱改短"
+        ],
+        "exp": "組間背景差異會造成混雜，需要隨機分配或統計調整。",
+        "subject": "生物",
+        "sub_topic": "實驗設計",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中三年級-實驗設計",
+        "template_id": "extra-2026-bio3-實驗設計-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-實驗設計-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷實驗設計",
+      "question": {
+        "q": "某班測試兩種肥料，甲組照光12小時、乙組照光8小時。要研究肥料效果，最佳改進是？",
+        "correct": "固定光照等其他條件，僅改變肥料種類",
+        "wrong": [
+          "同時改變土壤、溫度與水量",
+          "只選最高的一株代表全部植物",
+          "讓兩組使用不同作物而不記錄"
+        ],
+        "exp": "光照是可能影響生長的干擾變因，控制條件有助因果判斷。",
+        "subject": "生物",
+        "sub_topic": "實驗設計",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中三年級-實驗設計",
+        "template_id": "extra-2026-bio3-實驗設計-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-實驗設計-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷實驗設計",
+      "question": {
+        "q": "某研究者在不知道樣本組別的情況下判讀細胞影像。這種盲法安排主要為了？",
+        "correct": "減少評分者因知道處理條件而產生的主觀偏差",
+        "wrong": [
+          "保證儀器沒有任何隨機誤差",
+          "使每個樣本都完全相同",
+          "取代所有對照組與重複測量"
+        ],
+        "exp": "盲法可降低觀察者偏差，但仍需其他品質控制。",
+        "subject": "生物",
+        "sub_topic": "實驗設計",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中三年級-實驗設計",
+        "template_id": "extra-2026-bio3-實驗設計-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-分類與演化證據-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷分類與演化證據",
+      "question": {
+        "q": "鯨魚前肢、蝙蝠翅膀與人的上肢骨骼排列具有共同模式，功能卻不同。這較支持何種概念？",
+        "correct": "同源構造反映可能源自共同祖先",
+        "wrong": [
+          "功能不同代表一定沒有親緣關係",
+          "只有外觀顏色可用於分類",
+          "骨骼相似必定表示三者是同一物種"
+        ],
+        "exp": "共同祖先的基本構造可經演化改變用途。",
+        "subject": "生物",
+        "sub_topic": "分類與演化證據",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-分類與演化證據",
+        "template_id": "extra-2026-bio3-分類與演化證據-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-分類與演化證據-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷分類與演化證據",
+      "question": {
+        "q": "化石記錄顯示某支生物在不同年代逐步出現新的骨骼特徵。要提出演化關係，最適合的做法是？",
+        "correct": "整合地層年代、形態及獨立遺傳證據，避免任意指定直系祖先",
+        "wrong": [
+          "只依化石尺寸大小直接畫出親子關係",
+          "忽略所有年代資訊",
+          "認定每件化石必定是下一件化石的直接親本"
+        ],
+        "exp": "化石提供時間與形態線索，親緣關係須考量證據與不確定性。",
+        "subject": "生物",
+        "sub_topic": "分類與演化證據",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-分類與演化證據",
+        "template_id": "extra-2026-bio3-分類與演化證據-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-分類與演化證據-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷分類與演化證據",
+      "question": {
+        "q": "某兩類鳥長出相似喙形，但DNA證據顯示親緣較遠。這最可能反映什麼？",
+        "correct": "相近環境選擇可能造成趨同演化",
+        "wrong": [
+          "DNA與分類永遠沒有任何關係",
+          "喙形相同就必定是同一物種",
+          "兩類鳥的基因組必定完全相同"
+        ],
+        "exp": "趨同演化使不同祖先支系可能發展相似適應特徵。",
+        "subject": "生物",
+        "sub_topic": "分類與演化證據",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-分類與演化證據",
+        "template_id": "extra-2026-bio3-分類與演化證據-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

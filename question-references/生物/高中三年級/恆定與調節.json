@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-恆定與調節-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷恆定與調節",
+      "question": {
+        "q": "人體體溫升高後引發皮膚血管擴張與出汗，體溫回落時反應減弱。此機制是？",
+        "correct": "負回饋調節",
+        "wrong": [
+          "只會無限制放大體溫偏差的正回饋",
+          "完全不受溫度刺激影響的隨機過程",
+          "與體溫無關的DNA複製"
+        ],
+        "exp": "出汗與皮膚血流變化可促進散熱，使偏高體溫回復。",
+        "subject": "生物",
+        "sub_topic": "恆定與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-恆定與調節",
+        "template_id": "extra-2026-bio3-恆定與調節-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-恆定與調節-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷恆定與調節",
+      "question": {
+        "q": "某人脫水時血漿滲透壓升高，ADH增加。腎臟最可能產生哪種變化？",
+        "correct": "集合管水再吸收增加，尿量減少",
+        "wrong": [
+          "集合管水再吸收完全停止",
+          "尿量必定無限制增加",
+          "ADH直接使腎臟合成所有血紅素"
+        ],
+        "exp": "ADH調節集合管通水性，有助保存水分並降低過高滲透壓。",
+        "subject": "生物",
+        "sub_topic": "恆定與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-恆定與調節",
+        "template_id": "extra-2026-bio3-恆定與調節-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-恆定與調節-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷恆定與調節",
+      "question": {
+        "q": "某人餐後血糖上升，胰島素增加使肝臟和肌肉儲存更多養分。當血糖回落，胰島素刺激通常如何變化？",
+        "correct": "減弱，因負回饋偏差已縮小",
+        "wrong": [
+          "無論血糖如何必定持續無限增加",
+          "直接轉變為免疫抗體",
+          "血糖變化完全不能被人體偵測"
+        ],
+        "exp": "負回饋在變數回到目標附近時通常降低原先糾正反應。",
+        "subject": "生物",
+        "sub_topic": "恆定與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-恆定與調節",
+        "template_id": "extra-2026-bio3-恆定與調節-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

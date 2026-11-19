@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-神經、內分泌及免疫-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷神經、內分泌及免疫",
+      "question": {
+        "q": "某疫苗使身體對特定抗原產生記憶性B細胞，再次接觸時抗體反應較快速。這主要利用哪種特性？",
+        "correct": "適應性免疫的抗原專一性與免疫記憶",
+        "wrong": [
+          "細胞分裂永遠不需DNA",
+          "所有病原體從此完全不可能接觸身體",
+          "抗體只由紅血球直接合成"
+        ],
+        "exp": "記憶細胞有助再次接觸時更快速地啟動特定免疫反應。",
+        "subject": "生物",
+        "sub_topic": "神經、內分泌及免疫",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經、內分泌及免疫",
+        "template_id": "extra-2026-bio3-神經、內分泌及免疫-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-神經、內分泌及免疫-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷神經、內分泌及免疫",
+      "question": {
+        "q": "某人接觸花粉後快速打噴嚏、流鼻水，局部肥大細胞釋放組織胺。這與何種反應較相關？",
+        "correct": "特定過敏反應中的免疫介質釋放",
+        "wrong": [
+          "正常減數分裂",
+          "粒線體的DNA複製",
+          "只由紅血球運送氧氣造成"
+        ],
+        "exp": "部分立即型過敏與IgE及肥大細胞釋放組織胺有關。",
+        "subject": "生物",
+        "sub_topic": "神經、內分泌及免疫",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經、內分泌及免疫",
+        "template_id": "extra-2026-bio3-神經、內分泌及免疫-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-神經、內分泌及免疫-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷神經、內分泌及免疫",
+      "question": {
+        "q": "長期壓力可能改變自律神經活性、皮質醇分泌與部分免疫反應。這最能說明？",
+        "correct": "神經、內分泌及免疫系統間存在調節交互作用",
+        "wrong": [
+          "三系統完全不共享任何訊號",
+          "所有激素只能作用於單一神經元",
+          "免疫細胞完全沒有受體"
+        ],
+        "exp": "不同調節系統可透過訊號與激素相互影響。",
+        "subject": "生物",
+        "sub_topic": "神經、內分泌及免疫",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經、內分泌及免疫",
+        "template_id": "extra-2026-bio3-神經、內分泌及免疫-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

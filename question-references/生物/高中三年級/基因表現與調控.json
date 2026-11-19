@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-基因表現與調控-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷基因表現與調控",
+      "question": {
+        "q": "兩種細胞同有某基因，但其中一種細胞該基因啟動子區域高度甲基化且轉錄量低。較合理的原因為何？",
+        "correct": "甲基化可能透過染色質與轉錄調控降低該基因表現",
+        "wrong": [
+          "甲基化表示該基因所有鹼基被刪除",
+          "所有甲基化都必然增加任何基因的轉錄",
+          "轉錄差異只能由細胞核大小決定"
+        ],
+        "exp": "表觀遺傳修飾可影響基因表現，不必改變DNA序列。",
+        "subject": "生物",
+        "sub_topic": "基因表現與調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-基因表現與調控",
+        "template_id": "extra-2026-bio3-基因表現與調控-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-基因表現與調控-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷基因表現與調控",
+      "question": {
+        "q": "同一真核基因轉錄出前驅mRNA後，兩種細胞採不同外顯子組合，產生功能略異的蛋白質。這是什麼機制？",
+        "correct": "選擇性RNA剪接",
+        "wrong": [
+          "兩細胞一定具有完全不同的染色體數",
+          "只由DNA分子全部降解造成",
+          "細胞永遠只能將前驅mRNA作同一種剪接"
+        ],
+        "exp": "選擇性剪接可以使同一基因形成不同成熟mRNA與蛋白質。",
+        "subject": "生物",
+        "sub_topic": "基因表現與調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-基因表現與調控",
+        "template_id": "extra-2026-bio3-基因表現與調控-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-基因表現與調控-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷基因表現與調控",
+      "question": {
+        "q": "某研究利用小RNA降低目標mRNA穩定性，發現蛋白質產量下降。這最直接屬於哪一層次調控？",
+        "correct": "轉錄後的mRNA穩定性調控",
+        "wrong": [
+          "完全不涉及RNA的染色體分裂",
+          "只改變細胞外液氣壓",
+          "以不同元素取代DNA磷酸骨架"
+        ],
+        "exp": "mRNA降解會減少可供翻譯的模板，是轉錄後調控。",
+        "subject": "生物",
+        "sub_topic": "基因表現與調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-基因表現與調控",
+        "template_id": "extra-2026-bio3-基因表現與調控-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

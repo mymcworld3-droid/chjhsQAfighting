@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-族群遺傳-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷族群遺傳",
+      "question": {
+        "q": "在符合哈溫平衡的二倍體族群中，隱性同型合子aa頻率為0.09。a等位基因頻率及Aa頻率分別約為何？",
+        "correct": "0.30與0.42",
+        "wrong": [
+          "0.09與0.18",
+          "0.70與0.09",
+          "0.91與0.18"
+        ],
+        "exp": "q²=0.09得q=0.30，p=0.70，因此2pq=0.42。",
+        "subject": "生物",
+        "sub_topic": "族群遺傳",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群遺傳",
+        "template_id": "extra-2026-bio3-族群遺傳-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-族群遺傳-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷族群遺傳",
+      "question": {
+        "q": "某族群100人中AA25人、Aa50人、aa25人。A等位基因頻率約為何？",
+        "correct": "0.50",
+        "wrong": [
+          "0.25",
+          "0.75",
+          "1.00"
+        ],
+        "exp": "A等位基因數為2×25+50=100，總等位基因數200，頻率0.50。",
+        "subject": "生物",
+        "sub_topic": "族群遺傳",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群遺傳",
+        "template_id": "extra-2026-bio3-族群遺傳-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-族群遺傳-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷族群遺傳",
+      "question": {
+        "q": "某小島族群因火山災害只剩少數隨機存活者，後代等位基因頻率改變。即使性狀不影響生存，仍可能發生什麼？",
+        "correct": "瓶頸造成的遺傳漂變",
+        "wrong": [
+          "所有個體按需要產生相同定向突變",
+          "完全不可能改變任何等位基因頻率",
+          "族群遺傳只會在大型族群出現"
+        ],
+        "exp": "小族群隨機抽樣效應較強，災害瓶頸可造成頻率偏移。",
+        "subject": "生物",
+        "sub_topic": "族群遺傳",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群遺傳",
+        "template_id": "extra-2026-bio3-族群遺傳-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

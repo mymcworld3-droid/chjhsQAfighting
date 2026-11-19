@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-體內運輸與物質交換-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷體內運輸與物質交換",
+      "question": {
+        "q": "某微血管網總交換表面積增加，若分壓差與膜厚度不變，依擴散原理，氣體交換能力可能如何變化？",
+        "correct": "通常增加",
+        "wrong": [
+          "必定降低至零",
+          "完全不受面積影響",
+          "只會改變紅血球的染色體數"
+        ],
+        "exp": "擴散通量與交換面積相關，增加有效表面積通常有助物質交換。",
+        "subject": "生物",
+        "sub_topic": "體內運輸與物質交換",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-體內運輸與物質交換",
+        "template_id": "extra-2026-bio3-體內運輸與物質交換-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-體內運輸與物質交換-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷體內運輸與物質交換",
+      "question": {
+        "q": "某患者血紅素濃度明顯下降，即使肺泡換氣正常，也容易運動時感到疲倦。主要原因可能是？",
+        "correct": "血液攜帶氧氣的總能力下降",
+        "wrong": [
+          "氧氣由肺泡到血液的擴散必定完全停止",
+          "所有組織不再消耗ATP",
+          "紅血球會直接變成白血球"
+        ],
+        "exp": "血紅素承載大部分血氧，濃度降低會減少氧輸送總量。",
+        "subject": "生物",
+        "sub_topic": "體內運輸與物質交換",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-體內運輸與物質交換",
+        "template_id": "extra-2026-bio3-體內運輸與物質交換-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-體內運輸與物質交換-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷體內運輸與物質交換",
+      "question": {
+        "q": "某人的組織血流量不足，細胞仍持續消耗氧氣。即使動脈氧含量正常，組織可能出現什麼問題？",
+        "correct": "氧輸送率因血流量不足而降低",
+        "wrong": [
+          "只要動脈氧含量正常，供氧永遠無限制",
+          "血流量與組織氧供應完全無關",
+          "所有細胞都會自動轉為光合作用"
+        ],
+        "exp": "組織氧供應與動脈含氧量及血流量共同相關。",
+        "subject": "生物",
+        "sub_topic": "體內運輸與物質交換",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-體內運輸與物質交換",
+        "template_id": "extra-2026-bio3-體內運輸與物質交換-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-生物科技及倫理-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷生物科技及倫理",
+      "question": {
+        "q": "某醫療基因資料庫計畫將受試者樣本用於新研究，與原先說明的用途不同。優先應考量什麼？",
+        "correct": "知情同意、使用範圍及個資保護",
+        "wrong": [
+          "只要資料具科學價值就可以公開所有姓名",
+          "受試者一旦提供檢體便永遠沒有任何權利",
+          "研究紀錄不用保護敏感資訊"
+        ],
+        "exp": "基因與健康資料敏感，研究應尊重同意內容及倫理規範。",
+        "subject": "生物",
+        "sub_topic": "生物科技及倫理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中三年級-生物科技及倫理",
+        "template_id": "extra-2026-bio3-生物科技及倫理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-生物科技及倫理-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷生物科技及倫理",
+      "question": {
+        "q": "某研究團隊基因編輯作物獲得抗病性，打算進行田間試驗。從生物安全角度最需要先評估什麼？",
+        "correct": "編輯效應、非目標生物與環境影響及相關規範",
+        "wrong": [
+          "只要抗病性提高就必然沒有任何環境風險",
+          "田間試驗不需要任何對照",
+          "只看植株外觀即可完全評估基因變化"
+        ],
+        "exp": "生物技術應同時評估效益、基因變化與環境風險。",
+        "subject": "生物",
+        "sub_topic": "生物科技及倫理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中三年級-生物科技及倫理",
+        "template_id": "extra-2026-bio3-生物科技及倫理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-生物科技及倫理-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用數值、科學證據及倫理規範判斷生物科技及倫理",
+      "question": {
+        "q": "某實驗宣稱基因編輯沒有任何非預期變化，但只分析目標基因附近的短片段。最合理的審查意見是？",
+        "correct": "應依研究目的檢查可能的非目標效應，且不能因局部檢測就宣稱完全無風險",
+        "wrong": [
+          "短片段正確即可保證全基因組完全無變化",
+          "所有基因編輯都必然沒有任何非目標效應",
+          "只要論文題名寫安全就無須資料"
+        ],
+        "exp": "局部測序不能排除所有非預期改變，結論需符合檢測範圍。",
+        "subject": "生物",
+        "sub_topic": "生物科技及倫理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中三年級-生物科技及倫理",
+        "template_id": "extra-2026-bio3-生物科技及倫理-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
