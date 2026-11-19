@@ -1,6 +1,6 @@
 import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
-import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, rescueDungeonTeammate, claimDungeonBossReward } from './dungeon-room.js';
+import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, setDungeonBossReady, rescueDungeonTeammate, claimDungeonBossReward } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 
@@ -102,7 +102,8 @@ class DungeonMapView{
       '<button type="button" data-dm="down" aria-label="向下移動一格">↓</button>'+
       '<button type="button" data-dm="right" aria-label="向右移動一格">→</button>'+
       '</div><button type="button" class="dm-portal-button" data-dm="portal" hidden disabled>啟動傳送門</button>'+
-      '<button type="button" class="dm-boss-entry" data-dm="enter-boss" hidden disabled>全隊進入首領戰</button>'+
+      '<small class="dm-portal-votes" data-dm-portal-votes hidden role="status" aria-live="polite"></small>'+ 
+      '<button type="button" class="dm-boss-entry" data-dm="enter-boss" hidden disabled>我已準備進入首領戰</button>'+
       '<button type="button" class="dm-quiz-charge" data-dm="quiz" disabled>答題充能 · 隨時作答</button>'+ 
       '<button type="button" class="dm-strike" data-dm="strike" disabled>選擇靈獸後攻擊 · 2 體力</button>'+ 
        '<small data-dm-strike-alert role="status" aria-live="polite"></small>'+ 
@@ -864,13 +865,27 @@ class DungeonMapView{
     const near=Boolean(p&&portal&&
       Math.abs(p.x-portal.x)+Math.abs(p.y-portal.y)<=1);
     const alive=self?.downed!==true&&Number(self?.battleHealth)>0;
+    const portalReady=this.room?.bossPortalReady;
+    const readyCount=Number(portalReady?.readyCount)||0;
+    const requiredCount=Number(portalReady?.requiredCount)||0;
+    const offlineCount=Number(portalReady?.offlineCount)||0;
+    const confirmed=Boolean(portalReady?.readyUids?.includes(this.uid));
+    const allReady=portalReady?.allReady===true;
+    const votes=this.$('[data-dm-portal-votes]');
+    if(votes){
+      votes.hidden=bossFight||!active||stage!=='open';
+      votes.textContent='首領準備 '+readyCount+' / '+requiredCount+' 人'+
+        (offlineCount?' · '+offlineCount+' 人離線暫不計入':'')+
+        (confirmed?' · 你已確認':'');
+    }
     node.textContent=!active?'等待隊伍集結':
       bossFight?(encounter?.status==='defeated'?
         '✓ 全隊已擊敗玄炎鎮殿獸 · 點擊勝利面板領取個人靈石與修為':
         '⚔ 首領戰 · '+(boss?.attack?.label?
           boss.attack.label+' 預警中，請立即閃避':'注意紅色預警格，保持協作')):
       !progress?'舊版探索場次 · 重新集結才有守鑰任務':
-      stage==='open'?'✓ 全隊共享密鑰已啟動首領傳送門 · 前往傳送陣進入 Boss 戰':
+      stage==='open'?'✓ 傳送門已啟動 · 首領準備 '+readyCount+'/'+requiredCount+
+        ' · 全體在線隊員各自走近確認後共同傳送':
       stage==='ready'?'🔑 已取得全隊共享密鑰 · 前往深處傳送陣':
       '◆ 前往地圖最深處，擊敗鎮鑰玄甲獸取得密鑰';
     node.classList.toggle('is-ready',stage==='ready');
@@ -882,11 +897,17 @@ class DungeonMapView{
       this.portalPending?'正在啟動傳送門…':'🔑 使用密鑰啟動傳送門';
     if(entry){
       entry.hidden=bossFight||!active||stage!=='open';
-      entry.disabled=this.bossPending||!near||!alive;
-      entry.textContent=this.bossPending?'正在傳送全隊…':
-        !near?'請走近傳送陣 · 全隊進入首領戰':'⚔ 全隊進入首領戰';
-      entry.title=!near?'需要站在傳送陣或相鄰一格':
-        '一人進入即帶全隊傳送，保留生命與蓄勢，不扣探索體力';
+      entry.disabled=this.bossPending||
+        (!confirmed&&(!near||!alive))||
+        (confirmed&&allReady&&(!near||!alive));
+      entry.textContent=this.bossPending?'正在更新準備狀態…':
+        confirmed&&allReady?'⚔ 確認全隊出發':
+        confirmed?'取消首領準備 · '+readyCount+'/'+requiredCount:
+        !near?'請走近傳送陣才能準備':
+        '⚔ 我已準備 · '+readyCount+'/'+requiredCount;
+      entry.title=confirmed&&!allReady?'取消自己的確認，繼續探索':
+        !near?'需站在傳送陣或相鄰一格，且保持生命值大於零':
+        '所有在線隊員都確認後會一同進入；離線逾 60 秒的隊員不阻擋傳送';
     }
     button.title=stage==='open'?'傳送陣已啟動，可進入首領戰':
       !alive?'角色已倒地，不能啟動傳送門':
@@ -930,7 +951,11 @@ class DungeonMapView{
     this.bossPending=true;this.updatePortalHUD();
     const roomId=this.roomId,token=this.seq;
     try{
-      const response=await enterDungeonBoss(roomId);
+      const status=this.room?.bossPortalReady;
+      const confirmed=status?.readyUids?.includes(this.uid)===true;
+      const response=confirmed&&!status?.allReady?
+        await setDungeonBossReady(roomId,false):
+        await enterDungeonBoss(roomId);
       if(!this.isCurrent()||token!==this.seq||roomId!==this.roomId)return;
       if(response?.room){
         this.updateRoom(response.room);
