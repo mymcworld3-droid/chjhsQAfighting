@@ -12,6 +12,7 @@ on:
       - 'dungeon-enemy-combat.cjs'
       - 'dungeon-player-combat.cjs'
       - 'dungeon-objectives.cjs'
+      - 'dungeon-boss-battle.cjs'
       - 'dungeon-skill-combat.cjs'
       - 'dungeon-quiz-api.cjs'
       - 'dungeon-quiz-credit.cjs'
@@ -50,6 +51,7 @@ jobs:
           node --check dungeon-enemy-combat.cjs
           node --check dungeon-player-combat.cjs
           node --check dungeon-objectives.cjs
+          node --check dungeon-boss-battle.cjs
           node --check dungeon-skill-combat.cjs
           node --check dungeon-quiz-api.cjs
           node --check dungeon-quiz-credit.cjs

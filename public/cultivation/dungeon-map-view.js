@@ -372,7 +372,8 @@ class DungeonMapView{
   }
   currentAim(){
     const beast=this.creatures().find(e=>e.id===this.selectedBeastId);
-    return beast?(this.aimTile||beast.position):this.aimTile||null;
+    return beast?(beast.kind==='boss'?
+      (this.aimTile||beast.position):beast.position):this.aimTile||null;
   }
   targetFor(skill){
     const own=this.room?.members?.[this.uid]?.position;
