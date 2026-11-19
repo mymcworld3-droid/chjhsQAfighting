@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-e2-opinion-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "A classmate says, 'Online lessons should replace every face-to-face class.' Which reply offers a respectful counterargument?",
+        "correct": "I understand the convenience, but some subjects still benefit from hands-on activities.",
+        "wrong": [
+          "Online lessons are always useless, and no one should disagree.",
+          "I accept your view without considering practical lessons.",
+          "Your suggestion is wrong simply because I dislike online tools."
+        ],
+        "exp": "A constructive response acknowledges a benefit and then offers a relevant limitation, rather than relying on insults or unsupported extremes.",
+        "subject": "英文",
+        "sub_topic": "意見表達",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中二年級-意見表達",
+        "template_id": "ref-20261119-b6-e2-opinion-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e2-opinion-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "Which opening is most suitable for an email proposing a change to the school recycling program?",
+        "correct": "I would like to suggest adding clearly labeled bins to improve waste sorting.",
+        "wrong": [
+          "You must change everything immediately because I said so.",
+          "The program is perfect, so there is nothing to discuss.",
+          "I do not know what the program is, but everyone is certainly wrong."
+        ],
+        "exp": "A useful proposal identifies a specific, feasible change and communicates it politely.",
+        "subject": "英文",
+        "sub_topic": "意見表達",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中二年級-意見表達",
+        "template_id": "ref-20261119-b6-e2-opinion-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e2-opinion-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "A student supports later library opening hours but worries about staff workload. Which sentence best expresses a balanced position?",
+        "correct": "I support longer hours if the school can arrange a reasonable staffing plan.",
+        "wrong": [
+          "The library should remain open all night regardless of staffing.",
+          "Staffing concerns mean libraries should never open after noon.",
+          "Longer hours automatically require no extra resources."
+        ],
+        "exp": "A balanced position states support while specifying a relevant condition to address the opposing concern.",
+        "subject": "英文",
+        "sub_topic": "意見表達",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中二年級-意見表達",
+        "template_id": "ref-20261119-b6-e2-opinion-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
