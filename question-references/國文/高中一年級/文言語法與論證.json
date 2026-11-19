@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-chi1-classicalreasoning-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "《論語》：「學而不思則罔，思而不學則殆。」此句最主要運用何種論述安排？",
+        "correct": "對舉兩種偏失，強調學習與思考應相互配合",
+        "wrong": [
+          "只主張背誦比思考重要",
+          "以歷史年份為證明依據",
+          "用一個人的傳記敘述其求學經歷"
+        ],
+        "exp": "原文並列只有學而不思、只有思而不學的弊端，透過對舉引出學思並重的觀念。",
+        "subject": "國文",
+        "sub_topic": "文言語法與論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文言語法與論證",
+        "template_id": "ref-20261119-b4-chi1-classicalreasoning-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chi1-classicalreasoning-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "《曹劌論戰》：「一鼓作氣，再而衰，三而竭。」此處「再」的詞義最接近何者？",
+        "correct": "第二次",
+        "wrong": [
+          "重新、再一次（次數不定）",
+          "反覆無限次",
+          "將來某一天"
+        ],
+        "exp": "本句依第一次擊鼓、第二次擊鼓、第三次擊鼓的順序敘述士氣變化；「再」在此明確指第二次。",
+        "subject": "國文",
+        "sub_topic": "文言語法與論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文言語法與論證",
+        "template_id": "ref-20261119-b4-chi1-classicalreasoning-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chi1-classicalreasoning-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "《禮記·學記》：「雖有嘉餚，弗食，不知其旨也；雖有至道，弗學，不知其善也。」主要運用何種論證技巧？",
+        "correct": "以未品嚐美食作類比，說明不實際學習就難知學問之善",
+        "wrong": [
+          "以統計數據證明烹飪技術比讀書重要",
+          "只描述古代菜餚種類，未涉及學習",
+          "主張只靠聽聞而不學習便能掌握至道"
+        ],
+        "exp": "兩句以「嘉餚不食不知味」類比「至道不學不知善」，利用相似結構支持親自學習的重要。",
+        "subject": "國文",
+        "sub_topic": "文言語法與論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文言語法與論證",
+        "template_id": "ref-20261119-b4-chi1-classicalreasoning-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
