@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-m1-righttriangle-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "沿用原觀念，條件清楚、答案唯一、含可驗證解題步驟",
+      "question": {
+        "q": "某直角三角形的兩股長為6與8，令θ為對邊長6的銳角，則sinθ為何？",
+        "correct": "3/5",
+        "wrong": [
+          "4/5",
+          "3/4",
+          "5/3"
+        ],
+        "exp": "斜邊=√(6²+8²)=10，所以sinθ=對邊/斜邊=6/10=3/5。",
+        "subject": "數學",
+        "sub_topic": "直角三角形三角比",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-直角三角形三角比",
+        "template_id": "ref-20261119-b8-m1-righttriangle-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-m1-righttriangle-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "沿用原觀念，條件清楚、答案唯一、含可驗證解題步驟",
+      "question": {
+        "q": "某梯子長10公尺，與水平地面夾角30°。忽略厚度，梯子頂端距離地面的垂直高度為何？",
+        "correct": "5公尺",
+        "wrong": [
+          "5√3公尺",
+          "10公尺",
+          "10√3公尺"
+        ],
+        "exp": "梯子長是斜邊，高度為對邊，故h=10 sin30°=10×(1/2)=5公尺。",
+        "subject": "數學",
+        "sub_topic": "直角三角形三角比",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-直角三角形三角比",
+        "template_id": "ref-20261119-b8-m1-righttriangle-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-m1-righttriangle-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "沿用原觀念，條件清楚、答案唯一、含可驗證解題步驟",
+      "question": {
+        "q": "某直角三角形的一銳角θ滿足tanθ=3/4，則cosθ為何？",
+        "correct": "4/5",
+        "wrong": [
+          "3/5",
+          "5/4",
+          "3/4"
+        ],
+        "exp": "可取對邊3、鄰邊4，斜邊為5，所以cosθ=鄰邊/斜邊=4/5。",
+        "subject": "數學",
+        "sub_topic": "直角三角形三角比",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-直角三角形三角比",
+        "template_id": "ref-20261119-b8-m1-righttriangle-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
