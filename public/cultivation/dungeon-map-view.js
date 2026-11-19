@@ -11,6 +11,9 @@ import { skillArt } from './manual-art.js';
 import './manual-rules.js';
 import './tactical-animation.js';
 import './tactical-skill-effects.js';
+import './tactical-ambience.js';
+import './tactical-threat-visuals.js';
+import {dungeonThreatPlan} from './dungeon-threat-plan.js';
 import {dungeonAnimationEvents,paintDungeonScene,drawDungeonHitNumbers} from './dungeon-skill-animation.js';
 import {dungeonMovementEvents,sampleDungeonMovement,continueDungeonMovement,previewDungeonMovement} from './dungeon-movement-animation.js';
 
@@ -44,6 +47,8 @@ class DungeonMapView{
     this.visualScenes=new Map(); // authenticated room events only; never controls damage
     this.travelScenes=new Map(); // sampled trial movement; server positions remain untouched
     this.pendingMovementPreview=null; // visual only; never enters C-room rules
+    this.ambiencePlan=null;this.ambientTimer=null;
+    this.pendingAction=null;
     this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;
     this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
     this.routePending=false;this.actionFeedbackTimer=null;
@@ -257,6 +262,8 @@ class DungeonMapView{
     if(room.status==='assembled')void this.quiz?.warm();
     this.map=null;this.camera=Camera.initialCamera();
     this.visualScenes.clear();this.travelScenes.clear();
+    this.pendingMovementPreview=null;this.pendingAction=null;
+    clearTimeout(this.ambientTimer);this.ambientTimer=null;this.ambiencePlan=null;
     this.follow=true;this.pointers.clear();this.opened=true;
     this.movePending=false;this.strikePending=false;this.skillPending=false;
     this.portalPending=false;this.bossPending=false;
@@ -289,6 +296,13 @@ class DungeonMapView{
       if(!this.isCurrent()||request!==this.seq||uid!==this.uid)return;
       if(!mapValid(map))throw new Error('副本地圖資料不完整');
       this.map=map;
+      const ambience=globalThis.QATacticalAmbience;
+      const biome={bamboo:'竹林',ruins:'遺墟',frost:'霜嶺',
+        marsh:'碧水'}[map.biome]||'遺墟';
+      this.ambiencePlan=ambience?.prepare?.({
+        id:roomId,width:20,height:14,
+        trial:{title:biome,seed:map.layoutId||map.seed||roomId}
+      })||null;
       const palette=BIOMES[map.biome]||BIOMES.ruins;
       this.root.style.setProperty('--dm-accent',palette.trim);
       this.$('[data-dm-title]').textContent=map.arena==='boss'?
@@ -814,7 +828,11 @@ class DungeonMapView{
     if(!target){this.skillAlert('請先選擇同一直線上的目標，或空白地格');return;}
     const seq=(Number.isSafeInteger(member.skillSeq)?member.skillSeq:0)+1;
     const roomId=this.roomId,token=this.seq;
-    this.skillPending=true;this.updateSkillHUD();this.skillAlert('');
+    this.skillPending=true;this.updateSkillHUD();
+    this.pendingAction={kind:'skill',target:{...target},
+      startedAt:performance.now()};
+    this.skillAlert('出招中 · 正在確認命中結果');
+    this.drawSoon();
     try{
       const response=await castDungeonSkill(roomId,skillId,target,seq);
       if(!this.isCurrent()||this.seq!==token||this.roomId!==roomId)return;
@@ -866,8 +884,10 @@ class DungeonMapView{
         }catch(_){}
       }
     }finally{
-      this.skillPending=false;
-      if(this.isCurrent()&&this.seq===token)this.updateSkillHUD();
+      this.skillPending=false;this.pendingAction=null;
+      if(this.isCurrent()&&this.seq===token){
+        this.updateSkillHUD();this.drawSoon();
+      }
     }
   }
   strikeAlert(message=''){
@@ -883,7 +903,11 @@ class DungeonMapView{
     if(!member||!enemy)return;
     const seq=(Number.isSafeInteger(member.strikeSeq)?member.strikeSeq:0)+1;
     const token=this.seq,roomId=this.roomId;
-    this.strikePending=true;this.updateStrikeHUD();this.strikeAlert('');
+    this.strikePending=true;this.updateStrikeHUD();
+    this.pendingAction={kind:'strike',target:{...enemy.position},
+      startedAt:performance.now()};
+    this.strikeAlert('出拳中 · 正在確認命中結果');
+    this.drawSoon();
     try{
       const response=await strikeDungeonBeast(roomId,enemy.id,seq);
       if(!this.isCurrent()||token!==this.seq||roomId!==this.roomId)return;
@@ -914,8 +938,10 @@ class DungeonMapView{
         }catch(_){}
       }
     }finally{
-      this.strikePending=false;
-      if(this.isCurrent()&&token===this.seq)this.updateStrikeHUD();
+      this.strikePending=false;this.pendingAction=null;
+      if(this.isCurrent()&&token===this.seq){
+        this.updateStrikeHUD();this.drawSoon();
+      }
     }
   }
   actionFeedback(message=''){
@@ -1421,7 +1447,8 @@ class DungeonMapView{
     const previous=this.room;
     if(changedArena){
       this.visualScenes?.clear();this.travelScenes?.clear();
-      this.pendingMovementPreview=null;
+      this.pendingMovementPreview=null;this.pendingAction=null;
+      this.ambiencePlan=null;
     }
     else if(this.map&&previous?.status==='assembled'){
       this.visualScenes ||=new Map();
@@ -1483,7 +1510,8 @@ class DungeonMapView{
     clearTimeout(this.actionFeedbackTimer);this.actionFeedbackTimer=null;
     this.quiz?.destroy();
     this.visualScenes?.clear();this.travelScenes?.clear();
-    this.pendingMovementPreview=null;
+    this.pendingMovementPreview=null;this.pendingAction=null;
+    clearTimeout(this.ambientTimer);this.ambientTimer=null;this.ambiencePlan=null;
     for(const aura of this.focusAuras.values())aura.remove();
     this.focusAuras.clear();
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
@@ -1700,6 +1728,7 @@ class DungeonMapView{
     if(this.wheelMode==='move'){
       this.rangeKind='move';
       this.rangeTiles=dungeonReachableTiles(this.map,from,enemies,
+        member.dungeonAdmin===true?48:
         Math.max(0,Math.min(10,member.explorationStamina||0)));
     }else{
       const skill=(member.dungeonSkills||[]).find(s=>s.id===this.selectedSkillId)||
@@ -1723,7 +1752,20 @@ class DungeonMapView{
     let travelActive=false;
     const visualActor=(actor,key)=>{
       const entry=this.travelScenes.get(key);
-      if(!entry||reduceMotion)return actor;
+      if(!entry||reduceMotion){
+        if(reduceMotion)return actor;
+        const ambience=globalThis.QATacticalAmbience;
+        const kind=actor.kind||'';
+        const pose=ambience?.idlePose?.({
+          uid:actor.uid||actor.id,
+          hp:actor.battleHealth??100,
+          bot:key.startsWith('enemy:'),
+          species:kind==='wisp'?12:kind==='golem'?8:
+            kind==='guardian'||kind==='boss'?9:0,
+          boss:kind==='boss'
+        },now,false);
+        return pose?{...actor,visualLift:-(pose.dy||0)}:actor;
+      }
       const sampled=sampleDungeonMovement(entry,now);
       if(!sampled){this.travelScenes.delete(key);return actor;}
       if(!sampled.active){
@@ -1774,11 +1816,16 @@ class DungeonMapView{
         }
       }
     };
+    const warning=dungeonThreatPlan(m,this.creatures(),this.members(),
+      this.uid,this.rangeTiles,this.wheelMode);
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:visualMembers,selfUid:this.uid,showRoutes:false,
       rangeTiles:this.rangeTiles,rangeKind:this.rangeKind,
       enemies:visualEnemies,objectives:this.room?.dungeonProgress,
       aimTile:this.currentAim(),art:this.sprites,
+      dangerPlan:warning,showDangerGuidance:this.wheelMode==='move',
+      ambiencePlan:this.ambiencePlan,pendingAction:this.pendingAction,
+      reducedMotion,
       currentTick:Number(this.room?.battleClock?.appliedTick)||0,
       visualTimeMs:now,
       animationUnderlay:(context,view)=>paintEffects(context,view,false),
@@ -1797,7 +1844,14 @@ class DungeonMapView{
       this.canvas.removeAttribute('data-visual-hero');
     if((scenes.length||queuedScenes)&&!reduceMotion)this.drawSoon();
     if(travelActive&&!reduceMotion)this.drawSoon();
-
+    // 20fps atmosphere refresh (not a 60fps polling loop). Pause entirely
+    // when hidden or reduced motion is requested; C-room clock continues.
+    if(!reduceMotion&&!document.hidden&&!this.ambientTimer){
+      this.ambientTimer=setTimeout(()=>{
+        this.ambientTimer=null;
+        if(this.opened)this.drawSoon();
+      },50);
+    }
   }
 }
 export async function showDungeonMap(options){
