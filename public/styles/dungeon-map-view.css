@@ -210,3 +210,55 @@
 @media(max-width:370px){
   #dungeon-map-view .dm-battle-clock{max-width:128px;white-space:normal;text-align:center}
 }
+
+/* Stage 9: nonblocking live beast inspector. The canvas alone suppresses
+   iOS long-press selection; panel text/buttons remain accessible. */
+#dungeon-map-view .dm-inspector{
+  position:absolute;z-index:2;top:112px;left:14px;
+  width:min(300px,calc(100% - 28px));max-height:min(385px,56%);
+  overflow:auto;padding:12px;background:#0d1c18ef;
+  color:#efdfc4;border:1px solid #b69d77b3;border-radius:13px;
+  box-shadow:0 10px 27px #000b;backdrop-filter:blur(8px);
+  touch-action:pan-y;overscroll-behavior:contain;
+}
+#dungeon-map-view .dm-inspector-head{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin-bottom:7px;color:#efd5ac;
+}
+#dungeon-map-view .dm-inspector-head strong{font-size:15px}
+#dungeon-map-view .dm-inspector-head button{
+  min-width:31px;min-height:31px;padding:2px 8px;font-size:19px;
+}
+#dungeon-map-view .dm-inspector p{
+  font-size:12px;line-height:1.6;margin:6px 0 9px;
+  color:#e4ded0;overflow-wrap:anywhere;
+}
+#dungeon-map-view .dm-inspector small{
+  display:block;margin-top:7px;color:#c0c4ad;
+  line-height:1.5;font-size:10px;
+}
+#dungeon-map-view .dm-beast-list{display:grid;gap:5px}
+#dungeon-map-view .dm-beast-list button{
+  text-align:left;display:block;width:100%;min-height:34px;
+  background:#22372c;border-color:#617b60;
+  color:#e8e0d0;font:600 12px/1.4 system-ui,"Noto Sans TC";
+}
+#dungeon-map-view .dm-beast-list button[aria-pressed="true"]{
+  background:#556c4d;border-color:#c9cf94;color:#fff5d6;
+}
+#dungeon-map-view [data-dm="beasts"]:not(:disabled){border-color:#d2a67d}
+#dungeon-map-view [data-dm="beasts"][aria-expanded="true"]{
+  color:#1e231b;background:#d6bf90;
+}
+@media(max-width:720px){
+  #dungeon-map-view .dm-inspector{
+    top:85px;left:8px;width:min(250px,calc(100% - 16px));
+    max-height:min(345px,43%);padding:9px;
+  }
+  #dungeon-map-view .dm-inspector-head strong{font-size:13px}
+}
+@media(max-height:430px) and (orientation:landscape){
+  #dungeon-map-view .dm-inspector{
+    top:44px;max-height:calc(100% - 55px);width:242px;
+  }
+}
