@@ -781,7 +781,25 @@ async function main(){
     for(const {page} of [a,b]){
       await page.locator('[data-dm-boss-health]:not([hidden])').waitFor();
       assert.equal(await page.locator('[data-dm-boss-progress]').getAttribute('aria-valuemax'),'900');
+      await page.waitForFunction(()=>{
+        const canvas=document.querySelector('#dungeon-map-view [data-dm-world]');
+        return canvas?.dataset.bossEffects==='active'&&
+          Number(canvas.dataset.environmentEffects)>0;
+      },null,{timeout:7000});
     }
+    // The browser must actually redraw each server-authorized boss warning
+    // before the hit; no client-invented attack cells are accepted.
+    const bossMap=Boss.mapFor('legacy:'+room.id);
+    const telegraph=Boss.plan(bossMap,room.enemies[0],room.members,
+      (room.battleAppliedTick||0)+2);
+    assert.ok(telegraph?.cells?.length);
+    room.enemies[0].attack=telegraph;room.revision++;publish();
+    await a.page.waitForFunction(()=>{
+      const canvas=document.querySelector('#dungeon-map-view [data-dm-world]');
+      return canvas?.dataset.bossTelegraph==='quake'&&
+        Number(canvas.dataset.warningCells)>0;
+    },null,{timeout:7000});
+    room.enemies[0].attack=null;room.revision++;publish();
 
     // A server-authorized basic attack resolves on the 2x2 boss footprint,
     // archives one victory, then both players can claim their own prize.
@@ -790,7 +808,6 @@ async function main(){
     room.revision++;publish();
     await a.page.waitForFunction(()=>document.querySelector('[data-dm-boss-progress]')
       ?.getAttribute('aria-valuenow')==='20',null,{timeout:8000});
-    const bossMap=Boss.mapFor('legacy:'+room.id);
     await clickTile(a.page,{x:11,y:8},{x:11,y:7},bossMap);
     await a.page.locator('[data-dm-victory]:not([hidden])').waitFor({timeout:9000});
     await b.page.locator('[data-dm-victory]:not([hidden])').waitFor({timeout:9000});
