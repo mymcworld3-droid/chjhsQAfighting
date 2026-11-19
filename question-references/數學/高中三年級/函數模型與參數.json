@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-modelparams-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "函數、極限、模型與代數根的性質，附可查核推導",
+      "question": {
+        "q": "線性模型f(t)=a+bt通過(1,5)與(3,13)。參數(a,b)為何？",
+        "correct": "(1,4)",
+        "wrong": [
+          "(4,1)",
+          "(2,3)",
+          "(−1,6)"
+        ],
+        "exp": "由a+b=5與a+3b=13相減得2b=8，b=4，a=1。",
+        "subject": "數學",
+        "sub_topic": "函數模型與參數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數模型與參數",
+        "template_id": "ref-20261119-b10-m3-modelparams-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-modelparams-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "函數、極限、模型與代數根的性質，附可查核推導",
+      "question": {
+        "q": "成長模型N(t)=a×b^t，其中a>0、b>0。已知N(0)=4、N(2)=36，則(a,b)為何？",
+        "correct": "(4,3)",
+        "wrong": [
+          "(3,4)",
+          "(4,9)",
+          "(6,2)"
+        ],
+        "exp": "N(0)=a=4；N(2)=4b²=36，故b²=9，由b>0得b=3。",
+        "subject": "數學",
+        "sub_topic": "函數模型與參數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數模型與參數",
+        "template_id": "ref-20261119-b10-m3-modelparams-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-modelparams-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "函數、極限、模型與代數根的性質，附可查核推導",
+      "question": {
+        "q": "函數模型f(t)=at²+2t+1，已知f(1)=6，參數a為何？",
+        "correct": "3",
+        "wrong": [
+          "2",
+          "4",
+          "5"
+        ],
+        "exp": "代入t=1得a+2+1=6，所以a=3。",
+        "subject": "數學",
+        "sub_topic": "函數模型與參數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數模型與參數",
+        "template_id": "ref-20261119-b10-m3-modelparams-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
