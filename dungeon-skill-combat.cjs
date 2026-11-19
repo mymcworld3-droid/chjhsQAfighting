@@ -17,8 +17,13 @@ const axis=(a,b)=>{
 };
 const at=(p,dx,dy,n=1)=>({x:p.x+dx*n,y:p.y+dy*n});
 const present=(members,point)=>Object.values(members).some(m=>same(m.position,point));
+// A beast killed earlier in the SAME multi-hit cast is no longer an obstacle.
+// Otherwise the first lethal punch leaves a phantom corpse blocking every
+// subsequent step of 四步連推, despite being removed when the cast finishes.
 const occupied=(p,enemies,ignore='')=>
-  enemies.some(e=>e.id!==ignore&&Boss.occupies(e,p));
+  enemies.some(e=>e.id!==ignore&&
+    (!Number.isSafeInteger(e.battleHealth)||e.battleHealth>0)&&
+    Boss.occupies(e,p));
 const tile=(map,p)=>walkable(map,p);
 function visible(map,a,b){
   if(!tile(map,a)||!tile(map,b))return false;
@@ -169,7 +174,8 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   const enemies=(room.enemies||[]).map(e=>({...e,position:{...e.position}}));
   const startingPositions=new Map(enemies.map(e=>[e.id,{...e.position}]));
   const members={...room.members};
-  let player={...member},hits=[],cells=[],position=null,sword=member.flyingSword||null;
+  let player={...member},hits=[],cells=[],position=null,chainSteps=[],
+    sword=member.flyingSword||null;
   // Re-derive attack from the latest verified A-side manual snapshot: A can
   // gain manuscript EXP in another session while this C dungeon stays open.
   const base=attackPower(normalized);
@@ -282,16 +288,31 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
         const row=front(map,current,d,false);
         if(!row.length)break;
         cells.push(...row);
+        // Preserve the true four ordered impacts for the client's original
+        // 問道試煉 step-by-step animation, rather than one final-coordinate
+        // jump. Everything here is computed on the authoritative server.
+        const starts=new Map(enemies.map(e=>[e.id,{...e.position}]));
+        const hitStart=hits.length,from={...current};
         for(const e of targets(row)){
           apply(e,sk.power);
           if(healthy(e)>0){
             const moved=advance(e,d,1);
+            if(moved)e.attack=null;
             if(!moved&&sk.collisionPower>0)apply(e,sk.collisionPower);
           }
         }
         const ahead=forward(current,d,1);
-        if(!tile(map,ahead)||occupied(ahead,enemies)||present(members,ahead))break;
-        current=ahead;
+        const canStep=tile(map,ahead)&&!occupied(ahead,enemies)&&
+          !present(members,ahead);
+        if(canStep)current=ahead;
+        chainSteps.push({step:n+1,origin:from,target:forward(from,d,1),
+          cells:row.map(p=>({...p})),
+          hits:hits.slice(hitStart).map(h=>({...h})),
+          visualMoves:enemies.filter(e=>!same(starts.get(e.id),e.position))
+            .slice(0,12).map(e=>({enemyId:e.id,
+              from:{...starts.get(e.id)},to:{...e.position}})),
+          position:{...current}});
+        if(!canStep)break;
       }
       player.position=current;position=current;
     }else{
@@ -331,7 +352,8 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
       enemyId:e.id,from:{...startingPositions.get(e.id)},to:{...e.position}
     }));
   const result={seq,skillId,skillName:sk.name,origin:{...origin},target:{...target},
-    cost,hits,visualMoves,totalDamage:hits.reduce((a,h)=>a+h.damage,0),
+    cost,hits,visualMoves,...(chainSteps.length?{chainSteps}:{}),
+    totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
     focusBefore:chargeBefore,focusEmpowered:empowered,
     focusActivated:sk.kind==='fist-focus',visualVersion:1,effectCells,

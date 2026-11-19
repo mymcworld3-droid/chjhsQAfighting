@@ -255,3 +255,54 @@ test('stage 13: server recomputes live attack after scripture mastery changes',(
   assert.ok(changed.result.totalDamage>original.result.totalDamage);
   assert.ok(changed.members.a.dungeonAttack>original.members.a.dungeonAttack);
 });
+
+test('four-step shove follows four consecutive server-confirmed impacts, not a single push',()=>{
+  const record=body(),initial=room(record,beast(6,5,'beast-1',10000));
+  const out=cast(initial,record,'dragon-guard',{x:6,y:5});
+  assert.equal(out.duplicate,false);
+  assert.equal(out.result.cost,4);
+  assert.equal(out.result.chainSteps.length,4);
+  assert.equal(out.result.hits.length,4,'every stage punches the beast again');
+  assert.equal(out.result.visualMoves.length,1,'final displacement is still a summary');
+  assert.equal(out.result.chainSteps.every(s=>s.hits.length===1),true);
+  assert.deepStrictEqual(out.result.chainSteps.map(s=>s.origin.x),[5,6,7,8]);
+  assert.deepStrictEqual(out.result.chainSteps.map(s=>s.position.x),[6,7,8,9]);
+  assert.deepStrictEqual(out.result.chainSteps.map(s=>s.visualMoves[0].to.x),
+    [7,8,9,10]);
+  assert.deepStrictEqual(out.members.a.position,{x:9,y:5});
+  assert.deepStrictEqual(out.enemies[0].position,{x:10,y:5});
+  assert.equal(initial.members.a.position.x,5,'casting must remain pure');
+  const again=cast(next(initial,out),record,'dragon-guard',{x:10,y:5},2);
+  assert.equal(again.result.chainSteps.length,4,'no per-skill cooldown or one-use limit');
+  assert.deepStrictEqual(again.members.a.position,{x:13,y:5});
+  assert.deepStrictEqual(again.enemies[0].position,{x:14,y:5});
+});
+test('a lethal first punch cannot leave a phantom corpse blocking the rest of the combo',()=>{
+  const record=body(),initial=room(record,beast(6,5,'beast-1',1));
+  const out=cast(initial,record,'dragon-guard',{x:6,y:5});
+  assert.equal(out.result.hits.length,1,'the enemy died on the first punch');
+  assert.equal(out.result.chainSteps.length,4);
+  assert.deepStrictEqual(out.result.chainSteps.map(s=>s.position.x),[6,7,8,9]);
+  assert.deepStrictEqual(out.members.a.position,{x:9,y:5});
+  assert.equal(out.enemies.length,0);
+  assert.deepStrictEqual(out.result.chainSteps[0].hits.map(h=>h.defeated),[true]);
+  assert.equal(out.result.chainSteps.slice(1).every(s=>s.hits.length===0),true);
+});
+test('live blocker or wall stops the combo without sliding through occupied cells',()=>{
+  const record=body(),initial=room(record,beast(6,5,'beast-1',10000));
+  const wall=structuredClone(map);wall.tiles[5*16+8]=0;
+  const blocked=S.castSkill(initial,'a',wall,record,{
+    skillId:'dragon-guard',target:{x:6,y:5},seq:1});
+  assert.equal(blocked.result.chainSteps.length,2);
+  assert.equal(blocked.result.chainSteps[1].position.x,6);
+  assert.deepStrictEqual(blocked.enemies[0].position,{x:7,y:5});
+  assert.ok(blocked.result.chainSteps[1].hits.length>=2,
+    'blocked push triggers collision damage');
+  const withTeammate=structuredClone(initial);
+  withTeammate.members.b={uid:'b',position:{x:8,y:5},
+    battleHealth:100,downed:false};
+  const teammate=cast(withTeammate,record,'dragon-guard',{x:6,y:5});
+  assert.equal(teammate.result.chainSteps.length,2);
+  assert.deepStrictEqual(teammate.members.a.position,{x:6,y:5});
+  assert.deepStrictEqual(teammate.members.b.position,{x:8,y:5});
+});
