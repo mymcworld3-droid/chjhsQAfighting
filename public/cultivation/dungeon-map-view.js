@@ -294,7 +294,10 @@ class DungeonMapView{
     const stamina=Number.isSafeInteger(own?.explorationStamina)?
       own.explorationStamina:100;
     const energy=this.$('[data-dm-energy]');
-    if(energy)energy.textContent=stamina+' / 100';
+    if(energy)energy.textContent=String(stamina);
+    this.$('[data-dm-quarter-energy]').hidden=!active||!this.map;
+    this.root.querySelectorAll('[data-dm-energy-segment]').forEach((segment,index)=>
+      segment.classList.toggle('is-filled',index<energyRingFill(stamina)));
     const p=this.selfPad(),node=this.$('[data-dm-location]');
     if(node)node.textContent='座標 '+p.x+'，'+p.y;
     const hp=Number.isSafeInteger(own?.battleHealth)?
@@ -331,10 +334,34 @@ class DungeonMapView{
       button.disabled=!active||!this.map||this.movePending||stamina<1||downed;
     });
     const charge=this.$('[data-dm="quiz"]');
-    if(charge)charge.disabled=!active||!this.map;
+    if(charge){
+      charge.disabled=!active||!this.map;
+      charge.classList.toggle('is-charge-ready',active&&!!this.map);
+    }
     this.updatePortalHUD();
     this.updateRescueHUD();this.updateGuardHUD();this.updateVictoryHUD();
-    this.updateStrikeHUD();this.updateSkillHUD();
+    this.updateStrikeHUD();this.updateSkillHUD();this.updateWheelHUD();
+  }
+  setWheelMode(mode){
+    if(mode!=='attack'&&mode!=='move')return;
+    this.wheelMode=mode;this.updateWheelHUD();
+  }
+  updateWheelHUD(){
+    const wheel=this.$('[data-dm-wheel]');
+    if(!wheel)return;
+    const active=this.room?.status==='assembled'&&!!this.map;
+    wheel.hidden=!active;
+    wheel.dataset.mode=this.wheelMode;
+    this.$('[data-dm-wheel-attack]').hidden=this.wheelMode!=='attack';
+    this.$('[data-dm-wheel-move]').hidden=this.wheelMode!=='move';
+    for(const name of ['attack','move'])
+      this.$('[data-dm="wheel-'+name+'"]').setAttribute('aria-pressed',
+        String(this.wheelMode===name));
+    const toggle=this.$('[data-dm="loadouts"]');
+    const own=this.room?.members?.[this.uid];
+    toggle.hidden=!active||!own?.dungeonLoadoutNames?.length;
+    toggle.setAttribute('aria-expanded',String(this.manualOpen));
+    toggle.classList.toggle('is-open',this.manualOpen);
   }
   updateGuardHUD(){
     const box=this.$('[data-dm-guards]');
@@ -559,11 +586,11 @@ class DungeonMapView{
     if(!panel)return;
     const active=this.room?.status==='assembled'&&!!this.map;
     const presets=member?.dungeonLoadoutNames||[];
-    // The beast inspector and manual controls share the compact left rail.
-    // Display only one at a time so neither hides the other's buttons.
-    panel.hidden=!active||!presets.length||this.inspectOpen;
+    // Presets/details are an optional popup. The actual cast controls live
+    // in the quarter dial and must update even while the popup is closed.
+    panel.hidden=!active||!presets.length||!this.manualOpen||this.inspectOpen;
     panel.classList.toggle('has-focus',active&&Number(member?.focusCharges)>0);
-    if(panel.hidden)return;
+    if(!active)return;
     const skills=member.dungeonSkills||[];
     const signature=JSON.stringify([presets,skills]);
     if(signature!==this.skillSignature){
@@ -576,14 +603,15 @@ class DungeonMapView{
         button.textContent=String(name||('配置 '+(index+1))).slice(0,15);
         return button;
       }));
-      const skillRoot=this.$('[data-dm-skills]');
-      skillRoot.replaceChildren(...skills.map(skill=>{
+      const skillButton=skill=>{
         const button=document.createElement('button');
         button.type='button';button.dataset.dm='cast';
         button.dataset.skillId=skill.id;
         button.title=skill.description||'';
         return button;
-      }));
+      };
+      this.$('[data-dm-skills]').replaceChildren(...skills.map(skillButton));
+      this.$('[data-dm-wheel-skills]').replaceChildren(...skills.map(skillButton));
     }
     const stamina=Number.isSafeInteger(member.explorationStamina)?
       member.explorationStamina:0;
@@ -601,7 +629,7 @@ class DungeonMapView{
       button.setAttribute('aria-pressed',String(selected));
       button.disabled=this.loadoutPending||this.skillPending||downed||selected;
     });
-    this.root.querySelectorAll('[data-dm-skills] button').forEach(button=>{
+    this.root.querySelectorAll('[data-dm-skills] button,[data-dm-wheel-skills] button').forEach(button=>{
       const skill=skills.find(v=>v.id===button.dataset.skillId);
       if(!skill)return;
       const empowered=charges>0&&skill.school==='body'&&
@@ -622,6 +650,7 @@ class DungeonMapView{
         downed||stamina<cost||
         (skill.kind!=='fist-focus'&&!aimed);
     });
+    this.updateWheelHUD();
   }
   currentAim(){
     const beast=this.creatures().find(e=>e.id===this.selectedBeastId);
@@ -1214,6 +1243,11 @@ class DungeonMapView{
       this.updateBeastHUD();this.updateSkillHUD();return;
     }
     if(name==='quiz'){this.quiz?.show();return;}
+    if(name==='wheel-attack'){this.setWheelMode('attack');return;}
+    if(name==='wheel-move'){this.setWheelMode('move');return;}
+    if(name==='loadouts'){
+      this.manualOpen=!this.manualOpen;this.updateSkillHUD();return;
+    }
     if(name==='portal'){void this.openPortal();return;}
     if(name==='enter-boss'){void this.enterBoss();return;}
     if(name==='rescue'){void this.rescue(rescueUid);return;}
