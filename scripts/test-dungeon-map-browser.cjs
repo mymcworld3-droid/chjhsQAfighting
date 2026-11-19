@@ -514,8 +514,23 @@ async function main(){
     assert.deepStrictEqual(room.members.b.position,startPositions.b);
     assert.equal(room.members.a.moveSeq,1);
     assert.equal(room.members.a.explorationStamina,9);
-    await a.page.waitForFunction(()=>window.__dungeonMotionFrames?.includes('walking'),
-      null,{timeout:5000});
+    try{
+      await a.page.waitForFunction(()=>window.__dungeonMotionFrames?.includes('walking'),
+        null,{timeout:5000});
+    }catch(error){
+      console.error('[Dungeon motion diagnostics]',{
+        requests:requests.slice(-12),
+        errors,
+        motion:await a.page.evaluate(()=>({
+          frames:window.__dungeonMotionFrames,
+          current:document.querySelector('[data-dm-world]')?.dataset.motion,
+          hero:document.querySelector('[data-dm-world]')?.dataset.visualHero,
+          reduced:matchMedia('(prefers-reduced-motion: reduce)').matches,
+          source:document.querySelector('[data-dm-world]')?.outerHTML.slice(0,240)
+        }))
+      });
+      throw error;
+    }
     await a.page.waitForFunction(()=>{
       const frames=window.__dungeonMotionFrames||[];
       return frames.indexOf('walking')>=0&&
