@@ -1,0 +1,142 @@
+/* Exact trial boss-health skin, scoped to the real-time dungeon. */
+/* Stage-three boss presentation. Passive overlays: never steal map/touch input. */
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud{
+  position:absolute;z-index:2;top:40px;left:50%;transform:translateX(-50%);
+  width:min(344px,calc(100% - 24px));max-width:344px;
+  display:grid;gap:3px;padding:6px 11px 7px;border:1px solid rgba(215,171,115,.55);
+  border-radius:10px;background:linear-gradient(90deg,rgba(36,24,20,.92),rgba(25,24,23,.90),rgba(36,24,20,.92));
+  box-shadow:0 4px 18px rgba(0,0,0,.42),inset 0 0 14px rgba(255,155,83,.055);
+  pointer-events:none;color:#f0dfc5;min-width:0;isolation:isolate;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud[hidden]{display:none!important}
+#dungeon-map-view.tc-quarter-layout .tc-boss-line{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  min-width:0;line-height:1.3;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-name{
+  flex:1;min-width:0;color:#f2d5b2;font-size:12px;font-weight:700;white-space:nowrap;
+  text-overflow:ellipsis;overflow:hidden;text-shadow:0 1px 5px rgba(0,0,0,.8);
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-phase{
+  font-size:10px;letter-spacing:.025em;border:1px solid rgba(217,174,123,.42);
+  color:#eacda5;padding:1px 6px;border-radius:12px;background:rgba(118,75,45,.20);
+  white-space:nowrap;font-variant-numeric:tabular-nums;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-health{
+  position:relative;height:9px;background:#3f3430;border-radius:10px;overflow:hidden;
+  border:1px solid rgba(232,196,157,.22);
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-fill{
+  position:absolute;inset:0 auto 0 0;width:100%;
+  background:linear-gradient(90deg,#a95143,#d97557 53%,#f2b68d);
+  box-shadow:0 0 6px rgba(245,146,99,.22);
+  transition:width .22s ease-out;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-half{
+  position:absolute;left:50%;height:100%;width:1.5px;top:0;background:#fbe2b8;
+  box-shadow:0 0 3px #3c241a;opacity:.8;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-subline{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  color:#d9bcaa;font-size:10px;min-width:0;line-height:1.2;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-intent{
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-number{
+  font-variant-numeric:tabular-nums;white-space:nowrap;color:#edc6aa;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud[data-phase="2"]{
+  border-color:rgba(241,134,89,.88);
+  background:linear-gradient(90deg,rgba(64,28,26,.95),rgba(37,21,23,.93),rgba(64,28,26,.95));
+  box-shadow:0 4px 20px rgba(0,0,0,.5),0 0 18px rgba(226,105,67,.16);
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud[data-phase="2"] .tc-boss-phase{
+  border-color:#ec9479;color:#fff0de;background:#914634;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud[data-boss-kind="vine"] .tc-boss-fill{
+  background:linear-gradient(90deg,#498866,#8fc7a2,#c7e8bf);
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud[data-boss-kind="rock"] .tc-boss-fill{
+  background:linear-gradient(90deg,#82684d,#c9a078,#e4c39a);
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud[data-phase="2"] .tc-boss-fill{
+  background:linear-gradient(90deg,#a84337,#e27148,#ffc28d);
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-announcement{
+  position:absolute;z-index:4;left:50%;top:31%;
+  transform:translate(-50%,-50%);
+  width:min(420px,calc(100% - 24px));min-width:0;
+  display:grid;gap:5px;text-align:center;padding:13px 16px;
+  pointer-events:none;color:#fce7c5;overflow:hidden;
+  border:1px solid rgba(243,186,115,.55);border-radius:12px;
+  background:linear-gradient(90deg,rgba(34,20,18,.88),rgba(51,29,22,.92),rgba(34,20,18,.88));
+  box-shadow:0 10px 30px rgba(0,0,0,.48),0 0 24px rgba(208,114,64,.15);
+  animation:tc-boss-reveal 1.35s ease-out both;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-announcement[hidden]{display:none!important}
+#dungeon-map-view.tc-quarter-layout .tc-boss-announcement small{
+  display:block;color:#f0bc84;font-size:10px;letter-spacing:.18em;font-weight:700;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-announcement strong{
+  color:#ffe9cb;font-size:clamp(17px,2.8vw,25px);line-height:1.35;
+  font-family:"Noto Serif TC","Songti TC",serif;font-weight:600;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-announcement span{
+  color:#e7c7a7;font-size:11px;line-height:1.4;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-announcement[data-kind="phase"]{
+  background:linear-gradient(90deg,rgba(65,22,20,.92),rgba(82,31,26,.95),rgba(65,22,20,.92));
+  border-color:rgba(247,130,99,.82);
+}
+@keyframes tc-boss-reveal{
+  0%{opacity:0;transform:translate(-50%,-52%) scale(.94);filter:brightness(1.55)}
+  18%{opacity:1;transform:translate(-50%,-50%) scale(1.018)}
+  80%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-47%) scale(.99)}
+}
+@media(orientation:portrait){
+  #dungeon-map-view.tc-quarter-layout .tc-boss-hud{
+    top:34px;width:min(286px,calc(100% - 18px));
+    padding:5px 8px;gap:3px;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-boss-name{font-size:11px}
+  #dungeon-map-view.tc-quarter-layout .tc-boss-phase{font-size:9px}
+  #dungeon-map-view.tc-quarter-layout .tc-boss-subline{font-size:9px}
+  #dungeon-map-view.tc-quarter-layout .tc-boss-announcement{
+    top:27%;padding:10px 12px;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-boss-announcement strong{font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  #dungeon-map-view.tc-quarter-layout .tc-boss-announcement{
+    animation:none;opacity:1;filter:none;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-boss-fill{transition:none}
+}
+
+
+/* Dungeon-only boss mechanics: retain the exact trial HUD for health,
+   while keeping the server-owned shield in a quiet lower line. */
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud .dm-boss-shield{
+  margin:2px 0 0;min-width:0;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud .dm-boss-shield span{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:6px;color:#b2d8e8;font-size:10px;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud .dm-shield-meter{
+  margin-top:2px;height:4px;background:#24313c;border-radius:3px;
+  overflow:hidden;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud .dm-shield-meter i{
+  display:block;height:100%;width:100%;
+  background:linear-gradient(90deg,#5eaece,#c5edff);
+  transition:width .22s ease-out;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud[data-phase="3"]{
+  border-color:#ff9c9e;
+}
+#dungeon-map-view.tc-quarter-layout .tc-boss-hud[data-phase="3"] .tc-boss-fill{
+  background:linear-gradient(90deg,#a83d61,#ef7570,#ffd4a4);
+}
