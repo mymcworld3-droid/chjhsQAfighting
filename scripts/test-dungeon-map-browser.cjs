@@ -37,6 +37,15 @@ const app=express();app.use(express.json());
 const map=generateDungeonLayout('stage6-browser-visual-1');
 let room=null,clockLoop=null;const watchers=new Set(),requests=[];
 const victoryReceipts=new Set(),playerRewards={a:{gold:0,cultivation:0},b:{gold:0,cultivation:0}};
+const victoryArchives=new Map(),victoryInbox={a:[],b:[]};
+function archiveVictory(){
+  if(room?.bossEncounter?.status!=='defeated'||victoryArchives.has(room.id))return;
+  const record=Victory.makeArchive(room.id,room,Date.now());
+  victoryArchives.set(room.id,record);
+  for(const uid of Object.keys(record.members)){
+    victoryInbox[uid].unshift({roomId:room.id,archivedAtMs:record.archivedAtMs});
+  }
+}
 const currentMap=()=>room?.dungeonArena==='boss'?
   Boss.mapFor('legacy:'+room.id):map;
 const quizState=Object.fromEntries(['a','b'].map(uid=>[uid,{answered:0,
@@ -142,6 +151,17 @@ app.post('/api/dungeon/room',(req,res)=>{
   const success=()=>res.json({ok:true,roomId:room?.id||null,room:currentRoom()});
   if(!['a','b'].includes(uid))return res.status(401).json({ok:false,error:'sign-in required'});
   if(action==='list-public')return res.json({ok:true,rooms:[]});
+  if(action==='recent-victories'){
+    const rewards=(victoryInbox[uid]||[]).map(row=>{
+      const witness=victoryArchives.get(row.roomId),
+        proof=Victory.verifiedArchive(row.roomId,witness,uid);
+      return {roomId:row.roomId,archivedAtMs:row.archivedAtMs,
+        defeatedAtTick:proof.defeatedAtTick,partySize:proof.partySize,
+        claimed:victoryReceipts.has(Victory.receiptId(row.roomId,proof.session,uid)),
+        gold:Victory.GOLD,cultivation:Victory.CULTIVATION};
+    });
+    return res.json({ok:true,rewards});
+  }
   if(action==='reconnect')return res.json({ok:true,roomId:room?.members?.[uid]?room.id:null,
     room:room?.members?.[uid]?currentRoom():null});
   if(action==='create'){
@@ -158,7 +178,8 @@ app.post('/api/dungeon/room',(req,res)=>{
       joinedAtMs:2,heartbeatAtMs:Date.now()};
     room.revision++;publish();return success();
   }
-  if(!room?.members?.[uid])return res.status(403).json({ok:false,error:'non-member'});
+  if(!room?.members?.[uid]&&action!=='claim-boss-reward')
+    return res.status(403).json({ok:false,error:'non-member'});
   if(req.body.roomId&&room.id!==req.body.roomId)
     return res.status(404).json({ok:false,error:'unknown room'});
   if(action==='get-map')return res.json({ok:true,roomId:room.id,
@@ -221,6 +242,7 @@ app.post('/api/dungeon/room',(req,res)=>{
       room.dungeonProgress=Objectives.combatProgress(room,out.enemies,uid);
       room.bossEncounter=Boss.onDefeat(room,out.enemies,uid);
       room.members=out.members;room.enemies=out.enemies;
+      archiveVictory();
       room.revision++;publish();return success();
     }catch(error){return res.status(error.status||409).json({ok:false,error:error.message});}
   }
@@ -256,7 +278,10 @@ app.post('/api/dungeon/room',(req,res)=>{
   }
   if(action==='claim-boss-reward'){
     try{
-      const proof=Victory.validate(room.id,room,uid);
+      const witness=victoryArchives.get(req.body.roomId)||room;
+      const proof=victoryArchives.has(req.body.roomId)?
+        Victory.verifiedArchive(req.body.roomId,witness,uid):
+        Victory.validate(room.id,room,uid);
       const id=Victory.receiptId(room.id,proof.session,uid);
       const duplicate=victoryReceipts.has(id);
       if(!duplicate){
@@ -271,6 +296,19 @@ app.post('/api/dungeon/room',(req,res)=>{
     }catch(error){return res.status(error.status||409).json({
       ok:false,error:error.message
     });}
+  }
+  if(action==='leave'){
+    const oldRoomId=room.id;
+    if(!room?.members?.[uid])return res.json({ok:true,roomId:oldRoomId,room:null});
+    delete room.members[uid];
+    room.revision++;
+    if(room.status==='assembled'){
+      room.status=Object.keys(room.members).length?'waiting':'closed';
+      room.bossEncounter=null;room.dungeonArena=null;
+      room.dungeonProgress=null;room.enemies=[];
+    }
+    publish();
+    return res.json({ok:true,roomId:oldRoomId,room:null});
   }
   if(action==='loadout'){
     try{
@@ -297,6 +335,7 @@ app.post('/api/dungeon/room',(req,res)=>{
       room.dungeonProgress=Objectives.combatProgress(room,outcome.enemies,uid);
       room.bossEncounter=Boss.onDefeat(room,outcome.enemies,uid);
       room.members=outcome.members;room.enemies=outcome.enemies;
+      archiveVictory();
       room.revision++;publish();return success();
     }catch(error){return res.status(error.status||409).json({ok:false,error:error.message});}
   }
