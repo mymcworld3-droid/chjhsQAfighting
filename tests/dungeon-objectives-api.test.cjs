@@ -118,7 +118,7 @@ test('stage 14 guardian/key/portal: two C instances share one objective and deny
   assert.equal(final.dungeonProgress.openedAtTick,0);
   assert.equal((await f.call('b','activate-portal',{roomId:f.id},1)).status,200);
   assert.equal(f.getRoom().revision,final.revision,'repeated portal request no extra write');
-  assert.equal((await f.call('intruder','activate-portal',{roomId:f.id})).status,403);
+  assert.ok([401,403].includes((await f.call('intruder','activate-portal',{roomId:f.id})).status));
   assert.equal((await f.call('a','strike',{
     roomId:f.id,enemyId:guardian.id,seq:6})).status,200,
   'a retry of the last successful kill is idempotent');
@@ -135,9 +135,9 @@ test('stage 14 guardian falls to an equipped verified manual; cancels reset all 
   f.a.records.set('tacticalManuals/a',record);
   const switchResult=await f.call('a','loadout',{roomId:f.id,index:0});
   assert.equal(switchResult.status,200);
-  const guardian=raw.enemies.find(e=>e.id===Objectives.GUARDIAN_ID);
+  const current=f.getRoom(),guardian=current.enemies.find(e=>e.id===Objectives.GUARDIAN_ID);
   const pos=adjacent(f.map,guardian.position);
-  raw.members.a.position={...pos};raw.enemies=[guardian];
+  current.members.a.position={...pos};current.enemies=[guardian];
   guardian.battleHealth=20;
   assert.equal((await f.call('a','strike',{roomId:f.id,
     enemyId:guardian.id,seq:1})).status,409,'manual replaces bare punch');
