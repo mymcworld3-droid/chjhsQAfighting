@@ -171,3 +171,21 @@ test('the autonomous boss clock consumes guard before applying the real attack',
   const later=Boss.advance({...r,...applied},map,NOW+4000);
   assert.equal(later,null,'replaying the same server tick cannot deal damage twice');
 });
+
+test('two teammates cannot overwrite one active guard and waste stamina',()=>{
+  let r=room({
+    a:member('a',{x:10,y:10}),
+    b:member('b',{x:11,y:10}),
+    c:member('c',{x:10,y:11})
+  });
+  const first=Boss.guard(r,'a',map,{targetUid:'c',seq:1});
+  r={...r,members:first.members};
+  assert.equal(r.members.a.explorationStamina,97);
+  assert.throws(()=>Boss.guard(r,'b',map,{targetUid:'c',seq:1}),/已有有效掩護/);
+  assert.equal(r.members.b.explorationStamina,100);
+  assert.equal(r.members.c.bossGuard.sourceUid,'a');
+  r={...r,battleAppliedTick:6};
+  const renewed=Boss.guard(r,'b',map,{targetUid:'c',seq:1});
+  assert.equal(renewed.members.b.explorationStamina,97);
+  assert.equal(renewed.members.c.bossGuard.sourceUid,'b');
+});
