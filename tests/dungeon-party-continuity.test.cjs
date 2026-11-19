@@ -119,8 +119,16 @@ test('leaving a live boss fight cannot teleport or reset the remaining players',
   const stored=f.c.records.get(API.ROOMS+'/'+roomId);
   stored.dungeonProgress={...stored.dungeonProgress,guardianStatus:'defeated',
     keyAcquired:true,portalStatus:'open'};
-  stored.members.a.position={...map.portalSite};
-  const arrival=await f.call('a','enter-boss',{roomId});
+  for(const uid of 'abc')stored.members[uid].position={...map.portalSite};
+  const first=await f.call('a','enter-boss',{roomId});
+  assert.equal(first.status,200);
+  assert.equal(first.body.room.dungeonArena,'exploration',
+    'the first YES may never drag teammates into the arena');
+  assert.equal(first.body.room.bossPortalReady.readyCount,1);
+  const second=await f.call('b','boss-ready',{roomId,ready:true});
+  assert.equal(second.status,200);
+  assert.equal(second.body.room.bossPortalReady.readyCount,2);
+  const arrival=await f.call('c','enter-boss',{roomId});
   assert.equal(arrival.status,200,JSON.stringify(arrival.body));
   assert.equal(arrival.body.room.dungeonArena,'boss');
   const before=arrival.body.room;
@@ -144,4 +152,103 @@ test('leaving a live boss fight cannot teleport or reset the remaining players',
   assert.equal(moved.body.room.dungeonArena,'boss');
   assert.equal(moved.body.room.members.b.moveSeq,1);
   assert.equal((await f.call('c','get',{roomId})).body.room.bossEncounter.status,'fighting');
+});
+
+// Test helper: C stores a server-issued map; only the test arranges characters
+// next to the portal so we can exercise voting independently of movement.
+function openPortal(f,roomId){
+  const map=generateDungeonLayout(SEED);
+  const stored=f.c.records.get(API.ROOMS+'/'+roomId);
+  stored.dungeonProgress={...stored.dungeonProgress,
+    guardianStatus:'defeated',keyAcquired:true,portalStatus:'open'};
+  for(const uid of Object.keys(stored.members))
+    stored.members[uid].position={...map.portalSite};
+  return stored;
+}
+test('concurrent confirmations on one C room cause exactly one boss transition',async()=>{
+  const f=fixture(),roomId=await assembled(f);
+  openPortal(f,roomId);
+  const outcomes=await Promise.all('abc'.split('').map(uid=>
+    f.call(uid,'boss-ready',{roomId,ready:true})));
+  assert.ok(outcomes.every(r=>r.status===200),JSON.stringify(outcomes));
+  const results=outcomes.map(x=>x.body.room);
+  assert.equal(results.filter(x=>x.dungeonArena==='boss').length,1,
+    'only the final serialized transaction performs a transition');
+  const final=(await f.call('a','get',{roomId})).body.room;
+  assert.equal(final.dungeonArena,'boss');
+  assert.equal(final.enemies.length,1);
+  assert.equal(final.enemies[0].id,Boss.ID);
+  assert.equal(final.enemies[0].battleHealth,Boss.HP);
+  assert.equal(final.bossPortalReady,null);
+  assert.equal((await f.call('a','boss-ready',{roomId,ready:false})).status,409);
+  const before=final.revision;
+  const retry=await f.call('a','enter-boss',{roomId});
+  assert.equal(retry.status,200);
+  assert.equal(retry.body.room.revision,before,'duplicate after arrival has no effect');
+});
+test('cancel vote, changed position and missing consent prevent premature boss entry',async()=>{
+  const f=fixture(),roomId=await assembled(f);
+  const stored=openPortal(f,roomId);
+  assert.equal((await f.call('a','boss-ready',{roomId,ready:'true'})).status,400);
+  assert.equal((await f.call('a','boss-ready',{roomId,ready:true})).status,200);
+  let room=(await f.call('a','get',{roomId})).body.room;
+  assert.equal(room.bossPortalReady.readyCount,1);
+  const repeated=await f.call('a','boss-ready',{roomId,ready:true});
+  assert.equal(repeated.body.room.revision,room.revision,'retry is idempotent');
+  assert.equal((await f.call('a','boss-ready',{roomId,ready:false})).status,200);
+  room=(await f.call('a','get',{roomId})).body.room;
+  assert.equal(room.bossPortalReady.readyCount,0);
+  await f.call('a','boss-ready',{roomId,ready:true});
+  await f.call('b','boss-ready',{roomId,ready:true});
+  stored.members.a.moveSeq=1; // invalidates the recorded position/step token
+  const moved=(await f.call('a','get',{roomId})).body.room;
+  assert.equal(moved.bossPortalReady.readyCount,1);
+  const missing=await f.call('c','enter-boss',{roomId});
+  assert.equal(missing.status,200);
+  assert.equal(missing.body.room.dungeonArena,'exploration',
+    'a stale vote must not count even though the client still displays it');
+  assert.equal(missing.body.room.bossPortalReady.readyCount,2);
+  const restored=await f.call('a','enter-boss',{roomId});
+  assert.equal(restored.body.room.dungeonArena,'boss');
+});
+test('departure shrinks required roster without resetting ready teammates',async()=>{
+  const f=fixture(),roomId=await assembled(f);
+  openPortal(f,roomId);
+  await f.call('a','boss-ready',{roomId,ready:true});
+  await f.call('b','boss-ready',{roomId,ready:true});
+  const departure=await f.call('c','leave',{roomId});
+  assert.equal(departure.status,200);
+  assert.equal(departure.body.room.status,'assembled');
+  assert.equal(departure.body.room.bossPortalReady.requiredCount,2);
+  assert.equal(departure.body.room.bossPortalReady.readyCount,2);
+  assert.equal(departure.body.room.dungeonArena,'exploration');
+  const final=await f.call('a','enter-boss',{roomId});
+  assert.equal(final.status,200);
+  assert.equal(final.body.room.dungeonArena,'boss');
+  assert.equal(Object.keys(final.body.room.members).length,2);
+});
+test('stale disconnected teammates do not block two-person or solo transition',async()=>{
+  const f=fixture(),roomId=await assembled(f);
+  const stored=openPortal(f,roomId);
+  stored.members.c.heartbeatAtMs=1;
+  const first=await f.call('a','boss-ready',{roomId,ready:true});
+  assert.equal(first.body.room.bossPortalReady.requiredCount,2);
+  assert.equal(first.body.room.bossPortalReady.offlineCount,1);
+  assert.equal(first.body.room.dungeonArena,'exploration');
+  const last=await f.call('b','boss-ready',{roomId,ready:true});
+  assert.equal(last.body.room.dungeonArena,'boss');
+  assert.ok(last.body.room.members.c,'offline teammate can reconnect to the boss scene');
+  assert.equal((await f.call('c','reconnect')).body.room.dungeonArena,'boss');
+});
+test('unactivated portal, distant players and downed members cannot give consent',async()=>{
+  const f=fixture(),roomId=await assembled(f);
+  assert.equal((await f.call('a','enter-boss',{roomId})).status,409);
+  const stored=openPortal(f,roomId);
+  stored.members.a.position={...generateDungeonLayout(SEED).spawn};
+  assert.equal((await f.call('a','boss-ready',{roomId,ready:true})).status,409);
+  stored.members.a.position={...generateDungeonLayout(SEED).portalSite};
+  stored.members.a.downed=true;
+  assert.equal((await f.call('a','boss-ready',{roomId,ready:true})).status,409);
+  assert.equal((await f.call('d','boss-ready',{roomId,ready:true})).status,403);
+  assert.equal((await f.call('a','get',{roomId})).body.room.dungeonArena,'exploration');
 });
