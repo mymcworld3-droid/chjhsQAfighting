@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-math1-data-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "某組資料為4、6、6、7、27。其平均數與中位數分別為何？",
+        "correct": "平均數10、中位數6",
+        "wrong": [
+          "平均數6、中位數10",
+          "平均數10、中位數7",
+          "平均數9、中位數6"
+        ],
+        "exp": "五個數相加為50，平均數=50/5=10；由小至大排列後第三個數是6，故中位數為6。極端值27會拉高平均數，但不會改變這組資料的中位數。",
+        "subject": "數學",
+        "sub_topic": "一維與二維資料、相關性",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-一維與二維資料、相關性",
+        "template_id": "ref-20261119-b7-math1-data-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-data-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "資料點(1,6)、(2,4)、(3,2)皆落在同一條直線上。此資料的線性相關係數為何？",
+        "correct": "−1",
+        "wrong": [
+          "0",
+          "1",
+          "−1/2"
+        ],
+        "exp": "三點滿足y=−2x+8，皆位於負斜率直線，具有完全負線性相關，相關係數r=−1。",
+        "subject": "數學",
+        "sub_topic": "一維與二維資料、相關性",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-一維與二維資料、相關性",
+        "template_id": "ref-20261119-b7-math1-data-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-data-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "班級甲的資料為2、4、6；班級乙為12、14、16。若各自增加相同常數10，哪項敘述正確？",
+        "correct": "平均數增加10，標準差不變",
+        "wrong": [
+          "平均數及標準差均增加10",
+          "平均數不變，標準差增加10",
+          "平均數和標準差都不變"
+        ],
+        "exp": "每個數同加10，平均數會增加10；各數相對其平均的離差不變，故變異數與標準差不變。",
+        "subject": "數學",
+        "sub_topic": "一維與二維資料、相關性",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-一維與二維資料、相關性",
+        "template_id": "ref-20261119-b7-math1-data-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
