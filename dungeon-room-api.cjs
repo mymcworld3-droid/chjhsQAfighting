@@ -14,7 +14,7 @@ const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
 const {strikeEnemy,maxHealth}=require('./dungeon-player-combat.cjs');
 const Skills=require('./dungeon-skill-combat.cjs');
 const QuizCredit=require('./dungeon-quiz-credit.cjs');
-const {staminaFor}=require('./dungeon-stamina-rules.cjs');
+const {staminaFor,clampStamina}=require('./dungeon-stamina-rules.cjs');
 const Objectives=require('./dungeon-objectives.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
 const Portal=require('./dungeon-portal-readiness.cjs');
@@ -148,6 +148,32 @@ function createHandler({
         return sessionRoom(room,at)&&hasMember(room,uid)?{id:pointed,room}:null;
       };
       const respond=(roomId,room)=>res.json({ok:true,roomId:roomId||null,room:room?publicRoom(roomId,room,at):null});
+      // A member may already be exploring when this version is deployed or
+      // may gain/lose administrator permissions while a room stays active.
+      // Revalidate the Firebase A flag on reconnect/get/stream-open, then
+      // publish one C revision. Regular movement incurs no extra A read.
+      const refreshAdmin=async(roomId,room)=>{
+        if(!room||!hasMember(room,uid)||!sessionRoom(room,at))return room;
+        const user=await resolveA().db.collection('users').doc(uid).get();
+        const privileged=user.exists&&user.data()?.isAdmin===true;
+        const member=membersOf(room)[uid];
+        if(member.dungeonAdmin===privileged&&
+            (!privileged||member.explorationStamina===10))return room;
+        const ref=db.collection(ROOMS).doc(roomId);
+        return db.runTransaction(async tx=>{
+          const snap=await tx.get(ref),current=snap.exists?snap.data():null;
+          if(!current||!hasMember(current,uid)||!sessionRoom(current,at))return current;
+          const existing=membersOf(current)[uid];
+          if(existing.dungeonAdmin===privileged&&
+              (!privileged||existing.explorationStamina===10))return current;
+          const nextMember={...existing,dungeonAdmin:privileged,
+            explorationStamina:privileged?10:clampStamina(existing.explorationStamina)};
+          const members={...current.members,[uid]:nextMember};
+          const revision=current.revision+1;
+          tx.update(ref,{members,revision});
+          return {...current,members,revision};
+        });
+      };
       const addMember=async(tx,roomId,room,name,player,{reuseExisting=false}={})=>{
         const current=await existing(tx);
         if(current&&current.id!==roomId){
@@ -282,7 +308,8 @@ function createHandler({
       }
       if(action==='reconnect'){
         const outcome=await db.runTransaction(existing);
-        return respond(outcome?.id,outcome?.room);
+        const room=outcome?.room?await refreshAdmin(outcome.id,outcome.room):null;
+        return respond(outcome?.id,room);
       }
       if(action==='recent-victories'){
         // Read-only personal victory discovery. Does not require an active
@@ -332,9 +359,10 @@ function createHandler({
       if(action==='subscribe'){
         const snap=await roomRef.get();
         if(!snap.exists)throw err('副本房間不存在',404);
-        const current=snap.data();
+        let current=snap.data();
         if(!hasMember(current,uid))throw err('你不是此副本的隊員',403);
         if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
+        current=await refreshAdmin(roomId,current);
         return streamDungeonRoom({req,res,ref:roomRef,uid,initialRoom:current,
           project:publicRoom,isActive:room=>sessionRoom(room,clock()),clock,logger,
           onTick:syncBattleClock});
@@ -380,7 +408,7 @@ function createHandler({
         const room=snap.data();
         if(!hasMember(room,uid))throw err('你不是此副本的隊員',403);
         if(!sessionRoom(room,at))throw err('副本房間已關閉或過期',410);
-        return respond(roomId,room);
+        return respond(roomId,await refreshAdmin(roomId,room));
       }
       if(action==='move'||action==='move-route'){
         // Both tap-to-walk and one-step keyboard movement use the same
