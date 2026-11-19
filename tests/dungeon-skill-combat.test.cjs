@@ -32,12 +32,18 @@ const body=()=>({
 });
 function room(record,enemy=beast()){
   const account={uid:'a',accessScore:200,position:{x:5,y:5},
-    battleHealth:100,downed:false,explorationStamina:100};
+    battleHealth:100,downed:false,explorationStamina:10};
   return {status:'assembled',battleAppliedTick:0,enemies:[enemy],
     members:{a:{...account,...S.initialCombatLoadout(account,record)}}};
 }
 const cast=(r,record,skillId,target,seq=1)=>S.castSkill(r,'a',map,record,{skillId,target,seq});
 const next=(old,out)=>({...old,members:out.members,enemies:out.enemies});
+// Simulates the resulting credited +4 energy after a separately-verified
+// answer; the skill unit test does not issue quiz receipts.
+const charged=(state,cost)=>state.members.a.explorationStamina>=cost?state:
+  {...state,members:{...state.members,
+    a:{...state.members.a,explorationStamina:
+      Math.min(10,state.members.a.explorationStamina+4)}}};
 test('skill loadout snapshots only include owned, unlocked, realm-valid abilities',()=>{
   const record=sword(),low=S.initialCombatLoadout({accessScore:1},record);
   assert.ok(low.dungeonSkillIds.includes('wind-slash'));
@@ -55,7 +61,7 @@ test('straight sword beam uses level-scaled power, stops at a wall and debits on
   const first=cast(r,record,'wind-slash',{x:7,y:5});
   assert.equal(first.duplicate,false);
   assert.ok(first.result.totalDamage>0);
-  assert.equal(first.members.a.explorationStamina,98);
+  assert.equal(first.members.a.explorationStamina,8);
   assert.equal(r.enemies[0].battleHealth,500,'pure function');
   assert.equal(first.members.a.skillSeq,1);
   assert.equal(cast(next(r,first),record,'wind-slash',{x:7,y:5}).duplicate,true);
@@ -91,7 +97,7 @@ test('sword array can damage multiple enemies, with multiple center intersection
   const out=cast(state,record,'sky-cloud',{x:7,y:5});
   assert.ok(out.result.hits.filter(v=>v.enemyId==='beast-1').length>=2);
   assert.ok(out.result.hits.some(v=>v.enemyId==='beast-2'));
-  assert.equal(out.members.a.explorationStamina,96);
+  assert.equal(out.members.a.explorationStamina,6);
 });
 test('flying sword summons to vacant tile then attacks along cardinal trail',()=>{
   const record=sword(),initial=room(record,beast(8,5));
@@ -112,12 +118,14 @@ test('body focus grants six reduced-cost casts and expires without turn limits',
   assert.equal(focused.result.totalDamage,0);
   let state=next(r,focused);
   for(let i=0;i<6;i++){
+    state=charged(state,1);
     const out=cast(state,record,'dragon-strike',{x:7,y:5},i+2);
     assert.equal(out.result.cost,1);
     assert.equal(out.members.a.focusCharges,5-i);
     state=next(state,out);
   }
   assert.equal(state.members.a.focusCharges,0);
+  state=charged(state,2);
   const normal=cast(state,record,'dragon-strike',{x:7,y:5},8);
   assert.equal(normal.result.cost,2);
 });
@@ -183,6 +191,7 @@ test('stage 13: focus empowers only body attacks, consumes precisely six empower
   assert.equal(focus.members.a.focusCharges,6);
   let state=next(initial,focus);
   for(let n=0;n<6;n++){
+    state=charged(state,1);
     const used=cast(state,record,'dragon-strike',{x:7,y:5},n+2);
     assert.equal(used.result.focusEmpowered,true);
     assert.equal(used.result.cost,1);
@@ -191,6 +200,7 @@ test('stage 13: focus empowers only body attacks, consumes precisely six empower
     assert.ok(used.result.effectCells.every(p=>Number.isInteger(p.x)&&Number.isInteger(p.y)));
     state=next(state,used);
   }
+  state=charged(state,2);
   const normal=cast(state,record,'dragon-strike',{x:7,y:5},8);
   assert.equal(normal.result.focusEmpowered,false);
   assert.equal(normal.result.cost,2);
@@ -221,7 +231,7 @@ test('stage 13: empowered skills cannot be forged by a browser-reported flag or 
   assert.equal(attack.result.focusEmpowered,false);
   assert.equal(attack.result.cost,2);
   assert.equal(attack.result.focusCharges,0);
-  assert.equal(attack.members.a.explorationStamina,98);
+  assert.equal(attack.members.a.explorationStamina,8);
 });
 
 test('stage 13: realtime dungeon skill labels never describe turn cooldowns',()=>{
