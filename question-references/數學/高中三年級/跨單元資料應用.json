@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-cross-unit-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "某班甲組20人平均80分，乙組30人平均70分，合併50人的平均成績為何？",
+        "correct": "74分",
+        "wrong": [
+          "75分",
+          "76分",
+          "70分"
+        ],
+        "exp": "合併平均=(20×80+30×70)/50=(1600+2100)/50=74，須以人數加權。",
+        "subject": "數學",
+        "sub_topic": "跨單元資料應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-跨單元資料應用",
+        "template_id": "ref-20261119-b10-m3-cross-unit-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-cross-unit-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "商品單價模型p(q)=60−2q（元），銷量q介於0與30間。收益R(q)=qp(q)，最大收益為何？",
+        "correct": "450元",
+        "wrong": [
+          "900元",
+          "600元",
+          "300元"
+        ],
+        "exp": "R(q)=60q−2q²=−2(q−15)²+450，故q=15時最大收益450元。",
+        "subject": "數學",
+        "sub_topic": "跨單元資料應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-跨單元資料應用",
+        "template_id": "ref-20261119-b10-m3-cross-unit-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-cross-unit-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "某校去年社團參與學生120人，今年150人，但總學生人數同時由400人變成600人。社團參與率的變化何者正確？",
+        "correct": "由30%下降至25%",
+        "wrong": [
+          "由30%上升至37.5%",
+          "由25%上升至30%",
+          "由30%維持30%"
+        ],
+        "exp": "去年120/400=30%，今年150/600=25%；參加人數雖增加，但參與率下降5個百分點。",
+        "subject": "數學",
+        "sub_topic": "跨單元資料應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-跨單元資料應用",
+        "template_id": "ref-20261119-b10-m3-cross-unit-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
