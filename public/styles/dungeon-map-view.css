@@ -193,3 +193,20 @@
   #dungeon-map-view .dm-movement{bottom:8px;left:auto;right:8px;min-width:165px}
   #dungeon-map-view .dm-controls{max-width:calc(100% - 205px)}
 }
+
+/* Stage 8: compact server-calibrated battle clock; passive by design. */
+#dungeon-map-view .dm-battle-clock{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:32px;padding:5px 10px;white-space:nowrap;
+  border:1px solid #b3bc8b89;border-radius:9px;
+  color:#e0e8bf;background:#263b2b;letter-spacing:.02em;
+  font:600 12px/1.25 system-ui,"Noto Sans TC",sans-serif;
+  font-variant-numeric:tabular-nums;
+}
+@media(max-width:720px){
+  #dungeon-map-view .dm-head-actions{gap:6px}
+  #dungeon-map-view .dm-battle-clock{font-size:10px;padding:4px 6px}
+}
+@media(max-width:370px){
+  #dungeon-map-view .dm-battle-clock{max-width:128px;white-space:normal;text-align:center}
+}
