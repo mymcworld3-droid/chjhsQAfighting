@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-bio3-regulate-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從具體生理機制判斷神經、激素與免疫功能",
+      "question": {
+        "q": "健康人體進食後血糖升高，胰臟分泌哪種激素可促進細胞攝取或儲存葡萄糖，使血糖下降？",
+        "correct": "胰島素",
+        "wrong": [
+          "升糖素",
+          "腎上腺素",
+          "甲狀腺素"
+        ],
+        "exp": "胰臟β細胞分泌胰島素，促進部分細胞攝取葡萄糖及肝、肌肉組織合成肝醣，協助降低血糖。",
+        "subject": "生物",
+        "sub_topic": "神經、內分泌及免疫",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經、內分泌及免疫",
+        "template_id": "ref-20261119-bio3-regulate-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-bio3-regulate-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從具體生理機制判斷神經、激素與免疫功能",
+      "question": {
+        "q": "手指碰到高溫物體時，手臂迅速縮回，反射路徑可先經脊髓整合而不必等待大腦意識決定。最合理的敘述是？",
+        "correct": "脊髓反射可先產生動作，訊息亦可上傳大腦",
+        "wrong": [
+          "所有反射都必先經大腦皮質做出意識判斷",
+          "反射弧不需要感覺神經元",
+          "運動神經元在反射中不參與肌肉反應"
+        ],
+        "exp": "典型脊髓撤回反射經感覺神經傳入脊髓，透過中間神經元等連結運動神經，先促成快速撤回；痛覺訊息也會傳向大腦。",
+        "subject": "生物",
+        "sub_topic": "神經、內分泌及免疫",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經、內分泌及免疫",
+        "template_id": "ref-20261119-bio3-regulate-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-bio3-regulate-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從具體生理機制判斷神經、激素與免疫功能",
+      "question": {
+        "q": "某人接種疫苗後，再遇到相同抗原可迅速產生大量特異性抗體。負責大量分泌抗體的細胞主要是哪一種？",
+        "correct": "漿細胞",
+        "wrong": [
+          "紅血球",
+          "血小板",
+          "吞噬後立即死亡的成熟神經元"
+        ],
+        "exp": "抗原刺激B細胞分化，漿細胞大量分泌對應抗體；記憶性B細胞則協助再次接觸時快速應答。",
+        "subject": "生物",
+        "sub_topic": "神經、內分泌及免疫",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經、內分泌及免疫",
+        "template_id": "ref-20261119-bio3-regulate-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
