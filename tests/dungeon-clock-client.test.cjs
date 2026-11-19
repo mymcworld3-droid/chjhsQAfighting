@@ -7,9 +7,10 @@ const source=fs.readFileSync(path.join(__dirname,
   '../public/cultivation/dungeon-map-view.js'),'utf8')
   .replace(/^import .*$/gm,'').replace(/^export /gm,'');
 let perfNow=400;
-const Viewer=new Function('performance',source+'\nreturn DungeonMapView;')({
+const Viewer=new Function('performance','Camera',
+  source+'\nreturn DungeonMapView;')({
   now:()=>perfNow
-});
+},{initialCamera:()=>({zoom:1,panX:0,panY:0})});
 function setup(start=1800000000000){
   const viewer=new Viewer(),output={textContent:'',title:''};
   viewer.$=selector=>selector==='[data-dm-clock]'?output:null;
