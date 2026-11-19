@@ -106,6 +106,17 @@ app.post('/api/dungeon/quiz/answer',(req,res)=>{
   s.reviews[q.id]=review;s.lastReview=review;delete s.pending[s.answered];
   s.answered++;return res.json({ok:true,review,state:quizView(uid)});
 });
+app.post('/api/dungeon/quiz/next',(req,res)=>{
+  const uid=req.get('x-test-user'),s=quizState[uid];
+  requests.push('quiz-next');
+  if(!room?.members?.[uid]||room.status!=='assembled')
+    return res.status(403).json({error:'not assembled'});
+  if(s.lastReview?.questionId===req.body.questionId)
+    s.lastReview=null;
+  else if(!s.reviews[req.body.questionId]||s.lastReview)
+    return res.status(409).json({error:'review mismatch'});
+  return res.json({ok:true,state:quizView(uid)});
+});
 app.post('/api/dungeon/room',(req,res)=>{
   const uid=req.get('x-test-user'),action=req.body.action;
   requests.push(action);
