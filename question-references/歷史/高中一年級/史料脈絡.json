@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-hist1-context-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "史料脈絡、來源可信度與可檢驗的歷史問題，不預設結論",
+      "question": {
+        "q": "某商會於1925年刊登廣告，稱「本城商業空前繁盛」，但同年民間日記提到許多店家歇業。史家應優先注意什麼？",
+        "correct": "比較兩份文字的撰寫目的、受眾與所指區域，再尋求其他資料交互查核",
+        "wrong": [
+          "商會廣告出版較正式，因而必然完整代表每家商店狀況",
+          "私人日記帶有個人感受，因此一定比所有商業資料準確",
+          "兩份文字描述不同就表示其中一份必定是後人偽造"
+        ],
+        "exp": "商會廣告有招徠目的，日記反映個人接觸的生活範圍；需考察其時空脈絡與證據範圍，不能直接決定孰真孰假。",
+        "subject": "歷史",
+        "sub_topic": "史料脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料脈絡",
+        "template_id": "ref-20261119-b11-hist1-context-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-hist1-context-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "史料脈絡、來源可信度與可檢驗的歷史問題，不預設結論",
+      "question": {
+        "q": "研究某歷史學校的上課制度，找到一張無日期課表及一本學生畢業紀念冊。若要確定課表適用年份，哪種做法最妥當？",
+        "correct": "比對課表上校名、教師姓名與同期學籍或校務檔案，以確認使用年代",
+        "wrong": [
+          "只因課表紙張泛黃，就斷言必定與紀念冊同年",
+          "只看課表上有數學課，即推定它通行於所有時代",
+          "認為課表既為原件，就不需再核對其時間與適用學校"
+        ],
+        "exp": "材料需要確認年代、機構與使用情境；可用校務記錄、教師任職資料等交叉檢查。",
+        "subject": "歷史",
+        "sub_topic": "史料脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料脈絡",
+        "template_id": "ref-20261119-b11-hist1-context-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-hist1-context-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "史料脈絡、來源可信度與可檢驗的歷史問題，不預設結論",
+      "question": {
+        "q": "某份殖民時期官方報告列出「已開辦學校數」，地方居民回憶卻提到「孩子難以入學」。對兩份史料最合理的綜合解釋為何？",
+        "correct": "設校數量與實際入學機會是不同指標，需查各地分布與招生條件",
+        "wrong": [
+          "開辦學校增加便能證明所有孩子都已實際入學",
+          "居民回憶反映困難，因此官方報告的設校數必然全部虛構",
+          "兩份資料指標不同，所以歷史研究永遠無法同時使用"
+        ],
+        "exp": "學校設立與學生可及性不同，應以地域、身份、招生規定與入學人數等資料補充背景。",
+        "subject": "歷史",
+        "sub_topic": "史料脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料脈絡",
+        "template_id": "ref-20261119-b11-hist1-context-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
