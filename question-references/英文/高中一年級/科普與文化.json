@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-en1-scienceculture-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Read: 'Some cities paint selected roofs with reflective coatings. These roofs absorb less sunlight on hot days, which may reduce indoor cooling needs.' Why are reflective coatings useful?",
+        "correct": "They can reduce the amount of solar energy absorbed by the roof.",
+        "wrong": [
+          "They create electricity directly from rainfall.",
+          "They prevent all outdoor temperatures from changing.",
+          "They make heat travel from the room to the Sun."
+        ],
+        "exp": "Reflective surfaces send more incoming sunlight away, generally absorbing less shortwave energy; the text links this to potentially lower cooling demand.",
+        "subject": "英文",
+        "sub_topic": "科普與文化",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中一年級-科普與文化",
+        "template_id": "ref-20261119-b8-en1-scienceculture-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-scienceculture-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Read: 'During a festival, families share a traditional meal. Some use local vegetables unavailable in other regions, while keeping the festival's central meaning.' What does this demonstrate?",
+        "correct": "A tradition can retain its meaning while allowing regional variations.",
+        "wrong": [
+          "Every family must follow one identical recipe.",
+          "Local ingredients always remove a festival's cultural meaning.",
+          "Regional differences prove the festival has no shared purpose."
+        ],
+        "exp": "The tradition's central meaning remains, but ingredients vary with local conditions, illustrating continuity with cultural variation.",
+        "subject": "英文",
+        "sub_topic": "科普與文化",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中一年級-科普與文化",
+        "template_id": "ref-20261119-b8-en1-scienceculture-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-scienceculture-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Read: 'Sea turtles may mistake floating plastic bags for jellyfish. Wildlife groups recommend reducing litter and collecting waste on beaches.' What problem is described?",
+        "correct": "Plastic pollution can endanger sea turtles by resembling their food.",
+        "wrong": [
+          "Plastic bags provide sea turtles with better nutrition.",
+          "Sea turtles can always identify every plastic object.",
+          "Collecting litter increases the amount of plastic in the ocean."
+        ],
+        "exp": "The passage states that floating plastic can be confused with prey, creating a hazard; it motivates reducing and removing waste.",
+        "subject": "英文",
+        "sub_topic": "科普與文化",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中一年級-科普與文化",
+        "template_id": "ref-20261119-b8-en1-scienceculture-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
