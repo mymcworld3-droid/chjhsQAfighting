@@ -111,7 +111,9 @@ app.post('/api/dungeon/room',(req,res)=>{
     Object.values(room.members).sort((a,b)=>a.joinedAtMs-b.joinedAtMs)
       .forEach((member,i)=>{
         member.position={...map.spawnPads[i]};
-        member.explorationStamina=100;member.moveSeq=0;member.lastMove=null;
+        member.explorationStamina=100;member.battleHealth=100;
+        member.battleMaxHealth=100;member.downed=false;member.lastDamage=null;
+        member.moveSeq=0;member.lastMove=null;
       });
     room.revision++;publish();return success();
   }
