@@ -24,6 +24,7 @@ class DungeonMapView{
     this.camera=Camera.initialCamera();this.follow=false;this.routes=false;
     this.opened=false;this.seq=0;this.pointers=new Map();this.movePending=false;
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
+    this.clockTimer=null;this.clockAnchor=null;this.clockTickFloor=0;
     this.onResize=()=>this.resize();
     this.onVisibility=()=>{if(!document.hidden&&this.opened)this.resize();};
   }
@@ -32,7 +33,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-map-view-style')){
       const style=document.createElement('link');
       style.id='dungeon-map-view-style';style.rel='stylesheet';
-      style.href='/styles/dungeon-map-view.css?v=20261118-stage6';
+      style.href='/styles/dungeon-map-view.css?v=20261119-stage8';
       document.head.append(style);
     }
     const root=document.createElement('section');
@@ -42,7 +43,7 @@ class DungeonMapView{
     root.innerHTML='<div class="dm-shell">'+
       '<header class="dm-head"><div><small>青雲問道 · 秘境探勘</small>'+
       '<h2 data-dm-title>秘境地圖</h2></div><div class="dm-head-actions">'+
-      '<span class="dm-badge">探索預覽</span>'+
+      '<span class="dm-battle-clock" data-dm-clock role="timer" aria-live="off">等待集結</span>'+
       '<button type="button" data-dm="close" aria-label="返回合作副本隊伍">返回隊伍 <span aria-hidden="true">×</span></button></div></header>'+
       '<div class="dm-stage" data-dm-stage>'+
       '<canvas class="dm-world" data-dm-world tabindex="0" aria-label="秘境地圖。可拖曳、雙指縮放，或使用方向鍵移動視角。"></canvas>'+
@@ -125,6 +126,8 @@ class DungeonMapView{
     }else window.addEventListener('resize',this.onResize);
     window.addEventListener('orientationchange',this.onResize);
     document.addEventListener('visibilitychange',this.onVisibility);
+    this.clockTimer=setInterval(()=>this.renderClock(),250);
+    this.syncClockAnchor(room);
     this.resize();this.updateStatus();
     await this.load();
   }
@@ -229,6 +232,44 @@ class DungeonMapView{
       if(this.isCurrent()&&token===this.seq)this.updateMovementHUD();
     }
   }
+  syncClockAnchor(room){
+    const battle=room?.battleClock;
+    if(!battle||battle.version!==1||!Number.isSafeInteger(battle.startedAtMs)){
+      this.clockAnchor=null;this.clockTickFloor=0;this.renderClock();return;
+    }
+    // The server transmits its timestamp/elapsed value; local performance
+    // time is used only to smoothly *display* progress between room snapshots.
+    const old=this.clockAnchor;
+    if(old?.startedAtMs!==battle.startedAtMs)this.clockTickFloor=0;
+    this.clockTickFloor=Math.max(this.clockTickFloor,Number(battle.tick)||0);
+    this.clockAnchor={
+      startedAtMs:battle.startedAtMs,
+      elapsedMs:Math.max(0,Number(battle.elapsedMs)||0),
+      receivedAt:performance.now(),
+      tickMs:Math.max(1,Number(battle.tickMs)||1000),
+      maxElapsedMs:Math.max(0,(Number(room.expiresAtMs)||0)-battle.startedAtMs)
+    };
+    this.renderClock();
+  }
+  renderClock(){
+    const node=this.$('[data-dm-clock]');
+    if(!node)return;
+    const clock=this.clockAnchor;
+    if(!clock||this.room?.status!=='assembled'){
+      node.textContent='等待集結';
+      node.title='副本時鐘尚未啟動';return;
+    }
+    const passed=Math.max(clock.elapsedMs,clock.elapsedMs+
+      Math.max(0,performance.now()-clock.receivedAt));
+    const duration=Math.min(passed,clock.maxElapsedMs||passed);
+    const seconds=Math.floor(duration/1000);
+    const h=Math.floor(seconds/3600),m=Math.floor(seconds/60)%60,s=seconds%60;
+    const display=(h?String(h)+':':'')+
+      String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    const tick=Math.max(this.clockTickFloor,Math.floor(duration/clock.tickMs));
+    node.textContent='戰場時鐘 '+display+' · T'+tick;
+    node.title='由伺服器時間校準；玩家操作或離開地圖不會暫停';
+  }
   updateStatus(){
     const state=this.$('[data-dm-status]');
     if(state)state.textContent=this.room?.status==='assembled'?
@@ -244,6 +285,7 @@ class DungeonMapView{
     }
     if(Number(room.revision)<Number(this.room?.revision||0))return;
     this.room=room;
+    this.syncClockAnchor(room);
     this.updateStatus();
     if(this.map&&this.follow){
       this.camera=Camera.focusOn(this.camera,this.selfPad(),this.map,this.width,this.height);
@@ -252,6 +294,7 @@ class DungeonMapView{
   }
   close(){
     ++this.seq;this.opened=false;this.pointers.clear();this.movePending=false;
+    clearInterval(this.clockTimer);this.clockTimer=null;this.clockAnchor=null;this.clockTickFloor=0;
     this.observer?.disconnect();this.observer=null;
     window.removeEventListener('resize',this.onResize);
     window.removeEventListener('orientationchange',this.onResize);
