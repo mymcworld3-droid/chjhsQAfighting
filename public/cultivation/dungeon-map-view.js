@@ -27,6 +27,7 @@ class DungeonMapView{
     this.opened=false;this.seq=0;this.pointers=new Map();this.movePending=false;
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
     this.aimTile=null;this.skillSignature='';
+    this.focusAuras=new Map();
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
     this.clockTimer=null;this.clockAnchor=null;this.clockTickFloor=0;
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
@@ -40,7 +41,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-map-view-style')){
       const style=document.createElement('link');
       style.id='dungeon-map-view-style';style.rel='stylesheet';
-      style.href='/styles/dungeon-map-view.css?v=20261119-stage12';
+      style.href='/styles/dungeon-map-view.css?v=20261119-stage13';
       document.head.append(style);
     }
     const root=document.createElement('section');
@@ -53,7 +54,8 @@ class DungeonMapView{
       '<span class="dm-battle-clock" data-dm-clock role="timer" aria-live="off">等待集結</span>'+
       '<button type="button" data-dm="close" aria-label="返回合作副本隊伍">返回隊伍 <span aria-hidden="true">×</span></button></div></header>'+
       '<div class="dm-stage" data-dm-stage>'+
-      '<canvas class="dm-world" data-dm-world tabindex="0" aria-label="秘境地圖。可拖曳、雙指縮放，或使用方向鍵移動視角。"></canvas>'+
+      '<canvas class="dm-world" data-dm-world tabindex="0" aria-label="秘境地圖。可拖曳、雙指縮放，或使用方向鍵移動視角。"></canvas>'+ 
+      '<div class="dm-effect-layer" data-dm-effects aria-hidden="true"></div>'+
       '<div class="dm-message" data-dm-message role="status" aria-live="polite">正在取得副本地圖…</div>'+
       '<aside class="dm-biome" data-dm-biome-box hidden><small>秘境地貌</small>'+
       '<strong data-dm-biome>—</strong><span data-dm-summary></span></aside>'+
@@ -287,6 +289,7 @@ class DungeonMapView{
     // The beast inspector and manual controls share the compact left rail.
     // Display only one at a time so neither hides the other's buttons.
     panel.hidden=!active||!presets.length||this.inspectOpen;
+    panel.classList.toggle('has-focus',active&&Number(member?.focusCharges)>0);
     if(panel.hidden)return;
     const skills=member.dungeonSkills||[];
     const signature=JSON.stringify([presets,skills]);
@@ -312,8 +315,10 @@ class DungeonMapView{
     const stamina=Number.isSafeInteger(member.explorationStamina)?
       member.explorationStamina:0;
     const downed=member.downed===true||member.battleHealth===0;
-    this.$('[data-dm-focus]').textContent=member.focusCharges>0?
-      '蓄勢 '+member.focusCharges+'/6':'';
+    const charges=Number.isSafeInteger(member.focusCharges)?
+      Math.max(0,Math.min(6,member.focusCharges)):0;
+    this.$('[data-dm-focus]').textContent=charges>0?
+      '✦ 金身蓄勢 '+charges+'/6 · 體術減耗':'';
     const aimed=this.currentAim();
     this.$('[data-dm-aim]').textContent=aimed?
       '目標格 ('+aimed.x+'，'+aimed.y+') · 點其他格改變目標':
@@ -326,9 +331,16 @@ class DungeonMapView{
     this.root.querySelectorAll('[data-dm-skills] button').forEach(button=>{
       const skill=skills.find(v=>v.id===button.dataset.skillId);
       if(!skill)return;
-      const cost=member.focusCharges>0&&skill.school==='body'&&
-        skill.kind!=='fist-focus'?Math.ceil(skill.cost/2):skill.cost;
-      button.textContent=skill.name+' · '+cost+' 體力';
+      const empowered=charges>0&&skill.school==='body'&&
+        skill.kind!=='fist-focus';
+      const cost=empowered?Math.ceil(skill.cost/2):skill.cost;
+      // Only actually empowered body attacks turn gold.
+      button.classList.toggle('is-focus-empowered',empowered);
+      button.dataset.focusEmpowered=String(empowered);
+      button.textContent=(empowered?'✦ ':'')+skill.name+' · '+cost+' 體力';
+      button.title=(empowered?'蓄勢加成：體力減半、施放後消耗一層。':
+        (skill.kind==='fist-focus'?'施放後凝聚六層蓄勢，無冷卻。':''))+
+        (skill.description||'');
       button.disabled=this.skillPending||this.loadoutPending||this.movePending||
         downed||stamina<cost||
         (skill.kind!=='fist-focus'&&!aimed);
@@ -412,8 +424,12 @@ class DungeonMapView{
         const result=response.room.members?.[this.uid]?.lastSkill;
         if(result?.seq===seq&&result.skillId===skillId){
           const defeated=result.hits?.filter(hit=>hit.defeated).length||0;
-          this.skillAlert(result.skillName+' · '+result.totalDamage+
+          this.skillAlert(result.focusActivated?
+            '✦ 金身蓄勢！六層金色氣勁已凝聚，接下來六招體術體力減半':
+            (result.focusEmpowered?'✦ 金身加成 · ':'')+
+            result.skillName+' · '+result.totalDamage+
             ' 傷害 · '+(result.hits?.length||0)+' 次命中'+
+            (result.focusEmpowered?' · 蓄勢剩餘 '+result.focusCharges+'/6':'')+
             (defeated?' · 擊敗 '+defeated+' 隻':''));
           if(result.position){
             this.follow=true;this.followBeast=false;
@@ -689,6 +705,8 @@ class DungeonMapView{
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
     this.aimTile=null;this.skillSignature='';
     this.quiz?.destroy();
+    for(const aura of this.focusAuras.values())aura.remove();
+    this.focusAuras.clear();
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
     this.touchOrigins.clear();this.gestureMulti=false;
     this.inspectOpen=false;this.selectedBeastId=null;
