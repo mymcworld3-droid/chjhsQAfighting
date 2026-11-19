@@ -816,7 +816,7 @@ class DungeonMapView{
       }));
     }
     const state={patrol:'巡邏中',return:'返回巡邏',pursuit:'追蹤中',
-      alert:'警戒',windup:'準備攻擊！',recover:'收招中'};
+      alert:'警戒',windup:'準備攻擊！',recover:'收招中',staggered:'破盾失衡'};
     list.querySelectorAll('[data-beast-id]').forEach(item=>{
       const beast=beasts.find(e=>String(e.id)===item.dataset.beastId);
       if(!beast)return;
