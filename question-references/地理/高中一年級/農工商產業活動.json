@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-geo1-industry-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "某加工業使用大量沉重礦石作原料，製成品重量遠小於原料重量，其他區位條件相近。為減少原料運輸成本，工廠較可能設在哪裡？",
+        "correct": "接近原料產地",
+        "wrong": [
+          "距離原料產地最遠處",
+          "只能設在遊客最密集處",
+          "一定要設在沒有道路的地區"
+        ],
+        "exp": "原料具有顯著重量損失的加工業，常考慮靠近原料產地，以減少運送大量未加工原料的成本。",
+        "subject": "地理",
+        "sub_topic": "農工商產業活動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-農工商產業活動",
+        "template_id": "ref-20261119-b4-geo1-industry-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-geo1-industry-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "連鎖超市評估新店址時，特別考慮住宅人口密度、道路可達性與購買力。這主要反映商業區位受何者影響？",
+        "correct": "消費市場規模與交通可及性",
+        "wrong": [
+          "當地板塊運動速率",
+          "深海洋流溫度",
+          "店址與顧客距離完全無關"
+        ],
+        "exp": "零售商業需接觸消費者，通常重視市場腹地、居民需求、交通便捷性與競爭環境。",
+        "subject": "地理",
+        "sub_topic": "農工商產業活動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-農工商產業活動",
+        "template_id": "ref-20261119-b4-geo1-industry-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-geo1-industry-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "某企業原本僅向一國採購關鍵零件，後改向多國合格供應商採購，雖增加部分管理成本。這項調整最直接希望改善什麼？",
+        "correct": "降低單一來源中斷造成的供應風險",
+        "wrong": [
+          "保證所有零件價格永遠相同",
+          "讓運輸需求完全歸零",
+          "使所有國家的生產條件完全一致"
+        ],
+        "exp": "分散供應來源可提升供應鏈韌性，但也可能帶來管理、驗證及物流成本。",
+        "subject": "地理",
+        "sub_topic": "農工商產業活動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-農工商產業活動",
+        "template_id": "ref-20261119-b4-geo1-industry-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
