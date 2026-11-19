@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-english1-名詞子句與形容詞子句-1",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：名詞子句與形容詞子句，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "Could you tell me ______ the last bus leaves tonight?",
+        "correct": "when",
+        "wrong": [
+          "when does",
+          "what time does",
+          "that when does"
+        ],
+        "exp": "間接問句應採直述語序：when the last bus leaves，而非疑問倒裝。",
+        "subject": "英文",
+        "sub_topic": "名詞子句與形容詞子句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-高中一年級-名詞子句與形容詞子句",
+        "template_id": "extra-2026-english1-名詞子句與形容詞子句-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-名詞子句與形容詞子句-2",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：名詞子句與形容詞子句，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "The student ______ won the science fair has been invited to speak at our school.",
+        "correct": "who",
+        "wrong": [
+          "which",
+          "where",
+          "when"
+        ],
+        "exp": "先行詞student指人，關係代名詞who在子句中作主詞。",
+        "subject": "英文",
+        "sub_topic": "名詞子句與形容詞子句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-高中一年級-名詞子句與形容詞子句",
+        "template_id": "extra-2026-english1-名詞子句與形容詞子句-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-名詞子句與形容詞子句-3",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：名詞子句與形容詞子句，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "______ the committee decides will affect how the school uses its budget next year.",
+        "correct": "What",
+        "wrong": [
+          "Where",
+          "Which student",
+          "Because"
+        ],
+        "exp": "空格需名詞子句作整句主詞，What the committee decides表示委員會決定的事情。",
+        "subject": "英文",
+        "sub_topic": "名詞子句與形容詞子句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-高中一年級-名詞子句與形容詞子句",
+        "template_id": "extra-2026-english1-名詞子句與形容詞子句-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

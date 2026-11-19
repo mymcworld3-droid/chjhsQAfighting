@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-english1-現在式與過去式-1",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：現在式與過去式，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "Every morning, Kevin ______ the train at seven, but yesterday he took the bus instead.",
+        "correct": "takes",
+        "wrong": [
+          "took",
+          "is taking yesterday",
+          "will took"
+        ],
+        "exp": "every morning表示固定習慣，主詞Kevin為第三人稱單數，現在簡單式takes正確。",
+        "subject": "英文",
+        "sub_topic": "現在式與過去式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-高中一年級-現在式與過去式",
+        "template_id": "extra-2026-english1-現在式與過去式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-現在式與過去式-2",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：現在式與過去式，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "The students ______ the museum last Friday and wrote a report about the visit the next day.",
+        "correct": "visited",
+        "wrong": [
+          "visit",
+          "visits",
+          "have visiting"
+        ],
+        "exp": "last Friday是確定的過去時間，使用過去簡單式visited。",
+        "subject": "英文",
+        "sub_topic": "現在式與過去式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-高中一年級-現在式與過去式",
+        "template_id": "extra-2026-english1-現在式與過去式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-現在式與過去式-3",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：現在式與過去式，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "Water ______ at approximately 100°C under standard atmospheric pressure.",
+        "correct": "boils",
+        "wrong": [
+          "boiled yesterday",
+          "is boiling every yesterday",
+          "will boiling"
+        ],
+        "exp": "敘述一般科學事實時使用現在簡單式，Water為不可數主詞，故用boils。",
+        "subject": "英文",
+        "sub_topic": "現在式與過去式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-高中一年級-現在式與過去式",
+        "template_id": "extra-2026-english1-現在式與過去式-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

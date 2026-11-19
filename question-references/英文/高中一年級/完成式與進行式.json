@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-english1-完成式與進行式-1",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：完成式與進行式，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "Emma ______ in this town since she was five years old, and she still lives here now.",
+        "correct": "has lived",
+        "wrong": [
+          "lived only yesterday",
+          "is live",
+          "have living"
+        ],
+        "exp": "since指出從過去延續至今，主詞Emma用現在完成式has lived。",
+        "subject": "英文",
+        "sub_topic": "完成式與進行式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-高中一年級-完成式與進行式",
+        "template_id": "extra-2026-english1-完成式與進行式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-完成式與進行式-2",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：完成式與進行式，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "When the lights suddenly went out, the students ______ their presentations in the classroom.",
+        "correct": "were preparing",
+        "wrong": [
+          "prepare every week",
+          "have prepare",
+          "will preparing"
+        ],
+        "exp": "突發過去事件打斷當時正在進行的動作，使用過去進行式were preparing。",
+        "subject": "英文",
+        "sub_topic": "完成式與進行式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-高中一年級-完成式與進行式",
+        "template_id": "extra-2026-english1-完成式與進行式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-完成式與進行式-3",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：完成式與進行式，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "I can't lend you the novel right now because I ______ reading it yet.",
+        "correct": "haven't finished",
+        "wrong": [
+          "didn't finished",
+          "am finish",
+          "haven't finishing"
+        ],
+        "exp": "yet與尚未完成的現在結果相符，haven't finished為現在完成式否定。",
+        "subject": "英文",
+        "sub_topic": "完成式與進行式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-高中一年級-完成式與進行式",
+        "template_id": "extra-2026-english1-完成式與進行式-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

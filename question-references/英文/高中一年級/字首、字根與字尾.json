@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-english1-字首、字根與字尾-1",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：字首、字根與字尾，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "The museum provides ______ tickets for visitors with disabilities, so they can enter the exhibition without extra obstacles.",
+        "correct": "accessible",
+        "wrong": [
+          "accessing",
+          "accessibly",
+          "inaccessible"
+        ],
+        "exp": "名詞tickets前需形容詞且語意指容易取得或使用，accessible正確；inaccessible語意相反。",
+        "subject": "英文",
+        "sub_topic": "字首、字根與字尾",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-高中一年級-字首、字根與字尾",
+        "template_id": "extra-2026-english1-字首、字根與字尾-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-字首、字根與字尾-2",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：字首、字根與字尾，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "The speaker's explanation was so ______ that everyone understood the safety rules without asking questions.",
+        "correct": "clear",
+        "wrong": [
+          "unclear",
+          "clearly",
+          "clearness"
+        ],
+        "exp": "was後及so...that結構需形容詞，且全部理解代表說明清楚，故選clear。",
+        "subject": "英文",
+        "sub_topic": "字首、字根與字尾",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-高中一年級-字首、字根與字尾",
+        "template_id": "extra-2026-english1-字首、字根與字尾-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-字首、字根與字尾-3",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：字首、字根與字尾，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "After repairing the broken bicycle, Mia felt a strong sense of ______ because she had solved the problem herself.",
+        "correct": "achievement",
+        "wrong": [
+          "achieve",
+          "achievable",
+          "achievingly"
+        ],
+        "exp": "of後需要名詞，achievement表示成就感；其餘詞性或構詞不合。",
+        "subject": "英文",
+        "sub_topic": "字首、字根與字尾",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-高中一年級-字首、字根與字尾",
+        "template_id": "extra-2026-english1-字首、字根與字尾-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

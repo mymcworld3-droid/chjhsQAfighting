@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-english1-連接詞與轉折-1",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：連接詞與轉折，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "______ the weather was terrible, the rescue team continued searching for the missing hikers.",
+        "correct": "Although",
+        "wrong": [
+          "Because of",
+          "Unless",
+          "Therefore"
+        ],
+        "exp": "句中前後為讓步對比，Although引導完整子句；Because of後通常接名詞片語。",
+        "subject": "英文",
+        "sub_topic": "連接詞與轉折",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-高中一年級-連接詞與轉折",
+        "template_id": "extra-2026-english1-連接詞與轉折-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-連接詞與轉折-2",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：連接詞與轉折，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "You will not be allowed into the laboratory ______ you wear the required safety goggles.",
+        "correct": "unless",
+        "wrong": [
+          "although",
+          "because",
+          "since"
+        ],
+        "exp": "實驗室規定表示除非戴好護目鏡，否則不能進入，選unless。",
+        "subject": "英文",
+        "sub_topic": "連接詞與轉折",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-高中一年級-連接詞與轉折",
+        "template_id": "extra-2026-english1-連接詞與轉折-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-連接詞與轉折-3",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：連接詞與轉折，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "The library was closed for repairs. ______, the students used the online collection to finish their research.",
+        "correct": "Therefore",
+        "wrong": [
+          "However although",
+          "Despite of",
+          "Unless"
+        ],
+        "exp": "前句指出圖書館關閉，後句是因此採用線上館藏，Therefore作結果連接副詞。",
+        "subject": "英文",
+        "sub_topic": "連接詞與轉折",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-高中一年級-連接詞與轉折",
+        "template_id": "extra-2026-english1-連接詞與轉折-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

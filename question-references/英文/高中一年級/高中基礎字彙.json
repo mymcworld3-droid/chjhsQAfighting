@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-english1-高中基礎字彙-1",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：高中基礎字彙，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "Because the bridge was damaged by the storm, the school bus had to take a different ______ to reach the campus.",
+        "correct": "route",
+        "wrong": [
+          "reason",
+          "reward",
+          "record"
+        ],
+        "exp": "橋梁受損後校車須改走其他路線，因此選route（路線），不是原因、獎勵或紀錄。",
+        "subject": "英文",
+        "sub_topic": "高中基礎字彙",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-高中一年級-高中基礎字彙",
+        "template_id": "extra-2026-english1-高中基礎字彙-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-高中基礎字彙-2",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：高中基礎字彙，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "The doctor told Leo to get enough sleep because it is ______ for his recovery.",
+        "correct": "essential",
+        "wrong": [
+          "ordinary",
+          "distant",
+          "temporary"
+        ],
+        "exp": "充足睡眠對康復至關重要，因此選essential（必不可少的）；其他選項與醫師建議的必要性不符。",
+        "subject": "英文",
+        "sub_topic": "高中基礎字彙",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-高中一年級-高中基礎字彙",
+        "template_id": "extra-2026-english1-高中基礎字彙-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-english1-高中基礎字彙-3",
+      "source": "依高中英文課綱自編語境題（非歷屆試卷原題）",
+      "design": "情境英語運用：高中基礎字彙，答案可由語法及上下文檢驗",
+      "question": {
+        "q": "The students carefully ______ the results of their science experiment before making a conclusion.",
+        "correct": "examined",
+        "wrong": [
+          "escaped",
+          "borrowed",
+          "invited"
+        ],
+        "exp": "在做結論前應仔細檢查結果，examined表示仔細檢視，其他動詞不符合實驗語境。",
+        "subject": "英文",
+        "sub_topic": "高中基礎字彙",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-高中一年級-高中基礎字彙",
+        "template_id": "extra-2026-english1-高中基礎字彙-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
