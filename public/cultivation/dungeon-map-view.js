@@ -252,7 +252,7 @@ class DungeonMapView{
     this.close();
     this.previousFocus=document.activeElement;
     this.room=room;this.roomId=room.id;this.uid=playerUid;
-    this.quiz?.attach(room.id,playerUid);
+    this.quiz?.attach(room.id,playerUid,room.members[playerUid]?.dungeonAdmin===true);
     if(room.status==='assembled')void this.quiz?.warm();
     this.map=null;this.camera=Camera.initialCamera();
     this.visualScenes.clear();this.travelScenes.clear();
@@ -321,14 +321,15 @@ class DungeonMapView{
     const holder=this.$('[data-dm-movement]');
     if(holder)holder.hidden=!active||!this.map;
     const own=this.room?.members?.[this.uid];
-    const stamina=Number.isSafeInteger(own?.explorationStamina)?
-      own.explorationStamina:10;
+    const stamina=own?.dungeonAdmin===true?10:
+      Number.isSafeInteger(own?.explorationStamina)?own.explorationStamina:10;
     const energy=this.$('[data-dm-energy]');
     if(energy)energy.textContent=String(Math.max(0,Math.min(10,stamina)));
     const chargeLabel=this.$('[data-dm="quiz"]');
     if(chargeLabel)chargeLabel.setAttribute('aria-label',
       '答題充能，體力 '+Math.max(0,Math.min(10,stamina))+
-      ' / 10，答對增加 4 點、答錯增加 1 點，無作答次數限制');
+      ' / 10，'+(own?.dungeonAdmin===true?'管理員體力固定十點，答題仍可累積學習紀錄':
+      '答對增加 4 點、答錯增加 1 點，無作答次數限制'));
     this.$('[data-dm-quarter-energy]').hidden=!active||!this.map;
     this.root.querySelectorAll('[data-dm-energy-segment]').forEach((segment,index)=>
       segment.classList.toggle('is-filled',index<energyRingFill(stamina)));
@@ -1393,6 +1394,7 @@ class DungeonMapView{
         this.visualScenes.delete(this.visualScenes.keys().next().value);
     }
     this.room=room;
+    this.quiz?.setAdmin(room.members[this.uid]?.dungeonAdmin===true);
     if(changedArena){
       this.map=null;this.camera=Camera.initialCamera();
       this.follow=true;this.followBeast=false;
