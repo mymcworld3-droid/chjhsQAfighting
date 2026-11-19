@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-chi1-classical-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "根據經典文言例句辨識虛詞與特殊句型",
+      "question": {
+        "q": "「青，取之於藍，而青於藍。」此句中連接前後兩個分句的「而」，主要表達何種關係？",
+        "correct": "轉折關係",
+        "wrong": [
+          "時間先後的承接關係",
+          "兩個動作同時並列且毫無對比",
+          "假設條件關係"
+        ],
+        "exp": "「青色提煉自藍草，卻比藍草更青」，前後具有出乎預期的對比，「而」在此表示轉折。",
+        "subject": "國文",
+        "sub_topic": "實詞、虛詞與常見句型",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-實詞、虛詞與常見句型",
+        "template_id": "ref-20261119-chi1-classical-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chi1-classical-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "根據經典文言例句辨識虛詞與特殊句型",
+      "question": {
+        "q": "「不以物喜，不以己悲」中的「以」，在這兩句中的意思最接近何者？",
+        "correct": "因為、由於",
+        "wrong": [
+          "拿來、用作",
+          "認為、當作",
+          "沿著、順著"
+        ],
+        "exp": "句意是不因外物的好壞而喜，也不因自己的得失而悲；兩個「以」都用來引出原因。",
+        "subject": "國文",
+        "sub_topic": "實詞、虛詞與常見句型",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-實詞、虛詞與常見句型",
+        "template_id": "ref-20261119-chi1-classical-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chi1-classical-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "根據經典文言例句辨識虛詞與特殊句型",
+      "question": {
+        "q": "「蚓無爪牙之利，筋骨之強」中的「爪牙之利」與「筋骨之強」，具有哪一種文言句型特徵？",
+        "correct": "定語後置",
+        "wrong": [
+          "被動句",
+          "使動句",
+          "判斷句"
+        ],
+        "exp": "「利」修飾「爪牙」、「強」修飾「筋骨」，一般語序可理解為「銳利的爪牙、強健的筋骨」；「之」是定語後置的標誌。",
+        "subject": "國文",
+        "sub_topic": "實詞、虛詞與常見句型",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-實詞、虛詞與常見句型",
+        "template_id": "ref-20261119-chi1-classical-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
