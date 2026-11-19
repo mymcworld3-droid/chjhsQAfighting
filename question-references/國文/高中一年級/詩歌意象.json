@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-ch1-imagery-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "王維〈山居秋暝〉有「明月松間照，清泉石上流」。將「明月」「松」「清泉」「石」並置，主要營造哪種景物氛圍？",
+        "correct": "清幽寧靜而富有自然動態",
+        "wrong": [
+          "繁華市街與市集喧鬧",
+          "戰爭將至的緊張軍情",
+          "荒漠沙塵遮蔽視線"
+        ],
+        "exp": "明月照映松林、泉水流過石上，意象兼具靜態光影與流動聲響，構成清幽而有生命感的山居景象。",
+        "subject": "國文",
+        "sub_topic": "詩歌意象",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-詩歌意象",
+        "template_id": "ref-20261119-b5-ch1-imagery-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ch1-imagery-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "杜甫〈春望〉寫「感時花濺淚，恨別鳥驚心」。花與鳥在詩中主要承載何種作用？",
+        "correct": "景物映照詩人的憂時與離別之情",
+        "wrong": [
+          "證明花鳥在生物學上一定會哭泣",
+          "單純介紹長安的花卉品種",
+          "用於標示精確的天文日期"
+        ],
+        "exp": "「感時」「恨別」交代情緒背景，花鳥意象被賦予詩人的悲感，屬於情景交融的表現。",
+        "subject": "國文",
+        "sub_topic": "詩歌意象",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-詩歌意象",
+        "template_id": "ref-20261119-b5-ch1-imagery-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ch1-imagery-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "王維〈使至塞上〉中的「大漠孤煙直，長河落日圓」，哪個詞語最直接強化空曠景象中孤獨、單一的視覺焦點？",
+        "correct": "孤煙",
+        "wrong": [
+          "長河",
+          "落日",
+          "大漠"
+        ],
+        "exp": "「大漠」提供遼闊背景，「孤煙」以單一煙柱凸顯廣大空間中的鮮明焦點，也呼應視覺上的寂寥感。",
+        "subject": "國文",
+        "sub_topic": "詩歌意象",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-詩歌意象",
+        "template_id": "ref-20261119-b5-ch1-imagery-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
