@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-civ1-rights-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨別基本自由、隱私保障和限制權利時的比例原則",
+      "question": {
+        "q": "若某機構未經合法授權與適當程序，任意公開個人的私人通訊內容，最直接涉及何種權利保障問題？",
+        "correct": "隱私權及通訊秘密",
+        "wrong": [
+          "自由選擇運動項目的權利",
+          "取得交通優惠票價的權利",
+          "國家選定官方節日的權限"
+        ],
+        "exp": "私人通訊涉及個人資訊與秘密；任意公開可能侵害隱私及通訊秘密，是否例外須依法律及具體情形判斷。",
+        "subject": "公民",
+        "sub_topic": "基本人權",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中一年級-基本人權",
+        "template_id": "ref-20261119-b2-civ1-rights-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-civ1-rights-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨別基本自由、隱私保障和限制權利時的比例原則",
+      "question": {
+        "q": "政府以維護公共安全為理由限制人民自由時，下列哪項原則最符合憲政法治的要求？",
+        "correct": "限制須有合法依據，並檢驗目的、必要性與手段是否合比例",
+        "wrong": [
+          "只要聲稱安全就可以無限制永久剝奪任何自由",
+          "限制權利完全不需要理由",
+          "只考慮執法人員的個人喜好"
+        ],
+        "exp": "對基本權的限制通常須符合法律保留及比例原則，不能僅以抽象公益名義任意限制。",
+        "subject": "公民",
+        "sub_topic": "基本人權",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中一年級-基本人權",
+        "template_id": "ref-20261119-b2-civ1-rights-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-civ1-rights-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨別基本自由、隱私保障和限制權利時的比例原則",
+      "question": {
+        "q": "一群學生以和平方式提出校園無障礙設施改善訴求，並公開表達意見。此行為最密切涉及哪些基本自由？",
+        "correct": "言論自由與和平集會的自由",
+        "wrong": [
+          "自由任意破壞他人財產",
+          "不受任何法律拘束的權力",
+          "可以強迫他人接受相同意見的權力"
+        ],
+        "exp": "和平表達公共意見涉及言論與集會等自由；行使自由也須尊重他人權利與法律。",
+        "subject": "公民",
+        "sub_topic": "基本人權",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中一年級-基本人權",
+        "template_id": "ref-20261119-b2-civ1-rights-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
