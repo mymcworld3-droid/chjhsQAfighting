@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-math2-normal-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "運用標準分數比較不同分布下的相對位置",
+      "question": {
+        "q": "某成績分布的平均數為60分、標準差為8分。得分76分的學生，其標準分數z為何？",
+        "correct": "2",
+        "wrong": [
+          "1",
+          "−2",
+          "8"
+        ],
+        "exp": "z=(x−平均數)/標準差=(76−60)/8=2，表示高於平均數2個標準差。",
+        "subject": "數學",
+        "sub_topic": "常態分布與標準化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-常態分布與標準化",
+        "template_id": "ref-20261119-b2-math2-normal-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-math2-normal-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "運用標準分數比較不同分布下的相對位置",
+      "question": {
+        "q": "某量測值的平均數為100、標準差為15。若觀測值的標準分數為−1，原觀測值為多少？",
+        "correct": "85",
+        "wrong": [
+          "115",
+          "99",
+          "−15"
+        ],
+        "exp": "x=平均數+z×標準差=100+(−1)×15=85。",
+        "subject": "數學",
+        "sub_topic": "常態分布與標準化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-常態分布與標準化",
+        "template_id": "ref-20261119-b2-math2-normal-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-math2-normal-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "運用標準分數比較不同分布下的相對位置",
+      "question": {
+        "q": "甲考試平均70分、標準差5分，小安考80分；乙考試平均80分、標準差10分，小安考90分。若以標準分數比較，他哪次相對表現較高？",
+        "correct": "甲考試",
+        "wrong": [
+          "乙考試",
+          "兩次相同",
+          "只看原始分數無法計算標準分數"
+        ],
+        "exp": "甲z=(80−70)/5=2，乙z=(90−80)/10=1；標準分數較高的甲考試相對位置較高。",
+        "subject": "數學",
+        "sub_topic": "常態分布與標準化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-常態分布與標準化",
+        "template_id": "ref-20261119-b2-math2-normal-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
