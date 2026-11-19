@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-math1-remainder-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "多項式P(x)=x³−3x+2除以x−1，其餘式是多少？",
+        "correct": "0",
+        "wrong": [
+          "1",
+          "2",
+          "−1"
+        ],
+        "exp": "依餘式定理，除以x−1的餘式為P(1)=1−3+2=0。",
+        "subject": "數學",
+        "sub_topic": "餘式定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-餘式定理",
+        "template_id": "ref-20261119-b4-math1-remainder-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-math1-remainder-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "若P(x)=x²+ax+4可被x−2整除，實數a應為何？",
+        "correct": "−4",
+        "wrong": [
+          "4",
+          "−2",
+          "2"
+        ],
+        "exp": "可整除表示P(2)=0，故4+2a+4=0，解得a=−4。",
+        "subject": "數學",
+        "sub_topic": "餘式定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-餘式定理",
+        "template_id": "ref-20261119-b4-math1-remainder-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-math1-remainder-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "多項式P(x)=2x³−x+5除以2x−2，其餘式為何？",
+        "correct": "6",
+        "wrong": [
+          "5",
+          "−6",
+          "3"
+        ],
+        "exp": "2x−2=2(x−1)，令x=1時的P(1)=2−1+5=6，即常數餘式。",
+        "subject": "數學",
+        "sub_topic": "餘式定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-餘式定理",
+        "template_id": "ref-20261119-b4-math1-remainder-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
