@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-DNA 複製與基因表現-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷DNA 複製與基因表現",
+      "question": {
+        "q": "細菌在含重氮的培養基生長後轉入一般氮源，經一輪DNA複製，若採半保留複製，子代DNA將如何組成？",
+        "correct": "每個DNA雙股各含一條原有重鏈與一條新輕鏈",
+        "wrong": [
+          "每個DNA雙股都只含兩條原有重鏈",
+          "每個DNA雙股都完全不含原有DNA",
+          "原有DNA被轉化成蛋白質"
+        ],
+        "exp": "半保留複製使每條新DNA雙股保存一條親代模板鏈。",
+        "subject": "生物",
+        "sub_topic": "DNA 複製與基因表現",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-DNA 複製與基因表現",
+        "template_id": "extra-2026-bio2-DNA 複製與基因表現-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-DNA 複製與基因表現-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷DNA 複製與基因表現",
+      "question": {
+        "q": "DNA聚合酶通常只能沿新生股5'到3'方向延伸。這對複製叉有何影響？",
+        "correct": "前導股可較連續合成，後隨股多以片段方式合成",
+        "wrong": [
+          "兩條新鏈都必定沿3'到5'方向延伸",
+          "DNA複製時完全不需要模板",
+          "後隨股不能形成任何DNA"
+        ],
+        "exp": "DNA雙股反向平行且聚合方向固定，導致前導與後隨股合成方式不同。",
+        "subject": "生物",
+        "sub_topic": "DNA 複製與基因表現",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-DNA 複製與基因表現",
+        "template_id": "extra-2026-bio2-DNA 複製與基因表現-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-DNA 複製與基因表現-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷DNA 複製與基因表現",
+      "question": {
+        "q": "同種細胞中的兩個基因DNA序列都存在，但在不同環境下mRNA量顯著變化。最直接應分析哪類機制？",
+        "correct": "轉錄調節及mRNA穩定性",
+        "wrong": [
+          "細胞核的原子序改變",
+          "每個基因必須永久等量表現",
+          "細胞所有DNA複製必定停止"
+        ],
+        "exp": "基因存在與轉錄量是不同層面，表現受到調控。",
+        "subject": "生物",
+        "sub_topic": "DNA 複製與基因表現",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-DNA 複製與基因表現",
+        "template_id": "extra-2026-bio2-DNA 複製與基因表現-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

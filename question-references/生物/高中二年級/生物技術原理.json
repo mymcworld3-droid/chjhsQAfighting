@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-生物技術原理-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷生物技術原理",
+      "question": {
+        "q": "理想PCR從1個雙股DNA模板開始，若每循環完整加倍，經5個循環後約有幾個雙股DNA拷貝？",
+        "correct": "32個",
+        "wrong": [
+          "5個",
+          "10個",
+          "64個"
+        ],
+        "exp": "理想加倍模型為2的n次方，5次循環約32個；實際PCR效率未必100%。",
+        "subject": "生物",
+        "sub_topic": "生物技術原理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生物技術原理",
+        "template_id": "extra-2026-bio2-生物技術原理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-生物技術原理-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷生物技術原理",
+      "question": {
+        "q": "研究者以同一種限制酶切割兩段DNA，產生相容的黏性末端，再利用DNA連接酶處理。最可能達成哪件事？",
+        "correct": "使DNA片段以共價鍵接合形成重組DNA",
+        "wrong": [
+          "使所有DNA立即轉成蛋白質",
+          "將限制酶改造成核糖體",
+          "必定消除DNA中的全部鹼基"
+        ],
+        "exp": "相容末端可先互補配對，DNA連接酶可封合磷酸二酯鍵。",
+        "subject": "生物",
+        "sub_topic": "生物技術原理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生物技術原理",
+        "template_id": "extra-2026-bio2-生物技術原理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-生物技術原理-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷生物技術原理",
+      "question": {
+        "q": "同一凝膠電泳條件下，兩段線性DNA片段長度分別為500與1500鹼基對。若正常分離，哪一段通常移動較遠？",
+        "correct": "500鹼基對的較短DNA",
+        "wrong": [
+          "1500鹼基對的較長DNA",
+          "兩者因序列不同必定停在完全相同位置",
+          "所有DNA都不帶電荷而不能電泳"
+        ],
+        "exp": "DNA帶負電且在凝膠中較短片段通過孔隙阻力較小，常移動較遠。",
+        "subject": "生物",
+        "sub_topic": "生物技術原理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生物技術原理",
+        "template_id": "extra-2026-bio2-生物技術原理-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

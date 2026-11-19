@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-基因調控-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷基因調控",
+      "question": {
+        "q": "某細菌在無乳糖時抑制乳糖分解相關基因轉錄，有乳糖時抑制解除。這最能反映什麼？",
+        "correct": "可利用營養物質透過調節蛋白影響基因轉錄",
+        "wrong": [
+          "只要有乳糖細菌必定更換全部染色體",
+          "基因只會在多細胞動物受到調控",
+          "乳糖可直接取代RNA聚合酶合成蛋白質"
+        ],
+        "exp": "誘導型操縱組藉抑制蛋白與誘導物反應調節轉錄。",
+        "subject": "生物",
+        "sub_topic": "基因調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-基因調控",
+        "template_id": "extra-2026-bio2-基因調控-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-基因調控-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷基因調控",
+      "question": {
+        "q": "某細胞一段基因啟動子附近的DNA甲基化增加，該基因轉錄下降。哪種解釋較符合現象？",
+        "correct": "表觀遺傳修飾可能改變染色質或轉錄因子結合，抑制表現",
+        "wrong": [
+          "甲基化必定把DNA鹼基全部換成RNA",
+          "轉錄量改變就證明基因已完整刪除",
+          "所有DNA甲基化必定增加任何基因的轉錄"
+        ],
+        "exp": "某些區域的甲基化可抑制轉錄，不一定改變DNA序列。",
+        "subject": "生物",
+        "sub_topic": "基因調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-基因調控",
+        "template_id": "extra-2026-bio2-基因調控-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-基因調控-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷基因調控",
+      "question": {
+        "q": "某小RNA可與特定mRNA互補結合並促進降解。這最直接影響哪一步？",
+        "correct": "降低可供核糖體轉譯的mRNA量",
+        "wrong": [
+          "使原子核立即變成新元素",
+          "直接複製出額外染色體",
+          "使細胞膜永久不再透水"
+        ],
+        "exp": "RNA干擾可降低目標mRNA穩定性，使蛋白質產量下降。",
+        "subject": "生物",
+        "sub_topic": "基因調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-基因調控",
+        "template_id": "extra-2026-bio2-基因調控-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

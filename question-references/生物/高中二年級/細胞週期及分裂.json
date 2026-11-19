@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-細胞週期及分裂-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷細胞週期及分裂",
+      "question": {
+        "q": "某細胞DNA受損後在細胞週期檢查點暫停進入分裂。此機制主要有何生物意義？",
+        "correct": "避免帶有未修復DNA損傷的細胞直接進行分裂",
+        "wrong": [
+          "使DNA在檢查點永久不再修復",
+          "讓所有細胞立即完成減數分裂",
+          "將全部染色體改變為脂質"
+        ],
+        "exp": "檢查點可監控DNA複製及損傷，降低錯誤傳遞給子細胞的機率。",
+        "subject": "生物",
+        "sub_topic": "細胞週期及分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞週期及分裂",
+        "template_id": "extra-2026-bio2-細胞週期及分裂-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-細胞週期及分裂-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷細胞週期及分裂",
+      "question": {
+        "q": "減數分裂第一次分裂後、第二次分裂前通常不再進行完整DNA複製。這與何種結果有關？",
+        "correct": "最後配子可保有單套染色體數及單條染色分體",
+        "wrong": [
+          "配子染色體數必定比母細胞多四倍",
+          "減數分裂只會形成兩個完全相同體細胞",
+          "第二次分裂必定新增全部染色體"
+        ],
+        "exp": "兩次分裂間沒有再一次S期，減數第二次分裂使姐妹染色分體分離。",
+        "subject": "生物",
+        "sub_topic": "細胞週期及分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞週期及分裂",
+        "template_id": "extra-2026-bio2-細胞週期及分裂-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-細胞週期及分裂-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷細胞週期及分裂",
+      "question": {
+        "q": "在減數分裂第一次分裂前期，同源染色體發生互換。若兩對等位基因位於同一條染色體上，互換可能如何影響配子？",
+        "correct": "產生親代原有連鎖組合以外的重組組合",
+        "wrong": [
+          "使所有配子只保留一種組合",
+          "一定讓染色體數加倍",
+          "只能發生在DNA完全沒有複製時"
+        ],
+        "exp": "同源染色體非姐妹染色分體互換可形成重組染色體。",
+        "subject": "生物",
+        "sub_topic": "細胞週期及分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞週期及分裂",
+        "template_id": "extra-2026-bio2-細胞週期及分裂-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

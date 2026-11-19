@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-轉錄、轉譯與突變-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷轉錄、轉譯與突變",
+      "question": {
+        "q": "DNA模板股為3'-TAC GGA-5'，若按互補配對轉錄，mRNA應為何？",
+        "correct": "5'-AUG CCU-3'",
+        "wrong": [
+          "5'-ATG CCT-3'",
+          "5'-UAC GGA-3'",
+          "5'-AAA CCC-3'"
+        ],
+        "exp": "RNA與模板反向平行配對，A對U、T對A、C對G、G對C。",
+        "subject": "生物",
+        "sub_topic": "轉錄、轉譯與突變",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-轉錄、轉譯與突變",
+        "template_id": "extra-2026-bio2-轉錄、轉譯與突變-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-轉錄、轉譯與突變-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷轉錄、轉譯與突變",
+      "question": {
+        "q": "某基因的編碼序列中插入一個鹼基，且發生在蛋白質編碼區靠前端。若非3的倍數插入，最可能造成？",
+        "correct": "下游讀框改變，許多胺基酸序列可能受影響",
+        "wrong": [
+          "只改變一個氨基酸且下游絕不受影響",
+          "所有DNA立刻被完全分解",
+          "只改變細胞膜厚度而不影響密碼子"
+        ],
+        "exp": "密碼子三個鹼基一組，插入非3的倍數可造成移碼突變。",
+        "subject": "生物",
+        "sub_topic": "轉錄、轉譯與突變",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-轉錄、轉譯與突變",
+        "template_id": "extra-2026-bio2-轉錄、轉譯與突變-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-轉錄、轉譯與突變-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷轉錄、轉譯與突變",
+      "question": {
+        "q": "某mRNA出現終止密碼子，但核糖體之前已合成多肽。遇到終止密碼子時通常發生什麼？",
+        "correct": "由釋放因子協助終止翻譯並釋出多肽",
+        "wrong": [
+          "終止密碼子必定指定一個額外胺基酸",
+          "核糖體會把全部mRNA變回DNA",
+          "所有蛋白質自此無法折疊"
+        ],
+        "exp": "終止密碼子不編碼一般胺基酸，會觸發翻譯終止。",
+        "subject": "生物",
+        "sub_topic": "轉錄、轉譯與突變",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-轉錄、轉譯與突變",
+        "template_id": "extra-2026-bio2-轉錄、轉譯與突變-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

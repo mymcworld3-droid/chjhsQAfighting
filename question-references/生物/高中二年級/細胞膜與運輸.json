@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-細胞膜與運輸-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷細胞膜與運輸",
+      "question": {
+        "q": "某細胞膜蛋白每完成一次ATP驅動循環，向外送出3個Na⁺並向內帶入2個K⁺。此運輸最直接的淨電荷變化為何？",
+        "correct": "每循環有一個正電荷淨移向細胞外",
+        "wrong": [
+          "每循環有五個正電荷淨移入細胞",
+          "每循環完全沒有電荷移動",
+          "每循環移出兩個負電荷"
+        ],
+        "exp": "3個正電荷流出、2個流入，淨流出1個正電荷，為鈉鉀幫浦的電生性。",
+        "subject": "生物",
+        "sub_topic": "細胞膜與運輸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞膜與運輸",
+        "template_id": "extra-2026-bio2-細胞膜與運輸-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-細胞膜與運輸-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷細胞膜與運輸",
+      "question": {
+        "q": "白血球以細胞膜包圍大型細菌並形成囊泡，使細菌進入細胞。這種作用屬於？",
+        "correct": "吞噬作用，屬胞吞的一種",
+        "wrong": [
+          "簡單擴散",
+          "滲透作用",
+          "無需膜變形的促進性擴散"
+        ],
+        "exp": "大型顆粒由細胞膜延伸包覆，形成胞吞囊泡進入細胞。",
+        "subject": "生物",
+        "sub_topic": "細胞膜與運輸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞膜與運輸",
+        "template_id": "extra-2026-bio2-細胞膜與運輸-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-細胞膜與運輸-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "利用分子與實驗機制判斷細胞膜與運輸",
+      "question": {
+        "q": "某物質需經膜蛋白順濃度梯度通過；濃度增加後運輸速率出現飽和。最合理的原因為何？",
+        "correct": "可用運輸蛋白數量有限，最大通量受到限制",
+        "wrong": [
+          "濃度越高所有分子必定永久無法移動",
+          "順梯度移動必須完全依賴ATP水解",
+          "飽和必然表示細胞膜立即消失"
+        ],
+        "exp": "特定膜蛋白的轉運位點有限，促進性擴散也可呈現飽和。",
+        "subject": "生物",
+        "sub_topic": "細胞膜與運輸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞膜與運輸",
+        "template_id": "extra-2026-bio2-細胞膜與運輸-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
