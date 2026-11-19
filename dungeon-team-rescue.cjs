@@ -3,7 +3,9 @@
 // There is no client-specified HP, price, distance, or resurrection count.
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {isAlive,clampHealth,HEALTH_MAX}=require('./dungeon-enemy-combat.cjs');
-const ALLY_COST=8,ALLY_HP=40,ALLY_LIMIT=2,SELF_COST=25,SELF_HP=25,SELF_LIMIT=1;
+const {MAX_STAMINA,clampStamina}=require('./dungeon-stamina-rules.cjs');
+// Self-revive remains obtainable under a ten-point stamina cap.
+const ALLY_COST=8,ALLY_HP=40,ALLY_LIMIT=2,SELF_COST=MAX_STAMINA,SELF_HP=25,SELF_LIMIT=1;
 const MAX_SEQ=1000000;
 const fail=(text,status=409)=>Object.assign(new Error(text),{status});
 const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
@@ -38,8 +40,7 @@ function help(room,uid,map,{targetUid,seq}={}){
     if((target.allyReviveCount||0)>=ALLY_LIMIT)
       throw fail('這位隊友本場可接受的援助次數已達上限');
   }
-  const stamina=Number.isSafeInteger(member.explorationStamina)?
-    Math.max(0,member.explorationStamina):0;
+  const stamina=clampStamina(member.explorationStamina);
   if(stamina<price)
     throw fail('救援體力不足，可以繼續答題補充體力');
   const result={seq,targetUid,kind:self?'self':'ally',cost:price,
