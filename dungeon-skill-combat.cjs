@@ -232,7 +232,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
           apply(e,sk.power);
       }else{
         // Crossed diagonals form two sweeps; a given arm hits once.
-        for(const r of rays.filter(r=>r.cells.some(p=>same(p,e.position))))
+        for(const r of rays.filter(r=>r.cells.some(p=>Boss.occupies(e,p))))
           apply(e,sk.power);
       }
     }
