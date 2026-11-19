@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-ch1-philosophy-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "聚焦經典文本的思想、修辭與表達，非單純文字搜尋",
+      "question": {
+        "q": "《孟子》曰：「天時不如地利，地利不如人和。」若運用此思想分析團隊合作，哪項觀點最貼近原文？",
+        "correct": "人的團結與協作比單靠有利時機或地勢更重要",
+        "wrong": [
+          "只要時機正確，團隊是否合作便不影響結果",
+          "地理條件是所有事情中唯一值得考慮的因素",
+          "人與人的互信與協作在任何情況都沒有價值"
+        ],
+        "exp": "「不如」逐層比較天時、地利與人和，強調人心團結在成事過程中的關鍵地位。",
+        "subject": "國文",
+        "sub_topic": "諸子思想及寓言",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-諸子思想及寓言",
+        "template_id": "ref-20261119-b6-ch1-philosophy-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-ch1-philosophy-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "聚焦經典文本的思想、修辭與表達，非單純文字搜尋",
+      "question": {
+        "q": "《荀子》曰：「不積跬步，無以至千里；不積小流，無以成江海。」這段話主要透過哪種方式論證？",
+        "correct": "以行路與水流的累積作比喻，說明學習需循序積累",
+        "wrong": [
+          "以兩個相反例證主張任何努力都沒有意義",
+          "以史書年代證明只有旅行才能學習",
+          "以水流速度推算每個人的固定學習成績"
+        ],
+        "exp": "由一步步積累到千里，以及小水流累積成江海的類比，說明長期成果來自日常的持續累積。",
+        "subject": "國文",
+        "sub_topic": "諸子思想及寓言",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-諸子思想及寓言",
+        "template_id": "ref-20261119-b6-ch1-philosophy-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-ch1-philosophy-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "聚焦經典文本的思想、修辭與表達，非單純文字搜尋",
+      "question": {
+        "q": "《韓非子》寓言「買櫝還珠」中，買主看上精美的木盒，買下後卻把盒中的珍珠退還。這則寓言主要提醒什麼？",
+        "correct": "過度重視外在包裝，可能忽略事物本身的價值",
+        "wrong": [
+          "有精美外觀的事物必定完全沒有內在價值",
+          "所有買賣都應以木盒作為唯一商品",
+          "能辨識外表美感就一定能正確評估內在價值"
+        ],
+        "exp": "買主只取木盒、反而退還珍珠，形成形式與本質的價值錯置，用以諷刺捨本逐末。",
+        "subject": "國文",
+        "sub_topic": "諸子思想及寓言",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-諸子思想及寓言",
+        "template_id": "ref-20261119-b6-ch1-philosophy-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
