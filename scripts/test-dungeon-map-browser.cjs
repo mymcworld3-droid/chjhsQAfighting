@@ -17,6 +17,16 @@ const manualRecord={
     {name:'空白',skillIds:[]}],
   activeLoadout:0
 };
+const dragonRecord={
+  school:'body',books:{'body-dragon':{exp:2500}},
+  equipped:['dragon-strike','dragon-guard','dragon-roar'],
+  loadouts:[
+    {name:'蓄勢連拳',skillIds:['dragon-strike','dragon-guard','dragon-roar']},
+    {name:'拳法',skillIds:['dragon-strike']},
+    {name:'無裝備',skillIds:[]}
+  ],activeLoadout:0
+};
+let activeManual=manualRecord;
 let playwright;try{playwright=require('playwright');}
 catch(_){playwright=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright');}
 const app=express();app.use(express.json());
@@ -191,7 +201,7 @@ app.post('/api/dungeon/room',(req,res)=>{
   if(action==='skill'){
     try{
       const out=SkillCombat.castSkill(room,uid,map,
-        uid==='a'?manualRecord:null,{
+        uid==='a'?activeManual:null,{
           skillId:req.body.skillId,target:req.body.target,seq:req.body.seq
         });
       if(out.duplicate)return success();
@@ -562,6 +572,63 @@ async function main(){
       .waitFor();
     assert.equal(room.members.a.dungeonLoadoutIndex,1);
     assert.ok(room.members.a.dungeonSkillIds.includes('wind-step'));
+    // Stage 13: the real deterministic combat routine prepares and spends
+    // the six focus charges; a separate player's map sees the same gold halo.
+    activeManual=dragonRecord;
+    room.members.a.accessScore=200;
+    room.members.a={...room.members.a,
+      ...SkillCombat.initialCombatLoadout(room.members.a,dragonRecord)};
+    room.enemies=[{...wolf,position:candidate,attack:null,cadence:999999,
+      battleHealth:100000,battleMaxHealth:100000}];
+    room.revision++;publish();
+    const focusButton=a.page.locator(
+      '#dungeon-map-view [data-dm="cast"][data-skill-id="dragon-roar"]');
+    await focusButton.waitFor({timeout:5000});
+    assert.equal(await focusButton.getAttribute('data-focus-empowered'),'false',
+      '蓄勢本身不享受蓄勢金色加成');
+    await focusButton.click();
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-dm-focus]')?.textContent.includes('6/6'),
+      null,{timeout:5000});
+    assert.equal(room.members.a.focusCharges,6);
+    assert.equal(room.members.a.lastSkill.focusActivated,true);
+    const goldButton=a.page.locator(
+      '#dungeon-map-view [data-dm="cast"][data-skill-id="dragon-strike"]');
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-skill-id="dragon-strike"]')
+        ?.classList.contains('is-focus-empowered'));
+    assert.equal(await goldButton.getAttribute('data-focus-empowered'),'true');
+    assert.match(await goldButton.innerText(),/✦.*1 體力/);
+    const style=await goldButton.evaluate(node=>({
+      color:getComputedStyle(node).color,
+      background:getComputedStyle(node).backgroundImage,
+      animation:getComputedStyle(node).animationName
+    }));
+    assert.ok(style.background.includes('gradient'),JSON.stringify(style));
+    assert.equal(style.animation,'dmTechniqueGold');
+    await a.page.locator('[data-focus-uid="a"] .dm-focus-ring').waitFor();
+    await b.page.locator('[data-focus-uid="a"] .dm-focus-ring').waitFor();
+    assert.equal(await a.page.locator('[data-focus-uid="a"]').getAttribute('data-charges'),'6');
+    assert.equal(await b.page.locator('[data-focus-uid="a"]').getAttribute('data-charges'),'6');
+    // Select the durable test beast and spend all six empowered casts.
+    await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
+    await a.page.locator('[data-dm-beast-list] button').first().click();
+    for(let remaining=6;remaining>=1;remaining--){
+      await goldButton.click();
+      await a.page.waitForFunction(n=>{
+        const focus=document.querySelector('[data-dm-focus]')?.textContent||'';
+        return n===1?!focus.includes('/6'):focus.includes((n-1)+'/6');
+      },remaining,{timeout:5000});
+      assert.equal(room.members.a.focusCharges,remaining-1);
+      assert.equal(room.members.a.lastSkill.focusEmpowered,true);
+      assert.equal(room.members.a.lastSkill.cost,1);
+      assert.equal(room.members.a.lastSkill.effectCells.length>0,true);
+    }
+    await a.page.locator('[data-focus-uid="a"]').waitFor({state:'detached'});
+    await b.page.locator('[data-focus-uid="a"]').waitFor({state:'detached'});
+    assert.equal(await goldButton.getAttribute('data-focus-empowered'),'false');
+    assert.match(await goldButton.innerText(),/2 體力/);
+    assert.equal(room.members.a.skillSeq,7);
     // Stage 12: the question is personal, while NPC ticks and other clients
     // keep receiving the same live dungeon room stream.
     const chargeButton=a.page.locator('#dungeon-map-view [data-dm="quiz"]');
@@ -611,7 +678,7 @@ async function main(){
     assert.equal(room.members.a.quizCreditSeq,2);
     assert.ok(requests.filter(action=>action==='generate-quiz').length>=2);
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two clients, NPC AI, melee, skills, independent quiz grading, five-slot prefetch and idempotent stamina');
+    console.log('[Dungeon map browser] PASS: two clients, NPC AI, melee, golden focus skills and shared auras, six charges, independent quizzes and stamina');
   }finally{
     clearInterval(clockLoop);
     clockLoop=null;
