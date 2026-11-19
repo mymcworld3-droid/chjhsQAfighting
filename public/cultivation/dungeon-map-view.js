@@ -5,7 +5,7 @@ import { getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 import { energyRingFill, dungeonFocusCharges, dungeonFocusEmpowers } from './dungeon-quarter-controls.js';
 import { dungeonTrialWheelHTML, bindDungeonTrialWheel, renderDungeonTrialWheel } from './dungeon-trial-wheel.js';
-import { dungeonRoute } from './dungeon-map-actions.js';
+import { dungeonRoute, dungeonReachableTiles, dungeonAttackTiles } from './dungeon-map-actions.js';
 import { skillArt } from './manual-art.js';
 
 // The dungeon shares the trial's fullscreen quarter-dial presentation;
@@ -38,6 +38,7 @@ class DungeonMapView{
     this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;
     this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
     this.routePending=false;this.actionFeedbackTimer=null;
+    this.rangeSignature='';this.rangeTiles=[];this.rangeKind='move';
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
     this.clockTimer=null;this.clockAnchor=null;this.clockTickFloor=0;
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
@@ -254,7 +255,7 @@ class DungeonMapView{
     this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
     this.loadoutPending=false;this.aimTile=null;this.skillSignature='';
     this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;this.wheelSwipeStart=null;
-    this.routePending=false;
+    this.routePending=false;this.rangeSignature='';this.rangeTiles=[];
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
     this.beastIds='';this.touchOrigins.clear();this.gestureMulti=false;
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
@@ -981,6 +982,13 @@ class DungeonMapView{
     if(this.wheelMode==='move'){
       void this.moveTo(tile);
     }else if(this.selectedSkillId&&this.selectedSkillId!=='basic'){
+      const own=this.room?.members?.[this.uid];
+      const skill=own?.dungeonSkills?.find(s=>s.id===this.selectedSkillId);
+      const self=this.selfPad();
+      if(skill?.kind==='fist-focus'&&(x!==self.x||y!==self.y)){
+        this.actionFeedback('蓄勢須點選自己的角色位置');
+        return;
+      }
       void this.cast(this.selectedSkillId);
     }else if(beast){
       void this.strike();
@@ -1385,6 +1393,7 @@ class DungeonMapView{
     this.aimTile=null;this.skillSignature='';
     this.wheelSwipeStart=null;this.manualOpen=false;this.wheelMode='attack';
     this.selectedSkillId='';this.routePending=false;
+    this.rangeSignature='';this.rangeTiles=[];
     clearTimeout(this.actionFeedbackTimer);this.actionFeedbackTimer=null;
     this.quiz?.destroy();
     for(const aura of this.focusAuras.values())aura.remove();
@@ -1652,6 +1661,29 @@ class DungeonMapView{
       if(!present.has(uid)){aura.remove();this.focusAuras.delete(uid);}
     }
   }
+  updateRangePlan(){
+    if(!this.map||this.room?.status!=='assembled'){
+      this.rangeSignature='';this.rangeTiles=[];return;
+    }
+    const member=this.room.members?.[this.uid];
+    if(!member)return;
+    const revision=Number(this.room.revision)||0;
+    const key=this.roomId+'|'+this.seq+'|'+revision+'|'+
+      this.wheelMode+'|'+this.selectedSkillId;
+    if(this.rangeSignature===key)return;
+    this.rangeSignature=key;
+    const from=this.selfPad(),enemies=this.creatures();
+    if(this.wheelMode==='move'){
+      this.rangeKind='move';
+      this.rangeTiles=dungeonReachableTiles(this.map,from,enemies,
+        member.explorationStamina||0);
+    }else{
+      const skill=(member.dungeonSkills||[]).find(s=>s.id===this.selectedSkillId)||
+        {kind:'attack',range:1};
+      this.rangeKind=skill.kind==='dash-cleave'?'dash':'attack';
+      this.rangeTiles=dungeonAttackTiles(this.map,from,skill,enemies);
+    }
+  }
   drawSoon(){
     if(!this.opened||this.frame)return;
     this.frame=requestAnimationFrame(()=>{this.frame=0;this.draw();});
@@ -1661,8 +1693,10 @@ class DungeonMapView{
     const ctx=this.ctx,m=this.map,w=this.width,h=this.height;
     ctx.fillStyle='#0b1915';ctx.fillRect(0,0,w,h);
     if(!m)return;
+    this.updateRangePlan();
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:this.members(),selfUid:this.uid,showRoutes:this.routes,
+      rangeTiles:this.rangeTiles,rangeKind:this.rangeKind,
       enemies:this.creatures(),objectives:this.room?.dungeonProgress,
       aimTile:this.currentAim(),art:this.sprites,
       currentTick:Number(this.room?.battleClock?.appliedTick)||0,
