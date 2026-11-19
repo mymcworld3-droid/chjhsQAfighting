@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-eng2-emphasis-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "Choose the correct completion: 'Not until the final experiment ______ the source of the error.'",
+        "correct": "did the researchers identify",
+        "wrong": [
+          "the researchers identify",
+          "the researchers did identified",
+          "had the researchers identifying"
+        ],
+        "exp": "A fronted negative expression 'Not until ...' requires subject–auxiliary inversion in the main clause: 'did the researchers identify'.",
+        "subject": "英文",
+        "sub_topic": "倒裝與強調",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中二年級-倒裝與強調",
+        "template_id": "ref-20261119-b3-eng2-emphasis-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-eng2-emphasis-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "Choose the correct completion: 'It was in the library ______ I found the missing notebook.'",
+        "correct": "that",
+        "wrong": [
+          "what",
+          "which did",
+          "where did"
+        ],
+        "exp": "The cleft structure 'It was ... that ...' highlights the location. 'It was in the library that I found ...' is grammatical.",
+        "subject": "英文",
+        "sub_topic": "倒裝與強調",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中二年級-倒裝與強調",
+        "template_id": "ref-20261119-b3-eng2-emphasis-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-eng2-emphasis-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "Choose the correct completion: 'Rarely ______ such a clear view of the stars in the city.'",
+        "correct": "do we see",
+        "wrong": [
+          "we see",
+          "we seeing",
+          "does we see"
+        ],
+        "exp": "When the negative-frequency adverb 'Rarely' begins the sentence, auxiliary 'do' precedes the subject 'we': 'Rarely do we see ...'.",
+        "subject": "英文",
+        "sub_topic": "倒裝與強調",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中二年級-倒裝與強調",
+        "template_id": "ref-20261119-b3-eng2-emphasis-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
