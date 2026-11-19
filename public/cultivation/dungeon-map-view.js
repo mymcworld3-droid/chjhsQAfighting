@@ -960,8 +960,11 @@ class DungeonMapView{
       target:{...path.at(-1)}};
     this.travelScenes.set(event.key,{...event,
       startedAt:performance.now(),optimistic:true});
-    // Paint before a fast SSE/HTTP ACK can outrun the next rAF.
-    this.draw();
+    // Advertise the first frame immediately, but paint asynchronously.
+    // A synchronous draw here could throw or do expensive VFX work before
+    // the authoritative move request was even sent to the C-room server.
+    if(this.canvas?.dataset)this.canvas.dataset.motion='walking';
+    this.drawSoon();
   }
   confirmMovementPreview(member){
     const pending=this.pendingMovementPreview;
