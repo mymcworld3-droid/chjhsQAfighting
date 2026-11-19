@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-天擇與演化-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用天擇與演化生物概念",
+      "question": {
+        "q": "某細菌族群原本就有少數抗藥性變異，使用抗生素後抗藥菌比例提高。最合理的原因是？",
+        "correct": "抗生素選擇使具抗性者較容易存活繁殖",
+        "wrong": [
+          "抗生素必然依每隻細菌需求精準創造抗性突變",
+          "所有細菌同時轉換成全新的物種",
+          "抗藥性只可能在完全沒有遺傳變異時出現"
+        ],
+        "exp": "環境選擇作用於已有可遺傳差異，使抗性等位基因比例改變。",
+        "subject": "生物",
+        "sub_topic": "天擇與演化",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中一年級-天擇與演化",
+        "template_id": "extra-2026-bio1-天擇與演化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-天擇與演化-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用天擇與演化生物概念",
+      "question": {
+        "q": "某鳥類族群生活在硬殼種子增加的環境，厚喙個體取食效率較高。經多代後喙厚平均增加。最符合哪種演化機制？",
+        "correct": "有利性狀影響存活與繁殖的自然選擇",
+        "wrong": [
+          "每隻鳥為了吃種子主動改變並遺傳喙形",
+          "只有種子本身發生遺傳變化",
+          "族群性狀無法在多代間改變"
+        ],
+        "exp": "若喙厚具遺傳性，有利個體留下較多後代，可造成族群平均變化。",
+        "subject": "生物",
+        "sub_topic": "天擇與演化",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中一年級-天擇與演化",
+        "template_id": "extra-2026-bio1-天擇與演化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-天擇與演化-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用天擇與演化生物概念",
+      "question": {
+        "q": "兩個族群長期隔離，分別累積不同遺傳差異。若後來無法成功繁殖後代，這較能反映什麼？",
+        "correct": "繁殖隔離可能促成物種形成",
+        "wrong": [
+          "隔離必然使所有個體基因完全相同",
+          "所有隔離一代就產生新物種",
+          "繁殖隔離與演化完全無關"
+        ],
+        "exp": "地理隔離降低基因交流，經長期分化可能形成繁殖隔離。",
+        "subject": "生物",
+        "sub_topic": "天擇與演化",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中一年級-天擇與演化",
+        "template_id": "extra-2026-bio1-天擇與演化-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

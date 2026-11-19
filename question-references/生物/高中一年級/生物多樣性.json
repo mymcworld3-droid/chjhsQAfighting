@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-生物多樣性-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用生物多樣性生物概念",
+      "question": {
+        "q": "同一物種野生稻有許多不同的抗病等位基因，這主要代表哪一層次的多樣性？",
+        "correct": "遺傳多樣性",
+        "wrong": [
+          "生態系多樣性",
+          "地形多樣性",
+          "氣候帶多樣性"
+        ],
+        "exp": "同種內不同基因變異是遺傳多樣性的核心。",
+        "subject": "生物",
+        "sub_topic": "生物多樣性",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生物多樣性",
+        "template_id": "extra-2026-bio1-生物多樣性-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-生物多樣性-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用生物多樣性生物概念",
+      "question": {
+        "q": "某山區同時有森林、草地與濕地，且各自包含不同的物種群。若以生物多樣性層次分析，最能呈現什麼？",
+        "correct": "生態系多樣性與物種多樣性可能同時較高",
+        "wrong": [
+          "只有森林才屬於生態系",
+          "生態系數目與多樣性完全無關",
+          "所有生境中的物種必然完全相同"
+        ],
+        "exp": "不同環境與群集可形成多種生態系，也可能容納不同物種。",
+        "subject": "生物",
+        "sub_topic": "生物多樣性",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生物多樣性",
+        "template_id": "extra-2026-bio1-生物多樣性-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-生物多樣性-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用生物多樣性生物概念",
+      "question": {
+        "q": "某保育計畫只保留數量相同的同種個體，卻沒有考量彼此高度近親。可能忽略什麼風險？",
+        "correct": "遺傳多樣性不足導致近交與適應力降低",
+        "wrong": [
+          "個體數目相同就保證基因完全多元",
+          "遺傳差異不可能影響族群存續",
+          "近親繁殖一定讓每個等位基因變多"
+        ],
+        "exp": "保育除了數量還應考慮族群基因多樣性與長期生存能力。",
+        "subject": "生物",
+        "sub_topic": "生物多樣性",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生物多樣性",
+        "template_id": "extra-2026-bio1-生物多樣性-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

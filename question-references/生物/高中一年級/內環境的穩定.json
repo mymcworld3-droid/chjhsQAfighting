@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-內環境的穩定-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用內環境的穩定生物概念",
+      "question": {
+        "q": "天氣炎熱時人體流汗且皮膚血管擴張，主要目的是？",
+        "correct": "增加散熱，將體溫維持在適當範圍",
+        "wrong": [
+          "讓體溫無限制升高",
+          "阻止所有水分蒸發",
+          "使皮膚完全不與環境交換熱量"
+        ],
+        "exp": "汗液蒸發與皮膚血流增加有助散熱，屬體溫負回饋的一部分。",
+        "subject": "生物",
+        "sub_topic": "內環境的穩定",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-內環境的穩定",
+        "template_id": "extra-2026-bio1-內環境的穩定-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-內環境的穩定-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用內環境的穩定生物概念",
+      "question": {
+        "q": "某人長時間運動且飲水不足，血漿滲透壓上升，身體通常出現哪種反應？",
+        "correct": "口渴與ADH分泌增加，減少腎臟失水",
+        "wrong": [
+          "口渴立即停止且尿量無限增加",
+          "所有細胞均停止感知滲透壓",
+          "腎臟完全不能調節水分"
+        ],
+        "exp": "下視丘相關受器與ADH系統協助體液滲透壓穩定。",
+        "subject": "生物",
+        "sub_topic": "內環境的穩定",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-內環境的穩定",
+        "template_id": "extra-2026-bio1-內環境的穩定-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-內環境的穩定-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用內環境的穩定生物概念",
+      "question": {
+        "q": "某人體溫調節中，溫度過低引發顫抖，體溫回升後顫抖減弱。這最能說明什麼？",
+        "correct": "負回饋反應可在偏差減小後逐漸降低",
+        "wrong": [
+          "顫抖是使體溫持續下降的正回饋",
+          "肌肉活動永遠不產熱",
+          "所有恆定反應都不受刺激強度影響"
+        ],
+        "exp": "顫抖藉肌肉代謝產熱，體溫回升後刺激減少，反應可下降。",
+        "subject": "生物",
+        "sub_topic": "內環境的穩定",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-內環境的穩定",
+        "template_id": "extra-2026-bio1-內環境的穩定-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

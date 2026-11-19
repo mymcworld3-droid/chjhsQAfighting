@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-遺傳與性狀-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用遺傳與性狀生物概念",
+      "question": {
+        "q": "若某遺傳性狀為完全顯性、由單一基因座控制，Aa個體與aa個體交配，子代呈顯性表現型的理論比例為何？",
+        "correct": "二分之一",
+        "wrong": [
+          "四分之一",
+          "全部",
+          "零"
+        ],
+        "exp": "Aa可產生A與a兩種配子，aa只產生a，子代Aa與aa各半。",
+        "subject": "生物",
+        "sub_topic": "遺傳與性狀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-遺傳與性狀",
+        "template_id": "extra-2026-bio1-遺傳與性狀-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-遺傳與性狀-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用遺傳與性狀生物概念",
+      "question": {
+        "q": "兩名具有相同基因型的植物，在不同光照下長出不同高度。這最能說明什麼？",
+        "correct": "同一基因型的表現型仍可能受環境影響",
+        "wrong": [
+          "基因型相同就保證所有性狀完全一致",
+          "植物高度不可能受光照影響",
+          "環境變化必定立即改寫所有DNA"
+        ],
+        "exp": "表現型由基因和環境共同影響，不能只憑差異判定突變。",
+        "subject": "生物",
+        "sub_topic": "遺傳與性狀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-遺傳與性狀",
+        "template_id": "extra-2026-bio1-遺傳與性狀-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-遺傳與性狀-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用遺傳與性狀生物概念",
+      "question": {
+        "q": "一個家庭中父母都表現正常，但子女出現某常染色體隱性遺傳疾病。若假設無新突變，父母最可能的基因型為何？",
+        "correct": "兩人皆為帶因者Aa",
+        "wrong": [
+          "兩人皆為AA",
+          "一人AA另一人aa",
+          "兩人皆為aa且都正常"
+        ],
+        "exp": "隱性患病子女為aa，雙親各須提供一個a，正常表現型的雙親可為Aa。",
+        "subject": "生物",
+        "sub_topic": "遺傳與性狀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-遺傳與性狀",
+        "template_id": "extra-2026-bio1-遺傳與性狀-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

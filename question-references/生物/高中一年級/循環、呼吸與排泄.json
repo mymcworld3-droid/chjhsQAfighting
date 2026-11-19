@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-循環、呼吸與排泄-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用循環、呼吸與排泄生物概念",
+      "question": {
+        "q": "某運動員跑步時骨骼肌耗氧增加，血液主要靠哪種物質運送大部分氧氣？",
+        "correct": "紅血球中的血紅素",
+        "wrong": [
+          "血小板中的DNA",
+          "血漿中的葉綠素",
+          "白血球中的抗體"
+        ],
+        "exp": "氧氣主要與紅血球血紅素結合輸送，少部分溶於血漿。",
+        "subject": "生物",
+        "sub_topic": "循環、呼吸與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-循環、呼吸與排泄",
+        "template_id": "extra-2026-bio1-循環、呼吸與排泄-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-循環、呼吸與排泄-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用循環、呼吸與排泄生物概念",
+      "question": {
+        "q": "肺泡壁與微血管壁薄，且肺泡附近血流豐富。這種構造主要促進什麼？",
+        "correct": "氧氣與二氧化碳跨膜擴散及持續交換",
+        "wrong": [
+          "血液直接在肺泡內合成全部紅血球",
+          "完全阻止氣體進入循環",
+          "使所有呼吸作用不需氧氣"
+        ],
+        "exp": "交換面薄且擴散距離短，血流維持分壓差有利氣體交換。",
+        "subject": "生物",
+        "sub_topic": "循環、呼吸與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-循環、呼吸與排泄",
+        "template_id": "extra-2026-bio1-循環、呼吸與排泄-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-循環、呼吸與排泄-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用循環、呼吸與排泄生物概念",
+      "question": {
+        "q": "某人因失水而抗利尿激素ADH上升，腎臟集合管增加水再吸收。其尿量通常如何改變？",
+        "correct": "減少",
+        "wrong": [
+          "增加到無限大",
+          "完全與水再吸收無關",
+          "尿液立即變成純葡萄糖"
+        ],
+        "exp": "ADH促進集合管水通透性及再吸收，有助減少尿量與保存體水。",
+        "subject": "生物",
+        "sub_topic": "循環、呼吸與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-循環、呼吸與排泄",
+        "template_id": "extra-2026-bio1-循環、呼吸與排泄-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

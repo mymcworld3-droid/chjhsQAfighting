@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-神經與內分泌概念-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用神經與內分泌概念生物概念",
+      "question": {
+        "q": "某人摸到熱鍋迅速縮手，反射反應部分可先經脊髓完成。這顯示什麼？",
+        "correct": "反射弧能在意識判斷前快速啟動肌肉反應",
+        "wrong": [
+          "所有反射都必須先經大腦皮質完整分析",
+          "感覺神經只能傳出肌肉指令",
+          "脊髓完全不參與神經訊息傳遞"
+        ],
+        "exp": "反射弧可由感覺神經、脊髓中樞與運動神經構成快速保護反應。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌概念",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-神經與內分泌概念",
+        "template_id": "extra-2026-bio1-神經與內分泌概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-神經與內分泌概念-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用神經與內分泌概念生物概念",
+      "question": {
+        "q": "餐後血糖升高刺激胰臟分泌胰島素，使細胞攝取與儲存葡萄糖增加。這屬於哪種調節？",
+        "correct": "負回饋調節",
+        "wrong": [
+          "無限制放大偏差的正回饋",
+          "與血糖濃度無關的隨機變化",
+          "依地球公轉控制的季節週期"
+        ],
+        "exp": "血糖偏高促使降低血糖的反應，是維持恆定的負回饋。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌概念",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-神經與內分泌概念",
+        "template_id": "extra-2026-bio1-神經與內分泌概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-神經與內分泌概念-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用神經與內分泌概念生物概念",
+      "question": {
+        "q": "某激素經血液循環全身，但只影響部分細胞。最主要原因是？",
+        "correct": "只有具合適受體及訊息傳導能力的細胞會對它反應",
+        "wrong": [
+          "血液只會到達單一細胞",
+          "激素在進入血液時立即變成基因",
+          "所有細胞對任何激素的反應必定完全相同"
+        ],
+        "exp": "激素作用取決於目標細胞的受體與下游訊號。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌概念",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-神經與內分泌概念",
+        "template_id": "extra-2026-bio1-神經與內分泌概念-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-人類活動與保育-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用人類活動與保育生物概念",
+      "question": {
+        "q": "某地道路切開原本連續的森林，使兩側族群難以交流。哪種保育措施較能降低破碎化影響？",
+        "correct": "設置合適的野生動物通道與棲地廊道",
+        "wrong": [
+          "增加完全封閉且無通道的障礙",
+          "只在道路旁設置裝飾圖案",
+          "把兩側所有野生動物都移出森林"
+        ],
+        "exp": "廊道與跨路設施有助移動及基因交流，需依物種習性設計。",
+        "subject": "生物",
+        "sub_topic": "人類活動與保育",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-人類活動與保育",
+        "template_id": "extra-2026-bio1-人類活動與保育-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-人類活動與保育-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用人類活動與保育生物概念",
+      "question": {
+        "q": "外來物種被引入島嶼後，快速繁殖並捕食原生動物。保育單位首要評估什麼？",
+        "correct": "其族群擴張、食物網影響與可行控制方法",
+        "wrong": [
+          "只因外觀漂亮就無需管理",
+          "外來物種必定對所有原生種有利",
+          "所有外來物種一律沒有任何生態影響"
+        ],
+        "exp": "外來物種是否入侵需看其傳播與生態衝擊，應依證據管理。",
+        "subject": "生物",
+        "sub_topic": "人類活動與保育",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-人類活動與保育",
+        "template_id": "extra-2026-bio1-人類活動與保育-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-人類活動與保育-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用人類活動與保育生物概念",
+      "question": {
+        "q": "某農區增加農藥使用後昆蟲數下降，同時食蟲鳥的繁殖數減少。若要判斷因果，應如何做？",
+        "correct": "監測農藥、昆蟲及鳥類並設對照區，評估食物減少與直接毒性",
+        "wrong": [
+          "直接判定鳥類下降只能由單一因素造成",
+          "只計算農藥包裝數量",
+          "完全忽略其他棲地變化"
+        ],
+        "exp": "農藥可能直接或間接影響食物網，需控制其他環境變因。",
+        "subject": "生物",
+        "sub_topic": "人類活動與保育",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-人類活動與保育",
+        "template_id": "extra-2026-bio1-人類活動與保育-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

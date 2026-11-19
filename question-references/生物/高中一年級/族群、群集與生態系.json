@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-族群、群集與生態系-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用族群、群集與生態系生物概念",
+      "question": {
+        "q": "某森林內單一物種鹿的數量變化是族群研究；若研究鹿、狼與草的相互關係，主要屬於什麼層次？",
+        "correct": "群集中的不同物種交互作用",
+        "wrong": [
+          "單一細胞的分子代謝",
+          "地球內核的對流運動",
+          "一條DNA的鹼基排列"
+        ],
+        "exp": "同種個體構成族群，多物種之間的捕食與競爭屬群集研究。",
+        "subject": "生物",
+        "sub_topic": "族群、群集與生態系",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-族群、群集與生態系",
+        "template_id": "extra-2026-bio1-族群、群集與生態系-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-族群、群集與生態系-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用族群、群集與生態系生物概念",
+      "question": {
+        "q": "某池塘魚群原先快速增加，後因食物與空間限制使數量趨於穩定。這最符合哪種概念？",
+        "correct": "環境負荷量限制族群成長",
+        "wrong": [
+          "魚群永遠能呈指數成長而不受資源限制",
+          "負荷量代表每隻魚的體重",
+          "數量穩定意味沒有任何個體出生與死亡"
+        ],
+        "exp": "有限資源可能使族群數量接近負荷量，仍可能有出生死亡與波動。",
+        "subject": "生物",
+        "sub_topic": "族群、群集與生態系",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-族群、群集與生態系",
+        "template_id": "extra-2026-bio1-族群、群集與生態系-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-族群、群集與生態系-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用族群、群集與生態系生物概念",
+      "question": {
+        "q": "某植物與根部真菌合作：植物提供光合作用產物，真菌提高養分吸收。這較接近哪種種間關係？",
+        "correct": "互利共生",
+        "wrong": [
+          "寄生且雙方必定受害",
+          "捕食",
+          "完全沒有任何物質交換"
+        ],
+        "exp": "雙方都獲得利益，屬互利共生的例子。",
+        "subject": "生物",
+        "sub_topic": "族群、群集與生態系",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-族群、群集與生態系",
+        "template_id": "extra-2026-bio1-族群、群集與生態系-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

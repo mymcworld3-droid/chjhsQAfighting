@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio1-食物網與能量流-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用食物網與能量流生物概念",
+      "question": {
+        "q": "某湖泊中大型掠食魚減少，小型食浮游動物的魚增加，浮游動物下降。這最接近哪種現象？",
+        "correct": "營養階層連鎖效應",
+        "wrong": [
+          "地球的熱對流",
+          "DNA的半保留複製",
+          "純粹不涉及物種交互作用的變化"
+        ],
+        "exp": "掠食者變化可透過中間消費者影響較低營養級。",
+        "subject": "生物",
+        "sub_topic": "食物網與能量流",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-食物網與能量流",
+        "template_id": "extra-2026-bio1-食物網與能量流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-食物網與能量流-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用食物網與能量流生物概念",
+      "question": {
+        "q": "某食物網中植物被昆蟲與兔共同取食，昆蟲數量大減後，兔的食物條件可能如何變化？",
+        "correct": "若植物總量受取食限制，兔可利用的植物可能增加",
+        "wrong": [
+          "昆蟲下降必然讓植物立即完全消失",
+          "兔一定在同一秒全部死亡",
+          "兩種草食動物必然不存在任何資源競爭"
+        ],
+        "exp": "共用資源的物種可能有間接競爭，結果仍依環境與物種變動而定。",
+        "subject": "生物",
+        "sub_topic": "食物網與能量流",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-食物網與能量流",
+        "template_id": "extra-2026-bio1-食物網與能量流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio1-食物網與能量流-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以自然或社會案例運用食物網與能量流生物概念",
+      "question": {
+        "q": "某難分解污染物在浮游生物、魚類與魚食性鳥類體內濃度逐級升高。這較接近？",
+        "correct": "生物放大作用",
+        "wrong": [
+          "有絲分裂",
+          "自然選擇必然讓所有污染物消失",
+          "水分的滲透作用"
+        ],
+        "exp": "持久性污染物可能沿食物鏈在高營養級累積較高濃度。",
+        "subject": "生物",
+        "sub_topic": "食物網與能量流",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-食物網與能量流",
+        "template_id": "extra-2026-bio1-食物網與能量流-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
