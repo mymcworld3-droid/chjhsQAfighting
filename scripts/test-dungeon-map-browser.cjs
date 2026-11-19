@@ -272,6 +272,11 @@ async function main(){
       const count=await page.locator('[data-dm-beast-list] button').count();
       assert.equal(count,room.enemies.length);
       await page.locator('[data-dm-beast-list] button').first().click();
+      // Selecting a beast closes the inspector to free the narrow rail for
+      // manual skill controls. Reopen it to read the selected beast details.
+      await page.locator('[data-dm-inspector]').waitFor({state:'hidden'});
+      await page.locator('#dungeon-map-view [data-dm="beasts"]').click();
+      await page.locator('[data-dm-inspector]:not([hidden])').waitFor();
       const description=await page.locator('[data-dm-beast-details]').innerText();
       assert.match(description,/座標/);assert.match(description,/節拍 T/);
       assert.ok(description.includes(room.enemies[0].name));
