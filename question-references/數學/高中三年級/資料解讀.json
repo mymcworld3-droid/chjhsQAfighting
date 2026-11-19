@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-m3-datareading-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "某校去年500人中有200人參加社團，今年600人中有210人參加。參加率如何變化？",
+        "correct": "由40%下降到35%",
+        "wrong": [
+          "由40%上升到42%",
+          "由35%上升到40%",
+          "由40%維持40%"
+        ],
+        "exp": "去年200/500=40%；今年210/600=35%，參加人數雖增加，比例卻下降5個百分點。",
+        "subject": "數學",
+        "sub_topic": "資料解讀",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-資料解讀",
+        "template_id": "ref-20261119-b11-m3-datareading-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m3-datareading-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "兩個班級甲20人平均80分、乙30人平均70分，合併後的平均分數為何？",
+        "correct": "74分",
+        "wrong": [
+          "75分",
+          "76分",
+          "70分"
+        ],
+        "exp": "必須按班級人數加權：(20×80+30×70)/50=(1600+2100)/50=74。",
+        "subject": "數學",
+        "sub_topic": "資料解讀",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-資料解讀",
+        "template_id": "ref-20261119-b11-m3-datareading-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m3-datareading-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "某城市調查發現通勤時間與壓力評分的相關係數為0.65。哪項解釋最適當？",
+        "correct": "樣本呈正線性相關，但不能僅據此推定通勤直接造成壓力",
+        "wrong": [
+          "相關係數0.65表示每增加1分鐘通勤，壓力必增加0.65分",
+          "0.65代表65%的人因通勤而罹患壓力相關疾病",
+          "正相關已證明所有其他影響壓力的因素均不存在"
+        ],
+        "exp": "r=0.65反映正向線性相關的程度，不等於斜率、因果效果或人數百分比。",
+        "subject": "數學",
+        "sub_topic": "資料解讀",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-資料解讀",
+        "template_id": "ref-20261119-b11-m3-datareading-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
