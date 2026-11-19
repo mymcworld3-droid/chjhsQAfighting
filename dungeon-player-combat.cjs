@@ -47,7 +47,7 @@ function strikeEnemy(room,uid,map,{enemyId,seq}={}){
     updated.battleHealth=remaining;
     updated.battleMaxHealth=maxHealth(enemy.kind);
   }
-  const hit={seq,enemyId,damage:teamwork?.damage??Math.min(health,DAMAGE),
+  const hit={seq,enemyId,origin:{...member.position},target:{...enemy.position},damage:teamwork?.damage??Math.min(health,DAMAGE),
     remainingHealth:remaining,defeated,tick,
     ...(teamwork?{shieldDamage:teamwork.shieldDamage,combo:teamwork.combo,
       shieldBroken:teamwork.shieldBroken}:{})};
