@@ -270,7 +270,9 @@ class DungeonMapView{
     if(!panel)return;
     const active=this.room?.status==='assembled'&&!!this.map;
     const presets=member?.dungeonLoadoutNames||[];
-    panel.hidden=!active||!presets.length;
+    // The beast inspector and manual controls share the compact left rail.
+    // Display only one at a time so neither hides the other's buttons.
+    panel.hidden=!active||!presets.length||this.inspectOpen;
     if(panel.hidden)return;
     const skills=member.dungeonSkills||[];
     const signature=JSON.stringify([presets,skills]);
@@ -691,16 +693,22 @@ class DungeonMapView{
     if(name==='close'){this.close();return;}
     if(name==='retry'){void this.load();return;}
     if(name==='close-beasts'){
-      this.inspectOpen=false;this.followBeast=false;this.updateBeastHUD();return;
+      this.inspectOpen=false;this.followBeast=false;
+      this.updateBeastHUD();this.updateSkillHUD();return;
     }
-    if(name==='beast-select'){this.selectBeast(beastId);return;}
+    if(name==='beast-select'){
+      // Selecting an enemy from the inspector returns the left rail to
+      // combat controls. The chosen enemy remains selected for casting.
+      this.selectBeast(beastId);this.inspectOpen=false;
+      this.updateBeastHUD();this.updateSkillHUD();return;
+    }
     if(name==='strike'){void this.strike();return;}
     if(name==='cast'){void this.cast(skillId);return;}
     if(name==='loadout'){void this.changeLoadout(Number(loadoutIndex));return;}
     if(name==='beasts'){
       this.inspectOpen=!this.inspectOpen;
       if(!this.inspectOpen)this.followBeast=false;
-      this.updateBeastHUD();return;
+      this.updateBeastHUD();this.updateSkillHUD();return;
     }
     const directions={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
     if(directions[name]){void this.move(...directions[name]);return;}
