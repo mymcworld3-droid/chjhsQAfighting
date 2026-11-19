@@ -1,6 +1,6 @@
 import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
-import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom } from './dungeon-room.js';
+import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 
@@ -26,6 +26,7 @@ class DungeonMapView{
     this.camera=Camera.initialCamera();this.follow=false;this.routes=false;
     this.opened=false;this.seq=0;this.pointers=new Map();this.movePending=false;
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
+    this.portalPending=false;
     this.aimTile=null;this.skillSignature='';
     this.focusAuras=new Map();
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
@@ -50,7 +51,9 @@ class DungeonMapView{
     root.setAttribute('aria-label','合作副本地圖預覽');
     root.innerHTML='<div class="dm-shell">'+
       '<header class="dm-head"><div><small>青雲問道 · 秘境探勘</small>'+
-      '<h2 data-dm-title>秘境地圖</h2></div><div class="dm-head-actions">'+
+      '<h2 data-dm-title>秘境地圖</h2>'+
+      '<p class="dm-objective-status" data-dm-objective aria-live="polite">'+
+      '尋找守鑰靈獸</p></div><div class="dm-head-actions">'+
       '<span class="dm-battle-clock" data-dm-clock role="timer" aria-live="off">等待集結</span>'+
       '<button type="button" data-dm="close" aria-label="返回合作副本隊伍">返回隊伍 <span aria-hidden="true">×</span></button></div></header>'+
       '<div class="dm-stage" data-dm-stage>'+
@@ -85,7 +88,8 @@ class DungeonMapView{
       '<button type="button" data-dm="left" aria-label="向左移動一格">←</button>'+
       '<button type="button" data-dm="down" aria-label="向下移動一格">↓</button>'+
       '<button type="button" data-dm="right" aria-label="向右移動一格">→</button>'+
-      '</div><button type="button" class="dm-quiz-charge" data-dm="quiz" disabled>答題充能 · 隨時作答</button>'+ 
+      '</div><button type="button" class="dm-portal-button" data-dm="portal" hidden disabled>啟動傳送門</button>'+
+      '<button type="button" class="dm-quiz-charge" data-dm="quiz" disabled>答題充能 · 隨時作答</button>'+ 
       '<button type="button" class="dm-strike" data-dm="strike" disabled>選擇靈獸後攻擊 · 2 體力</button>'+ 
        '<small data-dm-strike-alert role="status" aria-live="polite"></small>'+ 
        '<small data-dm-move-alert role="status" aria-live="polite"></small></div>'+ 
@@ -96,7 +100,7 @@ class DungeonMapView{
        '<small data-dm-aim>先點擊靈獸或地圖格選擇施法目標</small>'+
        '<small data-dm-skill-alert role="status" aria-live="polite"></small></aside>'+ 
       '<div class="dm-legend" aria-hidden="true">'+
-      '<span>● 起點</span><span>◇ 傳送陣</span><span>◆ 守護者</span></div></div>'+
+      '<span>● 起點</span><span>◇ 傳送陣</span><span>◆ 守鑰靈獸</span></div></div>'+
       '<footer class="dm-foot"><span data-dm-status>地圖展示 · 尚未開放移動與戰鬥</span>'+
       '<span data-dm-zoom>100%</span></footer></div>';
     document.body.append(root);
@@ -154,6 +158,7 @@ class DungeonMapView{
     this.map=null;this.camera=Camera.initialCamera();
     this.follow=false;this.routes=false;this.pointers.clear();this.opened=true;
     this.movePending=false;this.strikePending=false;this.skillPending=false;
+    this.portalPending=false;
     this.loadoutPending=false;this.aimTile=null;this.skillSignature='';
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
     this.beastIds='';this.touchOrigins.clear();this.gestureMulti=false;
@@ -258,6 +263,7 @@ class DungeonMapView{
     });
     const charge=this.$('[data-dm="quiz"]');
     if(charge)charge.disabled=!active||!this.map;
+    this.updatePortalHUD();
     this.updateStrikeHUD();this.updateSkillHUD();
   }
   updateStrikeHUD(){
@@ -676,6 +682,65 @@ class DungeonMapView{
     node.textContent='戰場時鐘 '+display+' · T'+tick;
     node.title='由伺服器時間校準；玩家操作或離開地圖不會暫停';
   }
+  updatePortalHUD(){
+    const node=this.$('[data-dm-objective]');
+    const button=this.$('[data-dm="portal"]');
+    const progress=this.room?.dungeonProgress;
+    if(!button||!node)return;
+    const active=this.room?.status==='assembled'&&!!this.map;
+    const stage=progress?.portalStatus;
+    const self=this.room?.members?.[this.uid];
+    const p=self?.position,portal=this.map?.portalSite;
+    const near=Boolean(p&&portal&&
+      Math.abs(p.x-portal.x)+Math.abs(p.y-portal.y)<=1);
+    const alive=self?.downed!==true&&Number(self?.battleHealth)>0;
+    node.textContent=!active?'等待隊伍集結':
+      !progress?'舊版探索場次 · 重新集結才有守鑰任務':
+      stage==='open'?'✓ 全隊共享密鑰已啟動首領傳送門（Boss 戰將於後續階段開放）':
+      stage==='ready'?'🔑 已取得全隊共享密鑰 · 前往深處傳送陣':
+      '◆ 前往地圖最深處，擊敗鎮鑰玄甲獸取得密鑰';
+    node.classList.toggle('is-ready',stage==='ready');
+    node.classList.toggle('is-open',stage==='open');
+    button.hidden=!active||!progress||stage==='sealed';
+    button.disabled=this.portalPending||stage==='open'||!near||!alive;
+    button.textContent=stage==='open'?'✓ 傳送門已啟動':
+      !near?'🔑 持有共享密鑰 · 請靠近傳送陣':
+      this.portalPending?'正在啟動傳送門…':'🔑 使用密鑰啟動傳送門';
+    button.title=stage==='open'?'全隊傳送門已解鎖；Boss 戰將在後續階段接入':
+      !alive?'角色已倒地，不能啟動傳送門':
+      !near?'必須站在傳送門或相鄰一格':'使用全隊共享密鑰，不消耗探索體力';
+  }
+  async openPortal(){
+    const progress=this.room?.dungeonProgress;
+    if(!this.isCurrent()||this.portalPending||
+        progress?.portalStatus!=='ready')return;
+    this.portalPending=true;this.updatePortalHUD();
+    const token=this.seq,roomId=this.roomId;
+    try{
+      const data=await activateDungeonPortal(roomId);
+      if(!this.isCurrent()||this.seq!==token||this.roomId!==roomId)return;
+      if(data?.room){
+        this.updateRoom(data.room);
+        window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
+          detail:{room:data.room}
+        }));
+      }
+    }catch(error){
+      if(this.isCurrent()&&this.seq===token){
+        this.moveAlert(error?.message||'傳送門啟動失敗，請重試');
+        if(error?.status===409){
+          try{
+            const fresh=await getDungeonRoom(roomId);
+            if(this.isCurrent()&&this.seq===token&&fresh?.room)
+              this.updateRoom(fresh.room);
+          }catch(_){}
+        }
+      }
+    }finally{
+      this.portalPending=false;
+      if(this.isCurrent()&&this.seq===token)this.updatePortalHUD();
+    }
+  }
   updateStatus(){
     const state=this.$('[data-dm-status]');
     if(state)state.textContent=this.room?.status==='assembled'?
@@ -741,6 +806,7 @@ class DungeonMapView{
       this.updateBeastHUD();this.updateSkillHUD();return;
     }
     if(name==='quiz'){this.quiz?.show();return;}
+    if(name==='portal'){void this.openPortal();return;}
     if(name==='strike'){void this.strike();return;}
     if(name==='cast'){void this.cast(skillId);return;}
     if(name==='loadout'){void this.changeLoadout(Number(loadoutIndex));return;}
@@ -974,7 +1040,8 @@ class DungeonMapView{
     if(!m)return;
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:this.members(),selfUid:this.uid,showRoutes:this.routes,
-      enemies:this.creatures(),aimTile:this.currentAim(),
+      enemies:this.creatures(),objectives:this.room?.dungeonProgress,
+      aimTile:this.currentAim(),
       currentTick:Number(this.room?.battleClock?.appliedTick)||0,
       visualTimeMs:performance.now()
     });
@@ -989,7 +1056,8 @@ class DungeonMapView{
     if(miniCtx){
       miniCtx.setTransform(dpr,0,0,dpr,0,0);
       drawMinimap(miniCtx,m,geometry,mw,mh,{
-        members:this.members(),selfUid:this.uid,enemies:this.creatures()
+        members:this.members(),selfUid:this.uid,enemies:this.creatures(),
+        objectives:this.room?.dungeonProgress
       });
     }
     this.$('[data-dm-zoom]').textContent=Math.round(this.camera.zoom*100)+'%';

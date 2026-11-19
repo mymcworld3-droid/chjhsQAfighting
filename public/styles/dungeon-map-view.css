@@ -530,3 +530,38 @@
   #dungeon-map-view .dm-focus-spark{animation:none!important}
   #dungeon-map-view .dm-focus-spark{opacity:.85}
 }
+
+// Stage 14: shared guardian-key objective and party portal activation.
+#dungeon-map-view .dm-objective-status{
+  margin:3px 0 0;max-width:min(570px,64vw);
+  color:#efcba5;font-size:11px;line-height:1.45;
+  overflow-wrap:anywhere;
+}
+#dungeon-map-view .dm-objective-status.is-ready{
+  color:#98ead5;text-shadow:0 0 8px #45d4be54;
+}
+#dungeon-map-view .dm-objective-status.is-open{
+  color:#d1b9ff;text-shadow:0 0 9px #bd9aff7a;
+}
+#dungeon-map-view .dm-portal-button{
+  width:100%;min-height:36px;font-size:12px;font-weight:750;
+  padding:7px 10px;line-height:1.35;
+  background:linear-gradient(110deg,#254e53,#3a7669);
+  color:#d1fff1;border:1px solid #a1f0df;
+  box-shadow:0 0 12px #63dfc02e;
+}
+#dungeon-map-view .dm-portal-button:not(:disabled){
+  animation:dmPortalAvailable 2s ease-in-out infinite;
+}
+#dungeon-map-view .dm-portal-button:disabled{opacity:.75}
+@keyframes dmPortalAvailable{
+  0%,100%{box-shadow:0 0 4px #5debd04a}
+  50%{box-shadow:0 0 19px #9df8df99}
+}
+@media(max-width:720px){
+  #dungeon-map-view .dm-objective-status{max-width:62vw;font-size:10px}
+  #dungeon-map-view .dm-portal-button{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+  #dungeon-map-view .dm-portal-button{animation:none!important}
+}

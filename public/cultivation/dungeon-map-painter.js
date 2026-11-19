@@ -9,9 +9,10 @@ export const BIOMES=Object.freeze({
 });
 const partyColors=['#f0cf8a','#9bdcc0','#d8acd9','#f3b5a0'];
 export const BEAST_COLORS=Object.freeze({
-  wolf:'#f2b67d',wisp:'#80dfc9',golem:'#c9a383'
+  wolf:'#f2b67d',wisp:'#80dfc9',golem:'#c9a383',
+  guardian:'#edbd6a'
 });
-const glyphs=Object.freeze({wolf:'◆',wisp:'✦',golem:'⬟'});
+const glyphs=Object.freeze({wolf:'◆',wisp:'✦',golem:'⬟',guardian:'♜'});
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 export function hashCell(map,x,y){
   const s=(map.layoutId||map.seed||'v1')+':'+x+','+y;
@@ -21,7 +22,7 @@ export function hashCell(map,x,y){
 }
 export function drawWorld(ctx,map,camera,width,height,
   {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0,
-    aimTile=null,visualTimeMs=0}={}){
+    aimTile=null,visualTimeMs=0,objectives=null}={}){
   const palette=BIOMES[map.biome]||BIOMES.ruins;
   const g=Camera.geometry(camera,map,width,height);
   const v=Camera.visibleTiles(camera,map,width,height);
@@ -154,8 +155,15 @@ export function drawWorld(ctx,map,camera,width,height,
     }
     ctx.restore();
   }
-  marker(map.guardianSite,'鑰匙守護者','#e6acaa','◆');
-  marker(map.portalSite,'傳送陣',palette.trim,'◇');
+  if(objectives?.guardianStatus==='defeated')
+    marker(map.guardianSite,'守鑰已破','#d4b46b','✦');
+  else marker(map.guardianSite,'鎮鑰守護區','#e6acaa','◆');
+  const portalOpen=objectives?.portalStatus==='open',
+    portalReady=objectives?.portalStatus==='ready';
+  marker(map.portalSite,
+    portalOpen?'首領傳送門':portalReady?'可啟動傳送陣':'封印傳送陣',
+    portalOpen?'#b5a5ff':portalReady?'#82e5db':'#8e9e99',
+    portalOpen?'✦':'◇');
   marker(map.spawn,'起點','#bde9ab','●');
   // Render hostile creatures beneath player markers so characters remain
   // visible when the AI reaches melee distance (no damage in stage 9).
@@ -166,7 +174,8 @@ export function drawWorld(ctx,map,camera,width,height,
     if(x<-35||y<-35||x>width+35||y>height+35)continue;
     const color=BEAST_COLORS[enemy.kind]||'#e5bc9e';
     const alerted=enemy.intent==='pursuit'||enemy.intent==='alert';
-    const r=clamp(cell*.35,4,12);
+    const guardian=enemy.kind==='guardian';
+    const r=clamp(cell*(guardian?.47:.35),guardian?6:4,guardian?17:12);
     ctx.save();
     ctx.beginPath();ctx.arc(x,y,r*1.55,0,Math.PI*2);
     ctx.globalAlpha=alerted?.25:.14;
@@ -252,7 +261,7 @@ export function drawWorld(ctx,map,camera,width,height,
   return g;
 }
 export function drawMinimap(ctx,map,geometry,width,height,
-  {members=[],selfUid='',enemies=[]}={}){
+  {members=[],selfUid='',enemies=[],objectives=null}={}){
   const p=BIOMES[map.biome]||BIOMES.ruins;
   ctx.fillStyle=p.void;ctx.fillRect(0,0,width,height);
   const scale=Math.min((width-10)/map.width,(height-10)/map.height);
@@ -274,8 +283,10 @@ export function drawMinimap(ctx,map,geometry,width,height,
         Math.max(scale,1.5),Math.max(scale,1.5));
     }
   }
+  const portalColor=objectives?.portalStatus==='open'?'#c2b1ff':
+    objectives?.portalStatus==='ready'?'#74e4d1':'#899a95';
   for(const [point,color] of [[map.spawn,'#bde9ab'],[map.guardianSite,'#e6acaa'],
-    [map.portalSite,p.trim]]){
+    [map.portalSite,portalColor]]){
     if(!point)continue;
     ctx.fillStyle=color;ctx.beginPath();
     ctx.arc(ox+(point.x+.5)*scale,oy+(point.y+.5)*scale,Math.max(2,scale),0,Math.PI*2);
