@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-math2-rvnormal-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "離散隨機變數X取值0、1、2的機率依序為1/4、1/2、1/4，則變異數Var(X)為何？",
+        "correct": "1/2",
+        "wrong": [
+          "1",
+          "1/4",
+          "3/2"
+        ],
+        "exp": "E(X)=0×1/4+1×1/2+2×1/4=1；E(X²)=0+1/2+4×1/4=3/2；Var(X)=E(X²)−[E(X)]²=1/2。",
+        "subject": "數學",
+        "sub_topic": "隨機變數與常態分布",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-隨機變數與常態分布",
+        "template_id": "ref-20261119-b9-math2-rvnormal-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math2-rvnormal-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "某測量值服從平均100、標準差20的常態分布，若某個觀測值為130，其標準分數z為何？",
+        "correct": "1.5",
+        "wrong": [
+          "0.5",
+          "3",
+          "−1.5"
+        ],
+        "exp": "標準化z=(x−μ)/σ=(130−100)/20=1.5。",
+        "subject": "數學",
+        "sub_topic": "隨機變數與常態分布",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-隨機變數與常態分布",
+        "template_id": "ref-20261119-b9-math2-rvnormal-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math2-rvnormal-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "若X服從平均μ=50的對稱常態分布，且測量為連續型，則P(X>50)為何？",
+        "correct": "0.5",
+        "wrong": [
+          "0",
+          "0.25",
+          "1"
+        ],
+        "exp": "常態分布以平均數50為對稱中心，連續變數在單一點的機率為0，故P(X>50)=1/2。",
+        "subject": "數學",
+        "sub_topic": "隨機變數與常態分布",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-隨機變數與常態分布",
+        "template_id": "ref-20261119-b9-math2-rvnormal-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
