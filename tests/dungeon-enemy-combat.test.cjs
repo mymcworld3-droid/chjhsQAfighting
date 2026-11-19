@@ -118,3 +118,28 @@ test('hit logic is deterministic and server moves only one tile at a time',()=>{
   assert.equal(r1.members.a.explorationStamina,100);
   assert.ok(r1.enemies.every(enemy=>walkable(map,enemy.position)));
 });
+
+test('a lagged transaction cannot both create and resolve an unseen warning',()=>{
+  const p=map.spawnPads[0],e={kind:'wolf',cadence:2,position:nextTo(p)};
+  let room=core(e,p);
+  room=apply(room,3); // attack started at T2 but only committed now
+  assert.equal(room.members.a.battleHealth,100);
+  assert.ok(room.enemies[0].attack);
+  const armed=room.enemies[0].attack;
+  assert.equal(armed.resolvesAtTick,5);
+  room=apply(room,4);
+  assert.equal(room.members.a.battleHealth,100);
+  room=apply(room,5);
+  assert.equal(room.members.a.battleHealth,92);
+  // Bigger catch-up: plan at T2 then T4 would have resolved invisibly,
+  // so the deadline is pushed at least two ticks past publication.
+  let delayed=core(e,p);
+  delayed=apply(delayed,4);
+  assert.equal(delayed.members.a.battleHealth,100);
+  assert.ok(delayed.enemies[0].attack);
+  assert.ok(delayed.enemies[0].attack.resolvesAtTick>=6);
+  delayed=apply(delayed,5);
+  assert.equal(delayed.members.a.battleHealth,100);
+  delayed=apply(delayed,6);
+  assert.equal(delayed.members.a.battleHealth,92);
+});
