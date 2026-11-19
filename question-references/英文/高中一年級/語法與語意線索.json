@@ -96,14 +96,14 @@
       "source": "高中自編參考題（非歷屆考題）",
       "design": "自然語境、條件清楚、錯誤選項與觀念相關",
       "question": {
-        "q": "The new water filters were installed last week; ______, the school will test the water quality again before allowing drinking.",
+        "q": "The school installed the new water filters last week; ______, they have not yet been approved for drinking-water use.",
         "correct": "however",
         "wrong": [
           "therefore",
           "for example",
           "similarly"
         ],
-        "exp": "The sentence contrasts completed installation with the remaining need for verification; 'however' marks that caution.",
+        "exp": "安裝已完成與尚未核准飲用形成轉折，however 表示「然而」。Therefore 表原因或結果，無法自然表達此對比。",
         "subject": "英文",
         "sub_topic": "語法與語意線索",
         "knowledge_points": [
