@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m2-period-sine-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "某潮位模型h(t)=2+1.5sin(πt/6)，t以小時計。其最小正週期為何？",
+        "correct": "12小時",
+        "wrong": [
+          "6小時",
+          "3小時",
+          "24小時"
+        ],
+        "exp": "sin(ωt)週期2π/|ω|，ω=π/6，故週期12小時。",
+        "subject": "數學",
+        "sub_topic": "正弦、餘弦週期現象",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-正弦、餘弦週期現象",
+        "template_id": "ref-20261119-b10-m2-period-sine-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m2-period-sine-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "某週期指標模型y(t)=sin(2πt/24)，t≥0以小時計。此模型第一次達到最大值1的時刻為何？",
+        "correct": "t=6小時",
+        "wrong": [
+          "t=3小時",
+          "t=12小時",
+          "t=24小時"
+        ],
+        "exp": "sin在角度π/2首次達最大值，令2πt/24=π/2，解得t=6。",
+        "subject": "數學",
+        "sub_topic": "正弦、餘弦週期現象",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-正弦、餘弦週期現象",
+        "template_id": "ref-20261119-b10-m2-period-sine-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m2-period-sine-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "某高度模型h(t)=5−3cos(πt/4)，t以小時計。其最高值與最低值分別為何？",
+        "correct": "8與2",
+        "wrong": [
+          "5與−3",
+          "8與5",
+          "5與2"
+        ],
+        "exp": "cos範圍[−1,1]，h最大5−3(−1)=8，最小5−3(1)=2。",
+        "subject": "數學",
+        "sub_topic": "正弦、餘弦週期現象",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-正弦、餘弦週期現象",
+        "template_id": "ref-20261119-b10-m2-period-sine-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
