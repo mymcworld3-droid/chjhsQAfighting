@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-m2-3ddiagram-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "一個長方體邊長為3、4、12公分。兩個相對頂點之間的空間對角線長為何？",
+        "correct": "13公分",
+        "wrong": [
+          "19公分",
+          "12公分",
+          "√97公分"
+        ],
+        "exp": "空間對角線長=√(3²+4²+12²)=√169=13公分。",
+        "subject": "數學",
+        "sub_topic": "空間坐標、向量與圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間坐標、向量與圖形",
+        "template_id": "ref-20261119-b11-m2-3ddiagram-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-3ddiagram-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "以O(0,0,0)為原點，點P(−3,4,0)到原點的距離為何？",
+        "correct": "5",
+        "wrong": [
+          "7",
+          "√7",
+          "25"
+        ],
+        "exp": "距離√[(−3)²+4²+0²]=√25=5。",
+        "subject": "數學",
+        "sub_topic": "空間坐標、向量與圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間坐標、向量與圖形",
+        "template_id": "ref-20261119-b11-m2-3ddiagram-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-3ddiagram-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "長方體長6、寬4、高3公分。將高增加一倍，另兩邊不變，新長方體體積為何？",
+        "correct": "144立方公分",
+        "wrong": [
+          "72立方公分",
+          "96立方公分",
+          "216立方公分"
+        ],
+        "exp": "新高度6公分，體積=6×4×6=144立方公分；與原體積72相比變為2倍。",
+        "subject": "數學",
+        "sub_topic": "空間坐標、向量與圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間坐標、向量與圖形",
+        "template_id": "ref-20261119-b11-m2-3ddiagram-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
