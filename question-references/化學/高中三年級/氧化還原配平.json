@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-c3-redox-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "酸性溶液中，Cr₂O₇²⁻還原成2Cr³⁺時，兩個鉻原子共需得到多少電子？",
+        "correct": "6個",
+        "wrong": [
+          "3個",
+          "2個",
+          "12個"
+        ],
+        "exp": "Cr在Cr₂O₇²⁻中的氧化數為+6，還原成+3，每個Cr得到3電子，共2×3=6電子。",
+        "subject": "化學",
+        "sub_topic": "氧化還原配平",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-氧化還原配平",
+        "template_id": "ref-20261119-b5-c3-redox-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-c3-redox-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "在酸性溶液中平衡半反應MnO₄⁻+8H⁺+?e⁻→Mn²⁺+4H₂O，問電子係數為何？",
+        "correct": "5",
+        "wrong": [
+          "3",
+          "4",
+          "7"
+        ],
+        "exp": "左側電荷−1+8−n=7−n，右側+2；因此7−n=2，n=5，亦符合Mn由+7降至+2。",
+        "subject": "化學",
+        "sub_topic": "氧化還原配平",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-氧化還原配平",
+        "template_id": "ref-20261119-b5-c3-redox-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-c3-redox-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "已知氧化半反應2I⁻→I₂+2e⁻，還原半反應Cl₂+2e⁻→2Cl⁻。將兩式相加的淨反應為何？",
+        "correct": "2I⁻+Cl₂→I₂+2Cl⁻",
+        "wrong": [
+          "I₂+2Cl⁻→2I⁻+Cl₂",
+          "2I⁻+2Cl₂→I₂+4Cl⁻",
+          "I⁻+Cl₂→I₂+Cl⁻"
+        ],
+        "exp": "兩半反應的電子各2個，直接相消，得2I⁻+Cl₂→I₂+2Cl⁻，原子數與總電荷均守恆。",
+        "subject": "化學",
+        "sub_topic": "氧化還原配平",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-氧化還原配平",
+        "template_id": "ref-20261119-b5-c3-redox-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
