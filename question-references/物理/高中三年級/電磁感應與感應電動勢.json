@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-phy3-induction-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "匝數為50的線圈，每匝穿過的磁通量在0.25 s內由0.020 Wb均勻減至0。平均感應電動勢大小為何？",
+        "correct": "4.0 V",
+        "wrong": [
+          "0.08 V",
+          "1.0 V",
+          "10 V"
+        ],
+        "exp": "法拉第定律平均感應電動勢大小=N|ΔΦ/Δt|=50×0.020/0.25=4.0 V。",
+        "subject": "物理",
+        "sub_topic": "電磁感應與感應電動勢",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電磁感應與感應電動勢",
+        "template_id": "ref-20261119-b3-phy3-induction-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-phy3-induction-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "一直導線棒長0.50 m，以垂直於磁場與棒長的方向在均勻0.40 T磁場中以3.0 m/s移動。兩端動生電動勢大小為何？",
+        "correct": "0.60 V",
+        "wrong": [
+          "0.24 V",
+          "1.2 V",
+          "6.0 V"
+        ],
+        "exp": "棒、速度與磁場兩兩垂直時，動生電動勢ε=BLv=0.40×0.50×3.0=0.60 V。",
+        "subject": "物理",
+        "sub_topic": "電磁感應與感應電動勢",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電磁感應與感應電動勢",
+        "template_id": "ref-20261119-b3-phy3-induction-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-phy3-induction-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "閉合金屬線圈置於垂直於線圈平面的磁場中，磁場向紙內且強度逐漸增大。從面向紙面的觀察者看，感應電流方向為何？",
+        "correct": "逆時針",
+        "wrong": [
+          "順時針",
+          "不會產生電流",
+          "先順時針再必然逆時針"
+        ],
+        "exp": "向紙內的磁通增加，依楞次定律線圈須產生向紙外的磁場抵抗變化；由右手定則，電流為逆時針。",
+        "subject": "物理",
+        "sub_topic": "電磁感應與感應電動勢",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電磁感應與感應電動勢",
+        "template_id": "ref-20261119-b3-phy3-induction-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
