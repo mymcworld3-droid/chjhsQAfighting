@@ -1878,6 +1878,14 @@ class DungeonMapView{
       animationOverlay:(context,view)=>paintEffects(context,view,true)
     });
     this.updateFocusAuras(geometry,visualMembers);
+    // Read-only render diagnostics for real-device/browser acceptance.
+    // These reflect actually constructed visual plans, not combat authority.
+    this.canvas.dataset.environmentEffects=String(
+      this.environmentPlan?.positions?.length||0);
+    const visibleBoss=this.creatures().find(e=>e.kind==='boss');
+    this.canvas.dataset.bossEffects=visibleBoss?'active':'none';
+    this.canvas.dataset.bossTelegraph=visibleBoss?.attack?.kind||'none';
+    this.canvas.dataset.warningCells=String(warning.cells.length);
     // Expose presentation activity for browser acceptance and accessibility.
     // This is never used as input to movement, collision or combat rules.
     // Autonomous beasts may move continuously. Only the local hero controls
