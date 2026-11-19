@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-恆星與星系-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用恆星與星系課內知識",
+      "question": {
+        "q": "某天文新聞說A星距地球10光年。這個單位主要代表什麼？",
+        "correct": "距離，約為光在真空中行進10年的路程",
+        "wrong": [
+          "恆星壽命必定只有10年",
+          "光在一天內繞地球10次",
+          "恆星每年亮度增加10倍"
+        ],
+        "exp": "光年是距離單位，不是時間或亮度。",
+        "subject": "地球科學",
+        "sub_topic": "恆星與星系",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中一年級-恆星與星系",
+        "template_id": "extra-2026-earth1-恆星與星系-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-恆星與星系-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用恆星與星系課內知識",
+      "question": {
+        "q": "甲乙兩顆恆星本質光度相同，但甲距地球是乙的兩倍。忽略吸收，甲的觀測亮度約為乙的多少？",
+        "correct": "四分之一",
+        "wrong": [
+          "二分之一",
+          "兩倍",
+          "四倍"
+        ],
+        "exp": "觀測光通量遵守反平方律，距離加倍時減為四分之一。",
+        "subject": "地球科學",
+        "sub_topic": "恆星與星系",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中一年級-恆星與星系",
+        "template_id": "extra-2026-earth1-恆星與星系-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-恆星與星系-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用恆星與星系課內知識",
+      "question": {
+        "q": "某研究者比較兩個星系的光譜，發現甲的譜線紅移較大。在一般宇宙膨脹模型下較可能意味什麼？",
+        "correct": "甲通常位於較遠距離，仍需考量特殊速度及測距方法",
+        "wrong": [
+          "甲必定比乙質量大十倍",
+          "甲必定正在向地球靠近",
+          "光譜線移動完全無法用於天文研究"
+        ],
+        "exp": "宇宙學紅移與宇宙膨脹及距離相關，個別天體速度也有影響。",
+        "subject": "地球科學",
+        "sub_topic": "恆星與星系",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中一年級-恆星與星系",
+        "template_id": "extra-2026-earth1-恆星與星系-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

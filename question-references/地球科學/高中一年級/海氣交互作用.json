@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-海氣交互作用-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用海氣交互作用課內知識",
+      "question": {
+        "q": "某年熱帶太平洋信風減弱，中東部海溫異常偏高。這較接近何種現象？",
+        "correct": "聖嬰事件的海氣異常",
+        "wrong": [
+          "所有洋流永久停止",
+          "只因月食造成氣候異常",
+          "中緯度溫帶氣旋的眼牆"
+        ],
+        "exp": "聖嬰涉及信風、沃克環流與赤道太平洋海溫的相互作用。",
+        "subject": "地球科學",
+        "sub_topic": "海氣交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海氣交互作用",
+        "template_id": "extra-2026-earth1-海氣交互作用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-海氣交互作用-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用海氣交互作用課內知識",
+      "question": {
+        "q": "夏季颱風經過某海域後，海面溫度短暫下降。較合理的物理原因為何？",
+        "correct": "強風混合及湧升使較冷的下層水接近表面",
+        "wrong": [
+          "颱風會立即使海洋完全結冰",
+          "颱風只改變海水顏色",
+          "海水不會與大氣交換能量"
+        ],
+        "exp": "強風和波浪造成垂直混合，並有蒸發冷卻等作用。",
+        "subject": "地球科學",
+        "sub_topic": "海氣交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海氣交互作用",
+        "template_id": "extra-2026-earth1-海氣交互作用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-海氣交互作用-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用海氣交互作用課內知識",
+      "question": {
+        "q": "某海域表層溫度上升，熱帶對流增強，釋放潛熱又影響大氣環流。這最能說明何種關係？",
+        "correct": "海洋與大氣存在雙向能量和水氣回饋",
+        "wrong": [
+          "海洋只能被動接受大氣作用",
+          "對流與海水溫度完全無關",
+          "海水不參與水循環"
+        ],
+        "exp": "海溫影響蒸發與對流，大氣風與雲又反過來影響海面能量。",
+        "subject": "地球科學",
+        "sub_topic": "海氣交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海氣交互作用",
+        "template_id": "extra-2026-earth1-海氣交互作用-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

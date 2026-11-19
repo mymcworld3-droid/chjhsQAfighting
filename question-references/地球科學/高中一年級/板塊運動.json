@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-板塊運動-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用板塊運動課內知識",
+      "question": {
+        "q": "海底地形發現中洋脊兩側岩石年齡大致向外增加。這支持何種模型？",
+        "correct": "新海洋地殼在洋脊形成後向兩側擴張",
+        "wrong": [
+          "海底地殼只在海溝中心形成",
+          "海洋板塊從不移動",
+          "洋脊兩側的岩石必須同時最古老"
+        ],
+        "exp": "海底擴張使新岩石在洋脊生成，離洋脊越遠通常越老。",
+        "subject": "地球科學",
+        "sub_topic": "板塊運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-板塊運動",
+        "template_id": "extra-2026-earth1-板塊運動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-板塊運動-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用板塊運動課內知識",
+      "question": {
+        "q": "某海洋板塊與大陸板塊聚合，海洋板塊向大陸下方隱沒。附近最可能形成什麼？",
+        "correct": "海溝、弧形火山帶及由淺至深的地震",
+        "wrong": [
+          "只有寬廣無震的平坦盆地",
+          "必定形成兩側年齡最小的中洋脊",
+          "完全沒有岩漿與地震作用"
+        ],
+        "exp": "隱沒聚合帶常有海溝、火山弧及不同深度地震。",
+        "subject": "地球科學",
+        "sub_topic": "板塊運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-板塊運動",
+        "template_id": "extra-2026-earth1-板塊運動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-板塊運動-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用板塊運動課內知識",
+      "question": {
+        "q": "兩板塊在邊界沿水平方向相反滑動，常發生淺源地震但未必有火山。這較接近？",
+        "correct": "轉形板塊邊界",
+        "wrong": [
+          "典型板塊張裂中心",
+          "海洋板塊垂直隱沒中心",
+          "沒有任何斷層的板塊內部"
+        ],
+        "exp": "轉形邊界以水平剪切運動為主，通常不是火山鏈形成主因。",
+        "subject": "地球科學",
+        "sub_topic": "板塊運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-板塊運動",
+        "template_id": "extra-2026-earth1-板塊運動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

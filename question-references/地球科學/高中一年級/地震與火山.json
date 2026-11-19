@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-地震與火山-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地震與火山課內知識",
+      "question": {
+        "q": "甲地距震央較近，P波到達後很快偵測到S波；乙地兩波到時差較大。哪個推論較合理？",
+        "correct": "乙地通常距震央較遠",
+        "wrong": [
+          "甲地地震規模一定較小",
+          "到時差與距離完全無關",
+          "兩站必定位於同一震央"
+        ],
+        "exp": "P波傳得比S波快，兩者到時差隨傳播距離一般增大。",
+        "subject": "地球科學",
+        "sub_topic": "地震與火山",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地震與火山",
+        "template_id": "extra-2026-earth1-地震與火山-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-地震與火山-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地震與火山課內知識",
+      "question": {
+        "q": "某火山噴發前出現地表隆起、局部地震增加與氣體排放變化。這些現象最適合用於？",
+        "correct": "綜合監測岩漿活動及可能的噴發風險",
+        "wrong": [
+          "保證火山在某一分鐘一定噴發",
+          "判定所有附近居民都不受影響",
+          "證明地表岩石沒有任何變形"
+        ],
+        "exp": "多項地質與氣體觀測可作風險評估，但無法保證精確噴發時刻。",
+        "subject": "地球科學",
+        "sub_topic": "地震與火山",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地震與火山",
+        "template_id": "extra-2026-earth1-地震與火山-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-地震與火山-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地震與火山課內知識",
+      "question": {
+        "q": "兩棟建築位在相似地震震度區，但甲在鬆軟沉積盆地、乙在較堅硬基岩。哪個判斷較適當？",
+        "correct": "場址地盤條件可能造成地震波放大差異",
+        "wrong": [
+          "地震波在任何地層中必定完全相同",
+          "地震規模會由建物材質決定",
+          "只看建物外牆顏色即可評估震害"
+        ],
+        "exp": "軟弱地盤及盆地效應可能改變局部震動，須結合耐震設計分析。",
+        "subject": "地球科學",
+        "sub_topic": "地震與火山",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地震與火山",
+        "template_id": "extra-2026-earth1-地震與火山-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

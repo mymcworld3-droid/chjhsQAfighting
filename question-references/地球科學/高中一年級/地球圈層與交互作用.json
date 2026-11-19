@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-地球圈層與交互作用-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地球圈層與交互作用課內知識",
+      "question": {
+        "q": "某森林被大規模砍伐後，下游土砂量增加。這最直接涉及哪幾個地球圈層的互動？",
+        "correct": "生物圈、岩石圈與水圈",
+        "wrong": [
+          "只有宇宙星系之間的作用",
+          "只涉及地核而與地表無關",
+          "生物活動與土壤侵蝕完全無關"
+        ],
+        "exp": "植被改變土壤穩定與水流逕流，影響地表侵蝕與河流輸砂。",
+        "subject": "地球科學",
+        "sub_topic": "地球圈層與交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球圈層與交互作用",
+        "template_id": "extra-2026-earth1-地球圈層與交互作用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-地球圈層與交互作用-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地球圈層與交互作用課內知識",
+      "question": {
+        "q": "火山噴發產生的火山灰進入大氣，影響太陽輻射及降水。這反映哪種交互作用？",
+        "correct": "岩石圈的地質事件可能影響大氣圈",
+        "wrong": [
+          "岩漿活動只能改變地下岩石",
+          "火山灰必定使每個地區氣溫相同",
+          "大氣完全無法受地表作用影響"
+        ],
+        "exp": "火山氣膠與灰可改變大氣光學與雲雨過程，作用跨越圈層。",
+        "subject": "地球科學",
+        "sub_topic": "地球圈層與交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球圈層與交互作用",
+        "template_id": "extra-2026-earth1-地球圈層與交互作用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-地球圈層與交互作用-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地球圈層與交互作用課內知識",
+      "question": {
+        "q": "某河口大量氮磷營養鹽入海，造成藻華與溶氧下降。要分析完整機制，應考慮什麼？",
+        "correct": "陸地人類活動、水圈物質輸送及海洋生物反應",
+        "wrong": [
+          "只看海岸線形狀即可解釋所有藻華",
+          "營養鹽不可能從河流進入海洋",
+          "海洋生物永遠不影響水中氧氣"
+        ],
+        "exp": "跨圈層的營養物輸送會改變海洋生物與水質。",
+        "subject": "地球科學",
+        "sub_topic": "地球圈層與交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球圈層與交互作用",
+        "template_id": "extra-2026-earth1-地球圈層與交互作用-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

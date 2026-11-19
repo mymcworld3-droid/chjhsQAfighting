@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-日地月運動-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用日地月運動課內知識",
+      "question": {
+        "q": "某學生發現夏至前後北半球某地白晝較長，冬至前後較短。造成此差異的主要原因是？",
+        "correct": "地軸傾斜使太陽每日視行路徑與晝長改變",
+        "wrong": [
+          "地球夏季必定距太陽更近",
+          "月球繞地球的速度每季改變",
+          "太陽每年停止照射北半球數月"
+        ],
+        "exp": "季節變化主要由地軸傾斜造成各緯度日照角度與日照時數不同。",
+        "subject": "地球科學",
+        "sub_topic": "日地月運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中一年級-日地月運動",
+        "template_id": "extra-2026-earth1-日地月運動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-日地月運動-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用日地月運動課內知識",
+      "question": {
+        "q": "某晚上觀察到滿月，約兩週後若天氣良好，最可能看到哪種月相？",
+        "correct": "接近朔月，月面受光部分不易觀測",
+        "wrong": [
+          "再次接近滿月",
+          "一定發生日全食",
+          "永遠都是上弦月"
+        ],
+        "exp": "朔望週期約29.5天，滿月到朔月約半個週期。",
+        "subject": "地球科學",
+        "sub_topic": "日地月運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中一年級-日地月運動",
+        "template_id": "extra-2026-earth1-日地月運動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-日地月運動-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用日地月運動課內知識",
+      "question": {
+        "q": "某地某次滿月並未發生月食。下列解釋何者最合理？",
+        "correct": "月球軌道與黃道面有傾角，滿月不一定經過地影",
+        "wrong": [
+          "滿月時月球必定位於太陽與地球中間",
+          "月食只發生在每年元旦",
+          "地球不會投下影子"
+        ],
+        "exp": "月球軌道傾角使多數滿月時月球位於地影上方或下方。",
+        "subject": "地球科學",
+        "sub_topic": "日地月運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中一年級-日地月運動",
+        "template_id": "extra-2026-earth1-日地月運動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

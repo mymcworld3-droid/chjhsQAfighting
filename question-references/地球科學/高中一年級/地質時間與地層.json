@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-地質時間與地層-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地質時間與地層課內知識",
+      "question": {
+        "q": "某沉積岩層A位於B之下，且兩層均未倒轉或受擾動。哪項判斷最合理？",
+        "correct": "A通常比B先沉積",
+        "wrong": [
+          "B必定比A古老",
+          "兩層必定是同一時間形成",
+          "只能由岩石顏色決定年代"
+        ],
+        "exp": "地層疊置律指出未受擾動的沉積層通常下老上新。",
+        "subject": "地球科學",
+        "sub_topic": "地質時間與地層",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地質時間與地層",
+        "template_id": "extra-2026-earth1-地質時間與地層-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-地質時間與地層-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地質時間與地層課內知識",
+      "question": {
+        "q": "一種化石在地理分布廣但生存年代短，對地層年代研究有何用途？",
+        "correct": "可作指準化石以比對不同地區地層",
+        "wrong": [
+          "可直接推算地球所有岩層的絕對年齡",
+          "必定表示當時全世界氣候完全一致",
+          "只能用來鑑別火成岩"
+        ],
+        "exp": "廣布而時間範圍短的物種適合作相對年代對比線索。",
+        "subject": "地球科學",
+        "sub_topic": "地質時間與地層",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地質時間與地層",
+        "template_id": "extra-2026-earth1-地質時間與地層-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-地質時間與地層-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地質時間與地層課內知識",
+      "question": {
+        "q": "某火山灰層經放射性定年為50萬年前，位於未倒轉地層A上方、B下方。最合理的時間關係是？",
+        "correct": "A較50萬年前老，B較50萬年前新",
+        "wrong": [
+          "A必定較B年輕",
+          "A和B皆形成於同一日",
+          "放射性定年完全無法提供年代參考"
+        ],
+        "exp": "火山灰作為時間標誌，依疊置關係可限制鄰近沉積層年代。",
+        "subject": "地球科學",
+        "sub_topic": "地質時間與地層",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地質時間與地層",
+        "template_id": "extra-2026-earth1-地質時間與地層-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-岩石循環-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用岩石循環課內知識",
+      "question": {
+        "q": "石灰岩在高溫高壓作用下重新結晶為大理岩，這屬哪種岩石變化？",
+        "correct": "變質作用",
+        "wrong": [
+          "火成岩漿凝固",
+          "河川沉積後立即蒸發",
+          "核分裂作用"
+        ],
+        "exp": "石灰岩受熱壓變質可形成大理岩，未必經過熔融。",
+        "subject": "地球科學",
+        "sub_topic": "岩石循環",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中一年級-岩石循環",
+        "template_id": "extra-2026-earth1-岩石循環-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-岩石循環-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用岩石循環課內知識",
+      "question": {
+        "q": "火成岩經風化侵蝕、搬運、沉積、壓密及膠結後，最可能形成？",
+        "correct": "沉積岩",
+        "wrong": [
+          "只有變質岩",
+          "新的岩漿",
+          "直接形成地核物質"
+        ],
+        "exp": "岩石碎屑經沉積與成岩作用可成為沉積岩。",
+        "subject": "地球科學",
+        "sub_topic": "岩石循環",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中一年級-岩石循環",
+        "template_id": "extra-2026-earth1-岩石循環-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-岩石循環-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用岩石循環課內知識",
+      "question": {
+        "q": "某地花崗岩經高溫高壓作用形成片麻岩。這可說明岩石循環哪種特性？",
+        "correct": "既有岩石可在不同物理條件下變質形成新岩石",
+        "wrong": [
+          "花崗岩只可能永久維持相同構造",
+          "變質作用必定先將所有岩石完全熔融",
+          "所有變質岩都由海水蒸發而成"
+        ],
+        "exp": "變質作用主要在固態下改變礦物與組織，是岩石循環的一環。",
+        "subject": "地球科學",
+        "sub_topic": "岩石循環",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中一年級-岩石循環",
+        "template_id": "extra-2026-earth1-岩石循環-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

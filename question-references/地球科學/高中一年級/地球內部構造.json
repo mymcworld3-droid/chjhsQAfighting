@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth1-地球內部構造-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地球內部構造課內知識",
+      "question": {
+        "q": "S波無法穿過地球外核，而P波能穿過但會折射。最重要的推論是？",
+        "correct": "外核主要為液態",
+        "wrong": [
+          "外核全由固態花崗岩構成",
+          "地球內部沒有任何分層",
+          "S波傳播完全不受物質狀態影響"
+        ],
+        "exp": "S波為剪力波，不能在液體中傳播，支持液態外核模型。",
+        "subject": "地球科學",
+        "sub_topic": "地球內部構造",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球內部構造",
+        "template_id": "extra-2026-earth1-地球內部構造-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-地球內部構造-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地球內部構造課內知識",
+      "question": {
+        "q": "地球莫霍不連續面是哪些主要構造的分界？",
+        "correct": "地殼與地函",
+        "wrong": [
+          "內核與外核",
+          "海水與大氣",
+          "平流層與對流層"
+        ],
+        "exp": "莫霍面是地殼與地函地震波速度突變的邊界。",
+        "subject": "地球科學",
+        "sub_topic": "地球內部構造",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球內部構造",
+        "template_id": "extra-2026-earth1-地球內部構造-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth1-地球內部構造-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "從觀測、地球圈層和自然機制運用地球內部構造課內知識",
+      "question": {
+        "q": "地球磁場與深部液態金屬對流有密切關聯。主要形成區域是哪裡？",
+        "correct": "液態外核",
+        "wrong": [
+          "固態地殼表層",
+          "海洋表面",
+          "地球最外圍的平流層"
+        ],
+        "exp": "地磁場主要來自外核導電液態金屬流動形成的地球發電機機制。",
+        "subject": "地球科學",
+        "sub_topic": "地球內部構造",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球內部構造",
+        "template_id": "extra-2026-earth1-地球內部構造-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
