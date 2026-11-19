@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-chem3-concentration-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "化學計量與反應條件可核算，不跳步、附正確推導",
+      "question": {
+        "q": "將0.10 mol NaCl完全溶於水後定容至250 mL，假設體積可直接採用定容值，其莫耳濃度為何？",
+        "correct": "0.40 M",
+        "wrong": [
+          "0.025 M",
+          "0.10 M",
+          "2.5 M"
+        ],
+        "exp": "莫耳濃度M=n/V=0.10 mol/0.250 L=0.40 M。",
+        "subject": "化學",
+        "sub_topic": "莫耳與濃度換算",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-莫耳與濃度換算",
+        "template_id": "ref-20261119-b11-chem3-concentration-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-chem3-concentration-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "化學計量與反應條件可核算，不跳步、附正確推導",
+      "question": {
+        "q": "取25.0 mL、1.2 M的某溶液，加水定容至150.0 mL且溶質未損失，末濃度為何？",
+        "correct": "0.20 M",
+        "wrong": [
+          "0.30 M",
+          "0.60 M",
+          "7.2 M"
+        ],
+        "exp": "稀釋前後溶質莫耳數守恆，C₂=C₁V₁/V₂=1.2×25.0/150.0=0.20 M。",
+        "subject": "化學",
+        "sub_topic": "莫耳與濃度換算",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-莫耳與濃度換算",
+        "template_id": "ref-20261119-b11-chem3-concentration-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-chem3-concentration-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "化學計量與反應條件可核算，不跳步、附正確推導",
+      "question": {
+        "q": "0.15 M AlCl₃溶液100 mL，假設完全解離且忽略其他反應，其中Cl⁻的莫耳數為何？",
+        "correct": "0.045 mol",
+        "wrong": [
+          "0.015 mol",
+          "0.030 mol",
+          "0.15 mol"
+        ],
+        "exp": "AlCl₃物質的量=0.15×0.100=0.015 mol；每mol AlCl₃給3 mol Cl⁻，所以Cl⁻為0.045 mol。",
+        "subject": "化學",
+        "sub_topic": "莫耳與濃度換算",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-莫耳與濃度換算",
+        "template_id": "ref-20261119-b11-chem3-concentration-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
