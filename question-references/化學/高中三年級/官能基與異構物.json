@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-chem3-functional-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "有機化合物CH₃CHO具有哪一種主要官能基？",
+        "correct": "醛基（−CHO）",
+        "wrong": [
+          "羧基（−COOH）",
+          "羥基（−OH）",
+          "酮基（碳鏈中間的>C=O）"
+        ],
+        "exp": "CH₃CHO末端含有−CHO，屬醛類；它的羰基位在碳鏈末端而非酮類的碳鏈內部。",
+        "subject": "化學",
+        "sub_topic": "官能基與異構物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-官能基與異構物",
+        "template_id": "ref-20261119-b4-chem3-functional-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chem3-functional-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "有機化合物CH₃COCH₃屬於哪一類？",
+        "correct": "酮",
+        "wrong": [
+          "醛",
+          "羧酸",
+          "醚"
+        ],
+        "exp": "CH₃COCH₃的羰基碳連結兩個碳基團，符合酮類結構，名稱為丙酮。",
+        "subject": "化學",
+        "sub_topic": "官能基與異構物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-官能基與異構物",
+        "template_id": "ref-20261119-b4-chem3-functional-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chem3-functional-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "下列哪一組互為位置異構物，而非不同官能基的異構物？",
+        "correct": "丙烷-1-醇與丙烷-2-醇",
+        "wrong": [
+          "乙醇與二甲醚",
+          "乙醇與乙酸",
+          "乙烷與乙烯"
+        ],
+        "exp": "丙烷-1-醇和丙烷-2-醇同為C₃H₈O、同屬醇類，但羥基所連接的碳位置不同，因此為位置異構物。",
+        "subject": "化學",
+        "sub_topic": "官能基與異構物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-官能基與異構物",
+        "template_id": "ref-20261119-b4-chem3-functional-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
