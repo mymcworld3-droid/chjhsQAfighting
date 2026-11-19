@@ -167,6 +167,8 @@ export async function getDungeonMap(roomId){
 // Position and stamina come exclusively from the server room snapshot.
 export const moveDungeonMember=(roomId,dx,dy,step)=>
   request('move',{roomId,dx,dy,step});
+export const moveDungeonMemberRoute=(roomId,vectors,step)=>
+  request('move-route',{roomId,vectors,step});
 
 // Attack requests contain only enemy ID and per-player sequence. The
 // server calculates range, damage and energy in one room transaction.
