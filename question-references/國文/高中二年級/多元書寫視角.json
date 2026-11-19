@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-perspectives-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "同一條老街改造工程，甲文以行動不便居民的立場指出人行道高低差；乙文以店家的立場擔憂施工期間客流減少。比較兩文，何者最恰當？",
+        "correct": "兩者從不同生活需求出發，提出無障礙及營業影響兩種需協調的問題",
+        "wrong": [
+          "甲乙其實都只關心道路鋪面的顏色與材質",
+          "只要店家提出疑慮，便能證明改善無障礙設施沒有必要",
+          "甲的經驗足以直接否認乙的營業影響，不需進一步討論"
+        ],
+        "exp": "甲關注移動權益，乙關心施工與生計；完整理解公共議題須辨別利益位置並尋求兼顧。",
+        "subject": "國文",
+        "sub_topic": "多元書寫視角",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-多元書寫視角",
+        "template_id": "ref-20261119-b8-ch2-perspectives-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-perspectives-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "同一場暴雨過後，學生寫「停課讓我可以在家休息」，清潔隊員則寫「凌晨就出門清除道路淤泥」。這種並置最主要提醒讀者什麼？",
+        "correct": "相同事件對不同身分者可能帶來截然不同的經驗與責任",
+        "wrong": [
+          "暴雨只會影響清潔隊員，學生一定不受影響",
+          "只要學生休息，便可證明清潔工作已全部完成",
+          "兩人敘述的差異表示其中一個人一定在說謊"
+        ],
+        "exp": "同一事件中不同角色面對的需求、工作與感受各異；雙視角可擴大讀者理解，而非簡化成誰對誰錯。",
+        "subject": "國文",
+        "sub_topic": "多元書寫視角",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-多元書寫視角",
+        "template_id": "ref-20261119-b8-ch2-perspectives-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-perspectives-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "甲文以剛到城市求學的學生口吻寫陌生感，乙文以在地居民口吻寫對街區變遷的熟悉與不安。若進行跨視角比較，哪個分析方式最充分？",
+        "correct": "比較兩人對同一空間的記憶、期待及身分位置，再解釋感受差異",
+        "wrong": [
+          "只根據誰居住時間較長，直接判定其感受唯一正確",
+          "只計算兩篇文章字數，便推斷哪位作者較了解城市",
+          "因立場不同，就認定兩篇文章完全無法相互參照"
+        ],
+        "exp": "書寫視角與生活經驗、時間跨度及身分位置有關；比較須辨別文本對空間的不同認知。",
+        "subject": "國文",
+        "sub_topic": "多元書寫視角",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-多元書寫視角",
+        "template_id": "ref-20261119-b8-ch2-perspectives-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
