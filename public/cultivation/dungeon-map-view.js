@@ -1,6 +1,6 @@
 import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
-import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, setDungeonBossReady, rescueDungeonTeammate, claimDungeonBossReward } from './dungeon-room.js';
+import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, setDungeonBossReady, rescueDungeonTeammate, guardDungeonTeammate, claimDungeonBossReward } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 
@@ -27,7 +27,8 @@ class DungeonMapView{
     this.opened=false;this.seq=0;this.pointers=new Map();this.movePending=false;
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
     this.portalPending=false;this.bossPending=false;
-    this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
+    this.rescuePending=false;this.guardPending=false;this.guardSignature='';
+    this.rewardPending=false;this.rewardResult=null;
     this.aimTile=null;this.skillSignature='';
     this.focusAuras=new Map();
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
@@ -58,7 +59,11 @@ class DungeonMapView{
       '<div class="dm-boss-health" data-dm-boss-health hidden>'+
       '<div><strong data-dm-boss-label>玄炎鎮殿獸</strong>'+
       '<span data-dm-boss-value>900/900</span></div>'+
-      '<div class="dm-boss-meter"><i data-dm-boss-meter></i></div></div>'+
+      '<div class="dm-boss-meter"><i data-dm-boss-meter></i></div>'+
+      '<div class="dm-boss-shield" data-dm-boss-shield hidden>'+
+      '<span>玄甲護盾 <em data-dm-shield-value>180/180</em></span>'+
+      '<div class="dm-shield-meter"><i data-dm-shield-meter></i></div></div>'+
+      '<small class="dm-teamwork-hint" data-dm-teamwork-hint aria-live="polite"></small></div>'+
       '</div><div class="dm-head-actions">'+
       '<span class="dm-battle-clock" data-dm-clock role="timer" aria-live="off">等待集結</span>'+
       '<button type="button" data-dm="close" aria-label="返回合作副本隊伍">返回隊伍 <span aria-hidden="true">×</span></button></div></header>'+
@@ -96,6 +101,7 @@ class DungeonMapView{
       '<div class="dm-threat" data-dm-threat role="status" aria-live="polite" hidden></div>'+
       '<div class="dm-team-status" data-dm-team-status aria-label="隊友生命狀態"></div>'+
       '<div class="dm-rescue-actions" data-dm-rescues hidden aria-live="polite"></div>'+
+      '<div class="dm-guard-actions" data-dm-guards hidden aria-label="首領戰掩護"></div>'+
       '<div class="dm-dpad" role="group" aria-label="角色移動，一次一格">'+
       '<button type="button" data-dm="up" aria-label="向上移動一格">↑</button>'+
       '<button type="button" data-dm="left" aria-label="向左移動一格">←</button>'+
@@ -283,7 +289,7 @@ class DungeonMapView{
     const charge=this.$('[data-dm="quiz"]');
     if(charge)charge.disabled=!active||!this.map;
     this.updatePortalHUD();
-    this.updateRescueHUD();this.updateVictoryHUD();
+    this.updateRescueHUD();this.updateGuardHUD();this.updateVictoryHUD();
     this.updateStrikeHUD();this.updateSkillHUD();
   }
   updateRescueHUD(){
@@ -1024,6 +1030,7 @@ class DungeonMapView{
   close(){
     ++this.seq;this.opened=false;this.pointers.clear();this.movePending=false;
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
+    this.guardPending=false;this.guardSignature='';
     this.aimTile=null;this.skillSignature='';
     this.quiz?.destroy();
     for(const aura of this.focusAuras.values())aura.remove();
@@ -1061,6 +1068,7 @@ class DungeonMapView{
     if(name==='portal'){void this.openPortal();return;}
     if(name==='enter-boss'){void this.enterBoss();return;}
     if(name==='rescue'){void this.rescue(rescueUid);return;}
+    if(name==='guard'){void this.guard(rescueUid);return;}
     if(name==='claim-victory'){void this.claimVictory();return;}
     if(name==='strike'){void this.strike();return;}
     if(name==='cast'){void this.cast(skillId);return;}
