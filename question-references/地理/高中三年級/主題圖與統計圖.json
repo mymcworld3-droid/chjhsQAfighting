@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-geo3-thematic-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "地理資料需保持分母及單位可比較，遵守統計推論限制",
+      "question": {
+        "q": "要比較各縣市「65歲以上人口占當地總人口比例」，製作分級設色圖時最適合以何種數值決定色階？",
+        "correct": "各縣市高齡人口百分比",
+        "wrong": [
+          "各縣市高齡人口的絕對人數",
+          "各縣市行政區劃的面積",
+          "各縣市在地圖上的名稱字數"
+        ],
+        "exp": "題目比較高齡化程度，應以相對比例而非總人數上色，避免人口規模較大地區被誤判。",
+        "subject": "地理",
+        "sub_topic": "主題圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-主題圖與統計圖",
+        "template_id": "ref-20261119-b11-geo3-thematic-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-geo3-thematic-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "地理資料需保持分母及單位可比較，遵守統計推論限制",
+      "question": {
+        "q": "某統計長條圖將縱軸起點設為95，而兩組數據為96與100。若圖形看起來差異巨大，主要應注意什麼？",
+        "correct": "非零起點可能放大視覺差距，應檢查座標軸尺度與實際數值",
+        "wrong": [
+          "兩組數值接近，表示圖形一定發生資料偽造",
+          "只要長條圖使用色彩，便不需要標示縱軸",
+          "起點設95可保證對所有比較問題都更客觀"
+        ],
+        "exp": "長條圖依長度比較時，截斷縱軸可能放大視覺差異；應標示尺度，必要時使用零起點。",
+        "subject": "地理",
+        "sub_topic": "主題圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-主題圖與統計圖",
+        "template_id": "ref-20261119-b11-geo3-thematic-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-geo3-thematic-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "地理資料需保持分母及單位可比較，遵守統計推論限制",
+      "question": {
+        "q": "甲縣人口20萬、通勤車禍120件；乙縣人口50萬、通勤車禍200件。若用每10萬人事故件數比較，何者正確？",
+        "correct": "甲縣60件，高於乙縣40件",
+        "wrong": [
+          "甲縣120件，乙縣200件，因此乙相對風險必然較高",
+          "兩縣均為每10萬人40件",
+          "甲縣24件，乙縣100件"
+        ],
+        "exp": "甲120/2=每10萬人60件；乙200/5=每10萬人40件。比較不同人口規模宜用標準化比率。",
+        "subject": "地理",
+        "sub_topic": "主題圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-主題圖與統計圖",
+        "template_id": "ref-20261119-b11-geo3-thematic-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
