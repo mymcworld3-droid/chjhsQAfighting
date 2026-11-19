@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-en2-science-society-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "Article excerpt: 'A coastal town restored mangroves to reduce erosion. Scientists observed less soil loss at some locations, but stronger waves still caused damage during major storms.' Which policy conclusion is most justified?",
+        "correct": "Mangrove restoration can help, but other coastal protection measures may still be needed.",
+        "wrong": [
+          "Mangroves guarantee that every storm will cause no damage.",
+          "The observation proves that mangroves cannot reduce erosion anywhere.",
+          "The town should stop monitoring erosion after planting mangroves."
+        ],
+        "exp": "The evidence supports benefits at some sites while acknowledging remaining extreme-storm damage, so a combined strategy is reasonable.",
+        "subject": "英文",
+        "sub_topic": "科普、社會議題與人文",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-科普、社會議題與人文",
+        "template_id": "ref-20261119-b9-en2-science-society-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en2-science-society-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "Article excerpt: 'An archive invited elders to record traditional place names. Younger volunteers added maps and translations. The team kept both original recordings and translated versions.' Why might preserving both versions matter?",
+        "correct": "They allow users to access the material while retaining the original speakers' words for verification.",
+        "wrong": [
+          "Translations automatically make the original recordings useless.",
+          "The original recordings prove that place names never change.",
+          "Keeping two versions means no cultural context is needed."
+        ],
+        "exp": "Translated and mapped resources improve accessibility, while originals preserve source language and allow future checking of interpretations.",
+        "subject": "英文",
+        "sub_topic": "科普、社會議題與人文",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-科普、社會議題與人文",
+        "template_id": "ref-20261119-b9-en2-science-society-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en2-science-society-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "Article excerpt: 'A research group noticed that students who used standing desks reported less discomfort. However, volunteers chose whether to use the desks, and the study did not randomly assign participants.' What is the main limitation?",
+        "correct": "Self-selection may affect the comparison, so a causal conclusion requires more evidence.",
+        "wrong": [
+          "The results prove that standing desks cure every type of discomfort.",
+          "Random assignment is unnecessary because volunteering removes all bias.",
+          "The survey shows that every student used the same type of desk."
+        ],
+        "exp": "Students who choose standing desks may differ in other ways from those who do not; self-selection can confound observed differences.",
+        "subject": "英文",
+        "sub_topic": "科普、社會議題與人文",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-科普、社會議題與人文",
+        "template_id": "ref-20261119-b9-en2-science-society-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
