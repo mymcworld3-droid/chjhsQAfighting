@@ -55,10 +55,16 @@ class DungeonMapView{
       style.href='/styles/dungeon-map-view.css?v=20261119-focus-aura-v2';
       document.head.append(style);
     }
+    if(!document.getElementById('dungeon-trial-boss-style')){
+      const link=document.createElement('link');
+      link.id='dungeon-trial-boss-style';link.rel='stylesheet';
+      link.href='/styles/dungeon-trial-boss.css?v=20261119-hud-parity-v1';
+      document.head.append(link);
+    }
     if(!document.getElementById('dungeon-trial-wheel-style')){
       const link=document.createElement('link');
       link.id='dungeon-trial-wheel-style';link.rel='stylesheet';
-      link.href='/styles/dungeon-trial-wheel.css?v=20261119-stamina10-locked-v3';
+      link.href='/styles/dungeon-trial-wheel.css?v=20261119-hud-parity-v4';
       document.head.append(link);
     }
     const root=document.createElement('section');
@@ -1163,11 +1169,15 @@ class DungeonMapView{
         const hp=Math.max(0,boss?.battleHealth||0),
           max=boss?.battleMaxHealth||900,phase=boss?.phase||1;
         this.$('[data-dm-boss-label]').textContent=encounter?.status==='defeated'?
-          '✓ 玄炎鎮殿獸已擊敗':
-          '玄炎鎮殿獸 · 第 '+['壹','貳','參'][phase-1]+'階段';
-        this.$('[data-dm-boss-value]').textContent=hp+'/'+max;
+          '✓ 玄炎鎮殿獸已擊敗':'玄炎鎮殿獸';
+        this.$('[data-dm-phase]').textContent=
+          ['第一階段','第二階段','第三階段'][Math.max(0,Math.min(2,phase-1))];
+        this.$('[data-dm-boss-value]').textContent=hp+' / '+max;
         this.$('[data-dm-boss-meter]').style.width=
           Math.round(hp/Math.max(1,max)*100)+'%';
+        const meter=this.$('[data-dm-boss-progress]');
+        meter?.setAttribute('aria-valuenow',String(hp));
+        meter?.setAttribute('aria-valuemax',String(max));
         bossBar.dataset.phase=String(phase);
         const shieldNode=this.$('[data-dm-boss-shield]');
         const hint=this.$('[data-dm-teamwork-hint]');
