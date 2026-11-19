@@ -70,6 +70,10 @@ export const rescueDungeonTeammate=(roomId,targetUid,seq)=>
   request('rescue',{roomId,targetUid,seq});
 export const claimDungeonBossReward=roomId=>
   request('claim-boss-reward',{roomId});
+export const listRecentDungeonVictories=async()=>{
+  const data=await request('recent-victories');
+  return Array.isArray(data.rewards)?data.rewards:[];
+};
 export const cancelDungeonAssembly=roomId=>request('cancel-start',{roomId});
 
 // Only one active subscription per visible dungeon lobby is necessary.
