@@ -1839,7 +1839,7 @@ class DungeonMapView{
       aimTile:this.currentAim(),art:this.sprites,
       dangerPlan:warning,showDangerGuidance:this.wheelMode==='move',
       ambiencePlan:this.ambiencePlan,pendingAction:this.pendingAction,
-      reducedMotion,
+      reducedMotion:reduceMotion,
       currentTick:Number(this.room?.battleClock?.appliedTick)||0,
       visualTimeMs:now,
       animationUnderlay:(context,view)=>paintEffects(context,view,false),
