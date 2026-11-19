@@ -121,7 +121,7 @@ test('disband closes code and clears every member index without modifying the ol
   assert.equal((await f.call('a','create')).status,200);
   assert.ok([...f.c.records.keys()].every(key=>!key.startsWith('raidRooms/')));
 });
-test('leave while assembled returns the remaining members to unready waiting and transfers host',async()=>{
+test('leave while assembled preserves the expedition and transfers host',async()=>{
   const f=fixture(),created=(await f.call('a','create')).body,id=created.roomId;
   await f.call('b','join-code',{roomCode:created.room.code});
   await f.call('a','ready',{roomId:id,ready:true});
@@ -129,9 +129,11 @@ test('leave while assembled returns the remaining members to unready waiting and
   await f.call('a','start',{roomId:id});
   const left=await f.call('a','leave',{roomId:id});
   assert.equal(left.status,200);
-  assert.equal(left.body.room.status,'waiting');
+  assert.equal(left.body.room.status,'assembled');
   assert.equal(left.body.room.hostUid,'b');
-  assert.equal(left.body.room.members.b.ready,false);
+  assert.equal(left.body.room.members.b.ready,true);
+  assert.equal(left.body.room.dungeonArena,'exploration');
+  assert.ok(left.body.room.enemies.length>0);
   assert.equal((await f.call('b','start',{roomId:id})).status,409);
   assert.equal((await f.call('a','reconnect')).body.room,null);
 });

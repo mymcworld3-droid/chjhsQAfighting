@@ -267,16 +267,16 @@ test('boss guard API is serialized and a retried packet cannot spend stamina twi
   const guard=await f.call('a','boss-guard',{roomId,targetUid:'b',seq:1});
   assert.equal(guard.status,200,JSON.stringify(guard.body));
   assert.equal(guard.body.room.members.b.bossGuard.sourceUid,'a');
-  assert.equal(guard.body.room.members.a.explorationStamina,97);
+  assert.equal(guard.body.room.members.a.explorationStamina,7);
   const retry=await f.call('a','boss-guard',{roomId,targetUid:'b',seq:1});
   assert.equal(retry.status,200);
   assert.equal(retry.body.room.revision,guard.body.room.revision);
-  assert.equal(retry.body.room.members.a.explorationStamina,97);
+  assert.equal(retry.body.room.members.a.explorationStamina,7);
   assert.equal((await f.call('a','boss-guard',{roomId,targetUid:'ghost',seq:2})).status,403);
   assert.equal((await f.call('b','boss-guard',{roomId,targetUid:'a',seq:9})).status,409);
   assert.equal((await f.call('a','boss-guard',{roomId,targetUid:'b',seq:2})).status,409,
     'active guard cannot be overwritten at another stamina cost');
-  assert.equal((await f.call('a','get',{roomId})).body.room.members.a.explorationStamina,97);
+  assert.equal((await f.call('a','get',{roomId})).body.room.members.a.explorationStamina,7);
   const outsider=await f.call('d','boss-guard',{roomId,targetUid:'b',seq:1});
   assert.equal(outsider.status,403);
 });

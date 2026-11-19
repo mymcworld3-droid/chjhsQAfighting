@@ -129,7 +129,7 @@ test('idle reconnect and movement catch up without game tick depending on player
   const move=await f.call('a','move',{roomId:id,dx,dy,step:1},0);
   assert.equal(move.status,200);
   assert.equal(move.body.room.battleClock.appliedTick,17);
-  assert.equal(move.body.room.members.a.explorationStamina,99);
+  assert.equal(move.body.room.members.a.explorationStamina,9);
   assert.deepStrictEqual(f.a.records.get('users/a'),original);
   const duplicate=await f.call('a','move',{roomId:id,dx,dy,step:1},1);
   assert.equal(duplicate.status,200);

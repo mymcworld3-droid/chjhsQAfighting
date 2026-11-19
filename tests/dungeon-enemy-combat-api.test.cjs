@@ -153,7 +153,7 @@ test('legal one-tile dodge after telegraph avoids damage and deducts only explor
   const moved=await f.call('a','move',{roomId:id,dx:dir[0],dy:dir[1],
     step:1,battleHealth:999,explorationStamina:999});
   assert.equal(moved.status,200);
-  assert.equal(moved.body.room.members.a.explorationStamina,99);
+  assert.equal(moved.body.room.members.a.explorationStamina,9);
   assert.equal(moved.body.room.members.a.battleHealth,100);
   f.clock(1000);
   const expired=await f.call('b','clock',{roomId:id},1);

@@ -78,7 +78,7 @@ test('real-time view has no camera gesture path and always locks the player on r
   assert.match(source,/this\.camera=Camera\.lockToPlayer\(this\.selfPad\(\),m,w,h\)/);
   assert.match(source,/pointerMove\(event\)[\s\S]*?Map gestures never change the world camera/);
   assert.match(source,/wheel\(event\)\{if\(this\.opened\)event\.preventDefault\(\);\}/);
-  assert.match(source,/不可拖曳地圖/);
+  assert.match(source,/\/\/ Arrow keys and zoom shortcuts never move this fixed camera\./);
   assert.match(source,/if\(this\.map\)\{[\s\S]*?Camera\.lockToPlayer\(this\.selfPad/);
 });
 test('trial quarter wheels remain visually mirrored; old camera chrome hidden',()=>{
@@ -88,9 +88,9 @@ test('trial quarter wheels remain visually mirrored; old camera chrome hidden',(
     .replaceAll('#tactical-combat','#dungeon-map-view');
   const css=read('public/styles/dungeon-trial-wheel.css');
   assert.ok(css.includes(mirror));
-  assert.match(css,/\.dm-overview,[\s\S]*?\.dm-controls,[\s\S]*?\.dm-foot/);
-  assert.match(css,/\.dm-world\{[\s\S]*?cursor:crosshair!important/);
-  assert.match(css,/\.tc-quarter-energy>\.dm-quiz-charge\[data-quiz\]/);
+  assert.doesNotMatch(css,/\.dm-overview|\.dm-controls|\.dm-foot/,'old chrome removed');
+  assert.match(css,/\.tc-arena>canvas\{[\s\S]*?touch-action:none!important/);
+  assert.match(css,/\.tc-quarter-energy>\[data-quiz\]/);
   const wheel=read('public/cultivation/dungeon-trial-wheel.js');
   assert.doesNotMatch(wheel,/data-end|結束回合/);
 });

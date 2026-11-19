@@ -90,6 +90,11 @@ test('stage 14 guardian/key/portal: two C instances share one objective and deny
     assert.equal(y.status,200,y.body?.error);
   }
   assert.equal(f.getRoom().enemies[0].battleHealth,60);
+  // The preceding ten hits spent both players' ten stamina. Test fixture
+  // now represents a separately verified recharge; the quiz-credit suite
+  // independently rejects forged or duplicate replenishment.
+  f.getRoom().members.a.explorationStamina=4;
+  f.getRoom().members.b.explorationStamina=4;
   const [lastA,lastB]=await Promise.all([
     f.call('a','strike',{roomId:f.id,enemyId:guardian.id,seq:6},0),
     f.call('b','strike',{roomId:f.id,enemyId:guardian.id,seq:6},1)

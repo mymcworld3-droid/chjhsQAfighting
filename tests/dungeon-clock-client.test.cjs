@@ -73,6 +73,9 @@ test('client clock is presentation-only and does not call combat mutations',()=>
   assert.match(source,/clearInterval\(this\.clockTimer\)/);
   assert.match(source,/this\.syncClockAnchor\(room\)/);
   assert.match(source,/data-dm-clock/);
-  assert.doesNotMatch(source,/Date\.now\(\)/);
+  assert.match(source,/receivedAt:performance\.now\(\)/);
+  assert.match(source,/performance\.now\(\)-clock\.receivedAt/);
+  // Wall-clock input suppresses wheel clicks, not the server-anchored clock.
+  assert.doesNotMatch(source.slice(source.indexOf('  syncClockAnchor(room){'),source.indexOf('  renderClock(){')+700),/Date\.now\(\)/);
   assert.doesNotMatch(source,/battleAppliedTick\s*=/);
 });

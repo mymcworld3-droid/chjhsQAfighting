@@ -1101,3 +1101,7 @@ html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.b
 #dungeon-map-view.tc-quarter-layout .tc-quarter-energy>.dm-quiz-charge[data-quiz] .tc-energy-number{
   right:15%!important;bottom:30%!important;
 }
+
+/* The camera is player-locked: tiles are targetable, never draggable. */
+#dungeon-map-view.tc-quarter-layout .tc-arena>canvas,
+#dungeon-map-view.tc-quarter-layout .tc-arena>canvas:active{cursor:crosshair!important}

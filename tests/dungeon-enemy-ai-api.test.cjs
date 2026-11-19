@@ -156,7 +156,7 @@ test('a player move transaction also catches up the NPCs and reports positions t
   assert.equal(moved.status,200);
   assert.equal(moved.body.room.battleClock.appliedTick,3);
   assert.equal(moved.body.room.enemies.length,room.enemies.length);
-  assert.equal(moved.body.room.members.a.explorationStamina,99);
+  assert.equal(moved.body.room.members.a.explorationStamina,9);
   const teammate=(await f.call('b','get',{roomId:id},1)).body.room;
   assert.deepStrictEqual(teammate.enemies,moved.body.room.enemies);
   assert.deepStrictEqual(teammate.members.a.position,moved.body.room.members.a.position);

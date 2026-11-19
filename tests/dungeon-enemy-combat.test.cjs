@@ -55,7 +55,7 @@ test('moving out of a warned tile during windup avoids all damage',()=>{
   room=apply(room,4);
   assert.equal(room.members.a.battleHealth,100);
   assert.deepStrictEqual(room.enemies[0].lastAttack.hits,[]);
-  assert.equal(room.members.a.explorationStamina,99);
+  assert.equal(room.members.a.explorationStamina,9);
 });
 test('wisp attack is a two-tile unobstructed ray, golem warns on fan tiles',()=>{
   const first=map.mainRoute[5],neighbor=map.mainRoute[6];
