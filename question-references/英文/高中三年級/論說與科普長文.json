@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-en3-science-argument-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Read: 'A school tested shorter, more frequent study breaks. Students in the trial reported better concentration, but the group was small, and teachers did not measure long-term learning outcomes.' Which recommendation best follows?",
+        "correct": "Conduct a larger study that also measures learning outcomes before making a strong schoolwide claim.",
+        "wrong": [
+          "Treat improved self-reports as proof that grades have risen for every student.",
+          "Conclude that breaks can never affect learning.",
+          "Replace all classes with breaks immediately, without further evidence."
+        ],
+        "exp": "The small trial offers promising reports but does not establish long-term learning effects, so further study should track objective outcomes.",
+        "subject": "英文",
+        "sub_topic": "論說與科普長文",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-論說與科普長文",
+        "template_id": "ref-20261119-b9-en3-science-argument-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en3-science-argument-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Read: 'An island installed solar panels to reduce fuel use. During sunny hours, generators ran less often; after sunset, the island still relied on stored electricity and backup generation.' Which conclusion is supported?",
+        "correct": "Solar power reduced generator use at some times, but reliable evening supply still required other resources.",
+        "wrong": [
+          "Solar panels supplied all electricity without storage or backups at night.",
+          "The installation caused all generators to operate more during sunshine.",
+          "The report shows that the island did not use any solar electricity."
+        ],
+        "exp": "The passage identifies a daytime benefit and a nighttime limitation; both belong in an accurate summary.",
+        "subject": "英文",
+        "sub_topic": "論說與科普長文",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-論說與科普長文",
+        "template_id": "ref-20261119-b9-en3-science-argument-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en3-science-argument-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Read: 'Researchers surveyed households near two rivers. One river had undergone a cleanup, while the other had not. Litter counts fell near the cleaned river, but both river communities also began awareness campaigns.' What remains uncertain?",
+        "correct": "How much of the litter reduction can be attributed specifically to the cleanup rather than the campaigns.",
+        "wrong": [
+          "Whether any litter counts were collected at all.",
+          "Whether either community had an awareness campaign.",
+          "Whether river litter can ever be measured."
+        ],
+        "exp": "The shared awareness campaigns could influence litter outcomes, so the distinct causal contribution of cleanup cannot be isolated from the information alone.",
+        "subject": "英文",
+        "sub_topic": "論說與科普長文",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-論說與科普長文",
+        "template_id": "ref-20261119-b9-en3-science-argument-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
