@@ -135,6 +135,9 @@ test('boss defeat is idempotent and does not hand out unimplemented rewards',()=
   assert.strictEqual(Boss.onDefeat({...started,bossEncounter:completed},[],'b'),completed);
   assert.equal('loot' in completed,false);
   assert.equal('experience' in completed,false);
+  assert.equal(Boss.advance({...started,bossEncounter:completed,enemies:[]},
+    Boss.mapFor(seed),FROM+70000),null,
+    'victory must not create thousands of needless per-second C writes');
   const view=Boss.publicEncounter(completed);
   assert.equal(view.status,'defeated');
   assert.equal('secret' in view,false);

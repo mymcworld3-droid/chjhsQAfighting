@@ -159,8 +159,10 @@ function advance(room,map,now){
     room.battleAppliedTick:0;
   const due=Math.max(applied,dueTick(room,now));
   if(due<=applied)return null;
-  if(room.bossEncounter.status!=='fighting')
-    return {battleAppliedTick:due,battleAppliedAtMs:now};
+  // Once the shared boss is defeated there is no autonomous enemy left to
+  // simulate. Stop per-second Firestore writes; the displayed elapsed clock
+  // still advances from the original server timestamp without C mutations.
+  if(room.bossEncounter.status!=='fighting')return null;
   const initial=room.enemies?.find(e=>e.id===ID);
   if(!initial)throw fail('首領戰資料異常，缺少有效 Boss',409);
   const safeCatchup=due-applied>Combat.SAFE_CATCHUP_TICKS;
