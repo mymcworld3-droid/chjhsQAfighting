@@ -938,9 +938,7 @@ class DungeonMapView{
           detail:{room:result.room}
         }));
         this.follow=true;this.followBeast=false;
-        this.camera=Camera.focusOn(this.camera,this.selfPad(),
-          this.map,this.width,this.height);
-        this.$('[data-dm="focus"]').setAttribute('aria-pressed','true');
+        this.camera=Camera.lockToPlayer(this.selfPad(),this.map,this.width,this.height);
         this.drawSoon();
       }
       if(this.isCurrent()&&this.seq===token)this.actionFeedback('');
@@ -1013,16 +1011,8 @@ class DungeonMapView{
           detail:{room:result.room}
         }));
       }
-      // Explicit player movement takes precedence over observing a beast.
-      this.followBeast=false;
-      if(!this.follow){
-        this.follow=true;
-        this.camera=Camera.zoomAt(this.camera,Math.max(this.camera.zoom,2.6),
-          this.width/2,this.height/2,this.map,this.width,this.height);
-        this.$('[data-dm="focus"]').setAttribute('aria-pressed','true');
-      }
-      this.camera=Camera.focusOn(this.camera,this.selfPad(),this.map,
-        this.width,this.height);
+      this.follow=true;this.followBeast=false;
+      this.camera=Camera.lockToPlayer(this.selfPad(),this.map,this.width,this.height);
       this.drawSoon();
     }catch(error){
       if(!this.isCurrent()||token!==this.seq)return;
@@ -1440,29 +1430,7 @@ class DungeonMapView{
     }
     const directions={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
     if(directions[name]){void this.move(...directions[name]);return;}
-    if(!this.map||!this.isCurrent())return;
-    const w=this.width,h=this.height,m=this.map;
-    switch(name){
-      case 'plus':
-        this.camera=Camera.zoomAt(this.camera,this.camera.zoom*1.35,w/2,h/2,m,w,h);
-        this.follow=false;break;
-      case 'minus':
-        this.camera=Camera.zoomAt(this.camera,this.camera.zoom/1.35,w/2,h/2,m,w,h);
-        this.follow=false;break;
-      case 'fit':this.camera=Camera.fitMap();this.follow=false;break;
-      case 'focus':
-        this.follow=!this.follow;
-        if(this.follow){
-          this.camera=Camera.zoomAt(this.camera,Math.max(2.5,this.camera.zoom),w/2,h/2,m,w,h);
-          this.camera=Camera.focusOn(this.camera,this.selfPad(),m,w,h);
-        }break;
-      case 'route':this.routes=!this.routes;break;
-      default:return;
-    }
-    if(name!=='route')this.followBeast=false;
-    this.$('[data-dm="focus"]').setAttribute('aria-pressed',String(this.follow));
-    this.$('[data-dm="route"]').setAttribute('aria-pressed',String(this.routes));
-    this.drawSoon();
+    if(name==='route'){this.routes=!this.routes;this.drawSoon();}
   }
   keyDown(event){
     if(this.quiz?.visible)return;
@@ -1482,16 +1450,7 @@ class DungeonMapView{
     if(!this.routePending&&walking[event.key]&&!event.ctrlKey&&!event.altKey&&!event.metaKey){
       event.preventDefault();void this.move(...walking[event.key]);return;
     }
-    if(event.target.closest('button'))return;
-    const moves={ArrowLeft:[45,0],ArrowRight:[-45,0],ArrowUp:[0,45],ArrowDown:[0,-45]};
-    if(moves[event.key]){
-      event.preventDefault();this.follow=false;this.followBeast=false;
-      this.camera=Camera.pan(this.camera,...moves[event.key],this.map,this.width,this.height);
-      this.$('[data-dm="focus"]').setAttribute('aria-pressed','false');this.drawSoon();
-    }else if(event.key==='+'||event.key==='='){
-      event.preventDefault();this.action('plus');
-    }else if(event.key==='-'){event.preventDefault();this.action('minus');}
-    else if(event.key==='Home'){event.preventDefault();this.action('fit');}
+    // Arrow keys and zoom shortcuts never move this fixed camera.
   }
   pointerPosition(event){
     const bounds=this.canvas.getBoundingClientRect();
@@ -1517,32 +1476,12 @@ class DungeonMapView{
   }
   pointerMove(event){
     if(!this.map||!this.isCurrent()||!this.pointers.has(event.pointerId))return;
-    event.preventDefault();
-    const old=[...this.pointers.values()],at=this.pointerPosition(event);
-    const origin=this.touchOrigins.get(event.pointerId);
-    if(this.pointers.size>1||(origin&&
-      Math.hypot(at.x-origin.x,at.y-origin.y)>8)){
+    const point=this.pointerPosition(event),origin=this.touchOrigins.get(event.pointerId);
+    if(origin&&Math.hypot(point.x-origin.x,point.y-origin.y)>8){
       clearTimeout(this.longPressTimer);this.longPressTimer=null;
     }
-    this.pointers.set(event.pointerId,at);
-    const now=[...this.pointers.values()];
-    if(old.length>=2&&now.length>=2){
-      const [a,b]=old,[c,d]=now;
-      const centerOld={x:(a.x+b.x)/2,y:(a.y+b.y)/2};
-      const centerNew={x:(c.x+d.x)/2,y:(c.y+d.y)/2};
-      const before=Math.hypot(a.x-b.x,a.y-b.y),after=Math.hypot(c.x-d.x,c.y-d.y);
-      if(before>3&&after>3)this.camera=Camera.zoomAt(this.camera,
-        this.camera.zoom*(after/before),centerOld.x,centerOld.y,
-        this.map,this.width,this.height);
-      this.camera=Camera.pan(this.camera,centerNew.x-centerOld.x,
-        centerNew.y-centerOld.y,this.map,this.width,this.height);
-    }else if(old.length===1&&now.length===1){
-      this.camera=Camera.pan(this.camera,now[0].x-old[0].x,now[0].y-old[0].y,
-        this.map,this.width,this.height);
-    }
-    this.follow=false;this.followBeast=false;
-    this.$('[data-dm="focus"]').setAttribute('aria-pressed','false');
-    this.drawSoon();
+    this.pointers.set(event.pointerId,point);
+    // Map gestures never change the world camera; only short taps act.
   }
   pointerUp(event){
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
@@ -1565,25 +1504,12 @@ class DungeonMapView{
         this.canvas.releasePointerCapture(event.pointerId);
     }catch(_){}
   }
-  wheel(event){
-    if(!this.map||!this.isCurrent())return;
-    event.preventDefault();
-    const p=this.pointerPosition(event),scale=Math.exp(-clamp(event.deltaY,-180,180)*.002);
-    this.camera=Camera.zoomAt(this.camera,this.camera.zoom*scale,p.x,p.y,
-      this.map,this.width,this.height);
-    this.follow=false;this.followBeast=false;
-    this.$('[data-dm="focus"]').setAttribute('aria-pressed','false');
-    this.drawSoon();
-  }
+  wheel(event){if(this.opened)event.preventDefault();}
   resize(){
     if(!this.opened||!this.stage)return;
     const rect=this.stage.getBoundingClientRect();
     const width=Math.max(1,Math.round(rect.width)),height=Math.max(1,Math.round(rect.height));
-    if(this.map&&this.width>0&&this.height>0&&(width!==this.width||height!==this.height)){
-      this.camera=Camera.resizePreservingCenter(this.camera,this.map,
-        this.width,this.height,width,height);
-      if(this.follow)this.camera=Camera.focusOn(this.camera,this.selfPad(),this.map,width,height);
-    }
+    if(this.map)this.camera=Camera.lockToPlayer(this.selfPad(),this.map,width,height);
     this.width=width;this.height=height;
     const dpr=clamp(window.devicePixelRatio||1,1,2);
     if(this.canvas.width!==Math.round(width*dpr)||this.canvas.height!==Math.round(height*dpr)){
@@ -1684,6 +1610,8 @@ class DungeonMapView{
     const ctx=this.ctx,m=this.map,w=this.width,h=this.height;
     ctx.fillStyle='#0b1915';ctx.fillRect(0,0,w,h);
     if(!m)return;
+    // Recenter on every frame, even with stale camera state.
+    this.camera=Camera.lockToPlayer(this.selfPad(),m,w,h);
     this.updateRangePlan();
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:this.members(),selfUid:this.uid,showRoutes:this.routes,
