@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-oldnew-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "甲：《論語》「工欲善其事，必先利其器。」乙：某校改善實驗室安全，先檢查護具、維修設備，再安排學生操作。比較兩者，最適當的連結為何？",
+        "correct": "要把工作做好，事先備妥合適工具與條件具有重要性",
+        "wrong": [
+          "只要工具齊全，便可免除所有學習與練習",
+          "工具是否安全與工作成果完全無關",
+          "古文只討論工匠，不能引申至實驗室準備"
+        ],
+        "exp": "古文強調完善工具與準備對完成工作的重要；現代實驗安全先檢查設備的做法可作為對照。",
+        "subject": "國文",
+        "sub_topic": "古今文本議題比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-古今文本議題比較",
+        "template_id": "ref-20261119-b8-ch2-oldnew-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-oldnew-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "甲：孟子曰：「老吾老，以及人之老。」乙：一個社區將原供家庭照護的志工培訓推廣到獨居長者服務。兩者共有的倫理理念為何？",
+        "correct": "將對親近長者的關懷推及社會其他有需要的長者",
+        "wrong": [
+          "只照顧自己家庭內的長者，不必理會他人",
+          "把所有長者視為完全相同，無須詢問個別需求",
+          "以是否具有親屬關係作為唯一服務條件"
+        ],
+        "exp": "「以及人之老」明確表達推己及人的關懷，社區方案也將照顧範圍擴大至家庭之外。",
+        "subject": "國文",
+        "sub_topic": "古今文本議題比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-古今文本議題比較",
+        "template_id": "ref-20261119-b8-ch2-oldnew-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-oldnew-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "甲：《論語》「君子和而不同。」乙：學生會討論校園手機規範時，要求不同立場先說明理由並互相尊重。兩者最可能共有何項原則？",
+        "correct": "可以保留不同意見，同時以尊重與理性討論維持合作",
+        "wrong": [
+          "只有所有成員都支持同一方案，才算具有和諧",
+          "理性討論的目的應是讓少數人完全不得表達意見",
+          "凡意見不同就代表彼此必須斷絕合作"
+        ],
+        "exp": "「和而不同」強調可在差異中相處與協調，與現代議事中尊重異議、理性辯論相符。",
+        "subject": "國文",
+        "sub_topic": "古今文本議題比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-古今文本議題比較",
+        "template_id": "ref-20261119-b8-ch2-oldnew-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
