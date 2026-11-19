@@ -18,17 +18,28 @@ export class DungeonQuizPanel{
     this.question=null;this.review=null;this.loading=false;this.answering=false;
     this.prefetching=false;this.pendingCredits=[];this.warming=false;
     this.warmUntil=0;this.questionStartedAt=0;this.errorMessage='';
+    this.isAdmin=false;
     const panel=document.createElement('aside');
     panel.className='dm-quiz-panel';panel.hidden=true;
     panel.setAttribute('role','region');panel.setAttribute('aria-label','副本獨立答題');
+    // Trial-style page: one question, four full-width choices, immediate review
+    // and an explicit next button. No 問道助手 or AI hint requests.
     panel.innerHTML='<section class="dm-quiz-sheet">'+
-      '<header class="dm-quiz-top"><div><small>青雲問道 · 副本問道</small>'+
+      '<header class="dm-quiz-top"><div><small>青雲問道 · 問道試煉</small>'+
       '<h3>答題充能</h3></div>'+
-      '<button type="button" data-dq="collapse" aria-label="收合題目返回戰場">收合 · 返回戰場</button></header>'+
+      '<button type="button" data-dq="collapse" aria-label="返回戰場">返回戰場</button></header>'+
       '<p class="dm-quiz-info">答對恢復 4 體力，答錯恢復 1 體力（上限 10）。'+
-      '答題時靈獸仍會攻擊；可隨時收合題目，隊友不必等待。</p>'+
+      '逐題批改、查看解析，再按下一題。作答時戰鬥及隊友行動不暫停。</p>'+
+      '<div class="dm-quiz-toolbar"><span data-dq="scope">依選擇的學習範圍出題</span>'+
+      '<button type="button" data-dq="whiteboard" aria-expanded="false">計算白板</button></div>'+
       '<p data-dq="status" class="dm-quiz-status" role="status" aria-live="polite"></p>'+
       '<div data-dq-content class="dm-quiz-content"></div>'+
+      '<section class="dm-quiz-whiteboard" data-dq-whiteboard hidden aria-label="計算白板">'+
+      '<div class="dm-quiz-whiteboard-head"><strong>計算白板</strong>'+
+      '<div><button type="button" data-dq="whiteboard-clear">清除</button>'+
+      '<button type="button" data-dq="whiteboard-close">收起白板</button></div></div>'+
+      '<canvas data-dq-whiteboard-canvas width="720" height="280" '+
+      'aria-label="可使用手指、滑鼠或觸控筆書寫的計算區域"></canvas></section>'+
       '<div class="dm-quiz-actions">'+
       '<button type="button" data-dq="retry" hidden>重新取得題目</button>'+
       '<button type="button" data-dq="credit" hidden>重試補充體力</button>'+
@@ -44,18 +55,78 @@ export class DungeonQuizPanel{
       else if(action==='credit')void this.retryCredits();
       else if(action==='next')void this.next();
       else if(action==='answer')void this.submit(Number(button.dataset.choice));
+      else if(action==='whiteboard'||action==='whiteboard-close')
+        this.toggleWhiteboard(action==='whiteboard'?undefined:false);
+      else if(action==='whiteboard-clear')this.clearWhiteboard();
     });
     panel.addEventListener('keydown',event=>{
       if(event.key==='Escape'){event.stopPropagation();event.preventDefault();this.hide();}
     });
+    this.bindWhiteboard();
+  }
+  bindWhiteboard(){
+    const canvas=this.element.querySelector('[data-dq-whiteboard-canvas]');
+    const ctx=canvas?.getContext('2d');
+    if(!ctx)return;
+    let active=null;
+    const point=event=>{
+      const rect=canvas.getBoundingClientRect();
+      return rect.width&&rect.height?{
+        x:(event.clientX-rect.left)*canvas.width/rect.width,
+        y:(event.clientY-rect.top)*canvas.height/rect.height}:null;
+    };
+    canvas.addEventListener('pointerdown',event=>{
+      if(active!==null)return;
+      const p=point(event);if(!p)return;
+      active=event.pointerId;canvas.setPointerCapture?.(active);
+      ctx.strokeStyle='#172e28';ctx.lineWidth=2.8;
+      ctx.lineCap='round';ctx.lineJoin='round';
+      ctx.beginPath();ctx.moveTo(p.x,p.y);
+      ctx.lineTo(p.x+.01,p.y+.01);ctx.stroke();
+      event.preventDefault();
+    });
+    canvas.addEventListener('pointermove',event=>{
+      if(active!==event.pointerId)return;
+      const p=point(event);if(!p)return;
+      ctx.lineTo(p.x,p.y);ctx.stroke();event.preventDefault();
+    });
+    const end=event=>{
+      if(active!==event.pointerId)return;
+      active=null;ctx.closePath();
+      if(canvas.hasPointerCapture?.(event.pointerId))
+        canvas.releasePointerCapture(event.pointerId);
+    };
+    canvas.addEventListener('pointerup',end);
+    canvas.addEventListener('pointercancel',end);
+    canvas.addEventListener('lostpointercapture',event=>{
+      if(active===event.pointerId){active=null;ctx.closePath();}
+    });
+  }
+  toggleWhiteboard(force){
+    const area=this.element.querySelector('[data-dq-whiteboard]');
+    if(!area)return;
+    const open=force===undefined?area.hidden:Boolean(force);
+    area.hidden=!open;
+    this.$('whiteboard')?.setAttribute('aria-expanded',String(open));
+  }
+  clearWhiteboard(){
+    const canvas=this.element.querySelector('[data-dq-whiteboard-canvas]');
+    canvas?.getContext('2d')?.clearRect(0,0,canvas.width,canvas.height);
+  }
+  setAdmin(flag){
+    const admin=flag===true;
+    if(this.isAdmin!==admin){this.isAdmin=admin;if(this.visible)this.paint();}
   }
   $(name){return this.element.querySelector('[data-dq="'+name+'"]');}
   valid(epoch=this.epoch){
     return epoch===this.epoch&&this.roomId&&this.uid===getMainUser()?.uid;
   }
-  attach(roomId,uid){
-    if(this.roomId===roomId&&this.uid===uid)return;
-    this.epoch++;this.roomId=roomId;this.uid=uid;
+  attach(roomId,uid,isAdmin=false){
+    if(this.roomId===roomId&&this.uid===uid){
+      this.setAdmin(isAdmin);return;
+    }
+    this.epoch++;this.roomId=roomId;this.uid=uid;this.isAdmin=isAdmin===true;
+    this.clearWhiteboard();this.toggleWhiteboard(false);
     this.visible=false;this.element.hidden=true;
     this.question=null;this.review=null;this.pendingCredits=[];
     this.loading=false;this.answering=false;this.prefetching=false;
@@ -67,7 +138,8 @@ export class DungeonQuizPanel{
     this.roomId='';this.uid='';this.question=null;this.review=null;
     this.pendingCredits=[];this.prefetching=false;this.loading=false;
     this.answering=false;this.warming=false;this.warmUntil=0;
-    this.errorMessage='';this.questionStartedAt=0;
+    this.errorMessage='';this.questionStartedAt=0;this.isAdmin=false;
+    this.clearWhiteboard();this.toggleWhiteboard(false);
   }
   async warm(){
     // Preload before the player presses the charge button. Reconnecting and
@@ -113,49 +185,68 @@ export class DungeonQuizPanel{
       this.status('正在填充題庫中，已通過審核的題目會自動出現…');
       return;
     }
-    if(this.review){
-      const r=this.review;
-      this.status(this.errorMessage||(r.correct?'答對！':'答錯了')+' · 答題體力 '+r.amount+
-        ' 點（實際恢復量依當前剩餘體力計算）');
-      const title=document.createElement('p');title.className='dm-quiz-question';
-      title.innerHTML=rich(r.q);content.append(title);
-      const choices=document.createElement('div');choices.className='dm-quiz-options';
-      (r.opts||[]).forEach((option,index)=>{
-        const node=document.createElement('div');
-        node.className='dm-quiz-option'+(index===r.answerIndex?' is-correct':'')+
-          (index===r.choice&&index!==r.answerIndex?' is-wrong':'');
-        node.innerHTML='<strong>'+String.fromCharCode(65+index)+'.</strong> '+
-          rich(option);
-        choices.append(node);
+    const item=this.review||this.question;
+    const scope=this.$('scope');
+    if(scope)scope.textContent=item?
+      '第 '+(this.review?.index||this.answered+1)+' 題 · '+
+      (item.subject||'綜合')+' · '+(item.topic||'核心觀念'):
+      '依選擇的學習範圍出題';
+    if(item){
+      const sheet=document.createElement('section');
+      sheet.className='dm-quiz-question-sheet tc-question-sheet glass-panel';
+      const badge=document.createElement('small');
+      badge.className='dm-quiz-question-badge tc-question-badge';
+      badge.textContent=(item.subject||'綜合')+' · '+(item.topic||'核心觀念');
+      const title=document.createElement('h3');
+      title.className='dm-quiz-question tc-question';
+      title.innerHTML=rich(item.q);
+      sheet.append(badge,title);content.append(sheet);
+      const choices=document.createElement('div');
+      choices.className='dm-quiz-options tc-options';
+      (item.opts||[]).forEach((option,index)=>{
+        const node=document.createElement(this.review?'div':'button');
+        if(!this.review){
+          node.type='button';node.dataset.dq='answer';
+          node.dataset.choice=String(index);node.disabled=this.answering;
+        }
+        node.className='dm-quiz-option'+
+          (this.review&&index===this.review.answerIndex?' is-correct':'')+
+          (this.review&&index===this.review.choice&&index!==this.review.answerIndex?
+            ' is-wrong':'');
+        const letter=document.createElement('span');
+        letter.className='dm-quiz-letter';
+        letter.textContent=String.fromCharCode(65+index);
+        const label=document.createElement('span');
+        label.className='quiz-rich-option';label.innerHTML=rich(option);
+        node.append(letter,label);choices.append(node);
       });
       content.append(choices);
+    }
+    if(this.review){
+      const r=this.review;
+      this.status(this.errorMessage||'本題已批改 · 請閱讀解析後按下一題');
+      const feedback=document.createElement('section');
+      feedback.className='dm-quiz-feedback tc-feedback-section glass-panel';
+      const heading=document.createElement('strong');
+      heading.className=r.correct?'tc-correct':'tc-wrong';
+      heading.textContent=(r.correct?'答對':'答錯')+
+        (this.isAdmin?' · 管理員體力固定 10/10':' · 體力 +'+r.amount);
+      feedback.append(heading);
       const explanation=document.createElement('section');
       explanation.className='dm-quiz-explanation';
-      const heading=document.createElement('strong');heading.textContent='解析';
-      const detail=document.createElement('div');detail.innerHTML=rich(r.explanation);
-      explanation.append(heading,detail);
+      const label=document.createElement('strong');label.textContent='解析';
+      const detail=document.createElement('div');
+      detail.innerHTML=rich(r.explanation||'本題尚未提供解析');
+      explanation.append(label,detail);
       if(r.reward?.learning){
         const learning=document.createElement('p');
         learning.textContent=r.reward.learning;explanation.append(learning);
       }
-      content.append(explanation);
+      feedback.append(explanation);content.append(feedback);
     }else if(this.question){
-      const q=this.question;
-      this.status(this.errorMessage||'第 '+(this.answered+1)+' 題 · '+(q.subject||'綜合')+
-        ' · '+(q.topic||'核心觀念')+
-        ' · 玩家各自答題，戰場持續運作');
-      const title=document.createElement('p');title.className='dm-quiz-question';
-      title.innerHTML=rich(q.q);content.append(title);
-      const choices=document.createElement('div');choices.className='dm-quiz-options';
-      (q.opts||[]).forEach((option,index)=>{
-        const node=document.createElement('button');node.type='button';
-        node.dataset.dq='answer';node.dataset.choice=String(index);
-        node.disabled=this.answering;
-        node.innerHTML='<strong>'+String.fromCharCode(65+index)+'.</strong> '+
-          rich(option);
-        choices.append(node);
-      });
-      content.append(choices);
+      this.status(this.errorMessage||'請選擇 A、B、C、D · '+
+        (this.isAdmin?'管理員體力固定 10/10，答題仍計入學習紀錄':
+          '答對 +4、答錯 +1 · 可隨時返回戰場'));
     }else this.status(this.errorMessage||'正在填充題庫中…');
     try{window.quizMathTypeset?.(content);}catch(_){}
   }
@@ -265,6 +356,7 @@ export class DungeonQuizPanel{
       await acknowledgeDungeonReview(this.roomId,reviewId);
       if(!this.valid(epoch))return;
       this.review=null;this.question=null;this.errorMessage='';
+      this.clearWhiteboard();this.toggleWhiteboard(false);
       this.questionStartedAt=Date.now();
       this.paint();await this.load();
     }catch(error){
