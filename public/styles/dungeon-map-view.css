@@ -617,3 +617,46 @@
   #dungeon-map-view .dm-boss-entry{animation:none!important}
   #dungeon-map-view .dm-boss-meter i{transition:none}
 }
+
+// Stage 16 — team rescue and authenticated, personal victory reward.
+#dungeon-map-view .dm-rescue-actions{
+  display:grid;gap:5px;max-height:110px;overflow:auto;
+  padding:6px;background:#163327dc;border:1px solid #7ecba780;
+  border-radius:9px;
+}
+#dungeon-map-view .dm-rescue-actions button{
+  font-size:11px;min-height:35px;padding:6px 9px;
+  color:#cffff0;background:#225646;border-color:#8adbc1;
+}
+#dungeon-map-view .dm-victory-panel{
+  position:absolute;z-index:3;top:90px;left:50%;
+  transform:translateX(-50%);width:min(390px,calc(100% - 24px));
+  display:grid;gap:7px;max-height:42%;overflow-y:auto;
+  padding:12px 15px;color:#ffe9bc;
+  background:#172821f0;border:1px solid #e4ba6b;
+  border-radius:12px;box-shadow:0 8px 22px #0008;
+  backdrop-filter:blur(6px);
+}
+#dungeon-map-view .dm-victory-panel strong{
+  color:#f8d889;text-align:center;font-size:16px;
+}
+#dungeon-map-view .dm-victory-panel p{
+  margin:0;text-align:center;font-size:12px;line-height:1.5;
+}
+#dungeon-map-view .dm-victory-panel small{
+  text-align:center;line-height:1.5;color:#c1dfcc;font-size:11px;
+}
+#dungeon-map-view .dm-victory-panel button{
+  color:#372819;background:linear-gradient(90deg,#d9a850,#f6d78a);
+  border:1px solid #f9e4b6;font-weight:800;
+}
+@media(max-width:720px){
+ #dungeon-map-view .dm-victory-panel{
+   top:66px;left:50%;max-height:32%;padding:9px 10px;gap:4px;
+ }
+ #dungeon-map-view .dm-victory-panel strong{font-size:13px}
+ #dungeon-map-view .dm-victory-panel p{font-size:11px}
+}
+@media(max-height:450px) and (orientation:landscape){
+ #dungeon-map-view .dm-victory-panel{top:40px;max-height:42%}
+}

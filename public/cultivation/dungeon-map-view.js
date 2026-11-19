@@ -1,6 +1,7 @@
 import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
-import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal, enterDungeonBoss } from './dungeon-room.js';
+import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal, enterDungeonBoss,
+  rescueDungeonTeammate, claimDungeonBossReward } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 
@@ -27,6 +28,8 @@ class DungeonMapView{
     this.opened=false;this.seq=0;this.pointers=new Map();this.movePending=false;
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
     this.portalPending=false;this.bossPending=false;
+    this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
+    this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
     this.aimTile=null;this.skillSignature='';
     this.focusAuras=new Map();
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
@@ -67,6 +70,12 @@ class DungeonMapView{
       '<div class="dm-message" data-dm-message role="status" aria-live="polite">正在取得副本地圖…</div>'+
       '<aside class="dm-biome" data-dm-biome-box hidden><small>秘境地貌</small>'+
       '<strong data-dm-biome>—</strong><span data-dm-summary></span></aside>'+
+      '<div class="dm-victory-panel" data-dm-victory hidden>'+
+      '<strong>✦ 玄炎鎮殿 · 全隊勝利</strong>'+
+      '<p>首領已擊敗！每位參戰隊員可領取 120 靈石與 3 修為。</p>'+
+      '<button type="button" data-dm="claim-victory" data-dm-claim>領取本場獎勵</button>'+
+      '<small data-dm-reward-status role="status" aria-live="polite">'+
+      '個別領取，一場一人限領一次。離開隊伍前請完成領取。</small></div>'+
       '<div class="dm-overview" data-dm-overview hidden aria-hidden="true">'+
       '<canvas data-dm-minimap></canvas><span>全域縮圖</span></div>'+
       '<div class="dm-controls" aria-label="地圖視角控制">'+
@@ -88,6 +97,7 @@ class DungeonMapView{
       '<span data-dm-location>（待命）</span></div>'+
       '<div class="dm-threat" data-dm-threat role="status" aria-live="polite" hidden></div>'+
       '<div class="dm-team-status" data-dm-team-status aria-label="隊友生命狀態"></div>'+
+      '<div class="dm-rescue-actions" data-dm-rescues hidden aria-live="polite"></div>'+
       '<div class="dm-dpad" role="group" aria-label="角色移動，一次一格">'+
       '<button type="button" data-dm="up" aria-label="向上移動一格">↑</button>'+
       '<button type="button" data-dm="left" aria-label="向左移動一格">←</button>'+
@@ -125,7 +135,8 @@ class DungeonMapView{
       const button=event.target.closest('[data-dm]');
       if(button&&root.contains(button)&&!button.disabled)
         this.action(button.dataset.dm,button.dataset.beastId,
-          button.dataset.skillId,button.dataset.loadoutIndex);
+          button.dataset.skillId,button.dataset.loadoutIndex,
+          button.dataset.targetUid);
     });
     root.addEventListener('keydown',event=>this.keyDown(event));
     this.canvas.addEventListener('pointerdown',event=>this.pointerDown(event));
@@ -165,6 +176,7 @@ class DungeonMapView{
     this.follow=false;this.routes=false;this.pointers.clear();this.opened=true;
     this.movePending=false;this.strikePending=false;this.skillPending=false;
     this.portalPending=false;this.bossPending=false;
+    this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
     this.loadoutPending=false;this.aimTile=null;this.skillSignature='';
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
     this.beastIds='';this.touchOrigins.clear();this.gestureMulti=false;
@@ -249,7 +261,7 @@ class DungeonMapView{
     const threat=this.$('[data-dm-threat]');
     if(threat){
       threat.hidden=!threatened.length&&!downed;
-      if(downed)threat.textContent='已倒地，請等待後續復活機制';
+      if(downed)threat.textContent='已倒地 · 可以答題蓄力自救，或等待隊友靠近救援';
       else if(threatened.length){
         const fire=Math.min(...threatened.map(beast=>beast.attack.resolvesAtTick));
         const applied=Number(this.room?.battleClock?.appliedTick)||0;
@@ -272,7 +284,117 @@ class DungeonMapView{
     const charge=this.$('[data-dm="quiz"]');
     if(charge)charge.disabled=!active||!this.map;
     this.updatePortalHUD();
+    this.updateRescueHUD();this.updateVictoryHUD();
     this.updateStrikeHUD();this.updateSkillHUD();
+  }
+  updateRescueHUD(){
+    const box=this.$('[data-dm-rescues]');
+    if(!box)return;
+    box.replaceChildren();
+    const own=this.room?.members?.[this.uid];
+    const active=this.room?.status==='assembled'&&!!this.map&&
+      !(this.room?.dungeonArena==='boss'&&
+        this.room?.bossEncounter?.status==='defeated');
+    if(!active||!own){box.hidden=true;return;}
+    const isDown=own.downed===true||Number(own.battleHealth)===0;
+    const list=isDown?[own]:this.members().filter(m=>
+      m.uid!==this.uid&&(m.downed===true||Number(m.battleHealth)===0));
+    box.hidden=!list.length;
+    const energy=Math.max(0,Number(own.explorationStamina)||0);
+    for(const friend of list){
+      const ownAid=friend.uid===this.uid,cost=ownAid?25:8;
+      const nearby=ownAid||Boolean(own.position&&friend.position&&
+        Math.abs(own.position.x-friend.position.x)+
+        Math.abs(own.position.y-friend.position.y)<=1);
+      const limit=ownAid?(own.selfRescueCount||0)<1:
+        (friend.allyReviveCount||0)<2;
+      const button=document.createElement('button');
+      button.type='button';button.dataset.dm='rescue';
+      button.dataset.targetUid=friend.uid;
+      button.textContent=ownAid?
+        '✦ 凝神復起 · '+cost+' 體力（本場 1 次）':
+        '✚ 救援 '+String(friend.name||'隊友').slice(0,9)+' · '+cost+' 體力';
+      button.disabled=this.rescuePending||!near||!limit||energy<cost;
+      button.title=!limit?'這位修士的本場救援次數已用盡':
+        !near?'需走到隊友身旁相鄰一格':
+        energy<cost?'可答題補充探索體力':
+        ownAid?'以 25 體力恢復 25 生命，每場限 1 次':
+        '恢復隊友 40 生命，每人每場最多接受 2 次援助';
+      box.append(button);
+    }
+  }
+  updateVictoryHUD(){
+    const panel=this.$('[data-dm-victory]');
+    if(!panel)return;
+    const won=this.room?.status==='assembled'&&
+      this.room?.dungeonArena==='boss'&&
+      this.room?.bossEncounter?.status==='defeated';
+    panel.hidden=!won;
+    if(!won)return;
+    const button=this.$('[data-dm-claim]');
+    const status=this.$('[data-dm-reward-status]');
+    const award=this.rewardResult;
+    button.disabled=this.rewardPending||!!award;
+    button.textContent=this.rewardPending?'正在驗證勝利並入帳…':
+      award?'✓ 已領取本場獎勵':'領取 120 靈石 ＋ 3 修為';
+    status.textContent=award?
+      (award.status==='duplicate'?'本場獎勵先前已領取，不再重複發放':
+        '已成功存入原本的玩家帳號，重新進入宗門可查看增加後數值'):
+      '個別領取，一場每人限領一次。離開隊伍前請完成領取。';
+  }
+  async rescue(targetUid){
+    if(!this.isCurrent()||!this.map||this.rescuePending)return;
+    const own=this.room?.members?.[this.uid];
+    if(!own||this.room.status!=='assembled')return;
+    const seq=(Number.isSafeInteger(own.rescueSeq)?own.rescueSeq:0)+1;
+    const roomId=this.roomId,token=this.seq;
+    this.rescuePending=true;this.updateRescueHUD();
+    try{
+      const data=await rescueDungeonTeammate(roomId,targetUid,seq);
+      if(!this.isCurrent()||this.seq!==token||this.roomId!==roomId)return;
+      if(data?.room){
+        this.updateRoom(data.room);
+        window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
+          detail:{room:data.room}
+        }));
+        this.moveAlert(targetUid===this.uid?'✦ 已凝神復起，恢復 25 生命':
+          '✚ 已救起隊友，恢復 40 生命');
+      }
+    }catch(error){
+      if(this.isCurrent()&&this.seq===token){
+        this.moveAlert(error?.message||'救援失敗');
+        if(error?.status===409){
+          try{const current=await getDungeonRoom(roomId);
+            if(this.isCurrent()&&this.seq===token&&current?.room)
+              this.updateRoom(current.room);
+          }catch(_){}
+        }
+      }
+    }finally{
+      this.rescuePending=false;
+      if(this.isCurrent()&&this.seq===token)this.updateRescueHUD();
+    }
+  }
+  async claimVictory(){
+    if(!this.isCurrent()||this.rewardPending||this.rewardResult||
+        this.room?.dungeonArena!=='boss'||
+        this.room?.bossEncounter?.status!=='defeated')return;
+    const roomId=this.roomId,token=this.seq;
+    this.rewardPending=true;this.updateVictoryHUD();
+    try{
+      const data=await claimDungeonBossReward(roomId);
+      if(!this.isCurrent()||this.seq!==token||this.roomId!==roomId)return;
+      if(data?.reward)this.rewardResult=data.reward;
+    }catch(error){
+      if(this.isCurrent()&&this.seq===token)
+        this.$('[data-dm-reward-status]').textContent=
+          error?.message||'獎勵暫時無法入帳，可以重新按鈕領取';
+    }finally{
+      this.rewardPending=false;
+      if(this.isCurrent()&&this.seq===token&&!this.rewardResult)
+        this.$('[data-dm-claim]').disabled=false;
+      else if(this.isCurrent()&&this.seq===token)this.updateVictoryHUD();
+    }
   }
   updateStrikeHUD(){
     const button=this.$('[data-dm="strike"]');
@@ -899,7 +1021,7 @@ class DungeonMapView{
     const focus=this.previousFocus;this.previousFocus=null;
     if(focus?.isConnected)focus.focus({preventScroll:true});
   }
-  action(name,beastId,skillId,loadoutIndex){
+  action(name,beastId,skillId,loadoutIndex,rescueUid){
     if(name==='close'){this.close();return;}
     if(name==='retry'){void this.load();return;}
     if(name==='close-beasts'){
@@ -915,6 +1037,8 @@ class DungeonMapView{
     if(name==='quiz'){this.quiz?.show();return;}
     if(name==='portal'){void this.openPortal();return;}
     if(name==='enter-boss'){void this.enterBoss();return;}
+    if(name==='rescue'){void this.rescue(rescueUid);return;}
+    if(name==='claim-victory'){void this.claimVictory();return;}
     if(name==='strike'){void this.strike();return;}
     if(name==='cast'){void this.cast(skillId);return;}
     if(name==='loadout'){void this.changeLoadout(Number(loadoutIndex));return;}
