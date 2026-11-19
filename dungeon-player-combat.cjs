@@ -3,6 +3,7 @@
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {isAlive}=require('./dungeon-enemy-combat.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
+const {clampStamina}=require('./dungeon-stamina-rules.cjs');
 const STAMINA_COST=2,DAMAGE=30,MAX_STRIKE_SEQ=100000;
 const ENEMY_HEALTH=Object.freeze({wolf:60,wisp:60,golem:90,guardian:360,boss:Boss.HP});
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
@@ -30,8 +31,7 @@ function strikeEnemy(room,uid,map,{enemyId,seq}={}){
   const enemy=room.enemies[index];
   if(!walkable(map,enemy.position)||Boss.reach(member.position,enemy)!==1)
     throw fail('請先移動至靈獸相鄰一格再攻擊',409);
-  const stamina=Number.isSafeInteger(member.explorationStamina)?
-    member.explorationStamina:0;
+  const stamina=clampStamina(member.explorationStamina);
   if(stamina<STAMINA_COST)throw fail('探索體力不足，無法攻擊',409);
   const health=Number.isSafeInteger(enemy.battleHealth)?
     Math.max(0,Math.min(maxHealth(enemy.kind),enemy.battleHealth)):
