@@ -128,3 +128,16 @@ const influence=QATactical.sealEffectCells(battle,{x:4,y:2});
 - 特效被繪製在人物、靈獸、生命條之前；不遮蔽主要攻擊預告。當戰鬥演出仍在進行時，新增的破除特效暫存等待原有演出結束，避免提前播在攻擊動作之前；不觸發額外戰鬥指令。
 - 支援 `prefers-reduced-motion`：使用者關閉動態效果時，只切換正確圖片狀態而不播放粒子；切換關卡／試演時會清除暫存，背景頁面暫停期間不流失剩餘動畫時間。
 - 圖片素材、純視覺模組與戰場渲染均更新靜態版本索引；測試 `tests/tactical-guardian-vfx.test.cjs` 涵蓋圖片透明度與尺寸、三狀態切換、真實權威變化、不同關卡與房間拒絕、效能與 Canvas 繪製順序。
+
+## 第七階段：上線前戰場品質驗收（2026-11-19）
+
+**適用範圍：** PvE v4 鎮守靈陣及封印四型陣眼，並回歸檢查原有 PvE、PvP、v3 封印與手機／平板／桌面佈局。保持所有技能、耐久、鎮守失敗、勝利結算、體力消耗與同步協議不變。
+
+- 情報面板圖片：以前是 CSS 圖集載入失敗就只剩空白框。現在**按需、只載入一次** 512×384 透明 WebP，圖片尚未載入或 HTTP 404、格式錯誤時顯示清楚的「護、煞、獸、迷」文字圖示；完成解碼後才切換至圖片，不會在每次狀態同步重試失敗請求。戰場 Canvas 的圓形標記備援繼續保留。
+- 新增圖片載入成功／失敗／規格錯誤的單元測試，檢查四種類型、三種耐久狀態、UI 閱讀內容不變、圖片載入不修改權威戰場資料。
+- 手機與桌面瀏覽器驗收實際截取**鎮守守護晶核（完整／受損）**與**封印護靈晶核（完整／受損）**的 Canvas `drawImage` 來源裁切座標，避免只檢查磁碟檔案存在卻未真的顯示。
+- 在真實戰場封印 v4 測試清單、詳細情報、單座範圍、定位；驗證**查看情報與操作鏡頭完全不改 revision**。手機直式測試情報面板邊界不能跑出遊戲畫面，並留下截圖。
+- 受擊後驗證圖集的受損列真的被繪製；其他模式不產生封印情報入口，鎮守模式維持原本回合與生命條，技能點擊及普通攻擊沿用伺服器判定。
+- 重複的多人副本地圖瀏覽器測試從 `tactical-browser.yml` 移出；它原本已在獨立 `dungeon-browser.yml` 中執行。此拆分讓**戰場 UI 測試與多人副本同步／地圖測試分開呈報**，絕不把副本失敗設為允許失敗或改寫既有副本規則。
+- 驗收指令：`node --test tests/tactical-seal-inspector.test.cjs tests/tactical-guardian-vfx.test.cjs tests/tactical-seal-metadata.test.cjs tests/tactical-seal-ranges.test.cjs tests/tactical-seal-targeting.test.cjs`；完整瀏覽器：`TACTICAL_SKETCH_ONLY=1 node scripts/test-tactical-browser.cjs`。
+- 上線條件：本階段單元檢查、GitHub 上的戰場瀏覽器驗收、修煉回歸三者都必須核實結果；多人副本既有六項失敗另由其專屬 CI 追蹤，不能誤報為已修復。

@@ -38,7 +38,7 @@ function scene(points){
       maxHp:2,hp:2,activated:false,...x}))},actors:[],status:'active'};
 }
 const point=(kind,x=3,y=2,extras={})=>({kind,x,y,...extras});
-function mount(state){
+function mount(state,Inspector=SealInspector){
   let otherOpen=false;
   const root=new Node('root'),top=new Node('top'),loadout=new Node('loadout'),
     canvas=new Node('canvas'),main=new Node('main'),modal=new Node('modal');
@@ -48,7 +48,7 @@ function mount(state){
     '.tc-main.tc-game canvas':canvas,'[data-modal]':modal,
     '[data-main]':main,'.tc-main canvas':canvas};
   let focused=null,located=null,closedOther=0;
-  const inspector=new SealInspector(root,{getState:()=>state,getRenderer:()=>renderer,rules:R,
+  const inspector=new Inspector(root,{getState:()=>state,getRenderer:()=>renderer,rules:R,
     closeOther:()=>{closedOther++;},isOtherOpen:()=>otherOpen,onFocusRange:s=>{focused=s;},
     onNavigate:s=>{located=s;}});
   return {inspector,root,main,modal,renderer,setOtherOpen:v=>{otherOpen=v;},get focused(){return focused;},
@@ -161,4 +161,59 @@ test('inspector cannot unlock the map while the beast dialog is still open',()=>
   m.modal.hidden=false;m.inspector.refresh();
   assert.equal(m.main.inert,true,'quiz/dialog modal still locks the map');
   assert.equal(m.inspector.toggle.hidden,true);
+});
+
+test('inspector shows legible fallback while artwork loads, then swaps to the atlas',()=>{
+  let imageCount=0;
+  class FakeImage{
+    constructor(){imageCount++;this.naturalWidth=512;this.naturalHeight=384;this.onload=null;this.onerror=null;}
+    set src(v){this.url=v;}
+  }
+  const {SealInspector:WithImage}=new Function('document','Image',
+    src.replace(/export (class|function) /g,'$1 ')+
+    '\nreturn {SealInspector};')(fakeDoc,FakeImage);
+  const s=scene([point('shield'),point('hazard',5,2),point('rage',6,3),point('maze',8,4)]);
+  const m=mount(s,WithImage),a=m.inspector;
+  a.refresh();
+  assert.equal(imageCount,1,'lazy atlas should be fetched only once');
+  assert.equal(a.artworkStatus,'loading');
+  a.toggleRoster();
+  assert.match(a.roster.innerHTML,/tc-seal-inspector-art-fallback/);
+  assert.match(a.roster.innerHTML,/護/);
+  assert.match(a.roster.innerHTML,/煞/);
+  assert.match(a.roster.innerHTML,/獸/);
+  assert.match(a.roster.innerHTML,/迷/);
+  const before=JSON.stringify(s);
+  a.artworkImage.onload();
+  assert.equal(a.artworkStatus,'ready');
+  assert.match(a.roster.innerHTML,/tc-seal-inspector-art is-ready/);
+  assert.doesNotMatch(a.roster.innerHTML,/tc-seal-inspector-art-fallback/);
+  a.refresh();assert.equal(imageCount,1);
+  assert.equal(JSON.stringify(s),before,'loading decorative images must not edit game state');
+  assert(style.includes('.tc-seal-inspector-art.is-ready'));
+  assert(style.includes('.tc-seal-inspector-art:not(.is-ready)'));
+});
+test('inspector stays readable after missing or malformed WebP and does not retry forever',()=>{
+  let images=0;
+  class BrokenImage{
+    constructor(){images++;this.naturalWidth=0;this.naturalHeight=0;}
+    set src(v){this.url=v;}
+  }
+  const {SealInspector:BrokenInspector}=new Function('document','Image',
+    src.replace(/export (class|function) /g,'$1 ')+
+    '\nreturn {SealInspector};')(fakeDoc,BrokenImage);
+  for(const kind of ['shield','hazard','rage','maze']){
+    const m=mount(scene([point(kind)]),BrokenInspector),a=m.inspector;
+    a.refresh();a.inspect({x:3,y:2});
+    assert.match(a.panel.innerHTML,/tc-seal-inspector-art-fallback/);
+    a.artworkImage.onerror();
+    assert.equal(a.artworkStatus,'unavailable');
+    assert.match(a.panel.innerHTML,/tc-seal-inspector-art-fallback/);
+    a.refresh();
+  }
+  assert.equal(images,4,'one failed request per inspector instance, never on each refresh');
+  const malformed=mount(scene([point('shield')]),BrokenInspector);
+  malformed.inspector.refresh();
+  malformed.inspector.artworkImage.onload();
+  assert.equal(malformed.inspector.artworkStatus,'unavailable','malformed image cannot pass the dimensions check');
 });

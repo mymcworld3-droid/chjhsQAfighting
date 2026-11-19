@@ -9,7 +9,7 @@ import {TacticalRenderer} from './tactical-renderer.js?v=20261118-phase7-compass
 import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
 import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-pve-v4';
 import {BeastInspector} from './tactical-beast-inspector.js?v=20261118-phase4-focus-v1';
-import {SealInspector} from './tactical-seal-inspector.js?v=20261119-seal-inspector-v1';
+import {SealInspector} from './tactical-seal-inspector.js?v=20261119-seal-inspector-v2';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
 
@@ -226,7 +226,7 @@ function ensure(){
   }
   if(!document.getElementById('tactical-seal-inspector-style')){
     const link=document.createElement('link');link.id='tactical-seal-inspector-style';
-    link.rel='stylesheet';link.href='/styles/tactical-seal-inspector.css?v=20261119-seal-inspector-v1';
+    link.rel='stylesheet';link.href='/styles/tactical-seal-inspector.css?v=20261119-seal-inspector-v2';
     document.head.append(link);
   }
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261115-field-ink';document.head.append(link);}

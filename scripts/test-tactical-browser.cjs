@@ -60,6 +60,21 @@ async function main(){
   const errors=[];
   async function make(uid,viewport){const context=await browser.newContext({viewport,deviceScaleFactor:2});await context.addInitScript(uid=>sessionStorage.testUid=uid,uid);
     await context.addInitScript(()=>{const clear=CanvasRenderingContext2D.prototype.clearRect;CanvasRenderingContext2D.prototype.clearRect=function(...args){if(this.canvas.closest('#tactical-combat'))window.__battleDraws=(window.__battleDraws||0)+1;return Reflect.apply(clear,this,args);};});
+    // Capture the actual pixels sourced from tactical sprite atlases.
+    await context.addInitScript(()=>{
+      window.__objectiveFrames=[];
+      const original=CanvasRenderingContext2D.prototype.drawImage;
+      CanvasRenderingContext2D.prototype.drawImage=function(...args){
+        const src=String(args[0]?.currentSrc||args[0]?.src||'');
+        const type=src.includes('/assets/shrines/guardian-atlas.webp')?'guardian':
+          src.includes('/assets/seals/seal-atlas.webp')?'seal':null;
+        if(type&&this.canvas?.closest?.('#tactical-combat')&&args.length>=9){
+          window.__objectiveFrames.push([type,args[1],args[2]]);
+          if(window.__objectiveFrames.length>240)window.__objectiveFrames.splice(0,100);
+        }
+        return Reflect.apply(original,this,args);
+      };
+    });
     await context.addInitScript(()=>{window.__pickersSeen=0;window.__pickerObserver=new MutationObserver(()=>{if(document.querySelector('#tactical-combat [data-map],#tactical-combat [data-branch]'))window.__pickersSeen++;});window.__pickerObserver.observe(document,{childList:true,subtree:true});});
     const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
     const frame=()=>page.frames().find(f=>f!==page.mainFrame()&&/\/app\.html(?:[?#]|$)/.test(f.url()));
@@ -973,12 +988,56 @@ async function main(){
         await quick.locator('.tc-arena canvas').waitFor();await quick.locator('#startup-cloud-curtain').waitFor({state:'detached'});
         assert.match(await quick.locator('[data-objective]').textContent(),stage===6?/鎮守.*靈陣/:/封印.*攻擊陣眼/);
         if(stage===6){
-          await quick.locator('[data-end]>span').click();await quick.waitForFunction(()=>document.querySelector('[data-objective]')?.textContent.includes('1 / 4 回合'));
+          assert.equal(await quick.locator('[data-seal-inspector-toggle]').isVisible(),false,
+            'defense shrine is not a seal and must not show the inspector');
+          await quick.waitForFunction(()=>window.__objectiveFrames?.some(f=>
+            f[0]==='guardian'&&f[1]===0&&f[2]===0),null,{timeout:12000});
+          const hp=mission.objective.maxHp;
+          mission.objective.hp=Math.max(1,Math.floor(hp*.40));mission.revision++;
+          await quick.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
+          await quick.waitForFunction(()=>window.__objectiveFrames?.some(f=>
+            f[0]==='guardian'&&f[1]===160&&f[2]===0));
+          assert.match(await quick.locator('[data-objective]').textContent(),/靈陣/);
+          assert.equal((await read(quick)).objective.hp,mission.objective.hp);
+          await quick.locator('[data-end]>span').click();
+          await quick.waitForFunction(()=>document.querySelector('[data-objective]')?.textContent.includes('1 / 4 回合'));
           assert.equal((await read(quick)).objective.completedRounds,1);
         }else{
+          await quick.waitForFunction(()=>window.__objectiveFrames?.some(f=>
+            f[0]==='seal'&&f[1]===0&&f[2]===0),null,{timeout:12000});
+          const before=await read(quick);
+          await quick.locator('[data-seal-inspector-toggle]').click();
+          await quick.locator('[data-seal-inspector-roster]').waitFor({state:'visible'});
+          assert.match(await quick.locator('[data-seal-inspector-roster]').textContent(),/護靈陣眼/);
+          await quick.locator('[data-seal-inspector-select]').first().click();
+          await quick.locator('[data-seal-inspector-panel]').waitFor({state:'visible'});
+          assert.ok((await quick.locator('[data-seal-inspector-panel]').textContent()).includes('2 / 2'));
+          await quick.screenshot({path:path.join(output,'seal-inspector-landscape.png')});
+          await quick.locator('[data-seal-inspector-range]').click();
+          assert.equal(await quick.locator('[data-seal-range-toggle]').textContent(),'陣眼範圍：單座');
+          assert.equal((await read(quick)).revision,before.revision,
+            'viewing and focusing seal range must not commit a battle action');
+          await quick.setViewportSize({width:393,height:852});
+          await quick.locator('[data-seal-inspector-toggle]').click();
+          await quick.locator('[data-seal-inspector-select]').first().click();
+          const bounds=await quick.evaluate(()=>{
+            const p=document.querySelector('[data-seal-inspector-panel]').getBoundingClientRect();
+            const s=document.querySelector('#tactical-combat').getBoundingClientRect();
+            return {left:p.left-s.left,right:p.right-s.left,top:p.top-s.top,bottom:p.bottom-s.top,w:s.width,h:s.height};
+          });
+          assert(bounds.left>=-1&&bounds.right<=bounds.w+1&&
+            bounds.top>=-1&&bounds.bottom<=bounds.h+1,
+            'portrait seal information sheet remains within the game stage');
+          await quick.screenshot({path:path.join(output,'seal-inspector-portrait.png')});
+          await quick.locator('[data-seal-inspector-locate]').click();
+          assert.equal((await read(quick)).revision,before.revision,
+            'camera focus cannot consume stamina or send attacks');
+          await quick.setViewportSize({width:844,height:390});
           await quick.locator('[data-action="attack"]').click();await cell(quick,2,1);
           await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='8');
           assert.equal((await read(quick)).objective.points[0].hp,1);
+          await quick.waitForFunction(()=>window.__objectiveFrames?.some(f=>
+            f[0]==='seal'&&f[1]===0&&f[2]===128),null,{timeout:12000});
         }
       }
       // Phase-three boss UI: use the same local authoritative room fixture.

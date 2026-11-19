@@ -43,6 +43,9 @@ export class SealInspector{
     this.isOtherOpen=isOtherOpen||(()=>false);
     this.rosterOpen=false;this.pinnedId=null;this.returnFocus=null;
     this.cached=new WeakMap();
+    // The battle canvas already falls back when artwork fails. The inspector
+    // must be equally usable offline / before the WebP download completes.
+    this.artworkStatus='idle';this.artworkImage=null;
     this.toggle=make('button','tc-seal-inspector-toggle','sealInspectorToggle','查看本關陣眼');
     this.toggle.type='button';this.toggle.setAttribute('aria-expanded','false');
     this.toggle.setAttribute('aria-controls','tc-seal-inspector-roster');
@@ -150,10 +153,34 @@ export class SealInspector{
     this.dismiss();this.toggle.hidden=true;
     this.toggle.querySelector('[data-seal-inspector-count]').textContent='0';
   }
+  ensureArtwork(){
+    if(this.artworkStatus!=='idle')return;
+    if(typeof Image==='undefined'){this.artworkStatus='unavailable';return;}
+    this.artworkStatus='loading';
+    const image=new Image();this.artworkImage=image;
+    image.decoding='async';
+    image.onload=()=>{
+      if(this.artworkImage!==image)return;
+      this.artworkStatus=image.naturalWidth===512&&image.naturalHeight===384?'ready':'unavailable';
+      if(this.artworkStatus!=='ready')image.onload=image.onerror=null;
+      if(this.active())this.refresh();
+    };
+    image.onerror=()=>{
+      if(this.artworkImage!==image)return;
+      this.artworkStatus='unavailable';image.onload=image.onerror=null;
+      if(this.active())this.refresh();
+    };
+    image.src='/assets/seals/seal-atlas.webp';
+  }
   picture(seal){
     const p=sealArtwork(seal,this.rules);
-    return '<span class="tc-seal-inspector-art" role="img" aria-label="'+esc(seal.name)+
-      '" style="background-position:'+p.x+'% '+p.y+'%"></span>';
+    const fallback={shield:'護',hazard:'煞',rage:'獸',maze:'迷'}[seal.kind]||'陣';
+    const ready=this.artworkStatus==='ready';
+    return '<span class="tc-seal-inspector-art'+(ready?' is-ready':'')+
+      '" role="img" aria-label="'+esc(seal.name)+
+      '" style="--seal-color:'+esc(seal.color)+';background-position:'+p.x+'% '+p.y+'%">'+
+      (ready?'':'<span class="tc-seal-inspector-art-fallback" aria-hidden="true">'+fallback+'</span>')+
+      '</span>';
   }
   renderRoster(){
     const seals=this.seals(),left=seals.filter(s=>s.active).length;
@@ -204,6 +231,7 @@ export class SealInspector{
   }
   refresh(){
     if(!this.active()){this.reset();return;}
+    this.ensureArtwork();
     const seals=this.seals(),count=seals.filter(s=>s.active).length;
     this.toggle.hidden=!seals.length;
     if(!seals.length){this.dismiss();return;}
