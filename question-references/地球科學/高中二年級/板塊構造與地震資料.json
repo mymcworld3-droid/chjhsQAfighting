@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-earth2-platesdata-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "氣候、地震與能量收支依學科觀念設計；單一正解、條件清楚",
+      "question": {
+        "q": "兩個地震測站使用相近的地震波速模型，甲的P波與S波到時差8秒、乙為22秒。哪一站通常距震源較遠？",
+        "correct": "乙站",
+        "wrong": [
+          "甲站",
+          "兩站必定等距",
+          "到時差只與地震規模相關，不能反映距離"
+        ],
+        "exp": "在波速模型相近且P波較S波快時，兩波到時差通常隨傳播距離增加，故乙站較遠。",
+        "subject": "地球科學",
+        "sub_topic": "板塊構造與地震資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-板塊構造與地震資料",
+        "template_id": "ref-20261119-b11-earth2-platesdata-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-earth2-platesdata-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "氣候、地震與能量收支依學科觀念設計；單一正解、條件清楚",
+      "question": {
+        "q": "一串地震的震源深度自海溝向大陸內側逐漸加深，最可能代表何種構造？",
+        "correct": "海洋板塊沿隱沒帶向下插入",
+        "wrong": [
+          "兩板塊只發生水平錯動而沒有垂直構造",
+          "所有地震均發生在單一固定深度",
+          "該地區沒有板塊交界活動"
+        ],
+        "exp": "傾斜且由淺入深的震源分布常對應隱沒板塊的班尼奧夫帶。",
+        "subject": "地球科學",
+        "sub_topic": "板塊構造與地震資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-板塊構造與地震資料",
+        "template_id": "ref-20261119-b11-earth2-platesdata-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-earth2-platesdata-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "氣候、地震與能量收支依學科觀念設計；單一正解、條件清楚",
+      "question": {
+        "q": "某斷層兩側GPS測站多年平均相對位移每年3公分。依此長期平均速率估算，10年累積的相對位移約多少？",
+        "correct": "30公分",
+        "wrong": [
+          "3公分",
+          "300公分",
+          "0.3公分"
+        ],
+        "exp": "若長期平均速率維持每年3公分，10年位移=3×10=30公分；實際瞬時位移可能不均勻。",
+        "subject": "地球科學",
+        "sub_topic": "板塊構造與地震資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-板塊構造與地震資料",
+        "template_id": "ref-20261119-b11-earth2-platesdata-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
