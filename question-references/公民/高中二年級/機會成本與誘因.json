@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-civ2-opportunity-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "分析最佳放棄選項、邊際效益與制度誘因",
+      "question": {
+        "q": "某學生週六只能選一項活動：A活動淨收益800元、B活動淨收益600元、C活動淨收益300元。若三者效益已用同一金錢標準衡量，學生選擇B活動的機會成本為何？",
+        "correct": "800元",
+        "wrong": [
+          "600元",
+          "300元",
+          "1,100元"
+        ],
+        "exp": "機會成本是放棄的最佳替代選項的價值。選B時，放棄的選項以A的800元淨收益最高，故機會成本為800元。",
+        "subject": "公民",
+        "sub_topic": "機會成本與誘因",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-機會成本與誘因",
+        "template_id": "ref-20261119-civ2-opportunity-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-civ2-opportunity-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "分析最佳放棄選項、邊際效益與制度誘因",
+      "question": {
+        "q": "某人購買第一杯飲料的額外效益估計80元、第二杯的額外效益30元；每杯都要花50元，且無其他影響。在邊際決策原則下，最適合的購買數量為何？",
+        "correct": "1杯",
+        "wrong": [
+          "0杯",
+          "2杯",
+          "只要總預算足夠就必須買10杯"
+        ],
+        "exp": "第一杯邊際效益80>邊際成本50，值得買；第二杯邊際效益30<50，不值得再買。",
+        "subject": "公民",
+        "sub_topic": "機會成本與誘因",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-機會成本與誘因",
+        "template_id": "ref-20261119-civ2-opportunity-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-civ2-opportunity-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "分析最佳放棄選項、邊際效益與制度誘因",
+      "question": {
+        "q": "某城市對開車進入擁擠市中心收取尖峰擁擠費，並維持大眾運輸票價不變。若其他條件不變，最直接改變的經濟誘因為何？",
+        "correct": "提高尖峰開車的私人金錢成本，促使部分人改選交通方式",
+        "wrong": [
+          "直接提高所有人的開車效益",
+          "使道路需求不論價格都維持不變",
+          "使公共運輸的票價自動上漲至與開車成本相同"
+        ],
+        "exp": "擁擠費提高特定時段開車的邊際金錢成本，可能鼓勵改期出行、共乘或搭乘大眾運輸。",
+        "subject": "公民",
+        "sub_topic": "機會成本與誘因",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-機會成本與誘因",
+        "template_id": "ref-20261119-civ2-opportunity-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
