@@ -567,7 +567,15 @@ async function main(){
     room.revision++;publish();
     await a.page.locator('[data-dm-wheel] [data-wheel-choice="dragon-guard"]')
       .waitFor({timeout:9000});
-    await a.page.locator('[data-dm-wheel] [data-wheel-choice="dragon-guard"]').click();
+    // Sector buttons occupy the whole quarter-circle bounding box but are
+    // clip-pathed to annular wedges. Its geometric center is NOT clickable.
+    // Choose the actual middle of the second of three outer wedges.
+    const guardChoice=a.page.locator('[data-dm-wheel] [data-wheel-choice="dragon-guard"]');
+    const guardBounds=await guardChoice.boundingBox();
+    assert.ok(guardBounds);
+    const point=.385; // (-135°, radius 87%) in quarter-wheel coordinates
+    await guardChoice.click({position:{
+      x:guardBounds.width*point,y:guardBounds.height*point}});
     await a.page.waitForFunction(()=>
       document.querySelector('[data-dm-wheel] [data-wheel-choice="dragon-guard"]')
         ?.getAttribute('aria-pressed')==='true',null,{timeout:5000});
