@@ -1,6 +1,5 @@
 import * as Camera from './dungeon-map-camera.js';
-import {dungeonBossVisualPlan,drawBossTelegraph,drawBossAura,
-  drawBossTransition} from './dungeon-boss-visuals.js';
+import {dungeonBossVisualPlan,drawBossTelegraph,drawBossAura,drawBossTransition} from './dungeon-boss-visuals.js';
 import {drawDungeonEnvironment,drawDungeonCastWindup} from './dungeon-environment-effects.js';
 
 // Stage-6-only deterministic canvas presentation. No gameplay mutations.
