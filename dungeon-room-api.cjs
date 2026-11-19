@@ -124,7 +124,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','activate-portal','enter-boss','rescue','claim-boss-reward','clock'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','activate-portal','enter-boss','rescue','claim-boss-reward','recent-victories','clock'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -274,6 +274,12 @@ function createHandler({
         const outcome=await db.runTransaction(existing);
         return respond(outcome?.id,outcome?.room);
       }
+      if(action==='recent-victories'){
+        // Read-only personal victory discovery. Does not require an active
+        // room or a still-connected party, and never exposes the full archive.
+        const rewards=await Victory.recent(resolveA().db,db,uid);
+        return res.json({ok:true,rewards});
+      }
       const roomId=safeRoomId(req.body?.roomId);
       if(!roomId)throw err('副本房間編號無效',400);
       const roomRef=db.collection(ROOMS).doc(roomId);
@@ -414,11 +420,15 @@ function createHandler({
             ...(progress?{dungeonProgress:progress}:{}),
             ...(bossEncounter?{bossEncounter}:{}),
             revision:current.revision+1};
+          const saveVictory=evolved.bossEncounter?.status==='fighting'&&
+            bossEncounter?.status==='defeated'?
+            await Victory.prepareArchive(tx,db,roomId,next,at):null;
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
             enemies:next.enemies,
             ...(progress!==evolved.dungeonProgress?{dungeonProgress:progress}:{}),
             ...(bossEncounter!==evolved.bossEncounter?{bossEncounter}:{}),
             revision:next.revision});
+          saveVictory?.();
           return next;
         });
         return respond(roomId,updated);
@@ -455,11 +465,16 @@ function createHandler({
             ...(progress?{dungeonProgress:progress}:{}),
             ...(bossEncounter?{bossEncounter}:{}),
             revision:current.revision+1};
+          const saveVictory=action==='skill'&&
+            evolved.bossEncounter?.status==='fighting'&&
+            bossEncounter?.status==='defeated'?
+            await Victory.prepareArchive(tx,db,roomId,next,at):null;
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
             ...(action==='skill'?{enemies:next.enemies}:{}),
             ...(progress!==evolved.dungeonProgress?{dungeonProgress:progress}:{}),
             ...(bossEncounter!==evolved.bossEncounter?{bossEncounter}:{}),
             revision:next.revision});
+          saveVictory?.();
           return next;
         });
         return respond(roomId,updated);
@@ -554,14 +569,23 @@ function createHandler({
         return respond(roomId,updated);
       }
       if(action==='claim-boss-reward'){
-        // C is a verified read-only victory witness; A atomically saves each
-        // participant's permanent reward and unique receipt.
-        const snap=await roomRef.get();
-        const room=snap.exists?snap.data():null;
-        if(!room||!hasMember(room,uid))
-          throw err('你不是此副本的隊員',403);
-        if(!sessionRoom(room,at))throw err('副本房間已關閉或過期',410);
-        const reward=await Victory.claim(resolveA().db,roomId,room,uid,at);
+        // Durable C victory proof survives room closure, expiration and
+        // teammates leaving. Older active rooms without an archive still
+        // use the stage-16 witness during the valid session.
+        const archived=await db.collection(Victory.ARCHIVES).doc(roomId).get();
+        let witness;
+        if(archived.exists){
+          witness=archived.data();
+          Victory.verifiedArchive(roomId,witness,uid);
+        }else{
+          const snap=await roomRef.get();
+          witness=snap.exists?snap.data():null;
+          if(!witness||!hasMember(witness,uid))
+            throw err('找不到這位修士的副本勝利紀錄',403);
+          if(!sessionRoom(witness,at))
+            throw err('舊版副本已逾期，且沒有可恢復的勝利存檔',410);
+        }
+        const reward=await Victory.claim(resolveA().db,roomId,witness,uid,at);
         return res.json({ok:true,roomId,reward});
       }
       if(action==='ready'){ 
