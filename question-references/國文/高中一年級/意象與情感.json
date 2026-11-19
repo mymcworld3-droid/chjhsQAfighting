@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-images-emotion-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "杜甫〈登高〉：「無邊落木蕭蕭下，不盡長江滾滾來。」此處落葉與江流的並置，最能營造何種感受？",
+        "correct": "蕭瑟秋景與綿延時間交織的蒼茫感",
+        "wrong": [
+          "春日百花綻放的明麗輕快",
+          "市集熱鬧繁華的歡欣",
+          "山林徹底靜止、不見任何動態"
+        ],
+        "exp": "落木「蕭蕭下」帶出蕭瑟衰落，長江「滾滾來」呈現連續流動，結合成廣闊而蒼茫的意境。",
+        "subject": "國文",
+        "sub_topic": "意象與情感",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-意象與情感",
+        "template_id": "ref-20261119-b8-ch1-images-emotion-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-images-emotion-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "陶淵明〈飲酒〉：「采菊東籬下，悠然見南山。」若結合「悠然」理解採菊與望山的動作，何項詮釋最貼切？",
+        "correct": "在日常田園生活中自然流露閒適自得的心境",
+        "wrong": [
+          "詩人焦急尋路，因而無暇觀看山景",
+          "詩句主要想量測南山與住處的精確距離",
+          "採菊只為完成官府派下的採集任務"
+        ],
+        "exp": "採菊、見山都是平易的日常景象，「悠然」點明不刻意追逐的閒適心境。",
+        "subject": "國文",
+        "sub_topic": "意象與情感",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-意象與情感",
+        "template_id": "ref-20261119-b8-ch1-images-emotion-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-images-emotion-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "閱讀自編詩句：「列車離站後／月臺只剩一盞黃燈／風翻著未寄出的信／把最後一句話吹向遠方。」其中未寄出的信最可能象徵何者？",
+        "correct": "尚未說出口的情感與離別留下的遺憾",
+        "wrong": [
+          "已經由收件人閱讀並回覆的消息",
+          "旅客完全不在乎分離的心境",
+          "詩人主要想介紹郵政運輸的速度"
+        ],
+        "exp": "「未寄出」與列車離站、最後一句話呼應，暗示話語未及傳達的失落與牽念。",
+        "subject": "國文",
+        "sub_topic": "意象與情感",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-意象與情感",
+        "template_id": "ref-20261119-b8-ch1-images-emotion-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
