@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-en3-listening-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Listening transcript: 'The university entrance lecture, originally scheduled for Friday at 2:15 p.m., will now start at 3:00 p.m. in the same hall.' By how long was the starting time postponed?",
+        "correct": "45 minutes",
+        "wrong": [
+          "15 minutes",
+          "30 minutes",
+          "60 minutes"
+        ],
+        "exp": "The time change from 2:15 to 3:00 is 45 minutes. The hall remains the same.",
+        "subject": "英文",
+        "sub_topic": "聽力練習",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中三年級-聽力練習",
+        "template_id": "ref-20261119-b9-en3-listening-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en3-listening-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Listening transcript: 'Please note that the science workshop is free, but advance registration is required. Registration closes on Thursday at noon, one day before the event.' When must participants register?",
+        "correct": "By Thursday at noon",
+        "wrong": [
+          "By Friday at noon",
+          "At any time during the workshop",
+          "Only after arriving on Friday"
+        ],
+        "exp": "The workshop takes place Friday, and registration closes at noon on Thursday despite there being no fee.",
+        "subject": "英文",
+        "sub_topic": "聽力練習",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中三年級-聽力練習",
+        "template_id": "ref-20261119-b9-en3-listening-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en3-listening-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Listening transcript: 'Your return train will depart from Platform 5, not Platform 2. The train number and departure time shown on your ticket are still correct.' Which information should travelers update?",
+        "correct": "The departure platform",
+        "wrong": [
+          "The train number",
+          "The departure time",
+          "The arrival city"
+        ],
+        "exp": "The notice changes only the platform from 2 to 5 while explicitly keeping the ticket's train number and departure time.",
+        "subject": "英文",
+        "sub_topic": "聽力練習",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中三年級-聽力練習",
+        "template_id": "ref-20261119-b9-en3-listening-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
