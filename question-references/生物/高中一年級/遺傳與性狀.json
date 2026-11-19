@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-bio1-heredity-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "某植物花色呈不完全顯性，RR為紅花、rr為白花、Rr為粉紅花。兩株粉紅花交配，子代粉紅花的理論比例是多少？",
+        "correct": "1/2",
+        "wrong": [
+          "1/4",
+          "3/4",
+          "1"
+        ],
+        "exp": "Rr×Rr的基因型比例RR:Rr:rr=1:2:1，因此粉紅花Rr占2/4=1/2。",
+        "subject": "生物",
+        "sub_topic": "遺傳與性狀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-遺傳與性狀",
+        "template_id": "ref-20261119-b4-bio1-heredity-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-bio1-heredity-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "假設人類ABO血型依一般遺傳規則，父母基因型分別為Iᴬi與Iᴮi，子女出現O型血的理論機率為何？",
+        "correct": "1/4",
+        "wrong": [
+          "0",
+          "1/2",
+          "3/4"
+        ],
+        "exp": "配子各為Iᴬ或i、Iᴮ或i；四種等可能子代基因型中ii占1/4，表現O型。",
+        "subject": "生物",
+        "sub_topic": "遺傳與性狀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-遺傳與性狀",
+        "template_id": "ref-20261119-b4-bio1-heredity-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-bio1-heredity-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "某性狀由X染色體上一個隱性等位基因a決定。母親為XᴬXᵃ帶因者，父親為XᴬY。只考慮兒子，兒子表現該隱性性狀的理論機率為何？",
+        "correct": "1/2",
+        "wrong": [
+          "1/4",
+          "0",
+          "1"
+        ],
+        "exp": "兒子的Y來自父親，X來自母親；母親提供Xᴬ或Xᵃ的機率各半，因此兒子患該X連鎖隱性性狀機率為1/2。",
+        "subject": "生物",
+        "sub_topic": "遺傳與性狀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-遺傳與性狀",
+        "template_id": "ref-20261119-b4-bio1-heredity-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
