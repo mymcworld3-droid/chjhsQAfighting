@@ -1,4 +1,7 @@
 import * as Camera from './dungeon-map-camera.js';
+import {dungeonBossVisualPlan,drawBossTelegraph,drawBossAura,
+  drawBossTransition} from './dungeon-boss-visuals.js';
+import {drawDungeonEnvironment,drawDungeonCastWindup} from './dungeon-environment-effects.js';
 
 // Stage-6-only deterministic canvas presentation. No gameplay mutations.
 export const BIOMES=Object.freeze({
@@ -35,6 +38,7 @@ export function drawWorld(ctx,map,camera,width,height,
     aimTile=null,visualTimeMs=0,objectives=null,art=null,
     rangeTiles=[],rangeKind='move',animationUnderlay=null,animationOverlay=null,
     dangerPlan=null,showDangerGuidance=false,ambiencePlan=null,
+    environmentPlan=null,bossTransition=null,displayTick=currentTick,
     reducedMotion=false,pendingAction=null}={}){
   const palette=BIOMES[map.biome]||BIOMES.ruins;
   const g=Camera.geometry(camera,map,width,height);
@@ -81,6 +85,16 @@ export function drawWorld(ctx,map,camera,width,height,
       }
     }
   }
+  // Biome details follow the *world*, not the screen, as the camera moves.
+  const visibleWorld={ox:g.ox,oy:g.oy,cell,
+    left:-cell,top:-cell,right:width+cell,bottom:height+cell};
+  drawDungeonEnvironment(ctx,environmentPlan,map,visibleWorld,
+    visualTimeMs,reducedMotion,objectives);
+  const boss=enemies.find(enemy=>enemy?.kind==='boss');
+  const bossPlan=dungeonBossVisualPlan(boss,displayTick);
+  if(bossPlan)drawBossAura(ctx,bossPlan,{
+    ox:g.ox,oy:g.oy,cell,width:map.width,height:map.height
+  },visualTimeMs,reducedMotion);
   // Same trial ambience engine. Screen-space motes remain decorative;
   // they never imply safe terrain or change the collision map.
   const ambience=globalThis.QATacticalAmbience;
@@ -142,6 +156,12 @@ export function drawWorld(ctx,map,camera,width,height,
     const viewport={ox:g.ox,oy:g.oy,cell,
       width:map.width,height:map.height};
     threats.drawGround(ctx,dangerPlan,viewport);
+    // Quake rings / charge rails / flame tongues are clipped to the
+    // authoritative warning mask, never spilled onto a safe tile.
+    if(bossPlan)drawBossTelegraph(ctx,bossPlan,map,viewport,
+      visualTimeMs,reducedMotion);
+    if(bossTransition)drawBossTransition(ctx,bossTransition.scene,
+      viewport,bossTransition.progress,reducedMotion);
     ctx.save();
     ctx.globalAlpha=reducedMotion?1:.78+.22*
       Math.sin(visualTimeMs*.005);
@@ -174,20 +194,10 @@ export function drawWorld(ctx,map,camera,width,height,
     }
   
   }
-  // Immediate non-authoritative input cue while combat is validated
-  // remotely. It never draws damage, hit numbers or enemy displacement.
-  if(pendingAction?.target&&walk(pendingAction.target.x,pendingAction.target.y)){
-    const centerX=g.ox+(pendingAction.target.x+.5)*cell,
-      centerY=g.oy+(pendingAction.target.y+.5)*cell;
-    const phase=reducedMotion?0:Math.sin(visualTimeMs*.018);
-    ctx.save();ctx.strokeStyle=pendingAction.kind==='skill'?
-      '#f5cf87':'#c8eed1';
-    ctx.globalAlpha=.68+.25*phase;
-    ctx.lineWidth=Math.max(1.7,cell*.055);
-    ctx.beginPath();ctx.arc(centerX,centerY,
-      Math.max(5,cell*(.28+.055*phase)),0,Math.PI*2);
-    ctx.stroke();ctx.restore();
-  }
+  // Shared timeline of an *attempted* cast: glows only, no fake hits.
+  if(pendingAction?.origin&&pendingAction.target)
+    drawDungeonCastWindup(ctx,pendingAction,{ox:g.ox,oy:g.oy,cell},
+      visualTimeMs,reducedMotion);
   // Player-selected aim is an outline under every character marker, not a
   // filled overlay that hides the NPC or player on the selected tile.
   if(aimTile&&walk(aimTile.x,aimTile.y)){
@@ -248,7 +258,8 @@ export function drawWorld(ctx,map,camera,width,height,
     if(enemy.kind==='boss'){
       // A single 2x2 animated-looking painted beast. All attack cells,
       // players and HP derive from one server entity, never four fake NPCs.
-      const left=g.ox+pos.x*cell,top=g.oy+pos.y*cell;
+      const left=g.ox+pos.x*cell,
+        top=g.oy+pos.y*cell-(Number(enemy.visualLift)||0)*cell;
       const w=cell*2,ratio=clamp((enemy.battleHealth||0)/
         Math.max(1,enemy.battleMaxHealth||900),0,1);
       ctx.save();
