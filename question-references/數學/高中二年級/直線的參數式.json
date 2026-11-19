@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-m2-lineparam-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "空間直線L：(x,y,z)=(2,−1,3)+t(1,2,−1)。若x=5，則對應點的y坐標為何？",
+        "correct": "5",
+        "wrong": [
+          "3",
+          "−5",
+          "7"
+        ],
+        "exp": "x=2+t=5得t=3；故y=−1+2×3=5。",
+        "subject": "數學",
+        "sub_topic": "直線的參數式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-直線的參數式",
+        "template_id": "ref-20261119-b11-m2-lineparam-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-lineparam-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "直線L：x=1+3t、y=2−2t、z=4+t。下列哪個向量與L的方向平行？",
+        "correct": "(3,−2,1)",
+        "wrong": [
+          "(1,2,4)",
+          "(3,2,1)",
+          "(−2,3,1)"
+        ],
+        "exp": "由參數式各坐標t的係數可得方向向量(3,−2,1)。",
+        "subject": "數學",
+        "sub_topic": "直線的參數式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-直線的參數式",
+        "template_id": "ref-20261119-b11-m2-lineparam-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-lineparam-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "直線L：(x,y,z)=(−1,2,0)+t(2,−1,3)。其與平面z=6的交點為何？",
+        "correct": "(3,0,6)",
+        "wrong": [
+          "(1,1,3)",
+          "(3,2,6)",
+          "(5,−1,6)"
+        ],
+        "exp": "由z=3t=6得t=2，代入x=−1+2×2=3、y=2−2=0，故交點(3,0,6)。",
+        "subject": "數學",
+        "sub_topic": "直線的參數式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-直線的參數式",
+        "template_id": "ref-20261119-b11-m2-lineparam-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
