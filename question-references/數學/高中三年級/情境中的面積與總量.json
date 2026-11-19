@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-applied-area-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "將積分與速率累積及成本變化結合，明確標註單位及條件",
+      "question": {
+        "q": "水流量速率q(t)=3+2t公升/小時，t以小時計，0≤t≤2。兩小時內流入多少公升？",
+        "correct": "10公升",
+        "wrong": [
+          "7公升",
+          "14公升",
+          "6公升"
+        ],
+        "exp": "總水量等於流量對時間積分：∫₀²(3+2t)dt=[3t+t²]₀²=6+4=10公升。",
+        "subject": "數學",
+        "sub_topic": "情境中的面積與總量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-情境中的面積與總量",
+        "template_id": "ref-20261119-b10-m3-applied-area-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-applied-area-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "將積分與速率累積及成本變化結合，明確標註單位及條件",
+      "question": {
+        "q": "某設備功率隨時間變化為P(t)=100+50t瓦，0≤t≤2，t以小時計。兩小時的總用電量為何？",
+        "correct": "0.3度電",
+        "wrong": [
+          "0.2度電",
+          "0.4度電",
+          "3度電"
+        ],
+        "exp": "能量為∫₀²(100+50t)dt=[100t+25t²]₀²=300瓦時=0.3千瓦時，也就是0.3度電。",
+        "subject": "數學",
+        "sub_topic": "情境中的面積與總量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-情境中的面積與總量",
+        "template_id": "ref-20261119-b10-m3-applied-area-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-applied-area-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "將積分與速率累積及成本變化結合，明確標註單位及條件",
+      "question": {
+        "q": "某商品生產量q的邊際成本C′(q)=4q+2（元/件）。若產量由1件增至3件，成本增加多少元？",
+        "correct": "20元",
+        "wrong": [
+          "12元",
+          "16元",
+          "24元"
+        ],
+        "exp": "總成本增量為邊際成本的積分∫₁³(4q+2)dq=[2q²+2q]₁³=(18+6)−(2+2)=20元。",
+        "subject": "數學",
+        "sub_topic": "情境中的面積與總量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-情境中的面積與總量",
+        "template_id": "ref-20261119-b10-m3-applied-area-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
