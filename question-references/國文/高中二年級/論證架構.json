@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-chi2-argument-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨識推論漏洞、因果證據與反駁回應",
+      "question": {
+        "q": "某篇社論寫道：「這項規定是正確的，因為凡是正確的規定都應該推行，而這項規定就是正確的。」主要犯了哪一種論證問題？",
+        "correct": "以結論支持結論，形成循環論證",
+        "wrong": [
+          "以反例推翻全稱命題",
+          "以數據證明原因和結果",
+          "先提出反方證據再逐項回應"
+        ],
+        "exp": "論述重複「規定正確」作為前提與結論，沒有提出獨立理由或證據，屬循環論證。",
+        "subject": "國文",
+        "sub_topic": "論證架構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-論證架構",
+        "template_id": "ref-20261119-chi2-argument-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chi2-argument-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨識推論漏洞、因果證據與反駁回應",
+      "question": {
+        "q": "某校增加圖書館座位後，該年學生平均成績也上升。若要主張「新增座位造成成績上升」，最需要先處理哪項問題？",
+        "correct": "排除其他可能影響成績的因素，不能只憑同時發生便推論因果",
+        "wrong": [
+          "只要兩件事同年發生就足以確認因果",
+          "只需知道新座位的顏色",
+          "平均成績上升必表示所有個人成績都上升"
+        ],
+        "exp": "同時發生代表相關線索，並不足證成因果；教學方式、學生組成及其他資源改變等都可能影響成績。",
+        "subject": "國文",
+        "sub_topic": "論證架構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-論證架構",
+        "template_id": "ref-20261119-chi2-argument-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chi2-argument-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨識推論漏洞、因果證據與反駁回應",
+      "question": {
+        "q": "某生主張「校園夜間可調降非必要照明以節電，但應兼顧安全」。下列哪組資料最有助於檢驗並完善此主張？",
+        "correct": "調降前後同條件的用電量，以及夜間通行照度與安全紀錄",
+        "wrong": [
+          "學校紀念品的銷售排行榜",
+          "學校運動隊的得分統計",
+          "全校學生最喜歡的午餐口味"
+        ],
+        "exp": "主張包含節電效益與安全限制，證據應同時衡量能源消耗、照明需求與安全影響，而非只有無關資訊。",
+        "subject": "國文",
+        "sub_topic": "論證架構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-論證架構",
+        "template_id": "ref-20261119-chi2-argument-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
