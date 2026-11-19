@@ -492,8 +492,23 @@ async function main(){
       new MutationObserver(record).observe(canvas,{attributes:true,attributeFilter:['data-motion']});
     });
     await a.page.keyboard.press(direction[2]);
-    await a.page.waitForFunction(()=>
-      document.querySelector('[data-dm-energy]')?.textContent==='9',null,{timeout:7000});
+    try{
+      await a.page.waitForFunction(()=>
+        document.querySelector('[data-dm-energy]')?.textContent==='9',
+        null,{timeout:7000});
+    }catch(error){
+      console.error('[Dungeon move diagnostics]',{
+        requests:requests.slice(-12),errors,
+        player:room.members.a,clock:room.battleAppliedTick,
+        ui:await a.page.evaluate(()=>({
+          energy:document.querySelector('[data-dm-energy]')?.textContent,
+          movement:document.querySelector('[data-dm-world]')?.dataset.motion,
+          feedback:document.querySelector('[data-dm-action-feedback]')?.textContent,
+          status:document.querySelector('[data-dm-status]')?.textContent
+        }))
+      });
+      throw error;
+    }
     assert.deepStrictEqual(room.members.a.position,
       {x:original.x+direction[0],y:original.y+direction[1]});
     assert.deepStrictEqual(room.members.b.position,startPositions.b);
