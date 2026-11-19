@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-math2-coordinate-ratio-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "A(−2,3)、B(10,−3)為平面兩點。點P在線段AB上且AP:PB=1:2，則P的坐標為何？",
+        "correct": "(2,1)",
+        "wrong": [
+          "(6,−1)",
+          "(4,0)",
+          "(2,−1)"
+        ],
+        "exp": "內分比AP:PB=1:2，P=(2A+B)/3，故x=(2×(−2)+10)/3=2，y=(2×3−3)/3=1。",
+        "subject": "數學",
+        "sub_topic": "平面上比例與坐標",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-平面上比例與坐標",
+        "template_id": "ref-20261119-b9-math2-coordinate-ratio-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math2-coordinate-ratio-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "平面上A(1,2)、B(7,5)，C為AB的中點。若將C向左平移3單位、向上平移2單位，得到D，則D坐標為何？",
+        "correct": "(1,11/2)",
+        "wrong": [
+          "(4,7/2)",
+          "(7,11/2)",
+          "(1,7/2)"
+        ],
+        "exp": "C=((1+7)/2,(2+5)/2)=(4,7/2)，再加平移向量(−3,2)，得D=(1,11/2)。",
+        "subject": "數學",
+        "sub_topic": "平面上比例與坐標",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-平面上比例與坐標",
+        "template_id": "ref-20261119-b9-math2-coordinate-ratio-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math2-coordinate-ratio-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "地圖上A、B兩點相距4.5公分，比例尺為1:40,000，若沿直線測量，實際距離為多少公里？",
+        "correct": "1.8公里",
+        "wrong": [
+          "0.18公里",
+          "18公里",
+          "0.45公里"
+        ],
+        "exp": "實際距離4.5×40,000=180,000公分=1,800公尺=1.8公里。",
+        "subject": "數學",
+        "sub_topic": "平面上比例與坐標",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-平面上比例與坐標",
+        "template_id": "ref-20261119-b9-math2-coordinate-ratio-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
