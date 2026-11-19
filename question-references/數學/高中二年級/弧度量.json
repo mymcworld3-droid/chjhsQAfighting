@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-math2-radian-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "半徑為8的圓，圓心角為3π/4弧度時所對的弧長為何？",
+        "correct": "6π",
+        "wrong": [
+          "3π",
+          "8π",
+          "12π"
+        ],
+        "exp": "弧長s=rθ（θ必用弧度），所以s=8×3π/4=6π。",
+        "subject": "數學",
+        "sub_topic": "弧度量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-弧度量",
+        "template_id": "ref-20261119-b7-math2-radian-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math2-radian-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "半徑為4的扇形，圓心角為π/3弧度，扇形面積為何？",
+        "correct": "8π/3",
+        "wrong": [
+          "4π/3",
+          "16π/3",
+          "8π"
+        ],
+        "exp": "扇形面積A=(1/2)r²θ=(1/2)×16×(π/3)=8π/3。",
+        "subject": "數學",
+        "sub_topic": "弧度量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-弧度量",
+        "template_id": "ref-20261119-b7-math2-radian-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math2-radian-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "7π/6弧度等於多少度？",
+        "correct": "210°",
+        "wrong": [
+          "150°",
+          "240°",
+          "120°"
+        ],
+        "exp": "弧度換角度需乘180°/π，(7π/6)×(180°/π)=210°。",
+        "subject": "數學",
+        "sub_topic": "弧度量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-弧度量",
+        "template_id": "ref-20261119-b7-math2-radian-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
