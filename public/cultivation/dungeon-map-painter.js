@@ -20,7 +20,7 @@ export function hashCell(map,x,y){
   return (h>>>0)/4294967296;
 }
 export function drawWorld(ctx,map,camera,width,height,
-  {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0}={}){
+  {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0,aimTile=null}={}){
   const palette=BIOMES[map.biome]||BIOMES.ruins;
   const g=Camera.geometry(camera,map,width,height);
   const v=Camera.visibleTiles(camera,map,width,height);
@@ -93,6 +93,16 @@ export function drawWorld(ctx,map,camera,width,height,
       }
       ctx.restore();
     }
+  }
+  // Player-selected aim is an outline under every character marker, not a
+  // filled overlay that hides the NPC or player on the selected tile.
+  if(aimTile&&walk(aimTile.x,aimTile.y)){
+    const x=g.ox+aimTile.x*cell,y=g.oy+aimTile.y*cell;
+    ctx.save();ctx.strokeStyle='#ffe5a3';
+    ctx.lineWidth=clamp(cell*.12,1.5,3);
+    ctx.setLineDash([Math.max(3,cell*.25),Math.max(2,cell*.13)]);
+    ctx.strokeRect(x+2,y+2,Math.max(1,cell-4),Math.max(1,cell-4));
+    ctx.restore();
   }
   function marker(point,label,color,glyph){
     if(!point)return;

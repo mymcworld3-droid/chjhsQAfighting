@@ -299,3 +299,57 @@
 @media(max-width:720px){
   #dungeon-map-view .dm-team-status{max-width:180px;font-size:9px}
 }
+
+/* Stage 11B: separate scrollable martial control on the left; the movement
+   pad stays on the right on narrow screens. Neither blocks the map center. */
+#dungeon-map-view .dm-manual{
+  position:absolute;bottom:82px;left:14px;z-index:1;
+  display:flex;flex-direction:column;gap:7px;
+  width:min(222px,32%);max-height:53%;overflow-x:hidden;overflow-y:auto;
+  padding:10px 11px;border:1px solid #b5a37691;border-radius:12px;
+  background:#101d19e9;box-shadow:0 6px 20px #0008;
+  scrollbar-width:thin;touch-action:pan-y;
+}
+#dungeon-map-view .dm-manual[hidden]{display:none!important}
+#dungeon-map-view .dm-manual-heading{
+  display:flex;gap:7px;justify-content:space-between;align-items:center;
+  font-size:12px;color:#f2dba8;
+}
+#dungeon-map-view .dm-manual-heading span{color:#e8c47e;font-size:11px}
+#dungeon-map-view .dm-presets{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;
+}
+#dungeon-map-view .dm-presets button{
+  font-size:10px;padding:4px 3px;min-width:0;min-height:32px;
+  white-space:normal;overflow-wrap:anywhere;
+}
+#dungeon-map-view .dm-presets button[aria-pressed="true"]{
+  background:#74633b;color:#fff2cb;border-color:#f1d298;
+}
+#dungeon-map-view .dm-skills{display:grid;gap:5px}
+#dungeon-map-view .dm-skills button{
+  width:100%;min-width:0;min-height:35px;
+  padding:6px 8px;font-size:11px;text-align:left;
+  background:#294238;color:#d8f6e2;border-color:#7fa58a;
+}
+#dungeon-map-view .dm-skills button:disabled{opacity:.46}
+#dungeon-map-view .dm-manual small{
+  display:block;color:#d2c49a;line-height:1.4;font-size:10px;
+  overflow-wrap:anywhere;
+}
+#dungeon-map-view [data-dm-skill-alert]{color:#f5c494;font-weight:600}
+@media(max-width:720px){
+  #dungeon-map-view .dm-manual{
+    bottom:130px;left:8px;width:min(165px,calc(100% - 190px));
+    max-height:48%;padding:7px;
+  }
+  #dungeon-map-view .dm-presets button{font-size:9px;min-height:31px}
+  #dungeon-map-view .dm-skills button{font-size:10px;min-height:32px}
+}
+@media(max-width:410px){
+  #dungeon-map-view .dm-manual{width:min(152px,calc(100% - 184px))}
+  #dungeon-map-view .dm-presets{grid-template-columns:1fr}
+}
+@media(max-height:430px) and (orientation:landscape){
+  #dungeon-map-view .dm-manual{bottom:8px;left:9px;width:min(185px,30%);max-height:70%}
+}
