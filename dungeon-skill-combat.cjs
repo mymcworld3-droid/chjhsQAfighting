@@ -34,6 +34,13 @@ function visible(map,a,b){
   }
   return true;
 }
+// Focus is a six-cast body-technique enhancement, not a cooldown or a
+// general-purpose bonus to sword techniques. Keep the eligibility and the
+// actual cost together so the client can render the same trusted outcome.
+const isFocusEmpowered=(member,skill)=>Number.isSafeInteger(member?.focusCharges)&&
+  member.focusCharges>0&&skill?.school==='body'&&skill.kind!=='fist-focus';
+const focusCost=(member,skill)=>isFocusEmpowered(member,skill)?
+  Math.ceil(skill.cost/2):skill.cost;
 const skillOf=(id,record,score)=>{
   const s=Manuals.BY_SKILL[id];
   if(!s||!Manuals.unlocked(record,id)||!Manuals.meetsRealm(s,score))return null;
@@ -138,8 +145,8 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   const normalized=Manuals.normalize(raw);
   const sk=skillOf(skillId,normalized,member.accessScore||0);
   if(!sk)throw fail('功法尚未解鎖或修士境界不足',403);
-  const cost=member.focusCharges>0&&sk.school==='body'&&sk.kind!=='fist-focus'?
-    Math.ceil(sk.cost/2):sk.cost;
+  const empowered=isFocusEmpowered(member,sk);
+  const cost=focusCost(member,sk);
   const stamina=Number.isSafeInteger(member.explorationStamina)?
     member.explorationStamina:0;
   if(stamina<cost)throw fail('探索體力不足，無法施放技能',409);
@@ -273,13 +280,21 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   // The client cannot create damage, revive defeated enemies, or set focus.
   const surviving=enemies.filter(e=>healthy(e)>0);
   const chargeBefore=Math.max(0,Math.min(6,member.focusCharges||0));
-  if(sk.kind!=='fist-focus'&&chargeBefore>0)
-    player.focusCharges=chargeBefore-1;
+  if(empowered)player.focusCharges=chargeBefore-1;
   player.explorationStamina=stamina-cost;
   player.skillSeq=seq;
+  // Small, bounded visual payload: the shared SSE already transports the
+  // last resolved skill, so all clients see the same ground-level impact
+  // trace without trusting browser-supplied damage or affected squares.
+  const seen=new Set();
+  const effectCells=(sk.kind==='fist-focus'?[origin]:cells)
+    .filter(p=>tile(map,p)&&!seen.has(key(p))&&seen.add(key(p)))
+    .slice(0,72).map(p=>({x:p.x,y:p.y}));
   const result={seq,skillId,skillName:sk.name,target:{...target},
     cost,hits,totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
+    focusBefore:chargeBefore,focusEmpowered:empowered,
+    focusActivated:sk.kind==='fist-focus',visualVersion:1,effectCells,
     tick:Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0,
     ...(position?{position}:{})};
   player.lastSkill=result;
@@ -287,4 +302,4 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   return {duplicate:false,members,enemies:surviving,result,cells};
 }
 module.exports={attackPower,initialCombatLoadout,loadout,switchLoadout,
-  ray,rayTo,visible,beamArray,castSkill};
+  isFocusEmpowered,focusCost,ray,rayTo,visible,beamArray,castSkill};

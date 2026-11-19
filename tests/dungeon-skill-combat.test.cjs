@@ -173,3 +173,53 @@ test('fist sweep pushes a live NPC and stops before a second enemy',()=>{
   assert.deepStrictEqual(stalled.enemies.find(x=>x.id==='beast-1').position,
     {x:6,y:5});
 });
+
+test('stage 13: focus empowers only body attacks, consumes precisely six empowered casts',()=>{
+  const record=body(),initial=room(record,beast(7,5,'beast-1',99999));
+  const focus=cast(initial,record,'dragon-roar',{x:5,y:5});
+  assert.equal(focus.result.focusActivated,true);
+  assert.equal(focus.result.focusEmpowered,false);
+  assert.deepStrictEqual(focus.result.effectCells,[{x:5,y:5}]);
+  assert.equal(focus.members.a.focusCharges,6);
+  let state=next(initial,focus);
+  for(let n=0;n<6;n++){
+    const used=cast(state,record,'dragon-strike',{x:7,y:5},n+2);
+    assert.equal(used.result.focusEmpowered,true);
+    assert.equal(used.result.cost,1);
+    assert.equal(used.result.focusBefore,6-n);
+    assert.equal(used.result.focusCharges,5-n);
+    assert.ok(used.result.effectCells.every(p=>Number.isInteger(p.x)&&Number.isInteger(p.y)));
+    state=next(state,used);
+  }
+  const normal=cast(state,record,'dragon-strike',{x:7,y:5},8);
+  assert.equal(normal.result.focusEmpowered,false);
+  assert.equal(normal.result.cost,2);
+  assert.equal(normal.result.focusCharges,0);
+});
+test('stage 13: switching manuals does not fabricate empowerment or consume body focus on a sword',()=>{
+  const b=body(),r=room(b,beast(7,5,'beast-1',9999));
+  const prepared=cast(r,b,'dragon-roar',{x:5,y:5});
+  const swordRecord=sword();
+  const changed={...next(r,prepared),members:{
+    ...prepared.members,a:{...prepared.members.a,
+      ...S.loadout(swordRecord,200,0)}
+  }};
+  assert.equal(S.isFocusEmpowered(changed.members.a,M.BY_SKILL['wind-slash']),false);
+  assert.equal(S.focusCost(changed.members.a,M.BY_SKILL['wind-slash']),2);
+  const shot=cast(changed,swordRecord,'wind-slash',{x:7,y:5},2);
+  assert.equal(shot.result.focusEmpowered,false);
+  assert.equal(shot.result.focusCharges,6);
+  assert.equal(shot.result.focusBefore,6);
+  assert.equal(shot.result.cost,2);
+  assert.equal(shot.result.totalDamage>0,true);
+  assert.equal(S.focusCost(shot.members.a,M.BY_SKILL['dragon-strike']),1);
+});
+test('stage 13: empowered skills cannot be forged by a browser-reported flag or costs',()=>{
+  const record=body(),r=room(record,beast(7,5,'beast-1',9999));
+  const attack=S.castSkill(r,'a',map,record,{skillId:'dragon-strike',
+    target:{x:7,y:5},seq:1,focusCharges:6,focusEmpowered:true,cost:0});
+  assert.equal(attack.result.focusEmpowered,false);
+  assert.equal(attack.result.cost,2);
+  assert.equal(attack.result.focusCharges,0);
+  assert.equal(attack.members.a.explorationStamina,98);
+});
