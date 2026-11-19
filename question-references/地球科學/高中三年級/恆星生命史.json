@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-ea3-star-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "質量遠大於太陽的恆星在核心核融合演化後期可能發生核心坍縮超新星，殘骸可能為何？",
+        "correct": "中子星或黑洞，視核心質量等條件而定",
+        "wrong": [
+          "必定變成一顆與地球大小相同的普通岩石行星",
+          "必定永久維持主序星狀態",
+          "所有情況都只形成紅矮星"
+        ],
+        "exp": "高質量恆星的核心坍縮可形成中子星或黑洞，結果取決於前身星與核心等條件。",
+        "subject": "地球科學",
+        "sub_topic": "恆星生命史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-恆星生命史",
+        "template_id": "ref-20261119-b5-ea3-star-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ea3-star-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "在其他成分等條件相近時，主序星質量越大，核心核融合通常越劇烈。其主序壽命相較低質量主序星一般如何？",
+        "correct": "較短",
+        "wrong": [
+          "較長且與質量成正比",
+          "完全相同",
+          "永遠不會離開主序階段"
+        ],
+        "exp": "高質量主序星雖有較多燃料，核融合能量輸出增加得更快，因此通常較快耗盡可用的核心氫。",
+        "subject": "地球科學",
+        "sub_topic": "恆星生命史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-恆星生命史",
+        "template_id": "ref-20261119-b5-ea3-star-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ea3-star-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "一顆與太陽質量接近的恆星，在演化晚期拋出外層氣體形成行星狀星雲後，留下的緻密核心通常是什麼？",
+        "correct": "白矮星",
+        "wrong": [
+          "中子星",
+          "超大質量黑洞",
+          "新的主序藍色巨星"
+        ],
+        "exp": "太陽質量量級的恆星經紅巨星等階段，拋出外層氣體後留下由電子簡併壓支撐的白矮星。",
+        "subject": "地球科學",
+        "sub_topic": "恆星生命史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-恆星生命史",
+        "template_id": "ref-20261119-b5-ea3-star-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
