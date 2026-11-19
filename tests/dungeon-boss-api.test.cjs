@@ -77,7 +77,7 @@ test('two C servers permit only a legitimate teammate to enter one shared boss r
   const original=stored.revision;
   stored.members.a.position={...f.map.portalSite};
   stored.members.b.position={...f.map.portalSite};
-  stored.members.a.explorationStamina=54;
+  stored.members.a.explorationStamina=7;
   stored.members.a.battleHealth=72;
   stored.members.a.focusCharges=5;
   const [first,second]=await Promise.all([
@@ -87,28 +87,32 @@ test('two C servers permit only a legitimate teammate to enter one shared boss r
   ]);
   assert.equal(first.status,200,first.body?.error);
   assert.equal(second.status,200,second.body?.error);
-  assert.equal(f.raw().revision,original+1);
+  assert.equal(f.raw().revision,original+2,'each teammate must vote once');
   assert.equal(f.raw().dungeonArena,'boss');
   assert.equal(f.raw().enemies.length,1);
   assert.equal(f.raw().enemies[0].id,Boss.ID);
   assert.equal(f.raw().enemies[0].battleHealth,Boss.HP);
   assert.equal(f.raw().members.a.battleHealth,72);
-  assert.equal(f.raw().members.a.explorationStamina,54);
+  assert.equal(f.raw().members.a.explorationStamina,7);
   assert.equal(f.raw().members.a.focusCharges,5);
   assert.equal(f.raw().battleAppliedTick,0);
   const r1=await f.call('a','get-map',{roomId:f.id},0);
   const r2=await f.call('b','get-map',{roomId:f.id},1);
   assert.deepStrictEqual(r1.body.map,r2.body.map);
   assert.equal(r1.body.map.arena,'boss');
-  assert.equal(first.body.room.enemies[0].footprint,2);
-  assert.equal(first.body.room.bossEncounter.status,'fighting');
+  assert.equal(second.body.room.enemies[0].footprint,2);
+  assert.equal(second.body.room.bossEncounter.status,'fighting');
   assert.deepStrictEqual(f.a.records.get('users/a'),aBefore);
   assert.equal((await f.call('a','cancel-start',{roomId:f.id})).status,409);
 });
 test('real boss collision, dodgeable warning, 2-server shared kill and retry prevention',async()=>{
   const f=await create(),room=unlock(f);
   room.members.a.position={...f.map.portalSite};
+  room.members.b.position={...f.map.portalSite};
   assert.equal((await f.call('a','enter-boss',{roomId:f.id})).status,200);
+  assert.equal(f.raw().dungeonArena,'exploration','one vote may not teleport other players');
+  assert.equal((await f.call('b','enter-boss',{roomId:f.id},1)).status,200);
+  assert.equal(f.raw().dungeonArena,'boss');
   const raw=f.raw();raw.members.a.position={x:11,y:9};
   raw.members.b.position={x:12,y:9};
   assert.equal((await f.call('a','move',{roomId:f.id,dx:0,dy:-1,step:1})).status,
@@ -133,7 +137,7 @@ test('real boss collision, dodgeable warning, 2-server shared kill and retry pre
   assert.equal(f.raw().members.b.battleHealth,89);
   const current=f.raw();current.members.a.position={x:11,y:8};
   current.members.b.position={x:12,y:8};
-  current.enemies[0].battleHealth=60;
+  current.enemies[0].battleHealth=40; // Two valid shielded hits kill this fixture.
   const [strikeA,strikeB]=await Promise.all([
     f.call('a','strike',{roomId:f.id,enemyId:Boss.ID,seq:1,
       damage:99999,battleHealth:1},0),
@@ -153,15 +157,20 @@ test('real boss collision, dodgeable warning, 2-server shared kill and retry pre
   assert.ok(!f.raw().loot);
   assert.ok(!f.raw().rewards);
 });
-test('boss room cleanup on member leave cannot retain a stale entrance/key or fight',async()=>{
+test('leaving a boss room preserves the surviving party and revokes ex-member access',async()=>{
   const f=await create(),room=unlock(f);
   room.members.a.position={...f.map.portalSite};
+  room.members.b.position={...f.map.portalSite};
   assert.equal((await f.call('a','enter-boss',{roomId:f.id})).status,200);
+  assert.equal(f.raw().dungeonArena,'exploration','one vote may not teleport other players');
+  assert.equal((await f.call('b','enter-boss',{roomId:f.id},1)).status,200);
   const leaving=await f.call('b','leave',{roomId:f.id},1);
   assert.equal(leaving.status,200);
-  assert.equal(f.raw().status,'waiting');
-  assert.equal(f.raw().dungeonArena,null);
-  assert.equal(f.raw().bossEncounter,null);
-  assert.equal(f.raw().dungeonProgress,null);
-  assert.deepStrictEqual(f.raw().enemies,[]);
+  assert.equal(f.raw().status,'assembled');
+  assert.equal(f.raw().dungeonArena,'boss');
+  assert.equal(f.raw().bossEncounter.status,'fighting');
+  assert.equal(f.raw().dungeonProgress.keyAcquired,true);
+  assert.equal(f.raw().enemies[0].id,Boss.ID);
+  assert.equal(f.raw().members.b,undefined);
+  assert.equal((await f.call('b','get',{roomId:f.id},1)).status,403);
 });
