@@ -2,7 +2,7 @@
 
 此文件記錄 `stamina-battle` 分支封印關卡 **layoutVersion 4** 的既有規則，
 並定義之後「陣眼圖片、效果範圍、情報面板」必須共用的單一資料來源。
-本階段只整理資料與最小化規則參數引用，**不改變目前的戰鬥與介面操作**。
+本階段整理單一資料來源、必要的規則參數引用，以及既有戰場標記的標籤／顏色來源，**不改變戰鬥判定與操作方式**。
 
 ## 四種陣眼
 
@@ -26,7 +26,8 @@
 
 | API | 用途 |
 | --- | --- |
-| `SEAL_TYPES` | 不可變資料：類型、名稱、標籤、顏色、效果文字、範圍語義、機制參數、破除描述與提示 |
+| `SEAL_TYPES` | 不可變資料：類型、名稱、簡短提示、標籤、顏色、效果文字、範圍語義、機制參數、破除描述與提示 |
+| `SEAL_KINDS` | 由共用類型目錄產生的不可變順序；保留既有種子碼生成結果，不要任意調整類型插入順序 |
 | `SEAL_MAX_DURABILITY`、`SEAL_HIT_DAMAGE` | 關卡初始化與命中扣除共用的耐久規則 |
 | `sealDefinition(kind)` | 取得單一類型定義；未知類型回傳 `null` |
 | `sealInfo(state, {x,y})` | 取得某座陣眼即時快照，包含耐久、是否仍可攻擊及連動障礙；無效／舊版狀態回傳 `null` |
@@ -41,6 +42,10 @@ const selected=QATactical.sealInfo(battle,{x:4,y:2});
 const influence=QATactical.sealEffectCells(battle,{x:4,y:2});
 ```
 
+現有的 `tactical-combat.js` 戰場目標摘要透過 `sealDefinition(kind).shortEffect` 顯示短名稱；
+`tactical-renderer.js` 原本的圓形陣眼暫時保留，但標籤與未破除的顏色改由 `sealInfo(state, point)` 取得，
+舊版第三代關卡維持原本「陣」字標記。正式生成圖片與透明圖層仍安排在第二階段。
+
 不要把 `sealInfo` 的計算結果寫回 `battle.objective`。
 快照中 `range` 與 `gate` 是副本資料，不直接引用戰場狀態；適合在介面短暫顯示。
 
@@ -51,6 +56,8 @@ const influence=QATactical.sealEffectCells(battle,{x:4,y:2});
 3. 效果範圍、角色預告、技能瞄準範圍與角色立繪應分不同 Canvas 圖層，危險紅框優先。
 4. 情報面板與首次教學不能代替伺服器端的實際技能命中驗證。
 5. 陣眼受損／破除應依 `hp/maxHp/active` 決定，不修改伺服器的結算時機。
-6. 圖片與介面變更安排在第二階段以後；第一階段只提供資料基礎。
+6. 第一階段只統一既有標記的文字和色彩來源；圖片素材、正式範圍圖層與情報視窗安排在後續階段。
 
 測試：`node --test tests/tactical-seal-metadata.test.cjs tests/tactical-layout-v4.test.cjs`。
+
+驗收：第一階段專屬測試共 9 項，涵蓋真實種子關卡、舊版相容、資訊快照不改寫狀態、現有畫面資料綁定及核心戰鬥數值。
