@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-eng1-collocation-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從自然英文搭配辨認適合的動詞與介系詞",
+      "question": {
+        "q": "The team needs to ______ a conclusion after reviewing all the evidence.",
+        "correct": "reach",
+        "wrong": [
+          "wear",
+          "lend",
+          "boil"
+        ],
+        "exp": "'Reach a conclusion' is the natural collocation meaning to arrive at a judgment after considering evidence.",
+        "subject": "英文",
+        "sub_topic": "詞彙搭配",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中一年級-詞彙搭配",
+        "template_id": "ref-20261119-b2-eng1-collocation-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-eng1-collocation-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從自然英文搭配辨認適合的動詞與介系詞",
+      "question": {
+        "q": "Everyone should ______ responsibility for the safety of their own belongings.",
+        "correct": "take",
+        "wrong": [
+          "eat",
+          "throw",
+          "open"
+        ],
+        "exp": "'Take responsibility for' means to accept the duty or accountability for something.",
+        "subject": "英文",
+        "sub_topic": "詞彙搭配",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中一年級-詞彙搭配",
+        "template_id": "ref-20261119-b2-eng1-collocation-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-eng1-collocation-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從自然英文搭配辨認適合的動詞與介系詞",
+      "question": {
+        "q": "The campaign hopes to ______ awareness of plastic pollution among students.",
+        "correct": "raise",
+        "wrong": [
+          "repair",
+          "borrow",
+          "remove off"
+        ],
+        "exp": "'Raise awareness of' means to make more people conscious of an issue; the other verbs do not form the intended collocation.",
+        "subject": "英文",
+        "sub_topic": "詞彙搭配",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中一年級-詞彙搭配",
+        "template_id": "ref-20261119-b2-eng1-collocation-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
