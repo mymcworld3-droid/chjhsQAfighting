@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-hist1-japan-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以制度、抗爭與戰時政策辨識日治臺灣社會變遷",
+      "question": {
+        "q": "日本統治臺灣初期推動土地調查與人口調查。從殖民政府治理角度看，下列何者最直接說明這些調查的用途？",
+        "correct": "掌握土地與人口資料以利課稅和行政管理",
+        "wrong": [
+          "讓所有土地立即無償歸農民所有",
+          "直接取消所有行政區與稅收制度",
+          "使臺灣在調查當年取得自治政府"
+        ],
+        "exp": "土地、戶口調查有助於建立行政統計、財產與賦稅管理，同時也強化殖民政府的治理能力。",
+        "subject": "歷史",
+        "sub_topic": "日本統治與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-日本統治與社會變遷",
+        "template_id": "ref-20261119-hist1-japan-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-hist1-japan-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以制度、抗爭與戰時政策辨識日治臺灣社會變遷",
+      "question": {
+        "q": "1930年霧社事件與下列哪一種歷史脈絡最密切相關？",
+        "correct": "賽德克族部分部落反抗日本殖民統治",
+        "wrong": [
+          "清朝官員抵抗荷蘭東印度公司",
+          "臺灣民眾發起臺灣議會設置請願",
+          "二戰結束後反對接收政策的示威"
+        ],
+        "exp": "霧社事件發生於1930年，與賽德克族在殖民統治下遭受的壓迫及衝突有關，屬原住民族武裝反抗事件。",
+        "subject": "歷史",
+        "sub_topic": "日本統治與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-日本統治與社會變遷",
+        "template_id": "ref-20261119-hist1-japan-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-hist1-japan-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以制度、抗爭與戰時政策辨識日治臺灣社會變遷",
+      "question": {
+        "q": "日治後期推行的「皇民化運動」，與哪項政策最符合？",
+        "correct": "推廣日語與日本化生活，強化對日本國家的認同",
+        "wrong": [
+          "鼓勵以漢文全面取代日語教育",
+          "宣布殖民地居民全面不受戰時動員政策影響",
+          "廢除日本天皇相關的政治象徵"
+        ],
+        "exp": "皇民化運動強調語言、姓名、宗教與生活方式的日本化，並在戰時動員背景下強化帝國臣民認同。",
+        "subject": "歷史",
+        "sub_topic": "日本統治與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-日本統治與社會變遷",
+        "template_id": "ref-20261119-hist1-japan-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
