@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-en1-reference-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "Read: 'Nora handed Lily a notebook after Lily forgot hers. Lily returned it before lunch.' What does 'it' refer to?",
+        "correct": "The notebook Nora lent to Lily",
+        "wrong": [
+          "Lily's missing original notebook",
+          "Nora's lunch",
+          "The place where they met"
+        ],
+        "exp": "'It' refers to the notebook Nora handed to Lily, which Lily later returned. The original notebook was forgotten.",
+        "subject": "英文",
+        "sub_topic": "推論與代名詞指涉",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "english-推論與代名詞指涉",
+        "template_id": "ref-20261119-b8-en1-reference-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-reference-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "Read: 'The park closed its main entrance after heavy rain. Visitors were asked to use the side gate, which remained open.' What does 'which' refer to?",
+        "correct": "The side gate",
+        "wrong": [
+          "The heavy rain",
+          "The main entrance",
+          "The park's closing time"
+        ],
+        "exp": "The relative clause 'which remained open' modifies the immediately preceding noun phrase 'the side gate'.",
+        "subject": "英文",
+        "sub_topic": "推論與代名詞指涉",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "english-推論與代名詞指涉",
+        "template_id": "ref-20261119-b8-en1-reference-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-reference-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "Read: 'Evan checked his bicycle brakes before riding in the rain, even though he had repaired them last week.' What is the best inference?",
+        "correct": "Evan wanted to confirm the brakes still worked safely.",
+        "wrong": [
+          "Evan knew that the brakes had failed again.",
+          "The bicycle had never been repaired.",
+          "Evan intended to avoid riding his bicycle entirely."
+        ],
+        "exp": "The precaution suggests he was checking safety. Nothing in the sentence confirms a new brake failure or an intention to cancel the ride.",
+        "subject": "英文",
+        "sub_topic": "推論與代名詞指涉",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "english-推論與代名詞指涉",
+        "template_id": "ref-20261119-b8-en1-reference-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
