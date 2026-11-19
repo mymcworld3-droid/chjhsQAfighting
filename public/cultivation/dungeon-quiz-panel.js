@@ -25,7 +25,7 @@ export class DungeonQuizPanel{
       '<header class="dm-quiz-top"><div><small>青雲問道 · 副本問道</small>'+
       '<h3>答題充能</h3></div>'+
       '<button type="button" data-dq="collapse" aria-label="收合題目返回戰場">收合 · 返回戰場</button></header>'+
-      '<p class="dm-quiz-info">答對恢復 4 體力，答錯恢復 1 體力（上限 100）。'+
+      '<p class="dm-quiz-info">答對恢復 4 體力，答錯恢復 1 體力（上限 10）。'+
       '答題時靈獸仍會攻擊；可隨時收合題目，隊友不必等待。</p>'+
       '<p data-dq="status" class="dm-quiz-status" role="status" aria-live="polite"></p>'+
       '<div data-dq-content class="dm-quiz-content"></div>'+
