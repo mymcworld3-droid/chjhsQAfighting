@@ -8,6 +8,10 @@ export const BIOMES=Object.freeze({
  marsh:{name:'雲隱荒澤',void:'#0a1a1b',wall:'#163537',floor:'#316762',clearing:'#448079',trim:'#b1e3cf',line:'#76a8a5',edge:'#22514f'}
 });
 const partyColors=['#f0cf8a','#9bdcc0','#d8acd9','#f3b5a0'];
+export const BEAST_COLORS=Object.freeze({
+  wolf:'#f2b67d',wisp:'#80dfc9',golem:'#c9a383'
+});
+const glyphs=Object.freeze({wolf:'◆',wisp:'✦',golem:'⬟'});
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 export function hashCell(map,x,y){
   const s=(map.layoutId||map.seed||'v1')+':'+x+','+y;
@@ -15,7 +19,8 @@ export function hashCell(map,x,y){
   for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}
   return (h>>>0)/4294967296;
 }
-export function drawWorld(ctx,map,camera,width,height,{members=[],selfUid='',showRoutes=false}={}){
+export function drawWorld(ctx,map,camera,width,height,
+  {members=[],selfUid='',showRoutes=false,enemies=[]}={}){
   const palette=BIOMES[map.biome]||BIOMES.ruins;
   const g=Camera.geometry(camera,map,width,height);
   const v=Camera.visibleTiles(camera,map,width,height);
@@ -94,6 +99,37 @@ export function drawWorld(ctx,map,camera,width,height,{members=[],selfUid='',sho
   marker(map.guardianSite,'鑰匙守護者','#e6acaa','◆');
   marker(map.portalSite,'傳送陣',palette.trim,'◇');
   marker(map.spawn,'起點','#bde9ab','●');
+  // Render hostile creatures beneath player markers so characters remain
+  // visible when the AI reaches melee distance (no damage in stage 9).
+  for(const enemy of enemies){
+    const pos=enemy?.position;
+    if(!pos||!walk(pos.x,pos.y))continue;
+    const x=g.ox+(pos.x+.5)*cell,y=g.oy+(pos.y+.5)*cell;
+    if(x<-35||y<-35||x>width+35||y>height+35)continue;
+    const color=BEAST_COLORS[enemy.kind]||'#e5bc9e';
+    const alerted=enemy.intent==='pursuit'||enemy.intent==='alert';
+    const r=clamp(cell*.35,4,12);
+    ctx.save();
+    ctx.beginPath();ctx.arc(x,y,r*1.55,0,Math.PI*2);
+    ctx.globalAlpha=alerted?.25:.14;
+    ctx.fillStyle=alerted?'#f47b76':color;ctx.fill();ctx.globalAlpha=1;
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fillStyle='#231d19';ctx.strokeStyle=alerted?'#ff8f78':color;
+    ctx.lineWidth=alerted?2.6:1.8;ctx.fill();ctx.stroke();
+    ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.font='bold '+Math.round(clamp(r*1.4,10,18))+'px sans-serif';
+    ctx.fillText(glyphs[enemy.kind]||'◆',x,y);
+    if(cell>=14){
+      ctx.fillStyle='#fff2d4';ctx.font='600 10px system-ui,"Noto Sans TC"';
+      const label=String(enemy.name||'靈獸').slice(0,12);
+      const tw=ctx.measureText(label).width+10;
+      ctx.fillStyle='rgba(14,16,15,.86)';
+      ctx.fillRect(x-tw/2,y-r-24,tw,17);
+      ctx.fillStyle=alerted?'#ffc0ad':'#f2e2c2';
+      ctx.fillText(label,x,y-r-15);
+    }
+    ctx.restore();
+  }
   members.slice(0,4).forEach((member,index)=>{
     const validPos=member?.position&&Number.isInteger(member.position.x)&&
       Number.isInteger(member.position.y)&&member.position.x>=0&&
@@ -127,7 +163,8 @@ export function drawWorld(ctx,map,camera,width,height,{members=[],selfUid='',sho
   ctx.fillStyle=shadow;ctx.fillRect(0,0,width,height);
   return g;
 }
-export function drawMinimap(ctx,map,geometry,width,height,{members=[],selfUid=''}={}){
+export function drawMinimap(ctx,map,geometry,width,height,
+  {members=[],selfUid='',enemies=[]}={}){
   const p=BIOMES[map.biome]||BIOMES.ruins;
   ctx.fillStyle=p.void;ctx.fillRect(0,0,width,height);
   const scale=Math.min((width-10)/map.width,(height-10)/map.height);
@@ -144,6 +181,18 @@ export function drawMinimap(ctx,map,geometry,width,height,{members=[],selfUid=''
     if(!point)continue;
     ctx.fillStyle=color;ctx.beginPath();
     ctx.arc(ox+(point.x+.5)*scale,oy+(point.y+.5)*scale,Math.max(2,scale),0,Math.PI*2);
+    ctx.fill();
+  }
+  // Tiny hostile markers use the same server positions as the main map.
+  for(const enemy of enemies){
+    const pos=enemy?.position;
+    if(!pos||pos.x<0||pos.y<0||pos.x>=map.width||pos.y>=map.height||
+       map.tiles[pos.y*map.width+pos.x]===0)continue;
+    ctx.fillStyle=enemy.intent==='pursuit'?'#fa8076':
+      BEAST_COLORS[enemy.kind]||'#e1a989';
+    ctx.beginPath();
+    ctx.arc(ox+(pos.x+.5)*scale,oy+(pos.y+.5)*scale,
+      Math.max(1.6,scale*.7),0,Math.PI*2);
     ctx.fill();
   }
   // Team positions are drawn from authoritative member snapshots.
