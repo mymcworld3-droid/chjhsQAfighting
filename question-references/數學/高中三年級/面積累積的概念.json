@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-area-accum-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "某水流量速率q(t)=4t公升/小時，0≤t≤3（t以小時計）。此段時間流入的水量為何？",
+        "correct": "18公升",
+        "wrong": [
+          "12公升",
+          "36公升",
+          "6公升"
+        ],
+        "exp": "總流入量是速率曲線下的面積∫₀³4t dt=[2t²]₀³=18公升。",
+        "subject": "數學",
+        "sub_topic": "面積累積的概念",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-面積累積的概念",
+        "template_id": "ref-20261119-b10-m3-area-accum-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-area-accum-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "物體速度v(t)=6−2t（公尺/秒），0≤t≤3秒，速度均為非負。三秒內位移為何？",
+        "correct": "9公尺",
+        "wrong": [
+          "18公尺",
+          "6公尺",
+          "3公尺"
+        ],
+        "exp": "位移為速度對時間積分∫₀³(6−2t)dt=[6t−t²]₀³=18−9=9公尺。",
+        "subject": "數學",
+        "sub_topic": "面積累積的概念",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-面積累積的概念",
+        "template_id": "ref-20261119-b10-m3-area-accum-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-area-accum-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "設A(x)=∫₀ˣ(2t+1)dt，x≥0，則A(2)−A(1)為何？",
+        "correct": "4",
+        "wrong": [
+          "3",
+          "5",
+          "2"
+        ],
+        "exp": "差值是區間[1,2]上的面積∫₁²(2t+1)dt=[t²+t]₁²=(4+2)−(1+1)=4。",
+        "subject": "數學",
+        "sub_topic": "面積累積的概念",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-面積累積的概念",
+        "template_id": "ref-20261119-b10-m3-area-accum-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
