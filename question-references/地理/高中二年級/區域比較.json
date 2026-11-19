@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-geo2-regions-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "地理資料需保持分母及單位可比較，遵守統計推論限制",
+      "question": {
+        "q": "甲區人口40萬、圖書館8間；乙區人口10萬、圖書館3間。若比較每10萬人圖書館數量，哪區較高？",
+        "correct": "乙區，每10萬人3間",
+        "wrong": [
+          "甲區，每10萬人8間",
+          "甲區，每10萬人4間",
+          "兩區都是每10萬人2間"
+        ],
+        "exp": "甲區8/4=每10萬人2間；乙區3/1=每10萬人3間，因此乙區較高。",
+        "subject": "地理",
+        "sub_topic": "區域比較",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域比較",
+        "template_id": "ref-20261119-b11-geo2-regions-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-geo2-regions-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "地理資料需保持分母及單位可比較，遵守統計推論限制",
+      "question": {
+        "q": "甲地平均月薪5萬元、必要生活支出4萬元；乙地平均月薪4萬元、必要生活支出2.5萬元。若只看這兩項簡化指標，哪項結論較合理？",
+        "correct": "乙地薪資較低，但扣除必要支出後的餘額較高",
+        "wrong": [
+          "甲地薪資較高，因此扣除支出後必定較多",
+          "乙地平均薪資較低，因此居民必定沒有儲蓄可能",
+          "兩地薪資相差1萬元，因此兩地剩餘可用金額也一定相差1萬元"
+        ],
+        "exp": "甲餘額50,000−40,000=10,000元；乙40,000−25,000=15,000元，乙高5,000元。",
+        "subject": "地理",
+        "sub_topic": "區域比較",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域比較",
+        "template_id": "ref-20261119-b11-geo2-regions-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-geo2-regions-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "地理資料需保持分母及單位可比較，遵守統計推論限制",
+      "question": {
+        "q": "兩個農業區年雨量相同，甲有長達六個月的乾季，乙雨量較平均。若兩地都種植需持續供水的作物，哪項推論最合理？",
+        "correct": "甲區更需評估乾季灌溉與蓄水條件",
+        "wrong": [
+          "因年雨量相同，兩地的灌溉需求必然完全一樣",
+          "乙區分布較平均，因此作物生長完全不受氣溫影響",
+          "甲區雨季集中，便能確保乾季每週都有充足水分"
+        ],
+        "exp": "供水風險不只由年雨量決定，也由降雨季節分布與作物需水期決定；甲區乾季壓力可能較高。",
+        "subject": "地理",
+        "sub_topic": "區域比較",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域比較",
+        "template_id": "ref-20261119-b11-geo2-regions-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
