@@ -40,8 +40,8 @@ function environment(){
   const a=db({'users/a':user('a'),'users/b':user('b')});
   const room={id:roomId,mode:'dungeon',status:'assembled',
     assembledAtMs:at-5000,expiresAtMs:at+600000,
-    members:{a:{uid:'a',explorationStamina:93,quizCreditSeq:0},
-      b:{uid:'b',explorationStamina:70,quizCreditSeq:0}}};
+    members:{a:{uid:'a',explorationStamina:6,quizCreditSeq:0},
+      b:{uid:'b',explorationStamina:7,quizCreditSeq:0}}};
   const c=db({['dungeonRooms/'+roomId]:room});
   return {a,c,room};
 }
@@ -84,8 +84,8 @@ test('graded answer changes only answering player progression and C credit is on
   assert.equal(a.records.get('users/b').stats.totalAnswered,0);
   const stored=a.records.get('dungeonQuizStates/a');
   const applied=Credits.credit(room,'a',stored,q.id,roomId);
-  assert.equal(applied.members.a.explorationStamina,97);
-  assert.equal(applied.members.b.explorationStamina,70);
+  assert.equal(applied.members.a.explorationStamina,10);
+  assert.equal(applied.members.b.explorationStamina,7);
   assert.equal(applied.members.a.quizCreditSeq,1);
   assert.equal(Credits.credit({...room,members:applied.members},'a',stored,q.id,roomId).duplicate,true);
   const duplicated=await Q.answer(a,c,'a',{roomId,questionId:q.id,choice:0},at);
@@ -111,8 +111,8 @@ test('two independent answers, out-of-order credits forbidden and cap enforced',
   assert.equal(result.review.correct,false);assert.equal(result.review.amount,1);
   const graded=a.records.get('dungeonQuizStates/b');
   const applied=Credits.credit(room,'b',graded,q.id,roomId);
-  assert.equal(applied.members.b.explorationStamina,71);
-  assert.equal(applied.members.a.explorationStamina,93);
+  assert.equal(applied.members.b.explorationStamina,8);
+  assert.equal(applied.members.a.explorationStamina,6);
   assert.throws(()=>Credits.credit(room,'a',graded,q.id,roomId),/不屬於|找不到/);
   assert.throws(()=>Credits.credit(room,'b',graded,'invented',roomId),/找不到/);
   const low={...room,members:{...room.members,b:{...room.members.b,quizCreditSeq:2}}};
