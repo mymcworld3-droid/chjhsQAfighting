@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-phy1-newton-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以合力、作用反作用及接觸力作為推論依據",
+      "question": {
+        "q": "質量3 kg的物體在光滑水平面上，受到向右8 N與向左2 N的兩個水平力。加速度為何？",
+        "correct": "向右2 m/s²",
+        "wrong": [
+          "向左2 m/s²",
+          "向右10 m/s²",
+          "0 m/s²"
+        ],
+        "exp": "水平合力8−2=6 N向右；由F=ma得a=6/3=2 m/s²向右。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-牛頓運動定律",
+        "template_id": "ref-20261119-b2-phy1-newton-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-phy1-newton-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以合力、作用反作用及接觸力作為推論依據",
+      "question": {
+        "q": "質量4 kg的箱子靜止在水平地面上，無其他鉛直外力。取g=10 m/s²，地板對箱子的正向力大小為何？",
+        "correct": "40 N",
+        "wrong": [
+          "4 N",
+          "10 N",
+          "0 N"
+        ],
+        "exp": "鉛直方向靜力平衡，正向力N=mg=4×10=40 N。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-牛頓運動定律",
+        "template_id": "ref-20261119-b2-phy1-newton-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-phy1-newton-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以合力、作用反作用及接觸力作為推論依據",
+      "question": {
+        "q": "質量2 kg和3 kg的兩木塊相互接觸並置於光滑水平面，從2 kg木塊一側施以向右10 N的水平推力，兩塊不分離。3 kg木塊受2 kg木塊的水平接觸力為何？",
+        "correct": "6 N向右",
+        "wrong": [
+          "4 N向右",
+          "10 N向右",
+          "6 N向左"
+        ],
+        "exp": "整體加速度a=10/(2+3)=2 m/s²。3 kg木塊的唯一水平力是接觸力，大小為3×2=6 N向右。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-牛頓運動定律",
+        "template_id": "ref-20261119-b2-phy1-newton-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
