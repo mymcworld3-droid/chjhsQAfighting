@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-practicalwriting-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "知識與語用、文本修訂、圖表分析對應高中觀念",
+      "question": {
+        "q": "某生想向教務處申請更正成績單上的班級資訊。下列哪個電子郵件主旨最明確而得體？",
+        "correct": "申請更正成績單班級資料（高三二班學生）",
+        "wrong": [
+          "老師快看，真的有很大的問題！",
+          "成績單的事情，你們應該懂",
+          "有空再說，沒有固定主題"
+        ],
+        "exp": "正式電子郵件主旨應清楚標示目的與可辨識的相關資訊，讓承辦單位能快速判定案件。",
+        "subject": "國文",
+        "sub_topic": "應用文",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-應用文",
+        "template_id": "ref-20261119-b9-ch3-practicalwriting-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-practicalwriting-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "知識與語用、文本修訂、圖表分析對應高中觀念",
+      "question": {
+        "q": "社團邀請講者入校演講，已有活動主題、日期、時間與地點，但尚未詢問講者能否出席。結尾何種寫法最妥當？",
+        "correct": "敬請於下週三前回覆是否方便出席，如有需調整之處亦歡迎告知。",
+        "wrong": [
+          "我們已經安排好一切，您不必回覆就算答應。",
+          "若未出席即表示您不尊重本社團，因此不能拒絕。",
+          "時間與地點可能還會改變，但請先不要詢問。"
+        ],
+        "exp": "邀請函需提供明確回覆期限與調整空間，尊重受邀者時間安排，不能以沉默視為同意。",
+        "subject": "國文",
+        "sub_topic": "應用文",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-應用文",
+        "template_id": "ref-20261119-b9-ch3-practicalwriting-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-practicalwriting-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "知識與語用、文本修訂、圖表分析對應高中觀念",
+      "question": {
+        "q": "公告原文：「活動改至下週五，其他規定不變。」但公告未寫出日期、時間與原活動名稱。為避免讀者誤解，哪項修訂最合適？",
+        "correct": "補上活動名稱、確切年月日與開始時間，並標明哪些事項維持原安排",
+        "wrong": [
+          "只把「下週五」加粗，其他資訊一律省略",
+          "不須說明活動名稱，讓讀者自行推測是哪一場",
+          "將「其他規定不變」改為「一切未知」，不提供任何細節"
+        ],
+        "exp": "正式公告應消除相對日期與活動對象不明的問題，提供可直接核對的明確資訊。",
+        "subject": "國文",
+        "sub_topic": "應用文",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-應用文",
+        "template_id": "ref-20261119-b9-ch3-practicalwriting-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
