@@ -1703,6 +1703,10 @@ class DungeonMapView{
       animationOverlay:(context,view)=>paintEffects(context,view,true)
     });
     this.updateFocusAuras(geometry,visualMembers);
+    // Expose presentation activity for browser acceptance and accessibility.
+    // This is never used as input to movement, collision or combat rules.
+    const motionState=travelActive?'walking':'idle';
+    if(this.canvas.dataset.motion!==motionState)this.canvas.dataset.motion=motionState;
     if(scenes.length&&!reduceMotion)this.drawSoon();
     if(travelActive&&!reduceMotion)this.drawSoon();
 

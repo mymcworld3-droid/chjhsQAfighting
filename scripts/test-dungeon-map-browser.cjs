@@ -472,6 +472,14 @@ async function main(){
     });
     assert.ok(direction,'player must have at least one unblocked cardinal step');
     await a.page.locator('#dungeon-map-view [data-dm-world]').focus();
+    // Observe live canvas frames, not only the server's final coordinate.
+    await a.page.evaluate(()=>{
+      const canvas=document.querySelector('#dungeon-map-view [data-dm-world]');
+      window.__dungeonMotionFrames=[];
+      const record=()=>window.__dungeonMotionFrames.push(canvas.dataset.motion||'unset');
+      record();
+      new MutationObserver(record).observe(canvas,{attributes:true,attributeFilter:['data-motion']});
+    });
     await a.page.keyboard.press(direction[2]);
     await a.page.waitForFunction(()=>
       document.querySelector('[data-dm-energy]')?.textContent==='9',null,{timeout:7000});
@@ -480,6 +488,13 @@ async function main(){
     assert.deepStrictEqual(room.members.b.position,startPositions.b);
     assert.equal(room.members.a.moveSeq,1);
     assert.equal(room.members.a.explorationStamina,9);
+    await a.page.waitForFunction(()=>window.__dungeonMotionFrames?.includes('walking'),
+      null,{timeout:5000});
+    await a.page.waitForFunction(()=>window.__dungeonMotionFrames?.includes('idle'),
+      null,{timeout:5000});
+    const motionFrames=await a.page.evaluate(()=>window.__dungeonMotionFrames);
+    assert.ok(motionFrames.indexOf('walking')<motionFrames.lastIndexOf('idle'),
+      'the dungeon should animate, then finish at the confirmed tile');
     const savedMoveSeq=room.members.a.moveSeq;
     const savedStamina=room.members.a.explorationStamina;
     // A retransmission must never move the player again or spend more energy.
