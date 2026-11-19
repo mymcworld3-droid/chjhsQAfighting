@@ -87,7 +87,7 @@ async function readyGroup(f,code){
   assert.equal(assembled.status,200);
   return {id,room:assembled.body.room,map:generateDungeonLayout(SECRET)};
 }
-test('only assembled players get four distinct server-stored positions and 100 private movement stamina',async()=>{
+test('only assembled players get four distinct server-stored positions and 10 private movement stamina',async()=>{
   const f=fixture(),created=(await f.call('a','create')).body;
   assert.equal((await f.call('a','move',{roomId:created.roomId,dx:1,dy:0,step:1})).status,409);
   for(const uid of 'bcd')await f.call(uid,'join-code',{roomCode:created.room.code});
@@ -188,5 +188,5 @@ test('room restart resets exploration counters only after a new ready assembly',
   await f.call('a','ready',{roomId:id,ready:true});
   const restarted=await f.call('a','start',{roomId:id});
   assert.equal(restarted.body.room.members.a.moveSeq,0);
-  assert.equal(restarted.body.room.members.a.explorationStamina,100);
+  assert.equal(restarted.body.room.members.a.explorationStamina,START_STAMINA);
 });
