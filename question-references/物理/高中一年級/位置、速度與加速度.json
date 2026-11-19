@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-p1-motion-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "一輛機車初速度為+5 m/s，沿同一直線作定加速度−2 m/s²的運動。經過2秒後瞬時速度是多少？",
+        "correct": "+1 m/s",
+        "wrong": [
+          "+9 m/s",
+          "−1 m/s",
+          "+3 m/s"
+        ],
+        "exp": "利用v=v₀+at=5+(−2)×2=+1 m/s，仍向原正方向行駛。",
+        "subject": "物理",
+        "sub_topic": "位置、速度與加速度",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-位置、速度與加速度",
+        "template_id": "ref-20261119-b5-p1-motion-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-p1-motion-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "一名學生先向東走30 m，再向西走10 m，總共花20 s。若東向為正，其平均速度是多少？",
+        "correct": "+1 m/s",
+        "wrong": [
+          "+2 m/s",
+          "−1 m/s",
+          "+0.5 m/s"
+        ],
+        "exp": "位移為30−10=20 m向東，平均速度=位移/時間=20/20=+1 m/s；40 m路程不能拿來計算平均速度。",
+        "subject": "物理",
+        "sub_topic": "位置、速度與加速度",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-位置、速度與加速度",
+        "template_id": "ref-20261119-b5-p1-motion-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-p1-motion-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "一物體在直線上由靜止開始以4 m/s²的定加速度運動，前3秒的位移為何？",
+        "correct": "18 m",
+        "wrong": [
+          "12 m",
+          "24 m",
+          "36 m"
+        ],
+        "exp": "初速為0，位移s=(1/2)at²=0.5×4×3²=18 m。",
+        "subject": "物理",
+        "sub_topic": "位置、速度與加速度",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-位置、速度與加速度",
+        "template_id": "ref-20261119-b5-p1-motion-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
