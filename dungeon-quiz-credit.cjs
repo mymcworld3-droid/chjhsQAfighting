@@ -2,7 +2,7 @@
 // Atomic, server-trusted per-player stamina credits. A owns grading receipts,
 // C owns the shared room. Clients may only name a completed question; they
 // cannot supply correctness, stamina amounts or alter other party members.
-const MAX_STAMINA=100,RIGHT=4,WRONG=1;
+const {MAX_STAMINA,RIGHT,WRONG,clampStamina}=require('./dungeon-stamina-rules.cjs');
 const fail=(msg,status=409)=>Object.assign(new Error(msg),{status});
 const validIndex=n=>Number.isSafeInteger(n)&&n>=1&&n<=1000000;
 function credit(room,uid,source,questionId,roomId){
@@ -24,8 +24,7 @@ function credit(room,uid,source,questionId,roomId){
   if(review.index<=previous)return {duplicate:true,members:room.members};
   if(review.index!==previous+1)
     throw fail('請先領取較早完成的題目體力',409);
-  const stamina=Number.isSafeInteger(member.explorationStamina)?
-    Math.max(0,Math.min(MAX_STAMINA,member.explorationStamina)):0;
+  const stamina=clampStamina(member.explorationStamina);
   const received=Math.min(MAX_STAMINA-stamina,review.amount);
   const updated={...member,explorationStamina:stamina+received,
     quizCreditSeq:review.index,lastQuizCredit:{
