@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-phy3-circuit-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單位與物理定律條件明確；附計算步驟及可識別的常見迷思選項",
+      "question": {
+        "q": "將3 Ω與6 Ω電阻串聯，接上18 V理想電源，電流大小為何？",
+        "correct": "2 A",
+        "wrong": [
+          "3 A",
+          "6 A",
+          "9 A"
+        ],
+        "exp": "串聯等效電阻R=3+6=9 Ω，依歐姆定律I=V/R=18/9=2 A。",
+        "subject": "物理",
+        "sub_topic": "電流電阻與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電流電阻與電路",
+        "template_id": "ref-20261119-b11-phy3-circuit-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-phy3-circuit-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單位與物理定律條件明確；附計算步驟及可識別的常見迷思選項",
+      "question": {
+        "q": "將兩個4 Ω電阻並聯接上8 V理想電源，忽略導線與電源內阻，總電流為何？",
+        "correct": "4 A",
+        "wrong": [
+          "1 A",
+          "2 A",
+          "8 A"
+        ],
+        "exp": "並聯等效電阻R=(4×4)/(4+4)=2 Ω，總電流I=8/2=4 A。",
+        "subject": "物理",
+        "sub_topic": "電流電阻與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電流電阻與電路",
+        "template_id": "ref-20261119-b11-phy3-circuit-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-phy3-circuit-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單位與物理定律條件明確；附計算步驟及可識別的常見迷思選項",
+      "question": {
+        "q": "電阻10 Ω在穩定電流0.50 A通過時，消耗的電功率為何？",
+        "correct": "2.5 W",
+        "wrong": [
+          "5 W",
+          "0.25 W",
+          "20 W"
+        ],
+        "exp": "電阻耗功率P=I²R=(0.50)²×10=2.5 W。",
+        "subject": "物理",
+        "sub_topic": "電流電阻與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電流電阻與電路",
+        "template_id": "ref-20261119-b11-phy3-circuit-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
