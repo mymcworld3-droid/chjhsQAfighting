@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-civ2-remedies-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境進行推理，附解釋與合理干擾選項",
+      "question": {
+        "q": "某人收到政府不利處分，通知文件列有處分事實、法律依據及可採取的救濟方式與期限。提供這些資訊主要有何意義？",
+        "correct": "協助當事人了解理由並及時行使合法救濟權利",
+        "wrong": [
+          "使當事人從此不得提出任何異議",
+          "讓機關的所有決定無須法律依據",
+          "表示所有救濟程序已自動完成"
+        ],
+        "exp": "理由與救濟資訊有助當事人判斷處分是否合法、是否提出申訴或訴願等救濟，並避免錯過期限。",
+        "subject": "公民",
+        "sub_topic": "權利救濟",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-權利救濟",
+        "template_id": "ref-20261119-b4-civ2-remedies-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-civ2-remedies-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境進行推理，附解釋與合理干擾選項",
+      "question": {
+        "q": "網購商品疑似與標示不符，消費者希望循合法程序處理爭議。以下何者最有利於後續查證？",
+        "correct": "保存商品描述、交易紀錄與雙方溝通資料",
+        "wrong": [
+          "先刪除所有訂單及付款紀錄",
+          "只在網路上以匿名留言代替任何聯絡",
+          "未查明事實即偽造商品照片"
+        ],
+        "exp": "交易與商品紀錄可提供客觀證據，協助雙方協商及後續依適用程序尋求消費爭議處理。",
+        "subject": "公民",
+        "sub_topic": "權利救濟",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-權利救濟",
+        "template_id": "ref-20261119-b4-civ2-remedies-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-civ2-remedies-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境進行推理，附解釋與合理干擾選項",
+      "question": {
+        "q": "某機關擬對個人作成重大不利決定，卻未告知相關事實，也不給任何陳述意見機會。這最可能違反哪種程序理念？",
+        "correct": "正當程序及聽取當事人意見的保障",
+        "wrong": [
+          "以不公開理由提高行政透明度",
+          "所有行政決定只能由網路民調取代",
+          "處分越重大越不需要公平程序"
+        ],
+        "exp": "程序公平通常要求受影響者能適度知悉事由、表達意見，並有依法審查的機會；具體程序依事件與法律規定。",
+        "subject": "公民",
+        "sub_topic": "權利救濟",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-權利救濟",
+        "template_id": "ref-20261119-b4-civ2-remedies-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
