@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-meaning-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "Which sentence is closest in meaning to 'Not all students supported the proposed schedule change'?",
+        "correct": "Some students did not support the proposed schedule change.",
+        "wrong": [
+          "No student supported the proposed schedule change.",
+          "Every student rejected the proposed schedule change.",
+          "Most students supported the change, and no one disagreed."
+        ],
+        "exp": "'Not all' negates a universal claim: at least one student did not support the change. It does not imply that nobody supported it.",
+        "subject": "英文",
+        "sub_topic": "句意辨析",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-句意辨析",
+        "template_id": "ref-20261119-b7-eng2-meaning-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-meaning-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "What does this statement mean? 'Unless the safety inspection is completed, the laboratory will remain closed.'",
+        "correct": "The laboratory cannot reopen before the safety inspection is completed.",
+        "wrong": [
+          "The laboratory must reopen before the inspection begins.",
+          "The laboratory will certainly open immediately after the inspection, regardless of its result.",
+          "The laboratory can reopen without any inspection if students request it."
+        ],
+        "exp": "Unless expresses a necessary condition: no completed inspection means the laboratory stays closed. It does not guarantee reopening the moment the inspection finishes.",
+        "subject": "英文",
+        "sub_topic": "句意辨析",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-句意辨析",
+        "template_id": "ref-20261119-b7-eng2-meaning-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-meaning-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "Which statement most accurately restates 'Few residents opposed the new recycling rules'?",
+        "correct": "Only a small number of residents expressed opposition.",
+        "wrong": [
+          "Almost every resident actively opposed the rules.",
+          "All residents openly supported the rules.",
+          "No resident had an opinion about the rules."
+        ],
+        "exp": "'Few residents opposed' means the number who were against the rules was small. It does not specify how many actively supported or remained neutral.",
+        "subject": "英文",
+        "sub_topic": "句意辨析",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-句意辨析",
+        "template_id": "ref-20261119-b7-eng2-meaning-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
