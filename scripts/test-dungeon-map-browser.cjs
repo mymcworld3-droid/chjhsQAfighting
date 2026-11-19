@@ -9,6 +9,7 @@ const AI=require('../dungeon-enemy-ai.cjs');
 const PlayerCombat=require('../dungeon-player-combat.cjs');
 const SkillCombat=require('../dungeon-skill-combat.cjs');
 const QuizCredits=require('../dungeon-quiz-credit.cjs');
+const Objectives=require('../dungeon-objectives.cjs');
 const manualRecord={
   school:'sword',books:{'sword-wind':{exp:2500}},
   equipped:['wind-slash'],
@@ -180,7 +181,8 @@ app.post('/api/dungeon/room',(req,res)=>{
      room.assembledAtMs=room.battleStartedAtMs;
     room.battleAppliedTick=0;
     room.enemyAiVersion=AI.ENEMY_AI_VERSION;
-    room.enemies=AI.initialEnemies(map);
+    const seeded=Objectives.spawn(map,AI.initialEnemies(map));
+    room.enemies=seeded.enemies;room.dungeonProgress=seeded.progress;
     if(clockLoop)clearInterval(clockLoop);
     clockLoop=setInterval(()=>{
       if(!room||room.status!=='assembled')return;
@@ -205,9 +207,20 @@ app.post('/api/dungeon/room',(req,res)=>{
           skillId:req.body.skillId,target:req.body.target,seq:req.body.seq
         });
       if(out.duplicate)return success();
+      room.dungeonProgress=Objectives.combatProgress(room,out.enemies,uid);
       room.members=out.members;room.enemies=out.enemies;
       room.revision++;publish();return success();
     }catch(error){return res.status(error.status||409).json({ok:false,error:error.message});}
+  }
+  if(action==='activate-portal'){
+    try{
+      const applied=Objectives.activate(room,uid,map);
+      if(applied.duplicate)return success();
+      room.dungeonProgress=applied.progress;room.revision++;publish();
+      return success();
+    }catch(error){return res.status(error.status||409).json({
+      ok:false,error:error.message
+    });}
   }
   if(action==='loadout'){
     try{
@@ -231,6 +244,7 @@ app.post('/api/dungeon/room',(req,res)=>{
       const outcome=PlayerCombat.strikeEnemy(room,uid,map,{
         enemyId:req.body.enemyId,seq:req.body.seq});
       if(outcome.duplicate)return success();
+      room.dungeonProgress=Objectives.combatProgress(room,outcome.enemies,uid);
       room.members=outcome.members;room.enemies=outcome.enemies;
       room.revision++;publish();return success();
     }catch(error){return res.status(error.status||409).json({ok:false,error:error.message});}
