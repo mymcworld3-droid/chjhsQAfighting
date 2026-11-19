@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-chem1-equations-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "化學反應Fe+O₂→Fe₂O₃用最小正整數係數配平後，氧氣O₂的係數是多少？",
+        "correct": "3",
+        "wrong": [
+          "2",
+          "4",
+          "6"
+        ],
+        "exp": "配平為4Fe+3O₂→2Fe₂O₃，左右鐵原子各4個、氧原子各6個，所以O₂係數為3。",
+        "subject": "化學",
+        "sub_topic": "化學式與反應式",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-化學式與反應式",
+        "template_id": "ref-20261119-b3-chem1-equations-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-chem1-equations-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "完整燃燒丙烷C₃H₈的反應為C₃H₈+O₂→CO₂+H₂O，最小正整數係數配平後，氧氣的係數是多少？",
+        "correct": "5",
+        "wrong": [
+          "3",
+          "4",
+          "7"
+        ],
+        "exp": "碳3個得3CO₂，氫8個得4H₂O；生成物共含6+4=10個O原子，需5O₂。",
+        "subject": "化學",
+        "sub_topic": "化學式與反應式",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-化學式與反應式",
+        "template_id": "ref-20261119-b3-chem1-equations-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-chem1-equations-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "已配平反應N₂+3H₂→2NH₃。若2 mol N₂與3 mol H₂充分反應，且不考慮逆反應，最多生成多少莫耳NH₃？",
+        "correct": "2 mol",
+        "wrong": [
+          "3 mol",
+          "4 mol",
+          "6 mol"
+        ],
+        "exp": "反應係數表示3 mol H₂消耗1 mol N₂，生成2 mol NH₃；氫氣為限量反應物，產量為2 mol。",
+        "subject": "化學",
+        "sub_topic": "化學式與反應式",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-化學式與反應式",
+        "template_id": "ref-20261119-b3-chem1-equations-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
