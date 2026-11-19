@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-hist3-researchquestion-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "史料脈絡、來源可信度與可檢驗的歷史問題，不預設結論",
+      "question": {
+        "q": "某生想探討「某城市電車系統對市民生活的影響」，下列哪個研究問題最具可操作性？",
+        "correct": "比較電車開通前後沿線通勤時間與商業聚集的變化，並說明可用史料",
+        "wrong": [
+          "電車是不是歷史上最偉大的交通工具？",
+          "所有城市居民是否從來都一致支持電車？",
+          "如果沒有電車，這個世界是否就不可能進步？"
+        ],
+        "exp": "可操作的問題應限定地點、時段與可觀察的變項，並能找到班次表、路線圖、報刊等資料進行檢驗。",
+        "subject": "歷史",
+        "sub_topic": "問題意識",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-問題意識",
+        "template_id": "ref-20261119-b11-hist3-researchquestion-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-hist3-researchquestion-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "史料脈絡、來源可信度與可檢驗的歷史問題，不預設結論",
+      "question": {
+        "q": "某研究只使用戰時官方宣傳海報，就想回答「當時所有人民是否都自願支持戰爭」。最主要的問題是什麼？",
+        "correct": "宣傳內容呈現政府希望傳達的立場，不足以直接代表所有人的實際態度",
+        "wrong": [
+          "只要海報是當時印製，就足以證明全體民眾的真實想法",
+          "宣傳海報不是文字書籍，因此完全不能用於歷史研究",
+          "研究態度時只需要宣傳口號，不必考慮閱聽者回應"
+        ],
+        "exp": "宣傳海報可研究政治動員目的，但要推論民眾態度還需日記、民意、行為紀錄等不同史料。",
+        "subject": "歷史",
+        "sub_topic": "問題意識",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-問題意識",
+        "template_id": "ref-20261119-b11-hist3-researchquestion-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-hist3-researchquestion-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "史料脈絡、來源可信度與可檢驗的歷史問題，不預設結論",
+      "question": {
+        "q": "研究問題原為「歷史上所有工廠為什麼都會成功？」下列哪項修正最符合史學問題意識？",
+        "correct": "選定某地某時期的工廠，檢驗資本、交通與勞動條件如何影響營運結果",
+        "wrong": [
+          "保留「所有工廠必然成功」的前提，只蒐集成功案例",
+          "把研究期間擴大至古今全世界，讓題目更全面",
+          "先宣稱交通是唯一原因，再拒絕查閱其他類型的資料"
+        ],
+        "exp": "原問題範圍過廣且預設所有工廠成功；修訂後限定對象與時空，容許多原因並可由史料檢驗。",
+        "subject": "歷史",
+        "sub_topic": "問題意識",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-問題意識",
+        "template_id": "ref-20261119-b11-hist3-researchquestion-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
