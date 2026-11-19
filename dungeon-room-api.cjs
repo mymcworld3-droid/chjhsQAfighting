@@ -63,7 +63,10 @@ const publicRoom=(roomId,room,at=Date.now())=>({
   // never the secret map seed or server-side patrol/decision internals.
   enemies:Array.isArray(room.enemies)?room.enemies.map(e=>({
     id:e.id,name:e.name,kind:e.kind,position:e.position,
-    ...(e.kind==='boss'?{footprint:2,phase:Boss.phase(e.battleHealth)}:{}),
+    ...(e.kind==='boss'?{footprint:2,phase:Boss.phase(e.battleHealth),
+      shield:Math.max(0,Number(e.shield)||0),shieldMax:Boss.SHIELD_MAX,
+      exposedUntilTick:e.exposedUntilTick||0,
+      lastTeamHit:e.lastTeamHit||null}:{}),
     intent:e.intent,targetUid:e.targetUid||null,
     lastActionTick:e.lastActionTick,cadence:e.cadence,
     battleHealth:Number.isSafeInteger(e.battleHealth)?e.battleHealth:maxHealth(e.kind),
@@ -127,7 +130,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','activate-portal','enter-boss','boss-ready','rescue','claim-boss-reward','recent-victories','clock'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','activate-portal','enter-boss','boss-ready','boss-guard','rescue','claim-boss-reward','recent-victories','clock'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -557,6 +560,28 @@ function createHandler({
           const result=QuizCredit.credit(evolved,uid,graded,questionId,roomId);
           if(result.duplicate&&!battleDelta)return current;
           const next={...evolved,members:result.members,revision:current.revision+1};
+          tx.update(roomRef,{...(battleDelta||{}),members:next.members,
+            revision:next.revision});
+          return next;
+        });
+        return respond(roomId,updated);
+      }
+      if(action==='boss-guard'){
+        // Guard strength, range, duration, cost and the next action sequence
+        // are all verified in the server-owned C-room transaction.
+        const {targetUid,seq}=req.body||{};
+        const updated=await db.runTransaction(async tx=>{
+          const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
+          if(!current||!hasMember(current,uid))
+            throw err('你不是此副本的隊員',403);
+          if(!sessionRoom(current,at))throw err('副本已結束或房間已過期',410);
+          if(current.status!=='assembled')throw err('副本尚未開始',409);
+          const map=roomMap(current,roomId);
+          const battleDelta=advanceWorld(current,map,at);
+          const evolved={...current,...(battleDelta||{})};
+          const out=Boss.guard(evolved,uid,map,{targetUid,seq});
+          if(out.duplicate&&!battleDelta)return current;
+          const next={...evolved,members:out.members,revision:current.revision+1};
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
             revision:next.revision});
           return next;
