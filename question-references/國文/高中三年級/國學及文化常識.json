@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-chi3-classics-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "下列哪一組完整列出儒家典籍「四書」？",
+        "correct": "《大學》《中庸》《論語》《孟子》",
+        "wrong": [
+          "《詩經》《尚書》《禮記》《周易》",
+          "《史記》《漢書》《後漢書》《三國志》",
+          "《莊子》《韓非子》《墨子》《荀子》"
+        ],
+        "exp": "四書為《大學》《中庸》《論語》《孟子》；其他選項分別屬經部部分典籍、史書與諸子著作。",
+        "subject": "國文",
+        "sub_topic": "國學及文化常識",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-國學及文化常識",
+        "template_id": "ref-20261119-b4-chi3-classics-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chi3-classics-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "比較《史記》與《資治通鑑》的體例，哪項敘述正確？",
+        "correct": "《史記》是紀傳體通史，《資治通鑑》是編年體通史",
+        "wrong": [
+          "《史記》是編年體通史，《資治通鑑》是紀傳體通史",
+          "兩書均為依地理區域分卷的地理志",
+          "兩書均為先秦時期的詩歌總集"
+        ],
+        "exp": "司馬遷《史記》以本紀、世家、列傳等組成紀傳體；司馬光《資治通鑑》依年代敘述歷史，為編年體通史。",
+        "subject": "國文",
+        "sub_topic": "國學及文化常識",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-國學及文化常識",
+        "template_id": "ref-20261119-b4-chi3-classics-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chi3-classics-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "屈原〈離騷〉在中國文學史上最常與哪一文學傳統相關？",
+        "correct": "楚辭",
+        "wrong": [
+          "元曲",
+          "唐代傳奇小說",
+          "明清章回小說"
+        ],
+        "exp": "〈離騷〉是屈原代表作，屬楚辭文學傳統，其語言與意象具有楚地文化特色。",
+        "subject": "國文",
+        "sub_topic": "國學及文化常識",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-國學及文化常識",
+        "template_id": "ref-20261119-b4-chi3-classics-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
