@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-math2-period-model-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "某地潮位模型h(t)=3+2cos(πt/4)，其中t為小時。此潮位變化模型的週期為何？",
+        "correct": "8小時",
+        "wrong": [
+          "4小時",
+          "2小時",
+          "16小時"
+        ],
+        "exp": "cos(ωt)的週期為2π/|ω|，此處ω=π/4，故週期2π/(π/4)=8小時。",
+        "subject": "數學",
+        "sub_topic": "週期模型的實際應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-週期模型的實際應用",
+        "template_id": "ref-20261119-b9-math2-period-model-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math2-period-model-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "摩天輪座艙高度模型h(t)=18−15cos(πt/15)，t為分鐘，則座艙最高高度為何？",
+        "correct": "33公尺",
+        "wrong": [
+          "18公尺",
+          "15公尺",
+          "3公尺"
+        ],
+        "exp": "cos範圍為[−1,1]，高度最大發生cos=−1，故18−15×(−1)=33公尺。",
+        "subject": "數學",
+        "sub_topic": "週期模型的實際應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-週期模型的實際應用",
+        "template_id": "ref-20261119-b9-math2-period-model-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math2-period-model-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "某溫度模型T(t)=24+4sin(πt/12)，t以小時計且t=0為起點。模型預測第一次達到最高溫度的時間t為何？",
+        "correct": "6小時",
+        "wrong": [
+          "3小時",
+          "12小時",
+          "24小時"
+        ],
+        "exp": "最高溫度時sin(πt/12)=1，最小非負解πt/12=π/2，得t=6小時。",
+        "subject": "數學",
+        "sub_topic": "週期模型的實際應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-週期模型的實際應用",
+        "template_id": "ref-20261119-b9-math2-period-model-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
