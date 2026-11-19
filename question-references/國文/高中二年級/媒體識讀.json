@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-ch2-media-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "社群平台貼文聲稱「九成高中生支持延後上課」，卻只訪問某校社團的20名學生。這項結論最主要的推論問題為何？",
+        "correct": "樣本來源有限，不能直接概括全體高中生",
+        "wrong": [
+          "只要使用百分比，任何樣本都具有全國代表性",
+          "只要20人中有18人同意，便無須檢查抽樣方法",
+          "社會調查完全不能使用數字"
+        ],
+        "exp": "20名特定社團成員是有限且可能有偏的樣本，無法逕行推論全國高中生的意見分布。",
+        "subject": "國文",
+        "sub_topic": "媒體識讀",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-媒體識讀",
+        "template_id": "ref-20261119-b5-ch2-media-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ch2-media-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "一張網路流傳的洪水照片被標示為「昨天本市災情」，查證發現同一照片五年前已出現在另一國的新聞。哪種處理最合理？",
+        "correct": "查明拍攝時間與地點，指出照片遭重新挪用",
+        "wrong": [
+          "因照片中確實有洪水，就認定現在本市同樣淹水",
+          "只看分享次數判斷事件年代",
+          "只因影像清晰便視為當天拍攝"
+        ],
+        "exp": "照片所示災害可能真實，但搭配錯誤時間與地點會形成誤導；查核原始影像來源及背景是關鍵。",
+        "subject": "國文",
+        "sub_topic": "媒體識讀",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-媒體識讀",
+        "template_id": "ref-20261119-b5-ch2-media-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ch2-media-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "某短影片引用研究稱：「飲食習慣A與睡眠品質較好有關」，卻將其標題寫為「A能保證每個人睡得更好」。最主要誇大了什麼？",
+        "correct": "把相關性與群體觀察誤寫成對所有人的必然因果效果",
+        "wrong": [
+          "把隨機試驗的結論忠實翻成相同意思",
+          "因研究提到睡眠就必定沒有任何統計依據",
+          "證明研究已涵蓋全球每一位受試者"
+        ],
+        "exp": "研究中的關聯不必然等於因果，更不能據此聲稱對所有人必定有效；應檢視研究設計、效應大小與樣本限制。",
+        "subject": "國文",
+        "sub_topic": "媒體識讀",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-媒體識讀",
+        "template_id": "ref-20261119-b5-ch2-media-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
