@@ -406,16 +406,19 @@ function createHandler({
         return respond(roomId,updated);
       }
       if(action==='skill'||action==='loadout'){
+        // Manuscript progress belongs to Firebase A (playerRepository),
+        // while cooperative room state belongs to Firebase C. These cannot
+        // participate in one cross-database transaction: read the trusted A
+        // snapshot first, then atomically authorize/calculate the room in C.
+        const manualSnap=await resolveA().db.collection('tacticalManuals').doc(uid).get();
+        const record=manualSnap.exists?manualSnap.data():null;
         const updated=await db.runTransaction(async tx=>{
           const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
           if(!current||!hasMember(current,uid))
             throw err('你不是此副本的隊員',403);
           if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
           if(current.status!=='assembled')throw err('請先完成全隊集結',409);
-          // The manual record is read inside this transaction. Client-side
-          // skill lists, upgrade levels, equipment and realm are never trusted.
-          const manualSnap=await tx.get(db.collection('tacticalManuals').doc(uid));
-          const record=manualSnap.exists?manualSnap.data():null;
+          // Client-side skill lists, upgrades and combat stats are never trusted.
           const map=roomMap(current,roomId);
           const battleDelta=advanceWorld(current,map,at);
           const evolved={...current,...(battleDelta||{})};
@@ -451,6 +454,21 @@ function createHandler({
         return respond(roomId,updated);
       }
       if(action==='start'||action==='cancel-start'){
+        let manualByUid=null,rosterKey=null;
+        if(action==='start'){
+          const preflight=await roomRef.get(),found=preflight.exists?preflight.data():null;
+          if(!found||found.hostUid!==uid||!hasMember(found,uid))
+            throw err('只有隊長能決定副本出發',403);
+          if(!sessionRoom(found,at))throw err('隊伍已關閉或過期',409);
+          // Gather authoritative player manuscripts from A. If the roster
+          // changes before C commits, the transaction refuses a stale start.
+          const ids=Object.keys(membersOf(found)).sort();
+          rosterKey=ids.join('|');
+          const records=await Promise.all(ids.map(id=>
+            resolveA().db.collection('tacticalManuals').doc(id).get()));
+          manualByUid=Object.fromEntries(ids.map((id,i)=>
+            [id,records[i].exists?records[i].data():null]));
+        }
         const updated=await db.runTransaction(async tx=>{
           const snap=await tx.get(roomRef),room=snap.exists?snap.data():null;
           if(!room||!hasMember(room,uid)||room.hostUid!==uid)
@@ -462,20 +480,18 @@ function createHandler({
             const members=Object.values(membersOf(room));
             if(!members.length||members.some(m=>m.ready!==true))
               throw err('請先等待所有隊員準備完成',409);
+            if(Object.keys(membersOf(room)).sort().join('|')!==rosterKey)
+              throw err('副本成員名單已變更，請重新開始',409);
             // Spawn positions/energy are committed atomically before anyone
             // can move. Cross-instance clients see one authoritative snapshot.
             const map=roomMap(room,roomId);
             const startingMembers=startExplorationMembers(room,map);
-            // Snapshot current C-side manuscripts for all 1-4 members before
-            // writing any state. Entry skills are authoritative, not browser
-            // selected; later battle loadout switches re-read the same source.
-            const ids=Object.keys(startingMembers);
-            const records=await Promise.all(ids.map(id=>
-              tx.get(db.collection('tacticalManuals').doc(id))));
-            for(let i=0;i<ids.length;i++){
-              const id=ids[i],record=records[i].exists?records[i].data():null;
+            // The verified A-side snapshot is installed in the committed C
+            // room; neither client-side changes nor another player's inputs
+            // can inject an equipped skill into the shared room.
+            for(const id of Object.keys(startingMembers)){
               startingMembers[id]={...startingMembers[id],
-                ...Skills.initialCombatLoadout(startingMembers[id],record)};
+                ...Skills.initialCombatLoadout(startingMembers[id],manualByUid[id])};
             }
             const clockState=initialClock(at),enemies=initialEnemies(map);
             const enemyState={enemyAiVersion:ENEMY_AI_VERSION,enemies};
