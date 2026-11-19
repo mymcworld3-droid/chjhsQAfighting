@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-chem1-acid-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以明確濃度、酸鹼指示劑及計量關係理解中和",
+      "question": {
+        "q": "25°C下，將0.010 M的強酸HCl稀釋十倍至0.0010 M，假設完全解離且忽略水自解離，pH約如何變化？",
+        "correct": "由2升至3",
+        "wrong": [
+          "由2降至1",
+          "由2升至12",
+          "保持2"
+        ],
+        "exp": "強酸完全解離，[H⁺]由10⁻² M降至10⁻³ M，pH=−log[H⁺]由2變成3。",
+        "subject": "化學",
+        "sub_topic": "酸、鹼與中和",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中一年級-酸、鹼與中和",
+        "template_id": "ref-20261119-b2-chem1-acid-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-chem1-acid-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以明確濃度、酸鹼指示劑及計量關係理解中和",
+      "question": {
+        "q": "酚酞指示劑加入稀NaOH水溶液後呈現粉紅色；若再逐漸加入HCl並充分攪拌，使溶液轉為明顯酸性，顏色最可能變為何？",
+        "correct": "無色",
+        "wrong": [
+          "深藍色",
+          "黑色",
+          "綠色"
+        ],
+        "exp": "酚酞在鹼性溶液呈粉紅色，在酸性或近中性條件下通常無色。",
+        "subject": "化學",
+        "sub_topic": "酸、鹼與中和",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中一年級-酸、鹼與中和",
+        "template_id": "ref-20261119-b2-chem1-acid-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-chem1-acid-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以明確濃度、酸鹼指示劑及計量關係理解中和",
+      "question": {
+        "q": "20.0 mL、0.10 M的H₂SO₄與0.20 M NaOH完全中和。假設每個H₂SO₄可提供2個需中和的H⁺，需NaOH多少毫升？",
+        "correct": "20.0 mL",
+        "wrong": [
+          "10.0 mL",
+          "40.0 mL",
+          "2.0 mL"
+        ],
+        "exp": "硫酸莫耳數=0.0200×0.10=0.00200 mol，需OH⁻ 0.00400 mol；NaOH體積=0.00400/0.20=0.0200 L=20.0 mL。",
+        "subject": "化學",
+        "sub_topic": "酸、鹼與中和",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中一年級-酸、鹼與中和",
+        "template_id": "ref-20261119-b2-chem1-acid-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
