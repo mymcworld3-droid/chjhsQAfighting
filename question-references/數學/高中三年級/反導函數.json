@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-math3-antiderivative-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "若f(x)=4x³−6x+5，下列哪一個是f的反導函數？",
+        "correct": "x⁴−3x²+5x",
+        "wrong": [
+          "12x²−6",
+          "x⁴−6x²+5x",
+          "4x⁴−3x²+5x"
+        ],
+        "exp": "對F(x)=x⁴−3x²+5x微分，得F'(x)=4x³−6x+5，符合反導函數的定義。",
+        "subject": "數學",
+        "sub_topic": "反導函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-反導函數",
+        "template_id": "ref-20261119-b4-math3-antiderivative-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-math3-antiderivative-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "設F'(x)=6x−4且F(1)=3，則F(0)為何？",
+        "correct": "4",
+        "wrong": [
+          "3",
+          "−1",
+          "−4"
+        ],
+        "exp": "F(x)=3x²−4x+C。由F(1)=3−4+C=3得C=4，所以F(0)=4。",
+        "subject": "數學",
+        "sub_topic": "反導函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-反導函數",
+        "template_id": "ref-20261119-b4-math3-antiderivative-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-math3-antiderivative-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "若F'(x)=2x且F(0)=1，則F(3)為何？",
+        "correct": "10",
+        "wrong": [
+          "9",
+          "6",
+          "7"
+        ],
+        "exp": "積分得F(x)=x²+C，因F(0)=1得C=1，故F(3)=9+1=10。",
+        "subject": "數學",
+        "sub_topic": "反導函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-反導函數",
+        "template_id": "ref-20261119-b4-math3-antiderivative-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
