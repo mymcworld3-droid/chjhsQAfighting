@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-civ2-unemployment-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "某地就業人口為960人，失業且有尋職意願並正在找工作的人口為40人。若勞動力僅包含上述兩群，失業率為何？",
+        "correct": "4%",
+        "wrong": [
+          "4.17%",
+          "40%",
+          "96%"
+        ],
+        "exp": "勞動力=就業960+失業40=1,000人；失業率=40/1,000×100%=4%。",
+        "subject": "公民",
+        "sub_topic": "失業與經濟成長",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-失業與經濟成長",
+        "template_id": "ref-20261119-b3-civ2-unemployment-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-civ2-unemployment-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "某國某年的實質GDP為2,000億元，次年增至2,100億元，若統計口徑一致，實質經濟成長率為何？",
+        "correct": "5%",
+        "wrong": [
+          "10%",
+          "2.5%",
+          "100%"
+        ],
+        "exp": "實質成長率=(2,100−2,000)/2,000×100%=5%。",
+        "subject": "公民",
+        "sub_topic": "失業與經濟成長",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-失業與經濟成長",
+        "template_id": "ref-20261119-b3-civ2-unemployment-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-civ2-unemployment-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "某製造業引進新型設備，使部分原有員工的技能與新職務需求不符，即使經濟未衰退仍出現失業。這較接近何種失業？",
+        "correct": "結構性失業",
+        "wrong": [
+          "循環性失業",
+          "摩擦性失業中的短期轉職等待",
+          "僅由季節性農忙造成的失業"
+        ],
+        "exp": "產業技術變動造成勞工技能與新職務要求不匹配，屬結構性失業；景氣衰退引起的需求下降才較接近循環性失業。",
+        "subject": "公民",
+        "sub_topic": "失業與經濟成長",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-失業與經濟成長",
+        "template_id": "ref-20261119-b3-civ2-unemployment-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
