@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-en1-writing-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "A student writes: 'Our class wants to use less paper. We now share notices online and print only when necessary.' Which final sentence best completes the paragraph?",
+        "correct": "Together, these changes can help our class reduce unnecessary printing.",
+        "wrong": [
+          "Therefore, every digital device uses no energy at all.",
+          "We should immediately stop reading books of any kind.",
+          "Our class has learned that paper and plastic are identical."
+        ],
+        "exp": "The ending restates the purpose and practical effects of the steps described without introducing a false or unrelated claim.",
+        "subject": "英文",
+        "sub_topic": "段落寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中一年級-段落寫作",
+        "template_id": "ref-20261119-b8-en1-writing-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-writing-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "A paragraph describes why students should take regular study breaks. Which detail provides the strongest support?",
+        "correct": "A brief stretch after focused work may help students return feeling more alert.",
+        "wrong": [
+          "Many students own backpacks of different sizes.",
+          "The school has several doors near the cafeteria.",
+          "The classroom windows face a large playground."
+        ],
+        "exp": "The correct sentence directly illustrates a possible benefit of a study break; the other facts do not support the topic.",
+        "subject": "英文",
+        "sub_topic": "段落寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中一年級-段落寫作",
+        "template_id": "ref-20261119-b8-en1-writing-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-writing-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "A writer wishes to compare biking and taking the bus to school. Which topic sentence makes the comparison clear?",
+        "correct": "Cycling and taking the bus can both reduce car trips, but they differ in flexibility and physical effort.",
+        "wrong": [
+          "Bicycles are useful, and their paint can be colorful.",
+          "Bus stops are built of different materials.",
+          "Travel is an important part of life, and some cities are old."
+        ],
+        "exp": "The sentence introduces both transport modes and specifies comparable dimensions, giving the paragraph a clear structure.",
+        "subject": "英文",
+        "sub_topic": "段落寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中一年級-段落寫作",
+        "template_id": "ref-20261119-b8-en1-writing-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
