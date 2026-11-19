@@ -1,0 +1,873 @@
+/* Generated counterpart of public/styles/tactical-quarter-controls.css.
+   Shared classes/geometry match 問道試煉. Regenerate when trial styles change. */
+/* 問道試煉戰場：全幅可操作畫布、有限大小地圖、左下充能、
+   右下攻擊／移動／結束回合。其餘操作不在此畫面露出。
+   PvP、答題彈窗、妖獸介紹仍使用原本畫面與流程。 */
+#dungeon-map-view.tc-quarter-layout{
+  --tc-dial: min(30vw,44vh);
+  --tc-wheel:var(--tc-dial); /* right wheel matches the left charging dial */
+  --tc-ink:#161b17;
+  --tc-gold:#c6b68d;
+  background:var(--tc-ink);
+}
+/* Keep the original top title, turn/status text and 收起 button. The game
+   flex layout reserves space for this header, so the map/dials remain below. */
+#dungeon-map-view.tc-quarter-layout .tc-top{
+  display:flex!important;
+  flex:0 0 auto!important;
+  position:relative;
+  z-index:6;
+  align-items:center;
+  justify-content:space-between;
+}
+#dungeon-map-view.tc-quarter-layout .tc-top [data-close]{
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+}
+#dungeon-map-view.tc-quarter-layout .tc-main.tc-game{
+  flex:1;display:block!important;position:relative;
+  min-height:0;min-width:0;
+  overflow:hidden!important;padding:0!important;margin:0!important;
+  background:var(--tc-ink);
+}
+#dungeon-map-view.tc-quarter-layout .tc-main.tc-game::before{
+  content:none!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-arena{
+  position:absolute;inset:0;
+  display:block!important;
+  width:100%;height:100%;
+  min-width:0;min-height:0;
+  padding:0!important;margin:0!important;
+  overflow:hidden;
+}
+#dungeon-map-view.tc-quarter-layout .tc-arena>canvas{
+  position:absolute;
+  inset:0;
+  width:100%!important;height:100%!important;
+  display:block;
+  min-height:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#222c25;
+  box-shadow:none!important;
+  cursor:grab;
+  touch-action:none!important;
+  overscroll-behavior:contain;
+  -webkit-user-select:none;user-select:none;
+}
+#dungeon-map-view.tc-quarter-layout .tc-arena>canvas:active{cursor:grabbing}
+#dungeon-map-view.tc-quarter-layout .tc-objective:not([hidden]){
+  position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:2;
+  max-width:75%;padding:5px 12px;border:1px solid #84c7b877;border-radius:12px;
+  background:#12291ddd;color:#d9f7e9;font-size:12px;text-align:center;
+  pointer-events:none;text-shadow:0 1px 2px #000;
+}
+#dungeon-map-view.tc-quarter-layout.tc-animating .tc-arena>canvas{cursor:progress}
+
+/* Existing battle data is still updated, but is deliberately absent from
+   the sketch. No sidebars, status captions, extra skills, guard or confirm. */
+#dungeon-map-view.tc-quarter-layout .tc-arena-heading,
+#dungeon-map-view.tc-quarter-layout .tc-selection,
+#dungeon-map-view.tc-quarter-layout .tc-actors,
+#dungeon-map-view.tc-quarter-layout .tc-skill-info,
+#dungeon-map-view.tc-quarter-layout .tc-game-footer,
+#dungeon-map-view.tc-quarter-layout .tc-turn-buttons,
+#dungeon-map-view.tc-quarter-layout .tc-command>[data-execute],
+#dungeon-map-view.tc-quarter-layout .tc-action-tabs>[data-action="skill"],
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-stamina]{
+  display:none!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-sidebar,
+#dungeon-map-view.tc-quarter-layout .tc-command,
+#dungeon-map-view.tc-quarter-layout .tc-action-tabs{
+  display:contents!important;
+}
+
+/* The full circle center sits precisely at the bottom-left corner. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter{
+  position:absolute;
+  bottom:0;
+  width:var(--tc-dial);height:var(--tc-dial);
+  z-index:3;
+  box-sizing:border-box;
+  overflow:hidden;
+  isolation:isolate;
+  color:#e8d9b5;
+  border:2px solid var(--tc-gold);
+  box-shadow:0 0 1px rgba(0,0,0,.4);
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy{
+  left:0;
+  border-radius:0 100% 0 0;
+  border-color:rgba(68,199,122,.75);
+  background:radial-gradient(circle at 19% 90%,#11291e 0%,#143c29 53%,#13261d 100%);
+}
+/* Ten thick curved green bar segments, fed directly by server stamina. */
+#dungeon-map-view.tc-quarter-layout .tc-energy-ring{
+  position:absolute;z-index:2;
+  inset:0;width:100%;height:100%;
+  pointer-events:none;
+  overflow:visible;
+}
+#dungeon-map-view.tc-quarter-layout .tc-energy-track{
+  fill:none;
+  stroke:#214d35;
+  stroke-width:8;
+  stroke-linecap:round;
+  opacity:.86;
+}
+#dungeon-map-view.tc-quarter-layout [data-energy-segment]{
+  fill:none;
+  stroke:#356048;
+  stroke-width:6.9;
+  stroke-linecap:round;
+  opacity:.74;
+  transition:stroke .25s ease,opacity .25s ease,filter .25s ease;
+}
+#dungeon-map-view.tc-quarter-layout [data-energy-segment].is-filled{
+  stroke:#45f48e;
+  stroke-width:7.1;
+  opacity:1;
+  filter:drop-shadow(0 0 2.6px rgba(54,239,128,.9));
+}
+/* The inner quadrant is the charging action, not a decorative button.
+   Green pulsing appears only while the existing quiz action is enabled. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz]{
+  position:absolute;left:0;bottom:0;z-index:3;
+  width:80%;height:80%;
+  min-width:0;min-height:0!important;
+  margin:0;padding:0!important;
+  border:2px solid #328a59!important;
+  border-radius:0 100% 0 0!important;
+  background:radial-gradient(circle at 34% 63%,#1b4931 0%,#143926 55%,#112c20 100%)!important;
+  box-shadow:inset 0 0 17px rgba(33,115,63,.25)!important;
+  color:#e6ffe9!important;
+  cursor:pointer;
+  opacity:1;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz]:disabled{
+  cursor:default;
+  opacity:1!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready{
+  background:radial-gradient(circle at 38% 46%,#2bb964 0%,#198446 59%,#0f4b2f 100%)!important;
+  border-color:#66f5a1!important;
+  animation:tc-charge-ready-pulse 1.75s ease-in-out infinite;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz]:hover:not(:disabled){
+  border-color:#a2ffca!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready:hover{
+  background:radial-gradient(circle at 42% 45%,#42cf78 0%,#248f51 64%,#13482e 100%)!important;
+}
+@keyframes tc-charge-ready-pulse{
+  0%,100%{
+    filter:brightness(1) drop-shadow(0 0 2px rgba(36,223,99,.24));
+  }
+  50%{
+    filter:brightness(1.17) drop-shadow(0 0 11px rgba(52,238,121,.72));
+  }
+}
+#dungeon-map-view.tc-quarter-layout .tc-energy-bolt{
+  position:absolute;left:18%;top:23%;
+  width:39%;height:59%;
+  display:block;
+  overflow:visible;
+  pointer-events:none;
+  filter:drop-shadow(0 2px 2px rgba(4,45,22,.58)) drop-shadow(0 0 7px rgba(159,255,175,.62));
+}
+#dungeon-map-view.tc-quarter-layout .tc-bolt-outline{
+  fill:none;stroke:#0b4b2c;stroke-width:6.3;stroke-linejoin:round;
+}
+#dungeon-map-view.tc-quarter-layout .tc-bolt-fill{
+  fill:url(#tc-bolt-gradient);
+  stroke:#e9ffdd;stroke-width:1.3;stroke-linejoin:round;
+}
+#dungeon-map-view.tc-quarter-layout .tc-bolt-glint{
+  fill:none;stroke:#fff;stroke-width:2.7;stroke-linejoin:round;
+  stroke-linecap:round;opacity:.82;
+}
+#dungeon-map-view.tc-quarter-layout .tc-energy-number{
+  position:absolute;right:12%;bottom:9%;
+  min-width:23%;
+  font-family:system-ui,sans-serif;
+  font-size:clamp(25px,3.9vw,54px);
+  font-weight:600;
+  line-height:1.05;
+  text-align:center;
+  color:#eaffdf;
+  text-shadow:0 0 8px rgba(91,243,138,.66);
+  pointer-events:none;
+}
+#dungeon-map-view.tc-quarter-layout .tc-charge-label{
+  position:absolute;left:4%;bottom:6%;width:83%;
+  color:#eff8e6;font:600 clamp(8px,2vw,12px)/1.2 system-ui,sans-serif;
+  text-align:center;white-space:nowrap;
+  text-shadow:0 1px 4px #0c2516;pointer-events:none;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz]:focus-visible,
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action button:focus-visible{
+  outline:3px solid #f5dfab!important;
+  outline-offset:-5px!important;
+}
+
+/* The selected buttons are curved pizza-edge annular sectors.
+   Their SVG rotors glide over the middle action and outer target/skill rings;
+   label text follows the slices without any pill-shaped background. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action{
+  right:0;
+  width:var(--tc-wheel);height:var(--tc-wheel);
+  border-radius:100% 0 0 0;
+  background:radial-gradient(circle at 100% 100%,#111b16 0%,#1d2a21 50%,#304035 100%);
+  touch-action:none;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-options{display:contents!important}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[hidden]{
+  display:none!important;
+  pointer-events:none!important;
+}
+/* Hidden choices must not cover the outer ring after mode changes. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector{
+  position:absolute;inset:0;z-index:2;
+  display:block;
+  width:100%;height:100%;
+  min-width:0;min-height:0!important;
+  padding:0!important;margin:0!important;
+  border:0!important;border-radius:0!important;
+  box-shadow:none!important;
+  background:#27382e!important;
+  color:#e6d9b7!important;
+  font:600 clamp(12px,1.65vw,24px)/1.2 "Noto Serif TC","Songti TC",serif!important;
+  white-space:normal;
+  text-align:center;
+  cursor:pointer;
+  touch-action:none;
+  transition:background .2s ease,color .2s ease;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[aria-pressed=true]{
+  background:#455640!important;
+  color:#fff7db!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[aria-pressed=true]>span{
+  opacity:0; /* The curved moving sector carries the selected name and cost. */
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector:hover:not(:disabled){
+  background:#526a50!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector:disabled{
+  opacity:1!important;color:#989e8d!important;cursor:default;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector>span{
+  position:absolute;display:block;pointer-events:none;
+  white-space:normal;line-height:1.12;overflow-wrap:anywhere;
+}
+/* Option labels and the sliding outer sector both display the exact cost.
+   Smaller second lines stay within the recessed annular track. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-wheel-name{
+  display:block;
+  font-weight:700;
+  line-height:1.1;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-wheel-cost{
+  display:block;
+  margin-top:2px;
+  font-size:.72em;
+  line-height:1.1;
+  font-weight:600;
+  letter-spacing:-.025em;
+  white-space:nowrap;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]>span{
+  font-size:clamp(9px,1.05vw,16px);
+  line-height:1.06;
+}
+#dungeon-map-view.tc-quarter-layout .tc-sector-attack>span{
+  left:58%;top:39%;width:37%;
+}
+#dungeon-map-view.tc-quarter-layout .tc-sector-move>span{
+  left:25%;top:71%;width:39%;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]{
+  z-index:3;
+  font:600 clamp(10px,1.25vw,19px)/1.18 "Noto Serif TC","Songti TC",serif!important;
+  background:#283d32!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice][aria-pressed=true]{
+  background:#365a41!important;color:#f3f9de!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]>span{
+  width:clamp(38px,32%,90px);
+  transform:translate(-50%,-50%);
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice].is-unavailable{
+  color:#c1bca9!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector-end{
+  z-index:4;background:#19261d!important;
+  font-size:clamp(16px,2.4vw,31px)!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-sector-end>span{
+  left:65%;top:75%;width:32%;
+  transform:translate(-2%,-2%);
+}
+#dungeon-map-view.tc-quarter-layout .tc-action-lines{
+  position:absolute;inset:0;z-index:5;
+  width:100%;height:100%;overflow:visible;
+  pointer-events:none;
+}
+#dungeon-map-view.tc-quarter-layout .tc-action-lines path,
+#dungeon-map-view.tc-quarter-layout .tc-action-lines line{
+  fill:none;stroke:var(--tc-gold);stroke-width:.9;
+  vector-effect:non-scaling-stroke;
+}
+#dungeon-map-view.tc-quarter-layout .tc-action-lines path:first-child{stroke-width:1.2}
+#dungeon-map-view.tc-quarter-layout .tc-action-lines .tc-wheel-lane-guide{
+  stroke:#10291f;
+  stroke-width:1.65;
+  opacity:.9;
+}
+/* Slim wedges sit between the inset rails with a visible margin on all sides. */
+/* A real circular sector, clipped by its own concentric SVG arcs. */
+#dungeon-map-view.tc-quarter-layout .tc-wheel-slider{
+  position:absolute;inset:0;z-index:6;
+  display:block;width:100%;height:100%;
+  overflow:hidden;pointer-events:none;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-slider-rotor{
+  transform-origin:100px 100px;
+  transform-box:view-box;
+  transition:transform .40s cubic-bezier(.22,.85,.22,1);
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-slider-shape{
+  fill:#dbb56c;stroke:#fff0bd;stroke-width:.85;
+  stroke-linejoin:round;
+  filter:drop-shadow(0 0 .9px #f8de9c);
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-slider-detail .tc-wheel-slider-shape{
+  fill:#61bd87;stroke:#ddffdd;
+  filter:drop-shadow(0 0 .9px #a7ffb1);
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-slider.is-dragging .tc-wheel-slider-rotor{
+  transition:none!important;
+}
+/* The words travel with the sector, but are never rounded capsules. */
+#dungeon-map-view.tc-quarter-layout .tc-wheel-marker{
+  position:absolute;z-index:7;pointer-events:none;
+  display:block;
+  width:clamp(44px,23%,92px);
+  padding:0;margin:0;min-height:0;
+  border:0;border-radius:0;background:transparent;
+  box-shadow:none;
+  color:#241d11;
+  font:700 clamp(11px,1.5vw,19px)/1.13 "Noto Serif TC","Songti TC",sans-serif;
+  text-align:center;white-space:normal;overflow-wrap:anywhere;
+  text-shadow:0 1px 0 #fff1bb8c;
+  transform:translate(-50%,-50%);
+  transition:left .40s cubic-bezier(.22,.85,.22,1),top .40s cubic-bezier(.22,.85,.22,1);
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker{
+  width:clamp(50px,29%,114px);
+  color:#11271c;
+  font-size:clamp(10px,1.2vw,15px);
+  line-height:1.06;
+  text-shadow:0 1px 0 #d8ffe599;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-marker.is-dragging{
+  transition:none!important;
+}
+/* Sketch ratios stay correct inside the portrait 9:16 game frame. */
+@media(orientation:portrait){
+  #dungeon-map-view.tc-quarter-layout{
+    --tc-dial:min(50vw,31vh);
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]{
+    font-size:clamp(9px,2.7vw,15px)!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-marker{
+    width:clamp(30px,24%,72px);
+    font-size:clamp(9px,2.7vw,13px);
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker{
+    width:clamp(42px,30%,88px);
+    font-size:clamp(9px,2.2vw,12px);
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]>span{
+    font-size:clamp(9px,2.2vw,12px);
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-wheel-cost{
+    margin-top:1px;
+    font-size:.74em;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector{
+    font-size:clamp(13px,3.8vw,20px)!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector-end{
+    font-size:clamp(15px,4vw,25px)!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-energy-bolt{
+    left:17%;top:23%;width:42%;height:60%;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-energy-number{
+    font-size:clamp(23px,6vw,38px);
+  }
+}
+@media(orientation:landscape) and (max-height:460px){
+  #dungeon-map-view.tc-quarter-layout{
+    --tc-dial:min(29vw,48vh);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector,
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-marker,
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-slider-rotor,
+  #dungeon-map-view.tc-quarter-layout [data-energy-segment]{
+    transition:none!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready{
+    animation:none!important;
+    filter:none!important;
+    box-shadow:inset 0 0 18px rgba(84,224,130,.35)!important;
+  }
+}
+/* Keep the original question screen unchanged during answer/review modals. */
+#dungeon-map-view.tc-quarter-layout .tc-modal .tc-question{line-height:1.95!important}
+#dungeon-map-view.tc-quarter-layout .tc-modal .tc-options>button{color:#eee8d5!important}
+html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.bg-green-600{background:#285a40!important;border-color:#a8d1a4!important}
+html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.bg-red-600{background:#69372f!important;border-color:#e2ad9a!important}
+
+
+#dungeon-map-view .tc-manual-loot{
+  margin:10px 0;padding:11px 13px;background:#20432b;
+  border:1px solid #d9be7a;border-radius:9px;color:#f5dda2;
+}
+
+/* Battle controls: aged bronze edging and jade light, within the original
+   quarter-circle geometry. The canvas and all hit areas remain unchanged. */
+#dungeon-map-view.tc-quarter-layout{
+  --tc-gold:#a9956b;
+  --tc-ink:#141b17;
+}
+#dungeon-map-view.tc-quarter-layout .tc-top{
+  background:linear-gradient(90deg,#171c17 0%,#20251d 52%,#151a16 100%);
+  border-bottom:1px solid #8b79544f;
+  box-shadow:0 3px 14px #090e0bb3;
+}
+#dungeon-map-view.tc-quarter-layout .tc-top h1{
+  color:#e9dfc7;
+  font-weight:600;
+  text-shadow:0 1px 8px #000b;
+}
+#dungeon-map-view.tc-quarter-layout .tc-top-right>span{color:#c6b99c}
+#dungeon-map-view.tc-quarter-layout .tc-top [data-close]{
+  color:#ddd0ae;background:#242a21;border-color:#82755399;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter{
+  border-color:#a7987099;
+  box-shadow:inset 0 0 0 3px #0d1812aa,0 0 18px #07110eb3;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy{
+  background:radial-gradient(circle at 8% 100%,#263e2e 0%,#182d20 60%,#1e2e22 100%);
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action{
+  background:radial-gradient(circle at 100% 100%,#142019 0%,#283329 62%,#19251e 100%);
+}
+#dungeon-map-view.tc-quarter-layout .tc-energy-track{stroke:#263d2b;opacity:1}
+#dungeon-map-view.tc-quarter-layout [data-energy-segment]{stroke:#405746;opacity:.9}
+#dungeon-map-view.tc-quarter-layout [data-energy-segment].is-filled{
+  stroke:#7de5a0;filter:drop-shadow(0 0 2px #4bd77d);
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz]{
+  border-color:#6b9774!important;
+  background:radial-gradient(circle at 28% 70%,#31563a 0%,#1e3b29 58%,#172b20 100%)!important;
+  box-shadow:inset 0 0 0 3px #11251a99,inset 0 0 22px #0b1d13aa!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready{
+  border-color:#9adca7!important;
+  background:radial-gradient(circle at 30% 67%,#43865a 0%,#286443 55%,#19452e 100%)!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready:hover{
+  background:radial-gradient(circle at 30% 67%,#58a36c 0%,#327850 60%,#1d5035 100%)!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-energy-bolt{
+  filter:drop-shadow(0 2px 3px #102619) drop-shadow(0 0 5px #83df9b80);
+}
+#dungeon-map-view.tc-quarter-layout .tc-energy-number{
+  color:#f0f3d6;text-shadow:0 2px 5px #0c2516,0 0 8px #7cdf8e80;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector{
+  background:linear-gradient(135deg,#374337,#222e24 70%,#18251c)!important;
+  color:#e3d7b9!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]{
+  background:linear-gradient(135deg,#3c493a,#243729 65%,#1b2c21)!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[aria-pressed=true],
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice][aria-pressed=true]{
+  background:linear-gradient(135deg,#667658,#415c43 65%,#304c36)!important;
+  color:#fff4d6!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector:hover:not(:disabled){
+  background:linear-gradient(135deg,#66775b,#405943)!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector-end{
+  background:radial-gradient(circle at 100% 100%,#25382a,#17251b 75%)!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-action-lines path,
+#dungeon-map-view.tc-quarter-layout .tc-action-lines line{stroke:#b1a078;opacity:.8}
+#dungeon-map-view.tc-quarter-layout .tc-action-lines .tc-wheel-lane-guide{stroke:#12271b;opacity:.85}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-slider-shape{
+  fill:#c6aa73;stroke:#f2dfb0;filter:drop-shadow(0 0 1px #e5c989);
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-slider-detail .tc-wheel-slider-shape{
+  fill:#79b38a;stroke:#cce8ca;filter:drop-shadow(0 0 1px #8dd8a2);
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector:disabled{
+  color:#9b9f8b!important;
+}
+
+/* Recast both controls as a restrained jade-and-bronze instrument. The
+   existing sectors and their hit areas stay in place; only their finish and
+   the selected indicators change. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter{
+  border:1px solid #b9a77a99;
+  box-shadow:0 -5px 22px #08100db3,inset 0 0 0 3px #101b16;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter::after{
+  content:"";position:absolute;inset:4px;z-index:8;pointer-events:none;
+  border:1px solid #d9c79238;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy::after{border-radius:0 100% 0 0}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action::after{border-radius:100% 0 0 0}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy{
+  background:radial-gradient(circle at 0 100%,#254135 0%,#1b3027 68%,#111e19 100%);
+}
+#dungeon-map-view.tc-quarter-layout .tc-energy-track{
+  stroke:#0d1c16;stroke-width:5.8;opacity:1;
+}
+#dungeon-map-view.tc-quarter-layout [data-energy-segment]{
+  stroke:#52675a;stroke-width:4.1;opacity:.75;
+}
+#dungeon-map-view.tc-quarter-layout [data-energy-segment].is-filled{
+  stroke:#8ad7a1;stroke-width:4.5;opacity:1;
+  filter:drop-shadow(0 0 1.8px #6cc98a99);
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz]{
+  border:1px solid #91ac85a6!important;
+  background:radial-gradient(circle at 10% 90%,#335b41 0%,#203d2d 55%,#162a20 100%)!important;
+  box-shadow:inset 0 0 0 4px #13261b80,inset 0 0 28px #0c1f16c9!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready{
+  border-color:#9ed2a2!important;
+  background:radial-gradient(circle at 12% 88%,#477a51 0%,#285539 57%,#193a29 100%)!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-energy-bolt{
+  left:22%;top:15%;width:29%;height:43%;
+  filter:drop-shadow(0 2px 3px #102619a6) drop-shadow(0 0 5px #84d49a70);
+}
+#dungeon-map-view.tc-quarter-layout .tc-energy-number{
+  right:15%;bottom:30%;font-size:clamp(23px,3.2vw,44px);
+  font-weight:500;color:#edf0d8;text-shadow:0 2px 6px #0c2516;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action{
+  background:radial-gradient(circle at 100% 100%,#17251e,#24362b 70%,#17251d);
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector{
+  background:linear-gradient(135deg,#33463a,#24362b 65%,#1a2b21)!important;
+  color:#ede5cf!important;
+  text-shadow:0 1px 3px #0a1711;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]{
+  background:linear-gradient(135deg,#3a5040,#283c2f 65%,#1c3024)!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[aria-pressed=true],
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice][aria-pressed=true]{
+  background:linear-gradient(135deg,#4c6650,#314c39 70%,#243e2e)!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector:hover:not(:disabled){
+  background:linear-gradient(135deg,#536c54,#35513d)!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector-end{
+  background:radial-gradient(circle at 100% 100%,#2b4031,#192b20 77%)!important;
+  font-size:clamp(14px,1.8vw,24px)!important;
+  font-weight:600!important;letter-spacing:.08em;
+}
+#dungeon-map-view.tc-quarter-layout .tc-action-lines path,
+#dungeon-map-view.tc-quarter-layout .tc-action-lines line{stroke:#b3a37c;stroke-width:.7;opacity:.55}
+#dungeon-map-view.tc-quarter-layout .tc-action-lines .tc-wheel-lane-guide{stroke:#10251a;stroke-width:1;opacity:.55}
+/* A fine outline follows the selected sector; its small floating label is
+   readable without the former opaque, oversized blocks. */
+#dungeon-map-view.tc-quarter-layout .tc-wheel-slider-shape{
+  fill:#d9bd8124;stroke:#d9c28b;stroke-width:.8;
+  filter:drop-shadow(0 0 1px #e5c98966);
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-slider-detail .tc-wheel-slider-shape{
+  fill:#9bcba32b;stroke:#a9d8b2;
+  filter:drop-shadow(0 0 1px #92dca666);
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-marker{
+  width:auto;min-width:0;max-width:35%;padding:4px 8px;
+  border:1px solid #d3bc87aa;border-radius:6px;
+  background:#20372cef;box-shadow:0 2px 7px #07110dc0;
+  color:#f3e7c7;text-shadow:none;
+  font-size:clamp(10px,1.05vw,15px);font-weight:700;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker{
+  border-color:#a7cfacaa;color:#e5f4dc;
+  font-size:clamp(9px,.95vw,13px);
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-cost{font-weight:500}
+@media(orientation:portrait){
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-marker{
+    padding:3px 5px;font-size:clamp(9px,2.6vw,12px);
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker{font-size:clamp(9px,2.3vw,11px)}
+  #dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector-end{font-size:clamp(14px,3.5vw,20px)!important}
+  #dungeon-map-view.tc-quarter-layout .tc-energy-number{font-size:clamp(22px,5vw,32px)}
+}
+
+
+/* Quiet status hint tucked under the header; never cover the arena center. */
+#dungeon-map-view .tc-action-feedback[hidden]{display:none!important}
+#dungeon-map-view:not(.tc-quarter-layout) .tc-action-feedback{display:none!important}
+#dungeon-map-view.tc-quarter-layout .tc-action-feedback{
+  position:absolute;
+  top:10px;
+  left:12px;
+  z-index:4;
+  box-sizing:border-box;
+  max-width:min(44vw,300px);
+  padding:5px 8px;
+  border:0;
+  border-radius:7px;
+  background:rgba(20,29,23,.66);
+  color:#c5cdbb;
+  font-size:12px;
+  font-weight:400;
+  line-height:1.35;
+  text-align:left;
+  box-shadow:none;
+  pointer-events:none;
+}
+@media (orientation:portrait){
+  #dungeon-map-view.tc-quarter-layout .tc-action-feedback{
+    top:8px;
+    left:8px;
+    max-width:min(65vw,280px);
+    font-size:11px;
+  }
+}
+
+/* Skill icons are part of the sector, never a standalone floating card.
+   Keep the paint, technique name and stamina cost aligned inside the dial.
+   In particular, use CSS comments: a // line invalidated the first image rule. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]>span{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  width:31%;
+  max-height:42px;
+  padding:0;
+  text-align:center;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
+  gap:3px;
+  width:31%;
+  max-width:31%;
+  max-height:44px;
+  padding:3px 4px;
+  text-align:center;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-copy{
+  display:flex;flex:1 1 0;min-width:0;
+  flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;line-height:1.1;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-copy .tc-wheel-name{
+  display:block;
+  width:100%;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;overflow-wrap:normal;
+  font-size:clamp(9px,1vw,13px);
+  line-height:1.1;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-copy .tc-wheel-cost{
+  display:block;
+  width:100%;min-width:0;
+  margin:0;
+  font-size:clamp(8px,.85vw,11px);
+  font-weight:500;line-height:1.1;white-space:nowrap;
+  letter-spacing:-.04em;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-skill-art,
+#dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker .tc-wheel-skill-art{
+  display:block;
+  flex:0 0 auto;
+  width:clamp(17px,2vw,23px);
+  height:clamp(17px,2vw,23px);
+  max-width:23px;max-height:23px;
+  margin:0!important;
+  padding:0!important;
+  object-fit:cover;
+  border-radius:4px;
+  border:1px solid #c5c9a47d;
+  box-shadow:0 1px 3px #0007;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker .tc-wheel-skill-art{
+  border-color:#a8c8ac90;
+}
+@media(orientation:portrait){
+  #dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]>span,
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker{
+    gap:2px;
+    width:31%;max-width:31%;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker{
+    padding:2px;
+    max-height:36px;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-skill-art,
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker .tc-wheel-skill-art{
+    width:14px;height:14px;max-width:14px;max-height:14px;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-copy .tc-wheel-name{
+    font-size:clamp(8px,2.15vw,10px);
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-copy .tc-wheel-cost{
+    font-size:clamp(7px,1.85vw,9px);
+  }
+}
+
+
+/* Stage-five accessible telegraph status: screen reader only, never an extra
+   button or visual panel in the fixed quarter-circle battlefield layout. */
+#dungeon-map-view .tc-threat-a11y{
+  position:absolute!important;
+  width:1px!important;height:1px!important;
+  min-width:0!important;min-height:0!important;
+  overflow:hidden!important;clip-path:inset(50%)!important;
+  white-space:nowrap;pointer-events:none;
+  left:0;top:0;margin:0;padding:0;border:0;
+}
+
+/* Native iOS callout / text-selection blue overlay must not steal deliberate
+   map long-press inspection. Quiz dialogs keep their selection and inputs. */
+#dungeon-map-view .tc-main.tc-game,
+#dungeon-map-view .tc-main.tc-game .tc-arena,
+#dungeon-map-view .tc-main.tc-game .tc-arena>canvas,
+#dungeon-map-view.tc-quarter-layout .tc-quarter,
+#dungeon-map-view.tc-quarter-layout .tc-quarter *{
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+#dungeon-map-view .tc-main.tc-game .tc-arena>canvas{
+  touch-action:none!important;
+  overscroll-behavior:contain;
+}
+
+/* The large PvE arena hides its old heading, so seal ranges have a separate
+   non-modal toggle. Keep it above the map, away from both quarter wheels. */
+#dungeon-map-view.tc-quarter-layout .tc-arena>.tc-seal-range-toolbar:not([hidden]){
+  position:absolute;z-index:5;top:43px;right:calc(9px + env(safe-area-inset-right,0px));
+  left:auto;width:max-content;max-width:min(74vw,325px);
+  padding:4px 7px;background:rgba(13,28,24,.79);
+  border:1px solid rgba(117,177,149,.31);border-radius:12px;
+  box-shadow:0 2px 9px rgba(0,0,0,.16);backdrop-filter:blur(4px);
+  justify-content:flex-end;
+}
+#dungeon-map-view.tc-quarter-layout .tc-seal-range-toolbar button{
+  font-size:clamp(10px,2.2vw,12px)!important;
+  min-height:32px!important;padding:5px 8px!important
+}
+#dungeon-map-view.tc-quarter-layout .tc-seal-range-toolbar [data-seal-range-note]{
+  flex-basis:100%;text-align:right;
+  font-size:clamp(9px,1.9vw,11px);white-space:nowrap;
+  text-overflow:ellipsis;overflow:hidden
+}
+@media(orientation:portrait) and (max-width:430px){
+  #dungeon-map-view.tc-quarter-layout .tc-arena>.tc-seal-range-toolbar:not([hidden]){
+    top:42px;right:7px;max-width:72vw;padding:3px 6px;gap:3px
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-seal-range-toolbar [data-seal-range-note]{
+    max-width:100%;font-size:9px
+  }
+}
+
+/* Keep the guide below the existing sealing/range HUD. Neither overlay
+   enters the bottom quarter-circles or alters tap/drag on the canvas. */
+#dungeon-map-view.tc-quarter-layout .tc-arena>.tc-seal-guide:not([hidden]){
+  top:112px;max-width:min(350px,68vw);pointer-events:none;
+}
+#dungeon-map-view.tc-quarter-layout .tc-arena>.tc-seal-target-hint:not([hidden]){
+  left:50%;bottom:calc(var(--tc-dial,160px) * .44 + 10px);
+  max-width:min(370px,58vw);font-size:clamp(10px,2vw,12px);
+}
+#dungeon-map-view.tc-quarter-layout .tc-seal-range-toolbar [data-seal-guide-help]{
+  min-width:30px;min-height:30px!important;padding:3px 7px!important;
+  border-radius:50%;font-weight:800;
+}
+@media(orientation:portrait) and (max-width:430px){
+  #dungeon-map-view.tc-quarter-layout .tc-arena>.tc-seal-guide:not([hidden]){
+    top:118px;max-width:76vw;padding:8px 9px;font-size:10px;
+  }
+  #dungeon-map-view.tc-quarter-layout .tc-arena>.tc-seal-target-hint:not([hidden]){
+    max-width:68vw;bottom:calc(var(--tc-dial,150px) * .56 + 8px);
+    font-size:10px;padding:5px 7px;
+  }
+}
+
+/* Dungeon exceptions: real-time play has no End Turn wedge and no cap on
+   question charging. The bottom two rings retain the trial's exact sectors. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-sector-end{
+  display:none!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz]{
+  display:block!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-options>.tc-sector.is-focus-empowered{
+  background:linear-gradient(115deg,#fff3c1 0%,#f6d278 33%,#e2a444 72%,#bf7d28 100%)!important;
+  color:#302009!important;
+  border-color:#fff0b9!important;
+  box-shadow:inset 0 1px 2px #fffbe9bc,0 0 14px 2px #ffca65b0!important;
+  animation:dmFocusGoldSkill 1.65s ease-in-out infinite;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-options>.tc-sector.is-focus-empowered .tc-wheel-copy{
+  color:#302009!important;text-shadow:0 1px 0 #fff7d1bf;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-options>.tc-sector.is-focus-empowered .tc-wheel-cost{
+  color:#51310f!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker.is-focus-empowered{
+  color:#38200b!important;background:#f6d47f!important;
+  border-color:#fff2c6!important;box-shadow:0 0 16px #ffd575b6!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-wheel-detail-marker.is-focus-empowered .tc-wheel-copy{
+  color:#35200e!important;text-shadow:none!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.has-focus{
+  box-shadow:0 -5px 22px #08100db3,inset 0 0 0 3px #101b16,0 0 14px #ffc75e72;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz]:focus-visible,
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action button:focus-visible{
+  outline:3px solid #f5dfab!important;outline-offset:-5px!important;
+}
+@keyframes dmFocusGoldSkill{
+  0%,100%{filter:brightness(1) drop-shadow(0 0 4px #f9ce64aa)}
+  50%{filter:brightness(1.1) drop-shadow(0 0 11px #ffe0a4bb)}
+}
+@media(prefers-reduced-motion:reduce){
+  #dungeon-map-view.tc-quarter-layout .tc-wheel-options>.tc-sector.is-focus-empowered{
+    animation:none!important;
+  }
+}
