@@ -20,7 +20,7 @@ export function hashCell(map,x,y){
   return (h>>>0)/4294967296;
 }
 export function drawWorld(ctx,map,camera,width,height,
-  {members=[],selfUid='',showRoutes=false,enemies=[]}={}){
+  {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0}={}){
   const palette=BIOMES[map.biome]||BIOMES.ruins;
   const g=Camera.geometry(camera,map,width,height);
   const v=Camera.visibleTiles(camera,map,width,height);
@@ -72,6 +72,27 @@ export function drawWorld(ctx,map,camera,width,height,
     };
     paintPath(map.mainRoute,palette.trim,.62);
     for(const branch of map.branches||[])paintPath(branch.route,palette.line,.55);
+  }
+  // Attack telegraphs are painted first, below all beast and player sprites.
+  // A warning cell never masks the player or overwrites a creature marker.
+  for(const beast of enemies){
+    const warning=beast?.attack;
+    if(!Array.isArray(warning?.cells))continue;
+    for(const p of warning.cells){
+      if(!walk(p.x,p.y)||p.x<v.x0||p.x>v.x1||p.y<v.y0||p.y>v.y1)continue;
+      const x=g.ox+p.x*cell,y=g.oy+p.y*cell;
+      ctx.save();
+      ctx.fillStyle='rgba(231,74,56,.23)';
+      ctx.fillRect(x+.7,y+.7,Math.max(1,cell-1.4),Math.max(1,cell-1.4));
+      ctx.strokeStyle='#ff785f';ctx.lineWidth=clamp(cell*.095,1,3);
+      ctx.strokeRect(x+1.2,y+1.2,Math.max(1,cell-2.4),Math.max(1,cell-2.4));
+      if(cell>=13){
+        ctx.fillStyle='#ffe4bb';ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.font='bold '+Math.round(clamp(cell*.55,10,18))+'px sans-serif';
+        ctx.fillText('!',x+cell*.5,y+cell*.5);
+      }
+      ctx.restore();
+    }
   }
   function marker(point,label,color,glyph){
     if(!point)return;
@@ -156,6 +177,30 @@ export function drawWorld(ctx,map,camera,width,height,
       ctx.beginPath();ctx.arc(sx,sy,radius+3,0,Math.PI*2);
       ctx.strokeStyle='#fff5d1';ctx.lineWidth=1.5;ctx.stroke();
     }
+    const hp=Number.isSafeInteger(member.battleHealth)?
+      Math.max(0,Math.min(100,member.battleHealth)):100;
+    if(member.downed||hp===0){
+      ctx.save();ctx.strokeStyle='#f3aaa2';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(sx-radius*.56,sy-radius*.56);
+      ctx.lineTo(sx+radius*.56,sy+radius*.56);
+      ctx.moveTo(sx+radius*.56,sy-radius*.56);
+      ctx.lineTo(sx-radius*.56,sy+radius*.56);ctx.stroke();ctx.restore();
+    }
+    if(cell>=12){
+      const barW=clamp(cell*.85,13,27),barH=3;
+      ctx.fillStyle='#251e1a';
+      ctx.fillRect(sx-barW/2,sy-radius-10,barW,barH);
+      ctx.fillStyle=hp>50?'#81da91':hp>25?'#e2b966':'#ed8d81';
+      ctx.fillRect(sx-barW/2,sy-radius-10,barW*hp/100,barH);
+      if(member.lastDamage&&Number.isSafeInteger(currentTick)&&
+        currentTick-member.lastDamage.tick>=0&&
+        currentTick-member.lastDamage.tick<=2){
+        ctx.save();ctx.fillStyle='#ffd0b4';ctx.textAlign='center';
+        ctx.textBaseline='middle';ctx.font='bold 11px system-ui';
+        ctx.fillText('-'+member.lastDamage.amount,sx,sy-radius-23);
+        ctx.restore();
+      }
+    }
   });
   const shadow=ctx.createRadialGradient(width/2,height/2,Math.min(width,height)*.2,
     width/2,height/2,Math.max(width,height)*.78);
@@ -174,6 +219,16 @@ export function drawMinimap(ctx,map,geometry,width,height,
     if(tile!==0){
       ctx.fillStyle=tile===2?p.clearing:p.floor;
       ctx.fillRect(ox+x*scale,oy+y*scale,scale+.3,scale+.3);
+    }
+  }
+  // Draw warning tiles below player and NPC minimap pins.
+  for(const enemy of enemies){
+    for(const tile of enemy?.attack?.cells||[]){
+      if(tile.x<0||tile.y<0||tile.x>=map.width||tile.y>=map.height||
+        map.tiles[tile.y*map.width+tile.x]===0)continue;
+      ctx.fillStyle='rgba(253,111,82,.7)';
+      ctx.fillRect(ox+tile.x*scale,oy+tile.y*scale,
+        Math.max(scale,1.5),Math.max(scale,1.5));
     }
   }
   for(const [point,color] of [[map.spawn,'#bde9ab'],[map.guardianSite,'#e6acaa'],
