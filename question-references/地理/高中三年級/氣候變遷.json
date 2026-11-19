@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-geo3-climatechange-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "某城市推動建築節能、提升公共運輸效率，以減少溫室氣體排放。這些政策主要屬於哪一類氣候行動？",
+        "correct": "減緩（mitigation）",
+        "wrong": [
+          "調適（adaptation）",
+          "地質災害震源定位",
+          "僅改變氣候測站位置"
+        ],
+        "exp": "減緩著重減少溫室氣體排放或增加碳移除，降低未來氣候變遷幅度；節能與減排屬此範疇。",
+        "subject": "地理",
+        "sub_topic": "氣候變遷",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-氣候變遷",
+        "template_id": "ref-20261119-b4-geo3-climatechange-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-geo3-climatechange-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "全球海平面上升的長期主要貢獻因素中，下列哪一組較符合科學理解？",
+        "correct": "海水受熱膨脹，以及陸地冰河與冰蓋融化入海",
+        "wrong": [
+          "所有海平面上升都只因海上船舶變多",
+          "只有浮在海面的海冰融化，陸地冰完全不重要",
+          "海水溫度越高，體積必定越小"
+        ],
+        "exp": "海水升溫熱膨脹與陸地冰融水增加海洋水量是海平面上升的重要原因；浮冰融化不等同陸地冰入海。",
+        "subject": "地理",
+        "sub_topic": "氣候變遷",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-氣候變遷",
+        "template_id": "ref-20261119-b4-geo3-climatechange-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-geo3-climatechange-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "某低窪沿海聚落加強暴雨預警與疏散演練、抬高建築重要設備。這最直接屬於何種氣候策略？",
+        "correct": "調適，降低面對可能災害時的暴露與損失",
+        "wrong": [
+          "單純減緩，直接消除全球所有溫室氣體",
+          "證明氣候變遷已完全停止",
+          "讓海平面立即下降到工業化前水位"
+        ],
+        "exp": "預警、疏散及降低設施脆弱度可減輕災害衝擊，是調適措施；與減少排放的減緩策略互補。",
+        "subject": "地理",
+        "sub_topic": "氣候變遷",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-氣候變遷",
+        "template_id": "ref-20261119-b4-geo3-climatechange-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
