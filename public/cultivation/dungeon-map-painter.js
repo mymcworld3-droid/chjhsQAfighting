@@ -155,16 +155,20 @@ export function drawWorld(ctx,map,camera,width,height,
     }
     ctx.restore();
   }
-  if(objectives?.guardianStatus==='defeated')
-    marker(map.guardianSite,'守鑰已破','#d4b46b','✦');
-  else marker(map.guardianSite,'鎮鑰守護區','#e6acaa','◆');
-  const portalOpen=objectives?.portalStatus==='open',
-    portalReady=objectives?.portalStatus==='ready';
-  marker(map.portalSite,
-    portalOpen?'首領傳送門':portalReady?'可啟動傳送陣':'封印傳送陣',
-    portalOpen?'#b5a5ff':portalReady?'#82e5db':'#8e9e99',
-    portalOpen?'✦':'◇');
-  marker(map.spawn,'起點','#bde9ab','●');
+  if(map.arena==='boss'){
+    marker(map.spawn,'隊伍入口','#9edbc9','●');
+  }else{
+    if(objectives?.guardianStatus==='defeated')
+      marker(map.guardianSite,'守鑰已破','#d4b46b','✦');
+    else marker(map.guardianSite,'鎮鑰守護區','#e6acaa','◆');
+    const portalOpen=objectives?.portalStatus==='open',
+      portalReady=objectives?.portalStatus==='ready';
+    marker(map.portalSite,
+      portalOpen?'首領傳送門':portalReady?'可啟動傳送陣':'封印傳送陣',
+      portalOpen?'#b5a5ff':portalReady?'#82e5db':'#8e9e99',
+      portalOpen?'✦':'◇');
+    marker(map.spawn,'起點','#bde9ab','●');
+  }
   // Render hostile creatures beneath player markers so characters remain
   // visible when the AI reaches melee distance (no damage in stage 9).
   for(const enemy of enemies){
@@ -173,6 +177,36 @@ export function drawWorld(ctx,map,camera,width,height,
     const x=g.ox+(pos.x+.5)*cell,y=g.oy+(pos.y+.5)*cell;
     if(x<-35||y<-35||x>width+35||y>height+35)continue;
     const color=BEAST_COLORS[enemy.kind]||'#e5bc9e';
+    if(enemy.kind==='boss'){
+      // A single 2x2 animated-looking painted beast. All attack cells,
+      // players and HP derive from one server entity, never four fake NPCs.
+      const left=g.ox+pos.x*cell,top=g.oy+pos.y*cell;
+      const w=cell*2,ratio=clamp((enemy.battleHealth||0)/
+        Math.max(1,enemy.battleMaxHealth||900),0,1);
+      ctx.save();
+      ctx.fillStyle='#e9645d';ctx.globalAlpha=.16;
+      ctx.fillRect(left-cell*.2,top-cell*.2,w+cell*.4,w+cell*.4);
+      ctx.globalAlpha=1;
+      ctx.fillStyle='#301a1e';ctx.strokeStyle='#e8b86b';
+      ctx.lineWidth=clamp(cell*.10,2,5);
+      ctx.fillRect(left+2,top+2,w-4,w-4);
+      ctx.strokeRect(left+2,top+2,w-4,w-4);
+      ctx.beginPath();ctx.arc(left+w*.5,top+w*.5,w*.37,0,Math.PI*2);
+      ctx.fillStyle='#733c34';ctx.fill();
+      ctx.fillStyle='#ffe8b2';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.font='bold '+Math.round(clamp(cell*1.1,18,51))+'px sans-serif';
+      ctx.fillText('♜',left+w*.5,top+w*.52);
+      const bw=Math.max(28,w*1.12),bx=left+w*.5-bw*.5,by=top-11;
+      ctx.fillStyle='#210c12';ctx.fillRect(bx,by,bw,6);
+      ctx.fillStyle=ratio>.35?'#f2c979':'#ed7468';
+      ctx.fillRect(bx,by,bw*ratio,6);
+      ctx.fillStyle='#ffe7c0';ctx.font='bold 12px system-ui,"Noto Sans TC"';
+      const label=String(enemy.name||'首領').slice(0,15);
+      const tw=ctx.measureText(label).width+14;
+      ctx.fillStyle='#231016ee';ctx.fillRect(left+w*.5-tw/2,by-22,tw,18);
+      ctx.fillStyle='#ffe7c0';ctx.fillText(label,left+w*.5,by-13);
+      ctx.restore();continue;
+    }
     const alerted=enemy.intent==='pursuit'||enemy.intent==='alert';
     const guardian=enemy.kind==='guardian';
     const r=clamp(cell*(guardian?.47:.35),guardian?6:4,guardian?17:12);
@@ -285,8 +319,10 @@ export function drawMinimap(ctx,map,geometry,width,height,
   }
   const portalColor=objectives?.portalStatus==='open'?'#c2b1ff':
     objectives?.portalStatus==='ready'?'#74e4d1':'#899a95';
-  for(const [point,color] of [[map.spawn,'#bde9ab'],[map.guardianSite,'#e6acaa'],
-    [map.portalSite,portalColor]]){
+  for(const [point,color] of (map.arena==='boss'?
+    [[map.spawn,'#bde9ab']]:
+    [[map.spawn,'#bde9ab'],[map.guardianSite,'#e6acaa'],
+      [map.portalSite,portalColor]])){
     if(!point)continue;
     ctx.fillStyle=color;ctx.beginPath();
     ctx.arc(ox+(point.x+.5)*scale,oy+(point.y+.5)*scale,Math.max(2,scale),0,Math.PI*2);
@@ -299,10 +335,15 @@ export function drawMinimap(ctx,map,geometry,width,height,
        map.tiles[pos.y*map.width+pos.x]===0)continue;
     ctx.fillStyle=enemy.intent==='pursuit'?'#fa8076':
       BEAST_COLORS[enemy.kind]||'#e1a989';
-    ctx.beginPath();
-    ctx.arc(ox+(pos.x+.5)*scale,oy+(pos.y+.5)*scale,
-      Math.max(1.6,scale*.7),0,Math.PI*2);
-    ctx.fill();
+    if(enemy.kind==='boss'){
+      ctx.fillRect(ox+pos.x*scale,oy+pos.y*scale,
+        Math.max(3,scale*2),Math.max(3,scale*2));
+    }else{
+      ctx.beginPath();
+      ctx.arc(ox+(pos.x+.5)*scale,oy+(pos.y+.5)*scale,
+        Math.max(1.6,scale*.7),0,Math.PI*2);
+      ctx.fill();
+    }
   }
   // Team positions are drawn from authoritative member snapshots.
   members.slice(0,4).forEach((member,index)=>{

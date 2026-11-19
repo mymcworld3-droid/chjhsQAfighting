@@ -565,3 +565,55 @@
 @media(prefers-reduced-motion:reduce){
   #dungeon-map-view .dm-portal-button{animation:none!important}
 }
+
+// Stage 15: a single 2x2 server-owned boss and shared room transition.
+#dungeon-map-view .dm-boss-health{
+  margin-top:5px;max-width:min(380px,47vw);
+  padding:5px 8px 7px;background:#371e20a3;
+  border:1px solid #b97c617a;border-radius:8px;
+}
+#dungeon-map-view .dm-boss-health>div:first-child{
+  display:flex;justify-content:space-between;align-items:center;gap:9px;
+  font-size:11px;color:#ffe2b7;
+}
+#dungeon-map-view .dm-boss-health strong{font-weight:800}
+#dungeon-map-view .dm-boss-health span{font-variant-numeric:tabular-nums}
+#dungeon-map-view .dm-boss-meter{
+  width:100%;height:6px;border-radius:999px;
+  margin-top:5px;overflow:hidden;background:#2a1115;
+}
+#dungeon-map-view .dm-boss-meter i{
+  display:block;height:100%;width:100%;
+  background:linear-gradient(90deg,#e5766b,#f2c46d);
+  box-shadow:0 0 8px #e6a06780;
+  transition:width .24s ease-out;
+}
+#dungeon-map-view .dm-boss-health[data-phase="2"] .dm-boss-meter i{
+  background:linear-gradient(90deg,#ec8655,#ffc15e)
+}
+#dungeon-map-view .dm-boss-health[data-phase="3"] .dm-boss-meter i{
+  background:linear-gradient(90deg,#c65896,#ff7469)
+}
+#dungeon-map-view .dm-boss-entry{
+  width:100%;min-height:42px;font-size:12px;font-weight:800;
+  color:#fff5d8;border:1px solid #efb47f;
+  background:linear-gradient(115deg,#7d4531,#a26335);
+  box-shadow:0 0 16px #ffc16b38;
+}
+#dungeon-map-view .dm-boss-entry:not(:disabled){
+  animation:dmBossEntryGlow 1.7s ease-in-out infinite;
+}
+#dungeon-map-view .dm-boss-entry:disabled{opacity:.7}
+@keyframes dmBossEntryGlow{
+  0%,100%{box-shadow:0 0 5px #e5b66b55}
+  50%{box-shadow:0 0 18px #ffc76b9e}
+}
+@media(max-width:720px){
+  #dungeon-map-view .dm-boss-health{max-width:65vw;padding:4px 6px}
+  #dungeon-map-view .dm-boss-health>div:first-child{font-size:10px}
+  #dungeon-map-view .dm-boss-entry{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+  #dungeon-map-view .dm-boss-entry{animation:none!important}
+  #dungeon-map-view .dm-boss-meter i{transition:none}
+}
