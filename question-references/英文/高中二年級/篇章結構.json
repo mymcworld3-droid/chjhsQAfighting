@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-en2-paragraphstructure-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "A report first describes noise near a hospital, then compares three traffic-management options, and ends by recommending a trial of quieter delivery hours. What is its organization?",
+        "correct": "Problem → comparison of solutions → recommendation",
+        "wrong": [
+          "Personal biography → holiday schedule → conclusion",
+          "Recommendation → unrelated story → definition",
+          "Sequence of three unrelated historical events"
+        ],
+        "exp": "The text identifies a problem, evaluates alternative responses and chooses a trial solution.",
+        "subject": "英文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-篇章結構",
+        "template_id": "ref-20261119-b9-en2-paragraphstructure-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en2-paragraphstructure-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "A passage begins with 'Many libraries now lend digital devices.' The next paragraph begins, 'However, equipment loans also require staff training and maintenance.' What is the second paragraph's main function?",
+        "correct": "To qualify an identified benefit by discussing practical limitations",
+        "wrong": [
+          "To repeat the first paragraph without adding information",
+          "To prove that lending devices has never helped anyone",
+          "To replace the topic of libraries with an unrelated biography"
+        ],
+        "exp": "'However' introduces a counterbalancing concern: the operational requirements of an otherwise useful service.",
+        "subject": "英文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-篇章結構",
+        "template_id": "ref-20261119-b9-en2-paragraphstructure-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en2-paragraphstructure-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "Three paragraphs discuss: A. the results of a school's rainwater project; B. why the school wanted to reduce tap-water use; C. how rainwater tanks were installed and monitored. Which order forms a clear explanation from motivation to action to results?",
+        "correct": "B → C → A",
+        "wrong": [
+          "A → B → C",
+          "C → A → B",
+          "B → A → C"
+        ],
+        "exp": "A logical report first explains motivation (B), then implementation (C), and finally outcomes (A).",
+        "subject": "英文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-篇章結構",
+        "template_id": "ref-20261119-b9-en2-paragraphstructure-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
