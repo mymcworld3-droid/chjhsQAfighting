@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-math3-stats-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "三筆資料2、4、6，以三筆資料為完整母體，母體變異數為何？",
+        "correct": "8/3",
+        "wrong": [
+          "8",
+          "4",
+          "2"
+        ],
+        "exp": "母體平均數為4，離差平方和=(−2)²+0²+2²=8，母體變異數=8/3。",
+        "subject": "數學",
+        "sub_topic": "統計資料分析",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-統計資料分析",
+        "template_id": "ref-20261119-b7-math3-stats-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math3-stats-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "某次考試平均75分、標準差10分。小芸得90分，其標準分數z是多少？",
+        "correct": "1.5",
+        "wrong": [
+          "0.9",
+          "1.0",
+          "2.0"
+        ],
+        "exp": "標準分數z=(90−75)/10=1.5，表示成績高於平均數1.5個標準差。",
+        "subject": "數學",
+        "sub_topic": "統計資料分析",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-統計資料分析",
+        "template_id": "ref-20261119-b7-math3-stats-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math3-stats-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "若一組資料的標準差為4，將每筆資料都乘上3再加5，新資料的標準差為何？",
+        "correct": "12",
+        "wrong": [
+          "9",
+          "17",
+          "7"
+        ],
+        "exp": "標準差對平移不變，對乘上常數a會乘|a|；新標準差=|3|×4=12。",
+        "subject": "數學",
+        "sub_topic": "統計資料分析",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-統計資料分析",
+        "template_id": "ref-20261119-b7-math3-stats-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
