@@ -30,7 +30,8 @@ function startExplorationMembers(room,map){
     return [member.uid,{...member,position,explorationStamina:START_STAMINA,
       battleHealth:100,battleMaxHealth:100,downed:false,lastDamage:null,
       moveSeq:0,lastMove:null,strikeSeq:0,lastStrike:null,
-      quizCreditSeq:0,lastQuizCredit:null}];
+      quizCreditSeq:0,lastQuizCredit:null,
+      rescueSeq:0,lastRescue:null,selfRescueCount:0,allyReviveCount:0}];
   }));
 }
 const validVector=(dx,dy)=>Number.isInteger(dx)&&Number.isInteger(dy)&&
