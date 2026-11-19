@@ -28,7 +28,6 @@ class DungeonMapView{
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
     this.portalPending=false;this.bossPending=false;
     this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
-    this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
     this.aimTile=null;this.skillSignature='';
     this.focusAuras=new Map();
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
@@ -116,7 +115,7 @@ class DungeonMapView{
        '<small data-dm-skill-alert role="status" aria-live="polite"></small></aside>'+ 
       '<div class="dm-legend" aria-hidden="true">'+
       '<span>● 起點</span><span>◇ 傳送陣</span><span>◆ 守鑰靈獸</span></div></div>'+
-      '<footer class="dm-foot"><span data-dm-status>地圖展示 · 尚未開放移動與戰鬥</span>'+
+      '<footer class="dm-foot"><span data-dm-status>秘境地圖與多人即時戰鬥</span>'+
       '<span data-dm-zoom>100%</span></footer></div>';
     document.body.append(root);
     this.root=root;this.stage=root.querySelector('[data-dm-stage]');
@@ -867,11 +866,11 @@ class DungeonMapView{
     const alive=self?.downed!==true&&Number(self?.battleHealth)>0;
     node.textContent=!active?'等待隊伍集結':
       bossFight?(encounter?.status==='defeated'?
-        '✓ 全隊已擊敗玄炎鎮殿獸 · 正式結算尚未開放':
+        '✓ 全隊已擊敗玄炎鎮殿獸 · 點擊勝利面板領取個人靈石與修為':
         '⚔ 首領戰 · '+(boss?.attack?.label?
           boss.attack.label+' 預警中，請立即閃避':'注意紅色預警格，保持協作')):
       !progress?'舊版探索場次 · 重新集結才有守鑰任務':
-      stage==='open'?'✓ 全隊共享密鑰已啟動首領傳送門（Boss 戰將於後續階段開放）':
+      stage==='open'?'✓ 全隊共享密鑰已啟動首領傳送門 · 前往傳送陣進入 Boss 戰':
       stage==='ready'?'🔑 已取得全隊共享密鑰 · 前往深處傳送陣':
       '◆ 前往地圖最深處，擊敗鎮鑰玄甲獸取得密鑰';
     node.classList.toggle('is-ready',stage==='ready');
@@ -960,7 +959,7 @@ class DungeonMapView{
     if(state)state.textContent=this.room?.status==='assembled'?
       this.room?.dungeonArena==='boss'?
         (this.room?.bossEncounter?.status==='defeated'?
-          '首領已擊敗 · 正式獎勵與結算尚未開放':
+          '首領已擊敗 · 請在勝利面板領取本場靈石與修為':
           '首領戰進行中 · 預警格可閃避 · 功法與答題持續有效'):
         '戰場進行中 · 可隨時移動與施放已裝備功法 · 紅色預警格請閃避':
       '等待隊伍集結 · 地圖預覽不消耗體力';

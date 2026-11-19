@@ -128,7 +128,7 @@ function markBusy(value){
 function renderHome(){
   const count=list.length;
   body.innerHTML='<div class="dg-intro"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>'+
-    '<div><h3>秘境集結</h3><p>先召集道友，一起踏上即時探索副本。地圖與戰鬥將在後續階段開放。</p></div></div>'+
+    '<div><h3>秘境集結</h3><p>召集道友、隨時答題充能，一起深入秘境挑戰守鑰靈獸與玄炎鎮殿獸。</p></div></div>'+
     '<div class="dg-actions"><button class="dg-primary" data-dg="quick">快速組隊</button>'+
     '<button data-dg="create">建立私人隊伍</button>'+
     '<button data-dg="create-public">建立公開隊伍</button></div>'+
@@ -164,7 +164,7 @@ function renderRoom(){
   const objective=room.dungeonProgress;
   const mission=room.dungeonArena==='boss'?
     (room.bossEncounter?.status==='defeated'?
-      '玄炎鎮殿獸已被全隊擊敗；正式獎勵與結算將於後續階段開放。':
+      '玄炎鎮殿獸已被全隊擊敗！請在副本勝利畫面領取個人靈石與修為，離隊前記得入帳。':
       '已進入玄炎鎮殿首領戰，請留意紅色預告格、維持生命與體力。'):
     objective?.portalStatus==='open'?
     '傳送門已啟動，請走近傳送陣，帶全隊進入真正的首領戰。':
