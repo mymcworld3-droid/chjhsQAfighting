@@ -18,6 +18,8 @@ const Impact=globalThis.QATacticalImpact;
 const Threats=globalThis.QATacticalThreats;
 const Targets=globalThis.QATacticalTargetVisuals;
 const Compass=globalThis.QATacticalCompass;
+const SEAL_ATLAS='/assets/seals/seal-atlas.webp';
+const SEAL_FRAME_SIZE=128; // 4 columns: shield, hazard, rage, maze; 3 rows: intact, damaged, broken.
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
   monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
 
@@ -361,6 +363,16 @@ export class TacticalRenderer{
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;
   }
+  ensureSealAtlas(){
+    // Only sealing battles request this 73 KB atlas; other battle modes keep
+    // their current image startup costs unchanged. Failed loads use vector art.
+    if(this.images.seals||this.destroyed)return;
+    const img=new Image();this.images.seals=img;
+    img.decoding='async';
+    img.onload=()=>{if(!this.destroyed)this.requestDraw();};
+    img.onerror=()=>{if(!this.destroyed)this.requestDraw();};
+    img.src=SEAL_ATLAS;
+  }
   drawFlyingSword(p,color,opacity=1,angle=Math.PI/5){
     const c=this.ctx,cell=this.cell,x=this.ox+(p.x+.5)*cell,y=this.oy+(p.y+.28)*cell;
     c.save();
@@ -618,11 +630,13 @@ export class TacticalRenderer{
       // hue now come from the same authoritative catalog as combat and intel.
       // Layout-v3 activation markers intentionally retain their legacy style.
       const seal=R.sealInfo(s,p);
-      markers.push({...p,label:p.activated?'✓':seal?.label||'陣',
+      markers.push({...p,seal,label:p.activated?'✓':seal?.label||'陣',
         color:p.activated?'#b5c4b7':seal?.color||'#a7e8ff'});
     }
+    if(markers.some(p=>p.seal))this.ensureSealAtlas();
     for(const p of objective?.hazards||[])fill(p,'#f24c4866','#ffb1a3');
     for(const p of markers){
+      if(p.seal)continue; // Sprite cores are drawn after ground warnings, before characters.
       const x=ox+(p.x+.5)*cell,y=oy+(p.y+.5)*cell;c.save();c.strokeStyle=p.color;c.fillStyle='#102b2bcc';c.lineWidth=Math.max(2,cell*.06);
       c.beginPath();c.arc(x,y,cell*.34,0,Math.PI*2);c.fill();c.stroke();c.fillStyle=p.color;c.font=`bold ${Math.max(10,cell*.3)}px system-ui`;c.textAlign='center';c.textBaseline='middle';c.fillText(p.label,x,y);c.restore();
       if(objective?.type==='defense'){
@@ -716,6 +730,43 @@ export class TacticalRenderer{
       [m.kind,Math.round(m.screenX),Math.round(m.screenY)]));
     Compass.draw(c,this.compassMarkers,{width:w,height:h});
     if(scene)this.drawEffect(scene,progress,false);
+    // Seal art: keep the floor glyph and floating crystal below every hero,
+    // beast and HP label while preserving all combat telegraph outlines.
+    if(objective?.type==='sealing'&&s.trial?.layoutVersion===4){
+      for(const p of markers){
+        const seal=p.seal;if(!seal)continue;
+        const x=ox+(p.x+.5)*cell,y=oy+(p.y+.5)*cell;
+        const column=R.SEAL_KIN.indexOf(seal.kind);
+        const row=seal.broken||seal.hp<=0?2:seal.hp<seal.maxHp?1:0;
+        const size=cell*(cell<27?1.10:1.22);
+        c.save();
+        if(seal.broken)c.globalAlpha=.88;
+        const painted=column>=0&&this.sprite('seals',column*SEAL_FRAME_SIZE,
+          row*SEAL_FRAME_SIZE,SEAL_FRAME_SIZE,SEAL_FRAME_SIZE,
+          x-size/2,y-size*.59,size,size);
+        c.restore();
+        if(!painted){
+          // During image loading / network failure the existing readable icon
+          // remains available, including the same color and destroyed check.
+          c.save();c.strokeStyle=p.color;c.fillStyle='#102b2bdd';
+          c.lineWidth=Math.max(2,cell*.06);c.beginPath();c.arc(x,y,cell*.34,0,Math.PI*2);
+          c.fill();c.stroke();c.fillStyle=p.color;
+          c.font=`bold ${Math.max(10,cell*.3)}px system-ui`;
+          c.textAlign='center';c.textBaseline='middle';c.fillText(p.label,x,y);c.restore();
+        }else if(!seal.broken&&cell>=26){
+          // Two quiet durability insets distinguish 2/2 from 1/2 at a glance.
+          const bars=Math.max(1,Math.min(4,Math.round(seal.maxHp)));
+          const pip=cell*.115,gap=Math.max(2,cell*.035);
+          const left=x-(bars*pip+(bars-1)*gap)/2;
+          for(let i=0;i<bars;i++){
+            const px=left+i*(pip+gap),py=y+cell*.44;
+            c.fillStyle='#142629dc';c.fillRect(px-1,py-1,pip+2,Math.max(3,cell*.065)+2);
+            c.fillStyle=i<seal.hp?seal.color:'#667577';
+            c.fillRect(px,py,pip,Math.max(2,cell*.065));
+          }
+        }
+      }
+    }
     const actors=scene?A.sample(scene,progress):s.actors;
     const positions=actors.filter(R.alive).sort((a,b)=>a.y-b.y);
     for(const a of positions){

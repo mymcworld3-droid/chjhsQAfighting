@@ -44,7 +44,7 @@ const influence=QATactical.sealEffectCells(battle,{x:4,y:2});
 
 現有的 `tactical-combat.js` 戰場目標摘要透過 `sealDefinition(kind).shortEffect` 顯示短名稱；
 `tactical-renderer.js` 原本的圓形陣眼暫時保留，但標籤與未破除的顏色改由 `sealInfo(state, point)` 取得，
-舊版第三代關卡維持原本「陣」字標記。正式生成圖片與透明圖層仍安排在第二階段。
+舊版第三代關卡維持原本「陣」字標記。第二階段已接入 AI 生成的四類／三狀態透明 WebP 圖集，並保留圖片載入失敗時的文字圓形標記。
 
 不要把 `sealInfo` 的計算結果寫回 `battle.objective`。
 快照中 `range` 與 `gate` 是副本資料，不直接引用戰場狀態；適合在介面短暫顯示。
@@ -61,3 +61,18 @@ const influence=QATactical.sealEffectCells(battle,{x:4,y:2});
 測試：`node --test tests/tactical-seal-metadata.test.cjs tests/tactical-layout-v4.test.cjs`。
 
 驗收：第一階段專屬測試共 9 項，涵蓋真實種子關卡、舊版相容、資訊快照不改寫狀態、現有畫面資料綁定及核心戰鬥數值。
+
+
+## 第二階段：B＋C 陣眼圖片
+
+- 素材：`public/assets/seals/seal-atlas.webp`，512×384、RGBA WebP、約 73 KB。
+- 圖集排版為 **4 欄 × 3 列**，每格 128×128。
+  - 欄依 `SEAL_KINDS`：`shield`、`hazard`、`rage`、`maze`。
+  - 列依耐久狀態：完整（2/2）、受損（1/2）、破除（0/2）。
+- 以原始 AI 生成圖重新裁切、透明去背與壓縮。地面符陣和懸浮晶核整合為一張帶透明度的圖集；不需要逐個網路請求。
+- 當 `layoutVersion===4` 且為封印關卡，才懶載入圖集；其他模式不多下載圖片。
+- 在戰場地面預告層之上、人物／靈獸及生命條下方繪製，確保角色不被蓋住。
+- 圖集下載失敗或圖片尚在載入時，保留原本的文字圓形標記作為後備。
+- 陣眼依實際 `hp/maxHp/activated` 選擇圖片，現有傷害與結算不變。破除後保留殘破石盤。
+- 第三版舊封印關卡維持文字標記，不誤套第四版可攻擊素材。
+- 依照第二階段範圍限制：不新增「影響範圍高亮」與「陣眼情報」面板，這兩項按原規劃留待第三、五階段。
