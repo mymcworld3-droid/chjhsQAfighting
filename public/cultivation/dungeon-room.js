@@ -165,6 +165,33 @@ export const castDungeonSkill=(roomId,skillId,target,seq)=>
 export const switchDungeonLoadout=(roomId,index)=>
   request('loadout',{roomId,index});
 
+// Individual question sessions belong to Firebase A; only verified answer
+// receipts can be credited by the C room transaction.
+export async function dungeonQuizRequest(endpoint,body){
+  const uid=getMainUser()?.uid;
+  if(!uid)throw new Error('請先登入後再進行副本答題');
+  const response=await authenticatedMainFetch(endpoint,{
+    method:'POST',body:JSON.stringify(body)
+  });
+  const data=await response.json().catch(()=>null);
+  if(getMainUser()?.uid!==uid)throw new Error('登入帳號已切換，請重新開啟副本');
+  if(!response.ok){
+    const error=new Error(data?.error||'副本答題服務暫時無法使用');
+    error.status=response.status;
+    throw error;
+  }
+  return data;
+}
+export const getDungeonQuizState=roomId=>
+  dungeonQuizRequest('/api/dungeon/quiz/state',{roomId});
+export const generateDungeonQuestion=(roomId,slot=0)=>
+  dungeonQuizRequest('/api/generate-quiz',{quizMode:'dungeon',roomId,slot});
+export const answerDungeonQuestion=(roomId,questionId,choice,help=0,timeTaken=0)=>
+  dungeonQuizRequest('/api/dungeon/quiz/answer',
+    {roomId,questionId,choice,help,timeTaken});
+export const claimDungeonQuizStamina=(roomId,questionId)=>
+  request('quiz-credit',{roomId,questionId});
+
 // The server computes clock ticks from its own assembly epoch. This request
 // never accepts client timestamps or a requested tick value.
 export const synchronizeDungeonBattleClock=roomId=>request('clock',{roomId});
