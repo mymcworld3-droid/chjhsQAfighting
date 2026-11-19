@@ -346,7 +346,7 @@ async function main(){
       assert.ok(dims.pixels>=dims.w*1.9,JSON.stringify(dims));
       assert.equal(dims.touch,'none');assert.equal(dims.zoom,'100%');
       const creatureButton=page.locator('#dungeon-map-view [data-dm="beasts"]');
-      await page.waitForFunction(()=>/^靈獸 [4-6]$/.test(
+      await page.waitForFunction(()=>/^靈獸 [5-7]$/.test(
         document.querySelector('[data-dm="beasts"]')?.textContent||''));
       assert.equal(await creatureButton.isDisabled(),false);
     }
