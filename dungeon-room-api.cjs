@@ -15,6 +15,7 @@ const {strikeEnemy,maxHealth}=require('./dungeon-player-combat.cjs');
 const Skills=require('./dungeon-skill-combat.cjs');
 const QuizCredit=require('./dungeon-quiz-credit.cjs');
 const Objectives=require('./dungeon-objectives.cjs');
+const Boss=require('./dungeon-boss-battle.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -50,11 +51,14 @@ const publicRoom=(roomId,room,at=Date.now())=>({
   expiresAtMs:room.expiresAtMs,maxMembers:MAX_MEMBERS,
   battleClock:projectClock(room,at),
   dungeonProgress:Objectives.publicProgress(room.dungeonProgress),
+  dungeonArena:room.dungeonArena==='boss'?'boss':'exploration',
+  bossEncounter:Boss.publicEncounter(room.bossEncounter),
   enemyAiVersion:room.enemyAiVersion||null,
   // Presentational snapshots expose only the current NPC action state,
   // never the secret map seed or server-side patrol/decision internals.
   enemies:Array.isArray(room.enemies)?room.enemies.map(e=>({
     id:e.id,name:e.name,kind:e.kind,position:e.position,
+    ...(e.kind==='boss'?{footprint:2,phase:Boss.phase(e.battleHealth)}:{}),
     intent:e.intent,targetUid:e.targetUid||null,
     lastActionTick:e.lastActionTick,cadence:e.cadence,
     battleHealth:Number.isSafeInteger(e.battleHealth)?e.battleHealth:maxHealth(e.kind),
@@ -118,7 +122,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','activate-portal','clock'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','activate-portal','enter-boss','clock'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -305,7 +309,7 @@ function createHandler({
         const seed=current.mapSeed||('legacy:'+roomId);
         if(current.mapVersion!==undefined&&current.mapVersion!==LAYOUT_VERSION)
           throw err('副本地圖版本尚未支援',409);
-        return res.json({ok:true,roomId,map:generateDungeonLayout(seed)});
+        return res.json({ok:true,roomId,map:roomMap(current,roomId)});
       }
       if(action==='subscribe'){
         const snap=await roomRef.get();
@@ -402,12 +406,16 @@ function createHandler({
           if(outcome.duplicate&&!battleDelta)return current;
           const progress=outcome.duplicate?evolved.dungeonProgress:
             Objectives.combatProgress(evolved,outcome.enemies,uid);
+          const bossEncounter=outcome.duplicate?evolved.bossEncounter:
+            Boss.onDefeat(evolved,outcome.enemies,uid);
           const next={...evolved,members:outcome.members,enemies:outcome.enemies,
             ...(progress?{dungeonProgress:progress}:{}),
+            ...(bossEncounter?{bossEncounter}:{}),
             revision:current.revision+1};
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
             enemies:next.enemies,
             ...(progress!==evolved.dungeonProgress?{dungeonProgress:progress}:{}),
+            ...(bossEncounter!==evolved.bossEncounter?{bossEncounter}:{}),
             revision:next.revision});
           return next;
         });
@@ -438,13 +446,17 @@ function createHandler({
           const progress=action==='skill'&&!outcome.duplicate?
             Objectives.combatProgress(evolved,outcome.enemies,uid):
             evolved.dungeonProgress;
+          const bossEncounter=action==='skill'&&!outcome.duplicate?
+            Boss.onDefeat(evolved,outcome.enemies,uid):evolved.bossEncounter;
           const next={...evolved,members:outcome.members,
             ...(action==='skill'?{enemies:outcome.enemies}:{}),
             ...(progress?{dungeonProgress:progress}:{}),
+            ...(bossEncounter?{bossEncounter}:{}),
             revision:current.revision+1};
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
             ...(action==='skill'?{enemies:next.enemies}:{}),
             ...(progress!==evolved.dungeonProgress?{dungeonProgress:progress}:{}),
+            ...(bossEncounter!==evolved.bossEncounter?{bossEncounter}:{}),
             revision:next.revision});
           return next;
         });
@@ -468,6 +480,28 @@ function createHandler({
             revision:current.revision+1};
           tx.update(roomRef,{...(battleDelta||{}),
             dungeonProgress:result.progress,revision:next.revision});
+          return next;
+        });
+        return respond(roomId,updated);
+      }
+      if(action==='enter-boss'){
+        const updated=await db.runTransaction(async tx=>{
+          const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
+          if(!current||!hasMember(current,uid))
+            throw err('你不是此副本的隊員',403);
+          if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
+          if(current.status!=='assembled')throw err('副本尚未出發',409);
+          if(current.dungeonArena==='boss'&&current.bossEncounter?.version===Boss.VERSION)
+            return current;
+          const map=roomMap(current,roomId);
+          const delta=advanceWorld(current,map,at);
+          const entered=Boss.enter({...current,...(delta||{})},uid,map,at,roomId);
+          if(entered.duplicate)return current;
+          const next={...entered.room,revision:current.revision+1};
+          tx.update(roomRef,{dungeonArena:'boss',bossEncounter:next.bossEncounter,
+            enemies:next.enemies,members:next.members,
+            battleAppliedTick:next.battleAppliedTick,
+            battleAppliedAtMs:next.battleAppliedAtMs,revision:next.revision});
           return next;
         });
         return respond(roomId,updated);
@@ -557,16 +591,20 @@ function createHandler({
             const enemyState={enemyAiVersion:ENEMY_AI_VERSION,
               enemies:objectives.enemies,dungeonProgress:objectives.progress};
             const next={...room,status:'assembled',assembledAtMs:at,
+              dungeonArena:'exploration',bossEncounter:null,
               ...clockState,...enemyState,members:startingMembers,
               revision:room.revision+1};
             tx.update(roomRef,{status:next.status,assembledAtMs:at,
+              dungeonArena:'exploration',bossEncounter:null,
               ...clockState,...enemyState,members:startingMembers,
               revision:next.revision});
             return next;
           }
           if(room.status==='waiting')return room;
           if(room.status!=='assembled')throw err('隊伍尚未集結',409);
-          if(Object.values(membersOf(room)).some(m=>(m.moveSeq||0)>0))
+          if(room.dungeonArena==='boss'||
+              room.dungeonProgress?.portalStatus==='open'||
+              Object.values(membersOf(room)).some(m=>(m.moveSeq||0)>0))
             throw err('隊伍已開始探索，不能取消集結；可離開隊伍結束本次探索',409);
           const members=Object.fromEntries(Object.entries(membersOf(room))
             .map(([key,m])=>{
@@ -579,7 +617,7 @@ function createHandler({
             }));
           const clockState={battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null};
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null};
           const next={...room,status:'waiting',...clockState,members,
             revision:room.revision+1};
           tx.update(roomRef,{status:'waiting',...clockState,members,
@@ -623,7 +661,7 @@ function createHandler({
           const codeSnap=await tx.get(codeRef);
           const cleared={battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null};
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null};
           const next={...room,status:'closed',closedAtMs:at,...cleared,
             revision:room.revision+1};
           tx.update(roomRef,{status:'closed',closedAtMs:at,...cleared,
@@ -667,7 +705,7 @@ function createHandler({
           const reset=room.status==='assembled'?{
             battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null
           }:{};
           const updated={...room,revision:room.revision+1,
             status:closed?'closed':'waiting',hostUid,members,...reset,
