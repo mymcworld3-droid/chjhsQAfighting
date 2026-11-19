@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-直線方程式、斜率與距離-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "兩點斜率與直線方程式",
+      "question": {
+        "q": "通過 $(1,2)$ 與 $(4,8)$ 兩點的直線方程式為何？",
+        "correct": "$y=2x$",
+        "wrong": [
+          "$y=2x+1$",
+          "$y=\\frac12x$",
+          "$y=3x-1$"
+        ],
+        "exp": "斜率 $m=(8-2)/(4-1)=2$，代入 $(1,2)$ 得截距 $0$，故 $y=2x$。",
+        "subject": "數學",
+        "sub_topic": "直線方程式、斜率與距離",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "h1-直線方程式、斜率與距離",
+        "template_id": "self-20261119-math-高中一年級-直線方程式、斜率與距離-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-直線方程式、斜率與距離-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "點線距離公式與絕對值",
+      "question": {
+        "q": "點 $(3,-1)$ 到直線 $3x+4y-10=0$ 的距離為何？",
+        "correct": "$1$",
+        "wrong": [
+          "$2$",
+          "$3$",
+          "$5$"
+        ],
+        "exp": "點線距離為 $|3(3)+4(-1)-10|/\\sqrt{3^2+4^2}=5/5=1$。",
+        "subject": "數學",
+        "sub_topic": "直線方程式、斜率與距離",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "h1-直線方程式、斜率與距離",
+        "template_id": "self-20261119-math-高中一年級-直線方程式、斜率與距離-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-直線方程式、斜率與距離-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "以垂直斜率關係建立方程式",
+      "question": {
+        "q": "通過 $(2,1)$ 且垂直於 $2x-3y+6=0$ 的直線方程式為何？",
+        "correct": "$3x+2y=8$",
+        "wrong": [
+          "$2x-3y=1$",
+          "$3x-2y=4$",
+          "$2x+3y=7$"
+        ],
+        "exp": "原直線斜率為 $2/3$，垂直線斜率 $-3/2$；由 $y-1=-\\frac32(x-2)$ 得 $3x+2y=8$。",
+        "subject": "數學",
+        "sub_topic": "直線方程式、斜率與距離",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "h1-直線方程式、斜率與距離",
+        "template_id": "self-20261119-math-高中一年級-直線方程式、斜率與距離-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -95,6 +95,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-math-高中二年級-平面向量內積-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "二維坐標內積的計算",
+      "question": {
+        "q": "平面向量 $\\vec u=(2,-1)$、$\\vec v=(3,4)$，求 $\\vec u\\cdot\\vec v$。",
+        "correct": "$2$",
+        "wrong": [
+          "$10$",
+          "$-2$",
+          "$6$"
+        ],
+        "exp": "內積為 $2\\times3+(-1)\\times4=6-4=2$，僅涉及平面二維向量。",
+        "subject": "數學",
+        "sub_topic": "平面向量內積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "plane-vector-dot-product",
+        "template_id": "self-20261119-math-高中二年級-平面向量內積-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中二年級-平面向量內積-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "以二維向量垂直條件求未知數",
+      "question": {
+        "q": "平面向量 $\\vec u=(1,2)$、$\\vec v=(t,-1)$ 相互垂直，則實數 $t$ 為何？",
+        "correct": "$2$",
+        "wrong": [
+          "$-2$",
+          "$1$",
+          "$0$"
+        ],
+        "exp": "垂直時內積為零，故 $1\\times t+2\\times(-1)=t-2=0$，得 $t=2$。",
+        "subject": "數學",
+        "sub_topic": "平面向量內積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "plane-vector-dot-product",
+        "template_id": "self-20261119-math-高中二年級-平面向量內積-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中二年級-平面向量內積-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "以二維內積與向量長度求夾角",
+      "question": {
+        "q": "平面向量 $\\vec u=(1,0)$、$\\vec v=(1,\\sqrt3)$ 的夾角為何？",
+        "correct": "$60^\\circ$",
+        "wrong": [
+          "$30^\\circ$",
+          "$45^\\circ$",
+          "$90^\\circ$"
+        ],
+        "exp": "$\\vec u\\cdot\\vec v=1$，長度分別為 $1$、$2$，故 $\\cos\\theta=1/2$，兩向量夾角為 $60^\\circ$。",
+        "subject": "數學",
+        "sub_topic": "平面向量內積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "plane-vector-dot-product",
+        "template_id": "self-20261119-math-高中二年級-平面向量內積-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

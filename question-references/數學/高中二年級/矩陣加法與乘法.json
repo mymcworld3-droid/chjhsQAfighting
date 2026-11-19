@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-math-高中二年級-矩陣加法與乘法-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "矩陣乘法之列乘行",
+      "question": {
+        "q": "令 $A=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$、$B=\\begin{pmatrix}2&0\\\\3&1\\end{pmatrix}$，則 $AB$ 的左上角元素為何？",
+        "correct": "$8$",
+        "wrong": [
+          "$2$",
+          "$5$",
+          "$6$"
+        ],
+        "exp": "$AB$ 的第一列第一行元素等於 $1\\times2+2\\times3=8$，不能直接將對應元素相乘。",
+        "subject": "數學",
+        "sub_topic": "矩陣加法與乘法",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h2-矩陣加法與乘法",
+        "template_id": "self-20261119-math-高中二年級-矩陣加法與乘法-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中二年級-矩陣加法與乘法-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "交換矩陣的左乘與右乘差異",
+      "question": {
+        "q": "令 $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$、$B=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$。下列何者為 $AB$？",
+        "correct": "$\\begin{pmatrix}2&1\\\\4&3\\end{pmatrix}$",
+        "wrong": [
+          "$\\begin{pmatrix}3&4\\\\1&2\\end{pmatrix}$",
+          "$\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$",
+          "$\\begin{pmatrix}0&2\\\\3&0\\end{pmatrix}$"
+        ],
+        "exp": "右乘 $B$ 會交換 $A$ 的兩欄，得到 $AB=\\begin{pmatrix}2&1\\\\4&3\\end{pmatrix}$；左乘則交換兩列。",
+        "subject": "數學",
+        "sub_topic": "矩陣加法與乘法",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h2-矩陣加法與乘法",
+        "template_id": "self-20261119-math-高中二年級-矩陣加法與乘法-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中二年級-矩陣加法與乘法-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "檢核矩陣乘法相容維度",
+      "question": {
+        "q": "矩陣 $A$ 為 $2\\times3$，矩陣 $B$ 為 $3\\times4$，則乘積 $AB$ 的大小為何？",
+        "correct": "$2\\times4$",
+        "wrong": [
+          "$3\\times3$",
+          "$4\\times2$",
+          "無法相乘"
+        ],
+        "exp": "內側維度 $3$ 相等，乘積存在，且外側維度決定結果為 $2\\times4$。",
+        "subject": "數學",
+        "sub_topic": "矩陣加法與乘法",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h2-矩陣加法與乘法",
+        "template_id": "self-20261119-math-高中二年級-矩陣加法與乘法-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-math-高中三年級-定積分與面積-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "多項式定積分的上下限代入",
+      "question": {
+        "q": "計算定積分 $\\int_0^2(3x^2+1)\\,dx$。",
+        "correct": "$10$",
+        "wrong": [
+          "$8$",
+          "$9$",
+          "$12$"
+        ],
+        "exp": "原始函數為 $x^3+x$，代入上下限得 $(8+2)-0=10$。",
+        "subject": "數學",
+        "sub_topic": "定積分與面積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-定積分與面積",
+        "template_id": "self-20261119-math-高中三年級-定積分與面積-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中三年級-定積分與面積-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "以圖形面積與定積分互相驗證",
+      "question": {
+        "q": "在 $0\\le x\\le4$ 區間內，直線 $y=x$ 與 $x$ 軸圍成的面積為何？",
+        "correct": "$8$",
+        "wrong": [
+          "$4$",
+          "$12$",
+          "$16$"
+        ],
+        "exp": "面積為 $\\int_0^4x\\,dx=\\left[x^2/2\\right]_0^4=8$，亦即底高均為 $4$ 的直角三角形面積。",
+        "subject": "數學",
+        "sub_topic": "定積分與面積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-定積分與面積",
+        "template_id": "self-20261119-math-高中三年級-定積分與面積-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中三年級-定積分與面積-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "先求交點再積分正值區域",
+      "question": {
+        "q": "拋物線 $y=4-x^2$ 與 $x$ 軸所圍成的有限區域，其面積為何？",
+        "correct": "$\\frac{32}{3}$",
+        "wrong": [
+          "$\\frac{16}{3}$",
+          "$8$",
+          "$16$"
+        ],
+        "exp": "交點為 $x=\\pm2$，面積 $\\int_{-2}^{2}(4-x^2)\\,dx=[4x-x^3/3]_{-2}^{2}=32/3$。",
+        "subject": "數學",
+        "sub_topic": "定積分與面積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-定積分與面積",
+        "template_id": "self-20261119-math-高中三年級-定積分與面積-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

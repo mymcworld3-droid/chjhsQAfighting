@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-實數、數線與絕對值-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "絕對值方程式需完整枚舉正負兩支",
+      "question": {
+        "q": "解方程式 $|2x-3|=5$，所有實數解為何？",
+        "correct": "$x=-1$ 或 $x=4$ ",
+        "wrong": [
+          "$x=1$ 或 $x=4$",
+          "只有 $x=4$",
+          "$x=-4$ 或 $x=1$"
+        ],
+        "exp": "$2x-3=5$ 得 $x=4$；$2x-3=-5$ 得 $x=-1$。絕對值等於正數須分正負兩種情況。",
+        "subject": "數學",
+        "sub_topic": "實數、數線與絕對值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "h1-實數、數線與絕對值",
+        "template_id": "self-20261119-math-高中一年級-實數、數線與絕對值-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-實數、數線與絕對值-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "將絕對值不等式轉為開區間並計數",
+      "question": {
+        "q": "滿足 $|x-2|<3$ 的整數 $x$ 共有幾個？",
+        "correct": "$5$ 個",
+        "wrong": [
+          "$4$ 個",
+          "$6$ 個",
+          "$7$ 個"
+        ],
+        "exp": "由 $-3<x-2<3$ 得 $-1<x<5$，整數為 $0,1,2,3,4$，共 $5$ 個。",
+        "subject": "數學",
+        "sub_topic": "實數、數線與絕對值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "h1-實數、數線與絕對值",
+        "template_id": "self-20261119-math-高中一年級-實數、數線與絕對值-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-實數、數線與絕對值-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "以數線距離與三角不等式理解最小值",
+      "question": {
+        "q": "對所有實數 $x$，$|x+2|+|x-3|$ 的最小值為何？",
+        "correct": "$5$",
+        "wrong": [
+          "$0$",
+          "$1$",
+          "$6$"
+        ],
+        "exp": "這是數線上點 $x$ 到 $-2$ 與 $3$ 的距離和，至少等於兩點距離 $5$；當 $-2\\le x\\le3$ 時取等號。",
+        "subject": "數學",
+        "sub_topic": "實數、數線與絕對值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "h1-實數、數線與絕對值",
+        "template_id": "self-20261119-math-高中一年級-實數、數線與絕對值-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

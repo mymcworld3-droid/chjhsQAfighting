@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-math-高中三年級-導數定義與微分法則-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "多項式微分後計算指定位置的導數",
+      "question": {
+        "q": "已知 $f(x)=x^3-3x^2+2$，則 $f'(2)$ 為何？",
+        "correct": "$0$",
+        "wrong": [
+          "$2$",
+          "$-2$",
+          "$12$"
+        ],
+        "exp": "$f'(x)=3x^2-6x$，代入 $x=2$ 得 $12-12=0$。",
+        "subject": "數學",
+        "sub_topic": "導數定義與微分法則",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-導數定義與微分法則",
+        "template_id": "self-20261119-math-高中三年級-導數定義與微分法則-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中三年級-導數定義與微分法則-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "由差商極限理解導數定義",
+      "question": {
+        "q": "若 $f(x)=x^2$，求 $\\lim_{h\\to0}\\frac{f(3+h)-f(3)}h$。",
+        "correct": "$6$",
+        "wrong": [
+          "$3$",
+          "$9$",
+          "$0$"
+        ],
+        "exp": "展開 $f(3+h)-f(3)=6h+h^2$，除以 $h$ 得 $6+h$，取極限為 $6$。",
+        "subject": "數學",
+        "sub_topic": "導數定義與微分法則",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-導數定義與微分法則",
+        "template_id": "self-20261119-math-高中三年級-導數定義與微分法則-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中三年級-導數定義與微分法則-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "乘積法則與指定點導數",
+      "question": {
+        "q": "若 $f(x)=(x^2+1)(x-2)$，則 $f'(1)$ 為何？",
+        "correct": "$0$",
+        "wrong": [
+          "$-2$",
+          "$2$",
+          "$4$"
+        ],
+        "exp": "乘積微分得 $f'(x)=2x(x-2)+(x^2+1)$，代入 $x=1$ 得 $-2+2=0$。",
+        "subject": "數學",
+        "sub_topic": "導數定義與微分法則",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-導數定義與微分法則",
+        "template_id": "self-20261119-math-高中三年級-導數定義與微分法則-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

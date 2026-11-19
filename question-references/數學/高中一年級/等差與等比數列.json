@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-等差與等比數列-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "辨認項數與公差的乘數",
+      "question": {
+        "q": "等差數列首項為 $5$、公差為 $3$，第 $8$ 項為何？",
+        "correct": "$26$",
+        "wrong": [
+          "$24$",
+          "$29$",
+          "$21$"
+        ],
+        "exp": "$a_8=a_1+(8-1)d=5+7\\times3=26$。",
+        "subject": "數學",
+        "sub_topic": "等差與等比數列",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "h1-等差與等比數列",
+        "template_id": "self-20261119-math-高中一年級-等差與等比數列-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-等差與等比數列-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "由公比推得前五項和",
+      "question": {
+        "q": "等比數列為 $3,6,12,\\ldots$，前 $5$ 項和為何？",
+        "correct": "$93$",
+        "wrong": [
+          "$48$",
+          "$96$",
+          "$63$"
+        ],
+        "exp": "前五項為 $3,6,12,24,48$，總和 $93$；也可用 $3(2^5-1)/(2-1)$。",
+        "subject": "數學",
+        "sub_topic": "等差與等比數列",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "h1-等差與等比數列",
+        "template_id": "self-20261119-math-高中一年級-等差與等比數列-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-等差與等比數列-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "已知兩項反推公差再求指定項",
+      "question": {
+        "q": "某等差數列第 $3$ 項為 $8$、第 $7$ 項為 $20$，求第 $10$ 項。",
+        "correct": "$29$",
+        "wrong": [
+          "$26$",
+          "$32$",
+          "$35$"
+        ],
+        "exp": "相隔四項增加 $12$，公差為 $3$；$a_{10}=a_7+3d=20+9=29$。",
+        "subject": "數學",
+        "sub_topic": "等差與等比數列",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "h1-等差與等比數列",
+        "template_id": "self-20261119-math-高中一年級-等差與等比數列-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-math-高中二年級-貝氏定理-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "以供應比例與不良率建立後驗機率",
+      "question": {
+        "q": "甲、乙兩廠分別供應某零件的 $60\\%$、$40\\%$，不良率分別為 $1\\%$、$4\\%$。隨機抽到一個不良品，來自乙廠的機率為何？",
+        "correct": "$\\frac8{11}$",
+        "wrong": [
+          "$\\frac25$",
+          "$\\frac45$",
+          "$\\frac4{11}$"
+        ],
+        "exp": "乙廠且不良的機率為 $0.4\\times0.04=0.016$；總不良機率為 $0.6\\times0.01+0.016=0.022$，故 $0.016/0.022=8/11$。",
+        "subject": "數學",
+        "sub_topic": "貝氏定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h2-貝氏定理",
+        "template_id": "self-20261119-math-高中二年級-貝氏定理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中二年級-貝氏定理-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "區分前驗機率與觀察證據後的條件機率",
+      "question": {
+        "q": "某日下雨機率為 $20\\%$。已知下雨時地面濕的機率為 $90\\%$，沒下雨時為 $10\\%$。若看到地面濕，下雨的機率為何？",
+        "correct": "$\\frac9{13}$",
+        "wrong": [
+          "$\\frac9{10}$",
+          "$\\frac15$",
+          "$\\frac12$"
+        ],
+        "exp": "$P(雨且濕)=0.2\\times0.9=0.18$，$P(不雨且濕)=0.8\\times0.1=0.08$，故 $P(雨\\mid濕)=0.18/0.26=9/13$。",
+        "subject": "數學",
+        "sub_topic": "貝氏定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h2-貝氏定理",
+        "template_id": "self-20261119-math-高中二年級-貝氏定理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中二年級-貝氏定理-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "兩層隨機選擇下的貝氏公式",
+      "question": {
+        "q": "先以機率 $1/3$ 選甲袋、$2/3$ 選乙袋。甲袋有 $2$ 紅 $1$ 藍，乙袋有 $1$ 紅 $3$ 藍。抽得紅球後，選中甲袋的機率為何？",
+        "correct": "$\\frac47$",
+        "wrong": [
+          "$\\frac13$",
+          "$\\frac23$",
+          "$\\frac25$"
+        ],
+        "exp": "$P(甲且紅)=(1/3)(2/3)=2/9$；$P(乙且紅)=(2/3)(1/4)=1/6$；比值 $(2/9)/(2/9+1/6)=4/7$。",
+        "subject": "數學",
+        "sub_topic": "貝氏定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h2-貝氏定理",
+        "template_id": "self-20261119-math-高中二年級-貝氏定理-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

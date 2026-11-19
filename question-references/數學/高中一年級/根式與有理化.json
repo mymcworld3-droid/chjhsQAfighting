@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-根式與有理化-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "將同類根式化簡後相加",
+      "question": {
+        "q": "化簡 $\\sqrt{18}+\\sqrt{8}$。",
+        "correct": "$5\\sqrt2$",
+        "wrong": [
+          "$\\sqrt{26}$",
+          "$3\\sqrt2$",
+          "$5\\sqrt{26}$"
+        ],
+        "exp": "$\\sqrt{18}=3\\sqrt2$、$\\sqrt8=2\\sqrt2$，相加得 $5\\sqrt2$。",
+        "subject": "數學",
+        "sub_topic": "根式與有理化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-根式與有理化",
+        "template_id": "self-20261119-math-高中一年級-根式與有理化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-根式與有理化-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "運用平方差與根式運算",
+      "question": {
+        "q": "計算 $(\\sqrt5+\\sqrt3)(\\sqrt5-\\sqrt3)$。",
+        "correct": "$2$",
+        "wrong": [
+          "$8$",
+          "$\\sqrt2$",
+          "$4\\sqrt{15}$"
+        ],
+        "exp": "由平方差公式得 $5-3=2$。",
+        "subject": "數學",
+        "sub_topic": "根式與有理化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-根式與有理化",
+        "template_id": "self-20261119-math-高中一年級-根式與有理化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-math-高中一年級-根式與有理化-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "以共軛根式進行分母有理化",
+      "question": {
+        "q": "將 $\\dfrac1{\\sqrt7-\\sqrt3}$ 的分母有理化，結果為何？",
+        "correct": "$\\dfrac{\\sqrt7+\\sqrt3}{4}$",
+        "wrong": [
+          "$\\dfrac{\\sqrt7-\\sqrt3}{4}$",
+          "$\\dfrac{\\sqrt7+\\sqrt3}{10}$",
+          "$\\sqrt7+\\sqrt3$"
+        ],
+        "exp": "分子分母同乘 $\\sqrt7+\\sqrt3$，分母成為 $7-3=4$。",
+        "subject": "數學",
+        "sub_topic": "根式與有理化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-根式與有理化",
+        "template_id": "self-20261119-math-高中一年級-根式與有理化-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
