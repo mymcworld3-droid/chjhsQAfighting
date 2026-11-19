@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-civ2-market-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依其他條件不變的假設分析曲線移動與均衡",
+      "question": {
+        "q": "某市場販售的是正常財，若消費者平均所得上升，且供給曲線及其他需求因素不變，市場均衡通常如何改變？",
+        "correct": "均衡價格上升、均衡交易量增加",
+        "wrong": [
+          "均衡價格下降、交易量減少",
+          "價格不變、交易量必定歸零",
+          "只有供給曲線向右移動"
+        ],
+        "exp": "正常財需求通常隨所得提高而增加，需求曲線右移；在向上傾斜的供給曲線下，均衡價格與交易量皆上升。",
+        "subject": "公民",
+        "sub_topic": "需求、供給與市場價格",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-需求、供給與市場價格",
+        "template_id": "ref-20261119-civ2-market-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-civ2-market-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依其他條件不變的假設分析曲線移動與均衡",
+      "question": {
+        "q": "某產品的生產必須使用天然氣。若天然氣價格上漲，而產品需求及其他供給因素均不變，通常將如何影響產品市場？",
+        "correct": "供給曲線左移，均衡價格上升、數量下降",
+        "wrong": [
+          "供給曲線右移，價格下降、數量上升",
+          "需求曲線必因成本提高而右移",
+          "供給成本與均衡結果完全沒有關係"
+        ],
+        "exp": "能源成本提高使廠商在每個給定價格下願意供應的量減少，供給左移；在一般供需斜率下價格上升、交易量下降。",
+        "subject": "公民",
+        "sub_topic": "需求、供給與市場價格",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-需求、供給與市場價格",
+        "template_id": "ref-20261119-civ2-market-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-civ2-market-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依其他條件不變的假設分析曲線移動與均衡",
+      "question": {
+        "q": "某競爭市場的政府規定有效的最低售價，高於原本均衡價格。若供需曲線正常且沒有其他配套措施，最可能出現何種市場現象？",
+        "correct": "供給量大於需求量，形成超額供給",
+        "wrong": [
+          "需求量大於供給量，形成短缺",
+          "市場交易量自動超過原均衡交易量",
+          "價格管制使需求曲線必定消失"
+        ],
+        "exp": "高於均衡價的有效價格下限，使供給者願供量增加而消費者願買量減少，容易產生超額供給。",
+        "subject": "公民",
+        "sub_topic": "需求、供給與市場價格",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-需求、供給與市場價格",
+        "template_id": "ref-20261119-civ2-market-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
