@@ -613,7 +613,14 @@ export class TacticalRenderer{
       if(objective.item&&!objective.item.collected)markers.push({...objective.item,label:'物',color:'#f7d975'});
       if(objective.destination)markers.push({...objective.destination,label:'交',color:'#8ee6d0'});
     }else if(objective?.type==='defense')markers.push({...objective.shrine,label:'守',color:'#75e9b2'});
-    else if(objective?.type==='sealing')for(const p of objective.points||[])markers.push({...p,label:p.activated?'✓':({shield:'護',hazard:'煞',rage:'獸',maze:'迷'}[p.kind]||'陣'),color:p.activated?'#b5c4b7':'#a7e8ff'});
+    else if(objective?.type==='sealing')for(const p of objective.points||[]){
+      // Keep the existing compact marker until the image phase. Its label and
+      // hue now come from the same authoritative catalog as combat and intel.
+      // Layout-v3 activation markers intentionally retain their legacy style.
+      const seal=R.sealInfo(s,p);
+      markers.push({...p,label:p.activated?'✓':seal?.label||'陣',
+        color:p.activated?'#b5c4b7':seal?.color||'#a7e8ff'});
+    }
     for(const p of objective?.hazards||[])fill(p,'#f24c4866','#ffb1a3');
     for(const p of markers){
       const x=ox+(p.x+.5)*cell,y=oy+(p.y+.5)*cell;c.save();c.strokeStyle=p.color;c.fillStyle='#102b2bcc';c.lineWidth=Math.max(2,cell*.06);
