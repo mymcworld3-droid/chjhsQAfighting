@@ -65,7 +65,10 @@ export const kickDungeonMember=(roomId,targetUid)=>request('kick',{roomId,target
 export const disbandDungeonRoom=roomId=>request('disband',{roomId});
 export const assembleDungeonRoom=roomId=>request('start',{roomId});
 export const activateDungeonPortal=roomId=>request('activate-portal',{roomId});
-export const enterDungeonBoss=roomId=>request('enter-boss',{roomId});
+// Explicit co-op vote. The legacy enter-boss action is a YES vote as well.
+export const setDungeonBossReady=(roomId,ready)=>
+  request('boss-ready',{roomId,ready:!!ready});
+export const enterDungeonBoss=roomId=>setDungeonBossReady(roomId,true);
 export const rescueDungeonTeammate=(roomId,targetUid,seq)=>
   request('rescue',{roomId,targetUid,seq});
 export const claimDungeonBossReward=roomId=>
