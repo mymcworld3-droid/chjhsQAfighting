@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-bio3-popgen-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "某二倍體族群有100人，AA、Aa、aa基因型人數依序為20、50、30人。A等位基因頻率為何？",
+        "correct": "0.45",
+        "wrong": [
+          "0.20",
+          "0.50",
+          "0.70"
+        ],
+        "exp": "總等位基因200個；A數量=2×20+50=90，頻率90/200=0.45。",
+        "subject": "生物",
+        "sub_topic": "族群遺傳",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群遺傳",
+        "template_id": "ref-20261119-b4-bio3-popgen-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-bio3-popgen-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "符合哈溫平衡的族群中，隱性同型合子aa的頻率為0.16。理論上異型合子Aa的頻率為何？",
+        "correct": "0.48",
+        "wrong": [
+          "0.16",
+          "0.24",
+          "0.64"
+        ],
+        "exp": "q²=0.16，所以q=0.4、p=0.6，異型合子頻率2pq=2×0.6×0.4=0.48。",
+        "subject": "生物",
+        "sub_topic": "族群遺傳",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群遺傳",
+        "template_id": "ref-20261119-b4-bio3-popgen-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-bio3-popgen-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "數隻鳥從大陸遷到無鳥的小島並建立新族群。若新族群的等位基因頻率與原族群不同，最直接可能反映哪種現象？",
+        "correct": "創始者效應",
+        "wrong": [
+          "一定由新島環境直接改變每隻鳥的基因",
+          "所有性狀的等位基因頻率必與原族群相同",
+          "只有完全沒有繁殖的新族群才可能發生演化"
+        ],
+        "exp": "少量創始個體僅攜帶原族群基因庫的一部分，隨機抽樣可能使新族群頻率不同，稱創始者效應。",
+        "subject": "生物",
+        "sub_topic": "族群遺傳",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群遺傳",
+        "template_id": "ref-20261119-b4-bio3-popgen-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
