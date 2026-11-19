@@ -274,8 +274,9 @@ test('boss guard API is serialized and a retried packet cannot spend stamina twi
   assert.equal(retry.body.room.members.a.explorationStamina,97);
   assert.equal((await f.call('a','boss-guard',{roomId,targetUid:'ghost',seq:2})).status,403);
   assert.equal((await f.call('b','boss-guard',{roomId,targetUid:'a',seq:9})).status,409);
-  assert.equal((await f.call('a','boss-guard',{roomId,targetUid:'b',seq:2})).status,200);
-  assert.equal((await f.call('a','get',{roomId})).body.room.members.a.explorationStamina,94);
+  assert.equal((await f.call('a','boss-guard',{roomId,targetUid:'b',seq:2})).status,409,
+    'active guard cannot be overwritten at another stamina cost');
+  assert.equal((await f.call('a','get',{roomId})).body.room.members.a.explorationStamina,97);
   const outsider=await f.call('d','boss-guard',{roomId,targetUid:'b',seq:1});
   assert.equal(outsider.status,403);
 });
