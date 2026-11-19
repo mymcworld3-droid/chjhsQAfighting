@@ -12,6 +12,9 @@ import './manual-rules.js';
 import './tactical-animation.js';
 import './tactical-skill-effects.js';
 import './tactical-ambience.js';
+import './tactical-impact-presentation.js';
+import {dungeonEnvironmentPlan} from './dungeon-environment-effects.js';
+import {dungeonBossTransition} from './dungeon-boss-visuals.js';
 import './tactical-threat-visuals.js';
 import {dungeonThreatPlan} from './dungeon-threat-plan.js';
 import {dungeonAnimationEvents,paintDungeonScene,drawDungeonHitNumbers} from './dungeon-skill-animation.js';
@@ -47,7 +50,8 @@ class DungeonMapView{
     this.visualScenes=new Map(); // authenticated room events only; never controls damage
     this.travelScenes=new Map(); // sampled trial movement; server positions remain untouched
     this.pendingMovementPreview=null; // visual only; never enters C-room rules
-    this.ambiencePlan=null;this.ambientTimer=null;
+    this.ambiencePlan=null;this.environmentPlan=null;
+    this.ambientTimer=null;this.bossTransition=null;
     this.pendingAction=null;
     this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;
     this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
@@ -263,7 +267,9 @@ class DungeonMapView{
     this.map=null;this.camera=Camera.initialCamera();
     this.visualScenes.clear();this.travelScenes.clear();
     this.pendingMovementPreview=null;this.pendingAction=null;
-    clearTimeout(this.ambientTimer);this.ambientTimer=null;this.ambiencePlan=null;
+    clearTimeout(this.ambientTimer);this.ambientTimer=null;
+    this.ambiencePlan=null;this.environmentPlan=null;
+    this.bossTransition=null;
     this.follow=true;this.pointers.clear();this.opened=true;
     this.movePending=false;this.strikePending=false;this.skillPending=false;
     this.portalPending=false;this.bossPending=false;
@@ -296,6 +302,7 @@ class DungeonMapView{
       if(!this.isCurrent()||request!==this.seq||uid!==this.uid)return;
       if(!mapValid(map))throw new Error('副本地圖資料不完整');
       this.map=map;
+      this.environmentPlan=dungeonEnvironmentPlan(map);
       const ambience=globalThis.QATacticalAmbience;
       const biome={bamboo:'竹林',ruins:'遺墟',frost:'霜嶺',
         marsh:'碧水'}[map.biome]||'遺墟';
@@ -830,6 +837,7 @@ class DungeonMapView{
     const roomId=this.roomId,token=this.seq;
     this.skillPending=true;this.updateSkillHUD();
     this.pendingAction={kind:'skill',target:{...target},
+      origin:{...member.position},skillId,style:skill.kind,
       startedAt:performance.now()};
     this.skillAlert('出招中 · 正在確認命中結果');
     this.drawSoon();
@@ -905,6 +913,7 @@ class DungeonMapView{
     const token=this.seq,roomId=this.roomId;
     this.strikePending=true;this.updateStrikeHUD();
     this.pendingAction={kind:'strike',target:{...enemy.position},
+      origin:{...member.position},style:'basic',
       startedAt:performance.now()};
     this.strikeAlert('出拳中 · 正在確認命中結果');
     this.drawSoon();
@@ -1461,11 +1470,15 @@ class DungeonMapView{
     if(changedArena){
       this.visualScenes?.clear();this.travelScenes?.clear();
       this.pendingMovementPreview=null;this.pendingAction=null;
-      this.ambiencePlan=null;
+      this.ambiencePlan=null;this.environmentPlan=null;
+      this.bossTransition=null;
     }
     else if(this.map&&previous?.status==='assembled'){
       this.visualScenes ||=new Map();
       const now=performance.now();
+      const phase=dungeonBossTransition(previous,room);
+      if(phase)this.bossTransition={scene:phase,startedAt:now,
+        duration:phase.kind==='defeat'?1500:1150};
       for(const event of dungeonMovementEvents(previous,room,this.map)){
         const prior=this.travelScenes.get(event.key);
         const pending=this.pendingMovementPreview;
@@ -1524,7 +1537,9 @@ class DungeonMapView{
     this.quiz?.destroy();
     this.visualScenes?.clear();this.travelScenes?.clear();
     this.pendingMovementPreview=null;this.pendingAction=null;
-    clearTimeout(this.ambientTimer);this.ambientTimer=null;this.ambiencePlan=null;
+    clearTimeout(this.ambientTimer);this.ambientTimer=null;
+    this.ambiencePlan=null;this.environmentPlan=null;
+    this.bossTransition=null;
     for(const aura of this.focusAuras.values())aura.remove();
     this.focusAuras.clear();
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
@@ -1832,13 +1847,30 @@ class DungeonMapView{
     };
     const warning=dungeonThreatPlan(m,this.creatures(),this.members(),
       this.uid,this.rangeTiles,this.wheelMode);
+    const transition=this.bossTransition;
+    let phasePulse=null;
+    if(transition){
+      const elapsed=now-transition.startedAt;
+      if(elapsed>=transition.duration)this.bossTransition=null;
+      else phasePulse={scene:transition.scene,
+        progress:clamp(elapsed/transition.duration,0,1)};
+    }
+    const clock=this.clockAnchor;
+    const displayTick=clock?Math.max(
+      Number(this.room?.battleAppliedTick)||0,this.clockTickFloor,
+      Math.floor((clock.elapsedMs+Math.max(0,now-clock.receivedAt))/
+        clock.tickMs)):
+      Number(this.room?.battleAppliedTick)||0;
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:visualMembers,selfUid:this.uid,showRoutes:false,
       rangeTiles:this.rangeTiles,rangeKind:this.rangeKind,
       enemies:visualEnemies,objectives:this.room?.dungeonProgress,
       aimTile:this.currentAim(),art:this.sprites,
       dangerPlan:warning,showDangerGuidance:this.wheelMode==='move',
-      ambiencePlan:this.ambiencePlan,pendingAction:this.pendingAction,
+      ambiencePlan:this.ambiencePlan,
+      environmentPlan:this.environmentPlan,
+      bossTransition:phasePulse,displayTick,
+      pendingAction:this.pendingAction,
       reducedMotion:reduceMotion,
       currentTick:Number(this.room?.battleClock?.appliedTick)||0,
       visualTimeMs:now,
@@ -1858,7 +1890,8 @@ class DungeonMapView{
       this.canvas.dataset.visualHero=visualHero.x.toFixed(3)+','+visualHero.y.toFixed(3);
     else if(this.canvas.hasAttribute('data-visual-hero'))
       this.canvas.removeAttribute('data-visual-hero');
-    if((scenes.length||queuedScenes)&&!reduceMotion)this.drawSoon();
+    if((scenes.length||queuedScenes||phasePulse)&&!reduceMotion)
+      this.drawSoon();
     if(travelActive&&!reduceMotion)this.drawSoon();
     // 20fps atmosphere refresh (not a 60fps polling loop). Pause entirely
     // when hidden or reduced motion is requested; C-room clock continues.
