@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-math3-seqlimit-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "當n趨近無窮大，數列aₙ=(3n²+2)/(n²−1)（n≥2）的極限為何？",
+        "correct": "3",
+        "wrong": [
+          "0",
+          "2",
+          "不存在"
+        ],
+        "exp": "分子分母同除以n²，得(3+2/n²)/(1−1/n²)，極限為3。",
+        "subject": "數學",
+        "sub_topic": "數列極限",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中三年級-數列極限",
+        "template_id": "ref-20261119-b3-math3-seqlimit-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math3-seqlimit-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "數列aₙ=(−1)ⁿ（n≥1）是否收斂？",
+        "correct": "不收斂，因奇偶子數列有不同極限",
+        "wrong": [
+          "收斂至0",
+          "收斂至1",
+          "收斂至−1"
+        ],
+        "exp": "偶數項恆為1、奇數項恆為−1，兩個子數列極限不同，故原數列沒有極限。",
+        "subject": "數學",
+        "sub_topic": "數列極限",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中三年級-數列極限",
+        "template_id": "ref-20261119-b3-math3-seqlimit-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math3-seqlimit-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "若aₙ=5−2/n，則當n趨近無窮大時aₙ的極限為何？",
+        "correct": "5",
+        "wrong": [
+          "3",
+          "0",
+          "−2"
+        ],
+        "exp": "因1/n→0，故5−2/n→5。",
+        "subject": "數學",
+        "sub_topic": "數列極限",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中三年級-數列極限",
+        "template_id": "ref-20261119-b3-math3-seqlimit-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
