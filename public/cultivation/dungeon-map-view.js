@@ -89,7 +89,7 @@ class DungeonMapView{
       '<span class="dm-battle-clock" data-dm-clock role="timer" aria-live="off">等待集結</span>'+
       '<button type="button" data-dm="close" aria-label="返回合作副本隊伍">返回隊伍 <span aria-hidden="true">×</span></button></div></header>'+
       '<div class="dm-stage" data-dm-stage>'+
-      '<canvas class="dm-world" data-dm-world tabindex="0" aria-label="秘境地圖。可拖曳、雙指縮放，或使用方向鍵移動視角。"></canvas>'+ 
+      '<canvas class="dm-world" data-dm-world tabindex="0" aria-label="即時戰場。點選灰色地格移動，點選紅色地格使用選定技能；可拖曳、雙指縮放及長按查看靈獸資料。"></canvas>'+ 
       '<div class="dm-effect-layer" data-dm-effects aria-hidden="true"></div>'+
        '<div class="dm-action-feedback" data-dm-action-feedback role="status" aria-live="polite" hidden></div>'+
       '<div class="dm-message" data-dm-message role="status" aria-live="polite">正在取得副本地圖…</div>'+
@@ -770,6 +770,7 @@ class DungeonMapView{
   skillAlert(message=''){
     const node=this.$('[data-dm-skill-alert]');
     if(node)node.textContent=message;
+    if(message)this.actionFeedback(message);
   }
   async changeLoadout(index){
     if(this.loadoutPending||this.skillPending||!this.isCurrent())return;
@@ -854,6 +855,7 @@ class DungeonMapView{
   strikeAlert(message=''){
     const node=this.$('[data-dm-strike-alert]');
     if(node)node.textContent=message;
+    if(message)this.actionFeedback(message);
   }
   async strike(){
     if(!this.isCurrent()||!this.map||this.strikePending||
@@ -994,9 +996,10 @@ class DungeonMapView{
       void this.strike();
     }else this.actionFeedback('請點選射程內的靈獸，或切換已裝備功法');
   }
-  moveAlert(message=''){ 
+  moveAlert(message=''){
     const node=this.$('[data-dm-move-alert]');
     if(node)node.textContent=message;
+    if(message)this.actionFeedback(message);
   }
   async move(dx,dy){
     if(this.movePending||!this.map||!this.isCurrent()||
