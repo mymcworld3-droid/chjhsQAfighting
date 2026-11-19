@@ -835,7 +835,7 @@ html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.b
 #dungeon-map-view.tc-quarter-layout .tc-quarter-energy>[data-quiz]{
   display:block!important;
 }
-#dungeon-map-view.tc-quarter-layout .tc-wheel-options>.tc-sector.is-focus-empowered{
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-wheel-options>.tc-sector[data-wheel-choice].is-focus-empowered[aria-pressed]{
   background:linear-gradient(115deg,#fff3c1 0%,#f6d278 33%,#e2a444 72%,#bf7d28 100%)!important;
   color:#302009!important;
   border-color:#fff0b9!important;
@@ -867,7 +867,7 @@ html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.b
   50%{filter:brightness(1.1) drop-shadow(0 0 11px #ffe0a4bb)}
 }
 @media(prefers-reduced-motion:reduce){
-  #dungeon-map-view.tc-quarter-layout .tc-wheel-options>.tc-sector.is-focus-empowered{
+  #dungeon-map-view.tc-quarter-layout .tc-quarter-action .tc-wheel-options>.tc-sector[data-wheel-choice].is-focus-empowered[aria-pressed]{
     animation:none!important;
   }
 }
