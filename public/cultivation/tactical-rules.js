@@ -89,7 +89,7 @@
   const SEAL_HIT_DAMAGE=1;
   const SEAL_TYPES=Object.freeze({
     shield:Object.freeze({
-      id:'shield',label:'護',name:'護靈陣眼',color:'#65c6ec',
+      id:'shield',label:'護',name:'護靈陣眼',color:'#65c6ec',shortEffect:'護：減傷',
       effect:'距離 3 格內的靈獸受到的非穿透傷害降低 35%。',
       range:Object.freeze({kind:'manhattan',radius:3,label:'曼哈頓距離 3 格'}),
       damageMultiplier:.65,
@@ -97,7 +97,7 @@
       tactic:'先破除陣眼，再攻擊受到保護的靈獸。'
     }),
     hazard:Object.freeze({
-      id:'hazard',label:'煞',name:'妖煞陣眼',color:'#d773bd',
+      id:'hazard',label:'煞',name:'妖煞陣眼',color:'#d773bd',shortEffect:'煞：危險格',
       effect:'每逢指定回合，預告玩家所在的一格；若回合結束時仍在該格，受到最大生命值 12% 的傷害（至少 1 點）。',
       range:Object.freeze({kind:'warning',radius:null,label:'當前預告危險格（無固定半徑）'}),
       triggerEveryTurns:2,maxHpDamageRatio:.12,
@@ -105,7 +105,7 @@
       tactic:'確認紅色預告格並移開；也能攻擊陣眼解除威脅。'
     }),
     rage:Object.freeze({
-      id:'rage',label:'獸',name:'御獸陣眼',color:'#e9ad60',
+      id:'rage',label:'獸',name:'御獸陣眼',color:'#e9ad60',shortEffect:'獸：增攻',
       effect:'距離 3 格內的靈獸造成的傷害提高 25%。',
       range:Object.freeze({kind:'manhattan',radius:3,label:'曼哈頓距離 3 格'}),
       damageMultiplier:1.25,
@@ -113,7 +113,7 @@
       tactic:'先破除陣眼，可降低附近靈獸的攻擊威脅。'
     }),
     maze:Object.freeze({
-      id:'maze',label:'迷',name:'迷蹤陣眼',color:'#74c9aa',
+      id:'maze',label:'迷',name:'迷蹤陣眼',color:'#74c9aa',shortEffect:'迷：開路',
       effect:'維持與陣眼連動的石障；破除後會移除該石障（若本關配置了連動石障）。',
       range:Object.freeze({kind:'linked-block',radius:null,label:'連動石障（無固定半徑）'}),
       onBreak:'已連動的石障會被移除，開通道路。',
@@ -133,7 +133,7 @@
     const durability=point.activated?0:Math.max(0,Math.min(maximum,Number.isFinite(point.hp)?point.hp:maximum));
     return {
       id:key(point),x:point.x,y:point.y,kind:def.id,label:def.label,name:def.name,
-      color:def.color,effect:def.effect,range:{...def.range},onBreak:def.onBreak,tactic:def.tactic,
+      color:def.color,shortEffect:def.shortEffect,effect:def.effect,range:{...def.range},onBreak:def.onBreak,tactic:def.tactic,
       attackable:!point.activated,active:!point.activated,broken:!!point.activated,
       hp:durability,maxHp:maximum,hitDamage:SEAL_HIT_DAMAGE,
       gate:point.gate?{x:point.gate.x,y:point.gate.y}:null
