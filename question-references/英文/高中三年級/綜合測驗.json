@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-eng3-cloze-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "跨句推論、圖表與論證綜合，結論與資料界限一致",
+      "question": {
+        "q": "Complete the report: 'By the time the science fair opened on Friday, the volunteers ______ all the exhibition booths.'",
+        "correct": "had arranged",
+        "wrong": [
+          "have arranged",
+          "arrange",
+          "will arrange"
+        ],
+        "exp": "The booth arrangement was completed before another past event ('opened on Friday'), so the past perfect 'had arranged' fits the timeline.",
+        "subject": "英文",
+        "sub_topic": "綜合測驗",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中三年級-綜合測驗",
+        "template_id": "ref-20261119-b7-eng3-cloze-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng3-cloze-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "跨句推論、圖表與論證綜合，結論與資料界限一致",
+      "question": {
+        "q": "Complete: 'Only after the results were checked ______ the team publish its findings.'",
+        "correct": "did",
+        "wrong": [
+          "does",
+          "had",
+          "was"
+        ],
+        "exp": "When the restrictive expression 'Only after ...' begins a sentence referring to the past, the main clause uses inversion with 'did + subject + base verb'.",
+        "subject": "英文",
+        "sub_topic": "綜合測驗",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中三年級-綜合測驗",
+        "template_id": "ref-20261119-b7-eng3-cloze-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng3-cloze-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "跨句推論、圖表與論證綜合，結論與資料界限一致",
+      "question": {
+        "q": "Complete: 'The survey may be useful; ______, its results should not be generalized beyond the small group studied.'",
+        "correct": "however",
+        "wrong": [
+          "therefore",
+          "likewise",
+          "for example"
+        ],
+        "exp": "The second clause qualifies the positive first clause; 'however' marks the appropriate contrast and caution.",
+        "subject": "英文",
+        "sub_topic": "綜合測驗",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中三年級-綜合測驗",
+        "template_id": "ref-20261119-b7-eng3-cloze-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
