@@ -43,7 +43,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-map-view-style')){
       const style=document.createElement('link');
       style.id='dungeon-map-view-style';style.rel='stylesheet';
-      style.href='/styles/dungeon-map-view.css?v=20261119-stage15';
+      style.href='/styles/dungeon-map-view.css?v=20261119-stage17-portal';
       document.head.append(style);
     }
     const root=document.createElement('section');
