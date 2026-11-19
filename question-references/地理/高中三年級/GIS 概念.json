@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-GIS 概念-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證GIS 概念，非僅閱讀摘錄",
+      "question": {
+        "q": "某校要計算學生住家距離最近的公車站「步行路程」，何種GIS分析比直線距離更適合？",
+        "correct": "依可通行道路建立網絡最短路徑分析",
+        "wrong": [
+          "只畫住家到站點的直線",
+          "使用整座城市的平均海拔代替距離",
+          "以公車站名稱筆畫數決定遠近"
+        ],
+        "exp": "路網分析可考慮街道、不可通行障礙及實際步行路徑。",
+        "subject": "地理",
+        "sub_topic": "GIS 概念",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-GIS 概念",
+        "template_id": "extra-2026-geo3-GIS 概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-GIS 概念-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證GIS 概念，非僅閱讀摘錄",
+      "question": {
+        "q": "某GIS圖層記錄醫院位置為點、行政區為面。若要計算每區醫院數量，應使用哪種方法？",
+        "correct": "點落在多邊形內的空間連結或計數",
+        "wrong": [
+          "只依醫院名稱排序",
+          "把行政區面積全部設為零",
+          "只在圖上改變醫院標記顏色"
+        ],
+        "exp": "點與面圖層可透過空間包含關係彙整數量。",
+        "subject": "地理",
+        "sub_topic": "GIS 概念",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-GIS 概念",
+        "template_id": "extra-2026-geo3-GIS 概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-GIS 概念-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證GIS 概念，非僅閱讀摘錄",
+      "question": {
+        "q": "若使用經緯度座標直接把1度當作各地固定的公里數，可能發生哪項錯誤？",
+        "correct": "經度一度對應距離會隨緯度改變，應轉換適當座標或用測地距離",
+        "wrong": [
+          "地球任何地方經度一度距離都完全相等",
+          "經緯度與地球位置完全無關",
+          "緯度越高經線越彼此平行且固定距離"
+        ],
+        "exp": "球面上的角度不是固定平面長度，經度間距會隨緯度縮小。",
+        "subject": "地理",
+        "sub_topic": "GIS 概念",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-GIS 概念",
+        "template_id": "extra-2026-geo3-GIS 概念-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

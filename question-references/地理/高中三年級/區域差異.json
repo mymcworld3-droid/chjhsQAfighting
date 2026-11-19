@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-區域差異-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證區域差異，非僅閱讀摘錄",
+      "question": {
+        "q": "甲地因高山阻隔道路稀少，乙地位於平原且交通密集。若比較公共服務可及性，應如何處理地形因素？",
+        "correct": "利用實際路網與行程時間評估，而非只用直線距離",
+        "wrong": [
+          "只比較兩地行政區面積",
+          "完全忽略坡度與道路條件",
+          "認定所有偏鄉居民交通時間相等"
+        ],
+        "exp": "地形與路網共同決定抵達設施的實際成本。",
+        "subject": "地理",
+        "sub_topic": "區域差異",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geography-高中三年級-區域差異",
+        "template_id": "extra-2026-geo3-區域差異-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-區域差異-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證區域差異，非僅閱讀摘錄",
+      "question": {
+        "q": "兩個地區平均所得相近，但甲地所得差距較大、乙地公共服務較普及。哪種評估較完整？",
+        "correct": "加入所得分配、公共服務及生活成本指標",
+        "wrong": [
+          "只看平均所得就判定生活條件完全相同",
+          "只用人口總數比較幸福程度",
+          "將所有地區地理條件視為一致"
+        ],
+        "exp": "平均數掩蓋分配與公共服務差異，應使用多面向指標。",
+        "subject": "地理",
+        "sub_topic": "區域差異",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geography-高中三年級-區域差異",
+        "template_id": "extra-2026-geo3-區域差異-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-區域差異-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證區域差異，非僅閱讀摘錄",
+      "question": {
+        "q": "某產業政策在交通便利的都市奏效，直接移植到偏遠島嶼卻成效有限。最可能忽略什麼？",
+        "correct": "在地市場規模、物流成本與人力資源等條件",
+        "wrong": [
+          "任何政策應在各地有完全相同結果",
+          "島嶼地理不會影響運輸",
+          "地方人口結構與產業發展完全無關"
+        ],
+        "exp": "產業政策需要符合區位、交通和勞動條件，不可忽略地方差異。",
+        "subject": "地理",
+        "sub_topic": "區域差異",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geography-高中三年級-區域差異",
+        "template_id": "extra-2026-geo3-區域差異-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

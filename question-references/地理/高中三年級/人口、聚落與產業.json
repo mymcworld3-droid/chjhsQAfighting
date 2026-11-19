@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-人口、聚落與產業-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證人口、聚落與產業，非僅閱讀摘錄",
+      "question": {
+        "q": "某地0至14歲人口20萬、15至64歲60萬、65歲以上20萬。其總扶養比約多少？",
+        "correct": "約66.7%",
+        "wrong": [
+          "約40%",
+          "約33.3%",
+          "約100%"
+        ],
+        "exp": "扶養比等於幼年與老年人口合計40萬除以工作年齡人口60萬，約66.7%。",
+        "subject": "地理",
+        "sub_topic": "人口、聚落與產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geography-高中三年級-人口、聚落與產業",
+        "template_id": "extra-2026-geo3-人口、聚落與產業-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-人口、聚落與產業-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證人口、聚落與產業，非僅閱讀摘錄",
+      "question": {
+        "q": "某城市中心區人口減少、外圍通勤聚落擴大，但工作仍集中市中心。這種現象可能帶來哪種需求？",
+        "correct": "跨市郊通勤運輸與交通整合需求增加",
+        "wrong": [
+          "中心區工作必定全部轉移至外圍",
+          "住宅外移會使交通旅次立即歸零",
+          "行政邊界必然與實際通勤圈一致"
+        ],
+        "exp": "人口郊區化與就業中心集中，容易形成通勤需求及交通壓力。",
+        "subject": "地理",
+        "sub_topic": "人口、聚落與產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geography-高中三年級-人口、聚落與產業",
+        "template_id": "extra-2026-geo3-人口、聚落與產業-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-人口、聚落與產業-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證人口、聚落與產業，非僅閱讀摘錄",
+      "question": {
+        "q": "某國增加科技園區的研發投資與高階人才培育，希望由低價代工轉向產品設計。這最直接涉及什麼？",
+        "correct": "提升產業價值鏈中的技術與附加價值位置",
+        "wrong": [
+          "只靠增加工廠數量便能保證創新",
+          "完全停止人才培育才有利研發",
+          "產品設計必須與市場需求完全隔離"
+        ],
+        "exp": "研發與技術能力有助往價值鏈高附加價值環節移動。",
+        "subject": "地理",
+        "sub_topic": "人口、聚落與產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geography-高中三年級-人口、聚落與產業",
+        "template_id": "extra-2026-geo3-人口、聚落與產業-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

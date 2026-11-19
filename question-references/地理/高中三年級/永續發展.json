@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-永續發展-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證永續發展，非僅閱讀摘錄",
+      "question": {
+        "q": "某都市提高垃圾回收率，但每人消費產生的廢棄物也大幅增加。評估永續效果時，還需注意什麼？",
+        "correct": "每人廢棄物產生量、最終處理量及回收實際效益",
+        "wrong": [
+          "只看回收箱數量",
+          "回收率提高就保證資源使用必定下降",
+          "只要分類完成就無需考量後續處理"
+        ],
+        "exp": "高回收率不等於總廢棄物降低，需看完整物質流。",
+        "subject": "地理",
+        "sub_topic": "永續發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-永續發展",
+        "template_id": "extra-2026-geo3-永續發展-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-永續發展-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證永續發展，非僅閱讀摘錄",
+      "question": {
+        "q": "某地以觀光增加收入，但熱門景點因遊客過多而損害步道與居民生活。哪種策略較符合永續觀光？",
+        "correct": "設定承載與分流措施，並讓地方社區參與收益及管理",
+        "wrong": [
+          "完全不限制任何時段的遊客量",
+          "只以旅客人數多寡評估成功",
+          "把居民居住需求排除規畫"
+        ],
+        "exp": "永續觀光需同時考量經濟利益、環境承載與社區生活。",
+        "subject": "地理",
+        "sub_topic": "永續發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-永續發展",
+        "template_id": "extra-2026-geo3-永續發展-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-永續發展-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證永續發展，非僅閱讀摘錄",
+      "question": {
+        "q": "某開發案宣稱經濟效益高，但沒有估算生態破壞及弱勢居民搬遷成本。若用永續發展框架評估，最重要的補充是？",
+        "correct": "納入環境成本、分配效果與長期影響作整體比較",
+        "wrong": [
+          "只需比較企業第一年營業額",
+          "環境與社會成本不能被納入公共決策",
+          "只要增加就業就必然沒有其他代價"
+        ],
+        "exp": "永續發展要求評估經濟、社會與環境面向及跨世代影響。",
+        "subject": "地理",
+        "sub_topic": "永續發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-永續發展",
+        "template_id": "extra-2026-geo3-永續發展-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

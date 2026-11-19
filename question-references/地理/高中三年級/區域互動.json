@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-區域互動-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證區域互動，非僅閱讀摘錄",
+      "question": {
+        "q": "某城市每天有大量居民跨行政區工作。若界定實際都市機能區，最適合參考什麼？",
+        "correct": "居住地與工作地間的通勤流量及空間連結",
+        "wrong": [
+          "只使用各行政區的名字",
+          "只看城市入口拱門位置",
+          "把所有行政區視為完全獨立經濟體"
+        ],
+        "exp": "都市機能區可由通勤及經濟往來界定，不一定等同行政邊界。",
+        "subject": "地理",
+        "sub_topic": "區域互動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geography-高中三年級-區域互動",
+        "template_id": "extra-2026-geo3-區域互動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-區域互動-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證區域互動，非僅閱讀摘錄",
+      "question": {
+        "q": "某山區農產品透過冷鏈物流出口，但因港口交通中斷造成價格下降。這反映何種區域連結？",
+        "correct": "生產區與交通節點及市場需求的互相依賴",
+        "wrong": [
+          "農業價格必然不受運輸影響",
+          "只要是山區就無法出口產品",
+          "港口運作與內陸產業完全不相關"
+        ],
+        "exp": "區域經濟依賴物流串聯，節點中斷可向生產地傳遞衝擊。",
+        "subject": "地理",
+        "sub_topic": "區域互動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geography-高中三年級-區域互動",
+        "template_id": "extra-2026-geo3-區域互動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-區域互動-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證區域互動，非僅閱讀摘錄",
+      "question": {
+        "q": "兩城市分別擅長醫療服務與資訊產業，透過高速運輸和合作園區互補發展。最合適的分析為何？",
+        "correct": "交通可及性增加促進區域專業分工與互補",
+        "wrong": [
+          "交通越便捷產業必定完全相同",
+          "區域合作表示各城市必須停止原有產業",
+          "地理距離縮短等於自然資源完全一致"
+        ],
+        "exp": "交通與資訊連結可促進跨城合作，但各地優勢和制度仍有差異。",
+        "subject": "地理",
+        "sub_topic": "區域互動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geography-高中三年級-區域互動",
+        "template_id": "extra-2026-geo3-區域互動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

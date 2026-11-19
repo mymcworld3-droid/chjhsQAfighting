@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-主題圖與統計圖-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證主題圖與統計圖，非僅閱讀摘錄",
+      "question": {
+        "q": "某新聞比較兩縣每年交通事故，甲1000件、人口100萬，乙300件、人口10萬。哪個地區每萬人事故率較高？",
+        "correct": "乙縣，每萬人約30件",
+        "wrong": [
+          "甲縣，每萬人約100件",
+          "兩縣率完全相同",
+          "只看事故總數可確定甲較高"
+        ],
+        "exp": "甲為每萬人10件，乙為30件，率的比較需考慮人口分母。",
+        "subject": "地理",
+        "sub_topic": "主題圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-主題圖與統計圖",
+        "template_id": "extra-2026-geo3-主題圖與統計圖-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-主題圖與統計圖-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證主題圖與統計圖，非僅閱讀摘錄",
+      "question": {
+        "q": "某統計圖的縱軸從90開始，將數值95與100兩組畫成長條。若要避免誇大差距，最適合怎麼做？",
+        "correct": "改用零起點長條圖或清楚標示截斷尺度",
+        "wrong": [
+          "省略縱軸刻度讓圖面更美觀",
+          "增加圖形立體陰影",
+          "只顯示百分比符號而不附數據"
+        ],
+        "exp": "長條長度通常會被解讀為量值，截斷縱軸容易放大視覺差異。",
+        "subject": "地理",
+        "sub_topic": "主題圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-主題圖與統計圖",
+        "template_id": "extra-2026-geo3-主題圖與統計圖-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-主題圖與統計圖-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證主題圖與統計圖，非僅閱讀摘錄",
+      "question": {
+        "q": "若要表示某地一年中每月降雨量與平均氣溫的季節變化，哪種圖表配置較合適？",
+        "correct": "以月份為橫軸，降雨量用柱狀、氣溫用折線並標明不同單位",
+        "wrong": [
+          "將月份任意打亂並省略單位",
+          "只畫各月人口密度",
+          "把全部數據放入單一沒有刻度的圓餅圖"
+        ],
+        "exp": "月降雨與氣溫單位不同，複合氣候圖可比較季節性，需清楚標示尺度。",
+        "subject": "地理",
+        "sub_topic": "主題圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-主題圖與統計圖",
+        "template_id": "extra-2026-geo3-主題圖與統計圖-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

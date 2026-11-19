@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-氣候與資源-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證氣候與資源，非僅閱讀摘錄",
+      "question": {
+        "q": "某地旱季延長，農業需要大量灌溉，而水庫蓄水下降。哪種調適措施較能同時考慮水資源效率？",
+        "correct": "調整作物與灌溉方式，結合用水監測及節水技術",
+        "wrong": [
+          "無限制擴大高耗水作物面積",
+          "完全不記錄地下水抽取量",
+          "只依去年的單次降雨決定長期計畫"
+        ],
+        "exp": "旱季水資源管理需結合供需、節水及地下水永續性。",
+        "subject": "地理",
+        "sub_topic": "氣候與資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geography-高中三年級-氣候與資源",
+        "template_id": "extra-2026-geo3-氣候與資源-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-氣候與資源-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證氣候與資源，非僅閱讀摘錄",
+      "question": {
+        "q": "某城市擬以太陽能替代部分化石燃料，但日夜發電量變化明顯。最需要配合何種能源規畫？",
+        "correct": "儲能、電網調度及需求管理等彈性機制",
+        "wrong": [
+          "假設每天夜間太陽能發電必定最大",
+          "只靠增加標語即可穩定供電",
+          "不需評估供需時間差"
+        ],
+        "exp": "再生能源供電具時變性，需系統調度、互補電源或儲能協助。",
+        "subject": "地理",
+        "sub_topic": "氣候與資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geography-高中三年級-氣候與資源",
+        "template_id": "extra-2026-geo3-氣候與資源-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-氣候與資源-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證氣候與資源，非僅閱讀摘錄",
+      "question": {
+        "q": "某沿海地區大量抽取地下水，觀測到地層下陷與海水入侵風險上升。何種政策最可能對應主要成因？",
+        "correct": "降低地下水超抽，並評估替代水源及補注",
+        "wrong": [
+          "繼續無限制抽水直到井水鹽度上升",
+          "只提高海灘觀光收入",
+          "只把地層下陷歸因地圖誤差"
+        ],
+        "exp": "地下水超抽可能造成地層壓密與海水入侵，應管理取水。",
+        "subject": "地理",
+        "sub_topic": "氣候與資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geography-高中三年級-氣候與資源",
+        "template_id": "extra-2026-geo3-氣候與資源-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

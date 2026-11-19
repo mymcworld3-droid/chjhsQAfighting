@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-多資料整合-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證多資料整合，非僅閱讀摘錄",
+      "question": {
+        "q": "研究者以人口資料、淹水潛勢圖與醫院位置評估災害脆弱性。最合適的整合原則為何？",
+        "correct": "統一空間尺度、年份與定義，再評估人口暴露及可及性",
+        "wrong": [
+          "只把三張圖的顏色加起來",
+          "把不同年份資料直接當成同時情況",
+          "忽略人口與醫院的實際位置"
+        ],
+        "exp": "跨圖層分析需注意時間、尺度與測量定義，才可形成合理風險推論。",
+        "subject": "地理",
+        "sub_topic": "多資料整合",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-多資料整合",
+        "template_id": "extra-2026-geo3-多資料整合-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-多資料整合-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證多資料整合，非僅閱讀摘錄",
+      "question": {
+        "q": "某流域衛星影像顯示森林減少，但氣象站也顯示降雨增加。若想研究洪峰變化，應如何設計分析？",
+        "correct": "同時納入土地覆蓋、降雨及地形資料，評估各因素作用",
+        "wrong": [
+          "只將洪峰增加全部歸因森林減少",
+          "只因降雨增加就否認土地利用作用",
+          "只使用一張沒有日期的衛星照片"
+        ],
+        "exp": "洪峰受降雨與流域逕流特性共同影響，需整合不同資料與時序。",
+        "subject": "地理",
+        "sub_topic": "多資料整合",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-多資料整合",
+        "template_id": "extra-2026-geo3-多資料整合-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-多資料整合-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證多資料整合，非僅閱讀摘錄",
+      "question": {
+        "q": "某地區兩份人口資料分別以村里與鄉鎮彙整，研究者直接把比率相加。主要風險為何？",
+        "correct": "空間單元和分母不同，可能產生統計聚合與解釋偏差",
+        "wrong": [
+          "行政區大小不同不會影響任何分析",
+          "比率可無條件相加得到總人口",
+          "只要都以百分比表示就必然可直接合併"
+        ],
+        "exp": "不同統計空間單元須先處理定義、人口分母及可比較性。",
+        "subject": "地理",
+        "sub_topic": "多資料整合",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-多資料整合",
+        "template_id": "extra-2026-geo3-多資料整合-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

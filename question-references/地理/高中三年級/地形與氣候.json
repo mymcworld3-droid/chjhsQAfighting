@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-地形與氣候-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證地形與氣候，非僅閱讀摘錄",
+      "question": {
+        "q": "某山區迎風坡降雨多、背風坡較乾燥。若兩側高度與距海條件相近，哪種機制最能解釋？",
+        "correct": "濕空氣在迎風坡抬升冷卻凝結，背風坡下降增溫",
+        "wrong": [
+          "背風坡因地勢較高必定降雨最多",
+          "只要山脈存在就會阻止所有風流動",
+          "降雨差異必定只由行政區界線決定"
+        ],
+        "exp": "地形抬升與焚風效應使迎背風坡水氣及降雨分布不同，仍會受風向季節影響。",
+        "subject": "地理",
+        "sub_topic": "地形與氣候",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geography-高中三年級-地形與氣候",
+        "template_id": "extra-2026-geo3-地形與氣候-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-地形與氣候-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證地形與氣候，非僅閱讀摘錄",
+      "question": {
+        "q": "某城市甲地海拔100公尺、乙地1100公尺，若使用平均環境直減率每上升100公尺氣溫下降0.6°C作粗估，乙地較甲地低幾度？",
+        "correct": "約6°C",
+        "wrong": [
+          "約0.6°C",
+          "約12°C",
+          "約60°C"
+        ],
+        "exp": "高度差1000公尺，即十個100公尺，粗估溫差10乘0.6等於6°C，實際仍因天氣而異。",
+        "subject": "地理",
+        "sub_topic": "地形與氣候",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geography-高中三年級-地形與氣候",
+        "template_id": "extra-2026-geo3-地形與氣候-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-地形與氣候-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以地理模型和資料驗證地形與氣候，非僅閱讀摘錄",
+      "question": {
+        "q": "某河川下游地勢低平，連日豪雨且上游集水區快速開發。對淹水風險較合理的判斷是？",
+        "correct": "低平地形與集水區逕流增加可能共同提高洪峰及淹水風險",
+        "wrong": [
+          "只要下游地勢低就必定不會積水",
+          "降雨和土地覆蓋完全不影響逕流",
+          "都市土地開發必然增加土壤入滲"
+        ],
+        "exp": "排水及水文風險受地形、降雨與土地利用共同影響。",
+        "subject": "地理",
+        "sub_topic": "地形與氣候",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geography-高中三年級-地形與氣候",
+        "template_id": "extra-2026-geo3-地形與氣候-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
