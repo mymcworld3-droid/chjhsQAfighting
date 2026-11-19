@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-bio2-cellcycle-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "某二倍體體細胞在G1期有8條染色體。完成S期DNA複製後、尚未開始有絲分裂前，染色體數及姐妹染色分體數分別為何？",
+        "correct": "8條染色體、16條姐妹染色分體",
+        "wrong": [
+          "16條染色體、16條姐妹染色分體",
+          "8條染色體、8條姐妹染色分體",
+          "16條染色體、32條姐妹染色分體"
+        ],
+        "exp": "S期複製DNA，使每條染色體由兩條姐妹染色分體組成；以著絲點計的染色體數仍是8，分體數為16。",
+        "subject": "生物",
+        "sub_topic": "細胞週期及分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞週期及分裂",
+        "template_id": "ref-20261119-b4-bio2-cellcycle-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-bio2-cellcycle-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "若某生物的二倍體生殖母細胞有6條染色體，經正常減數分裂形成的每個單倍體配子通常有幾條染色體？",
+        "correct": "3條",
+        "wrong": [
+          "6條",
+          "12條",
+          "2條"
+        ],
+        "exp": "減數分裂使染色體套數由二倍體2n=6減為單倍體n=3，因此配子通常有3條。",
+        "subject": "生物",
+        "sub_topic": "細胞週期及分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞週期及分裂",
+        "template_id": "ref-20261119-b4-bio2-cellcycle-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-bio2-cellcycle-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "正常減數分裂中，同源染色體通常在哪一階段分離至細胞兩極？",
+        "correct": "第一次分裂後期（後期I）",
+        "wrong": [
+          "第一次分裂前期（前期I）",
+          "第二次分裂中期（中期II）",
+          "第二次分裂末期（末期II）"
+        ],
+        "exp": "減數分裂第一次後期是同源染色體分離；姐妹染色分體通常在第二次分裂後期分離。",
+        "subject": "生物",
+        "sub_topic": "細胞週期及分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞週期及分裂",
+        "template_id": "ref-20261119-b4-bio2-cellcycle-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
