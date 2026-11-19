@@ -10,9 +10,27 @@ const validMap=map=>Number.isInteger(map?.width)&&Number.isInteger(map?.height)&
 const viewport=(width,height)=>({width:Math.max(1,finite(width,1)),
   height:Math.max(1,finite(height,1))});
 export function initialCamera(){return {zoom:1,panX:0,panY:0};}
+// The player is ALWAYS the exact center of the visible battlefield, even
+// near the edge of an irregular map. No edge clamp may move this anchor.
+// A tile has a responsive pixel size independent from the overall map size.
+export function lockToPlayer(point,map,width,height){
+  if(!validMap(map))throw new TypeError('副本地圖尺寸無效');
+  return {locked:true,
+    target:{x:clamp(Math.floor(finite(point?.x)),0,map.width-1),
+      y:clamp(Math.floor(finite(point?.y)),0,map.height-1)}};
+}
 export function geometry(camera,map,width,height){
   if(!validMap(map))throw new TypeError('副本地圖尺寸無效');
   const view=viewport(width,height);
+  if(camera?.locked===true){
+    const target=lockToPlayer(camera.target,map,width,height).target;
+    const size=clamp(Math.min(view.width,view.height)/9,22,56);
+    const ox=view.width/2-(target.x+.5)*size;
+    const oy=view.height/2-(target.y+.5)*size;
+    return {width:view.width,height:view.height,zoom:1,cell:size,
+      ox,oy,panX:0,panY:0,totalX:size*map.width,
+      totalY:size*map.height,locked:true,target};
+  }
   const cell=Math.max(.1,Math.min(
     Math.max(1,view.width-2*MARGIN)/map.width,
     Math.max(1,view.height-2*MARGIN)/map.height));
@@ -30,15 +48,19 @@ export function geometry(camera,map,width,height){
     panX:ox-centerX,panY:oy-centerY,totalX,totalY};
 }
 export function normalized(camera,map,width,height){
+  if(camera?.locked===true)
+    return lockToPlayer(camera.target,map,width,height);
   const g=geometry(camera,map,width,height);
   return {zoom:g.zoom,panX:g.panX,panY:g.panY};
 }
 export function pan(camera,dx,dy,map,width,height){
+  if(camera?.locked===true)return lockToPlayer(camera.target,map,width,height);
   return normalized({zoom:camera?.zoom??1,
     panX:finite(camera?.panX)+finite(dx),
     panY:finite(camera?.panY)+finite(dy)},map,width,height);
 }
 export function zoomAt(camera,zoom,pixelX,pixelY,map,width,height){
+  if(camera?.locked===true)return lockToPlayer(camera.target,map,width,height);
   const old=geometry(camera,map,width,height);
   const anchorX=finite(pixelX,old.width/2),anchorY=finite(pixelY,old.height/2);
   const worldX=(anchorX-old.ox)/old.cell,worldY=(anchorY-old.oy)/old.cell;
@@ -49,6 +71,7 @@ export function zoomAt(camera,zoom,pixelX,pixelY,map,width,height){
   },map,width,height);
 }
 export function focusOn(camera,point,map,width,height){
+  if(camera?.locked===true)return lockToPlayer(point,map,width,height);
   const g=geometry(camera,map,width,height);
   const x=clamp(finite(point?.x),0,map.width-1)+.5;
   const y=clamp(finite(point?.y),0,map.height-1)+.5;
@@ -77,6 +100,7 @@ export function visibleTiles(camera,map,width,height){
   return {x0,y0,x1,y1};
 }
 export function resizePreservingCenter(camera,map,fromWidth,fromHeight,toWidth,toHeight){
+  if(camera?.locked===true)return lockToPlayer(camera.target,map,toWidth,toHeight);
   const old=geometry(camera,map,fromWidth,fromHeight);
   const point={x:(old.width/2-old.ox)/old.cell,
     y:(old.height/2-old.oy)/old.cell};
