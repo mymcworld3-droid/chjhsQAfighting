@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-earth1-quakes-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "一般地震波中，P波與S波傳播性質有何重要差異？",
+        "correct": "P波可通過固體與液體，S波無法在一般液體中傳播",
+        "wrong": [
+          "P波只能在固體中傳播，S波可穿透液態地核",
+          "P波與S波在所有介質中速度完全一樣",
+          "兩種波都只能沿地表傳播"
+        ],
+        "exp": "P波為壓縮波，可傳於固體及液體；S波為剪力波，液體無法支撐相同剪切恢復力，因此不能像在固體中傳播。",
+        "subject": "地球科學",
+        "sub_topic": "地震與火山",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地震與火山",
+        "template_id": "ref-20261119-b3-earth1-quakes-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-earth1-quakes-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "某地震測站記錄P波先到、S波後到，若兩波的到時差比另一測站更大，且地層條件相近，通常代表什麼？",
+        "correct": "該站距離震源較遠",
+        "wrong": [
+          "該站必定位於震央上方",
+          "該站的地震規模比較大",
+          "該站必然在板塊中心而非邊界"
+        ],
+        "exp": "P波通常快於S波，隨傳播距離增加，兩者累積到時差增大，因此可據以推估震源距離。",
+        "subject": "地球科學",
+        "sub_topic": "地震與火山",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地震與火山",
+        "template_id": "ref-20261119-b3-earth1-quakes-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-earth1-quakes-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "關於地震規模與各地震度的差異，下列何者正確？",
+        "correct": "同一次地震的規模表徵震源事件大小，各地震度可因距離與場址條件不同而異",
+        "wrong": [
+          "同一次地震在各測站的規模必須依人數重新定義",
+          "震度只由地震發生年份決定",
+          "規模與震度是完全相同且可互換的量"
+        ],
+        "exp": "規模描述地震源的大小，震度描述某地的地表搖晃程度；距離、深度與地質條件均會影響各地震度。",
+        "subject": "地球科學",
+        "sub_topic": "地震與火山",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地震與火山",
+        "template_id": "ref-20261119-b3-earth1-quakes-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
