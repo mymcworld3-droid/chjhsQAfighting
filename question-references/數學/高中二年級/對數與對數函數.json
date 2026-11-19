@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m2-logfunc-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "解方程式log₂(x−1)=3，x為何？",
+        "correct": "9",
+        "wrong": [
+          "7",
+          "8",
+          "10"
+        ],
+        "exp": "x−1=2³=8，故x=9；且x−1>0符合對數定義域。",
+        "subject": "數學",
+        "sub_topic": "對數與對數函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-對數與對數函數",
+        "template_id": "ref-20261119-b10-m2-logfunc-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m2-logfunc-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "若log₃27−log₃9=a，則a為何？",
+        "correct": "1",
+        "wrong": [
+          "2",
+          "3",
+          "−1"
+        ],
+        "exp": "log₃27=3，log₃9=2，因此a=3−2=1；亦可用對數減法律。",
+        "subject": "數學",
+        "sub_topic": "對數與對數函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-對數與對數函數",
+        "template_id": "ref-20261119-b10-m2-logfunc-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m2-logfunc-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "函數f(x)=log₂(x+4)的定義域為何？",
+        "correct": "x>−4",
+        "wrong": [
+          "x≥−4",
+          "x>4",
+          "所有實數"
+        ],
+        "exp": "對數內的真數必大於0，x+4>0，故x>−4，不含−4。",
+        "subject": "數學",
+        "sub_topic": "對數與對數函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-對數與對數函數",
+        "template_id": "ref-20261119-b10-m2-logfunc-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
