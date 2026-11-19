@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-en2-organization-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "A paragraph has three parts: A. 'The group then tested water from three locations.' B. 'First, the volunteers selected sampling sites.' C. 'Finally, they compared the measurements.' Which order is most logical?",
+        "correct": "B → A → C",
+        "wrong": [
+          "A → C → B",
+          "C → B → A",
+          "B → C → A"
+        ],
+        "exp": "Sampling sites must be selected before testing, and results are compared after measurements. The sequence is first, then, finally.",
+        "subject": "英文",
+        "sub_topic": "文章組織",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-文章組織",
+        "template_id": "ref-20261119-b8-en2-organization-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en2-organization-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "An article begins by describing long waiting times at a clinic. It next explains that appointment slots overlap and ends by proposing a new booking system. Which organizational pattern does it follow?",
+        "correct": "Problem → cause → proposed solution",
+        "wrong": [
+          "Solution → celebration → unrelated example",
+          "Comparison → biography → historical timeline",
+          "Definition → geographical map → fictional ending"
+        ],
+        "exp": "The writing introduces a waiting-time problem, identifies scheduling overlap as a cause, and proposes a booking-system solution.",
+        "subject": "英文",
+        "sub_topic": "文章組織",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-文章組織",
+        "template_id": "ref-20261119-b8-en2-organization-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en2-organization-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "A writer wants to compare school A's recycling system with school B's. Which outline provides the clearest comparison?",
+        "correct": "Compare collection rules at both schools, then sorting accuracy at both, then overall strengths and limitations.",
+        "wrong": [
+          "Describe school A's favorite sports, then school B's building color, then an unrelated conclusion.",
+          "List school A's history only, without mentioning school B.",
+          "Describe one success at school A and declare school B inferior without any comparable measure."
+        ],
+        "exp": "A coherent comparison uses shared criteria for both subjects and then evaluates differences, avoiding unrelated details or unsupported judgments.",
+        "subject": "英文",
+        "sub_topic": "文章組織",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-文章組織",
+        "template_id": "ref-20261119-b8-en2-organization-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
