@@ -14,7 +14,7 @@ const axis=(a,b)=>{
   return (dx===0)!==(dy===0)?{x:dx,y:dy}:null;
 };
 const at=(p,dx,dy,n=1)=>({x:p.x+dx*n,y:p.y+dy*n});
-const present=(members,enemy)=>Object.values(members).some(m=>isAlive(m)&&same(m.position,enemy));
+const present=(members,point)=>Object.values(members).some(m=>same(m.position,point));
 const occupied=(p,enemies,ignore='')=>enemies.some(e=>e.id!==ignore&&same(e.position,p));
 const tile=(map,p)=>walkable(map,p);
 function visible(map,a,b){
