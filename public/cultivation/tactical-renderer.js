@@ -8,6 +8,7 @@ import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
 import './tactical-threat-visuals.js?v=20261118-phase5-v1';
 import './tactical-target-visuals.js?v=20261118-phase6-v1';
 import './tactical-compass.js?v=20261118-phase7-v1';
+import './tactical-seal-ranges.js?v=20261119-seal-ranges-v1';
 const R=globalThis.QATactical;
 const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
 const A=globalThis.QATacticalAnimation;
@@ -18,6 +19,7 @@ const Impact=globalThis.QATacticalImpact;
 const Threats=globalThis.QATacticalThreats;
 const Targets=globalThis.QATacticalTargetVisuals;
 const Compass=globalThis.QATacticalCompass;
+const SealRanges=globalThis.QATacticalSealRanges;
 const SEAL_ATLAS='/assets/seals/seal-atlas.webp';
 const SEAL_FRAME_SIZE=128; // 4 columns: shield, hazard, rage, maze; 3 rows: intact, damaged, broken.
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
@@ -25,7 +27,7 @@ const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/wo
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.focusBeastIndex=0;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.focusBeastIndex=0;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;this.sealRangePlan={seals:[]};this.sealRangeMode='all';this.sealRangeFocusId=null;
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
@@ -243,6 +245,12 @@ export class TacticalRenderer{
     if(this.inspectedUid===next)return;
     this.inspectedUid=next;this.draw();
   }
+  setSealRangeMode(mode='all',focusId=null){
+    const accepted=SealRanges.MODES.includes(mode)?mode:'all';
+    const target=focusId||null;
+    if(this.sealRangeMode===accepted&&this.sealRangeFocusId===target)return;
+    this.sealRangeMode=accepted;this.sealRangeFocusId=target;this.requestDraw();
+  }
   update(state,uid,mode,selection){
     this.preview=null;
     // A single room can contain several stages of identical size. The map
@@ -277,6 +285,8 @@ export class TacticalRenderer{
       this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,attackSkill(me,mode))):[];
     }
     this.threatPlan=Threats.derive(state,uid,mode,this.range);
+    // Compute once per authoritative state update, never in the animation loop.
+    this.sealRangePlan=SealRanges.derive(state,R);
     this.targetPlan=Targets.derive(state,uid,mode,selection,R,this.threatPlan);
     this.hoverPlan=this.hoverSelection?
       Targets.derive(state,uid,mode,this.hoverSelection,R,this.threatPlan):null;
@@ -314,7 +324,7 @@ export class TacticalRenderer{
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
   present(state,uid,scene=null,progress=0,view=null){
-    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.canvas.removeAttribute('aria-description');this.canvas.removeAttribute('aria-keyshortcuts');this.draw();
+    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.sealRangePlan={seals:[]};this.canvas.removeAttribute('aria-description');this.canvas.removeAttribute('aria-keyshortcuts');this.draw();
   }
   get isAnimating(){return !!this.scene||this.queue.length>0;}
   get currentAction(){return (this.scene||this.queue[0])?.label||'';}
@@ -621,6 +631,10 @@ export class TacticalRenderer{
       Impact.drawBossPresence(c,Impact.bossFor(s),{ox,oy,cell,width:s.width,height:s.height},now,reduced);
     }
     const objective=s.objective,markers=[];
+    // Field auras are ground markings, below red telegraphs and target previews.
+    if(!this.preview&&objective?.type==='sealing'&&s.trial?.layoutVersion===4)
+      SealRanges.ground(c,this.sealRangePlan,{ox,oy,cell,width:s.width,height:s.height},
+        this.sealRangeMode,this.sealRangeFocusId);
     if(objective?.type==='transport'){
       if(objective.item&&!objective.item.collected)markers.push({...objective.item,label:'物',color:'#f7d975'});
       if(objective.destination)markers.push({...objective.destination,label:'交',color:'#8ee6d0'});
@@ -708,6 +722,11 @@ export class TacticalRenderer{
         c.fillStyle='#56594c';c.fillRect(x+cell*.14,y+cell*.1,cell*.72,cell*.8);
       }
     }
+    // Gates and current hazard marks are above terrain props but below the
+    // red hazard contours, player/monster sprites and their HP labels.
+    if(!this.preview&&objective?.type==='sealing'&&s.trial?.layoutVersion===4)
+      SealRanges.details(c,this.sealRangePlan,{ox,oy,cell,width:s.width,height:s.height},
+        this.sealRangeMode,this.sealRangeFocusId);
     // Tactical warnings, skill reach and target rings are ground markings.
     // Paint their complete outlines before any actor sprite, status icon or
     // HP bar so neither heroes nor beasts can be crossed by a range frame.

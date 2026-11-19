@@ -20,6 +20,8 @@ const id=()=>globalThis.crypto.randomUUID();
 const localUser=()=>window.getCurrentUserData?.()||{};
 let root=null,keyboardGuard=null,renderer=null,beastInspector=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
 let attackChoice='attack',selectedManualSkill='',wheelIgnoreClickUntil=0;
+// Local view preference; never sent to the server or charged as a battle action.
+let sealRangeMode='all',sealRangeFocusId=null;
 let battleLoadouts=null,loadoutFetchedFor='',loadoutFetchingFor='',loadoutMenuOpen=false;
 let manualRecapCache=null,manualRecapLoadingKey='',manualXpTimer=null,battleMasteryBaseline=null;
 const battlefieldMode=()=>action==='manual'?'manual:'+selectedManualSkill:action;
@@ -263,6 +265,8 @@ function ensure(){
     else if(b.hasAttribute('data-exit'))close();
     else if(b.hasAttribute('data-sync'))void sync();
     else if(b.hasAttribute('data-reset-view'))renderer?.resetView();
+    else if(b.hasAttribute('data-seal-range-toggle'))cycleSealRangeMode();
+    else if(b.hasAttribute('data-seal-range-next'))nextSealRangeFocus();
     else if(b.hasAttribute('data-loadout-toggle')){loadoutMenuOpen=!loadoutMenuOpen;renderBattleLoadouts();}
     else if(b.hasAttribute('data-loadout-index'))void switchBattleLoadout(Number(b.dataset.loadoutIndex));
     else if(b.hasAttribute('data-intro-ack'))void acknowledgeIntro();
@@ -511,10 +515,54 @@ function selectWheel(value){
   renderer?.update(state,uid,battlefieldMode(),selection);
 }
 
+function refreshSealRangeControls(){
+  const toolbar=$('[data-seal-range-toolbar]');
+  if(!toolbar||!state)return;
+  const sealRanges=R.sealInfos(state).filter(p=>p.active);
+  const available=state.mode==='pve'&&state.trial?.layoutVersion===4&&
+    state.objective?.type==='sealing'&&sealRanges.length>0;
+  toolbar.hidden=!available;
+  if(!available){renderer?.setSealRangeMode('off',null);return;}
+  if(!sealRanges.some(p=>p.id===sealRangeFocusId))sealRangeFocusId=sealRanges[0].id;
+  const focused=sealRanges.find(p=>p.id===sealRangeFocusId);
+  renderer?.setSealRangeMode(sealRangeMode,sealRangeFocusId);
+  const toggle=$('[data-seal-range-toggle]'),next=$('[data-seal-range-next]'),
+    note=$('[data-seal-range-note]');
+  toggle.textContent='陣眼範圍：'+({all:'全部',focus:'單座',off:'隱藏'}[sealRangeMode]||'全部');
+  toggle.setAttribute('aria-pressed',String(sealRangeMode!=='off'));
+  toggle.title='切換陣眼效果範圍（全部／單座／隱藏）';
+  next.hidden=sealRangeMode!=='focus'||sealRanges.length<2;
+  if(note){
+    const text=sealRangeMode==='all'?'藍：減傷 · 橙：增攻 · 紫紅：預告 · 綠：開路':
+      sealRangeMode==='off'?'範圍已隱藏，實際戰鬥效果仍然生效':
+      focused?.name+' · '+(focused?.range.kind==='warning'?
+        (state.objective?.hazards?.length?'目前危險格已標示':'目前沒有危險格預告'):
+        focused?.range.kind==='linked-block'?'顯示連動石障':focused?.range.label);
+    if(note.textContent!==text)note.textContent=text;
+  }
+}
+function cycleSealRangeMode(){
+  if(!state||state.objective?.type!=='sealing')return;
+  const modes=['all','focus','off'],index=modes.indexOf(sealRangeMode);
+  sealRangeMode=modes[(index+1)%modes.length];
+  refreshSealRangeControls();
+}
+function nextSealRangeFocus(){
+  if(!state||state.objective?.type!=='sealing')return;
+  const seals=R.sealInfos(state).filter(p=>p.active);
+  if(seals.length<2)return;
+  const index=seals.findIndex(p=>p.id===sealRangeFocusId);
+  const next=seals[(index+1+seals.length)%seals.length];
+  sealRangeMode='focus';sealRangeFocusId=next.id;
+  refreshSealRangeControls();
+  // Explicit navigation button moves the camera; no battle tile is selected
+  // and no movement/attack command is submitted.
+  renderer?.focusCameraOn(next);
+}
 function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
   root.classList.toggle('tc-quarter-layout',state?.mode==='pve');
-  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><span data-threat-a11y class="tc-threat-a11y" role="status" aria-live="polite" aria-atomic="true"></span><div class="tc-objective" data-objective role="status" aria-live="polite" hidden></div>
+  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><div class="tc-seal-range-toolbar" data-seal-range-toolbar role="group" aria-label="陣眼效果範圍" hidden><button type="button" data-seal-range-toggle aria-pressed="true" title="切換陣眼效果範圍">陣眼範圍：全部</button><button type="button" data-seal-range-next hidden title="查看下一座陣眼的範圍">下一座</button><span data-seal-range-note aria-live="polite"></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><span data-threat-a11y class="tc-threat-a11y" role="status" aria-live="polite" aria-atomic="true"></span><div class="tc-objective" data-objective role="status" aria-live="polite" hidden></div>
       <section class="tc-boss-hud" data-boss-hud data-phase="1" data-boss-kind="rock" aria-label="首領生命與攻擊預告" hidden>
         <div class="tc-boss-line"><strong class="tc-boss-name" data-boss-name></strong><span class="tc-boss-phase" data-boss-phase>第一階段</span></div>
         <div class="tc-boss-health" data-boss-health role="progressbar" aria-label="首領生命">
@@ -793,7 +841,7 @@ function paint({preserveModal=false}={}){
     quizButton.setAttribute('aria-label',`答題充能，${quizButton.title}，目前能量 ${amount} / ${R.LIMITS.stamina}，答對增加 4，答錯增加 1`);
   }else $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
-  renderer.update(state,uid,battlefieldMode(),selection);updateControls();updateClock();
+  renderer.update(state,uid,battlefieldMode(),selection);refreshSealRangeControls();updateControls();updateClock();
   beastInspector?.refresh();updateBossHud();
   // Resume/open through room-state polling also prefetches before any click.
   if(!modalOpen)preloadTacticalQuestions();

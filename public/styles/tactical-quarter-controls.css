@@ -773,3 +773,31 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
   touch-action:none!important;
   overscroll-behavior:contain;
 }
+
+/* The large PvE arena hides its old heading, so seal ranges have a separate
+   non-modal toggle. Keep it above the map, away from both quarter wheels. */
+#tactical-combat.tc-quarter-layout .tc-arena>.tc-seal-range-toolbar:not([hidden]){
+  position:absolute;z-index:5;top:43px;right:calc(9px + env(safe-area-inset-right,0px));
+  left:auto;width:max-content;max-width:min(74vw,325px);
+  padding:4px 7px;background:rgba(13,28,24,.79);
+  border:1px solid rgba(117,177,149,.31);border-radius:12px;
+  box-shadow:0 2px 9px rgba(0,0,0,.16);backdrop-filter:blur(4px);
+  justify-content:flex-end;
+}
+#tactical-combat.tc-quarter-layout .tc-seal-range-toolbar button{
+  font-size:clamp(10px,2.2vw,12px)!important;
+  min-height:32px!important;padding:5px 8px!important
+}
+#tactical-combat.tc-quarter-layout .tc-seal-range-toolbar [data-seal-range-note]{
+  flex-basis:100%;text-align:right;
+  font-size:clamp(9px,1.9vw,11px);white-space:nowrap;
+  text-overflow:ellipsis;overflow:hidden
+}
+@media(orientation:portrait) and (max-width:430px){
+  #tactical-combat.tc-quarter-layout .tc-arena>.tc-seal-range-toolbar:not([hidden]){
+    top:42px;right:7px;max-width:72vw;padding:3px 6px;gap:3px
+  }
+  #tactical-combat.tc-quarter-layout .tc-seal-range-toolbar [data-seal-range-note]{
+    max-width:100%;font-size:9px
+  }
+}
