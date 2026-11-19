@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-earth3-climatedata-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境推理，附可核對解析",
+      "question": {
+        "q": "某地1991至2020年7月平均氣溫為28.0°C，今年7月平均為29.2°C。以該基準期計算，今年7月氣溫距平是多少？",
+        "correct": "+1.2°C",
+        "wrong": [
+          "−1.2°C",
+          "+0.2°C",
+          "+29.2°C"
+        ],
+        "exp": "氣溫距平=觀測值−基準期平均=29.2−28.0=+1.2°C。",
+        "subject": "地球科學",
+        "sub_topic": "氣候資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-氣候資料",
+        "template_id": "ref-20261119-b4-earth3-climatedata-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-earth3-climatedata-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境推理，附可核對解析",
+      "question": {
+        "q": "甲乙兩地年雨量皆為1,200 mm；甲地全年分布均勻，乙地多集中於少數暴雨日。哪項評估較合理？",
+        "correct": "兩地年雨量相同，但洪水與供水調度風險可能不同",
+        "wrong": [
+          "年總量相同就代表每個月降雨也相同",
+          "乙地沒有任何暴雨風險",
+          "年雨量足以精確預測每一天的降水量"
+        ],
+        "exp": "相同年雨量可能對應截然不同的時序分布，影響逕流、洪水、蓄水與乾季供水。",
+        "subject": "地球科學",
+        "sub_topic": "氣候資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-氣候資料",
+        "template_id": "ref-20261119-b4-earth3-climatedata-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-earth3-climatedata-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境推理，附可核對解析",
+      "question": {
+        "q": "某測站30年間年平均氣溫趨勢約為每10年上升0.2°C。若僅依此線性趨勢估算，30年的趨勢增量約是多少？",
+        "correct": "0.6°C",
+        "wrong": [
+          "0.2°C",
+          "2.0°C",
+          "6.0°C"
+        ],
+        "exp": "30年包含3個十年，依指定線性趨勢估算增量約3×0.2=0.6°C；不代表每一年都等幅上升。",
+        "subject": "地球科學",
+        "sub_topic": "氣候資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-氣候資料",
+        "template_id": "ref-20261119-b4-earth3-climatedata-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
