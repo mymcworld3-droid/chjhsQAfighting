@@ -531,7 +531,7 @@
   #dungeon-map-view .dm-focus-spark{opacity:.85}
 }
 
-// Stage 14: shared guardian-key objective and party portal activation.
+/* Stage 14: shared guardian-key objective and party portal activation. */
 #dungeon-map-view .dm-objective-status{
   margin:3px 0 0;max-width:min(570px,64vw);
   color:#efcba5;font-size:11px;line-height:1.45;
