@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-m1-identities-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "將(2x−3)²−(x+1)(x−1)化簡，結果為何？",
+        "correct": "3x²−12x+10",
+        "wrong": [
+          "3x²−12x+8",
+          "5x²−12x+10",
+          "3x²−6x+10"
+        ],
+        "exp": "(2x−3)²=4x²−12x+9，(x+1)(x−1)=x²−1；相減得3x²−12x+10。",
+        "subject": "數學",
+        "sub_topic": "式的運算、代數恆等式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-式的運算、代數恆等式",
+        "template_id": "ref-20261119-b6-m1-identities-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m1-identities-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "若a+b=9、a−b=3，則a²−b²等於多少？",
+        "correct": "27",
+        "wrong": [
+          "6",
+          "81",
+          "12"
+        ],
+        "exp": "利用平方差公式a²−b²=(a+b)(a−b)=9×3=27。",
+        "subject": "數學",
+        "sub_topic": "式的運算、代數恆等式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-式的運算、代數恆等式",
+        "template_id": "ref-20261119-b6-m1-identities-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m1-identities-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "x²+6x+9可寫成哪個完全平方？",
+        "correct": "(x+3)²",
+        "wrong": [
+          "(x−3)²",
+          "(x+6)²",
+          "(x+3)(x−3)"
+        ],
+        "exp": "由(a+b)²=a²+2ab+b²，令a=x、b=3，得x²+6x+9=(x+3)²。",
+        "subject": "數學",
+        "sub_topic": "式的運算、代數恆等式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-式的運算、代數恆等式",
+        "template_id": "ref-20261119-b6-m1-identities-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
