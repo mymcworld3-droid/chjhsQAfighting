@@ -770,8 +770,9 @@ function paint({preserveModal=false}={}){
   if(objective){
     const living=state.actors.filter(a=>a.bot&&a.hp>0).length;
     const label=state.trial?.variant?.includes('breakthrough')?'突圍運送':objective.item?'尋物運送':'運送';
-    const sealLabels={shield:'護：減傷',hazard:'煞：危險格',rage:'獸：增攻',maze:'迷：開路'};
-    const sealEffects=[...new Set((objective.points||[]).filter(p=>!p.activated).map(p=>sealLabels[p.kind]).filter(Boolean))].join('／');
+    // Keep the battlefield objective summary in sync with the server's seal metadata.
+    const sealEffects=[...new Set((objective.points||[]).filter(p=>!p.activated)
+      .map(p=>R.sealDefinition(p.kind)?.shortEffect).filter(Boolean))].join('／');
     const text=objective.type==='transport'?(objective.carrying?`${label} · 將靈物送至交付點`:`${label} · 先取得靈物`):
       objective.type==='defense'?`鎮守 · ${objective.completedRounds} / ${objective.rounds} 回合 · 靈陣 ${objective.hp} / ${objective.maxHp}`:
       objective.type==='sealing'?`封印 · ${objective.points.filter(p=>p.activated).length} / ${objective.points.length} 陣眼${state.trial?.layoutVersion===4?' · 攻擊陣眼'+(sealEffects?' · '+sealEffects:''):''}`:
