@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-dialogue-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "Student: 'Can I renew this library book online?' Librarian: 'Yes, as long as no one else has reserved it.' Student: 'Someone has reserved it. What should I do?' Which reply is most appropriate?",
+        "correct": "Then you cannot renew it; please return it by the due date.",
+        "wrong": [
+          "You can always renew it, even when another reader is waiting.",
+          "The reservation means the book is now yours to keep.",
+          "You must borrow a second copy before returning the first."
+        ],
+        "exp": "The librarian's stated condition allows renewal only when there is no reservation, so the student should return the reserved book on time.",
+        "subject": "英文",
+        "sub_topic": "情境對話",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-情境對話",
+        "template_id": "ref-20261119-b7-eng1-dialogue-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-dialogue-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "Teacher: 'Could you explain why your group's results differ from the others?' Student: '______' Which reply is both polite and scientifically appropriate?",
+        "correct": "We may have measured at a different temperature; we will check that variable.",
+        "wrong": [
+          "Our results are correct because I prefer them.",
+          "The other groups must be wrong, so we need no evidence.",
+          "There is never a need to repeat an experiment."
+        ],
+        "exp": "The appropriate reply proposes a testable possible reason and a plan to verify it, rather than making an unsupported claim.",
+        "subject": "英文",
+        "sub_topic": "情境對話",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-情境對話",
+        "template_id": "ref-20261119-b7-eng1-dialogue-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-dialogue-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "A: 'I'm afraid I can't attend the meeting at 3 p.m. because of a class. Could we meet at 4 instead?' B: '______' Choose the most helpful response if B is free at 4.",
+        "correct": "Of course. Let's meet at 4 p.m. instead.",
+        "wrong": [
+          "No, 3 p.m. was the original time, so no other time is possible.",
+          "I am free at 4, but I insist that you miss your class.",
+          "I cannot answer unless you cancel all future meetings."
+        ],
+        "exp": "Accepting the alternative time directly addresses the schedule conflict while maintaining a polite and cooperative tone.",
+        "subject": "英文",
+        "sub_topic": "情境對話",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-情境對話",
+        "template_id": "ref-20261119-b7-eng1-dialogue-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
