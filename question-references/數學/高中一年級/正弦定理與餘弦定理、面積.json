@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-m1-sinecos-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "三角形兩邊長為5與7，其夾角為60°。夾角對邊的長度為何？",
+        "correct": "√39",
+        "wrong": [
+          "√74",
+          "√24",
+          "6"
+        ],
+        "exp": "依餘弦定理c²=5²+7²−2×5×7 cos60°=25+49−35=39，故c=√39。",
+        "subject": "數學",
+        "sub_topic": "正弦定理與餘弦定理、面積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-正弦定理與餘弦定理、面積",
+        "template_id": "ref-20261119-b6-m1-sinecos-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m1-sinecos-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "三角形中，A角為30°、B角為45°，A的對邊長4。B的對邊長是多少？",
+        "correct": "4√2",
+        "wrong": [
+          "2√2",
+          "4",
+          "8√2"
+        ],
+        "exp": "正弦定理b/sin45°=4/sin30°，故b=4×(√2/2)/(1/2)=4√2。",
+        "subject": "數學",
+        "sub_topic": "正弦定理與餘弦定理、面積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-正弦定理與餘弦定理、面積",
+        "template_id": "ref-20261119-b6-m1-sinecos-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m1-sinecos-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "三角形兩邊長分別為10與6，其夾角為30°，面積為何？",
+        "correct": "15",
+        "wrong": [
+          "30",
+          "60",
+          "8"
+        ],
+        "exp": "三角形面積=(1/2)ab sinC=(1/2)×10×6×sin30°=15。",
+        "subject": "數學",
+        "sub_topic": "正弦定理與餘弦定理、面積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-正弦定理與餘弦定理、面積",
+        "template_id": "ref-20261119-b6-m1-sinecos-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
