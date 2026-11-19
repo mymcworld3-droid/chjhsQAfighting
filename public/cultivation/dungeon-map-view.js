@@ -12,7 +12,7 @@ import './manual-rules.js';
 import './tactical-animation.js';
 import './tactical-skill-effects.js';
 import {dungeonAnimationEvents,paintDungeonScene,drawDungeonHitNumbers} from './dungeon-skill-animation.js';
-import {dungeonMovementEvents,sampleDungeonMovement,continueDungeonMovement} from './dungeon-movement-animation.js';
+import {dungeonMovementEvents,sampleDungeonMovement,continueDungeonMovement,previewDungeonMovement} from './dungeon-movement-animation.js';
 
 // The dungeon shares the trial's fullscreen quarter-dial presentation;
 // its exploration, combat and questions remain live, server-authoritative actions.
@@ -43,6 +43,7 @@ class DungeonMapView{
     this.focusAuras=new Map();this.sprites={};
     this.visualScenes=new Map(); // authenticated room events only; never controls damage
     this.travelScenes=new Map(); // sampled trial movement; server positions remain untouched
+    this.pendingMovementPreview=null; // visual only; never enters C-room rules
     this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;
     this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
     this.routePending=false;this.actionFeedbackTimer=null;
@@ -926,6 +927,22 @@ class DungeonMapView{
       if(node.isConnected){node.hidden=true;node.textContent='';}
     },3300);
   }
+  beginMovementPreview(path,finalStep){
+    const event=previewDungeonMovement(path,this.map,this.uid);
+    if(!event)return;
+    this.pendingMovementPreview={key:event.key,finalStep,
+      target:{...path.at(-1)}};
+    this.travelScenes.set(event.key,{...event,
+      startedAt:performance.now(),optimistic:true});
+    this.drawSoon();
+  }
+  clearMovementPreview(){
+    const pending=this.pendingMovementPreview;
+    this.pendingMovementPreview=null;
+    if(pending&&this.travelScenes.get(pending.key)?.optimistic)
+      this.travelScenes.delete(pending.key);
+    this.drawSoon();
+  }
   async moveTo(tile){
     if(!this.isCurrent()||!this.map||this.routePending||this.movePending||
         this.room?.status!=='assembled')return;
@@ -938,7 +955,7 @@ class DungeonMapView{
     }
     if(!route.length)return;
     const stamina=Math.max(0,Math.min(10,Number(own.explorationStamina)||0));
-    if(route.length>stamina){
+    if(!own.dungeonAdmin&&route.length>stamina){
       this.actionFeedback('體力不足，需要 '+route.length+' 點，目前 '+stamina+' 點');
       return;
     }
@@ -953,10 +970,19 @@ class DungeonMapView{
         const member=this.room.members?.[this.uid];
         const next=route.slice(offset,offset+48);
         const step=(Number.isSafeInteger(member?.moveSeq)?member.moveSeq:0)+1;
+        const path=[{...member.position}];
+        for(const {dx,dy} of next){
+          const last=path.at(-1);
+          path.push({x:last.x+dx,y:last.y+dy});
+        }
+        this.beginMovementPreview(path,step+next.length-1);
         const result=await moveDungeonMemberRoute(roomId,next,step);
         if(!this.isCurrent()||this.seq!==token||roomId!==this.roomId)break;
         if(!result?.room)throw new Error('移動結果遺失，請重新同步');
         this.updateRoom(result.room);
+        if(this.pendingMovementPreview?.finalStep<=
+            result.room.members?.[this.uid]?.moveSeq)
+          this.clearMovementPreview();
         window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
           detail:{room:result.room}
         }));
@@ -966,6 +992,7 @@ class DungeonMapView{
       }
       if(this.isCurrent()&&this.seq===token)this.actionFeedback('');
     }catch(error){
+      this.clearMovementPreview();
       if(this.isCurrent()&&this.seq===token){
         this.actionFeedback(error?.message||'移動失敗，請重新點選');
         if(error?.status===409){
@@ -1025,6 +1052,14 @@ class DungeonMapView{
     const step=(Number.isSafeInteger(member.moveSeq)?member.moveSeq:0)+1;
     const token=this.seq,roomId=this.roomId;
     this.movePending=true;this.updateMovementHUD();this.moveAlert('');
+    const origin={...member.position};
+    const target={x:origin.x+dx,y:origin.y+dy};
+    if(target.x>=0&&target.y>=0&&target.x<this.map.width&&
+        target.y<this.map.height&&
+        this.map.tiles[target.y*this.map.width+target.x]>0&&
+        !this.creatures().some(e=>e.position?.x===target.x&&
+          e.position?.y===target.y))
+      this.beginMovementPreview([origin,target],step);
     try{
       const result=await moveDungeonMember(roomId,dx,dy,step);
       if(!this.isCurrent()||token!==this.seq||roomId!==this.roomId)return;
@@ -1033,11 +1068,15 @@ class DungeonMapView{
         window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
           detail:{room:result.room}
         }));
+        if(this.pendingMovementPreview?.finalStep<=
+            result.room.members?.[this.uid]?.moveSeq)
+          this.clearMovementPreview();
       }
       this.follow=true;this.followBeast=false;
       this.camera=Camera.lockToPlayer(this.selfPad(),this.map,this.width,this.height);
       this.drawSoon();
     }catch(error){
+      this.clearMovementPreview();
       if(!this.isCurrent()||token!==this.seq)return;
       this.moveAlert(error?.message||'移動失敗，請重試');
       if(error?.status===409){
@@ -1380,12 +1419,28 @@ class DungeonMapView{
     // Play only newly committed skill/strike results; duplicate SSE snapshots
     // cannot restart a visual, and entering an arena cannot replay old casts.
     const previous=this.room;
-    if(changedArena){this.visualScenes?.clear();this.travelScenes?.clear();}
+    if(changedArena){
+      this.visualScenes?.clear();this.travelScenes?.clear();
+      this.pendingMovementPreview=null;
+    }
     else if(this.map&&previous?.status==='assembled'){
       this.visualScenes ||=new Map();
       const now=performance.now();
       for(const event of dungeonMovementEvents(previous,room,this.map)){
         const prior=this.travelScenes.get(event.key);
+        const pending=this.pendingMovementPreview;
+        const target=event.scene.moves?.[0]?.path?.at(-1);
+        if(pending?.key===event.key&&
+            room.members?.[this.uid]?.moveSeq>=pending.finalStep&&
+            target?.x===pending.target.x&&target?.y===pending.target.y&&
+            prior?.optimistic){
+          this.pendingMovementPreview=null;
+          const still=sampleDungeonMovement(prior,now);
+          if(still?.active)this.travelScenes.set(event.key,{...prior,
+            optimistic:false});
+          else this.travelScenes.delete(event.key);
+          continue;
+        }
         const joined=continueDungeonMovement(event,prior,now);
         this.travelScenes.set(event.key,{...joined,startedAt:now});
       }
@@ -1428,6 +1483,7 @@ class DungeonMapView{
     clearTimeout(this.actionFeedbackTimer);this.actionFeedbackTimer=null;
     this.quiz?.destroy();
     this.visualScenes?.clear();this.travelScenes?.clear();
+    this.pendingMovementPreview=null;
     for(const aura of this.focusAuras.values())aura.remove();
     this.focusAuras.clear();
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
@@ -1669,7 +1725,12 @@ class DungeonMapView{
       const entry=this.travelScenes.get(key);
       if(!entry||reduceMotion)return actor;
       const sampled=sampleDungeonMovement(entry,now);
-      if(!sampled||!sampled.active){this.travelScenes.delete(key);return actor;}
+      if(!sampled){this.travelScenes.delete(key);return actor;}
+      if(!sampled.active){
+        if(entry.optimistic&&this.pendingMovementPreview?.key===key)
+          return {...actor,position:sampled.position,visualLift:0};
+        this.travelScenes.delete(key);return actor;
+      }
       travelActive=true;
       return {...actor,position:sampled.position,visualLift:sampled.lift};
     };
