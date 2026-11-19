@@ -41,6 +41,7 @@ function fake(){
     fill:()=>hit('fill'),stroke:()=>hit('stroke'),
     moveTo:()=>hit('move'),lineTo:()=>hit('line'),
     fillText:text=>{texts.push(String(text));hit('text');},
+    strokeText:text=>{texts.push(String(text));hit('strokeText');},
     measureText:value=>({width:String(value).length*10}),
     save(){},restore(){},
     createRadialGradient:()=>({addColorStop(){}})
@@ -107,11 +108,13 @@ test('mobile long-press selects a beast without system text highlighting',async(
   assert.match(css,/-webkit-user-select:none!important/);
   assert.match(css,/-webkit-touch-callout:none!important/);
 });
-test('NPC camera targeting never changes or sends authoritative AI state',()=>{
+test('NPC inspection keeps the local hero centered and never changes authoritative AI state',()=>{
   const view=createViewer(),before=structuredClone(view.room.enemies);
   view.selectBeast(view.room.enemies[0].id,{focus:true});
-  assert.equal(view.followBeast,true);
-  assert.ok(view.camera.zoom>=2.4);
+  assert.equal(view.followBeast,false);
+  const hero=Camera.mapPoint(view.camera,view.selfPad(),map,view.width,view.height);
+  assert.equal(hero.x,view.width/2);
+  assert.equal(hero.y,view.height/2);
   assert.deepStrictEqual(view.room.enemies,before);
   assert.doesNotMatch(viewerSource,/request\('enemy-move'/);
   assert.doesNotMatch(viewerSource,/localStorage|sessionStorage/);
