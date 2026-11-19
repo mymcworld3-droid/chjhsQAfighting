@@ -197,6 +197,14 @@ function simulateCombat(map,enemies,members,startTick,endTick,
     }
     next=updated;
   }
+  // Catch-up may publish a new telegraph one or more ticks late even when
+  // the strike is not due yet. Grant the full windup AFTER this transaction
+  // becomes visible, not after the historical tick that created it.
+  next=next.map(enemy=>enemy.attack&&
+    enemy.attack.startedAtTick>committedTick&&
+    enemy.attack.resolvesAtTick<endTick+Combat.WINDUP_TICKS?
+    {...enemy,attack:{...enemy.attack,
+      resolvesAtTick:endTick+Combat.WINDUP_TICKS}}:enemy);
   return {enemies:next,members:currentMembers};
 }
 function advanceWorld(room,map,now){
