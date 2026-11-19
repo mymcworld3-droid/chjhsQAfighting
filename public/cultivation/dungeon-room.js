@@ -154,3 +154,7 @@ export async function getDungeonMap(roomId){
 // Position and stamina come exclusively from the server room snapshot.
 export const moveDungeonMember=(roomId,dx,dy,step)=>
   request('move',{roomId,dx,dy,step});
+
+// The server computes clock ticks from its own assembly epoch. This request
+// never accepts client timestamps or a requested tick value.
+export const synchronizeDungeonBattleClock=roomId=>request('clock',{roomId});
