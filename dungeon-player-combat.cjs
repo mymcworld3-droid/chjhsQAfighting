@@ -21,6 +21,8 @@ function strikeEnemy(room,uid,map,{enemyId,seq}={}){
     return {duplicate:true,members:room.members,enemies:room.enemies};
   if(seq!==prior+1)throw fail('攻擊已不同步，請重新取得隊伍狀態',409);
   if(!isAlive(member))throw fail('修士已倒地，暫時無法攻擊',409);
+  if(member.dungeonSkillIds?.length)
+    throw fail('已裝備功法技能，普通攻擊已由技能取代',409);
   if(!walkable(map,member.position))throw fail('角色所在位置無效',409);
   const index=room.enemies?.findIndex(e=>e.id===enemyId)??-1;
   if(index<0)throw fail('靈獸已被擊敗或不在戰場上',409);

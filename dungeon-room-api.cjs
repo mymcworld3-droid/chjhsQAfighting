@@ -12,6 +12,7 @@ const {initialClock,projectClock} = require('./dungeon-battle-clock.cjs');
 const {initialEnemies,advanceWorld,ENEMY_AI_VERSION} = require('./dungeon-enemy-ai.cjs');
 const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
 const {strikeEnemy,maxHealth}=require('./dungeon-player-combat.cjs');
+const Skills=require('./dungeon-skill-combat.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -114,7 +115,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','clock'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','clock'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -404,6 +405,35 @@ function createHandler({
         });
         return respond(roomId,updated);
       }
+      if(action==='skill'||action==='loadout'){
+        const updated=await db.runTransaction(async tx=>{
+          const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
+          if(!current||!hasMember(current,uid))
+            throw err('你不是此副本的隊員',403);
+          if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
+          if(current.status!=='assembled')throw err('請先完成全隊集結',409);
+          // The manual record is read inside this transaction. Client-side
+          // skill lists, upgrade levels, equipment and realm are never trusted.
+          const manualSnap=await tx.get(db.collection('tacticalManuals').doc(uid));
+          const record=manualSnap.exists?manualSnap.data():null;
+          const map=roomMap(current,roomId);
+          const battleDelta=advanceWorld(current,map,at);
+          const evolved={...current,...(battleDelta||{})};
+          const outcome=action==='skill'?
+            Skills.castSkill(evolved,uid,map,record,{
+              skillId:req.body?.skillId,target:req.body?.target,seq:req.body?.seq
+            }):Skills.switchLoadout(evolved,uid,record,req.body?.index);
+          if(outcome.duplicate&&!battleDelta)return current;
+          const next={...evolved,members:outcome.members,
+            ...(action==='skill'?{enemies:outcome.enemies}:{}),
+            revision:current.revision+1};
+          tx.update(roomRef,{...(battleDelta||{}),members:next.members,
+            ...(action==='skill'?{enemies:next.enemies}:{}),
+            revision:next.revision});
+          return next;
+        });
+        return respond(roomId,updated);
+      }
       if(action==='ready'){ 
         if(typeof req.body?.ready!=='boolean')throw err('準備狀態無效',400);
         const updated=await db.runTransaction(async tx=>{
@@ -436,6 +466,17 @@ function createHandler({
             // can move. Cross-instance clients see one authoritative snapshot.
             const map=roomMap(room,roomId);
             const startingMembers=startExplorationMembers(room,map);
+            // Snapshot current C-side manuscripts for all 1-4 members before
+            // writing any state. Entry skills are authoritative, not browser
+            // selected; later battle loadout switches re-read the same source.
+            const ids=Object.keys(startingMembers);
+            const records=await Promise.all(ids.map(id=>
+              tx.get(db.collection('tacticalManuals').doc(id))));
+            for(let i=0;i<ids.length;i++){
+              const id=ids[i],record=records[i].exists?records[i].data():null;
+              startingMembers[id]={...startingMembers[id],
+                ...Skills.initialCombatLoadout(startingMembers[id],record)};
+            }
             const clockState=initialClock(at),enemies=initialEnemies(map);
             const enemyState={enemyAiVersion:ENEMY_AI_VERSION,enemies};
             const next={...room,status:'assembled',assembledAtMs:at,
@@ -454,7 +495,9 @@ function createHandler({
             .map(([key,m])=>{
               const {position,explorationStamina,moveSeq,lastMove,
                 battleHealth,battleMaxHealth,downed,lastDamage,
-                strikeSeq,lastStrike,...previous}=m;
+                strikeSeq,lastStrike,skillSeq,lastSkill,dungeonLoadoutIndex,
+                dungeonLoadoutNames,dungeonSkillIds,dungeonSkills,dungeonAttack,
+                flyingSword,focusCharges,...previous}=m;
               return [key,{...previous,ready:false}];
             }));
           const clockState={battleClockVersion:null,battleStartedAtMs:null,
@@ -538,7 +581,9 @@ function createHandler({
             for(const [key,member] of Object.entries(members)){
               const {position,explorationStamina,moveSeq,lastMove,
                 battleHealth,battleMaxHealth,downed,lastDamage,
-                strikeSeq,lastStrike,...previous}=member;
+                strikeSeq,lastStrike,skillSeq,lastSkill,dungeonLoadoutIndex,
+                dungeonLoadoutNames,dungeonSkillIds,dungeonSkills,dungeonAttack,
+                flyingSword,focusCharges,...previous}=member;
               members[key]={...previous,ready:false};
             }
           }
