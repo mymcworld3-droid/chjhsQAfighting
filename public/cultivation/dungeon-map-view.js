@@ -2,6 +2,7 @@ import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
 import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
+import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 
 // Read-only expedition blueprint. Pointer and keyboard events manipulate only
 // this viewer's local camera; no battle/move endpoint is called at this stage.
@@ -20,6 +21,7 @@ let viewer;
 class DungeonMapView{
   constructor(){
     this.root=null;this.stage=null;this.canvas=null;this.mini=null;this.ctx=null;
+    this.quiz=null;
     this.map=null;this.room=null;this.roomId='';this.uid='';
     this.camera=Camera.initialCamera();this.follow=false;this.routes=false;
     this.opened=false;this.seq=0;this.pointers=new Map();this.movePending=false;
@@ -38,7 +40,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-map-view-style')){
       const style=document.createElement('link');
       style.id='dungeon-map-view-style';style.rel='stylesheet';
-      style.href='/styles/dungeon-map-view.css?v=20261119-stage11b';
+      style.href='/styles/dungeon-map-view.css?v=20261119-stage12';
       document.head.append(style);
     }
     const root=document.createElement('section');
@@ -81,7 +83,8 @@ class DungeonMapView{
       '<button type="button" data-dm="left" aria-label="向左移動一格">←</button>'+
       '<button type="button" data-dm="down" aria-label="向下移動一格">↓</button>'+
       '<button type="button" data-dm="right" aria-label="向右移動一格">→</button>'+
-      '</div><button type="button" class="dm-strike" data-dm="strike" disabled>選擇靈獸後攻擊 · 2 體力</button>'+ 
+      '</div><button type="button" class="dm-quiz-charge" data-dm="quiz" disabled>答題充能 · 隨時作答</button>'+ 
+      '<button type="button" class="dm-strike" data-dm="strike" disabled>選擇靈獸後攻擊 · 2 體力</button>'+ 
        '<small data-dm-strike-alert role="status" aria-live="polite"></small>'+ 
        '<small data-dm-move-alert role="status" aria-live="polite"></small></div>'+ 
        '<aside class="dm-manual" data-dm-manual hidden aria-label="副本功法技能">'+
@@ -99,6 +102,13 @@ class DungeonMapView{
     this.canvas=root.querySelector('[data-dm-world]');
     this.mini=root.querySelector('[data-dm-minimap]');
     this.ctx=this.canvas.getContext('2d',{alpha:false});
+    this.quiz=new DungeonQuizPanel(root,{onRoom:room=>{
+      if(!this.isCurrent()||room.id!==this.roomId)return;
+      this.updateRoom(room);
+      window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
+        detail:{room}
+      }));
+    }});
     root.addEventListener('click',event=>{
       const button=event.target.closest('[data-dm]');
       if(button&&root.contains(button)&&!button.disabled)
@@ -137,6 +147,7 @@ class DungeonMapView{
     this.close();
     this.previousFocus=document.activeElement;
     this.room=room;this.roomId=room.id;this.uid=playerUid;
+    this.quiz?.attach(room.id,playerUid);
     this.map=null;this.camera=Camera.initialCamera();
     this.follow=false;this.routes=false;this.pointers.clear();this.opened=true;
     this.movePending=false;this.strikePending=false;this.skillPending=false;
@@ -242,6 +253,8 @@ class DungeonMapView{
     this.root?.querySelectorAll('.dm-dpad button').forEach(button=>{
       button.disabled=!active||!this.map||this.movePending||stamina<1||downed;
     });
+    const charge=this.$('[data-dm="quiz"]');
+    if(charge)charge.disabled=!active||!this.map;
     this.updateStrikeHUD();this.updateSkillHUD();
   }
   updateStrikeHUD(){
@@ -673,6 +686,7 @@ class DungeonMapView{
     ++this.seq;this.opened=false;this.pointers.clear();this.movePending=false;
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
     this.aimTile=null;this.skillSignature='';
+    this.quiz?.destroy();
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
     this.touchOrigins.clear();this.gestureMulti=false;
     this.inspectOpen=false;this.selectedBeastId=null;
@@ -702,6 +716,7 @@ class DungeonMapView{
       this.selectBeast(beastId);this.inspectOpen=false;
       this.updateBeastHUD();this.updateSkillHUD();return;
     }
+    if(name==='quiz'){this.quiz?.show();return;}
     if(name==='strike'){void this.strike();return;}
     if(name==='cast'){void this.cast(skillId);return;}
     if(name==='loadout'){void this.changeLoadout(Number(loadoutIndex));return;}
@@ -737,6 +752,7 @@ class DungeonMapView{
     this.drawSoon();
   }
   keyDown(event){
+    if(this.quiz?.visible)return;
     if(event.key==='Escape'){event.preventDefault();this.close();return;}
     if(!this.opened)return;
     if(event.key==='Tab'){
