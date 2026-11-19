@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-phy2-kinematics-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "汽車以初速4 m/s作直線等加速度運動，加速度為2 m/s²。經過3秒的位移為何？",
+        "correct": "21 m",
+        "wrong": [
+          "18 m",
+          "12 m",
+          "30 m"
+        ],
+        "exp": "位移s=v₀t+(1/2)at²=4×3+(1/2)×2×3²=12+9=21 m。",
+        "subject": "物理",
+        "sub_topic": "一維與二維運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-一維與二維運動",
+        "template_id": "ref-20261119-b3-phy2-kinematics-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-phy2-kinematics-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "球以20 m/s的水平初速度從平台拋出，忽略空氣阻力，取g=10 m/s²。經1.5秒後的鉛直向下速度大小為何？",
+        "correct": "15 m/s",
+        "wrong": [
+          "10 m/s",
+          "20 m/s",
+          "30 m/s"
+        ],
+        "exp": "水平拋射的初始鉛直速度為0，鉛直加速度g=10 m/s²，故經t=1.5 s後鉛直速度大小gt=15 m/s。",
+        "subject": "物理",
+        "sub_topic": "一維與二維運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-一維與二維運動",
+        "template_id": "ref-20261119-b3-phy2-kinematics-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-phy2-kinematics-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "一物體位移向量在東向為6 m、北向為8 m。其位移大小為何？",
+        "correct": "10 m",
+        "wrong": [
+          "14 m",
+          "2 m",
+          "48 m"
+        ],
+        "exp": "東向與北向分量互相垂直，位移大小√(6²+8²)=√100=10 m。",
+        "subject": "物理",
+        "sub_topic": "一維與二維運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-一維與二維運動",
+        "template_id": "ref-20261119-b3-phy2-kinematics-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
