@@ -87,8 +87,8 @@ test('two distinct servers commit concurrent strikes once and share one enemy he
   assert.equal(stored.enemies.length,0);
   assert.equal(stored.members.a.strikeSeq,1);
   assert.equal(stored.members.b.strikeSeq,1);
-  assert.equal(stored.members.a.explorationStamina,98);
-  assert.equal(stored.members.b.explorationStamina,98);
+  assert.equal(stored.members.a.explorationStamina,8);
+  assert.equal(stored.members.b.explorationStamina,8);
   const before=stored.revision;
   const same=await f.call('a','strike',{roomId:id,enemyId:wolf.id,seq:1},1);
   assert.equal(same.status,200);
@@ -133,7 +133,7 @@ test('authoritative C-side manual equipment enables skills and replaces basic at
   const result=cast.body.room.members.a.lastSkill;
   assert.equal(result.skillId,'wind-slash');
   assert.ok(result.totalDamage>0&&result.totalDamage<=60);
-  assert.equal(cast.body.room.members.a.explorationStamina,98);
+  assert.equal(cast.body.room.members.a.explorationStamina,8);
   const before=f.c.records.get('dungeonRooms/'+id).revision;
   const retry=await f.call('a','skill',{roomId:id,skillId:'wind-slash',
     target:{...wolf.position},seq:1});
@@ -156,8 +156,8 @@ test('two servers resolve simultaneous equipped skills against one shared enemy'
   assert.equal(stored.enemies.length,0);
   assert.equal(stored.members.a.skillSeq,1);
   assert.equal(stored.members.b.skillSeq,1);
-  assert.equal(stored.members.a.explorationStamina,98);
-  assert.equal(stored.members.b.explorationStamina,98);
+  assert.equal(stored.members.a.explorationStamina,8);
+  assert.equal(stored.members.b.explorationStamina,8);
   assert.ok(stored.members.a.lastSkill.totalDamage+
     stored.members.b.lastSkill.totalDamage===60);
   const before=stored.revision;
@@ -199,7 +199,7 @@ test('assembly trusts only Firebase A manuscript documents, never empty C aliase
 
 test('two C server instances cannot double-credit one A-graded answer',async()=>{
   const {f,id,raw}=await setup();
-  raw.members.a.explorationStamina=93;
+  raw.members.a.explorationStamina=6;
   const qid='dungeon-question-a-1';
   f.a.records.set('dungeonQuizStates/a',{
     roomId:id,sessionKey:id+':'+raw.assembledAtMs,
@@ -213,9 +213,9 @@ test('two C server instances cannot double-credit one A-graded answer',async()=>
   assert.equal(first.status,200);assert.equal(retry.status,200);
   const snapshot=f.c.records.get('dungeonRooms/'+id);
   assert.equal(snapshot.members.a.quizCreditSeq,1);
-  assert.equal(snapshot.members.a.explorationStamina,97);
+  assert.equal(snapshot.members.a.explorationStamina,10);
   assert.equal(snapshot.members.b.quizCreditSeq,0);
-  assert.equal(snapshot.members.b.explorationStamina,100);
+  assert.equal(snapshot.members.b.explorationStamina,10);
   assert.equal(snapshot.members.a.lastQuizCredit.granted,4);
   const revision=snapshot.revision;
   assert.equal((await f.call('a','quiz-credit',{roomId:id,questionId:qid})).status,200);
@@ -238,12 +238,12 @@ test('quiz credit is member- and session-bound; rejects ungraded, out-of-order a
   assert.equal((await f.call('invalid','quiz-credit',{roomId:id,questionId:'one'})).status,401);
   assert.equal(f.c.records.get('dungeonRooms/'+id).revision,rev);
   const credited=await f.call('a','quiz-credit',{roomId:id,questionId:'one'});
-  assert.equal(credited.status,200);assert.equal(credited.body.room.members.a.explorationStamina,100);
+  assert.equal(credited.status,200);assert.equal(credited.body.room.members.a.explorationStamina,10);
   assert.equal(credited.body.room.members.a.lastQuizCredit.granted,0,
     'at cap still acknowledge the receipt once');
-  f.c.records.get('dungeonRooms/'+id).members.a.explorationStamina=90;
+  f.c.records.get('dungeonRooms/'+id).members.a.explorationStamina=6;
   const second=await f.call('a','quiz-credit',{roomId:id,questionId:'two'});
-  assert.equal(second.status,200);assert.equal(second.body.room.members.a.explorationStamina,94);
+  assert.equal(second.status,200);assert.equal(second.body.room.members.a.explorationStamina,10);
   const oldA=f.a.records.get('dungeonQuizStates/a');
   f.a.records.set('dungeonQuizStates/a',{...oldA,sessionKey:'old-room:123'});
   assert.equal((await f.call('a','quiz-credit',{roomId:id,questionId:'two'})).status,403);
