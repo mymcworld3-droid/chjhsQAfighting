@@ -843,16 +843,6 @@ async function main(){
     const beforeAid=room.members.a.explorationStamina;
     room.revision++;publish();
     const aid=a.page.locator('[data-dm="rescue"][data-target-uid="b"]');
-    await a.page.waitForTimeout(700);
-    console.log('[Dungeon rescue HUD diagnostic]',await a.page.evaluate(()=>{
-      const box=document.querySelector('[data-dm-rescues]');
-      const party=document.querySelector('[data-dm-team-status]');
-      const hud=document.querySelector('[data-dm-movement]');
-      return {bodyReady:!!hud,bodyHidden:hud?.hidden,boxReady:!!box,
-        boxHidden:box?.hidden,boxHtml:box?.innerHTML,
-        party:party?.textContent,objective:document.querySelector('[data-dm-objective]')?.textContent,
-        title:document.querySelector('[data-dm-title]')?.textContent};
-    }));
     await aid.waitFor({state:'visible'});
     await a.page.waitForFunction(()=>
       !document.querySelector('[data-dm="rescue"][data-target-uid="b"]')?.disabled);
