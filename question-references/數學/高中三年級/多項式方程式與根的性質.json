@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-polynroots-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "函數、極限、模型與代數根的性質，附可查核推導",
+      "question": {
+        "q": "方程式x²−7x+10=0的兩個實根之積為何？",
+        "correct": "10",
+        "wrong": [
+          "7",
+          "−7",
+          "−10"
+        ],
+        "exp": "依韋達定理兩根之積c/a=10；亦可分解(x−2)(x−5)=0，兩根2與5乘積10。",
+        "subject": "數學",
+        "sub_topic": "多項式方程式與根的性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式方程式與根的性質",
+        "template_id": "ref-20261119-b10-m3-polynroots-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-polynroots-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "函數、極限、模型與代數根的性質，附可查核推導",
+      "question": {
+        "q": "多項式方程式x³−6x²+11x−6=0的三個實根為何？",
+        "correct": "1、2、3",
+        "wrong": [
+          "−1、−2、−3",
+          "1、1、6",
+          "2、2、2"
+        ],
+        "exp": "多項式可分解為(x−1)(x−2)(x−3)，故根為1、2、3。",
+        "subject": "數學",
+        "sub_topic": "多項式方程式與根的性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式方程式與根的性質",
+        "template_id": "ref-20261119-b10-m3-polynroots-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-polynroots-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "函數、極限、模型與代數根的性質，附可查核推導",
+      "question": {
+        "q": "若i²=−1，則方程式x²+4x+5=0在複數範圍的解為何？",
+        "correct": "−2±i",
+        "wrong": [
+          "2±i",
+          "−4±i",
+          "−2±2i"
+        ],
+        "exp": "配方(x+2)²+1=0，得(x+2)²=−1，所以x+2=±i，解為−2±i。",
+        "subject": "數學",
+        "sub_topic": "多項式方程式與根的性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式方程式與根的性質",
+        "template_id": "ref-20261119-b10-m3-polynroots-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
