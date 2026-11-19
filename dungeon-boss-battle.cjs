@@ -28,6 +28,15 @@ function mapFor(seed){
     if((x<=2||x>=WIDTH-3)&&(y<=2||y>=HEIGHT-3))continue;
     tiles[y*WIDTH+x]=((x+2*y)%5===0)?2:1;
   }
+  // Seeded cover makes repeat visits distinct without corrupting the
+  // broad, four-connected boss chamber. Pillars are always outside all
+  // spawn pads and the genuine 2x2 enemy body.
+  const variation=parseInt(hash(seed).slice(-4),16)%3;
+  for(const p of [
+    {x:4+variation,y:4},{x:WIDTH-5-variation,y:4},
+    {x:4+variation,y:11},{x:WIDTH-5-variation,y:11},
+    {x:6+variation,y:8},{x:WIDTH-7-variation,y:8}
+  ])tiles[p.y*WIDTH+p.x]=0;
   const spawnPads=[{x:7,y:13},{x:9,y:13},{x:13,y:13},{x:15,y:13}];
   const spawn={...spawnPads[0]},bossSite={...ANCHOR};
   // The legacy camera contract expects these markers, even when the boss

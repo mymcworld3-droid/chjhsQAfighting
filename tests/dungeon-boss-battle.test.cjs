@@ -17,10 +17,23 @@ function fixture(){
     dungeonProgress:{keyAcquired:true,portalStatus:'open'},members,enemies:[]}};
 }
 const xy=p=>p.x+','+p.y;
-test('600 arena seeds create stable fully walkable boss footprint and disjoint four spawns',()=>{
+test('600 arena seeds create stable walkable boss footprint and distinct seeded cover',()=>{
+  const layouts=new Set();
   for(let i=0;i<600;i++){
     const map=Boss.mapFor('boss-seed-'+i);
     assert.deepStrictEqual(map,Boss.mapFor('boss-seed-'+i));
+    layouts.add(map.tiles.join(''));
+    const visited=new Set([xy(map.spawn)]),queue=[map.spawn];
+    for(let j=0;j<queue.length;j++){
+      const p=queue[j];
+      for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){
+        const q={x:p.x+dx,y:p.y+dy};
+        if(walkable(map,q)&&!visited.has(xy(q))){
+          visited.add(xy(q));queue.push(q);
+        }
+      }
+    }
+    assert.equal(visited.size,map.walkableCount,'all cover must remain connected');
     assert.equal(map.arena,'boss');
     assert.equal(map.mode,'dungeon');
     assert.equal(map.width,23);
@@ -37,6 +50,7 @@ test('600 arena seeds create stable fully walkable boss footprint and disjoint f
     assert.equal(Boss.occupies(boss,{x:13,y:7}),false);
     assert.equal(map.tiles[0],0);
   }
+  assert.ok(layouts.size>=3,'seed changes meaningful arena cover geometry');
 });
 test('only a living member standing near activated portal can teleport all teammates once',()=>{
   const {map,room}=fixture();
