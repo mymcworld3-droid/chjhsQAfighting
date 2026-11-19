@@ -575,7 +575,9 @@ async function handleClick(event){
   else if(action==='leave')return confirmAction(
     room.bossEncounter?.status==='defeated'?
       '確定離開已完成的副本？本場勝利已保存，可稍後回副本入口領取尚未入帳的獎勵。':
-      '確定離開目前的合作副本隊伍？',
+      (room.status==='assembled'?
+        '確定退出正在進行的副本？其他隊員會保留探索與戰鬥進度繼續挑戰，但你無法重新加入這一場。':
+        '確定離開目前的合作副本隊伍？'),
     ()=>leaveDungeonRoom(roomId),{clear:true,message:'已離開隊伍'});
 }
 function init(){
