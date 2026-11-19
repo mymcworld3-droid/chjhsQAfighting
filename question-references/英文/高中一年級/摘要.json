@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-summary-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "Read: 'A city introduced electric buses on two routes. Drivers reported quieter rides, while passengers appreciated lower noise near stops. However, charging time sometimes caused delays, so the city is testing a revised timetable.' Which summary is most accurate?",
+        "correct": "Electric buses reduced noise on two routes, but charging-related delays prompted timetable trials.",
+        "wrong": [
+          "Electric buses have replaced every route without any delays.",
+          "Passengers opposed electric buses because the vehicles became noisier.",
+          "The city stopped using buses and switched entirely to trains."
+        ],
+        "exp": "A balanced summary includes the observed noise benefit, the limited scope of two routes, and the operational delay the city is addressing.",
+        "subject": "英文",
+        "sub_topic": "摘要",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-摘要",
+        "template_id": "ref-20261119-b7-eng1-summary-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-summary-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "Read: 'A school offered free breakfast for one semester. Attendance improved, but a nearby school without the program also saw an increase. Researchers therefore recommended a longer study before drawing conclusions.' Which summary is best?",
+        "correct": "Attendance improved during the program, but other factors may explain part of the change.",
+        "wrong": [
+          "The breakfast program was proved to be the only cause of better attendance.",
+          "Both schools experienced a decline in attendance.",
+          "The researchers concluded that breakfast has no possible benefits."
+        ],
+        "exp": "The passage reports an improvement but highlights a comparison school's improvement, which limits claims about causation.",
+        "subject": "英文",
+        "sub_topic": "摘要",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-摘要",
+        "template_id": "ref-20261119-b7-eng1-summary-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-summary-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "Read: 'A town installed rainwater tanks at public buildings and used stored water to irrigate gardens. The tanks reduced the use of treated water, but long dry periods still required backup supplies.' Which summary preserves the key message?",
+        "correct": "Rainwater storage supported irrigation and reduced treated-water use, though backup water remained necessary.",
+        "wrong": [
+          "The town eliminated its need for all other water sources.",
+          "The tanks increased treated-water use during every season.",
+          "Rainwater was used only for drinking and never for gardening."
+        ],
+        "exp": "The key points are using collected rainwater for gardens, savings in treated water, and remaining limits during long dry spells.",
+        "subject": "英文",
+        "sub_topic": "摘要",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-摘要",
+        "template_id": "ref-20261119-b7-eng1-summary-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
