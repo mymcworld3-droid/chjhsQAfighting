@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-math3-sampling-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，統計及應用數據均有可核驗推導",
+      "question": {
+        "q": "一所學校高一、高二、高三學生分別有300、200、100人。若採比例分層抽樣抽取60人，各年級應抽多少人？",
+        "correct": "30、20、10人",
+        "wrong": [
+          "20、20、20人",
+          "36、18、6人",
+          "40、10、10人"
+        ],
+        "exp": "總人數600，各年級占1/2、1/3、1/6，故樣本60人依比例分配為30、20、10人。",
+        "subject": "數學",
+        "sub_topic": "抽樣與統計圖表",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-抽樣與統計圖表",
+        "template_id": "ref-20261119-b9-math3-sampling-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math3-sampling-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，統計及應用數據均有可核驗推導",
+      "question": {
+        "q": "研究者想估計全校學生的睡眠時數，卻只在週末到圖書館訪問讀書的學生。主要問題是什麼？",
+        "correct": "抽樣對象可能無法代表全校，產生選擇偏差",
+        "wrong": [
+          "樣本來自同一場所，便保證每人被抽中的機會相等",
+          "所有在圖書館的學生睡眠時數一定相同",
+          "只要訪問人數夠多就必然能排除取樣偏差"
+        ],
+        "exp": "週末圖書館使用者可能在作息、學習行為上與全校不同，不是單純增加此類樣本就能確保代表性。",
+        "subject": "數學",
+        "sub_topic": "抽樣與統計圖表",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-抽樣與統計圖表",
+        "template_id": "ref-20261119-b9-math3-sampling-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math3-sampling-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，統計及應用數據均有可核驗推導",
+      "question": {
+        "q": "兩組資料甲、乙均有平均數50，但甲的標準差5，乙的標準差15。若要以圖表呈現兩組數據的離散差異，何項判斷最合理？",
+        "correct": "乙的數據相對平均數通常較分散",
+        "wrong": [
+          "甲的數據必比乙更分散",
+          "兩組平均相同，標準差也必定相同",
+          "乙每筆觀測值都一定大於甲的對應觀測值"
+        ],
+        "exp": "標準差反映與平均數的典型偏離程度，乙的15大於甲的5，可知乙較分散，但不能推論逐筆大小。",
+        "subject": "數學",
+        "sub_topic": "抽樣與統計圖表",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-抽樣與統計圖表",
+        "template_id": "ref-20261119-b9-math3-sampling-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
