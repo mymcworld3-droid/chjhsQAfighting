@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-e2-graphwriting-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視圖表精確解讀、語境、禮貌及不同證據的整合",
+      "question": {
+        "q": "A table shows the number of library visits rose from 200 in January to 260 in February. Which sentence reports the relative increase correctly?",
+        "correct": "Library visits increased by 30% from January to February.",
+        "wrong": [
+          "Library visits increased by 60% from January to February.",
+          "Library visits increased by 30 percentage points from January to February.",
+          "Library visits decreased by 30% from January to February."
+        ],
+        "exp": "The increase is 60 visits, and 60/200=30%; since visits are counts, a relative percent is appropriate rather than percentage points.",
+        "subject": "英文",
+        "sub_topic": "圖表寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-圖表寫作",
+        "template_id": "ref-20261119-b6-e2-graphwriting-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e2-graphwriting-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視圖表精確解讀、語境、禮貌及不同證據的整合",
+      "question": {
+        "q": "A chart shows train users increased from 150 to 180, while bus users decreased from 200 to 190. Which description is accurate?",
+        "correct": "Train use rose by 30, whereas bus use fell by 10.",
+        "wrong": [
+          "Both transport types gained 30 users.",
+          "Bus use increased by 10 while train use fell by 30.",
+          "Train and bus use both remained unchanged."
+        ],
+        "exp": "The train figure changes by +30 (180−150), while the bus figure changes by −10 (190−200), so 'whereas' signals the contrasting trends.",
+        "subject": "英文",
+        "sub_topic": "圖表寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-圖表寫作",
+        "template_id": "ref-20261119-b6-e2-graphwriting-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e2-graphwriting-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視圖表精確解讀、語境、禮貌及不同證據的整合",
+      "question": {
+        "q": "A school survey reports that students choosing option A increased from 40% to 55%. Which sentence states the change precisely?",
+        "correct": "The share choosing A increased by 15 percentage points.",
+        "wrong": [
+          "The share choosing A increased by 15 students.",
+          "The share choosing A increased by 55 percentage points.",
+          "The share choosing A decreased by 15 percentage points."
+        ],
+        "exp": "The percentages differ by 55%−40%=15 percentage points; the number of students cannot be inferred without sample sizes.",
+        "subject": "英文",
+        "sub_topic": "圖表寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-圖表寫作",
+        "template_id": "ref-20261119-b6-e2-graphwriting-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
