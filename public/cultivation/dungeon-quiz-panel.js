@@ -16,7 +16,8 @@ export class DungeonQuizPanel{
     this.root=root;this.onRoom=onRoom||(()=>{});
     this.roomId='';this.uid='';this.visible=false;this.epoch=0;
     this.question=null;this.review=null;this.loading=false;this.answering=false;
-    this.prefetching=false;this.pendingCredits=[];
+    this.prefetching=false;this.pendingCredits=[];this.warming=false;
+    this.warmUntil=0;this.questionStartedAt=0;this.errorMessage='';
     const panel=document.createElement('aside');
     panel.className='dm-quiz-panel';panel.hidden=true;
     panel.setAttribute('role','region');panel.setAttribute('aria-label','副本獨立答題');
@@ -58,13 +59,32 @@ export class DungeonQuizPanel{
     this.visible=false;this.element.hidden=true;
     this.question=null;this.review=null;this.pendingCredits=[];
     this.loading=false;this.answering=false;this.prefetching=false;
-    this.paint();
+    this.warming=false;this.warmUntil=0;this.errorMessage='';
+    this.questionStartedAt=0;this.paint();
   }
   destroy(){
     this.epoch++;this.visible=false;this.element.hidden=true;
     this.roomId='';this.uid='';this.question=null;this.review=null;
     this.pendingCredits=[];this.prefetching=false;this.loading=false;
-    this.answering=false;
+    this.answering=false;this.warming=false;this.warmUntil=0;
+    this.errorMessage='';this.questionStartedAt=0;
+  }
+  async warm(){
+    // Preload before the player presses the charge button. Reconnecting and
+    // frequent room SSE ticks cannot trigger an API request storm.
+    if(!this.valid()||this.warming||Date.now()<this.warmUntil)return;
+    this.warming=true;this.warmUntil=Date.now()+45000;
+    const epoch=this.epoch;
+    try{
+      const data=await getDungeonQuizState(this.roomId);
+      if(!this.valid(epoch))return;
+      if(data.state.stock<PREFETCH_STOCK){
+        if(!data.state.question)await generateDungeonQuestion(this.roomId,0);
+        if(this.valid(epoch))await this.prefetch(epoch);
+      }
+    }catch(_){
+      if(this.valid(epoch))this.warmUntil=Date.now()+10000;
+    }finally{if(this.valid(epoch))this.warming=false;}
   }
   show(){
     if(!this.valid())return;
@@ -95,7 +115,7 @@ export class DungeonQuizPanel{
     }
     if(this.review){
       const r=this.review;
-      this.status((r.correct?'答對！':'答錯了')+' · 答題體力 '+r.amount+
+      this.status(this.errorMessage||(r.correct?'答對！':'答錯了')+' · 答題體力 '+r.amount+
         ' 點（實際恢復量依當前剩餘體力計算）');
       const title=document.createElement('p');title.className='dm-quiz-question';
       title.innerHTML=rich(r.q);content.append(title);
@@ -121,7 +141,7 @@ export class DungeonQuizPanel{
       content.append(explanation);
     }else if(this.question){
       const q=this.question;
-      this.status('第 '+(this.answered+1)+' 題 · '+(q.subject||'綜合')+
+      this.status(this.errorMessage||'第 '+(this.answered+1)+' 題 · '+(q.subject||'綜合')+
         ' · '+(q.topic||'核心觀念')+
         ' · 玩家各自答題，戰場持續運作');
       const title=document.createElement('p');title.className='dm-quiz-question';
@@ -136,7 +156,7 @@ export class DungeonQuizPanel{
         choices.append(node);
       });
       content.append(choices);
-    }else this.status('正在填充題庫中…');
+    }else this.status(this.errorMessage||'正在填充題庫中…');
     try{window.quizMathTypeset?.(content);}catch(_){}
   }
   async retryCredits(){
@@ -153,17 +173,17 @@ export class DungeonQuizPanel{
         if(response?.room)this.onRoom(response.room);
         this.pendingCredits=this.pendingCredits.filter(x=>x.id!==record.id);
       }catch(error){
-        this.status('答題已記錄，但體力補發尚未完成：'+error.message+
-          '。可按「重試補充體力」。');
+        this.errorMessage='答題已記錄，但體力補發尚未完成：'+error.message+
+          '。可按「重試補充體力」。';
         this.paint();return;
       }
     }
-    this.paint();
+    this.errorMessage='';this.paint();
   }
   async load(){
     if(!this.valid()||this.loading)return;
     const epoch=this.epoch;
-    this.loading=true;this.paint();
+    this.loading=true;this.errorMessage='';this.paint();
     try{
       const response=await getDungeonQuizState(this.roomId);
       if(!this.valid(epoch))return;
@@ -179,13 +199,13 @@ export class DungeonQuizPanel{
         question=generated.dungeonQuestion;
       }
       if(!this.valid(epoch))return;
-      this.question=question;this.review=null;this.paint();
+      this.question=question;this.review=null;this.questionStartedAt=Date.now();this.paint();
       // Fill the next four independent slots without locking up the screen.
       // Main solo generation performs normal scope checks and AI review.
       void this.prefetch(epoch);
     }catch(error){
       if(this.valid(epoch)){
-        this.question=null;this.status(error?.message||'題目取得失敗');
+        this.question=null;this.errorMessage=error?.message||'題目取得失敗';
         this.paint();
       }
     }finally{
@@ -199,12 +219,12 @@ export class DungeonQuizPanel{
     try{
       const state=(await getDungeonQuizState(this.roomId)).state;
       if(!this.valid(epoch))return;
-      const missing=Math.max(0,PREFETCH_STOCK-state.stock);
-      // Limit simultaneous requests to two, then continue filling; each
-      // target has a distinct slot and a transaction-bound question index.
-      for(let slot=1;slot<=missing-1&&this.valid(epoch);slot+=2){
-        await Promise.allSettled([slot,slot+1].filter(n=>n<missing).map(n=>
-          generateDungeonQuestion(this.roomId,n)));
+      if(state.stock>=PREFETCH_STOCK)return;
+      // All slots 1..4, not 1..(5-stock-1): the previous expression omitted
+      // slot four and left holes after concurrent answers.
+      for(let slot=1;slot<PREFETCH_STOCK&&this.valid(epoch);slot+=2){
+        await Promise.allSettled([slot,slot+1].filter(n=>n<PREFETCH_STOCK)
+          .map(n=>generateDungeonQuestion(this.roomId,n)));
       }
     }catch(_){
       // A temporary AI shortage must never invalidate the visible question.
@@ -213,7 +233,7 @@ export class DungeonQuizPanel{
   async submit(choice){
     if(!this.valid()||!this.question||this.answering||this.review)return;
     const epoch=this.epoch,q=this.question,startedAt=this.questionStartedAt||Date.now();
-    this.answering=true;this.paint();this.status('正在批改本題…');
+    this.answering=true;this.errorMessage='';this.paint();this.status('正在批改本題…');
     try{
       const result=await answerDungeonQuestion(this.roomId,q.id,choice,0,
         Math.max(0,Math.floor((Date.now()-startedAt)/1000)));
@@ -224,7 +244,7 @@ export class DungeonQuizPanel{
       this.paint();
       await this.retryCredits();
     }catch(error){
-      if(this.valid(epoch))this.status(error?.message||'批改失敗，請重試');
+      if(this.valid(epoch))this.errorMessage=error?.message||'批改失敗，請重試';
     }finally{
       this.answering=false;
       if(this.valid(epoch))this.paint();
@@ -232,7 +252,7 @@ export class DungeonQuizPanel{
   }
   async next(){
     if(!this.valid()||!this.review)return;
-    this.review=null;this.question=null;this.questionStartedAt=Date.now();
+    this.review=null;this.question=null;this.errorMessage='';this.questionStartedAt=Date.now();
     this.paint();await this.load();
   }
 }
