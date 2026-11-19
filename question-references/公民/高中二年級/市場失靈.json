@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-civ2-marketfail-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "民主制度、媒體識讀與市場失靈實際應用，尊重概念區分及推論條件",
+      "question": {
+        "q": "某工廠生產商品造成下游水污染，卻沒有承擔居民清理水源的費用。若市場價格未反映這些損害，屬於何種問題？",
+        "correct": "生產造成負外部性",
+        "wrong": [
+          "商品供給過少必然造成的正外部性",
+          "純粹由消費者偏好不同造成的價格差異",
+          "因政府公開資訊而產生的完全競爭市場"
+        ],
+        "exp": "廠商決策未承擔污染對他人造成的外部成本，市場價格可能低估社會成本，屬負外部性。",
+        "subject": "公民",
+        "sub_topic": "市場失靈",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-市場失靈",
+        "template_id": "ref-20261119-b11-civ2-marketfail-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-civ2-marketfail-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "民主制度、媒體識讀與市場失靈實際應用，尊重概念區分及推論條件",
+      "question": {
+        "q": "某二手商品市場中，賣家清楚知道是否有隱藏故障，但買家難以驗證，導致優良商品也難以賣出合理價格。這主要涉及何種市場失靈？",
+        "correct": "資訊不對稱可能造成逆選擇",
+        "wrong": [
+          "所有商品都具有相同品質，因此價格差異消失",
+          "市場必然不存在任何買賣雙方的資訊差異",
+          "政府提供公共服務必然使商品需求歸零"
+        ],
+        "exp": "品質資訊由賣家掌握、買家缺乏辨識能力，可能使買家壓低願付價格，令品質較佳產品退出市場。",
+        "subject": "公民",
+        "sub_topic": "市場失靈",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-市場失靈",
+        "template_id": "ref-20261119-b11-civ2-marketfail-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-civ2-marketfail-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "民主制度、媒體識讀與市場失靈實際應用，尊重概念區分及推論條件",
+      "question": {
+        "q": "社區防洪設施完工後，即使有人未出資，仍很難只排除該戶享受防洪保護。這種特性可能帶來什麼問題？",
+        "correct": "搭便車誘因，使自願出資供給可能不足",
+        "wrong": [
+          "所有家庭必定願意支付相同金額",
+          "防洪設施因有成本而不可能產生任何公共利益",
+          "只要有一家住戶出資，其他住戶的受益必定為零"
+        ],
+        "exp": "若受益不易排除未付費者，個人可能傾向等待他人出資，導致集體供給不足。",
+        "subject": "公民",
+        "sub_topic": "市場失靈",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-市場失靈",
+        "template_id": "ref-20261119-b11-civ2-marketfail-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
