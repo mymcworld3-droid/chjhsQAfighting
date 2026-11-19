@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-discrete-rv-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "X分別以機率0.2、0.3、0.5取值1、2、3，則P(X≥2)為何？",
+        "correct": "0.8",
+        "wrong": [
+          "0.5",
+          "0.3",
+          "0.2"
+        ],
+        "exp": "X≥2包含X=2及X=3，機率相加0.3+0.5=0.8。",
+        "subject": "數學",
+        "sub_topic": "離散型隨機變數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-離散型隨機變數",
+        "template_id": "ref-20261119-b10-m3-discrete-rv-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-discrete-rv-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "某離散變數X的分布為P(X=1)=0.2、P(X=2)=0.3、P(X=3)=0.5，期望值是多少？",
+        "correct": "2.3",
+        "wrong": [
+          "2.0",
+          "2.5",
+          "1.8"
+        ],
+        "exp": "E(X)=1×0.2+2×0.3+3×0.5=0.2+0.6+1.5=2.3。",
+        "subject": "數學",
+        "sub_topic": "離散型隨機變數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-離散型隨機變數",
+        "template_id": "ref-20261119-b10-m3-discrete-rv-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-discrete-rv-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "若X為伯努利隨機變數，P(X=1)=0.7、P(X=0)=0.3，則Var(X)為何？",
+        "correct": "0.21",
+        "wrong": [
+          "0.7",
+          "0.49",
+          "0.3"
+        ],
+        "exp": "伯努利變數的變異數為p(1−p)，故0.7×0.3=0.21。",
+        "subject": "數學",
+        "sub_topic": "離散型隨機變數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-離散型隨機變數",
+        "template_id": "ref-20261119-b10-m3-discrete-rv-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
