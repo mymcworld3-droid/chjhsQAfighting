@@ -176,12 +176,28 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   const damageFor=power=>Math.max(1,Math.round(base*power));
   const healthy=e=>Number.isSafeInteger(e.battleHealth)?
     Math.max(0,e.battleHealth):maxHealth(e.kind);
+  const tick=Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0;
+  // Multi-hit sword arrays are ONE contribution, not eight fake teammates.
+  // Remember whether this cast linked to a different player's recent strike.
+  const linkedBossHits=new Map();
   const apply=(enemy,power)=>{
     if(!enemy||healthy(enemy)<=0)return;
-    const health=healthy(enemy),damage=Math.min(health,damageFor(power));
-    enemy.battleHealth=health-damage;enemy.battleMaxHealth=maxHealth(enemy.kind);
+    const health=healthy(enemy);
+    let teamwork=null,damage;
+    if(enemy.kind==='boss'){
+      if(!linkedBossHits.has(enemy.id))
+        linkedBossHits.set(enemy.id,Boss.comboReady(enemy,uid,tick));
+      teamwork=Boss.damage(enemy,uid,damageFor(power),tick,linkedBossHits.get(enemy.id));
+      damage=teamwork.damage;
+    }else{
+      damage=Math.min(health,damageFor(power));
+      enemy.battleHealth=health-damage;
+      enemy.battleMaxHealth=maxHealth(enemy.kind);
+    }
     hits.push({enemyId:enemy.id,damage,remainingHealth:enemy.battleHealth,
-      defeated:enemy.battleHealth===0});
+      defeated:enemy.battleHealth===0,
+      ...(teamwork?{shieldDamage:teamwork.shieldDamage,combo:teamwork.combo,
+        shieldBroken:teamwork.shieldBroken}:{})});
   };
   const targets=(locations)=>enemies.filter(e=>healthy(e)>0&&
     locations.some(p=>Boss.occupies(e,p)));
