@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-math1-polar-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "平面點P的極坐標為(4,−30°)。其直角坐標為何？",
+        "correct": "(2√3,−2)",
+        "wrong": [
+          "(−2,2√3)",
+          "(2,−2√3)",
+          "(−2√3,2)"
+        ],
+        "exp": "x=r cosθ=4×(√3/2)=2√3；y=r sinθ=4×(−1/2)=−2。",
+        "subject": "數學",
+        "sub_topic": "廣義角與極坐標",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-廣義角與極坐標",
+        "template_id": "ref-20261119-b7-math1-polar-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-polar-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "平面點Q的直角坐標為(−2,2√3)，若極徑取正值且0°≤θ<360°，其極坐標為何？",
+        "correct": "(4,120°)",
+        "wrong": [
+          "(4,60°)",
+          "(2,120°)",
+          "(4,240°)"
+        ],
+        "exp": "r=√[(-2)²+(2√3)²]=4；Q在第二象限、參考角60°，故θ=120°。",
+        "subject": "數學",
+        "sub_topic": "廣義角與極坐標",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-廣義角與極坐標",
+        "template_id": "ref-20261119-b7-math1-polar-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-polar-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "廣義角420°與下列哪一角具有相同終邊？",
+        "correct": "60°",
+        "wrong": [
+          "120°",
+          "240°",
+          "300°"
+        ],
+        "exp": "同終邊角相差360°的整數倍；420°−360°=60°。",
+        "subject": "數學",
+        "sub_topic": "廣義角與極坐標",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-廣義角與極坐標",
+        "template_id": "ref-20261119-b7-math1-polar-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
