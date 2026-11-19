@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-神經與內分泌-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查神經與內分泌",
+      "question": {
+        "q": "某神經元達閾值後產生動作電位，其上升期主要與何種離子流動有關？",
+        "correct": "電壓門控Na⁺通道打開，Na⁺快速流入",
+        "wrong": [
+          "細胞內全部K⁺立即消失",
+          "神經元立即停止所有膜電位變化",
+          "動作電位只由葡萄糖直接穿膜形成"
+        ],
+        "exp": "典型神經動作電位去極化上升期由Na⁺內流造成。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經與內分泌",
+        "template_id": "extra-2026-bio3-神經與內分泌-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-神經與內分泌-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查神經與內分泌",
+      "question": {
+        "q": "某人血糖低時胰臟釋出升糖素，促進肝醣分解，使血糖回升。此機制屬於？",
+        "correct": "負回饋調節",
+        "wrong": [
+          "不斷放大低血糖的正回饋",
+          "完全不涉及激素的反應",
+          "只由地球季節決定"
+        ],
+        "exp": "血糖偏低引發升血糖反應，有助恢復穩態。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經與內分泌",
+        "template_id": "extra-2026-bio3-神經與內分泌-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-神經與內分泌-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查神經與內分泌",
+      "question": {
+        "q": "某激素能進入多種器官，卻僅使具特定受體的細胞出現反應。最能反映什麼？",
+        "correct": "目標細胞受體與訊號傳遞決定激素作用的特異性",
+        "wrong": [
+          "激素只會在原分泌細胞內作用",
+          "所有細胞都必須有相同受體",
+          "血液完全不會輸送激素"
+        ],
+        "exp": "激素經循環可廣泛分布，但作用取決於細胞是否能接收及轉導訊號。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經與內分泌",
+        "template_id": "extra-2026-bio3-神經與內分泌-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

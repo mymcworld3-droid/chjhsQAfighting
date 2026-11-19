@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-動物組織-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查動物組織",
+      "question": {
+        "q": "研究者發現某器官內層細胞緊密排列，具有吸收與分泌功能。這類細胞最可能屬於？",
+        "correct": "上皮組織",
+        "wrong": [
+          "骨骼肌組織",
+          "神經組織",
+          "骨骼結締組織"
+        ],
+        "exp": "上皮組織覆蓋表面及內腔，常參與保護、吸收與分泌。",
+        "subject": "生物",
+        "sub_topic": "動物組織",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-動物組織",
+        "template_id": "extra-2026-bio3-動物組織-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-動物組織-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查動物組織",
+      "question": {
+        "q": "某動物組織含大量細胞外基質與膠原纖維，可支撐及連接其他組織。最可能是？",
+        "correct": "結締組織",
+        "wrong": [
+          "上皮組織",
+          "心肌細胞",
+          "表皮角質層中的空氣"
+        ],
+        "exp": "結締組織常有較多細胞外基質，具支撐與連結等功能。",
+        "subject": "生物",
+        "sub_topic": "動物組織",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-動物組織",
+        "template_id": "extra-2026-bio3-動物組織-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-動物組織-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查動物組織",
+      "question": {
+        "q": "比較心肌和骨骼肌時，何者最符合心肌特徵？",
+        "correct": "具有分支細胞與特殊細胞間連接，有助協調節律收縮",
+        "wrong": [
+          "所有心肌都由個人意識直接控制",
+          "心肌細胞完全沒有粒線體",
+          "心肌只分布於四肢骨頭"
+        ],
+        "exp": "心肌具節律性與細胞間電性連結，協助心臟同步收縮。",
+        "subject": "生物",
+        "sub_topic": "動物組織",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-動物組織",
+        "template_id": "extra-2026-bio3-動物組織-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-顯微與圖表判讀-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查顯微與圖表判讀",
+      "question": {
+        "q": "研究者將10 μm的細胞在顯微照片中顯示為5 cm長。該照片的放大倍率約為多少？",
+        "correct": "5000倍",
+        "wrong": [
+          "500倍",
+          "50倍",
+          "50000倍"
+        ],
+        "exp": "5 cm等於50000 μm，除以實際長度10 μm為5000倍。",
+        "subject": "生物",
+        "sub_topic": "顯微與圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中三年級-顯微與圖表判讀",
+        "template_id": "extra-2026-bio3-顯微與圖表判讀-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-顯微與圖表判讀-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查顯微與圖表判讀",
+      "question": {
+        "q": "某顯微鏡使用目鏡10倍、物鏡40倍，理想總放大倍率為何？",
+        "correct": "400倍",
+        "wrong": [
+          "40倍",
+          "50倍",
+          "4000倍"
+        ],
+        "exp": "目鏡倍率乘物鏡倍率得到10×40＝400倍，解析度則是另一項指標。",
+        "subject": "生物",
+        "sub_topic": "顯微與圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中三年級-顯微與圖表判讀",
+        "template_id": "extra-2026-bio3-顯微與圖表判讀-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-顯微與圖表判讀-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查顯微與圖表判讀",
+      "question": {
+        "q": "兩組細胞螢光強度的平均值不同，但誤差範圍高度重疊，且未提供樣本量。最適當的科學態度是？",
+        "correct": "暫不能只憑平均值差異斷定具有統計上可靠的差別",
+        "wrong": [
+          "平均值不同便確定兩組永遠沒有重疊",
+          "誤差範圍一旦重疊就必然完全相同",
+          "樣本數對統計推論沒有任何影響"
+        ],
+        "exp": "需要樣本數、變異定義與合適的檢定或信賴區間，單看圖形不足下定論。",
+        "subject": "生物",
+        "sub_topic": "顯微與圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中三年級-顯微與圖表判讀",
+        "template_id": "extra-2026-bio3-顯微與圖表判讀-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

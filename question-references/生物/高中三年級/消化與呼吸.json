@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-消化與呼吸-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查消化與呼吸",
+      "question": {
+        "q": "某人小腸部分絨毛受損，即使消化酵素正常，仍出現吸收不良。最可能的直接原因為何？",
+        "correct": "有效吸收表面積下降",
+        "wrong": [
+          "胃內立即無法分泌任何水分",
+          "肺泡氣體交換必定停止",
+          "所有胰臟細胞立即死亡"
+        ],
+        "exp": "小腸絨毛與微絨毛增加吸收面積，受損會影響養分進入循環。",
+        "subject": "生物",
+        "sub_topic": "消化與呼吸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-消化與呼吸",
+        "template_id": "extra-2026-bio3-消化與呼吸-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-消化與呼吸-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查消化與呼吸",
+      "question": {
+        "q": "運動時組織產生更多CO₂，血液中CO₂運輸的重要形式是什麼？",
+        "correct": "多數轉為碳酸氫根在血漿中運輸",
+        "wrong": [
+          "全部以完整葡萄糖形式運輸",
+          "全部由血小板形成固體顆粒",
+          "只能在肺泡內形成二氧化碳"
+        ],
+        "exp": "CO₂進入紅血球後可由碳酸酐酶促進轉為碳酸氫根，隨血液運輸。",
+        "subject": "生物",
+        "sub_topic": "消化與呼吸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-消化與呼吸",
+        "template_id": "extra-2026-bio3-消化與呼吸-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-消化與呼吸-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查消化與呼吸",
+      "question": {
+        "q": "某肺泡內氧分壓下降，而肺泡與血液的交換面積也減少。最直接可能導致什麼？",
+        "correct": "氧由肺泡擴散入血的效率降低",
+        "wrong": [
+          "氧擴散速率必定無限增加",
+          "血紅素自動轉變成葉綠素",
+          "肺泡不再需要任何血液流經"
+        ],
+        "exp": "氣體擴散受分壓梯度、交換面積與厚度影響。",
+        "subject": "生物",
+        "sub_topic": "消化與呼吸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-消化與呼吸",
+        "template_id": "extra-2026-bio3-消化與呼吸-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

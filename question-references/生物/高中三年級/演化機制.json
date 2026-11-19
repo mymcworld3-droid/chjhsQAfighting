@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-演化機制-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查演化機制",
+      "question": {
+        "q": "某族群因颱風後只剩少數個體，倖存者等位基因頻率與原族群差很多。即使沒有自然選擇，最可能是哪種機制？",
+        "correct": "遺傳漂變中的瓶頸效應",
+        "wrong": [
+          "所有個體依需求同時出現完全相同突變",
+          "染色體完全不再複製",
+          "所有等位基因頻率永久不變"
+        ],
+        "exp": "隨機存活造成族群縮小，可讓等位基因頻率因抽樣而偏移。",
+        "subject": "生物",
+        "sub_topic": "演化機制",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-演化機制",
+        "template_id": "extra-2026-bio3-演化機制-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-演化機制-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查演化機制",
+      "question": {
+        "q": "某兩個原本隔離的族群因道路廊道重新往來，開始互相交配。最直接可能增加什麼？",
+        "correct": "基因流動，使部分等位基因在族群間交換",
+        "wrong": [
+          "兩族群的所有突變率立即變零",
+          "自然選擇從此不可能發生",
+          "個體染色體數必定都加倍"
+        ],
+        "exp": "遷移與繁殖可增加基因流，降低某些由隔離形成的差異。",
+        "subject": "生物",
+        "sub_topic": "演化機制",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-演化機制",
+        "template_id": "extra-2026-bio3-演化機制-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-演化機制-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查演化機制",
+      "question": {
+        "q": "某昆蟲抗藥性等位基因原本稀少，施藥後其頻率上升。若此性狀可遺傳，最可能反映？",
+        "correct": "自然選擇提高具抗藥性個體的繁殖貢獻",
+        "wrong": [
+          "農藥直接告訴每隻昆蟲應發生哪一種突變",
+          "抗藥性永遠與遺傳無關",
+          "基因頻率無法隨世代改變"
+        ],
+        "exp": "施藥增加抗性個體的相對適存度，使等位基因頻率改變。",
+        "subject": "生物",
+        "sub_topic": "演化機制",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-演化機制",
+        "template_id": "extra-2026-bio3-演化機制-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

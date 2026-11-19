@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-族群與群集-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查族群與群集",
+      "question": {
+        "q": "某湖泊大型掠食魚因捕撈減少，小魚增加，浮游動物下降。這最接近哪個生態概念？",
+        "correct": "營養階層連鎖效應",
+        "wrong": [
+          "所有物種都沒有相互作用",
+          "DNA轉錄的直接結果",
+          "單一個體體內的負回饋"
+        ],
+        "exp": "捕食關係可使頂層掠食者變化間接影響更低營養層。",
+        "subject": "生物",
+        "sub_topic": "族群與群集",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群與群集",
+        "template_id": "extra-2026-bio3-族群與群集-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-族群與群集-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查族群與群集",
+      "question": {
+        "q": "某封閉島嶼的動物族群經快速成長後，因食物有限趨於穩定。若用邏輯斯成長概念，最相關的參數是？",
+        "correct": "環境負荷量K",
+        "wrong": [
+          "光的折射率",
+          "個體染色體長度",
+          "每秒地震次數"
+        ],
+        "exp": "負荷量代表環境長期可支持的個體量，但會隨環境條件變動。",
+        "subject": "生物",
+        "sub_topic": "族群與群集",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群與群集",
+        "template_id": "extra-2026-bio3-族群與群集-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-族群與群集-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查族群與群集",
+      "question": {
+        "q": "某群落經野火後，土壤仍保留，草本植物先恢復，之後灌木與樹木增加。這較接近哪種演替？",
+        "correct": "次級演替",
+        "wrong": [
+          "完全沒有土壤的初級演替",
+          "減數分裂",
+          "沒有物種變化的靜態系統"
+        ],
+        "exp": "野火後若保有土壤與種子庫，常發生次級演替。",
+        "subject": "生物",
+        "sub_topic": "族群與群集",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群與群集",
+        "template_id": "extra-2026-bio3-族群與群集-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

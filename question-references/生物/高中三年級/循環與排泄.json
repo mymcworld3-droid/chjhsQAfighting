@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-循環與排泄-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查循環與排泄",
+      "question": {
+        "q": "某人運動時心輸出量增加，若心率每分鐘100次、每搏輸出量70 mL，心輸出量約為？",
+        "correct": "7 L／分鐘",
+        "wrong": [
+          "0.7 L／分鐘",
+          "70 L／分鐘",
+          "170 L／分鐘"
+        ],
+        "exp": "心輸出量＝心率×搏出量＝100×70 mL＝7000 mL／分鐘。",
+        "subject": "生物",
+        "sub_topic": "循環與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-循環與排泄",
+        "template_id": "extra-2026-bio3-循環與排泄-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-循環與排泄-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查循環與排泄",
+      "question": {
+        "q": "某腎元的腎絲球過濾正常，但腎小管水再吸收降低，其他條件固定，尿量最可能如何？",
+        "correct": "增加",
+        "wrong": [
+          "減少到零",
+          "完全不受再吸收影響",
+          "尿中必定沒有任何溶質"
+        ],
+        "exp": "過濾後留在管腔的水較多，最終尿量可能增加。",
+        "subject": "生物",
+        "sub_topic": "循環與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-循環與排泄",
+        "template_id": "extra-2026-bio3-循環與排泄-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-循環與排泄-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查循環與排泄",
+      "question": {
+        "q": "血液從左心室射出後，先進入哪種主要血管，再供應全身器官？",
+        "correct": "主動脈",
+        "wrong": [
+          "肺靜脈",
+          "上腔靜脈",
+          "肺動脈直接進入肺泡"
+        ],
+        "exp": "左心室經主動脈送血至體循環，肺動脈則由右心室通往肺部。",
+        "subject": "生物",
+        "sub_topic": "循環與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-循環與排泄",
+        "template_id": "extra-2026-bio3-循環與排泄-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

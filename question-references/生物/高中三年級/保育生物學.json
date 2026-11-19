@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio3-保育生物學-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查保育生物學",
+      "question": {
+        "q": "某棲地被快速道路切成兩片，兩側少數個體長期無法往來。最有效改善基因交流的做法可能是？",
+        "correct": "設置符合物種需求的安全通道與連通棲地",
+        "wrong": [
+          "再增加沒有通道的隔離柵欄",
+          "只把一側動物全部捕捉移出",
+          "忽略交通造成的棲地破碎"
+        ],
+        "exp": "棲地廊道有助移動與基因流，但需配合道路及物種行為設計。",
+        "subject": "生物",
+        "sub_topic": "保育生物學",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中三年級-保育生物學",
+        "template_id": "extra-2026-bio3-保育生物學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-保育生物學-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查保育生物學",
+      "question": {
+        "q": "某瀕危物種圈養數量逐年增加，但大多由少數親本繁殖。保育研究應特別注意什麼？",
+        "correct": "遺傳多樣性下降與近交衰退風險",
+        "wrong": [
+          "只要數量增加就保證沒有遺傳問題",
+          "親本越少必然產生更多等位基因",
+          "所有圈養個體都沒有基因突變"
+        ],
+        "exp": "有效族群大小與遺傳多樣性是長期保育的重要指標。",
+        "subject": "生物",
+        "sub_topic": "保育生物學",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中三年級-保育生物學",
+        "template_id": "extra-2026-bio3-保育生物學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio3-保育生物學-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "以人體生理、族群資料與實驗條件考查保育生物學",
+      "question": {
+        "q": "某保育區的稀有鳥類數量沒有增加，研究者發現繁殖棲地在區外遭破壞。這提醒管理者什麼？",
+        "correct": "保育效果需考量完整生活史與保護區外的生境連通",
+        "wrong": [
+          "只看保育區面積就可保證族群成長",
+          "區外環境永遠不會影響區內物種",
+          "只要數年數量不變就應放棄全部保育"
+        ],
+        "exp": "移動物種可能依賴區內外多種生境，需以族群生態整體規畫。",
+        "subject": "生物",
+        "sub_topic": "保育生物學",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中三年級-保育生物學",
+        "template_id": "extra-2026-bio3-保育生物學-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
