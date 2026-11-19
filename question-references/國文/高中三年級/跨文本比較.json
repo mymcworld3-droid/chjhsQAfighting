@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-cross-analysis-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "具體文本與文化背景相結合，論證保留資料限制，選項符合相同考點",
+      "question": {
+        "q": "甲文：「公共服務改為線上申辦後，民眾可減少排隊時間。」乙文：「若缺乏數位設備與協助，部分居民仍可能無法順利申辦。」哪項結論最完整？",
+        "correct": "推動線上服務可提升效率，但仍應保留協助或其他申辦管道",
+        "wrong": [
+          "線上申辦可縮短排隊，便能保證所有居民使用機會相同",
+          "乙文指出數位落差，因此可直接否定甲文的效率效益",
+          "兩文觀點有差異，故無法用來共同討論公共服務設計"
+        ],
+        "exp": "甲文提供效率優勢，乙文提出可近性限制；完整的政策建議須同時處理兩者。",
+        "subject": "國文",
+        "sub_topic": "跨文本比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-跨文本比較",
+        "template_id": "ref-20261119-b10-ch3-cross-analysis-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-cross-analysis-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "具體文本與文化背景相結合，論證保留資料限制，選項符合相同考點",
+      "question": {
+        "q": "甲文主張「公園夜間照明能提升步行便利」；乙文指出「光線若直接照進民宅，可能干擾睡眠」。若整合兩文提出方案，何者最適當？",
+        "correct": "依路段需求設置遮光燈具、調整照明方向及時段，並評估步行安全與住戶影響",
+        "wrong": [
+          "為了增加便利，所有燈具應直接面向住宅並全天最高亮度運作",
+          "因可能干擾睡眠，所以不必評估夜間行人的安全需求",
+          "兩文關注不同群體，因此唯一合理做法是停止所有公共討論"
+        ],
+        "exp": "兩文分別反映公共便利與住宅休息需求；調整燈具方向、亮度與時段是兼顧利益的具體方法。",
+        "subject": "國文",
+        "sub_topic": "跨文本比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-跨文本比較",
+        "template_id": "ref-20261119-b10-ch3-cross-analysis-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-cross-analysis-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "具體文本與文化背景相結合，論證保留資料限制，選項符合相同考點",
+      "question": {
+        "q": "甲文說明「植樹能在炎熱天氣提供遮蔭」；乙文提醒「樹木需要適當土壤、用水及後續養護」。哪項整合最合適？",
+        "correct": "植樹可作為降溫措施，但規畫須納入生長條件與長期維護成本",
+        "wrong": [
+          "因樹木需要澆水，就可推論它們無法提供任何遮蔭",
+          "只要具遮蔭效益，就表示種植後永遠不用維護",
+          "甲文與乙文討論不同階段，因此不適合放入同一份計畫"
+        ],
+        "exp": "遮蔭是預期效益，土壤、水及養護是必要條件；二者應一起納入評估。",
+        "subject": "國文",
+        "sub_topic": "跨文本比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-跨文本比較",
+        "template_id": "ref-20261119-b10-ch3-cross-analysis-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
