@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-civ1-democracy-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境進行推理，附解釋與合理干擾選項",
+      "question": {
+        "q": "某國的民意代表由選民定期選出，負責在議會討論並通過法律。這最直接反映何種民主制度？",
+        "correct": "代議民主",
+        "wrong": [
+          "由君主世襲決定法律",
+          "由法官直接選出所有議員",
+          "完全不設民意機關的專制制度"
+        ],
+        "exp": "代議民主由人民選出代表參與公共決策，代表須透過選舉及其他制度對人民負責。",
+        "subject": "公民",
+        "sub_topic": "民主政治與憲政",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-民主政治與憲政",
+        "template_id": "ref-20261119-b4-civ1-democracy-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-civ1-democracy-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境進行推理，附解釋與合理干擾選項",
+      "question": {
+        "q": "政府公開預算執行資料，並接受立法機關及公民團體監督。此措施最能促進何種民主治理原則？",
+        "correct": "透明與課責",
+        "wrong": [
+          "行政權不受任何檢驗",
+          "永久取消所有公共政策討論",
+          "政府資訊完全只供少數官員使用"
+        ],
+        "exp": "預算公開讓民眾檢視資源使用，也提供追究施政責任的基礎，與政府透明、課責有關。",
+        "subject": "公民",
+        "sub_topic": "民主政治與憲政",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-民主政治與憲政",
+        "template_id": "ref-20261119-b4-civ1-democracy-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-civ1-democracy-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境進行推理，附解釋與合理干擾選項",
+      "question": {
+        "q": "選舉採秘密投票，禁止他人強迫選民公開個別投票內容。此制度主要保障何種價值？",
+        "correct": "選民不受脅迫、依自身意願表達政治選擇",
+        "wrong": [
+          "讓選民無法了解任何候選人的政策",
+          "使所有選舉結果必然是平手",
+          "只讓特定職業的人參與投票"
+        ],
+        "exp": "秘密投票降低外部威嚇、收買與報復等風險，保障選民自由作出政治選擇。",
+        "subject": "公民",
+        "sub_topic": "民主政治與憲政",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-民主政治與憲政",
+        "template_id": "ref-20261119-b4-civ1-democracy-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
