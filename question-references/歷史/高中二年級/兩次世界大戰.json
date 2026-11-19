@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-hist2-worldwar-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "結合條約、關鍵事件與戰時政策理解兩次大戰",
+      "question": {
+        "q": "1919年簽訂的《凡爾賽條約》對德國規定領土、軍備與賠償等限制。研究兩次大戰間的歐洲政治時，此條約為何重要？",
+        "correct": "其安排影響戰後秩序，也成為德國部分政治力量不滿的來源",
+        "wrong": [
+          "該條約直接建立了歐洲共同貨幣歐元",
+          "條約使所有國際衝突從此永久消失",
+          "條約在第一次世界大戰開始前數百年簽訂"
+        ],
+        "exp": "凡爾賽條約是第一次世界大戰後的重要和約，其條件與政治爭議影響戰間期德國和歐洲局勢。",
+        "subject": "歷史",
+        "sub_topic": "兩次世界大戰",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中二年級-兩次世界大戰",
+        "template_id": "ref-20261119-b2-hist2-worldwar-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-hist2-worldwar-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "結合條約、關鍵事件與戰時政策理解兩次大戰",
+      "question": {
+        "q": "1939年德國入侵波蘭，英國與法國隨後對德國宣戰。這組事件在世界史上通常被視為哪個發展的起點？",
+        "correct": "第二次世界大戰歐洲主要戰場全面爆發",
+        "wrong": [
+          "第一次世界大戰結束",
+          "冷戰正式結束",
+          "聯合國正式成立"
+        ],
+        "exp": "1939年9月德國入侵波蘭，英法對德宣戰，通常標誌第二次世界大戰在歐洲全面爆發。",
+        "subject": "歷史",
+        "sub_topic": "兩次世界大戰",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中二年級-兩次世界大戰",
+        "template_id": "ref-20261119-b2-hist2-worldwar-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-hist2-worldwar-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "結合條約、關鍵事件與戰時政策理解兩次大戰",
+      "question": {
+        "q": "第二次世界大戰期間，各交戰國在後方實施物資配給、工業轉產與宣傳動員。最適合用哪個概念理解此現象？",
+        "correct": "總體戰使軍事、經濟與一般社會生活緊密連結",
+        "wrong": [
+          "戰爭只涉及前線軍人，與平民無關",
+          "所有工廠必定停止生產",
+          "物資配給只代表世界貿易完全消失"
+        ],
+        "exp": "總體戰要求國家廣泛動員人口、產業、資源及社會組織，後方也受到戰爭影響。",
+        "subject": "歷史",
+        "sub_topic": "兩次世界大戰",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "hist-高中二年級-兩次世界大戰",
+        "template_id": "ref-20261119-b2-hist2-worldwar-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
