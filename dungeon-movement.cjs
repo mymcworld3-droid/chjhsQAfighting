@@ -51,6 +51,9 @@ function moveOnMap(room,uid,map,{dx,dy,step}={}){
     member.position:spawnFor(room,uid,map);
   const to={x:from.x+dx,y:from.y+dy};
   if(!walkable(map,to))throw error('前方是無法通行的地形',409);
+  if((room.enemies||[]).some(enemy=>enemy?.position?.x===to.x&&
+      enemy?.position?.y===to.y))
+    throw error('靈獸擋住前方道路，請繞路或等待靈獸移動',409);
   const stamina=Number.isSafeInteger(member.explorationStamina)?
     member.explorationStamina:START_STAMINA;
   if(stamina<STEP_COST)throw error('探索體力不足，暫時無法移動',409);
