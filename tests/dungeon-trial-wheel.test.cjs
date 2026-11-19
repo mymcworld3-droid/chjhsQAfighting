@@ -49,7 +49,7 @@ test('trial stylesheet stays an exact scoped mirror and gold focus overrides rem
     '#dungeon-map-view');
   const css=read('public/styles/dungeon-trial-wheel.css');
   assert.ok(css.includes(mirrored),'quarter controls have drifted from the trial');
-  assert.match(css,/\.tc-wheel-options>\.tc-sector\.is-focus-empowered/);
+  assert.match(css,/\.tc-wheel-options>\.tc-sector\[data-wheel-choice\]\.is-focus-empowered\[aria-pressed\]/);
   assert.match(css,/dmFocusGoldSkill/);
 });
 test('BFS matches actual map walls, creatures and any-length tap-to-route',()=>{
