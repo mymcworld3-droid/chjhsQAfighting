@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-rv-expect-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "某抽獎每張票價3元，獎金為20元的機率1/4，其餘獎金0元。單次淨收益（獎金減票價）的期望值為何？",
+        "correct": "2元",
+        "wrong": [
+          "5元",
+          "−3元",
+          "17元"
+        ],
+        "exp": "獎金期望值20×1/4+0×3/4=5元，減固定票價3元後，淨收益期望值為2元。",
+        "subject": "數學",
+        "sub_topic": "隨機變數與期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-隨機變數與期望值",
+        "template_id": "ref-20261119-b10-m3-rv-expect-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-rv-expect-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "離散隨機變數X等機率取值4與6，則E(X)為何？",
+        "correct": "5",
+        "wrong": [
+          "4",
+          "6",
+          "10"
+        ],
+        "exp": "E(X)=4×1/2+6×1/2=5。",
+        "subject": "數學",
+        "sub_topic": "隨機變數與期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-隨機變數與期望值",
+        "template_id": "ref-20261119-b10-m3-rv-expect-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-rv-expect-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料比較、極限、機率與累積量，含計算說明及唯一正解",
+      "question": {
+        "q": "若E(X)=4，且Y=2X+3，則E(Y)為何？",
+        "correct": "11",
+        "wrong": [
+          "8",
+          "7",
+          "14"
+        ],
+        "exp": "期望值具線性性質，E(2X+3)=2E(X)+3=2×4+3=11。",
+        "subject": "數學",
+        "sub_topic": "隨機變數與期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-隨機變數與期望值",
+        "template_id": "ref-20261119-b10-m3-rv-expect-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
