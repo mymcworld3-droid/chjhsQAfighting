@@ -18,7 +18,7 @@ function db(initial={}){
           return snap(ref);
         },set:(ref,value)=>{writing=true;changes.set(ref.key,clone(value));},
           update:(ref,value)=>{writing=true;changes.set(ref.key,
-            {...clone(records.get(ref.key)||{}),...clone(value)}}};
+            {...clone(records.get(ref.key)||{}),...clone(value)});}};
         const result=await fn(tx);for(const [k,v]of changes)records.set(k,v);
         return result;
       });
