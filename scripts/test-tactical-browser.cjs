@@ -1033,6 +1033,13 @@ async function main(){
           assert.equal((await read(quick)).revision,before.revision,
             'camera focus cannot consume stamina or send attacks');
           await quick.setViewportSize({width:844,height:390});
+          // Earlier '定位陣眼' deliberately pans the camera. The shared
+          // grid-click helper assumes the default camera, so reset it before
+          // asserting the unchanged attack-to-seal behavior.
+          await quick.evaluate(()=>{
+            document.querySelector('.tc-arena canvas').dispatchEvent(
+              new KeyboardEvent('keydown',{key:'0',bubbles:true}));
+          });
           await quick.locator('[data-action="attack"]').click();await cell(quick,2,1);
           await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='8');
           assert.equal((await read(quick)).objective.points[0].hp,1);
