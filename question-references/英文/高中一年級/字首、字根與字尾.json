@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-eng1-wordform-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "The instructions were written ______ so that every student could follow them.",
+        "correct": "clearly",
+        "wrong": [
+          "clear",
+          "clarity",
+          "clearness"
+        ],
+        "exp": "Written需要副詞修飾，clearly意為清楚地。clear為形容詞，clarity與clearness為名詞。",
+        "subject": "英文",
+        "sub_topic": "字首、字根與字尾",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-高中一年級-字首、字根與字尾",
+        "template_id": "ref-20261119-b4-eng1-wordform-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-eng1-wordform-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "The city plans to improve the ______ of public transportation for wheelchair users.",
+        "correct": "accessibility",
+        "wrong": [
+          "accessible",
+          "accessibly",
+          "accessing"
+        ],
+        "exp": "The ... of是名詞位置，accessibility表示可及性；accessible為形容詞，accessibly為副詞。",
+        "subject": "英文",
+        "sub_topic": "字首、字根與字尾",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-高中一年級-字首、字根與字尾",
+        "template_id": "ref-20261119-b4-eng1-wordform-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-eng1-wordform-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "Her decision to join the volunteer program was completely ______; nobody forced her.",
+        "correct": "voluntary",
+        "wrong": [
+          "voluntarily",
+          "volunteer",
+          "volunteering"
+        ],
+        "exp": "Was completely之後需要描述決定的形容詞voluntary，意為自願的；voluntarily是副詞。",
+        "subject": "英文",
+        "sub_topic": "字首、字根與字尾",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-高中一年級-字首、字根與字尾",
+        "template_id": "ref-20261119-b4-eng1-wordform-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
