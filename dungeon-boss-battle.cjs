@@ -7,6 +7,10 @@ const {dueTick,isRunning}=require('./dungeon-battle-clock.cjs');
 const Combat=require('./dungeon-enemy-combat.cjs');
 const VERSION=1,ID='boss-1',KIND='boss',NAME='玄炎鎮殿獸',HP=900;
 const SIZE=2,WIDTH=23,HEIGHT=17;
+const SHIELD_MAX=180,COMBO_WINDOW_TICKS=5,GUARD_DURATION_TICKS=5;
+const ALLY_GUARD_COST=3,SELF_GUARD_COST=6;
+const STAGGER_TICKS=3,EXPOSED_TICKS=6;
+const MAX_GUARD_SEQ=100000;
 const ANCHOR=Object.freeze({x:11,y:6});
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
 const same=(a,b)=>a?.x===b?.x&&a?.y===b?.y;
@@ -63,9 +67,108 @@ function cells(enemy){
 const occupies=(enemy,p)=>cells(enemy).some(q=>same(q,p));
 const reach=(from,enemy)=>Math.min(...cells(enemy).map(p=>dist(from,p)),Infinity);
 const phase=hp=>hp>HP*.7?1:hp>HP*.35?2:3;
+const tickOf=room=>Number.isSafeInteger(room?.battleAppliedTick)?
+  Math.max(0,room.battleAppliedTick):0;
+const int=(value,otherwise=0)=>Number.isSafeInteger(value)&&value>=0?value:otherwise;
+function comboReady(boss,uid,tick){
+  return boss?.kind===KIND&&typeof uid==='string'&&uid.length>0&&
+    typeof boss.lastContributorUid==='string'&&
+    boss.lastContributorUid!==uid&&
+    Number.isSafeInteger(boss.lastContributorTick)&&
+    tick>=boss.lastContributorTick&&
+    tick-boss.lastContributorTick<=COMBO_WINDOW_TICKS;
+}
+// Mutates ONLY the local enemy snapshot calculated inside the C transaction.
+// One martial skill may hit the boss several times; the caller computes linked
+// ONCE per skill, so its own repeated hits cannot manufacture teamwork.
+function damage(boss,uid,amount,tick,linked=false){
+  if(boss?.kind!==KIND||typeof uid!=='string'||!uid||
+      !Number.isSafeInteger(tick)||tick<0||!Number.isFinite(amount))
+    throw fail('首領傷害資料無效',409);
+  const health=int(boss.battleHealth,HP);
+  if(!health)return {damage:0,shieldDamage:0,combo:false,shieldBroken:false};
+  const combo=linked===true;
+  const attack=Math.max(1,Math.round(amount*(combo?1.2:1)));
+  const shieldBefore=Math.min(SHIELD_MAX,int(boss.shield));
+  const shieldDamage=Math.min(shieldBefore,attack);
+  // Shield reduces HP damage, but never makes the boss invulnerable.
+  const exposed=shieldBefore===0&&tick<=int(boss.exposedUntilTick,-1);
+  const dealt=Math.min(health,Math.max(1,Math.round(attack*(
+    shieldBefore>0?.7:exposed?1.25:1))));
+  boss.battleHealth=health-dealt;
+  boss.shield=shieldBefore-shieldDamage;
+  const broken=shieldBefore>0&&boss.shield===0;
+  if(broken){
+    boss.exposedUntilTick=tick+EXPOSED_TICKS;
+    // A shield break interrupts a wind-up once and opens a short counter window.
+    boss.attack=null;boss.intent='staggered';boss.targetUid=null;
+    boss.nextActionTick=Math.max(int(boss.nextActionTick),tick+STAGGER_TICKS);
+  }
+  boss.lastContributorUid=uid;boss.lastContributorTick=tick;
+  boss.lastTeamHit={uid,tick,damage:dealt,shieldDamage,
+    combo,shieldBroken:broken};
+  return {...boss.lastTeamHit};
+}
+function guard(room,uid,map,{targetUid,seq}={}){
+  if(room?.status!=='assembled'||room.dungeonArena!=='boss'||
+    room.bossEncounter?.status!=='fighting')throw fail('目前無法使用首領掩護',409);
+  if(typeof targetUid!=='string'||!Object.hasOwn(room.members||{},targetUid))
+    throw fail('掩護對象不是目前的隊員',403);
+  const source=room.members?.[uid],target=room.members[targetUid];
+  if(!source)throw fail('你不是此副本的隊員',403);
+  if(!Number.isSafeInteger(seq)||seq<1||seq>MAX_GUARD_SEQ)
+    throw fail('掩護操作序號無效',400);
+  const previous=int(source.guardSeq);
+  if(seq===previous&&source.lastGuard?.targetUid===targetUid&&
+      source.lastGuard?.seq===seq)
+    return {duplicate:true,members:room.members};
+  if(seq!==previous+1)throw fail('掩護序號不同步，請重新取得隊伍狀態',409);
+  if(!Combat.isAlive(source)||!Combat.isAlive(target)||
+      !walkable(map,source.position)||!walkable(map,target.position))
+    throw fail('倒地或站位無效，無法進行掩護',409);
+  if(dist(source.position,target.position)>2)
+    throw fail('必須與隊友相距兩格以內才能掩護',409);
+  const cost=targetUid===uid?SELF_GUARD_COST:ALLY_GUARD_COST;
+  if(int(source.explorationStamina)<cost)
+    throw fail('探索體力不足，無法掩護',409);
+  const tick=tickOf(room);
+  const protectedMember={...target,
+    bossGuard:{sourceUid:uid,grantedAtTick:tick,
+      expiresAtTick:tick+GUARD_DURATION_TICKS}};
+  const lastGuard={seq,targetUid,cost,tick};
+  const members={...room.members,[targetUid]:protectedMember};
+  members[uid]={...members[uid],explorationStamina:
+    int(source.explorationStamina)-cost,guardSeq:seq,lastGuard};
+  return {duplicate:false,members,lastGuard};
+}
+function resolveGuardedAttack(boss,members,tick){
+  const attack=boss.attack;
+  if(!attack||tick<attack.resolvesAtTick)return {members,hits:[]};
+  const hits=[];let next=members;
+  for(const [uid,member]of Object.entries(members||{})){
+    if(!Combat.isAlive(member)||!attack.cells.some(p=>same(p,member.position)))continue;
+    const protection=member.bossGuard;
+    const guarded=protection&&Object.hasOwn(members,protection.sourceUid||'')&&
+      Number.isSafeInteger(protection.grantedAtTick)&&
+      tick>=protection.grantedAtTick&&
+      Number.isSafeInteger(protection.expiresAtTick)&&
+      tick<=protection.expiresAtTick;
+    const reduced=guarded?Math.max(1,Math.ceil(attack.damage/2)):attack.damage;
+    const remaining=Math.max(0,Combat.clampHealth(member)-reduced);
+    if(next===members)next={...members};
+    next[uid]={...member,battleHealth:remaining,downed:remaining===0,
+      bossGuard:null,lastDamage:{sourceId:boss.id,amount:reduced,tick,
+        ...(guarded?{guardedByUid:protection.sourceUid,
+          blockedAmount:attack.damage-reduced}:{})}};
+    hits.push(uid);
+  }
+  return {members:next,hits};
+}
 function initialBoss(){
   return {id:ID,name:NAME,kind:KIND,position:{...ANCHOR},
-    battleHealth:HP,battleMaxHealth:HP,
+    battleHealth:HP,battleMaxHealth:HP,shield:SHIELD_MAX,
+    exposedUntilTick:-1,lastContributorUid:null,lastContributorTick:-1,
+    lastTeamHit:null,
     footprint:SIZE,phase:1,cadence:4,aggroRange:20,
     intent:'waiting',targetUid:null,lastActionTick:0,
     attack:null,lastAttack:null,lastAttackTick:0,
@@ -182,7 +285,7 @@ function advance(room,map,now){
       if(boss.attack.startedAtTick>applied){
         boss.attack={...boss.attack,resolvesAtTick:due+Combat.WINDUP_TICKS};
       }else{
-        const result=Combat.resolveAttack(boss,members,tick);
+        const result=resolveGuardedAttack(boss,members,tick);
         members=result.members;
         boss={...boss,attack:null,lastAttack:{
           tick,kind:boss.attack.kind,label:boss.attack.label,
@@ -225,5 +328,7 @@ function publicEncounter(state){
     defeatedAtTick:state.defeatedAtTick??null};
 }
 module.exports={VERSION,ID,KIND,NAME,HP,SIZE,ANCHOR,WIDTH,HEIGHT,
+  SHIELD_MAX,COMBO_WINDOW_TICKS,GUARD_DURATION_TICKS,ALLY_GUARD_COST,SELF_GUARD_COST,
+  STAGGER_TICKS,EXPOSED_TICKS,comboReady,damage,guard,resolveGuardedAttack,
   mapFor,cells,occupies,reach,initialBoss,enter,phase,attackCells,plan,
   advance,onDefeat,publicEncounter};
