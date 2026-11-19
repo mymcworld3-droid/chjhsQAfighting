@@ -8,7 +8,7 @@ const map=generateDungeonLayout('stage9-client-presentation');
 const cameraSource=fs.readFileSync(path.join(__dirname,
   '../public/cultivation/dungeon-map-camera.js'),'utf8').replace(/^export /gm,'');
 const Camera=new Function(cameraSource+
-  '\nreturn {initialCamera,geometry,visibleTiles,zoomAt,pan,focusOn,mapPoint};')();
+  '\nreturn {initialCamera,geometry,visibleTiles,zoomAt,pan,focusOn,lockToPlayer,mapPoint};')();
 const painterSource=fs.readFileSync(path.join(__dirname,
   '../public/cultivation/dungeon-map-painter.js'),'utf8')
   .replace(/^import .*$/gm,'').replace(/^export /gm,'');
