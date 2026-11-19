@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-en1-topic-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "Supporting details: 'Students bring reusable containers. The cafeteria offers water refills. Volunteers weigh leftover food each week.' Which topic sentence best fits?",
+        "correct": "Our school is taking several practical steps to reduce waste.",
+        "wrong": [
+          "The cafeteria's only responsibility is to prepare meals.",
+          "Students at this school no longer need to drink water.",
+          "Weekly measurements show that all waste has disappeared."
+        ],
+        "exp": "The details describe reusable containers, water refills and waste tracking. A topic sentence should unify those actions without making an unsupported absolute claim.",
+        "subject": "英文",
+        "sub_topic": "主題句與支持句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-主題句與支持句",
+        "template_id": "ref-20261119-b8-en1-topic-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-topic-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "Topic sentence: 'Learning to budget helps teenagers make thoughtful financial choices.' Which sentence best supports this claim?",
+        "correct": "Setting a spending limit before shopping can help students avoid unnecessary purchases.",
+        "wrong": [
+          "Some shops play music when customers enter.",
+          "Many teenagers prefer different styles of clothing.",
+          "A budget is a list of every shop in a city."
+        ],
+        "exp": "A concrete example of planned spending directly supports how budgeting improves decisions; the others are irrelevant or incorrectly define a budget.",
+        "subject": "英文",
+        "sub_topic": "主題句與支持句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-主題句與支持句",
+        "template_id": "ref-20261119-b8-en1-topic-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-topic-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "A paragraph says: 'Community libraries serve people with different needs. Some visitors read quietly, while others attend workshops. Audio books also help users who prefer listening.' Which closing sentence is most coherent?",
+        "correct": "Offering varied resources helps a library serve a wider range of community members.",
+        "wrong": [
+          "Every community library should close its workshop rooms.",
+          "All visitors must use audio books instead of printed materials.",
+          "The number of library visitors can be determined solely by the building's color."
+        ],
+        "exp": "The conclusion summarizes the diversity of services rather than contradicting the examples or adding unrelated claims.",
+        "subject": "英文",
+        "sub_topic": "主題句與支持句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-主題句與支持句",
+        "template_id": "ref-20261119-b8-en1-topic-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
