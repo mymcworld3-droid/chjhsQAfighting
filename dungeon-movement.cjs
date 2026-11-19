@@ -67,5 +67,36 @@ function moveOnMap(room,uid,map,{dx,dy,step}={}){
     ...room.members,[uid]:nextMember
   }};
 }
-module.exports={START_STAMINA,STEP_COST,MAX_STEPS,roomMap,spawnFor,
-  startExplorationMembers,validVector,moveOnMap};
+// One-click travel uses the same authoritative per-cell checks as a manual
+// step. A bounded multi-step path is committed atomically, not a teleport:
+// every tile and every stamina unit is validated through moveOnMap.
+const MAX_ROUTE=48;
+function moveRouteOnMap(room,uid,map,{vectors,step}={}){
+  if(!Array.isArray(vectors)||!vectors.length||vectors.length>MAX_ROUTE||
+      !vectors.every(v=>validVector(v?.dx,v?.dy)))
+    throw error('移動路線無效，每次最多移動 '+MAX_ROUTE+' 格',400);
+  if(!Number.isSafeInteger(step)||step<1||step+vectors.length-1>MAX_STEPS)
+    throw error('移動序號無效',400);
+  const member=room?.members?.[uid];
+  if(!member)throw error('你不是此副本的隊員',403);
+  const key=vectors.map(v=>v.dx+','+v.dy).join(';');
+  const prior=Number.isSafeInteger(member.moveSeq)?member.moveSeq:0;
+  const finalStep=step+vectors.length-1;
+  if(finalStep===prior&&member.lastRoute?.step===step&&
+      member.lastRoute?.key===key)return {
+    duplicate:true,members:room.members,member
+  };
+  if(step!==prior+1)throw error('移動已不同步，請重新取得隊伍位置',409);
+  let next=room;
+  for(let i=0;i<vectors.length;i++){
+    const {dx,dy}=vectors[i];
+    const outcome=moveOnMap(next,uid,map,{dx,dy,step:step+i});
+    next={...next,members:outcome.members};
+  }
+  const moved={...next.members[uid],lastRoute:{step,key}};
+  return {duplicate:false,member:moved,members:{
+    ...next.members,[uid]:moved
+  }};
+}
+module.exports={START_STAMINA,STEP_COST,MAX_STEPS,MAX_ROUTE,roomMap,spawnFor,
+  startExplorationMembers,validVector,moveOnMap,moveRouteOnMap};
