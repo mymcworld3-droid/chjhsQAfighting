@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-essaystructure-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "知識與語用、文本修訂、圖表分析對應高中觀念",
+      "question": {
+        "q": "某篇評論依次列出：甲，指出校園低碳通勤參與率不足；乙，比較增加單車停放空間與改善公車接駁的成本和效果；丙，建議先試辦公車接駁並追蹤結果。何種排序最符合問題分析後提出建議的結構？",
+        "correct": "甲 → 乙 → 丙",
+        "wrong": [
+          "乙 → 丙 → 甲",
+          "丙 → 甲 → 乙",
+          "甲 → 丙 → 乙"
+        ],
+        "exp": "先說明問題，再評估方案，最後據評估提出可實施且可追蹤的建議，形成合乎邏輯的政策評論。",
+        "subject": "國文",
+        "sub_topic": "文章架構與修訂",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-文章架構與修訂",
+        "template_id": "ref-20261119-b9-ch3-essaystructure-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-essaystructure-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "知識與語用、文本修訂、圖表分析對應高中觀念",
+      "question": {
+        "q": "原句：「調查發現部分學生使用新的線上工具後作業速度較快，因此可證明所有學生的學習能力都大幅提升。」哪種修訂最嚴謹？",
+        "correct": "部分受訪學生的作業速度較快，但尚無足夠資料判斷整體學習能力是否提升",
+        "wrong": [
+          "作業速度變快就等於所有學習成果都必然改善",
+          "既然有部分學生進步，便能確定每人學習能力提高相同比例",
+          "線上工具只要被使用，就不需要其他學習評量"
+        ],
+        "exp": "作業速度與學習能力不同，樣本也非全體；修訂應保留觀察結果與尚未驗證的推論之別。",
+        "subject": "國文",
+        "sub_topic": "文章架構與修訂",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-文章架構與修訂",
+        "template_id": "ref-20261119-b9-ch3-essaystructure-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-essaystructure-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "知識與語用、文本修訂、圖表分析對應高中觀念",
+      "question": {
+        "q": "某篇文章前三段分別呈現政策效益、執行成本與各類使用者的需求差異。哪個結尾最能統整前文？",
+        "correct": "政策是否擴大實施，應結合實際成效、成本與不同群體需求，再以試辦結果調整",
+        "wrong": [
+          "因政策有優點，後續成本和不同使用者的影響便無須理會",
+          "只要文章中列過成本，便表示所有政策都不能推動",
+          "不論前文討論什麼，結尾只需重複「此事十分重要」"
+        ],
+        "exp": "好的結論應回應前文主要論點並形成有條件的判斷，而不是忽略已呈現的限制。",
+        "subject": "國文",
+        "sub_topic": "文章架構與修訂",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-文章架構與修訂",
+        "template_id": "ref-20261119-b9-ch3-essaystructure-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
