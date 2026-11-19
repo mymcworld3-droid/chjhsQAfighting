@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-biography-narrative-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "閱讀自編史傳片段：「守令初至，見倉廩虛，先減府中宴費，後請鄉老共議儲糧。歲荒，民賴以安。」若由先後行動推論人物形象，哪項最合理？",
+        "correct": "先節制公費並徵詢地方意見，呈現務實且重視民生的治理風格",
+        "wrong": [
+          "因倉糧不足，守令首先舉辦盛大宴會安撫百姓",
+          "守令始終拒絕與地方人士討論儲糧辦法",
+          "片段主要以誇飾景物描寫呈現守令對山水的喜愛"
+        ],
+        "exp": "減少宴費、邀鄉老議糧及荒年安定的結果構成行動與後果的敘事，可支持重視民生的判斷。",
+        "subject": "國文",
+        "sub_topic": "史傳敘事",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-史傳敘事",
+        "template_id": "ref-20261119-b8-ch1-biography-narrative-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-biography-narrative-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "某史傳文章先記人物在戰前堅持整頓軍紀，接著交代戰役時士卒井然有序，最後引當時將領的話稱讚其訓練。這種安排主要有何作用？",
+        "correct": "以事前行動、事中成果及旁人評價交互塑造人物能力",
+        "wrong": [
+          "只記戰役結果，完全省略人物的具體行動",
+          "以作者的私人喜好取代任何可供判讀的敘事材料",
+          "藉景物描寫證明軍隊人數一定多於敵軍"
+        ],
+        "exp": "先記具體行動，再以實際效果和他人評語呼應，讓人物能力有多重敘事依據。",
+        "subject": "國文",
+        "sub_topic": "史傳敘事",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-史傳敘事",
+        "template_id": "ref-20261119-b8-ch1-biography-narrative-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-biography-narrative-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "自編史傳記述：「某臣屢諫，不見納。後歲旱，君乃問策，臣復以舊議進。」其中「復」依上下文最接近何義？",
+        "correct": "再度、又一次",
+        "wrong": [
+          "恢復原有官位",
+          "回到自己的故鄉",
+          "答覆書信"
+        ],
+        "exp": "先有「屢諫」，後又「以舊議進」，表示臣子再次提出先前的主張，「復」作「又、再」解。",
+        "subject": "國文",
+        "sub_topic": "史傳敘事",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-史傳敘事",
+        "template_id": "ref-20261119-b8-ch1-biography-narrative-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
