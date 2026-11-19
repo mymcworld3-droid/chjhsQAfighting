@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-chem3-ksp-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "對CaF₂(s)⇌Ca²⁺(aq)+2F⁻(aq)，其溶解度積Ksp的表達式為何？",
+        "correct": "[Ca²⁺][F⁻]²",
+        "wrong": [
+          "[Ca²⁺][F⁻]",
+          "[Ca²⁺]²[F⁻]",
+          "[CaF₂]/([Ca²⁺][F⁻]²)"
+        ],
+        "exp": "純固體不列入平衡常數，溶液物種的濃度指數等於反應係數，因此Ksp=[Ca²⁺][F⁻]²。",
+        "subject": "化學",
+        "sub_topic": "溶解度積",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-溶解度積",
+        "template_id": "ref-20261119-b3-chem3-ksp-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-chem3-ksp-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "在純水中，某難溶鹽AB(s)⇌A⁺+B⁻，已知Ksp=9.0×10⁻¹⁰，忽略其他平衡，莫耳溶解度s約為何？",
+        "correct": "3.0×10⁻⁵ M",
+        "wrong": [
+          "9.0×10⁻¹⁰ M",
+          "9.0×10⁻⁵ M",
+          "3.0×10⁻¹⁰ M"
+        ],
+        "exp": "純水中[A⁺]=[B⁻]=s，Ksp=s²，故s=√(9.0×10⁻¹⁰)=3.0×10⁻⁵ M。",
+        "subject": "化學",
+        "sub_topic": "溶解度積",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-溶解度積",
+        "template_id": "ref-20261119-b3-chem3-ksp-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-chem3-ksp-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "將少量NaCl加入AgCl(s)與其飽和水溶液共存的系統，固定溫度且忽略配位等影響，AgCl的莫耳溶解度通常如何改變？",
+        "correct": "降低",
+        "wrong": [
+          "升高",
+          "完全不變",
+          "等於加入的NaCl莫耳數"
+        ],
+        "exp": "加入共同離子Cl⁻，使AgCl(s)⇌Ag⁺+Cl⁻的平衡傾向固體側，降低AgCl的溶解度，但固定溫度的Ksp不變。",
+        "subject": "化學",
+        "sub_topic": "溶解度積",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-溶解度積",
+        "template_id": "ref-20261119-b3-chem3-ksp-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
