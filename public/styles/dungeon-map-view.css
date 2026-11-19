@@ -303,7 +303,7 @@
 /* Stage 11B: separate scrollable martial control on the left; the movement
    pad stays on the right on narrow screens. Neither blocks the map center. */
 #dungeon-map-view .dm-manual{
-  position:absolute;bottom:82px;left:14px;z-index:1;
+  position:absolute;bottom:82px;left:14px;z-index:4;
   display:flex;flex-direction:column;gap:7px;
   width:min(222px,32%);max-height:53%;overflow-x:hidden;overflow-y:auto;
   padding:10px 11px;border:1px solid #b5a37691;border-radius:12px;
