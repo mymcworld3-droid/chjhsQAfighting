@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-bio1-photosyn-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "結合氧氣來源、卡爾文循環及遮光實驗理解光合作用",
+      "question": {
+        "q": "綠色植物進行光合作用時，釋放到外界的氧氣主要直接來自哪個物質？",
+        "correct": "水（H₂O）",
+        "wrong": [
+          "二氧化碳（CO₂）",
+          "葡萄糖（C₆H₁₂O₆）",
+          "土壤中的氮氣（N₂）"
+        ],
+        "exp": "光反應中水分子被分解，釋放O₂並提供電子；產生的氧氣並非直接由CO₂分子分解而來。",
+        "subject": "生物",
+        "sub_topic": "光合作用與呼吸作用",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-光合作用與呼吸作用",
+        "template_id": "ref-20261119-b2-bio1-photosyn-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-bio1-photosyn-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "結合氧氣來源、卡爾文循環及遮光實驗理解光合作用",
+      "question": {
+        "q": "關於葉綠體中的卡爾文循環，下列何者正確？",
+        "correct": "利用光反應提供的ATP與NADPH，將CO₂轉入有機物",
+        "wrong": [
+          "直接把水分子裂解並釋放所有O₂",
+          "只在動物粒線體內發生",
+          "不需要任何碳來源即可不斷產生醣類"
+        ],
+        "exp": "卡爾文循環利用ATP與NADPH，透過碳固定反應將無機CO₂轉換為有機分子；主要氧氣釋放發生在光反應。",
+        "subject": "生物",
+        "sub_topic": "光合作用與呼吸作用",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-光合作用與呼吸作用",
+        "template_id": "ref-20261119-b2-bio1-photosyn-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-bio1-photosyn-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "結合氧氣來源、卡爾文循環及遮光實驗理解光合作用",
+      "question": {
+        "q": "先將植物充分置於黑暗使葉片澱粉減少，再遮住一片葉子的局部並照光數小時。脫色後加碘液，未遮光部分呈藍黑色而遮光部分較不變色。這最直接支持哪個推論？",
+        "correct": "光照促進葉片形成可被碘液檢出的澱粉",
+        "wrong": [
+          "光照會使碘液完全失去反應能力",
+          "遮光部分一定沒有任何活細胞",
+          "澱粉只可能由根部直接吸收"
+        ],
+        "exp": "處理前先減少原有澱粉，再比較同葉片遮光與照光區，可推論光照是葉片澱粉形成的重要條件。",
+        "subject": "生物",
+        "sub_topic": "光合作用與呼吸作用",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-光合作用與呼吸作用",
+        "template_id": "ref-20261119-b2-bio1-photosyn-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
