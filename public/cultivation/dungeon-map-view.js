@@ -25,6 +25,9 @@ class DungeonMapView{
     this.opened=false;this.seq=0;this.pointers=new Map();this.movePending=false;
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
     this.clockTimer=null;this.clockAnchor=null;this.clockTickFloor=0;
+    this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
+    this.beastIds='';this.touchOrigins=new Map();
+    this.longPressTimer=null;this.longPressTriggered=false;
     this.onResize=()=>this.resize();
     this.onVisibility=()=>{if(!document.hidden&&this.opened)this.resize();};
   }
@@ -33,7 +36,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-map-view-style')){
       const style=document.createElement('link');
       style.id='dungeon-map-view-style';style.rel='stylesheet';
-      style.href='/styles/dungeon-map-view.css?v=20261119-stage8';
+      style.href='/styles/dungeon-map-view.css?v=20261119-stage9';
       document.head.append(style);
     }
     const root=document.createElement('section');
@@ -58,7 +61,14 @@ class DungeonMapView{
       '<button type="button" data-dm="fit" title="縮放至全圖">全圖</button>'+
       '<button type="button" data-dm="focus" aria-pressed="false" title="定位預留出生點">定位</button>'+
       '<button type="button" data-dm="route" aria-pressed="false" title="顯示路線">路線</button>'+
-      '</div><div class="dm-movement" data-dm-movement hidden>'+
+      '<button type="button" data-dm="beasts" aria-expanded="false">靈獸 0</button>'+
+      '</div><aside class="dm-inspector" data-dm-inspector hidden>'+
+      '<div class="dm-inspector-head"><strong>靈獸動向</strong>'+
+      '<button type="button" data-dm="close-beasts" aria-label="關閉靈獸資料">×</button></div>'+
+      '<p data-dm-beast-details role="status">點選靈獸查看行動狀態</p>'+
+      '<div class="dm-beast-list" data-dm-beast-list></div>'+
+      '<small>可點選或長按地圖上的靈獸查看 · 尚無攻擊與傷害</small></aside>'+
+      '<div class="dm-movement" data-dm-movement hidden>'+
       '<div class="dm-energy"><span>探索體力</span><strong data-dm-energy>100 / 100</strong>'+
       '<span data-dm-location>（待命）</span></div>'+
       '<div class="dm-dpad" role="group" aria-label="角色移動，一次一格">'+
@@ -78,7 +88,8 @@ class DungeonMapView{
     this.ctx=this.canvas.getContext('2d',{alpha:false});
     root.addEventListener('click',event=>{
       const button=event.target.closest('[data-dm]');
-      if(button&&root.contains(button)&&!button.disabled)this.action(button.dataset.dm);
+      if(button&&root.contains(button)&&!button.disabled)
+        this.action(button.dataset.dm,button.dataset.beastId);
     });
     root.addEventListener('keydown',event=>this.keyDown(event));
     this.canvas.addEventListener('pointerdown',event=>this.pointerDown(event));
@@ -114,6 +125,9 @@ class DungeonMapView{
     this.room=room;this.roomId=room.id;this.uid=playerUid;
     this.map=null;this.camera=Camera.initialCamera();
     this.follow=false;this.routes=false;this.pointers.clear();this.opened=true;this.movePending=false;
+    this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
+    this.beastIds='';this.touchOrigins.clear();
+    clearTimeout(this.longPressTimer);this.longPressTimer=null;
     this.root.hidden=false;
     this.$('[data-dm="focus"]').setAttribute('aria-pressed','false');
     this.$('[data-dm="route"]').setAttribute('aria-pressed','false');
@@ -149,7 +163,7 @@ class DungeonMapView{
       this.$('[data-dm-biome-box]').hidden=false;
       this.$('[data-dm-overview]').hidden=false;
       this.camera=Camera.initialCamera();this.alert('');
-      this.resize();this.updateMovementHUD();
+      this.resize();this.updateMovementHUD();this.updateBeastHUD();
     }catch(error){
       if(!this.isCurrent()||request!==this.seq)return;
       this.alert(error?.message||'無法載入地圖',true);
@@ -280,6 +294,7 @@ class DungeonMapView{
       '探索中 · WASD 或方向按鈕移動，1 格耗費 1 體力 · 尚無戰鬥':
       '等待隊伍集結 · 地圖預覽不消耗體力';
     this.updateMovementHUD();
+    this.updateBeastHUD();
   }
   updateRoom(room){
     if(!this.opened)return;
@@ -293,11 +308,18 @@ class DungeonMapView{
     this.updateStatus();
     if(this.map&&this.follow){
       this.camera=Camera.focusOn(this.camera,this.selfPad(),this.map,this.width,this.height);
+    }else if(this.map&&this.followBeast){
+      const beast=this.creatures().find(e=>e.id===this.selectedBeastId);
+      if(beast)this.camera=Camera.focusOn(this.camera,beast.position,
+        this.map,this.width,this.height);
     }
     this.drawSoon();
   }
   close(){
     ++this.seq;this.opened=false;this.pointers.clear();this.movePending=false;
+    clearTimeout(this.longPressTimer);this.longPressTimer=null;
+    this.touchOrigins.clear();this.inspectOpen=false;this.selectedBeastId=null;
+    this.followBeast=false;this.beastIds='';
     clearInterval(this.clockTimer);this.clockTimer=null;this.clockAnchor=null;this.clockTickFloor=0;
     this.observer?.disconnect();this.observer=null;
     window.removeEventListener('resize',this.onResize);
@@ -310,9 +332,18 @@ class DungeonMapView{
     const focus=this.previousFocus;this.previousFocus=null;
     if(focus?.isConnected)focus.focus({preventScroll:true});
   }
-  action(name){
+  action(name,beastId){
     if(name==='close'){this.close();return;}
     if(name==='retry'){void this.load();return;}
+    if(name==='close-beasts'){
+      this.inspectOpen=false;this.followBeast=false;this.updateBeastHUD();return;
+    }
+    if(name==='beast-select'){this.selectBeast(beastId);return;}
+    if(name==='beasts'){
+      this.inspectOpen=!this.inspectOpen;
+      if(!this.inspectOpen)this.followBeast=false;
+      this.updateBeastHUD();return;
+    }
     const directions={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
     if(directions[name]){void this.move(...directions[name]);return;}
     if(!this.map||!this.isCurrent())return;
@@ -334,6 +365,7 @@ class DungeonMapView{
       case 'route':this.routes=!this.routes;break;
       default:return;
     }
+    if(name!=='route')this.followBeast=false;
     this.$('[data-dm="focus"]').setAttribute('aria-pressed',String(this.follow));
     this.$('[data-dm="route"]').setAttribute('aria-pressed',String(this.routes));
     this.drawSoon();
@@ -441,7 +473,8 @@ class DungeonMapView{
     ctx.fillStyle='#0b1915';ctx.fillRect(0,0,w,h);
     if(!m)return;
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
-      members:this.members(),selfUid:this.uid,showRoutes:this.routes
+      members:this.members(),selfUid:this.uid,showRoutes:this.routes,
+      enemies:this.creatures()
     });
     const mini=this.mini,miniBounds=mini.getBoundingClientRect();
     const mw=Math.max(1,Math.round(miniBounds.width)),mh=Math.max(1,Math.round(miniBounds.height));
@@ -452,7 +485,9 @@ class DungeonMapView{
     const miniCtx=mini.getContext('2d');
     if(miniCtx){
       miniCtx.setTransform(dpr,0,0,dpr,0,0);
-      drawMinimap(miniCtx,m,geometry,mw,mh,{members:this.members(),selfUid:this.uid});
+      drawMinimap(miniCtx,m,geometry,mw,mh,{
+        members:this.members(),selfUid:this.uid,enemies:this.creatures()
+      });
     }
     this.$('[data-dm-zoom]').textContent=Math.round(this.camera.zoom*100)+'%';
   }
