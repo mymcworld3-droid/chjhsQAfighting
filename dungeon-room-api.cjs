@@ -415,7 +415,10 @@ function createHandler({
           if(Object.values(membersOf(room)).some(m=>(m.moveSeq||0)>0))
             throw err('隊伍已開始探索，不能取消集結；可離開隊伍結束本次探索',409);
           const members=Object.fromEntries(Object.entries(membersOf(room))
-            .map(([key,m])=>[key,{...m,ready:false}]));
+            .map(([key,m])=>{
+              const {position,explorationStamina,moveSeq,lastMove,...previous}=m;
+              return [key,{...previous,ready:false}];
+            }));
           const clockState={battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
             enemyAiVersion:null,enemies:[]};
@@ -460,8 +463,13 @@ function createHandler({
           const snaps=await Promise.all(refs.map(ref=>tx.get(ref)));
           const codeRef=db.collection(CODES).doc(room.code);
           const codeSnap=await tx.get(codeRef);
-          const next={...room,status:'closed',closedAtMs:at,revision:room.revision+1};
-          tx.update(roomRef,{status:'closed',closedAtMs:at,revision:next.revision});
+          const cleared={battleClockVersion:null,battleStartedAtMs:null,
+            battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
+            enemyAiVersion:null,enemies:[]};
+          const next={...room,status:'closed',closedAtMs:at,...cleared,
+            revision:room.revision+1};
+          tx.update(roomRef,{status:'closed',closedAtMs:at,...cleared,
+            revision:next.revision});
           refs.forEach((ref,index)=>{
             if(snaps[index].exists&&snaps[index].data()?.roomId===roomId)
               tx.set(ref,{roomId:null,updatedAtMs:at});
@@ -488,7 +496,12 @@ function createHandler({
           const remaining=Object.values(members).sort((a,b)=>a.joinedAtMs-b.joinedAtMs||a.uid.localeCompare(b.uid));
           const closed=!remaining.length;
           const hostUid=room.hostUid===uid?(remaining[0]?.uid||null):room.hostUid;
-          if(room.status==='assembled')for(const member of Object.values(members))member.ready=false;
+          if(room.status==='assembled'){
+            for(const [key,member] of Object.entries(members)){
+              const {position,explorationStamina,moveSeq,lastMove,...previous}=member;
+              members[key]={...previous,ready:false};
+            }
+          }
           const reset=room.status==='assembled'?{
             battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
