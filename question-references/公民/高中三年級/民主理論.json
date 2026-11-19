@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-civ3-democracy-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "民主制度、媒體識讀與市場失靈實際應用，尊重概念區分及推論條件",
+      "question": {
+        "q": "一項公共議題經多數票通過，但某些措施被質疑侵害少數群體的基本權利。哪項評析最符合憲政民主？",
+        "correct": "多數決是決策方式之一，但仍須接受基本權保障及憲法限制",
+        "wrong": [
+          "只要贏得多數票，任何基本權限制都必定正當",
+          "少數群體不得使用司法途徑質疑多數決",
+          "公民既能投票，政府就不必說明政策如何影響不同群體"
+        ],
+        "exp": "憲政民主兼顧多數決與權利保障，基本權與憲法審查是防止多數權力濫用的重要機制。",
+        "subject": "公民",
+        "sub_topic": "民主理論",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中三年級-民主理論",
+        "template_id": "ref-20261119-b11-civ3-democracy-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-civ3-democracy-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "民主制度、媒體識讀與市場失靈實際應用，尊重概念區分及推論條件",
+      "question": {
+        "q": "市府針對大型開發案舉辦公開討論，讓支持與反對者提出證據、回應質疑並修正方案。此程序最接近哪項民主理念？",
+        "correct": "審議民主強調理由交換與公共討論",
+        "wrong": [
+          "只由行政首長私人決定，不須公開理由",
+          "只要網路投票結果出現，便不允許任何討論",
+          "公民參與應完全排除不同立場的意見"
+        ],
+        "exp": "審議民主重視可公開檢驗的理由、平等發言及在討論中修正看法，而不僅是最後表決。",
+        "subject": "公民",
+        "sub_topic": "民主理論",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中三年級-民主理論",
+        "template_id": "ref-20261119-b11-civ3-democracy-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-civ3-democracy-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "民主制度、媒體識讀與市場失靈實際應用，尊重概念區分及推論條件",
+      "question": {
+        "q": "某國定期舉行選舉，但新聞媒體無法報導反對黨，反對候選人也無法公平競選。要評估民主品質，最應注意什麼？",
+        "correct": "選舉是否具實質競爭、言論自由與公平參與條件",
+        "wrong": [
+          "只要投票日期固定，就能證明所有政治權利均受保障",
+          "因投票存在，反對黨是否能競選便與民主品質無關",
+          "新聞自由與競選公平只影響媒體，不影響選舉過程"
+        ],
+        "exp": "選舉的民主品質取決於實質競爭與公民自由，不能僅用是否定期投票作為唯一標準。",
+        "subject": "公民",
+        "sub_topic": "民主理論",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中三年級-民主理論",
+        "template_id": "ref-20261119-b11-civ3-democracy-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
