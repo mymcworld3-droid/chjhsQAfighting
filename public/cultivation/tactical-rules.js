@@ -83,6 +83,81 @@
   const fail=message=>{throw Object.assign(new Error(message),{status:409});};
   const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
   const key=p=>p.x+','+p.y;
+  // Canonical v4 seal data. UI inspectors and range overlays should read these
+  // same values rather than guessing a universal three-tile radius.
+  const SEAL_MAX_DURABILITY=2;
+  const SEAL_HIT_DAMAGE=1;
+  const SEAL_TYPES=Object.freeze({
+    shield:Object.freeze({
+      id:'shield',label:'護',name:'護靈陣眼',color:'#65c6ec',
+      effect:'距離 3 格內的靈獸受到的非穿透傷害降低 35%。',
+      range:Object.freeze({kind:'manhattan',radius:3,label:'曼哈頓距離 3 格'}),
+      damageMultiplier:.65,
+      onBreak:'此陣眼提供的減傷效果消失。',
+      tactic:'先破除陣眼，再攻擊受到保護的靈獸。'
+    }),
+    hazard:Object.freeze({
+      id:'hazard',label:'煞',name:'妖煞陣眼',color:'#d773bd',
+      effect:'每逢指定回合，預告玩家所在的一格；若回合結束時仍在該格，受到最大生命值 12% 的傷害（至少 1 點）。',
+      range:Object.freeze({kind:'warning',radius:null,label:'當前預告危險格（無固定半徑）'}),
+      triggerEveryTurns:2,maxHpDamageRatio:.12,
+      onBreak:'最後一座妖煞陣眼破除後，已預告的妖煞危險格也會消失。',
+      tactic:'確認紅色預告格並移開；也能攻擊陣眼解除威脅。'
+    }),
+    rage:Object.freeze({
+      id:'rage',label:'獸',name:'御獸陣眼',color:'#e9ad60',
+      effect:'距離 3 格內的靈獸造成的傷害提高 25%。',
+      range:Object.freeze({kind:'manhattan',radius:3,label:'曼哈頓距離 3 格'}),
+      damageMultiplier:1.25,
+      onBreak:'此陣眼提供的靈獸增傷效果消失。',
+      tactic:'先破除陣眼，可降低附近靈獸的攻擊威脅。'
+    }),
+    maze:Object.freeze({
+      id:'maze',label:'迷',name:'迷蹤陣眼',color:'#74c9aa',
+      effect:'維持與陣眼連動的石障；破除後會移除該石障（若本關配置了連動石障）。',
+      range:Object.freeze({kind:'linked-block',radius:null,label:'連動石障（無固定半徑）'}),
+      onBreak:'已連動的石障會被移除，開通道路。',
+      tactic:'查看連動石障位置，破除陣眼以打開通路。'
+    })
+  });
+  const sealDefinition=kind=>Object.hasOwn(SEAL_TYPES,String(kind))?SEAL_TYPES[kind]:null;
+  // Read-only, serializable per-battle snapshot; never modify or enrich the
+  // persisted objective. Old layout-v3 seals have different activation rules.
+  function sealInfo(state,position){
+    if(state?.trial?.layoutVersion!==4||state.objective?.type!=='sealing'||
+      !Number.isInteger(position?.x)||!Number.isInteger(position?.y))return null;
+    const point=(state.objective.points||[]).find(p=>p.x===position.x&&p.y===position.y);
+    const def=sealDefinition(point?.kind);
+    if(!point||!def)return null;
+    const maximum=Number.isFinite(point.maxHp)&&point.maxHp>0?point.maxHp:SEAL_MAX_DURABILITY;
+    const durability=point.activated?0:Math.max(0,Math.min(maximum,Number.isFinite(point.hp)?point.hp:maximum));
+    return {
+      id:key(point),x:point.x,y:point.y,kind:def.id,label:def.label,name:def.name,
+      color:def.color,effect:def.effect,range:{...def.range},onBreak:def.onBreak,tactic:def.tactic,
+      attackable:!point.activated,active:!point.activated,broken:!!point.activated,
+      hp:durability,maxHp:maximum,hitDamage:SEAL_HIT_DAMAGE,
+      gate:point.gate?{x:point.gate.x,y:point.gate.y}:null
+    };
+  }
+  function sealInfos(state){
+    return state?.objective?.type==='sealing'?(state.objective.points||[])
+      .map(p=>sealInfo(state,p)).filter(Boolean):[];
+  }
+  // Cells eligible for a current seal effect: auras use Manhattan distance
+  // regardless of walls, matching damage(); hazards use live telegraph cells.
+  // Maze links are presented through sealInfo().gate, not as an invented aura.
+  function sealEffectCells(state,position){
+    const info=sealInfo(state,position);
+    if(!info?.active)return [];
+    if(info.range.kind==='warning')
+      return (state.objective.hazards||[]).filter(p=>inside(state,p))
+        .map(p=>({x:p.x,y:p.y}));
+    if(info.range.kind!=='manhattan')return [];
+    const cells=[];
+    for(let y=0;y<state.height;y++)for(let x=0;x<state.width;x++)
+      if(dist(info,{x,y})<=info.range.radius)cells.push({x,y});
+    return cells;
+  }
   const clone=s=>JSON.parse(JSON.stringify(s));
   const alive=a=>a&&a.hp>0;
   const current=s=>s.actors.find(a=>a.uid===s.turnUid);
@@ -247,7 +322,7 @@
     const possible=introduced?TRIAL_TERRAINS.filter(t=>t.enemies.includes(introduced.species)):TRIAL_TERRAINS;
     const theme=pick(br,possible),spawn={x:1,y:1+Math.floor(gr()*(height-2))};
     const objective=mode==='defense'?{type:mode,shrine:{x:Math.floor(width/2),y:Math.floor(height/2)},rounds:4,completedRounds:0,hp:0,maxHp:0,spawnIndex:0,completed:false}:
-      mode==='sealing'?{type:mode,points:[{x:Math.floor(width*.55),y:1},{x:width-3,y:height-2},...(stage>=17&&or()<.5?[{x:Math.floor(width/2),y:Math.floor(height/2)}]:[])].map((p,i)=>({...p,kind:['shield','hazard','rage','maze'][(i+Math.floor((stage-8)/4))%4],hp:2,maxHp:2,activated:false})),completed:false}:
+      mode==='sealing'?{type:mode,points:[{x:Math.floor(width*.55),y:1},{x:width-3,y:height-2},...(stage>=17&&or()<.5?[{x:Math.floor(width/2),y:Math.floor(height/2)}]:[])].map((p,i)=>({...p,kind:['shield','hazard','rage','maze'][(i+Math.floor((stage-8)/4))%4],hp:SEAL_MAX_DURABILITY,maxHp:SEAL_MAX_DURABILITY,activated:false})),completed:false}:
       mode==='boss'?{type:mode,bossUid:'monster-0',completed:false}:{type:mode,completed:false};
     const bossPos={x:width-4,y:Math.floor(height/2)-1};
     const bossCells=mode==='boss'?[bossPos,{x:bossPos.x+1,y:bossPos.y},{x:bossPos.x,y:bossPos.y+1},{x:bossPos.x+1,y:bossPos.y+1}]:[];
@@ -551,8 +626,8 @@
   function damage(s,source,target,raw,opts={}){
     if(!alive(source)||!alive(target))return 0;
     const active=s.trial?.layoutVersion===4&&s.objective?.type==='sealing'?s.objective.points.filter(p=>!p.activated):[];
-    if(source.bot&&active.some(p=>p.kind==='rage'&&dist(p,source)<=3))raw*=1.25;
-    if(target.bot&&active.some(p=>p.kind==='shield'&&dist(p,target)<=3)&&!opts.pierce)raw*=.65;
+    if(source.bot&&active.some(p=>p.kind==='rage'&&dist(p,source)<=SEAL_TYPES.rage.range.radius))raw*=SEAL_TYPES.rage.damageMultiplier;
+    if(target.bot&&active.some(p=>p.kind==='shield'&&dist(p,target)<=SEAL_TYPES.shield.range.radius)&&!opts.pierce)raw*=SEAL_TYPES.shield.damageMultiplier;
     let amount=Math.max(0,Math.round(raw));if(!opts.pierce)amount=Math.round(amount*(1-(target.guard||0)));
     const shieldScale=opts.shieldMultiplier||1,absorbed=opts.pierce?0:Math.min(target.shield,Math.round(amount*shieldScale));target.shield-=absorbed;amount=Math.max(0,amount-Math.ceil(absorbed/shieldScale));
     const dealt=Math.min(target.hp,amount);target.hp-=dealt;
@@ -582,7 +657,7 @@
     if(s.trial?.layoutVersion!==4||s.objective?.type!=='sealing')return;
     for(const p of s.objective.points||[]){
       if(p.activated||seen.has(key(p))||!cells.some(c=>key(c)===key(p)))continue;
-      seen.add(key(p));p.hp=Math.max(0,p.hp-1);
+      seen.add(key(p));p.hp=Math.max(0,p.hp-SEAL_HIT_DAMAGE);
       if(!p.hp){
         p.activated=true;if(p.gate)s.blocks=s.blocks.filter(b=>key(b)!==key(p.gate));
         if(p.kind==='hazard'&&!s.objective.points.some(q=>!q.activated&&q.kind==='hazard'))s.objective.hazards=[];
@@ -1026,7 +1101,7 @@
     if(s.mode!=='pve')return;const hero=s.actors[0];
     if(s.trial?.layoutVersion===4&&s.objective?.type==='sealing'){
       const active=s.objective.points.some(p=>!p.activated&&p.kind==='hazard');
-      s.objective.hazards=active&&s.turn%2===0?[point(hero)]:[];
+      s.objective.hazards=active&&s.turn%SEAL_TYPES.hazard.triggerEveryTurns===0?[point(hero)]:[];
     }
     for(const m of s.actors.filter(a=>a.bot&&alive(a))){
       if(s.trial?.layoutVersion===4&&s.objective?.type==='defense'){
@@ -1178,7 +1253,7 @@
     if(s.mode==='pve'){
       const hero=s.actors[0];
       if(s.trial?.layoutVersion===4&&s.objective?.type==='sealing'&&s.objective.hazards?.some(p=>key(p)===key(hero))){
-        const hit=Math.min(hero.hp,Math.max(1,Math.round(hero.maxHp*.12)));hero.hp-=hit;
+        const hit=Math.min(hero.hp,Math.max(1,Math.round(hero.maxHp*SEAL_TYPES.hazard.maxHpDamageRatio)));hero.hp-=hit;
         log(s,'妖煞陣爆發 −'+hit,'damage',{target:hero.uid,damage:hit,animation:{kind:'damage',changes:[appearance(hero)],numbers:[{uid:hero.uid,damage:hit}]}});
       }
       for(const m of s.actors.filter(a=>a.bot&&alive(a))){
@@ -1307,5 +1382,5 @@
     if(s.pveMetrics)Object.assign(s.pveMetrics,{outcome:'loss',reason:'forfeit',turns:s.actors.find(a=>a.uid===uid)?.turns||0});
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });
