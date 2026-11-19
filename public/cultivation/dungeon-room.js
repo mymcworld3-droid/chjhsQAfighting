@@ -175,6 +175,8 @@ export const strikeDungeonBeast=(roomId,enemyId,seq)=>
 
 export const castDungeonSkill=(roomId,skillId,target,seq)=>
   request('skill',{roomId,skillId,target,seq});
+export const guardDungeonTeammate=(roomId,targetUid,seq)=>
+  request('boss-guard',{roomId,targetUid,seq});
 export const switchDungeonLoadout=(roomId,index)=>
   request('loadout',{roomId,index});
 
