@@ -649,6 +649,8 @@ async function main(){
     await a.page.waitForFunction(()=>document.querySelector('[data-dm-action-feedback]')
       ?.textContent.includes('前進 4 格'),null,{timeout:9000});
     await a.page.waitForFunction(()=>document.querySelector('[data-dm-world]')
+      ?.dataset.motion==='walking',null,{timeout:5000});
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-world]')
       ?.dataset.motion==='idle',null,{timeout:5000});
     const reported=await a.page.locator('[data-dm-action-feedback]').innerText();
     assert.match(reported,/完成 4 段/);
