@@ -218,12 +218,21 @@ function renderRoom(){
   const exploring=assembled&&memberList.some(member=>Number(member.moveSeq)>0);
   const fullyReady=memberList.length>0&&readyCount===memberList.length;
   const objective=room.dungeonProgress;
+  const portalReady=assembled&&room.dungeonArena!=='boss'&&
+    objective?.portalStatus==='open'?room.bossPortalReady:null;
+  const portalReadyCount=Number(portalReady?.readyCount)||0;
+  const portalRequired=Number(portalReady?.requiredCount)||0;
+  const portalOffline=Number(portalReady?.offlineCount)||0;
+  const portalVotes=portalReady?.readyUids||[];
   const mission=room.dungeonArena==='boss'?
     (room.bossEncounter?.status==='defeated'?
       '玄炎鎮殿獸已被全隊擊敗！可一鍵領獎並離場，也可以日後從副本入口補領。':
       '已進入玄炎鎮殿首領戰，請留意紅色預告格、維持生命與體力。'):
     objective?.portalStatus==='open'?
-    '傳送門已啟動，請走近傳送陣，帶全隊進入真正的首領戰。':
+    '傳送門已啟動，前往傳送陣分別確認首領戰準備（'+
+      portalReadyCount+'/'+portalRequired+' 人已確認）'+
+      (portalOffline?'；'+portalOffline+' 人離線逾一分鐘暫不計入':'')+
+      '。在線隊員全部確認後才會共同傳送。':
     objective?.portalStatus==='ready'?
     '全隊已取得密鑰，前往深處傳送陣啟動入口。':
     objective?.portalStatus==='sealed'?
@@ -231,13 +240,18 @@ function renderRoom(){
     '請重新集結，以開啟新版守鑰任務。';
   const members=memberList.map(member=>{
     const leader=member.uid===room.hostUid,isMe=member.uid===account;
+    const readyNow=portalReady?portalVotes.includes(member.uid):member.ready===true;
+    const readyLabel=portalReady?
+      (!member.online?'離線待機':readyNow?'已確認首領戰':'尚未確認'):
+      assembled?(room.dungeonArena==='boss'?'首領戰中':'探索中'):
+      readyNow?'已準備':'未準備';
     return '<article class="dg-member"><span class="dg-avatar" aria-hidden="true">'+
       (leader?'<i class="fa-solid fa-crown"></i>':'<i class="fa-solid fa-user"></i>')+'</span>'+
       '<span class="dg-member-body"><strong>'+esc(nameOf(member))+
       (isMe?' <em>（你）</em>':'')+'</strong><small>'+esc(member.realm||'凡人')+'境'+
       (leader?' · 隊長':'')+'</small><small class="dg-presence" data-dg-presence="'+esc(member.uid)+'"></small></span>'+
-      '<span class="dg-ready '+(member.ready?'is-ready':'')+'">'+
-      (member.ready?'已準備':'未準備')+'</span>'+
+      '<span class="dg-ready '+(readyNow?'is-ready':'')+'">'+
+      readyLabel+'</span>'+
       (host&&!leader&&!assembled?'<button class="dg-kick" data-dg="kick" data-target-uid="'+esc(member.uid)+
       '" aria-label="將 '+esc(nameOf(member))+' 移出隊伍">移除</button>':'')+'</article>';
   }).join('');
@@ -247,7 +261,10 @@ function renderRoom(){
     '<span class="dg-sync" data-dg-sync role="status"></span></div>'+
     '<div class="dg-room-code"><span>邀請代碼 <strong>'+esc(room.code)+'</strong></span>'+
     '<button data-dg="copy">複製</button></div>'+
-    '<div class="dg-section-heading"><h3>隊伍成員</h3><span>'+readyCount+' / '+memberList.length+' 已準備</span></div>'+
+    '<div class="dg-section-heading"><h3>隊伍成員</h3><span>'+
+    (portalReady?portalReadyCount+' / '+portalRequired+' 已確認首領戰':
+      assembled?'共同探索中':readyCount+' / '+memberList.length+' 已準備')+
+    '</span></div>'+
     '<div class="dg-members">'+members+'</div>'+
     (assembled?'<p class="dg-assembled" role="status"><i class="fa-solid fa-check-circle"></i> 探索進行中 · '+esc(mission)+
       ' 可隨時答題充能、施放功法或移動（一格耗 1 體力），靈獸依伺服器時鐘自行行動。</p>':
