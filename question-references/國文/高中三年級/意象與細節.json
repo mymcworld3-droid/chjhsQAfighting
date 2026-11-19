@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-image-detail-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "具體文本與文化背景相結合，論證保留資料限制，選項符合相同考點",
+      "question": {
+        "q": "閱讀自編散文：「雨停後，操場邊的白線浸著水，球網滴下最後幾顆水珠；他站在階梯上，想起那場沒有踢完的比賽。」哪一項分析最能說明描寫的作用？",
+        "correct": "水珠與未完成的比賽相連，使具體場景承載未竟之事的惆悵",
+        "wrong": [
+          "白線與水珠只提供氣象資訊，不可能與人物記憶產生聯繫",
+          "作者已明確交代比賽結果，因此雨後細節只是重複",
+          "雨停後出現水珠，足以證明人物已不在乎先前的比賽"
+        ],
+        "exp": "水珠、白線、球網使場景可感，末句將景物與未完成的比賽連結，情緒透過細節顯現。",
+        "subject": "國文",
+        "sub_topic": "意象與細節",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-意象與細節",
+        "template_id": "ref-20261119-b10-ch3-image-detail-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-image-detail-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "具體文本與文化背景相結合，論證保留資料限制，選項符合相同考點",
+      "question": {
+        "q": "寫作題：「以一件舊物表現友誼。」下列哪項補寫最能避免空泛宣告，讓舊物自然承載回憶？",
+        "correct": "我翻開缺了一角的筆記本，封底仍留著她在畢業前畫下的那張地圖",
+        "wrong": [
+          "那件東西非常珍貴，珍貴得足以證明所有友誼都會長存",
+          "友情是一種感情，因此筆記本必須被大家好好珍惜",
+          "我買過很多筆記本，其中有些厚、有些薄，所以這本特別有價值"
+        ],
+        "exp": "缺角、封底地圖及畢業情境使物件與具體的共同經驗相連，而非抽象稱讚其重要。",
+        "subject": "國文",
+        "sub_topic": "意象與細節",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-意象與細節",
+        "template_id": "ref-20261119-b10-ch3-image-detail-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-image-detail-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "具體文本與文化背景相結合，論證保留資料限制，選項符合相同考點",
+      "question": {
+        "q": "閱讀自編短文：「火車站已改建多年，每次聽見廣播尾音那一下短促的鈴聲，我仍想起母親在月臺揮手，喊我別忘了帶外套。」鈴聲在文本中最重要的作用為何？",
+        "correct": "以聽覺線索喚起離別場景，使當下聲音與過去記憶交疊",
+        "wrong": [
+          "鈴聲只負責交代列車班次，與母親形象沒有關聯",
+          "作者藉鈴聲證明舊車站的建築外觀從未改變",
+          "鈴聲表示敘事者已遺忘離站時的所有情感"
+        ],
+        "exp": "鈴聲重現引出母親揮手的場景，成為連結當下與記憶的感官意象。",
+        "subject": "國文",
+        "sub_topic": "意象與細節",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-意象與細節",
+        "template_id": "ref-20261119-b10-ch3-image-detail-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
