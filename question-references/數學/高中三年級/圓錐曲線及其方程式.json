@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-conics-equations-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "橢圓x²/25+y²/9=1的兩個焦點坐標為何？",
+        "correct": "(−4,0)與(4,0)",
+        "wrong": [
+          "(−5,0)與(5,0)",
+          "(0,−4)與(0,4)",
+          "(−3,0)與(3,0)"
+        ],
+        "exp": "長軸在x軸，a²=25、b²=9，c²=a²−b²=16，c=4，焦點在(±4,0)。",
+        "subject": "數學",
+        "sub_topic": "圓錐曲線及其方程式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-圓錐曲線及其方程式",
+        "template_id": "ref-20261119-b10-m3-conics-equations-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-conics-equations-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "拋物線y²=12x的焦點坐標為何？",
+        "correct": "(3,0)",
+        "wrong": [
+          "(6,0)",
+          "(0,3)",
+          "(−3,0)"
+        ],
+        "exp": "與標準式y²=4px比較，4p=12，所以p=3，焦點為(3,0)。",
+        "subject": "數學",
+        "sub_topic": "圓錐曲線及其方程式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-圓錐曲線及其方程式",
+        "template_id": "ref-20261119-b10-m3-conics-equations-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-conics-equations-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "雙曲線x²/9−y²/16=1的兩條漸近線為何？",
+        "correct": "y=±(4/3)x",
+        "wrong": [
+          "y=±(3/4)x",
+          "y=±(16/9)x",
+          "y=±3x"
+        ],
+        "exp": "x²/a²−y²/b²=1的漸近線為y=±(b/a)x；此處a=3、b=4。",
+        "subject": "數學",
+        "sub_topic": "圓錐曲線及其方程式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-圓錐曲線及其方程式",
+        "template_id": "ref-20261119-b10-m3-conics-equations-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
