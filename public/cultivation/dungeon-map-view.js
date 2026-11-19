@@ -253,7 +253,8 @@ class DungeonMapView{
     this.portalPending=false;this.bossPending=false;
     this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
     this.loadoutPending=false;this.aimTile=null;this.skillSignature='';
-    this.wheelMode='attack';this.manualOpen=false;this.wheelSwipeStart=null;
+    this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;this.wheelSwipeStart=null;
+    this.routePending=false;
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
     this.beastIds='';this.touchOrigins.clear();this.gestureMulti=false;
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
@@ -383,32 +384,70 @@ class DungeonMapView{
   }
   setWheelMode(mode){
     if(mode!=='attack'&&mode!=='move')return;
-    this.wheelMode=mode;this.updateWheelHUD();
+    if(this.wheelMode!==mode){
+      this.wheelMode=mode;this.aimTile=null;this.selectedBeastId=null;
+      this.updateBeastHUD();this.updateSkillHUD();
+      this.drawSoon();
+    }
+    this.updateWheelHUD();
+  }
+  selectTrialWheel(value){
+    if(value==='move'||value==='attack'){
+      this.setWheelMode(value);return;
+    }
+    if(value==='player')return;
+    const own=this.room?.members?.[this.uid];
+    const skills=own?.dungeonSkills||[];
+    if(value!=='basic'&&!skills.some(skill=>skill.id===value))return;
+    if(value==='basic'&&skills.length)return;
+    if(this.selectedSkillId!==value){
+      this.selectedSkillId=value;
+      this.aimTile=null;this.selectedBeastId=null;
+    }
+    this.wheelMode='attack';
+    this.updateBeastHUD();this.updateSkillHUD();
+    this.updateWheelHUD();this.drawSoon();
   }
   updateWheelHUD(){
     const wheel=this.$('[data-dm-wheel]');
     if(!wheel)return;
     const active=this.room?.status==='assembled'&&!!this.map;
     wheel.hidden=!active;
-    wheel.dataset.mode=this.wheelMode;
-    const charges=active?dungeonFocusCharges(this.room?.members?.[this.uid]):0;
-    wheel.classList.toggle('has-focus',charges>0);
+    const own=this.room?.members?.[this.uid];
+    const charges=active?dungeonFocusCharges(own):0;
     const badge=this.$('[data-dm-focus-indicator]');
     if(badge){
       badge.hidden=!active||charges===0;
       badge.textContent=charges>0?'✦ 金身蓄勢 '+charges+'/6':'';
       badge.title=charges>0?'剩餘 '+charges+' 次強化體術，施放後消耗一層':'';
     }
-    this.$('[data-dm-wheel-attack]').hidden=this.wheelMode!=='attack';
-    this.$('[data-dm-wheel-move]').hidden=this.wheelMode!=='move';
-    for(const name of ['attack','move'])
-      this.$('[data-dm="wheel-'+name+'"]').setAttribute('aria-pressed',
-        String(this.wheelMode===name));
+    const skills=Array.isArray(own?.dungeonSkills)?own.dungeonSkills:[];
+    if(skills.length&&!skills.some(skill=>skill.id===this.selectedSkillId))
+      this.selectedSkillId=skills[0].id;
+    if(!skills.length)this.selectedSkillId='basic';
+    const options=skills.length?skills.map(skill=>{
+      const empowered=dungeonFocusEmpowers(own,skill);
+      const cost=empowered?Math.ceil(skill.cost/2):skill.cost;
+      let art='';
+      try{art=skillArt(skill)||''}catch(_){}
+      return {value:skill.id,name:skill.name,cost,
+        description:skill.description||'',art,empowered};
+    }):[{value:'basic',name:'普通攻擊',cost:2}];
+    renderDungeonTrialWheel(wheel,{
+      mode:this.wheelMode,options,
+      selected:this.wheelMode==='move'?'player':this.selectedSkillId,
+      stamina:Math.max(0,Number(own?.explorationStamina)||0),
+      focusCharges:charges,
+      locked:!active||this.movePending||this.routePending||
+        this.skillPending||this.loadoutPending||this.strikePending||
+        own?.downed===true||Number(own?.battleHealth)===0
+    });
     const toggle=this.$('[data-dm="loadouts"]');
-    const own=this.room?.members?.[this.uid];
-    toggle.hidden=!active||!own?.dungeonLoadoutNames?.length;
-    toggle.setAttribute('aria-expanded',String(this.manualOpen));
-    toggle.classList.toggle('is-open',this.manualOpen);
+    if(toggle){
+      toggle.hidden=!active||!own?.dungeonLoadoutNames?.length;
+      toggle.setAttribute('aria-expanded',String(this.manualOpen));
+      toggle.classList.toggle('is-open',this.manualOpen);
+    }
   }
   updateGuardHUD(){
     const box=this.$('[data-dm-guards]');
@@ -1291,6 +1330,7 @@ class DungeonMapView{
     if(name==='quiz'){this.quiz?.show();return;}
     if(name==='wheel-attack'){this.setWheelMode('attack');return;}
     if(name==='wheel-move'){this.setWheelMode('move');return;}
+    if(name==='wheel-choice'){this.selectTrialWheel(skillId||'player');return;}
     if(name==='loadouts'){
       this.manualOpen=!this.manualOpen;this.updateSkillHUD();return;
     }
