@@ -184,7 +184,7 @@ test('offline catch-up cancels unseen attack and forbids retroactive damage',asy
   const {f,id,raw}=await setup();
   f.clock(2000);
   await f.call('b','clock',{roomId:id},1);
-  assert.ok(raw.enemies[0].attack);
+  assert.ok(f.c.records.get(ROOMS+'/'+id).enemies[0].attack);
   f.clock(48000);
   const resumed=await f.call('a','clock',{roomId:id});
   assert.equal(resumed.status,200);
