@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-earth1-airsea-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "氣候、地震與能量收支依學科觀念設計；單一正解、條件清楚",
+      "question": {
+        "q": "熱帶海面水溫較高時，若其他條件相近，海面蒸發與大氣水氣供應通常如何變化？",
+        "correct": "蒸發潛勢較高，可能提供較多水氣給大氣",
+        "wrong": [
+          "海水溫度升高會使水蒸氣完全停止形成",
+          "大氣水氣量只由海水鹽度決定，與水溫無關",
+          "海面升溫必使全部降水立即發生在原地"
+        ],
+        "exp": "海水升溫提高飽和水氣壓，其他條件相近時通常有助蒸發；但實際降水還受大氣環流與穩定度影響。",
+        "subject": "地球科學",
+        "sub_topic": "海氣交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海氣交互作用",
+        "template_id": "ref-20261119-b11-earth1-airsea-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-earth1-airsea-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "氣候、地震與能量收支依學科觀念設計；單一正解、條件清楚",
+      "question": {
+        "q": "在熱帶太平洋，若信風明顯減弱，赤道東太平洋較冷深層海水上湧的程度可能如何改變？",
+        "correct": "湧升可能減弱，表層海水因而較易偏暖",
+        "wrong": [
+          "湧升必定加強，使東太平洋持續異常降溫",
+          "信風強弱與表層水移動完全無關",
+          "只要信風減弱，全球所有海域均必須同步降溫"
+        ],
+        "exp": "東風減弱會改變表層水堆積和湧升，赤道東太平洋冷水補充可能減弱，這是聖嬰相關過程之一。",
+        "subject": "地球科學",
+        "sub_topic": "海氣交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海氣交互作用",
+        "template_id": "ref-20261119-b11-earth1-airsea-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-earth1-airsea-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "氣候、地震與能量收支依學科觀念設計；單一正解、條件清楚",
+      "question": {
+        "q": "強烈颱風通過某海域後，衛星觀測到海面短期降溫。哪項解釋最直接符合海氣交互作用？",
+        "correct": "強風使上層水混合並可能引起較冷水上湧",
+        "wrong": [
+          "海面降溫代表太陽輻射永久停止照射海洋",
+          "颱風會使深海海水立即全部結冰",
+          "颱風只改變海面顏色，不影響海水溫度"
+        ],
+        "exp": "颱風強風造成上層海水混合與局部湧升，可使冷水接近表面而導致短期海表降溫。",
+        "subject": "地球科學",
+        "sub_topic": "海氣交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海氣交互作用",
+        "template_id": "ref-20261119-b11-earth1-airsea-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
