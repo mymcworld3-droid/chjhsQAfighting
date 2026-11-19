@@ -1445,11 +1445,15 @@ class DungeonMapView{
   }
   updateStatus(){
     const state=this.$('[data-dm-status]');
+    const boss=this.creatures().find(e=>e.kind==='boss');
+    const attack=boss?.attack;
     if(state)state.textContent=this.room?.status==='assembled'?
       this.room?.dungeonArena==='boss'?
         (this.room?.bossEncounter?.status==='defeated'?
           '首領已擊敗 · 請在勝利面板領取本場靈石與修為':
-          '首領戰進行中 · 預警格可閃避 · 功法與答題持續有效'):
+          attack?.label?
+            '⚠ 首領蓄勢 · '+attack.label+' · 依地面預警範圍閃避':
+            '首領戰進行中 · 預警格可閃避 · 功法與答題持續有效'):
         '戰場進行中 · 可隨時移動與施放已裝備功法 · 紅色預警格請閃避':
       '等待隊伍集結 · 地圖預覽不消耗體力';
     this.updateMovementHUD();
