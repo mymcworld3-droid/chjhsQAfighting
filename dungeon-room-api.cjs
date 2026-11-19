@@ -16,6 +16,7 @@ const Skills=require('./dungeon-skill-combat.cjs');
 const QuizCredit=require('./dungeon-quiz-credit.cjs');
 const Objectives=require('./dungeon-objectives.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
+const Portal=require('./dungeon-portal-readiness.cjs');
 const Rescue=require('./dungeon-team-rescue.cjs');
 const Victory=require('./dungeon-victory-reward.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
@@ -55,6 +56,8 @@ const publicRoom=(roomId,room,at=Date.now())=>({
   dungeonProgress:Objectives.publicProgress(room.dungeonProgress),
   dungeonArena:room.dungeonArena==='boss'?'boss':'exploration',
   bossEncounter:Boss.publicEncounter(room.bossEncounter),
+  bossPortalReady:Portal.validRoom(room)?
+    Portal.project(room,roomMap(room,roomId),at):null,
   enemyAiVersion:room.enemyAiVersion||null,
   // Presentational snapshots expose only the current NPC action state,
   // never the secret map seed or server-side patrol/decision internals.
@@ -124,7 +127,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','activate-portal','enter-boss','rescue','claim-boss-reward','recent-victories','clock'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','activate-portal','enter-boss','boss-ready','rescue','claim-boss-reward','recent-victories','clock'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -501,24 +504,37 @@ function createHandler({
         });
         return respond(roomId,updated);
       }
-      if(action==='enter-boss'){
+      if(action==='enter-boss'||action==='boss-ready'){
+        // Legacy "enter-boss" is only a YES vote, never a one-player
+        // shortcut. All votes and the world transition serialize on C.
+        const ready=action==='enter-boss'?true:req.body?.ready;
+        if(typeof ready!=='boolean')throw err('請傳入正確的首領準備狀態',400);
         const updated=await db.runTransaction(async tx=>{
           const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
           if(!current||!hasMember(current,uid))
             throw err('你不是此副本的隊員',403);
           if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
           if(current.status!=='assembled')throw err('副本尚未出發',409);
-          if(current.dungeonArena==='boss'&&current.bossEncounter?.version===Boss.VERSION)
-            return current;
+          if(current.dungeonArena==='boss'&&current.bossEncounter?.version===Boss.VERSION){
+            if(ready)return current; // safe retry after transition
+            throw err('全隊已進入首領戰，不能再取消準備',409);
+          }
           const map=roomMap(current,roomId);
           const delta=advanceWorld(current,map,at);
-          const entered=Boss.enter({...current,...(delta||{})},uid,map,at,roomId);
-          if(entered.duplicate)return current;
-          const next={...entered.room,revision:current.revision+1};
-          tx.update(roomRef,{dungeonArena:'boss',bossEncounter:next.bossEncounter,
-            enemies:next.enemies,members:next.members,
-            battleAppliedTick:next.battleAppliedTick,
-            battleAppliedAtMs:next.battleAppliedAtMs,revision:next.revision});
+          const evolved={...current,...(delta||{})};
+          const outcome=Portal.vote(evolved,uid,map,at,ready,roomId);
+          if(!outcome.changed&&!delta)return current;
+          const next={...outcome.room,revision:current.revision+1};
+          tx.update(roomRef,{
+            ...(delta||{}),members:next.members,
+            bossPortalReady:next.bossPortalReady,
+            ...(outcome.transitioned?{
+              dungeonArena:'boss',bossEncounter:next.bossEncounter,
+              enemies:next.enemies,battleAppliedTick:next.battleAppliedTick,
+              battleAppliedAtMs:next.battleAppliedAtMs
+            }:{}),
+            revision:next.revision
+          });
           return next;
         });
         return respond(roomId,updated);
@@ -650,10 +666,12 @@ function createHandler({
               enemies:objectives.enemies,dungeonProgress:objectives.progress};
             const next={...room,status:'assembled',assembledAtMs:at,
               dungeonArena:'exploration',bossEncounter:null,
+              bossPortalReady:{version:Portal.VERSION,votes:{}},
               ...clockState,...enemyState,members:startingMembers,
               revision:room.revision+1};
             tx.update(roomRef,{status:next.status,assembledAtMs:at,
               dungeonArena:'exploration',bossEncounter:null,
+              bossPortalReady:next.bossPortalReady,
               ...clockState,...enemyState,members:startingMembers,
               revision:next.revision});
             return next;
@@ -676,7 +694,7 @@ function createHandler({
             }));
           const clockState={battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null};
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null};
           const next={...room,status:'waiting',...clockState,members,
             revision:room.revision+1};
           tx.update(roomRef,{status:'waiting',...clockState,members,
@@ -720,7 +738,7 @@ function createHandler({
           const codeSnap=await tx.get(codeRef);
           const cleared={battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null};
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null};
           const next={...room,status:'closed',closedAtMs:at,...cleared,
             revision:room.revision+1};
           tx.update(roomRef,{status:'closed',closedAtMs:at,...cleared,
@@ -759,15 +777,21 @@ function createHandler({
           const reset=closed&&room.status==='assembled'?{
             battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null
           }:{};
+          const votes={...(room.bossPortalReady?.votes||{})};
+          delete votes[uid];
+          const portalState=closed?null:
+            room.bossPortalReady?{version:Portal.VERSION,votes}:null;
           const updated={...room,revision:room.revision+1,
             status:closed?'closed':room.status,hostUid,members,...reset,
+            bossPortalReady:portalState,
             ...(closed?{closedAtMs:at}:{})};
           const codeRef=db.collection(CODES).doc(room.code);
           const codeSnap=closed?await tx.get(codeRef):null; // read before writes
           tx.update(roomRef,{revision:updated.revision,status:updated.status,
-            hostUid,members,...reset,...(closed?{closedAtMs:at}:{})});
+            hostUid,members,...reset,bossPortalReady:portalState,
+            ...(closed?{closedAtMs:at}:{})});
           tx.set(pointerRef,{roomId:null,updatedAtMs:at});
           if(closed&&codeSnap?.exists&&codeSnap.data()?.roomId===roomId)
             tx.set(codeRef,{roomId,status:'closed',expiresAtMs:room.expiresAtMs});
