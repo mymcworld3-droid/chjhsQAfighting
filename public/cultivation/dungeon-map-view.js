@@ -1,5 +1,5 @@
 import * as Camera from './dungeon-map-camera.js';
-import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
+import { BIOMES, drawWorld } from './dungeon-map-painter.js';
 import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, moveDungeonMemberRoute, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, setDungeonBossReady, rescueDungeonTeammate, guardDungeonTeammate, claimDungeonBossReward } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
@@ -24,10 +24,10 @@ const mapValid=map=>map?.mode==='dungeon'&&map.layoutVersion===1&&
 let viewer;
 class DungeonMapView{
   constructor(){
-    this.root=null;this.stage=null;this.canvas=null;this.mini=null;this.ctx=null;
+    this.root=null;this.stage=null;this.canvas=null;this.ctx=null;
     this.quiz=null;
     this.map=null;this.room=null;this.roomId='';this.uid='';
-    this.camera=Camera.initialCamera();this.follow=false;this.routes=false;
+    this.camera=Camera.initialCamera();this.follow=false;
     this.opened=false;this.seq=0;this.pointers=new Map();this.movePending=false;
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
     this.portalPending=false;this.bossPending=false;
@@ -236,7 +236,7 @@ class DungeonMapView{
     this.quiz?.attach(room.id,playerUid);
     if(room.status==='assembled')void this.quiz?.warm();
     this.map=null;this.camera=Camera.initialCamera();
-    this.follow=true;this.routes=false;this.pointers.clear();this.opened=true;
+    this.follow=true;this.pointers.clear();this.opened=true;
     this.movePending=false;this.strikePending=false;this.skillPending=false;
     this.portalPending=false;this.bossPending=false;
     this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
@@ -1416,7 +1416,6 @@ class DungeonMapView{
     }
     const directions={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
     if(directions[name]){void this.move(...directions[name]);return;}
-    if(name==='route'){this.routes=!this.routes;this.drawSoon();}
   }
   keyDown(event){
     if(this.quiz?.visible)return;
@@ -1600,7 +1599,7 @@ class DungeonMapView{
     this.camera=Camera.lockToPlayer(this.selfPad(),m,w,h);
     this.updateRangePlan();
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
-      members:this.members(),selfUid:this.uid,showRoutes:this.routes,
+      members:this.members(),selfUid:this.uid,showRoutes:false,
       rangeTiles:this.rangeTiles,rangeKind:this.rangeKind,
       enemies:this.creatures(),objectives:this.room?.dungeonProgress,
       aimTile:this.currentAim(),art:this.sprites,
@@ -1608,22 +1607,7 @@ class DungeonMapView{
       visualTimeMs:performance.now()
     });
     this.updateFocusAuras(geometry);
-    if(this.mini?.closest('[data-dm-overview]')?.hidden)return;
-    const mini=this.mini,miniBounds=mini.getBoundingClientRect();
-    const mw=Math.max(1,Math.round(miniBounds.width)),mh=Math.max(1,Math.round(miniBounds.height));
-    const dpr=clamp(window.devicePixelRatio||1,1,2);
-    if(mini.width!==Math.round(mw*dpr)||mini.height!==Math.round(mh*dpr)){
-      mini.width=Math.round(mw*dpr);mini.height=Math.round(mh*dpr);
-    }
-    const miniCtx=mini.getContext('2d');
-    if(miniCtx){
-      miniCtx.setTransform(dpr,0,0,dpr,0,0);
-      drawMinimap(miniCtx,m,geometry,mw,mh,{
-        members:this.members(),selfUid:this.uid,enemies:this.creatures(),
-        objectives:this.room?.dungeonProgress
-      });
-    }
-    this.$('[data-dm-zoom]').textContent=Math.round(this.camera.zoom*100)+'%';
+
   }
 }
 export async function showDungeonMap(options){
