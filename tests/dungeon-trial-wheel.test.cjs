@@ -150,3 +150,11 @@ test('range previews stay below sprites and paint both safe movement and attack 
   assert.match(painter,/rangeTiles=\[\],rangeKind='move'/);
   assert.match(painter,/Render before all danger/);
 });
+
+test('radial selection prioritizes an outer manual over an accidentally hit inner move wedge',()=>{
+  const wheel=read('public/cultivation/dungeon-trial-wheel.js');
+  assert.match(wheel,/radius<\.745\|\|radius>1\.01/);
+  assert.match(wheel,/event\.stopPropagation\(\)/);
+  assert.match(wheel,/select\?\.\(chosen\.dataset\.wheelChoice\)/);
+  assert.match(wheel,/wheel\.dataset\.mode!=='attack'/);
+});

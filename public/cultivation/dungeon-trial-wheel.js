@@ -184,7 +184,7 @@ export function renderDungeonTrialWheel(wheel,{mode='attack',options=[],selected
   return selection.value;
 }
 export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick}={}){
-  let pointer=null;
+  let pointer=null,dragClickUntil=0;
   const angle=e=>{
     const rect=wheel.getBoundingClientRect();
     return Math.max(-180,Math.min(-90,
@@ -229,7 +229,7 @@ export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick}={}){
       wheel.releasePointerCapture(e.pointerId)}catch(_){}
     if(e.type==='pointercancel'){refresh?.();return;}
     if(!gesture.moved)return;
-    ignoreClick?.();
+    ignoreClick?.();dragClickUntil=Date.now()+350;
     const selected=gesture.ring==='action'?
       (angle(e)>ANGLES.center?'attack':'move'):
       [...wheel.querySelectorAll('[data-wheel-choice]')]
@@ -245,6 +245,28 @@ export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick}={}){
     pointer=null;
     for(const el of wheel.querySelectorAll('.is-dragging'))
       el.classList.remove('is-dragging');
+    refresh?.();
+  });
+  // Native full-quarter clipped buttons share overlapping DOM rectangles.
+  // If a browser dispatches a tap to the inner "move" button while its
+  // *coordinates* lie on the outer skill ring, honor the ring that was
+  // physically touched. This prevents an intended 四步連推 cast from
+  // silently becoming a one-cell move. The server still validates every cast.
+  wheel.addEventListener('click',event=>{
+    if(Date.now()<dragClickUntil)return;
+    if(wheel.dataset.mode!=='attack')return;
+    const rect=wheel.getBoundingClientRect(),size=Math.min(rect.width,rect.height);
+    if(!size)return;
+    const dx=event.clientX-rect.right,dy=event.clientY-rect.bottom;
+    if(dx>0||dy>0)return;
+    const radius=Math.hypot(dx,dy)/size;
+    if(radius<.745||radius>1.01)return;
+    const buttons=[...wheel.querySelectorAll('[data-wheel-choice]')];
+    if(!buttons.length)return;
+    const chosen=buttons[dungeonWheelIndex(angle(event),buttons.length)];
+    if(!chosen||chosen.disabled)return;
+    event.preventDefault();event.stopPropagation();
+    select?.(chosen.dataset.wheelChoice);
     refresh?.();
   });
   wheel.addEventListener('keydown',e=>{

@@ -408,6 +408,8 @@ class DungeonMapView{
     this.wheelMode='attack';
     this.updateBeastHUD();this.updateSkillHUD();
     this.updateWheelHUD();this.drawSoon();
+    if(value==='dragon-guard')
+      this.actionFeedback('已選四步連推 · 點擊方向可連續推進最多四格（消耗 4 體力）');
   }
   updateWheelHUD(){
     const wheel=this.$('[data-dm-wheel]');
