@@ -167,6 +167,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   const origin=member.position;
   if(!tile(map,target))throw fail('目標不能位於牆壁或界外',409);
   const enemies=(room.enemies||[]).map(e=>({...e,position:{...e.position}}));
+  const startingPositions=new Map(enemies.map(e=>[e.id,{...e.position}]));
   const members={...room.members};
   let player={...member},hits=[],cells=[],position=null,sword=member.flyingSword||null;
   // Re-derive attack from the latest verified A-side manual snapshot: A can
@@ -325,8 +326,12 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   const effectCells=(sk.kind==='fist-focus'?[origin]:cells)
     .filter(p=>tile(map,p)&&!seen.has(key(p))&&seen.add(key(p)))
     .slice(0,72).map(p=>({x:p.x,y:p.y}));
+  const visualMoves=enemies.filter(e=>startingPositions.has(e.id)&&
+    !same(startingPositions.get(e.id),e.position)).slice(0,12).map(e=>({
+      enemyId:e.id,from:{...startingPositions.get(e.id)},to:{...e.position}
+    }));
   const result={seq,skillId,skillName:sk.name,origin:{...origin},target:{...target},
-    cost,hits,totalDamage:hits.reduce((a,h)=>a+h.damage,0),
+    cost,hits,visualMoves,totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
     focusBefore:chargeBefore,focusEmpowered:empowered,
     focusActivated:sk.kind==='fist-focus',visualVersion:1,effectCells,
