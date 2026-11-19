@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-bio1-enzymes-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "某酵素在pH=7時作用較快，在pH=2時作用顯著降低。下列何種解釋最合理？",
+        "correct": "酸鹼度可能改變酵素蛋白質構形與活性部位",
+        "wrong": [
+          "所有酵素在任意pH下結構都恆定",
+          "pH=2時受質的原子必定全部消失",
+          "酵素活性與溶液酸鹼度不可能相關"
+        ],
+        "exp": "酵素的胺基酸側鏈電荷與蛋白質構形可受pH影響，活性部位因此可能改變，使催化效率降低。",
+        "subject": "生物",
+        "sub_topic": "酵素與代謝",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-酵素與代謝",
+        "template_id": "ref-20261119-b3-bio1-enzymes-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-bio1-enzymes-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "固定溫度下，比較相同反應加酵素與不加酵素的活化能，下列何者正確？",
+        "correct": "酵素可降低反應活化能，但不改變整體反應的平衡常數",
+        "wrong": [
+          "酵素使反應的整體自由能變化必定變正",
+          "酵素一定使產物比反應物的總能量增加",
+          "酵素只靠增加反應溫度進行催化"
+        ],
+        "exp": "酵素經由不同反應途徑降低活化能，使反應更快到達平衡；並不改變反應自由能差與平衡常數。",
+        "subject": "生物",
+        "sub_topic": "酵素與代謝",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-酵素與代謝",
+        "template_id": "ref-20261119-b3-bio1-enzymes-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-bio1-enzymes-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "某實驗設置兩組相同濃度的澱粉溶液，甲加入活性澱粉酶，乙加入先經高溫變性的同量澱粉酶，其他條件相同。預期何組較快產生分解產物？",
+        "correct": "甲組",
+        "wrong": [
+          "乙組",
+          "兩組必定完全相同",
+          "高溫變性後乙組必然產生更多酵素"
+        ],
+        "exp": "活性澱粉酶能催化澱粉水解；變性酵素活性通常降低，故甲組較快產生分解產物。",
+        "subject": "生物",
+        "sub_topic": "酵素與代謝",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-酵素與代謝",
+        "template_id": "ref-20261119-b3-bio1-enzymes-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
