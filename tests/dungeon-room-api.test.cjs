@@ -226,3 +226,36 @@ test('reconnecting to a pre-upgrade dungeon refreshes admin rights from A, not t
   assert.equal(revoked.body.room.members.a.explorationStamina,10);
   assert.equal(f.c.records.get(ref).members.a.dungeonAdmin,false);
 });
+
+test('dungeon departure uses the same trusted max HP as 問道試煉, not a fixed 100',async()=>{
+  const f=fixture(),user=f.a.records.get('users/a');
+  user.stats.maxHp=2350;user.stats.attack=340;
+  const expected=require('../raid-authority.cjs').trustedRaidPlayerSnapshot(
+    {...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},
+    'a',{}).maxHp;
+  const created=(await f.call('a','create')).body;
+  assert.equal((await f.call('a','ready',{
+    roomId:created.roomId,ready:true})).status,200);
+  const started=await f.call('a','start',{roomId:created.roomId});
+  assert.equal(started.status,200,JSON.stringify(started.body));
+  assert.equal(started.body.room.members.a.battleMaxHealth,expected);
+  assert.equal(started.body.room.members.a.battleHealth,expected);
+  const stored=f.c.records.get(API.ROOMS+'/'+created.roomId);
+  assert.equal(stored.members.a.battleMaxHealth,expected);
+});
+test('migration from a 100 HP room preserves injury ratio, not free health',async()=>{
+  const f=fixture(),user=f.a.records.get('users/a');
+  user.stats.maxHp=2000;
+  const created=(await f.call('a','create')).body;
+  const key=API.ROOMS+'/'+created.roomId;
+  const room=f.c.records.get(key);
+  f.c.records.set(key,{...room,status:'assembled',assembledAtMs:f.at,
+    members:{...room.members,a:{...room.members.a,
+      battleHealth:25,battleMaxHealth:100}}});
+  const synced=await f.call('a','reconnect');
+  assert.equal(synced.status,200);
+  assert.equal(synced.body.room.members.a.battleMaxHealth,2000);
+  assert.equal(synced.body.room.members.a.battleHealth,500);
+  const snapshot=f.c.records.get(key);
+  assert.equal(snapshot.members.a.battleHealth,500);
+});

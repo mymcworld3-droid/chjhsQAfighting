@@ -143,3 +143,19 @@ test('a lagged transaction cannot both create and resolve an unseen warning',()=
   delayed=apply(delayed,6);
   assert.equal(delayed.members.a.battleHealth,92);
 });
+
+test('dungeon damage scales with trusted trial HP while keeping warning duration',()=>{
+  assert.equal(Combat.maxHealth({battleMaxHealth:2500}),2500);
+  assert.equal(Combat.scaledDamage(8,{battleMaxHealth:2500}),200);
+  const p=map.spawnPads[0],e={kind:'wolf',position:nextTo(p),id:'beast-1'};
+  const attack=Combat.planAttack(map,e,{a:{position:p,battleHealth:2500,
+    battleMaxHealth:2500}},2);
+  assert.equal(attack.resolvesAtTick,4);
+  const people={a:{position:p,battleMaxHealth:2500,battleHealth:2000}};
+  const before=structuredClone(people);
+  const out=Combat.resolveAttack({...e,attack},people,4);
+  assert.equal(out.members.a.battleHealth,1800);
+  assert.equal(out.members.a.lastDamage.amount,200);
+  assert.deepEqual(people,before);
+  assert.equal(Combat.clampHealth({battleMaxHealth:2500,battleHealth:2350}),2350);
+});

@@ -4,8 +4,9 @@ const fs=require('node:fs'),path=require('node:path');
 const src=fs.readFileSync(path.join(__dirname,
   '../public/cultivation/dungeon-movement-animation.js'),'utf8')
   .replace(/^export /gm,'');
-const {dungeonMovementEvents,sampleDungeonMovement,continueDungeonMovement}=
-  new Function(src+'\nreturn {dungeonMovementEvents,sampleDungeonMovement,continueDungeonMovement};')();
+const {dungeonMovementEvents,sampleDungeonMovement,continueDungeonMovement,
+  previewDungeonMovement}=
+  new Function(src+'\nreturn {dungeonMovementEvents,sampleDungeonMovement,continueDungeonMovement,previewDungeonMovement};')();
 const A=require('../public/cultivation/tactical-animation.js');
 const map={width:14,height:12,tiles:Array(14*12).fill(1)};
 const room=()=>({id:'dungroom000001',status:'assembled',assembledAtMs:1000,
@@ -133,4 +134,28 @@ test('four-step chain samples one smoothed step per beat, including beast pushes
   }
   assert.deepStrictEqual(sample({...hero},1).position,{x:6,y:2});
   assert.equal(dungeonMovementEvents(next,structuredClone(next),map).length,0);
+});
+
+test('immediate visual preview uses the trial sampler before any server reply',()=>{
+  const input=[{x:2,y:2},{x:3,y:2},{x:4,y:2}];
+  const original=JSON.stringify(input);
+  const preview=previewDungeonMovement(input,map,'a');
+  assert.ok(preview);
+  assert.equal(preview.key,'member:a');
+  const halfway=sampleDungeonMovement({...preview,startedAt:1000},
+    1000+preview.scene.duration/2,A);
+  near(halfway.position.x,3);
+  assert.deepEqual(input,JSON.parse(original),'preview never changes game state');
+  assert.equal(previewDungeonMovement([{x:2,y:2},{x:4,y:2}],map,'a'),null);
+  const wall={...map,tiles:map.tiles.slice()};
+  wall.tiles[2*map.width+3]=0;
+  assert.equal(previewDungeonMovement(input,wall,'a'),null);
+  const view=fs.readFileSync(path.join(__dirname,
+    '../public/cultivation/dungeon-map-view.js'),'utf8');
+  assert.match(view,/beginMovementPreview\(path,step\+next\.length-1\)/);
+  assert.match(view,/const result=await moveDungeonMemberRoute/);
+  assert.ok(view.indexOf('this.beginMovementPreview(path,step+next.length-1)')<
+    view.indexOf('const result=await moveDungeonMemberRoute'));
+  assert.match(view,/if\(pending\?\.key===event\.key/);
+  assert.match(view,/this\.clearMovementPreview\(\)/);
 });
