@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-e1-paragraph-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "語境、論證、證據與推論均需合理，避免只靠關鍵字",
+      "question": {
+        "q": "A short article describes the increasing amount of food waste, explains why food is thrown away, and then proposes smaller meal portions. Which organization does it use?",
+        "correct": "Problem → causes → solution",
+        "wrong": [
+          "Solution → unrelated history → conclusion",
+          "Cause → comparison of two cities → biography",
+          "Chronological events without a central issue"
+        ],
+        "exp": "The article first identifies food waste as a problem, then discusses causes, and finally suggests a response.",
+        "subject": "英文",
+        "sub_topic": "段落結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-段落結構",
+        "template_id": "ref-20261119-b6-e1-paragraph-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e1-paragraph-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "語境、論證、證據與推論均需合理，避免只靠關鍵字",
+      "question": {
+        "q": "A paragraph begins: 'Keeping a regular sleep schedule can help students.' Which supporting sentence best develops the topic?",
+        "correct": "Going to bed at similar times may make it easier to feel rested in the morning.",
+        "wrong": [
+          "The school cafeteria has changed its lunch menu.",
+          "There are three bus stops near the library.",
+          "Some students prefer blue notebooks to red ones."
+        ],
+        "exp": "The topic concerns the benefits of regular sleeping hours; the correct sentence gives a directly relevant possible benefit.",
+        "subject": "英文",
+        "sub_topic": "段落結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-段落結構",
+        "template_id": "ref-20261119-b6-e1-paragraph-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e1-paragraph-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "語境、論證、證據與推論均需合理，避免只靠關鍵字",
+      "question": {
+        "q": "A paragraph presents the benefits of school gardens and then acknowledges that they require ongoing care. Which conclusion best summarizes both ideas?",
+        "correct": "School gardens can support learning when schools also plan for regular maintenance.",
+        "wrong": [
+          "School gardens never require any time or resources.",
+          "Every school garden must use exactly the same plants.",
+          "School gardens cannot be used for learning under any circumstances."
+        ],
+        "exp": "A good conclusion preserves the stated educational benefit while recognizing that maintenance is a necessary practical consideration.",
+        "subject": "英文",
+        "sub_topic": "段落結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-段落結構",
+        "template_id": "ref-20261119-b6-e1-paragraph-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
