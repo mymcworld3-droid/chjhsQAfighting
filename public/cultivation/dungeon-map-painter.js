@@ -20,7 +20,8 @@ export function hashCell(map,x,y){
   return (h>>>0)/4294967296;
 }
 export function drawWorld(ctx,map,camera,width,height,
-  {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0,aimTile=null}={}){
+  {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0,
+    aimTile=null,visualTimeMs=0}={}){
   const palette=BIOMES[map.biome]||BIOMES.ruins;
   const g=Camera.geometry(camera,map,width,height);
   const v=Camera.visibleTiles(camera,map,width,height);
@@ -73,7 +74,33 @@ export function drawWorld(ctx,map,camera,width,height,
     paintPath(map.mainRoute,palette.trim,.62);
     for(const branch of map.branches||[])paintPath(branch.route,palette.line,.55);
   }
-  // Attack telegraphs are painted first, below all beast and player sprites.
+  // Stage 13: server-confirmed strike paths briefly gild or cool the FLOOR.
+  // These are translucent underlays, not character-covering target masks.
+  // No combat geometry or power is derived from browser animation state.
+  for(const member of members){
+    const skill=member?.lastSkill;
+    if(skill?.visualVersion!==1||!Number.isSafeInteger(skill.tick)||
+        currentTick<skill.tick||currentTick-skill.tick>1||
+        !Array.isArray(skill.effectCells))continue;
+    const gold=skill.focusEmpowered===true||skill.focusActivated===true;
+    const shimmer=(.18+.07*Math.sin(visualTimeMs/190));
+    for(const p of skill.effectCells.slice(0,72)){
+      if(!Number.isSafeInteger(p?.x)||!Number.isSafeInteger(p?.y)||
+          !walk(p.x,p.y)||p.x<v.x0||p.x>v.x1||p.y<v.y0||p.y>v.y1)continue;
+      const x=g.ox+p.x*cell,y=g.oy+p.y*cell;
+      ctx.save();
+      ctx.fillStyle=gold?'#ffd36d':'#73d9e6';
+      ctx.globalAlpha=shimmer;
+      ctx.fillRect(x+1,y+1,Math.max(1,cell-2),Math.max(1,cell-2));
+      ctx.globalAlpha=.55;
+      ctx.lineWidth=clamp(cell*.085,1,2.5);
+      ctx.strokeStyle=gold?'#fff0ac':'#b0f1ff';
+      ctx.strokeRect(x+1.5,y+1.5,Math.max(1,cell-3),Math.max(1,cell-3));
+      ctx.restore();
+    }
+  }
+  // Attack telegraphs are painted after the skill floor trace but below
+  // all beast/player sprites, preserving legible red danger outlines.
   // A warning cell never masks the player or overwrites a creature marker.
   for(const beast of enemies){
     const warning=beast?.attack;
@@ -272,6 +299,12 @@ export function drawMinimap(ctx,map,geometry,width,height,
     if(!position||position.x<0||position.y<0||position.x>=map.width||
        position.y>=map.height||map.tiles[position.y*map.width+position.x]===0)return;
     const x=ox+(position.x+.5)*scale,y=oy+(position.y+.5)*scale;
+    if(Number.isSafeInteger(member.focusCharges)&&member.focusCharges>0&&
+        !member.downed&&Number(member.battleHealth)!==0){
+      ctx.save();ctx.strokeStyle='#ffe18a';ctx.lineWidth=Math.max(1,scale*.33);
+      ctx.beginPath();ctx.arc(x,y,Math.max(3,scale*1.7),0,Math.PI*2);
+      ctx.stroke();ctx.restore();
+    }
     ctx.fillStyle=partyColors[index];ctx.beginPath();
     ctx.arc(x,y,Math.max(1.6,member.uid===selfUid?scale*.95:scale*.7),
       0,Math.PI*2);ctx.fill();
