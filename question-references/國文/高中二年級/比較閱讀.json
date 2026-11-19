@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-chi2-comparative-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "多文本統整、表格計算與詩詞象徵，重視可驗證的解讀依據",
+      "question": {
+        "q": "甲：「圖書館熱門時段常一位難求，應提供預約座位，避免無序排隊。」乙：「若所有座位都須事先預約，臨時來館的學生可能被排除；可保留部分免預約席。」統整兩文，哪項方案最切合雙方顧慮？",
+        "correct": "保留一定比例的預約座位，同時設置適量臨時席位並追蹤使用情況",
+        "wrong": [
+          "全面改成預約制，不再提供臨時座位",
+          "完全禁止座位預約，讓學生自行搶位",
+          "只擴增圖書館藏書數量，而不處理座位分配問題"
+        ],
+        "exp": "甲強調秩序與公平分配，乙提醒臨時使用者的可近性；混合座位制度及成效追蹤可同時回應兩項關切。",
+        "subject": "國文",
+        "sub_topic": "比較閱讀",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-比較閱讀",
+        "template_id": "ref-20261119-b7-chi2-comparative-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-chi2-comparative-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "多文本統整、表格計算與詩詞象徵，重視可驗證的解讀依據",
+      "question": {
+        "q": "甲：「某校新建單車停車棚後，騎車上學人數增加，因此停車棚很有效。」乙：「同一時期校外道路拓寬並增設自行車道，可能也影響學生選擇。」比較兩文，哪項推論最穩健？",
+        "correct": "甲提出時間上的相關現象，乙補充其他可能原因，尚須更多比較資料判斷因果",
+        "wrong": [
+          "乙已證明停車棚對騎車人數完全沒有影響",
+          "甲的觀察能排除所有其他交通政策因素",
+          "兩文都否認騎車上學人數曾有增加"
+        ],
+        "exp": "甲引用前後變化，乙指出同時存在的混雜因素；要分辨停車棚的獨立效果，需進一步對照與分析。",
+        "subject": "國文",
+        "sub_topic": "比較閱讀",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-比較閱讀",
+        "template_id": "ref-20261119-b7-chi2-comparative-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-chi2-comparative-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "多文本統整、表格計算與詩詞象徵，重視可驗證的解讀依據",
+      "question": {
+        "q": "甲：「保存老街應重視居民口述歷史，避免只留下外觀。」乙：「老街修復還需改善消防、排水等安全設施，才能維持實際居住功能。」哪項觀點最能整合兩文？",
+        "correct": "歷史敘事與居住安全都是老街保存應兼顧的面向",
+        "wrong": [
+          "只要保存口述記憶，就不需要維護公共安全",
+          "若改善消防設施，所有歷史記憶就必然消失",
+          "兩文都認為老街只應服務短期觀光而非居民"
+        ],
+        "exp": "甲重視文化記憶，乙強調基礎安全，兩者並非互斥；修復策略可同時維持生活與文化價值。",
+        "subject": "國文",
+        "sub_topic": "比較閱讀",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-比較閱讀",
+        "template_id": "ref-20261119-b7-chi2-comparative-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
