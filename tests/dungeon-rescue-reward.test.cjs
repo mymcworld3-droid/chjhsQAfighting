@@ -96,7 +96,7 @@ test('rescue rules: 8 stamina ally, 25 stamina self and exact HP, sequence repla
       b:{uid:'b',position:y,explorationStamina:30,battleHealth:0,
         downed:true,allyReviveCount:0,selfRescueCount:0}
     }};
-  assert.throws(()=>Rescue.help(room,'b',map,{targetUid:'a',seq:1}),/已倒地/);
+  assert.throws(()=>Rescue.help(room,'b',map,{targetUid:'a',seq:1}),/尚未倒地/);
   const helped=Rescue.help(room,'a',map,{targetUid:'b',seq:1});
   assert.equal(helped.members.a.explorationStamina,42);
   assert.equal(helped.members.b.battleHealth,40);
