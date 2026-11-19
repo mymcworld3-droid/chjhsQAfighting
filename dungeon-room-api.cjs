@@ -8,6 +8,7 @@ const { verifyMainIdentity } = require('./raid-question-ticket.cjs');
 const {streamDungeonRoom} = require('./dungeon-room-stream.cjs');
 const {LAYOUT_VERSION,generateDungeonLayout} = require('./dungeon-map-generator.cjs');
 const {roomMap,startExplorationMembers,moveOnMap} = require('./dungeon-movement.cjs');
+const {initialClock,advanceClock,projectClock} = require('./dungeon-battle-clock.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -41,6 +42,7 @@ const publicRoom=(roomId,room,at=Date.now())=>({
   hostUid:room.hostUid,createdAtMs:room.createdAtMs,
   assembledAtMs:room.assembledAtMs||0,
   expiresAtMs:room.expiresAtMs,maxMembers:MAX_MEMBERS,
+  battleClock:projectClock(room,at),
   members:Object.fromEntries(Object.entries(membersOf(room)).map(([id,member])=>
     [id,{...member,online:memberOnline(member,at)}]))
 });
@@ -93,7 +95,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','clock'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -246,6 +248,28 @@ function createHandler({
       const roomId=safeRoomId(req.body?.roomId);
       if(!roomId)throw err('副本房間編號無效',400);
       const roomRef=db.collection(ROOMS).doc(roomId);
+      // A shared Firestore cursor makes clock ticks idempotent even if all four
+      // participants connect through different Render processes.
+      const syncBattleClock=async()=>{
+        return db.runTransaction(async tx=>{
+          const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
+          if(!current||!hasMember(current,uid))
+            throw err('你不是此副本的隊員',403);
+          if(!sessionRoom(current,clock()))
+            throw err('副本房間已關閉或過期',410);
+          if(current.status!=='assembled')
+            throw err('副本時鐘尚未啟動',409);
+          const time=clock(),delta=advanceClock(current,time);
+          if(!delta)return current;
+          const next={...current,...delta,revision:current.revision+1};
+          tx.update(roomRef,{...delta,revision:next.revision});
+          return next;
+        });
+      };
+      if(action==='clock'){
+        const result=await syncBattleClock();
+        return res.json({ok:true,roomId,clock:projectClock(result,clock())});
+      }
       if(action==='get-map'){
         const snap=await roomRef.get();
         if(!snap.exists)throw err('副本房間不存在',404);
@@ -267,7 +291,8 @@ function createHandler({
         if(!hasMember(current,uid))throw err('你不是此副本的隊員',403);
         if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
         return streamDungeonRoom({req,res,ref:roomRef,uid,initialRoom:current,
-          project:publicRoom,isActive:room=>sessionRoom(room,clock()),clock,logger});
+          project:publicRoom,isActive:room=>sessionRoom(room,clock()),clock,logger,
+          onTick:syncBattleClock});
       }
       if(action==='heartbeat'){
         const updated=await db.runTransaction(async tx=>{
@@ -278,7 +303,8 @@ function createHandler({
           const member=membersOf(current)[uid],last=Number(member.heartbeatAtMs)||0;
           const shouldTouch=last<=0||at-last>=HEARTBEAT_MIN_MS;
           const shouldRenew=Number(current.expiresAtMs)-at<RENEW_IF_LESS_THAN_MS;
-          if(!shouldTouch&&!shouldRenew)return current;
+          const battleDelta=advanceClock(current,at);
+          if(!shouldTouch&&!shouldRenew&&!battleDelta)return current;
           const codeRef=db.collection(CODES).doc(current.code);
           const codeSnap=shouldRenew?await tx.get(codeRef):null;
           if(shouldRenew&&(!codeSnap?.exists||codeSnap.data()?.roomId!==roomId||
@@ -287,8 +313,9 @@ function createHandler({
           const expiresAtMs=shouldRenew?at+LOBBY_TTL_MS:current.expiresAtMs;
           const members=shouldTouch?{...membersOf(current),
             [uid]:{...member,heartbeatAtMs:at}}:membersOf(current);
-          const next={...current,members,expiresAtMs,revision:current.revision+1};
-          tx.update(roomRef,{members,expiresAtMs,revision:next.revision});
+          const next={...current,members,expiresAtMs,...(battleDelta||{}),
+            revision:current.revision+1};
+          tx.update(roomRef,{members,expiresAtMs,...(battleDelta||{}),revision:next.revision});
           if(shouldRenew)tx.set(codeRef,{roomId,status:'active',expiresAtMs});
           return next;
         });
@@ -320,8 +347,11 @@ function createHandler({
           const map=roomMap(current,roomId);
           const outcome=moveOnMap(current,uid,map,{dx,dy,step});
           if(outcome.duplicate)return current;
-          const next={...current,members:outcome.members,revision:current.revision+1};
-          tx.update(roomRef,{members:next.members,revision:next.revision});
+          const battleDelta=advanceClock(current,at);
+          const next={...current,members:outcome.members,...(battleDelta||{}),
+            revision:current.revision+1};
+          tx.update(roomRef,{members:next.members,...(battleDelta||{}),
+            revision:next.revision});
           return next;
         });
         return respond(roomId,updated);
@@ -358,10 +388,11 @@ function createHandler({
             // can move. Cross-instance clients see one authoritative snapshot.
             const map=roomMap(room,roomId);
             const startingMembers=startExplorationMembers(room,map);
+            const clockState=initialClock(at);
             const next={...room,status:'assembled',assembledAtMs:at,
-              members:startingMembers,revision:room.revision+1};
+              ...clockState,members:startingMembers,revision:room.revision+1};
             tx.update(roomRef,{status:next.status,assembledAtMs:at,
-              members:startingMembers,revision:next.revision});
+              ...clockState,members:startingMembers,revision:next.revision});
             return next;
           }
           if(room.status==='waiting')return room;
@@ -370,8 +401,12 @@ function createHandler({
             throw err('隊伍已開始探索，不能取消集結；可離開隊伍結束本次探索',409);
           const members=Object.fromEntries(Object.entries(membersOf(room))
             .map(([key,m])=>[key,{...m,ready:false}]));
-          const next={...room,status:'waiting',members,revision:room.revision+1};
-          tx.update(roomRef,{status:'waiting',members,revision:next.revision});
+          const clockState={battleClockVersion:null,battleStartedAtMs:null,
+            battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null};
+          const next={...room,status:'waiting',...clockState,members,
+            revision:room.revision+1};
+          tx.update(roomRef,{status:'waiting',...clockState,members,
+            revision:next.revision});
           return next;
         });
         return respond(roomId,updated);
