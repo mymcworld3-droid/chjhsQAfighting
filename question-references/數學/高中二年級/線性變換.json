@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-m2-linear-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "平面線性變換T由矩陣[[2,1],[0,3]]表示，則T(2,−1)為何？",
+        "correct": "(3,−3)",
+        "wrong": [
+          "(5,−1)",
+          "(3,3)",
+          "(4,−3)"
+        ],
+        "exp": "矩陣乘以列向量(2,−1)，第一分量2×2+1×(−1)=3，第二分量0×2+3×(−1)=−3。",
+        "subject": "數學",
+        "sub_topic": "線性變換",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-線性變換",
+        "template_id": "ref-20261119-b5-m2-linear-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-m2-linear-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "平面線性變換T(x,y)=(x+y,x−y)。若u=(2,1)、v=(−1,3)，則T(u+v)為何？",
+        "correct": "(5,−3)",
+        "wrong": [
+          "(3,1)",
+          "(−2,4)",
+          "(1,4)"
+        ],
+        "exp": "u+v=(1,4)，故T(u+v)=(1+4,1−4)=(5,−3)；也可利用線性變換的加法性。",
+        "subject": "數學",
+        "sub_topic": "線性變換",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-線性變換",
+        "template_id": "ref-20261119-b5-m2-linear-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-m2-linear-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "平面線性變換T(x,y)=(−y,x)作用於點(3,−2)後，其像點為何？",
+        "correct": "(2,3)",
+        "wrong": [
+          "(−2,−3)",
+          "(−3,2)",
+          "(3,2)"
+        ],
+        "exp": "直接代入T(3,−2)=(−(−2),3)=(2,3)；這也可視為平面逆時針旋轉90°。",
+        "subject": "數學",
+        "sub_topic": "線性變換",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-線性變換",
+        "template_id": "ref-20261119-b5-m2-linear-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
