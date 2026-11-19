@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-math3-quantdecision-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，統計及應用數據均有可核驗推導",
+      "question": {
+        "q": "某交通月票售價500元，單次搭乘30元。若某月預計搭乘18次，且不考慮其他優惠，使用月票比單次付費省多少元？",
+        "correct": "40元",
+        "wrong": [
+          "20元",
+          "60元",
+          "540元"
+        ],
+        "exp": "單次付費總額=18×30=540元，月票500元，差額540−500=40元。",
+        "subject": "數學",
+        "sub_topic": "生活決策的量化分析",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-生活決策的量化分析",
+        "template_id": "ref-20261119-b9-math3-quantdecision-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math3-quantdecision-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，統計及應用數據均有可核驗推導",
+      "question": {
+        "q": "手機方案A月費300元另收每GB 40元；方案B月費500元包含所有題述使用量。若每月用量8GB，哪個方案較便宜、差多少？",
+        "correct": "方案B，便宜120元",
+        "wrong": [
+          "方案A，便宜120元",
+          "兩方案均為500元",
+          "方案B，便宜320元"
+        ],
+        "exp": "方案A費用300+40×8=620元，方案B固定500元，故B便宜620−500=120元。",
+        "subject": "數學",
+        "sub_topic": "生活決策的量化分析",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-生活決策的量化分析",
+        "template_id": "ref-20261119-b9-math3-quantdecision-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math3-quantdecision-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，統計及應用數據均有可核驗推導",
+      "question": {
+        "q": "某飲水機採購有兩方案：甲設備費8,000元、年維護費1,000元；乙設備費5,000元、年維護費1,600元。忽略利率、耗材與折舊，若預計使用5年，哪項正確？",
+        "correct": "兩方案五年總成本均為13,000元",
+        "wrong": [
+          "甲的五年總成本為9,000元",
+          "乙的五年總成本為8,000元",
+          "甲比乙五年總成本高3,000元"
+        ],
+        "exp": "甲5年總成本8,000+1,000×5=13,000元；乙5,000+1,600×5=13,000元，故相等。",
+        "subject": "數學",
+        "sub_topic": "生活決策的量化分析",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-生活決策的量化分析",
+        "template_id": "ref-20261119-b9-math3-quantdecision-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
