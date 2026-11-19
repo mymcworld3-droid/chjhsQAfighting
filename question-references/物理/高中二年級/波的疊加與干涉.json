@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-phy2-wave-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "利用相位、波長及波程差判斷疊加結果",
+      "question": {
+        "q": "兩相干同相波源產生等振幅波，在某點的波程差恰為2.5倍波長。忽略其他影響，該點應發生哪種干涉？",
+        "correct": "相消干涉",
+        "wrong": [
+          "相長干涉",
+          "無法疊加",
+          "波速加倍"
+        ],
+        "exp": "同相波源的波程差為半整數倍波長時，相位差為奇數倍π，等振幅波在該處理想相消。",
+        "subject": "物理",
+        "sub_topic": "波的疊加與干涉",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-波的疊加與干涉",
+        "template_id": "ref-20261119-phy2-wave-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-phy2-wave-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "利用相位、波長及波程差判斷疊加結果",
+      "question": {
+        "q": "同一介質中兩列振幅皆為3.0 cm的同頻波，在某位置同時到達且相位差為180°。該位置理想疊加後的瞬時位移為何？",
+        "correct": "0 cm",
+        "wrong": [
+          "3.0 cm",
+          "6.0 cm",
+          "9.0 cm"
+        ],
+        "exp": "同振幅且相位相反的兩列波在該處位移互相抵銷，合成位移為0；線性疊加不是振幅直接相加。",
+        "subject": "物理",
+        "sub_topic": "波的疊加與干涉",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-波的疊加與干涉",
+        "template_id": "ref-20261119-phy2-wave-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-phy2-wave-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "利用相位、波長及波程差判斷疊加結果",
+      "question": {
+        "q": "波速為20 m/s、頻率為10 Hz的兩個同相相干波源，在某點的波程差為1.0 m。忽略衰減，該點最可能出現何種干涉？",
+        "correct": "相消干涉",
+        "wrong": [
+          "相長干涉",
+          "波長變為1.0 m",
+          "兩波頻率相加變為20 Hz"
+        ],
+        "exp": "波長λ=v/f=20/10=2.0 m；波程差1.0 m=λ/2，因此為相消干涉。",
+        "subject": "物理",
+        "sub_topic": "波的疊加與干涉",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-波的疊加與干涉",
+        "template_id": "ref-20261119-phy2-wave-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
