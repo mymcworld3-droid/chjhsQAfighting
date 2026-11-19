@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-phy2-circuit-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以電荷、等效電阻及儲能公式分析基本電路",
+      "question": {
+        "q": "電容器電容8 μF，兩端電壓12 V，若電容固定，所儲存的電荷量大小為何？",
+        "correct": "96 μC",
+        "wrong": [
+          "1.5 μC",
+          "24 μC",
+          "960 μC"
+        ],
+        "exp": "Q=CV=(8 μF)(12 V)=96 μC。",
+        "subject": "物理",
+        "sub_topic": "電容與直流電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電容與直流電路",
+        "template_id": "ref-20261119-b2-phy2-circuit-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-phy2-circuit-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以電荷、等效電阻及儲能公式分析基本電路",
+      "question": {
+        "q": "理想12 V電池連接2 Ω與4 Ω電阻串聯的閉合電路，忽略電池內阻，電路電流為何？",
+        "correct": "2 A",
+        "wrong": [
+          "3 A",
+          "6 A",
+          "8 A"
+        ],
+        "exp": "串聯電阻為2+4=6 Ω，依歐姆定律I=12/6=2 A。",
+        "subject": "物理",
+        "sub_topic": "電容與直流電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電容與直流電路",
+        "template_id": "ref-20261119-b2-phy2-circuit-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-phy2-circuit-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "以電荷、等效電阻及儲能公式分析基本電路",
+      "question": {
+        "q": "一個電容2 μF的理想電容器充電至10 V，儲存的電能為何？",
+        "correct": "100 μJ",
+        "wrong": [
+          "20 μJ",
+          "200 μJ",
+          "10 μJ"
+        ],
+        "exp": "電能U=(1/2)CV²=(1/2)×2×10⁻⁶×10² J=100×10⁻⁶ J=100 μJ。",
+        "subject": "物理",
+        "sub_topic": "電容與直流電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電容與直流電路",
+        "template_id": "ref-20261119-b2-phy2-circuit-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
