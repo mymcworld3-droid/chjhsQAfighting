@@ -960,6 +960,20 @@ class DungeonMapView{
       target:{...path.at(-1)}};
     this.travelScenes.set(event.key,{...event,
       startedAt:performance.now(),optimistic:true});
+    // Paint before a fast SSE/HTTP ACK can outrun the next rAF.
+    this.draw();
+  }
+  confirmMovementPreview(member){
+    const pending=this.pendingMovementPreview;
+    if(!pending||!member||member.moveSeq<pending.finalStep)return;
+    if(member.position?.x!==pending.target.x||
+       member.position?.y!==pending.target.y){
+      this.clearMovementPreview();return;
+    }
+    this.pendingMovementPreview=null;
+    const prior=this.travelScenes.get(pending.key);
+    if(prior?.optimistic)this.travelScenes.set(pending.key,{
+      ...prior,optimistic:false});
     this.drawSoon();
   }
   clearMovementPreview(){
@@ -1006,9 +1020,7 @@ class DungeonMapView{
         if(!this.isCurrent()||this.seq!==token||roomId!==this.roomId)break;
         if(!result?.room)throw new Error('移動結果遺失，請重新同步');
         this.updateRoom(result.room);
-        if(this.pendingMovementPreview?.finalStep<=
-            result.room.members?.[this.uid]?.moveSeq)
-          this.clearMovementPreview();
+        this.confirmMovementPreview(result.room.members?.[this.uid]);
         window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
           detail:{room:result.room}
         }));
@@ -1094,9 +1106,7 @@ class DungeonMapView{
         window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
           detail:{room:result.room}
         }));
-        if(this.pendingMovementPreview?.finalStep<=
-            result.room.members?.[this.uid]?.moveSeq)
-          this.clearMovementPreview();
+        this.confirmMovementPreview(result.room.members?.[this.uid]);
       }
       this.follow=true;this.followBeast=false;
       this.camera=Camera.lockToPlayer(this.selfPad(),this.map,this.width,this.height);
