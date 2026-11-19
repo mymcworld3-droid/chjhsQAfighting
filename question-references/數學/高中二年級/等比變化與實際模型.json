@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m2-geometric-model-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "某材料樣本初始質量100克，每經過4小時剩下原來的一半。依理想等比模型，經過12小時後質量為何？",
+        "correct": "12.5克",
+        "wrong": [
+          "25克",
+          "6.25克",
+          "50克"
+        ],
+        "exp": "12小時包含3個4小時，故剩餘量=100×(1/2)³=12.5克。",
+        "subject": "數學",
+        "sub_topic": "等比變化與實際模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中二年級-等比變化與實際模型",
+        "template_id": "ref-20261119-b10-m2-geometric-model-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m2-geometric-model-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "某設備原價800元，連續兩年每年年末折舊5%。若各年均以當年初餘額計，兩年後估計價值為何？",
+        "correct": "722元",
+        "wrong": [
+          "720元",
+          "760元",
+          "682元"
+        ],
+        "exp": "兩年後價值800×(0.95)²=800×0.9025=722元，不能直接扣兩次原價的5%。",
+        "subject": "數學",
+        "sub_topic": "等比變化與實際模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中二年級-等比變化與實際模型",
+        "template_id": "ref-20261119-b10-m2-geometric-model-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m2-geometric-model-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "一項指標初始值200，每一期乘上1.2。若維持相同變化率，經過3期後的值為何？",
+        "correct": "345.6",
+        "wrong": [
+          "320",
+          "360",
+          "288"
+        ],
+        "exp": "等比變化模型V₃=200×(1.2)³=200×1.728=345.6。",
+        "subject": "數學",
+        "sub_topic": "等比變化與實際模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中二年級-等比變化與實際模型",
+        "template_id": "ref-20261119-b10-m2-geometric-model-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
