@@ -262,3 +262,25 @@
     top:44px;max-height:calc(100% - 55px);width:242px;
   }
 }
+
+/* Stage 10: clear, non-obstructive warning/health HUD. Warnings are drawn
+   beneath character markers in the world canvas, never over the sprites. */
+#dungeon-map-view .dm-health{
+  color:#a9e5b3;font-variant-numeric:tabular-nums;font-weight:700;
+}
+#dungeon-map-view .dm-health.is-critical{
+  color:#ffa694;text-shadow:0 0 7px #c74b4b50;
+}
+#dungeon-map-view .dm-threat{
+  max-width:310px;padding:6px 9px;text-align:center;
+  border-radius:8px;background:#6a281ecf;
+  border:1px solid #fa9e75;color:#ffe3bc;
+  font-size:11px;font-weight:650;line-height:1.5;
+  overflow-wrap:anywhere;
+}
+#dungeon-map-view .dm-threat[hidden]{display:none!important}
+#dungeon-map-view .dm-dpad button:disabled{opacity:.48}
+@media(max-width:720px){
+  #dungeon-map-view .dm-energy{max-width:170px;gap:4px 7px}
+  #dungeon-map-view .dm-threat{max-width:195px;font-size:10px;padding:5px 7px}
+}
