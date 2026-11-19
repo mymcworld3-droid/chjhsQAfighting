@@ -212,3 +212,95 @@ test('C victory validation denies forged progress and unearned rewards',()=>{
     enemies:[Boss.initialBoss()]},'a'),/先真正擊敗/);
   assert.throws(()=>Victory.validate(roomId,{...room,status:'waiting'},'a'),/有效/);
 });
+
+
+test('real boss death atomically archives a permanent C victory and personal inbox',async()=>{
+  const f=await fixture(),room=f.raw();
+  room.dungeonProgress={...room.dungeonProgress,
+    guardianStatus:'defeated',keyAcquired:true,portalStatus:'open'};
+  room.members.a.position={...f.map.portalSite};
+  assert.equal((await f.call('a','enter-boss',{roomId:f.roomId})).status,200);
+  assert.equal((await f.call('a','recent-victories')).body.rewards.length,0,
+    'live boss cannot be mistaken for a completed victory');
+  const fight=f.raw();
+  fight.enemies[0].battleHealth=45;
+  fight.members.a.position={x:11,y:8};
+  fight.members.b.position={x:12,y:8};
+  const [a,b]=await Promise.all([
+    f.call('a','strike',{roomId:f.roomId,enemyId:Boss.ID,seq:1},0),
+    f.call('b','strike',{roomId:f.roomId,enemyId:Boss.ID,seq:1},1)
+  ]);
+  assert.equal(a.status,200,a.body?.error);
+  assert.equal(b.status,200,b.body?.error);
+  assert.equal(f.raw().bossEncounter.status,'defeated');
+  const archive=f.c.records.get('dungeonVictoryRecords/'+f.roomId);
+  assert.ok(archive,'C archive must commit with real boss death');
+  assert.equal(archive.recordVersion,1);
+  assert.equal(archive.roomId,f.roomId);
+  assert.equal(archive.bossEncounter.status,'defeated');
+  assert.deepStrictEqual(Object.keys(archive.members).sort(),['a','b']);
+  assert.equal(archive.members.a.uid,'a');
+  assert.equal(archive.members.a.battleHealth,undefined,
+    'archive must omit health, quiz state and other battle-private fields');
+  assert.equal(archive.mapSeed,undefined,'seed stays secret');
+  assert.equal(archive.enemies.length,0);
+  assert.equal(f.c.records.get('dungeonVictoryInbox/a').recent.length,1);
+  assert.equal(f.c.records.get('dungeonVictoryInbox/b').recent.length,1);
+  const before=await f.call('a','recent-victories');
+  assert.equal(before.status,200);
+  assert.deepStrictEqual(before.body.rewards.map(x=>x.claimed),[false]);
+  assert.equal(before.body.rewards[0].partySize,2);
+  assert.equal((await f.call('visitor','recent-victories')).body.rewards.length,0);
+  assert.equal((await f.call('visitor','claim-boss-reward',
+    {roomId:f.roomId})).status,403);
+  // Leaving an assembled room resets combat for everyone. The immutable
+  // archive and each member's inbox must remain intact and redeemable.
+  assert.equal((await f.call('b','leave',{roomId:f.roomId},1)).status,200);
+  assert.equal(f.raw().status,'waiting');
+  assert.equal(f.raw().bossEncounter,null);
+  assert.equal((await f.call('a','disband',{roomId:f.roomId})).status,200);
+  assert.equal(f.raw().status,'closed');
+  const [claimedB,claimedA,replayedB]=await Promise.all([
+    f.call('b','claim-boss-reward',{roomId:f.roomId,gold:999999},1),
+    f.call('a','claim-boss-reward',{roomId:f.roomId},0),
+    f.call('b','claim-boss-reward',{roomId:f.roomId},0)
+  ]);
+  assert.equal(claimedA.status,200,claimedA.body?.error);
+  assert.equal(claimedB.status,200,claimedB.body?.error);
+  assert.equal(replayedB.status,200,replayedB.body?.error);
+  assert.equal(Number(claimedB.body.reward.awarded)+
+    Number(replayedB.body.reward.awarded),1);
+  for(const uid of ['a','b']){
+    assert.equal(f.a.records.get('users/'+uid).stats.gold,125);
+    assert.equal(f.a.records.get('users/'+uid).stats.totalScore,53);
+    assert.equal(f.a.records.get('users/'+uid).stats.dungeonBossWins,1);
+    const list=await f.call(uid,'recent-victories');
+    assert.equal(list.body.rewards[0].claimed,true);
+  }
+  assert.equal([...f.a.records.keys()].filter(k=>
+    k.startsWith('dungeonVictoryClaims/')).length,2);
+  assert.ok(f.c.records.has('dungeonVictoryRecords/'+f.roomId));
+  assert.equal((await f.call('b','claim-boss-reward',{roomId:f.roomId}))
+    .body.reward.status,'duplicate');
+});
+test('archive excludes unverified wins and mismatched room identity',()=>{
+  const roomId='dungroom000001',room={mode:'dungeon',version:1,
+    status:'assembled',assembledAtMs:NOW,dungeonArena:'boss',
+    dungeonProgress:{guardianStatus:'defeated',keyAcquired:true,portalStatus:'open'},
+    bossEncounter:{version:Boss.VERSION,status:'defeated',enteredAtTick:1,
+      defeatedAtTick:3,defeatedByUid:'a'},
+    enemies:[],members:{a:{uid:'a',battleHealth:10,quizCreditSeq:90},
+      b:{uid:'b',battleHealth:0,downed:true}}};
+  const archived=Victory.makeArchive(roomId,room,NOW+3000);
+  assert.equal(Victory.verifiedArchive(roomId,archived,'b').partySize,2,
+    'downed participants are still entitled to the same team victory');
+  assert.throws(()=>Victory.verifiedArchive('dungroom000002',archived,'a'),
+    /存檔/);
+  assert.throws(()=>Victory.verifiedArchive(roomId,archived,'intruder'),
+    /不是這場/);
+  assert.throws(()=>Victory.makeArchive(roomId,{
+    ...room,enemies:[Boss.initialBoss()]},NOW),/先真正擊敗/);
+  assert.throws(()=>Victory.makeArchive(roomId,{
+    ...room,bossEncounter:{...room.bossEncounter,status:'fighting'}},NOW),
+    /先真正擊敗/);
+});
