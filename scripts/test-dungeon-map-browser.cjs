@@ -405,10 +405,21 @@ async function main(){
     await a.page.locator('#dungeon-lobby [data-dg="create"]').click();
     await a.page.locator('#dungeon-lobby [data-dg="ready"]').waitFor();
     const b=await client('b',{width:990,height:570});
-    await b.page.locator('#dungeon-lobby [data-dg-code]').fill('ABCDEF');
-    await b.page.locator('#dungeon-lobby [data-dg="join-code"]').click();
+    // The lobby refreshes its public-room cards asynchronously. If that
+    // refresh rerenders the code input between fill and click, retry the
+    // user-visible join once the code field has settled.
     try{
-      await b.page.locator('#dungeon-lobby [data-dg="ready"]').waitFor({timeout:6500});
+      for(let attempt=0;attempt<3;attempt++){
+        await b.page.locator('#dungeon-lobby [data-dg-code]').fill('ABCDEF');
+        await b.page.locator('#dungeon-lobby [data-dg="join-code"]').click();
+        try{
+          await b.page.locator('#dungeon-lobby [data-dg="ready"]')
+            .waitFor({timeout:3800});break;
+        }catch(error){
+          const notice=await b.page.locator('[data-dg-notice]').textContent();
+          if(attempt===2||!notice?.includes('請輸入六碼'))throw error;
+        }
+      }
     }catch(error){
       console.error('[Dungeon join diagnostics]',{requests,room,errors,
         browser:await b.page.evaluate(()=>({
