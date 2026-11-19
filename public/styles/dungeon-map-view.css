@@ -431,3 +431,102 @@
   #dungeon-map-view .dm-quiz-sheet{padding:12px}
   #dungeon-map-view .dm-quiz-info{font-size:11px}
 }
+
+/* Stage 13 — 金身蓄勢: a genuinely empowered move is visibly gold.
+   The UI never grants power: only the authoritative C-room focus count does. */
+#dungeon-map-view .dm-manual.has-focus{
+  border-color:#d9b76c;
+  box-shadow:0 0 0 1px #e7ca7740,0 5px 30px #ebae4c29,0 9px 26px #0009;
+}
+#dungeon-map-view .dm-manual.has-focus [data-dm-focus]{
+  color:#ffeaa0;background:#6e4c1d99;border:1px solid #e9c37599;
+  border-radius:999px;padding:4px 7px;
+  text-shadow:0 0 10px #ffd88eaa;font-weight:800;
+}
+#dungeon-map-view .dm-skills button.is-focus-empowered{
+  background:linear-gradient(128deg,#ffe8a2 0%,#ecb95d 40%,#b97d2f 100%);
+  color:#2b2114;border:1.5px solid #ffecb1;font-weight:800;
+  text-shadow:0 1px 0 #fff9ba73;
+  box-shadow:inset 0 1px 1px #fffac6b3,0 0 13px #ffd15b88;
+  animation:dmTechniqueGold 1.65s ease-in-out infinite;
+}
+#dungeon-map-view .dm-skills button.is-focus-empowered:disabled{
+  opacity:.65;animation:none;filter:saturate(.68);
+}
+#dungeon-map-view .dm-skills button.is-focus-empowered:hover:not(:disabled){
+  background:linear-gradient(120deg,#fff0bb,#f0cb73,#d99d43);
+  border-color:#fff4d3;
+}
+@keyframes dmTechniqueGold{
+  0%,100%{box-shadow:inset 0 1px 1px #fffac6b3,0 0 7px #ffc95c63}
+  50%{box-shadow:inset 0 1px 1px #fffac6f0,0 0 21px #ffd15bcb}
+}
+/* The avatar remains visible through the transparent center of the halo.
+   The layer tracks the same camera geometry and sprite overlap offsets. */
+#dungeon-map-view .dm-effect-layer{
+  position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;
+}
+#dungeon-map-view .dm-focus-aura{
+  --dm-focus-size:52px;
+  position:absolute;
+  width:var(--dm-focus-size);height:var(--dm-focus-size);
+  transform:translate(-50%,-50%);
+  pointer-events:none;isolation:isolate;
+  filter:drop-shadow(0 0 8px #e8a33d90);
+  contain:layout style;
+}
+#dungeon-map-view .dm-focus-ring{
+  position:absolute;inset:13%;border:2px solid #ffeab0;
+  border-radius:50%;
+  background:radial-gradient(circle,transparent 0%,transparent 52%,
+    #ffcf5840 71%,#eaaa4766 100%);
+  box-shadow:0 0 12px 3px #ffd76a8a,inset 0 0 13px #ffd36b6b;
+  animation:dmFocusBreath 2.1s ease-in-out infinite;
+}
+#dungeon-map-view .dm-focus-orbit{
+  position:absolute;inset:1%;border-radius:50%;
+  border:1.7px dashed #ffe6a7c9;
+  box-shadow:0 0 15px #f7bd5f80;
+  animation:dmFocusOrbit 6s linear infinite;
+}
+#dungeon-map-view .dm-focus-spark{
+  position:absolute;width:5px;height:5px;top:50%;left:50%;
+  border:1px solid #fffee0;
+  border-radius:1px;transform:rotate(45deg);
+  background:#ffe8a0;
+  box-shadow:0 0 8px 3px #ffc251aa;
+  animation:dmFocusMote 2.1s ease-in-out infinite;
+}
+#dungeon-map-view .dm-spark-a{left:12%;top:68%;animation-delay:-.15s}
+#dungeon-map-view .dm-spark-b{left:83%;top:55%;animation-delay:-.85s}
+#dungeon-map-view .dm-spark-c{left:42%;top:90%;animation-delay:-1.35s}
+#dungeon-map-view .dm-spark-d{left:63%;top:13%;animation-delay:-1.7s}
+#dungeon-map-view .dm-focus-count{
+  position:absolute;right:-3px;top:-11px;min-width:26px;
+  padding:1px 4px;white-space:nowrap;
+  font:900 11px/1.3 system-ui,"Noto Sans TC",sans-serif;
+  text-align:center;color:#fff5bf;background:#3a2815e8;
+  border:1px solid #f4d882;border-radius:12px;
+  text-shadow:0 0 5px #fff7c7;
+  box-shadow:0 0 8px #ffd77d88;
+}
+@keyframes dmFocusBreath{
+  0%,100%{transform:scale(.91);opacity:.70}
+  50%{transform:scale(1.12);opacity:1}
+}
+@keyframes dmFocusOrbit{
+  from{transform:rotate(0deg)}to{transform:rotate(360deg)}
+}
+@keyframes dmFocusMote{
+  0%{transform:translateY(6px) scale(.55) rotate(45deg);opacity:0}
+  26%{opacity:1}
+  82%{opacity:.8}
+  100%{transform:translateY(-23px) scale(1.1) rotate(160deg);opacity:0}
+}
+@media(prefers-reduced-motion:reduce){
+  #dungeon-map-view .dm-skills button.is-focus-empowered,
+  #dungeon-map-view .dm-focus-ring,
+  #dungeon-map-view .dm-focus-orbit,
+  #dungeon-map-view .dm-focus-spark{animation:none!important}
+  #dungeon-map-view .dm-focus-spark{opacity:.85}
+}
