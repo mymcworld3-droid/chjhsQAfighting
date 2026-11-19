@@ -6,7 +6,7 @@
 // tactical combat and main-account resources until quiz charging arrives.
 const {generateDungeonLayout,LAYOUT_VERSION,walkable}=require('./dungeon-map-generator.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
-const {START_STAMINA,STEP_COST,clampStamina}=require('./dungeon-stamina-rules.cjs');
+const {START_STAMINA,STEP_COST,staminaFor,staminaAfterCost}=require('./dungeon-stamina-rules.cjs');
 const MAX_STEPS=100000;
 const error=(message,status=409)=>Object.assign(new Error(message),{status});
 const order=members=>Object.values(members||{}).sort((a,b)=>
@@ -57,9 +57,9 @@ function moveOnMap(room,uid,map,{dx,dy,step}={}){
   if(!walkable(map,to))throw error('前方是無法通行的地形',409);
   if((room.enemies||[]).some(enemy=>Boss.occupies(enemy,to)))
     throw error('靈獸擋住前方道路，請繞路或等待靈獸移動',409);
-  const stamina=clampStamina(member.explorationStamina);
+  const stamina=staminaFor(member);
   if(stamina<STEP_COST)throw error('探索體力不足，暫時無法移動',409);
-  const nextMember={...member,position:to,explorationStamina:stamina-STEP_COST,
+  const nextMember={...member,position:to,explorationStamina:staminaAfterCost(member,STEP_COST),
     moveSeq:step,lastMove:{step,dx,dy}};
   return {duplicate:false,member:nextMember,members:{
     ...room.members,[uid]:nextMember

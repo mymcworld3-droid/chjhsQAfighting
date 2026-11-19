@@ -14,7 +14,7 @@ const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
 const {strikeEnemy,maxHealth}=require('./dungeon-player-combat.cjs');
 const Skills=require('./dungeon-skill-combat.cjs');
 const QuizCredit=require('./dungeon-quiz-credit.cjs');
-const {clampStamina}=require('./dungeon-stamina-rules.cjs');
+const {staminaFor}=require('./dungeon-stamina-rules.cjs');
 const Objectives=require('./dungeon-objectives.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
 const Portal=require('./dungeon-portal-readiness.cjs');
@@ -81,7 +81,7 @@ const publicRoom=(roomId,room,at=Date.now())=>({
   })):[],
   members:Object.fromEntries(Object.entries(membersOf(room)).map(([id,member])=>
     [id,{...member,
-      ...(room.status==='assembled'?{explorationStamina:clampStamina(member.explorationStamina)}:{}),
+      ...(room.status==='assembled'?{explorationStamina:staminaFor(member)}:{}),
       online:memberOnline(member,at)}]))
 });
 const safeName=(value,uid)=>{
@@ -95,7 +95,8 @@ const REALM_TIERS=Object.freeze([
 const makeMember=(uid,name,at,player={})=>{
   const score=trainingAccess.score(player);
   const realm=REALM_TIERS.find(([threshold])=>score>=threshold)?.[1]||'凡人';
-  return {uid,name,joinedAtMs:at,ready:false,realm,accessScore:score,heartbeatAtMs:at};
+  return {uid,name,joinedAtMs:at,ready:false,realm,accessScore:score,
+    dungeonAdmin:player?.isAdmin===true,heartbeatAtMs:at};
 };
 // Public recruitment discloses only safe presentation fields, never codes,
 // member identifiers, or complete room state.
@@ -662,10 +663,15 @@ function createHandler({
           // changes before C commits, the transaction refuses a stale start.
           const ids=Object.keys(membersOf(found)).sort();
           rosterKey=ids.join('|');
-          const records=await Promise.all(ids.map(id=>
-            resolveA().db.collection('tacticalManuals').doc(id).get()));
-          manualByUid=Object.fromEntries(ids.map((id,i)=>
-            [id,records[i].exists?records[i].data():null]));
+          const records=await Promise.all(ids.map(async id=>{
+            const [manual,user]=await Promise.all([
+              resolveA().db.collection('tacticalManuals').doc(id).get(),
+              resolveA().db.collection('users').doc(id).get()
+            ]);
+            return {manual:manual.exists?manual.data():null,
+              isAdmin:user.exists&&user.data()?.isAdmin===true};
+          }));
+          manualByUid=Object.fromEntries(ids.map((id,i)=>[id,records[i]]));
         }
         const updated=await db.runTransaction(async tx=>{
           const snap=await tx.get(roomRef),room=snap.exists?snap.data():null;
@@ -689,7 +695,10 @@ function createHandler({
             // can inject an equipped skill into the shared room.
             for(const id of Object.keys(startingMembers)){
               startingMembers[id]={...startingMembers[id],
-                ...Skills.initialCombatLoadout(startingMembers[id],manualByUid[id])};
+                // Refresh A-side admin privilege at departure. A client cannot
+                // grant this by setting any field in a dungeon HTTP request.
+                dungeonAdmin:manualByUid[id].isAdmin,
+                ...Skills.initialCombatLoadout(startingMembers[id],manualByUid[id].manual)};
             }
             const clockState=initialClock(at);
             const objectives=Objectives.spawn(map,initialEnemies(map));
