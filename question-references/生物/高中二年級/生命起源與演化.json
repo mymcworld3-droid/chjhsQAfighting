@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-生命起源與演化-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查生命起源與演化",
+      "question": {
+        "q": "某研究者發現粒線體具有自己的環狀DNA、核糖體與雙層膜。這些特徵最常被用來支持哪項假說？",
+        "correct": "粒線體源於古代與宿主細胞共生的細菌",
+        "wrong": [
+          "粒線體完全由細胞壁分泌形成",
+          "所有細胞器都沒有任何遺傳物質",
+          "粒線體只能存在於沒有細胞核的細菌"
+        ],
+        "exp": "粒線體的部分特徵接近原核生物，是內共生理論的重要證據。",
+        "subject": "生物",
+        "sub_topic": "生命起源與演化",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生命起源與演化",
+        "template_id": "extra-2026-bio2-生命起源與演化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-生命起源與演化-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查生命起源與演化",
+      "question": {
+        "q": "兩物種在多個獨立基因序列上高度相似，且有化石與形態證據支持。最合理的推論為何？",
+        "correct": "兩者可能具有較近的共同祖先關係",
+        "wrong": [
+          "兩物種必定是同一個現存個體",
+          "基因相似就表示兩者所有習性完全相同",
+          "不同物種不可能擁有相似的基因"
+        ],
+        "exp": "遺傳與其他獨立證據可共同支持親緣推論，但不能單憑一個序列判斷全部性狀。",
+        "subject": "生物",
+        "sub_topic": "生命起源與演化",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生命起源與演化",
+        "template_id": "extra-2026-bio2-生命起源與演化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-生命起源與演化-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查生命起源與演化",
+      "question": {
+        "q": "關於地球早期生命可能由化學演化產生的假說，何種科學態度較恰當？",
+        "correct": "以實驗與地質證據檢驗可能途徑，區分假說與已證實事實",
+        "wrong": [
+          "只要提出一個模型就不需再尋求證據",
+          "任何實驗產生有機分子就能證明已製成完整生命",
+          "因早期地球無直接影像就不能研究生命起源"
+        ],
+        "exp": "生命起源研究涉及可檢驗化學過程，但完整歷程仍有不確定性。",
+        "subject": "生物",
+        "sub_topic": "生命起源與演化",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生命起源與演化",
+        "template_id": "extra-2026-bio2-生命起源與演化-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

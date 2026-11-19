@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-光合作用與呼吸-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查光合作用與呼吸",
+      "question": {
+        "q": "科學家以含氧-18標記的水提供給植物，光照後釋出的氧氣帶有標記。這最支持哪個結論？",
+        "correct": "光合作用放出的氧氣主要源自水分解",
+        "wrong": [
+          "氧氣必定全部來自二氧化碳的碳原子",
+          "光反應完全不涉及水",
+          "標記氧只能進入葡萄糖而不能成為氧氣"
+        ],
+        "exp": "光反應的水分解提供電子與氧氣，放出的O₂氧原子源於水。",
+        "subject": "生物",
+        "sub_topic": "光合作用與呼吸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-光合作用與呼吸",
+        "template_id": "extra-2026-bio2-光合作用與呼吸-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-光合作用與呼吸-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查光合作用與呼吸",
+      "question": {
+        "q": "在光照充足的葉綠體中，固定二氧化碳形成有機物的卡爾文循環主要在哪個部位進行？",
+        "correct": "葉綠體基質",
+        "wrong": [
+          "粒線體內膜",
+          "細胞核核仁",
+          "葉綠體類囊體腔內的光系統反應中心"
+        ],
+        "exp": "卡爾文循環的主要酵素位於葉綠體基質，利用光反應產生的ATP與NADPH。",
+        "subject": "生物",
+        "sub_topic": "光合作用與呼吸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-光合作用與呼吸",
+        "template_id": "extra-2026-bio2-光合作用與呼吸-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-光合作用與呼吸-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查光合作用與呼吸",
+      "question": {
+        "q": "將植物葉片在適溫、固定CO₂濃度下增加光照，光合速率上升後趨於平台。哪種解釋最合理？",
+        "correct": "其他因素或酵素反應能力限制最大光合速率",
+        "wrong": [
+          "光強越高，固定速率必定無限增加",
+          "平台代表葉片所有細胞立即死亡",
+          "光照對植物完全沒有影響"
+        ],
+        "exp": "光合作用受光、CO₂與酵素等共同限制，達飽和後光再增加效果有限。",
+        "subject": "生物",
+        "sub_topic": "光合作用與呼吸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-光合作用與呼吸",
+        "template_id": "extra-2026-bio2-光合作用與呼吸-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

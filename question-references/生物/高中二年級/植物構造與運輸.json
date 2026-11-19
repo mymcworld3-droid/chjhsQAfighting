@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-植物構造與運輸-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查植物構造與運輸",
+      "question": {
+        "q": "某高大樹木白天蒸散旺盛，葉片水勢下降，木質部水柱張力增加。主要有利哪項作用？",
+        "correct": "從根部向葉片輸送水與無機鹽",
+        "wrong": [
+          "把葉片的全部糖分只向上輸送",
+          "由葉片直接合成土壤中的礦物質",
+          "讓導管中的水永久停止流動"
+        ],
+        "exp": "蒸散拉力與水分子的內聚作用支持木質部向上輸水。",
+        "subject": "生物",
+        "sub_topic": "植物構造與運輸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物構造與運輸",
+        "template_id": "extra-2026-bio2-植物構造與運輸-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-植物構造與運輸-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查植物構造與運輸",
+      "question": {
+        "q": "某植物成熟葉製造蔗糖，正在生長的果實大量消耗糖分。主要透過哪種組織輸送？",
+        "correct": "韌皮部由來源組織運向庫組織",
+        "wrong": [
+          "木質部只由葉運向根",
+          "植物表皮角質層",
+          "葉片氣孔內的空氣通道"
+        ],
+        "exp": "蔗糖等有機養分可經韌皮部篩管由源運向庫。",
+        "subject": "生物",
+        "sub_topic": "植物構造與運輸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物構造與運輸",
+        "template_id": "extra-2026-bio2-植物構造與運輸-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-植物構造與運輸-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查植物構造與運輸",
+      "question": {
+        "q": "某實驗去除一小段樹幹外圍含韌皮部的環狀組織，保持木質部相對完整。其上方可能出現何種現象？",
+        "correct": "光合作用糖分向下運輸受阻，局部糖分可能累積",
+        "wrong": [
+          "根部水分立即無法經木質部向上移動",
+          "所有葉片同時失去全部葉綠素",
+          "樹木的地上部立即完全沒有細胞呼吸"
+        ],
+        "exp": "環狀剝皮會破壞韌皮部輸送，使葉片製造的糖分難以下運。",
+        "subject": "生物",
+        "sub_topic": "植物構造與運輸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物構造與運輸",
+        "template_id": "extra-2026-bio2-植物構造與運輸-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

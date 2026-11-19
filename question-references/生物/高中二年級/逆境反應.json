@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-逆境反應-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查逆境反應",
+      "question": {
+        "q": "植物在高鹽度土壤中吸水困難，其主要原因之一是？",
+        "correct": "外部溶液水勢較低，使根部吸水的水勢差減小",
+        "wrong": [
+          "鹽分會直接使所有水分子消失",
+          "土壤越鹹根部就一定吸水越容易",
+          "植物根部完全不受滲透條件影響"
+        ],
+        "exp": "鹽分增加降低土壤水勢，並可能造成離子毒性。",
+        "subject": "生物",
+        "sub_topic": "逆境反應",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-逆境反應",
+        "template_id": "extra-2026-bio2-逆境反應-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-逆境反應-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查逆境反應",
+      "question": {
+        "q": "某植物長期受旱後葉片萎凋，農民只觀察葉色便宣稱根部沒有缺水。最適當的科學檢查為何？",
+        "correct": "量測土壤含水與植物水分狀態，判斷真正的水分壓力",
+        "wrong": [
+          "只以葉片外形排除全部逆境",
+          "因未下雨就斷定所有植物都必定枯死",
+          "不需任何測量就可精確估計根壓"
+        ],
+        "exp": "乾旱反應涉及土壤、根部與葉片的水勢，外觀無法取代生理量測。",
+        "subject": "生物",
+        "sub_topic": "逆境反應",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-逆境反應",
+        "template_id": "extra-2026-bio2-逆境反應-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-逆境反應-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查逆境反應",
+      "question": {
+        "q": "某農田短時間淹水，土壤孔隙中的氧氣供應受限，部分植物根部受損。最直接受影響的生理過程可能是？",
+        "correct": "根部有氧呼吸與ATP供應",
+        "wrong": [
+          "葉片中所有DNA立即消失",
+          "根部細胞不再需要能量",
+          "氧氣越少有氧呼吸必定越旺盛"
+        ],
+        "exp": "水飽和土壤氧氣擴散慢，根部缺氧可限制有氧呼吸並影響吸收。",
+        "subject": "生物",
+        "sub_topic": "逆境反應",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-逆境反應",
+        "template_id": "extra-2026-bio2-逆境反應-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

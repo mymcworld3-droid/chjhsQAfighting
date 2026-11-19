@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-植物激素-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查植物激素",
+      "question": {
+        "q": "某幼苗受單側光照後，莖背光側伸長較快，使幼苗朝光源彎曲。與此最相關的植物激素為何？",
+        "correct": "生長素",
+        "wrong": [
+          "胰島素",
+          "腎上腺素",
+          "甲狀腺素"
+        ],
+        "exp": "生長素分布差異可造成莖兩側伸長程度不同，形成向光性。",
+        "subject": "生物",
+        "sub_topic": "植物激素",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物激素",
+        "template_id": "extra-2026-bio2-植物激素-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-植物激素-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查植物激素",
+      "question": {
+        "q": "某批香蕉與成熟蘋果放在密閉容器中，香蕉成熟速度加快。最可能是何種激素的作用？",
+        "correct": "乙烯",
+        "wrong": [
+          "脫落酸只在所有情況下促進果實成熟",
+          "人體生長激素",
+          "血管收縮素"
+        ],
+        "exp": "乙烯可由成熟果實釋放並促進鄰近果實成熟。",
+        "subject": "生物",
+        "sub_topic": "植物激素",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物激素",
+        "template_id": "extra-2026-bio2-植物激素-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-植物激素-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查植物激素",
+      "question": {
+        "q": "乾旱時植物體內脫落酸ABA增加，保衛細胞反應使氣孔關閉。這有助植物達成哪種效果？",
+        "correct": "減少蒸散失水，但可能降低CO₂進入",
+        "wrong": [
+          "讓蒸散量無限增加",
+          "使葉片完全不再需要水分",
+          "促使根部立即形成動物肌肉"
+        ],
+        "exp": "ABA參與乾旱訊號及氣孔調節，保水同時可能限制光合作用。",
+        "subject": "生物",
+        "sub_topic": "植物激素",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物激素",
+        "template_id": "extra-2026-bio2-植物激素-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

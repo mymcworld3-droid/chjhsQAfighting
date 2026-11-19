@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-bio2-植物的生殖與調節-1",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查植物的生殖與調節",
+      "question": {
+        "q": "被子植物花粉粒落在適合柱頭後萌發花粉管。這條花粉管主要目的為何？",
+        "correct": "把雄配子送入胚珠完成受精",
+        "wrong": [
+          "將整個子房輸送到葉片",
+          "使花瓣直接變成根部",
+          "讓胚在受精前就發育成熟"
+        ],
+        "exp": "花粉管為雄配子提供到達胚珠的途徑。",
+        "subject": "生物",
+        "sub_topic": "植物的生殖與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物的生殖與調節",
+        "template_id": "extra-2026-bio2-植物的生殖與調節-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-植物的生殖與調節-2",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查植物的生殖與調節",
+      "question": {
+        "q": "某開花植物發生雙重受精，其中一個精細胞與卵細胞結合。另一個精細胞通常與什麼結合？",
+        "correct": "中央細胞的兩個極核或次生核，形成胚乳發育來源",
+        "wrong": [
+          "另一個精細胞形成新花粉",
+          "葉片保衛細胞直接形成果實",
+          "根毛細胞形成新的染色體"
+        ],
+        "exp": "被子植物雙重受精形成合子與初生胚乳核，是種子發育的重要特徵。",
+        "subject": "生物",
+        "sub_topic": "植物的生殖與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物的生殖與調節",
+        "template_id": "extra-2026-bio2-植物的生殖與調節-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-bio2-植物的生殖與調節-3",
+      "source": "依高中生物課綱自編參考題（非歷屆試卷原題）",
+      "design": "結合植物實驗或演化證據考查植物的生殖與調節",
+      "question": {
+        "q": "某植物種子在乾燥休眠時幾乎不生長，吸水並置於適溫與足氧環境後開始萌發。最合理原因為何？",
+        "correct": "水分恢復代謝活動並在適當環境下啟動胚生長",
+        "wrong": [
+          "乾燥種子不含任何活細胞",
+          "只要吸水就完全不受氧氣與溫度影響",
+          "種子萌發一定要先形成花粉"
+        ],
+        "exp": "萌發需水與適當溫度、氧氣等條件，部分種子另有光或休眠限制。",
+        "subject": "生物",
+        "sub_topic": "植物的生殖與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物的生殖與調節",
+        "template_id": "extra-2026-bio2-植物的生殖與調節-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
