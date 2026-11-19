@@ -11,6 +11,7 @@ const {roomMap,startExplorationMembers,moveOnMap} = require('./dungeon-movement.
 const {initialClock,projectClock} = require('./dungeon-battle-clock.cjs');
 const {initialEnemies,advanceWorld,ENEMY_AI_VERSION} = require('./dungeon-enemy-ai.cjs');
 const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
+const {strikeEnemy,maxHealth}=require('./dungeon-player-combat.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -52,6 +53,8 @@ const publicRoom=(roomId,room,at=Date.now())=>({
     id:e.id,name:e.name,kind:e.kind,position:e.position,
     intent:e.intent,targetUid:e.targetUid||null,
     lastActionTick:e.lastActionTick,cadence:e.cadence,
+    battleHealth:Number.isSafeInteger(e.battleHealth)?e.battleHealth:maxHealth(e.kind),
+    battleMaxHealth:maxHealth(e.kind),
     attack:pendingPublic(e.attack),
     lastAttack:e.lastAttack?{
       tick:e.lastAttack.tick,kind:e.lastAttack.kind,
@@ -111,7 +114,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','clock'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','clock'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -379,7 +382,29 @@ function createHandler({
         });
         return respond(roomId,updated);
       }
-      if(action==='ready'){
+      if(action==='strike'){
+        // Firestore transaction serializes both players' hits against one NPC.
+        const {enemyId,seq}=req.body||{};
+        const updated=await db.runTransaction(async tx=>{
+          const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
+          if(!current||!hasMember(current,uid))
+            throw err('你不是此副本的隊員',403);
+          if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
+          if(current.status!=='assembled')throw err('請先完成全隊集結',409);
+          const map=roomMap(current,roomId);
+          const battleDelta=advanceWorld(current,map,at);
+          const evolved={...current,...(battleDelta||{})};
+          const outcome=strikeEnemy(evolved,uid,map,{enemyId,seq});
+          if(outcome.duplicate&&!battleDelta)return current;
+          const next={...evolved,members:outcome.members,enemies:outcome.enemies,
+            revision:current.revision+1};
+          tx.update(roomRef,{...(battleDelta||{}),members:next.members,
+            enemies:next.enemies,revision:next.revision});
+          return next;
+        });
+        return respond(roomId,updated);
+      }
+      if(action==='ready'){ 
         if(typeof req.body?.ready!=='boolean')throw err('準備狀態無效',400);
         const updated=await db.runTransaction(async tx=>{
           const snap=await tx.get(roomRef),room=snap.exists?snap.data():null;
@@ -428,7 +453,8 @@ function createHandler({
           const members=Object.fromEntries(Object.entries(membersOf(room))
             .map(([key,m])=>{
               const {position,explorationStamina,moveSeq,lastMove,
-                battleHealth,battleMaxHealth,downed,lastDamage,...previous}=m;
+                battleHealth,battleMaxHealth,downed,lastDamage,
+                strikeSeq,lastStrike,...previous}=m;
               return [key,{...previous,ready:false}];
             }));
           const clockState={battleClockVersion:null,battleStartedAtMs:null,
@@ -511,7 +537,8 @@ function createHandler({
           if(room.status==='assembled'){
             for(const [key,member] of Object.entries(members)){
               const {position,explorationStamina,moveSeq,lastMove,
-                battleHealth,battleMaxHealth,downed,lastDamage,...previous}=member;
+                battleHealth,battleMaxHealth,downed,lastDamage,
+                strikeSeq,lastStrike,...previous}=member;
               members[key]={...previous,ready:false};
             }
           }

@@ -1,10 +1,10 @@
 'use strict';
 
-// Stage 9/10: deterministic autonomous NPC movement with server-owned
-// telegraphs and health. No player attacks, rewards or respawn yet.
+// Cooperative autonomous NPCs and server-owned attack warnings.
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {dueTick,isRunning}=require('./dungeon-battle-clock.cjs');
 const Combat=require('./dungeon-enemy-combat.cjs');
+const {maxHealth}=require('./dungeon-player-combat.cjs');
 const ENEMY_AI_VERSION=1;
 const MAX_CATCHUP_TICKS=24;
 const DIRECTIONS=Object.freeze([[0,-1],[1,0],[0,1],[-1,0]]);
@@ -56,7 +56,8 @@ function initialEnemies(map){
       patrolDirection:pathIndex===path.length-1?-1:1,
       cadence:type.cadence,aggroRange:type.aggroRange,
       intent:'patrol',targetUid:null,lastActionTick:0,
-      attack:null,lastAttack:null,lastAttackTick:0});
+      attack:null,lastAttack:null,lastAttackTick:0,
+       battleHealth:maxHealth(type.kind),battleMaxHealth:maxHealth(type.kind)});
   }
   return out;
 }
