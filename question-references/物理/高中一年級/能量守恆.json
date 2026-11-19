@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-phy1-conservation-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "質量2.0 kg的物體從距地3.0 m高處由靜止自由落下，不計阻力，取g=10 m/s²。落地前瞬間動能為何？",
+        "correct": "60 J",
+        "wrong": [
+          "6 J",
+          "30 J",
+          "120 J"
+        ],
+        "exp": "損失的重力位能mgh=2.0×10×3.0=60 J轉成動能，所以末動能60 J。",
+        "subject": "物理",
+        "sub_topic": "能量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中一年級-能量守恆",
+        "template_id": "ref-20261119-b3-phy1-conservation-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-phy1-conservation-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "某裝置輸入200 J電能，其中130 J轉成可利用的機械能，其餘主要變成熱。能量轉換效率為何？",
+        "correct": "65%",
+        "wrong": [
+          "35%",
+          "130%",
+          "70%"
+        ],
+        "exp": "效率=有效輸出能量/輸入能量×100%=130/200×100%=65%。",
+        "subject": "物理",
+        "sub_topic": "能量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中一年級-能量守恆",
+        "template_id": "ref-20261119-b3-phy1-conservation-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-phy1-conservation-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "一顆球向上拋出，忽略空氣阻力，以地面作位能零點。球上升過程中，其動能與重力位能如何變化？",
+        "correct": "動能下降、重力位能上升，兩者總和不變",
+        "wrong": [
+          "動能與重力位能皆上升",
+          "動能上升、重力位能下降",
+          "動能與重力位能皆保持不變"
+        ],
+        "exp": "球上升時速度降低，動能減少；高度增加，位能增加。無非保守力作功時機械能守恆。",
+        "subject": "物理",
+        "sub_topic": "能量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中一年級-能量守恆",
+        "template_id": "ref-20261119-b3-phy1-conservation-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
