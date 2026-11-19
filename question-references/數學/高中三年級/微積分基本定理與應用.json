@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-m3-ftc-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "設F(x)=∫₀ˣ(t²+2)dt，則F′(3)是多少？",
+        "correct": "11",
+        "wrong": [
+          "9",
+          "13",
+          "6"
+        ],
+        "exp": "由微積分基本定理F′(x)=x²+2，代入3得9+2=11。",
+        "subject": "數學",
+        "sub_topic": "微積分基本定理與應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-微積分基本定理與應用",
+        "template_id": "ref-20261119-b6-m3-ftc-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m3-ftc-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "計算定積分∫₁³2x dx的值。",
+        "correct": "8",
+        "wrong": [
+          "4",
+          "6",
+          "9"
+        ],
+        "exp": "2x的反導函數為x²，故∫₁³2x dx=3²−1²=8。",
+        "subject": "數學",
+        "sub_topic": "微積分基本定理與應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-微積分基本定理與應用",
+        "template_id": "ref-20261119-b6-m3-ftc-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m3-ftc-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "設G(x)=∫₂^(x²)3t dt，則G′(2)是多少？",
+        "correct": "48",
+        "wrong": [
+          "24",
+          "12",
+          "18"
+        ],
+        "exp": "由微積分基本定理與鏈鎖律，G′(x)=3(x²)×2x=6x³，代入2得48。",
+        "subject": "數學",
+        "sub_topic": "微積分基本定理與應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-微積分基本定理與應用",
+        "template_id": "ref-20261119-b6-m3-ftc-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
