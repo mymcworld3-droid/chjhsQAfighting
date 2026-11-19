@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-geo1-timezone-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "臺灣標準時間為UTC+8，若倫敦當日採UTC+0時間，臺灣當晚20:00時，倫敦當日是幾點？",
+        "correct": "12:00",
+        "wrong": [
+          "04:00",
+          "20:00",
+          "翌日04:00"
+        ],
+        "exp": "臺灣比UTC早8小時；臺灣20:00減8小時，得到倫敦當日12:00。本題已明定倫敦使用UTC+0。",
+        "subject": "地理",
+        "sub_topic": "經緯度、時區",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-經緯度、時區",
+        "template_id": "ref-20261119-b3-geo1-timezone-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-geo1-timezone-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "甲地位於北緯23°、東經120°，乙地位於南緯23°、東經120°。兩地最明確的地理關係為何？",
+        "correct": "位於相同經線、分處赤道兩側",
+        "wrong": [
+          "位於相同緯線、同在北半球",
+          "經度相差240°",
+          "兩地必定具有相同季節"
+        ],
+        "exp": "兩地經度皆為東經120°，位於同一條經線；緯度一北一南且均23°，分處赤道兩側。",
+        "subject": "地理",
+        "sub_topic": "經緯度、時區",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-經緯度、時區",
+        "template_id": "ref-20261119-b3-geo1-timezone-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-geo1-timezone-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "以地球每24小時自轉360°的平均速率估算，地方太陽時相差2小時的兩地，經度大約相差多少度？",
+        "correct": "30°",
+        "wrong": [
+          "15°",
+          "45°",
+          "60°"
+        ],
+        "exp": "地球平均每小時自轉360°/24=15°，相差2小時約為30°。這是地方太陽時差，不一定等於法定時區差。",
+        "subject": "地理",
+        "sub_topic": "經緯度、時區",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-經緯度、時區",
+        "template_id": "ref-20261119-b3-geo1-timezone-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
