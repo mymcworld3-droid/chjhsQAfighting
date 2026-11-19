@@ -238,8 +238,9 @@ async function main(){
     }
     // Both connected browsers display elapsed server time with no player
     // movement or actions required to make the clock advance.
-    await a.page.waitForFunction(()=>/戰場時鐘 00:0[2-9] · T[2-9]/.test(
-      document.querySelector('[data-dm-clock]')?.textContent||''),null,{timeout:8000});
+    await a.page.waitForFunction(()=>Number((
+      document.querySelector('[data-dm-clock]')?.textContent||'').match(/T(\d+)/)?.[1]||0)>=2,
+      null,{timeout:8000});
     const clockA=await a.page.locator('[data-dm-clock]').innerText();
     const clockB=await b.page.locator('[data-dm-clock]').innerText();
     assert.match(clockA,/戰場時鐘/);
@@ -247,6 +248,11 @@ async function main(){
     const tickA=Number(clockA.match(/T(\d+)/)?.[1]||-1),
       tickB=Number(clockB.match(/T(\d+)/)?.[1]||-1);
     assert.ok(Math.abs(tickA-tickB)<=1,clockA+' vs '+clockB);
+    // Inspecting a creature intentionally zooms to it; restore the
+    // all-map view before checking the original 100% -> 135% zoom control.
+    await a.page.locator('#dungeon-map-view [data-dm="fit"]').click();
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-zoom]')
+      ?.textContent==='100%');
     await a.page.locator('#dungeon-map-view [data-dm="plus"]').click();
     await a.page.waitForFunction(()=>document.querySelector('[data-dm-zoom]').textContent==='135%');
     await a.page.locator('#dungeon-map-view [data-dm="route"]').click();
