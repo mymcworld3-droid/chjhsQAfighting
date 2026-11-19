@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-m1-ineq-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "解不等式(x+3)(x−2)≥0，解集為何？",
+        "correct": "x≤−3 或 x≥2",
+        "wrong": [
+          "−3≤x≤2",
+          "x<−3 或 x>2",
+          "x≥−3 或 x≤2"
+        ],
+        "exp": "根為−3與2；乘積在兩根之外為非負，且等於0時亦符合≥，故x≤−3或x≥2。",
+        "subject": "數學",
+        "sub_topic": "多項式不等式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中一年級-多項式不等式",
+        "template_id": "ref-20261119-b6-m1-ineq-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m1-ineq-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "解不等式x²−4x−12<0，解集為何？",
+        "correct": "−2<x<6",
+        "wrong": [
+          "x<−2 或 x>6",
+          "−2≤x≤6",
+          "2<x<6"
+        ],
+        "exp": "x²−4x−12=(x−6)(x+2)，開口向上的二次式在兩根−2與6之間為負。",
+        "subject": "數學",
+        "sub_topic": "多項式不等式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中一年級-多項式不等式",
+        "template_id": "ref-20261119-b6-m1-ineq-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m1-ineq-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "解不等式(x−1)²(x+2)<0，解集為何？",
+        "correct": "x<−2",
+        "wrong": [
+          "x<1",
+          "−2<x<1",
+          "x>−2 且 x≠1"
+        ],
+        "exp": "(x−1)²除了x=1以外均為正，乘積要為負需x+2<0，故x<−2。",
+        "subject": "數學",
+        "sub_topic": "多項式不等式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中一年級-多項式不等式",
+        "template_id": "ref-20261119-b6-m1-ineq-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
