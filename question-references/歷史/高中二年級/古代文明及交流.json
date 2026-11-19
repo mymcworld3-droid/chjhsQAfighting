@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-h2-ancient-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "兩河流域古代泥板文字留下穀物收支、土地與交易紀錄。這些材料最直接可用來研究哪項課題？",
+        "correct": "行政管理與經濟交易活動",
+        "wrong": [
+          "所有居民的私人思想必定完全相同",
+          "古代世界每個地方的降雨量",
+          "當時人人均已接受完全相同的普及教育"
+        ],
+        "exp": "記帳及交易紀錄提供行政與經濟制度運作的直接線索，但不可能完整代表所有居民的經驗。",
+        "subject": "歷史",
+        "sub_topic": "古代文明及交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-古代文明及交流",
+        "template_id": "ref-20261119-b5-h2-ancient-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-h2-ancient-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "古埃及與兩河流域都在河川流域發展農業、城市與統治組織。比較兩地文明時，何種問題最具歷史研究價值？",
+        "correct": "比較河川水文、灌溉安排與政治組織之間的關係",
+        "wrong": [
+          "只要兩地都靠河流就認定政治制度必定一樣",
+          "直接將今日國界視為古代文明的固定疆界",
+          "只比較兩地文物顏色，不考慮年代與地理條件"
+        ],
+        "exp": "比較可從共同的農業基礎及不同自然條件切入，分析技術、行政與政治組織的差異。",
+        "subject": "歷史",
+        "sub_topic": "古代文明及交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-古代文明及交流",
+        "template_id": "ref-20261119-b5-h2-ancient-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-h2-ancient-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "某古代港口遺址出土外國製造的玻璃器與本地陶器，且貨物記錄顯示商船頻繁停靠。最恰當的初步解釋為何？",
+        "correct": "該港口可能是跨地區商品與技術交流的節點",
+        "wrong": [
+          "所有居民必定都使用同一種語言",
+          "外國商品出土表示本地不曾製作任何器物",
+          "只要有商船往來便足以證明兩地政治制度完全相同"
+        ],
+        "exp": "不同來源製品與貿易記載可相互支持港口作為交換節點的說法，但不足以推定所有居民的語言或制度。",
+        "subject": "歷史",
+        "sub_topic": "古代文明及交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-古代文明及交流",
+        "template_id": "ref-20261119-b5-h2-ancient-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
