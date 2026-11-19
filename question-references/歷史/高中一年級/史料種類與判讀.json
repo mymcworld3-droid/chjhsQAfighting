@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-hist1-sources-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "研究某次日治時期地方抗議，學生找到當日警察報告與多年後出版的歷史研究專書。下列區分何者較合理？",
+        "correct": "警察報告可作為當時的一手史料；後出的研究專書通常屬二手研究",
+        "wrong": [
+          "兩者因涉及同一事件就都必定是一手史料",
+          "警察報告必定毫無立場與誤差",
+          "後出的研究專書必定比當時文件更早形成"
+        ],
+        "exp": "一手與二手史料依形成脈絡與研究問題判斷；當時直接記錄與後來綜合研究的性質不同，但兩者仍須批判使用。",
+        "subject": "歷史",
+        "sub_topic": "史料種類與判讀",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料種類與判讀",
+        "template_id": "ref-20261119-b3-hist1-sources-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-hist1-sources-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "某史家發現同一事件中政府公告與民間日記的記述互相矛盾。下列何種做法最符合史料批判？",
+        "correct": "比較作者身分、寫作目的與時間，再尋找其他資料交互查證",
+        "wrong": [
+          "只採用官方版本，不檢查來源",
+          "只選擇最符合個人印象的一份記錄",
+          "因兩份史料衝突，就斷定事件從未發生"
+        ],
+        "exp": "不同立場的記載可能強調不同事實；交叉比對、考慮成文目的及時代脈絡，有助於較完整的歷史解釋。",
+        "subject": "歷史",
+        "sub_topic": "史料種類與判讀",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料種類與判讀",
+        "template_id": "ref-20261119-b3-hist1-sources-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-hist1-sources-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "一張歷史照片旁的說明標註「1920年街景」，但照片背面沒有日期。研究者要確認拍攝年代，哪項行動最可靠？",
+        "correct": "比對建築、服飾及原始收藏紀錄，查證說明標註是否可信",
+        "wrong": [
+          "只看照片顏色就精確斷定年份",
+          "直接把展場標籤視為無需查證的證據",
+          "因沒有日期就必定認定照片是現代偽造"
+        ],
+        "exp": "照片的日期與情境需外部證據佐證，包括來源、保存紀錄及其他同時期材料，避免將後加說明當作確定事實。",
+        "subject": "歷史",
+        "sub_topic": "史料種類與判讀",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料種類與判讀",
+        "template_id": "ref-20261119-b3-hist1-sources-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
