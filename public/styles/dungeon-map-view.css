@@ -566,6 +566,17 @@
   #dungeon-map-view .dm-portal-button{animation:none!important}
 }
 
+/* Stage 17: compact consent counter remains inside the movement HUD so the
+   player's camera and combat map are unobstructed on mobile. */
+#dungeon-map-view .dm-portal-votes{
+  display:block;max-width:245px;text-align:center;
+  color:#e5d5ac;font:650 11px/1.45 system-ui,"Noto Sans TC",sans-serif;
+  overflow-wrap:anywhere;
+}
+@media(max-width:720px){
+  #dungeon-map-view .dm-portal-votes{max-width:175px;font-size:10px}
+}
+
 // Stage 15: a single 2x2 server-owned boss and shared room transition.
 #dungeon-map-view .dm-boss-health{
   margin-top:5px;max-width:min(380px,47vw);
