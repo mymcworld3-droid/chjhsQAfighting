@@ -8,7 +8,8 @@ const { verifyMainIdentity } = require('./raid-question-ticket.cjs');
 const {streamDungeonRoom} = require('./dungeon-room-stream.cjs');
 const {LAYOUT_VERSION,generateDungeonLayout} = require('./dungeon-map-generator.cjs');
 const {roomMap,startExplorationMembers,moveOnMap} = require('./dungeon-movement.cjs');
-const {initialClock,advanceClock,projectClock} = require('./dungeon-battle-clock.cjs');
+const {initialClock,projectClock} = require('./dungeon-battle-clock.cjs');
+const {initialEnemies,advanceWorld,ENEMY_AI_VERSION} = require('./dungeon-enemy-ai.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -43,6 +44,14 @@ const publicRoom=(roomId,room,at=Date.now())=>({
   assembledAtMs:room.assembledAtMs||0,
   expiresAtMs:room.expiresAtMs,maxMembers:MAX_MEMBERS,
   battleClock:projectClock(room,at),
+  enemyAiVersion:room.enemyAiVersion||null,
+  // Presentational snapshots expose only the current NPC action state,
+  // never the secret map seed or server-side patrol/decision internals.
+  enemies:Array.isArray(room.enemies)?room.enemies.map(e=>({
+    id:e.id,name:e.name,kind:e.kind,position:e.position,
+    intent:e.intent,targetUid:e.targetUid||null,
+    lastActionTick:e.lastActionTick,cadence:e.cadence
+  })):[],
   members:Object.fromEntries(Object.entries(membersOf(room)).map(([id,member])=>
     [id,{...member,online:memberOnline(member,at)}]))
 });
@@ -259,7 +268,7 @@ function createHandler({
             throw err('副本房間已關閉或過期',410);
           if(current.status!=='assembled')
             throw err('副本時鐘尚未啟動',409);
-          const time=clock(),delta=advanceClock(current,time);
+          const time=clock(),delta=advanceWorld(current,roomMap(current,roomId),time);
           if(!delta)return current;
           const next={...current,...delta,revision:current.revision+1};
           tx.update(roomRef,{...delta,revision:next.revision});
@@ -303,7 +312,8 @@ function createHandler({
           const member=membersOf(current)[uid],last=Number(member.heartbeatAtMs)||0;
           const shouldTouch=last<=0||at-last>=HEARTBEAT_MIN_MS;
           const shouldRenew=Number(current.expiresAtMs)-at<RENEW_IF_LESS_THAN_MS;
-          const battleDelta=advanceClock(current,at);
+          const battleDelta=current.status==='assembled'?
+            advanceWorld(current,roomMap(current,roomId),at):null;
           if(!shouldTouch&&!shouldRenew&&!battleDelta)return current;
           const codeRef=db.collection(CODES).doc(current.code);
           const codeSnap=shouldRenew?await tx.get(codeRef):null;
@@ -347,7 +357,9 @@ function createHandler({
           const map=roomMap(current,roomId);
           const outcome=moveOnMap(current,uid,map,{dx,dy,step});
           if(outcome.duplicate)return current;
-          const battleDelta=advanceClock(current,at);
+          // AI decisions observe the newly committed player position in this
+          // same transaction; clients cannot trigger extra NPC actions.
+          const battleDelta=advanceWorld({...current,members:outcome.members},map,at);
           const next={...current,members:outcome.members,...(battleDelta||{}),
             revision:current.revision+1};
           tx.update(roomRef,{members:next.members,...(battleDelta||{}),
@@ -388,11 +400,14 @@ function createHandler({
             // can move. Cross-instance clients see one authoritative snapshot.
             const map=roomMap(room,roomId);
             const startingMembers=startExplorationMembers(room,map);
-            const clockState=initialClock(at);
+            const clockState=initialClock(at),enemies=initialEnemies(map);
+            const enemyState={enemyAiVersion:ENEMY_AI_VERSION,enemies};
             const next={...room,status:'assembled',assembledAtMs:at,
-              ...clockState,members:startingMembers,revision:room.revision+1};
+              ...clockState,...enemyState,members:startingMembers,
+              revision:room.revision+1};
             tx.update(roomRef,{status:next.status,assembledAtMs:at,
-              ...clockState,members:startingMembers,revision:next.revision});
+              ...clockState,...enemyState,members:startingMembers,
+              revision:next.revision});
             return next;
           }
           if(room.status==='waiting')return room;
@@ -402,7 +417,8 @@ function createHandler({
           const members=Object.fromEntries(Object.entries(membersOf(room))
             .map(([key,m])=>[key,{...m,ready:false}]));
           const clockState={battleClockVersion:null,battleStartedAtMs:null,
-            battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null};
+            battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
+            enemyAiVersion:null,enemies:[]};
           const next={...room,status:'waiting',...clockState,members,
             revision:room.revision+1};
           tx.update(roomRef,{status:'waiting',...clockState,members,
@@ -473,13 +489,18 @@ function createHandler({
           const closed=!remaining.length;
           const hostUid=room.hostUid===uid?(remaining[0]?.uid||null):room.hostUid;
           if(room.status==='assembled')for(const member of Object.values(members))member.ready=false;
+          const reset=room.status==='assembled'?{
+            battleClockVersion:null,battleStartedAtMs:null,
+            battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
+            enemyAiVersion:null,enemies:[]
+          }:{};
           const updated={...room,revision:room.revision+1,
-            status:closed?'closed':'waiting',hostUid,members,
+            status:closed?'closed':'waiting',hostUid,members,...reset,
             ...(closed?{closedAtMs:at}:{})};
           const codeRef=db.collection(CODES).doc(room.code);
           const codeSnap=closed?await tx.get(codeRef):null; // read before writes
           tx.update(roomRef,{revision:updated.revision,status:updated.status,
-            hostUid,members,...(closed?{closedAtMs:at}:{})});
+            hostUid,members,...reset,...(closed?{closedAtMs:at}:{})});
           tx.set(pointerRef,{roomId:null,updatedAtMs:at});
           if(closed&&codeSnap?.exists&&codeSnap.data()?.roomId===roomId)
             tx.set(codeRef,{roomId,status:'closed',expiresAtMs:room.expiresAtMs});
