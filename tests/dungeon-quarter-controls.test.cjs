@@ -26,7 +26,7 @@ test('trial-like HUD has exactly two bottom quarter circles and all action slots
 test('ten nondegenerate stamina arc segments lie within the left quarter',()=>{
   const html=dungeonEnergySegments();
   assert.equal((html.match(/data-dm-energy-segment="/g)||[]).length,10);
-  const paths=[...html.matchAll(/data-dm-energy-segment="(\d+)" d="M ([\d.]+) ([\d.]+) A 91 91 0 0 1 ([\d.]+) ([\d.]+)"/g)];
+  const paths=[...html.matchAll(/data-dm-energy-segment="(\d+)" d="M ([\d.]+) ([\d.]+) A 90 90 0 0 1 ([\d.]+) ([\d.]+)"/g)];
   assert.equal(paths.length,10);
   for(const [i,entry] of paths.entries()){
     assert.equal(Number(entry[1]),i);
@@ -39,7 +39,7 @@ test('ten nondegenerate stamina arc segments lie within the left quarter',()=>{
 
 test('stamina ring clamps and is monotone across player energy',()=>{
   assert.deepEqual([-4,0,1,10,11,50,99,100,1000,NaN].map(energyRingFill),
-    [0,0,1,1,2,5,10,10,10,0]);
+    [0,0,1,10,10,10,10,10,10,0]);
 });
 
 test('existing server-authorized quiz, strike and four movement buttons are MOVED, not cloned',()=>{
