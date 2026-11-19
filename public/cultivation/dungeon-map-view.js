@@ -36,7 +36,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-map-view-style')){
       const style=document.createElement('link');
       style.id='dungeon-map-view-style';style.rel='stylesheet';
-      style.href='/styles/dungeon-map-view.css?v=20261119-stage9';
+      style.href='/styles/dungeon-map-view.css?v=20261119-stage10';
       document.head.append(style);
     }
     const root=document.createElement('section');
@@ -67,10 +67,12 @@ class DungeonMapView{
       '<button type="button" data-dm="close-beasts" aria-label="關閉靈獸資料">×</button></div>'+
       '<p data-dm-beast-details role="status">點選靈獸查看行動狀態</p>'+
       '<div class="dm-beast-list" data-dm-beast-list></div>'+
-      '<small>可點選或長按地圖上的靈獸查看 · 尚無攻擊與傷害</small></aside>'+
+      '<small>紅色方格表示即將遭到攻擊；預告後移出範圍即可閃避。</small></aside>'+
       '<div class="dm-movement" data-dm-movement hidden>'+
       '<div class="dm-energy"><span>探索體力</span><strong data-dm-energy>100 / 100</strong>'+
+      '<span class="dm-health" data-dm-health>生命 100/100</span>'+
       '<span data-dm-location>（待命）</span></div>'+
+      '<div class="dm-threat" data-dm-threat role="status" aria-live="polite" hidden></div>'+
       '<div class="dm-dpad" role="group" aria-label="角色移動，一次一格">'+
       '<button type="button" data-dm="up" aria-label="向上移動一格">↑</button>'+
       '<button type="button" data-dm="left" aria-label="向左移動一格">←</button>'+
@@ -193,8 +195,29 @@ class DungeonMapView{
     if(energy)energy.textContent=stamina+' / 100';
     const p=this.selfPad(),node=this.$('[data-dm-location]');
     if(node)node.textContent='座標 '+p.x+'，'+p.y;
+    const hp=Number.isSafeInteger(own?.battleHealth)?
+      Math.max(0,own.battleHealth):100;
+    const downed=own?.downed===true||hp===0;
+    const health=this.$('[data-dm-health]');
+    if(health){
+      health.textContent=downed?'倒地 · 等待救援':'生命 '+hp+'/100';
+      health.classList.toggle('is-critical',hp<=25);
+    }
+    const threatened=this.creatures().filter(beast=>
+      beast?.attack?.cells?.some(tile=>tile.x===p.x&&tile.y===p.y));
+    const threat=this.$('[data-dm-threat]');
+    if(threat){
+      threat.hidden=!threatened.length&&!downed;
+      if(downed)threat.textContent='已倒地，請等待後續復活機制';
+      else if(threatened.length){
+        const fire=Math.min(...threatened.map(beast=>beast.attack.resolvesAtTick));
+        const applied=Number(this.room?.battleClock?.appliedTick)||0;
+        threat.textContent='危險！'+threatened.length+
+          ' 隻靈獸鎖定腳下 · 約 '+Math.max(0,fire-applied)+' 秒後命中，請立即移開';
+      }
+    }
     this.root?.querySelectorAll('.dm-dpad button').forEach(button=>{
-      button.disabled=!active||!this.map||this.movePending||stamina<1;
+      button.disabled=!active||!this.map||this.movePending||stamina<1||downed;
     });
   }
   moveAlert(message=''){
@@ -273,7 +296,8 @@ class DungeonMapView{
         element.dataset.beastId=String(beast.id);return element;
       }));
     }
-    const state={patrol:'巡邏中',return:'返回巡邏',pursuit:'追蹤中',alert:'警戒'};
+    const state={patrol:'巡邏中',return:'返回巡邏',pursuit:'追蹤中',
+      alert:'警戒',windup:'準備攻擊！',recover:'收招中'};
     list.querySelectorAll('[data-beast-id]').forEach(item=>{
       const beast=beasts.find(e=>String(e.id)===item.dataset.beastId);
       if(!beast)return;
@@ -288,7 +312,11 @@ class DungeonMapView{
         ' · 座標 ('+selected.position.x+','+selected.position.y+')'+
         ' · 每 '+selected.cadence+' 秒行動一次'+
         (selected.targetUid?' · 已發現修士':'')+
-        ' · 節拍 T'+(selected.lastActionTick||0);
+        ' · 節拍 T'+(selected.lastActionTick||0)+
+        (selected.attack?' · '+selected.attack.label+
+          ' 即將於 T'+selected.attack.resolvesAtTick+' 攻擊（紅格危險）':'')+
+        (selected.lastAttack?.hits?.length?' · 最近命中 '+
+          selected.lastAttack.hits.length+' 位修士':'');
     }else details.textContent='點選靈獸可查看最新行動';
   }
   selectBeast(id,{focus=true}={}){
@@ -361,7 +389,7 @@ class DungeonMapView{
   updateStatus(){
     const state=this.$('[data-dm-status]');
     if(state)state.textContent=this.room?.status==='assembled'?
-      '探索中 · WASD 或方向按鈕移動，1 格耗費 1 體力 · 尚無戰鬥':
+      '戰場進行中 · 方向鍵/WASD 移動 · 走出紅色預警格閃避靈獸攻擊':
       '等待隊伍集結 · 地圖預覽不消耗體力';
     this.updateMovementHUD();
     this.updateBeastHUD();
@@ -573,7 +601,8 @@ class DungeonMapView{
     if(!m)return;
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:this.members(),selfUid:this.uid,showRoutes:this.routes,
-      enemies:this.creatures()
+      enemies:this.creatures(),
+      currentTick:Number(this.room?.battleClock?.appliedTick)||0
     });
     const mini=this.mini,miniBounds=mini.getBoundingClientRect();
     const mw=Math.max(1,Math.round(miniBounds.width)),mh=Math.max(1,Math.round(miniBounds.height));
