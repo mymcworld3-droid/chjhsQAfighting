@@ -131,14 +131,16 @@ class DungeonMapView{
       <small data-dm-aim hidden></small>
       <small data-dm-skill-alert hidden></small>
     </aside>
+    <div class="dm-hud-live-status" role="status" aria-live="polite">
+      <span data-dm-health>生命 100/100</span>
+      <span data-dm-team-status></span>
+    </div>
     <div class="dm-hidden-contract" hidden aria-hidden="true">
       <strong data-dm-energy>10</strong>
       <button type="button" class="dm-quiz-charge" data-dm="quiz" disabled>答題充能</button>
       <button type="button" data-dm="strike" disabled>普通攻擊</button>
       <small data-dm-strike-alert role="status" aria-live="polite"></small>
       <small data-dm-move-alert role="status" aria-live="polite"></small>
-      <span data-dm-health role="status" aria-live="polite"></span>
-      <span data-dm-team-status aria-live="off"></span>
     </div>
   </div>
 </div>`;
