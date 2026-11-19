@@ -10,6 +10,7 @@ const PlayerCombat=require('../dungeon-player-combat.cjs');
 const SkillCombat=require('../dungeon-skill-combat.cjs');
 const QuizCredits=require('../dungeon-quiz-credit.cjs');
 const Objectives=require('../dungeon-objectives.cjs');
+const Boss=require('../dungeon-boss-battle.cjs');
 const manualRecord={
   school:'sword',books:{'sword-wind':{exp:2500}},
   equipped:['wind-slash'],
@@ -33,6 +34,8 @@ catch(_){playwright=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/pla
 const app=express();app.use(express.json());
 const map=generateDungeonLayout('stage6-browser-visual-1');
 let room=null,clockLoop=null;const watchers=new Set(),requests=[];
+const currentMap=()=>room?.dungeonArena==='boss'?
+  Boss.mapFor('legacy:'+room.id):map;
 const quizState=Object.fromEntries(['a','b'].map(uid=>[uid,{answered:0,
   pending:{},reviews:{},lastReview:null}]));
 const question=(uid,n)=>({id:uid+'-q-'+n,q:'副本問道測試：請選出整數加法的正確算式。',
@@ -52,6 +55,8 @@ const clone=x=>JSON.parse(JSON.stringify(x));
 const currentRoom=()=>{
   if(!room)return null;
   const view=clone(room);
+  view.enemies=view.enemies?.map(e=>e.kind==='boss'?
+    {...e,footprint:2,phase:Boss.phase(e.battleHealth)}:e);
   if(view.status==='assembled'){
     const time=Date.now();
     const elapsedMs=Math.max(0,time-view.battleStartedAtMs);
@@ -70,7 +75,7 @@ const publish=()=>{
 };
 const advanceWorld=()=>{
   if(room?.status!=='assembled')return;
-  const patch=AI.advanceWorld(room,map,Date.now());
+  const patch=AI.advanceWorld(room,currentMap(),Date.now());
   if(!patch)return;
   room={...room,...patch,revision:room.revision+1};
   publish();
@@ -153,7 +158,8 @@ app.post('/api/dungeon/room',(req,res)=>{
   if(!room?.members?.[uid])return res.status(403).json({ok:false,error:'non-member'});
   if(req.body.roomId&&room.id!==req.body.roomId)
     return res.status(404).json({ok:false,error:'unknown room'});
-  if(action==='get-map')return res.json({ok:true,roomId:room.id,map:clone(map)});
+  if(action==='get-map')return res.json({ok:true,roomId:room.id,
+    map:clone(currentMap())});
   if(action==='get')return success();
   if(action==='clock'){
     const time=Date.now(),tick=Math.floor(Math.max(0,time-room.battleStartedAtMs)/1000);
@@ -176,7 +182,7 @@ app.post('/api/dungeon/room',(req,res)=>{
   if(action==='start'){
     if(uid!==room.hostUid||!Object.values(room.members).every(member=>member.ready))
       return res.status(409).json({ok:false,error:'not ready'});
-    room.status='assembled';
+    room.status='assembled';room.dungeonArena='exploration';room.bossEncounter=null;
     room.battleStartedAtMs=Date.now();
      room.assembledAtMs=room.battleStartedAtMs;
     room.battleAppliedTick=0;
@@ -202,12 +208,13 @@ app.post('/api/dungeon/room',(req,res)=>{
   }
   if(action==='skill'){
     try{
-      const out=SkillCombat.castSkill(room,uid,map,
+      const out=SkillCombat.castSkill(room,uid,currentMap(),
         uid==='a'?activeManual:null,{
           skillId:req.body.skillId,target:req.body.target,seq:req.body.seq
         });
       if(out.duplicate)return success();
       room.dungeonProgress=Objectives.combatProgress(room,out.enemies,uid);
+      room.bossEncounter=Boss.onDefeat(room,out.enemies,uid);
       room.members=out.members;room.enemies=out.enemies;
       room.revision++;publish();return success();
     }catch(error){return res.status(error.status||409).json({ok:false,error:error.message});}
@@ -218,6 +225,16 @@ app.post('/api/dungeon/room',(req,res)=>{
       if(applied.duplicate)return success();
       room.dungeonProgress=applied.progress;room.revision++;publish();
       return success();
+    }catch(error){return res.status(error.status||409).json({
+      ok:false,error:error.message
+    });}
+  }
+  if(action==='enter-boss'){
+    try{
+      const entered=Boss.enter(room,uid,map,Date.now(),room.id);
+      if(entered.duplicate)return success();
+      room={...entered.room,revision:room.revision+1};
+      publish();return success();
     }catch(error){return res.status(error.status||409).json({
       ok:false,error:error.message
     });}
@@ -241,10 +258,11 @@ app.post('/api/dungeon/room',(req,res)=>{
   }
   if(action==='strike'){
     try{
-      const outcome=PlayerCombat.strikeEnemy(room,uid,map,{
+      const outcome=PlayerCombat.strikeEnemy(room,uid,currentMap(),{
         enemyId:req.body.enemyId,seq:req.body.seq});
       if(outcome.duplicate)return success();
       room.dungeonProgress=Objectives.combatProgress(room,outcome.enemies,uid);
+      room.bossEncounter=Boss.onDefeat(room,outcome.enemies,uid);
       room.members=outcome.members;room.enemies=outcome.enemies;
       room.revision++;publish();return success();
     }catch(error){return res.status(error.status||409).json({ok:false,error:error.message});}
@@ -258,9 +276,10 @@ app.post('/api/dungeon/room',(req,res)=>{
       return success();
     if(!Number.isSafeInteger(step)||step!==member.moveSeq+1)
       return res.status(409).json({ok:false,error:'stale step'});
-    const next={x:member.position.x+dx,y:member.position.y+dy};
-    if(next.x<0||next.y<0||next.x>=map.width||next.y>=map.height||
-       !map.tiles[next.y*map.width+next.x])
+    const next={x:member.position.x+dx,y:member.position.y+dy},area=currentMap();
+    if(next.x<0||next.y<0||next.x>=area.width||next.y>=area.height||
+       !area.tiles[next.y*area.width+next.x]||
+       room.enemies?.some(enemy=>Boss.occupies(enemy,next)))
       return res.status(409).json({ok:false,error:'wall'});
     if(member.explorationStamina<1)return res.status(409).json({ok:false,error:'no energy'});
     member.position=next;member.explorationStamina--;member.moveSeq=step;
