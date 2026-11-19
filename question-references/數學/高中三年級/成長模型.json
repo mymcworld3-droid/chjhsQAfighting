@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-growthmodel-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "某數量目前為500，每年年末按前一年增加4%。依等比成長模型，兩年後約為多少？",
+        "correct": "540.8",
+        "wrong": [
+          "540",
+          "520.8",
+          "580"
+        ],
+        "exp": "N₂=500×(1.04)²=500×1.0816=540.8。",
+        "subject": "數學",
+        "sub_topic": "成長模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中三年級-成長模型",
+        "template_id": "ref-20261119-b10-m3-growthmodel-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-growthmodel-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "某種庫存每期減少20%，初始1000件。若連續經過3期，依模型剩多少件？",
+        "correct": "512件",
+        "wrong": [
+          "400件",
+          "640件",
+          "800件"
+        ],
+        "exp": "每期留下80%，三期後1000×0.8³=512件。",
+        "subject": "數學",
+        "sub_topic": "成長模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中三年級-成長模型",
+        "template_id": "ref-20261119-b10-m3-growthmodel-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-growthmodel-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "某微生物數量模型N(t)=400×2^(t/5)，t以小時計。預測何時達到1600個？",
+        "correct": "10小時",
+        "wrong": [
+          "5小時",
+          "15小時",
+          "20小時"
+        ],
+        "exp": "1600/400=4=2²，因此t/5=2，解得t=10小時。",
+        "subject": "數學",
+        "sub_topic": "成長模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中三年級-成長模型",
+        "template_id": "ref-20261119-b10-m3-growthmodel-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
