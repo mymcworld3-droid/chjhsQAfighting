@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-chem2-redox-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從氧化數、電子守恆與電極反應分析電化學",
+      "question": {
+        "q": "在中性化合物KMnO₄中，若K的氧化數為+1、O為−2，Mn的氧化數為何？",
+        "correct": "+7",
+        "wrong": [
+          "+3",
+          "+5",
+          "−7"
+        ],
+        "exp": "整體氧化數和為0：(+1)+x+4(−2)=0，故x=+7。",
+        "subject": "化學",
+        "sub_topic": "氧化還原與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-氧化還原與電化學",
+        "template_id": "ref-20261119-b2-chem2-redox-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-chem2-redox-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從氧化數、電子守恆與電極反應分析電化學",
+      "question": {
+        "q": "鋅銅原電池以Zn(s)/Zn²⁺及Cu²⁺/Cu(s)組成，且總反應為Zn+Cu²⁺→Zn²⁺+Cu。在放電過程中哪個電極發生氧化？",
+        "correct": "鋅電極（陽極）",
+        "wrong": [
+          "銅電極（陰極）",
+          "兩電極同時只發生還原",
+          "所有電子只在鹽橋中流動"
+        ],
+        "exp": "Zn→Zn²⁺+2e⁻為失電子氧化半反應，發生在陽極；Cu²⁺+2e⁻→Cu則在陰極還原。",
+        "subject": "化學",
+        "sub_topic": "氧化還原與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-氧化還原與電化學",
+        "template_id": "ref-20261119-b2-chem2-redox-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-chem2-redox-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從氧化數、電子守恆與電極反應分析電化學",
+      "question": {
+        "q": "銅離子在陰極依Cu²⁺+2e⁻→Cu還原。若有0.10 mol的Cu²⁺完全轉成Cu，需多少莫耳電子？",
+        "correct": "0.20 mol",
+        "wrong": [
+          "0.05 mol",
+          "0.10 mol",
+          "0.40 mol"
+        ],
+        "exp": "由半反應係數，每1 mol Cu²⁺需2 mol電子，因此0.10×2=0.20 mol電子。",
+        "subject": "化學",
+        "sub_topic": "氧化還原與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-氧化還原與電化學",
+        "template_id": "ref-20261119-b2-chem2-redox-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
