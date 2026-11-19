@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-earth1-plate-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "由相對位移、岩石性質與造山機制理解板塊",
+      "question": {
+        "q": "兩個GPS測站分別位於互相遠離的板塊上，測得彼此距離平均每年增加3.0 cm。若此速率近似固定，10年間距離約增加多少？",
+        "correct": "30 cm",
+        "wrong": [
+          "3 cm",
+          "300 cm",
+          "0.3 cm"
+        ],
+        "exp": "相對遠離速率為3.0 cm/年，10年位移約3.0×10=30 cm；這是兩測站間的相對距離變化。",
+        "subject": "地球科學",
+        "sub_topic": "板塊運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-板塊運動",
+        "template_id": "ref-20261119-earth1-plate-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-earth1-plate-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "由相對位移、岩石性質與造山機制理解板塊",
+      "question": {
+        "q": "在海洋板塊與大陸板塊互相聚合時，為何通常由海洋板塊向大陸板塊下方隱沒？",
+        "correct": "海洋岩石圈通常較緻密，容易向下進入地函",
+        "wrong": [
+          "海洋板塊必然比大陸板塊厚且更輕",
+          "大陸地殼通常比海洋地殼密度大得多",
+          "兩板塊相遇時完全不受岩石性質影響"
+        ],
+        "exp": "海洋地殼以玄武岩質為主、密度通常比大陸地殼高；海洋岩石圈冷卻後密度增加，有利於隱沒。",
+        "subject": "地球科學",
+        "sub_topic": "板塊運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-板塊運動",
+        "template_id": "ref-20261119-earth1-plate-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-earth1-plate-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "由相對位移、岩石性質與造山機制理解板塊",
+      "question": {
+        "q": "喜馬拉雅山脈主要是印度板塊與歐亞板塊聚合形成。最符合其主要造山機制的敘述是？",
+        "correct": "兩塊大陸岩石圈碰撞擠壓，造成地殼增厚與隆起",
+        "wrong": [
+          "兩塊板塊沿中洋脊互相分離",
+          "巨大隕石直接堆成整條山脈",
+          "所有高山只能由單一火山錐組成"
+        ],
+        "exp": "印度與歐亞大陸碰撞產生強烈擠壓、逆衝斷層與地殼增厚，形成高山帶；不是典型中洋脊張裂地形。",
+        "subject": "地球科學",
+        "sub_topic": "板塊運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中一年級-板塊運動",
+        "template_id": "ref-20261119-earth1-plate-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
