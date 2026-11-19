@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-p2-impulse-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "一顆0.50 kg的球以+6 m/s向右運動，受外力後改以−2 m/s向左運動。其動量變化量Δp為何？",
+        "correct": "−4 kg·m/s",
+        "wrong": [
+          "+4 kg·m/s",
+          "−2 kg·m/s",
+          "+2 kg·m/s"
+        ],
+        "exp": "Δp=m(v末−v初)=0.50×(−2−6)=−4 kg·m/s，負號代表動量變化朝左。",
+        "subject": "物理",
+        "sub_topic": "動量與衝量",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-動量與衝量",
+        "template_id": "ref-20261119-b5-p2-impulse-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-p2-impulse-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "一個平均大小20 N的水平力沿固定方向作用0.15秒，造成的衝量大小為何？",
+        "correct": "3.0 N·s",
+        "wrong": [
+          "0.13 N·s",
+          "20.15 N·s",
+          "30 N·s"
+        ],
+        "exp": "衝量J=F平均Δt=20×0.15=3.0 N·s。",
+        "subject": "物理",
+        "sub_topic": "動量與衝量",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-動量與衝量",
+        "template_id": "ref-20261119-b5-p2-impulse-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-p2-impulse-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "在光滑水平面上，質量2 kg的小車以3 m/s向右碰上原本靜止的質量1 kg小車，碰後兩車黏在一起。忽略外力，合體速度為何？",
+        "correct": "2 m/s向右",
+        "wrong": [
+          "3 m/s向右",
+          "1 m/s向左",
+          "6 m/s向右"
+        ],
+        "exp": "完全非彈性碰撞仍守恆總動量：(2×3+1×0)=(2+1)v，因此v=2 m/s向右。",
+        "subject": "物理",
+        "sub_topic": "動量與衝量",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-動量與衝量",
+        "template_id": "ref-20261119-b5-p2-impulse-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
