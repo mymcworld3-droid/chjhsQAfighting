@@ -325,7 +325,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   const effectCells=(sk.kind==='fist-focus'?[origin]:cells)
     .filter(p=>tile(map,p)&&!seen.has(key(p))&&seen.add(key(p)))
     .slice(0,72).map(p=>({x:p.x,y:p.y}));
-  const result={seq,skillId,skillName:sk.name,target:{...target},
+  const result={seq,skillId,skillName:sk.name,origin:{...origin},target:{...target},
     cost,hits,totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
     focusBefore:chargeBefore,focusEmpowered:empowered,
