@@ -6,6 +6,7 @@ const path=require('node:path');
 const express=require('express');
 const {generateDungeonLayout}=require('../dungeon-map-generator.cjs');
 const AI=require('../dungeon-enemy-ai.cjs');
+const PlayerCombat=require('../dungeon-player-combat.cjs');
 let playwright;try{playwright=require('playwright');}
 catch(_){playwright=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright');}
 const app=express();app.use(express.json());
@@ -114,8 +115,18 @@ app.post('/api/dungeon/room',(req,res)=>{
         member.explorationStamina=100;member.battleHealth=100;
         member.battleMaxHealth=100;member.downed=false;member.lastDamage=null;
         member.moveSeq=0;member.lastMove=null;
+        member.strikeSeq=0;member.lastStrike=null;
       });
     room.revision++;publish();return success();
+  }
+  if(action==='strike'){
+    try{
+      const outcome=PlayerCombat.strikeEnemy(room,uid,map,{
+        enemyId:req.body.enemyId,seq:req.body.seq});
+      if(outcome.duplicate)return success();
+      room.members=outcome.members;room.enemies=outcome.enemies;
+      room.revision++;publish();return success();
+    }catch(error){return res.status(error.status||409).json({ok:false,error:error.message});}
   }
   if(action==='move'){
     if(room.status!=='assembled')return res.status(409).json({ok:false,error:'not assembled'});
@@ -392,9 +403,30 @@ async function main(){
     // only the visibility of A's hit and shared HP is deterministic here.
     assert.deepStrictEqual(errors,[]);
     assert.equal(requests.filter(action=>action==='move').length,3);
-    assert.ok(!requests.some(action=>/attack|reward|damage/.test(action)));
+    // Stage 11A: use a stationary nearby beast to exercise the new player
+    // attack button and verify both clients see exactly one shared defeat.
+    room.enemies=[{...wolf,position:candidate,attack:null,cadence:999999,
+      battleHealth:60,battleMaxHealth:60}];
+    room.revision++;publish();
+    await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
+    await a.page.locator('[data-dm-beast-list] button').first().click();
+    await a.page.locator('[data-dm="strike"]:not([disabled])').waitFor();
+    await a.page.locator('[data-dm="strike"]').click();
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-strike-alert]')
+      ?.textContent.includes('傷害 30'));
+    assert.equal(room.enemies[0].battleHealth,30);
+    await a.page.locator('[data-dm="strike"]:not([disabled])').waitFor();
+    await a.page.locator('[data-dm="strike"]').click();
+    await b.page.waitForFunction(()=>document.querySelector('[data-dm="beasts"]')
+      ?.textContent.includes('靈獸 0'));
+    assert.equal(room.enemies.length,0);
+    assert.equal(room.members.a.strikeSeq,2);
+    assert.equal(room.members.a.explorationStamina,94);
+    assert.equal(room.members.b.explorationStamina,99);
+    assert.equal(requests.filter(action=>action==='strike').length,2);
+    assert.ok(!requests.some(action=>/reward|damage/.test(action)));
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two clients, moving NPCs, telegraph-before-hit, synced HP, 3 moves, SSE repaint and pinch');
+    console.log('[Dungeon map browser] PASS: two clients, moving NPCs, warning/hit, synchronized HP, two melee strikes and shared kill');
   }finally{
     clearInterval(clockLoop);
     clockLoop=null;
