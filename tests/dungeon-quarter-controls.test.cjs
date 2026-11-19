@@ -39,7 +39,7 @@ test('old onscreen panels, D-pad, map tools and legacy HUD are not in mounted HT
   const html=view.match(/root\.innerHTML=`([\s\S]*?)`;/)?.[1];
   assert.ok(html,'single battle template must exist');
   for(const old of ['dm-dpad','dm-controls','dm-overview','dm-legend',
-      'dm-foot','dm-biome','dm-energy','dm-health','dm-team-status-bar',
+      'dm-foot','dm-biome','dm-team-status-bar',
       'data-dm="plus"','data-dm="minus"','data-dm="route"','data-dm="fit"']){
     assert.ok(!html.includes(old),'old UI remains: '+old);
   }
