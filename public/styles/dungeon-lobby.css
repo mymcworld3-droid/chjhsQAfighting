@@ -169,3 +169,6 @@ body.ui-cleanup #home-dungeon-entry{min-height:68px;margin-top:4px}
   #dungeon-lobby .dg-victory-row button{width:100%}
   #dungeon-lobby .dg-victory-claimed{align-self:flex-end}
 }
+
+#dungeon-lobby .dg-finish{font-weight:800;min-height:44px;background:linear-gradient(110deg,#b28953,#e0c27a);color:#1f2c20;border-color:#efd997;box-shadow:0 2px 12px #d7af6c33}
+#dungeon-lobby .dg-finish:hover{filter:brightness(1.09)}

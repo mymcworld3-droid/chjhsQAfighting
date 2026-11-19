@@ -73,7 +73,7 @@ class DungeonMapView{
       '<p>首領已擊敗！每位參戰隊員可領取 120 靈石與 3 修為。</p>'+
       '<button type="button" data-dm="claim-victory" data-dm-claim>領取本場獎勵</button>'+
       '<small data-dm-reward-status role="status" aria-live="polite">'+
-      '個別領取，一場一人限領一次。離開隊伍前請完成領取。</small></div>'+
+      '每場每人限領一次；現在或離隊後，都能從副本入口領取。</small></div>'+
       '<div class="dm-overview" data-dm-overview hidden aria-hidden="true">'+
       '<canvas data-dm-minimap></canvas><span>全域縮圖</span></div>'+
       '<div class="dm-controls" aria-label="地圖視角控制">'+
@@ -338,7 +338,7 @@ class DungeonMapView{
     status.textContent=award?
       (award.status==='duplicate'?'本場獎勵先前已領取，不再重複發放':
         '已成功存入原本的玩家帳號，重新進入宗門可查看增加後數值'):
-      '個別領取，一場每人限領一次。離開隊伍前請完成領取。';
+      '每場每人限領一次；離開隊伍後仍可從副本入口的勝利紀錄補領。';
   }
   async rescue(targetUid){
     if(!this.isCurrent()||!this.map||this.rescuePending)return;

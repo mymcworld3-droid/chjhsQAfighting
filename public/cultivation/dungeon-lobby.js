@@ -220,7 +220,7 @@ function renderRoom(){
   const objective=room.dungeonProgress;
   const mission=room.dungeonArena==='boss'?
     (room.bossEncounter?.status==='defeated'?
-      '玄炎鎮殿獸已被全隊擊敗！請在副本勝利畫面領取個人靈石與修為，離隊前記得入帳。':
+      '玄炎鎮殿獸已被全隊擊敗！可一鍵領獎並離場，也可以日後從副本入口補領。':
       '已進入玄炎鎮殿首領戰，請留意紅色預告格、維持生命與體力。'):
     objective?.portalStatus==='open'?
     '傳送門已啟動，請走近傳送陣，帶全隊進入真正的首領戰。':
