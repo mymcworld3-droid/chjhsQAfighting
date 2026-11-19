@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-chi1-modernpoetry-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "古今語義、修辭結構與詩歌意象，附可核實的語義解析",
+      "question": {
+        "q": "閱讀自編詩句：「母親把舊雨傘靠在門旁／傘面補了三次／每當天色轉暗／它仍先替我想到回家的路。」詩中「雨傘」最主要承載何種象徵？",
+        "correct": "平凡物件凝聚長期照顧與牽掛的記憶",
+        "wrong": [
+          "物件越舊就必定代表家庭經濟困窘",
+          "只有使用舊雨傘才能真正認識道路方向",
+          "詩人主要想比較不同雨傘布料的耐用度"
+        ],
+        "exp": "舊傘多次修補與「替我想到回家的路」結合，使日常用品成為母親長期照顧與牽掛的象徵。",
+        "subject": "國文",
+        "sub_topic": "現代詩",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-現代詩",
+        "template_id": "ref-20261119-b7-chi1-modernpoetry-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-chi1-modernpoetry-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "古今語義、修辭結構與詩歌意象，附可核實的語義解析",
+      "question": {
+        "q": "閱讀自編詩句：「窗台上長出一小片綠／大樓仍堵住遠山／它卻把春天／從縫隙裡慢慢推進來。」詩中「小片綠」與大樓形成何種對比？",
+        "correct": "狹小生長空間與持續展現生命力之間的對比",
+        "wrong": [
+          "城市建築全都已被森林取代的景象",
+          "植物生長永遠與季節變化沒有關聯",
+          "詩人以統計資料證明建築物高度逐年下降"
+        ],
+        "exp": "大樓遮住遠山暗示受限的空間，窗台綠意卻能生長，凸顯微小生命面對限制仍帶來希望。",
+        "subject": "國文",
+        "sub_topic": "現代詩",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-現代詩",
+        "template_id": "ref-20261119-b7-chi1-modernpoetry-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-chi1-modernpoetry-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "古今語義、修辭結構與詩歌意象，附可核實的語義解析",
+      "question": {
+        "q": "閱讀自編詩句：「鐘聲停止了／操場跑道仍畫著白線／那些放學後的腳印／比校門更記得我們。」末句「腳印比校門更記得我們」主要運用何種表達方式？",
+        "correct": "將腳印寫成有記憶的事物，藉擬人表達對校園往事的眷戀",
+        "wrong": [
+          "用科學紀錄證明腳印具有生物神經系統",
+          "以純粹客觀的路面測量說明校門長度",
+          "主張學校已不存在任何人或活動"
+        ],
+        "exp": "「記得」本為人的能力，賦予腳印記憶，將過往校園生活的情感投射到具體景物，屬擬人與象徵。",
+        "subject": "國文",
+        "sub_topic": "現代詩",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-現代詩",
+        "template_id": "ref-20261119-b7-chi1-modernpoetry-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
