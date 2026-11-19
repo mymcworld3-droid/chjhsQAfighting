@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-geo1-climate-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "運用降雨統計、地形和行星環流判斷氣候",
+      "question": {
+        "q": "某地多年平均5月降雨量250 mm，12月降雨量20 mm。僅由這份資料可直接判斷何者？",
+        "correct": "該地多年平均5月比12月多雨",
+        "wrong": [
+          "每年5月每一天都一定下雨",
+          "每年12月完全不可能下雨",
+          "5月的最高氣溫必定高於12月"
+        ],
+        "exp": "多年平均降水量可比較月份典型雨量差異，不能保證個別日期的雨況，也無法直接推定氣溫。",
+        "subject": "地理",
+        "sub_topic": "氣候系統",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-氣候系統",
+        "template_id": "ref-20261119-b2-geo1-climate-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-geo1-climate-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "運用降雨統計、地形和行星環流判斷氣候",
+      "question": {
+        "q": "某山坡海拔500 m處氣溫為22°C，山頂海拔1,500 m，若假設沿途平均每上升100 m氣溫下降0.6°C，山頂氣溫約為多少？",
+        "correct": "16°C",
+        "wrong": [
+          "6°C",
+          "22.6°C",
+          "28°C"
+        ],
+        "exp": "高度增加1,000 m，相當於10個100 m，降溫約10×0.6=6°C；22−6=16°C。",
+        "subject": "地理",
+        "sub_topic": "氣候系統",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-氣候系統",
+        "template_id": "ref-20261119-b2-geo1-climate-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-geo1-climate-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "運用降雨統計、地形和行星環流判斷氣候",
+      "question": {
+        "q": "赤道附近的熱帶輻合帶（ITCZ）通常較容易出現較多雲雨，主要與哪項環流過程有關？",
+        "correct": "低層暖濕氣流輻合上升，冷卻凝結形成雲雨",
+        "wrong": [
+          "地面空氣持續強烈下沉且完全無水氣",
+          "地球自轉使所有雲滴無法形成",
+          "沙漠地表全年不受太陽輻射"
+        ],
+        "exp": "熱帶輻合帶附近暖濕空氣上升、冷卻凝結，容易形成深對流雲與降雨，但各地還受季節與其他因素影響。",
+        "subject": "地理",
+        "sub_topic": "氣候系統",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-氣候系統",
+        "template_id": "ref-20261119-b2-geo1-climate-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
