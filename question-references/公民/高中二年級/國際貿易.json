@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-civ2-trade-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "比較利益、關稅與匯率的基本量化應用",
+      "question": {
+        "q": "甲國生產1單位布需4小時、1單位米需2小時；乙國生產1單位布需3小時、1單位米需3小時。只考慮勞動時間，哪國生產米具有比較利益？",
+        "correct": "甲國",
+        "wrong": [
+          "乙國",
+          "兩國機會成本完全相同",
+          "兩國都沒有任何生產能力"
+        ],
+        "exp": "甲生產1米的機會成本=0.5布；乙生產1米的機會成本=1布；甲機會成本較低，故在米生產具比較利益。",
+        "subject": "公民",
+        "sub_topic": "國際貿易",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國際貿易",
+        "template_id": "ref-20261119-b2-civ2-trade-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-civ2-trade-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "比較利益、關稅與匯率的基本量化應用",
+      "question": {
+        "q": "某國對進口鞋類提高關稅，假設世界市場價格及國內其他條件不變，對國內購鞋消費者最可能產生何種影響？",
+        "correct": "進口鞋的國內價格可能上升，消費者購買成本提高",
+        "wrong": [
+          "進口鞋在國內必定立即完全免費",
+          "所有國內製鞋廠商的生產成本必定下降為零",
+          "關稅與商品價格不可能有任何關係"
+        ],
+        "exp": "進口關稅提高進口成本，在其他條件相同且部分轉嫁時，國內銷售價格可能上升，消費者負擔增加。",
+        "subject": "公民",
+        "sub_topic": "國際貿易",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國際貿易",
+        "template_id": "ref-20261119-b2-civ2-trade-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-civ2-trade-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "比較利益、關稅與匯率的基本量化應用",
+      "question": {
+        "q": "某出口商售出價值1,000美元的商品，假設美元報價不變且不計費用。匯率由1美元兌新臺幣30元變成33元，換回的新臺幣收入增加多少？",
+        "correct": "3,000元",
+        "wrong": [
+          "300元",
+          "30,000元",
+          "33,000元"
+        ],
+        "exp": "原收入1,000×30=30,000元，新收入1,000×33=33,000元，增加3,000元。",
+        "subject": "公民",
+        "sub_topic": "國際貿易",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國際貿易",
+        "template_id": "ref-20261119-b2-civ2-trade-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
