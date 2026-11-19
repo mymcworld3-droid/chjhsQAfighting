@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-rhetoric-context-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "柳宗元〈捕蛇者說〉寫「孰知賦斂之毒有甚是蛇者乎！」作者將賦稅負擔與毒蛇並提，主要達到何種論述效果？",
+        "correct": "用毒蛇的危害襯托苛重賦稅對百姓造成的更深痛苦",
+        "wrong": [
+          "證明所有蛇類都不具有毒性",
+          "主張收稅的官員都必須學習捕蛇技術",
+          "只為分類野外蛇類，完全不涉及社會批判"
+        ],
+        "exp": "結尾反問將毒蛇之害與賦斂之害比較，凸顯苛政對民生的傷害，帶有鮮明批判意味。",
+        "subject": "國文",
+        "sub_topic": "修辭與文史背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-修辭與文史背景",
+        "template_id": "ref-20261119-b8-ch2-rhetoric-context-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-rhetoric-context-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "劉禹錫〈陋室銘〉：「山不在高，有仙則名；水不在深，有龍則靈。」這組句子對後文「惟吾德馨」有何鋪墊作用？",
+        "correct": "先用山與水的價值不取決於外在大小作類比，引出居處價值重在德行",
+        "wrong": [
+          "主張陋室必須緊鄰高山與深水才值得居住",
+          "逐一列出山水地理高度，作為建築測量報告",
+          "強調房屋裝飾越豪華，品德就一定越高"
+        ],
+        "exp": "前兩句以山、水的外在條件與內在意義類比居室，為後文以德行取代華美外觀的主張鋪陳。",
+        "subject": "國文",
+        "sub_topic": "修辭與文史背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-修辭與文史背景",
+        "template_id": "ref-20261119-b8-ch2-rhetoric-context-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-rhetoric-context-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "歐陽修〈醉翁亭記〉：「山水之樂，得之心而寓之酒也。」若結合「醉翁之意不在酒」理解，哪項說明最適當？",
+        "correct": "飲酒是抒發方式，真正樂趣來自山水與內心感受",
+        "wrong": [
+          "作者主要記錄飲酒量與酒器規格，與山水無關",
+          "作者否定人可以從自然景色獲得任何樂趣",
+          "句中「寓」是把山水搬入酒杯，屬完全寫實的記錄"
+        ],
+        "exp": "「意不在酒」點明情趣不只在飲酒，「得之心而寓之酒」進一步說明感受與表達方式之別。",
+        "subject": "國文",
+        "sub_topic": "修辭與文史背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-修辭與文史背景",
+        "template_id": "ref-20261119-b8-ch2-rhetoric-context-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
