@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-hist2-industrial-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "區辨工業化的技術、勞動與跨區域經濟效應",
+      "question": {
+        "q": "十八世紀末至十九世紀初，蒸汽機逐漸廣泛用於工廠生產。相較主要依賴河流水力的工廠，蒸汽動力最重要的區位影響為何？",
+        "correct": "工廠設址對河流水力的依賴降低",
+        "wrong": [
+          "工廠只能設在大河上游",
+          "煤炭不再具有任何能源用途",
+          "工廠從此不需要工人"
+        ],
+        "exp": "蒸汽機使用燃料提供機械動力，降低工業生產對特定水流條件的依賴，進一步改變工廠區位選擇。",
+        "subject": "歷史",
+        "sub_topic": "工業革命與帝國主義",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-工業革命與帝國主義",
+        "template_id": "ref-20261119-hist2-industrial-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-hist2-industrial-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "區辨工業化的技術、勞動與跨區域經濟效應",
+      "question": {
+        "q": "十九世紀部分工業城市出現工時過長、工資低與工傷問題。勞工組織成立、爭取工時限制與勞動保障，最直接回應哪項變遷？",
+        "correct": "工廠制度下勞資權力與勞動條件問題",
+        "wrong": [
+          "中世紀封建莊園全面恢復",
+          "工廠生產完全不存在雇傭關係",
+          "農業人口已經完全消失"
+        ],
+        "exp": "工業化帶動工廠雇傭勞動，也帶來工時、安全與薪資爭議，促成工會與勞動改革運動。",
+        "subject": "歷史",
+        "sub_topic": "工業革命與帝國主義",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-工業革命與帝國主義",
+        "template_id": "ref-20261119-hist2-industrial-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-hist2-industrial-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "區辨工業化的技術、勞動與跨區域經濟效應",
+      "question": {
+        "q": "某歷史研究比較十九世紀蒸汽船與鐵路普及前後的商品流通。若其他條件近似，最可能觀察到哪項影響？",
+        "correct": "長途運輸時間與成本下降，區域市場連結增強",
+        "wrong": [
+          "長途貿易完全不再需要港口",
+          "運輸革新必使所有殖民地立即獨立",
+          "所有原料價格在各地永遠完全相同"
+        ],
+        "exp": "蒸汽船與鐵路改善運輸效率，促進工業原料及商品跨區域流動，但不代表交通或價格差異完全消失。",
+        "subject": "歷史",
+        "sub_topic": "工業革命與帝國主義",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-工業革命與帝國主義",
+        "template_id": "ref-20261119-hist2-industrial-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
