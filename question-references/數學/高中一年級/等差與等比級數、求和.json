@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-math1-series-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "等差級數5+8+11+⋯+32的和是多少？",
+        "correct": "185",
+        "wrong": [
+          "180",
+          "170",
+          "195"
+        ],
+        "exp": "首項5、公差3、末項32，項數n=(32−5)/3+1=10；和S=10(5+32)/2=185。",
+        "subject": "數學",
+        "sub_topic": "等差與等比級數、求和",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中一年級-等差與等比級數、求和",
+        "template_id": "ref-20261119-b3-math1-series-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math1-series-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "等比級數3+6+12+24+48的和是多少？",
+        "correct": "93",
+        "wrong": [
+          "90",
+          "96",
+          "99"
+        ],
+        "exp": "首項3、公比2、共5項，和為3(2⁵−1)/(2−1)=93。",
+        "subject": "數學",
+        "sub_topic": "等差與等比級數、求和",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中一年級-等差與等比級數、求和",
+        "template_id": "ref-20261119-b3-math1-series-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math1-series-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "某人第一週存100元，往後每週比前一週多存50元。若連續存8週，累計存款為何？",
+        "correct": "2,200元",
+        "wrong": [
+          "1,800元",
+          "2,400元",
+          "1,200元"
+        ],
+        "exp": "為等差數列a₁=100、d=50、n=8，末項a₈=450；總和S₈=8(100+450)/2=2,200元。",
+        "subject": "數學",
+        "sub_topic": "等差與等比級數、求和",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中一年級-等差與等比級數、求和",
+        "template_id": "ref-20261119-b3-math1-series-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
