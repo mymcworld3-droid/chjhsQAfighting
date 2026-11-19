@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-eng3-text-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "理解段落間的因果、轉折與組織順序",
+      "question": {
+        "q": "A report opens by describing the growing problem of food waste, then examines its causes, and finally proposes ways to reduce it. Which pattern best describes the report?",
+        "correct": "Problem → causes → solutions",
+        "wrong": [
+          "Chronological biography → dialogue → poem",
+          "Two unrelated descriptions → an advertisement",
+          "A single quotation repeated without explanation"
+        ],
+        "exp": "The report presents a problem, analyzes reasons for it, and then develops solutions in a clear sequence.",
+        "subject": "英文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-篇章結構",
+        "template_id": "ref-20261119-b2-eng3-text-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-eng3-text-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "理解段落間的因果、轉折與組織順序",
+      "question": {
+        "q": "Paragraph 1 explains how planting street trees can reduce summer heat. Paragraph 2 begins, 'However, trees cannot be planted everywhere.' What should Paragraph 2 most logically discuss next?",
+        "correct": "Practical limits such as underground pipes and narrow sidewalks",
+        "wrong": [
+          "The history of an unrelated mountain",
+          "A recipe for a fruit dessert",
+          "Why summer never occurs in cities"
+        ],
+        "exp": "'However' signals a contrast. After benefits, the next paragraph should examine practical constraints on planting urban trees.",
+        "subject": "英文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-篇章結構",
+        "template_id": "ref-20261119-b2-eng3-text-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-eng3-text-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "理解段落間的因果、轉折與組織順序",
+      "question": {
+        "q": "A passage states, 'Daily exercise may improve sleep quality.' It then gives results from a school survey and finishes by noting that sleep also depends on stress and screen use. What is the role of the final statement?",
+        "correct": "It qualifies the earlier claim by adding other relevant factors.",
+        "wrong": [
+          "It repeats the exact survey result without interpretation.",
+          "It claims exercise is the only cause of sleep problems.",
+          "It changes the topic to a sports competition."
+        ],
+        "exp": "The final statement limits an overly simple conclusion by noting that sleep quality has multiple influencing factors.",
+        "subject": "英文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-篇章結構",
+        "template_id": "ref-20261119-b2-eng3-text-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
