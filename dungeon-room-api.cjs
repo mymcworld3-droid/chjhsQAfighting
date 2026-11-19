@@ -14,6 +14,7 @@ const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
 const {strikeEnemy,maxHealth}=require('./dungeon-player-combat.cjs');
 const Skills=require('./dungeon-skill-combat.cjs');
 const QuizCredit=require('./dungeon-quiz-credit.cjs');
+const {clampStamina}=require('./dungeon-stamina-rules.cjs');
 const Objectives=require('./dungeon-objectives.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
 const Portal=require('./dungeon-portal-readiness.cjs');
@@ -79,7 +80,9 @@ const publicRoom=(roomId,room,at=Date.now())=>({
     }:null
   })):[],
   members:Object.fromEntries(Object.entries(membersOf(room)).map(([id,member])=>
-    [id,{...member,online:memberOnline(member,at)}]))
+    [id,{...member,
+      ...(room.status==='assembled'?{explorationStamina:clampStamina(member.explorationStamina)}:{}),
+      online:memberOnline(member,at)}]))
 });
 const safeName=(value,uid)=>{
   const name=String(value||'').trim().slice(0,32);
