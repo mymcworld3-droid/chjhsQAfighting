@@ -65,6 +65,7 @@ export const kickDungeonMember=(roomId,targetUid)=>request('kick',{roomId,target
 export const disbandDungeonRoom=roomId=>request('disband',{roomId});
 export const assembleDungeonRoom=roomId=>request('start',{roomId});
 export const activateDungeonPortal=roomId=>request('activate-portal',{roomId});
+export const enterDungeonBoss=roomId=>request('enter-boss',{roomId});
 export const cancelDungeonAssembly=roomId=>request('cancel-start',{roomId});
 
 // Only one active subscription per visible dungeon lobby is necessary.

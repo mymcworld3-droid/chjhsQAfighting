@@ -1,6 +1,6 @@
 import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
-import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal } from './dungeon-room.js';
+import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal, enterDungeonBoss } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 
@@ -26,7 +26,7 @@ class DungeonMapView{
     this.camera=Camera.initialCamera();this.follow=false;this.routes=false;
     this.opened=false;this.seq=0;this.pointers=new Map();this.movePending=false;
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
-    this.portalPending=false;
+    this.portalPending=false;this.bossPending=false;
     this.aimTile=null;this.skillSignature='';
     this.focusAuras=new Map();
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
@@ -42,7 +42,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-map-view-style')){
       const style=document.createElement('link');
       style.id='dungeon-map-view-style';style.rel='stylesheet';
-      style.href='/styles/dungeon-map-view.css?v=20261119-stage13';
+      style.href='/styles/dungeon-map-view.css?v=20261119-stage15';
       document.head.append(style);
     }
     const root=document.createElement('section');
@@ -53,7 +53,12 @@ class DungeonMapView{
       '<header class="dm-head"><div><small>青雲問道 · 秘境探勘</small>'+
       '<h2 data-dm-title>秘境地圖</h2>'+
       '<p class="dm-objective-status" data-dm-objective aria-live="polite">'+
-      '尋找守鑰靈獸</p></div><div class="dm-head-actions">'+
+      '尋找守鑰靈獸</p>'+
+      '<div class="dm-boss-health" data-dm-boss-health hidden>'+
+      '<div><strong data-dm-boss-label>玄炎鎮殿獸</strong>'+
+      '<span data-dm-boss-value>900/900</span></div>'+
+      '<div class="dm-boss-meter"><i data-dm-boss-meter></i></div></div>'+
+      '</div><div class="dm-head-actions">'+
       '<span class="dm-battle-clock" data-dm-clock role="timer" aria-live="off">等待集結</span>'+
       '<button type="button" data-dm="close" aria-label="返回合作副本隊伍">返回隊伍 <span aria-hidden="true">×</span></button></div></header>'+
       '<div class="dm-stage" data-dm-stage>'+
@@ -89,6 +94,7 @@ class DungeonMapView{
       '<button type="button" data-dm="down" aria-label="向下移動一格">↓</button>'+
       '<button type="button" data-dm="right" aria-label="向右移動一格">→</button>'+
       '</div><button type="button" class="dm-portal-button" data-dm="portal" hidden disabled>啟動傳送門</button>'+
+      '<button type="button" class="dm-boss-entry" data-dm="enter-boss" hidden disabled>全隊進入首領戰</button>'+
       '<button type="button" class="dm-quiz-charge" data-dm="quiz" disabled>答題充能 · 隨時作答</button>'+ 
       '<button type="button" class="dm-strike" data-dm="strike" disabled>選擇靈獸後攻擊 · 2 體力</button>'+ 
        '<small data-dm-strike-alert role="status" aria-live="polite"></small>'+ 
@@ -158,7 +164,7 @@ class DungeonMapView{
     this.map=null;this.camera=Camera.initialCamera();
     this.follow=false;this.routes=false;this.pointers.clear();this.opened=true;
     this.movePending=false;this.strikePending=false;this.skillPending=false;
-    this.portalPending=false;
+    this.portalPending=false;this.bossPending=false;
     this.loadoutPending=false;this.aimTile=null;this.skillSignature='';
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
     this.beastIds='';this.touchOrigins.clear();this.gestureMulti=false;
@@ -191,9 +197,11 @@ class DungeonMapView{
       this.map=map;
       const palette=BIOMES[map.biome]||BIOMES.ruins;
       this.root.style.setProperty('--dm-accent',palette.trim);
-      this.$('[data-dm-title]').textContent=palette.name+' · 合作副本';
+      this.$('[data-dm-title]').textContent=map.arena==='boss'?
+        '玄炎鎮殿 · 首領戰':palette.name+' · 合作副本';
       this.$('[data-dm-biome]').textContent=palette.name;
-      this.$('[data-dm-summary]').textContent=
+      this.$('[data-dm-summary]').textContent=map.arena==='boss'?
+        '四人共享戰場 · 2×2 巨獸 · '+map.width+' × '+map.height+' 格':
         map.branchCount+' 條支線 · '+map.width+' × '+map.height+' 格';
       this.$('[data-dm-biome-box]').hidden=false;
       this.$('[data-dm-overview]').hidden=false;
