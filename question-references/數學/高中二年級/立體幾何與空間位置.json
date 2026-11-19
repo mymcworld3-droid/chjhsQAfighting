@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-m2-solidspace-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "長方體底面長5公分、寬4公分，高6公分，其表面積為何？",
+        "correct": "148平方公分",
+        "wrong": [
+          "120平方公分",
+          "74平方公分",
+          "100平方公分"
+        ],
+        "exp": "表面積為2(lw+lh+wh)=2(5×4+5×6+4×6)=2×74=148平方公分。",
+        "subject": "數學",
+        "sub_topic": "立體幾何與空間位置",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-立體幾何與空間位置",
+        "template_id": "ref-20261119-b11-m2-solidspace-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-solidspace-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "正立方體邊長3公分，從一頂點到相對頂點的空間對角線長是多少？",
+        "correct": "3√3公分",
+        "wrong": [
+          "3√2公分",
+          "9公分",
+          "6公分"
+        ],
+        "exp": "三個互相垂直方向的坐標差皆為3，由三維畢氏定理，距離√(3²+3²+3²)=3√3。",
+        "subject": "數學",
+        "sub_topic": "立體幾何與空間位置",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-立體幾何與空間位置",
+        "template_id": "ref-20261119-b11-m2-solidspace-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-solidspace-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "保持原學習觀念、完整條件與推導；不混用三維內積概念",
+      "question": {
+        "q": "一個正四角柱底面是邊長2公分的正方形、高7公分，體積為何？",
+        "correct": "28立方公分",
+        "wrong": [
+          "14立方公分",
+          "56立方公分",
+          "18立方公分"
+        ],
+        "exp": "柱體體積=底面積×高=(2×2)×7=28立方公分。",
+        "subject": "數學",
+        "sub_topic": "立體幾何與空間位置",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-立體幾何與空間位置",
+        "template_id": "ref-20261119-b11-m2-solidspace-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
