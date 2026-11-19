@@ -95,8 +95,8 @@ async function setup(){
 }
 test('room assembly grants isolated HP and a server clock transaction publishes warned strike',async()=>{
   const {f,id,raw}=await setup();
-  assert.equal(raw.members.a.battleHealth,100);
-  assert.equal(raw.members.b.battleHealth,100);
+  assert.equal(raw.members.a.battleHealth,raw.members.a.battleMaxHealth);
+  assert.equal(raw.members.b.battleHealth,raw.members.b.battleMaxHealth);
   const original=structuredClone(f.a.records.get('users/a'));
   f.clock(2000);
   const first=await f.call('b','clock',{roomId:id,tick:1e6,damage:1e6,
@@ -112,7 +112,7 @@ test('room assembly grants isolated HP and a server clock transaction publishes 
     p.x===snap.members.a.position.x&&p.y===snap.members.a.position.y));
   assert.ok(!Object.hasOwn(snap.enemies[0],'patrolIndex'));
   assert.ok(!Object.hasOwn(snap.enemies[0],'spawn'));
-  assert.equal(snap.members.a.battleHealth,100);
+  assert.equal(snap.members.a.battleHealth,snap.members.a.battleMaxHealth);
   assert.deepStrictEqual(f.a.records.get('users/a'),original);
 });
 test('unmoved player loses HP once across four simultaneous server requests',async()=>{
@@ -128,14 +128,14 @@ test('unmoved player loses HP once across four simultaneous server requests',asy
   ]);
   assert.ok(replies.every(r=>r.status===200));
   const stored=f.c.records.get(ROOMS+'/'+id);
-  assert.equal(stored.members.a.battleHealth,92);
+  assert.equal(stored.members.a.battleHealth,stored.members.a.battleMaxHealth-Combat.scaledDamage(8,stored.members.a));
   assert.equal(stored.members.a.lastDamage.tick,4);
-  assert.equal(stored.members.b.battleHealth,100);
+  assert.equal(stored.members.b.battleHealth,stored.members.b.battleMaxHealth);
   assert.equal(stored.battleAppliedTick,4);
   assert.equal(stored.enemies[0].lastAttack.hits.length,1);
   assert.equal(stored.revision,before+2,'arm and resolve each commit once');
   assert.equal((await f.call('a','clock',{roomId:id})).body.clock.appliedTick,4);
-  assert.equal(f.c.records.get(ROOMS+'/'+id).members.a.battleHealth,92);
+  assert.equal(f.c.records.get(ROOMS+'/'+id).members.a.battleHealth,stored.members.a.battleMaxHealth-Combat.scaledDamage(8,stored.members.a));
 });
 test('legal one-tile dodge after telegraph avoids damage and deducts only exploration stamina',async()=>{
   const {f,id,map,raw}=await setup();
@@ -154,12 +154,12 @@ test('legal one-tile dodge after telegraph avoids damage and deducts only explor
     step:1,battleHealth:999,explorationStamina:999});
   assert.equal(moved.status,200);
   assert.equal(moved.body.room.members.a.explorationStamina,9);
-  assert.equal(moved.body.room.members.a.battleHealth,100);
+  assert.equal(moved.body.room.members.a.battleHealth,moved.body.room.members.a.battleMaxHealth);
   f.clock(1000);
   const expired=await f.call('b','clock',{roomId:id},1);
   assert.equal(expired.status,200);
   const stored=f.c.records.get(ROOMS+'/'+id);
-  assert.equal(stored.members.a.battleHealth,100);
+  assert.equal(stored.members.a.battleHealth,stored.members.a.battleMaxHealth);
   assert.deepStrictEqual(stored.enemies[0].lastAttack.hits,[]);
   assert.deepStrictEqual(stored.members.a.position,moved.body.room.members.a.position);
 });
@@ -190,7 +190,7 @@ test('offline catch-up cancels unseen attack and forbids retroactive damage',asy
   assert.equal(resumed.status,200);
   const after=f.c.records.get(ROOMS+'/'+id);
   assert.equal(after.battleAppliedTick,50);
-  assert.equal(after.members.a.battleHealth,100);
+  assert.equal(after.members.a.battleHealth,after.members.a.battleMaxHealth);
   assert.ok(!after.enemies[0].attack||
     after.enemies[0].attack.startedAtTick===50);
 });

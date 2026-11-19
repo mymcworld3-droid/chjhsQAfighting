@@ -4,6 +4,7 @@ const {PROJECT_IDS}=require('../firebase-admin-projects.cjs');
 const {__test:API}=require('../dungeon-room-api.cjs');
 const {generateDungeonLayout}=require('../dungeon-map-generator.cjs');
 const Boss=require('../dungeon-boss-battle.cjs');
+const Combat=require('../dungeon-enemy-combat.cjs');
 const SEED='0a1b2c3d4e5f60718293a4b5',NOW=1800000000000;
 function store(initial={}){
   const records=new Map(Object.entries(initial)),clone=x=>structuredClone(x);
@@ -115,6 +116,8 @@ test('real boss collision, dodgeable warning, 2-server shared kill and retry pre
   assert.equal(f.raw().dungeonArena,'boss');
   const raw=f.raw();raw.members.a.position={x:11,y:9};
   raw.members.b.position={x:12,y:9};
+  const startHpA=raw.members.a.battleHealth;
+  const startHpB=raw.members.b.battleHealth;
   assert.equal((await f.call('a','move',{roomId:f.id,dx:0,dy:-1,step:1})).status,
     200,'can approach a free cell');
   assert.equal((await f.call('a','move',{roomId:f.id,dx:0,dy:-1,step:2})).status,
@@ -125,16 +128,17 @@ test('real boss collision, dodgeable warning, 2-server shared kill and retry pre
   const warning=f.raw().enemies[0].attack;
   assert.equal(warning.kind,'quake');
   assert.ok(warning.cells.length>0);
-  assert.equal(f.raw().members.a.battleHealth,100);
+  assert.equal(f.raw().members.a.battleHealth,startHpA);
   f.advance(1000);
   await f.call('a','clock',{roomId:f.id});
-  assert.equal(f.raw().members.a.battleHealth,100);
+  assert.equal(f.raw().members.a.battleHealth,startHpA);
   // Player b intentionally stays on a warned tile; player a dodges.
   f.raw().members.a.position={x:7,y:13};
   f.advance(1000);
   await f.call('b','clock',{roomId:f.id},1);
-  assert.equal(f.raw().members.a.battleHealth,100);
-  assert.equal(f.raw().members.b.battleHealth,89);
+  assert.equal(f.raw().members.a.battleHealth,startHpA);
+  assert.equal(f.raw().members.b.battleHealth,startHpB-
+    Combat.scaledDamage(warning.damage,raw.members.b));
   const current=f.raw();current.members.a.position={x:11,y:8};
   current.members.b.position={x:12,y:8};
   current.enemies[0].battleHealth=40; // Two valid shielded hits kill this fixture.

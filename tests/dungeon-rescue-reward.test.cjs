@@ -150,7 +150,8 @@ test('two C servers rescue one downed ally once and keep retries resource-neutra
   assert.equal(a.status,200,a.body?.error);assert.equal(b.status,200,b.body?.error);
   assert.equal(f.raw().revision,revision+1);
   assert.equal(f.raw().members.a.explorationStamina,2);
-  assert.equal(f.raw().members.b.battleHealth,40);
+  assert.equal(f.raw().members.b.battleHealth,
+    Math.round(f.raw().members.b.battleMaxHealth*.4));
   assert.equal((await f.call('b','rescue',{roomId:f.roomId,
     targetUid:'b',seq:1})).status,409,'cannot self-revive when healthy');
   assert.equal((await f.call('visitor','rescue',{roomId:f.roomId,
