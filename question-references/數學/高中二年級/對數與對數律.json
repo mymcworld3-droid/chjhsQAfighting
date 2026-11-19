@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-math2-log-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "若log₂x+log₂(x−2)=3，且x>2，則x為何？",
+        "correct": "4",
+        "wrong": [
+          "−2",
+          "2",
+          "8"
+        ],
+        "exp": "依對數加法公式，log₂[x(x−2)]=3，所以x²−2x=8，即(x−4)(x+2)=0；定義域x>2，得x=4。",
+        "subject": "數學",
+        "sub_topic": "對數與對數律",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h2-對數與對數律",
+        "template_id": "ref-20261119-b3-math2-log-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math2-log-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "已知log₃5=a，則log₃45可表示為何？",
+        "correct": "2+a",
+        "wrong": [
+          "2a",
+          "3+a",
+          "2−a"
+        ],
+        "exp": "45=9×5=3²×5，所以log₃45=log₃(3²)+log₃5=2+a。",
+        "subject": "數學",
+        "sub_topic": "對數與對數律",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h2-對數與對數律",
+        "template_id": "ref-20261119-b3-math2-log-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math2-log-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "設a=log₄8、b=log₈4，則ab等於多少？",
+        "correct": "1",
+        "wrong": [
+          "2",
+          "3/4",
+          "1/2"
+        ],
+        "exp": "換底公式得a=ln8/ln4、b=ln4/ln8，兩式相乘恰為1。",
+        "subject": "數學",
+        "sub_topic": "對數與對數律",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h2-對數與對數律",
+        "template_id": "ref-20261119-b3-math2-log-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
