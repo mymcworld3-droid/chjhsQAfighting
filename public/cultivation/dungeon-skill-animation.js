@@ -78,10 +78,25 @@ function buildSkill(uid,result,previous,next){
     moves.push({uid,path:[copyPoint(origin),copyPoint(result.position)],
       timing:skill.kind==='fist-chain'?'chain-advance':'dash'});
   }
-  for(const enemy of next?.enemies||[]){
+  // Prefer explicit server-confirmed displacement, including enemies
+  // defeated by the same cast (they may not exist in the next snapshot).
+  const confirmed=Array.isArray(result.visualMoves)?result.visualMoves:[];
+  const drawnMoves=new Set();
+  for(const motion of confirmed.slice(0,12)){
+    if(!hitIds.has(motion.enemyId)||!validPoint(motion.from)||
+        !validPoint(motion.to)||same(motion.from,motion.to))continue;
+    moves.push({uid:motion.enemyId,path:[copyPoint(motion.from),
+      copyPoint(motion.to)],
+      timing:skill.kind==='fist-throw'?'manual-throw':'push'});
+    drawnMoves.add(motion.enemyId);
+  }
+  // Older rooms have no visualMoves. Use a bounded prior/next snapshot
+  // fallback, never allow animations to mutate or guess game damage.
+  if(!confirmed.length)for(const enemy of next?.enemies||[]){
     const prior=priorEnemies.get(enemy.id);
-    if(!hitIds.has(enemy.id)||!validPoint(prior?.position)||
-        !validPoint(enemy?.position)||same(prior.position,enemy.position))continue;
+    if(!hitIds.has(enemy.id)||drawnMoves.has(enemy.id)||
+        !validPoint(prior?.position)||!validPoint(enemy?.position)||
+        same(prior.position,enemy.position))continue;
     moves.push({uid:enemy.id,path:[copyPoint(prior.position),
       copyPoint(enemy.position)],
       timing:skill.kind==='fist-throw'?'manual-throw':'push'});
