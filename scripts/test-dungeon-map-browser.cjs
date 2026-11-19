@@ -837,6 +837,7 @@ async function main(){
       document.querySelector('[data-dm-boss-health]')?.getAttribute('data-phase')==='1');
     // A downed teammate can be brought back during the real-time boss fight.
     room.members.a.position={x:11,y:10};
+    room.members.a.battleHealth=100;room.members.a.downed=false;
     room.members.b.position={x:11,y:9};
     room.members.b.battleHealth=0;room.members.b.downed=true;
     const beforeAid=room.members.a.explorationStamina;
