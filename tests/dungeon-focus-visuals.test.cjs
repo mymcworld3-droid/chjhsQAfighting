@@ -57,7 +57,7 @@ test('a persistent focus badge is wired to room updates and vanishes at zero',()
 
 test('aura is attached to the same camera-aligned per-member layer, not an opaque character mask',()=>{
   assert.match(view,/updateFocusAuras\(geometry\)/);
-  assert.match(view,/member\.focusCharges/);
+  assert.match(view,/member\?\.focusCharges/);
   assert.match(view,/if\(!Number\.isSafeInteger\(charges\)\|\|charges<=0\|\|member\.downed/);
   for(const part of ['dm-focus-glow','dm-focus-flames','dm-focus-ring',
       'dm-focus-orbit','dm-spark-a','dm-spark-f','dm-focus-count'])
