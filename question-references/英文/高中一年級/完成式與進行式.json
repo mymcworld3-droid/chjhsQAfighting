@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-eng1-tense-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依時間標記與動作先後選擇合適時態",
+      "question": {
+        "q": "Lena ______ for two hours, and she is still working on the report.",
+        "correct": "has been writing",
+        "wrong": [
+          "writes",
+          "had wrote",
+          "was write"
+        ],
+        "exp": "Since the action began two hours ago and continues now, the present perfect progressive 'has been writing' fits the time expression.",
+        "subject": "英文",
+        "sub_topic": "完成式與進行式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-高中一年級-完成式與進行式",
+        "template_id": "ref-20261119-b2-eng1-tense-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-eng1-tense-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依時間標記與動作先後選擇合適時態",
+      "question": {
+        "q": "When the fire alarm rang yesterday, the students ______ an experiment in the laboratory.",
+        "correct": "were conducting",
+        "wrong": [
+          "have conducted",
+          "conduct",
+          "will conduct"
+        ],
+        "exp": "A past action in progress when another past event occurred takes the past progressive 'were conducting'.",
+        "subject": "英文",
+        "sub_topic": "完成式與進行式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-高中一年級-完成式與進行式",
+        "template_id": "ref-20261119-b2-eng1-tense-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-eng1-tense-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依時間標記與動作先後選擇合適時態",
+      "question": {
+        "q": "By the time we arrived at the station, the last train ______.",
+        "correct": "had left",
+        "wrong": [
+          "has leave",
+          "leaves",
+          "will leave"
+        ],
+        "exp": "'By the time we arrived' sets a past reference point; the train departed earlier, so the past perfect 'had left' is appropriate.",
+        "subject": "英文",
+        "sub_topic": "完成式與進行式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-高中一年級-完成式與進行式",
+        "template_id": "ref-20261119-b2-eng1-tense-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
