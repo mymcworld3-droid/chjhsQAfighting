@@ -5,6 +5,7 @@
 // This temporary dungeon exploration pool is independent from raid tickets,
 // tactical combat and main-account resources until quiz charging arrives.
 const {generateDungeonLayout,LAYOUT_VERSION,walkable}=require('./dungeon-map-generator.cjs');
+const Boss=require('./dungeon-boss-battle.cjs');
 const START_STAMINA=100;
 const STEP_COST=1;
 const MAX_STEPS=100000;
@@ -14,7 +15,9 @@ const order=members=>Object.values(members||{}).sort((a,b)=>
 function roomMap(room,roomId){
   if(room?.mapVersion!==undefined&&room.mapVersion!==LAYOUT_VERSION)
     throw error('副本地圖版本尚未支援',409);
-  return generateDungeonLayout(room?.mapSeed||('legacy:'+roomId));
+  const seed=room?.mapSeed||('legacy:'+roomId);
+  return room?.dungeonArena==='boss'?Boss.mapFor(seed):
+    generateDungeonLayout(seed);
 }
 function spawnFor(room,uid,map){
   const index=order(room?.members).findIndex(m=>m.uid===uid);
@@ -52,8 +55,7 @@ function moveOnMap(room,uid,map,{dx,dy,step}={}){
     member.position:spawnFor(room,uid,map);
   const to={x:from.x+dx,y:from.y+dy};
   if(!walkable(map,to))throw error('前方是無法通行的地形',409);
-  if((room.enemies||[]).some(enemy=>enemy?.position?.x===to.x&&
-      enemy?.position?.y===to.y))
+  if((room.enemies||[]).some(enemy=>Boss.occupies(enemy,to)))
     throw error('靈獸擋住前方道路，請繞路或等待靈獸移動',409);
   const stamina=Number.isSafeInteger(member.explorationStamina)?
     member.explorationStamina:START_STAMINA;

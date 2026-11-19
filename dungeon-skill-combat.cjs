@@ -5,6 +5,7 @@ const Manuals=require('./public/cultivation/manual-rules.js');
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {isAlive}=require('./dungeon-enemy-combat.cjs');
 const {maxHealth,MAX_STRIKE_SEQ}=require('./dungeon-player-combat.cjs');
+const Boss=require('./dungeon-boss-battle.cjs');
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
 const same=(a,b)=>a?.x===b?.x&&a?.y===b?.y;
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
@@ -15,7 +16,8 @@ const axis=(a,b)=>{
 };
 const at=(p,dx,dy,n=1)=>({x:p.x+dx*n,y:p.y+dy*n});
 const present=(members,point)=>Object.values(members).some(m=>same(m.position,point));
-const occupied=(p,enemies,ignore='')=>enemies.some(e=>e.id!==ignore&&same(e.position,p));
+const occupied=(p,enemies,ignore='')=>
+  enemies.some(e=>e.id!==ignore&&Boss.occupies(e,p));
 const tile=(map,p)=>walkable(map,p);
 function visible(map,a,b){
   if(!tile(map,a)||!tile(map,b))return false;
@@ -181,8 +183,10 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
     hits.push({enemyId:enemy.id,damage,remainingHealth:enemy.battleHealth,
       defeated:enemy.battleHealth===0});
   };
-  const targets=(locations)=>enemies.filter(e=>healthy(e)>0&&locations.some(p=>same(e.position,p)));
+  const targets=(locations)=>enemies.filter(e=>healthy(e)>0&&
+    locations.some(p=>Boss.occupies(e,p)));
   const advance=(object,d,steps,maxDistance=steps)=>{
+    if(object.kind==='boss')return 0; // fixed 2x2 boss cannot be knocked aside
     let total=0;
     for(let n=0;n<steps&&total<maxDistance;n++){
       const p=forward(object.position,d,1);
@@ -216,7 +220,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
     const rays=beamArray(map,target,sk);
     cells=[target,...rays.flatMap(r=>r.cells)];
     for(const e of targets(cells)){
-      if(same(e.position,target)){
+      if(Boss.occupies(e,target)){
         // The center receives only beams that can actually traverse the map.
         // A missing ray never becomes a free bonus hit through stone walls.
         const repeats=sk.orthogonal?rays.length:
@@ -224,7 +228,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
         const each=(sk.centerPower||sk.power)/(sk.orthogonal?8:2);
         for(let i=0;i<repeats;i++)apply(e,each);
       }else if(sk.orthogonal){
-        for(const r of rays.filter(r=>r.cells.some(p=>same(p,e.position))))
+        for(const r of rays.filter(r=>r.cells.some(p=>Boss.occupies(e,p))))
           apply(e,sk.power);
       }else{
         // Crossed diagonals form two sweeps; a given arm hits once.
@@ -277,6 +281,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
       cells=front(map,origin,d,!!sk.tShape);
       for(const e of targets(cells)){
         if(sk.kind==='fist-throw'){
+          if(e.kind==='boss'){apply(e,sk.power);continue;}
           const landing=forward(e.position,d,-2);
           if(!tile(map,landing)||occupied(landing,enemies,e.id)||
               present(members,landing))continue;

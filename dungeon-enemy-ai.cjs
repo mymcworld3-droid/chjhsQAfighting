@@ -4,6 +4,7 @@
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {dueTick,isRunning}=require('./dungeon-battle-clock.cjs');
 const Combat=require('./dungeon-enemy-combat.cjs');
+const Boss=require('./dungeon-boss-battle.cjs');
 const {maxHealth}=require('./dungeon-player-combat.cjs');
 const ENEMY_AI_VERSION=1;
 const MAX_CATCHUP_TICKS=24;
@@ -211,6 +212,7 @@ function simulateCombat(map,enemies,members,startTick,endTick,
 }
 function advanceWorld(room,map,now){
   if(!isRunning(room))return null;
+  if(room.dungeonArena==='boss')return Boss.advance(room,map,now);
   const applied=Number.isSafeInteger(room.battleAppliedTick)&&room.battleAppliedTick>=0?
     room.battleAppliedTick:0;
   const due=Math.max(applied,dueTick(room,now));

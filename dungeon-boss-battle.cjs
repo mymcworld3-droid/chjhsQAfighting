@@ -62,7 +62,7 @@ function initialBoss(){
     attack:null,lastAttack:null,lastAttackTick:0,
     attackCount:0,nextActionTick:0};
 }
-function enter(room,uid,explorationMap,now){
+function enter(room,uid,explorationMap,now,roomId=''){
   if(room?.status!=='assembled')throw fail('副本尚未集結',409);
   const member=room.members?.[uid];
   if(!member)throw fail('你不是此副本的隊員',403);
@@ -77,7 +77,7 @@ function enter(room,uid,explorationMap,now){
   if(!walkable(explorationMap,member.position)||
       dist(member.position,explorationMap.portalSite)>1)
     throw fail('請走到已啟動的傳送陣或相鄰一格',409);
-  const arena=mapFor(room.mapSeed||('legacy:'+room.id));
+  const arena=mapFor(room.mapSeed||('legacy:'+roomId));
   const joined=Object.entries(room.members).sort(([,a],[,b])=>
     a.joinedAtMs-b.joinedAtMs||String(a.uid).localeCompare(String(b.uid)));
   const members={...room.members};

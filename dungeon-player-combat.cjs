@@ -2,13 +2,14 @@
 // Stage 11A: server-only cooperative melee. Skills and drops are later stages.
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {isAlive}=require('./dungeon-enemy-combat.cjs');
+const Boss=require('./dungeon-boss-battle.cjs');
 const STAMINA_COST=2,DAMAGE=30,MAX_STRIKE_SEQ=100000;
-const ENEMY_HEALTH=Object.freeze({wolf:60,wisp:60,golem:90,guardian:360});
+const ENEMY_HEALTH=Object.freeze({wolf:60,wisp:60,golem:90,guardian:360,boss:Boss.HP});
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
 const maxHealth=kind=>ENEMY_HEALTH[kind]||60;
 function strikeEnemy(room,uid,map,{enemyId,seq}={}){
-  if(typeof enemyId!=='string'||!(/^(beast-[1-9][0-9]{0,4}|guardian-1)$/.test(enemyId)))
+  if(typeof enemyId!=='string'||!(/^(beast-[1-9][0-9]{0,4}|guardian-1|boss-1)$/.test(enemyId)))
     throw fail('靈獸目標無效',400);
   if(!Number.isSafeInteger(seq)||seq<1||seq>MAX_STRIKE_SEQ)
     throw fail('攻擊序號無效',400);
@@ -27,7 +28,7 @@ function strikeEnemy(room,uid,map,{enemyId,seq}={}){
   const index=room.enemies?.findIndex(e=>e.id===enemyId)??-1;
   if(index<0)throw fail('靈獸已被擊敗或不在戰場上',409);
   const enemy=room.enemies[index];
-  if(!walkable(map,enemy.position)||distance(member.position,enemy.position)!==1)
+  if(!walkable(map,enemy.position)||Boss.reach(member.position,enemy)!==1)
     throw fail('請先移動至靈獸相鄰一格再攻擊',409);
   const stamina=Number.isSafeInteger(member.explorationStamina)?
     member.explorationStamina:0;
