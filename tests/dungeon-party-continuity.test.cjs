@@ -253,3 +253,29 @@ test('unactivated portal, distant players and downed members cannot give consent
   assert.equal((await f.call('d','boss-ready',{roomId,ready:true})).status,403);
   assert.equal((await f.call('a','get',{roomId})).body.room.dungeonArena,'exploration');
 });
+
+test('boss guard API is serialized and a retried packet cannot spend stamina twice',async()=>{
+  const f=fixture(),roomId=await assembled(f);
+  openPortal(f,roomId);
+  for(const uid of 'abc'){
+    const vote=await f.call(uid,'boss-ready',{roomId,ready:true});
+    assert.equal(vote.status,200);
+  }
+  const stored=f.c.records.get(API.ROOMS+'/'+roomId);
+  stored.members.a.position={x:7,y:13};
+  stored.members.b.position={x:9,y:13};
+  const guard=await f.call('a','boss-guard',{roomId,targetUid:'b',seq:1});
+  assert.equal(guard.status,200,JSON.stringify(guard.body));
+  assert.equal(guard.body.room.members.b.bossGuard.sourceUid,'a');
+  assert.equal(guard.body.room.members.a.explorationStamina,97);
+  const retry=await f.call('a','boss-guard',{roomId,targetUid:'b',seq:1});
+  assert.equal(retry.status,200);
+  assert.equal(retry.body.room.revision,guard.body.room.revision);
+  assert.equal(retry.body.room.members.a.explorationStamina,97);
+  assert.equal((await f.call('a','boss-guard',{roomId,targetUid:'ghost',seq:2})).status,403);
+  assert.equal((await f.call('b','boss-guard',{roomId,targetUid:'a',seq:9})).status,409);
+  assert.equal((await f.call('a','boss-guard',{roomId,targetUid:'b',seq:2})).status,200);
+  assert.equal((await f.call('a','get',{roomId})).body.room.members.a.explorationStamina,94);
+  const outsider=await f.call('d','boss-guard',{roomId,targetUid:'b',seq:1});
+  assert.equal(outsider.status,403);
+});
