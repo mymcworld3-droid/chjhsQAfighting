@@ -1,0 +1,38 @@
+name: Dungeon co-op browser acceptance
+
+on:
+  push:
+    branches: [stamina-battle]
+    paths:
+      - 'dungeon-room-api.cjs'
+      - 'dungeon-boss-battle.cjs'
+      - 'dungeon-team-rescue.cjs'
+      - 'dungeon-victory-reward.cjs'
+      - 'dungeon-skill-combat.cjs'
+      - 'dungeon-quiz-api.cjs'
+      - 'dungeon-quiz-credit.cjs'
+      - 'public/cultivation/dungeon-*.js'
+      - 'public/styles/dungeon-lobby.css'
+      - 'public/styles/dungeon-map-view.css'
+      - 'scripts/test-dungeon-map-browser.cjs'
+      - '.github/workflows/dungeon-browser.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: dungeon-browser-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dungeon-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --no-audit --no-fund
+      - run: npm install --no-save --no-audit --no-fund playwright@1.62.1
+      - run: npx playwright install --with-deps chromium
+      - name: Two-player real-time dungeon and recoverable settlement
+        run: node scripts/test-dungeon-map-browser.cjs
