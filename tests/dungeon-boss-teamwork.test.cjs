@@ -4,6 +4,7 @@ const assert=require('node:assert/strict');
 const Boss=require('../dungeon-boss-battle.cjs');
 const Player=require('../dungeon-player-combat.cjs');
 const Skills=require('../dungeon-skill-combat.cjs');
+const Credits=require('../dungeon-quiz-credit.cjs');
 const {initialClock}=require('../dungeon-battle-clock.cjs');
 const NOW=1800000000000;
 const SEED='cooperative-boss-teamwork-2026';
@@ -11,22 +12,35 @@ const map=Boss.mapFor(SEED);
 const near={x:10,y:6};
 const another={x:13,y:6};
 const defender={x:11,y:10};
-function member(uid,position,stamina=100){
+function member(uid,position,stamina=10){
   return {uid,name:uid,position:{...position},battleHealth:100,
     downed:false,explorationStamina:stamina,
     moveSeq:0,strikeSeq:0,skillSeq:0,guardSeq:0};
 }
 function room(members={a:member('a',near),b:member('b',another)}){
   const boss={...Boss.initialBoss(),nextActionTick:2};
-  return {mode:'dungeon',status:'assembled',dungeonArena:'boss',
+  return {id:'dungroombosstest',assembledAtMs:NOW,
+    mode:'dungeon',status:'assembled',dungeonArena:'boss',
     bossEncounter:{version:Boss.VERSION,status:'fighting'},
     ...initialClock(NOW),battleAppliedTick:0,members,enemies:[boss]};
 }
 const update=(r,o)=>({...r,members:o.members,enemies:o.enemies});
+// Use an authenticated, correctly ordered C-credit receipt in solo tests:
+// hitting a boss more than five times requires more question answers.
+function earnStamina(r){
+  const member=r.members.a,index=(member.quizCreditSeq||0)+1;
+  const questionId='solo-focus-'+index;
+  const result=Credits.credit(r,'a',{
+    roomId:r.id,sessionKey:r.id+':'+r.assembledAtMs,
+    reviews:{[questionId]:{uid:'a',questionId,index,correct:true,amount:4}}
+  },questionId,r.id);
+  return {...r,members:result.members};
+}
 test('solo attacks chip the shield and HP without needing any cooperative token',()=>{
   let r=room({a:member('a',near)});
   assert.equal(r.enemies[0].shield,Boss.SHIELD_MAX);
   for(let seq=1;seq<=6;seq++){
+    if(r.members.a.explorationStamina<2)r=earnStamina(r);
     const result=Player.strikeEnemy(r,'a',map,{enemyId:Boss.ID,seq});
     assert.equal(result.hit.combo,false);
     assert.equal(result.hit.shieldDamage,30);
@@ -100,7 +114,7 @@ test('guard reduces one boss hit, is consumed, and is not available to outsiders
     cells:[{...defender}],startedAtTick:2,resolvesAtTick:4};
   r.battleAppliedTick=2;
   const protective=Boss.guard(r,'a',map,{targetUid:'b',seq:1});
-  assert.equal(protective.members.a.explorationStamina,97);
+  assert.equal(protective.members.a.explorationStamina,7);
   assert.equal(protective.members.b.bossGuard.sourceUid,'a');
   assert.equal(Boss.guard({...r,members:protective.members},'a',map,{
     targetUid:'b',seq:1}).duplicate,true);
@@ -117,7 +131,7 @@ test('guard reduces one boss hit, is consumed, and is not available to outsiders
 test('solo guard costs six stamina, expires, and does not block more than one hit',()=>{
   const solo=room({a:member('a',defender)});
   const g=Boss.guard(solo,'a',map,{targetUid:'a',seq:1});
-  assert.equal(g.members.a.explorationStamina,94);
+  assert.equal(g.members.a.explorationStamina,4);
   const enemy={...solo.enemies[0],attack:{kind:'quake',damage:16,
     cells:[{...defender}],startedAtTick:1,resolvesAtTick:2}};
   const protectedHit=Boss.resolveGuardedAttack(enemy,g.members,2);
@@ -134,7 +148,7 @@ test('guard cannot be used while far away, downed, short of stamina or after vic
   r.members.a.position={x:11,y:9};
   r.members.a.explorationStamina=2;
   assert.throws(()=>Boss.guard(r,'a',map,{targetUid:'b',seq:1}),/體力不足/);
-  r.members.a.explorationStamina=100;
+  r.members.a.explorationStamina=10;
   r.members.a.downed=true;
   assert.throws(()=>Boss.guard(r,'a',map,{targetUid:'b',seq:1}),/倒地/);
   r.members.a.downed=false;
@@ -142,17 +156,20 @@ test('guard cannot be used while far away, downed, short of stamina or after vic
   assert.throws(()=>Boss.guard(r,'a',map,{targetUid:'b',seq:1}),/目前無法/);
 });
 
-test('unassisted solo victory stays possible inside the original 100 stamina budget',()=>{
+test('solo victory remains possible with capped 10 stamina and verified quiz recharges',()=>{
   let r=room({a:member('a',near)});
   let strikes=0;
   while(r.enemies.some(e=>e.id===Boss.ID)&&strikes<50){
+    if(r.members.a.explorationStamina<2)r=earnStamina(r);
     const out=Player.strikeEnemy(r,'a',map,{enemyId:Boss.ID,seq:strikes+1});
     r=update(r,out);
     strikes++;
+    assert.ok(r.members.a.explorationStamina>=0&&
+      r.members.a.explorationStamina<=10);
   }
-  assert.ok(strikes<50,'basic melee alone must be able to defeat the boss');
+  assert.ok(strikes<50,'basic melee alone must defeat boss after answering questions');
+  assert.ok(r.members.a.quizCreditSeq>0,'boss must require repeat earned quiz charge');
   assert.equal(r.enemies.some(e=>e.id===Boss.ID),false);
-  assert.equal(r.members.a.explorationStamina,100-strikes*2);
   const defeated=Boss.onDefeat({...r,enemies:[Boss.initialBoss()]},r.enemies,'a');
   assert.equal(defeated.status,'defeated');
 });
@@ -180,12 +197,12 @@ test('two teammates cannot overwrite one active guard and waste stamina',()=>{
   });
   const first=Boss.guard(r,'a',map,{targetUid:'c',seq:1});
   r={...r,members:first.members};
-  assert.equal(r.members.a.explorationStamina,97);
+  assert.equal(r.members.a.explorationStamina,7);
   assert.throws(()=>Boss.guard(r,'b',map,{targetUid:'c',seq:1}),/已有有效掩護/);
-  assert.equal(r.members.b.explorationStamina,100);
+  assert.equal(r.members.b.explorationStamina,10);
   assert.equal(r.members.c.bossGuard.sourceUid,'a');
   r={...r,battleAppliedTick:6};
   const renewed=Boss.guard(r,'b',map,{targetUid:'c',seq:1});
-  assert.equal(renewed.members.b.explorationStamina,97);
+  assert.equal(renewed.members.b.explorationStamina,7);
   assert.equal(renewed.members.c.bossGuard.sourceUid,'b');
 });
