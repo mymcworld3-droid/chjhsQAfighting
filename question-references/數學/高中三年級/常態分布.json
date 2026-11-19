@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-normal-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "某項成績近似服從平均數75、標準差8的常態分布。得分59的標準分數z為何？",
+        "correct": "−2",
+        "wrong": [
+          "−1",
+          "2",
+          "−16"
+        ],
+        "exp": "標準分數z=(59−75)/8=−16/8=−2，表示低於平均2個標準差。",
+        "subject": "數學",
+        "sub_topic": "常態分布",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-常態分布",
+        "template_id": "ref-20261119-b10-m3-normal-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-normal-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "設X為平均數40的連續常態分布隨機變數，P(X≥40)是多少？",
+        "correct": "0.5",
+        "wrong": [
+          "0.25",
+          "0.4",
+          "1"
+        ],
+        "exp": "常態分布以平均數40對稱；單點機率為0，所以大於或等於40的機率為1/2。",
+        "subject": "數學",
+        "sub_topic": "常態分布",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-常態分布",
+        "template_id": "ref-20261119-b10-m3-normal-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-normal-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "單一正解、完整計算或推理；保留原觀念分類",
+      "question": {
+        "q": "考試甲平均70分、標準差5分，小美得80分；考試乙平均80分、標準差10分，小美得95分。依標準分數比較，哪次相對表現較高？",
+        "correct": "甲考試",
+        "wrong": [
+          "乙考試",
+          "兩次相同",
+          "缺乏兩場考試總人數，完全無法比較標準分數"
+        ],
+        "exp": "甲z=(80−70)/5=2，乙z=(95−80)/10=1.5；甲z較高，代表相對於各自分布表現較高。",
+        "subject": "數學",
+        "sub_topic": "常態分布",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-常態分布",
+        "template_id": "ref-20261119-b10-m3-normal-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
