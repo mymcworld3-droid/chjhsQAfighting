@@ -25,7 +25,7 @@ test('four immutable v4 seal definitions match the mechanics',()=>{
     assert(Object.isFrozen(d));
     assert(Object.isFrozen(d.range));
     assert(d.name.endsWith('陣眼'));
-    for(const key of ['label','color','effect','onBreak','tactic'])
+    for(const key of ['label','color','shortEffect','effect','onBreak','tactic'])
       assert.equal(typeof d[key],'string',kind+':'+key);
   }
   assert.equal(R.SEAL_TYPES.shield.range.radius,3);
@@ -50,6 +50,7 @@ test('serializable seal info is read-only and references actual objective state'
   assert.equal(list.length,4);
   assert.deepEqual(list.map(x=>x.name),['護靈陣眼','妖煞陣眼','御獸陣眼','迷蹤陣眼']);
   assert.deepEqual(list.map(x=>x.hp),[2,2,1,2]);
+  assert.deepEqual(list.map(x=>x.shortEffect),['護：減傷','煞：危險格','獸：增攻','迷：開路']);
   assert(list.every(x=>x.attackable===true));
   assert.deepEqual(list[3].gate,{x:7,y:6});
   list[3].gate.x=99;list[0].range.radius=99;
@@ -110,4 +111,13 @@ test('seal still requires two effective attacks and does not grant beast kill XP
   assert.equal(R.sealInfo(s,{x:3,y:1}).attackable,false);
   assert.equal(s.status,'finished');
   assert.equal(s.manualExp,undefined);
+});
+
+test('objective HUD shares the canonical short-effect labels',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
+  assert.match(source,/R\\.sealDefinition\\(p\\.kind\\)\\?\\.shortEffect/);
+  assert.doesNotMatch(source,/const sealLabels=/);
+  assert.deepEqual(Object.values(R.SEAL_TYPES).map(x=>x.shortEffect),
+    ['護：減傷','煞：危險格','獸：增攻','迷：開路']);
 });
