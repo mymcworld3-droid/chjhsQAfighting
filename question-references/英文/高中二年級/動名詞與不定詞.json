@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-eng2-gerund-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "During the examination, students should avoid ______ to one another.",
+        "correct": "talking",
+        "wrong": [
+          "to talk",
+          "talk",
+          "talked"
+        ],
+        "exp": "Avoid後接動名詞（avoid doing something），故選talking。",
+        "subject": "英文",
+        "sub_topic": "動名詞與不定詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-動名詞與不定詞",
+        "template_id": "ref-20261119-b4-eng2-gerund-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-eng2-gerund-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "The organizers promised ______ the results before Friday.",
+        "correct": "to announce",
+        "wrong": [
+          "announcing",
+          "announce",
+          "announced"
+        ],
+        "exp": "Promise接動詞時通常用to不定詞：promise to announce。",
+        "subject": "英文",
+        "sub_topic": "動名詞與不定詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-動名詞與不定詞",
+        "template_id": "ref-20261119-b4-eng2-gerund-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-eng2-gerund-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "I look forward to ______ you at the science exhibition next week.",
+        "correct": "meeting",
+        "wrong": [
+          "meet",
+          "to meet",
+          "met"
+        ],
+        "exp": "Look forward to中的to為介系詞，因此後面應接動名詞meeting。",
+        "subject": "英文",
+        "sub_topic": "動名詞與不定詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-動名詞與不定詞",
+        "template_id": "ref-20261119-b4-eng2-gerund-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
