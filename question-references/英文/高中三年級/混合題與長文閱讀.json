@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-eng3-integrated-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "跨句推論、圖表與論證綜合，結論與資料界限一致",
+      "question": {
+        "q": "Read: 'A city opened three new public drinking fountains. Plastic bottle waste at nearby parks fell from 500 kg per month to 400 kg. During the same period, a separate recycling campaign began.' Which report statement is the most defensible?",
+        "correct": "Bottle waste fell by 20%, but the fountain project cannot be identified as the only cause.",
+        "wrong": [
+          "Bottle waste fell by 100% because the fountains replaced every bottle.",
+          "Bottle waste rose by 20%, proving the fountains failed.",
+          "The fountains alone caused the entire 100 kg reduction, regardless of the other campaign."
+        ],
+        "exp": "The drop is (500−400)/500=20%; because another campaign began simultaneously, the evidence does not isolate the fountains' effect.",
+        "subject": "英文",
+        "sub_topic": "混合題與長文閱讀",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中三年級-混合題與長文閱讀",
+        "template_id": "ref-20261119-b7-eng3-integrated-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng3-integrated-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "跨句推論、圖表與論證綜合，結論與資料界限一致",
+      "question": {
+        "q": "Read: 'A library trial offered evening opening hours for three months. It recorded 90 evening visits in the first month, 120 in the second and 150 in the third. Staff availability remained limited.' Which recommendation is best supported?",
+        "correct": "Consider continuing the trial while evaluating staffing needs and whether visits remain high.",
+        "wrong": [
+          "Close the library immediately because evening visits fell every month.",
+          "Guarantee that 150 evening visitors will come every month forever.",
+          "Conclude that staffing needs can be ignored because visits increased."
+        ],
+        "exp": "Visits increased through the trial, but three months cannot establish a permanent pattern; staffing is an explicit operational constraint.",
+        "subject": "英文",
+        "sub_topic": "混合題與長文閱讀",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中三年級-混合題與長文閱讀",
+        "template_id": "ref-20261119-b7-eng3-integrated-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng3-integrated-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "跨句推論、圖表與論證綜合，結論與資料界限一致",
+      "question": {
+        "q": "Read: 'School A introduced a tutoring program. Average scores rose from 70 to 76. School B, without the program, rose from 68 to 72 in the same period. Both schools used the same test scale.' Which comparison is accurate?",
+        "correct": "A improved by 6 points and B by 4 points; the difference in gains is 2 points.",
+        "wrong": [
+          "A improved by 76 points and B by 72 points.",
+          "B improved by 6 points while A improved by 4 points.",
+          "The score changes alone prove that the entire improvement at A was caused by tutoring."
+        ],
+        "exp": "A's change is 76−70=6; B's is 72−68=4. Comparing gains yields 2 points, but other differences between schools could still affect causal interpretation.",
+        "subject": "英文",
+        "sub_topic": "混合題與長文閱讀",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中三年級-混合題與長文閱讀",
+        "template_id": "ref-20261119-b7-eng3-integrated-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
