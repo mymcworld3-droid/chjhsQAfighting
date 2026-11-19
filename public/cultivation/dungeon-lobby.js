@@ -97,7 +97,8 @@ function roomSignature(next){
   const explored=Object.values(next?.members||{}).some(m=>Number(m.moveSeq)>0);
   return JSON.stringify([next?.id,next?.revision===undefined?null:next?.status,
     next?.hostUid,next?.visibility,next?.code,next?.assembledAtMs,explored,
-    next?.dungeonProgress?.portalStatus||null,members]);
+    next?.dungeonProgress?.portalStatus||null,next?.dungeonArena||null,
+    next?.bossEncounter?.status||null,members]);
 }
 function memberOnline(member){
   const last=Number(member?.heartbeatAtMs)||0;
@@ -161,8 +162,12 @@ function renderRoom(){
   const exploring=assembled&&memberList.some(member=>Number(member.moveSeq)>0);
   const fullyReady=memberList.length>0&&readyCount===memberList.length;
   const objective=room.dungeonProgress;
-  const mission=objective?.portalStatus==='open'?
-    '傳送門已啟動，Boss 戰將在後續階段開放。':
+  const mission=room.dungeonArena==='boss'?
+    (room.bossEncounter?.status==='defeated'?
+      '玄炎鎮殿獸已被全隊擊敗；正式獎勵與結算將於後續階段開放。':
+      '已進入玄炎鎮殿首領戰，請留意紅色預告格、維持生命與體力。'):
+    objective?.portalStatus==='open'?
+    '傳送門已啟動，請走近傳送陣，帶全隊進入真正的首領戰。':
     objective?.portalStatus==='ready'?
     '全隊已取得密鑰，前往深處傳送陣啟動入口。':
     objective?.portalStatus==='sealed'?
