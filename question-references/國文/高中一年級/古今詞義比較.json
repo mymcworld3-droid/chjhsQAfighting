@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-chi1-ancientmeanings-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "《桃花源記》：「阡陌交通，雞犬相聞。」其中「交通」在此最貼近何義？",
+        "correct": "道路彼此交錯相通",
+        "wrong": [
+          "現代大眾運輸系統",
+          "政府交通法規",
+          "對外貿易的貨物流通"
+        ],
+        "exp": "「阡陌」為田間道路，「交通」形容田間道路縱橫交錯相通，並非現代的交通運輸總稱。",
+        "subject": "國文",
+        "sub_topic": "古今詞義比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-古今詞義比較",
+        "template_id": "ref-20261119-b3-chi1-ancientmeanings-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-chi1-ancientmeanings-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "《師說》：「古之學者必有師。」此處「學者」最恰當的意思為何？",
+        "correct": "求學的人",
+        "wrong": [
+          "專門從事學術研究並獲正式聘任的人",
+          "已取得博士學位的人",
+          "學校校長"
+        ],
+        "exp": "古文中「學者」指學習的人，不必等同今日常說的專業研究者。",
+        "subject": "國文",
+        "sub_topic": "古今詞義比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-古今詞義比較",
+        "template_id": "ref-20261119-b3-chi1-ancientmeanings-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-chi1-ancientmeanings-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "《出師表》：「未嘗不歎息痛恨於桓、靈也。」其中「痛恨」較接近何義？",
+        "correct": "痛心且深感遺憾",
+        "wrong": [
+          "對某人產生激烈仇恨並想報復",
+          "因身體疼痛而停止思考",
+          "表示十分喜愛與懷念"
+        ],
+        "exp": "「痛恨」在此為對桓、靈二帝政治失當的痛心與遺憾，並非現代主要指強烈憎惡的意思。",
+        "subject": "國文",
+        "sub_topic": "古今詞義比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-古今詞義比較",
+        "template_id": "ref-20261119-b3-chi1-ancientmeanings-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
