@@ -1560,7 +1560,7 @@ class DungeonMapView{
           return q?.x===pos.x&&q?.y===pos.y;
         });
         const slot=Math.max(0,companions.findIndex(x=>x.uid===member.uid));
-        const shift=companions.length>1?.22*geometry.cell:0;
+        const shift=member.uid===this.uid?0:(companions.length>1?.22*geometry.cell:0);
         const x=geometry.ox+(pos.x+.5)*geometry.cell+
           shift*(slot%2?1:-1);
         const y=geometry.oy+(pos.y+.5)*geometry.cell+
@@ -1645,7 +1645,7 @@ class DungeonMapView{
       if(elapsed>=entry.scene.duration){
         this.visualScenes.delete(key);continue;
       }
-      const p=reduceMotion?.77:Math.max(0,Math.min(1,
+      const p=reduceMotion ? .77 : Math.max(0,Math.min(1,
         elapsed/Math.max(1,entry.scene.duration)));
       if(!entry.soundPlayed&&p>=.38){
         entry.soundPlayed=true;
