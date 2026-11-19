@@ -531,11 +531,25 @@ async function main(){
       });
       throw error;
     }
-    await a.page.waitForFunction(()=>{
-      const frames=window.__dungeonMotionFrames||[];
-      return frames.indexOf('walking')>=0&&
-        frames.lastIndexOf('idle')>frames.indexOf('walking');
-    },null,{timeout:5000});
+    try{
+      await a.page.waitForFunction(()=>{
+        const frames=window.__dungeonMotionFrames||[];
+        return frames.indexOf('walking')>=0&&
+          frames.lastIndexOf('idle')>frames.indexOf('walking');
+      },null,{timeout:5000});
+    }catch(error){
+      console.error('[Dungeon motion completion diagnostics]',{
+        errors,requests:requests.slice(-12),
+        motion:await a.page.evaluate(()=>({
+          frames:window.__dungeonMotionFrames?.slice(-30),
+          current:document.querySelector('[data-dm-world]')?.dataset.motion,
+          hero:document.querySelector('[data-dm-world]')?.dataset.visualHero,
+          reduced:matchMedia('(prefers-reduced-motion: reduce)').matches,
+          clock:document.querySelector('[data-dm-clock]')?.textContent
+        }))
+      });
+      throw error;
+    }
     const motionFrames=await a.page.evaluate(()=>window.__dungeonMotionFrames);
     assert.ok(motionFrames.indexOf('walking')<motionFrames.lastIndexOf('idle'),
       'the dungeon should animate, then finish at the confirmed tile');
