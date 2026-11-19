@@ -52,7 +52,7 @@ test('a persistent focus badge is wired to room updates and vanishes at zero',()
   assert.match(dungeonQuarterControlsHTML(),/data-dm-focus-indicator hidden/);
   assert.match(view,/badge\.hidden=!active\|\|charges===0/);
   assert.match(view,/badge\.textContent=charges>0\?'✦ 金身蓄勢 '/);
-  assert.match(view,/wheel\.classList\.toggle\('has-focus',charges>0\)/);
+  assert.match(view,/renderDungeonTrialWheel\(wheel/);
 });
 
 test('aura is attached to the same camera-aligned per-member layer, not an opaque character mask',()=>{
