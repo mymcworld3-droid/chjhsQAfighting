@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-phy2-efield-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "一帶電粒子電荷量為−3.0 μC，放在方向向右、大小200 N/C的均勻電場中。所受電力為何？",
+        "correct": "6.0×10⁻⁴ N向左",
+        "wrong": [
+          "6.0×10⁻⁴ N向右",
+          "1.5×10⁻⁸ N向左",
+          "600 N向右"
+        ],
+        "exp": "F=qE，大小3.0×10⁻⁶×200=6.0×10⁻⁴ N；負電荷受力與電場方向相反。",
+        "subject": "物理",
+        "sub_topic": "電場與電位",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電場與電位",
+        "template_id": "ref-20261119-b4-phy2-efield-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-phy2-efield-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "正電荷q=2.0 μC由電位20 V處移到5 V處，若電荷量不變，其電位能變化ΔU為何？",
+        "correct": "−3.0×10⁻⁵ J",
+        "wrong": [
+          "+3.0×10⁻⁵ J",
+          "−7.5×10⁻⁶ J",
+          "+5.0×10⁻⁶ J"
+        ],
+        "exp": "ΔU=q(V末−V初)=2.0×10⁻⁶×(5−20)=−3.0×10⁻⁵ J。",
+        "subject": "物理",
+        "sub_topic": "電場與電位",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電場與電位",
+        "template_id": "ref-20261119-b4-phy2-efield-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-phy2-efield-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "平行板之間的均勻電場沿兩板法線方向，兩板相距0.020 m且電位差為100 V。忽略邊緣效應，電場大小約為何？",
+        "correct": "5,000 N/C",
+        "wrong": [
+          "50 N/C",
+          "2 N/C",
+          "200 N/C"
+        ],
+        "exp": "均勻電場大小E=|ΔV|/d=100/0.020=5,000 V/m=5,000 N/C。",
+        "subject": "物理",
+        "sub_topic": "電場與電位",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電場與電位",
+        "template_id": "ref-20261119-b4-phy2-efield-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
