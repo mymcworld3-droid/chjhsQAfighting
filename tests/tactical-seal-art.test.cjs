@@ -25,7 +25,9 @@ test('seal renderer lazily loads the atlas once and preserves a readable fallbac
   assert(source.includes("const painted=column>=0&&this.sprite('seals'"));
   assert(source.includes("if(!painted){"));
   assert(source.includes("c.fillText(p.label,x,y)"));
-  assert(source.includes("if(p.seal)continue;"));
+  // Stage-six guardian art is skipped in the old circular-marker loop too.
+  // All live v4 seals must still skip the old markers, avoiding two icons.
+  assert(source.includes("if(p.seal||objective?.type==='defense'&&s.trial?.layoutVersion===4)continue;"));
 });
 
 test('all four art columns use the canonical seeded seal order',()=>{
