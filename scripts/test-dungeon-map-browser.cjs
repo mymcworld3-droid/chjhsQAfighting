@@ -5,6 +5,7 @@ const assert=require('node:assert/strict');
 const path=require('node:path');
 const express=require('express');
 const {generateDungeonLayout}=require('../dungeon-map-generator.cjs');
+const AI=require('../dungeon-enemy-ai.cjs');
 let playwright;try{playwright=require('playwright');}
 catch(_){playwright=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright');}
 const app=express();app.use(express.json());
@@ -29,6 +30,13 @@ const currentRoom=()=>{
 const publish=()=>{
   const payload='data: '+JSON.stringify({room:currentRoom()})+'\n\n';
   for(const res of watchers)res.write(payload);
+};
+const advanceWorld=()=>{
+  if(room?.status!=='assembled')return;
+  const patch=AI.advanceWorld(room,map,Date.now());
+  if(!patch)return;
+  room={...room,...patch,revision:room.revision+1};
+  publish();
 };
 app.get('/dungeon-test.html',(_req,res)=>res.type('html').send(
   '<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">'+
@@ -71,9 +79,7 @@ app.post('/api/dungeon/room',(req,res)=>{
   if(action==='clock'){
     const time=Date.now(),tick=Math.floor(Math.max(0,time-room.battleStartedAtMs)/1000);
     if(room.status!=='assembled')return res.status(409).json({ok:false,error:'not assembled'});
-    if(tick>room.battleAppliedTick){
-      room.battleAppliedTick=tick;room.revision++;publish();
-    }
+    if(tick>room.battleAppliedTick)advanceWorld();
     return res.json({ok:true,roomId:room.id,clock:currentRoom().battleClock});
   }
   if(action==='heartbeat')return res.json({ok:true,roomId:room.id,revision:room.revision});
@@ -94,12 +100,12 @@ app.post('/api/dungeon/room',(req,res)=>{
     room.status='assembled';
     room.battleStartedAtMs=Date.now();
     room.battleAppliedTick=0;
+    room.enemyAiVersion=AI.ENEMY_AI_VERSION;
+    room.enemies=AI.initialEnemies(map);
     if(clockLoop)clearInterval(clockLoop);
     clockLoop=setInterval(()=>{
       if(!room||room.status!=='assembled')return;
-      const tick=Math.floor(Math.max(0,Date.now()-room.battleStartedAtMs)/1000);
-      if(tick<=room.battleAppliedTick)return;
-      room.battleAppliedTick=tick;room.revision++;publish();
+      advanceWorld();
     },1000);
     clockLoop.unref?.();
     Object.values(room.members).sort((a,b)=>a.joinedAtMs-b.joinedAtMs)
@@ -205,6 +211,30 @@ async function main(){
       assert.ok(dims.w>200&&dims.h>200,JSON.stringify(dims));
       assert.ok(dims.pixels>=dims.w*1.9,JSON.stringify(dims));
       assert.equal(dims.touch,'none');assert.equal(dims.zoom,'100%');
+      const creatureButton=page.locator('#dungeon-map-view [data-dm="beasts"]');
+      await page.waitForFunction(()=>/^靈獸 [4-6]$/.test(
+        document.querySelector('[data-dm="beasts"]')?.textContent||''));
+      assert.equal(await creatureButton.isDisabled(),false);
+    }
+    // Stage-9 NPCs must move without the player pressing any controls.
+    const spawnBeasts=AI.initialEnemies(map);
+    await a.page.waitForFunction(()=>Number((
+      document.querySelector('[data-dm-clock]')?.textContent||'').match(/T(\d+)/)?.[1]||0)>=6,
+      null,{timeout:11000});
+    await a.page.waitForFunction(()=>Number((
+      document.querySelector('[data-dm-clock]')?.textContent||'').match(/T(\d+)/)?.[1]||0)>=6);
+    assert.ok(room.enemies.some((e,i)=>e.position.x!==spawnBeasts[i].position.x||
+      e.position.y!==spawnBeasts[i].position.y),'NPC should patrol with no player movement');
+    for(const {page} of [a,b]){
+      await page.locator('#dungeon-map-view [data-dm="beasts"]').click();
+      await page.locator('#dungeon-map-view [data-dm-inspector]:not([hidden])').waitFor();
+      const count=await page.locator('[data-dm-beast-list] button').count();
+      assert.equal(count,room.enemies.length);
+      await page.locator('[data-dm-beast-list] button').first().click();
+      const description=await page.locator('[data-dm-beast-details]').innerText();
+      assert.match(description,/座標/);assert.match(description,/節拍 T/);
+      assert.ok(description.includes(room.enemies[0].name));
+      await page.locator('[data-dm="close-beasts"]').click();
     }
     // Both connected browsers display elapsed server time with no player
     // movement or actions required to make the clock advance.
@@ -324,7 +354,7 @@ async function main(){
     assert.equal(requests.filter(action=>action==='move').length,3);
     assert.ok(!requests.some(action=>/attack|reward|damage/.test(action)));
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: 2 clients, synchronized idle battle clock, 3 moves, remote canvas SSE repaint, WASD and pinch');
+    console.log('[Dungeon map browser] PASS: two clients, autonomous NPC patrol and synced inspector, 3 moves, SSE repaint, WASD/pinch');
   }finally{
     clearInterval(clockLoop);
     clockLoop=null;
