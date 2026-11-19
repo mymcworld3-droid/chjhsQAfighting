@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth2-大氣環流-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "大氣環流：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "北半球副熱帶地區常有下沉氣流。若其他條件配合，這與哪種氣候特徵較相關？",
+        "correct": "大氣穩定且乾燥，部分地區容易形成沙漠",
+        "wrong": [
+          "下沉氣流必定引起每日強對流豪雨",
+          "沙漠完全不受大氣環流影響",
+          "副熱帶所有地區都具有完全相同降雨量"
+        ],
+        "exp": "哈德里環流下沉支在部分副熱帶造成高壓與乾燥條件。",
+        "subject": "地球科學",
+        "sub_topic": "大氣環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-大氣環流",
+        "template_id": "extra-2026-earth2-大氣環流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-大氣環流-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "大氣環流：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "赤道附近空氣受熱上升，形成低壓帶與頻繁對流。這最適合解釋哪種現象？",
+        "correct": "熱帶輻合帶常有較旺盛降雨",
+        "wrong": [
+          "赤道全年不可能形成雲",
+          "赤道附近常年只有極地下沉氣流",
+          "只要位於赤道就沒有季節變化"
+        ],
+        "exp": "熱帶輻合帶為氣流輻合上升區，常有對流降水，季節位置仍會移動。",
+        "subject": "地球科學",
+        "sub_topic": "大氣環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-大氣環流",
+        "template_id": "extra-2026-earth2-大氣環流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-大氣環流-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "大氣環流：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某地近地面風沿等壓線斜吹向低壓中心，高空卻較接近平行等壓線。最主要差異因素是？",
+        "correct": "近地面摩擦改變風與氣壓梯度及科氏力之平衡",
+        "wrong": [
+          "高空必定完全沒有氣壓差",
+          "近地面空氣不受地球自轉影響",
+          "等壓線越直就不可能有風"
+        ],
+        "exp": "地面摩擦降低風速與科氏力，使風更易斜穿等壓線。",
+        "subject": "地球科學",
+        "sub_topic": "大氣環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-大氣環流",
+        "template_id": "extra-2026-earth2-大氣環流-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

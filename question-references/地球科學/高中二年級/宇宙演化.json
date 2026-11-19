@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth2-宇宙演化-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "宇宙演化：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "遠方星系的光譜線普遍紅移，宇宙學中主要如何解釋？",
+        "correct": "宇宙膨脹使遠距光的波長被拉長",
+        "wrong": [
+          "所有星系都必定往地球中心靠近",
+          "光在真空中完全不會傳播",
+          "紅移必定只由儀器故障造成"
+        ],
+        "exp": "宇宙學紅移是膨脹宇宙的重要觀測證據，個別天體也有特殊速度。",
+        "subject": "地球科學",
+        "sub_topic": "宇宙演化",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-宇宙演化",
+        "template_id": "extra-2026-earth2-宇宙演化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-宇宙演化-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "宇宙演化：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "宇宙微波背景的溫度約2.7 K且接近黑體輻射，最支持哪種宇宙史模型？",
+        "correct": "早期曾有高溫高密度階段並隨膨脹冷卻",
+        "wrong": [
+          "宇宙從未經歷任何能量交換",
+          "所有恆星的表面溫度都是2.7 K",
+          "宇宙只由地球周圍的氣體組成"
+        ],
+        "exp": "微波背景為早期宇宙留下的輻射，是熱大霹靂模型的重要支持。",
+        "subject": "地球科學",
+        "sub_topic": "宇宙演化",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-宇宙演化",
+        "template_id": "extra-2026-earth2-宇宙演化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-宇宙演化-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "宇宙演化：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "若依哈伯定律估計，兩星系距離相差兩倍，且都夠遠以致特殊速度可忽略，其退行速度比約為？",
+        "correct": "2比1",
+        "wrong": [
+          "1比2",
+          "1比1",
+          "4比1"
+        ],
+        "exp": "在v=H₀d關係下，距離成兩倍時平均退行速度也約成兩倍。",
+        "subject": "地球科學",
+        "sub_topic": "宇宙演化",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-宇宙演化",
+        "template_id": "extra-2026-earth2-宇宙演化-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

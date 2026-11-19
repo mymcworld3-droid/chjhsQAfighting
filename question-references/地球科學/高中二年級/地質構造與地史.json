@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth2-地質構造與地史-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "地質構造與地史：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某地層A被火成岩脈B穿過，B又被斷層C錯動。從切割關係推論，形成先後應為何？",
+        "correct": "先A、再B、最後C",
+        "wrong": [
+          "先C、再B、最後A",
+          "先B、再A、最後C",
+          "三者必定在同一時間形成"
+        ],
+        "exp": "岩脈晚於被侵入的地層，斷層又切過岩脈，故C最後發生。",
+        "subject": "地球科學",
+        "sub_topic": "地質構造與地史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-地質構造與地史",
+        "template_id": "extra-2026-earth2-地質構造與地史-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-地質構造與地史-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "地質構造與地史：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某地表出露傾斜沉積層，中心地層較老、兩側較新。若地層未倒轉，這種褶皺較接近？",
+        "correct": "背斜構造",
+        "wrong": [
+          "向斜構造且核心最年輕",
+          "完全水平的單一地層",
+          "只有岩漿冷卻形成的火成岩脈"
+        ],
+        "exp": "背斜通常核心較老、兩翼較新；向斜核心則較年輕。",
+        "subject": "地球科學",
+        "sub_topic": "地質構造與地史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-地質構造與地史",
+        "template_id": "extra-2026-earth2-地質構造與地史-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-地質構造與地史-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "地質構造與地史：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某火山灰層位於兩層沉積岩之間，放射性定年為距今100萬年。最合理的用途為何？",
+        "correct": "為上下沉積層提供相對年代的時間限制",
+        "wrong": [
+          "證明上層岩石一定比火山灰老",
+          "使沉積岩中的化石立即獲得相同絕對年代",
+          "證明所有地層同時形成"
+        ],
+        "exp": "若地層未倒轉，下方較老、上方較年輕，火山灰提供可定年的時間標記。",
+        "subject": "地球科學",
+        "sub_topic": "地質構造與地史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-地質構造與地史",
+        "template_id": "extra-2026-earth2-地質構造與地史-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

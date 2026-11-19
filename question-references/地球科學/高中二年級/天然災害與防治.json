@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth2-天然災害與防治-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "天然災害與防治：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某山坡居民在連續豪雨後發現新裂縫與樹木傾斜。最合理的防災行動為何？",
+        "correct": "評估土石滑動徵兆並依警戒與撤離資訊避險",
+        "wrong": [
+          "因裂縫細小就保證沒有坡地風險",
+          "增加坡頂蓄水讓土壤更飽和",
+          "只靠天氣晴朗判斷地下水已消失"
+        ],
+        "exp": "豪雨入滲會增加孔隙水壓，裂縫及傾斜可能是滑動徵兆。",
+        "subject": "地球科學",
+        "sub_topic": "天然災害與防治",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天然災害與防治",
+        "template_id": "extra-2026-earth2-天然災害與防治-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-天然災害與防治-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "天然災害與防治：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某沿海城市面對海嘯警報，居民想沿著海岸道路觀浪。何種行為最適當？",
+        "correct": "立即依官方避難指示向高處或內陸安全地點移動",
+        "wrong": [
+          "靠近海岸拍攝浪高",
+          "在港口低窪區等待第一波通過",
+          "只要海面暫時退去就表示沒有危險"
+        ],
+        "exp": "海嘯可能有多波，靠岸與海水退縮都可能很危險，應遵守避難指示。",
+        "subject": "地球科學",
+        "sub_topic": "天然災害與防治",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天然災害與防治",
+        "template_id": "extra-2026-earth2-天然災害與防治-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-天然災害與防治-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "天然災害與防治：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "兩個地區地震搖晃強度相近，甲老舊建築較多，乙有較完整耐震設計。災損可能不同的主要原因為何？",
+        "correct": "脆弱度和建築耐震能力不同",
+        "wrong": [
+          "地震震央會依建築顏色移動",
+          "兩地地震規模必然不同",
+          "地面加速度不可能影響建物"
+        ],
+        "exp": "風險由危害、暴露與脆弱度共同決定，耐震設計能降低部分災損。",
+        "subject": "地球科學",
+        "sub_topic": "天然災害與防治",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天然災害與防治",
+        "template_id": "extra-2026-earth2-天然災害與防治-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

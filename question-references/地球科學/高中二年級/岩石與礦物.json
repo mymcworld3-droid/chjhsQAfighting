@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth2-岩石與礦物-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "岩石與礦物：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某礦物表面容易被指甲刮出刻痕。依摩氏硬度概念，最合理的是？",
+        "correct": "硬度可能低於約2.5",
+        "wrong": [
+          "硬度必定為10",
+          "硬度必定大於石英",
+          "礦物不可能用刮痕比較硬度"
+        ],
+        "exp": "指甲硬度約2.5，可留下刻痕的礦物通常較軟。",
+        "subject": "地球科學",
+        "sub_topic": "岩石與礦物",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中二年級-岩石與礦物",
+        "template_id": "extra-2026-earth2-岩石與礦物-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-岩石與礦物-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "岩石與礦物：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "花崗岩與玄武岩都屬火成岩，但花崗岩結晶顆粒較粗。這較可能與何種冷卻條件有關？",
+        "correct": "花崗岩通常在地下冷卻較慢",
+        "wrong": [
+          "花崗岩必定在海面瞬間凝固",
+          "玄武岩絕不含任何矽酸鹽",
+          "晶粒大小只由岩石名稱決定"
+        ],
+        "exp": "地下緩慢冷卻有利晶體長大，地表快速冷卻形成細粒結構。",
+        "subject": "地球科學",
+        "sub_topic": "岩石與礦物",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中二年級-岩石與礦物",
+        "template_id": "extra-2026-earth2-岩石與礦物-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-岩石與礦物-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "岩石與礦物：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某沉積岩含有許多被水流磨圓的小礫石，且經膠結形成。最適合辨識為？",
+        "correct": "礫岩",
+        "wrong": [
+          "大理岩",
+          "玄武岩",
+          "片麻岩"
+        ],
+        "exp": "被磨圓的礫石經沉積膠結可形成礫岩；大理岩與片麻岩屬變質岩。",
+        "subject": "地球科學",
+        "sub_topic": "岩石與礦物",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中二年級-岩石與礦物",
+        "template_id": "extra-2026-earth2-岩石與礦物-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

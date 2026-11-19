@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth2-天球坐標的概念-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "天球坐標的概念：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "地球自轉造成恆星每天看起來由東向西運動。若恆星天球位置不變，主要是何種運動的視效果？",
+        "correct": "地球自西向東自轉",
+        "wrong": [
+          "恆星每天繞太陽一圈",
+          "地球每天自東向西自轉",
+          "月球阻止地球自轉"
+        ],
+        "exp": "天球周日運動主要源自地球自轉，方向與地球自轉的視效果相反。",
+        "subject": "地球科學",
+        "sub_topic": "天球坐標的概念",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天球坐標的概念",
+        "template_id": "extra-2026-earth2-天球坐標的概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-天球坐標的概念-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "天球坐標的概念：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某地北緯25°觀察北極星，其仰角大約為多少？",
+        "correct": "25°",
+        "wrong": [
+          "65°",
+          "90°",
+          "0°"
+        ],
+        "exp": "在北半球，北天極高度近似觀測地緯度；北極星靠近北天極，仰角約25°。",
+        "subject": "地球科學",
+        "sub_topic": "天球坐標的概念",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天球坐標的概念",
+        "template_id": "extra-2026-earth2-天球坐標的概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-天球坐標的概念-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "天球坐標的概念：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某觀測者在赤道附近觀星，北天極的高度約是多少？",
+        "correct": "接近地平線0°",
+        "wrong": [
+          "接近天頂90°",
+          "固定45°",
+          "每天固定變成負90°"
+        ],
+        "exp": "北天極仰角約等於觀測者北緯，赤道緯度近零。",
+        "subject": "地球科學",
+        "sub_topic": "天球坐標的概念",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天球坐標的概念",
+        "template_id": "extra-2026-earth2-天球坐標的概念-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

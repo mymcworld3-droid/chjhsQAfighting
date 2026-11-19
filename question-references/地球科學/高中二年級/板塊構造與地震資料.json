@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth2-板塊構造與地震資料-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "板塊構造與地震資料：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "甲地測站P波與S波到時差10秒，乙地為25秒，若路徑條件相近，哪個測站通常離震央較遠？",
+        "correct": "乙地",
+        "wrong": [
+          "甲地",
+          "兩站必定等距",
+          "到時差只由地震規模決定"
+        ],
+        "exp": "P比S波快，到時差愈大通常表示傳播距離較長。",
+        "subject": "地球科學",
+        "sub_topic": "板塊構造與地震資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-板塊構造與地震資料",
+        "template_id": "extra-2026-earth2-板塊構造與地震資料-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-板塊構造與地震資料-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "板塊構造與地震資料：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某海溝與島弧間有地震，且震源深度往陸地逐漸加深。這最可能對應哪種構造？",
+        "correct": "隱沒帶的傾斜震源分布",
+        "wrong": [
+          "只有中洋脊擴張的淺源地震",
+          "地震只因表面降雨造成",
+          "無板塊活動的單一平原"
+        ],
+        "exp": "深源地震帶是隱沒板塊的重要觀測證據。",
+        "subject": "地球科學",
+        "sub_topic": "板塊構造與地震資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-板塊構造與地震資料",
+        "template_id": "extra-2026-earth2-板塊構造與地震資料-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-板塊構造與地震資料-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "板塊構造與地震資料：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "斷層沿水平向有明顯位移，地層兩側主要平行滑動，這最接近何種斷層？",
+        "correct": "走向滑移斷層",
+        "wrong": [
+          "正斷層且只有垂直伸張",
+          "逆斷層且只由擠壓抬升",
+          "不涉及岩層相對位移的褶皺"
+        ],
+        "exp": "水平剪切造成以走向位移為主的斷層活動。",
+        "subject": "地球科學",
+        "sub_topic": "板塊構造與地震資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-板塊構造與地震資料",
+        "template_id": "extra-2026-earth2-板塊構造與地震資料-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

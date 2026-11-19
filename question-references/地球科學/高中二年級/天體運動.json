@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth2-天體運動-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "天體運動：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "地球繞太陽運行時，北半球夏季與冬季的日照差異主要由何造成？",
+        "correct": "地軸傾斜使太陽高度及日照時間隨季節變化",
+        "wrong": [
+          "地球夏季一定離太陽最近",
+          "太陽在冬季停止輻射",
+          "月球公轉決定全年所有氣溫"
+        ],
+        "exp": "四季主要來自地軸傾斜，並非地日距離近遠。",
+        "subject": "地球科學",
+        "sub_topic": "天體運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天體運動",
+        "template_id": "extra-2026-earth2-天體運動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-天體運動-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "天體運動：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某行星繞恆星的半長軸增為原來4倍，若恆星質量不變且符合克卜勒第三定律，公轉週期變為？",
+        "correct": "原來的8倍",
+        "wrong": [
+          "原來的4倍",
+          "原來的2倍",
+          "原來的16倍"
+        ],
+        "exp": "T²與a³成正比，T比值等於4的3/2次方，即8。",
+        "subject": "地球科學",
+        "sub_topic": "天體運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天體運動",
+        "template_id": "extra-2026-earth2-天體運動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-天體運動-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "天體運動：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某地在滿月當晚沒有發生月食。這最合理的原因是？",
+        "correct": "月球軌道相對黃道傾斜，滿月時月球不一定通過地影",
+        "wrong": [
+          "每次滿月都必定發生月食",
+          "月球在滿月時從不位於地球對日側",
+          "日食與月食完全不涉及軌道幾何"
+        ],
+        "exp": "月球軌道約傾斜5度，食相只在接近交點時可能發生。",
+        "subject": "地球科學",
+        "sub_topic": "天體運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天體運動",
+        "template_id": "extra-2026-earth2-天體運動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

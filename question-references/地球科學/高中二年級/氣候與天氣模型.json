@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-earth2-氣候與天氣模型-1",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "氣候與天氣模型：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "兩個預報模式對下週降雨量有差異，但兩者都指出豪雨機率增加。防災單位較合適的處理是？",
+        "correct": "參考集合預報與風險範圍，採可調整的防災措施",
+        "wrong": [
+          "只要模式不同便完全不做準備",
+          "把任何單一預測值當作必然降雨",
+          "只挑最少降雨的結果且不檢查理由"
+        ],
+        "exp": "模型分歧反映不確定性，可用機率與風險規畫。",
+        "subject": "地球科學",
+        "sub_topic": "氣候與天氣模型",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-氣候與天氣模型",
+        "template_id": "extra-2026-earth2-氣候與天氣模型-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-氣候與天氣模型-2",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "氣候與天氣模型：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "氣候模式的網格較粗，難以描述狹窄山谷的短時強降雨。主要原因是？",
+        "correct": "地形與局地對流過程可能小於模式解析尺度",
+        "wrong": [
+          "網格越粗一定越能模擬細節",
+          "降雨完全不受地形影響",
+          "數值模型不能使用任何物理定律"
+        ],
+        "exp": "粗網格需參數化或進一步降尺度，不能精確解析每個局部地形。",
+        "subject": "地球科學",
+        "sub_topic": "氣候與天氣模型",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-氣候與天氣模型",
+        "template_id": "extra-2026-earth2-氣候與天氣模型-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-earth2-氣候與天氣模型-3",
+      "source": "自編高中地球科學課綱參考題（非歷屆試卷原題）",
+      "design": "氣候與天氣模型：地理情境、觀測證據與原理判斷",
+      "question": {
+        "q": "某研究以過去十年的資料校正模型，再用相同十年資料宣布預測極準。這種驗證方式主要缺少什麼？",
+        "correct": "獨立驗證資料，可能高估模式對新情況的表現",
+        "wrong": [
+          "任何模型都不需要測試資料",
+          "樣本使用越重複一定越可靠",
+          "只需看模型畫面是否美觀"
+        ],
+        "exp": "同一資料同時校正與評估可能過度擬合，應使用未參與校正的資料。",
+        "subject": "地球科學",
+        "sub_topic": "氣候與天氣模型",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-氣候與天氣模型",
+        "template_id": "extra-2026-earth2-氣候與天氣模型-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
