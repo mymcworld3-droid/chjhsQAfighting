@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-novelstructure-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "小說開頭寫主角收到一張沒有署名的明信片；中段多次出現相同筆跡；結尾揭示寄信人正是多年未見的童年好友。明信片與筆跡在結構上的主要作用為何？",
+        "correct": "前文埋設線索，結尾揭露身份使情節前後照應",
+        "wrong": [
+          "作者從頭就直接告訴讀者寄信者身分，完全沒有疑問",
+          "明信片只為展示印刷技術，對結局沒有作用",
+          "情節完全按照事件發生時間列出，沒有任何伏筆"
+        ],
+        "exp": "匿名明信片先製造疑問，同筆跡提供連續線索，結尾揭露寄件人使前文細節得到解釋。",
+        "subject": "國文",
+        "sub_topic": "小說敘事結構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-小說敘事結構",
+        "template_id": "ref-20261119-b8-ch2-novelstructure-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-novelstructure-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "某小說先呈現主角辭職離鄉的結果，再以後續章節交代他在職場遭遇的困境，最後寫他重返故鄉後的生活。這種開頭安排有何效果？",
+        "correct": "先展示關鍵結果以引起好奇，再補述促成結果的前因",
+        "wrong": [
+          "從第一段開始便依所有事件的實際時間先後排列",
+          "作者在結尾才讓主角第一次出現",
+          "整篇只使用議論，完全沒有事件與情節"
+        ],
+        "exp": "先呈現後發生的辭職結果，再回溯其起因，是倒敘與補敘的結合，有助於形成懸念。",
+        "subject": "國文",
+        "sub_topic": "小說敘事結構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-小說敘事結構",
+        "template_id": "ref-20261119-b8-ch2-novelstructure-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-novelstructure-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "故事中主角誤以為朋友背叛而拒絕聯絡；讀者提前知道朋友其實在暗中替他籌措醫療費，但主角直到結尾才得知。這種安排最容易形成哪種效果？",
+        "correct": "讀者與人物掌握資訊不同，產生戲劇性反諷與期待",
+        "wrong": [
+          "讀者與主角從頭到尾都不知道朋友所做的事",
+          "使所有人物行為失去因果關係而無法理解",
+          "只強調敘事時間變快，與資訊落差無關"
+        ],
+        "exp": "讀者早知朋友善意而主角誤解，資訊不對稱使讀者預期真相揭露，形成戲劇性反諷與張力。",
+        "subject": "國文",
+        "sub_topic": "小說敘事結構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-小說敘事結構",
+        "template_id": "ref-20261119-b8-ch2-novelstructure-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
