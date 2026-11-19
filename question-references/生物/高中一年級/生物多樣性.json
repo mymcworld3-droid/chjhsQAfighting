@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-b1-biodiv-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "兩個面積相同的保育區，甲有12種鳥、乙有7種鳥。僅根據物種數目，哪一項判斷最有根據？",
+        "correct": "甲的鳥類物種豐富度較高",
+        "wrong": [
+          "甲的所有物種個體數必定較多",
+          "甲的遺傳多樣性必定較高",
+          "乙的生態系類型必定較多"
+        ],
+        "exp": "物種豐富度是一定範圍內的物種數；12種大於7種，但不能據此推定個體總數、遺傳或生態系多樣性。",
+        "subject": "生物",
+        "sub_topic": "生物多樣性",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生物多樣性",
+        "template_id": "ref-20261119-b5-b1-biodiv-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-b1-biodiv-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "某山區的森林被新道路分割成數塊彼此不連通的小森林。若許多動物不願跨越道路，最可能出現哪種長期風險？",
+        "correct": "族群之間的基因交流降低，部分小族群近親繁殖風險上升",
+        "wrong": [
+          "分割後各族群必定立即增加基因流動",
+          "所有物種的遷移能力必定立刻變得一樣",
+          "道路分割必然在一天內增加每個物種的族群大小"
+        ],
+        "exp": "棲地破碎化可能降低個體遷移及基因流動，尤其小族群更可能受到近親繁殖與遺傳漂變影響。",
+        "subject": "生物",
+        "sub_topic": "生物多樣性",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生物多樣性",
+        "template_id": "ref-20261119-b5-b1-biodiv-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-b1-biodiv-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "野生植物的不同族群具有不同的耐旱等位基因。若為了保育只保存單一族群，最可能忽略哪一種價值？",
+        "correct": "物種內不同族群所包含的遺傳多樣性",
+        "wrong": [
+          "該物種所有族群必定具有相同等位基因",
+          "保育只應計算個體數，與遺傳差異無關",
+          "不同耐旱基因只影響名稱，不可能影響適應"
+        ],
+        "exp": "同一物種不同族群的遺傳變異可增加面對環境變動時的適應潛力，因此保育需要關注物種內基因庫。",
+        "subject": "生物",
+        "sub_topic": "生物多樣性",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生物多樣性",
+        "template_id": "ref-20261119-b5-b1-biodiv-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
