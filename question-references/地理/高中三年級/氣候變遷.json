@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-氣候變遷-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將氣候變遷應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某沿海城市規畫提高防洪堤高度與降低化石燃料排放。這兩項措施分別較接近？",
+        "correct": "前者為調適、後者為減緩",
+        "wrong": [
+          "兩者都是純粹的氣候減緩",
+          "前者是減緩而後者是調適",
+          "兩者都與氣候風險無關"
+        ],
+        "exp": "調適降低已發生或預期的氣候衝擊，減緩則降低溫室氣體排放源。",
+        "subject": "地理",
+        "sub_topic": "氣候變遷",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-氣候變遷",
+        "template_id": "extra-2026-geo3-氣候變遷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-氣候變遷-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將氣候變遷應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某地一年夏季特別寒冷，居民便宣稱全球暖化不存在。這種判斷的主要問題為何？",
+        "correct": "把短期局部天氣事件當成長期全球氣候趨勢的充分證據",
+        "wrong": [
+          "寒冷天氣與氣候之間完全沒有關係",
+          "全球氣候變遷只能用同一天的氣溫判斷",
+          "任何一年都不可能出現偏冷地區"
+        ],
+        "exp": "全球暖化須根據長期且廣泛的氣候統計，局部短期異常不推翻全球趨勢。",
+        "subject": "地理",
+        "sub_topic": "氣候變遷",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-氣候變遷",
+        "template_id": "extra-2026-geo3-氣候變遷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-氣候變遷-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將氣候變遷應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某城市高溫日數增加，但測站周圍也由農地變成密集建築。若要判斷區域氣候變遷，最合理的分析方式是？",
+        "correct": "同時比較其他測站與土地利用變遷，分辨都市熱島和區域背景變化",
+        "wrong": [
+          "只將該測站全部升溫歸因全球暖化",
+          "因有建築增加就否認區域升溫可能",
+          "只看一個月的最高溫便作長期結論"
+        ],
+        "exp": "局部都市化影響測站溫度，需控制站點環境與觀察長期區域資料。",
+        "subject": "地理",
+        "sub_topic": "氣候變遷",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-氣候變遷",
+        "template_id": "extra-2026-geo3-氣候變遷-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

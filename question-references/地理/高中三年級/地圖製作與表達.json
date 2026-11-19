@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-地圖製作與表達-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將地圖製作與表達應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "要比較不同縣市的高齡人口比例，使用分級設色圖時，應選哪種指標作上色依據？",
+        "correct": "各縣市高齡人口占當地總人口的百分比",
+        "wrong": [
+          "各縣市的高齡人口絕對數且不考慮規模",
+          "縣市名稱字數",
+          "縣市的土地面積而非人口資料"
+        ],
+        "exp": "分級設色圖比較地區特性宜採比例或率，避免把人口規模誤認為比例差異。",
+        "subject": "地理",
+        "sub_topic": "地圖製作與表達",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-地圖製作與表達",
+        "template_id": "extra-2026-geo3-地圖製作與表達-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-地圖製作與表達-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將地圖製作與表達應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某新聞地圖使用麥卡托投影比較高緯度與低緯度國家的面積，北方國家看起來非常大。何種說明最合理？",
+        "correct": "投影在高緯度造成面積放大，不能據圖面直接比真實面積",
+        "wrong": [
+          "任何投影都能同時保持所有面積和形狀",
+          "地圖圖面面積就是實際國土面積",
+          "圖例顏色決定國家的真實面積"
+        ],
+        "exp": "麥卡托屬保角投影，面積在高緯度放大，面積比較宜採等積投影。",
+        "subject": "地理",
+        "sub_topic": "地圖製作與表達",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-地圖製作與表達",
+        "template_id": "extra-2026-geo3-地圖製作與表達-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-地圖製作與表達-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將地圖製作與表達應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某城市想在地圖同時呈現公車站位置與各區人口密度。哪種地圖配置最適合？",
+        "correct": "以站點符號呈現站位，搭配按區域人口密度分級設色",
+        "wrong": [
+          "以單一顏色將所有資訊混在一起",
+          "只顯示車站名稱而不顯示位置",
+          "依行政區字母順序決定人口密度深淺"
+        ],
+        "exp": "點圖層與區域分級設色能分別呈現位置及密度，資訊應以適當圖例區分。",
+        "subject": "地理",
+        "sub_topic": "地圖製作與表達",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-地圖製作與表達",
+        "template_id": "extra-2026-geo3-地圖製作與表達-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-GIS 與空間資料-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將GIS 與空間資料應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某市想找出距離河岸200公尺內、且地勢低於5公尺的住宅區，GIS最適合採用哪種分析？",
+        "correct": "河岸緩衝區與高程資料疊合",
+        "wrong": [
+          "只列出所有住宅名稱",
+          "僅比較兩張地圖的顏色",
+          "把全市人口平均值當成每戶高程"
+        ],
+        "exp": "先建立河岸200公尺緩衝區，再與低海拔範圍及住宅圖層疊合，才能找出同時符合條件的區域。",
+        "subject": "地理",
+        "sub_topic": "GIS 與空間資料",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-GIS 與空間資料",
+        "template_id": "extra-2026-geo3-GIS 與空間資料-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-GIS 與空間資料-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將GIS 與空間資料應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某地理資料以每格30公尺的網格儲存地表高程，若要辨別寬度僅5公尺的小溝渠，最主要限制是什麼？",
+        "correct": "網格空間解析度不足以穩定呈現細小地物",
+        "wrong": [
+          "網格越大代表地形越精細",
+          "高程資料必然只能用文字表示",
+          "任何網格資料都無法與道路圖層疊合"
+        ],
+        "exp": "30公尺網格容易平均掉5公尺尺度地形，應使用較高解析度資料或實地測量。",
+        "subject": "地理",
+        "sub_topic": "GIS 與空間資料",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-GIS 與空間資料",
+        "template_id": "extra-2026-geo3-GIS 與空間資料-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-GIS 與空間資料-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將GIS 與空間資料應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某研究者把不同座標系統的道路資料與土地利用圖直接疊合，發現道路偏移。應優先如何處理？",
+        "correct": "核對並轉換至一致的座標參考系統",
+        "wrong": [
+          "直接移動圖例讓色彩一致",
+          "把兩張圖的所有資料值乘二",
+          "只刪除道路名稱即可解決"
+        ],
+        "exp": "座標系統或基準不同會使圖層位置不一致，須先進行正確轉換。",
+        "subject": "地理",
+        "sub_topic": "GIS 與空間資料",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-GIS 與空間資料",
+        "template_id": "extra-2026-geo3-GIS 與空間資料-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

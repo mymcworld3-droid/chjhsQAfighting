@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-全球化與不均衡發展-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將全球化與不均衡發展應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某手機在甲國設計、乙國生產晶片、丙國組裝，再銷售全球。這最能說明哪個現象？",
+        "correct": "全球價值鏈的跨國分工與依賴",
+        "wrong": [
+          "所有產品在一地從原料到銷售完成",
+          "跨國分工讓所有國家的所得必然相同",
+          "交通成本越高越容易形成供應鏈"
+        ],
+        "exp": "價值鏈依不同地區技術、勞動力和運輸條件分工，但附加價值不均。",
+        "subject": "地理",
+        "sub_topic": "全球化與不均衡發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geography-高中三年級-全球化與不均衡發展",
+        "template_id": "extra-2026-geo3-全球化與不均衡發展-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-全球化與不均衡發展-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將全球化與不均衡發展應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某國出口總額快速成長，卻只有少數高技術城市的薪資明顯提高。若評估全球化影響，最應加入哪類資料？",
+        "correct": "地區與所得階層分配、產業就業及薪資變化",
+        "wrong": [
+          "只看出口總額不看人口",
+          "只統計外商企業的商標數量",
+          "只比較國旗顏色"
+        ],
+        "exp": "總量成長可能伴隨區域與階層差距，需要分配資料判斷。",
+        "subject": "地理",
+        "sub_topic": "全球化與不均衡發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geography-高中三年級-全球化與不均衡發展",
+        "template_id": "extra-2026-geo3-全球化與不均衡發展-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-全球化與不均衡發展-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將全球化與不均衡發展應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某地高度依賴單一國家供應的關鍵原料，該國港口因災害暫停運作。最直接呈現什麼風險？",
+        "correct": "供應鏈過度集中造成外部衝擊傳遞",
+        "wrong": [
+          "進口原料越集中越不會中斷",
+          "只要有貿易就不存在任何運輸成本",
+          "災害只影響供應國而不影響買方"
+        ],
+        "exp": "全球化帶來效率，也可能透過運輸網絡傳遞集中風險。",
+        "subject": "地理",
+        "sub_topic": "全球化與不均衡發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geography-高中三年級-全球化與不均衡發展",
+        "template_id": "extra-2026-geo3-全球化與不均衡發展-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

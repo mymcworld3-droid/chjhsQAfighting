@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-環境議題-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將環境議題應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某湖泊因農田肥料流入導致藻華、魚類死亡。最適合先分析哪種環境機制？",
+        "correct": "營養鹽增加促進藻類繁殖與分解耗氧",
+        "wrong": [
+          "魚類死亡必定表示湖水沒有任何生物",
+          "只有湖水顏色能解釋缺氧原因",
+          "肥料增加必定使溶氧永久提高"
+        ],
+        "exp": "優養化可因氮磷負荷提高引發藻華，死亡分解與呼吸造成溶氧降低。",
+        "subject": "地理",
+        "sub_topic": "環境議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-環境議題",
+        "template_id": "extra-2026-geo3-環境議題-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-環境議題-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將環境議題應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某島大量移除紅樹林並填海設廠，後來風暴潮災損增加。若評估原因，最合適的方法是？",
+        "correct": "比較海岸地形、風暴強度及紅樹林變化，評估自然屏障作用",
+        "wrong": [
+          "只以單次災損推定所有海岸風暴強度相同",
+          "忽略土地利用變化",
+          "把工廠產值當成沿岸防護能力"
+        ],
+        "exp": "海岸植被可能削減部分波浪能量，但須控制風暴與地形差異。",
+        "subject": "地理",
+        "sub_topic": "環境議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-環境議題",
+        "template_id": "extra-2026-geo3-環境議題-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-環境議題-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將環境議題應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某地計畫興建垃圾焚化爐，整體廢棄物處理效率提高，但附近居民擔心排放。哪種評估最合理？",
+        "correct": "比較污染監測、交通負擔、替代方案與利益分配",
+        "wrong": [
+          "只因全市受益便拒絕監測排放",
+          "只因有人反對就不必比較任何技術",
+          "只使用廠商單一宣傳數字"
+        ],
+        "exp": "環境決策須結合風險資料、不同群體負擔與方案比較。",
+        "subject": "地理",
+        "sub_topic": "環境議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-環境議題",
+        "template_id": "extra-2026-geo3-環境議題-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

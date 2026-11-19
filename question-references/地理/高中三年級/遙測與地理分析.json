@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-遙測與地理分析-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將遙測與地理分析應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某地衛星影像中，植被在近紅外光的反射率高、紅光反射率低。若計算NDVI，該地通常呈現何種結果？",
+        "correct": "NDVI為較高的正值",
+        "wrong": [
+          "NDVI必定為負一",
+          "NDVI與兩波段反射率無關",
+          "NDVI只能用地表氣溫計算"
+        ],
+        "exp": "NDVI=(近紅外−紅光)/(近紅外+紅光)，健康植被常為正且較高。",
+        "subject": "地理",
+        "sub_topic": "遙測與地理分析",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-遙測與地理分析",
+        "template_id": "extra-2026-geo3-遙測與地理分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-遙測與地理分析-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將遙測與地理分析應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "比較兩年衛星影像的都市擴張時，甲影像在乾季、乙影像在雨季拍攝。為避免把季節變化誤認為土地利用變化，應如何做？",
+        "correct": "選用季節相近且經校正的影像，結合地面資料",
+        "wrong": [
+          "只挑雲量最多的影像",
+          "把所有綠色像素直接視為永久森林",
+          "不需區分影像拍攝日期"
+        ],
+        "exp": "季節、雲層及感測差異會影響分類，需控制時間和資料品質。",
+        "subject": "地理",
+        "sub_topic": "遙測與地理分析",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-遙測與地理分析",
+        "template_id": "extra-2026-geo3-遙測與地理分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-遙測與地理分析-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將遙測與地理分析應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某次颱風後，大量雲層遮蔽地表，研究者希望掌握淹水範圍。哪種資料較可能彌補可見光衛星影像限制？",
+        "correct": "具穿雲觀測能力的合成孔徑雷達影像",
+        "wrong": [
+          "只使用一般可見光影像且忽略雲層",
+          "以社群貼文按讚量推估淹水深度",
+          "只把氣象預報的風速當成洪水面積"
+        ],
+        "exp": "雷達遙測可在多雲條件下提供地表資訊，仍需辨認地表材質和影像誤差。",
+        "subject": "地理",
+        "sub_topic": "遙測與地理分析",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-遙測與地理分析",
+        "template_id": "extra-2026-geo3-遙測與地理分析-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-資料蒐集-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將資料蒐集應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某研究者只在捷運出口調查通勤方式，卻想推論全市居民交通習慣。主要風險是？",
+        "correct": "抽樣地點偏向捷運使用者，樣本可能不具代表性",
+        "wrong": [
+          "樣本數只要超過10便完全沒有偏差",
+          "捷運站可無條件代表所有郊區居民",
+          "所有問卷資料都不能作地理研究"
+        ],
+        "exp": "取樣框限制會造成選樣偏差，需依研究母群設計採樣。",
+        "subject": "地理",
+        "sub_topic": "資料蒐集",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-資料蒐集",
+        "template_id": "extra-2026-geo3-資料蒐集-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-資料蒐集-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將資料蒐集應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "要比較某流域十年間的降雨量，兩測站在不同高度且儀器規格不一致。哪種處理較合適？",
+        "correct": "核對站點、量測口徑及校正資料後再比較",
+        "wrong": [
+          "只把兩數相減便忽略所有站點差異",
+          "刪除海拔與觀測時間資訊",
+          "只取最高一天當作全年雨量"
+        ],
+        "exp": "長期地理數據須考慮觀測條件與測站變動，避免誤判趨勢。",
+        "subject": "地理",
+        "sub_topic": "資料蒐集",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-資料蒐集",
+        "template_id": "extra-2026-geo3-資料蒐集-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-資料蒐集-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將資料蒐集應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某市想發表熱點地圖，原始資料包含居民精確住址與敏感個資。較適當的公開方式是？",
+        "correct": "在不損及分析目的下，採適度空間彙整與隱私保護",
+        "wrong": [
+          "直接公開全部住址及個人姓名",
+          "只要製成地圖就不需告知資料用途",
+          "把私人位置資訊貼上網路便視為匿名"
+        ],
+        "exp": "位置資料可能重新識別個人，公開時需考慮解析度、風險與權限。",
+        "subject": "地理",
+        "sub_topic": "資料蒐集",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-資料蒐集",
+        "template_id": "extra-2026-geo3-資料蒐集-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-地理報告-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將地理報告應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "研究者發現河川整治後洪水減少，但同期降雨也較少。報告中最適合怎麼表述？",
+        "correct": "整治可能有影響，但需控制降雨差異才能估計效果",
+        "wrong": [
+          "直接宣稱全部改善皆由整治造成",
+          "因降雨減少就認定整治絕對無效",
+          "忽略降雨與流域變遷"
+        ],
+        "exp": "前後比較無法排除其他因素，需以對照及模型判斷政策貢獻。",
+        "subject": "地理",
+        "sub_topic": "地理報告",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-地理報告",
+        "template_id": "extra-2026-geo3-地理報告-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-地理報告-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將地理報告應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某學生提出「本地都市熱島更嚴重」，但報告只有一張無日期的照片。應如何加強證據？",
+        "correct": "加入不同土地利用區的實測溫度、測點及時間資訊",
+        "wrong": [
+          "只把照片放大",
+          "加入更多形容詞取代量測",
+          "只貼一張城市夜景就表示已完成分析"
+        ],
+        "exp": "地理問題需可重複的時空量測，照片單獨不足以量化溫度差。",
+        "subject": "地理",
+        "sub_topic": "地理報告",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-地理報告",
+        "template_id": "extra-2026-geo3-地理報告-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-地理報告-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將地理報告應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "兩位同學使用相同GIS資料卻得到不同緩衝區面積。若要使報告可重現，最應公開什麼？",
+        "correct": "資料版本、座標系統、距離單位與分析操作步驟",
+        "wrong": [
+          "只提供地圖封面",
+          "只列出研究者姓名而不說明方法",
+          "只告訴讀者最終面積數字"
+        ],
+        "exp": "GIS計算受座標投影、距離定義及資料處理方法影響，透明方法便於重現。",
+        "subject": "地理",
+        "sub_topic": "地理報告",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-地理報告",
+        "template_id": "extra-2026-geo3-地理報告-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

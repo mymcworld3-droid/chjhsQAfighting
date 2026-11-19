@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo3-城鄉與永續-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將城鄉與永續應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某城市大量住宅集中在捷運站周圍，但仍保留行人動線與公共綠地。此規畫最可能帶來哪項好處？",
+        "correct": "提高大眾運輸可及性並降低部分汽車旅次需求",
+        "wrong": [
+          "讓所有居民完全不需移動",
+          "必然消除所有都市熱島效應",
+          "使地價與居住成本永遠不變"
+        ],
+        "exp": "緊湊發展搭配步行與公共運輸，可能降低部分交通排放，但仍需考量居住品質。",
+        "subject": "地理",
+        "sub_topic": "城鄉與永續",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-城鄉與永續",
+        "template_id": "extra-2026-geo3-城鄉與永續-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-城鄉與永續-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將城鄉與永續應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某偏鄉有診所，卻沒有足夠公車班次讓長者前往。若評估醫療服務公平，最需要加入哪種指標？",
+        "correct": "依交通方式計算居民抵達診所的時間與成本",
+        "wrong": [
+          "僅統計診所建築面積",
+          "只看村落名義人口而不計距離",
+          "將診所地點視為所有人交通條件相同"
+        ],
+        "exp": "設施存在不等於可及，交通時間和負擔會影響使用機會。",
+        "subject": "地理",
+        "sub_topic": "城鄉與永續",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-城鄉與永續",
+        "template_id": "extra-2026-geo3-城鄉與永續-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo3-城鄉與永續-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "將城鄉與永續應用於事件、圖表或地理模型，而非僅從文章擷取資訊",
+      "question": {
+        "q": "某市設立新公園後，附近房租快速上升，部分原居民搬離。若分析永續城市政策，還應關注什麼？",
+        "correct": "環境改善與居住負擔及人口替換的分配效果",
+        "wrong": [
+          "有公園就必定所有居民受益程度相同",
+          "租金上漲代表綠地改善完全沒有價值",
+          "只需計算公園草地面積"
+        ],
+        "exp": "綠化政策可能帶來環境利益，也可能出現綠色仕紳化，需要考慮公平。",
+        "subject": "地理",
+        "sub_topic": "城鄉與永續",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geography-高中三年級-城鄉與永續",
+        "template_id": "extra-2026-geo3-城鄉與永續-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
