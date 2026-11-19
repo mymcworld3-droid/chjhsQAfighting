@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-m3-opt-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "某店收益模型R(q)=−2q²+40q（元），q≥0。收益最大時q為何？",
+        "correct": "10",
+        "wrong": [
+          "20",
+          "5",
+          "40"
+        ],
+        "exp": "R(q)=−2(q−10)²+200，開口向下，最大值於q=10達成。",
+        "subject": "數學",
+        "sub_topic": "經濟與生活情境最佳化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-經濟與生活情境最佳化",
+        "template_id": "ref-20261119-b6-m3-opt-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m3-opt-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "成本模型C(q)=q²−12q+50（元），q≥0。最低成本為多少元？",
+        "correct": "14元",
+        "wrong": [
+          "6元",
+          "36元",
+          "50元"
+        ],
+        "exp": "配方C(q)=(q−6)²+14，q=6時取得最低成本14元。",
+        "subject": "數學",
+        "sub_topic": "經濟與生活情境最佳化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-經濟與生活情境最佳化",
+        "template_id": "ref-20261119-b6-m3-opt-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m3-opt-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "某營運利潤模型P(q)=−q²+24q−80（元），q≥0。其最大利潤是多少元？",
+        "correct": "64元",
+        "wrong": [
+          "80元",
+          "12元",
+          "144元"
+        ],
+        "exp": "P(q)=−(q−12)²+64，當q=12時最大利潤為64元。",
+        "subject": "數學",
+        "sub_topic": "經濟與生活情境最佳化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-經濟與生活情境最佳化",
+        "template_id": "ref-20261119-b6-m3-opt-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
