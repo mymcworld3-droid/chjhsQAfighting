@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-en2-discourse-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Read: 'The city hopes electric buses will reduce street noise. ______, it is studying battery costs and charging schedules before buying more vehicles.' Which connector best fits?",
+        "correct": "At the same time",
+        "wrong": [
+          "For this reason alone",
+          "In other words",
+          "As a result of that conclusion only"
+        ],
+        "exp": "The city pursues a benefit while simultaneously examining operational costs and schedules; 'at the same time' connects concurrent considerations.",
+        "subject": "英文",
+        "sub_topic": "文意選填",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-文意選填",
+        "template_id": "ref-20261119-b8-en2-discourse-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en2-discourse-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Read: 'The study found that students who slept longer often reported better concentration. ______, the researchers warned that the survey could not prove sleep caused the improvement.' Which expression fits the contrast?",
+        "correct": "However",
+        "wrong": [
+          "Therefore",
+          "For instance",
+          "Likewise"
+        ],
+        "exp": "The warning qualifies a positive association, so 'however' marks a contrast between an observed relationship and a causal interpretation.",
+        "subject": "英文",
+        "sub_topic": "文意選填",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-文意選填",
+        "template_id": "ref-20261119-b8-en2-discourse-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en2-discourse-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Read: 'The school replaced single-use plates with reusable ones. ______, it introduced a washing station to clean them safely.' Which transition best introduces an additional related measure?",
+        "correct": "In addition",
+        "wrong": [
+          "On the contrary",
+          "Nevertheless",
+          "Instead of"
+        ],
+        "exp": "A washing station is a further supporting measure that complements reusable plates; 'in addition' adds the new measure.",
+        "subject": "英文",
+        "sub_topic": "文意選填",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-文意選填",
+        "template_id": "ref-20261119-b8-en2-discourse-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
