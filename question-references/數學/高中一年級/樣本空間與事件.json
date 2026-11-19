@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-math1-events-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "從1至12的整數中等機率抽出一個數。抽到「3的倍數或4的倍數」的機率為何？",
+        "correct": "1/2",
+        "wrong": [
+          "1/3",
+          "1/4",
+          "2/3"
+        ],
+        "exp": "3的倍數有4個，4的倍數有3個，共同倍數12有1個；聯集為4+3−1=6個，機率6/12=1/2。",
+        "subject": "數學",
+        "sub_topic": "樣本空間與事件",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-樣本空間與事件",
+        "template_id": "ref-20261119-b7-math1-events-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-events-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "連續擲兩次公平硬幣，將先後順序視為不同結果。至少有一次正面的機率為何？",
+        "correct": "3/4",
+        "wrong": [
+          "1/4",
+          "1/2",
+          "1"
+        ],
+        "exp": "樣本空間為正正、正反、反正、反反四個等可能結果，前三個符合至少一次正面，故3/4。",
+        "subject": "數學",
+        "sub_topic": "樣本空間與事件",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-樣本空間與事件",
+        "template_id": "ref-20261119-b7-math1-events-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-events-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "從1至10的整數中等機率抽出一個數。抽到「偶數且大於6」的機率為何？",
+        "correct": "1/5",
+        "wrong": [
+          "2/5",
+          "3/10",
+          "1/2"
+        ],
+        "exp": "符合條件的數只有8與10，共2個；全部有10種等可能結果，機率2/10=1/5。",
+        "subject": "數學",
+        "sub_topic": "樣本空間與事件",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-樣本空間與事件",
+        "template_id": "ref-20261119-b7-math1-events-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
