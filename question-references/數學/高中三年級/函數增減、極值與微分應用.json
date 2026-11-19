@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-m3-extrema-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "同一觀念變式，推論可核查、選項互不重複",
+      "question": {
+        "q": "設f(x)=x³−6x²+9x，函數在哪個x值有局部極大值？",
+        "correct": "x=1",
+        "wrong": [
+          "x=3",
+          "x=0",
+          "x=2"
+        ],
+        "exp": "f′(x)=3x²−12x+9=3(x−1)(x−3)，在x=1附近由正轉負，故x=1為局部極大點。",
+        "subject": "數學",
+        "sub_topic": "函數增減、極值與微分應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數增減、極值與微分應用",
+        "template_id": "ref-20261119-b6-m3-extrema-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m3-extrema-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "同一觀念變式，推論可核查、選項互不重複",
+      "question": {
+        "q": "函數f(x)=−x²+8x−5在所有實數上的最大值為何？",
+        "correct": "11",
+        "wrong": [
+          "4",
+          "16",
+          "5"
+        ],
+        "exp": "配方f(x)=−(x−4)²+11，平方項非負，故函數最大值為11。",
+        "subject": "數學",
+        "sub_topic": "函數增減、極值與微分應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數增減、極值與微分應用",
+        "template_id": "ref-20261119-b6-m3-extrema-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m3-extrema-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "同一觀念變式，推論可核查、選項互不重複",
+      "question": {
+        "q": "f(x)=x²−4x+3在下列哪個區間嚴格遞增？",
+        "correct": "(2,∞)",
+        "wrong": [
+          "(−∞,2)",
+          "(−∞,1)",
+          "(−1,1)"
+        ],
+        "exp": "f′(x)=2x−4；當x>2導數為正，因此在(2,∞)嚴格遞增。",
+        "subject": "數學",
+        "sub_topic": "函數增減、極值與微分應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數增減、極值與微分應用",
+        "template_id": "ref-20261119-b6-m3-extrema-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
