@@ -539,6 +539,72 @@ async function main(){
     assert.equal(room.members.a.explorationStamina,10);
     assert.equal(room.members.a.quizCreditSeq,1);
 
+    // Regression for the reported real-game symptom: four-step shove must
+    // traverse FOUR clear tiles when no beast, teammate or wall is ahead.
+    // Exercise the real client wheel and canvas, not a forged API payload.
+    const lane=(()=>{
+      for(let y=2;y<map.height-2;y++)for(let x=2;x<map.width-2;x++)
+        for(const [dx,dy] of [[1,0],[0,1],[-1,0],[0,-1]]){
+          const squares=Array.from({length:5},(_,i)=>({x:x+dx*i,y:y+dy*i}));
+          if(squares.every(p=>p.x>=0&&p.y>=0&&p.x<map.width&&p.y<map.height&&
+              !!map.tiles[p.y*map.width+p.x])&&
+              !squares.some(p=>p.x===room.members.b.position.x&&
+                p.y===room.members.b.position.y))
+            return {from:squares[0],target:squares[1],end:squares[4]};
+        }
+      return null;
+    })();
+    assert.ok(lane,'the generated dungeon must contain five contiguous open squares');
+    const savedParty=clone(room.members),savedBeasts=clone(room.enemies);
+    clearInterval(clockLoop);clockLoop=null;
+    activeManual=dragonRecord;
+    room.enemies=[];
+    room.members.a={...room.members.a,accessScore:200,
+      ...SkillCombat.initialCombatLoadout(
+        {...room.members.a,accessScore:200},dragonRecord),
+      position:{...lane.from},explorationStamina:10,
+      skillSeq:0,lastSkill:null};
+    room.revision++;publish();
+    await a.page.locator('[data-dm-wheel] [data-wheel-choice="dragon-guard"]')
+      .waitFor({timeout:9000});
+    await a.page.locator('[data-dm-wheel] [data-wheel-choice="dragon-guard"]').click();
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-dm-wheel] [data-wheel-choice="dragon-guard"]')
+        ?.getAttribute('aria-pressed')==='true',null,{timeout:5000});
+    const tilePixel=await a.page.evaluate(async({origin,tile,area})=>{
+      const Camera=await import('/cultivation/dungeon-map-camera.js');
+      const canvas=document.querySelector('[data-dm-world]'),
+        rect=canvas.getBoundingClientRect(),
+        camera=Camera.lockToPlayer(origin,area,rect.width,rect.height),
+        g=Camera.geometry(camera,area,rect.width,rect.height);
+      return {x:g.ox+(tile.x+.5)*g.cell,y:g.oy+(tile.y+.5)*g.cell};
+    },{origin:lane.from,tile:lane.target,area:map});
+    await a.page.locator('#dungeon-map-view [data-dm-world]').click({
+      position:tilePixel});
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-energy]')
+      ?.textContent==='6',null,{timeout:9000});
+    assert.equal(room.members.a.lastSkill?.skillId,'dragon-guard');
+    assert.equal(room.members.a.lastSkill?.chainSteps?.length,4,
+      'the authoritative C-room must confirm all four empty-lane stages');
+    assert.deepStrictEqual(room.members.a.position,lane.end,
+      'one click on a clear corridor must advance FOUR tiles');
+    assert.equal(room.members.a.explorationStamina,6,
+      'all four steps cost one skill cast, not four requests');
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-action-feedback]')
+      ?.textContent.includes('前進 4 格'),null,{timeout:9000});
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-world]')
+      ?.dataset.motion==='idle',null,{timeout:5000});
+    const reported=await a.page.locator('[data-dm-action-feedback]').innerText();
+    assert.match(reported,/完成 4 段/);
+    assert.match(reported,/前進 4 格/);
+    assert.equal(room.enemies.length,0);
+    // Restore the exploration scenario before the guardian/boss suite.
+    activeManual=manualRecord;
+    room.members=savedParty;room.enemies=savedBeasts;
+    room.revision++;publish();
+    clockLoop=setInterval(()=>{if(room?.status==='assembled')advanceWorld();},1000);
+    clockLoop.unref?.();
+
     // Put a genuine, low-HP guardian near a player for a deterministic
     // short browser battle; server tests cover full-length guardian combat.
     const guardian=Objectives.spawn(map,[]).enemies.find(e=>e.id===Objectives.GUARDIAN_ID);

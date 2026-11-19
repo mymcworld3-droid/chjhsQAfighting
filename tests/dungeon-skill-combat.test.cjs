@@ -306,3 +306,16 @@ test('live blocker or wall stops the combo without sliding through occupied cell
   assert.deepStrictEqual(teammate.members.a.position,{x:6,y:5});
   assert.deepStrictEqual(teammate.members.b.position,{x:8,y:5});
 });
+
+test('a real four-step shove advances four tiles across an empty corridor',()=>{
+  const record=body(),initial=room(record,beast(10,10));
+  // The only enemy is well away from the empty attack direction.
+  const out=cast(initial,record,'dragon-guard',{x:6,y:5});
+  assert.equal(out.result.chainSteps.length,4);
+  assert.deepStrictEqual(out.result.chainSteps.map(p=>p.position),
+    [{x:6,y:5},{x:7,y:5},{x:8,y:5},{x:9,y:5}]);
+  assert.deepStrictEqual(out.members.a.position,{x:9,y:5});
+  assert.equal(out.result.hits.length,0);
+  assert.equal(out.members.a.explorationStamina,6);
+  assert.equal(out.enemies[0].position.x,10);
+});

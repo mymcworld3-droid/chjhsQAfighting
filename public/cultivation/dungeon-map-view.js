@@ -818,10 +818,20 @@ class DungeonMapView{
         const result=response.room.members?.[this.uid]?.lastSkill;
         if(result?.seq===seq&&result.skillId===skillId){
           const defeated=result.hits?.filter(hit=>hit.defeated).length||0;
+          const chainSteps=Array.isArray(result.chainSteps)?
+            result.chainSteps:[];
+          const advanced=result.skillId==='dragon-guard'?
+            Math.abs((result.position?.x??result.origin?.x??0)-
+              (result.origin?.x??0))+
+            Math.abs((result.position?.y??result.origin?.y??0)-
+              (result.origin?.y??0)):0;
+          const chainProgress=result.skillId==='dragon-guard'?
+            ' · 完成 '+chainSteps.length+' 段 · 前進 '+advanced+' 格'+
+            (chainSteps.length<4?' · 前路受到阻擋':''):'';
           this.skillAlert(result.focusActivated?
             '✦ 金身蓄勢！六層金色氣勁已凝聚，接下來六招體術體力減半':
             (result.focusEmpowered?'✦ 金身加成 · ':'')+
-            result.skillName+' · '+result.totalDamage+
+            result.skillName+chainProgress+' · '+result.totalDamage+
             ' 傷害 · '+(result.hits?.length||0)+' 次命中'+
             (result.focusEmpowered?' · 蓄勢剩餘 '+result.focusCharges+'/6':'')+
             (defeated?' · 擊敗 '+defeated+' 隻':''));
