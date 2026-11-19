@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-phy2-shm-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "一理想彈簧振子振幅為0.10 m、角頻率為5 rad/s，其最大速率為何？",
+        "correct": "0.50 m/s",
+        "wrong": [
+          "0.02 m/s",
+          "5.0 m/s",
+          "0.10 m/s"
+        ],
+        "exp": "簡諧運動最大速率vₘₐₓ=ωA=5×0.10=0.50 m/s。",
+        "subject": "物理",
+        "sub_topic": "簡諧運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-簡諧運動",
+        "template_id": "ref-20261119-b3-phy2-shm-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-phy2-shm-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "理想水平彈簧振子於最大位移處瞬間靜止，若質量與彈簧常數固定，此時哪一項敘述正確？",
+        "correct": "速率為零，但回復力大小最大",
+        "wrong": [
+          "速率最大且回復力為零",
+          "速率與回復力都為零",
+          "加速度方向必背離平衡位置"
+        ],
+        "exp": "極端位移x=±A時瞬時速率0，回復力F=−kx，其大小kA最大且指向平衡位置。",
+        "subject": "物理",
+        "sub_topic": "簡諧運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-簡諧運動",
+        "template_id": "ref-20261119-b3-phy2-shm-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-phy2-shm-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "同一理想彈簧振子振幅從A變成2A，質量與彈簧常數不變，其機械能變成原來幾倍？",
+        "correct": "4倍",
+        "wrong": [
+          "2倍",
+          "1/2倍",
+          "維持1倍"
+        ],
+        "exp": "振子的總機械能E=(1/2)kA²，振幅變成2倍後能量變成(2A)²/A²=4倍。",
+        "subject": "物理",
+        "sub_topic": "簡諧運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-簡諧運動",
+        "template_id": "ref-20261119-b3-phy2-shm-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
