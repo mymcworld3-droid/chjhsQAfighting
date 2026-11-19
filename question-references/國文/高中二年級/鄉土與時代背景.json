@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-ch2-localhistory-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "具體文本與文化背景相結合，論證保留資料限制，選項符合相同考點",
+      "question": {
+        "q": "自編鄉土故事：「新公路開通後，山村的茶葉可以當天送到城裡。阿公說，以前須趁天未亮挑擔下山，如今雖方便，山路旁曾歇腳的老茶寮卻也逐漸冷清。」哪項分析最能兼顧背景與情感？",
+        "correct": "交通改善改變產銷與地方生活，也使舊有往來空間逐漸失去功能",
+        "wrong": [
+          "交通改善只會增加茶寮生意，不可能改變任何地方習慣",
+          "阿公對茶寮的感受證明新公路對茶農完全沒有經濟效益",
+          "道路開通是故事背景，因此不應用來解釋人物生活的改變"
+        ],
+        "exp": "故事以新舊運送方式及老茶寮的變化對照，呈現交通現代化的便利與地方記憶的消逝。",
+        "subject": "國文",
+        "sub_topic": "鄉土與時代背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-鄉土與時代背景",
+        "template_id": "ref-20261119-b10-ch2-localhistory-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch2-localhistory-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "具體文本與文化背景相結合，論證保留資料限制，選項符合相同考點",
+      "question": {
+        "q": "某篇以農村為背景的小說描寫：收割前夕連日降雨，鄰里自發到各家田裡幫忙，並約定農機優先供將要受災的地塊使用。下列何項最能指出時代及社會背景對情節的作用？",
+        "correct": "農時與天候共同影響勞動安排，鄰里合作成為應對風險的方法",
+        "wrong": [
+          "因有農機，便可確定農村完全不再依賴鄰里人際關係",
+          "降雨只用來增添景色，與收成時程及人物決策無關",
+          "鄰里互助顯示所有家庭擁有完全相同的土地、財力及需求"
+        ],
+        "exp": "季節性生產與天候風險是決策條件，鄰里合作及農機調度是具體應對，背景推動事件發展。",
+        "subject": "國文",
+        "sub_topic": "鄉土與時代背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-鄉土與時代背景",
+        "template_id": "ref-20261119-b10-ch2-localhistory-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch2-localhistory-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "具體文本與文化背景相結合，論證保留資料限制，選項符合相同考點",
+      "question": {
+        "q": "自編地方散文：「礦坑停工後，山腳商店逐漸歇業；多年後社區把舊礦工宿舍改成展覽室，卻發現年輕居民更關心工作機會能否留下。」這篇文字最適合討論何種議題？",
+        "correct": "產業轉型下地方記憶的保存與居民現實生計之間的關係",
+        "wrong": [
+          "保存舊宿舍便足以保證地方所有就業問題立即解決",
+          "居民重視工作機會，表示保存歷史建築完全沒有意義",
+          "商店歇業只反映個別店家喜好，與礦業停止無關"
+        ],
+        "exp": "礦業停工造成地方經濟改變，展示保存歷史記憶，年輕人的關切則凸顯文化保存與生計再生須共同思考。",
+        "subject": "國文",
+        "sub_topic": "鄉土與時代背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-鄉土與時代背景",
+        "template_id": "ref-20261119-b10-ch2-localhistory-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
