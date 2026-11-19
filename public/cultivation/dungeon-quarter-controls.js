@@ -46,5 +46,5 @@ export function dungeonFocusEmpowers(member,skill){
 
 export function energyRingFill(stamina){
   const value=Number.isFinite(Number(stamina))?Number(stamina):0;
-  return Math.ceil(Math.max(0,Math.min(100,value))/10);
+  return Math.max(0,Math.min(10,Math.floor(value)));
 }
