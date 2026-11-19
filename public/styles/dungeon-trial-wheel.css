@@ -906,3 +906,159 @@ html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.b
     padding:5px 8px;font-size:10px;
   }
 }
+
+/* 2026-11-19 UI fidelity: same trial top bar, full-bleed battlefield, and
+   corner wheels; hide the old exploratory pan/zoom dashboard entirely. */
+#dungeon-map-view.tc-quarter-layout{
+  background:#161b17!important;
+  --tc-ink:#161b17;
+}
+#dungeon-map-view.tc-quarter-layout .dm-head{
+  flex:0 0 auto!important;
+  position:relative!important;z-index:11!important;
+  padding:8px 14px!important;
+  display:flex!important;align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  border-bottom:1px solid #b9a77a6b!important;
+  background:linear-gradient(90deg,#171c17,#20251d 52%,#151a16)!important;
+  box-shadow:0 3px 14px #090e0ba6!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-head small,
+#dungeon-map-view.tc-quarter-layout .dm-biome,
+#dungeon-map-view.tc-quarter-layout .dm-overview,
+#dungeon-map-view.tc-quarter-layout .dm-controls,
+#dungeon-map-view.tc-quarter-layout .dm-foot,
+#dungeon-map-view.tc-quarter-layout .dm-legend{
+  display:none!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-head h2{
+  margin:0!important;
+  color:#e9dfc8!important;
+  font:700 clamp(15px,1.65vw,22px)/1.25 "Noto Serif TC",serif!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-head-actions{
+  display:flex!important;align-items:center!important;
+  gap:6px!important;flex-wrap:nowrap!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-head-actions>[data-dm="beasts"]{
+  padding:5px 9px!important;
+  min-height:33px!important;border-radius:7px!important;
+  font-size:11px!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-head-actions>[data-dm="close"]{
+  padding:5px 10px!important;
+  min-height:33px!important;border-radius:7px!important;
+  font-size:11px!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-head-actions>[data-dm-health]{
+  display:inline-block;white-space:nowrap;
+  color:#d9f2e2;font:650 11px/1.3 system-ui,"Noto Sans TC",sans-serif;
+}
+#dungeon-map-view.tc-quarter-layout .dm-head-actions>[data-dm-health].is-critical{
+  color:#ffd0bc!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-head-actions>[data-dm-team-status]{
+  max-width:clamp(65px,18vw,180px);
+  color:#c4d9ca;font:600 10px/1.3 system-ui,"Noto Sans TC",sans-serif;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#dungeon-map-view.tc-quarter-layout .dm-battle-clock{
+  white-space:nowrap;
+  padding:4px 7px;border:1px solid #b6a77d50;
+  border-radius:7px;color:#e2d7b9;
+  font:600 11px/1.2 system-ui,sans-serif;
+}
+#dungeon-map-view.tc-quarter-layout .dm-world{
+  cursor:crosshair!important;touch-action:none!important;
+  -webkit-user-select:none!important;user-select:none!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-world:active{
+  cursor:crosshair!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-stage{
+  background:#222c25!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-objective-status{
+  position:absolute!important;top:8px!important;left:50%!important;
+  transform:translateX(-50%)!important;
+  z-index:4!important;
+  max-width:min(75vw,440px)!important;
+  margin:0!important;padding:5px 12px!important;
+  border:1px solid #84c7b877;border-radius:12px;
+  color:#d9f7e9!important;background:#12291ddd;
+  text-align:center!important;font:600 11px/1.4 system-ui,sans-serif!important;
+  pointer-events:none;
+}
+#dungeon-map-view.tc-quarter-layout .dm-boss-health:not([hidden]){
+  position:absolute!important;left:50%!important;
+  top:42px!important;z-index:5!important;
+  transform:translateX(-50%)!important;
+  width:min(400px,65vw)!important;
+  max-width:min(400px,65vw)!important;
+  margin:0!important;
+  box-shadow:0 4px 14px #0006;
+}
+#dungeon-map-view.tc-quarter-layout .dm-movement{
+  left:8px!important;top:8px!important;
+  width:min(250px,52vw)!important;
+  max-width:min(250px,52vw)!important;
+  max-height:calc(100% - var(--tc-dial) - 20px)!important;
+  padding:7px!important;
+  border-radius:8px!important;
+  background:rgba(17,33,25,.82)!important;
+  box-shadow:0 4px 14px #0005!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-movement>.dm-energy{
+  display:none!important; /* Health and team are in the trial top strip. */
+}
+#dungeon-map-view.tc-quarter-layout .dm-inspector{
+  position:absolute!important;
+  top:9px!important;left:auto!important;right:8px!important;
+  z-index:13!important;
+  width:min(300px,63vw)!important;
+  max-height:calc(100% - var(--tc-dial) - 20px)!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-action-feedback{
+  top:38px!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-quarter{
+  --tc-wheel:var(--tc-dial);
+}
+@media (max-width:720px){
+  #dungeon-map-view.tc-quarter-layout .dm-head{
+    padding:5px 8px!important;gap:5px!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .dm-head h2{
+    font-size:14px!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .dm-head-actions{
+    gap:4px!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .dm-head-actions>[data-dm-team-status]{
+    display:none!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .dm-head-actions>[data-dm-health]{
+    font-size:10px!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .dm-head-actions>[data-dm="beasts"],
+  #dungeon-map-view.tc-quarter-layout .dm-head-actions>[data-dm="close"]{
+    padding:4px 6px!important;min-height:30px!important;
+    font-size:10px!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .dm-battle-clock{
+    font-size:9px!important;padding:3px 4px;
+  }
+  #dungeon-map-view.tc-quarter-layout .dm-objective-status{
+    top:5px!important;font-size:10px!important;padding:4px 8px!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .dm-boss-health:not([hidden]){
+    top:36px!important;width:min(330px,70vw)!important;
+    max-width:min(330px,70vw)!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .dm-movement{
+    top:5px!important;left:5px!important;
+    width:min(185px,53vw)!important;
+    max-width:min(185px,53vw)!important;
+  }
+}
