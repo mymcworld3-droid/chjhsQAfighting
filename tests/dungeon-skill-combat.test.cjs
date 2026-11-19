@@ -141,3 +141,35 @@ test('server-only preset switch preserves independent focus, flight sword and se
   assert.equal(changed.duplicate,false);
   assert.equal(S.switchLoadout({...r,members:changed.members},'a',record,1).duplicate,true);
 });
+
+
+test('push-to-edge advances the NPC, without crossing a wall or another actor',()=>{
+  const record=sword(),first=room(record,beast(7,5,'beast-1',500));
+  const pushed=cast(first,record,'wind-thousand',{x:7,y:5});
+  assert.ok(pushed.enemies[0].position.x>7,'push-to-edge must actually move NPC');
+  assert.equal(pushed.enemies[0].position.y,5);
+  const withWall=structuredClone(map);
+  withWall.tiles[5*16+9]=0;
+  const bounded=S.castSkill(first,'a',withWall,record,{
+    skillId:'wind-thousand',target:{x:7,y:5},seq:1});
+  assert.deepStrictEqual(bounded.enemies[0].position,{x:8,y:5});
+  const blocked=room(record,beast(7,5,'beast-1',500));
+  blocked.members.b={uid:'b',position:{x:8,y:5},
+    battleHealth:0,downed:true};
+  const stopped=cast(blocked,record,'wind-thousand',{x:7,y:5});
+  assert.deepStrictEqual(stopped.enemies[0].position,{x:7,y:5});
+});
+test('fist sweep pushes a live NPC and stops before a second enemy',()=>{
+  const record=body(),initial=room(record,beast(6,5,'beast-1',500));
+  const enabled=S.switchLoadout(initial,'a',record,2);
+  const state={...initial,members:enabled.members};
+  const pushed=cast(state,record,'rock-break',{x:6,y:5});
+  assert.ok(pushed.enemies[0].position.x>6);
+  const collision=room(record,beast(6,5,'beast-1',500));
+  collision.enemies.push(beast(7,5,'beast-2',500));
+  const active=S.switchLoadout(collision,'a',record,2);
+  const stalled=cast({...collision,members:active.members},
+    record,'rock-break',{x:6,y:5});
+  assert.deepStrictEqual(stalled.enemies.find(x=>x.id==='beast-1').position,
+    {x:6,y:5});
+});
