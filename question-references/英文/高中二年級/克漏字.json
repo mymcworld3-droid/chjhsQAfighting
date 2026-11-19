@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-en2-cloze-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Complete the passage: 'The school installed sensors to measure air quality. The measurements were displayed online, ______ students could see how pollution changed during the day.'",
+        "correct": "so that",
+        "wrong": [
+          "even though",
+          "rather than",
+          "as if"
+        ],
+        "exp": "So that introduces the purpose of publishing the measurements: allowing students to observe air-quality changes.",
+        "subject": "英文",
+        "sub_topic": "克漏字",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-克漏字",
+        "template_id": "ref-20261119-b8-en2-cloze-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en2-cloze-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Complete: 'The researchers repeated the experiment several times to make sure their findings were ______.'",
+        "correct": "reliable",
+        "wrong": [
+          "temporary",
+          "unrelated",
+          "optional"
+        ],
+        "exp": "Repeated measurements aim to check consistency and reliability, making 'reliable' the appropriate adjective.",
+        "subject": "英文",
+        "sub_topic": "克漏字",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-克漏字",
+        "template_id": "ref-20261119-b8-en2-cloze-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en2-cloze-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Complete: 'The article was based on a single interview. ______, the editor asked the author to gather additional evidence before publication.'",
+        "correct": "Therefore",
+        "wrong": [
+          "Nevertheless",
+          "For instance",
+          "Similarly"
+        ],
+        "exp": "The limited evidence explains the editor's request, so 'therefore' accurately signals the resulting action.",
+        "subject": "英文",
+        "sub_topic": "克漏字",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-克漏字",
+        "template_id": "ref-20261119-b8-en2-cloze-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
