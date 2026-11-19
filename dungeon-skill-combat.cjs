@@ -6,6 +6,7 @@ const {walkable}=require('./dungeon-map-generator.cjs');
 const {isAlive}=require('./dungeon-enemy-combat.cjs');
 const {maxHealth,MAX_STRIKE_SEQ}=require('./dungeon-player-combat.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
+const {clampStamina}=require('./dungeon-stamina-rules.cjs');
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
 const same=(a,b)=>a?.x===b?.x&&a?.y===b?.y;
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
@@ -161,8 +162,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   if(!sk)throw fail('功法尚未解鎖或修士境界不足',403);
   const empowered=isFocusEmpowered(member,sk);
   const cost=focusCost(member,sk);
-  const stamina=Number.isSafeInteger(member.explorationStamina)?
-    member.explorationStamina:0;
+  const stamina=clampStamina(member.explorationStamina);
   if(stamina<cost)throw fail('探索體力不足，無法施放技能',409);
   const origin=member.position;
   if(!tile(map,target))throw fail('目標不能位於牆壁或界外',409);
