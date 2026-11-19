@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-ch3-issues-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "知識及證據導向，需比較合理選項並交代推論限制",
+      "question": {
+        "q": "某校考慮將午餐剩食減量列為年度目標。一篇提案只說「這樣比較環保」，若要讓論證更具體，最應增加哪項內容？",
+        "correct": "提出可量化的減量目標、供餐調整方法，以及追蹤營養與廚餘量的方式",
+        "wrong": [
+          "直接宣稱所有學生都一定能吃下相同份量",
+          "只用提案人的個人口味決定全校餐點",
+          "只列舉其他學校的校徽樣式，不說明實施方式"
+        ],
+        "exp": "政策論證須說明可檢驗目標、執行策略與可能代價，才能評估是否達到減廢且不犧牲營養的目的。",
+        "subject": "國文",
+        "sub_topic": "議題論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-議題論證",
+        "template_id": "ref-20261119-b6-ch3-issues-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-ch3-issues-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "知識及證據導向，需比較合理選項並交代推論限制",
+      "question": {
+        "q": "某市希望全面改用手機應用程式辦理公共服務，有人提出年長者和無手機者可能難以使用。哪一項論證最完整？",
+        "correct": "數位化可提高效率，但應保留替代申辦管道並評估不同群體的可及性",
+        "wrong": [
+          "既然大多數人有手機，就不必檢查少數群體能否使用服務",
+          "只要保留紙本服務，就應完全停止所有數位改善",
+          "把數位服務使用人數當成唯一衡量公共服務公平性的指標"
+        ],
+        "exp": "完整論證同時考量效率利益、權利與公平限制，並提出可執行的配套，而不是只採全有或全無立場。",
+        "subject": "國文",
+        "sub_topic": "議題論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-議題論證",
+        "template_id": "ref-20261119-b6-ch3-issues-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-ch3-issues-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "知識及證據導向，需比較合理選項並交代推論限制",
+      "question": {
+        "q": "某市計畫補助大眾運輸以降低私人汽車使用。一篇支持文章引用運量成長數據，但未評估補助成本與城郊可及性。如何補強論證最適當？",
+        "correct": "加入單位補助成本、實際減少的汽車里程與不同地區的服務可及性資料",
+        "wrong": [
+          "只要運量成長，就斷言政策完全沒有財政負擔",
+          "以補助方案名稱的好聽程度判斷效果",
+          "認為增加大眾運輸乘客必定使所有道路交通量歸零"
+        ],
+        "exp": "公共議題論證應把政策目標與可測量效果、成本及分配影響結合，避免只用單一正面指標下結論。",
+        "subject": "國文",
+        "sub_topic": "議題論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-議題論證",
+        "template_id": "ref-20261119-b6-ch3-issues-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
