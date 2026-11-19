@@ -195,3 +195,56 @@ test('assembly trusts only Firebase A manuscript documents, never empty C aliase
     ['wind-slash','wind-step','wind-thousand']);
   assert.equal(started.body.room.members.a.dungeonLoadoutIndex,0);
 });
+
+
+test('two C server instances cannot double-credit one A-graded answer',async()=>{
+  const {f,id,raw}=await setup();
+  raw.members.a.explorationStamina=93;
+  const qid='dungeon-question-a-1';
+  f.a.records.set('dungeonQuizStates/a',{
+    roomId:id,sessionKey:id+':'+raw.assembledAtMs,
+    reviews:{[qid]:{uid:'a',questionId:qid,index:1,correct:true,amount:4}}
+  });
+  const [first,retry]=await Promise.all([
+    f.call('a','quiz-credit',{roomId:id,questionId:qid,correct:false,
+      amount:100,explorationStamina:9999},0),
+    f.call('a','quiz-credit',{roomId:id,questionId:qid},1)
+  ]);
+  assert.equal(first.status,200);assert.equal(retry.status,200);
+  const snapshot=f.c.records.get('dungeonRooms/'+id);
+  assert.equal(snapshot.members.a.quizCreditSeq,1);
+  assert.equal(snapshot.members.a.explorationStamina,97);
+  assert.equal(snapshot.members.b.quizCreditSeq,0);
+  assert.equal(snapshot.members.b.explorationStamina,100);
+  assert.equal(snapshot.members.a.lastQuizCredit.granted,4);
+  const revision=snapshot.revision;
+  assert.equal((await f.call('a','quiz-credit',{roomId:id,questionId:qid})).status,200);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).revision,revision);
+});
+test('quiz credit is member- and session-bound; rejects ungraded, out-of-order and forged',async()=>{
+  const {f,id,raw}=await setup();
+  const sessionKey=id+':'+raw.assembledAtMs;
+  f.a.records.set('dungeonQuizStates/a',{
+    roomId:id,sessionKey,
+    reviews:{
+      one:{uid:'a',questionId:'one',index:1,correct:false,amount:1},
+      two:{uid:'a',questionId:'two',index:2,correct:true,amount:4}
+    }
+  });
+  const rev=raw.revision;
+  assert.equal((await f.call('a','quiz-credit',{roomId:id,questionId:'two'})).status,409);
+  assert.equal((await f.call('a','quiz-credit',{roomId:id,questionId:'invented'})).status,403);
+  assert.equal((await f.call('b','quiz-credit',{roomId:id,questionId:'one'})).status,403);
+  assert.equal((await f.call('invalid','quiz-credit',{roomId:id,questionId:'one'})).status,401);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).revision,rev);
+  const credited=await f.call('a','quiz-credit',{roomId:id,questionId:'one'});
+  assert.equal(credited.status,200);assert.equal(credited.body.room.members.a.explorationStamina,100);
+  assert.equal(credited.body.room.members.a.lastQuizCredit.granted,0,
+    'at cap still acknowledge the receipt once');
+  raw.members.a.explorationStamina=90;
+  const second=await f.call('a','quiz-credit',{roomId:id,questionId:'two'});
+  assert.equal(second.status,200);assert.equal(second.body.room.members.a.explorationStamina,94);
+  const oldA=f.a.records.get('dungeonQuizStates/a');
+  f.a.records.set('dungeonQuizStates/a',{...oldA,sessionKey:'old-room:123'});
+  assert.equal((await f.call('a','quiz-credit',{roomId:id,questionId:'two'})).status,403);
+});
