@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-math1-prob-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依等可能樣本空間、組合計數與事件聯集計算機率",
+      "question": {
+        "q": "同時擲兩顆公平的六面骰，依骰子順序區分結果。兩骰點數和為7的機率為何？",
+        "correct": "1/6",
+        "wrong": [
+          "1/12",
+          "1/9",
+          "1/3"
+        ],
+        "exp": "共有6×6=36個等可能的有序結果；點數和為7有(1,6)、(2,5)、(3,4)、(4,3)、(5,2)、(6,1)共6種，機率為6/36=1/6。",
+        "subject": "數學",
+        "sub_topic": "古典機率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h1-古典機率",
+        "template_id": "ref-20261119-b2-math1-prob-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-math1-prob-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依等可能樣本空間、組合計數與事件聯集計算機率",
+      "question": {
+        "q": "袋中有5顆紅球、3顆藍球，除顏色外完全相同，隨機不放回抽出2顆。恰好各抽到1顆紅球與1顆藍球的機率為何？",
+        "correct": "15/28",
+        "wrong": [
+          "5/8",
+          "3/8",
+          "15/64"
+        ],
+        "exp": "全部兩球組合C(8,2)=28種；一紅一藍有5×3=15種，故機率15/28。",
+        "subject": "數學",
+        "sub_topic": "古典機率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h1-古典機率",
+        "template_id": "ref-20261119-b2-math1-prob-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-math1-prob-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依等可能樣本空間、組合計數與事件聯集計算機率",
+      "question": {
+        "q": "從整數1到20中等機率選出1個整數。選到「2的倍數或5的倍數」的機率為何？",
+        "correct": "3/5",
+        "wrong": [
+          "1/2",
+          "7/10",
+          "1/5"
+        ],
+        "exp": "2的倍數有10個、5的倍數有4個、同時是10的倍數有2個；聯集10+4−2=12個，機率12/20=3/5。",
+        "subject": "數學",
+        "sub_topic": "古典機率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h1-古典機率",
+        "template_id": "ref-20261119-b2-math1-prob-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
