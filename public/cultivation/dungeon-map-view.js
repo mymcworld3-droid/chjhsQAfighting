@@ -73,6 +73,7 @@ class DungeonMapView{
       '<span class="dm-health" data-dm-health>生命 100/100</span>'+
       '<span data-dm-location>（待命）</span></div>'+
       '<div class="dm-threat" data-dm-threat role="status" aria-live="polite" hidden></div>'+
+      '<div class="dm-team-status" data-dm-team-status aria-label="隊友生命狀態"></div>'+
       '<div class="dm-dpad" role="group" aria-label="角色移動，一次一格">'+
       '<button type="button" data-dm="up" aria-label="向上移動一格">↑</button>'+
       '<button type="button" data-dm="left" aria-label="向左移動一格">←</button>'+
@@ -215,6 +216,15 @@ class DungeonMapView{
         threat.textContent='危險！'+threatened.length+
           ' 隻靈獸鎖定腳下 · 約 '+Math.max(0,fire-applied)+' 秒後命中，請立即移開';
       }
+    }
+    const party=this.$('[data-dm-team-status]');
+    if(party){
+      const friends=this.members();
+      party.hidden=friends.length<2||!active;
+      if(!party.hidden)party.textContent=friends.map(m=>{
+        const value=Number.isSafeInteger(m.battleHealth)?m.battleHealth:100;
+        return String(m.name||'修士').slice(0,10)+' '+(m.downed?'倒地':value+' HP');
+      }).join(' · ');
     }
     this.root?.querySelectorAll('.dm-dpad button').forEach(button=>{
       button.disabled=!active||!this.map||this.movePending||stamina<1||downed;
