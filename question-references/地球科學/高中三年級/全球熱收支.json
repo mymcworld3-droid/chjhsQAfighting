@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-earth3-energybudget-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "氣候、地震與能量收支依學科觀念設計；單一正解、條件清楚",
+      "question": {
+        "q": "某模型估計地球系統年平均吸收短波輻射240 W/m²，對外放出長波輻射238 W/m²。依此簡化模型，淨能量收支為何？",
+        "correct": "每平方公尺淨增加2 W的能量輸入",
+        "wrong": [
+          "每平方公尺淨減少2 W的能量輸入",
+          "恰好平衡為0 W/m²",
+          "每平方公尺淨增加478 W的能量輸入"
+        ],
+        "exp": "淨收支=吸收−放出=240−238=+2 W/m²，表示在所述平均尺度下系統累積能量。",
+        "subject": "地球科學",
+        "sub_topic": "全球熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-全球熱收支",
+        "template_id": "ref-20261119-b11-earth3-energybudget-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-earth3-energybudget-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "氣候、地震與能量收支依學科觀念設計；單一正解、條件清楚",
+      "question": {
+        "q": "若地表由大片積雪轉為顏色較深的裸地，且入射陽光相同，最直接的輻射效應通常為何？",
+        "correct": "反照率降低，使吸收的短波輻射增加",
+        "wrong": [
+          "反照率提高，使吸收的短波輻射減少",
+          "地表顏色改變只影響長波輻射，不可能影響太陽短波",
+          "入射太陽輻射會因裸地顏色而完全消失"
+        ],
+        "exp": "積雪通常具較高反照率；轉為較暗裸地使反射減少、吸收增加，是冰雪反照率回饋的基礎。",
+        "subject": "地球科學",
+        "sub_topic": "全球熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-全球熱收支",
+        "template_id": "ref-20261119-b11-earth3-energybudget-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-earth3-energybudget-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "氣候、地震與能量收支依學科觀念設計；單一正解、條件清楚",
+      "question": {
+        "q": "若地球在長期平均下對外放出的能量小於吸收的太陽能量，最符合能量守恆的結論是哪一項？",
+        "correct": "地球系統會累積能量，直到其他過程使收支改變",
+        "wrong": [
+          "地球可持續累積能量而不影響任何物理狀態",
+          "大氣和海洋不可能吸收多出的能量",
+          "能量差額必定立即轉換成額外的入射太陽光"
+        ],
+        "exp": "吸收大於放出形成正能量不平衡，多餘能量會進入海洋、大氣、陸地等儲存或轉換，並影響後續輻射收支。",
+        "subject": "地球科學",
+        "sub_topic": "全球熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-全球熱收支",
+        "template_id": "ref-20261119-b11-earth3-energybudget-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
