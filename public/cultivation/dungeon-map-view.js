@@ -1,7 +1,6 @@
 import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
-import { getDungeonMap, moveDungeonMember, strikeDungeonBeast,
-  castDungeonSkill, switchDungeonLoadout, getDungeonRoom } from './dungeon-room.js';
+import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 
 // Read-only expedition blueprint. Pointer and keyboard events manipulate only
