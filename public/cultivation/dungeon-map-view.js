@@ -246,6 +246,74 @@ class DungeonMapView{
       if(this.isCurrent()&&token===this.seq)this.updateMovementHUD();
     }
   }
+  creatures(){
+    return Array.isArray(this.room?.enemies)?this.room.enemies:[];
+  }
+  updateBeastHUD(){
+    const beasts=this.creatures();
+    const button=this.$('[data-dm="beasts"]');
+    const panel=this.$('[data-dm-inspector]');
+    if(button){
+      button.textContent='靈獸 '+beasts.length;
+      button.disabled=!this.map||!beasts.length||this.room?.status!=='assembled';
+      button.setAttribute('aria-expanded',String(this.inspectOpen&&beasts.length>0));
+    }
+    if(!panel)return;
+    panel.hidden=!this.inspectOpen||!beasts.length||!this.map;
+    if(panel.hidden)return;
+    const list=this.$('[data-dm-beast-list]');
+    const ids=beasts.map(e=>String(e.id)).join('|');
+    if(ids!==this.beastIds){
+      this.beastIds=ids;
+      list.replaceChildren(...beasts.map(beast=>{
+        const element=document.createElement('button');
+        element.type='button';element.dataset.dm='beast-select';
+        element.dataset.beastId=String(beast.id);return element;
+      }));
+    }
+    const state={patrol:'巡邏中',return:'返回巡邏',pursuit:'追蹤中',alert:'警戒'};
+    list.querySelectorAll('[data-beast-id]').forEach(item=>{
+      const beast=beasts.find(e=>String(e.id)===item.dataset.beastId);
+      if(!beast)return;
+      item.textContent=String(beast.name||'靈獸')+' · '+(state[beast.intent]||'巡邏中');
+      item.setAttribute('aria-pressed',String(beast.id===this.selectedBeastId));
+    });
+    const selected=beasts.find(e=>e.id===this.selectedBeastId);
+    const details=this.$('[data-dm-beast-details]');
+    if(selected){
+      details.textContent=String(selected.name||'靈獸')+' · '+
+        (state[selected.intent]||'巡邏中')+
+        ' · 座標 ('+selected.position.x+','+selected.position.y+')'+
+        ' · 每 '+selected.cadence+' 秒行動一次'+
+        (selected.targetUid?' · 已發現修士':'')+
+        ' · 節拍 T'+(selected.lastActionTick||0);
+    }else details.textContent='點選靈獸可查看最新行動';
+  }
+  selectBeast(id,{focus=true}={}){
+    if(!this.map||!this.isCurrent())return;
+    const beast=this.creatures().find(e=>e.id===id);
+    if(!beast)return;
+    this.inspectOpen=true;this.selectedBeastId=beast.id;
+    if(focus){
+      this.follow=false;this.followBeast=true;
+      this.camera=Camera.zoomAt(this.camera,Math.max(2.4,this.camera.zoom),
+        this.width/2,this.height/2,this.map,this.width,this.height);
+      this.camera=Camera.focusOn(this.camera,beast.position,this.map,this.width,this.height);
+      this.$('[data-dm="focus"]').setAttribute('aria-pressed','false');
+    }
+    this.updateBeastHUD();this.drawSoon();
+  }
+  inspectAt(screen){
+    if(!this.map)return false;
+    const g=Camera.geometry(this.camera,this.map,this.width,this.height);
+    const closest=this.creatures().map(beast=>({
+      beast,distance:Math.hypot(g.ox+(beast.position.x+.5)*g.cell-screen.x,
+        g.oy+(beast.position.y+.5)*g.cell-screen.y)
+    })).sort((a,b)=>a.distance-b.distance)[0];
+    if(!closest||closest.distance>Math.max(18,g.cell*.85))return false;
+    this.selectBeast(closest.beast.id,{focus:false});
+    return true;
+  }
   syncClockAnchor(room){
     const battle=room?.battleClock;
     if(!battle||battle.version!==1||!Number.isSafeInteger(battle.startedAtMs)){
