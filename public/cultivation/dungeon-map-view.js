@@ -148,6 +148,7 @@ class DungeonMapView{
     this.previousFocus=document.activeElement;
     this.room=room;this.roomId=room.id;this.uid=playerUid;
     this.quiz?.attach(room.id,playerUid);
+    if(room.status==='assembled')void this.quiz?.warm();
     this.map=null;this.camera=Camera.initialCamera();
     this.follow=false;this.routes=false;this.pointers.clear();this.opened=true;
     this.movePending=false;this.strikePending=false;this.skillPending=false;
@@ -671,6 +672,7 @@ class DungeonMapView{
     }
     if(Number(room.revision)<Number(this.room?.revision||0))return;
     this.room=room;
+    if(room.status==='assembled')void this.quiz?.warm();
     this.syncClockAnchor(room);
     this.updateStatus();
     if(this.map&&this.follow){
