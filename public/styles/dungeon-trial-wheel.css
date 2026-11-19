@@ -1062,3 +1062,26 @@ html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.b
     max-width:min(185px,53vw)!important;
   }
 }
+
+/* Avoid old preview dial styling overriding the actual 80% trial center. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>.dm-quiz-charge[data-quiz]{
+  width:80%!important;height:80%!important;
+  left:0!important;bottom:0!important;
+  padding:0!important;margin:0!important;
+  border-radius:0 100% 0 0!important;
+  display:block!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>.dm-quiz-charge[data-quiz] .tc-energy-number{
+  right:15%!important;bottom:30%!important;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-energy>.dm-quiz-charge[data-quiz] .tc-charge-label{
+  color:#eaf9e9!important;text-align:center!important;
+}
+@media (orientation:portrait) and (max-width:480px){
+  #dungeon-map-view.tc-quarter-layout .dm-head h2{
+    font-size:13px!important;
+  }
+  #dungeon-map-view.tc-quarter-layout .dm-head-actions>[data-dm-health]{
+    max-width:66px;overflow:hidden;text-overflow:ellipsis;
+  }
+}
