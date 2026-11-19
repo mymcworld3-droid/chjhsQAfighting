@@ -63,7 +63,7 @@ test('dungeon uses separate private C-domain storage, A auth, and does not spend
   assert.equal(f.c.records.size,3);
   assert.equal([...f.c.records.keys()].some(k=>k.startsWith('raidRooms/')),false);
   const duplicate=await f.call('a','create');
-  assert.equal(duplicate.body.roomId,created.body.roomId,'lost create reply is idempotent');
+  assert.equal(duplicate.body.roomId,created.roomId,'lost create reply is idempotent');
   assert.equal(duplicate.body.room.revision,1);
 });
 test('joining by normalized six-digit code is atomic and capped at four users',async()=>{
@@ -72,7 +72,7 @@ test('joining by normalized six-digit code is atomic and capped at four users',a
   const joins=await Promise.all(['b','c','d','e'].map(uid=>f.call(uid,'join-code',{roomCode:code.toLowerCase()})));
   assert.equal(joins.filter(v=>v.status===200).length,3);
   assert.equal(joins.filter(v=>v.status===409).length,1);
-  const joined=(await f.call('a','get',{roomId:created.body.roomId})).body.room;
+  const joined=(await f.call('a','get',{roomId:created.roomId})).body.room;
   assert.equal(Object.keys(joined.members).length,4);
   assert.equal(joined.revision,4);
   const retry=await f.call('b','join-code',{roomCode:code});

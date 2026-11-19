@@ -60,10 +60,15 @@ test('admin basic attacks and equipped skills retain ten energy after repeated c
   }
   const normal=Strike.strikeEnemy(ordinary,'a',map,{enemyId:'beast-1',seq:1});
   assert.equal(normal.members.a.explorationStamina,8);
-  const record={school:'body',books:{'body-dragon':{exp:2500}},
+  const record={school:'body',
+    books:{'body-dragon':{exp:2500},'body-rock':{exp:2500},
+      'body-tiger':{exp:2500}},
     equipped:['dragon-strike','dragon-guard','dragon-roar'],
-    loadouts:[{name:'admin',skillIds:['dragon-strike','dragon-guard','dragon-roar']}],
-    activeLoadout:0};
+    loadouts:[
+      {name:'admin',skillIds:['dragon-strike','dragon-guard','dragon-roar']},
+      {name:'rock',skillIds:['rock-fist','rock-quake','rock-break']},
+      {name:'tiger',skillIds:['tiger-fist','tiger-step','tiger-throw']}
+    ],activeLoadout:0};
   const initial=Skills.initialCombatLoadout(admin.members.a,record);
   let magic={...admin,members:{a:{...admin.members.a,...initial}},enemies:[
     {id:'beast-1',kind:'golem',position:{x:5,y:2},
@@ -71,9 +76,9 @@ test('admin basic attacks and equipped skills retain ten energy after repeated c
   ]};
   for(let seq=1;seq<=7;seq++){
     magic={...magic,enemies:[{id:'beast-1',kind:'golem',
-      position:{x:5,y:2},battleHealth:90,battleMaxHealth:90}]};
+      position:{x:4,y:2},battleHealth:90,battleMaxHealth:90}]};
     const out=Skills.castSkill(magic,'a',map,record,{
-      skillId:'dragon-strike',target:{x:5,y:2},seq});
+      skillId:'dragon-strike',target:{x:4,y:2},seq});
     assert.equal(out.members.a.explorationStamina,10);
     magic=next(magic,out);
   }
