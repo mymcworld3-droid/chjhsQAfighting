@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-earth2-skycoords-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境推理，附可核對解析",
+      "question": {
+        "q": "在地平坐標系中，某恆星的仰角為90°，代表它在觀測者天空的哪個位置？",
+        "correct": "天頂",
+        "wrong": [
+          "正東方地平線",
+          "正南方地平線",
+          "地平線以下90°"
+        ],
+        "exp": "地平坐標的仰角由地平線0°量起，90°就是觀測者正上方的天頂。",
+        "subject": "地球科學",
+        "sub_topic": "天球坐標的概念",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天球坐標的概念",
+        "template_id": "ref-20261119-b4-earth2-skycoords-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-earth2-skycoords-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境推理，附可核對解析",
+      "question": {
+        "q": "若使用由正北方起順時針量測的方位角系統，方位角90°代表哪個方向？",
+        "correct": "正東",
+        "wrong": [
+          "正北",
+          "正南",
+          "正西"
+        ],
+        "exp": "此方位角約定為北0°、東90°、南180°、西270°，所以90°為正東。",
+        "subject": "地球科學",
+        "sub_topic": "天球坐標的概念",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天球坐標的概念",
+        "template_id": "ref-20261119-b4-earth2-skycoords-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-earth2-skycoords-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境推理，附可核對解析",
+      "question": {
+        "q": "北半球北緯35°附近的觀測者，若能清楚觀測北天極，其仰角大約為何？",
+        "correct": "35°",
+        "wrong": [
+          "0°",
+          "55°",
+          "90°"
+        ],
+        "exp": "北天極相對地平線的高度約等於觀測者的北緯，因此北緯35°處約為35°。",
+        "subject": "地球科學",
+        "sub_topic": "天球坐標的概念",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天球坐標的概念",
+        "template_id": "ref-20261119-b4-earth2-skycoords-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
