@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m3-graphcontinuity-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "函數、極限、模型與代數根的性質，附可查核推導",
+      "question": {
+        "q": "設f(x)=x²−1（x<2），f(x)=kx+1（x≥2）。若圖形在x=2連續，k為何？",
+        "correct": "1",
+        "wrong": [
+          "2",
+          "3",
+          "−1"
+        ],
+        "exp": "左極限2²−1=3，右極限與f(2)為2k+1；令2k+1=3得k=1。",
+        "subject": "數學",
+        "sub_topic": "以圖形理解連續性",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-以圖形理解連續性",
+        "template_id": "ref-20261119-b10-m3-graphcontinuity-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-graphcontinuity-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "函數、極限、模型與代數根的性質，附可查核推導",
+      "question": {
+        "q": "設f(x)=(x²−1)/(x−1)（x≠1），另定義f(1)=k。若要使x=1的圖形無破洞且連續，k應是多少？",
+        "correct": "2",
+        "wrong": [
+          "0",
+          "1",
+          "−2"
+        ],
+        "exp": "對x≠1可約分為x+1，故x→1極限為2；要連續須f(1)=k=2。",
+        "subject": "數學",
+        "sub_topic": "以圖形理解連續性",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-以圖形理解連續性",
+        "template_id": "ref-20261119-b10-m3-graphcontinuity-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m3-graphcontinuity-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "函數、極限、模型與代數根的性質，附可查核推導",
+      "question": {
+        "q": "函數f(x)在x<0時為−1、x>0時為1；在x=0可自由指定f(0)=k。哪項敘述正確？",
+        "correct": "無論k為何，f都無法在x=0連續",
+        "wrong": [
+          "只要k=0便連續",
+          "只要k=1便連續",
+          "只要k=−1便連續"
+        ],
+        "exp": "左極限是−1，右極限是1，兩者不相等，因此雙側極限不存在，無法靠單點函數值消除跳躍。",
+        "subject": "數學",
+        "sub_topic": "以圖形理解連續性",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-以圖形理解連續性",
+        "template_id": "ref-20261119-b10-m3-graphcontinuity-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
