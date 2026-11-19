@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-geo1-map-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "比例尺的長度、面積換算與圖面選擇",
+      "question": {
+        "q": "一張地圖比例尺為1：25,000。若兩地在圖上直線距離6.0 cm，實際直線距離約為何？",
+        "correct": "1.5 km",
+        "wrong": [
+          "0.15 km",
+          "6.0 km",
+          "15 km"
+        ],
+        "exp": "實際距離=6.0×25,000 cm=150,000 cm=1.5 km。",
+        "subject": "地理",
+        "sub_topic": "地圖要素與比例尺",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地圖要素與比例尺",
+        "template_id": "ref-20261119-geo1-map-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-geo1-map-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "比例尺的長度、面積換算與圖面選擇",
+      "question": {
+        "q": "同一條實際長1 km的道路，分別繪在1：10,000與1：100,000的地圖上。若地圖未經變形縮放，哪一張道路線段較長？",
+        "correct": "1：10,000的地圖",
+        "wrong": [
+          "1：100,000的地圖",
+          "兩者圖上線段長度相同",
+          "不能由比例尺判斷"
+        ],
+        "exp": "圖上長度=實距/比例尺分母；1 km在1：10,000圖上是10 cm，在1：100,000圖上是1 cm。",
+        "subject": "地理",
+        "sub_topic": "地圖要素與比例尺",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地圖要素與比例尺",
+        "template_id": "ref-20261119-geo1-map-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-geo1-map-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "比例尺的長度、面積換算與圖面選擇",
+      "question": {
+        "q": "比例尺為1：10,000的地圖上，一塊正方形空地的邊長畫成2.0 cm。忽略投影變形，實際面積約為何？",
+        "correct": "40,000 m²",
+        "wrong": [
+          "400 m²",
+          "4,000 m²",
+          "400,000 m²"
+        ],
+        "exp": "2.0 cm×10,000=200 m，正方形面積為200×200=40,000 m²（即4公頃）。",
+        "subject": "地理",
+        "sub_topic": "地圖要素與比例尺",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地圖要素與比例尺",
+        "template_id": "ref-20261119-geo1-map-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
