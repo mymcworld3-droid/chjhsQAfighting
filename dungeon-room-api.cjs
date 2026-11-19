@@ -10,6 +10,7 @@ const {LAYOUT_VERSION,generateDungeonLayout} = require('./dungeon-map-generator.
 const {roomMap,startExplorationMembers,moveOnMap} = require('./dungeon-movement.cjs');
 const {initialClock,projectClock} = require('./dungeon-battle-clock.cjs');
 const {initialEnemies,advanceWorld,ENEMY_AI_VERSION} = require('./dungeon-enemy-ai.cjs');
+const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -50,7 +51,13 @@ const publicRoom=(roomId,room,at=Date.now())=>({
   enemies:Array.isArray(room.enemies)?room.enemies.map(e=>({
     id:e.id,name:e.name,kind:e.kind,position:e.position,
     intent:e.intent,targetUid:e.targetUid||null,
-    lastActionTick:e.lastActionTick,cadence:e.cadence
+    lastActionTick:e.lastActionTick,cadence:e.cadence,
+    attack:pendingPublic(e.attack),
+    lastAttack:e.lastAttack?{
+      tick:e.lastAttack.tick,kind:e.lastAttack.kind,
+      label:e.lastAttack.label,damage:e.lastAttack.damage,
+      cells:e.lastAttack.cells,hits:e.lastAttack.hits
+    }:null
   })):[],
   members:Object.fromEntries(Object.entries(membersOf(room)).map(([id,member])=>
     [id,{...member,online:memberOnline(member,at)}]))
@@ -321,11 +328,15 @@ function createHandler({
               codeSnap.data()?.status!=='active'))
             throw err('房間代碼已失效，請重新建立隊伍',409);
           const expiresAtMs=shouldRenew?at+LOBBY_TTL_MS:current.expiresAtMs;
-          const members=shouldTouch?{...membersOf(current),
-            [uid]:{...member,heartbeatAtMs:at}}:membersOf(current);
-          const next={...current,members,expiresAtMs,...(battleDelta||{}),
+          // Merge health changes BEFORE writing heartbeat: otherwise the
+          // stale member copy could overwrite a committed hit or timestamp.
+          const evolved=battleDelta?.members||membersOf(current);
+          const members=shouldTouch?{...evolved,
+            [uid]:{...evolved[uid],heartbeatAtMs:at}}:evolved;
+          const {members:_damageMembers,...world}=battleDelta||{};
+          const next={...current,...world,members,expiresAtMs,
             revision:current.revision+1};
-          tx.update(roomRef,{members,expiresAtMs,...(battleDelta||{}),revision:next.revision});
+          tx.update(roomRef,{...world,members,expiresAtMs,revision:next.revision});
           if(shouldRenew)tx.set(codeRef,{roomId,status:'active',expiresAtMs});
           return next;
         });
@@ -416,7 +427,8 @@ function createHandler({
             throw err('隊伍已開始探索，不能取消集結；可離開隊伍結束本次探索',409);
           const members=Object.fromEntries(Object.entries(membersOf(room))
             .map(([key,m])=>{
-              const {position,explorationStamina,moveSeq,lastMove,...previous}=m;
+              const {position,explorationStamina,moveSeq,lastMove,
+                battleHealth,battleMaxHealth,downed,lastDamage,...previous}=m;
               return [key,{...previous,ready:false}];
             }));
           const clockState={battleClockVersion:null,battleStartedAtMs:null,
@@ -498,7 +510,8 @@ function createHandler({
           const hostUid=room.hostUid===uid?(remaining[0]?.uid||null):room.hostUid;
           if(room.status==='assembled'){
             for(const [key,member] of Object.entries(members)){
-              const {position,explorationStamina,moveSeq,lastMove,...previous}=member;
+              const {position,explorationStamina,moveSeq,lastMove,
+                battleHealth,battleMaxHealth,downed,lastDamage,...previous}=member;
               members[key]={...previous,ready:false};
             }
           }
