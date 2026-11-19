@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-ch1-symbol-image-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文體、修辭與論證原理明確，附可核查的文本依據",
+      "question": {
+        "q": "閱讀自編短文：「父親退役後，仍把那雙磨平鞋底的工作靴放在門邊。每當孩子想放棄，他便指著鞋說：『路是一步一步走出來的。』」工作靴的象徵意義最貼近何者？",
+        "correct": "持續勞動與累積經驗形成的堅持",
+        "wrong": [
+          "工作靴已舊，代表父親想完全忘記過去",
+          "鞋底磨損表示孩子不必再努力前進",
+          "靴子的主要功能是顯示父親收藏鞋子的數量"
+        ],
+        "exp": "磨平的鞋底對應長年行走與勞作，「一步一步」使它成為堅持與累積的具體象徵。",
+        "subject": "國文",
+        "sub_topic": "象徵、意象與修辭",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-象徵、意象與修辭",
+        "template_id": "ref-20261119-b9-ch1-symbol-image-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch1-symbol-image-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文體、修辭與論證原理明確，附可核查的文本依據",
+      "question": {
+        "q": "自編詩句：「黃昏把長街摺成一封信／路燈一盞盞替它封口。」這兩句最明顯運用何種修辭方式？",
+        "correct": "擬人與譬喻，將黃昏及路燈寫成會寄信的行動者",
+        "wrong": [
+          "只使用精確數據的客觀說明",
+          "頂真，以前句最後一詞作後句開頭",
+          "設問，以自問自答表達觀點"
+        ],
+        "exp": "黃昏「摺」長街、路燈「封口」，將自然景物人格化；又把長街比作一封信，形成譬喻。",
+        "subject": "國文",
+        "sub_topic": "象徵、意象與修辭",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-象徵、意象與修辭",
+        "template_id": "ref-20261119-b9-ch1-symbol-image-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch1-symbol-image-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文體、修辭與論證原理明確，附可核查的文本依據",
+      "question": {
+        "q": "閱讀自編短文：「他離鄉十年，回到巷口仍先聽見修鞋匠敲鞋釘的聲響。老店已換了招牌，敲擊聲卻讓他辨認出回家的方向。」其中「敲鞋釘的聲響」主要有何作用？",
+        "correct": "以聽覺意象連結故鄉記憶，使熟悉感跨越環境變化",
+        "wrong": [
+          "證明巷口建築外觀十年來完全沒有改變",
+          "以聲音說明主角已不記得家鄉",
+          "只為提供修鞋機器的技術規格"
+        ],
+        "exp": "聲響在老店招牌改變後仍被辨認出來，凸顯聲音喚回熟悉的故鄉記憶。",
+        "subject": "國文",
+        "sub_topic": "象徵、意象與修辭",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-象徵、意象與修辭",
+        "template_id": "ref-20261119-b9-ch1-symbol-image-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
