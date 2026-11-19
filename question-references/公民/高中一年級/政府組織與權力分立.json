@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-civ1-separation-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "某民主國家的國會質詢行政部門官員，要求說明政策執行及預算使用。此制度最主要體現何種原理？",
+        "correct": "立法機關對行政權的監督制衡",
+        "wrong": [
+          "行政權完全取代司法權",
+          "司法機關直接負責全部行政預算編列",
+          "所有政策一律只由民間企業制定"
+        ],
+        "exp": "民意機關透過質詢、審查預算等制度監督行政部門，有助於避免權力過度集中。",
+        "subject": "公民",
+        "sub_topic": "政府組織與權力分立",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政府組織與權力分立",
+        "template_id": "ref-20261119-b3-civ1-separation-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-civ1-separation-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "在民主憲政體制中，若政府決策侵害人民合法權益，讓獨立法院依法審查最直接有助於哪項目標？",
+        "correct": "以司法審查保障人民權利並限制公權力",
+        "wrong": [
+          "使法院直接代替民意機關通過所有法律",
+          "使行政機關不必說明任何政策理由",
+          "使法官依自己的偏好制定每一項行政措施"
+        ],
+        "exp": "司法機關依法律裁判爭議、審查公權力行使，能提供權利救濟並形成權力制衡。",
+        "subject": "公民",
+        "sub_topic": "政府組織與權力分立",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政府組織與權力分立",
+        "template_id": "ref-20261119-b3-civ1-separation-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-civ1-separation-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "某政治制度使同一位首長可制定法律、執行法律並對爭議作最終裁判，而且完全沒有外部審查。最主要的風險為何？",
+        "correct": "權力過度集中，缺乏相互制衡",
+        "wrong": [
+          "各機關職權分工更加獨立",
+          "司法審查與人民救濟必然加強",
+          "政策決策因此不可能發生任何錯誤"
+        ],
+        "exp": "權力分立與制衡用來降低權力集中帶來的濫權風險；立法、行政、司法皆受同一人無限掌控會削弱監督。",
+        "subject": "公民",
+        "sub_topic": "政府組織與權力分立",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政府組織與權力分立",
+        "template_id": "ref-20261119-b3-civ1-separation-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
