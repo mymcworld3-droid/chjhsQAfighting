@@ -9,7 +9,8 @@ const cameraSource=fs.readFileSync(path.join(__dirname,'../public/cultivation/du
 const Camera=new Function(cameraSource+'\nreturn {initialCamera,geometry,visibleTiles,zoomAt,pan,focusOn};')();
 const painterSource=fs.readFileSync(path.join(__dirname,'../public/cultivation/dungeon-map-painter.js'),'utf8')
   .replace(/^import .*$/gm,'').replace(/^export /gm,'');
-const painter=new Function('Camera',painterSource+'\nreturn {BIOMES,hashCell,drawWorld,drawMinimap};')(Camera);
+const {loadDungeonPainter}=require('./dungeon-painter-loader.cjs');
+const painter=loadDungeonPainter(Camera);
 function fakeCanvas(){
   const operations=new Map();
   const count=name=>operations.set(name,(operations.get(name)||0)+1);

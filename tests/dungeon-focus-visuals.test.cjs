@@ -19,9 +19,8 @@ const painterSource=read('public/cultivation/dungeon-map-painter.js');
 const camSource=read('public/cultivation/dungeon-map-camera.js');
 const camera=new Function(camSource.replace(/^export /gm,'')+
   '\nreturn {initialCamera,geometry,visibleTiles};')();
-const painter=new Function('Camera',
-  painterSource.replace(/^import .*$/gm,'').replace(/^export /gm,'')+
-  '\nreturn {drawWorld};')(camera);
+const {loadDungeonPainter}=require('./dungeon-painter-loader.cjs');
+const painter=loadDungeonPainter(camera);
 
 test('focus count uses server snapshot only and clamps six-cast duration',()=>{
   assert.equal(dungeonFocusCharges(null),0);

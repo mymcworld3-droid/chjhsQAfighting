@@ -12,8 +12,8 @@ const Camera=new Function(cameraSource+
 const painterSource=fs.readFileSync(path.join(__dirname,
   '../public/cultivation/dungeon-map-painter.js'),'utf8')
   .replace(/^import .*$/gm,'').replace(/^export /gm,'');
-const Painter=new Function('Camera',painterSource+
-  '\nreturn {drawWorld,drawMinimap,BEAST_COLORS};')(Camera);
+const {loadDungeonPainter}=require('./dungeon-painter-loader.cjs');
+const Painter=loadDungeonPainter(Camera);
 const viewerSource=fs.readFileSync(path.join(__dirname,
   '../public/cultivation/dungeon-map-view.js'),'utf8')
   .replace(/^import .*$/gm,'').replace(/^export /gm,'');

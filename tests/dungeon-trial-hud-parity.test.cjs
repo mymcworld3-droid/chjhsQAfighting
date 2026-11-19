@@ -7,8 +7,8 @@ const Camera=new Function(cameraSource+
   '\nreturn {geometry,visibleTiles,lockToPlayer,mapPoint};')();
 const painterSource=read('public/cultivation/dungeon-map-painter.js')
   .replace(/^import .*$/gm,'').replace(/^export /gm,'');
-const {drawWorld}=new Function('Camera',painterSource+
-  '\nreturn {drawWorld};')(Camera);
+const {loadDungeonPainter}=require('./dungeon-painter-loader.cjs');
+const {drawWorld}=loadDungeonPainter(Camera);
 const map={mode:'dungeon',layoutVersion:1,biome:'ruins',
   width:21,height:15,tiles:Array(21*15).fill(1),arena:'exploration',
   spawn:{x:10,y:7},spawnPads:[{x:10,y:7}],
