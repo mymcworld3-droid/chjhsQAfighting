@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-m2-trigsum-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "已知α、β均為第一象限角，sinα=3/5、cosα=4/5、sinβ=5/13、cosβ=12/13，則sin(α+β)為何？",
+        "correct": "56/65",
+        "wrong": [
+          "36/65",
+          "20/65",
+          "63/65"
+        ],
+        "exp": "sin(α+β)=sinαcosβ+cosαsinβ=(3×12+4×5)/(5×13)=56/65。",
+        "subject": "數學",
+        "sub_topic": "和差角公式、正餘弦疊合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-和差角公式、正餘弦疊合",
+        "template_id": "ref-20261119-b6-m2-trigsum-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m2-trigsum-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "cos75°的精確值為何？",
+        "correct": "(√6−√2)/4",
+        "wrong": [
+          "(√6+√2)/4",
+          "(√3−1)/2",
+          "(√2−√6)/4"
+        ],
+        "exp": "cos(45°+30°)=cos45°cos30°−sin45°sin30°=(√6−√2)/4。",
+        "subject": "數學",
+        "sub_topic": "和差角公式、正餘弦疊合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-和差角公式、正餘弦疊合",
+        "template_id": "ref-20261119-b6-m2-trigsum-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m2-trigsum-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "函數y=3sinx+4cosx可寫成Rsin(x+φ)，其中R>0。R的值為何？",
+        "correct": "5",
+        "wrong": [
+          "7",
+          "1",
+          "12"
+        ],
+        "exp": "展開Rsin(x+φ)=Rcosφ sinx+Rsinφ cosx，比較係數得R²=3²+4²=25，所以R=5。",
+        "subject": "數學",
+        "sub_topic": "和差角公式、正餘弦疊合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-和差角公式、正餘弦疊合",
+        "template_id": "ref-20261119-b6-m2-trigsum-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
