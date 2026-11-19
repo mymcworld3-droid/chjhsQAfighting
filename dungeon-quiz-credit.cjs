@@ -5,11 +5,12 @@
 const MAX_STAMINA=100,RIGHT=4,WRONG=1;
 const fail=(msg,status=409)=>Object.assign(new Error(msg),{status});
 const validIndex=n=>Number.isSafeInteger(n)&&n>=1&&n<=1000000;
-function credit(room,uid,source,questionId){
+function credit(room,uid,source,questionId,roomId){
   if(room?.mode!=='dungeon'||room?.status!=='assembled'||!room.members?.[uid])
     throw fail('副本已結束或你不是有效隊員',403);
-  const sessionKey=room.id+':'+room.assembledAtMs;
-  if(source?.sessionKey!==sessionKey||source?.roomId!==room.id)
+  const id=roomId||room.id;
+  const sessionKey=id+':'+room.assembledAtMs;
+  if(source?.sessionKey!==sessionKey||source?.roomId!==id)
     throw fail('答題紀錄不屬於這一場副本',403);
   if(typeof questionId!=='string'||questionId.length>120)
     throw fail('答題序號無效',400);
