@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-chem3-organic-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "乙烯CH₂=CH₂與氫氣H₂在適當催化條件下反應，生成乙烷CH₃−CH₃。此反應最適合歸類為何種反應？",
+        "correct": "加成反應",
+        "wrong": [
+          "取代反應",
+          "聚合反應",
+          "酯化反應"
+        ],
+        "exp": "H₂加到碳碳雙鍵的兩個碳上，雙鍵轉為單鍵，產生乙烷，屬不飽和烴的加成反應。",
+        "subject": "化學",
+        "sub_topic": "有機反應",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-有機反應",
+        "template_id": "ref-20261119-b3-chem3-organic-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-chem3-organic-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "乙醇CH₃CH₂OH在適當氧化條件下，若完全氧化成對應的羧酸，主要生成哪一種有機物？",
+        "correct": "乙酸CH₃COOH",
+        "wrong": [
+          "甲烷CH₄",
+          "乙烯CH₂=CH₂",
+          "乙酸乙酯CH₃COOCH₂CH₃"
+        ],
+        "exp": "乙醇為一級醇，在適當條件下可先氧化為乙醛，再氧化為乙酸；題目指定氧化成羧酸。",
+        "subject": "化學",
+        "sub_topic": "有機反應",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-有機反應",
+        "template_id": "ref-20261119-b3-chem3-organic-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-chem3-organic-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "乙酸CH₃COOH與乙醇CH₃CH₂OH在酸催化、加熱條件下發生酯化，主要生成哪一種酯？",
+        "correct": "乙酸乙酯",
+        "wrong": [
+          "甲酸甲酯",
+          "丙酸乙酯",
+          "乙酸甲酯"
+        ],
+        "exp": "酯化為羧酸和醇反應，乙酸提供CH₃COO−部分、乙醇提供−CH₂CH₃部分，生成CH₃COOCH₂CH₃及水。",
+        "subject": "化學",
+        "sub_topic": "有機反應",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-有機反應",
+        "template_id": "ref-20261119-b3-chem3-organic-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
