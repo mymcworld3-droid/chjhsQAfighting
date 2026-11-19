@@ -985,6 +985,15 @@ html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.b
   color:#c5cdbb!important;font:400 12px/1.35 system-ui,sans-serif!important;
   pointer-events:none;
 }
+/* HP is visually rendered only beneath avatars; this status is for
+   assistive technologies and never revives the retired header health cards. */
+#dungeon-map-view.tc-quarter-layout .dm-hud-live-status{
+  position:absolute!important;
+  width:1px!important;height:1px!important;overflow:hidden!important;
+  padding:0!important;margin:0!important;border:0!important;
+  white-space:nowrap!important;clip-path:inset(50%)!important;
+  pointer-events:none!important;
+}
 #dungeon-map-view.tc-quarter-layout .dm-hidden-contract,
 #dungeon-map-view.tc-quarter-layout .dm-hidden-contract *{
   display:none!important;pointer-events:none!important;
