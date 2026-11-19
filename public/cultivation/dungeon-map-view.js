@@ -218,6 +218,8 @@ class DungeonMapView{
           detail:{room:result.room}
         }));
       }
+      // Explicit player movement takes precedence over observing a beast.
+      this.followBeast=false;
       if(!this.follow){
         this.follow=true;
         this.camera=Camera.zoomAt(this.camera,Math.max(this.camera.zoom,2.6),
