@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-en1-grammarcontext-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "The students ______ their posters before the exhibition opened yesterday.",
+        "correct": "had finished",
+        "wrong": [
+          "have finished",
+          "will finish",
+          "are finishing"
+        ],
+        "exp": "Completing the posters happened before another past event ('opened yesterday'), so the past perfect is appropriate.",
+        "subject": "英文",
+        "sub_topic": "語法與語意線索",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "eng-高中一年級-語法與語意線索",
+        "template_id": "ref-20261119-b8-en1-grammarcontext-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-grammarcontext-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "The new water filters were installed last week; ______, the school will test the water quality again before allowing drinking.",
+        "correct": "however",
+        "wrong": [
+          "therefore",
+          "for example",
+          "similarly"
+        ],
+        "exp": "The sentence contrasts completed installation with the remaining need for verification; 'however' marks that caution.",
+        "subject": "英文",
+        "sub_topic": "語法與語意線索",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "eng-高中一年級-語法與語意線索",
+        "template_id": "ref-20261119-b8-en1-grammarcontext-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-grammarcontext-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "Neither the teacher nor the students ______ willing to cancel the outdoor activity without checking the updated forecast.",
+        "correct": "are",
+        "wrong": [
+          "is",
+          "was",
+          "be"
+        ],
+        "exp": "With 'neither...nor', agreement follows the nearer subject 'the students' (plural), so the present-tense verb is 'are'.",
+        "subject": "英文",
+        "sub_topic": "語法與語意線索",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "eng-高中一年級-語法與語意線索",
+        "template_id": "ref-20261119-b8-en1-grammarcontext-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
