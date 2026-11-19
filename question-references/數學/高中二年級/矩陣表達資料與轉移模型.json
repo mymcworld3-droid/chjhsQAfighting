@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-m2-markov-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "兩群人數列向量為[[80],[40]]，每期A組25%轉入B、B組25%轉入A。經過一期後A、B人數分別為何？",
+        "correct": "[[70],[50]]",
+        "wrong": [
+          "[[60],[60]]",
+          "[[80],[40]]",
+          "[[90],[30]]"
+        ],
+        "exp": "新A人數=0.75×80+0.25×40=70，新B人數=0.25×80+0.75×40=50，合計仍為120。",
+        "subject": "數學",
+        "sub_topic": "矩陣表達資料與轉移模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-矩陣表達資料與轉移模型",
+        "template_id": "ref-20261119-b6-m2-markov-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m2-markov-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "轉移矩陣P=[[0.6,0.2],[0.4,0.8]]作用於列向量[[30],[20]]，結果為何？",
+        "correct": "[[22],[28]]",
+        "wrong": [
+          "[[24],[26]]",
+          "[[18],[12]]",
+          "[[30],[20]]"
+        ],
+        "exp": "矩陣乘積第一分量0.6×30+0.2×20=22，第二分量0.4×30+0.8×20=28。",
+        "subject": "數學",
+        "sub_topic": "矩陣表達資料與轉移模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-矩陣表達資料與轉移模型",
+        "template_id": "ref-20261119-b6-m2-markov-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m2-markov-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "A組每期有30%轉到B組，B組每期有20%轉到A組。若狀態向量為[[A人數],[B人數]]的列向量，對應的轉移矩陣為何？",
+        "correct": "[[0.7,0.2],[0.3,0.8]]",
+        "wrong": [
+          "[[0.7,0.3],[0.2,0.8]]",
+          "[[0.3,0.2],[0.7,0.8]]",
+          "[[0.7,0.2],[0.8,0.3]]"
+        ],
+        "exp": "A保留70%、流向B30%；B流向A20%、保留80%，故以原組作欄，得到矩陣[[0.7,0.2],[0.3,0.8]]。",
+        "subject": "數學",
+        "sub_topic": "矩陣表達資料與轉移模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-矩陣表達資料與轉移模型",
+        "template_id": "ref-20261119-b6-m2-markov-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
