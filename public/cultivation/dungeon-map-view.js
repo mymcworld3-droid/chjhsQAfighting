@@ -55,12 +55,6 @@ class DungeonMapView{
       style.href='/styles/dungeon-map-view.css?v=20261119-focus-aura-v2';
       document.head.append(style);
     }
-    if(!document.getElementById('dungeon-quarter-controls-style')){
-      const stylesheet=document.createElement('link');
-      stylesheet.id='dungeon-quarter-controls-style';stylesheet.rel='stylesheet';
-      stylesheet.href='/styles/dungeon-quarter-controls.css?v=20261119-focus-gold-v2';
-      document.head.append(stylesheet);
-    }
     if(!document.getElementById('dungeon-trial-wheel-style')){
       const link=document.createElement('link');
       link.id='dungeon-trial-wheel-style';link.rel='stylesheet';
@@ -72,84 +66,77 @@ class DungeonMapView{
     root.classList.add('dm-quarter-layout','tc-quarter-layout');
     root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');
     root.setAttribute('aria-label','合作副本即時戰場');
-    root.innerHTML='<div class="dm-shell">'+
-      '<header class="dm-head"><div><small>青雲問道 · 秘境探勘</small>'+
-      '<h2 data-dm-title>秘境地圖</h2>'+
-      '<p class="dm-objective-status" data-dm-objective aria-live="polite">'+
-      '尋找守鑰靈獸</p>'+
-      '<div class="dm-boss-health" data-dm-boss-health hidden>'+
-      '<div><strong data-dm-boss-label>玄炎鎮殿獸</strong>'+
-      '<span data-dm-boss-value>900/900</span></div>'+
-      '<div class="dm-boss-meter"><i data-dm-boss-meter></i></div>'+
-      '<div class="dm-boss-shield" data-dm-boss-shield hidden>'+
-      '<span>玄甲護盾 <em data-dm-shield-value>180/180</em></span>'+
-      '<div class="dm-shield-meter"><i data-dm-shield-meter></i></div></div>'+
-      '<small class="dm-teamwork-hint" data-dm-teamwork-hint aria-live="polite"></small></div>'+
-      '</div><div class="dm-head-actions">'+
-      '<span class="dm-battle-clock" data-dm-clock role="timer" aria-live="off">等待集結</span>'+
-      '<button type="button" data-dm="close" aria-label="返回合作副本隊伍">返回隊伍 <span aria-hidden="true">×</span></button></div></header>'+
-      '<div class="dm-stage" data-dm-stage>'+
-      '<canvas class="dm-world" data-dm-world tabindex="0" aria-label="即時戰場。點選灰色地格移動，點選紅色地格使用選定技能；不可拖曳地圖，角色固定中央；點選地格操作、長按查看靈獸資料。"></canvas>'+ 
-      '<div class="dm-effect-layer" data-dm-effects aria-hidden="true"></div>'+
-       '<div class="dm-action-feedback" data-dm-action-feedback role="status" aria-live="polite" hidden></div>'+
-      '<div class="dm-message" data-dm-message role="status" aria-live="polite">正在取得副本地圖…</div>'+
-      '<aside class="dm-biome" data-dm-biome-box hidden><small>秘境地貌</small>'+
-      '<strong data-dm-biome>—</strong><span data-dm-summary></span></aside>'+
-      '<div class="dm-victory-panel" data-dm-victory hidden>'+
-      '<strong>✦ 玄炎鎮殿 · 全隊勝利</strong>'+
-      '<p>首領已擊敗！每位參戰隊員可領取 120 靈石與 3 修為。</p>'+
-      '<button type="button" data-dm="claim-victory" data-dm-claim>領取本場獎勵</button>'+
-      '<small data-dm-reward-status role="status" aria-live="polite">'+
-      '每場每人限領一次；現在或離隊後，都能從副本入口領取。</small></div>'+
-      '<div class="dm-overview" data-dm-overview hidden aria-hidden="true">'+
-      '<canvas data-dm-minimap></canvas><span>全域縮圖</span></div>'+
-      '<div class="dm-controls" aria-label="地圖視角控制">'+
-      '<button type="button" data-dm="plus" aria-label="放大地圖">＋</button>'+
-      '<button type="button" data-dm="minus" aria-label="縮小地圖">－</button>'+
-      '<button type="button" data-dm="fit" title="縮放至全圖">全圖</button>'+
-      '<button type="button" data-dm="focus" aria-pressed="false" title="定位預留出生點">定位</button>'+
-      '<button type="button" data-dm="route" aria-pressed="false" title="顯示路線">路線</button>'+
-      '<button type="button" data-dm="beasts" aria-expanded="false">靈獸 0</button>'+
-      '</div><aside class="dm-inspector" data-dm-inspector hidden>'+
-      '<div class="dm-inspector-head"><strong>靈獸動向</strong>'+
-      '<button type="button" data-dm="close-beasts" aria-label="關閉靈獸資料">×</button></div>'+
-      '<p data-dm-beast-details role="status">點選靈獸查看行動狀態</p>'+
-      '<div class="dm-beast-list" data-dm-beast-list></div>'+
-      '<small>紅色方格表示即將遭到攻擊；預告後移出範圍即可閃避。</small></aside>'+
-      '<div class="dm-movement" data-dm-movement hidden>'+
-      '<div class="dm-energy"><span>探索體力</span><strong data-dm-energy>10</strong>'+
-      '<span class="dm-health" data-dm-health>生命 100/100</span>'+
-      '<span data-dm-location>（待命）</span></div>'+
-      '<div class="dm-threat" data-dm-threat role="status" aria-live="polite" hidden></div>'+
-      '<div class="dm-team-status" data-dm-team-status aria-label="隊友生命狀態"></div>'+
-      '<div class="dm-rescue-actions" data-dm-rescues hidden aria-live="polite"></div>'+
-      '<div class="dm-guard-actions" data-dm-guards hidden aria-label="首領戰掩護"></div>'+
-      '<div class="dm-dpad" role="group" aria-label="角色移動，一次一格">'+
-      '<button type="button" data-dm="up" aria-label="向上移動一格">↑</button>'+
-      '<button type="button" data-dm="left" aria-label="向左移動一格">←</button>'+
-      '<button type="button" data-dm="down" aria-label="向下移動一格">↓</button>'+
-      '<button type="button" data-dm="right" aria-label="向右移動一格">→</button>'+
-      '</div><button type="button" class="dm-portal-button" data-dm="portal" hidden disabled>啟動傳送門</button>'+
-      '<small class="dm-portal-votes" data-dm-portal-votes hidden role="status" aria-live="polite"></small>'+ 
-      '<button type="button" class="dm-boss-entry" data-dm="enter-boss" hidden disabled>我已準備進入首領戰</button>'+
-      '<button type="button" class="dm-quiz-charge" data-dm="quiz" disabled>答題充能 · 隨時作答</button>'+ 
-      '<button type="button" class="dm-strike" data-dm="strike" disabled>選擇靈獸後攻擊 · 2 體力</button>'+ 
-       '<small data-dm-strike-alert role="status" aria-live="polite"></small>'+ 
-       '<small data-dm-move-alert role="status" aria-live="polite"></small></div>'+ 
-       '<aside class="dm-manual" data-dm-manual hidden aria-label="副本功法技能">'+
-       '<div class="dm-manual-heading"><strong>即時功法</strong><span data-dm-focus></span></div>'+
-       '<div class="dm-presets" data-dm-presets></div>'+
-       '<div class="dm-skills" data-dm-skills></div>'+
-       '<small data-dm-aim>先點擊靈獸或地圖格選擇施法目標</small>'+
-       '<small data-dm-skill-alert role="status" aria-live="polite"></small></aside>'+ 
-      '<div class="dm-legend" aria-hidden="true">'+
-      '<span>● 起點</span><span>◇ 傳送陣</span><span>◆ 守鑰靈獸</span></div></div>'+
-      '<footer class="dm-foot"><span data-dm-status>秘境地圖與多人即時戰鬥</span>'+
-      '<span data-dm-zoom>100%</span></footer></div>';
+    root.innerHTML=`<div class="dm-shell">
+  <header class="dm-head">
+    <h2 data-dm-title>合作副本</h2>
+    <div class="dm-head-actions">
+      <span class="dm-battle-clock" data-dm-clock role="timer" aria-live="off">等待集結</span>
+      <button type="button" data-dm="beasts" aria-expanded="false">靈獸</button>
+      <button type="button" data-dm="close" aria-label="收起副本戰場">收起</button>
+    </div>
+  </header>
+  <div class="dm-stage" data-dm-stage>
+    <canvas class="dm-world" data-dm-world tabindex="0" aria-label="合作副本。玩家固定中央，禁止拖曳與縮放。點選灰格移動、紅格攻擊，長按查看靈獸。"></canvas>
+    <div class="dm-effect-layer" data-dm-effects aria-hidden="true"></div>
+    <div class="dm-action-feedback" data-dm-action-feedback role="status" aria-live="polite" hidden></div>
+    <div class="dm-message" data-dm-message role="status" aria-live="polite">正在取得副本地圖…</div>
+    <p class="dm-objective-status" data-dm-objective role="status" aria-live="polite">尋找守鑰靈獸</p>
+    <section class="tc-boss-hud" data-dm-boss-health data-phase="1" data-boss-kind="rock" aria-label="首領生命與戰況" hidden>
+      <div class="tc-boss-line">
+        <strong class="tc-boss-name" data-dm-boss-label>玄炎鎮殿獸</strong>
+        <span class="tc-boss-phase" data-dm-phase>第一階段</span>
+      </div>
+      <div class="tc-boss-health" data-dm-boss-progress role="progressbar" aria-label="首領生命" aria-valuemin="0" aria-valuemax="900" aria-valuenow="900">
+        <div class="tc-boss-fill" data-dm-boss-meter></div><div class="tc-boss-half" aria-hidden="true"></div>
+      </div>
+      <div class="tc-boss-subline">
+        <span class="tc-boss-intent" data-dm-teamwork-hint></span>
+        <span class="tc-boss-number" data-dm-boss-value>900 / 900</span>
+      </div>
+      <div class="dm-boss-shield" data-dm-boss-shield hidden>
+        <span>玄甲護盾 <em data-dm-shield-value>180 / 180</em></span>
+        <div class="dm-shield-meter"><i data-dm-shield-meter></i></div>
+      </div>
+    </section>
+    <div class="dm-victory-panel" data-dm-victory hidden>
+      <strong>✦ 玄炎鎮殿 · 全隊勝利</strong>
+      <p>首領已擊敗！每位參戰隊員可領取 120 靈石與 3 修為。</p>
+      <button type="button" data-dm="claim-victory" data-dm-claim>領取本場獎勵</button>
+      <small data-dm-reward-status role="status" aria-live="polite">每場每人限領一次；現在或離隊後，都能從副本入口領取。</small>
+    </div>
+    <div class="dm-tactical-actions" data-dm-movement hidden>
+      <div class="dm-threat" data-dm-threat role="status" aria-live="polite" hidden></div>
+      <div class="dm-rescue-actions" data-dm-rescues hidden aria-live="polite"></div>
+      <div class="dm-guard-actions" data-dm-guards hidden aria-label="首領戰掩護"></div>
+      <button type="button" class="dm-portal-button" data-dm="portal" hidden disabled>啟動傳送門</button>
+      <small class="dm-portal-votes" data-dm-portal-votes hidden role="status" aria-live="polite"></small>
+      <button type="button" class="dm-boss-entry" data-dm="enter-boss" hidden disabled>我已準備進入首領戰</button>
+    </div>
+    <aside class="dm-inspector" data-dm-inspector hidden aria-label="靈獸資料">
+      <div class="dm-inspector-head"><strong>靈獸動向</strong><button type="button" data-dm="close-beasts" aria-label="關閉靈獸資料">×</button></div>
+      <p data-dm-beast-details role="status">點選靈獸查看行動狀態</p>
+      <div class="dm-beast-list" data-dm-beast-list></div>
+      <small>紅色方格表示即將遭到攻擊；預告後移出範圍即可閃避。</small>
+    </aside>
+    <aside class="dm-tactical-loadout" data-dm-manual hidden aria-label="副本技能配置">
+      <div class="dm-presets" data-dm-presets></div>
+      <div class="dm-skills" data-dm-skills hidden></div>
+      <span data-dm-focus hidden></span>
+      <small data-dm-aim hidden></small>
+      <small data-dm-skill-alert hidden></small>
+    </aside>
+    <div class="dm-hidden-contract" hidden aria-hidden="true">
+      <strong data-dm-energy>10</strong>
+      <button type="button" class="dm-quiz-charge" data-dm="quiz" disabled>答題充能</button>
+      <button type="button" data-dm="strike" disabled>普通攻擊</button>
+      <small data-dm-strike-alert role="status" aria-live="polite"></small>
+      <small data-dm-move-alert role="status" aria-live="polite"></small>
+      <span data-dm-health role="status" aria-live="polite"></span>
+      <span data-dm-team-status aria-live="off"></span>
+    </div>
+  </div>
+</div>`;
     const stage=root.querySelector('[data-dm-stage]');
-    // Mirror the trial top strip and move contextual overlays into the arena.
-    stage.append(root.querySelector('[data-dm-objective]'));
-    stage.append(root.querySelector('[data-dm-boss-health]'));
     stage.insertAdjacentHTML('beforeend',dungeonTrialWheelHTML());
     // Preserve the existing one-per-action DOM controls: do not create a
     // second quiz/attack/move button with a duplicate event handler.
@@ -174,17 +161,9 @@ class DungeonMapView{
     charge.setAttribute('aria-label','答題充能，可無限次個別作答');
     root.querySelector('[data-dm-strike-slot]').append(
       root.querySelector('[data-dm="strike"]'));
-    root.querySelector('[data-dm-move-slot]').append(
-      root.querySelector('.dm-dpad'));
     document.body.append(root);
     this.root=root;this.stage=stage;
     this.canvas=root.querySelector('[data-dm-world]');
-    this.mini=root.querySelector('[data-dm-minimap]');
-    const topActions=root.querySelector('.dm-head-actions');
-    topActions.prepend(root.querySelector('[data-dm-team-status]'));
-    topActions.prepend(root.querySelector('[data-dm-health]'));
-    const beastToggle=root.querySelector('[data-dm="beasts"]');
-    topActions.prepend(beastToggle);
     this.ctx=this.canvas.getContext('2d',{alpha:false});
     // Same image atlases as 問道試煉. Images affect presentation only;
     // failed downloads leave deterministic vector terrain/markers visible.
@@ -268,10 +247,6 @@ class DungeonMapView{
     this.beastIds='';this.touchOrigins.clear();this.gestureMulti=false;
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
     this.root.hidden=false;
-    this.$('[data-dm="focus"]').setAttribute('aria-pressed','false');
-    this.$('[data-dm="route"]').setAttribute('aria-pressed','false');
-    this.$('[data-dm-biome-box]').hidden=true;
-    this.$('[data-dm-overview]').hidden=true;
     this.$('[data-dm="close"]').focus({preventScroll:true});
     if(typeof ResizeObserver==='function'){
       this.observer=new ResizeObserver(()=>this.resize());
@@ -297,12 +272,6 @@ class DungeonMapView{
       this.root.style.setProperty('--dm-accent',palette.trim);
       this.$('[data-dm-title]').textContent=map.arena==='boss'?
         '玄炎鎮殿 · 首領戰':palette.name+' · 合作副本';
-      this.$('[data-dm-biome]').textContent=palette.name;
-      this.$('[data-dm-summary]').textContent=map.arena==='boss'?
-        '四人共享戰場 · 2×2 巨獸 · '+map.width+' × '+map.height+' 格':
-        map.branchCount+' 條支線 · '+map.width+' × '+map.height+' 格';
-      this.$('[data-dm-biome-box]').hidden=true;
-      this.$('[data-dm-overview]').hidden=true;
       // Always center the player, including irregular map boundaries.
       this.follow=true;this.followBeast=false;
       this.camera=Camera.lockToPlayer(this.selfPad(),
@@ -343,8 +312,7 @@ class DungeonMapView{
     this.$('[data-dm-quarter-energy]').hidden=!active||!this.map;
     this.root.querySelectorAll('[data-dm-energy-segment]').forEach((segment,index)=>
       segment.classList.toggle('is-filled',index<energyRingFill(stamina)));
-    const p=this.selfPad(),node=this.$('[data-dm-location]');
-    if(node)node.textContent='座標 '+p.x+'，'+p.y;
+    const p=this.selfPad();
     const hp=Number.isSafeInteger(own?.battleHealth)?
       Math.max(0,own.battleHealth):100;
     const downed=own?.downed===true||hp===0;
@@ -375,9 +343,6 @@ class DungeonMapView{
         return String(m.name||'修士').slice(0,10)+' '+(m.downed?'倒地':value+' HP');
       }).join(' · ');
     }
-    this.root?.querySelectorAll('.dm-dpad button').forEach(button=>{
-      button.disabled=!active||!this.map||this.movePending||stamina<1||downed;
-    });
     const charge=this.$('[data-dm="quiz"]');
     if(charge){
       charge.disabled=!active||!this.map;
