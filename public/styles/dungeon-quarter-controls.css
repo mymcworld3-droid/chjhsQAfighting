@@ -1,0 +1,431 @@
+/* Real-time dungeon battlefield adopts the existing 問道試煉 full-canvas
+   layout: bottom-left jade stamina/charge quadrant and bottom-right
+   attack/movement selection quadrant. No rules, server state or skills change.
+   This sheet is loaded AFTER dungeon-map-view.css by dungeon-map-view.js. */
+#dungeon-map-view.dm-quarter-layout{
+  --dm-dial:min(30vw,44vh);
+  --dm-ink:#141b17;
+  --dm-jade:#78c894;
+  --dm-bronze:#b9a77a;
+  padding:0!important;
+  color:#e9e1c8;
+  background:var(--dm-ink);
+}
+#dungeon-map-view.dm-quarter-layout .dm-shell{
+  width:100%!important;height:100%!important;
+  max-width:none;max-height:none;
+  margin:0;border:0;border-radius:0;
+  box-shadow:none;background:var(--dm-ink);
+}
+#dungeon-map-view.dm-quarter-layout .dm-head{
+  position:relative;z-index:5;
+  padding:7px 14px;
+  background:linear-gradient(90deg,#171c17,#20251d 52%,#151a16);
+  border-bottom:1px solid #8b79544f;
+  box-shadow:0 3px 14px #090e0bb3;
+}
+#dungeon-map-view.dm-quarter-layout .dm-head h2{
+  font-size:clamp(16px,2vw,21px);line-height:1.2;
+}
+#dungeon-map-view.dm-quarter-layout .dm-head small{font-size:10px}
+#dungeon-map-view.dm-quarter-layout .dm-head-actions{
+  flex-wrap:wrap;justify-content:flex-end;gap:6px;
+}
+#dungeon-map-view.dm-quarter-layout .dm-boss-health{max-width:min(420px,55vw)}
+#dungeon-map-view.dm-quarter-layout .dm-head button{
+  min-height:35px;padding:5px 11px;white-space:nowrap;
+}
+#dungeon-map-view.dm-quarter-layout .dm-stage{
+  position:relative;flex:1;min-height:0;
+  overflow:hidden;border:0;
+  background:#1c2921;
+}
+#dungeon-map-view.dm-quarter-layout .dm-world{
+  position:absolute;inset:0;width:100%;height:100%;
+  touch-action:none!important;cursor:grab;
+}
+#dungeon-map-view.dm-quarter-layout .dm-foot{
+  min-height:22px;padding:3px 11px;
+  font-size:10px;line-height:1.3;
+}
+#dungeon-map-view.dm-quarter-layout .dm-biome{
+  top:7px;left:8px;max-width:min(210px,42vw);
+  display:flex;align-items:center;gap:0;
+  padding:4px 9px;border-radius:7px;
+  background:#10241ab8;box-shadow:none;
+  border-color:#c3b18458;
+}
+#dungeon-map-view.dm-quarter-layout .dm-biome small,
+#dungeon-map-view.dm-quarter-layout .dm-biome span{display:none}
+#dungeon-map-view.dm-quarter-layout .dm-biome strong{font-size:12px}
+#dungeon-map-view.dm-quarter-layout .dm-overview{
+  top:7px;right:8px;padding:3px 5px;z-index:2;
+  background:#0c1917bd;opacity:.9;
+}
+#dungeon-map-view.dm-quarter-layout .dm-overview canvas{
+  width:clamp(84px,10vw,117px);
+  height:clamp(63px,8vw,88px);
+}
+#dungeon-map-view.dm-quarter-layout .dm-controls{
+  top:calc(clamp(63px,8vw,88px) + 18px);
+  bottom:auto!important;right:8px!important;left:auto!important;
+  transform:none!important;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  width:min(183px,40vw);max-width:min(183px,40vw);
+  gap:4px;padding:5px;z-index:4;
+  background:#0d1c17ba;
+}
+#dungeon-map-view.dm-quarter-layout .dm-controls button{
+  min-width:0;min-height:30px;padding:4px 3px;font-size:10px;
+}
+#dungeon-map-view.dm-quarter-layout .dm-legend{display:none!important}
+/* Compact optional status/coop panel, outside the bottom circular controls. */
+#dungeon-map-view.dm-quarter-layout .dm-movement{
+  position:absolute;
+  left:8px!important;right:auto!important;
+  top:40px!important;bottom:auto!important;
+  transform:none!important;z-index:5;
+  width:min(285px,45vw);min-width:0!important;
+  max-width:min(285px,45vw)!important;
+  max-height:calc(100% - var(--dm-dial) - 52px);
+  display:flex;align-items:stretch;gap:5px;
+  overflow-y:auto;overflow-x:hidden;
+  padding:8px 9px;
+  border-color:#a0a47b80;border-radius:10px;
+  background:rgba(12,25,19,.82);
+  scrollbar-width:thin;touch-action:pan-y;
+}
+#dungeon-map-view.dm-quarter-layout .dm-energy{
+  justify-content:flex-start;gap:3px 10px;
+  text-align:left;max-width:100%;font-size:10px;
+}
+#dungeon-map-view.dm-quarter-layout .dm-energy>span:first-child{
+  display:none; /* The full stamina number now belongs to the left dial. */
+}
+#dungeon-map-view.dm-quarter-layout .dm-team-status,
+#dungeon-map-view.dm-quarter-layout .dm-threat,
+#dungeon-map-view.dm-quarter-layout .dm-guard-actions,
+#dungeon-map-view.dm-quarter-layout .dm-rescue-actions{
+  max-width:100%;width:100%;
+  text-align:left;min-width:0;
+}
+#dungeon-map-view.dm-quarter-layout .dm-guard-actions{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  max-height:none;
+}
+#dungeon-map-view.dm-quarter-layout [data-dm-strike-alert],
+#dungeon-map-view.dm-quarter-layout [data-dm-move-alert]{
+  max-width:100%;text-align:left;min-height:0;
+}
+#dungeon-map-view.dm-quarter-layout .dm-portal-button,
+#dungeon-map-view.dm-quarter-layout .dm-boss-entry{
+  min-height:34px;font-size:11px;
+}
+#dungeon-map-view.dm-quarter-layout .dm-inspector{
+  top:40px;left:calc(min(285px,45vw) + 15px);
+  width:min(260px,30vw);z-index:7;
+  max-height:calc(100% - var(--dm-dial) - 50px);
+}
+#dungeon-map-view.dm-quarter-layout .dm-victory-panel{
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  max-height:65%;z-index:24;
+}
+/* Both corners use the same quarter-circle silhouette as 問道試煉. */
+#dungeon-map-view.dm-quarter-layout .dm-quarter{
+  position:absolute;bottom:0;
+  width:var(--dm-dial);height:var(--dm-dial);
+  z-index:9;overflow:hidden;
+  isolation:isolate;
+  border:1px solid #b9a77a99;
+  box-shadow:0 -5px 22px #08100db3,inset 0 0 0 3px #101b16;
+  -webkit-user-select:none;user-select:none;
+  -webkit-touch-callout:none;
+}
+#dungeon-map-view.dm-quarter-layout .dm-quarter::after{
+  content:"";position:absolute;inset:4px;z-index:9;
+  pointer-events:none;border:1px solid #d9c79238;
+}
+#dungeon-map-view.dm-quarter-layout .dm-quarter-energy{
+  left:0;border-radius:0 100% 0 0;
+  border-color:#7bc894aa;
+  background:radial-gradient(circle at 0% 100%,#254135,#1b3027 68%,#111e19);
+}
+#dungeon-map-view.dm-quarter-layout .dm-quarter-energy::after{
+  border-radius:0 100% 0 0;
+}
+#dungeon-map-view.dm-quarter-layout .dm-energy-ring{
+  position:absolute;inset:0;width:100%;height:100%;
+  z-index:3;overflow:visible;pointer-events:none;
+}
+#dungeon-map-view.dm-quarter-layout .dm-energy-ring path{
+  fill:none;stroke-linecap:round;
+  transition:stroke .22s ease,filter .22s ease;
+}
+#dungeon-map-view.dm-quarter-layout .dm-energy-track{
+  stroke:#10281c;stroke-width:7;
+}
+#dungeon-map-view.dm-quarter-layout [data-dm-energy-segment]{
+  stroke:#506758;stroke-width:5.4;opacity:.8;
+}
+#dungeon-map-view.dm-quarter-layout [data-dm-energy-segment].is-filled{
+  stroke:#85e6a1;stroke-width:5.6;opacity:1;
+  filter:drop-shadow(0 0 1.5px #4bd77d);
+}
+#dungeon-map-view.dm-quarter-layout .dm-charge-core{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+}
+#dungeon-map-view.dm-quarter-layout .dm-quiz-charge{
+  position:absolute;left:0;bottom:0;z-index:3;
+  width:79%!important;height:79%!important;
+  min-width:0;min-height:0!important;
+  display:block!important;
+  margin:0;padding:0!important;
+  border-radius:0 100% 0 0!important;
+  border:1px solid #91ac85!important;
+  background:radial-gradient(circle at 10% 90%,#335b41,#203d2d 55%,#162a20)!important;
+  color:#f3ffdf!important;
+  box-shadow:inset 0 0 0 4px #13261b80,inset 0 0 28px #0c1f16c9;
+  opacity:1!important;pointer-events:auto;
+}
+#dungeon-map-view.dm-quarter-layout .dm-quiz-charge.is-charge-ready{
+  background:radial-gradient(circle at 12% 88%,#477a51,#285539 57%,#193a29)!important;
+  border-color:#a1d6a7!important;
+  animation:dmChargePulse 1.75s ease-in-out infinite;
+}
+#dungeon-map-view.dm-quarter-layout .dm-quiz-charge:disabled{
+  opacity:.55!important;animation:none!important;
+}
+@keyframes dmChargePulse{
+  0%,100%{filter:brightness(1) drop-shadow(0 0 2px #4dd18c50)}
+  50%{filter:brightness(1.15) drop-shadow(0 0 9px #46db88a3)}
+}
+#dungeon-map-view.dm-quarter-layout .dm-energy-bolt{
+  position:absolute;top:12%;left:20%;
+  width:29%;height:42%;pointer-events:none;
+  filter:drop-shadow(0 1px 4px #90e8a060);
+}
+#dungeon-map-view.dm-quarter-layout .dm-energy-bolt path{
+  fill:#d6ffe3;stroke:#1c6943;stroke-width:2;
+}
+#dungeon-map-view.dm-quarter-layout .dm-quiz-charge strong{
+  position:absolute;bottom:29%;right:15%;
+  font:600 clamp(23px,3.3vw,44px)/1 system-ui,sans-serif;
+  color:#edf5dc;text-shadow:0 2px 5px #092516;
+  pointer-events:none;
+}
+#dungeon-map-view.dm-quarter-layout .dm-quiz-charge>span{
+  position:absolute;bottom:7%;left:7%;width:82%;
+  color:#eff8e6;text-align:center;
+  font:650 clamp(9px,1.2vw,13px)/1.1 system-ui,sans-serif;
+  pointer-events:none;
+}
+/* Right-side sliding choice (attack/move) with a smaller inner action layer. */
+#dungeon-map-view.dm-quarter-layout .dm-quarter-action{
+  right:0;border-radius:100% 0 0 0;
+  background:radial-gradient(circle at 100% 100%,#17251e,#24362b 70%,#17251d);
+  touch-action:none;
+}
+#dungeon-map-view.dm-quarter-layout .dm-quarter-action::after{
+  border-radius:100% 0 0 0;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-tabs{
+  position:absolute;inset:0;z-index:2;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-tabs button{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  min-width:0;min-height:0!important;
+  padding:0!important;margin:0;
+  border:0;border-radius:0;
+  background:linear-gradient(135deg,#36493a,#1c3025)!important;
+  color:#e9dbc0!important;
+  font:700 clamp(11px,1.3vw,18px)/1.2 "Noto Serif TC",serif!important;
+  -webkit-mask-image:radial-gradient(circle at 100% 100%,transparent 0 65%,#000 66% 100%);
+  mask-image:radial-gradient(circle at 100% 100%,transparent 0 65%,#000 66% 100%);
+  touch-action:none;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-tabs [data-dm="wheel-attack"]{
+  clip-path:polygon(100% 0,100% 100%,28% 28%,42% 12%,58% 0);
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-tabs [data-dm="wheel-move"]{
+  clip-path:polygon(0 100%,100% 100%,28% 28%,12% 42%,0 58%);
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-tabs button[aria-pressed="true"]{
+  background:linear-gradient(135deg,#5e775d,#294334)!important;
+  color:#fff4d6!important;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-tabs button span{
+  position:absolute;white-space:nowrap;pointer-events:none;
+  text-shadow:0 1px 4px #122318;
+}
+#dungeon-map-view.dm-quarter-layout [data-dm="wheel-attack"] span{
+  right:9%;top:29%;
+}
+#dungeon-map-view.dm-quarter-layout [data-dm="wheel-move"] span{
+  left:13%;bottom:26%;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-select-arc{
+  position:absolute;inset:0;z-index:5;
+  pointer-events:none;
+  -webkit-mask-image:radial-gradient(circle at 100% 100%,transparent 0 67%,#000 68% 100%);
+  mask-image:radial-gradient(circle at 100% 100%,transparent 0 67%,#000 68% 100%);
+}
+#dungeon-map-view.dm-quarter-layout [data-dm-wheel][data-mode="attack"] .dm-wheel-select-arc{
+  background:conic-gradient(from 180deg at 100% 100%,
+    transparent 0deg 46deg,#e0c38865 47deg 89deg,transparent 90deg 360deg);
+}
+#dungeon-map-view.dm-quarter-layout [data-dm-wheel][data-mode="move"] .dm-wheel-select-arc{
+  background:conic-gradient(from 180deg at 100% 100%,
+    #a9dbad65 0deg 43deg,transparent 44deg 360deg);
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-core{
+  position:absolute;right:4%;bottom:3%;
+  width:64%;height:61%;z-index:6;
+  display:flex;flex-direction:column;
+  justify-content:flex-end;gap:3px;
+  pointer-events:none;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-core[hidden]{display:none!important}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-strike-slot,
+#dungeon-map-view.dm-quarter-layout .dm-wheel-skills{
+  display:grid;gap:3px;width:100%;min-height:0;
+  pointer-events:none;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-skills{
+  max-height:100%;overflow-y:auto;scrollbar-width:none;
+  align-content:end;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-core button{
+  display:block;width:100%;min-height:28px;
+  padding:4px 3px;font:700 clamp(8px,1vw,12px)/1.15 system-ui,"Noto Sans TC",sans-serif;
+  border-radius:7px;border:1px solid #89b48d;
+  background:#274b37;color:#e6f3dc;
+  overflow:hidden;text-overflow:ellipsis;
+  pointer-events:auto;touch-action:manipulation;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-core button.is-focus-empowered{
+  color:#ffebb5;border-color:#e3c278;
+  background:linear-gradient(110deg,#6a592b,#344632);
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-core .dm-strike{
+  background:#57462b;border-color:#d2b16f;color:#f8d9a0;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-core .dm-dpad{
+  width:100%;height:100%;min-width:0;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));gap:3px;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-core-move [data-dm-move-slot]{
+  display:block;width:100%;height:100%;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-core .dm-dpad button{
+  min-width:0;min-height:0;
+  padding:0;font-size:clamp(15px,1.9vw,25px);
+  background:#33513c;border-color:#85a78d;
+  text-align:center;
+}
+#dungeon-map-view.dm-quarter-layout .dm-wheel-core .dm-dpad button:active:not(:disabled){
+  background:#638a65;
+}
+#dungeon-map-view.dm-quarter-layout .dm-loadout-toggle{
+  position:absolute;right:7px;bottom:calc(var(--dm-dial) + 6px);
+  z-index:7;min-height:31px;padding:5px 9px;
+  font-size:11px;background:#243b2c;border-color:#91a579;
+}
+#dungeon-map-view.dm-quarter-layout .dm-loadout-toggle.is-open{
+  color:#fde8a3;background:#405c37;
+}
+#dungeon-map-view.dm-quarter-layout .dm-manual{
+  right:7px!important;left:auto!important;
+  bottom:calc(var(--dm-dial) + 42px)!important;
+  width:min(240px,40vw)!important;
+  max-height:min(42vh,calc(100% - var(--dm-dial) - 55px));
+  z-index:8;overflow-y:auto;
+  transform:none;box-shadow:0 5px 24px #06140fcc;
+}
+#dungeon-map-view.dm-quarter-layout .dm-manual [data-dm-skills]{
+  display:none!important; /* Skills already appear in the right dial. */
+}
+#dungeon-map-view.dm-quarter-layout .dm-manual [data-dm-aim]{
+  font-size:10px;
+}
+@media(orientation:portrait){
+  #dungeon-map-view.dm-quarter-layout{--dm-dial:min(50vw,31vh)}
+  #dungeon-map-view.dm-quarter-layout .dm-wheel-tabs button{
+    font-size:clamp(10px,2.8vw,15px)!important;
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-wheel-core button{
+    font-size:clamp(8px,2.05vw,11px);
+    min-height:26px;
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-wheel-core .dm-dpad button{
+    font-size:clamp(15px,4vw,23px);
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-quiz-charge strong{
+    font-size:clamp(22px,5.8vw,38px);
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-quiz-charge>span{
+    font-size:clamp(9px,2.2vw,12px);
+  }
+}
+@media(max-width:720px){
+  #dungeon-map-view.dm-quarter-layout .dm-head{padding:5px 8px;gap:7px}
+  #dungeon-map-view.dm-quarter-layout .dm-head small{display:none}
+  #dungeon-map-view.dm-quarter-layout .dm-head h2{font-size:15px}
+  #dungeon-map-view.dm-quarter-layout .dm-head-actions{gap:4px}
+  #dungeon-map-view.dm-quarter-layout .dm-head button{
+    padding:4px 6px;min-height:32px;font-size:10px;
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-battle-clock{
+    font-size:10px;padding:3px 5px;
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-overview canvas{width:84px;height:62px}
+  #dungeon-map-view.dm-quarter-layout .dm-controls{
+    top:74px;right:6px!important;
+    width:135px;max-width:35vw;gap:3px;padding:4px;
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-controls button{
+    font-size:9px;min-height:28px;padding:3px 2px;
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-movement{
+    top:34px!important;left:6px!important;
+    width:min(210px,50vw);max-width:min(210px,50vw)!important;
+    max-height:calc(100% - var(--dm-dial) - 39px);
+    padding:5px 6px;gap:4px;
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-energy{font-size:9px}
+  #dungeon-map-view.dm-quarter-layout .dm-team-status{font-size:9px}
+  #dungeon-map-view.dm-quarter-layout .dm-biome{left:6px;top:5px;padding:3px 6px}
+  #dungeon-map-view.dm-quarter-layout .dm-biome strong{font-size:10px}
+  #dungeon-map-view.dm-quarter-layout .dm-inspector{
+    top:34px;left:auto;right:5px;
+    width:min(230px,65vw);max-height:43%;z-index:8;
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-loadout-toggle{
+    right:6px;padding:4px 7px;font-size:10px;
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-manual{
+    right:6px!important;width:min(200px,60vw)!important;
+    max-height:min(45vh,calc(100% - var(--dm-dial) - 45px));
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-foot{padding:3px 7px;font-size:9px}
+}
+@media(orientation:landscape) and (max-height:460px){
+  #dungeon-map-view.dm-quarter-layout{--dm-dial:min(29vw,47vh)}
+  #dungeon-map-view.dm-quarter-layout .dm-movement{
+    top:25px!important;max-height:calc(100% - var(--dm-dial) - 30px);
+  }
+  #dungeon-map-view.dm-quarter-layout .dm-controls{top:60px}
+  #dungeon-map-view.dm-quarter-layout .dm-overview canvas{width:75px;height:52px}
+  #dungeon-map-view.dm-quarter-layout .dm-head{padding:3px 8px}
+  #dungeon-map-view.dm-quarter-layout .dm-head h2{font-size:14px}
+  #dungeon-map-view.dm-quarter-layout .dm-loadout-toggle{min-height:28px}
+}
+@media(prefers-reduced-motion:reduce){
+  #dungeon-map-view.dm-quarter-layout .dm-quiz-charge.is-charge-ready{
+    animation:none!important;
+  }
+  #dungeon-map-view.dm-quarter-layout [data-dm-energy-segment]{
+    transition:none;
+  }
+}
