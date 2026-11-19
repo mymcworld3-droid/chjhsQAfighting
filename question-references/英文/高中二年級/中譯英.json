@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-translation-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "Choose the best translation of「雖然這項計畫降低了初期成本，但仍須考慮後續維護費用。」",
+        "correct": "Although the plan reduced initial costs, future maintenance expenses still need to be considered.",
+        "wrong": [
+          "Because the plan increased initial costs, future maintenance will not be needed.",
+          "Although the plan reduced maintenance costs, its initial expense must be ignored.",
+          "The plan reduced initial costs, so all future maintenance expenses have disappeared."
+        ],
+        "exp": "Although...still...保留「雖然……但仍……」的讓步關係；initial costs是初期成本，future maintenance expenses是後續維護費用。",
+        "subject": "英文",
+        "sub_topic": "中譯英",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-中譯英",
+        "template_id": "ref-20261119-b7-eng2-translation-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-translation-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "Choose the best translation of「學生完成安全訓練後，才可以使用實驗室。」",
+        "correct": "Students may not use the laboratory until they have completed safety training.",
+        "wrong": [
+          "Students may use the laboratory before completing safety training.",
+          "Students must stop using the laboratory once they have completed safety training.",
+          "Students need not complete safety training if the laboratory is available."
+        ],
+        "exp": "Not...until正確表達「直到……才」，並維持完成安全訓練為開始使用實驗室之前提的意思。",
+        "subject": "英文",
+        "sub_topic": "中譯英",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-中譯英",
+        "template_id": "ref-20261119-b7-eng2-translation-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-translation-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "Choose the best translation of「如果市政府去年有提前通知居民，施工造成的不便或許就能減少。」",
+        "correct": "If the city government had notified residents earlier last year, the disruption caused by construction might have been reduced.",
+        "wrong": [
+          "If the city government will notify residents last year, construction is reduced.",
+          "Because the city government notified residents last year, construction caused no disruption.",
+          "If residents had notified the city government last year, the construction would have been canceled."
+        ],
+        "exp": "針對去年未實現的假設，if子句採had+過去分詞，主要子句採might have+過去分詞；需保留通知方向與可能減少不便，而非保證取消施工。",
+        "subject": "英文",
+        "sub_topic": "中譯英",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-中譯英",
+        "template_id": "ref-20261119-b7-eng2-translation-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
