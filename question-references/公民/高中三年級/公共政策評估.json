@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-cv3-policy-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "某縣試辦免費接駁車，試辦後公共運輸搭乘量增加，但同期汽油價格也上升。若要判斷接駁車政策是否造成搭乘增加，最適合哪種方法？",
+        "correct": "比較條件相近且未試辦的地區，並控制油價等共同變化",
+        "wrong": [
+          "只看試辦後的乘客總數就把所有增幅歸於接駁車",
+          "以社群按讚數作為唯一成效依據",
+          "只比較不同年份的政策名稱，不看乘客與背景資料"
+        ],
+        "exp": "前後變化可能有多個原因；適當對照組與共同因素控制可改善政策因果效果判斷。",
+        "subject": "公民",
+        "sub_topic": "公共政策評估",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-公共政策評估",
+        "template_id": "ref-20261119-b5-cv3-policy-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-cv3-policy-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "某災害預警系統上線後，預警訊息發送數量大增，但實際可撤離居民比例沒有提高。這最直接提醒評估者什麼？",
+        "correct": "政策產出增加不一定代表預期的社會結果改善",
+        "wrong": [
+          "只要訊息數量增加，居民撤離效果必然同幅增加",
+          "只應評估資訊系統購置成本而不看居民反應",
+          "預警訊息越多就可以直接認定災害不可能發生"
+        ],
+        "exp": "發出訊息是政策產出，居民能否有效避險則是結果；應區分輸出指標與真正政策目標。",
+        "subject": "公民",
+        "sub_topic": "公共政策評估",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-公共政策評估",
+        "template_id": "ref-20261119-b5-cv3-policy-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-cv3-policy-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "政策甲每年花費200萬元使事故預估減少20件；政策乙每年花費150萬元使事故預估減少10件。若其他效益與風險近似，哪個方案的每減少一件事故成本較低？",
+        "correct": "甲，每件約10萬元",
+        "wrong": [
+          "乙，每件約15萬元，因總預算較低",
+          "甲，每件約20萬元",
+          "兩者成本相同，都是每件5萬元"
+        ],
+        "exp": "政策甲每減少一件事故成本200/20=10萬元；乙為150/10=15萬元，因此甲的成本效益指標較佳。",
+        "subject": "公民",
+        "sub_topic": "公共政策評估",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-公共政策評估",
+        "template_id": "ref-20261119-b5-cv3-policy-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
