@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-m2-vectorcontext-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "沿用原觀念，條件清楚、答案唯一、含可驗證解題步驟",
+      "question": {
+        "q": "一名學生先向東走5公尺，再向北走12公尺。忽略地形，合位移大小為何？",
+        "correct": "13公尺",
+        "wrong": [
+          "17公尺",
+          "7公尺",
+          "60公尺"
+        ],
+        "exp": "東向與北向互相垂直，合位移大小為√(5²+12²)=√169=13公尺。",
+        "subject": "數學",
+        "sub_topic": "向量在生活情境的應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-向量在生活情境的應用",
+        "template_id": "ref-20261119-b8-m2-vectorcontext-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-m2-vectorcontext-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "沿用原觀念，條件清楚、答案唯一、含可驗證解題步驟",
+      "question": {
+        "q": "平面上水平力F=(6,8)牛頓，物體沿位移d=(2,−1)公尺移動。此力所作的功為何？",
+        "correct": "4焦耳",
+        "wrong": [
+          "20焦耳",
+          "−4焦耳",
+          "28焦耳"
+        ],
+        "exp": "作功W=F·d=6×2+8×(−1)=12−8=4焦耳。",
+        "subject": "數學",
+        "sub_topic": "向量在生活情境的應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-向量在生活情境的應用",
+        "template_id": "ref-20261119-b8-m2-vectorcontext-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-m2-vectorcontext-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "沿用原觀念，條件清楚、答案唯一、含可驗證解題步驟",
+      "question": {
+        "q": "地圖以東為x正向、北為y正向。甲地座標(−2,3)，乙地(4,−1)，由甲地指向乙地的位移向量為何？",
+        "correct": "(6,−4)",
+        "wrong": [
+          "(−6,4)",
+          "(2,2)",
+          "(4,−3)"
+        ],
+        "exp": "位移向量=終點−起點=(4−(−2),−1−3)=(6,−4)，代表往東6單位、往南4單位。",
+        "subject": "數學",
+        "sub_topic": "向量在生活情境的應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-向量在生活情境的應用",
+        "template_id": "ref-20261119-b8-m2-vectorcontext-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
