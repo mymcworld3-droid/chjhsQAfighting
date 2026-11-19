@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-chem1-concentration-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "將0.40 M的NaCl溶液取50.0 mL，加水稀釋到200.0 mL，假設溶質不流失，濃度變成多少？",
+        "correct": "0.10 M",
+        "wrong": [
+          "0.20 M",
+          "0.40 M",
+          "1.60 M"
+        ],
+        "exp": "稀釋過程溶質莫耳數不變：M₁V₁=M₂V₂，所以M₂=0.40×50/200=0.10 M。",
+        "subject": "化學",
+        "sub_topic": "濃度、溶解與沉澱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-濃度、溶解與沉澱",
+        "template_id": "ref-20261119-b3-chem1-concentration-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-chem1-concentration-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "將100 mL、0.20 M的同種溶質水溶液與100 mL、0.10 M水溶液混合，且體積可加成、無反應，末濃度是多少？",
+        "correct": "0.15 M",
+        "wrong": [
+          "0.10 M",
+          "0.20 M",
+          "0.30 M"
+        ],
+        "exp": "總莫耳數=0.20×0.100+0.10×0.100=0.030 mol；總體積0.200 L，濃度0.030/0.200=0.15 M。",
+        "subject": "化學",
+        "sub_topic": "濃度、溶解與沉澱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-濃度、溶解與沉澱",
+        "template_id": "ref-20261119-b3-chem1-concentration-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-chem1-concentration-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "取20.0 mL、0.10 M的AgNO₃溶液，加入過量NaCl溶液使Ag⁺完全形成AgCl沉澱，忽略溶解量。生成AgCl多少莫耳？",
+        "correct": "0.0020 mol",
+        "wrong": [
+          "0.020 mol",
+          "0.0010 mol",
+          "0.20 mol"
+        ],
+        "exp": "Ag⁺的起始莫耳數=0.10×0.0200=0.0020 mol，Ag⁺與Cl⁻形成AgCl的莫耳比1:1，故沉澱0.0020 mol。",
+        "subject": "化學",
+        "sub_topic": "濃度、溶解與沉澱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-濃度、溶解與沉澱",
+        "template_id": "ref-20261119-b3-chem1-concentration-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
