@@ -356,11 +356,41 @@ async function main(){
     }
     assert.equal(room.members.a.moveSeq,2);
     assert.equal(room.members.a.explorationStamina,98);
+    // Use the production combat module in the mock server, then test that
+    // the warning appears before the automatic hit on both clients.
+    const playerPos=room.members.a.position;
+    const candidate=[[1,0],[0,1],[-1,0],[0,-1]]
+      .map(([dx,dy])=>({x:playerPos.x+dx,y:playerPos.y+dy}))
+      .find(p=>p.x>=0&&p.y>=0&&p.x<map.width&&p.y<map.height&&
+        map.tiles[p.y*map.width+p.x]>0&&
+        !(room.members.b.position.x===p.x&&room.members.b.position.y===p.y));
+    assert.ok(candidate,'a neighboring cell must exist for NPC warning');
+    const wolf=AI.initialEnemies(map).find(beast=>beast.kind==='wolf');
+    room.enemies=[{...wolf,position:candidate,attack:null,
+      lastAttack:null,lastAttackTick:0}];
+    room.revision++;publish();
+    await a.page.waitForFunction(()=>{
+      const node=document.querySelector('[data-dm-threat]');
+      return node&&!node.hidden&&/危險/.test(node.textContent);
+    },null,{timeout:10000});
+    assert.equal(room.members.a.battleHealth,100);
+    assert.ok(room.enemies[0].attack?.cells?.some(p=>
+      p.x===playerPos.x&&p.y===playerPos.y));
+    await a.page.waitForFunction(()=>{
+      const node=document.querySelector('[data-dm-health]');
+      return node&&/生命 ([0-9]+)\/100/.test(node.textContent)&&
+        Number(node.textContent.match(/生命 ([0-9]+)/)?.[1])<100;
+    },null,{timeout:10000});
+    await b.page.waitForFunction(()=>/修士甲 (?:9[0-2]|8\d|7\d) HP/.test(
+      document.querySelector('[data-dm-team-status]')?.textContent||''
+    ),null,{timeout:7000});
+    assert.ok(room.members.a.battleHealth<100);
+    assert.equal(room.members.b.battleHealth,100);
     assert.deepStrictEqual(errors,[]);
     assert.equal(requests.filter(action=>action==='move').length,3);
     assert.ok(!requests.some(action=>/attack|reward|damage/.test(action)));
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two clients, autonomous NPC patrol and synced inspector, 3 moves, SSE repaint, WASD/pinch');
+    console.log('[Dungeon map browser] PASS: two clients, moving NPCs, telegraph-before-hit, synced HP, 3 moves, SSE repaint and pinch');
   }finally{
     clearInterval(clockLoop);
     clockLoop=null;
