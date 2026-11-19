@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-chem2-rates-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "化學計量與反應條件可核算，不跳步、附正確推導",
+      "question": {
+        "q": "某反應A→B，在0至20秒內[A]由0.80 M降為0.50 M，若以A濃度下降量定義平均消耗速率，其值為何？",
+        "correct": "0.015 M/s",
+        "wrong": [
+          "0.030 M/s",
+          "0.040 M/s",
+          "0.065 M/s"
+        ],
+        "exp": "平均消耗速率=−Δ[A]/Δt=(0.80−0.50)/20=0.015 M/s。",
+        "subject": "化學",
+        "sub_topic": "反應速率與碰撞理論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-反應速率與碰撞理論",
+        "template_id": "ref-20261119-b11-chem2-rates-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-chem2-rates-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "化學計量與反應條件可核算，不跳步、附正確推導",
+      "question": {
+        "q": "同溫同壓下，兩組實驗使用相同質量、同顆粒大小的鋅與足量鹽酸，甲組1.0 M、乙組2.0 M，其他條件一致。一般而言何者起始反應較快？",
+        "correct": "乙組，因酸中有效反應粒子的濃度較高",
+        "wrong": [
+          "甲組，因低濃度使所有碰撞都更有效",
+          "兩組必定同速，因鋅的總質量相同",
+          "乙組必定產生兩倍的最終氫氣量，即使兩組的鋅都完全反應"
+        ],
+        "exp": "在其他條件固定且反應機制相同時，較高的反應物濃度通常增加有效碰撞頻率；若鋅皆完全反應，最終產氣量仍由鋅量決定。",
+        "subject": "化學",
+        "sub_topic": "反應速率與碰撞理論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-反應速率與碰撞理論",
+        "template_id": "ref-20261119-b11-chem2-rates-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-chem2-rates-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "化學計量與反應條件可核算，不跳步、附正確推導",
+      "question": {
+        "q": "某催化反應的反應物與生成物初、末狀態相同。加催化劑後反應變快，下列哪項能量描述正確？",
+        "correct": "活化能可能降低，但反應的ΔH不因此改變",
+        "wrong": [
+          "活化能降低必使反應ΔH由負變正",
+          "催化劑改變起、末狀態，因此平衡常數必然改變",
+          "催化劑使所有碰撞均能產生產物，反應不存在能障"
+        ],
+        "exp": "催化劑提供不同的反應路徑降低活化能，但起、末態焓差不變，定溫平衡常數也不因加入催化劑而改變。",
+        "subject": "化學",
+        "sub_topic": "反應速率與碰撞理論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-反應速率與碰撞理論",
+        "template_id": "ref-20261119-b11-chem2-rates-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
