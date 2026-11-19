@@ -515,6 +515,35 @@ async function main(){
     const charge=a.page.locator('#dungeon-map-view [data-dm="quiz"]');
     await charge.click();
     await a.page.locator('.dm-quiz-panel:not([hidden])').waitFor({timeout:9000});
+    // Same parchment/choice/review hierarchy as the main trial, but no
+    // Q&A assistant. Whiteboard strokes stay entirely local to this player.
+    const stem=a.page.locator('.dm-quiz-question-sheet .dm-quiz-question');
+    await stem.waitFor();
+    assert.ok((await stem.textContent()).length>8);
+    assert.equal(await a.page.locator('.dm-quiz-options button[data-dq="answer"]').count(),4);
+    assert.equal(await a.page.locator('.dm-quiz-panel [data-helper-panel],'+
+      '.dm-quiz-panel [data-helper-toggle],.dm-quiz-panel [data-helper-input]').count(),0);
+    await a.page.locator('.dm-quiz-panel [data-dq="whiteboard"]').click();
+    const scratch=a.page.locator('[data-dq-whiteboard-canvas]');
+    await scratch.waitFor({state:'visible'});
+    const rect=await scratch.boundingBox();assert.ok(rect&&rect.width>60);
+    await a.page.mouse.move(rect.x+20,rect.y+25);
+    await a.page.mouse.down();
+    await a.page.mouse.move(rect.x+80,rect.y+40,{steps:8});
+    await a.page.mouse.up();
+    const drawn=await scratch.evaluate(canvas=>{
+      const data=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+      for(let i=3;i<data.length;i+=4)if(data[i]!==0)return true;
+      return false;
+    });
+    assert.equal(drawn,true,'the independent scratchpad must accept pointer drawing');
+    await a.page.locator('.dm-quiz-panel [data-dq="whiteboard-clear"]').click();
+    assert.equal(await scratch.evaluate(canvas=>{
+      const data=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+      return data.some((value,index)=>index%4===3&&value!==0);
+    }),false,'clear must erase the scratchpad without changing the question');
+    await a.page.locator('.dm-quiz-panel [data-dq="whiteboard-close"]').click();
+    assert.equal(await a.page.locator('[data-dq-whiteboard]').isHidden(),true);
     const beforeClock=await b.page.locator('[data-dm-clock]').innerText();
     await b.page.waitForFunction(text=>
       document.querySelector('[data-dm-clock]')?.textContent!==text,
