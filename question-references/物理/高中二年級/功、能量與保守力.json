@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-phy2-work-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "用功與動能定理區分保守力與非保守力",
+      "question": {
+        "q": "一物體由靜止出發，沿水平無摩擦面移動3.0 m，受沿運動方向大小恆為6.0 N的水平合力。最後的動能為多少？",
+        "correct": "18 J",
+        "wrong": [
+          "2 J",
+          "9 J",
+          "36 J"
+        ],
+        "exp": "功與動能定理：ΔK=W淨=Fd=6.0×3.0=18 J；初始動能為0，所以末動能18 J。",
+        "subject": "物理",
+        "sub_topic": "功、能量與保守力",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中二年級-功、能量與保守力",
+        "template_id": "ref-20261119-phy2-work-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-phy2-work-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "用功與動能定理區分保守力與非保守力",
+      "question": {
+        "q": "質量0.50 kg的小球由距地4.0 m高處靜止落下，忽略空氣阻力，取g=10 m/s²。落地前瞬間的動能約為多少？",
+        "correct": "20 J",
+        "wrong": [
+          "2 J",
+          "10 J",
+          "40 J"
+        ],
+        "exp": "重力位能減少量mgh=0.50×10×4.0=20 J；無能量耗散時，此能量轉為動能。",
+        "subject": "物理",
+        "sub_topic": "功、能量與保守力",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中二年級-功、能量與保守力",
+        "template_id": "ref-20261119-phy2-work-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-phy2-work-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "用功與動能定理區分保守力與非保守力",
+      "question": {
+        "q": "物體沿水平粗糙面滑動5.0 m，受到大小固定4.0 N、方向與位移相反的動摩擦力。摩擦力做功為何？",
+        "correct": "−20 J",
+        "wrong": [
+          "+20 J",
+          "−0.8 J",
+          "0 J"
+        ],
+        "exp": "功W=Fd cos180°=4.0×5.0×(−1)=−20 J，負號表示摩擦力從物體機械能中耗散能量。",
+        "subject": "物理",
+        "sub_topic": "功、能量與保守力",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中二年級-功、能量與保守力",
+        "template_id": "ref-20261119-phy2-work-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
