@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-bio3-circulation-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "人體血液從右心室流出後，會先經由哪條主要血管前往肺部？",
+        "correct": "肺動脈",
+        "wrong": [
+          "主動脈",
+          "肺靜脈",
+          "上腔靜脈"
+        ],
+        "exp": "右心室將缺氧血經肺動脈送往肺部進行氣體交換；肺靜脈則將充氧血送回左心房。",
+        "subject": "生物",
+        "sub_topic": "循環與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-循環與排泄",
+        "template_id": "ref-20261119-b3-bio3-circulation-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-bio3-circulation-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "腎元中的腎小管若增加對水分的再吸收，且其他因素近似不變，排出的尿液體積通常如何變化？",
+        "correct": "減少",
+        "wrong": [
+          "增加",
+          "一定變成原本兩倍",
+          "恆定且與再吸收無關"
+        ],
+        "exp": "腎小管再吸收水分增加，返回血液的水量增多，在過濾量等條件不變時，最終排出尿量減少。",
+        "subject": "生物",
+        "sub_topic": "循環與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-循環與排泄",
+        "template_id": "ref-20261119-b3-bio3-circulation-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-bio3-circulation-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "健康成人在安靜狀態每分鐘心跳75次、每搏輸出量80 mL，則心輸出量約為多少？",
+        "correct": "6.0 L/min",
+        "wrong": [
+          "0.94 L/min",
+          "60 L/min",
+          "600 L/min"
+        ],
+        "exp": "心輸出量=心率×每搏輸出量=75×80=6,000 mL/min，即6.0 L/min。",
+        "subject": "生物",
+        "sub_topic": "循環與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-循環與排泄",
+        "template_id": "ref-20261119-b3-bio3-circulation-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
