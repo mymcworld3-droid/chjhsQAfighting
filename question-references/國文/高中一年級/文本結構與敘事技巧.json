@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-narrstructure-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "故事開頭寫主角在急診室等待檢查結果，第二段回述三天前如何受傷，最後再回到急診室。何者最能分析其時間安排？",
+        "correct": "以當下事件作框架，插入先前經過後再返回當下",
+        "wrong": [
+          "全文嚴格依時間先後，完全沒有回述",
+          "同時呈現兩個互不相關的世界，沒有共同主角",
+          "完全省略受傷原因，只描寫檢查儀器"
+        ],
+        "exp": "敘事先寫後發生的情境，再回到三天前交代因由，最後返回當下，形成回溯性的結構。",
+        "subject": "國文",
+        "sub_topic": "文本結構與敘事技巧",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文本結構與敘事技巧",
+        "template_id": "ref-20261119-b8-ch1-narrstructure-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-narrstructure-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "小說前半反覆提到老屋牆角有細小水痕，結尾暴雨時牆體因長期滲水坍塌。前文水痕細節最重要的作用是什麼？",
+        "correct": "事先埋下與後來事件相關的線索，使結局有前後呼應",
+        "wrong": [
+          "與結局完全無關，只為增加字數",
+          "證明所有老屋遇雨都一定立即坍塌",
+          "用來交代人物出生與成長的完整年代"
+        ],
+        "exp": "前段看似微小的水痕在結局發揮作用，具備伏筆與照應的敘事功能。",
+        "subject": "國文",
+        "sub_topic": "文本結構與敘事技巧",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文本結構與敘事技巧",
+        "template_id": "ref-20261119-b8-ch1-narrstructure-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-narrstructure-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "敘事視角、結構、語境與修訂，保留推論限制",
+      "question": {
+        "q": "某小說第一段寫主角在頒獎典禮上面無笑容，後文逐步揭示他與隊友的衝突，末段才交代不快的原因。這種資訊安排主要造成什麼閱讀效果？",
+        "correct": "先提出異常行為引發疑問，再逐步揭露其原因",
+        "wrong": [
+          "從開頭已完整解釋所有人物動機，不留下疑問",
+          "只依日期列出活動流程，不涉及人物心理",
+          "以純粹議論取代所有人物行動和情節"
+        ],
+        "exp": "先呈現不尋常反應而暫不說明原因，可製造懸念；後續揭露重新賦予前段行為意義。",
+        "subject": "國文",
+        "sub_topic": "文本結構與敘事技巧",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文本結構與敘事技巧",
+        "template_id": "ref-20261119-b8-ch1-narrstructure-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
