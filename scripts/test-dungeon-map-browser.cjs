@@ -691,8 +691,60 @@ async function main(){
     assert.equal(room.members.a.explorationStamina,priorStamina);
     assert.equal(room.members.a.quizCreditSeq,2);
     assert.ok(requests.filter(action=>action==='generate-quiz').length>=2);
+    // Stage 14: server-owned guardian, party key and validated portal opening.
+    assert.equal(room.dungeonProgress.portalStatus,'sealed');
+    const guardian=Objectives.spawn(map,[]).enemies[0];
+    room.enemies=[{...guardian,position:{...candidate},spawn:{...candidate},
+      cadence:999999,battleHealth:20}];
+    room.revision++;publish();
+    const blocked=await b.page.evaluate(async()=>{
+      const response=await fetch('/api/dungeon/room',{method:'POST',
+        headers:{'content-type':'application/json','x-test-user':'b'},
+        body:JSON.stringify({action:'activate-portal',roomId:'dungroom000001',
+          keyAcquired:true,portalStatus:'open'})});
+      return response.status;
+    });
+    assert.equal(blocked,409,'clients cannot forge the shared key');
+    await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
+    await a.page.locator('[data-dm-beast-list] button').first().click();
+    await a.page.locator('[data-dm="cast"][data-skill-id="dragon-strike"]')
+      .click();
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-dm-objective]')?.textContent.includes('共享密鑰'));
+    assert.equal(room.enemies.length,0);
+    assert.equal(room.dungeonProgress.keyAcquired,true);
+    assert.equal(room.dungeonProgress.guardianStatus,'defeated');
+    assert.equal(room.dungeonProgress.portalStatus,'ready');
+    await b.page.waitForFunction(()=>
+      document.querySelector('[data-dm-objective]')?.textContent.includes('共享密鑰'));
+    const portalButton=b.page.locator('[data-dm="portal"]');
+    assert.equal(await portalButton.isDisabled(),true,'portal requires spatial proximity');
+    room.members.b.position={...map.portalSite};
+    room.revision++;publish();
+    await portalButton.waitFor({state:'visible'});
+    await b.page.waitForFunction(()=>
+      !document.querySelector('[data-dm="portal"]')?.disabled);
+    const beforePortal=room.revision;
+    await portalButton.click();
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-dm-objective]')?.textContent.includes('傳送門'));
+    assert.equal(room.dungeonProgress.portalStatus,'open');
+    assert.equal(room.dungeonProgress.openedByUid,'b');
+    assert.equal(room.revision,beforePortal+1);
+    await b.page.waitForFunction(()=>
+      document.querySelector('[data-dm="portal"]')?.textContent.includes('已啟動'));
+    const retryPortal=await a.page.evaluate(async()=>{
+      const response=await fetch('/api/dungeon/room',{method:'POST',
+        headers:{'content-type':'application/json','x-test-user':'a'},
+        body:JSON.stringify({action:'activate-portal',roomId:'dungroom000001'})});
+      return response.status;
+    });
+    assert.equal(retryPortal,200);
+    assert.equal(room.revision,beforePortal+1,'retries never reopen the key portal');
+    assert.ok(!requests.some(action=>action==='start-boss'),
+      'boss phase must not be faked before its implementation');
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two clients, NPC AI, melee, golden focus skills and shared auras, six charges, independent quizzes and stamina');
+    console.log('[Dungeon map browser] PASS: two clients, NPC AI, melee, six golden charges, independent quizzes, guardian key and shared portal');
   }finally{
     clearInterval(clockLoop);
     clockLoop=null;
