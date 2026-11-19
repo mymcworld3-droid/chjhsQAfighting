@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-m1-count-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "同一觀念變式，推論可核查、選項互不重複",
+      "question": {
+        "q": "一份套餐可從3種主菜、2種配菜及2種飲料各選一項。但其中一款主菜不能搭配其中一款飲料。問可供選擇的套餐共有幾種？",
+        "correct": "10種",
+        "wrong": [
+          "12種",
+          "11種",
+          "8種"
+        ],
+        "exp": "原有3×2×2=12種；禁止的主菜與飲料組合還可搭配2種配菜，須扣掉2種，故10種。",
+        "subject": "數學",
+        "sub_topic": "基本計數原理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-基本計數原理",
+        "template_id": "ref-20261119-b6-m1-count-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m1-count-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "同一觀念變式，推論可核查、選項互不重複",
+      "question": {
+        "q": "有兩位不同學生要分別坐在4個不同座位上，且不可坐同一座位，共有多少種安排？",
+        "correct": "12種",
+        "wrong": [
+          "6種",
+          "8種",
+          "16種"
+        ],
+        "exp": "第一位可選4個座位，第二位剩下3個，依乘法原理共有4×3=12種。",
+        "subject": "數學",
+        "sub_topic": "基本計數原理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-基本計數原理",
+        "template_id": "ref-20261119-b6-m1-count-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m1-count-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "同一觀念變式，推論可核查、選項互不重複",
+      "question": {
+        "q": "以十位數字從1、2、3、4中選、個位數字從0、1、2、3、4、5中選，組成兩位數，要求兩個數字不相同。共有多少個？",
+        "correct": "20個",
+        "wrong": [
+          "24個",
+          "16個",
+          "12個"
+        ],
+        "exp": "共有4×6=24種組合；十位與個位相同的有11、22、33、44四個，扣除後24−4=20個。",
+        "subject": "數學",
+        "sub_topic": "基本計數原理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-基本計數原理",
+        "template_id": "ref-20261119-b6-m1-count-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
