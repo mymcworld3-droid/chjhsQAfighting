@@ -3,9 +3,10 @@ import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
 import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, setDungeonBossReady, rescueDungeonTeammate, guardDungeonTeammate, claimDungeonBossReward } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
+import { dungeonQuarterControlsHTML, energyRingFill } from './dungeon-quarter-controls.js';
 
-// Read-only expedition blueprint. Pointer and keyboard events manipulate only
-// this viewer's local camera; no battle/move endpoint is called at this stage.
+// The dungeon shares the trial's fullscreen quarter-dial presentation;
+// its exploration, combat and questions remain live, server-authoritative actions.
 const safeRoom=id=>/^[A-Za-z0-9_-]{8,160}$/.test(String(id||''));
 const clamp=(value,lo,hi)=>Math.max(lo,Math.min(hi,value));
 const mapValid=map=>map?.mode==='dungeon'&&map.layoutVersion===1&&
@@ -31,6 +32,8 @@ class DungeonMapView{
     this.rewardPending=false;this.rewardResult=null;
     this.aimTile=null;this.skillSignature='';
     this.focusAuras=new Map();
+    this.wheelMode='attack';this.manualOpen=false;
+    this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
     this.clockTimer=null;this.clockAnchor=null;this.clockTickFloor=0;
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
@@ -44,13 +47,14 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-map-view-style')){
       const style=document.createElement('link');
       style.id='dungeon-map-view-style';style.rel='stylesheet';
-      style.href='/styles/dungeon-map-view.css?v=20261119-stage18-teamwork';
+      style.href='/styles/dungeon-map-view.css?v=20261119-quarter-dials-v1';
       document.head.append(style);
     }
     const root=document.createElement('section');
     root.id='dungeon-map-view';root.hidden=true;
+    root.classList.add('dm-quarter-layout');
     root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');
-    root.setAttribute('aria-label','合作副本地圖預覽');
+    root.setAttribute('aria-label','合作副本即時戰場');
     root.innerHTML='<div class="dm-shell">'+
       '<header class="dm-head"><div><small>青雲問道 · 秘境探勘</small>'+
       '<h2 data-dm-title>秘境地圖</h2>'+
@@ -124,8 +128,29 @@ class DungeonMapView{
       '<span>● 起點</span><span>◇ 傳送陣</span><span>◆ 守鑰靈獸</span></div></div>'+
       '<footer class="dm-foot"><span data-dm-status>秘境地圖與多人即時戰鬥</span>'+
       '<span data-dm-zoom>100%</span></footer></div>';
+    const stage=root.querySelector('[data-dm-stage]');
+    stage.insertAdjacentHTML('beforeend',dungeonQuarterControlsHTML());
+    // Preserve the existing one-per-action DOM controls: do not create a
+    // second quiz/attack/move button with a duplicate event handler.
+    const charge=root.querySelector('[data-dm="quiz"]');
+    const stamina=root.querySelector('[data-dm-energy]');
+    root.querySelector('[data-dm-charge-slot]').append(charge);
+    charge.replaceChildren();
+    const bolt=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    bolt.setAttribute('viewBox','0 0 64 82');bolt.setAttribute('aria-hidden','true');
+    bolt.classList.add('dm-energy-bolt');
+    const lightning=document.createElementNS('http://www.w3.org/2000/svg','path');
+    lightning.setAttribute('d','M36 2 12 42H29L21 80 56 31H37L46 2Z');
+    bolt.append(lightning);
+    const label=document.createElement('span');label.textContent='答題充能';
+    charge.append(bolt,stamina,label);
+    charge.setAttribute('aria-label','答題充能，隨時開始獨立作答');
+    root.querySelector('[data-dm-strike-slot]').append(
+      root.querySelector('[data-dm="strike"]'));
+    root.querySelector('[data-dm-move-slot]').append(
+      root.querySelector('.dm-dpad'));
     document.body.append(root);
-    this.root=root;this.stage=root.querySelector('[data-dm-stage]');
+    this.root=root;this.stage=stage;
     this.canvas=root.querySelector('[data-dm-world]');
     this.mini=root.querySelector('[data-dm-minimap]');
     this.ctx=this.canvas.getContext('2d',{alpha:false});
@@ -138,6 +163,8 @@ class DungeonMapView{
     }});
     root.addEventListener('click',event=>{
       const button=event.target.closest('[data-dm]');
+      if(button?.closest('[data-dm-wheel]')&&
+          Date.now()<this.wheelSwipeSuppressUntil)return;
       if(button&&root.contains(button)&&!button.disabled)
         this.action(button.dataset.dm,button.dataset.beastId,
           button.dataset.skillId,button.dataset.loadoutIndex,
@@ -150,6 +177,22 @@ class DungeonMapView{
       this.canvas.addEventListener(type,event=>this.pointerUp(event));
     this.canvas.addEventListener('wheel',event=>this.wheel(event),{passive:false});
     this.canvas.addEventListener('contextmenu',event=>event.preventDefault());
+    const wheel=root.querySelector('[data-dm-wheel]');
+    wheel.addEventListener('pointerdown',event=>{
+      if(event.pointerType==='mouse'&&event.button!==0)return;
+      this.wheelSwipeStart={id:event.pointerId,x:event.clientX,y:event.clientY};
+    });
+    wheel.addEventListener('pointerup',event=>{
+      const from=this.wheelSwipeStart;this.wheelSwipeStart=null;
+      if(!from||from.id!==event.pointerId)return;
+      const dx=event.clientX-from.x,dy=event.clientY-from.y;
+      if(Math.hypot(dx,dy)<25)return;
+      // One gesture switches the same attack/move ring as the trial.
+      this.wheelSwipeSuppressUntil=Date.now()+180;
+      this.setWheelMode(Math.abs(dy)>=Math.abs(dx)?
+        (dy<0?'attack':'move'):(dx>0?'attack':'move'));
+    });
+    wheel.addEventListener('pointercancel',()=>{this.wheelSwipeStart=null;});
   }
   $(selector){return this.root?.querySelector(selector);}
   isCurrent(){return this.opened&&this.uid===getMainUser()?.uid&&
@@ -183,6 +226,7 @@ class DungeonMapView{
     this.portalPending=false;this.bossPending=false;
     this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
     this.loadoutPending=false;this.aimTile=null;this.skillSignature='';
+    this.wheelMode='attack';this.manualOpen=false;this.wheelSwipeStart=null;
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
     this.beastIds='';this.touchOrigins.clear();this.gestureMulti=false;
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
@@ -1136,6 +1180,7 @@ class DungeonMapView{
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
     this.guardPending=false;this.guardSignature='';
     this.aimTile=null;this.skillSignature='';
+    this.wheelSwipeStart=null;this.manualOpen=false;this.wheelMode='attack';
     this.quiz?.destroy();
     for(const aura of this.focusAuras.values())aura.remove();
     this.focusAuras.clear();
