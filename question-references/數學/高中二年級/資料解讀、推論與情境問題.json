@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-math2-data-infer-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "某校報告顯示去年回收量100公斤，今年增加至125公斤，同期回收桶數量也增加。僅憑資料最有根據的敘述是何者？",
+        "correct": "回收量增加25%，但無法確認增加原因完全是桶數增多",
+        "wrong": [
+          "回收量增加25個百分點，且每個人回收量必定增加",
+          "回收量增加125%，並證明環保意識已經翻倍",
+          "桶數量增加必然是回收量增加的唯一原因"
+        ],
+        "exp": "相對成長率=(125−100)/100=25%；同時發生的變動不等於已建立因果，仍需其他資料驗證。",
+        "subject": "數學",
+        "sub_topic": "資料解讀、推論與情境問題",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-資料解讀、推論與情境問題",
+        "template_id": "ref-20261119-b9-math2-data-infer-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math2-data-infer-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "甲班20人平均70分，乙班30人平均80分，合併50人的平均分數為何？",
+        "correct": "76分",
+        "wrong": [
+          "75分",
+          "80分",
+          "74分"
+        ],
+        "exp": "合併平均=(20×70+30×80)/50=(1400+2400)/50=76，不可直接取兩班平均的簡單平均75。",
+        "subject": "數學",
+        "sub_topic": "資料解讀、推論與情境問題",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-資料解讀、推論與情境問題",
+        "template_id": "ref-20261119-b9-math2-data-infer-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-math2-data-infer-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "同觀念多種變式，計算及推理可核驗，答案唯一",
+      "question": {
+        "q": "某活動有200位參與者，其中120位選擇A方案。若問卷只來自活動現場，哪個結論最嚴謹？",
+        "correct": "在此次受訪的200人中，60%選擇A；不能直接代表全市居民",
+        "wrong": [
+          "全市居民恰有60%選擇A，無須額外抽樣",
+          "有120人選A，代表A的比例是120%",
+          "活動參與者的偏好與樣本來源沒有任何關係"
+        ],
+        "exp": "120/200=60%；活動參與者不是全體居民的隨機樣本，推論整個城市時須考量抽樣偏差。",
+        "subject": "數學",
+        "sub_topic": "資料解讀、推論與情境問題",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-資料解讀、推論與情境問題",
+        "template_id": "ref-20261119-b9-math2-data-infer-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
