@@ -25,6 +25,7 @@ function startExplorationMembers(room,map){
   return Object.fromEntries(order(room.members).map((member,index)=>{
     const position={...(map.spawnPads[index]||map.spawn)};
     return [member.uid,{...member,position,explorationStamina:START_STAMINA,
+      battleHealth:100,battleMaxHealth:100,downed:false,lastDamage:null,
       moveSeq:0,lastMove:null}];
   }));
 }
@@ -43,6 +44,9 @@ function moveOnMap(room,uid,map,{dx,dy,step}={}){
      member.lastMove?.dx===dx&&member.lastMove?.dy===dy)
     return {duplicate:true,members:room.members,member};
   if(step!==prior+1)throw error('移動已不同步，請重新取得隊伍位置',409);
+  if(member.downed===true||Number.isSafeInteger(member.battleHealth)&&
+     member.battleHealth<=0)
+    throw error('修士已倒地，暫時無法移動；請等待隊友救援',409);
   const from=member.position&&walkable(map,member.position)?
     member.position:spawnFor(room,uid,map);
   const to={x:from.x+dx,y:from.y+dy};
