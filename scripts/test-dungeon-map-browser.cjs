@@ -9,10 +9,25 @@ let playwright;try{playwright=require('playwright');}
 catch(_){playwright=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright');}
 const app=express();app.use(express.json());
 const map=generateDungeonLayout('stage6-browser-visual-1');
-let room=null;const watchers=new Set(),requests=[];
+let room=null,clockLoop=null;const watchers=new Set(),requests=[];
 const clone=x=>JSON.parse(JSON.stringify(x));
+const currentRoom=()=>{
+  if(!room)return null;
+  const view=clone(room);
+  if(view.status==='assembled'){
+    const time=Date.now();
+    const elapsedMs=Math.max(0,time-view.battleStartedAtMs);
+    view.battleClock={
+      version:1,startedAtMs:view.battleStartedAtMs,tickMs:1000,
+      serverNowMs:time,elapsedMs,
+      tick:Math.max(view.battleAppliedTick,Math.floor(elapsedMs/1000)),
+      appliedTick:view.battleAppliedTick
+    };
+  }else view.battleClock=null;
+  return view;
+};
 const publish=()=>{
-  const payload='data: '+JSON.stringify({room:clone(room)})+'\n\n';
+  const payload='data: '+JSON.stringify({room:currentRoom()})+'\n\n';
   for(const res of watchers)res.write(payload);
 };
 app.get('/dungeon-test.html',(_req,res)=>res.type('html').send(
@@ -29,11 +44,11 @@ app.get('/cultivation/data/project-repository.js',(_req,res)=>res.type('text/jav
 app.post('/api/dungeon/room',(req,res)=>{
   const uid=req.get('x-test-user'),action=req.body.action;
   requests.push(action);
-  const success=()=>res.json({ok:true,roomId:room?.id||null,room:room?clone(room):null});
+  const success=()=>res.json({ok:true,roomId:room?.id||null,room:currentRoom()});
   if(!['a','b'].includes(uid))return res.status(401).json({ok:false,error:'sign-in required'});
   if(action==='list-public')return res.json({ok:true,rooms:[]});
   if(action==='reconnect')return res.json({ok:true,roomId:room?.members?.[uid]?room.id:null,
-    room:room?.members?.[uid]?clone(room):null});
+    room:room?.members?.[uid]?currentRoom():null});
   if(action==='create'){
     room={id:'dungroom000001',mode:'dungeon',version:1,revision:1,
       status:'waiting',visibility:'private',code:'ABCDEF',
@@ -53,12 +68,20 @@ app.post('/api/dungeon/room',(req,res)=>{
     return res.status(404).json({ok:false,error:'unknown room'});
   if(action==='get-map')return res.json({ok:true,roomId:room.id,map:clone(map)});
   if(action==='get')return success();
+  if(action==='clock'){
+    const time=Date.now(),tick=Math.floor(Math.max(0,time-room.battleStartedAtMs)/1000);
+    if(room.status!=='assembled')return res.status(409).json({ok:false,error:'not assembled'});
+    if(tick>room.battleAppliedTick){
+      room.battleAppliedTick=tick;room.revision++;publish();
+    }
+    return res.json({ok:true,roomId:room.id,clock:currentRoom().battleClock});
+  }
   if(action==='heartbeat')return res.json({ok:true,roomId:room.id,revision:room.revision});
   if(action==='subscribe'){
     res.set({'Content-Type':'text/event-stream','Cache-Control':'no-cache'});
     res.flushHeaders?.();
     watchers.add(res);
-    res.write('data: '+JSON.stringify({room:clone(room)})+'\n\n');
+    res.write('data: '+JSON.stringify({room:currentRoom()})+'\n\n');
     res.on('close',()=>watchers.delete(res));return;
   }
   if(action==='ready'){
@@ -69,6 +92,16 @@ app.post('/api/dungeon/room',(req,res)=>{
     if(uid!==room.hostUid||!Object.values(room.members).every(member=>member.ready))
       return res.status(409).json({ok:false,error:'not ready'});
     room.status='assembled';
+    room.battleStartedAtMs=Date.now();
+    room.battleAppliedTick=0;
+    if(clockLoop)clearInterval(clockLoop);
+    clockLoop=setInterval(()=>{
+      if(!room||room.status!=='assembled')return;
+      const tick=Math.floor(Math.max(0,Date.now()-room.battleStartedAtMs)/1000);
+      if(tick<=room.battleAppliedTick)return;
+      room.battleAppliedTick=tick;room.revision++;publish();
+    },1000);
+    clockLoop.unref?.();
     Object.values(room.members).sort((a,b)=>a.joinedAtMs-b.joinedAtMs)
       .forEach((member,i)=>{
         member.position={...map.spawnPads[i]};
@@ -173,6 +206,17 @@ async function main(){
       assert.ok(dims.pixels>=dims.w*1.9,JSON.stringify(dims));
       assert.equal(dims.touch,'none');assert.equal(dims.zoom,'100%');
     }
+    // Both connected browsers display elapsed server time with no player
+    // movement or actions required to make the clock advance.
+    await a.page.waitForFunction(()=>/戰場時鐘 00:0[2-9] · T[2-9]/.test(
+      document.querySelector('[data-dm-clock]')?.textContent||''),null,{timeout:8000});
+    const clockA=await a.page.locator('[data-dm-clock]').innerText();
+    const clockB=await b.page.locator('[data-dm-clock]').innerText();
+    assert.match(clockA,/戰場時鐘/);
+    assert.match(clockB,/戰場時鐘/);
+    const tickA=Number(clockA.match(/T(\d+)/)?.[1]||-1),
+      tickB=Number(clockB.match(/T(\d+)/)?.[1]||-1);
+    assert.ok(Math.abs(tickA-tickB)<=1,clockA+' vs '+clockB);
     await a.page.locator('#dungeon-map-view [data-dm="plus"]').click();
     await a.page.waitForFunction(()=>document.querySelector('[data-dm-zoom]').textContent==='135%');
     await a.page.locator('#dungeon-map-view [data-dm="route"]').click();
@@ -280,8 +324,10 @@ async function main(){
     assert.equal(requests.filter(action=>action==='move').length,3);
     assert.ok(!requests.some(action=>/attack|reward|damage/.test(action)));
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two clients, 3 successful moves, remote canvas SSE repaint, WASD, stamina, pinch and resize');
+    console.log('[Dungeon map browser] PASS: 2 clients, synchronized idle battle clock, 3 moves, remote canvas SSE repaint, WASD and pinch');
   }finally{
+    clearInterval(clockLoop);
+    clockLoop=null;
     await browser?.close();
     await new Promise(resolve=>server.close(resolve));
   }
