@@ -239,15 +239,18 @@ export function drawWorld(ctx,map,camera,width,height,
           Math.floor(bossFrame/5)*128,128,
           left+w*.08,top+w*.05,w*.84,w*.9))
         ctx.fillText('♜',left+w*.5,top+w*.52);
-      const bw=Math.max(28,w*1.12),bx=left+w*.5-bw*.5,by=top-11;
-      ctx.fillStyle='#210c12';ctx.fillRect(bx,by,bw,6);
-      ctx.fillStyle=ratio>.35?'#f2c979':'#ed7468';
-      ctx.fillRect(bx,by,bw*ratio,6);
-      ctx.fillStyle='#ffe7c0';ctx.font='bold 12px system-ui,"Noto Sans TC"';
-      const label=String(enemy.name||'首領').slice(0,15);
-      const tw=ctx.measureText(label).width+14;
-      ctx.fillStyle='#231016ee';ctx.fillRect(left+w*.5-tw/2,by-22,tw,18);
-      ctx.fillStyle='#ffe7c0';ctx.fillText(label,left+w*.5,by-13);
+      // Match the trial sprite-adjacent HP bar and HP/maxHP label.
+      const bw=cell*.76*2,bx=left+w*.5-bw/2,by=top+w*.5+cell*.34*2;
+      ctx.fillStyle='#14251c';ctx.fillRect(bx,by,bw,4);
+      ctx.fillStyle='#df8a73';ctx.fillRect(bx,by,bw*ratio,4);
+      const hpText=Math.ceil(Math.max(0,enemy.battleHealth||0))+
+        '/'+(enemy.battleMaxHealth||900);
+      const fontSize=clamp(cell*.23,9,14);
+      ctx.font='700 '+fontSize+'px system-ui,sans-serif';
+      ctx.textAlign='center';ctx.textBaseline='top';ctx.lineJoin='round';
+      ctx.lineWidth=2.8;ctx.strokeStyle='#15241b';
+      ctx.strokeText(hpText,left+w*.5,by+5,w);
+      ctx.fillStyle='#fff4de';ctx.fillText(hpText,left+w*.5,by+5,w);
       ctx.restore();continue;
     }
     const alerted=enemy.intent==='pursuit'||enemy.intent==='alert';
@@ -270,17 +273,16 @@ export function drawWorld(ctx,map,camera,width,height,
     if(cell>=14){
       const max=Number.isSafeInteger(enemy.battleMaxHealth)?enemy.battleMaxHealth:60;
       const hp=Number.isSafeInteger(enemy.battleHealth)?enemy.battleHealth:max;
-      const ratio=clamp(hp/Math.max(1,max),0,1),bar=clamp(cell*.85,15,29);
-      ctx.fillStyle='#331d1a';ctx.fillRect(x-bar/2,y-r-13,bar,3);
-      ctx.fillStyle=ratio>.4?'#e9b76a':'#ed7c6e';
-      ctx.fillRect(x-bar/2,y-r-13,bar*ratio,3);
-      ctx.fillStyle='#fff2d4';ctx.font='600 10px system-ui,"Noto Sans TC"';
-      const label=String(enemy.name||'靈獸').slice(0,12);
-      const tw=ctx.measureText(label).width+10;
-      ctx.fillStyle='rgba(14,16,15,.86)';
-      ctx.fillRect(x-tw/2,y-r-24,tw,17);
-      ctx.fillStyle=alerted?'#ffc0ad':'#f2e2c2';
-      ctx.fillText(label,x,y-r-15);
+      const ratio=clamp(hp/Math.max(1,max),0,1),bar=cell*.76;
+      const barY=y+cell*.34;
+      ctx.fillStyle='#14251c';ctx.fillRect(x-bar/2,barY,bar,4);
+      ctx.fillStyle='#df8a73';ctx.fillRect(x-bar/2,barY,bar*ratio,4);
+      const hpText=Math.ceil(hp)+'/'+max,fontSize=clamp(cell*.23,9,14);
+      ctx.font='700 '+fontSize+'px system-ui,sans-serif';
+      ctx.textAlign='center';ctx.textBaseline='top';
+      ctx.lineJoin='round';ctx.lineWidth=2.8;ctx.strokeStyle='#15241b';
+      ctx.strokeText(hpText,x,barY+5,cell*.97);
+      ctx.fillStyle='#fff4de';ctx.fillText(hpText,x,barY+5,cell*.97);
     }
     ctx.restore();
   }
@@ -299,7 +301,8 @@ export function drawWorld(ctx,map,camera,width,height,
       return q?.x===point.x&&q?.y===point.y;
     });
     const slot=Math.max(0,occupancy.findIndex(other=>other.uid===member.uid));
-    const offset=occupancy.length>1?(.22*cell):0;
+    // Keep the local hero at the literal center, even when allies overlap.
+    const offset=member.uid===selfUid?0:(occupancy.length>1?.22*cell:0);
     const sx=g.ox+(point.x+.5)*cell+offset*(slot%2?1:-1),
       sy=g.oy+(point.y+.5)*cell+offset*(slot>=2?1:-1);
     const radius=clamp(cell*.26,3,9);
@@ -348,19 +351,29 @@ export function drawWorld(ctx,map,camera,width,height,
       ctx.lineTo(sx-radius*.56,sy+radius*.56);ctx.stroke();ctx.restore();
     }
     if(cell>=12){
-      const barW=clamp(cell*.85,13,27),barH=3;
-      ctx.fillStyle='#251e1a';
-      ctx.fillRect(sx-barW/2,sy-radius-10,barW,barH);
-      ctx.fillStyle=hp>50?'#81da91':hp>25?'#e2b966':'#ed8d81';
-      ctx.fillRect(sx-barW/2,sy-radius-10,barW*hp/100,barH);
+      // The exact position, typography and colors used in tactical-renderer:
+      // HP below each sprite, not a second floating header health widget.
+      const max=Number.isSafeInteger(member.battleMaxHealth)&&
+        member.battleMaxHealth>0?member.battleMaxHealth:100;
+      const bar=cell*.76,barY=sy+cell*.34;
+      ctx.save();ctx.fillStyle='#14251c';
+      ctx.fillRect(sx-bar/2,barY,bar,4);
+      ctx.fillStyle='#c8d895';
+      ctx.fillRect(sx-bar/2,barY,bar*clamp(hp/max,0,1),4);
+      const hpText=Math.ceil(hp)+'/'+max,fontSize=clamp(cell*.23,9,14);
+      ctx.font='700 '+fontSize+'px system-ui,sans-serif';
+      ctx.textAlign='center';ctx.textBaseline='top';
+      ctx.lineJoin='round';ctx.lineWidth=2.8;ctx.strokeStyle='#15241b';
+      ctx.strokeText(hpText,sx,barY+5,cell*.97);
+      ctx.fillStyle='#fff4de';ctx.fillText(hpText,sx,barY+5,cell*.97);
       if(member.lastDamage&&Number.isSafeInteger(currentTick)&&
         currentTick-member.lastDamage.tick>=0&&
         currentTick-member.lastDamage.tick<=2){
-        ctx.save();ctx.fillStyle='#ffd0b4';ctx.textAlign='center';
-        ctx.textBaseline='middle';ctx.font='bold 11px system-ui';
-        ctx.fillText('-'+member.lastDamage.amount,sx,sy-radius-23);
-        ctx.restore();
+        ctx.fillStyle='#ffd0b4';ctx.textBaseline='middle';
+        ctx.font='bold 11px system-ui';
+        ctx.fillText('-'+member.lastDamage.amount,sx,sy-cell*.63);
       }
+      ctx.restore();
     }
   });
   const shadow=ctx.createRadialGradient(width/2,height/2,Math.min(width,height)*.2,
