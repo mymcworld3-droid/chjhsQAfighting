@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-phy3-photoelectric-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "某金屬的截止頻率為5.0×10¹⁴ Hz，照射頻率8.0×10¹⁴ Hz的光。取h=6.6×10⁻³⁴ J·s，光電子最大動能為何？",
+        "correct": "1.98×10⁻¹⁹ J",
+        "wrong": [
+          "5.28×10⁻¹⁹ J",
+          "3.30×10⁻¹⁹ J",
+          "0 J"
+        ],
+        "exp": "光電方程K最大=h(f−f₀)=6.6×10⁻³⁴×3.0×10¹⁴=1.98×10⁻¹⁹ J。",
+        "subject": "物理",
+        "sub_topic": "光電效應與物質波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-光電效應與物質波",
+        "template_id": "ref-20261119-b4-phy3-photoelectric-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-phy3-photoelectric-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "某金屬以高於截止頻率的單色光照射。若只提高入射光頻率，光電子最大動能一般如何變化？",
+        "correct": "增加",
+        "wrong": [
+          "減少",
+          "保持不變",
+          "必定變為零"
+        ],
+        "exp": "愛因斯坦光電方程K最大=hf−W，其中逸出功W固定；頻率提高，光子能量增加，因此最大動能增加。",
+        "subject": "物理",
+        "sub_topic": "光電效應與物質波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-光電效應與物質波",
+        "template_id": "ref-20261119-b4-phy3-photoelectric-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-phy3-photoelectric-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "題幹情境與推理明確，答案唯一並附可查核的解析",
+      "question": {
+        "q": "為什麼高速運動的棒球通常不容易觀察到明顯的物質波繞射現象？",
+        "correct": "其動量相對普朗克常數很大，德布羅意波長極短",
+        "wrong": [
+          "棒球完全不具有質量",
+          "德布羅意波長與動量成正比",
+          "只有帶電物體才可能具有物質波"
+        ],
+        "exp": "德布羅意波長λ=h/p；巨觀物體動量大，其波長極短，相對於一般實驗尺寸難以觀察繞射。",
+        "subject": "物理",
+        "sub_topic": "光電效應與物質波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-光電效應與物質波",
+        "template_id": "ref-20261119-b4-phy3-photoelectric-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
