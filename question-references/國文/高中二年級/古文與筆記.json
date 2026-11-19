@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-classicalnotes-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "閱讀自編仿古筆記：「某生夜讀，見窗外有光，疑鄰舍失火。急出視之，乃月映水缸，光反射壁耳。」文中「乃」最適當的解釋為何？",
+        "correct": "原來是，表示發現先前誤認的真正原因",
+        "wrong": [
+          "於是馬上點燃火把",
+          "始終堅信鄰舍失火",
+          "以此決定隔日不再讀書"
+        ],
+        "exp": "敘述先有疑心，查明後發現光源其實是月光反射；「乃」在此引出實際情況。",
+        "subject": "國文",
+        "sub_topic": "古文與筆記",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-古文與筆記",
+        "template_id": "ref-20261119-b8-ch2-classicalnotes-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-classicalnotes-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "閱讀自編仿古筆記：「里人共築橋，眾爭橋名。長者曰：『橋欲濟人，名何足爭？』眾乃止議。」長者的言論主要指出何種價值次序？",
+        "correct": "橋梁服務眾人的實用目的，比爭取名稱更重要",
+        "wrong": [
+          "橋梁名稱決定能否承受水流衝擊",
+          "只要橋有名字，就不需要實際建造",
+          "應先拆除已建好的橋，再開始討論名稱"
+        ],
+        "exp": "長者以「欲濟人」對比「名何足爭」，將公益功能置於名義爭執之前。",
+        "subject": "國文",
+        "sub_topic": "古文與筆記",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-古文與筆記",
+        "template_id": "ref-20261119-b8-ch2-classicalnotes-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-classicalnotes-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "閱讀自編仿古筆記：「客聞山寺鐘，欲往尋之。行里許，霧起，不辨徑。樵者引客至寺，客謝曰：『非君，吾迷矣。』」句中「非君，吾迷矣」何種語譯最符合文意？",
+        "correct": "若不是你帶路，我就會迷失方向了",
+        "wrong": [
+          "因為你帶錯路，我已經完全迷路",
+          "我不願接受你的引導，所以回到原地",
+          "你不是樵夫，而是寺中的和尚"
+        ],
+        "exp": "樵夫在霧中帶路使客人到寺，反事實的「非君」表達若無對方協助便可能迷路的感謝。",
+        "subject": "國文",
+        "sub_topic": "古文與筆記",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-古文與筆記",
+        "template_id": "ref-20261119-b8-ch2-classicalnotes-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
