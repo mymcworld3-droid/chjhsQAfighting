@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-math1-logscientific-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "已知log₁₀5≈0.6990，求log₁₀(5×10⁴)的近似值。",
+        "correct": "4.6990",
+        "wrong": [
+          "0.6994",
+          "5.6990",
+          "3.6990"
+        ],
+        "exp": "由log(ab)=log a+log b，log₁₀(5×10⁴)=log₁₀5+4≈4.6990。",
+        "subject": "數學",
+        "sub_topic": "常用對數、科學記號",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-常用對數、科學記號",
+        "template_id": "ref-20261119-b7-math1-logscientific-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-logscientific-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "把(6.4×10⁻⁵)÷(8×10⁻³)寫成標準科學記號，何者正確？",
+        "correct": "8×10⁻³",
+        "wrong": [
+          "8×10⁻²",
+          "0.8×10⁻³",
+          "8×10³"
+        ],
+        "exp": "係數相除6.4÷8=0.8；指數相減−5−(−3)=−2，得到0.8×10⁻²=8×10⁻³。",
+        "subject": "數學",
+        "sub_topic": "常用對數、科學記號",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-常用對數、科學記號",
+        "template_id": "ref-20261119-b7-math1-logscientific-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-logscientific-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "已知log表示以10為底的常用對數，則log 0.001 + log 100的值為何？",
+        "correct": "−1",
+        "wrong": [
+          "1",
+          "−5",
+          "5"
+        ],
+        "exp": "0.001=10⁻³、100=10²，兩個對數分別為−3與2，相加得−1。",
+        "subject": "數學",
+        "sub_topic": "常用對數、科學記號",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-常用對數、科學記號",
+        "template_id": "ref-20261119-b7-math1-logscientific-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
