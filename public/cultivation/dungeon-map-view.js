@@ -12,6 +12,7 @@ import './manual-rules.js';
 import './tactical-animation.js';
 import './tactical-skill-effects.js';
 import {dungeonAnimationEvents,paintDungeonScene,drawDungeonHitNumbers} from './dungeon-skill-animation.js';
+import {dungeonMovementEvents,sampleDungeonMovement,continueDungeonMovement} from './dungeon-movement-animation.js';
 
 // The dungeon shares the trial's fullscreen quarter-dial presentation;
 // its exploration, combat and questions remain live, server-authoritative actions.
@@ -41,6 +42,7 @@ class DungeonMapView{
     this.aimTile=null;this.skillSignature='';
     this.focusAuras=new Map();this.sprites={};
     this.visualScenes=new Map(); // authenticated room events only; never controls damage
+    this.travelScenes=new Map(); // sampled trial movement; server positions remain untouched
     this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;
     this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
     this.routePending=false;this.actionFeedbackTimer=null;
@@ -253,7 +255,7 @@ class DungeonMapView{
     this.quiz?.attach(room.id,playerUid);
     if(room.status==='assembled')void this.quiz?.warm();
     this.map=null;this.camera=Camera.initialCamera();
-    this.visualScenes.clear();
+    this.visualScenes.clear();this.travelScenes.clear();
     this.follow=true;this.pointers.clear();this.opened=true;
     this.movePending=false;this.strikePending=false;this.skillPending=false;
     this.portalPending=false;this.bossPending=false;
@@ -1361,10 +1363,15 @@ class DungeonMapView{
     // Play only newly committed skill/strike results; duplicate SSE snapshots
     // cannot restart a visual, and entering an arena cannot replay old casts.
     const previous=this.room;
-    if(changedArena)this.visualScenes?.clear();
+    if(changedArena){this.visualScenes?.clear();this.travelScenes?.clear();}
     else if(this.map&&previous?.status==='assembled'){
       this.visualScenes ||=new Map();
       const now=performance.now();
+      for(const event of dungeonMovementEvents(previous,room,this.map)){
+        const prior=this.travelScenes.get(event.key);
+        const joined=continueDungeonMovement(event,prior,now);
+        this.travelScenes.set(event.key,{...joined,startedAt:now});
+      }
       for(const {key,scene} of dungeonAnimationEvents(previous,room)){
         if(!this.visualScenes.has(key))
           this.visualScenes.set(key,{scene,startedAt:now,soundPlayed:false});
@@ -1401,7 +1408,7 @@ class DungeonMapView{
     this.rangeSignature='';this.rangeTiles=[];
     clearTimeout(this.actionFeedbackTimer);this.actionFeedbackTimer=null;
     this.quiz?.destroy();
-    this.visualScenes?.clear();
+    this.visualScenes?.clear();this.travelScenes?.clear();
     for(const aura of this.focusAuras.values())aura.remove();
     this.focusAuras.clear();
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
@@ -1541,10 +1548,10 @@ class DungeonMapView{
     }
     this.ctx?.setTransform(dpr,0,0,dpr,0,0);this.drawSoon();
   }
-  updateFocusAuras(geometry){
+  updateFocusAuras(geometry,visualMembers=this.members()){
     const layer=this.$('[data-dm-effects]');
     if(!layer||!this.map||!geometry)return;
-    const present=new Set(),members=this.members();
+    const present=new Set(),members=visualMembers;
     if(this.room?.status==='assembled'){
       members.forEach((member,index)=>{
         const charges=member?.focusCharges;
@@ -1634,12 +1641,27 @@ class DungeonMapView{
     const ctx=this.ctx,m=this.map,w=this.width,h=this.height;
     ctx.fillStyle='#0b1915';ctx.fillRect(0,0,w,h);
     if(!m)return;
-    // Recenter on every frame, even with stale camera state.
-    this.camera=Camera.lockToPlayer(this.selfPad(),m,w,h);
-    this.updateRangePlan();
     const now=performance.now(),scenes=[];
     const reduceMotion=typeof window!=='undefined'&&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    let travelActive=false;
+    const visualActor=(actor,key)=>{
+      const entry=this.travelScenes.get(key);
+      if(!entry||reduceMotion)return actor;
+      const sampled=sampleDungeonMovement(entry,now);
+      if(!sampled||!sampled.active){this.travelScenes.delete(key);return actor;}
+      travelActive=true;
+      return {...actor,position:sampled.position,visualLift:sampled.lift};
+    };
+    const visualMembers=this.members().map(member=>
+      visualActor(member,'member:'+member.uid));
+    const visualEnemies=this.creatures().map(enemy=>
+      visualActor(enemy,'enemy:'+enemy.id));
+    // Follow the same interpolated hero position, not the already-committed
+    // server endpoint. The player remains screen-centered while terrain glides.
+    const visualHero=visualMembers.find(member=>member.uid===this.uid)?.position||this.selfPad();
+    this.camera=Camera.lockToPlayer(visualHero,m,w,h);
+    this.updateRangePlan();
     for(const [key,entry] of this.visualScenes||[]){
       const elapsed=now-entry.startedAt;
       if(elapsed>=entry.scene.duration){
@@ -1670,17 +1692,18 @@ class DungeonMapView{
       }
     };
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
-      members:this.members(),selfUid:this.uid,showRoutes:false,
+      members:visualMembers,selfUid:this.uid,showRoutes:false,
       rangeTiles:this.rangeTiles,rangeKind:this.rangeKind,
-      enemies:this.creatures(),objectives:this.room?.dungeonProgress,
+      enemies:visualEnemies,objectives:this.room?.dungeonProgress,
       aimTile:this.currentAim(),art:this.sprites,
       currentTick:Number(this.room?.battleClock?.appliedTick)||0,
       visualTimeMs:now,
       animationUnderlay:(context,view)=>paintEffects(context,view,false),
       animationOverlay:(context,view)=>paintEffects(context,view,true)
     });
-    this.updateFocusAuras(geometry);
+    this.updateFocusAuras(geometry,visualMembers);
     if(scenes.length&&!reduceMotion)this.drawSoon();
+    if(travelActive&&!reduceMotion)this.drawSoon();
 
   }
 }

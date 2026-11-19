@@ -16,8 +16,8 @@ export function initialCamera(){return {zoom:1,panX:0,panY:0};}
 export function lockToPlayer(point,map,width,height){
   if(!validMap(map))throw new TypeError('副本地圖尺寸無效');
   return {locked:true,
-    target:{x:clamp(Math.floor(finite(point?.x)),0,map.width-1),
-      y:clamp(Math.floor(finite(point?.y)),0,map.height-1)}};
+    target:{x:clamp(finite(point?.x),0,map.width-1),
+      y:clamp(finite(point?.y),0,map.height-1)}};
 }
 export function geometry(camera,map,width,height){
   if(!validMap(map))throw new TypeError('副本地圖尺寸無效');

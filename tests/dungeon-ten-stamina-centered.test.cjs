@@ -75,7 +75,7 @@ test('camera cannot be dragged, zoomed, clamped away from the player or nudged o
 test('real-time view has no camera gesture path and always locks the player on render',()=>{
   const source=read('public/cultivation/dungeon-map-view.js');
   assert.doesNotMatch(source,/Camera\.(?:pan|zoomAt|fitMap|resizePreservingCenter)\(/);
-  assert.match(source,/this\.camera=Camera\.lockToPlayer\(this\.selfPad\(\),m,w,h\)/);
+  assert.match(source,/this\.camera=Camera\.lockToPlayer\(visualHero,m,w,h\)/);
   assert.match(source,/pointerMove\(event\)[\s\S]*?Map gestures never change the world camera/);
   assert.match(source,/wheel\(event\)\{if\(this\.opened\)event\.preventDefault\(\);\}/);
   assert.match(source,/\/\/ Arrow keys and zoom shortcuts never move this fixed camera\./);

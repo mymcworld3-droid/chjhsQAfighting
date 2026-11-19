@@ -70,6 +70,9 @@ test('map viewer is wired to authorized room blueprint and contains no movement 
   assert.match(source,/pointerUp\(event\)/);
   assert.match(source,/ResizeObserver/);
   assert.match(source,/requestAnimationFrame/);
+  assert.match(source,/dungeonMovementEvents\(previous,room,this\.map\)/);
+  assert.match(source,/Camera\.lockToPlayer\(visualHero,m,w,h\)/);
+  assert.match(source,/members:visualMembers/);
   assert.match(source,/this\.room\?\.members\?\.\[this\.uid\]/);
   assert.match(source,/mapValid\(map\)/);
   assert.match(lobby,/data-dg="preview-map"/);

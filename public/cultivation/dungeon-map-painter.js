@@ -192,8 +192,10 @@ export function drawWorld(ctx,map,camera,width,height,
   // visible when the AI reaches melee distance (no damage in stage 9).
   for(const enemy of enemies){
     const pos=enemy?.position;
-    if(!pos||!walk(pos.x,pos.y))continue;
-    const x=g.ox+(pos.x+.5)*cell,y=g.oy+(pos.y+.5)*cell;
+    if(!Number.isFinite(pos?.x)||!Number.isFinite(pos?.y)||
+        !walk(Math.floor(pos.x),Math.floor(pos.y)))continue;
+    const x=g.ox+(pos.x+.5)*cell,
+      y=g.oy+(pos.y+.5)*cell-(Number(enemy.visualLift)||0)*cell;
     if(x<-35||y<-35||x>width+35||y>height+35)continue;
     const color=BEAST_COLORS[enemy.kind]||'#e5bc9e';
     if(enemy.kind==='boss'){
@@ -267,11 +269,12 @@ export function drawWorld(ctx,map,camera,width,height,
     ctx.restore();
   }
   members.slice(0,4).forEach((member,index)=>{
-    const validPos=member?.position&&Number.isInteger(member.position.x)&&
-      Number.isInteger(member.position.y)&&member.position.x>=0&&
+    const validPos=member?.position&&Number.isFinite(member.position.x)&&
+      Number.isFinite(member.position.y)&&member.position.x>=0&&
       member.position.y>=0&&member.position.x<map.width&&
       member.position.y<map.height&&
-      map.tiles[member.position.y*map.width+member.position.x]!==0;
+      map.tiles[Math.floor(member.position.y)*map.width+
+        Math.floor(member.position.x)]!==0;
     const point=validPos?member.position:map.spawnPads[index];
     if(!point)return;
     // Players may cross or share a tile. Offset markers locally rather than
