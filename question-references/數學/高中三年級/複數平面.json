@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-m3-complex-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "複數z=−3+4i在複數平面上到原點的距離為何？",
+        "correct": "5",
+        "wrong": [
+          "7",
+          "1",
+          "25"
+        ],
+        "exp": "模長|z|=√[(-3)²+4²]=√25=5。",
+        "subject": "數學",
+        "sub_topic": "複數平面",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-複數平面",
+        "template_id": "ref-20261119-b6-m3-complex-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m3-complex-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "複數z₁=1+2i、z₂=−2+i，則z₁+z₂在複數平面對應的點為何？",
+        "correct": "(−1,3)",
+        "wrong": [
+          "(3,1)",
+          "(−1,1)",
+          "(1,3)"
+        ],
+        "exp": "相加得到(1−2)+(2+1)i=−1+3i，在複數平面對應(−1,3)。",
+        "subject": "數學",
+        "sub_topic": "複數平面",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-複數平面",
+        "template_id": "ref-20261119-b6-m3-complex-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m3-complex-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "相同觀念延伸、單一正解、附完整可核對推導",
+      "question": {
+        "q": "複數z=2+i，將z乘以i後，在複數平面對應哪個點？",
+        "correct": "(−1,2)",
+        "wrong": [
+          "(1,2)",
+          "(2,−1)",
+          "(−2,1)"
+        ],
+        "exp": "iz=i(2+i)=2i+i²=−1+2i，故對應點(−1,2)，等同逆時針旋轉90°。",
+        "subject": "數學",
+        "sub_topic": "複數平面",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-複數平面",
+        "template_id": "ref-20261119-b6-m3-complex-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
