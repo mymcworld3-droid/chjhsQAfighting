@@ -147,6 +147,9 @@ class DungeonMapView{
       '<footer class="dm-foot"><span data-dm-status>秘境地圖與多人即時戰鬥</span>'+
       '<span data-dm-zoom>100%</span></footer></div>';
     const stage=root.querySelector('[data-dm-stage]');
+    // Mirror the trial top strip and move contextual overlays into the arena.
+    stage.append(root.querySelector('[data-dm-objective]'));
+    stage.append(root.querySelector('[data-dm-boss-health]'));
     stage.insertAdjacentHTML('beforeend',dungeonTrialWheelHTML());
     // Preserve the existing one-per-action DOM controls: do not create a
     // second quiz/attack/move button with a duplicate event handler.
@@ -177,8 +180,11 @@ class DungeonMapView{
     this.root=root;this.stage=stage;
     this.canvas=root.querySelector('[data-dm-world]');
     this.mini=root.querySelector('[data-dm-minimap]');
+    const topActions=root.querySelector('.dm-head-actions');
+    topActions.prepend(root.querySelector('[data-dm-team-status]'));
+    topActions.prepend(root.querySelector('[data-dm-health]'));
     const beastToggle=root.querySelector('[data-dm="beasts"]');
-    root.querySelector('.dm-head-actions').prepend(beastToggle);
+    topActions.prepend(beastToggle);
     this.ctx=this.canvas.getContext('2d',{alpha:false});
     // Same image atlases as 問道試煉. Images affect presentation only;
     // failed downloads leave deterministic vector terrain/markers visible.
@@ -295,8 +301,8 @@ class DungeonMapView{
       this.$('[data-dm-summary]').textContent=map.arena==='boss'?
         '四人共享戰場 · 2×2 巨獸 · '+map.width+' × '+map.height+' 格':
         map.branchCount+' 條支線 · '+map.width+' × '+map.height+' 格';
-      this.$('[data-dm-biome-box]').hidden=false;
-      this.$('[data-dm-overview]').hidden=false;
+      this.$('[data-dm-biome-box]').hidden=true;
+      this.$('[data-dm-overview]').hidden=true;
       // Always center the player, including irregular map boundaries.
       this.follow=true;this.followBeast=false;
       this.camera=Camera.lockToPlayer(this.selfPad(),
@@ -1622,6 +1628,7 @@ class DungeonMapView{
       visualTimeMs:performance.now()
     });
     this.updateFocusAuras(geometry);
+    if(this.mini?.closest('[data-dm-overview]')?.hidden)return;
     const mini=this.mini,miniBounds=mini.getBoundingClientRect();
     const mw=Math.max(1,Math.round(miniBounds.width)),mh=Math.max(1,Math.round(miniBounds.height));
     const dpr=clamp(window.devicePixelRatio||1,1,2);
