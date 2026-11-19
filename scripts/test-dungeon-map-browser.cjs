@@ -11,6 +11,8 @@ const SkillCombat=require('../dungeon-skill-combat.cjs');
 const QuizCredits=require('../dungeon-quiz-credit.cjs');
 const Objectives=require('../dungeon-objectives.cjs');
 const Boss=require('../dungeon-boss-battle.cjs');
+const Rescue=require('../dungeon-team-rescue.cjs');
+const Victory=require('../dungeon-victory-reward.cjs');
 const manualRecord={
   school:'sword',books:{'sword-wind':{exp:2500}},
   equipped:['wind-slash'],
@@ -34,6 +36,7 @@ catch(_){playwright=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/pla
 const app=express();app.use(express.json());
 const map=generateDungeonLayout('stage6-browser-visual-1');
 let room=null,clockLoop=null;const watchers=new Set(),requests=[];
+const victoryReceipts=new Set(),playerRewards={a:{gold:0,cultivation:0},b:{gold:0,cultivation:0}};
 const currentMap=()=>room?.dungeonArena==='boss'?
   Boss.mapFor('legacy:'+room.id):map;
 const quizState=Object.fromEntries(['a','b'].map(uid=>[uid,{answered:0,
@@ -203,6 +206,8 @@ app.post('/api/dungeon/room',(req,res)=>{
         member.moveSeq=0;member.lastMove=null;
         member.strikeSeq=0;member.lastStrike=null;
          member.quizCreditSeq=0;member.lastQuizCredit=null;
+         member.rescueSeq=0;member.lastRescue=null;
+         member.selfRescueCount=0;member.allyReviveCount=0;
       });
     room.revision++;publish();return success();
   }
@@ -235,6 +240,34 @@ app.post('/api/dungeon/room',(req,res)=>{
       if(entered.duplicate)return success();
       room={...entered.room,revision:room.revision+1};
       publish();return success();
+    }catch(error){return res.status(error.status||409).json({
+      ok:false,error:error.message
+    });}
+  }
+  if(action==='rescue'){
+    try{
+      const out=Rescue.help(room,uid,currentMap(),{
+        targetUid:req.body.targetUid,seq:req.body.seq});
+      if(out.duplicate)return success();
+      room.members=out.members;room.revision++;publish();return success();
+    }catch(error){return res.status(error.status||409).json({
+      ok:false,error:error.message
+    });}
+  }
+  if(action==='claim-boss-reward'){
+    try{
+      const proof=Victory.validate(room.id,room,uid);
+      const id=Victory.receiptId(room.id,proof.session,uid);
+      const duplicate=victoryReceipts.has(id);
+      if(!duplicate){
+        victoryReceipts.add(id);
+        playerRewards[uid].gold+=Victory.GOLD;
+        playerRewards[uid].cultivation+=Victory.CULTIVATION;
+      }
+      return res.json({ok:true,roomId:room.id,reward:{
+        status:duplicate?'duplicate':'awarded',awarded:!duplicate,
+        gold:Victory.GOLD,cultivation:Victory.CULTIVATION
+      }});
     }catch(error){return res.status(error.status||409).json({
       ok:false,error:error.message
     });}
@@ -802,6 +835,45 @@ async function main(){
       'two players cannot create duplicate bosses or teleports');
     await b.page.waitForFunction(()=>
       document.querySelector('[data-dm-boss-health]')?.getAttribute('data-phase')==='1');
+    // A downed teammate can be brought back during the real-time boss fight.
+    room.members.a.position={x:11,y:10};
+    room.members.b.position={x:11,y:9};
+    room.members.b.battleHealth=0;room.members.b.downed=true;
+    const beforeAid=room.members.a.explorationStamina;
+    room.revision++;publish();
+    const aid=a.page.locator('[data-dm="rescue"][data-target-uid="b"]');
+    await aid.waitFor({state:'visible'});
+    await a.page.waitForFunction(()=>
+      !document.querySelector('[data-dm="rescue"][data-target-uid="b"]')?.disabled);
+    await aid.click();
+    await b.page.waitForFunction(()=>
+      document.querySelector('[data-dm-health]')?.textContent==='生命 40/100');
+    assert.equal(room.members.b.downed,false);
+    assert.equal(room.members.b.allyReviveCount,1);
+    assert.equal(room.members.a.explorationStamina,beforeAid-8);
+    const retryAid=await a.page.evaluate(async()=>{
+      const response=await fetch('/api/dungeon/room',{method:'POST',
+        headers:{'content-type':'application/json','x-test-user':'a'},
+        body:JSON.stringify({action:'rescue',roomId:'dungroom000001',
+          targetUid:'b',seq:1})});
+      return response.status;
+    });
+    assert.equal(retryAid,200);
+    assert.equal(room.members.a.explorationStamina,beforeAid-8);
+    // Emergency self recovery is available even when everyone else is
+    // unable to help; it is a separate, single-use and more expensive action.
+    room.members.b.battleHealth=0;room.members.b.downed=true;
+    room.members.b.explorationStamina=40;room.revision++;publish();
+    const selfAid=b.page.locator('[data-dm="rescue"][data-target-uid="b"]');
+    await selfAid.waitFor({state:'visible'});
+    await b.page.waitForFunction(()=>
+      !document.querySelector('[data-dm="rescue"][data-target-uid="b"]')?.disabled);
+    await selfAid.click();
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-dm-team-status]')?.textContent.includes('修士乙 25 HP'));
+    assert.equal(room.members.b.battleHealth,25);
+    assert.equal(room.members.b.selfRescueCount,1);
+    assert.equal(room.members.b.explorationStamina,15);
     // A deterministic C room update positions the fighter near the massive
     // boss to exercise genuine martial-art targeting of all four body tiles.
     room.members.a.position={x:11,y:8};
@@ -825,9 +897,28 @@ async function main(){
     assert.equal(quizState.a.answered,2,'questions survive the portal');
     assert.equal(quizState.b.answered,1,'teammate study state remains private');
     assert.equal(room.dungeonProgress.keyAcquired,true);
-    assert.ok(!room.rewards,'no unimplemented loot/experience granted');
+    assert.ok(!room.rewards,'no rewards are minted by the C-room combat engine');
+    await a.page.locator('[data-dm-victory]:not([hidden])').waitFor();
+    await b.page.locator('[data-dm-victory]:not([hidden])').waitFor();
+    await a.page.locator('[data-dm="claim-victory"]').click();
+    await b.page.locator('[data-dm="claim-victory"]').click();
+    await Promise.all([a,b].map(({page})=>page.waitForFunction(()=>
+      document.querySelector('[data-dm-reward-status]')?.textContent.includes('已成功存入'))));
+    assert.equal(playerRewards.a.gold,120);
+    assert.equal(playerRewards.b.gold,120);
+    assert.equal(playerRewards.a.cultivation,3);
+    assert.equal(victoryReceipts.size,2);
+    const repeated=await a.page.evaluate(async()=>{
+      const response=await fetch('/api/dungeon/room',{method:'POST',
+        headers:{'content-type':'application/json','x-test-user':'a'},
+        body:JSON.stringify({action:'claim-boss-reward',roomId:'dungroom000001',
+          gold:99999,cultivation:99999})});
+      return (await response.json()).reward;
+    });
+    assert.equal(repeated.status,'duplicate');
+    assert.equal(playerRewards.a.gold,120);
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two clients, autonomous enemies, golden focus, quizzes, shared guardian key, portal, boss arena, 2x2 hits and shared victory');
+    console.log('[Dungeon map browser] PASS: two clients, golden focus, independent quizzes, guardian/key/portal, true 2x2 boss, ally+self rescue and per-account victory receipt');
   }finally{
     clearInterval(clockLoop);
     clockLoop=null;
