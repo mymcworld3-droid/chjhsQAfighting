@@ -9,6 +9,7 @@ on:
       - 'dungeon-movement.cjs'
       - 'dungeon-battle-clock.cjs'
       - 'dungeon-enemy-ai.cjs'
+      - 'dungeon-enemy-combat.cjs'
       - 'dungeon-room-api.cjs'
       - 'invitation-api.cjs'
       - 'public/cultivation/dungeon-*.js'
@@ -40,6 +41,7 @@ jobs:
           node --check dungeon-movement.cjs
           node --check dungeon-battle-clock.cjs
           node --check dungeon-enemy-ai.cjs
+          node --check dungeon-enemy-combat.cjs
           node --check dungeon-room-stream.cjs
           node --check invitation-api.cjs
       - name: Check map ES modules parse
