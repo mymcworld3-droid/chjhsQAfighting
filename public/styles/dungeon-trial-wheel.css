@@ -871,3 +871,38 @@ html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.b
     animation:none!important;
   }
 }
+
+/* Same subdued feedback placement as 問道試煉; never a giant
+   centered failure modal or a button covering the live map. */
+#dungeon-map-view .dm-action-feedback{
+  position:absolute;z-index:6;top:10px;left:50%;
+  transform:translateX(-50%);
+  max-width:min(70vw,360px);
+  padding:6px 10px;
+  border:1px solid #baac8963;border-radius:8px;
+  background:rgba(19,30,24,.84);color:#e8d4ac;
+  font:600 11px/1.4 system-ui,"Noto Sans TC",sans-serif;
+  text-align:center;pointer-events:none;
+  backdrop-filter:blur(6px);
+}
+#dungeon-map-view .dm-action-feedback[hidden]{display:none!important}
+#dungeon-map-view.tc-quarter-layout .tc-bolt-fill{
+  fill:url(#dm-trial-bolt-gradient)!important;
+}
+/* Keep the original loadout and remaining focus charge above the same
+   quarter-circle boundaries on both landscape and portrait screens. */
+#dungeon-map-view.tc-quarter-layout{
+  --dm-dial:var(--tc-dial);
+}
+#dungeon-map-view.tc-quarter-layout .dm-loadout-toggle{
+  bottom:calc(var(--tc-dial) + 8px);
+}
+#dungeon-map-view.tc-quarter-layout .dm-focus-indicator{
+  bottom:calc(var(--tc-dial) + 8px);
+}
+@media(orientation:portrait){
+  #dungeon-map-view .dm-action-feedback{
+    top:8px;max-width:min(80vw,280px);
+    padding:5px 8px;font-size:10px;
+  }
+}
