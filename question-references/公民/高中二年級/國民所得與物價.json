@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-cv2-gdpprice-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "某國一籃相同商品在基期花費200元，今年需花費220元。若此籃商品就是物價指數計算的固定籃子，與基期相比的價格漲幅為何？",
+        "correct": "10%",
+        "wrong": [
+          "5%",
+          "20%",
+          "110%"
+        ],
+        "exp": "價格漲幅=(220−200)/200×100%=10%；若基期CPI=100，則今年指數110。",
+        "subject": "公民",
+        "sub_topic": "國民所得與物價",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國民所得與物價",
+        "template_id": "ref-20261119-b5-cv2-gdpprice-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-cv2-gdpprice-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "某國今年名目GDP成長8%，同期間GDP平減指數成長5%。估算實質GDP成長率最接近何者？",
+        "correct": "約2.9%",
+        "wrong": [
+          "約13%",
+          "約8%",
+          "約5%"
+        ],
+        "exp": "實質成長率=(1.08/1.05)−1≈0.02857，即約2.9%；不能把名目與物價成長率直接相加。",
+        "subject": "公民",
+        "sub_topic": "國民所得與物價",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國民所得與物價",
+        "template_id": "ref-20261119-b5-cv2-gdpprice-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-cv2-gdpprice-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "居民今年以50萬元向他人購買去年已生產的二手車，不計任何新增仲介服務。這筆50萬元交易額對今年GDP的直接貢獻通常為何？",
+        "correct": "不計入今年生產的GDP",
+        "wrong": [
+          "計入50萬元，因今年發生付款",
+          "計入100萬元，因買賣雙方各算一次",
+          "不論何時生產，都按當年二手交易價計入新的產出"
+        ],
+        "exp": "GDP衡量一定期間內新生產的最終商品與服務；二手車於去年已生產，轉售本身不構成今年新增產出。",
+        "subject": "公民",
+        "sub_topic": "國民所得與物價",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國民所得與物價",
+        "template_id": "ref-20261119-b5-cv2-gdpprice-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
