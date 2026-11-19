@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-en1-phrases-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "The city plans to ______ a new system for separating recyclable waste next month.",
+        "correct": "set up",
+        "wrong": [
+          "turn down",
+          "run out of",
+          "look down on"
+        ],
+        "exp": "Set up a system means establish or organize it. 'Turn down' means reject, while 'run out of' and 'look down on' do not fit the meaning.",
+        "subject": "英文",
+        "sub_topic": "常用片語",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中一年級-常用片語",
+        "template_id": "ref-20261119-b8-en1-phrases-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-phrases-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "We should ______ the weather forecast before deciding whether to hold the event outdoors.",
+        "correct": "check out",
+        "wrong": [
+          "give away",
+          "break down",
+          "put off"
+        ],
+        "exp": "Check out means examine or consult information. The forecast should be checked before the decision; the other phrasal verbs change the intended action.",
+        "subject": "英文",
+        "sub_topic": "常用片語",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中一年級-常用片語",
+        "template_id": "ref-20261119-b8-en1-phrases-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en1-phrases-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "自然語境、條件清楚、錯誤選項與觀念相關",
+      "question": {
+        "q": "The teacher asked the students to ______ their essays once more to correct spelling errors.",
+        "correct": "go over",
+        "wrong": [
+          "give up",
+          "take off",
+          "get along"
+        ],
+        "exp": "Go over means review or examine carefully; it fits proofreading essays. The other phrases mean quit, depart/remove or maintain a relationship.",
+        "subject": "英文",
+        "sub_topic": "常用片語",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中一年級-常用片語",
+        "template_id": "ref-20261119-b8-en1-phrases-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
