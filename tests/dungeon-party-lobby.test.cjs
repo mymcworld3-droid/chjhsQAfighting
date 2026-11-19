@@ -134,7 +134,10 @@ test('leave while assembled preserves the expedition and transfers host',async()
   assert.equal(left.body.room.members.b.ready,true);
   assert.equal(left.body.room.dungeonArena,'exploration');
   assert.ok(left.body.room.enemies.length>0);
-  assert.equal((await f.call('b','start',{roomId:id})).status,409);
+  const stableRevision=left.body.room.revision;
+  const repeat=await f.call('b','start',{roomId:id});
+  assert.equal(repeat.status,200,'new captain may safely retry assembly');
+  assert.equal(repeat.body.room.revision,stableRevision,'retry must not reset active exploration');
   assert.equal((await f.call('a','reconnect')).body.room,null);
 });
 test('lobby entry, input, guarded long-press and quiz selectability are present',()=>{
