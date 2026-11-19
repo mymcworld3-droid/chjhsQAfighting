@@ -577,7 +577,7 @@
   #dungeon-map-view .dm-portal-votes{max-width:175px;font-size:10px}
 }
 
-// Stage 15: a single 2x2 server-owned boss and shared room transition.
+/* Stage 15: a single 2x2 server-owned boss and shared room transition. */
 #dungeon-map-view .dm-boss-health{
   margin-top:5px;max-width:min(380px,47vw);
   padding:5px 8px 7px;background:#371e20a3;
@@ -629,7 +629,7 @@
   #dungeon-map-view .dm-boss-meter i{transition:none}
 }
 
-// Stage 16 — team rescue and authenticated, personal victory reward.
+/* Stage 16 — team rescue and authenticated, personal victory reward. */
 /* Stage 18: shield & compact two-column guard commands. */
 #dungeon-map-view .dm-boss-shield{margin-top:5px}
 #dungeon-map-view .dm-boss-shield span{
