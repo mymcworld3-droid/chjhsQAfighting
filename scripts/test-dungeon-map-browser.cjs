@@ -605,9 +605,9 @@ async function main(){
       await page.locator('[data-dm="claim-victory"]:not([disabled])').click();
     }
     await a.page.waitForFunction(()=>document.querySelector('[data-dm-reward-status]')
-      ?.textContent.includes('已領取'),null,{timeout:9000});
+      ?.textContent.includes('已成功存入'),null,{timeout:9000});
     await b.page.waitForFunction(()=>document.querySelector('[data-dm-reward-status]')
-      ?.textContent.includes('已領取'),null,{timeout:9000});
+      ?.textContent.includes('已成功存入'),null,{timeout:9000});
     assert.equal(playerRewards.a.gold,Victory.GOLD);
     assert.equal(playerRewards.b.gold,Victory.GOLD);
     assert.equal(victoryReceipts.size,2);
