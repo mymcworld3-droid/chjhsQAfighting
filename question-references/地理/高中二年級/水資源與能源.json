@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-geo2-waterenergy-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "某城市每天可供應120,000 m³生活用水，人口600,000人。若均等分配且不計損耗，每人每日平均可分得多少公升？",
+        "correct": "200公升",
+        "wrong": [
+          "20公升",
+          "2,000公升",
+          "500公升"
+        ],
+        "exp": "120,000 m³=120,000,000公升；除以600,000人得到每人每日200公升。",
+        "subject": "地理",
+        "sub_topic": "水資源與能源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-水資源與能源",
+        "template_id": "ref-20261119-b4-geo2-waterenergy-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-geo2-waterenergy-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "上游地區興建大型水庫可蓄水與發電，但下游居民擔憂河川生態及農業用水。最適當的政策評估方式為何？",
+        "correct": "同時考量發電效益、流量變化、生態與上下游用水需求",
+        "wrong": [
+          "只要有發電效益就不必評估下游影響",
+          "只討論興建成本，不考慮長期用水調度",
+          "水庫建設一定完全不改變河川泥砂與流量"
+        ],
+        "exp": "水庫可提供能源、灌溉與防洪等效益，也會改變流量與生態，跨流域治理須考量不同利害關係人。",
+        "subject": "地理",
+        "sub_topic": "水資源與能源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-水資源與能源",
+        "template_id": "ref-20261119-b4-geo2-waterenergy-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-geo2-waterenergy-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科知識與可驗證情境訓練推論，非單純閱讀理解",
+      "question": {
+        "q": "某地太陽光電發電主要集中中午，用電尖峰卻在傍晚。若希望減少兩者時間落差，哪項方法最直接？",
+        "correct": "利用儲能系統把中午部分電能移到傍晚使用",
+        "wrong": [
+          "只擴大白天的發電，完全不需考量晚間負載",
+          "永久關閉所有電力需求預測",
+          "以降低光電板效率來增加傍晚發電"
+        ],
+        "exp": "儲能可在發電較多時充電、需求較高時放電，協助處理供需時間不匹配，仍需評估成本及容量。",
+        "subject": "地理",
+        "sub_topic": "水資源與能源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-水資源與能源",
+        "template_id": "ref-20261119-b4-geo2-waterenergy-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
