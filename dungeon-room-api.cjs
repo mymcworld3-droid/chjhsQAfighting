@@ -7,7 +7,7 @@ const { playerRepository, raidRepository } = require('./server-repositories.cjs'
 const { verifyMainIdentity } = require('./raid-question-ticket.cjs');
 const {streamDungeonRoom} = require('./dungeon-room-stream.cjs');
 const {LAYOUT_VERSION,generateDungeonLayout} = require('./dungeon-map-generator.cjs');
-const {roomMap,startExplorationMembers,moveOnMap} = require('./dungeon-movement.cjs');
+const {roomMap,startExplorationMembers,moveOnMap,moveRouteOnMap} = require('./dungeon-movement.cjs');
 const {initialClock,projectClock} = require('./dungeon-battle-clock.cjs');
 const {initialEnemies,advanceWorld,ENEMY_AI_VERSION} = require('./dungeon-enemy-ai.cjs');
 const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
@@ -378,10 +378,11 @@ function createHandler({
         if(!sessionRoom(room,at))throw err('副本房間已關閉或過期',410);
         return respond(roomId,room);
       }
-      if(action==='move'){
-        // Movement is server-authoritative and sequential per authenticated
-        // player. The client never sends a destination, stamina or position.
-        const {dx,dy,step}=req.body||{};
+      if(action==='move'||action==='move-route'){
+        // Both tap-to-walk and one-step keyboard movement use the same
+        // per-tile server validation. Route paths are bounded and atomic.
+        // No client-selected destination, stamina or collision is trusted.
+        const {dx,dy,step,vectors}=req.body||{};
         const updated=await db.runTransaction(async tx=>{
           const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
           if(!current||!hasMember(current,uid))
@@ -391,7 +392,9 @@ function createHandler({
           if(current.status!=='assembled')
             throw err('請先完成全隊集結',409);
           const map=roomMap(current,roomId);
-          const outcome=moveOnMap(current,uid,map,{dx,dy,step});
+          const outcome=action==='move-route'?
+            moveRouteOnMap(current,uid,map,{vectors,step}):
+            moveOnMap(current,uid,map,{dx,dy,step});
           if(outcome.duplicate)return current;
           // AI decisions observe the newly committed player position in this
           // same transaction; clients cannot trigger extra NPC actions.
