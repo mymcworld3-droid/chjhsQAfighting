@@ -1,9 +1,12 @@
 import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
-import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, setDungeonBossReady, rescueDungeonTeammate, guardDungeonTeammate, claimDungeonBossReward } from './dungeon-room.js';
+import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, moveDungeonMemberRoute, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, setDungeonBossReady, rescueDungeonTeammate, guardDungeonTeammate, claimDungeonBossReward } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
-import { dungeonQuarterControlsHTML, energyRingFill, dungeonFocusCharges, dungeonFocusEmpowers } from './dungeon-quarter-controls.js';
+import { energyRingFill, dungeonFocusCharges, dungeonFocusEmpowers } from './dungeon-quarter-controls.js';
+import { dungeonTrialWheelHTML, bindDungeonTrialWheel, renderDungeonTrialWheel } from './dungeon-trial-wheel.js';
+import { dungeonRoute } from './dungeon-map-actions.js';
+import { skillArt } from './manual-art.js';
 
 // The dungeon shares the trial's fullscreen quarter-dial presentation;
 // its exploration, combat and questions remain live, server-authoritative actions.
@@ -32,8 +35,9 @@ class DungeonMapView{
     this.rewardPending=false;this.rewardResult=null;
     this.aimTile=null;this.skillSignature='';
     this.focusAuras=new Map();this.sprites={};
-    this.wheelMode='attack';this.manualOpen=false;
+    this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;
     this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
+    this.routePending=false;this.actionFeedbackTimer=null;
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
     this.clockTimer=null;this.clockAnchor=null;this.clockTickFloor=0;
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
@@ -56,9 +60,15 @@ class DungeonMapView{
       stylesheet.href='/styles/dungeon-quarter-controls.css?v=20261119-focus-gold-v2';
       document.head.append(stylesheet);
     }
+    if(!document.getElementById('dungeon-trial-wheel-style')){
+      const link=document.createElement('link');
+      link.id='dungeon-trial-wheel-style';link.rel='stylesheet';
+      link.href='/styles/dungeon-trial-wheel.css?v=20261119-synced-trial-v1';
+      document.head.append(link);
+    }
     const root=document.createElement('section');
     root.id='dungeon-map-view';root.hidden=true;
-    root.classList.add('dm-quarter-layout');
+    root.classList.add('dm-quarter-layout','tc-quarter-layout');
     root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');
     root.setAttribute('aria-label','合作副本即時戰場');
     root.innerHTML='<div class="dm-shell">'+
@@ -80,6 +90,7 @@ class DungeonMapView{
       '<div class="dm-stage" data-dm-stage>'+
       '<canvas class="dm-world" data-dm-world tabindex="0" aria-label="秘境地圖。可拖曳、雙指縮放，或使用方向鍵移動視角。"></canvas>'+ 
       '<div class="dm-effect-layer" data-dm-effects aria-hidden="true"></div>'+
+       '<div class="dm-action-feedback" data-dm-action-feedback role="status" aria-live="polite" hidden></div>'+
       '<div class="dm-message" data-dm-message role="status" aria-live="polite">正在取得副本地圖…</div>'+
       '<aside class="dm-biome" data-dm-biome-box hidden><small>秘境地貌</small>'+
       '<strong data-dm-biome>—</strong><span data-dm-summary></span></aside>'+
@@ -135,22 +146,28 @@ class DungeonMapView{
       '<footer class="dm-foot"><span data-dm-status>秘境地圖與多人即時戰鬥</span>'+
       '<span data-dm-zoom>100%</span></footer></div>';
     const stage=root.querySelector('[data-dm-stage]');
-    stage.insertAdjacentHTML('beforeend',dungeonQuarterControlsHTML());
+    stage.insertAdjacentHTML('beforeend',dungeonTrialWheelHTML());
     // Preserve the existing one-per-action DOM controls: do not create a
     // second quiz/attack/move button with a duplicate event handler.
     const charge=root.querySelector('[data-dm="quiz"]');
     const stamina=root.querySelector('[data-dm-energy]');
-    root.querySelector('[data-dm-charge-slot]').append(charge);
+    root.querySelector('[data-dm-quarter-energy]').append(charge);
+    charge.setAttribute('data-quiz','');
     charge.replaceChildren();
-    const bolt=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    bolt.setAttribute('viewBox','0 0 64 82');bolt.setAttribute('aria-hidden','true');
-    bolt.classList.add('dm-energy-bolt');
-    const lightning=document.createElementNS('http://www.w3.org/2000/svg','path');
-    lightning.setAttribute('d','M36 2 12 42H29L21 80 56 31H37L46 2Z');
-    bolt.append(lightning);
-    const label=document.createElement('span');label.textContent='答題充能';
-    charge.append(bolt,stamina,label);
-    charge.setAttribute('aria-label','答題充能，隨時開始獨立作答');
+    charge.innerHTML='<svg class="tc-energy-bolt" viewBox="0 0 72 100" aria-hidden="true" focusable="false">'+
+      '<defs><linearGradient id="dm-trial-bolt-gradient" x1="0" y1="0" x2="0.95" y2="1">'+
+      '<stop offset="0%" stop-color="#fcffe5"/><stop offset="48%" stop-color="#d9ffd4"/>'+
+      '<stop offset="100%" stop-color="#8cffb4"/></linearGradient></defs>'+
+      '<path class="tc-bolt-outline" d="M 43 6 L 16 50 Q 14 54 20 54 H 37 L 26 94 L 63 37 H 43 L 50 6 Z"></path>'+
+      '<path class="tc-bolt-fill" d="M 43 6 L 16 50 Q 14 54 20 54 H 37 L 26 94 L 63 37 H 43 L 50 6 Z"></path>'+
+      '<path class="tc-bolt-glint" d="M 42 17 L 27 46 H 40"></path></svg>';
+    charge.querySelector('.tc-bolt-fill')?.setAttribute('fill','url(#dm-trial-bolt-gradient)');
+    stamina.className='tc-energy-number';stamina.setAttribute('aria-hidden','true');
+    const label=document.createElement('span');
+    label.className='tc-charge-label';label.textContent='答題充能';
+    label.setAttribute('aria-hidden','true');
+    charge.append(stamina,label);
+    charge.setAttribute('aria-label','答題充能，可無限次個別作答');
     root.querySelector('[data-dm-strike-slot]').append(
       root.querySelector('[data-dm="strike"]'));
     root.querySelector('[data-dm-move-slot]').append(
@@ -198,21 +215,11 @@ class DungeonMapView{
     this.canvas.addEventListener('wheel',event=>this.wheel(event),{passive:false});
     this.canvas.addEventListener('contextmenu',event=>event.preventDefault());
     const wheel=root.querySelector('[data-dm-wheel]');
-    wheel.addEventListener('pointerdown',event=>{
-      if(event.pointerType==='mouse'&&event.button!==0)return;
-      this.wheelSwipeStart={id:event.pointerId,x:event.clientX,y:event.clientY};
+    bindDungeonTrialWheel(wheel,{
+      select:choice=>this.selectTrialWheel(choice),
+      refresh:()=>this.updateWheelHUD(),
+      ignoreClick:()=>{this.wheelSwipeSuppressUntil=Date.now()+350;}
     });
-    wheel.addEventListener('pointerup',event=>{
-      const from=this.wheelSwipeStart;this.wheelSwipeStart=null;
-      if(!from||from.id!==event.pointerId)return;
-      const dx=event.clientX-from.x,dy=event.clientY-from.y;
-      if(Math.hypot(dx,dy)<25)return;
-      // One gesture switches the same attack/move ring as the trial.
-      this.wheelSwipeSuppressUntil=Date.now()+180;
-      this.setWheelMode(Math.abs(dy)>=Math.abs(dx)?
-        (dy<0?'attack':'move'):(dx>0?'attack':'move'));
-    });
-    wheel.addEventListener('pointercancel',()=>{this.wheelSwipeStart=null;});
   }
   $(selector){return this.root?.querySelector(selector);}
   isCurrent(){return this.opened&&this.uid===getMainUser()?.uid&&
