@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-ea1-interior-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "地震波觀測發現S波無法穿越地球外核，而P波可穿過但有明顯折射。這最主要支持哪一推論？",
+        "correct": "地球外核以液態物質為主",
+        "wrong": [
+          "外核完全由真空組成",
+          "外核與地殼一樣皆為固態",
+          "所有地震波在地球各層速度完全相同"
+        ],
+        "exp": "S波是剪力波，無法像在固態中一樣穿過液態物質；結合P波傳播行為，可推斷外核主要呈液態。",
+        "subject": "地球科學",
+        "sub_topic": "地球內部構造",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球內部構造",
+        "template_id": "ref-20261119-b5-ea1-interior-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ea1-interior-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "莫霍不連續面（Moho）主要是哪兩個地球構造部分的分界？",
+        "correct": "地殼與地函",
+        "wrong": [
+          "地函與外核",
+          "外核與內核",
+          "對流層與平流層"
+        ],
+        "exp": "莫霍不連續面是地震波速度顯著改變的界面，常用來界定地殼與上部地函。",
+        "subject": "地球科學",
+        "sub_topic": "地球內部構造",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球內部構造",
+        "template_id": "ref-20261119-b5-ea1-interior-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ea1-interior-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "地球內核雖比外核溫度高，卻主要為固態。哪一因素最能解釋這種差異？",
+        "correct": "內核承受的極高壓力提高物質的熔點，使其維持固態",
+        "wrong": [
+          "內核完全沒有鐵或其他金屬",
+          "內核的溫度必定低於地表",
+          "外核因沒有重力而只能維持液態"
+        ],
+        "exp": "地球內核壓力非常高，對鐵合金等物質的相態有重要影響，故高溫下仍可保持固態。",
+        "subject": "地球科學",
+        "sub_topic": "地球內部構造",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球內部構造",
+        "template_id": "ref-20261119-b5-ea1-interior-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
