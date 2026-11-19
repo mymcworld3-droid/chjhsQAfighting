@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-hist2-enlightenment-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "若十七世紀的科學家認為觀測結果與古代權威著作不符，最符合近代科學革命精神的處理方式是？",
+        "correct": "設計可檢驗的觀察或實驗，以證據修正理論",
+        "wrong": [
+          "堅持任何古代記載均不可能有誤",
+          "要求研究者不再蒐集新資料",
+          "只依科學家的社會地位決定理論真偽"
+        ],
+        "exp": "科學革命強調數學推理、系統觀察與實驗檢驗，對既有權威提出可檢驗的質疑。",
+        "subject": "歷史",
+        "sub_topic": "科學革命與啟蒙",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-科學革命與啟蒙",
+        "template_id": "ref-20261119-b3-hist2-enlightenment-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-hist2-enlightenment-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "孟德斯鳩提出將國家權力加以區分與互相制衡。此主張最直接希望防止什麼問題？",
+        "correct": "政府權力集中造成濫用",
+        "wrong": [
+          "所有政府職能由單一機關無限制掌握",
+          "人民不能公開討論政府政策",
+          "科學家不再研究自然法則"
+        ],
+        "exp": "孟德斯鳩的權力分立主張有助於防止權力過度集中，影響後世憲政制度設計。",
+        "subject": "歷史",
+        "sub_topic": "科學革命與啟蒙",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-科學革命與啟蒙",
+        "template_id": "ref-20261119-b3-hist2-enlightenment-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-hist2-enlightenment-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "題幹具體、答案唯一且附原因說明",
+      "question": {
+        "q": "某十八世紀思想家主張人民應能理性討論公共事務，並質疑世襲特權的合理性。最符合哪種思想潮流？",
+        "correct": "啟蒙運動",
+        "wrong": [
+          "中世紀封建騎士制度",
+          "史前農業革命",
+          "二十世紀資訊革命"
+        ],
+        "exp": "啟蒙運動重視理性批判、公共討論與部分政治社會改革，挑戰傳統的權威與特權。",
+        "subject": "歷史",
+        "sub_topic": "科學革命與啟蒙",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-科學革命與啟蒙",
+        "template_id": "ref-20261119-b3-hist2-enlightenment-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
