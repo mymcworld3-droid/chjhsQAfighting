@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-math2-triggraph-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "函數y=3sin(2x)（x用弧度）的振幅與最小正週期分別為何？",
+        "correct": "振幅3、週期π",
+        "wrong": [
+          "振幅2、週期2π",
+          "振幅3、週期2π",
+          "振幅6、週期π/2"
+        ],
+        "exp": "對y=A sin(Bx)，振幅|A|、週期2π/|B|；所以振幅3，週期π。",
+        "subject": "數學",
+        "sub_topic": "正弦與餘弦函數圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-正弦與餘弦函數圖形",
+        "template_id": "ref-20261119-b3-math2-triggraph-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math2-triggraph-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "函數y=2cos x−1的最大值與最小值分別為何？",
+        "correct": "最大值1、最小值−3",
+        "wrong": [
+          "最大值2、最小值−2",
+          "最大值3、最小值−1",
+          "最大值1、最小值−1"
+        ],
+        "exp": "因−1≤cos x≤1，乘2再減1得到−3≤y≤1。",
+        "subject": "數學",
+        "sub_topic": "正弦與餘弦函數圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-正弦與餘弦函數圖形",
+        "template_id": "ref-20261119-b3-math2-triggraph-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math2-triggraph-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "將y=sin x的圖形向右平移π/3單位，所得函數為何？",
+        "correct": "y=sin(x−π/3)",
+        "wrong": [
+          "y=sin(x+π/3)",
+          "y=sin x+π/3",
+          "y=sin(3x/π)"
+        ],
+        "exp": "函數f(x)的圖形向右平移h，表達式變成f(x−h)，因此為sin(x−π/3)。",
+        "subject": "數學",
+        "sub_topic": "正弦與餘弦函數圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-正弦與餘弦函數圖形",
+        "template_id": "ref-20261119-b3-math2-triggraph-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
