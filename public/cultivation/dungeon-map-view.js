@@ -312,9 +312,9 @@ class DungeonMapView{
       button.textContent=ownAid?
         '✦ 凝神復起 · '+cost+' 體力（本場 1 次）':
         '✚ 救援 '+String(friend.name||'隊友').slice(0,9)+' · '+cost+' 體力';
-      button.disabled=this.rescuePending||!near||!limit||energy<cost;
+      button.disabled=this.rescuePending||!nearby||!limit||energy<cost;
       button.title=!limit?'這位修士的本場救援次數已用盡':
-        !near?'需走到隊友身旁相鄰一格':
+        !nearby?'需走到隊友身旁相鄰一格':
         energy<cost?'可答題補充探索體力':
         ownAid?'以 25 體力恢復 25 生命，每場限 1 次':
         '恢復隊友 40 生命，每人每場最多接受 2 次援助';
