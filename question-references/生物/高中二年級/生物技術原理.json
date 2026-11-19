@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-bio2-biotech-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "區分生物學機制、比較必要條件與明確生理作用",
+      "question": {
+        "q": "PCR反應要讓短引子與目標DNA序列結合，以提供DNA聚合酶延伸的起點。若兩條引子無法正確配對，最直接的結果是什麼？",
+        "correct": "目標DNA的擴增效率顯著降低或無法擴增",
+        "wrong": [
+          "目標DNA必定自行每循環加倍而不需引子",
+          "DNA聚合酶改為在任何位置無限制地合成RNA",
+          "反應會自動把目標片段轉成蛋白質"
+        ],
+        "exp": "DNA聚合酶需由引子提供可延伸的3′端；引子配對失敗會使指定區段無法有效擴增。",
+        "subject": "生物",
+        "sub_topic": "生物技術原理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生物技術原理",
+        "template_id": "ref-20261119-b11-bio2-biotech-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-bio2-biotech-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "區分生物學機制、比較必要條件與明確生理作用",
+      "question": {
+        "q": "在相同膠體與電泳條件下，將兩段線性DNA片段（400與1200鹼基對）進行一般瓊脂糖凝膠電泳，通常哪一段移動較遠？",
+        "correct": "400鹼基對片段",
+        "wrong": [
+          "1200鹼基對片段",
+          "兩段長度不同但必定停在同一位置",
+          "移動距離只由DNA是否含A鹼基決定"
+        ],
+        "exp": "DNA帶負電並在電場中移動；一般條件下較短片段較容易穿過膠體孔隙，因此移動較遠。",
+        "subject": "生物",
+        "sub_topic": "生物技術原理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生物技術原理",
+        "template_id": "ref-20261119-b11-bio2-biotech-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-bio2-biotech-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "區分生物學機制、比較必要條件與明確生理作用",
+      "question": {
+        "q": "研究者將含目標基因的DNA片段與經相容方式切開的質體連接，再送入細菌。該質體在此主要扮演何種角色？",
+        "correct": "攜帶目標DNA的載體",
+        "wrong": [
+          "直接把DNA翻譯成蛋白質的核糖體",
+          "提供不需細胞複製就能永久存在的游離胺基酸",
+          "使細菌所有原有基因自動刪除的酵素"
+        ],
+        "exp": "質體可作為重組DNA的載體，將目標片段導入宿主並在適合條件下被維持或複製。",
+        "subject": "生物",
+        "sub_topic": "生物技術原理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生物技術原理",
+        "template_id": "ref-20261119-b11-bio2-biotech-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
