@@ -897,6 +897,95 @@ class DungeonMapView{
       if(this.isCurrent()&&token===this.seq)this.updateStrikeHUD();
     }
   }
+  actionFeedback(message=''){
+    const node=this.$('[data-dm-action-feedback]');
+    if(!node)return;
+    clearTimeout(this.actionFeedbackTimer);
+    node.hidden=!message;node.textContent=message;
+    if(message)this.actionFeedbackTimer=setTimeout(()=>{
+      if(node.isConnected){node.hidden=true;node.textContent='';}
+    },3300);
+  }
+  async moveTo(tile){
+    if(!this.isCurrent()||!this.map||this.routePending||this.movePending||
+        this.room?.status!=='assembled')return;
+    const own=this.room?.members?.[this.uid];
+    if(!own||own.downed||Number(own.battleHealth)===0)return;
+    const from=this.selfPad();
+    const route=dungeonRoute(this.map,from,tile,this.creatures());
+    if(!route){
+      this.actionFeedback('此地格無法抵達：請選擇可通行位置');return;
+    }
+    if(!route.length)return;
+    const stamina=Math.max(0,Number(own.explorationStamina)||0);
+    if(route.length>stamina){
+      this.actionFeedback('體力不足，需要 '+route.length+' 點，目前 '+stamina+' 點');
+      return;
+    }
+    this.routePending=true;
+    const token=this.seq,roomId=this.roomId;
+    this.updateWheelHUD();this.actionFeedback('');
+    try{
+      // A route is split into bounded server-validated transactions.
+      // The next chunk uses the returned authoritative position and seq.
+      for(let offset=0;offset<route.length;offset+=48){
+        if(!this.isCurrent()||this.seq!==token||roomId!==this.roomId)break;
+        const member=this.room.members?.[this.uid];
+        const next=route.slice(offset,offset+48);
+        const step=(Number.isSafeInteger(member?.moveSeq)?member.moveSeq:0)+1;
+        const result=await moveDungeonMemberRoute(roomId,next,step);
+        if(!this.isCurrent()||this.seq!==token||roomId!==this.roomId)break;
+        if(!result?.room)throw new Error('移動結果遺失，請重新同步');
+        this.updateRoom(result.room);
+        window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
+          detail:{room:result.room}
+        }));
+        this.follow=true;this.followBeast=false;
+        this.camera=Camera.focusOn(this.camera,this.selfPad(),
+          this.map,this.width,this.height);
+        this.$('[data-dm="focus"]').setAttribute('aria-pressed','true');
+        this.drawSoon();
+      }
+    }catch(error){
+      if(this.isCurrent()&&this.seq===token){
+        this.actionFeedback(error?.message||'移動失敗，請重新點選');
+        if(error?.status===409){
+          try{
+            const latest=await getDungeonRoom(roomId);
+            if(this.isCurrent()&&this.seq===token&&latest?.room)
+              this.updateRoom(latest.room);
+          }catch(_){}
+        }
+      }
+    }finally{
+      this.routePending=false;
+      if(this.isCurrent()&&this.seq===token)this.updateWheelHUD();
+    }
+  }
+  mapTap(tile){
+    if(!this.map||!this.isCurrent()||this.routePending)return;
+    const {x,y}=tile;
+    if(!Number.isInteger(x)||!Number.isInteger(y)||
+        x<0||x>=this.map.width||y<0||y>=this.map.height||
+        this.map.tiles[y*this.map.width+x]===0)return;
+    this.aimTile={x,y};this.followBeast=false;
+    // Tapping an enemy is a combat action, not an inspector popup.
+    // Long-press remains dedicated to displaying beast information.
+    const beast=this.creatures().find(e=>e?.position&&
+      x>=e.position.x&&y>=e.position.y&&
+      x<e.position.x+(e.kind==='boss'?2:1)&&
+      y<e.position.y+(e.kind==='boss'?2:1));
+    this.selectedBeastId=beast?.id||null;
+    this.updateBeastHUD();this.updateStrikeHUD();
+    this.updateSkillHUD();this.drawSoon();
+    if(this.wheelMode==='move'){
+      void this.moveTo(tile);
+    }else if(this.selectedSkillId&&this.selectedSkillId!=='basic'){
+      void this.cast(this.selectedSkillId);
+    }else if(beast){
+      void this.strike();
+    }else this.actionFeedback('請點選射程內的靈獸，或切換已裝備功法');
+  }
   moveAlert(message=''){ 
     const node=this.$('[data-dm-move-alert]');
     if(node)node.textContent=message;
@@ -1295,6 +1384,8 @@ class DungeonMapView{
     this.guardPending=false;this.guardSignature='';
     this.aimTile=null;this.skillSignature='';
     this.wheelSwipeStart=null;this.manualOpen=false;this.wheelMode='attack';
+    this.selectedSkillId='';this.routePending=false;
+    clearTimeout(this.actionFeedbackTimer);this.actionFeedbackTimer=null;
     this.quiz?.destroy();
     for(const aura of this.focusAuras.values())aura.remove();
     this.focusAuras.clear();
@@ -1388,7 +1479,7 @@ class DungeonMapView{
     if(!this.map)return;
     const walking={w:[0,-1],a:[-1,0],s:[0,1],d:[1,0],
       W:[0,-1],A:[-1,0],S:[0,1],D:[1,0]};
-    if(walking[event.key]&&!event.ctrlKey&&!event.altKey&&!event.metaKey){
+    if(!this.routePending&&walking[event.key]&&!event.ctrlKey&&!event.altKey&&!event.metaKey){
       event.preventDefault();void this.move(...walking[event.key]);return;
     }
     if(event.target.closest('button'))return;
@@ -1463,16 +1554,11 @@ class DungeonMapView{
     this.pointers.delete(event.pointerId);
     this.touchOrigins.delete(event.pointerId);
     if(!this.pointers.size)this.gestureMulti=false;
-    if(tapped&&this.map&&this.isCurrent()&&!this.inspectAt(at)){
+    if(tapped&&this.map&&this.isCurrent()){
       const g=Camera.geometry(this.camera,this.map,this.width,this.height);
       const p={x:Math.floor((at.x-g.ox)/g.cell),
         y:Math.floor((at.y-g.oy)/g.cell)};
-      if(p.x>=0&&p.y>=0&&p.x<this.map.width&&p.y<this.map.height&&
-          this.map.tiles[p.y*this.map.width+p.x]>0){
-        this.aimTile=p;this.selectedBeastId=null;this.followBeast=false;
-        this.updateBeastHUD();this.updateStrikeHUD();this.updateSkillHUD();
-        this.drawSoon();
-      }
+      this.mapTap(p);
     }
     try{
       if(this.canvas.hasPointerCapture?.(event.pointerId))
