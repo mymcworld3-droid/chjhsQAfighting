@@ -144,6 +144,9 @@ class DungeonMapView{
 </div>`;
     const stage=root.querySelector('[data-dm-stage]');
     stage.insertAdjacentHTML('beforeend',dungeonTrialWheelHTML());
+    const loadoutToggle=root.querySelector('[data-dm="loadouts"]');
+    loadoutToggle.classList.add('tc-loadout-toggle');
+    root.querySelector('.dm-head-actions').prepend(loadoutToggle);
     // Preserve the existing one-per-action DOM controls: do not create a
     // second quiz/attack/move button with a duplicate event handler.
     const charge=root.querySelector('[data-dm="quiz"]');
