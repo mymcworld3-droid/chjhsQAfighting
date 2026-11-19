@@ -751,24 +751,18 @@ function createHandler({
           const remaining=Object.values(members).sort((a,b)=>a.joinedAtMs-b.joinedAtMs||a.uid.localeCompare(b.uid));
           const closed=!remaining.length;
           const hostUid=room.hostUid===uid?(remaining[0]?.uid||null):room.hostUid;
-          if(room.status==='assembled'){
-            for(const [key,member] of Object.entries(members)){
-              const {position,explorationStamina,moveSeq,lastMove,
-                battleHealth,battleMaxHealth,downed,lastDamage,
-                strikeSeq,lastStrike,skillSeq,lastSkill,dungeonLoadoutIndex,
-                dungeonLoadoutNames,dungeonSkillIds,dungeonSkills,dungeonAttack,
-                flyingSword,focusCharges,quizCreditSeq,lastQuizCredit,
-                rescueSeq,lastRescue,selfRescueCount,allyReviveCount,...previous}=member;
-              members[key]={...previous,ready:false};
-            }
-          }
-          const reset=room.status==='assembled'?{
+          // Voluntary departure must only remove that player. The surviving
+          // party keeps its arena, health, enemies, position, stamina, clock,
+          // objectives and boss fight. Otherwise a single player could erase
+          // everyone else's progress by clicking "leave".
+          // Only the LAST departure ends the run and clears transient state.
+          const reset=closed&&room.status==='assembled'?{
             battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
             enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null
           }:{};
           const updated={...room,revision:room.revision+1,
-            status:closed?'closed':'waiting',hostUid,members,...reset,
+            status:closed?'closed':room.status,hostUid,members,...reset,
             ...(closed?{closedAtMs:at}:{})};
           const codeRef=db.collection(CODES).doc(room.code);
           const codeSnap=closed?await tx.get(codeRef):null; // read before writes
