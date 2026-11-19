@@ -9,6 +9,7 @@ import './tactical-threat-visuals.js?v=20261118-phase5-v1';
 import './tactical-target-visuals.js?v=20261118-phase6-v1';
 import './tactical-compass.js?v=20261118-phase7-v1';
 import './tactical-seal-ranges.js?v=20261119-seal-ranges-v1';
+import './tactical-seal-targeting.js?v=20261119-seal-target-v1';
 const R=globalThis.QATactical;
 const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
 const A=globalThis.QATacticalAnimation;
@@ -20,14 +21,15 @@ const Threats=globalThis.QATacticalThreats;
 const Targets=globalThis.QATacticalTargetVisuals;
 const Compass=globalThis.QATacticalCompass;
 const SealRanges=globalThis.QATacticalSealRanges;
+const SealTargets=globalThis.QATacticalSealTargeting;
 const SEAL_ATLAS='/assets/seals/seal-atlas.webp';
 const SEAL_FRAME_SIZE=128; // 4 columns: shield, hazard, rage, maze; 3 rows: intact, damaged, broken.
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
   monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
 
 export class TacticalRenderer{
-  constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.focusBeastIndex=0;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;this.sealRangePlan={seals:[]};this.sealRangeMode='all';this.sealRangeFocusId=null;
+  constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{},onSealPeek=()=>{}){
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.onSealPeek=onSealPeek;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.focusBeastIndex=0;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;this.sealRangePlan={seals:[]};this.sealRangeMode='all';this.sealRangeFocusId=null;this.sealTargetPlan={seals:[]};
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
@@ -63,7 +65,11 @@ export class TacticalRenderer{
             if(actorUid&&!this.state?.actors.some(a=>a.uid===actorUid&&a.hp>0))return;
             this.longPressTriggered=true;this.suppressClickUntil=Date.now()+800;
             if(actorUid)this.onInspect(actorUid,'pin');
-            else this.setHoverPreview(tile);
+            else{
+              const seal=R.sealInfo(this.state,tile);
+              if(seal)this.onSealPeek(seal,'pin');
+              else this.setHoverPreview(tile);
+            }
           },500);
         }
       }
@@ -74,7 +80,12 @@ export class TacticalRenderer{
         const p=point(e),marker=Compass.pick(this.compassMarkers,p.x,p.y);
         canvas.style.cursor=marker?'pointer':'';
         if(marker)canvas.title='點選定位：'+marker.name;
-        else canvas.removeAttribute('title');
+        else{
+          const tile=this.tileAtClient(e.clientX,e.clientY);
+          const seal=tile?R.sealInfo(this.state,tile):null;
+          if(seal)canvas.title=SealTargets.summary(seal,'move')+'（可破壞的封印機關）';
+          else canvas.removeAttribute('title');
+        }
         const beast=this.beastAtClient(e.clientX,e.clientY),next=beast?.uid||null;
         if(next!==this.hoverUid){
           this.hoverUid=next;this.onInspect(next,'hover');
@@ -287,6 +298,7 @@ export class TacticalRenderer{
     this.threatPlan=Threats.derive(state,uid,mode,this.range);
     // Compute once per authoritative state update, never in the animation loop.
     this.sealRangePlan=SealRanges.derive(state,R);
+    this.sealTargetPlan=SealTargets.derive(state,uid,mode,R);
     this.targetPlan=Targets.derive(state,uid,mode,selection,R,this.threatPlan);
     this.hoverPlan=this.hoverSelection?
       Targets.derive(state,uid,mode,this.hoverSelection,R,this.threatPlan):null;
@@ -324,7 +336,7 @@ export class TacticalRenderer{
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
   present(state,uid,scene=null,progress=0,view=null){
-    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.sealRangePlan={seals:[]};this.canvas.removeAttribute('aria-description');this.canvas.removeAttribute('aria-keyshortcuts');this.draw();
+    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.sealRangePlan={seals:[]};this.sealTargetPlan={seals:[]};this.canvas.removeAttribute('aria-description');this.canvas.removeAttribute('aria-keyshortcuts');this.draw();
   }
   get isAnimating(){return !!this.scene||this.queue.length>0;}
   get currentAction(){return (this.scene||this.queue[0])?.label||'';}
@@ -784,6 +796,39 @@ export class TacticalRenderer{
             c.fillRect(px,py,pip,Math.max(2,cell*.065));
           }
         }
+      }
+    }
+    // Quiet attackable emblems + exact durability above the altar art and
+    // BELOW every character sprite. Ready is shown only when real skill
+    // geometry and server-side resource validation both allow an action.
+    if(!this.preview&&objective?.type==='sealing'&&s.trial?.layoutVersion===4){
+      for(const seal of this.sealTargetPlan.seals){
+        if(seal.broken)continue;
+        const x=ox+(seal.x+.5)*cell,y=oy+(seal.y+.5)*cell;
+        const ready=seal.status==='ready'&&!animating;
+        const size=Math.max(4.2,Math.min(8,cell*.16));
+        const cx=x+cell*.31,cy=y-cell*.28;
+        c.save();c.fillStyle=ready?'#173f34ec':'#152c2de0';
+        c.strokeStyle=ready?'#acf4cf':seal.color;
+        c.lineWidth=Math.max(1.2,cell*.031);
+        c.beginPath();c.arc(cx,cy,size,0,Math.PI*2);c.fill();c.stroke();
+        // Four ticks and a center dot read as a target even when tiny.
+        c.beginPath();
+        c.moveTo(cx-size*.7,cy);c.lineTo(cx-size*.28,cy);
+        c.moveTo(cx+size*.28,cy);c.lineTo(cx+size*.7,cy);
+        c.moveTo(cx,cy-size*.7);c.lineTo(cx,cy-size*.28);
+        c.moveTo(cx,cy+size*.28);c.lineTo(cx,cy+size*.7);
+        c.stroke();c.beginPath();c.arc(cx,cy,Math.max(.7,size*.11),0,Math.PI*2);
+        c.fillStyle=ready?'#dffff1':seal.color;c.fill();
+        if(cell>=25){
+          const label=seal.hp+'/'+seal.maxHp,tw=Math.max(cell*.45,24),th=Math.max(11,cell*.2);
+          c.fillStyle='#12221fe8';c.fillRect(x-tw/2,y+cell*.40,tw,th);
+          c.fillStyle=ready?'#c9ffe0':'#e0ebdd';
+          c.font='600 '+Math.max(9,Math.min(13,cell*.19))+'px system-ui';
+          c.textAlign='center';c.textBaseline='middle';
+          c.fillText(label,x,y+cell*.40+th/2);
+        }
+        c.restore();
       }
     }
     const actors=scene?A.sample(scene,progress):s.actors;

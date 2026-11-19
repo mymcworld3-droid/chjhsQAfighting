@@ -4,6 +4,7 @@ import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-re
 import {manualXpDelta,renderManualXpToast} from './tactical-manual-xp-feedback.js';
 import {manualRoomExp,battleBreakthroughEstimate,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
 import './tactical-rules.js?v=20261116-pve-v4';
+import './tactical-seal-targeting.js?v=20261119-seal-target-v1';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261118-phase7-compass-v1';
 import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
 import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-pve-v4';
@@ -12,6 +13,7 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
 
 const R=globalThis.QATactical;
+const SealTargets=globalThis.QATacticalSealTargeting;
 const Manuals=globalThis.QAManuals;
 const CombatImpact=globalThis.QATacticalImpact;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -22,6 +24,8 @@ let root=null,keyboardGuard=null,renderer=null,beastInspector=null,state=null,mo
 let attackChoice='attack',selectedManualSkill='',wheelIgnoreClickUntil=0;
 // Local view preference; never sent to the server or charged as a battle action.
 let sealRangeMode='all',sealRangeFocusId=null;
+let sealPeekPosition=null,sealGuideForced=false;
+const sealGuideSeenLocally=new Set();
 let battleLoadouts=null,loadoutFetchedFor='',loadoutFetchingFor='',loadoutMenuOpen=false;
 let manualRecapCache=null,manualRecapLoadingKey='',manualXpTimer=null,battleMasteryBaseline=null;
 const battlefieldMode=()=>action==='manual'?'manual:'+selectedManualSkill:action;
@@ -267,6 +271,8 @@ function ensure(){
     else if(b.hasAttribute('data-reset-view'))renderer?.resetView();
     else if(b.hasAttribute('data-seal-range-toggle'))cycleSealRangeMode();
     else if(b.hasAttribute('data-seal-range-next'))nextSealRangeFocus();
+    else if(b.hasAttribute('data-seal-guide-dismiss'))ackSealGuide();
+    else if(b.hasAttribute('data-seal-guide-help')){sealGuideForced=true;refreshSealTargetGuidance();}
     else if(b.hasAttribute('data-loadout-toggle')){loadoutMenuOpen=!loadoutMenuOpen;renderBattleLoadouts();}
     else if(b.hasAttribute('data-loadout-index'))void switchBattleLoadout(Number(b.dataset.loadoutIndex));
     else if(b.hasAttribute('data-intro-ack'))void acknowledgeIntro();
@@ -505,16 +511,50 @@ function selectWheel(value){
     attackChoice=value;
   }else return;
   if(action!==previousAction||selectedManualSkill!==previousManual){
-    selection=null;
+    sealPeekPosition=null;selection=null;
     const me=myActor(),attackSkill=action==='manual'?R.manualSkillFor(me,selectedManualSkill):R.basicFor(me);
     if(me&&action!=='move'&&(attackSkill?.range===0||attackSkill?.kind==='ring')){
       selection={x:me.x,y:me.y};
     }
   }
-  updateControls();
   renderer?.update(state,uid,battlefieldMode(),selection);
+  updateControls();
 }
 
+
+function sealGuideKey(){return 'qa:seal-attack-guide:v1:'+String(uid||'local');}
+function hasReadSealGuide(){
+  if(sealGuideSeenLocally.has(sealGuideKey()))return true;
+  try{return localStorage.getItem(sealGuideKey())==='1';}catch(_){return false;}
+}
+function ackSealGuide(){
+  const key=sealGuideKey();sealGuideSeenLocally.add(key);sealGuideForced=false;
+  try{localStorage.setItem(key,'1');}catch(_){}
+  refreshSealTargetGuidance();
+  $('[data-seal-guide-help]')?.focus({preventScroll:true});
+}
+function peekSealTarget(seal){
+  sealPeekPosition=seal?{x:seal.x,y:seal.y}:null;
+  refreshSealTargetGuidance();
+}
+function refreshSealTargetGuidance(){
+  const guide=$('[data-seal-guide]'),hint=$('[data-seal-target-hint]');
+  if(!guide||!hint)return;
+  const inSeal=SealTargets.active(state,R);
+  const active=inSeal&&state.status==='active';
+  guide.hidden=!active||(hasReadSealGuide()&&!sealGuideForced);
+  if(!inSeal){hint.hidden=true;return;}
+  const chosen=SealTargets.at(renderer?.sealTargetPlan,selection)||
+    SealTargets.at(renderer?.sealTargetPlan,sealPeekPosition);
+  hint.hidden=!chosen;
+  if(!chosen)return;
+  const mode=battlefieldMode(),needsDirection=renderer?.sealTargetPlan?.skill&&
+    ['line','cleave','fist-sweep','fist-throw','fist-chain'].includes(renderer.sealTargetPlan.skill.kind);
+  const text=SealTargets.summary(chosen,mode)+
+    (chosen.status==='ready'&&needsDirection?' · 請點選能覆蓋陣眼的紅色方向格':'');
+  if(hint.textContent!==text)hint.textContent=text;
+  hint.dataset.status=chosen.status;
+}
 function refreshSealRangeControls(){
   const toolbar=$('[data-seal-range-toolbar]');
   if(!toolbar||!state)return;
@@ -562,7 +602,7 @@ function nextSealRangeFocus(){
 function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
   root.classList.toggle('tc-quarter-layout',state?.mode==='pve');
-  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><div class="tc-seal-range-toolbar" data-seal-range-toolbar role="group" aria-label="陣眼效果範圍" hidden><button type="button" data-seal-range-toggle aria-pressed="true" title="切換陣眼效果範圍">陣眼範圍：全部</button><button type="button" data-seal-range-next hidden title="查看下一座陣眼的範圍">下一座</button><span data-seal-range-note aria-live="polite"></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><span data-threat-a11y class="tc-threat-a11y" role="status" aria-live="polite" aria-atomic="true"></span><div class="tc-objective" data-objective role="status" aria-live="polite" hidden></div>
+  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><div class="tc-seal-range-toolbar" data-seal-range-toolbar role="group" aria-label="陣眼效果範圍" hidden><button type="button" data-seal-range-toggle aria-pressed="true" title="切換陣眼效果範圍">陣眼範圍：全部</button><button type="button" data-seal-range-next hidden title="查看下一座陣眼的範圍">下一座</button><button type="button" data-seal-guide-help title="再看一次陣眼攻擊教學" aria-label="陣眼攻擊教學">？</button><span data-seal-range-note aria-live="polite"></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><span data-threat-a11y class="tc-threat-a11y" role="status" aria-live="polite" aria-atomic="true"></span><div class="tc-seal-guide" data-seal-guide hidden role="note"><strong>封印關卡 · 攻擊陣眼</strong><p>發光的懸浮晶核是可破壞的目標。先選擇普通攻擊或有效功法，再點選紅色射程內的陣眼；通常命中兩次就能破除。體力不足可先答題充能。</p><button type="button" data-seal-guide-dismiss>知道了</button></div><div class="tc-seal-target-hint" data-seal-target-hint hidden role="status" aria-live="polite"></div><div class="tc-objective" data-objective role="status" aria-live="polite" hidden></div>
       <section class="tc-boss-hud" data-boss-hud data-phase="1" data-boss-kind="rock" aria-label="首領生命與攻擊預告" hidden>
         <div class="tc-boss-line"><strong class="tc-boss-name" data-boss-name></strong><span class="tc-boss-phase" data-boss-phase>第一階段</span></div>
         <div class="tc-boss-health" data-boss-health role="progressbar" aria-label="首領生命">
@@ -744,15 +784,19 @@ function buildGame(){
     });
     command.prepend(energy,actions);
   }
-  renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,battlefieldMode(),selection);
+  renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){sealPeekPosition=null;selection=p;renderer.update(state,uid,battlefieldMode(),selection);updateControls();
     // The sketch has no extra confirm button: choosing a valid map tile
     // directly executes the selected move or directional attack.
-    if(root.classList.contains('tc-quarter-layout')&&['move','attack','skill','manual'].includes(action)&&!$('[data-execute]').disabled)void execute();
+    const selectedSeal=R.sealInfo(state,p);
+    if(root.classList.contains('tc-quarter-layout')&&
+      ['move','attack','skill','manual'].includes(action)&&
+      !(selectedSeal?.active&&action==='move')&&
+      !$('[data-execute]').disabled)void execute();
   }},()=>{
     if(!opened||!state||!renderer)return;updateControls();
     if(!renderer.isAnimating&&state.status==='finished'&&!modalOpen)resultDialog();
     else if(!renderer.isAnimating&&!modalOpen&&state.quizRound)schedule();
-  },(actorUid,kind)=>beastInspector?.inspect(actorUid,kind));
+  },(actorUid,kind)=>beastInspector?.inspect(actorUid,kind),seal=>peekSealTarget(seal));
 }
 function hideBossBanner(){
   clearTimeout(bossBannerTimer);bossBannerTimer=null;
@@ -841,7 +885,7 @@ function paint({preserveModal=false}={}){
     quizButton.setAttribute('aria-label',`答題充能，${quizButton.title}，目前能量 ${amount} / ${R.LIMITS.stamina}，答對增加 4，答錯增加 1`);
   }else $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
-  renderer.update(state,uid,battlefieldMode(),selection);refreshSealRangeControls();updateControls();updateClock();
+  renderer.update(state,uid,battlefieldMode(),selection);refreshSealRangeControls();updateControls();refreshSealTargetGuidance();updateClock();
   beastInspector?.refresh();updateBossHud();
   // Resume/open through room-state polling also prefetches before any click.
   if(!modalOpen)preloadTacticalQuestions();
@@ -868,6 +912,7 @@ function updateControls(){
   root.classList.toggle('tc-animating',!!animating);
   $('[data-stamina]').classList.toggle('tc-gaining',!modalOpen&&renderer?.currentKind==='answer');
   const t=selection?R.at(state,selection):null;
+  const selectedSeal=selection?R.sealInfo(state,selection):null;
   const directional=['line','cleave','fist-sweep','fist-throw','fist-chain'].includes(shown.kind);
   const quarter=root.classList.contains('tc-quarter-layout'),cost=R.techniqueCost(me,shown);
   const basicTab=$('[data-action="attack"]');
@@ -879,7 +924,10 @@ function updateControls(){
   const d=selection&&directional&&(selection.x===me.x||selection.y===me.y)?
     R.attackDirection(me,selection):null;
   const direction=d?(d.x>0?'右':d.x<0?'左':d.y>0?'下':'上'):'';
-  if(action==='move'&&selection){
+  if(action==='move'&&selectedSeal?.active){
+    label='這是可攻擊的陣眼，請切換攻擊模式';
+    error='此處是陣眼，請先選擇攻擊招式';
+  }else if(action==='move'&&selection){
     const route=R.path(state,me,selection,uid),cost=route?route.length-1:0;
     if(route&&route.length>1)moveStamina=cost;
     label=route&&route.length>1?`移動至此 · ${cost} 體力`:'無法移動至此';
@@ -892,6 +940,16 @@ function updateControls(){
       label=(action==='attack'&&directional&&direction?'向'+direction+'攻擊':shown.name)+' · '+cost+' 體力';
       try{R.validateSkill(state,me,shown,selection);}catch(e){error=e.message;}
     }
+  }
+  // A valid aim does not guarantee that an AoE actually hits the seal.
+  // Block an auto-cast when the selected seal is outside its real hit cells.
+  if(selectedSeal?.active&&action!=='move'&&!error){
+    const guidance=SealTargets.at(renderer?.sealTargetPlan,selection);
+    if(guidance&&guidance.status!=='ready')error=guidance.reason;
+    let affected=[];
+    try{affected=R.skillCells(state,me,shown,selection)||[];}catch(_){}
+    if(!error&&!affected.some(p=>p.x===selectedSeal.x&&p.y===selectedSeal.y))
+      error='此招式不會命中所選陣眼，請改選能覆蓋陣眼的攻擊方向';
   }
   const description=Manuals.descriptionWithDamage(me.atk,shown,
     {flyingSwordReady:!!me.flyingSword});
@@ -976,6 +1034,7 @@ function updateControls(){
       ${error?' · '+error:''}`:
     mine?hint:'等待對手行動';
   if(animating)$('[data-selection]').textContent=renderer.currentAction;
+  refreshSealTargetGuidance();
 }
 
 function updateClock(){
@@ -1108,6 +1167,7 @@ function accept(next,serial){
   const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
   const bossTransition=CombatImpact.phaseTransition(state,next);
   if(state?.id!==next?.id){
+    sealPeekPosition=null;sealGuideForced=false;
     hideBossBanner();bossTransitionPending=null;
     beastInspector?.dismiss();
     battleLoadouts=null;loadoutFetchedFor='';loadoutMenuOpen=false;
@@ -1812,6 +1872,7 @@ async function open(nextMode='pve'){
   if(opened)close();
   lastTrigger=document.activeElement;mode=nextMode;root.dataset.mode=mode;
   action='move';attackChoice='attack';selectedManualSkill='';selection=null;
+  sealPeekPosition=null;sealGuideForced=false;
   const accountUid=getMainUser()?.uid||'';if(uid!==accountUid||state?.mode!==nextMode)state=null;uid=accountUid;
   if(!uid){window.showToast?.('請先登入後進入戰場');return;}
   clearLiveManualXp();battleMasteryBaseline=null;
@@ -1832,6 +1893,7 @@ async function open(nextMode='pve'){
 function close(){
   if(!root)return;
   hideBossBanner();bossTransitionPending=null;
+  sealPeekPosition=null;sealGuideForced=false;
   beastInspector?.dismiss();
   window.QATrialQuestion?.close();keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;manualRecapCache=null;manualRecapLoadingKey='';battleMasteryBaseline=null;clearLiveManualXp();clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();

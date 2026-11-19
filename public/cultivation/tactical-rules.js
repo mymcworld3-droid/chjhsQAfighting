@@ -665,7 +665,14 @@
         p.activated=true;if(p.gate)s.blocks=s.blocks.filter(b=>key(b)!==key(p.gate));
         if(p.kind==='hazard'&&!s.objective.points.some(q=>!q.activated&&q.kind==='hazard'))s.objective.hazards=[];
       }
-      log(s,p.activated?'陣眼已破除':'陣眼受擊 · 剩餘 '+p.hp+' 次','objective',
+      const def=sealDefinition(p.kind),name=def?.name||'陣眼';
+      const lingering=p.kind==='hazard'&&
+        s.objective.points.some(q=>!q.activated&&q.kind==='hazard');
+      const feedback=p.activated?
+        name+'已破除'+(lingering?' · 仍有其他妖煞陣眼，危險預告尚未解除':
+          def?.onBreak?' · '+def.onBreak:''):
+        name+'受擊 · 耐久 '+p.hp+'/'+p.maxHp;
+      log(s,feedback,'objective',
         {animation:{kind:'impact',style:'blast',cells:[point(p)],color:p.activated?'#9ef4dc':'#e9c677'}});
     }
   }

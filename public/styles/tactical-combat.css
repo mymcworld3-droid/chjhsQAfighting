@@ -188,3 +188,47 @@
   #tactical-combat .tc-seal-range-toolbar{justify-content:center;gap:4px;font-size:10px}
   #tactical-combat .tc-seal-range-toolbar [data-seal-range-note]{max-width:100%}
 }
+
+/* V4 seal tutorial and target hint; separate from the action wheel and modal. */
+#tactical-combat .tc-seal-guide[hidden],
+#tactical-combat .tc-seal-target-hint[hidden]{display:none!important}
+#tactical-combat .tc-seal-guide{
+  position:absolute;left:50%;top:69px;transform:translateX(-50%);
+  z-index:6;width:max-content;max-width:min(380px,78%);
+  border:1px solid rgba(145,202,173,.58);border-radius:12px;
+  background:rgba(18,37,32,.96);box-shadow:0 8px 20px rgba(0,0,0,.28);
+  color:#e0f4e8;padding:11px 12px;pointer-events:none;
+  font-size:12px;line-height:1.55;text-align:left;
+}
+#tactical-combat .tc-seal-guide strong{
+  display:block;color:#d9f3dc;font-weight:700;font-size:13px;
+}
+#tactical-combat .tc-seal-guide p{margin:4px 0 8px!important}
+#tactical-combat .tc-seal-guide button{
+  display:block;margin-left:auto;pointer-events:auto;cursor:pointer;
+  min-height:32px!important;padding:5px 13px!important;
+  border:1px solid #8accab;background:#2e6850;color:#f0fff5;
+  border-radius:8px;font-size:12px!important;font-weight:600;
+}
+#tactical-combat .tc-seal-guide button:focus-visible{
+  outline:2px solid #ebf8c7;outline-offset:2px
+}
+#tactical-combat .tc-seal-target-hint{
+  position:absolute;left:50%;bottom:37px;transform:translateX(-50%);
+  z-index:4;max-width:min(470px,76%);width:max-content;
+  padding:6px 10px;border:1px solid rgba(125,196,161,.44);
+  border-radius:9px;color:#daeee2;background:rgba(15,34,30,.89);
+  font-size:11px;line-height:1.5;text-align:center;pointer-events:none;
+  text-shadow:0 1px 2px #000;overflow-wrap:anywhere;
+}
+#tactical-combat .tc-seal-target-hint[data-status="ready"]{
+  border-color:rgba(136,232,174,.68);color:#d1fbd8;
+}
+#tactical-combat .tc-seal-target-hint[data-status="out-of-reach"],
+#tactical-combat .tc-seal-target-hint[data-status="stamina"]{
+  border-color:rgba(226,178,103,.55);color:#f1dab6;
+}
+@media(orientation:portrait){
+  #tactical-combat .tc-seal-guide{font-size:11px;max-width:78%;padding:9px}
+  #tactical-combat .tc-seal-target-hint{max-width:76%;font-size:10px}
+}
