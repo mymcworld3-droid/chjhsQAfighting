@@ -120,6 +120,9 @@
       tactic:'查看連動石障位置，破除陣眼以打開通路。'
     })
   });
+  // Preserve the original deterministic type order; the generator and client
+  // both derive it from this single catalog.
+  const SEAL_KINDS=Object.freeze(Object.keys(SEAL_TYPES));
   const sealDefinition=kind=>Object.hasOwn(SEAL_TYPES,String(kind))?SEAL_TYPES[kind]:null;
   // Read-only, serializable per-battle snapshot; never modify or enrich the
   // persisted objective. Old layout-v3 seals have different activation rules.
@@ -322,7 +325,7 @@
     const possible=introduced?TRIAL_TERRAINS.filter(t=>t.enemies.includes(introduced.species)):TRIAL_TERRAINS;
     const theme=pick(br,possible),spawn={x:1,y:1+Math.floor(gr()*(height-2))};
     const objective=mode==='defense'?{type:mode,shrine:{x:Math.floor(width/2),y:Math.floor(height/2)},rounds:4,completedRounds:0,hp:0,maxHp:0,spawnIndex:0,completed:false}:
-      mode==='sealing'?{type:mode,points:[{x:Math.floor(width*.55),y:1},{x:width-3,y:height-2},...(stage>=17&&or()<.5?[{x:Math.floor(width/2),y:Math.floor(height/2)}]:[])].map((p,i)=>({...p,kind:['shield','hazard','rage','maze'][(i+Math.floor((stage-8)/4))%4],hp:SEAL_MAX_DURABILITY,maxHp:SEAL_MAX_DURABILITY,activated:false})),completed:false}:
+      mode==='sealing'?{type:mode,points:[{x:Math.floor(width*.55),y:1},{x:width-3,y:height-2},...(stage>=17&&or()<.5?[{x:Math.floor(width/2),y:Math.floor(height/2)}]:[])].map((p,i)=>({...p,kind:SEAL_KINDS[(i+Math.floor((stage-8)/4))%SEAL_KINDS.length],hp:SEAL_MAX_DURABILITY,maxHp:SEAL_MAX_DURABILITY,activated:false})),completed:false}:
       mode==='boss'?{type:mode,bossUid:'monster-0',completed:false}:{type:mode,completed:false};
     const bossPos={x:width-4,y:Math.floor(height/2)-1};
     const bossCells=mode==='boss'?[bossPos,{x:bossPos.x+1,y:bossPos.y},{x:bossPos.x,y:bossPos.y+1},{x:bossPos.x+1,y:bossPos.y+1}]:[];
@@ -1382,5 +1385,5 @@
     if(s.pveMetrics)Object.assign(s.pveMetrics,{outcome:'loss',reason:'forfeit',turns:s.actors.find(a=>a.uid===uid)?.turns||0});
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });
