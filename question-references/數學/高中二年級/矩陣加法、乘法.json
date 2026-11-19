@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-m2-matrixops-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "沿用原觀念，條件清楚、答案唯一、含可驗證解題步驟",
+      "question": {
+        "q": "若A=[[2,−1],[3,0]]，B=[[1,4],[−2,5]]，則2A−B為何？",
+        "correct": "[[3,−6],[8,−5]]",
+        "wrong": [
+          "[[3,2],[4,5]]",
+          "[[5,2],[8,−5]]",
+          "[[3,−6],[4,5]]"
+        ],
+        "exp": "2A=[[4,−2],[6,0]]，逐項減B得到[[4−1,−2−4],[6−(−2),0−5]]=[[3,−6],[8,−5]]。",
+        "subject": "數學",
+        "sub_topic": "矩陣加法、乘法",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-矩陣加法、乘法",
+        "template_id": "ref-20261119-b8-m2-matrixops-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-m2-matrixops-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "沿用原觀念，條件清楚、答案唯一、含可驗證解題步驟",
+      "question": {
+        "q": "矩陣A=[[1,2],[0,3]]與B=[[2,0],[1,1]]相乘AB的結果為何？",
+        "correct": "[[4,2],[3,3]]",
+        "wrong": [
+          "[[2,4],[3,3]]",
+          "[[3,2],[1,6]]",
+          "[[4,3],[2,3]]"
+        ],
+        "exp": "AB各項依行乘列：第一行(1×2+2×1,1×0+2×1)=(4,2)；第二行(0×2+3×1,0×0+3×1)=(3,3)。",
+        "subject": "數學",
+        "sub_topic": "矩陣加法、乘法",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-矩陣加法、乘法",
+        "template_id": "ref-20261119-b8-m2-matrixops-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-m2-matrixops-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "沿用原觀念，條件清楚、答案唯一、含可驗證解題步驟",
+      "question": {
+        "q": "若A=[[1,0],[2,1]]，B=[[1,3],[0,1]]，關於AB與BA哪項正確？",
+        "correct": "AB與BA不同",
+        "wrong": [
+          "AB=BA=[[1,3],[2,7]]",
+          "AB與BA必定都等於單位矩陣",
+          "AB與BA無法相乘"
+        ],
+        "exp": "AB=[[1,3],[2,7]]，BA=[[7,3],[2,1]]，兩者不同；矩陣乘法一般不具交換律。",
+        "subject": "數學",
+        "sub_topic": "矩陣加法、乘法",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-矩陣加法、乘法",
+        "template_id": "ref-20261119-b8-m2-matrixops-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
