@@ -264,6 +264,9 @@ function renderRoom(){
     (host&&assembled&&!exploring?'<button data-dg="cancel-assemble">返回等待室</button>':'')+
     (host&&!assembled?'<button data-dg="visibility">'+(room.visibility==='public'?'改為私人':'開放招募')+'</button>':'')+
     (host&&!assembled?'<button data-dg="invite">邀請好友</button>':'')+
+    (assembled&&room.dungeonArena==='boss'&&room.bossEncounter?.status==='defeated'?
+      '<button class="dg-finish" data-dg="settle-and-leave">'+
+      '✦ 領取獎勵並離開副本</button>':'')+
     '<button data-dg="leave">離開隊伍</button>'+
     (host?'<button class="dg-danger" data-dg="disband">解散隊伍</button>':'')+'</div>';
   // A room refresh must not erase a recent operation result or error.
@@ -555,7 +558,16 @@ async function handleClick(event){
     if(!member||targetUid===account)return;
     return confirmAction('確定將「'+nameOf(member)+'」移出副本隊伍？',
       ()=>kickDungeonMember(roomId,targetUid));
-  }else if(action==='disband'&&host)return confirmAction(
+  }else if(action==='settle-and-leave'&&
+    room.dungeonArena==='boss'&&room.bossEncounter?.status==='defeated')
+    return confirmAction('確定完成本場副本？系統會先將 120 靈石與 3 修為入帳，再離開隊伍。',
+      async()=>{
+        // If A-side reward fails, never destroy C membership. The next
+        // claim will safely replay the same A receipt if leaving fails.
+        await claimDungeonBossReward(roomId);
+        return leaveDungeonRoom(roomId);
+      },{clear:true,message:'已領取本場獎勵並離開副本，勝利紀錄仍可查詢。'});
+  else if(action==='disband'&&host)return confirmAction(
     room.bossEncounter?.status==='defeated'?
       '確定解散隊伍？本場勝利已保存，尚未領取的隊員之後仍可從副本入口補領。':
       '確定解散目前的合作副本隊伍？所有隊員都會離開。',
