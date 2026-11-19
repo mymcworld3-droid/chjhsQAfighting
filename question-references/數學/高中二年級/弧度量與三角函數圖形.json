@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-m2-radian-graph-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "函數y=2sin(2x−π/3)，其中x以弧度計。其振幅與最小正週期分別為何？",
+        "correct": "2與π",
+        "wrong": [
+          "2與2π",
+          "1與π",
+          "2與π/2"
+        ],
+        "exp": "sin函數前係數的絕對值為振幅2；角頻率係數為2，週期T=2π/2=π。",
+        "subject": "數學",
+        "sub_topic": "弧度量與三角函數圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-弧度量與三角函數圖形",
+        "template_id": "ref-20261119-b10-m2-radian-graph-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m2-radian-graph-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "150°換成弧度，最簡表示為何？",
+        "correct": "5π/6",
+        "wrong": [
+          "3π/4",
+          "2π/3",
+          "7π/6"
+        ],
+        "exp": "角度乘π/180°得到150π/180=5π/6。",
+        "subject": "數學",
+        "sub_topic": "弧度量與三角函數圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-弧度量與三角函數圖形",
+        "template_id": "ref-20261119-b10-m2-radian-graph-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-m2-radian-graph-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "與原觀念一致；單一正解、完整推理、合理計算干擾項",
+      "question": {
+        "q": "函數y=cosx+2（x為實數）的值域為何？",
+        "correct": "1≤y≤3",
+        "wrong": [
+          "−1≤y≤1",
+          "2≤y≤3",
+          "−3≤y≤−1"
+        ],
+        "exp": "cosx介於−1和1之間，整體上移2後值域為[1,3]。",
+        "subject": "數學",
+        "sub_topic": "弧度量與三角函數圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-弧度量與三角函數圖形",
+        "template_id": "ref-20261119-b10-m2-radian-graph-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
