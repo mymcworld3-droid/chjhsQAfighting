@@ -189,6 +189,8 @@ export const generateDungeonQuestion=(roomId,slot=0)=>
 export const answerDungeonQuestion=(roomId,questionId,choice,help=0,timeTaken=0)=>
   dungeonQuizRequest('/api/dungeon/quiz/answer',
     {roomId,questionId,choice,help,timeTaken});
+export const acknowledgeDungeonReview=(roomId,questionId)=>
+  dungeonQuizRequest('/api/dungeon/quiz/next',{roomId,questionId});
 export const claimDungeonQuizStamina=(roomId,questionId)=>
   request('quiz-credit',{roomId,questionId});
 
