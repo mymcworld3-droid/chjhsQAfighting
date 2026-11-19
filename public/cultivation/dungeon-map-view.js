@@ -7,6 +7,12 @@ import { energyRingFill, dungeonFocusCharges, dungeonFocusEmpowers } from './dun
 import { dungeonTrialWheelHTML, bindDungeonTrialWheel, renderDungeonTrialWheel } from './dungeon-trial-wheel.js';
 import { dungeonRoute, dungeonReachableTiles, dungeonAttackTiles } from './dungeon-map-actions.js';
 import { skillArt } from './manual-art.js';
+// The trial's original shared manual catalog, animation timing and VFX.
+import './manual-rules.js';
+import './tactical-animation.js';
+import './tactical-skill-effects.js';
+import {dungeonAnimationEvents,paintDungeonScene,drawDungeonHitNumbers}
+  from './dungeon-skill-animation.js';
 
 // The dungeon shares the trial's fullscreen quarter-dial presentation;
 // its exploration, combat and questions remain live, server-authoritative actions.
@@ -35,6 +41,7 @@ class DungeonMapView{
     this.rewardPending=false;this.rewardResult=null;
     this.aimTile=null;this.skillSignature='';
     this.focusAuras=new Map();this.sprites={};
+    this.visualScenes=new Map(); // authenticated room events only; never controls damage
     this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;
     this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
     this.routePending=false;this.actionFeedbackTimer=null;
@@ -247,6 +254,7 @@ class DungeonMapView{
     this.quiz?.attach(room.id,playerUid);
     if(room.status==='assembled')void this.quiz?.warm();
     this.map=null;this.camera=Camera.initialCamera();
+    this.visualScenes.clear();
     this.follow=true;this.pointers.clear();this.opened=true;
     this.movePending=false;this.strikePending=false;this.skillPending=false;
     this.portalPending=false;this.bossPending=false;
@@ -1351,6 +1359,20 @@ class DungeonMapView{
     if(Number(room.revision)<Number(this.room?.revision||0))return;
     const changedArena=this.map&&
       (this.map.arena==='boss')!==(room.dungeonArena==='boss');
+    // Play only newly committed skill/strike results; duplicate SSE snapshots
+    // cannot restart a visual, and entering an arena cannot replay old casts.
+    const previous=this.room;
+    if(changedArena)this.visualScenes?.clear();
+    else if(this.map&&previous?.status==='assembled'){
+      this.visualScenes ||=new Map();
+      const now=performance.now();
+      for(const {key,scene} of dungeonAnimationEvents(previous,room)){
+        if(!this.visualScenes.has(key))
+          this.visualScenes.set(key,{scene,startedAt:now,soundPlayed:false});
+      }
+      while(this.visualScenes.size>12)
+        this.visualScenes.delete(this.visualScenes.keys().next().value);
+    }
     this.room=room;
     if(changedArena){
       this.map=null;this.camera=Camera.initialCamera();
@@ -1380,6 +1402,7 @@ class DungeonMapView{
     this.rangeSignature='';this.rangeTiles=[];
     clearTimeout(this.actionFeedbackTimer);this.actionFeedbackTimer=null;
     this.quiz?.destroy();
+    this.visualScenes?.clear();
     for(const aura of this.focusAuras.values())aura.remove();
     this.focusAuras.clear();
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
@@ -1615,15 +1638,50 @@ class DungeonMapView{
     // Recenter on every frame, even with stale camera state.
     this.camera=Camera.lockToPlayer(this.selfPad(),m,w,h);
     this.updateRangePlan();
+    const now=performance.now(),scenes=[];
+    const reduceMotion=typeof window!=='undefined'&&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    for(const [key,entry] of this.visualScenes||[]){
+      const elapsed=now-entry.startedAt;
+      if(elapsed>=entry.scene.duration){
+        this.visualScenes.delete(key);continue;
+      }
+      const p=reduceMotion?.77:Math.max(0,Math.min(1,
+        elapsed/Math.max(1,entry.scene.duration)));
+      if(!entry.soundPlayed&&p>=.38){
+        entry.soundPlayed=true;
+        if(entry.scene.hits?.some(hit=>hit.damage>0))
+          try{window.QAGameAudio?.play('combat-impact',{volume:.27});}catch(_){}
+      }
+      scenes.push({scene:entry.scene,p});
+    }
+    const paintEffects=(context,view,above)=>{
+      const renderer=globalThis.QATacticalSkillEffects;
+      for(const {scene,p} of scenes){
+        try{
+          paintDungeonScene(context,scene,p,view,above,renderer);
+          if(above)drawDungeonHitNumbers(context,scene,p,view);
+        }catch(error){
+          // A malformed visual must never block the live multiplayer fight.
+          if(!scene.visualErrorLogged){
+            scene.visualErrorLogged=true;
+            console.warn('[Dungeon visuals] failed to paint',error);
+          }
+        }
+      }
+    };
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:this.members(),selfUid:this.uid,showRoutes:false,
       rangeTiles:this.rangeTiles,rangeKind:this.rangeKind,
       enemies:this.creatures(),objectives:this.room?.dungeonProgress,
       aimTile:this.currentAim(),art:this.sprites,
       currentTick:Number(this.room?.battleClock?.appliedTick)||0,
-      visualTimeMs:performance.now()
+      visualTimeMs:now,
+      animationUnderlay:(context,view)=>paintEffects(context,view,false),
+      animationOverlay:(context,view)=>paintEffects(context,view,true)
     });
     this.updateFocusAuras(geometry);
+    if(scenes.length&&!reduceMotion)this.drawSoon();
 
   }
 }
