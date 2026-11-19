@@ -336,6 +336,10 @@ class DungeonMapView{
       own.explorationStamina:10;
     const energy=this.$('[data-dm-energy]');
     if(energy)energy.textContent=String(Math.max(0,Math.min(10,stamina)));
+    const chargeLabel=this.$('[data-dm="quiz"]');
+    if(chargeLabel)chargeLabel.setAttribute('aria-label',
+      '答題充能，體力 '+Math.max(0,Math.min(10,stamina))+
+      ' / 10，答對增加 4 點、答錯增加 1 點，無作答次數限制');
     this.$('[data-dm-quarter-energy]').hidden=!active||!this.map;
     this.root.querySelectorAll('[data-dm-energy-segment]').forEach((segment,index)=>
       segment.classList.toggle('is-filled',index<energyRingFill(stamina)));
@@ -382,6 +386,17 @@ class DungeonMapView{
     this.updatePortalHUD();
     this.updateRescueHUD();this.updateGuardHUD();this.updateVictoryHUD();
     this.updateStrikeHUD();this.updateSkillHUD();this.updateWheelHUD();
+    // Keep the world uncluttered as in 問道試煉. Contextual team actions
+    // appear only when there is something useful to do or a live warning.
+    if(holder){
+      const exceptional=[
+        this.$('[data-dm-threat]'),this.$('[data-dm-rescues]'),
+        this.$('[data-dm-guards]'),this.$('[data-dm="portal"]'),
+        this.$('[data-dm="enter-boss"]'),this.$('[data-dm-portal-votes]')
+      ];
+      holder.hidden=!active||!this.map||!exceptional.some(node=>
+        node&&!node.hidden);
+    }
   }
   setWheelMode(mode){
     if(mode!=='attack'&&mode!=='move')return;
