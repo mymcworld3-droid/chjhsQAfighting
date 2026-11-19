@@ -304,3 +304,36 @@ test('archive excludes unverified wins and mismatched room identity',()=>{
     ...room,bossEncounter:{...room.bossEncounter,status:'fighting'}},NOW),
     /先真正擊敗/);
 });
+
+
+test('a legitimate equipped manual kill also writes the same durable C victory proof',async()=>{
+  const f=await fixture(),record={school:'sword',
+    books:{'sword-wind':{exp:2500}},equipped:['wind-slash'],
+    loadouts:[{name:'劍氣',skillIds:['wind-slash']},
+      {name:'守勢',skillIds:[]},{name:'空白',skillIds:[]}],
+    activeLoadout:0};
+  f.a.records.set('tacticalManuals/a',record);
+  assert.equal((await f.call('a','loadout',
+    {roomId:f.roomId,index:0})).status,200);
+  const prior=f.raw();
+  prior.dungeonProgress={...prior.dungeonProgress,
+    guardianStatus:'defeated',keyAcquired:true,portalStatus:'open'};
+  prior.members.a.position={...f.map.portalSite};
+  assert.equal((await f.call('a','enter-boss',
+    {roomId:f.roomId})).status,200);
+  const battle=f.raw();
+  battle.members.a.position={x:11,y:8};
+  battle.enemies[0].battleHealth=20;
+  const target={...battle.enemies[0].position};
+  const response=await f.call('a','skill',{
+    roomId:f.roomId,skillId:'wind-slash',target,seq:1,damage:9999999
+  });
+  assert.equal(response.status,200,response.body?.error);
+  assert.equal(f.raw().bossEncounter.status,'defeated');
+  const proof=f.c.records.get('dungeonVictoryRecords/'+f.roomId);
+  assert.ok(proof);
+  assert.equal(proof.bossEncounter.defeatedByUid,'a');
+  assert.equal(f.c.records.get('dungeonVictoryInbox/a').recent[0].roomId,f.roomId);
+  assert.equal(f.c.records.get('dungeonVictoryInbox/b').recent[0].roomId,f.roomId);
+  assert.equal((await f.call('b','recent-victories')).body.rewards[0].claimed,false);
+});
