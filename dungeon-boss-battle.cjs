@@ -132,6 +132,13 @@ function guard(room,uid,map,{targetUid,seq}={}){
   if(int(source.explorationStamina)<cost)
     throw fail('探索體力不足，無法掩護',409);
   const tick=tickOf(room);
+  // Competing teammates must not spend energy on an already active guard.
+  // The C transaction serializes simultaneous attempts across instances.
+  const active=target.bossGuard;
+  if(active&&Number.isSafeInteger(active.expiresAtTick)&&
+      active.expiresAtTick>=tick&&
+      Object.hasOwn(room.members,active.sourceUid||''))
+    throw fail('隊友已有有效掩護，請等待掩護生效或結束',409);
   const protectedMember={...target,
     bossGuard:{sourceUid:uid,grantedAtTick:tick,
       expiresAtTick:tick+GUARD_DURATION_TICKS}};
