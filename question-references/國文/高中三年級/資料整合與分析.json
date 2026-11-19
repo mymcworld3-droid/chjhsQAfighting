@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-ch3-integrate-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "一份校園節能報告指出：甲資料顯示全年用電量由120萬度降至108萬度；乙資料顯示同期學生人數維持相近。哪項摘要最嚴謹？",
+        "correct": "用電量下降10%，學生人數大致不變，但仍需其他資料判斷原因",
+        "wrong": [
+          "用電量下降12%，可直接證明全部由新設備造成",
+          "學生人數不變表示各月份用電量必定相同",
+          "因總用電量下降，所以每位學生用電必定減少50%"
+        ],
+        "exp": "降幅(120−108)/120=10%；學生人數相近是解讀線索，不能憑兩筆資料確定減少原因。",
+        "subject": "國文",
+        "sub_topic": "資料整合與分析",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-資料整合與分析",
+        "template_id": "ref-20261119-b5-ch3-integrate-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ch3-integrate-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "甲：某圖書館新書借閱率提高；乙：訪談指出使用者希望延長開放時間。若撰寫建議書，何種整合方式最適當？",
+        "correct": "指出借閱需求有增加跡象，並以訪談作為檢討開放時段的線索",
+        "wrong": [
+          "直接斷言借閱率提高完全是開放時間不足造成",
+          "認為新書借閱率與使用者意見一定互相矛盾",
+          "以訪談取代所有借閱數據並宣稱每人都贊成延長"
+        ],
+        "exp": "量化借閱資料與質性需求訪談可互補，提出政策建議時應區分現象、可能解釋與仍需驗證之處。",
+        "subject": "國文",
+        "sub_topic": "資料整合與分析",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-資料整合與分析",
+        "template_id": "ref-20261119-b5-ch3-integrate-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-ch3-integrate-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "概念導向、情境與依據完整、避免純閱讀理解",
+      "question": {
+        "q": "同一報告列出：甲社區1000戶中有200戶使用太陽能；乙社區500戶中有150戶使用。若比較普及率，何種敘述正確？",
+        "correct": "乙社區30%高於甲社區20%，但甲使用戶數較多",
+        "wrong": [
+          "甲社區使用比例為50%，較乙高",
+          "乙社區使用戶數200戶，甲為150戶",
+          "兩社區使用比例均為20%"
+        ],
+        "exp": "甲普及率200/1000=20%，乙150/500=30%；實際使用戶數則甲200戶、乙150戶，數量與比例須分別比較。",
+        "subject": "國文",
+        "sub_topic": "資料整合與分析",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-資料整合與分析",
+        "template_id": "ref-20261119-b5-ch3-integrate-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
