@@ -133,7 +133,7 @@ test('only the trial skill engine is imported; old square-flash VFX are removed'
   assert.match(view,/import '\.\/tactical-skill-effects\.js'/);
   assert.match(view,/dungeonAnimationEvents\(previous,room\)/);
   assert.match(view,/paintDungeonScene\(context,scene,p,view,above,renderer\)/);
-  assert.match(view,/if\(scenes\.length&&!reduceMotion\)this\.drawSoon\(\)/);
+  assert.match(view,/if\(\(scenes\.length\|\|queuedScenes\)\&\&!reduceMotion\)this\.drawSoon\(\)/);
   assert.match(painter,/animationUnderlay\(ctx,\{ox:g\.ox/);
   assert.match(painter,/animationOverlay\(ctx,\{ox:g\.ox/);
   assert.doesNotMatch(painter,/Stage 13: server-confirmed strike paths briefly gild/);
