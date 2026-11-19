@@ -17,8 +17,17 @@ function db(initial={}){
           assert.equal(writing,false,'read after write in transaction');
           return snap(ref);
         },set:(ref,value)=>{writing=true;changes.set(ref.key,clone(value));},
-          update:(ref,value)=>{writing=true;changes.set(ref.key,
-            {...clone(records.get(ref.key)||{}),...clone(value)});}};
+          update:(ref,value)=>{
+            writing=true;
+            const next=clone(records.get(ref.key)||{});
+            for(const [path,entry] of Object.entries(clone(value))){
+              const parts=path.split('.');
+              let item=next;
+              for(const part of parts.slice(0,-1))item=item[part]||={};
+              item[parts.at(-1)]=entry;
+            }
+            changes.set(ref.key,next);
+          }};
         const result=await fn(tx);for(const [k,v]of changes)records.set(k,v);
         return result;
       });

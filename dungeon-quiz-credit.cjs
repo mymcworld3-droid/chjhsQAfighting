@@ -15,7 +15,7 @@ function credit(room,uid,source,questionId,roomId){
   if(typeof questionId!=='string'||questionId.length>120)
     throw fail('答題序號無效',400);
   const review=source.reviews?.[questionId];
-  if(!review||review.questionId!==questionId||!validIndex(review.index)||
+  if(!review||review.uid!==uid||review.questionId!==questionId||!validIndex(review.index)||
       typeof review.correct!=='boolean'||
       review.amount!==(review.correct?RIGHT:WRONG))
     throw fail('找不到已完成且可信的答題結果',403);

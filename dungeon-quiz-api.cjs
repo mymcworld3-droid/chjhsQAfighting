@@ -215,7 +215,7 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
       patch.questProgress=recordEvent(user.questProgress,'solo');
       if(learningReward.recovery)patch.questProgress=recordEvent(patch.questProgress,'correction');
     }
-    const review={questionId:q.id,index:index+1,choice,answerIndex:q.answerIndex,
+    const review={uid,questionId:q.id,index:index+1,choice,answerIndex:q.answerIndex,
       correct,amount,explanation:q.explanation,q:q.q,opts:q.opts,
       subject:q.subject,topic:q.topic,reward:{
         cultivation,gold:0,learning:learningReward.message||''

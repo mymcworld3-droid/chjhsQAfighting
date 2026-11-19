@@ -99,7 +99,7 @@ app.post('/api/dungeon/quiz/answer',(req,res)=>{
   const q=s.pending[s.answered],choice=req.body.choice;
   if(!q||q.id!==req.body.questionId||!Number.isInteger(choice)||choice<0||choice>3)
     return res.status(409).json({error:'stale answer'});
-  const correct=choice===2,review={questionId:q.id,index:s.answered+1,
+  const correct=choice===2,review={uid,questionId:q.id,index:s.answered+1,
     q:q.q,opts:q.opts,correct,choice,answerIndex:2,amount:correct?4:1,
     explanation:'因為 2 加 3 等於 5。',
     reward:{cultivation:correct?1:0,gold:0,learning:''}};
