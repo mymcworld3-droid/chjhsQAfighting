@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-eng3-revision-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "Choose the best transition: 'The new bus route is more convenient for students. ______, it may reduce their travel costs.'",
+        "correct": "In addition",
+        "wrong": [
+          "Nevertheless",
+          "On the contrary",
+          "Instead"
+        ],
+        "exp": "第二句增補另一項優點，故用In addition；Nevertheless或On the contrary表示轉折，不符上下文。",
+        "subject": "英文",
+        "sub_topic": "寫作組織與文法修訂",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-寫作組織與文法修訂",
+        "template_id": "ref-20261119-b4-eng3-revision-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-eng3-revision-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "Choose the grammatically correct revision: 'The new recycling program encourage students to separate paper and plastic.'",
+        "correct": "The new recycling program encourages students to separate paper and plastic.",
+        "wrong": [
+          "The new recycling program encouraging students to separate paper and plastic.",
+          "The new recycling program are encourage students to separate paper and plastic.",
+          "The new recycling program encourages students separating paper and plastic to."
+        ],
+        "exp": "單數主詞program在現在簡單式需用encourages；encourage someone to do something是自然且正確的句型。",
+        "subject": "英文",
+        "sub_topic": "寫作組織與文法修訂",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-寫作組織與文法修訂",
+        "template_id": "ref-20261119-b4-eng3-revision-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-eng3-revision-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "A survey involved 120 students; 84 said they preferred electronic notices. Which sentence reports the result accurately without exaggeration?",
+        "correct": "Seventy percent of the surveyed students preferred electronic notices.",
+        "wrong": [
+          "Eighty-four percent of the surveyed students preferred electronic notices.",
+          "Every student in the school preferred electronic notices.",
+          "Only thirty percent of the surveyed students preferred electronic notices."
+        ],
+        "exp": "84/120=0.70。正確敘述應寫70% of the surveyed students，不能把樣本推成全校每位學生。",
+        "subject": "英文",
+        "sub_topic": "寫作組織與文法修訂",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-寫作組織與文法修訂",
+        "template_id": "ref-20261119-b4-eng3-revision-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
