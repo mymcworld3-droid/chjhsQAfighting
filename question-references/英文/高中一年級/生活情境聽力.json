@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-en1-listening-life-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "Listening transcript: 'Good morning. The school health check will begin at 8:30 in the gym, not in the auditorium. Please bring your student ID.' What should students do?",
+        "correct": "Go to the gym by 8:30 and bring their student ID.",
+        "wrong": [
+          "Go to the auditorium at 8:30 without an ID.",
+          "Go to the gym at 9:30 and bring a library book.",
+          "Go to the auditorium at 9:00 with their student ID."
+        ],
+        "exp": "The announcement identifies the new venue as the gym and states that the check begins at 8:30; it also requests a student ID.",
+        "subject": "英文",
+        "sub_topic": "生活情境聽力",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-生活情境聽力",
+        "template_id": "ref-20261119-b9-en1-listening-life-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en1-listening-life-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "Listening transcript: 'This is the museum. Your guided tour is still on Saturday, but the starting time has changed from 10:00 to 10:45. The meeting point remains the main entrance.' Which detail has changed?",
+        "correct": "The tour's starting time",
+        "wrong": [
+          "The tour's date",
+          "The meeting point",
+          "The tour's location"
+        ],
+        "exp": "The tour remains on Saturday and the meeting point stays at the main entrance; only the time shifts from 10:00 to 10:45.",
+        "subject": "英文",
+        "sub_topic": "生活情境聽力",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-生活情境聽力",
+        "template_id": "ref-20261119-b9-en1-listening-life-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en1-listening-life-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "Listening transcript: 'Passengers for Bus 12: the 5:10 service is canceled. The next bus leaves at 5:30 from the same stop.' If a passenger planned to take the canceled service, how much later is the next departure?",
+        "correct": "20 minutes",
+        "wrong": [
+          "10 minutes",
+          "30 minutes",
+          "40 minutes"
+        ],
+        "exp": "The next departure is at 5:30 rather than 5:10, a difference of 20 minutes. The stop itself is unchanged.",
+        "subject": "英文",
+        "sub_topic": "生活情境聽力",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-生活情境聽力",
+        "template_id": "ref-20261119-b9-en1-listening-life-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
