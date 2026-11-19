@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-cv1-inequality-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "某國統計顯示，低所得家庭學生的高等教育升學率明顯較低。若要研究是否存在教育機會不平等，下列哪種做法最合理？",
+        "correct": "比較家庭所得、學校資源與其他背景因素對升學機會的影響",
+        "wrong": [
+          "只看升學人數就斷定每個學生學習能力相同",
+          "一有群體差異就認定所有個別學校必定蓄意歧視",
+          "把所有不升學的人都視為受到相同政策影響"
+        ],
+        "exp": "教育機會受家庭資源、區域供給與制度設計等因素影響；要解釋差異需進行更多背景控制與證據分析。",
+        "subject": "公民",
+        "sub_topic": "社會階層與不平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會階層與不平等",
+        "template_id": "ref-20261119-b5-cv1-inequality-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-cv1-inequality-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "社會學研究比較父母與成年子女的職業階層，發現部分子女進入與父母不同的階層。這種現象稱為何者？",
+        "correct": "代際社會流動",
+        "wrong": [
+          "同一人一年內換職位的組織內調動",
+          "總人口自然增加",
+          "僅指所得物價指數的變動"
+        ],
+        "exp": "代際社會流動研究父母與子女世代間的社會階層變化；同一人生命歷程的轉變則屬世代內流動。",
+        "subject": "公民",
+        "sub_topic": "社會階層與不平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會階層與不平等",
+        "template_id": "ref-20261119-b5-cv1-inequality-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-cv1-inequality-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應情境、嚴守學習範圍、確保解析有可核對的依據",
+      "question": {
+        "q": "某職缺要求申請者具備與工作無關、但高費用才能取得的私人會員資格。若其他資格相近，這項要求可能造成什麼問題？",
+        "correct": "使經濟資源較少者面臨不必要的進入障礙",
+        "wrong": [
+          "保證所有人的錄取機會更加平等",
+          "只要採用會員資格便能排除所有偏見",
+          "能直接證明所有應徵者工作能力差異都消失"
+        ],
+        "exp": "與工作能力無關且昂貴的門檻，可能排除資源不足者，增加社會資本及經濟資源轉成職業機會的障礙。",
+        "subject": "公民",
+        "sub_topic": "社會階層與不平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會階層與不平等",
+        "template_id": "ref-20261119-b5-cv1-inequality-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
