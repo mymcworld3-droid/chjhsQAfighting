@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-civ3-govmarket-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境推理，附可核對解析",
+      "question": {
+        "q": "某工廠製造產品時排放污染，使附近住戶承擔清潔及健康成本，但產品價格未反映這些成本。這屬於何種經濟現象？",
+        "correct": "負向外部性",
+        "wrong": [
+          "正向外部性",
+          "沒有任何市場失靈的完全內部成本",
+          "僅由商品外觀決定的偏好差異"
+        ],
+        "exp": "生產活動把部分成本轉嫁給未參與交易的第三者，形成負向外部性，私人決策未完整反映社會成本。",
+        "subject": "公民",
+        "sub_topic": "市場與政府",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-市場與政府",
+        "template_id": "ref-20261119-b4-civ3-govmarket-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-civ3-govmarket-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境推理，附可核對解析",
+      "question": {
+        "q": "某街道照明在一般使用情況下難以排除特定行人享有照明，也不會因多一人通行就明顯減少他人照明。此服務具有哪項特性？",
+        "correct": "非排他性與非敵對性",
+        "wrong": [
+          "只有支付個別門票才能照明",
+          "使用一人後光線必全部耗盡",
+          "一定具有完全競爭的私人商品特性"
+        ],
+        "exp": "街道照明在一般情況下具有難以排除他人使用及多人共享的特性，接近公共財的典型例子。",
+        "subject": "公民",
+        "sub_topic": "市場與政府",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-市場與政府",
+        "template_id": "ref-20261119-b4-civ3-govmarket-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-civ3-govmarket-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "以學科觀念及具體情境推理，附可核對解析",
+      "question": {
+        "q": "二手車交易中，賣方知道車輛曾經重大事故，買方難以得知。此情況主要反映何種市場問題？",
+        "correct": "資訊不對稱",
+        "wrong": [
+          "完全資訊",
+          "沒有任何交易風險",
+          "供給量與需求量必然都為零"
+        ],
+        "exp": "買賣雙方掌握的重要商品品質資訊不同，可能影響價格、信任與市場交易，屬資訊不對稱問題。",
+        "subject": "公民",
+        "sub_topic": "市場與政府",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-市場與政府",
+        "template_id": "ref-20261119-b4-civ3-govmarket-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
