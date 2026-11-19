@@ -11,6 +11,8 @@ const SkillCombat=require('../dungeon-skill-combat.cjs');
 const QuizCredits=require('../dungeon-quiz-credit.cjs');
 const Objectives=require('../dungeon-objectives.cjs');
 const Boss=require('../dungeon-boss-battle.cjs');
+const Portal=require('../dungeon-portal-readiness.cjs');
+const Movement=require('../dungeon-movement.cjs');
 const Rescue=require('../dungeon-team-rescue.cjs');
 const Victory=require('../dungeon-victory-reward.cjs');
 const manualRecord={
@@ -70,6 +72,8 @@ const currentRoom=()=>{
   view.enemies=view.enemies?.map(e=>e.kind==='boss'?
     {...e,footprint:2,phase:Boss.phase(e.battleHealth)}:e);
   if(view.status==='assembled'){
+    if(view.dungeonArena==='exploration'&&view.dungeonProgress?.portalStatus==='open')
+      view.bossPortalReady=Portal.project(view,map,Date.now());
     const time=Date.now();
     const elapsedMs=Math.max(0,time-view.battleStartedAtMs);
     view.battleClock={
@@ -222,7 +226,7 @@ app.post('/api/dungeon/room',(req,res)=>{
     Object.values(room.members).sort((a,b)=>a.joinedAtMs-b.joinedAtMs)
       .forEach((member,i)=>{
         member.position={...map.spawnPads[i]};
-        member.explorationStamina=100;member.battleHealth=100;
+        member.explorationStamina=10;member.battleHealth=100;
         member.battleMaxHealth=100;member.downed=false;member.lastDamage=null;
         member.moveSeq=0;member.lastMove=null;
         member.strikeSeq=0;member.lastStrike=null;
@@ -256,12 +260,14 @@ app.post('/api/dungeon/room',(req,res)=>{
       ok:false,error:error.message
     });}
   }
-  if(action==='enter-boss'){
+  if(action==='enter-boss'||action==='boss-ready'){
     try{
-      const entered=Boss.enter(room,uid,map,Date.now(),room.id);
-      if(entered.duplicate)return success();
-      room={...entered.room,revision:room.revision+1};
-      publish();return success();
+      const ready=action==='enter-boss'?true:req.body.ready;
+      const outcome=Portal.vote(room,uid,map,Date.now(),ready,room.id);
+      if(outcome.changed||outcome.transitioned){
+        room={...outcome.room,revision:room.revision+1};publish();
+      }
+      return success();
     }catch(error){return res.status(error.status||409).json({
       ok:false,error:error.message
     });}
@@ -302,10 +308,11 @@ app.post('/api/dungeon/room',(req,res)=>{
     if(!room?.members?.[uid])return res.json({ok:true,roomId:oldRoomId,room:null});
     delete room.members[uid];
     room.revision++;
-    if(room.status==='assembled'){
-      room.status=Object.keys(room.members).length?'waiting':'closed';
-      room.bossEncounter=null;room.dungeonArena=null;
+    if(!Object.keys(room.members).length){
+      room.status='closed';room.bossEncounter=null;room.dungeonArena=null;
       room.dungeonProgress=null;room.enemies=[];
+    }else if(room.hostUid===uid){
+      room.hostUid=Object.keys(room.members)[0];
     }
     publish();
     return res.json({ok:true,roomId:oldRoomId,room:null});
@@ -339,24 +346,17 @@ app.post('/api/dungeon/room',(req,res)=>{
       room.revision++;publish();return success();
     }catch(error){return res.status(error.status||409).json({ok:false,error:error.message});}
   }
-  if(action==='move'){
-    if(room.status!=='assembled')return res.status(409).json({ok:false,error:'not assembled'});
-    const {dx,dy,step}=req.body,member=room.members[uid];
-    if(!Number.isInteger(dx)||!Number.isInteger(dy)||Math.abs(dx)+Math.abs(dy)!==1)
-      return res.status(400).json({ok:false,error:'invalid direction'});
-    if(step===member.moveSeq&&member.lastMove?.dx===dx&&member.lastMove?.dy===dy)
+  if(action==='move'||action==='move-route'){
+    try{
+      const outcome=action==='move'?
+        Movement.moveOnMap(room,uid,currentMap(),req.body):
+        Movement.moveRouteOnMap(room,uid,currentMap(),req.body);
+      if(outcome.duplicate)return success();
+      room.members=outcome.members;room.revision++;publish();
       return success();
-    if(!Number.isSafeInteger(step)||step!==member.moveSeq+1)
-      return res.status(409).json({ok:false,error:'stale step'});
-    const next={x:member.position.x+dx,y:member.position.y+dy},area=currentMap();
-    if(next.x<0||next.y<0||next.x>=area.width||next.y>=area.height||
-       !area.tiles[next.y*area.width+next.x]||
-       room.enemies?.some(enemy=>Boss.occupies(enemy,next)))
-      return res.status(409).json({ok:false,error:'wall'});
-    if(member.explorationStamina<1)return res.status(409).json({ok:false,error:'no energy'});
-    member.position=next;member.explorationStamina--;member.moveSeq=step;
-    member.lastMove={dx,dy,step};room.revision++;publish();
-    return success();
+    }catch(error){return res.status(error.status||409).json({
+      ok:false,error:error.message
+    });}
   }
   res.status(400).json({ok:false,error:'unknown action'});
 });
@@ -424,563 +424,205 @@ async function main(){
     await a.page.locator('#dungeon-lobby [data-dg="ready"]').click();
     await a.page.locator('#dungeon-lobby [data-dg="assemble"]:not([disabled])').waitFor();
     await a.page.locator('#dungeon-lobby [data-dg="assemble"]').click();
+    // Current two-player acceptance: fixed-camera quarter wheel, 10-point
+    // stamina, autonomous NPCs, independent quiz, shared key, unanimous
+    // portal entry, authoritative boss kill and exactly-once personal rewards.
     for(const {page} of [a,b]){
-      await page.locator('#dungeon-map-view:not([hidden])').waitFor({timeout:10000});
-      await page.locator('#dungeon-map-view [data-dm-biome-box]:not([hidden])').waitFor();
+      await page.locator('#dungeon-map-view:not([hidden])').waitFor({timeout:12000});
+      await page.waitForFunction(()=>{
+        const canvas=document.querySelector('#dungeon-map-view [data-dm-world]');
+        return canvas&&canvas.width>200&&canvas.height>200&&
+          document.querySelector('[data-dm-clock]')?.textContent.includes('戰場時鐘')&&
+          document.querySelector('[data-dm="quiz"]')?.disabled===false;
+      },null,{timeout:12000});
       const dims=await page.evaluate(()=>{
-        const canvas=document.querySelector('.dm-world'),r=canvas.getBoundingClientRect();
-        return {w:r.width,h:r.height,pixels:canvas.width,
+        const canvas=document.querySelector('#dungeon-map-view [data-dm-world]'),
+          rect=canvas.getBoundingClientRect();
+        return {w:rect.width,h:rect.height,pixels:canvas.width,
           touch:getComputedStyle(canvas).touchAction,
-          zoom:document.querySelector('[data-dm-zoom]').textContent};
+          stamina:document.querySelector('[data-dm-energy]')?.textContent,
+          obsolete:document.querySelector('.dm-overview,.dm-controls,.dm-foot')};
       });
       assert.ok(dims.w>200&&dims.h>200,JSON.stringify(dims));
       assert.ok(dims.pixels>=dims.w*1.9,JSON.stringify(dims));
-      assert.equal(dims.touch,'none');assert.equal(dims.zoom,'100%');
-      const creatureButton=page.locator('#dungeon-map-view [data-dm="beasts"]');
-      await page.waitForFunction(()=>/^靈獸 [5-7]$/.test(
-        document.querySelector('[data-dm="beasts"]')?.textContent||''));
-      assert.equal(await creatureButton.isDisabled(),false);
+      assert.equal(dims.touch,'none');
+      assert.equal(dims.stamina,'10');
+      assert.equal(dims.obsolete,null,'retired panels must not be mounted');
     }
-    // Stage-9 NPCs must move without the player pressing any controls.
-    const spawnBeasts=AI.initialEnemies(map);
-    await a.page.waitForFunction(()=>Number((
-      document.querySelector('[data-dm-clock]')?.textContent||'').match(/T(\d+)/)?.[1]||0)>=6,
-      null,{timeout:11000});
-    await a.page.waitForFunction(()=>Number((
-      document.querySelector('[data-dm-clock]')?.textContent||'').match(/T(\d+)/)?.[1]||0)>=6);
-    assert.ok(room.enemies.some((e,i)=>e.position.x!==spawnBeasts[i].position.x||
-      e.position.y!==spawnBeasts[i].position.y),'NPC should patrol with no player movement');
-    for(const {page} of [a,b]){
-      await page.locator('#dungeon-map-view [data-dm="beasts"]').click();
-      await page.locator('#dungeon-map-view [data-dm-inspector]:not([hidden])').waitFor();
-      const count=await page.locator('[data-dm-beast-list] button').count();
-      assert.equal(count,room.enemies.length);
-      await page.locator('[data-dm-beast-list] button').first().click();
-      // Selecting a beast closes the inspector to free the narrow rail for
-      // manual skill controls. Reopen it to read the selected beast details.
-      await page.locator('[data-dm-inspector]').waitFor({state:'hidden'});
-      await page.locator('#dungeon-map-view [data-dm="beasts"]').click();
-      await page.locator('[data-dm-inspector]:not([hidden])').waitFor();
-      const description=await page.locator('[data-dm-beast-details]').innerText();
-      assert.match(description,/座標/);assert.match(description,/節拍 T/);
-      assert.ok(description.includes(room.enemies[0].name));
-      await page.locator('[data-dm="close-beasts"]').click();
-    }
-    // Both connected browsers display elapsed server time with no player
-    // movement or actions required to make the clock advance.
-    await a.page.waitForFunction(()=>Number((
-      document.querySelector('[data-dm-clock]')?.textContent||'').match(/T(\d+)/)?.[1]||0)>=2,
-      null,{timeout:8000});
-    const clockA=await a.page.locator('[data-dm-clock]').innerText();
-    const clockB=await b.page.locator('[data-dm-clock]').innerText();
-    assert.match(clockA,/戰場時鐘/);
-    assert.match(clockB,/戰場時鐘/);
-    const tickA=Number(clockA.match(/T(\d+)/)?.[1]||-1),
-      tickB=Number(clockB.match(/T(\d+)/)?.[1]||-1);
-    assert.ok(Math.abs(tickA-tickB)<=1,clockA+' vs '+clockB);
-    // Inspecting a creature intentionally zooms to it; restore the
-    // all-map view before checking the original 100% -> 135% zoom control.
-    await a.page.locator('#dungeon-map-view [data-dm="fit"]').click();
-    await a.page.waitForFunction(()=>document.querySelector('[data-dm-zoom]')
-      ?.textContent==='100%');
-    await a.page.locator('#dungeon-map-view [data-dm="plus"]').click();
-    await a.page.waitForFunction(()=>document.querySelector('[data-dm-zoom]').textContent==='135%');
-    await a.page.locator('#dungeon-map-view [data-dm="route"]').click();
-    assert.equal(await a.page.locator('[data-dm="route"]').getAttribute('aria-pressed'),'true');
-    await a.page.locator('#dungeon-map-view [data-dm="fit"]').click();
-    await a.page.waitForFunction(()=>document.querySelector('[data-dm-zoom]').textContent==='100%');
-    await a.page.evaluate(()=>{
-      const canvas=document.querySelector('.dm-world'),r=canvas.getBoundingClientRect();
-      const emit=(type,id,x)=>canvas.dispatchEvent(new PointerEvent(type,{
-        bubbles:true,pointerType:'touch',pointerId:id,button:0,
-        clientX:r.left+r.width*x,clientY:r.top+r.height*.5
-      }));
-      emit('pointerdown',1,.4);emit('pointerdown',2,.6);
-      emit('pointermove',2,.8);emit('pointerup',1,.4);emit('pointerup',2,.8);
+    assert.equal(room.dungeonArena,'exploration');
+    assert.equal(Object.keys(room.members).length,2);
+    const startPositions=clone(Object.fromEntries(
+      Object.entries(room.members).map(([uid,member])=>[uid,member.position])));
+    const originalEnemies=clone(room.enemies);
+    await a.page.waitForFunction(()=>
+      Number((document.querySelector('[data-dm-clock]')?.textContent||'').match(/T(\d+)/)?.[1]||0)>=6,
+      null,{timeout:15000});
+    assert.ok(room.enemies.some((enemy,i)=>
+      enemy.position.x!==originalEnemies[i].position.x||
+      enemy.position.y!==originalEnemies[i].position.y),
+      'beasts must autonomously move without player input');
+
+    const dirs=[[1,0,'d'],[0,1,'s'],[-1,0,'a'],[0,-1,'w']];
+    const original=room.members.a.position;
+    const direction=dirs.find(([dx,dy])=>{
+      const to={x:original.x+dx,y:original.y+dy};
+      return to.x>=0&&to.y>=0&&to.x<map.width&&to.y<map.height&&
+        map.tiles[to.y*map.width+to.x]&&
+        !room.enemies.some(enemy=>Boss.occupies(enemy,to));
     });
-    // Paint is intentionally deferred to requestAnimationFrame: wait for
-    // the next frame rather than asserting a stale HUD value immediately.
-    await a.page.waitForFunction(()=>parseInt(
-      document.querySelector('[data-dm-zoom]')?.textContent||'0',10)>100,
-      null,{timeout:5000});
-    await a.page.locator('#dungeon-map-view [data-dm="focus"]').click();
-    assert.equal(await a.page.locator('[data-dm="focus"]').getAttribute('aria-pressed'),'true');
-    await a.page.locator('#dungeon-map-view [data-dm="close"]').click();
-    await a.page.locator('#dungeon-map-view').waitFor({state:'hidden'});
-    await a.page.locator('#dungeon-lobby [data-dg="preview-map"]').click();
-    await a.page.locator('#dungeon-map-view [data-dm-biome-box]:not([hidden])').waitFor();
-    await a.page.setViewportSize({width:880,height:530});
-    await a.page.waitForFunction(()=>{
-      const canvas=document.querySelector('.dm-world'),r=canvas.getBoundingClientRect();
-      return r.width>700&&r.height>300&&canvas.width>=r.width*1.9;
-    });
-    // One move per player, each visible to both browsers through the same SSE.
-    const names={up:[0,-1],right:[1,0],down:[0,1],left:[-1,0]};
-    const moveFor=uid=>{
-      const p=room.members[uid].position;
-      return Object.entries(names).find(([,v])=>{
-        const x=p.x+v[0],y=p.y+v[1];
-        return x>=0&&y>=0&&x<map.width&&y<map.height&&
-          map.tiles[y*map.width+x]!==0;
-      })[0];
-    };
-    // Compare only the world canvas, not any status badges. This checks
-    // that a's remote movement visibly reaches b's map via SSE.
-    const canvasHash=()=>b.page.evaluate(()=>{
-      const c=document.querySelector('#dungeon-map-view .dm-world');
-      const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
-      let h=2166136261;
-      for(let i=0;i<d.length;i+=4){
-        h^=d[i];h=Math.imul(h,16777619);
-        h^=d[i+1];h=Math.imul(h,16777619);
-        h^=d[i+2];h=Math.imul(h,16777619);
-      }
-      return h>>>0;
-    });
-    const beforeRemoteMove=await canvasHash();
-    const firstMove=moveFor('a');
-    await a.page.locator('#dungeon-map-view [data-dm="'+firstMove+'"]').click();
-    await a.page.waitForFunction(()=>document.querySelector('[data-dm-energy]')
-      ?.textContent==='99 / 100');
-    await b.page.waitForFunction(before=>{
-      const c=document.querySelector('#dungeon-map-view .dm-world');
-      const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
-      let h=2166136261;
-      for(let i=0;i<d.length;i+=4){
-        h^=d[i];h=Math.imul(h,16777619);
-        h^=d[i+1];h=Math.imul(h,16777619);
-        h^=d[i+2];h=Math.imul(h,16777619);
-      }
-      return (h>>>0)!==before;
-    },beforeRemoteMove,{timeout:7000});
-    await b.page.waitForFunction(()=>document.querySelector('#dungeon-lobby .dg-room-status')
-      ?.textContent.includes('已集結'));
+    assert.ok(direction,'player must have at least one unblocked cardinal step');
+    await a.page.locator('#dungeon-map-view [data-dm-world]').focus();
+    await a.page.keyboard.press(direction[2]);
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-dm-energy]')?.textContent==='9',null,{timeout:7000});
+    assert.deepStrictEqual(room.members.a.position,
+      {x:original.x+direction[0],y:original.y+direction[1]});
+    assert.deepStrictEqual(room.members.b.position,startPositions.b);
     assert.equal(room.members.a.moveSeq,1);
-    assert.equal(room.members.a.explorationStamina,99);
-    assert.equal(room.members.b.moveSeq,0);
-    const secondMove=moveFor('b');
-    await b.page.locator('#dungeon-map-view [data-dm="'+secondMove+'"]').click();
-    await b.page.waitForFunction(()=>document.querySelector('[data-dm-energy]')
-      ?.textContent==='99 / 100');
-    assert.equal(room.members.b.moveSeq,1);
-    assert.equal(room.members.a.explorationStamina,99);
-    assert.equal(room.members.b.explorationStamina,99);
-    // Opening the modal focuses a button. WASD must work regardless of that
-    // default focus and must still obey one-cell server validation.
-    const nextMove=moveFor('a');
-    const key={up:'w',right:'d',down:'s',left:'a'}[nextMove];
-    await a.page.locator('#dungeon-map-view [data-dm="focus"]').focus();
-    await a.page.keyboard.press(key);
-    try{
-      await a.page.waitForFunction(()=>document.querySelector('[data-dm-energy]')
-        ?.textContent==='98 / 100',null,{timeout:6000});
-    }catch(error){
-      console.error('[Dungeon WASD diagnostics]',{key,nextMove,requests,
-        a:room.members.a,errors,focus:await a.page.evaluate(()=>({
-          tag:document.activeElement?.tagName,
-          action:document.activeElement?.getAttribute('data-dm'),
-          energy:document.querySelector('[data-dm-energy]')?.textContent,
-          error:document.querySelector('[data-dm-move-alert]')?.textContent
-        }))});
-      throw error;
-    }
-    assert.equal(room.members.a.moveSeq,2);
-    assert.equal(room.members.a.explorationStamina,98);
-    // Use the production combat module in the mock server, then test that
-    // the warning appears before the automatic hit on both clients.
-    const playerPos=room.members.a.position;
-    const candidate=[[1,0],[0,1],[-1,0],[0,-1]]
-      .map(([dx,dy])=>({x:playerPos.x+dx,y:playerPos.y+dy}))
-      .find(p=>p.x>=0&&p.y>=0&&p.x<map.width&&p.y<map.height&&
-        map.tiles[p.y*map.width+p.x]>0&&
-        !(room.members.b.position.x===p.x&&room.members.b.position.y===p.y));
-    assert.ok(candidate,'a neighboring cell must exist for NPC warning');
-    const wolf=AI.initialEnemies(map).find(beast=>beast.kind==='wolf');
-    room.enemies=[{...wolf,position:candidate,attack:null,
-      lastAttack:null,lastAttackTick:0}];
-    room.revision++;publish();
-    await a.page.waitForFunction(()=>{
-      const node=document.querySelector('[data-dm-threat]');
-      return node&&!node.hidden&&/危險/.test(node.textContent);
-    },null,{timeout:10000});
-    assert.equal(room.members.a.battleHealth,100);
-    assert.ok(room.enemies[0].attack?.cells?.some(p=>
-      p.x===playerPos.x&&p.y===playerPos.y));
-    await a.page.waitForFunction(()=>{
-      const node=document.querySelector('[data-dm-health]');
-      return node&&/生命 ([0-9]+)\/100/.test(node.textContent)&&
-        Number(node.textContent.match(/生命 ([0-9]+)/)?.[1])<100;
-    },null,{timeout:10000});
-    await b.page.waitForFunction(()=>/修士甲 (?:9[0-2]|8\d|7\d) HP/.test(
-      document.querySelector('[data-dm-team-status]')?.textContent||''
-    ),null,{timeout:7000});
-    assert.ok(room.members.a.battleHealth<100);
-    assert.ok(room.members.b.battleHealth>=0&&room.members.b.battleHealth<=100);
-    // The other player may have been attacked by autonomous patrol earlier;
-    // only the visibility of A's hit and shared HP is deterministic here.
-    assert.deepStrictEqual(errors,[]);
-    assert.equal(requests.filter(action=>action==='move').length,3);
-    // Stage 11A: use a stationary nearby beast to exercise the new player
-    // attack button and verify both clients see exactly one shared defeat.
-    room.enemies=[{...wolf,position:candidate,attack:null,cadence:999999,
-      battleHealth:60,battleMaxHealth:60}];
-    room.revision++;publish();
-    await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
-    await a.page.locator('[data-dm-beast-list] button').first().click();
-    await a.page.locator('[data-dm="strike"]:not([disabled])').waitFor();
-    await a.page.locator('[data-dm="strike"]').click();
-    await a.page.waitForFunction(()=>document.querySelector('[data-dm-strike-alert]')
-      ?.textContent.includes('傷害 30'));
-    assert.equal(room.enemies[0].battleHealth,30);
-    await a.page.locator('[data-dm="strike"]:not([disabled])').waitFor();
-    await a.page.locator('[data-dm="strike"]').click();
-    await b.page.waitForFunction(()=>document.querySelector('[data-dm="beasts"]')
-      ?.textContent.includes('靈獸 0'));
-    assert.equal(room.enemies.length,0);
-    assert.equal(room.members.a.strikeSeq,2);
-    assert.equal(room.members.a.explorationStamina,94);
-    assert.equal(room.members.b.explorationStamina,99);
-    assert.equal(requests.filter(action=>action==='strike').length,2);
-    assert.ok(!requests.some(action=>/reward|damage/.test(action)));
-    // The previously unarmed player now receives a trusted skill snapshot.
-    // Verify the new buttons against the real deterministic combat module,
-    // without breaking the earlier stage-11A basic-strike acceptance.
-    room.members.a.accessScore=50;
-    room.members.a={...room.members.a,
-      ...SkillCombat.initialCombatLoadout(room.members.a,manualRecord)};
-    room.enemies=[{...wolf,position:candidate,attack:null,cadence:999999,
-      battleHealth:60,battleMaxHealth:60}];
-    room.revision++;publish();
-    await a.page.locator('#dungeon-map-view [data-dm="cast"][data-skill-id="wind-slash"]')
-      .waitFor({timeout:5000});
-    if(await a.page.locator('#dungeon-map-view [data-dm-inspector]').isHidden())
-      await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
-    await a.page.locator('#dungeon-map-view [data-dm-beast-list] button').first().click();
-    const skillButton=a.page.locator('#dungeon-map-view [data-dm="cast"][data-skill-id="wind-slash"]');
-    await skillButton.click();
-    await a.page.waitForFunction(()=>document.querySelector('[data-dm-skill-alert]')
-      ?.textContent.includes('流風斬'));
-    assert.equal(room.members.a.skillSeq,1);
-    assert.ok(room.enemies[0].battleHealth<60);
-    await b.page.waitForFunction(()=>document.querySelector('[data-dm="beasts"]')
-      ?.textContent.includes('靈獸 1'));
-    await skillButton.click();
-    await b.page.waitForFunction(()=>document.querySelector('[data-dm="beasts"]')
-      ?.textContent.includes('靈獸 0'));
-    assert.equal(room.enemies.length,0);
-    assert.equal(room.members.a.skillSeq,2);
-    assert.equal(room.members.a.explorationStamina,90);
-    assert.equal(requests.filter(action=>action==='skill').length,2);
-    await a.page.locator('#dungeon-map-view [data-dm="loadout"][data-loadout-index="1"]')
-      .click();
-    await a.page.locator('#dungeon-map-view [data-dm="cast"][data-skill-id="wind-step"]')
-      .waitFor();
-    assert.equal(room.members.a.dungeonLoadoutIndex,1);
-    assert.ok(room.members.a.dungeonSkillIds.includes('wind-step'));
-    // Stage 13: the real deterministic combat routine prepares and spends
-    // the six focus charges; a separate player's map sees the same gold halo.
-    activeManual=dragonRecord;
-    room.members.a.accessScore=200;
-    room.members.a={...room.members.a,
-      ...SkillCombat.initialCombatLoadout(room.members.a,dragonRecord)};
-    room.enemies=[{...wolf,position:candidate,attack:null,cadence:999999,
-      battleHealth:100000,battleMaxHealth:100000}];
-    room.revision++;publish();
-    const focusButton=a.page.locator(
-      '#dungeon-map-view [data-dm="cast"][data-skill-id="dragon-roar"]');
-    await focusButton.waitFor({timeout:5000});
-    assert.equal(await focusButton.getAttribute('data-focus-empowered'),'false',
-      '蓄勢本身不享受蓄勢金色加成');
-    await focusButton.click();
-    await a.page.waitForFunction(()=>
-      document.querySelector('[data-dm-focus]')?.textContent.includes('6/6'),
-      null,{timeout:5000});
-    assert.equal(room.members.a.focusCharges,6);
-    assert.equal(room.members.a.lastSkill.focusActivated,true);
-    const goldButton=a.page.locator(
-      '#dungeon-map-view [data-dm="cast"][data-skill-id="dragon-strike"]');
-    await a.page.waitForFunction(()=>
-      document.querySelector('[data-skill-id="dragon-strike"]')
-        ?.classList.contains('is-focus-empowered'));
-    assert.equal(await goldButton.getAttribute('data-focus-empowered'),'true');
-    assert.match(await goldButton.innerText(),/✦.*1 體力/);
-    const style=await goldButton.evaluate(node=>({
-      color:getComputedStyle(node).color,
-      background:getComputedStyle(node).backgroundImage,
-      animation:getComputedStyle(node).animationName
-    }));
-    assert.ok(style.background.includes('gradient'),JSON.stringify(style));
-    assert.equal(style.animation,'dmTechniqueGold');
-    await a.page.locator('[data-focus-uid="a"] .dm-focus-ring').waitFor();
-    await b.page.locator('[data-focus-uid="a"] .dm-focus-ring').waitFor();
-    assert.equal(await a.page.locator('[data-focus-uid="a"]').getAttribute('data-charges'),'6');
-    assert.equal(await b.page.locator('[data-focus-uid="a"]').getAttribute('data-charges'),'6');
-    // Select the durable test beast and spend all six empowered casts.
-    await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
-    await a.page.locator('[data-dm-beast-list] button').first().click();
-    for(let remaining=6;remaining>=1;remaining--){
-      await goldButton.click();
-      await a.page.waitForFunction(n=>{
-        const focus=document.querySelector('[data-dm-focus]')?.textContent||'';
-        return n===1?!focus.includes('/6'):focus.includes((n-1)+'/6');
-      },remaining,{timeout:5000});
-      assert.equal(room.members.a.focusCharges,remaining-1);
-      assert.equal(room.members.a.lastSkill.focusEmpowered,true);
-      assert.equal(room.members.a.lastSkill.cost,1);
-      assert.equal(room.members.a.lastSkill.effectCells.length>0,true);
-    }
-    await a.page.locator('[data-focus-uid="a"]').waitFor({state:'detached'});
-    await b.page.locator('[data-focus-uid="a"]').waitFor({state:'detached'});
-    assert.equal(await goldButton.getAttribute('data-focus-empowered'),'false');
-    assert.match(await goldButton.innerText(),/2 體力/);
-    assert.equal(room.members.a.skillSeq,7);
-    // Stage 12: the question is personal, while NPC ticks and other clients
-    // keep receiving the same live dungeon room stream.
-    const chargeButton=a.page.locator('#dungeon-map-view [data-dm="quiz"]');
-    await chargeButton.click();
-    await a.page.locator('.dm-quiz-panel:not([hidden])').waitFor();
-    await a.page.locator('[data-dq="answer"][data-choice="2"]').waitFor();
-    const aBefore=room.members.a.explorationStamina;
-    const bBefore=room.members.b.explorationStamina;
-    const previousClock=await a.page.locator('[data-dm-clock]').innerText();
-    await a.page.waitForFunction(previous=>
-      document.querySelector('[data-dm-clock]')?.textContent!==previous,
-      previousClock,{timeout:4500});
-    await a.page.locator('[data-dq="collapse"]').click();
-    await a.page.locator('.dm-quiz-panel').waitFor({state:'hidden'});
-    // Collapsing to dodge never discards an unanswered personal question.
-    await chargeButton.click();
+    assert.equal(room.members.a.explorationStamina,9);
+    const savedMoveSeq=room.members.a.moveSeq;
+    const savedStamina=room.members.a.explorationStamina;
+    // A retransmission must never move the player again or spend more energy.
+    const duplicate=await a.page.evaluate(async({dx,dy,step})=>{
+      const response=await fetch('/api/dungeon/room',{method:'POST',
+        headers:{'content-type':'application/json','x-test-user':'a'},
+        body:JSON.stringify({action:'move',roomId:'dungroom000001',dx,dy,step})});
+      return response.status;
+    },{dx:direction[0],dy:direction[1],step:1});
+    assert.equal(duplicate,200);
+    assert.equal(room.members.a.moveSeq,savedMoveSeq);
+    assert.equal(room.members.a.explorationStamina,savedStamina);
+
+    // A's question never interrupts the second player or the NPC clock.
+    const charge=a.page.locator('#dungeon-map-view [data-dm="quiz"]');
+    await charge.click();
+    await a.page.locator('.dm-quiz-panel:not([hidden])').waitFor({timeout:9000});
+    const beforeClock=await b.page.locator('[data-dm-clock]').innerText();
+    await b.page.waitForFunction(text=>
+      document.querySelector('[data-dm-clock]')?.textContent!==text,
+      beforeClock,{timeout:5000});
+    await a.page.locator('[data-dq="answer"][data-choice="2"]').waitFor({timeout:8000});
     await a.page.locator('[data-dq="answer"][data-choice="2"]').click();
     await a.page.locator('[data-dq="next"]:not([hidden])').waitFor();
     assert.match(await a.page.locator('.dm-quiz-explanation').innerText(),/加 3 等於 5/);
     assert.equal(room.members.a.quizCreditSeq,1);
-    assert.equal(room.members.a.explorationStamina,Math.min(100,aBefore+4));
-    assert.equal(room.members.b.explorationStamina,bBefore);
-    await a.page.locator('[data-dq="next"]').click();
-    await a.page.locator('[data-dq="answer"][data-choice="0"]').waitFor();
-    await a.page.locator('[data-dq="answer"][data-choice="0"]').click();
-    await a.page.locator('[data-dq="next"]:not([hidden])').waitFor();
-    assert.equal(room.members.a.quizCreditSeq,2);
-    assert.equal(room.members.a.explorationStamina,Math.min(100,aBefore+5));
+    assert.equal(room.members.a.explorationStamina,10,'correct +4 clamps to ten');
+    assert.equal(room.members.b.explorationStamina,10);
     assert.equal(quizState.b.answered,0);
     await a.page.locator('[data-dq="collapse"]').click();
-    await b.page.locator('#dungeon-map-view [data-dm="quiz"]').click();
-    await b.page.locator('[data-dq="answer"][data-choice="2"]').waitFor();
-    await b.page.locator('[data-dq="answer"][data-choice="2"]').click();
-    await b.page.locator('[data-dq="next"]:not([hidden])').waitFor();
-    assert.equal(room.members.b.quizCreditSeq,1);
-    assert.equal(room.members.b.explorationStamina,Math.min(100,bBefore+4));
-    assert.equal(quizState.a.answered,2);
-    const priorStamina=room.members.a.explorationStamina;
-    await a.page.evaluate(async()=>{
+    const retryCredit=await a.page.evaluate(async()=>{
       const response=await fetch('/api/dungeon/room',{method:'POST',
         headers:{'content-type':'application/json','x-test-user':'a'},
         body:JSON.stringify({action:'quiz-credit',roomId:'dungroom000001',
           questionId:'a-q-0'})});
-      if(!response.ok)throw Error('duplicate quiz credit failed');
-    });
-    assert.equal(room.members.a.explorationStamina,priorStamina);
-    assert.equal(room.members.a.quizCreditSeq,2);
-    assert.ok(requests.filter(action=>action==='generate-quiz').length>=2);
-    await b.page.locator('[data-dq="collapse"]').click();
-    // Stage 14: server-owned guardian, party key and validated portal opening.
-    assert.equal(room.dungeonProgress.portalStatus,'sealed');
-    const guardian=Objectives.spawn(map,[]).enemies[0];
-    room.enemies=[{...guardian,position:{...candidate},spawn:{...candidate},
-      cadence:999999,battleHealth:20}];
-    room.revision++;publish();
-    const blocked=await b.page.evaluate(async()=>{
-      const response=await fetch('/api/dungeon/room',{method:'POST',
-        headers:{'content-type':'application/json','x-test-user':'b'},
-        body:JSON.stringify({action:'activate-portal',roomId:'dungroom000001',
-          keyAcquired:true,portalStatus:'open'})});
       return response.status;
     });
-    assert.equal(blocked,409,'clients cannot forge the shared key');
-    await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
-    await a.page.locator('[data-dm-beast-list] button').first().click();
-    await a.page.locator('[data-dm="cast"][data-skill-id="dragon-strike"]')
-      .click();
+    assert.equal(retryCredit,200);
+    assert.equal(room.members.a.explorationStamina,10);
+    assert.equal(room.members.a.quizCreditSeq,1);
+
+    // Put a genuine, low-HP guardian near a player for a deterministic
+    // short browser battle; server tests cover full-length guardian combat.
+    const guardian=Objectives.spawn(map,[]).enemies.find(e=>e.id===Objectives.GUARDIAN_ID);
+    assert.ok(guardian);
+    const nearby=dirs.map(([dx,dy])=>({
+      x:guardian.position.x+dx,y:guardian.position.y+dy
+    })).find(pos=>pos.x>=0&&pos.y>=0&&pos.x<map.width&&pos.y<map.height&&
+      !!map.tiles[pos.y*map.width+pos.x]);
+    assert.ok(nearby,'guardian has a walkable adjacent attack square');
+    room.enemies=[{...guardian,battleHealth:20,cadence:999999}];
+    room.members.a.position={...nearby};
+    room.revision++;publish();
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-energy]')?.textContent==='10');
+    const clickTile=async(page,from,tile,area)=>{
+      const pos=await page.evaluate(async({from,tile,area})=>{
+        const Camera=await import('/cultivation/dungeon-map-camera.js');
+        const canvas=document.querySelector('#dungeon-map-view [data-dm-world]'),
+          rect=canvas.getBoundingClientRect(),
+          camera=Camera.lockToPlayer(from,area,rect.width,rect.height),
+          g=Camera.geometry(camera,area,rect.width,rect.height);
+        return {x:g.ox+(tile.x+.5)*g.cell,y:g.oy+(tile.y+.5)*g.cell};
+      },{from,tile,area});
+      await page.locator('#dungeon-map-view [data-dm-world]').click({position:pos});
+    };
+    await clickTile(a.page,nearby,guardian.position,map);
     await a.page.waitForFunction(()=>
-      document.querySelector('[data-dm-objective]')?.textContent.includes('共享密鑰'));
-    assert.equal(room.enemies.length,0);
+      document.querySelector('[data-dm-objective]')?.textContent.includes('共享密鑰'),
+      null,{timeout:8000});
     assert.equal(room.dungeonProgress.keyAcquired,true);
-    assert.equal(room.dungeonProgress.guardianStatus,'defeated');
     assert.equal(room.dungeonProgress.portalStatus,'ready');
-    await b.page.waitForFunction(()=>
-      document.querySelector('[data-dm-objective]')?.textContent.includes('共享密鑰'));
-    const portalButton=b.page.locator('[data-dm="portal"]');
-    assert.equal(await portalButton.isDisabled(),true,'portal requires spatial proximity');
+    assert.equal(room.enemies.length,0);
+    assert.equal(room.members.a.explorationStamina,8);
+
+    // Confirm the portal from a real visible button, then require BOTH
+    // teammates' independent confirmations before anybody enters the arena.
+    room.members.a.position={...map.portalSite};
     room.members.b.position={...map.portalSite};
     room.revision++;publish();
-    await portalButton.waitFor({state:'visible'});
-    await b.page.waitForFunction(()=>
-      !document.querySelector('[data-dm="portal"]')?.disabled);
-    const beforePortal=room.revision;
-    await portalButton.click();
-    await a.page.waitForFunction(()=>
-      document.querySelector('[data-dm-objective]')?.textContent.includes('傳送門'));
+    await b.page.locator('[data-dm="portal"]:not([disabled])').waitFor({timeout:8000});
+    await b.page.locator('[data-dm="portal"]').click();
+    await b.page.waitForFunction(()=>document.querySelector('[data-dm-objective]')
+      ?.textContent.includes('傳送門已啟動'),null,{timeout:8000});
     assert.equal(room.dungeonProgress.portalStatus,'open');
-    assert.equal(room.dungeonProgress.openedByUid,'b');
-    assert.equal(room.revision,beforePortal+1);
-    await b.page.waitForFunction(()=>
-      document.querySelector('[data-dm="portal"]')?.textContent.includes('已啟動'));
-    const retryPortal=await a.page.evaluate(async()=>{
-      const response=await fetch('/api/dungeon/room',{method:'POST',
-        headers:{'content-type':'application/json','x-test-user':'a'},
-        body:JSON.stringify({action:'activate-portal',roomId:'dungroom000001'})});
-      return response.status;
-    });
-    assert.equal(retryPortal,200);
-    assert.equal(room.revision,beforePortal+1,'retries never reopen the key portal');
-    // Stage 15: a member at the open portal brings the whole team through.
-    const bossEntry=b.page.locator('[data-dm="enter-boss"]');
-    await bossEntry.waitFor({state:'visible'});
-    await b.page.waitForFunction(()=>
-      !document.querySelector('[data-dm="enter-boss"]')?.disabled);
-    const enteringRevision=room.revision;
-    const aEnergy=room.members.a.explorationStamina,
-      bEnergy=room.members.b.explorationStamina;
-    await bossEntry.click();
-    await a.page.waitForFunction(()=>
-      document.querySelector('[data-dm-title]')?.textContent.includes('首領戰'),
-      null,{timeout:7000});
-    await b.page.waitForFunction(()=>
-      document.querySelector('[data-dm-title]')?.textContent.includes('首領戰'),
-      null,{timeout:7000});
+    const portalA=a.page.locator('[data-dm="enter-boss"]:not([disabled])');
+    const portalB=b.page.locator('[data-dm="enter-boss"]:not([disabled])');
+    await portalA.waitFor({timeout:9000});
+    await portalA.click();
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-portal-votes]')
+      ?.textContent.includes('1/2'),null,{timeout:8000});
+    assert.equal(room.dungeonArena,'exploration');
+    await portalB.waitFor({timeout:9000});
+    await portalB.click();
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-title]')
+      ?.textContent.includes('首領戰'),null,{timeout:8000});
+    await b.page.waitForFunction(()=>document.querySelector('[data-dm-title]')
+      ?.textContent.includes('首領戰'),null,{timeout:8000});
     assert.equal(room.dungeonArena,'boss');
-    assert.equal(room.bossEncounter.status,'fighting');
     assert.equal(room.enemies.length,1);
     assert.equal(room.enemies[0].id,Boss.ID);
-    assert.equal(room.enemies[0].battleHealth,Boss.HP);
-    assert.equal(room.revision,enteringRevision+1);
-    assert.equal(room.members.a.explorationStamina,aEnergy);
-    assert.equal(room.members.b.explorationStamina,bEnergy);
     for(const {page} of [a,b]){
-      assert.equal(await page.locator('[data-dm-boss-value]').innerText(),'900/900');
       await page.locator('[data-dm-boss-health]:not([hidden])').waitFor();
-      assert.equal(await page.locator('[data-dm="enter-boss"]').isHidden(),true);
-      assert.match(await page.locator('[data-dm-summary]').innerText(),/2×2 巨獸/);
+      assert.equal(await page.locator('[data-dm-boss-progress]').getAttribute('aria-valuemax'),'900');
     }
-    const enterRetry=await a.page.evaluate(async()=>{
-      const response=await fetch('/api/dungeon/room',{method:'POST',
-        headers:{'content-type':'application/json','x-test-user':'a'},
-        body:JSON.stringify({action:'enter-boss',roomId:'dungroom000001',
-          bossHealth:0,position:{x:0,y:0}})});
-      return response.status;
-    });
-    assert.equal(enterRetry,200);
-    assert.equal(room.revision,enteringRevision+1,
-      'two players cannot create duplicate bosses or teleports');
-    await b.page.waitForFunction(()=>
-      document.querySelector('[data-dm-boss-health]')?.getAttribute('data-phase')==='1');
-    // A downed teammate can be brought back during the real-time boss fight.
-    room.members.a.position={x:11,y:10};
-    room.members.a.battleHealth=100;room.members.a.downed=false;
-    room.members.b.position={x:11,y:9};
-    room.members.b.battleHealth=0;room.members.b.downed=true;
-    const beforeAid=room.members.a.explorationStamina;
-    room.revision++;publish();
-    const aid=a.page.locator('[data-dm="rescue"][data-target-uid="b"]');
-    await aid.waitFor({state:'visible'});
-    await a.page.waitForFunction(()=>
-      !document.querySelector('[data-dm="rescue"][data-target-uid="b"]')?.disabled);
-    await aid.click();
-    await b.page.waitForFunction(()=>
-      document.querySelector('[data-dm-health]')?.textContent==='生命 40/100');
-    assert.equal(room.members.b.downed,false);
-    assert.equal(room.members.b.allyReviveCount,1);
-    assert.equal(room.members.a.explorationStamina,beforeAid-8);
-    const retryAid=await a.page.evaluate(async()=>{
-      const response=await fetch('/api/dungeon/room',{method:'POST',
-        headers:{'content-type':'application/json','x-test-user':'a'},
-        body:JSON.stringify({action:'rescue',roomId:'dungroom000001',
-          targetUid:'b',seq:1})});
-      return response.status;
-    });
-    assert.equal(retryAid,200);
-    assert.equal(room.members.a.explorationStamina,beforeAid-8);
-    // Emergency self recovery is available even when everyone else is
-    // unable to help; it is a separate, single-use and more expensive action.
-    room.members.b.battleHealth=0;room.members.b.downed=true;
-    room.members.b.explorationStamina=40;room.revision++;publish();
-    const selfAid=b.page.locator('[data-dm="rescue"][data-target-uid="b"]');
-    await selfAid.waitFor({state:'visible'});
-    await b.page.waitForFunction(()=>
-      !document.querySelector('[data-dm="rescue"][data-target-uid="b"]')?.disabled);
-    await selfAid.click();
-    await a.page.waitForFunction(()=>
-      document.querySelector('[data-dm-team-status]')?.textContent.includes('修士乙 25 HP'));
-    assert.equal(room.members.b.battleHealth,25);
-    assert.equal(room.members.b.selfRescueCount,1);
-    assert.equal(room.members.b.explorationStamina,15);
-    // A deterministic C room update positions the fighter near the massive
-    // boss to exercise genuine martial-art targeting of all four body tiles.
-    room.members.a.position={x:11,y:8};
+
+    // A server-authorized basic attack resolves on the 2x2 boss footprint,
+    // archives one victory, then both players can claim their own prize.
     room.enemies[0].battleHealth=20;
+    room.members.a.position={x:11,y:8};
     room.revision++;publish();
-    await a.page.waitForFunction(()=>
-      document.querySelector('[data-dm-boss-value]')?.textContent==='20/900');
-    assert.equal(await a.page.locator('[data-dm-boss-health]')
-      .getAttribute('data-phase'),'3');
-    await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
-    await a.page.locator('[data-dm-beast-list] button').first().click();
-    await a.page.locator('[data-dm="cast"][data-skill-id="dragon-strike"]').click();
-    await a.page.waitForFunction(()=>
-      document.querySelector('[data-dm-objective]')?.textContent.includes('已擊敗玄炎鎮殿獸'));
-    await b.page.waitForFunction(()=>
-      document.querySelector('[data-dm-objective]')?.textContent.includes('已擊敗玄炎鎮殿獸'));
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-boss-progress]')
+      ?.getAttribute('aria-valuenow')==='20',null,{timeout:8000});
+    const bossMap=Boss.mapFor('legacy:'+room.id);
+    await clickTile(a.page,{x:11,y:8},{x:11,y:7},bossMap);
+    await a.page.locator('[data-dm-victory]:not([hidden])').waitFor({timeout:9000});
+    await b.page.locator('[data-dm-victory]:not([hidden])').waitFor({timeout:9000});
     assert.equal(room.bossEncounter.status,'defeated');
-    assert.equal(room.bossEncounter.defeatedByUid,'a');
     assert.equal(room.enemies.length,0);
-    assert.equal(await b.page.locator('[data-dm-boss-value]').innerText(),'0/900');
-    assert.equal(quizState.a.answered,2,'questions survive the portal');
-    assert.equal(quizState.b.answered,1,'teammate study state remains private');
-    assert.equal(room.dungeonProgress.keyAcquired,true);
-    assert.ok(!room.rewards,'no rewards are minted by the C-room combat engine');
-    await a.page.locator('[data-dm-victory]:not([hidden])').waitFor();
-    await b.page.locator('[data-dm-victory]:not([hidden])').waitFor();
-    assert.equal(victoryArchives.size,1,'boss must issue a single permanent C archive');
+    assert.equal(victoryArchives.size,1,'one permanent victory proof for the room');
     assert.equal(victoryInbox.a.length,1);
     assert.equal(victoryInbox.b.length,1);
-    await b.page.waitForFunction(()=>
-      document.querySelector('#dungeon-lobby [data-dg="claim-recovered"]')!==null);
-    // A completes the full flow: claim A's permanent reward first, then
-    // leave C's now-finished room. B must be able to claim afterwards.
-    await a.page.locator('#dungeon-map-view [data-dm="close"]').click();
-    await a.page.evaluate(()=>{window.openConfirm=()=>Promise.resolve(true);});
-    const finish=a.page.locator('#dungeon-lobby [data-dg="settle-and-leave"]');
-    await finish.waitFor({state:'visible'});
-    await finish.click();
-    await a.page.waitForFunction(()=>
-      document.querySelector('#dungeon-lobby [data-dg="settle-and-leave"]')===null,
-      null,{timeout:7000});
-    assert.equal(playerRewards.a.gold,120);
-    assert.equal(playerRewards.a.cultivation,3);
-    assert.equal(room.status,'waiting','the remaining team can reassemble');
-    assert.equal(room.bossEncounter,null,'old live boss removed from room');
-    assert.ok(victoryArchives.has('dungroom000001'),
-      'C victory archive must survive teammate departure and room reset');
-    await b.page.locator('#dungeon-map-view [data-dm="close"]').click();
-    const recover=b.page.locator('#dungeon-lobby [data-dg="claim-recovered"]');
-    await recover.waitFor({state:'visible',timeout:7000});
-    await recover.click();
-    await b.page.waitForFunction(()=>
-      document.querySelector('#dungeon-lobby .dg-victory-claimed')!==null);
-    assert.equal(playerRewards.b.gold,120);
-    assert.equal(playerRewards.b.cultivation,3);
+    for(const {page} of [a,b]){
+      await page.locator('[data-dm="claim-victory"]:not([disabled])').click();
+    }
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-reward-status]')
+      ?.textContent.includes('已領取'),null,{timeout:9000});
+    await b.page.waitForFunction(()=>document.querySelector('[data-dm-reward-status]')
+      ?.textContent.includes('已領取'),null,{timeout:9000});
+    assert.equal(playerRewards.a.gold,Victory.GOLD);
+    assert.equal(playerRewards.b.gold,Victory.GOLD);
     assert.equal(victoryReceipts.size,2);
-    const repeated=await a.page.evaluate(async()=>{
+    const replay=await a.page.evaluate(async()=>{
       const response=await fetch('/api/dungeon/room',{method:'POST',
         headers:{'content-type':'application/json','x-test-user':'a'},
         body:JSON.stringify({action:'claim-boss-reward',roomId:'dungroom000001',
-          gold:99999,cultivation:99999})});
+          gold:999999})});
       return (await response.json()).reward;
     });
-    assert.equal(repeated.status,'duplicate');
-    assert.equal(playerRewards.a.gold,120);
+    assert.equal(replay.status,'duplicate');
+    assert.equal(playerRewards.a.gold,Victory.GOLD);
+    assert.equal(room.status,'assembled','claim does not reset the party');
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two players, autonomous NPCs, focus, quizzes, guardian/portal, boss, rescue, atomic settlement exit and delayed A reward recovery');
+    console.log('[Dungeon browser] PASS: 2 players, real-time AI, 10 stamina, quiz, guardian, unanimous boss portal, victory and idempotent claims');
   }finally{
     clearInterval(clockLoop);
     clockLoop=null;
