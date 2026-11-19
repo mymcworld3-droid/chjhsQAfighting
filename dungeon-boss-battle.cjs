@@ -203,6 +203,7 @@ function enter(room,uid,explorationMap,now,roomId=''){
   const members={...room.members};
   joined.forEach(([id,record],i)=>{
     members[id]={...record,position:{...arena.spawnPads[i]},
+      explorationStamina:clampStamina(record.explorationStamina),
       flyingSword:null,lastMove:null};
   });
   // Synchronize to the current server tick at the transition so old
