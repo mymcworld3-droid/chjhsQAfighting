@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-topicplanning-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "作文題目：「在便利與公平之間，談你對校園全面改採線上申請的看法，並提出可行建議。」哪個中心論點最切題？",
+        "correct": "線上申請可提升效率，但應為缺乏數位設備者保留替代方式",
+        "wrong": [
+          "線上申請系統的顏色應配合校徽，這是唯一需要討論的事項",
+          "每位學生都具備完全相同的數位資源，所以無須討論公平",
+          "科技一定帶來進步，因此所有線下服務都應立即停止"
+        ],
+        "exp": "題目要求同時處理便利、公平、立場及建議；正解回應兩種價值並提出實際配套。",
+        "subject": "國文",
+        "sub_topic": "審題立意",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-審題立意",
+        "template_id": "ref-20261119-b8-ch2-topicplanning-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-topicplanning-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "題目：「以一次未能如願的經驗為起點，說明你如何調整方法，並反思『努力』的意義。」哪個段落安排最能完整回應？",
+        "correct": "描述挫折與原因 → 調整具體方法 → 檢討努力和結果的關係",
+        "wrong": [
+          "先列出成績單，再介紹最喜歡的電影，不談調整經驗",
+          "只描述勝利後的喜悅，完全不提未能如願的經驗",
+          "只反覆寫努力很重要，卻不交代任何事件或反思"
+        ],
+        "exp": "題目兼具記敘與議論要求，需呈現事件、調整與反思三層；抽象口號或離題事物無法滿足。",
+        "subject": "國文",
+        "sub_topic": "審題立意",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-審題立意",
+        "template_id": "ref-20261119-b8-ch2-topicplanning-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-topicplanning-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "作文題目：「有人說『快』是效率，也有人說『慢』能提高品質。請從具體生活經驗論證你的立場。」何種立意最有發展空間？",
+        "correct": "工作節奏應依任務性質調整：緊急時求快，驗證與學習時留足確認時間",
+        "wrong": [
+          "快與慢只是鐘錶上的數字，因此與生活決策完全無關",
+          "所有事情只要越快完成，品質就一定越好",
+          "本文只比較各品牌手錶的設計，不討論效率或品質"
+        ],
+        "exp": "中心主張須回應快、慢與效率品質的張力，並能透過生活例證與條件比較推進論證。",
+        "subject": "國文",
+        "sub_topic": "審題立意",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-審題立意",
+        "template_id": "ref-20261119-b8-ch2-topicplanning-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
