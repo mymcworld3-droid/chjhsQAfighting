@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-ch1-rhetoric-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "聚焦經典文本的思想、修辭與表達，非單純文字搜尋",
+      "question": {
+        "q": "校刊要列出校外教學必備物品，哪一句標點使用最清楚且符合一般書寫慣例？",
+        "correct": "請攜帶三樣物品：水壺、筆記本和學生證。",
+        "wrong": [
+          "請攜帶三樣物品；水壺，筆記本，和學生證。",
+          "請攜帶三樣物品？水壺、筆記本和學生證。",
+          "請攜帶三樣物品——水壺、筆記本和學生證？"
+        ],
+        "exp": "冒號可引出下文列舉，頓號隔開並列名詞，句末使用句號，語義及標點最完整。",
+        "subject": "國文",
+        "sub_topic": "標點與修辭",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-標點與修辭",
+        "template_id": "ref-20261119-b6-ch1-rhetoric-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-ch1-rhetoric-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "聚焦經典文本的思想、修辭與表達，非單純文字搜尋",
+      "question": {
+        "q": "句子「她的鼓勵像寒夜裡的一盞燈，照亮我前進的方向」主要運用何種修辭？",
+        "correct": "譬喻（明喻）",
+        "wrong": [
+          "設問",
+          "頂真",
+          "倒裝"
+        ],
+        "exp": "句中以「像」明確建立「鼓勵」與「寒夜的一盞燈」的相似關係，是明喻。",
+        "subject": "國文",
+        "sub_topic": "標點與修辭",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-標點與修辭",
+        "template_id": "ref-20261119-b6-ch1-rhetoric-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-ch1-rhetoric-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "聚焦經典文本的思想、修辭與表達，非單純文字搜尋",
+      "question": {
+        "q": "「他不是沒有能力，而是缺少練習；不是不願意改變，而是還未找到方法。」主要運用了哪一項表達技巧？",
+        "correct": "結構相近的句式反覆對舉，使理由層次更鮮明",
+        "wrong": [
+          "以前句末字作為後句首字的頂真",
+          "以同一字詞表達兩種不同意思的雙關",
+          "透過人物外貌替代其職業名稱的借代"
+        ],
+        "exp": "兩組「不是……而是……」並列對舉，透過相似句型強化辨析，具有排比及對比效果。",
+        "subject": "國文",
+        "sub_topic": "標點與修辭",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-標點與修辭",
+        "template_id": "ref-20261119-b6-ch1-rhetoric-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
