@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-en2-crosspara-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Paragraph 1: 'The city plans to add trees around bus stops to reduce heat.' Paragraph 2: 'Trees need enough soil space and regular watering, particularly during their first few years.' Which combined conclusion is best?",
+        "correct": "Trees may improve bus-stop comfort, but implementation needs adequate space and maintenance.",
+        "wrong": [
+          "The second paragraph proves trees cannot provide shade.",
+          "The first paragraph proves maintenance is never necessary.",
+          "Both paragraphs argue that only indoor waiting rooms should exist."
+        ],
+        "exp": "The first paragraph offers a potential benefit; the second identifies conditions required for implementation. Both must be retained.",
+        "subject": "英文",
+        "sub_topic": "跨段落比較",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-跨段落比較",
+        "template_id": "ref-20261119-b8-en2-crosspara-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en2-crosspara-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Paragraph 1 describes increased attendance after a free breakfast program began. Paragraph 2 explains that a neighboring school without the program also reported improved attendance. What does Paragraph 2 mainly do?",
+        "correct": "It introduces another observation that limits a simple causal explanation.",
+        "wrong": [
+          "It confirms that the breakfast program was the sole cause of improved attendance.",
+          "It proves attendance fell at both schools.",
+          "It changes the topic from attendance to lunch preferences."
+        ],
+        "exp": "The neighboring school provides a comparison that raises possible alternative causes for the increase in attendance.",
+        "subject": "英文",
+        "sub_topic": "跨段落比較",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-跨段落比較",
+        "template_id": "ref-20261119-b8-en2-crosspara-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-en2-crosspara-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "同觀念合理變化，語法、邏輯及答案均可核對",
+      "question": {
+        "q": "Paragraph 1: 'An electronic ticketing system reduced lines at the station.' Paragraph 2: 'Some older riders had difficulty using the app, so staff kept a ticket counter open.' What is the relationship?",
+        "correct": "The second paragraph identifies an accessibility limitation and an accompanying response.",
+        "wrong": [
+          "The second paragraph denies that waiting lines became shorter.",
+          "Both paragraphs say every passenger now uses the app without help.",
+          "The two paragraphs discuss entirely unrelated services."
+        ],
+        "exp": "The second paragraph adds a practical limitation to the system's efficiency benefit and explains how staff addressed it.",
+        "subject": "英文",
+        "sub_topic": "跨段落比較",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-跨段落比較",
+        "template_id": "ref-20261119-b8-en2-crosspara-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
