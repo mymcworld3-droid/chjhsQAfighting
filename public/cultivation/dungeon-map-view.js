@@ -927,7 +927,7 @@ class DungeonMapView{
     }
     this.routePending=true;
     const token=this.seq,roomId=this.roomId;
-    this.updateWheelHUD();this.actionFeedback('');
+    this.updateWheelHUD();this.actionFeedback('移動中 · '+route.length+' 格');
     try{
       // A route is split into bounded server-validated transactions.
       // The next chunk uses the returned authoritative position and seq.
@@ -949,6 +949,7 @@ class DungeonMapView{
         this.$('[data-dm="focus"]').setAttribute('aria-pressed','true');
         this.drawSoon();
       }
+      if(this.isCurrent()&&this.seq===token)this.actionFeedback('');
     }catch(error){
       if(this.isCurrent()&&this.seq===token){
         this.actionFeedback(error?.message||'移動失敗，請重新點選');
