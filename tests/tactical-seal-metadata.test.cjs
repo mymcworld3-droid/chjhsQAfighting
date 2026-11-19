@@ -116,7 +116,7 @@ test('seal still requires two effective attacks and does not grant beast kill XP
 test('objective HUD shares the canonical short-effect labels',()=>{
   const fs=require('node:fs'),path=require('node:path');
   const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
-  assert.match(source,/R\\.sealDefinition\\(p\\.kind\\)\\?\\.shortEffect/);
+  assert(source.includes('R.sealDefinition(p.kind)?.shortEffect'));
   assert.doesNotMatch(source,/const sealLabels=/);
   assert.deepEqual(Object.values(R.SEAL_TYPES).map(x=>x.shortEffect),
     ['護：減傷','煞：危險格','獸：增攻','迷：開路']);
