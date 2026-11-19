@@ -338,8 +338,12 @@ class DungeonMapView{
       button.classList.toggle('is-focus-empowered',empowered);
       button.dataset.focusEmpowered=String(empowered);
       button.textContent=(empowered?'✦ ':'')+skill.name+' · '+cost+' 體力';
-      button.title=(empowered?'蓄勢加成：體力減半、施放後消耗一層。':
-        (skill.kind==='fist-focus'?'施放後凝聚六層蓄勢，無冷卻。':''))+
+      button.title='技能等級 Lv.'+(skill.level||1)+' · '+
+        (empowered?'蓄勢加成：體力減半、施放後消耗一層。':
+          (skill.kind==='fist-focus'?'施放後凝聚六層蓄勢，無冷卻。':''))+
+        (skill.kind==='fist-focus'?'':('基礎單段傷害約 '+
+          (skill.singleHitDamage||0)+
+          (skill.centerHitDamage?'，劍陣中心每擊約 '+skill.centerHitDamage:'')+'。'))+
         (skill.description||'');
       button.disabled=this.skillPending||this.loadoutPending||this.movePending||
         downed||stamina<cost||
