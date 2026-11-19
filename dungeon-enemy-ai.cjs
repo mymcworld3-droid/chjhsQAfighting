@@ -147,7 +147,7 @@ function simulate(map,enemies,members,startTick,endTick){
 }
 
 function simulateCombat(map,enemies,members,startTick,endTick,
-  {safeCatchup=false}={}){
+  {safeCatchup=false,committedTick=startTick-1}={}){
   let currentMembers=members;
   let next=enemies.map(enemy=>({
     ...enemy,position:{...enemy.position},
@@ -167,14 +167,22 @@ function simulateCombat(map,enemies,members,startTick,endTick,
       if(safeCatchup&&tick<endTick){
         out=nextEnemy(map,enemy,currentMembers,tick,occupied);
       }else if(attack&&tick>=attack.resolvesAtTick){
-        const result=Combat.resolveAttack(enemy,currentMembers,tick);
-        currentMembers=result.members;
-        out={...enemy,attack:null,lastAttack:{
-          tick,kind:attack.kind,label:attack.label,
-          damage:attack.damage,cells:attack.cells,
-          hits:result.hits
-        },lastAttackTick:tick,
-        intent:'recover',targetUid:null,lastActionTick:tick};
+        if(attack.startedAtTick>committedTick){
+          // A lagged transaction may simulate several historical ticks.
+          // Never create + resolve a warning before a client could see it:
+          // publish this warning first, then give TWO future seconds to dodge.
+          out={...enemy,attack:{...attack,
+            resolvesAtTick:endTick+Combat.WINDUP_TICKS}};
+        }else{
+          const result=Combat.resolveAttack(enemy,currentMembers,tick);
+          currentMembers=result.members;
+          out={...enemy,attack:null,lastAttack:{
+            tick,kind:attack.kind,label:attack.label,
+            damage:attack.damage,cells:attack.cells,
+            hits:result.hits
+          },lastAttackTick:tick,
+          intent:'recover',targetUid:null,lastActionTick:tick};
+        }
       }else if(attack){
         out=enemy;
       }else if(tick%enemy.cadence===0){
@@ -207,7 +215,9 @@ function advanceWorld(room,map,now){
   const start=Math.max(applied+1,due-MAX_CATCHUP_TICKS+1);
   const safeCatchup=due-applied>Combat.SAFE_CATCHUP_TICKS;
   const outcome=due>applied?
-    simulateCombat(map,base,room.members,start,due,{safeCatchup}):
+    simulateCombat(map,base,room.members,start,due,{
+      safeCatchup,committedTick:applied
+    }):
     {enemies:base,members:room.members};
   return {enemies:outcome.enemies,enemyAiVersion:ENEMY_AI_VERSION,
     ...(outcome.members!==room.members?{members:outcome.members}:{}),
