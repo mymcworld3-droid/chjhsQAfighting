@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-m3-derivative-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "已知f(x)=2x³−3x²+4，求x=1處的切線斜率。",
+        "correct": "0",
+        "wrong": [
+          "1",
+          "4",
+          "6"
+        ],
+        "exp": "f′(x)=6x²−6x，代入x=1得到6−6=0，因此切線斜率為0。",
+        "subject": "數學",
+        "sub_topic": "多項式函數導數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式函數導數",
+        "template_id": "ref-20261119-b5-m3-derivative-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-m3-derivative-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "函數f(x)=x³−3x在x=2處的切線方程式為何？",
+        "correct": "y=9x−16",
+        "wrong": [
+          "y=9x+16",
+          "y=3x−4",
+          "y=9x−14"
+        ],
+        "exp": "f(2)=8−6=2；f′(x)=3x²−3，f′(2)=9。切線y−2=9(x−2)，即y=9x−16。",
+        "subject": "數學",
+        "sub_topic": "多項式函數導數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式函數導數",
+        "template_id": "ref-20261119-b5-m3-derivative-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-m3-derivative-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "保留課綱範圍，重視邏輯、可核對的計算及合理干擾項",
+      "question": {
+        "q": "若f(x)=x³−6x²+9x，求其在區間0<x<1的單調性。",
+        "correct": "嚴格遞增",
+        "wrong": [
+          "嚴格遞減",
+          "恆為常數",
+          "先減後增"
+        ],
+        "exp": "f′(x)=3x²−12x+9=3(x−1)(x−3)。當0<x<1時兩因子皆負，導數正，故嚴格遞增。",
+        "subject": "數學",
+        "sub_topic": "多項式函數導數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式函數導數",
+        "template_id": "ref-20261119-b5-m3-derivative-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
