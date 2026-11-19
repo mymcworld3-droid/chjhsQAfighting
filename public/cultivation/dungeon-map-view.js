@@ -281,7 +281,13 @@ class DungeonMapView{
     const target=this.creatures().find(e=>e.id===this.selectedBeastId);
     const current=member?.position;
     const adjacent=target&&current&&
-      Math.abs(target.position.x-current.x)+Math.abs(target.position.y-current.y)===1;
+      (target.kind==='boss'?[
+        {x:target.position.x,y:target.position.y},
+        {x:target.position.x+1,y:target.position.y},
+        {x:target.position.x,y:target.position.y+1},
+        {x:target.position.x+1,y:target.position.y+1}
+      ]:[target.position]).some(p=>
+        Math.abs(p.x-current.x)+Math.abs(p.y-current.y)===1);
     const energy=Number.isSafeInteger(member?.explorationStamina)?
       member.explorationStamina:0;
     button.hidden=Boolean(member?.dungeonSkillIds?.length);
@@ -366,7 +372,7 @@ class DungeonMapView{
   }
   currentAim(){
     const beast=this.creatures().find(e=>e.id===this.selectedBeastId);
-    return beast?.position||this.aimTile||null;
+    return beast?(this.aimTile||beast.position):this.aimTile||null;
   }
   targetFor(skill){
     const own=this.room?.members?.[this.uid]?.position;
@@ -627,7 +633,17 @@ class DungeonMapView{
     if(!this.map||!this.isCurrent())return;
     const beast=this.creatures().find(e=>e.id===id);
     if(!beast)return;
-    this.inspectOpen=true;this.selectedBeastId=beast.id;this.aimTile={...beast.position};
+    this.inspectOpen=true;this.selectedBeastId=beast.id;
+    const cells=beast.kind==='boss'?[
+      beast.position,{x:beast.position.x+1,y:beast.position.y},
+      {x:beast.position.x,y:beast.position.y+1},
+      {x:beast.position.x+1,y:beast.position.y+1}
+    ]:[beast.position];
+    const self=this.room?.members?.[this.uid]?.position||beast.position;
+    cells.sort((a,b)=>
+      Math.abs(a.x-self.x)+Math.abs(a.y-self.y)-
+      Math.abs(b.x-self.x)-Math.abs(b.y-self.y));
+    this.aimTile={...cells[0]};
     if(focus){
       this.follow=false;this.followBeast=true;
       this.camera=Camera.zoomAt(this.camera,Math.max(2.4,this.camera.zoom),
@@ -640,10 +656,16 @@ class DungeonMapView{
   inspectAt(screen){
     if(!this.map)return false;
     const g=Camera.geometry(this.camera,this.map,this.width,this.height);
-    const closest=this.creatures().map(beast=>({
-      beast,distance:Math.hypot(g.ox+(beast.position.x+.5)*g.cell-screen.x,
-        g.oy+(beast.position.y+.5)*g.cell-screen.y)
-    })).sort((a,b)=>a.distance-b.distance)[0];
+    const closest=this.creatures().map(beast=>{
+      const cells=beast.kind==='boss'?[
+        beast.position,{x:beast.position.x+1,y:beast.position.y},
+        {x:beast.position.x,y:beast.position.y+1},
+        {x:beast.position.x+1,y:beast.position.y+1}
+      ]:[beast.position];
+      return {beast,distance:Math.min(...cells.map(p=>
+        Math.hypot(g.ox+(p.x+.5)*g.cell-screen.x,
+          g.oy+(p.y+.5)*g.cell-screen.y)))};
+    }).sort((a,b)=>a.distance-b.distance)[0];
     if(!closest||closest.distance>Math.max(18,g.cell*.85))return false;
     this.selectBeast(closest.beast.id,{focus:false});
     return true;
@@ -697,24 +719,55 @@ class DungeonMapView{
     if(!button||!node)return;
     const active=this.room?.status==='assembled'&&!!this.map;
     const stage=progress?.portalStatus;
+    const bossFight=this.room?.dungeonArena==='boss';
+    const boss=this.creatures().find(e=>e.kind==='boss');
+    const encounter=this.room?.bossEncounter;
+    const bossBar=this.$('[data-dm-boss-health]');
+    if(bossBar){
+      bossBar.hidden=!bossFight;
+      if(bossFight){
+        const hp=Math.max(0,boss?.battleHealth||0),
+          max=boss?.battleMaxHealth||900,phase=boss?.phase||1;
+        this.$('[data-dm-boss-label]').textContent=encounter?.status==='defeated'?
+          '✓ 玄炎鎮殿獸已擊敗':
+          '玄炎鎮殿獸 · 第 '+['壹','貳','參'][phase-1]+'階段';
+        this.$('[data-dm-boss-value]').textContent=hp+'/'+max;
+        this.$('[data-dm-boss-meter]').style.width=
+          Math.round(hp/Math.max(1,max)*100)+'%';
+        bossBar.dataset.phase=String(phase);
+      }
+    }
+    const entry=this.$('[data-dm="enter-boss"]');
     const self=this.room?.members?.[this.uid];
     const p=self?.position,portal=this.map?.portalSite;
     const near=Boolean(p&&portal&&
       Math.abs(p.x-portal.x)+Math.abs(p.y-portal.y)<=1);
     const alive=self?.downed!==true&&Number(self?.battleHealth)>0;
     node.textContent=!active?'等待隊伍集結':
+      bossFight?(encounter?.status==='defeated'?
+        '✓ 全隊已擊敗玄炎鎮殿獸 · 正式結算尚未開放':
+        '⚔ 首領戰 · '+(boss?.attack?.label?
+          boss.attack.label+' 預警中，請立即閃避':'注意紅色預警格，保持協作')):
       !progress?'舊版探索場次 · 重新集結才有守鑰任務':
       stage==='open'?'✓ 全隊共享密鑰已啟動首領傳送門（Boss 戰將於後續階段開放）':
       stage==='ready'?'🔑 已取得全隊共享密鑰 · 前往深處傳送陣':
       '◆ 前往地圖最深處，擊敗鎮鑰玄甲獸取得密鑰';
     node.classList.toggle('is-ready',stage==='ready');
     node.classList.toggle('is-open',stage==='open');
-    button.hidden=!active||!progress||stage==='sealed';
+    button.hidden=bossFight||!active||!progress||stage==='sealed';
     button.disabled=this.portalPending||stage==='open'||!near||!alive;
     button.textContent=stage==='open'?'✓ 傳送門已啟動':
       !near?'🔑 持有共享密鑰 · 請靠近傳送陣':
       this.portalPending?'正在啟動傳送門…':'🔑 使用密鑰啟動傳送門';
-    button.title=stage==='open'?'全隊傳送門已解鎖；Boss 戰將在後續階段接入':
+    if(entry){
+      entry.hidden=bossFight||!active||stage!=='open';
+      entry.disabled=this.bossPending||!near||!alive;
+      entry.textContent=this.bossPending?'正在傳送全隊…':
+        !near?'請走近傳送陣 · 全隊進入首領戰':'⚔ 全隊進入首領戰';
+      entry.title=!near?'需要站在傳送陣或相鄰一格':
+        '一人進入即帶全隊傳送，保留生命與蓄勢，不扣探索體力';
+    }
+    button.title=stage==='open'?'傳送陣已啟動，可進入首領戰':
       !alive?'角色已倒地，不能啟動傳送門':
       !near?'必須站在傳送門或相鄰一格':'使用全隊共享密鑰，不消耗探索體力';
   }
@@ -749,10 +802,45 @@ class DungeonMapView{
       if(this.isCurrent()&&this.seq===token)this.updatePortalHUD();
     }
   }
+  async enterBoss(){
+    if(!this.isCurrent()||this.bossPending||
+        this.room?.dungeonArena==='boss'||
+        this.room?.dungeonProgress?.portalStatus!=='open')return;
+    this.bossPending=true;this.updatePortalHUD();
+    const roomId=this.roomId,token=this.seq;
+    try{
+      const response=await enterDungeonBoss(roomId);
+      if(!this.isCurrent()||token!==this.seq||roomId!==this.roomId)return;
+      if(response?.room){
+        this.updateRoom(response.room);
+        window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
+          detail:{room:response.room}
+        }));
+      }
+    }catch(error){
+      if(this.isCurrent()&&token===this.seq){
+        this.moveAlert(error?.message||'無法進入首領戰');
+        if(error?.status===409){
+          try{
+            const latest=await getDungeonRoom(roomId);
+            if(this.isCurrent()&&token===this.seq&&latest?.room)
+              this.updateRoom(latest.room);
+          }catch(_){}
+        }
+      }
+    }finally{
+      this.bossPending=false;
+      if(this.isCurrent())this.updatePortalHUD();
+    }
+  }
   updateStatus(){
     const state=this.$('[data-dm-status]');
     if(state)state.textContent=this.room?.status==='assembled'?
-      '戰場進行中 · 可隨時移動與施放已裝備功法 · 紅色預警格請閃避':
+      this.room?.dungeonArena==='boss'?
+        (this.room?.bossEncounter?.status==='defeated'?
+          '首領已擊敗 · 正式獎勵與結算尚未開放':
+          '首領戰進行中 · 預警格可閃避 · 功法與答題持續有效'):
+        '戰場進行中 · 可隨時移動與施放已裝備功法 · 紅色預警格請閃避':
       '等待隊伍集結 · 地圖預覽不消耗體力';
     this.updateMovementHUD();
     this.updateBeastHUD();
@@ -764,7 +852,17 @@ class DungeonMapView{
       this.close();return;
     }
     if(Number(room.revision)<Number(this.room?.revision||0))return;
+    const changedArena=this.map&&
+      (this.map.arena==='boss')!==(room.dungeonArena==='boss');
     this.room=room;
+    if(changedArena){
+      this.map=null;this.camera=Camera.initialCamera();
+      this.follow=false;this.followBeast=false;
+      this.inspectOpen=false;this.selectedBeastId=null;
+      this.aimTile=null;this.beastIds='';
+      this.alert('全隊正在進入首領戰場…');
+      void this.load();
+    }
     if(room.status==='assembled')void this.quiz?.warm();
     this.syncClockAnchor(room);
     this.updateStatus();
@@ -815,6 +913,7 @@ class DungeonMapView{
     }
     if(name==='quiz'){this.quiz?.show();return;}
     if(name==='portal'){void this.openPortal();return;}
+    if(name==='enter-boss'){void this.enterBoss();return;}
     if(name==='strike'){void this.strike();return;}
     if(name==='cast'){void this.cast(skillId);return;}
     if(name==='loadout'){void this.changeLoadout(Number(loadoutIndex));return;}
