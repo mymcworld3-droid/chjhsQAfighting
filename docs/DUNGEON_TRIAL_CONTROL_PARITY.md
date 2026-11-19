@@ -39,3 +39,16 @@
 - [x] `Camera.lockToPlayer` 對邊角、橫直式都精確置中；前端每幀重新套用，不能被 SSE、重整或觸控手勢改變。
 - [x] 新的 `tests/dungeon-ten-stamina-centered.test.cjs` 專門鎖定以上規則。
 - [ ] 尚未做手機瀏覽器、Render 真實多人連線及視覺截圖逐像素比對。
+
+
+## 2026-11-19 血量與舊版顯示清除
+
+- [x] 完全移除舊的 `dm-controls`、`dm-overview`、`dm-biome`、`dm-legend`、`dm-foot`、`dm-dpad` 與舊技能雙欄版面，不再生成畫面節點。
+- [x] 刪除舊 `dungeonQuarterControlsHTML` 及 `dungeon-quarter-controls.css`；只使用問道試煉幾何與樣式的 `dungeonTrialWheelHTML`。
+- [x] 玩家、隊友、一般靈獸及首領的血量改由戰場 Canvas 以問道試煉相同方式繪製：角色下方血量條與 `目前 HP/最大 HP`，不重複顯示頂部舊式生命文字。
+- [x] 首領介面使用從 `tactical-boss-presentation.css` 同步的 `dungeon-trial-boss.css`；沿用問道試煉的階段標示、長條血量、數值位置。副本特有的護盾與多人合擊提示仍保留在同一 HUD 下方。
+- [x] 配置選單移至問道試煉相同的頂部位置，舊的獨立功法大面板已移除；可用技能仍在右側圓盤切換。
+- [x] 只有必要的危險警告、隊友救援、首領掩護與傳送門確認才顯示副本專屬的精簡操作區，其他時候不佔戰場畫面。
+- [x] 多人在同一格時本機玩家的頭像/血量仍保持螢幕正中央；查看靈獸資料不改變鏡頭。
+- [x] 輔助閱讀器使用不佔畫面的即時生命狀態；正常視覺畫面無第二套血量介面。
+- [ ] Render 真實瀏覽器、行動裝置與多人實機視覺驗收尚未執行；截圖逐像素比對尚未完成。
