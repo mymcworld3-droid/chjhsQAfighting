@@ -107,3 +107,78 @@ test('forged and stale attacks are rejected, no player stamina or room revision 
   assert.equal((await f.call('a','strike',{roomId:id,enemyId:wolf.id,seq:1})).status,409);
   assert.equal(raw.revision,original);
 });
+
+
+const skillRecord=()=>({
+  school:'sword',books:{'sword-wind':{exp:2500}},
+  equipped:['wind-slash','wind-step','wind-thousand'],
+  loadouts:[
+    {name:'直線',skillIds:['wind-slash','wind-step','wind-thousand']},
+    {name:'突進',skillIds:['wind-step']},
+    {name:'留空',skillIds:[]}
+  ],activeLoadout:0
+});
+test('authoritative C-side manual equipment enables skills and replaces basic attack',async()=>{
+  const {f,id,raw,wolf}=await setup();
+  f.c.records.set('tacticalManuals/a',skillRecord());
+  const applied=await f.call('a','loadout',{roomId:id,index:0});
+  assert.equal(applied.status,200);
+  assert.ok(applied.body.room.members.a.dungeonSkillIds.includes('wind-slash'));
+  assert.equal(applied.body.room.members.a.dungeonLoadoutIndex,0);
+  const basic=await f.call('a','strike',{roomId:id,enemyId:wolf.id,seq:1});
+  assert.equal(basic.status,409);
+  const cast=await f.call('a','skill',{roomId:id,skillId:'wind-slash',
+    target:{...wolf.position},seq:1,power:9999,damage:9999});
+  assert.equal(cast.status,200);
+  const result=cast.body.room.members.a.lastSkill;
+  assert.equal(result.skillId,'wind-slash');
+  assert.ok(result.totalDamage>0&&result.totalDamage<=60);
+  assert.equal(cast.body.room.members.a.explorationStamina,98);
+  const before=f.c.records.get('dungeonRooms/'+id).revision;
+  const retry=await f.call('a','skill',{roomId:id,skillId:'wind-slash',
+    target:{...wolf.position},seq:1});
+  assert.equal(retry.status,200);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).revision,before);
+  assert.equal((await f.call('a','skill',{roomId:id,skillId:'sky-sever',
+    target:wolf.position,seq:2})).status,403);
+});
+test('two servers resolve simultaneous equipped skills against one shared enemy',async()=>{
+  const {f,id,raw,wolf}=await setup();
+  for(const uid of 'ab'){
+    f.c.records.set('tacticalManuals/'+uid,skillRecord());
+    assert.equal((await f.call(uid,'loadout',{roomId:id,index:0})).status,200);
+  }
+  const replies=await Promise.all(['a','b'].map((uid,i)=>
+    f.call(uid,'skill',{roomId:id,skillId:'wind-slash',
+      target:{...wolf.position},seq:1},i)));
+  assert.ok(replies.every(r=>r.status===200));
+  const stored=f.c.records.get('dungeonRooms/'+id);
+  assert.equal(stored.enemies.length,0);
+  assert.equal(stored.members.a.skillSeq,1);
+  assert.equal(stored.members.b.skillSeq,1);
+  assert.equal(stored.members.a.explorationStamina,98);
+  assert.equal(stored.members.b.explorationStamina,98);
+  assert.ok(stored.members.a.lastSkill.totalDamage+
+    stored.members.b.lastSkill.totalDamage===60);
+  const before=stored.revision;
+  const stale=await f.call('b','skill',{roomId:id,skillId:'wind-slash',
+    target:wolf.position,seq:1},0);
+  assert.equal(stale.status,200);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).revision,before);
+});
+test('three stored presets switch in battle, deny forged or unowned skills',async()=>{
+  const {f,id,raw,wolf}=await setup();
+  f.c.records.set('tacticalManuals/a',skillRecord());
+  const second=await f.call('a','loadout',{roomId:id,index:1});
+  assert.equal(second.status,200);
+  assert.deepStrictEqual(second.body.room.members.a.dungeonSkillIds,['wind-step']);
+  const fail=await f.call('a','skill',{roomId:id,skillId:'wind-slash',
+    target:wolf.position,seq:1});
+  assert.equal(fail.status,403);
+  assert.equal((await f.call('a','loadout',{roomId:id,index:3})).status,400);
+  const back=await f.call('a','loadout',{roomId:id,index:0});
+  assert.equal(back.status,200);
+  assert.ok(back.body.room.members.a.dungeonSkillIds.includes('wind-slash'));
+  assert.equal((await f.call('b','skill',{roomId:id,skillId:'wind-slash',
+    target:wolf.position,seq:1})).status,403);
+});
