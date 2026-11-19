@@ -141,3 +141,33 @@ test('guard cannot be used while far away, downed, short of stamina or after vic
   r.bossEncounter.status='defeated';
   assert.throws(()=>Boss.guard(r,'a',map,{targetUid:'b',seq:1}),/目前無法/);
 });
+
+test('unassisted solo victory stays possible inside the original 100 stamina budget',()=>{
+  let r=room({a:member('a',near)});
+  let strikes=0;
+  while(r.enemies.some(e=>e.id===Boss.ID)&&strikes<50){
+    const out=Player.strikeEnemy(r,'a',map,{enemyId:Boss.ID,seq:strikes+1});
+    r=update(r,out);
+    strikes++;
+  }
+  assert.ok(strikes<50,'basic melee alone must be able to defeat the boss');
+  assert.equal(r.enemies.some(e=>e.id===Boss.ID),false);
+  assert.equal(r.members.a.explorationStamina,100-strikes*2);
+  const defeated=Boss.onDefeat({...r,enemies:[Boss.initialBoss()]},r.enemies,'a');
+  assert.equal(defeated.status,'defeated');
+});
+test('the autonomous boss clock consumes guard before applying the real attack',()=>{
+  let r=room({a:member('a',{x:10,y:10}),b:member('b',defender)});
+  r.enemies[0].attack={kind:'quake',label:'裂地',damage:11,
+    cells:[{...defender}],startedAtTick:2,resolvesAtTick:4};
+  r.battleAppliedTick=2;
+  const prepared=Boss.guard(r,'a',map,{targetUid:'b',seq:1});
+  r={...r,members:prepared.members};
+  const applied=Boss.advance(r,map,NOW+4000);
+  assert.equal(applied.battleAppliedTick,4);
+  assert.equal(applied.members.b.battleHealth,94);
+  assert.equal(applied.members.b.lastDamage.blockedAmount,5);
+  assert.equal(applied.members.b.bossGuard,null);
+  const later=Boss.advance({...r,...applied},map,NOW+4000);
+  assert.equal(later,null,'replaying the same server tick cannot deal damage twice');
+});
