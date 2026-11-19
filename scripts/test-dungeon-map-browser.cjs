@@ -616,11 +616,13 @@ async function main(){
     assert.equal(room.enemies.length,0);
     const visualPoints=await a.page.evaluate(()=>window.__chainVisualPoints);
     assert.ok(visualPoints.length>=12,'real Chromium must paint intermediate frames');
-    const xs=visualPoints.map(p=>p[0]);
-    assert.ok(Math.max(...xs)-Math.min(...xs)>3.5,
+    const vx=lane.target.x-lane.from.x,vy=lane.target.y-lane.from.y;
+    const progress=visualPoints.map(([x,y])=>
+      (x-lane.from.x)*vx+(y-lane.from.y)*vy);
+    assert.ok(Math.max(...progress)-Math.min(...progress)>3.5,
       'canvas should visually traverse FOUR tiles, not just the first tile');
     for(let step=1;step<=3;step++)
-      assert.ok(xs.some(x=>Math.abs(x-(lane.from.x+step))<.16),
+      assert.ok(progress.some(value=>Math.abs(value-step)<.16),
         'animation must pass through committed stage '+step);
     // Restore the exploration scenario before the guardian/boss suite.
     activeManual=manualRecord;
