@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-geo2-eastasia-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "由季風、人口結構與區域環境條件進行區域比較",
+      "question": {
+        "q": "日本本州靠日本海一側的部分地區，冬季常有大量降雪。哪個機制最能解釋此現象？",
+        "correct": "冬季季風越過日本海取得水氣，受地形抬升而降雪",
+        "wrong": [
+          "冬季時日本海完全沒有水氣",
+          "所有降雪均由地震引起",
+          "日本西側全年只受乾燥的赤道氣流影響"
+        ],
+        "exp": "冬季冷空氣吹過相對較暖的日本海時吸收水氣，抵達日本海側再受地形抬升，易形成降雪。",
+        "subject": "地理",
+        "sub_topic": "東北亞與東南亞",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-東北亞與東南亞",
+        "template_id": "ref-20261119-b2-geo2-eastasia-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-geo2-eastasia-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "由季風、人口結構與區域環境條件進行區域比較",
+      "question": {
+        "q": "某東南亞沿海平原具有明顯雨季與乾季，當地農民依季節調整稻作時程。此現象最直接反映哪種氣候因素？",
+        "correct": "季風帶來的盛行風與降水季節變化",
+        "wrong": [
+          "同一日內地球自轉速度突然大幅改變",
+          "該地全年完全沒有水氣",
+          "農業只能在無風條件下運作"
+        ],
+        "exp": "部分東南亞地區降水受季風環流顯著影響，雨旱季變化會影響耕作與灌溉安排。",
+        "subject": "地理",
+        "sub_topic": "東北亞與東南亞",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-東北亞與東南亞",
+        "template_id": "ref-20261119-b2-geo2-eastasia-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-geo2-eastasia-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "由季風、人口結構與區域環境條件進行區域比較",
+      "question": {
+        "q": "某人口資料表顯示甲國65歲以上人口占30%，乙國占10%。若其他人口和制度條件近似，何項政策需求較可能在甲國更突出？",
+        "correct": "長期照護與高齡人口支持服務",
+        "wrong": [
+          "增建嬰兒托育中心必定是唯一優先事項",
+          "國民不再需要任何醫療服務",
+          "所有勞動年齡人口都必然完全消失"
+        ],
+        "exp": "65歲以上人口占比較高意味著高齡照護等服務的潛在需求較大，但實際政策仍須考慮健康狀況與制度。",
+        "subject": "地理",
+        "sub_topic": "東北亞與東南亞",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-東北亞與東南亞",
+        "template_id": "ref-20261119-b2-geo2-eastasia-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
