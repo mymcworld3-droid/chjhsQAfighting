@@ -120,7 +120,7 @@ const skillRecord=()=>({
 });
 test('authoritative C-side manual equipment enables skills and replaces basic attack',async()=>{
   const {f,id,raw,wolf}=await setup();
-  f.c.records.set('tacticalManuals/a',skillRecord());
+  f.a.records.set('tacticalManuals/a',skillRecord());
   const applied=await f.call('a','loadout',{roomId:id,index:0});
   assert.equal(applied.status,200);
   assert.ok(applied.body.room.members.a.dungeonSkillIds.includes('wind-slash'));
@@ -145,7 +145,7 @@ test('authoritative C-side manual equipment enables skills and replaces basic at
 test('two servers resolve simultaneous equipped skills against one shared enemy',async()=>{
   const {f,id,raw,wolf}=await setup();
   for(const uid of 'ab'){
-    f.c.records.set('tacticalManuals/'+uid,skillRecord());
+    f.a.records.set('tacticalManuals/'+uid,skillRecord());
     assert.equal((await f.call(uid,'loadout',{roomId:id,index:0})).status,200);
   }
   const replies=await Promise.all(['a','b'].map((uid,i)=>
@@ -168,7 +168,7 @@ test('two servers resolve simultaneous equipped skills against one shared enemy'
 });
 test('three stored presets switch in battle, deny forged or unowned skills',async()=>{
   const {f,id,raw,wolf}=await setup();
-  f.c.records.set('tacticalManuals/a',skillRecord());
+  f.a.records.set('tacticalManuals/a',skillRecord());
   const second=await f.call('a','loadout',{roomId:id,index:1});
   assert.equal(second.status,200);
   assert.deepStrictEqual(second.body.room.members.a.dungeonSkillIds,['wind-step']);
@@ -181,4 +181,17 @@ test('three stored presets switch in battle, deny forged or unowned skills',asyn
   assert.ok(back.body.room.members.a.dungeonSkillIds.includes('wind-slash'));
   assert.equal((await f.call('b','skill',{roomId:id,skillId:'wind-slash',
     target:wolf.position,seq:1})).status,403);
+});
+
+test('assembly trusts only Firebase A manuscript documents, never empty C aliases',async()=>{
+  const f=fixture(),created=(await f.call('a','create')).body,id=created.roomId;
+  f.a.records.set('tacticalManuals/a',skillRecord());
+  f.c.records.set('tacticalManuals/a',{equipped:['sky-sever'],
+    books:{'sword-sky':{exp:99999}}});
+  await f.call('a','ready',{roomId:id,ready:true});
+  const started=await f.call('a','start',{roomId:id});
+  assert.equal(started.status,200);
+  assert.deepStrictEqual(started.body.room.members.a.dungeonSkillIds,
+    ['wind-slash','wind-step','wind-thousand']);
+  assert.equal(started.body.room.members.a.dungeonLoadoutIndex,0);
 });
