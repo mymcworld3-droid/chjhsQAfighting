@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-character-symbol-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "自編小說：「搬家那天，阿姨把一把生鏽的鑰匙放進盒子。新屋早已使用電子鎖，但她說，這把鑰匙開過外婆家的門，也開過她放學回家的每個下午。」鑰匙在文中的象徵意義最接近何者？",
+        "correct": "連結家族記憶與成長經驗的情感媒介",
+        "wrong": [
+          "舊鎖已無法使用，因此鑰匙只象徵毫無價值的廢物",
+          "阿姨不相信任何新科技，也拒絕搬進新家",
+          "外婆的房屋至今仍完全依靠這把鑰匙開門"
+        ],
+        "exp": "鑰匙的實用功能已消失，卻因與外婆家和放學經驗相連而被保存，象徵難以割捨的記憶。",
+        "subject": "國文",
+        "sub_topic": "人物與象徵",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-人物與象徵",
+        "template_id": "ref-20261119-b8-ch2-character-symbol-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-character-symbol-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "小說寫：「校長看完學生提出的無障礙改善方案，沉默片刻，將原本的工程預算表翻到空白頁，請學生說明最不方便的路段。」這段動作最能顯示人物態度的何種變化？",
+        "correct": "從既有規畫出發，轉而願意聽取使用者的實際需求",
+        "wrong": [
+          "一開始便否定改善方案，並立即終止討論",
+          "校長已完成所有改善工程，無須調查",
+          "校長只在意預算表的紙張品質，未曾關注學生意見"
+        ],
+        "exp": "翻到空白頁並詢問不便路段，象徵願意重新檢視先前安排，以學生經驗補足規畫。",
+        "subject": "國文",
+        "sub_topic": "人物與象徵",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-人物與象徵",
+        "template_id": "ref-20261119-b8-ch2-character-symbol-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-character-symbol-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "聚焦人物分析、修辭與古今比較，含判讀依據",
+      "question": {
+        "q": "自編小說：「每次爭吵後，兩兄弟便把一張棋盤推回桌中央；棋子有時散亂，但誰也沒有丟掉那副舊棋。」若以棋盤分析人物關係，何者最恰當？",
+        "correct": "衝突雖反覆發生，兩人仍保留交流與修復關係的可能",
+        "wrong": [
+          "棋盤被推回桌上，證明兩人從未有過任何衝突",
+          "棋子散亂表示兄弟已永遠斷絕所有往來",
+          "作者想用棋盤證明所有爭吵都能在同一天完全解決"
+        ],
+        "exp": "棋子散亂映照摩擦，棋盤仍被保存並回到中央，暗示彼此關係尚有連結與轉圜。",
+        "subject": "國文",
+        "sub_topic": "人物與象徵",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-人物與象徵",
+        "template_id": "ref-20261119-b8-ch2-character-symbol-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
