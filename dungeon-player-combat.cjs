@@ -37,13 +37,22 @@ function strikeEnemy(room,uid,map,{enemyId,seq}={}){
     Math.max(0,Math.min(maxHealth(enemy.kind),enemy.battleHealth)):
     maxHealth(enemy.kind);
   if(health===0)throw fail('靈獸已被擊敗',409);
-  const remaining=Math.max(0,health-DAMAGE),defeated=remaining===0;
-  const hit={seq,enemyId,damage:Math.min(health,DAMAGE),
-    remainingHealth:remaining,defeated,
-    tick:Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0};
+  const tick=Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0;
+  const updated={...enemy};
+  const teamwork=enemy.kind==='boss'?
+    Boss.damage(updated,uid,DAMAGE,tick,Boss.comboReady(enemy,uid,tick)):null;
+  const remaining=teamwork?updated.battleHealth:Math.max(0,health-DAMAGE);
+  const defeated=remaining===0;
+  if(!teamwork){
+    updated.battleHealth=remaining;
+    updated.battleMaxHealth=maxHealth(enemy.kind);
+  }
+  const hit={seq,enemyId,damage:teamwork?.damage??Math.min(health,DAMAGE),
+    remainingHealth:remaining,defeated,tick,
+    ...(teamwork?{shieldDamage:teamwork.shieldDamage,combo:teamwork.combo,
+      shieldBroken:teamwork.shieldBroken}:{})};
   const enemies=defeated?room.enemies.filter(e=>e.id!==enemyId):
-    room.enemies.map(e=>e.id===enemyId?{...e,battleHealth:remaining,
-      battleMaxHealth:maxHealth(e.kind)}:e);
+    room.enemies.map(e=>e.id===enemyId?updated:e);
   const members={...room.members,[uid]:{...member,
     explorationStamina:stamina-STAMINA_COST,strikeSeq:seq,lastStrike:hit}};
   return {duplicate:false,members,enemies,hit};
