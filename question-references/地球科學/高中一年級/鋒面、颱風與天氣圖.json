@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-earth1-weather-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "綜合鋒面天氣變化、颱風眼及預報機率",
+      "question": {
+        "q": "某地氣象觀測依序出現暖空氣較緩慢抬升、廣泛層狀雲及較持續性降雨。若與冷鋒的典型情況相比，這組現象較符合哪種鋒面通過前後的特徵？",
+        "correct": "暖鋒",
+        "wrong": [
+          "冷鋒的典型強對流過境",
+          "沒有鋒面的乾燥高壓中心",
+          "完全沒有空氣抬升的穩定條件"
+        ],
+        "exp": "暖鋒附近較暖空氣沿較冷空氣緩緩上升，常出現範圍廣、持續較久的層狀雲與降水；實際天氣仍受水氣等條件影響。",
+        "subject": "地球科學",
+        "sub_topic": "鋒面、颱風與天氣圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-鋒面、颱風與天氣圖",
+        "template_id": "ref-20261119-earth1-weather-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-earth1-weather-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "綜合鋒面天氣變化、颱風眼及預報機率",
+      "question": {
+        "q": "颱風中心的「眼」可能有相對較弱的風雨。若某地短暫進入颱風眼，最合適的防災判斷為何？",
+        "correct": "不能視為颱風已結束，眼牆移近時可能再次出現強風豪雨",
+        "wrong": [
+          "風雨一度轉弱就表示颱風已完全遠離",
+          "颱風眼內的氣壓一定最高",
+          "風雨減弱代表所有氣象警報立即自動解除"
+        ],
+        "exp": "颱風眼內可能相對平靜，但眼牆環繞周圍、常有強風雨；若路徑穿越，另一側眼牆仍可能帶來危險。",
+        "subject": "地球科學",
+        "sub_topic": "鋒面、颱風與天氣圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-鋒面、颱風與天氣圖",
+        "template_id": "ref-20261119-earth1-weather-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-earth1-weather-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "綜合鋒面天氣變化、颱風眼及預報機率",
+      "question": {
+        "q": "某地預報明日降雨機率為70%。若預報使用的是一般機率意義，哪個解讀最合理？",
+        "correct": "代表預報所定義的降雨事件有70%的發生機率，不代表雨量必為70毫米",
+        "wrong": [
+          "保證每個地點都一定下雨70分鐘",
+          "表示實測雨量必為70毫米",
+          "表示不可能完全不下雨"
+        ],
+        "exp": "降雨機率描述特定區域、時段與門檻下的降雨事件發生可能性，不能直接當成降雨時數、雨量或必然結果。",
+        "subject": "地球科學",
+        "sub_topic": "鋒面、颱風與天氣圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-鋒面、颱風與天氣圖",
+        "template_id": "ref-20261119-earth1-weather-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
