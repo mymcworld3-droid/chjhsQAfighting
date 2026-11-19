@@ -117,7 +117,7 @@ class DungeonMapView{
       '<div class="dm-beast-list" data-dm-beast-list></div>'+
       '<small>紅色方格表示即將遭到攻擊；預告後移出範圍即可閃避。</small></aside>'+
       '<div class="dm-movement" data-dm-movement hidden>'+
-      '<div class="dm-energy"><span>探索體力</span><strong data-dm-energy>100 / 100</strong>'+
+      '<div class="dm-energy"><span>探索體力</span><strong data-dm-energy>10</strong>'+
       '<span class="dm-health" data-dm-health>生命 100/100</span>'+
       '<span data-dm-location>（待命）</span></div>'+
       '<div class="dm-threat" data-dm-threat role="status" aria-live="polite" hidden></div>'+
