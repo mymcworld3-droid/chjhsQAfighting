@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-ch2-pragmatics-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文本觀念、情境語用與摘要可信度相結合",
+      "question": {
+        "q": "老師對即將進實驗室的學生說：「如果你已經看過安全規範，不妨再花兩分鐘確認護具。」這句話在實際語境中主要具有什麼功能？",
+        "correct": "以較委婉的方式提醒學生再次確認安全措施",
+        "wrong": [
+          "宣告看過規範的人一定不得進入實驗室",
+          "明確表示護具是否完整完全不重要",
+          "要求學生只檢查紙張是否已經印好"
+        ],
+        "exp": "「不妨」語氣柔和，但實際言語行動是要求再次檢查護具，不能只從表面詞形判斷。",
+        "subject": "國文",
+        "sub_topic": "語意與語用",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-語意與語用",
+        "template_id": "ref-20261119-b9-ch2-pragmatics-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch2-pragmatics-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文本觀念、情境語用與摘要可信度相結合",
+      "question": {
+        "q": "社團幹部說：「場地借用還沒確定，海報先不要印。」有人解讀成「活動已取消」。哪項評析最正確？",
+        "correct": "原話只要求暫緩印製海報，並未宣告取消活動",
+        "wrong": [
+          "原話已明確宣布所有活動永久停止",
+          "只要場地未確定，就可推論主辦者不再打算舉辦",
+          "原話是在要求所有人立即印製海報"
+        ],
+        "exp": "「先不要印」是依場地未定採取暫時措施，活動是否取消仍無充分資訊。",
+        "subject": "國文",
+        "sub_topic": "語意與語用",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-語意與語用",
+        "template_id": "ref-20261119-b9-ch2-pragmatics-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch2-pragmatics-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "文本觀念、情境語用與摘要可信度相結合",
+      "question": {
+        "q": "某人受邀週末參加活動時回答：「那天下午已經有其他安排，恐怕無法趕到。下次有機會再約。」最合理的語用理解為何？",
+        "correct": "委婉表達這次無法出席，並保留日後邀約的禮貌空間",
+        "wrong": [
+          "明確答應本次活動一定準時抵達",
+          "要求主辦者立即將整場活動取消",
+          "表示自己沒有其他安排，只是不想說話"
+        ],
+        "exp": "「恐怕無法趕到」表達拒絕或無法參與，「下次再約」維持友善互動；不應把禮貌語視為本次出席承諾。",
+        "subject": "國文",
+        "sub_topic": "語意與語用",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-語意與語用",
+        "template_id": "ref-20261119-b9-ch2-pragmatics-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
