@@ -200,3 +200,29 @@ test('A-side isAdmin alone authorizes dungeon-wide fixed stamina; browser flags 
   assert.equal(started.body.room.members.b.explorationStamina,10);
   assert.equal(started.body.room.members.a.explorationStamina,10);
 });
+
+test('reconnecting to a pre-upgrade dungeon refreshes admin rights from A, not the browser',async()=>{
+  const f=fixture(),user=f.a.records.get('users/a');
+  user.isAdmin=false;
+  const created=(await f.call('a','create')).body;
+  const id=created.roomId,ref=API.ROOMS+'/'+id;
+  let room=f.c.records.get(ref);
+  room={...room,status:'assembled',assembledAtMs:f.at,
+    members:{...room.members,a:{...room.members.a,explorationStamina:2}}};
+  delete room.members.a.dungeonAdmin; // saved by an older deployment
+  f.c.records.set(ref,room);
+  user.isAdmin=true;
+  const updated=await f.call('a','reconnect');
+  assert.equal(updated.status,200);
+  assert.equal(updated.body.room.members.a.dungeonAdmin,true);
+  assert.equal(updated.body.room.members.a.explorationStamina,10);
+  assert.equal(f.c.records.get(ref).members.a.explorationStamina,10);
+  const revision=f.c.records.get(ref).revision;
+  assert.equal((await f.call('a','get',{roomId:id})).body.room.revision,revision,
+    'refreshing a current role cannot produce an endless SSE revision loop');
+  user.isAdmin=false;
+  const revoked=await f.call('a','get',{roomId:id});
+  assert.equal(revoked.body.room.members.a.dungeonAdmin,false);
+  assert.equal(revoked.body.room.members.a.explorationStamina,10);
+  assert.equal(f.c.records.get(ref).members.a.dungeonAdmin,false);
+});
