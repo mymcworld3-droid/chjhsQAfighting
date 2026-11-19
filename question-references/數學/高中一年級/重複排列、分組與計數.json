@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-math1-repeated-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "將LEVEL的五個英文字母排成一列，能形成多少種不同字母排列？",
+        "correct": "30種",
+        "wrong": [
+          "120種",
+          "60種",
+          "20種"
+        ],
+        "exp": "共有5個字母，其中L出現2次、E出現2次、V出現1次；不同排列數=5!/(2!×2!)=30。",
+        "subject": "數學",
+        "sub_topic": "重複排列、分組與計數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-重複排列、分組與計數",
+        "template_id": "ref-20261119-b7-math1-repeated-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-repeated-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "將6名互不相同的學生分成兩組，每組3人且不區分甲組、乙組的名稱，共有多少種分組方式？",
+        "correct": "10種",
+        "wrong": [
+          "20種",
+          "15種",
+          "6種"
+        ],
+        "exp": "先選出其中3人有C(6,3)=20種，但兩組互換順序視為同一分組，每種重複2次，故20/2=10。",
+        "subject": "數學",
+        "sub_topic": "重複排列、分組與計數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-重複排列、分組與計數",
+        "template_id": "ref-20261119-b7-math1-repeated-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math1-repeated-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "強調明確條件、可查證計算、同觀念多種變式",
+      "question": {
+        "q": "字串AABBCC包含2個A、2個B、2個C，重新排列後有多少個彼此不同的字串？",
+        "correct": "90個",
+        "wrong": [
+          "720個",
+          "180個",
+          "60個"
+        ],
+        "exp": "6個位置若全不同有6!種，三種字母各重複2次，需除以2!³，故6!/(2!2!2!)=90。",
+        "subject": "數學",
+        "sub_topic": "重複排列、分組與計數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-重複排列、分組與計數",
+        "template_id": "ref-20261119-b7-math1-repeated-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
