@@ -3,13 +3,13 @@
 // avoiding duplicate handlers and retaining server-authoritative actions.
 export function dungeonEnergySegments(){
   return Array.from({length:10},(_,index)=>{
-    const from=(-90+index*9+1)*Math.PI/180;
-    const to=(-90+(index+1)*9-1)*Math.PI/180;
-    const point=angle=>[(Math.cos(angle)*91).toFixed(2),
-      (100+Math.sin(angle)*91).toFixed(2)];
+    const from=(-90+index*9+1.35)*Math.PI/180;
+    const to=(-90+(index+1)*9-1.35)*Math.PI/180;
+    const point=angle=>[(Math.cos(angle)*90).toFixed(3),
+      (100+Math.sin(angle)*90).toFixed(3)];
     const a=point(from),b=point(to);
     return '<path data-dm-energy-segment="'+index+'" d="M '+a[0]+' '+a[1]+
-      ' A 91 91 0 0 1 '+b[0]+' '+b[1]+'"></path>';
+      ' A 90 90 0 0 1 '+b[0]+' '+b[1]+'"></path>';
   }).join('');
 }
 
