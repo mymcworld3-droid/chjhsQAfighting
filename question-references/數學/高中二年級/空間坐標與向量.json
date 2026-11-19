@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-m2-spacecoords-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "空間中A(−1,2,4)、B(3,5,0)，則向量AB為何？",
+        "correct": "(4,3,−4)",
+        "wrong": [
+          "(2,7,4)",
+          "(−4,−3,4)",
+          "(3,3,−4)"
+        ],
+        "exp": "由終點減起點，AB=(3−(−1),5−2,0−4)=(4,3,−4)。",
+        "subject": "數學",
+        "sub_topic": "空間坐標與向量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間坐標與向量",
+        "template_id": "ref-20261119-b11-m2-spacecoords-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-spacecoords-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "空間中P(2,−1,3)平移向量(−4,2,1)後得到Q，Q坐標為何？",
+        "correct": "(−2,1,4)",
+        "wrong": [
+          "(6,−3,2)",
+          "(−2,−3,4)",
+          "(−4,2,1)"
+        ],
+        "exp": "平移後Q=P+v=(2−4,−1+2,3+1)=(−2,1,4)。",
+        "subject": "數學",
+        "sub_topic": "空間坐標與向量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間坐標與向量",
+        "template_id": "ref-20261119-b11-m2-spacecoords-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-m2-spacecoords-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "空間坐標與幾何基本題，避免涉及超綱的三維向量內積計算",
+      "question": {
+        "q": "空間中兩點P(2,−3,1)、Q(−2,5,7)的中點為何？",
+        "correct": "(0,1,4)",
+        "wrong": [
+          "(0,2,4)",
+          "(−4,8,6)",
+          "(2,1,4)"
+        ],
+        "exp": "中點坐標取各分量平均，((2−2)/2,(−3+5)/2,(1+7)/2)=(0,1,4)。",
+        "subject": "數學",
+        "sub_topic": "空間坐標與向量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間坐標與向量",
+        "template_id": "ref-20261119-b11-m2-spacecoords-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
