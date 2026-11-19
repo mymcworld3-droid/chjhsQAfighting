@@ -103,6 +103,18 @@ test('dash and thrown targets reuse original trial move trails',()=>{
   assert.equal(dash.moves[0].timing,'dash');
   fx.paintDungeonScene(ctx,dash,.61,image,true,shared);
 });
+test('server authoritative throw path survives an enemy defeat and never changes game state',()=>{
+  const {previous,next}=sample('tiger-throw');
+  next.members.hero.lastSkill.visualMoves=[{enemyId:'beast-1',
+    from:{x:9,y:6},to:{x:6,y:6}}];
+  next.enemies=[];
+  const before=JSON.stringify(next);
+  const [event]=fx.dungeonAnimationEvents(previous,next);
+  assert.ok(event);
+  assert.deepEqual(event.scene.moves.find(m=>m.uid==='beast-1').path,
+    [{x:9,y:6},{x:6,y:6}]);
+  assert.equal(JSON.stringify(next),before);
+});
 test('basic attack uses readable slash and damage number animation',()=>{
   const previous=room(),next=room();
   next.members.hero.lastStrike={seq:1,enemyId:'beast-1',damage:30,
