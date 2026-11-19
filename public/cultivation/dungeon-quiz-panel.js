@@ -1,6 +1,6 @@
 import {
   getDungeonQuizState,generateDungeonQuestion,answerDungeonQuestion,
-  claimDungeonQuizStamina
+  acknowledgeDungeonReview,claimDungeonQuizStamina
 } from './dungeon-room.js';
 import {getMainUser} from './data/project-repository.js';
 
@@ -192,6 +192,13 @@ export class DungeonQuizPanel{
       this.pendingCredits=state.pendingCredits||[];
       await this.retryCredits();
       if(!this.valid(epoch))return;
+      // A response can be reloaded in another browser without skipping the
+      // original explanation. Only "下一題" acknowledges this review.
+      if(state.lastReview){
+        this.question=null;this.review=state.lastReview;
+        this.paint();void this.prefetch(epoch);
+        return;
+      }
       let question=state.question;
       if(!question){
         this.status('正在填充題庫中…');
@@ -252,7 +259,21 @@ export class DungeonQuizPanel{
   }
   async next(){
     if(!this.valid()||!this.review)return;
-    this.review=null;this.question=null;this.errorMessage='';this.questionStartedAt=Date.now();
-    this.paint();await this.load();
+    const epoch=this.epoch,reviewId=this.review.questionId;
+    this.$('next').disabled=true;
+    try{
+      await acknowledgeDungeonReview(this.roomId,reviewId);
+      if(!this.valid(epoch))return;
+      this.review=null;this.question=null;this.errorMessage='';
+      this.questionStartedAt=Date.now();
+      this.paint();await this.load();
+    }catch(error){
+      if(this.valid(epoch)){
+        this.errorMessage='無法切換下一題：'+(error?.message||'請稍後再試');
+        this.paint();
+      }
+    }finally{
+      if(this.valid(epoch))this.$('next').disabled=false;
+    }
   }
 }
