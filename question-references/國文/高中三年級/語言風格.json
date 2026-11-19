@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-style-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "知識與語用、文本修訂、圖表分析對應高中觀念",
+      "question": {
+        "q": "原句：「晚風輕撫水面，將最後一點夕陽揉成碎金。」若改寫成自然科觀察紀錄，哪個版本較適當？",
+        "correct": "傍晚水面出現細小波紋，反射夕陽而形成分散的亮點。",
+        "wrong": [
+          "晚風依然慈愛地撫慰每一滴水，夕陽滿懷不捨。",
+          "水面在哭泣，將夕陽的碎金藏入夢中。",
+          "風與夕陽的心情比任何觀察數據都重要。"
+        ],
+        "exp": "科學觀察宜保留可見現象並避免擬人及情感化比喻；細小波紋與反光亮點仍忠實描述原句景象。",
+        "subject": "國文",
+        "sub_topic": "語言風格",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-語言風格",
+        "template_id": "ref-20261119-b9-ch3-style-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-style-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "知識與語用、文本修訂、圖表分析對應高中觀念",
+      "question": {
+        "q": "閱讀：「他不說那年有多苦，只說：『田裡少了水，飯桌上也跟著安靜。』」這段敘述主要呈現何種語言風格？",
+        "correct": "以節制、含蓄的生活細節暗示艱難處境",
+        "wrong": [
+          "透過大量精確數值進行實驗報告",
+          "用誇大歡樂的場面直接否定苦難",
+          "完全沒有情感暗示，只是農業設備說明"
+        ],
+        "exp": "「飯桌上也跟著安靜」不直說家庭困難，而以生活場景含蓄表露水荒對家庭的影響。",
+        "subject": "國文",
+        "sub_topic": "語言風格",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-語言風格",
+        "template_id": "ref-20261119-b9-ch3-style-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-ch3-style-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "知識與語用、文本修訂、圖表分析對應高中觀念",
+      "question": {
+        "q": "原句：「截至本月底，預約借閱服務共提供二百次借書服務。」若為政府公告要求簡潔明確，哪個版本較妥當？",
+        "correct": "截至本月底，預約借閱服務累計辦理二百次借書。",
+        "wrong": [
+          "截至本月底，本項預約借閱服務的服務提供量為借閱服務二百次服務。",
+          "預約借閱這件事做得很好，因此數字不必公布。",
+          "截止本月底，我們可能早已確定所有人都喜歡這項服務。"
+        ],
+        "exp": "「服務共提供……服務」重複，簡化成「累計辦理二百次借書」保留期間與數量，語句較清晰。",
+        "subject": "國文",
+        "sub_topic": "語言風格",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-語言風格",
+        "template_id": "ref-20261119-b9-ch3-style-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
