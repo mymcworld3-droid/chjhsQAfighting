@@ -26,7 +26,8 @@ function createViewer(){
     enemies:AI.initialEnemies(map)};
   v.map=map;v.roomId=v.room.id;v.uid='a';v.opened=true;
   v.width=840;v.height=640;
-  v.$=()=>null;v.drawSoon=()=>{};
+  v.$=selector=>selector==='[data-dm="focus"]'?{setAttribute(){}}:null;
+  v.drawSoon=()=>{};
   v.canvas={getBoundingClientRect:()=>({left:10,top:20}),
     setPointerCapture(){},hasPointerCapture:()=>false};
   return v;
