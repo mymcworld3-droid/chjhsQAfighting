@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-m2-inverse-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "同一觀念變式，推論可核查、選項互不重複",
+      "question": {
+        "q": "若A=[[2,1],[1,1]]，其反矩陣A⁻¹為何？",
+        "correct": "[[1,−1],[−1,2]]",
+        "wrong": [
+          "[[2,−1],[−1,1]]",
+          "[[1,1],[1,2]]",
+          "[[−1,1],[1,−2]]"
+        ],
+        "exp": "A的行列式2×1−1×1=1，故A⁻¹=(1/1)[[1,−1],[−1,2]]。",
+        "subject": "數學",
+        "sub_topic": "反矩陣與解線性方程組",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-反矩陣與解線性方程組",
+        "template_id": "ref-20261119-b6-m2-inverse-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m2-inverse-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "同一觀念變式，推論可核查、選項互不重複",
+      "question": {
+        "q": "聯立方程組2x+y=7、x+y=4，解(x,y)為何？",
+        "correct": "(3,1)",
+        "wrong": [
+          "(1,3)",
+          "(2,2)",
+          "(4,−1)"
+        ],
+        "exp": "兩式相減得x=3，代入x+y=4得y=1，故解為(3,1)。",
+        "subject": "數學",
+        "sub_topic": "反矩陣與解線性方程組",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-反矩陣與解線性方程組",
+        "template_id": "ref-20261119-b6-m2-inverse-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-m2-inverse-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "同一觀念變式，推論可核查、選項互不重複",
+      "question": {
+        "q": "下列哪個矩陣沒有反矩陣？",
+        "correct": "[[2,4],[1,2]]",
+        "wrong": [
+          "[[1,2],[0,1]]",
+          "[[2,0],[0,3]]",
+          "[[1,0],[1,1]]"
+        ],
+        "exp": "2×2矩陣有反矩陣當且僅當行列式不為0；[[2,4],[1,2]]行列式2×2−4×1=0，因此不可逆。",
+        "subject": "數學",
+        "sub_topic": "反矩陣與解線性方程組",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-反矩陣與解線性方程組",
+        "template_id": "ref-20261119-b6-m2-inverse-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
