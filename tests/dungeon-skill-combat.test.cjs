@@ -223,3 +223,25 @@ test('stage 13: empowered skills cannot be forged by a browser-reported flag or 
   assert.equal(attack.result.focusCharges,0);
   assert.equal(attack.members.a.explorationStamina,98);
 });
+
+test('stage 13: realtime dungeon skill labels never describe turn cooldowns',()=>{
+  const bodyRecord=body(),bodySkills=S.loadout(bodyRecord,200,0).dungeonSkills;
+  const focus=bodySkills.find(skill=>skill.id==='dragon-roar');
+  assert.ok(focus.description.includes('六層'));
+  assert.ok(focus.description.includes('沒有回合或冷卻'));
+  assert.ok(!focus.description.includes('立即結束回合'));
+  assert.equal(focus.singleHitDamage,0);
+  const swordRecord=sword(),flying=S.loadout(swordRecord,200,2)
+    .dungeonSkills.find(skill=>skill.id==='flight-summon');
+  assert.ok(flying.description.includes('沒有回合或冷卻'));
+  assert.ok(flying.singleHitDamage>0);
+});
+test('stage 13: server recomputes live attack after scripture mastery changes',()=>{
+  const record=body(),battle=room(record,beast(7,5,'beast-1',9000));
+  const original=cast(battle,record,'dragon-strike',{x:7,y:5});
+  const stronger=structuredClone(record);
+  stronger.books['body-rock']={exp:M.MAX_EXP};
+  const changed=cast(battle,stronger,'dragon-strike',{x:7,y:5});
+  assert.ok(changed.result.totalDamage>original.result.totalDamage);
+  assert.ok(changed.members.a.dungeonAttack>original.members.a.dungeonAttack);
+});

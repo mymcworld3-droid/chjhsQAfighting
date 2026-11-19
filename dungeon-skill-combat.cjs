@@ -46,6 +46,14 @@ const skillOf=(id,record,score)=>{
   if(!s||!Manuals.unlocked(record,id)||!Manuals.meetsRealm(s,score))return null;
   return Manuals.skillAtLevel(s,record.skillLevels?.[id]);
 };
+const describeDungeonSkill=skill=>{
+  if(skill.kind==='fist-focus')
+    return '立即凝聚六層蓄勢。接下來六次成功施放的體修攻擊，體力消耗減半並向上取整；每次耗一層。副本中沒有回合或冷卻時間限制。';
+  if(skill.kind==='flying-sword')
+    return String(skill.description||'').replace('每回合最多用兩次。',
+      '副本中沒有回合或冷卻時間限制。');
+  return String(skill.description||'');
+};
 const loadout=(record,score,index)=>{
   const s=Manuals.normalize(record);
   if(!Number.isInteger(index)||index<0||index>=3)throw fail('技能配置編號無效',400);
@@ -53,8 +61,12 @@ const loadout=(record,score,index)=>{
   return {dungeonLoadoutIndex:index,dungeonLoadoutNames:s.loadouts.map(v=>v.name),
     dungeonSkillIds:ids,dungeonSkills:ids.map(id=>{
       const skill=skillOf(id,s,score);
+      const preview=Manuals.singleHitDamage(attackPower(s),skill);
       return {id,name:skill.name,kind:skill.kind,school:skill.school,
-        cost:skill.cost,range:skill.range,description:skill.description};
+        cost:skill.cost,range:skill.range,level:skill.level,
+        singleHitDamage:preview.damage||preview.potential||0,
+        ...(preview.center!==undefined?{centerHitDamage:preview.center}:{}),
+        description:describeDungeonSkill(skill)};
     })};
 };
 function attackPower(record){
@@ -155,8 +167,10 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   const enemies=(room.enemies||[]).map(e=>({...e,position:{...e.position}}));
   const members={...room.members};
   let player={...member},hits=[],cells=[],position=null,sword=member.flyingSword||null;
-  const base=Number.isSafeInteger(member.dungeonAttack)&&member.dungeonAttack>=30?
-    member.dungeonAttack:attackPower(normalized);
+  // Re-derive attack from the latest verified A-side manual snapshot: A can
+  // gain manuscript EXP in another session while this C dungeon stays open.
+  const base=attackPower(normalized);
+  player.dungeonAttack=base;
   const damageFor=power=>Math.max(1,Math.round(base*power));
   const healthy=e=>Number.isSafeInteger(e.battleHealth)?
     Math.max(0,e.battleHealth):maxHealth(e.kind);
