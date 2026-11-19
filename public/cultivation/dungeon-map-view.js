@@ -89,7 +89,7 @@ class DungeonMapView{
       '<span class="dm-battle-clock" data-dm-clock role="timer" aria-live="off">等待集結</span>'+
       '<button type="button" data-dm="close" aria-label="返回合作副本隊伍">返回隊伍 <span aria-hidden="true">×</span></button></div></header>'+
       '<div class="dm-stage" data-dm-stage>'+
-      '<canvas class="dm-world" data-dm-world tabindex="0" aria-label="即時戰場。點選灰色地格移動，點選紅色地格使用選定技能；可拖曳、雙指縮放及長按查看靈獸資料。"></canvas>'+ 
+      '<canvas class="dm-world" data-dm-world tabindex="0" aria-label="即時戰場。點選灰色地格移動，點選紅色地格使用選定技能；不可拖曳地圖，角色固定中央；點選地格操作、長按查看靈獸資料。"></canvas>'+ 
       '<div class="dm-effect-layer" data-dm-effects aria-hidden="true"></div>'+
        '<div class="dm-action-feedback" data-dm-action-feedback role="status" aria-live="polite" hidden></div>'+
       '<div class="dm-message" data-dm-message role="status" aria-live="polite">正在取得副本地圖…</div>'+
@@ -177,6 +177,8 @@ class DungeonMapView{
     this.root=root;this.stage=stage;
     this.canvas=root.querySelector('[data-dm-world]');
     this.mini=root.querySelector('[data-dm-minimap]');
+    const beastToggle=root.querySelector('[data-dm="beasts"]');
+    root.querySelector('.dm-head-actions').prepend(beastToggle);
     this.ctx=this.canvas.getContext('2d',{alpha:false});
     // Same image atlases as 問道試煉. Images affect presentation only;
     // failed downloads leave deterministic vector terrain/markers visible.
@@ -249,7 +251,7 @@ class DungeonMapView{
     this.quiz?.attach(room.id,playerUid);
     if(room.status==='assembled')void this.quiz?.warm();
     this.map=null;this.camera=Camera.initialCamera();
-    this.follow=false;this.routes=false;this.pointers.clear();this.opened=true;
+    this.follow=true;this.routes=false;this.pointers.clear();this.opened=true;
     this.movePending=false;this.strikePending=false;this.skillPending=false;
     this.portalPending=false;this.bossPending=false;
     this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
@@ -295,19 +297,11 @@ class DungeonMapView{
         map.branchCount+' 條支線 · '+map.width+' × '+map.height+' 格';
       this.$('[data-dm-biome-box]').hidden=false;
       this.$('[data-dm-overview]').hidden=false;
-      this.camera=Camera.initialCamera();this.alert('');
-      this.resize();
-      // In live exploration, open on the player at a useful tactical scale,
-      // just as 問道試煉 does. The full-map button still resets the camera.
-      // Waiting-room previews retain the complete map overview.
-      if(this.room?.status==='assembled'){
-        this.follow=true;this.followBeast=false;
-        this.camera=Camera.zoomAt(this.camera,2.6,
-          this.width/2,this.height/2,this.map,this.width,this.height);
-        this.camera=Camera.focusOn(this.camera,this.selfPad(),
-          this.map,this.width,this.height);
-        this.$('[data-dm="focus"]').setAttribute('aria-pressed','true');
-      }
+      // Always center the player, including irregular map boundaries.
+      this.follow=true;this.followBeast=false;
+      this.camera=Camera.lockToPlayer(this.selfPad(),
+        this.map,this.width,this.height);
+      this.alert('');this.resize();
       this.updateMovementHUD();this.updateBeastHUD();this.drawSoon();
     }catch(error){
       if(!this.isCurrent()||request!==this.seq)return;
@@ -333,9 +327,9 @@ class DungeonMapView{
     if(holder)holder.hidden=!active||!this.map;
     const own=this.room?.members?.[this.uid];
     const stamina=Number.isSafeInteger(own?.explorationStamina)?
-      own.explorationStamina:100;
+      own.explorationStamina:10;
     const energy=this.$('[data-dm-energy]');
-    if(energy)energy.textContent=String(stamina);
+    if(energy)energy.textContent=String(Math.max(0,Math.min(10,stamina)));
     this.$('[data-dm-quarter-energy]').hidden=!active||!this.map;
     this.root.querySelectorAll('[data-dm-energy-segment]').forEach((segment,index)=>
       segment.classList.toggle('is-filled',index<energyRingFill(stamina)));
@@ -437,7 +431,7 @@ class DungeonMapView{
     renderDungeonTrialWheel(wheel,{
       mode:this.wheelMode,options,
       selected:this.wheelMode==='move'?'player':this.selectedSkillId,
-      stamina:Math.max(0,Number(own?.explorationStamina)||0),
+      stamina:Math.max(0,Math.min(10,Number(own?.explorationStamina)||0)),
       focusCharges:charges,
       locked:!active||this.movePending||this.routePending||
         this.skillPending||this.loadoutPending||this.strikePending||
@@ -920,7 +914,7 @@ class DungeonMapView{
       this.actionFeedback('此地格無法抵達：請選擇可通行位置');return;
     }
     if(!route.length)return;
-    const stamina=Math.max(0,Number(own.explorationStamina)||0);
+    const stamina=Math.max(0,Math.min(10,Number(own.explorationStamina)||0));
     if(route.length>stamina){
       this.actionFeedback('體力不足，需要 '+route.length+' 點，目前 '+stamina+' 點');
       return;
@@ -1113,13 +1107,8 @@ class DungeonMapView{
       Math.abs(a.x-self.x)+Math.abs(a.y-self.y)-
       Math.abs(b.x-self.x)-Math.abs(b.y-self.y));
     this.aimTile={...cells[0]};
-    if(focus){
-      this.follow=false;this.followBeast=true;
-      this.camera=Camera.zoomAt(this.camera,Math.max(2.4,this.camera.zoom),
-        this.width/2,this.height/2,this.map,this.width,this.height);
-      this.camera=Camera.focusOn(this.camera,beast.position,this.map,this.width,this.height);
-      this.$('[data-dm="focus"]').setAttribute('aria-pressed','false');
-    }
+    // Selecting an enemy updates its inspector/aim, never the camera.
+    this.follow=true;this.followBeast=false;
     this.updateBeastHUD();this.updateStrikeHUD();this.updateSkillHUD();this.drawSoon();
   }
   inspectAt(screen){
@@ -1372,7 +1361,7 @@ class DungeonMapView{
     this.room=room;
     if(changedArena){
       this.map=null;this.camera=Camera.initialCamera();
-      this.follow=false;this.followBeast=false;
+      this.follow=true;this.followBeast=false;
       this.inspectOpen=false;this.selectedBeastId=null;
       this.aimTile=null;this.beastIds='';
       this.alert('全隊正在進入首領戰場…');
@@ -1381,11 +1370,9 @@ class DungeonMapView{
     if(room.status==='assembled')void this.quiz?.warm();
     this.syncClockAnchor(room);
     this.updateStatus();
-    if(this.map&&this.follow){
-      this.camera=Camera.focusOn(this.camera,this.selfPad(),this.map,this.width,this.height);
-    }else if(this.map&&this.followBeast){
-      const beast=this.creatures().find(e=>e.id===this.selectedBeastId);
-      if(beast)this.camera=Camera.focusOn(this.camera,beast.position,
+    if(this.map){
+      this.follow=true;this.followBeast=false;
+      this.camera=Camera.lockToPlayer(this.selfPad(),
         this.map,this.width,this.height);
     }
     this.drawSoon();
@@ -1680,7 +1667,7 @@ class DungeonMapView{
     if(this.wheelMode==='move'){
       this.rangeKind='move';
       this.rangeTiles=dungeonReachableTiles(this.map,from,enemies,
-        member.explorationStamina||0);
+        Math.max(0,Math.min(10,member.explorationStamina||0)));
     }else{
       const skill=(member.dungeonSkills||[]).find(s=>s.id===this.selectedSkillId)||
         {kind:'attack',range:1};
