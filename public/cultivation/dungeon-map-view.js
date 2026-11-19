@@ -287,7 +287,19 @@ class DungeonMapView{
       this.$('[data-dm-biome-box]').hidden=false;
       this.$('[data-dm-overview]').hidden=false;
       this.camera=Camera.initialCamera();this.alert('');
-      this.resize();this.updateMovementHUD();this.updateBeastHUD();
+      this.resize();
+      // In live exploration, open on the player at a useful tactical scale,
+      // just as 問道試煉 does. The full-map button still resets the camera.
+      // Waiting-room previews retain the complete map overview.
+      if(this.room?.status==='assembled'){
+        this.follow=true;this.followBeast=false;
+        this.camera=Camera.zoomAt(this.camera,2.6,
+          this.width/2,this.height/2,this.map,this.width,this.height);
+        this.camera=Camera.focusOn(this.camera,this.selfPad(),
+          this.map,this.width,this.height);
+        this.$('[data-dm="focus"]').setAttribute('aria-pressed','true');
+      }
+      this.updateMovementHUD();this.updateBeastHUD();this.drawSoon();
     }catch(error){
       if(!this.isCurrent()||request!==this.seq)return;
       this.alert(error?.message||'無法載入地圖',true);
