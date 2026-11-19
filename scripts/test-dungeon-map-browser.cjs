@@ -568,8 +568,10 @@ async function main(){
     const portalB=b.page.locator('[data-dm="enter-boss"]:not([disabled])');
     await portalA.waitFor({timeout:9000});
     await portalA.click();
-    await a.page.waitForFunction(()=>document.querySelector('[data-dm-portal-votes]')
-      ?.textContent.includes('1/2'),null,{timeout:8000});
+    await a.page.waitForFunction(()=>{
+      const status=document.querySelector('[data-dm-portal-votes]')?.textContent||'';
+      return /1\s*\/\s*2/.test(status)&&status.includes('你已確認');
+    },null,{timeout:8000});
     assert.equal(room.dungeonArena,'exploration');
     await portalB.waitFor({timeout:9000});
     await portalB.click();
