@@ -121,3 +121,45 @@ test('objective HUD shares the canonical short-effect labels',()=>{
   assert.deepEqual(Object.values(R.SEAL_TYPES).map(x=>x.shortEffect),
     ['護：減傷','煞：危險格','獸：增攻','迷：開路']);
 });
+
+test('seeded v4 sealing layouts always reference the canonical kind catalog',()=>{
+  const expected=['shield','hazard','rage','maze'];
+  assert.deepEqual(R.SEAL_KINDS,expected);
+  assert(Object.isFrozen(R.SEAL_KINDS));
+  let reviewed=0;
+  for(let seed=0;seed<20;seed++)for(let stage=1;stage<=45;stage++){
+    const layout=R.stageLayout('seal-catalog-'+seed,stage,4);
+    if(layout.mode!=='sealing')continue;
+    const state={
+      trial:{layoutVersion:4},objective:layout.objective,
+      width:layout.width,height:layout.height
+    };
+    const original=JSON.stringify(layout.objective);
+    const infos=R.sealInfos(state);
+    assert.equal(infos.length,layout.objective.points.length);
+    for(let index=0;index<infos.length;index++){
+      const info=infos[index],point=layout.objective.points[index];
+      assert.equal(point.kind,expected[(index+Math.floor((stage-8)/4))%4]);
+      assert.equal(info.name,R.SEAL_TYPES[point.kind].name);
+      assert.equal(info.color,R.SEAL_TYPES[point.kind].color);
+      assert.equal(info.hp,R.SEAL_MAX_DURABILITY);
+      assert.deepEqual(R.sealEffectCells(state,point).length>0,
+        info.range.kind==='manhattan');
+      reviewed++;
+    }
+    assert.equal(JSON.stringify(layout.objective),original,
+      'render/intel discovery must never mutate a seeded layout');
+  }
+  assert(reviewed>100,'sample enough generated objective positions');
+});
+
+test('renderer reads its marker label and color from canonical intel, with v3 fallback',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-renderer.js'),'utf8');
+  assert(source.includes('const seal=R.sealInfo(s,p);'));
+  assert(source.includes("seal?.label||'陣'"));
+  assert(source.includes("seal?.color||'#a7e8ff'"));
+  assert.doesNotMatch(source,/shield:'護',hazard:'煞',rage:'獸',maze:'迷'/);
+  const v3=scene([seal('shield')]);v3.trial.layoutVersion=3;
+  assert.equal(R.sealInfo(v3,{x:3,y:1}),null);
+});
