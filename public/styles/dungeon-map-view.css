@@ -630,6 +630,46 @@
 }
 
 // Stage 16 — team rescue and authenticated, personal victory reward.
+/* Stage 18: shield & compact two-column guard commands. */
+#dungeon-map-view .dm-boss-shield{margin-top:5px}
+#dungeon-map-view .dm-boss-shield span{
+  display:flex;align-items:center;justify-content:space-between;gap:6px;
+  color:#adddf5;font-size:10px;line-height:1.3;
+}
+#dungeon-map-view .dm-boss-shield em{font-style:normal;font-variant-numeric:tabular-nums}
+#dungeon-map-view .dm-shield-meter{
+  width:100%;height:5px;background:#182934;border-radius:99px;
+  overflow:hidden;margin-top:3px;
+}
+#dungeon-map-view .dm-shield-meter i{
+  display:block;height:100%;width:100%;background:linear-gradient(90deg,#60b8df,#abe0ef);
+  transition:width .2s ease-out;
+}
+#dungeon-map-view .dm-teamwork-hint{
+  display:block;margin-top:4px;line-height:1.35;font-size:10px;
+  color:#ffe0a4;overflow-wrap:anywhere;
+}
+#dungeon-map-view .dm-guard-actions{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;
+  max-width:250px;max-height:82px;overflow-y:auto;scrollbar-width:thin;
+  touch-action:pan-y;
+}
+#dungeon-map-view .dm-guard-actions button{
+  min-width:0;min-height:30px;padding:4px 6px;
+  font:600 10px/1.35 system-ui,"Noto Sans TC",sans-serif;
+  color:#d6f2ff;background:#20404c;border:1px solid #77acc9;
+  white-space:normal;overflow-wrap:anywhere;
+}
+#dungeon-map-view .dm-guard-actions button:disabled{opacity:.55}
+@media(max-width:720px){
+  #dungeon-map-view .dm-teamwork-hint{font-size:9px}
+  #dungeon-map-view .dm-guard-actions{max-width:175px;max-height:75px}
+  #dungeon-map-view .dm-guard-actions button{font-size:9px;min-height:28px}
+}
+@media(prefers-reduced-motion:reduce){
+  #dungeon-map-view .dm-shield-meter i{transition:none}
+}
+
 #dungeon-map-view .dm-rescue-actions{
   display:grid;gap:5px;max-height:110px;overflow:auto;
   padding:6px;background:#163327dc;border:1px solid #7ecba780;
