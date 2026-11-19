@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-chem3-titration-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "區分中和化學計量與緩衝系統機制",
+      "question": {
+        "q": "以0.20 M NaOH滴定25.0 mL的0.10 M H₂SO₄，假設硫酸兩個可解離氫離子皆完全被中和，需多少mL NaOH才達化學計量當量點？",
+        "correct": "25.0 mL",
+        "wrong": [
+          "12.5 mL",
+          "50.0 mL",
+          "5.0 mL"
+        ],
+        "exp": "n(H₂SO₄)=0.10×0.0250=0.00250 mol，需OH⁻=2×0.00250=0.00500 mol；NaOH體積=0.00500/0.20=0.0250 L。",
+        "subject": "化學",
+        "sub_topic": "酸鹼滴定與緩衝液",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-酸鹼滴定與緩衝液",
+        "template_id": "ref-20261119-chem3-titration-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chem3-titration-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "區分中和化學計量與緩衝系統機制",
+      "question": {
+        "q": "25°C下，某弱酸HA與其共軛鹼A⁻形成緩衝液，pKa=4.8。若[A⁻]/[HA]=10，近似理想溶液，pH約是多少？",
+        "correct": "5.8",
+        "wrong": [
+          "4.8",
+          "3.8",
+          "10.0"
+        ],
+        "exp": "由亨德森－哈塞爾巴赫方程式：pH=pKa+log([A⁻]/[HA])=4.8+log10=5.8。",
+        "subject": "化學",
+        "sub_topic": "酸鹼滴定與緩衝液",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-酸鹼滴定與緩衝液",
+        "template_id": "ref-20261119-chem3-titration-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-chem3-titration-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "區分中和化學計量與緩衝系統機制",
+      "question": {
+        "q": "某HA/A⁻緩衝液加入少量NaOH且尚未超出緩衝容量，主要反應為HA+OH⁻→A⁻+H₂O。忽略體積改變，哪項敘述最合理？",
+        "correct": "HA減少、A⁻增加，pH略微上升",
+        "wrong": [
+          "HA增加、A⁻減少，pH略微下降",
+          "HA與A⁻均完全消失",
+          "pH必立刻變成14"
+        ],
+        "exp": "外加OH⁻主要被弱酸HA消耗，使共軛鹼A⁻相對增加；比例[A⁻]/[HA]升高，pH通常小幅上升。",
+        "subject": "化學",
+        "sub_topic": "酸鹼滴定與緩衝液",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-酸鹼滴定與緩衝液",
+        "template_id": "ref-20261119-chem3-titration-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
