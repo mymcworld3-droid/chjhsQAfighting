@@ -241,7 +241,7 @@ test('quiz credit is member- and session-bound; rejects ungraded, out-of-order a
   assert.equal(credited.status,200);assert.equal(credited.body.room.members.a.explorationStamina,100);
   assert.equal(credited.body.room.members.a.lastQuizCredit.granted,0,
     'at cap still acknowledge the receipt once');
-  raw.members.a.explorationStamina=90;
+  f.c.records.get('dungeonRooms/'+id).members.a.explorationStamina=90;
   const second=await f.call('a','quiz-credit',{roomId:id,questionId:'two'});
   assert.equal(second.status,200);assert.equal(second.body.room.members.a.explorationStamina,94);
   const oldA=f.a.records.get('dungeonQuizStates/a');
