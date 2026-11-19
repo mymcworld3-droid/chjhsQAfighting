@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-comparison-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "School A surveyed 100 students, 40 of whom preferred printed books. School B surveyed 60 students, 30 of whom preferred printed books. Which comparison is accurate?",
+        "correct": "School B had a higher preference rate, but School A had more respondents preferring print.",
+        "wrong": [
+          "School A had both a higher rate and more such respondents.",
+          "School B had more respondents preferring print, but a lower rate.",
+          "Both schools had the same rate and the same number of respondents."
+        ],
+        "exp": "A's rate is 40/100=40%; B's rate is 30/60=50%. The number favoring print is higher at A (40 vs. 30).",
+        "subject": "英文",
+        "sub_topic": "比較與對照",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中二年級-比較與對照",
+        "template_id": "ref-20261119-b7-eng2-comparison-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-comparison-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "Read: 'The town library offers more printed reference books than the school library. The school library, however, provides longer evening study hours. Both offer free Wi-Fi.' Which comparison is correct?",
+        "correct": "The town library has more printed reference books, while the school library stays open for study later.",
+        "wrong": [
+          "The school library has more printed reference books and closes earlier.",
+          "Only the town library provides free Wi-Fi.",
+          "Both libraries have exactly the same collection and evening hours."
+        ],
+        "exp": "The paragraph contrasts the size of printed reference collections and study hours while identifying free Wi-Fi as a shared service.",
+        "subject": "英文",
+        "sub_topic": "比較與對照",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中二年級-比較與對照",
+        "template_id": "ref-20261119-b7-eng2-comparison-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng2-comparison-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "語境清楚、選項可比較、兼顧反例與論證邏輯",
+      "question": {
+        "q": "Two community gardens grew the same vegetables. Garden A used collected rainwater; Garden B used treated tap water. Both met the same harvest target. What can be concluded from this information alone?",
+        "correct": "They used different water sources but achieved the stated harvest target.",
+        "wrong": [
+          "Garden A necessarily spent less money on every aspect of production.",
+          "Garden B necessarily had lower soil quality.",
+          "The gardens must have used identical amounts of water."
+        ],
+        "exp": "The text supports a difference in water source and an equivalent harvest target, but supplies no information on costs, soil quality or total water consumption.",
+        "subject": "英文",
+        "sub_topic": "比較與對照",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中二年級-比較與對照",
+        "template_id": "ref-20261119-b7-eng2-comparison-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
