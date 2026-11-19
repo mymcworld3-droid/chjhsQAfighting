@@ -116,6 +116,9 @@ function nextEnemy(map,enemy,members,tick,occupied){
   }
   if(step&&(occupied.has(key(step))||playerTiles.some(([,p])=>same(p.position,step)))){
     step=null;
+    // A blocked patrol step must not advance its waypoint index: otherwise
+    // the next legal tick could attempt a nonadjacent leap.
+    if(!chosen){patrolIndex=enemy.patrolIndex;patrolDirection=enemy.patrolDirection;}
     if(chosen)intent='alert';
   }
   if(step&&!walkable(map,step))step=null;
