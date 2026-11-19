@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-math2-logeq-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "解方程式log₂(x+2)−log₂x=1，實數x為何？",
+        "correct": "2",
+        "wrong": [
+          "−2",
+          "1",
+          "4"
+        ],
+        "exp": "定義域須x>0。由對數律得log₂[(x+2)/x]=1，所以(x+2)/x=2，解得x=2，符合定義域。",
+        "subject": "數學",
+        "sub_topic": "對數函數、方程式與應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-對數函數、方程式與應用",
+        "template_id": "ref-20261119-b7-math2-logeq-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math2-logeq-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "已知log₃(2x−1)=2，則x為何？",
+        "correct": "5",
+        "wrong": [
+          "4",
+          "9",
+          "10"
+        ],
+        "exp": "對數定義給出2x−1=3²=9，因此2x=10、x=5；此時2x−1>0。",
+        "subject": "數學",
+        "sub_topic": "對數函數、方程式與應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-對數函數、方程式與應用",
+        "template_id": "ref-20261119-b7-math2-logeq-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-math2-logeq-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "question": {
+        "q": "某培養皿中細菌數目每3小時變成原來2倍，初始100隻。若依此模型成長，細菌數首次達800隻需多少小時？",
+        "correct": "9小時",
+        "wrong": [
+          "6小時",
+          "12小時",
+          "24小時"
+        ],
+        "exp": "800/100=8=2³，代表經歷3次加倍；每次需3小時，總計3×3=9小時。",
+        "subject": "數學",
+        "sub_topic": "對數函數、方程式與應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-對數函數、方程式與應用",
+        "template_id": "ref-20261119-b7-math2-logeq-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
