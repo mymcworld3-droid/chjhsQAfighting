@@ -85,20 +85,20 @@ function win(room,uid='a'){
     defeatedByUid:uid};
   room.enemies=[];
 }
-test('rescue rules: 8 stamina ally, 25 stamina self and exact HP, sequence replay',()=>{
+test('rescue rules: 8 stamina ally, 10 stamina self and exact HP, sequence replay',()=>{
   const map=generateDungeonLayout(SEED);
   const x={...map.spawnPads[0]},y=adjacent(map,x);
   assert.ok(y);
   const room={mode:'dungeon',status:'assembled',dungeonArena:'exploration',
     battleAppliedTick:11,enemies:[],members:{
-      a:{uid:'a',position:x,explorationStamina:50,battleHealth:100,
+      a:{uid:'a',position:x,explorationStamina:10,battleHealth:100,
         rescueSeq:0,allyReviveCount:0,selfRescueCount:0},
-      b:{uid:'b',position:y,explorationStamina:30,battleHealth:0,
+      b:{uid:'b',position:y,explorationStamina:10,battleHealth:0,
         downed:true,allyReviveCount:0,selfRescueCount:0}
     }};
   assert.throws(()=>Rescue.help(room,'b',map,{targetUid:'a',seq:1}),/尚未倒地/);
   const helped=Rescue.help(room,'a',map,{targetUid:'b',seq:1});
-  assert.equal(helped.members.a.explorationStamina,42);
+  assert.equal(helped.members.a.explorationStamina,2);
   assert.equal(helped.members.b.battleHealth,40);
   assert.equal(helped.members.b.downed,false);
   assert.equal(helped.members.b.allyReviveCount,1);
@@ -110,7 +110,7 @@ test('rescue rules: 8 stamina ally, 25 stamina self and exact HP, sequence repla
     'a',map,{targetUid:'b',seq:2}),/尚未倒地/);
   const self=Rescue.help(room,'b',map,{targetUid:'b',seq:1});
   assert.equal(self.members.b.battleHealth,25);
-  assert.equal(self.members.b.explorationStamina,5);
+  assert.equal(self.members.b.explorationStamina,0);
   assert.equal(self.members.b.selfRescueCount,1);
   const fallen={...room,members:{...self.members,
     b:{...self.members.b,downed:true,battleHealth:0}}};
@@ -140,7 +140,7 @@ test('two C servers rescue one downed ally once and keep retries resource-neutra
   const f=await fixture(),room=f.raw(),p={...f.map.spawnPads[0]};
   room.enemies=[];room.members.a.position=p;
   room.members.b.position={...p};room.members.b.battleHealth=0;
-  room.members.b.downed=true;room.members.a.explorationStamina=40;
+  room.members.b.downed=true;room.members.a.explorationStamina=10;
   const revision=room.revision;
   const [a,b]=await Promise.all([
     f.call('a','rescue',{roomId:f.roomId,targetUid:'b',seq:1,
@@ -149,7 +149,7 @@ test('two C servers rescue one downed ally once and keep retries resource-neutra
   ]);
   assert.equal(a.status,200,a.body?.error);assert.equal(b.status,200,b.body?.error);
   assert.equal(f.raw().revision,revision+1);
-  assert.equal(f.raw().members.a.explorationStamina,32);
+  assert.equal(f.raw().members.a.explorationStamina,2);
   assert.equal(f.raw().members.b.battleHealth,40);
   assert.equal((await f.call('b','rescue',{roomId:f.roomId,
     targetUid:'b',seq:1})).status,409,'cannot self-revive when healthy');
