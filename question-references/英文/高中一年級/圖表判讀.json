@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-e1-charts-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "A school chart shows electricity use fell from 600 kWh in March to 450 kWh in April. Which statement is correct?",
+        "correct": "Electricity use decreased by 25%.",
+        "wrong": [
+          "Electricity use decreased by 15%.",
+          "Electricity use increased by 25%.",
+          "Electricity use remained unchanged."
+        ],
+        "exp": "The change is (600−450)/600=0.25, so electricity use fell by 25% relative to March.",
+        "subject": "英文",
+        "sub_topic": "圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中一年級-圖表判讀",
+        "template_id": "ref-20261119-b6-e1-charts-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e1-charts-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "A survey shows that 40% of students carried reusable bottles in 2023 and 55% did so in 2024. Which statement is supported?",
+        "correct": "The percentage rose by 15 percentage points.",
+        "wrong": [
+          "The percentage rose by 15%.",
+          "The percentage fell by 15 percentage points.",
+          "The percentage reached 95% in 2024."
+        ],
+        "exp": "The difference between 55% and 40% is 15 percentage points; a percentage-point increase is not the same as a 15% relative increase.",
+        "subject": "英文",
+        "sub_topic": "圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中一年級-圖表判讀",
+        "template_id": "ref-20261119-b6-e1-charts-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e1-charts-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視真實語境、唯一正解與能說明語法或推理原因的解析",
+      "question": {
+        "q": "A table lists club members: Art 20, Science 30, Sports 45. Which statement is true?",
+        "correct": "Sports has 15 more members than Science.",
+        "wrong": [
+          "Art has 10 more members than Science.",
+          "Science has the highest membership.",
+          "Sports and Art have the same membership."
+        ],
+        "exp": "The sports club has 45 members and the science club has 30, a difference of 15.",
+        "subject": "英文",
+        "sub_topic": "圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中一年級-圖表判讀",
+        "template_id": "ref-20261119-b6-e1-charts-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
