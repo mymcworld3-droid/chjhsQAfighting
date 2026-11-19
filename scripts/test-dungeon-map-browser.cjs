@@ -551,8 +551,56 @@ async function main(){
       .waitFor();
     assert.equal(room.members.a.dungeonLoadoutIndex,1);
     assert.ok(room.members.a.dungeonSkillIds.includes('wind-step'));
+    // Stage 12: the question is personal, while NPC ticks and other clients
+    // keep receiving the same live dungeon room stream.
+    const chargeButton=a.page.locator('#dungeon-map-view [data-dm="quiz"]');
+    await chargeButton.click();
+    await a.page.locator('.dm-quiz-panel:not([hidden])').waitFor();
+    await a.page.locator('[data-dq="answer"][data-choice="2"]').waitFor();
+    const aBefore=room.members.a.explorationStamina;
+    const bBefore=room.members.b.explorationStamina;
+    const previousClock=await a.page.locator('[data-dm-clock]').innerText();
+    await a.page.waitForFunction(previous=>
+      document.querySelector('[data-dm-clock]')?.textContent!==previous,
+      previousClock,{timeout:4500});
+    await a.page.locator('[data-dq="collapse"]').click();
+    await a.page.locator('.dm-quiz-panel').waitFor({state:'hidden'});
+    // Collapsing to dodge never discards an unanswered personal question.
+    await chargeButton.click();
+    await a.page.locator('[data-dq="answer"][data-choice="2"]').click();
+    await a.page.locator('[data-dq="next"]:not([hidden])').waitFor();
+    assert.match(await a.page.locator('.dm-quiz-explanation').innerText(),/加 3 等於 5/);
+    assert.equal(room.members.a.quizCreditSeq,1);
+    assert.equal(room.members.a.explorationStamina,Math.min(100,aBefore+4));
+    assert.equal(room.members.b.explorationStamina,bBefore);
+    await a.page.locator('[data-dq="next"]').click();
+    await a.page.locator('[data-dq="answer"][data-choice="0"]').waitFor();
+    await a.page.locator('[data-dq="answer"][data-choice="0"]').click();
+    await a.page.locator('[data-dq="next"]:not([hidden])').waitFor();
+    assert.equal(room.members.a.quizCreditSeq,2);
+    assert.equal(room.members.a.explorationStamina,Math.min(100,aBefore+5));
+    assert.equal(quizState.b.answered,0);
+    await a.page.locator('[data-dq="collapse"]').click();
+    await b.page.locator('#dungeon-map-view [data-dm="quiz"]').click();
+    await b.page.locator('[data-dq="answer"][data-choice="2"]').waitFor();
+    await b.page.locator('[data-dq="answer"][data-choice="2"]').click();
+    await b.page.locator('[data-dq="next"]:not([hidden])').waitFor();
+    assert.equal(room.members.b.quizCreditSeq,1);
+    assert.equal(room.members.b.explorationStamina,Math.min(100,bBefore+4));
+    assert.equal(quizState.a.answered,2);
+    const priorStamina=room.members.a.explorationStamina;
+    await a.page.evaluate(async()=>{
+      const response=await fetch('/api/dungeon/room',{method:'POST',
+        headers:{'content-type':'application/json','x-test-user':'a'},
+        body:JSON.stringify({action:'quiz-credit',roomId:'dungroom000001',
+          questionId:'a-q-0'})});
+      if(!response.ok)throw Error('duplicate quiz credit failed');
+    });
+    assert.equal(room.members.a.explorationStamina,priorStamina);
+    assert.equal(room.members.a.quizCreditSeq,2);
+    assert.ok(requests.filter(action=>action==='generate-quiz').length>=2);
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: two clients, NPC AI, synced HP, melee and manual casts, shared kills, three saved presets');
+    console.log('[Dungeon map browser] PASS: two clients, NPC AI, melee, skills, independent quiz grading, five-slot prefetch and idempotent stamina');
   }finally{
     clearInterval(clockLoop);
     clockLoop=null;
