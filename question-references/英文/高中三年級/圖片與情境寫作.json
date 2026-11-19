@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-en3-picture-writing-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Picture description: A student in a wheelchair waits at the bottom of a staircase while another student points toward a ramp beside the building. Which sentence most clearly describes the visible scene without assuming feelings?",
+        "correct": "One student points out a nearby ramp to a student using a wheelchair.",
+        "wrong": [
+          "The student in the wheelchair is definitely angry at the school.",
+          "The building has no accessible entrance anywhere.",
+          "Both students have already agreed on a long-term school policy."
+        ],
+        "exp": "The correct sentence reports visible people and actions. It does not invent emotions, hidden events or facts beyond the scene.",
+        "subject": "英文",
+        "sub_topic": "圖片與情境寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-圖片與情境寫作",
+        "template_id": "ref-20261119-b9-en3-picture-writing-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en3-picture-writing-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Writing prompt: 'Describe how your class handled a disagreement about a group project and what you learned from the experience.' Which outline best meets the task?",
+        "correct": "Explain the disagreement → describe how the group discussed options → reflect on the lesson about communication",
+        "wrong": [
+          "List unrelated school events → describe a favorite meal → end without reflection",
+          "Discuss the group's final grade only → provide no conflict or response",
+          "Define friendship abstractly without describing a specific project experience"
+        ],
+        "exp": "The prompt asks for an actual disagreement, a response and a learning outcome, all of which are included in the correct outline.",
+        "subject": "英文",
+        "sub_topic": "圖片與情境寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-圖片與情境寫作",
+        "template_id": "ref-20261119-b9-en3-picture-writing-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en3-picture-writing-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "情境與長篇推論，避免無根據的因果推定",
+      "question": {
+        "q": "Picture description: A street is flooded after rain; volunteers in reflective vests are placing temporary barriers while a city worker directs pedestrians away from the water. Which caption best fits the visible evidence?",
+        "correct": "Volunteers and a city worker guide people away from a flooded street.",
+        "wrong": [
+          "The flooding has permanently destroyed all buildings in the city.",
+          "The volunteers caused the storm by placing barriers.",
+          "All residents have already returned to their homes safely."
+        ],
+        "exp": "The caption identifies actions and conditions shown in the picture, without making unsupported claims about cause, total damage or outcomes.",
+        "subject": "英文",
+        "sub_topic": "圖片與情境寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-圖片與情境寫作",
+        "template_id": "ref-20261119-b9-en3-picture-writing-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
