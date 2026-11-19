@@ -17,6 +17,7 @@ const key=p=>p.x+','+p.y;
 const same=(a,b)=>a?.x===b?.x&&a?.y===b?.y;
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
 function routeFor(map,zone){
+  if(zone==='guardian')return map.mainRoute.slice(-17);
   if(zone.startsWith('branch-')){
     const branch=map.branches.find(b=>b.id===zone);
     return branch?.route?.slice(-17)||[];

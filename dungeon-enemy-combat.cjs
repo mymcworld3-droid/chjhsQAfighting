@@ -9,7 +9,8 @@ const SAFE_CATCHUP_TICKS=3;
 const ATTACK_RULES=Object.freeze({
   wolf:Object.freeze({label:'撕咬突襲',pattern:'bite',damage:8,range:1}),
   wisp:Object.freeze({label:'靈焰直射',pattern:'ray',damage:6,range:2}),
-  golem:Object.freeze({label:'震地扇擊',pattern:'fan',damage:12,range:3})
+  golem:Object.freeze({label:'震地扇擊',pattern:'fan',damage:12,range:3}),
+  guardian:Object.freeze({label:'鎮鑰裂地震波',pattern:'fan',damage:14,range:3})
 });
 const DIRS=Object.freeze([[0,-1],[1,0],[0,1],[-1,0]]);
 const same=(a,b)=>a?.x===b?.x&&a?.y===b?.y;

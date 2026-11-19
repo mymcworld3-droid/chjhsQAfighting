@@ -14,6 +14,7 @@ const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
 const {strikeEnemy,maxHealth}=require('./dungeon-player-combat.cjs');
 const Skills=require('./dungeon-skill-combat.cjs');
 const QuizCredit=require('./dungeon-quiz-credit.cjs');
+const Objectives=require('./dungeon-objectives.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -48,6 +49,7 @@ const publicRoom=(roomId,room,at=Date.now())=>({
   assembledAtMs:room.assembledAtMs||0,
   expiresAtMs:room.expiresAtMs,maxMembers:MAX_MEMBERS,
   battleClock:projectClock(room,at),
+  dungeonProgress:Objectives.publicProgress(room.dungeonProgress),
   enemyAiVersion:room.enemyAiVersion||null,
   // Presentational snapshots expose only the current NPC action state,
   // never the secret map seed or server-side patrol/decision internals.
@@ -116,7 +118,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','clock'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','activate-portal','clock'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -398,10 +400,15 @@ function createHandler({
           const evolved={...current,...(battleDelta||{})};
           const outcome=strikeEnemy(evolved,uid,map,{enemyId,seq});
           if(outcome.duplicate&&!battleDelta)return current;
+          const progress=outcome.duplicate?evolved.dungeonProgress:
+            Objectives.combatProgress(evolved,outcome.enemies,uid);
           const next={...evolved,members:outcome.members,enemies:outcome.enemies,
+            ...(progress?{dungeonProgress:progress}:{}),
             revision:current.revision+1};
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
-            enemies:next.enemies,revision:next.revision});
+            enemies:next.enemies,
+            ...(progress!==evolved.dungeonProgress?{dungeonProgress:progress}:{}),
+            revision:next.revision});
           return next;
         });
         return respond(roomId,updated);
@@ -428,12 +435,39 @@ function createHandler({
               skillId:req.body?.skillId,target:req.body?.target,seq:req.body?.seq
             }):Skills.switchLoadout(evolved,uid,record,req.body?.index);
           if(outcome.duplicate&&!battleDelta)return current;
+          const progress=action==='skill'&&!outcome.duplicate?
+            Objectives.combatProgress(evolved,outcome.enemies,uid):
+            evolved.dungeonProgress;
           const next={...evolved,members:outcome.members,
             ...(action==='skill'?{enemies:outcome.enemies}:{}),
+            ...(progress?{dungeonProgress:progress}:{}),
             revision:current.revision+1};
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
             ...(action==='skill'?{enemies:next.enemies}:{}),
+            ...(progress!==evolved.dungeonProgress?{dungeonProgress:progress}:{}),
             revision:next.revision});
+          return next;
+        });
+        return respond(roomId,updated);
+      }
+      if(action==='activate-portal'){
+        // Only the shared C room can open the key portal, even if two
+        // teammates request it simultaneously on different Node instances.
+        const updated=await db.runTransaction(async tx=>{
+          const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
+          if(!current||!hasMember(current,uid))
+            throw err('你不是此副本的隊員',403);
+          if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
+          if(current.status!=='assembled')throw err('請先完成集結',409);
+          const map=roomMap(current,roomId);
+          const battleDelta=advanceWorld(current,map,at);
+          const evolved={...current,...(battleDelta||{})};
+          const result=Objectives.activate(evolved,uid,map);
+          if(result.duplicate&&!battleDelta)return current;
+          const next={...evolved,dungeonProgress:result.progress,
+            revision:current.revision+1};
+          tx.update(roomRef,{...(battleDelta||{}),
+            dungeonProgress:result.progress,revision:next.revision});
           return next;
         });
         return respond(roomId,updated);
@@ -518,8 +552,10 @@ function createHandler({
               startingMembers[id]={...startingMembers[id],
                 ...Skills.initialCombatLoadout(startingMembers[id],manualByUid[id])};
             }
-            const clockState=initialClock(at),enemies=initialEnemies(map);
-            const enemyState={enemyAiVersion:ENEMY_AI_VERSION,enemies};
+            const clockState=initialClock(at);
+            const objectives=Objectives.spawn(map,initialEnemies(map));
+            const enemyState={enemyAiVersion:ENEMY_AI_VERSION,
+              enemies:objectives.enemies,dungeonProgress:objectives.progress};
             const next={...room,status:'assembled',assembledAtMs:at,
               ...clockState,...enemyState,members:startingMembers,
               revision:room.revision+1};
@@ -543,7 +579,7 @@ function createHandler({
             }));
           const clockState={battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[]};
+            enemyAiVersion:null,enemies:[],dungeonProgress:null};
           const next={...room,status:'waiting',...clockState,members,
             revision:room.revision+1};
           tx.update(roomRef,{status:'waiting',...clockState,members,
@@ -587,7 +623,7 @@ function createHandler({
           const codeSnap=await tx.get(codeRef);
           const cleared={battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[]};
+            enemyAiVersion:null,enemies:[],dungeonProgress:null};
           const next={...room,status:'closed',closedAtMs:at,...cleared,
             revision:room.revision+1};
           tx.update(roomRef,{status:'closed',closedAtMs:at,...cleared,
@@ -631,7 +667,7 @@ function createHandler({
           const reset=room.status==='assembled'?{
             battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[]
+            enemyAiVersion:null,enemies:[],dungeonProgress:null
           }:{};
           const updated={...room,revision:room.revision+1,
             status:closed?'closed':'waiting',hostUid,members,...reset,

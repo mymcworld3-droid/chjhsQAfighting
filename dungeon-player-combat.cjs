@@ -3,12 +3,12 @@
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {isAlive}=require('./dungeon-enemy-combat.cjs');
 const STAMINA_COST=2,DAMAGE=30,MAX_STRIKE_SEQ=100000;
-const ENEMY_HEALTH=Object.freeze({wolf:60,wisp:60,golem:90});
+const ENEMY_HEALTH=Object.freeze({wolf:60,wisp:60,golem:90,guardian:360});
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
 const maxHealth=kind=>ENEMY_HEALTH[kind]||60;
 function strikeEnemy(room,uid,map,{enemyId,seq}={}){
-  if(typeof enemyId!=='string'||!/^beast-[1-9][0-9]{0,4}$/.test(enemyId))
+  if(typeof enemyId!=='string'||!(/^(beast-[1-9][0-9]{0,4}|guardian-1)$/.test(enemyId)))
     throw fail('靈獸目標無效',400);
   if(!Number.isSafeInteger(seq)||seq<1||seq>MAX_STRIKE_SEQ)
     throw fail('攻擊序號無效',400);
