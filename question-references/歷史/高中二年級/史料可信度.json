@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b11-hist2-reliability-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "史料脈絡、來源可信度與可檢驗的歷史問題，不預設結論",
+      "question": {
+        "q": "研究某地在1910年前後的人口變化，甲來源列出統計機關、年份及人口口徑；乙來源只有網路轉述的單一數字。哪項使用方式較合宜？",
+        "correct": "先查核甲的原始統計及口徑，再評估乙是否有可追溯的來源",
+        "wrong": [
+          "甲有機關名稱即可不問統計涵蓋範圍而全盤接受",
+          "乙較短且容易閱讀，因此必定更能準確反映人口變化",
+          "兩種數字只要不同，便不能再研究當地人口"
+        ],
+        "exp": "史料可信度除來源外，還要核對年份、口徑、範圍和轉述過程；可追溯的資料通常較利於檢驗。",
+        "subject": "歷史",
+        "sub_topic": "史料可信度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-史料可信度",
+        "template_id": "ref-20261119-b11-hist2-reliability-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-hist2-reliability-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "史料脈絡、來源可信度與可檢驗的歷史問題，不預設結論",
+      "question": {
+        "q": "某歷史研究引用兩本書作為同一事件的證據，但兩本書的相關記述都取自同一本回憶錄。此時應如何判讀？",
+        "correct": "雖有兩本書，原始證據仍主要來自同一回憶錄，應另尋獨立資料",
+        "wrong": [
+          "兩本書便是兩份彼此獨立的當事人目擊紀錄",
+          "只要引用次數增加，回憶錄的描述便不可能有偏差",
+          "既然由後人引用，原回憶錄就失去任何可研究價值"
+        ],
+        "exp": "書籍數量不等於獨立史源數量；需追查引用鏈及彼此是否共享同一原始來源。",
+        "subject": "歷史",
+        "sub_topic": "史料可信度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-史料可信度",
+        "template_id": "ref-20261119-b11-hist2-reliability-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b11-hist2-reliability-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "史料脈絡、來源可信度與可檢驗的歷史問題，不預設結論",
+      "question": {
+        "q": "研究者發現一封署名為當時官員的信，但尚未確認筆跡與收藏來源。若用來證明政策決策過程，最先應做何事？",
+        "correct": "確認信件真偽、年代、保存脈絡，再比對同期其他紀錄",
+        "wrong": [
+          "只要署名是官員就可以認為全信完全真實",
+          "先以信中文字建立結論，再找支持該結論的材料",
+          "因為信件尚未證實，便永遠不能使用任何私人書信作史料"
+        ],
+        "exp": "史料的外部批判須核對作者、年代與傳承來源，內部批判再檢查其立場與其他證據是否一致。",
+        "subject": "歷史",
+        "sub_topic": "史料可信度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中二年級-史料可信度",
+        "template_id": "ref-20261119-b11-hist2-reliability-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
