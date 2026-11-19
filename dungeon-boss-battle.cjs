@@ -5,6 +5,7 @@
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {dueTick,isRunning}=require('./dungeon-battle-clock.cjs');
 const Combat=require('./dungeon-enemy-combat.cjs');
+const {clampStamina}=require('./dungeon-stamina-rules.cjs');
 const VERSION=1,ID='boss-1',KIND='boss',NAME='玄炎鎮殿獸',HP=900;
 const SIZE=2,WIDTH=23,HEIGHT=17;
 const SHIELD_MAX=180,COMBO_WINDOW_TICKS=5,GUARD_DURATION_TICKS=5;
@@ -129,7 +130,7 @@ function guard(room,uid,map,{targetUid,seq}={}){
   if(dist(source.position,target.position)>2)
     throw fail('必須與隊友相距兩格以內才能掩護',409);
   const cost=targetUid===uid?SELF_GUARD_COST:ALLY_GUARD_COST;
-  if(int(source.explorationStamina)<cost)
+  if(clampStamina(source.explorationStamina)<cost)
     throw fail('探索體力不足，無法掩護',409);
   const tick=tickOf(room);
   // Competing teammates must not spend energy on an already active guard.
@@ -145,7 +146,7 @@ function guard(room,uid,map,{targetUid,seq}={}){
   const lastGuard={seq,targetUid,cost,tick};
   const members={...room.members,[targetUid]:protectedMember};
   members[uid]={...members[uid],explorationStamina:
-    int(source.explorationStamina)-cost,guardSeq:seq,lastGuard};
+    clampStamina(source.explorationStamina)-cost,guardSeq:seq,lastGuard};
   return {duplicate:false,members,lastGuard};
 }
 function resolveGuardedAttack(boss,members,tick){
