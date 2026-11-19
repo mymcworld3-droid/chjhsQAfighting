@@ -262,11 +262,15 @@ class DungeonMapView{
     const passed=Math.max(clock.elapsedMs,clock.elapsedMs+
       Math.max(0,performance.now()-clock.receivedAt));
     const duration=Math.min(passed,clock.maxElapsedMs||passed);
-    const seconds=Math.floor(duration/1000);
+    // Network delays must not make a previously displayed tick run backward.
+    // This is display-only; the server remains authoritative for all actions.
+    const tick=Math.max(this.clockTickFloor,Math.floor(duration/clock.tickMs));
+    this.clockTickFloor=tick;
+    const seconds=Math.max(Math.floor(duration/1000),
+      Math.floor(tick*clock.tickMs/1000));
     const h=Math.floor(seconds/3600),m=Math.floor(seconds/60)%60,s=seconds%60;
     const display=(h?String(h)+':':'')+
       String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-    const tick=Math.max(this.clockTickFloor,Math.floor(duration/clock.tickMs));
     node.textContent='戰場時鐘 '+display+' · T'+tick;
     node.title='由伺服器時間校準；玩家操作或離開地圖不會暫停';
   }
