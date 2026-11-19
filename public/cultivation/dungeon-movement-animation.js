@@ -50,6 +50,14 @@ const travel=(key,path,style='walk',bot=false)=>{
     after:[{uid,x:path.at(-1).x,y:path.at(-1).y,bot,hp:100,shield:0}],
     moves:[{uid,path}],numbers:[],duration}};
 };
+// Presentation only; every tile is validated again by the C-room.
+export function previewDungeonMovement(path,map,uid){
+  if(!Array.isArray(path)||path.length<2||path.length>49||
+      !path.every(p=>onMap(map,p))||
+      path.some((p,i)=>i>0&&!step(path[i-1],p))||
+      typeof uid!=='string'||!uid)return null;
+  return travel('member:'+uid,path.map(copy));
+}
 export function dungeonMovementEvents(previous,next,map){
   if(!previous||!next||previous.id!==next.id||!map||
     previous.status!=='assembled'||next.status!=='assembled'||
