@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-main-detail-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "Read: 'During a summer heat wave, a school opened an air-conditioned study room from 2 to 5 p.m. Students could sign up online, and the school planned to adjust the hours after collecting feedback.' Which summary best captures the main idea?",
+        "correct": "The school is testing a heat-relief study space and may change its hours based on feedback.",
+        "wrong": [
+          "The school has permanently canceled all outdoor classes.",
+          "The study room opens every morning without registration.",
+          "Students must attend the study room throughout the summer."
+        ],
+        "exp": "The passage explains a trial study-room service, its current hours and registration, and the plan to revise it after feedback; it does not claim a permanent arrangement.",
+        "subject": "英文",
+        "sub_topic": "主旨與細節",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "english-主旨與細節",
+        "template_id": "ref-20261119-b7-eng1-main-detail-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-main-detail-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "Read: 'For next week's science fair, students must submit their poster files by Tuesday 5 p.m. Printed posters can be collected on Thursday after 3 p.m.' Which action follows these instructions?",
+        "correct": "Submitting the poster file on Tuesday at 4 p.m. and collecting it on Thursday at 4 p.m.",
+        "wrong": [
+          "Submitting the poster file on Wednesday morning and collecting it on Thursday.",
+          "Submitting the poster file on Tuesday at 6 p.m. and collecting it on Thursday.",
+          "Submitting the file on Tuesday at 4 p.m. and collecting the poster on Wednesday."
+        ],
+        "exp": "Tuesday 4 p.m. is before the 5 p.m. deadline, and Thursday 4 p.m. is after the specified collection time.",
+        "subject": "英文",
+        "sub_topic": "主旨與細節",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "english-主旨與細節",
+        "template_id": "ref-20261119-b7-eng1-main-detail-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-main-detail-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "Read: 'After a school added water-refill stations, the share of students carrying reusable bottles rose from 30% to 45%. Teachers noted that an environmental campaign took place during the same period.' Which conclusion is most accurate?",
+        "correct": "Reusable-bottle use rose by 15 percentage points, but the stations may not be the only reason.",
+        "wrong": [
+          "Reusable-bottle use rose by 45 percentage points.",
+          "The new stations have been proved to be the only cause of the change.",
+          "The school removed all disposable bottles before the survey."
+        ],
+        "exp": "The share changed from 30% to 45%, a 15-percentage-point increase; the concurrent campaign means a single-cause interpretation is not justified.",
+        "subject": "英文",
+        "sub_topic": "主旨與細節",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "english-主旨與細節",
+        "template_id": "ref-20261119-b7-eng1-main-detail-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
