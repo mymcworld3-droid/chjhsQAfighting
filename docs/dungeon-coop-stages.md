@@ -97,3 +97,21 @@
 - `tests/dungeon-room-movement.test.cjs`：檢查多人在兩個伺服器執行個體上的位置／體力一致性、獨立併發、斷線重連、不扣舊團本票券、離開與過期權限。
 - `scripts/test-dungeon-map-browser.cjs`：保留兩個 Chromium 頁面模擬雙玩家進房、集結、觸控縮放及手機桌面版型，新增雙方可獨立移動且各扣一格的行為驗收。
 - 專項自動測試命令：`node --test tests/dungeon-*.test.cjs` 與 `npm run check:module-versions`。 
+
+## 第 8 階段：伺服器權威即時戰場時鐘
+
+### 時間資料與交易一致性
+
+- `dungeon-battle-clock.cjs` 定義不可變版號 `CLOCK_VERSION=1` 及 `TICK_MS=1000`。**不使用玩家端時鐘計算戰鬥結果**。隊長集結成功時，在保存四個出生點的同一 Firebase C 交易中寫入 `battleStartedAtMs`（伺服器時戳）、`battleAppliedTick=0`、`battleAppliedAtMs` 及版本。
+- 所有隊員看見的 `room.battleClock` 由 `publicRoom` 按同一個起始時間及**回應端當前伺服器時間**計算，包含 `version`、`tickMs`、`startedAtMs`、`serverNowMs`、`elapsedMs`、`tick`、`appliedTick` 及 `nextTickAtMs`。等待室與已關閉的房間不回傳進行中的時鐘。
+- `elapsedMs` 與當前邏輯 `tick` 由已過的實際伺服器時間推導；即使所有玩家暫時離開畫面或 Render instance 重新啟動，也**不重置或暫停**。玩家回來後無須以客戶端補送舊的每一秒；伺服器根據起點計算當前 tick 並恢復。
+- `battleAppliedTick` 為**已提交的節拍游標**，和即時計算的 `tick` 分開。簽名 `POST /api/dungeon/room` 的 `action:"clock"` 會在同一 Firestore 交易檢查房間仍有效且使用者仍為隊員，僅於 tick 增加時提交 `battleAppliedTick`、`battleAppliedAtMs` 和 `revision`。同一 tick 在多台伺服器競爭時只會提交一次，沒有新 tick 不寫入；任何客戶端提供的時間、tick、暫停參數皆忽略。
+- `subscribe` SSE 連線在集結中每秒由伺服器觸發一次有節流的 transaction 嘗試；透過 Firebase C `onSnapshot` 將新 revision 傳給所有裝置；停止訂閱／斷線／房間失效便清理 timer。當沒有任何連線時，不進行無謂的每秒資料庫寫入，但邏輯時鐘仍依伺服器時間推進；重新訂閱、移動、心跳或 `clock` 請求都能追上已過秒數。
+- 移動和心跳會在既有 Firestore 寫入交易內同步補上應有的 tick，避免玩家無法訂閱時先移動而時鐘落後。多人位置、體力、題目資料、入場票券不被時鐘修改。原有 `get`／`reconnect` 只用權威時間顯示，不額外收費或強迫寫入。
+- 舊的已集結房間若沒有 `battleStartedAtMs`，使用既有 `assembledAtMs` 作為穩定的起點，不強制遷移；取消集結並重新集結時才開啟新時鐘。計時與線上心跳不同：玩家離線不會讓戰場暫停。
+
+### 玩家畫面與後續承接
+
+- `dungeon-map-view.js` 的上方 HUD 顯示 `戰場時鐘 mm:ss · Tn`。畫面每 250 毫秒更新文字，僅用 `performance.now()` 推估兩次伺服器快照間的視覺秒數，**不把瀏覽器時間寫回伺服器**。切換視窗、鏡頭拖曳、移動、打字或關閉地圖不影響伺服器時鐘；SSE 重連會依新的伺服器資料重新校準。關閉地圖清除專屬 timer。
+- 本階段**尚未新增靈獸 AI、傷害／攻擊、答題充能**。第 9 階段才讓敵人的位置及行動與 `battleAppliedTick` 共同納入伺服器交易；有客戶端連線時自動推進，無客戶端連線時的歷史 tick 將由未來 AI 模組決定如何補跑。此階段只負責可靠的時間、權限、事件發送及顯示，不偽稱 NPC 已自行活動。
+- 專項測試 `tests/dungeon-battle-clock.test.cjs`、`tests/dungeon-battle-clock-api.test.cjs`、`tests/dungeon-clock-stream.test.cjs` 驗證時間計算、舊房間、伺服器爭用、重連補時、取消集結及 SSE 資源清理；雙玩家 Chromium 測試加入雙方時鐘在**無移動時也會前進**且同一節拍附近同步的驗收。
