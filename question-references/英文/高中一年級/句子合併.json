@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-combine-1",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "Combine without changing the meaning: 'The storm damaged the bridge. The bridge was repaired last month.'",
+        "correct": "The bridge that the storm damaged was repaired last month.",
+        "wrong": [
+          "The bridge repaired the storm last month.",
+          "The storm was repaired by the bridge last month.",
+          "The bridge was repaired last month because it damaged the storm."
+        ],
+        "exp": "The relative clause 'that the storm damaged' modifies 'the bridge', preserving which object was damaged and which one was repaired.",
+        "subject": "英文",
+        "sub_topic": "句子合併",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中一年級-句子合併",
+        "template_id": "ref-20261119-b7-eng1-combine-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-combine-2",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "Combine using 'because': 'Mia had completed an equivalent course. She did not need to take the introductory class.'",
+        "correct": "Mia did not need to take the introductory class because she had completed an equivalent course.",
+        "wrong": [
+          "Mia completed an equivalent course because she had not taken any courses.",
+          "Because Mia needed the introductory class, she had completed an equivalent course.",
+          "Mia did not complete an equivalent course because she needed the introductory class."
+        ],
+        "exp": "The earlier completion of an equivalent course explains why Mia did not need to attend the introductory class.",
+        "subject": "英文",
+        "sub_topic": "句子合併",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中一年級-句子合併",
+        "template_id": "ref-20261119-b7-eng1-combine-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b7-eng1-combine-3",
+      "source": "高中課程概念自編參考題（非歷屆原題）",
+      "design": "真實情境與篇章邏輯，避免字面猜測、保留條件限制及合理解析",
+      "question": {
+        "q": "Combine with 'although': 'The equipment was expensive. The school purchased it to support laboratory lessons.'",
+        "correct": "Although the equipment was expensive, the school purchased it to support laboratory lessons.",
+        "wrong": [
+          "Although the school purchased it, the equipment was inexpensive.",
+          "Because the equipment was expensive, the school refused to purchase it.",
+          "The school purchased it although the equipment was not expensive."
+        ],
+        "exp": "Although introduces the cost as a concession without changing the original statement that the school did purchase the equipment.",
+        "subject": "英文",
+        "sub_topic": "句子合併",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中一年級-句子合併",
+        "template_id": "ref-20261119-b7-eng1-combine-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
