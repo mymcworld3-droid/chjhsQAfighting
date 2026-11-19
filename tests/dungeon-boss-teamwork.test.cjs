@@ -80,7 +80,7 @@ test('multi-hit manuscript skill contributes one actor, with combo only after an
       {name:'A',skillIds:['wind-slash','wind-step','wind-thousand']},
       {name:'B',skillIds:['sky-pierce','sky-cloud','sky-sever']},
       {name:'C',skillIds:[]}],activeLoadout:0};
-  const player=member('a',{x:11,y:9});
+  const player={...member('a',{x:11,y:9}),accessScore:200};
   const combat=Skills.initialCombatLoadout({...player,accessScore:200},record);
   let r=room({a:{...player,...combat}});
   const changed=Skills.switchLoadout(r,'a',record,1);
