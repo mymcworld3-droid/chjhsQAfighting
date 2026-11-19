@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-thesis-tone-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "閱讀短文：「社區把閒置空地改成小菜園後，居民多了交流的機會。然而，若只靠幾位志工長期維護，菜園恐怕難以持續。公所正在討論輪值與工具共享制度。」哪項最能概括作者的立場？",
+        "correct": "肯定社區菜園的效益，同時提醒應建立可持續的管理方式",
+        "wrong": [
+          "社區菜園只會增加居民負擔，因此不應設置",
+          "只要有志工，就不需要管理制度或資源安排",
+          "作者主要關心種植哪一種蔬菜最有經濟價值"
+        ],
+        "exp": "前句肯定交流效益，後句指出維護風險並提出制度方向；作者採取支持但審慎的立場。",
+        "subject": "國文",
+        "sub_topic": "主旨、段落結構、語氣",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-主旨、段落結構、語氣",
+        "template_id": "ref-20261119-b8-ch1-thesis-tone-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-thesis-tone-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "閱讀短文：「我們並不反對在公園設置夜間照明。但燈具若直射住宅，休息中的居民便可能受影響。與其一味增加亮度，不如先調整照射方向和開燈時間。」這段論述主要採用何種安排？",
+        "correct": "先承認措施的合理性，再指出限制並提出調整建議",
+        "wrong": [
+          "先否定所有公共照明，再提出永久關閉公園",
+          "只依時間先後記敘一次公園散步的過程",
+          "以人物生平為主，沒有提出任何政策判斷"
+        ],
+        "exp": "「並不反對」先承認用途，接著以「但」指出光害，最後用「不如」提出替代做法，層次清楚。",
+        "subject": "國文",
+        "sub_topic": "主旨、段落結構、語氣",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-主旨、段落結構、語氣",
+        "template_id": "ref-20261119-b8-ch1-thesis-tone-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch1-thesis-tone-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "結合文體、語境及文本依據；單一正解、解析可核對",
+      "question": {
+        "q": "閱讀：「新設單車道確實方便通勤者；不過，轉彎路口若缺乏清楚標線，汽機車與自行車仍可能發生衝突。我們怎能只看通車剪綵，就以為安全問題已經解決？」結尾反問最主要呈現何種語氣？",
+        "correct": "質疑過早宣稱政策成功，促使讀者重視安全細節",
+        "wrong": [
+          "完全肯定新車道已解決所有安全問題",
+          "以輕鬆戲謔的口吻慶祝剪綵活動",
+          "主張通勤便利與安全措施永遠不可能兼顧"
+        ],
+        "exp": "結尾反問以「怎能」質疑只看表面成果的做法，前文同時承認通勤效益，並非全面否定建設。",
+        "subject": "國文",
+        "sub_topic": "主旨、段落結構、語氣",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-主旨、段落結構、語氣",
+        "template_id": "ref-20261119-b8-ch1-thesis-tone-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
