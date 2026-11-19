@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-genre-synthesis-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料與文體依據充分，兼顧文本結構、比較與論證，避免只靠字面關鍵詞",
+      "question": {
+        "q": "《論語》：「三人行，必有我師焉。」某現代教育短文主張「同學彼此分享解題方法，也要勇於指出各自的盲點」。兩者相通的學習觀何者最恰當？",
+        "correct": "學習可從他人經驗與長處獲得啟發，不局限於固定的師生身分",
+        "wrong": [
+          "只有正式教師具有知識，同學彼此不能學習",
+          "共同討論的目的在於證明自己永遠比他人正確",
+          "遇到不同解法時，應避免了解其理由"
+        ],
+        "exp": "《論語》強調處處可師法他人，現代短文也重視同儕互學與反思盲點，精神相通。",
+        "subject": "國文",
+        "sub_topic": "古文、韻文與現代文",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-古文、韻文與現代文",
+        "template_id": "ref-20261119-b10-ch3-genre-synthesis-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-genre-synthesis-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料與文體依據充分，兼顧文本結構、比較與論證，避免只靠字面關鍵詞",
+      "question": {
+        "q": "柳宗元〈江雪〉：「千山鳥飛絕，萬徑人蹤滅。孤舟蓑笠翁，獨釣寒江雪。」若與現代散文「大雪停了，整座港口只剩守夜人的燈還亮著」比較，兩者共同的表達效果是什麼？",
+        "correct": "藉廣闊而寂靜的背景，突出少數人物的孤獨與堅守",
+        "wrong": [
+          "以熱鬧人群與歡快對話共同呈現節慶氣氛",
+          "兩段都透過精確人口統計說明城市規模",
+          "兩段均主張自然景物與人物情感毫無關係"
+        ],
+        "exp": "兩段都以空曠寂靜映襯單一人物；詩句的「孤舟」「獨釣」與散文的守夜燈互相呼應。",
+        "subject": "國文",
+        "sub_topic": "古文、韻文與現代文",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-古文、韻文與現代文",
+        "template_id": "ref-20261119-b10-ch3-genre-synthesis-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b10-ch3-genre-synthesis-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "資料與文體依據充分，兼顧文本結構、比較與論證，避免只靠字面關鍵詞",
+      "question": {
+        "q": "《岳陽樓記》：「先天下之憂而憂，後天下之樂而樂。」某現代評論主張「公共決策應先評估弱勢群體受影響的程度，而非只追求施政者的個人成就」。兩者較可能共有哪項價值？",
+        "correct": "將公共福祉置於個人的榮耀與舒適之前",
+        "wrong": [
+          "只要施政者得到稱讚，便不必考慮民眾處境",
+          "公共利益應完全由個人好惡決定，不需分析後果",
+          "關心公共事務表示所有人都必須擔任政府官員"
+        ],
+        "exp": "古文強調以天下為念、先憂後樂；現代評論主張公共決策以受影響群體的福祉為先，兩者可相互參照。",
+        "subject": "國文",
+        "sub_topic": "古文、韻文與現代文",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-古文、韻文與現代文",
+        "template_id": "ref-20261119-b10-ch3-genre-synthesis-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
