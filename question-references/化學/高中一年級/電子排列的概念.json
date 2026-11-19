@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-c1-electrons-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "中性鋁原子的原子序為13，依簡化電子殼層排列可寫成2、8、3。鋁形成Al³⁺後，其電子總數為何？",
+        "correct": "10",
+        "wrong": [
+          "13",
+          "16",
+          "3"
+        ],
+        "exp": "中性鋁有13電子，形成Al³⁺代表失去3電子，剩下13−3=10電子，核內質子數仍為13。",
+        "subject": "化學",
+        "sub_topic": "電子排列的概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-電子排列的概念",
+        "template_id": "ref-20261119-b5-c1-electrons-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-c1-electrons-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "氯（原子序17）與鈉（原子序11）形成離子化合物NaCl時，氯離子Cl⁻在簡化殼層模型下的電子排列為何？",
+        "correct": "2、8、8",
+        "wrong": [
+          "2、8、7",
+          "2、7、8",
+          "2、8"
+        ],
+        "exp": "Cl原子本有17電子（2、8、7），Cl⁻多取得1電子而有18電子，因此為2、8、8。",
+        "subject": "化學",
+        "sub_topic": "電子排列的概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-電子排列的概念",
+        "template_id": "ref-20261119-b5-c1-electrons-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-c1-electrons-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "同屬第三週期的Mg（原子序12）與Cl（原子序17），在中性原子狀態下其佔有電子的殼層數目分別為何？",
+        "correct": "兩者皆3層",
+        "wrong": [
+          "Mg為2層、Cl為3層",
+          "Mg為3層、Cl為4層",
+          "兩者皆2層"
+        ],
+        "exp": "簡化電子排列Mg為2、8、2，Cl為2、8、7，兩種原子均具有三個佔有電子的殼層。",
+        "subject": "化學",
+        "sub_topic": "電子排列的概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-電子排列的概念",
+        "template_id": "ref-20261119-b5-c1-electrons-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
