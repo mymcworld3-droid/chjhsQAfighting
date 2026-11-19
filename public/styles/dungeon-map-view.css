@@ -177,6 +177,12 @@
   display:block;min-height:14px;max-width:250px;
   text-align:center;font-size:11px;line-height:1.4;color:#f0bfaf;
 }
+#dungeon-map-view .dm-strike{width:100%;min-height:35px;
+  border-color:#d8b26b;background:#473b25;color:#f8d9a0;font-size:12px;
+  padding:6px 9px}
+#dungeon-map-view .dm-strike:disabled{opacity:.6}
+#dungeon-map-view [data-dm-strike-alert]{display:block;max-width:250px;
+  font-size:11px;color:#f6d29c;text-align:center;line-height:1.35}
 #dungeon-map-view .dm-movement[hidden]{display:none!important}
 @media(max-width:720px){
   #dungeon-map-view .dm-movement{

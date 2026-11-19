@@ -1,6 +1,6 @@
 import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
-import { getDungeonMap, moveDungeonMember, getDungeonRoom } from './dungeon-room.js';
+import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, getDungeonRoom } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 
 // Read-only expedition blueprint. Pointer and keyboard events manipulate only
@@ -23,6 +23,7 @@ class DungeonMapView{
     this.map=null;this.room=null;this.roomId='';this.uid='';
     this.camera=Camera.initialCamera();this.follow=false;this.routes=false;
     this.opened=false;this.seq=0;this.pointers=new Map();this.movePending=false;
+    this.strikePending=false;
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
     this.clockTimer=null;this.clockAnchor=null;this.clockTickFloor=0;
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
@@ -36,7 +37,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-map-view-style')){
       const style=document.createElement('link');
       style.id='dungeon-map-view-style';style.rel='stylesheet';
-      style.href='/styles/dungeon-map-view.css?v=20261119-stage10';
+      style.href='/styles/dungeon-map-view.css?v=20261119-stage11a';
       document.head.append(style);
     }
     const root=document.createElement('section');
@@ -79,7 +80,9 @@ class DungeonMapView{
       '<button type="button" data-dm="left" aria-label="向左移動一格">←</button>'+
       '<button type="button" data-dm="down" aria-label="向下移動一格">↓</button>'+
       '<button type="button" data-dm="right" aria-label="向右移動一格">→</button>'+
-      '</div><small data-dm-move-alert role="status" aria-live="polite"></small></div>'+
+      '</div><button type="button" class="dm-strike" data-dm="strike" disabled>選擇靈獸後攻擊 · 2 體力</button>'+ 
+       '<small data-dm-strike-alert role="status" aria-live="polite"></small>'+ 
+       '<small data-dm-move-alert role="status" aria-live="polite"></small></div>'+ 
       '<div class="dm-legend" aria-hidden="true">'+
       '<span>● 起點</span><span>◇ 傳送陣</span><span>◆ 守護者</span></div></div>'+
       '<footer class="dm-foot"><span data-dm-status>地圖展示 · 尚未開放移動與戰鬥</span>'+
@@ -127,7 +130,8 @@ class DungeonMapView{
     this.previousFocus=document.activeElement;
     this.room=room;this.roomId=room.id;this.uid=playerUid;
     this.map=null;this.camera=Camera.initialCamera();
-    this.follow=false;this.routes=false;this.pointers.clear();this.opened=true;this.movePending=false;
+    this.follow=false;this.routes=false;this.pointers.clear();this.opened=true;
+    this.movePending=false;this.strikePending=false;
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
     this.beastIds='';this.touchOrigins.clear();this.gestureMulti=false;
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
@@ -229,8 +233,75 @@ class DungeonMapView{
     this.root?.querySelectorAll('.dm-dpad button').forEach(button=>{
       button.disabled=!active||!this.map||this.movePending||stamina<1||downed;
     });
+    this.updateStrikeHUD();
   }
-  moveAlert(message=''){
+  updateStrikeHUD(){
+    const button=this.$('[data-dm="strike"]');
+    if(!button)return;
+    const member=this.room?.members?.[this.uid];
+    const target=this.creatures().find(e=>e.id===this.selectedBeastId);
+    const current=member?.position;
+    const adjacent=target&&current&&
+      Math.abs(target.position.x-current.x)+Math.abs(target.position.y-current.y)===1;
+    const energy=Number.isSafeInteger(member?.explorationStamina)?
+      member.explorationStamina:0;
+    button.disabled=this.room?.status!=='assembled'||!this.map||
+      !adjacent||this.strikePending||member?.downed===true||
+      Number(member?.battleHealth)===0||energy<2;
+    button.textContent=this.strikePending?'攻擊結算中…':target?
+      '攻擊 '+String(target.name||'靈獸').slice(0,8)+' · 2 體力':
+      '選擇靈獸後攻擊 · 2 體力';
+    button.title=!target?'點擊地圖或靈獸名單選取目標':
+      !adjacent?'必須移至目標相鄰一格':'無冷卻，攻擊成功後可再次施放';
+  }
+  strikeAlert(message=''){
+    const node=this.$('[data-dm-strike-alert]');
+    if(node)node.textContent=message;
+  }
+  async strike(){
+    if(!this.isCurrent()||!this.map||this.strikePending||
+      this.room?.status!=='assembled')return;
+    const member=this.room?.members?.[this.uid];
+    const enemy=this.creatures().find(e=>e.id===this.selectedBeastId);
+    if(!member||!enemy)return;
+    const seq=(Number.isSafeInteger(member.strikeSeq)?member.strikeSeq:0)+1;
+    const token=this.seq,roomId=this.roomId;
+    this.strikePending=true;this.updateStrikeHUD();this.strikeAlert('');
+    try{
+      const response=await strikeDungeonBeast(roomId,enemy.id,seq);
+      if(!this.isCurrent()||token!==this.seq||roomId!==this.roomId)return;
+      if(response?.room){
+        this.updateRoom(response.room);
+        window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
+          detail:{room:response.room}
+        }));
+        const result=response.room.members?.[this.uid]?.lastStrike;
+        if(result?.seq===seq&&result.enemyId===enemy.id){
+          this.strikeAlert(result.defeated?'擊敗 '+enemy.name+'！':
+            '命中 '+enemy.name+' · 傷害 '+result.damage+
+            ' · 剩餘生命 '+result.remainingHealth);
+        }
+      }
+    }catch(error){
+      if(!this.isCurrent()||token!==this.seq)return;
+      this.strikeAlert(error?.message||'攻擊失敗，請重試');
+      if(error?.status===409){
+        try{
+          const latest=await getDungeonRoom(roomId);
+          if(this.isCurrent()&&token===this.seq&&latest?.room){
+            this.updateRoom(latest.room);
+            window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
+              detail:{room:latest.room}
+            }));
+          }
+        }catch(_){}
+      }
+    }finally{
+      this.strikePending=false;
+      if(this.isCurrent()&&token===this.seq)this.updateStrikeHUD();
+    }
+  }
+  moveAlert(message=''){ 
     const node=this.$('[data-dm-move-alert]');
     if(node)node.textContent=message;
   }
@@ -321,6 +392,7 @@ class DungeonMapView{
         (state[selected.intent]||'巡邏中')+
         ' · 座標 ('+selected.position.x+','+selected.position.y+')'+
         ' · 每 '+selected.cadence+' 秒行動一次'+
+        ' · 生命 '+(selected.battleHealth??'—')+'/'+(selected.battleMaxHealth??'—')+
         (selected.targetUid?' · 已發現修士':'')+
         ' · 節拍 T'+(selected.lastActionTick||0)+
         (selected.attack?' · '+selected.attack.label+
@@ -341,7 +413,7 @@ class DungeonMapView{
       this.camera=Camera.focusOn(this.camera,beast.position,this.map,this.width,this.height);
       this.$('[data-dm="focus"]').setAttribute('aria-pressed','false');
     }
-    this.updateBeastHUD();this.drawSoon();
+    this.updateBeastHUD();this.updateStrikeHUD();this.drawSoon();
   }
   inspectAt(screen){
     if(!this.map)return false;
@@ -425,6 +497,7 @@ class DungeonMapView{
   }
   close(){
     ++this.seq;this.opened=false;this.pointers.clear();this.movePending=false;
+    this.strikePending=false;
     clearTimeout(this.longPressTimer);this.longPressTimer=null;
     this.touchOrigins.clear();this.gestureMulti=false;
     this.inspectOpen=false;this.selectedBeastId=null;
@@ -448,6 +521,7 @@ class DungeonMapView{
       this.inspectOpen=false;this.followBeast=false;this.updateBeastHUD();return;
     }
     if(name==='beast-select'){this.selectBeast(beastId);return;}
+    if(name==='strike'){void this.strike();return;}
     if(name==='beasts'){
       this.inspectOpen=!this.inspectOpen;
       if(!this.inspectOpen)this.followBeast=false;

@@ -141,6 +141,12 @@ export function drawWorld(ctx,map,camera,width,height,
     ctx.font='bold '+Math.round(clamp(r*1.4,10,18))+'px sans-serif';
     ctx.fillText(glyphs[enemy.kind]||'◆',x,y);
     if(cell>=14){
+      const max=Number.isSafeInteger(enemy.battleMaxHealth)?enemy.battleMaxHealth:60;
+      const hp=Number.isSafeInteger(enemy.battleHealth)?enemy.battleHealth:max;
+      const ratio=clamp(hp/Math.max(1,max),0,1),bar=clamp(cell*.85,15,29);
+      ctx.fillStyle='#331d1a';ctx.fillRect(x-bar/2,y-r-13,bar,3);
+      ctx.fillStyle=ratio>.4?'#e9b76a':'#ed7c6e';
+      ctx.fillRect(x-bar/2,y-r-13,bar*ratio,3);
       ctx.fillStyle='#fff2d4';ctx.font='600 10px system-ui,"Noto Sans TC"';
       const label=String(enemy.name||'靈獸').slice(0,12);
       const tw=ctx.measureText(label).width+10;

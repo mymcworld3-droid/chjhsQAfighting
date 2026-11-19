@@ -155,6 +155,11 @@ export async function getDungeonMap(roomId){
 export const moveDungeonMember=(roomId,dx,dy,step)=>
   request('move',{roomId,dx,dy,step});
 
+// Attack requests contain only enemy ID and per-player sequence. The
+// server calculates range, damage and energy in one room transaction.
+export const strikeDungeonBeast=(roomId,enemyId,seq)=>
+  request('strike',{roomId,enemyId,seq});
+
 // The server computes clock ticks from its own assembly epoch. This request
 // never accepts client timestamps or a requested tick value.
 export const synchronizeDungeonBattleClock=roomId=>request('clock',{roomId});
