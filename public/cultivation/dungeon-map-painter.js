@@ -14,6 +14,16 @@ export const BEAST_COLORS=Object.freeze({
 });
 const glyphs=Object.freeze({wolf:'◆',wisp:'✦',golem:'⬟',guardian:'♜'});
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const readyArt=image=>image?.complete&&image?.naturalWidth>0;
+// The atlas URLs and source-cell sizes match tactical-renderer.js.
+// Always retain the existing map glyph/flat-color fallback while images load.
+function atlas(ctx,image,sourceX,sourceY,sourceSize,x,y,w,h){
+  if(!readyArt(image)||typeof ctx.drawImage!=='function')return false;
+  ctx.drawImage(image,sourceX,sourceY,sourceSize,sourceSize,x,y,w,h);
+  return true;
+}
+const groundRow=Object.freeze({bamboo:0,ruins:1,frost:2,marsh:3});
+const creatureFrame=Object.freeze({wolf:0,wisp:4,golem:7,guardian:12,boss:19});
 export function hashCell(map,x,y){
   const s=(map.layoutId||map.seed||'v1')+':'+x+','+y;
   let h=2166136261;
@@ -22,7 +32,7 @@ export function hashCell(map,x,y){
 }
 export function drawWorld(ctx,map,camera,width,height,
   {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0,
-    aimTile=null,visualTimeMs=0,objectives=null}={}){
+    aimTile=null,visualTimeMs=0,objectives=null,art=null}={}){
   const palette=BIOMES[map.biome]||BIOMES.ruins;
   const g=Camera.geometry(camera,map,width,height);
   const v=Camera.visibleTiles(camera,map,width,height);
@@ -45,6 +55,14 @@ export function drawWorld(ctx,map,camera,width,height,
     }else{
       ctx.fillStyle=tile===2?palette.clearing:palette.floor;
       ctx.fillRect(sx,sy,cell+.5,cell+.5);
+      // The trial's 4-column, 128px terrain atlas is drawn only on real
+      // walkable dungeon cells; off-map void and blockers remain legible.
+      if(cell>=8){
+        const row=groundRow[map.biome]??1;
+        const frame=tile===2?3:Math.floor(noise*3);
+        atlas(ctx,art?.ground,frame*128,row*128,128,
+          sx,sy,cell+.5,cell+.5);
+      }
       if(cell>=6){
         ctx.globalAlpha=.07+noise*.14;ctx.fillStyle=palette.edge;
         ctx.fillRect(sx+cell*(noise>.5?.24:.12),sy+cell*.28,cell*.48,cell*.1);
@@ -195,7 +213,11 @@ export function drawWorld(ctx,map,camera,width,height,
       ctx.fillStyle='#733c34';ctx.fill();
       ctx.fillStyle='#ffe8b2';ctx.textAlign='center';ctx.textBaseline='middle';
       ctx.font='bold '+Math.round(clamp(cell*1.1,18,51))+'px sans-serif';
-      ctx.fillText('♜',left+w*.5,top+w*.52);
+      const bossFrame=creatureFrame.boss;
+      if(!atlas(ctx,art?.monsters,bossFrame%5*128,
+          Math.floor(bossFrame/5)*128,128,
+          left+w*.08,top+w*.05,w*.84,w*.9))
+        ctx.fillText('♜',left+w*.5,top+w*.52);
       const bw=Math.max(28,w*1.12),bx=left+w*.5-bw*.5,by=top-11;
       ctx.fillStyle='#210c12';ctx.fillRect(bx,by,bw,6);
       ctx.fillStyle=ratio>.35?'#f2c979':'#ed7468';
@@ -219,7 +241,11 @@ export function drawWorld(ctx,map,camera,width,height,
     ctx.lineWidth=alerted?2.6:1.8;ctx.fill();ctx.stroke();
     ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';
     ctx.font='bold '+Math.round(clamp(r*1.4,10,18))+'px sans-serif';
-    ctx.fillText(glyphs[enemy.kind]||'◆',x,y);
+    const frame=creatureFrame[enemy.kind]??0;
+    if(!(cell>=11&&atlas(ctx,art?.monsters,frame%5*128,
+      Math.floor(frame/5)*128,128,x-cell*.46,y-cell*.52,
+      cell*.92,cell*.92)))
+      ctx.fillText(glyphs[enemy.kind]||'◆',x,y);
     if(cell>=14){
       const max=Number.isSafeInteger(enemy.battleMaxHealth)?enemy.battleMaxHealth:60;
       const hp=Number.isSafeInteger(enemy.battleHealth)?enemy.battleHealth:max;
@@ -256,9 +282,15 @@ export function drawWorld(ctx,map,camera,width,height,
     const sx=g.ox+(point.x+.5)*cell+offset*(slot%2?1:-1),
       sy=g.oy+(point.y+.5)*cell+offset*(slot>=2?1:-1);
     const radius=clamp(cell*.26,3,9);
+    const sex=String(member?.gender||member?.avatarGender||
+      member?.appearance?.gender||'male').toLowerCase();
+    const playerArt=sex==='female'?art?.female:art?.male;
+    const painted=cell>=10&&atlas(ctx,playerArt,0,0,112,
+      sx-cell*.55,sy-cell*.77,cell*1.10,cell*1.10);
     ctx.beginPath();ctx.arc(sx,sy,radius,0,Math.PI*2);
-    ctx.fillStyle=partyColors[index];ctx.fill();
-    ctx.strokeStyle=palette.void;ctx.lineWidth=1.5;ctx.stroke();
+    if(!painted){ctx.fillStyle=partyColors[index];ctx.fill();}
+    ctx.strokeStyle=member.uid===selfUid?'#fff5d1':partyColors[index];
+    ctx.lineWidth=member.uid===selfUid?2:1.4;ctx.stroke();
     if(member.uid===selfUid){
       ctx.beginPath();ctx.arc(sx,sy,radius+3,0,Math.PI*2);
       ctx.strokeStyle='#fff5d1';ctx.lineWidth=1.5;ctx.stroke();
