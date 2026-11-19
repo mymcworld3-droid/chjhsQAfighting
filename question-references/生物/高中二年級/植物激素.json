@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-bio2-hormone-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨認頂端優勢、種子萌發和葉片衰老相關植物激素",
+      "question": {
+        "q": "園藝人員摘除植物莖頂生長點後，側芽常較容易伸長。這與哪一種生理現象最相關？",
+        "correct": "頂端優勢減弱，側芽受到的抑制降低",
+        "wrong": [
+          "所有側芽的DNA立刻消失",
+          "切除頂芽使植物從此不再產生任何激素",
+          "側芽因無法行光合作用必定全部凋亡"
+        ],
+        "exp": "莖頂生長素與其他激素共同調節頂端優勢；摘心後頂芽抑制作用降低，側芽較容易生長。",
+        "subject": "生物",
+        "sub_topic": "植物激素",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物激素",
+        "template_id": "ref-20261119-b2-bio2-hormone-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-bio2-hormone-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨認頂端優勢、種子萌發和葉片衰老相關植物激素",
+      "question": {
+        "q": "某些植物的種子經適當環境訊號後開始萌發，吉貝素分泌增加並促進澱粉分解酵素生成。此過程主要有利於哪一活動？",
+        "correct": "動員儲存養分供胚生長",
+        "wrong": [
+          "讓種子永久維持休眠",
+          "使種子失去所有細胞膜",
+          "阻止任何胚細胞伸長"
+        ],
+        "exp": "吉貝素可促進部分種子萌發與貯藏養分動員，例如促使澱粉被分解以供萌發幼苗使用。",
+        "subject": "生物",
+        "sub_topic": "植物激素",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物激素",
+        "template_id": "ref-20261119-b2-bio2-hormone-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-bio2-hormone-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "辨認頂端優勢、種子萌發和葉片衰老相關植物激素",
+      "question": {
+        "q": "研究者以細胞分裂素處理離體的綠色葉片，發現相較對照組，葉綠素流失較慢。最合理的解釋為何？",
+        "correct": "細胞分裂素可延緩某些葉片的衰老過程",
+        "wrong": [
+          "細胞分裂素一定會立即讓葉片死亡",
+          "葉綠素流失速度與任何生理調節均無關",
+          "細胞分裂素只能作用於動物細胞"
+        ],
+        "exp": "細胞分裂素除與細胞分裂相關外，在某些植物組織中亦可延緩葉片衰老和葉綠素分解。",
+        "subject": "生物",
+        "sub_topic": "植物激素",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物激素",
+        "template_id": "ref-20261119-b2-bio2-hormone-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
