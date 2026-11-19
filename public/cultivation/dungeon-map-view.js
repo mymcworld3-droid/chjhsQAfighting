@@ -31,7 +31,7 @@ class DungeonMapView{
     this.rescuePending=false;this.guardPending=false;this.guardSignature='';
     this.rewardPending=false;this.rewardResult=null;
     this.aimTile=null;this.skillSignature='';
-    this.focusAuras=new Map();
+    this.focusAuras=new Map();this.sprites={};
     this.wheelMode='attack';this.manualOpen=false;
     this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
     this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
@@ -160,6 +160,20 @@ class DungeonMapView{
     this.canvas=root.querySelector('[data-dm-world]');
     this.mini=root.querySelector('[data-dm-minimap]');
     this.ctx=this.canvas.getContext('2d',{alpha:false});
+    // Same image atlases as 問道試煉. Images affect presentation only;
+    // failed downloads leave deterministic vector terrain/markers visible.
+    const assets={
+      ground:'/assets/world-map/ai/ground-atlas.webp',
+      monsters:'/assets/world-map/ai/creatures-atlas.webp',
+      male:'/assets/world-map/players/player-male.webp',
+      female:'/assets/world-map/players/player-female.webp'
+    };
+    for(const [key,src] of Object.entries(assets)){
+      const img=new Image();img.decoding='async';
+      img.onload=()=>this.drawSoon();
+      img.onerror=()=>this.drawSoon();
+      img.src=src;this.sprites[key]=img;
+    }
     this.quiz=new DungeonQuizPanel(root,{onRoom:room=>{
       if(!this.isCurrent()||room.id!==this.roomId)return;
       this.updateRoom(room);
@@ -1493,7 +1507,7 @@ class DungeonMapView{
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:this.members(),selfUid:this.uid,showRoutes:this.routes,
       enemies:this.creatures(),objectives:this.room?.dungeonProgress,
-      aimTile:this.currentAim(),
+      aimTile:this.currentAim(),art:this.sprites,
       currentTick:Number(this.room?.battleClock?.appliedTick)||0,
       visualTimeMs:performance.now()
     });
