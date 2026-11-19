@@ -96,7 +96,8 @@ function roomSignature(next){
     .map(([uid,m])=>[uid,m.name,m.realm,m.ready,m.joinedAtMs]);
   const explored=Object.values(next?.members||{}).some(m=>Number(m.moveSeq)>0);
   return JSON.stringify([next?.id,next?.revision===undefined?null:next?.status,
-    next?.hostUid,next?.visibility,next?.code,next?.assembledAtMs,explored,members]);
+    next?.hostUid,next?.visibility,next?.code,next?.assembledAtMs,explored,
+    next?.dungeonProgress?.portalStatus||null,members]);
 }
 function memberOnline(member){
   const last=Number(member?.heartbeatAtMs)||0;
@@ -159,6 +160,14 @@ function renderRoom(){
   const readyCount=memberList.filter(member=>member.ready===true).length;
   const exploring=assembled&&memberList.some(member=>Number(member.moveSeq)>0);
   const fullyReady=memberList.length>0&&readyCount===memberList.length;
+  const objective=room.dungeonProgress;
+  const mission=objective?.portalStatus==='open'?
+    '傳送門已啟動，Boss 戰將在後續階段開放。':
+    objective?.portalStatus==='ready'?
+    '全隊已取得密鑰，前往深處傳送陣啟動入口。':
+    objective?.portalStatus==='sealed'?
+    '探索深處，擊敗鎮鑰玄甲獸，取得共享密鑰。':
+    '請重新集結，以開啟新版守鑰任務。';
   const members=memberList.map(member=>{
     const leader=member.uid===room.hostUid,isMe=member.uid===account;
     return '<article class="dg-member"><span class="dg-avatar" aria-hidden="true">'+
@@ -179,7 +188,8 @@ function renderRoom(){
     '<button data-dg="copy">複製</button></div>'+
     '<div class="dg-section-heading"><h3>隊伍成員</h3><span>'+readyCount+' / '+memberList.length+' 已準備</span></div>'+
     '<div class="dg-members">'+members+'</div>'+
-    (assembled?'<p class="dg-assembled" role="status"><i class="fa-solid fa-check-circle"></i> 已進入副本探索，可在地圖中使用方向按鈕或 WASD 移動；每移動一格消耗 1 點探索體力。戰鬥尚未開放。</p>':
+    (assembled?'<p class="dg-assembled" role="status"><i class="fa-solid fa-check-circle"></i> 探索進行中 · '+esc(mission)+
+      ' 可隨時答題充能、施放功法或移動（一格耗 1 體力），靈獸依伺服器時鐘自行行動。</p>':
       '<p class="dg-helper">隊員各自確認準備。全員準備後，隊長才能確認集結出發。</p>')+
     '<section class="dg-map-teaser"><div><strong><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> 秘境地圖</strong>'+
     '<small>四種地貌 · 蜿蜒主線與支線 · 支援雙指縮放</small></div>'+
