@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-eng1-clauses-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "利用子句中缺少的語法成分判斷關係代名詞與名詞子句連接詞",
+      "question": {
+        "q": "The scientist ______ discovered the new material will give a talk tomorrow.",
+        "correct": "who",
+        "wrong": [
+          "where",
+          "when",
+          "whose"
+        ],
+        "exp": "'Who' is the subject of the relative clause and refers to the scientist; the other choices cannot fill this subject position.",
+        "subject": "英文",
+        "sub_topic": "名詞子句與形容詞子句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-高中一年級-名詞子句與形容詞子句",
+        "template_id": "ref-20261119-b2-eng1-clauses-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-eng1-clauses-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "利用子句中缺少的語法成分判斷關係代名詞與名詞子句連接詞",
+      "question": {
+        "q": "We have not decided ______ we should hold the outdoor concert because of the weather.",
+        "correct": "whether",
+        "wrong": [
+          "whose",
+          "whom",
+          "which student"
+        ],
+        "exp": "'Whether' introduces an indirect yes-or-no question: whether the concert should be held.",
+        "subject": "英文",
+        "sub_topic": "名詞子句與形容詞子句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-高中一年級-名詞子句與形容詞子句",
+        "template_id": "ref-20261119-b2-eng1-clauses-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-eng1-clauses-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "利用子句中缺少的語法成分判斷關係代名詞與名詞子句連接詞",
+      "question": {
+        "q": "The library ______ we studied last weekend will be closed for repairs.",
+        "correct": "where",
+        "wrong": [
+          "who",
+          "whose",
+          "what"
+        ],
+        "exp": "'Where' is a relative adverb referring to the place in which we studied; the other options do not express the needed location relation.",
+        "subject": "英文",
+        "sub_topic": "名詞子句與形容詞子句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-高中一年級-名詞子句與形容詞子句",
+        "template_id": "ref-20261119-b2-eng1-clauses-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
