@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b4-chem1-trends-1",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "比較同族的氟（F）、氯（Cl）、溴（Br），一般而言哪一個元素的電負度最大？",
+        "correct": "F",
+        "wrong": [
+          "Cl",
+          "Br",
+          "三者必定完全相同"
+        ],
+        "exp": "在週期表同族由下往上，原子核對成鍵電子吸引的趨勢通常增加；氟的電負度最大。",
+        "subject": "化學",
+        "sub_topic": "週期性與元素性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-週期性與元素性質",
+        "template_id": "ref-20261119-b4-chem1-trends-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chem1-trends-2",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "在週期表第三週期的Na、Si與Cl中，哪一元素通常展現最明顯的金屬性？",
+        "correct": "Na",
+        "wrong": [
+          "Si",
+          "Cl",
+          "三者的金屬性完全相同"
+        ],
+        "exp": "第三週期由左往右金屬性大致減弱；Na為鹼金屬，Si為類金屬，Cl為非金屬。",
+        "subject": "化學",
+        "sub_topic": "週期性與元素性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-週期性與元素性質",
+        "template_id": "ref-20261119-b4-chem1-trends-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b4-chem1-trends-3",
+      "source": "108課綱高中自編參考題（非歷屆原題）",
+      "design": "變式依同一觀念命題，要求答案唯一且附可核對解析",
+      "question": {
+        "q": "中性K原子失去最外層一個電子變成K⁺後，一般而言其離子半徑相較原子半徑如何？",
+        "correct": "K⁺半徑較小",
+        "wrong": [
+          "K⁺半徑較大",
+          "兩者半徑必完全相同",
+          "K⁺會因失去一個質子而縮小"
+        ],
+        "exp": "K失去4s最外層電子後，最外電子層由第四層變第三層，形成的K⁺半徑通常小於K原子。",
+        "subject": "化學",
+        "sub_topic": "週期性與元素性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-週期性與元素性質",
+        "template_id": "ref-20261119-b4-chem1-trends-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
