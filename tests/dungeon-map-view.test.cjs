@@ -64,7 +64,7 @@ test('map viewer is wired to authorized room blueprint and contains no movement 
   assert.match(source,/getDungeonMap\(roomId\)/);
   assert.match(source,/drawWorld\(/);
   assert.doesNotMatch(source,/drawMinimap\(/);
-  assert.match(source,/Camera\.lockToPlayer\(this\.selfPad\(\),m,w,h\)/);
+  assert.match(source,/Camera\.lockToPlayer\(visualHero,m,w,h\)/);
   assert.match(source,/pointerDown\(event\)/);
   assert.match(source,/pointerMove\(event\)/);
   assert.match(source,/pointerUp\(event\)/);

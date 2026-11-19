@@ -1558,9 +1558,10 @@ class DungeonMapView{
         if(!Number.isSafeInteger(charges)||charges<=0||member.downed||
             Number(member.battleHealth)===0)return;
         const pos=member.position||this.map.spawnPads[index];
-        if(!pos||!Number.isSafeInteger(pos.x)||!Number.isSafeInteger(pos.y)||
+        if(!pos||!Number.isFinite(pos.x)||!Number.isFinite(pos.y)||
             pos.x<0||pos.y<0||pos.x>=this.map.width||pos.y>=this.map.height||
-            this.map.tiles[pos.y*this.map.width+pos.x]===0)return;
+            this.map.tiles[Math.floor(pos.y)*this.map.width+
+              Math.floor(pos.x)]===0)return;
         // Exactly match the position offsets of overlapping teammate sprites.
         const companions=members.filter((other,j)=>{
           const q=other.position||this.map.spawnPads[j];
