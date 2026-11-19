@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-chi2-letter-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "強化通知、請求與公告的資訊完整性和禮貌",
+      "question": {
+        "q": "學生以電子郵件詢問學校是否接受校外志工時數登錄，哪一個主旨最清楚而得體？",
+        "correct": "詢問校外志工服務時數認列方式",
+        "wrong": [
+          "重要！請立刻看！！！！",
+          "嗨，你知道我在問什麼嗎？",
+          "隨便聊聊，不用回覆"
+        ],
+        "exp": "公務或校務詢問的郵件主旨應具體指出詢問事項，方便收件人辨識和轉交承辦人。",
+        "subject": "國文",
+        "sub_topic": "應用文與書信",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-應用文與書信",
+        "template_id": "ref-20261119-b2-chi2-letter-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-chi2-letter-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "強化通知、請求與公告的資訊完整性和禮貌",
+      "question": {
+        "q": "某社團已公告演講活動原訂12月5日，後改至12月12日，但場地不變。發送更正通知時，哪種寫法最不易誤導讀者？",
+        "correct": "明列原訂12月5日、改為12月12日，並註明場地不變",
+        "wrong": [
+          "只寫「日期可能有變」",
+          "只寫「請大家自行猜測新日期」",
+          "只寫活動名稱，完全不提異動"
+        ],
+        "exp": "更正通知宜清楚對照舊資料與新資料，並標註未變動事項，降低參與者誤用舊資訊的風險。",
+        "subject": "國文",
+        "sub_topic": "應用文與書信",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-應用文與書信",
+        "template_id": "ref-20261119-b2-chi2-letter-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-chi2-letter-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "強化通知、請求與公告的資訊完整性和禮貌",
+      "question": {
+        "q": "某學生寄信請老師協助推薦圖書資料，已說明研究題目及原因。信末還應加入哪項資訊，才能讓請求更具體且尊重對方？",
+        "correct": "可接受的回覆期限、致謝與聯絡方式",
+        "wrong": [
+          "要求老師必須當晚回覆，否則就公開抱怨",
+          "與研究無關的購物清單",
+          "只貼一串未說明的表情符號"
+        ],
+        "exp": "請求信件應提供明確需求與合宜的回覆方式，並兼顧對方可行的處理時間和禮貌。",
+        "subject": "國文",
+        "sub_topic": "應用文與書信",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-應用文與書信",
+        "template_id": "ref-20261119-b2-chi2-letter-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
