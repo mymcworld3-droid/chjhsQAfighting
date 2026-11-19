@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-學術字彙初階-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "從重複實驗情境理解學術動詞 verify",
+      "question": {
+        "q": "The team repeated the experiment under the same conditions to verify its findings. What does 'verify' mean?",
+        "correct": "Check whether something is accurate.",
+        "wrong": [
+          "Replace the results with guesses.",
+          "Keep the method secret.",
+          "Make the results appear more dramatic."
+        ],
+        "exp": "verify 在實驗情境是「驗證」：透過再次量測或其他證據檢查結果是否正確。",
+        "subject": "英文",
+        "sub_topic": "學術字彙初階",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-學術字彙初階",
+        "template_id": "self-20261119-eng-高中二年級-學術字彙初階-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-學術字彙初階-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "辨認 attribute ... to 的因果歸因用法",
+      "question": {
+        "q": "The authors attribute the drop in water use to the installation of new meters. What does 'attribute A to B' mean?",
+        "correct": "Regard B as a cause of A.",
+        "wrong": [
+          "Prove A and B are unrelated.",
+          "Use A as a name for B.",
+          "Record A without mentioning B."
+        ],
+        "exp": "attribute a change to a cause 表示「將變化歸因於某原因」，不等於因果已被嚴格證明。",
+        "subject": "英文",
+        "sub_topic": "學術字彙初階",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-學術字彙初階",
+        "template_id": "self-20261119-eng-高中二年級-學術字彙初階-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-學術字彙初階-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "從雙重目標理解 minimize 的詞義",
+      "question": {
+        "q": "The school aims to minimize food waste while maintaining meal quality. What does 'minimize' mean?",
+        "correct": "Reduce to as little as possible.",
+        "wrong": [
+          "Count without changing.",
+          "Increase as quickly as possible.",
+          "Separate into equal parts."
+        ],
+        "exp": "minimize 的意思是將某數量降到可行的最低程度；while 表示同時要保持餐點品質。",
+        "subject": "英文",
+        "sub_topic": "學術字彙初階",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-學術字彙初階",
+        "template_id": "self-20261119-eng-高中二年級-學術字彙初階-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-假設語氣-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "過去反事實條件與被動語態結合",
+      "question": {
+        "q": "If the city had strengthened the riverbank last year, fewer houses ______ during the storm.",
+        "correct": "would have been flooded",
+        "wrong": [
+          "would be flooded",
+          "will have flooded",
+          "have been flooding"
+        ],
+        "exp": "「去年原本可以做但沒做」是與過去事實相反的假設：If + had + p.p.，主句用 would have + p.p.；房屋是被淹，故用被動完成式 would have been flooded。",
+        "subject": "英文",
+        "sub_topic": "假設語氣",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-假設語氣",
+        "template_id": "self-20261119-eng-高中二年級-假設語氣-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-假設語氣-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "現在反事實條件句辨析",
+      "question": {
+        "q": "If I were in charge of the recycling project, I ______ the survey results before changing the rules.",
+        "correct": "would examine",
+        "wrong": [
+          "will examine",
+          "had examined",
+          "am examining"
+        ],
+        "exp": "If I were 表示與現在事實相反，主句宜用 would + 原形動詞：would examine。",
+        "subject": "英文",
+        "sub_topic": "假設語氣",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-假設語氣",
+        "template_id": "self-20261119-eng-高中二年級-假設語氣-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-假設語氣-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "wish 表達對已發生事情的遺憾",
+      "question": {
+        "q": "I wish I ______ the attachment more carefully before sending the email yesterday.",
+        "correct": "had checked",
+        "wrong": [
+          "have checked",
+          "will check",
+          "check"
+        ],
+        "exp": "對昨天已發生的事表示後悔，用 wish + 過去完成式 had checked。",
+        "subject": "英文",
+        "sub_topic": "假設語氣",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-假設語氣",
+        "template_id": "self-20261119-eng-高中二年級-假設語氣-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

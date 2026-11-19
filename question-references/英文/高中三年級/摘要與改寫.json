@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-摘要與改寫-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "摘取主要效果並保留關鍵限制條件",
+      "question": {
+        "q": "An island town installed rainwater tanks at schools. The stored water helped gardens survive dry months and reduced demand for piped water. It was not used as drinking water. Which summary is most accurate?",
+        "correct": "School rainwater tanks reduced demand for non-drinking water without replacing drinking supplies.",
+        "wrong": [
+          "The tanks provided all drinking water for the town.",
+          "The tanks ended every shortage during the dry season.",
+          "The gardens were removed after the tanks were installed."
+        ],
+        "exp": "摘要應同時保留用途、節水效益與限制：雨水用於庭園，未取代飲用水。",
+        "subject": "英文",
+        "sub_topic": "摘要與改寫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-摘要與改寫",
+        "template_id": "self-20261119-eng-高中三年級-摘要與改寫-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-摘要與改寫-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "保留不一致數據與推論界線",
+      "question": {
+        "q": "Researchers measured road noise at five junctions before and after a bus-route change. Levels fell at three, rose at one, and stayed similar at one. More data are needed before making city-wide claims. Which summary fits best?",
+        "correct": "Noise changes varied across junctions, and the evidence is insufficient for city-wide conclusions.",
+        "wrong": [
+          "Noise fell at every junction and across the entire city.",
+          "The new route caused traffic to stop everywhere.",
+          "Researchers proved that all routes reduce noise."
+        ],
+        "exp": "測量結果有下降、上升及不變，且樣本不足以推論全市，摘要不可誇大為全面改善。",
+        "subject": "英文",
+        "sub_topic": "摘要與改寫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-摘要與改寫",
+        "template_id": "self-20261119-eng-高中三年級-摘要與改寫-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-摘要與改寫-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "跨句整合互補關係形成精簡摘要",
+      "question": {
+        "q": "A school offers printed and audio textbooks. Audio helps with review during travel, while print is useful for studying diagrams. Teachers advise students to choose based on the task. Which summary is best?",
+        "correct": "Printed and audio materials complement each other for different study tasks.",
+        "wrong": [
+          "Audio textbooks should replace all printed materials.",
+          "Printed books cannot contain useful diagrams.",
+          "Students must use only one format for every task."
+        ],
+        "exp": "兩種媒材各有適用情境，核心不是排除任一形式，而是依任務選擇。",
+        "subject": "英文",
+        "sub_topic": "摘要與改寫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-摘要與改寫",
+        "template_id": "self-20261119-eng-高中三年級-摘要與改寫-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-文意選填-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "判斷篇章中的轉折連接詞",
+      "question": {
+        "q": "Some people assume that a faster delivery system always has a smaller environmental impact. ______, the new report found that energy use depends strongly on route planning.",
+        "correct": "However",
+        "wrong": [
+          "Therefore",
+          "Similarly",
+          "For example"
+        ],
+        "exp": "第一句提出普遍假設，第二句指出不一定成立，應用轉折副詞 However。",
+        "subject": "英文",
+        "sub_topic": "文意選填",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-文意選填",
+        "template_id": "self-20261119-eng-高中三年級-文意選填-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-文意選填-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "依時間順序填入連貫副詞",
+      "question": {
+        "q": "To reduce food waste, school kitchens first record the amount left after each meal. They ______ adjust portion sizes based on those records.",
+        "correct": "then",
+        "wrong": [
+          "otherwise",
+          "although",
+          "instead of"
+        ],
+        "exp": "first ... then ... 表示先記錄、再依紀錄調整，符合動作先後與句法。",
+        "subject": "英文",
+        "sub_topic": "文意選填",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-文意選填",
+        "template_id": "self-20261119-eng-高中三年級-文意選填-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-文意選填-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "兩句正反訊息的讓步轉折",
+      "question": {
+        "q": "The new device was inexpensive and easy to repair. ______, it used more electricity than the older model it was meant to replace.",
+        "correct": "Nevertheless",
+        "wrong": [
+          "Furthermore",
+          "Likewise",
+          "For instance"
+        ],
+        "exp": "前句是優點，後句提出與正面評價形成對比的缺點，應用 Nevertheless（儘管如此）。",
+        "subject": "英文",
+        "sub_topic": "文意選填",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-文意選填",
+        "template_id": "self-20261119-eng-高中三年級-文意選填-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

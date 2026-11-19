@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-論證與反論證-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "用對照組與混淆變項強化因果論證",
+      "question": {
+        "q": "Claim: 'Banning phones in class caused the rise in test scores.' Which evidence would best strengthen this causal claim?",
+        "correct": "Scores improved in comparable classes with the ban relative to classes without it, after accounting for earlier achievement.",
+        "wrong": [
+          "The school posted more photos of classrooms after the ban.",
+          "Several students said phones are expensive.",
+          "The principal repeated the claim at a meeting."
+        ],
+        "exp": "要支持因果主張，需要比較有無禁用措施的相似群體，並控制原先成績等混淆因素；宣傳與個別印象較無法驗證因果。",
+        "subject": "英文",
+        "sub_topic": "論證與反論證",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-論證與反論證",
+        "template_id": "self-20261119-eng-高中三年級-論證與反論證-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-論證與反論證-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "以可信反例反駁絕對化論點",
+      "question": {
+        "q": "Claim: 'Online classes always reduce meaningful peer interaction.' Which finding most directly weakens the claim?",
+        "correct": "Several well-structured online courses produced sustained peer collaboration and regular discussion.",
+        "wrong": [
+          "An online class used a blue background.",
+          "A school bought new charging cables.",
+          "One teacher printed a course outline."
+        ],
+        "exp": "always 是全稱命題，若有可信案例顯示線上課程也能促進持續互動，便可削弱其絕對性。",
+        "subject": "英文",
+        "sub_topic": "論證與反論證",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-論證與反論證",
+        "template_id": "self-20261119-eng-高中三年級-論證與反論證-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-論證與反論證-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "先讓步後回應的論證結構",
+      "question": {
+        "q": "Which sentence best makes a concession before defending investment in energy-efficient lighting?",
+        "correct": "Although the initial cost is higher, the lower electricity use may offset it over time.",
+        "wrong": [
+          "Energy-efficient lighting is perfect in every situation.",
+          "Anyone concerned about costs does not understand science.",
+          "The color of classroom walls is completely unrelated."
+        ],
+        "exp": "合格的讓步論證先承認合理疑慮（初期成本），再回應其長期效益，而非否定異議者。",
+        "subject": "英文",
+        "sub_topic": "論證與反論證",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-論證與反論證",
+        "template_id": "self-20261119-eng-高中三年級-論證與反論證-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-語境與詞義推斷-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "利用轉折與原因線索判斷形容詞",
+      "question": {
+        "q": "The plan seemed promising, but its financial feasibility remained ______ because the cost estimates had not been checked.",
+        "correct": "uncertain",
+        "wrong": [
+          "guaranteed",
+          "irrelevant",
+          "permanent"
+        ],
+        "exp": "but 與未核對的成本估算形成轉折，計畫財務可行性尚不確定，故選 uncertain。",
+        "subject": "英文",
+        "sub_topic": "語境與詞義推斷",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-語境與詞義推斷",
+        "template_id": "self-20261119-eng-高中三年級-語境與詞義推斷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-語境與詞義推斷-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "以抽樣範圍判讀代表性相關詞彙",
+      "question": {
+        "q": "Although the survey included 200 responses, all came from one club. The sample was not ______ of the whole school.",
+        "correct": "representative",
+        "wrong": [
+          "confidential",
+          "voluntary",
+          "anonymous"
+        ],
+        "exp": "即使有 200 份回答，若樣本只取自一個社團，仍可能無法代表全校；representative 表「具有代表性」。",
+        "subject": "英文",
+        "sub_topic": "語境與詞義推斷",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-語境與詞義推斷",
+        "template_id": "self-20261119-eng-高中三年級-語境與詞義推斷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-語境與詞義推斷-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "以原因與行動關係推斷動詞",
+      "question": {
+        "q": "Because the original bridge was closed, the delivery team had to ______ its route before leaving.",
+        "correct": "revise",
+        "wrong": [
+          "repeat",
+          "announce",
+          "memorize"
+        ],
+        "exp": "原路線因橋梁封閉而不可使用，必須修訂路線；revise 是「修改、修訂」。",
+        "subject": "英文",
+        "sub_topic": "語境與詞義推斷",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-語境與詞義推斷",
+        "template_id": "self-20261119-eng-高中三年級-語境與詞義推斷-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

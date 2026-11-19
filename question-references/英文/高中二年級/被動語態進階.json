@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-被動語態進階-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "過去完成式搭配被動語態",
+      "question": {
+        "q": "By the time the visitors arrived, the laboratory equipment ______ by the technicians.",
+        "correct": "had been inspected",
+        "wrong": [
+          "has inspected",
+          "was inspecting",
+          "had inspected"
+        ],
+        "exp": "檢查發生在訪客抵達前，且設備承受檢查動作，須用過去完成被動 had been inspected。",
+        "subject": "英文",
+        "sub_topic": "被動語態進階",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "eng-高中二年級-被動語態進階",
+        "template_id": "self-20261119-eng-高中二年級-被動語態進階-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-被動語態進階-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "未來式被動的時態與主詞角色",
+      "question": {
+        "q": "The updated safety guidelines ______ to all students next Monday.",
+        "correct": "will be emailed",
+        "wrong": [
+          "will email",
+          "have emailed",
+          "were emailing"
+        ],
+        "exp": "規範是被寄送的對象，且 next Monday 表示未來，應用 will be + 過去分詞 emailed。",
+        "subject": "英文",
+        "sub_topic": "被動語態進階",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "eng-高中二年級-被動語態進階",
+        "template_id": "self-20261119-eng-高中二年級-被動語態進階-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-被動語態進階-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "被動報導結構中的完成式不定詞",
+      "question": {
+        "q": "The ancient manuscript is believed ______ by two specialists before it was exhibited.",
+        "correct": "to have been examined",
+        "wrong": [
+          "to examine",
+          "examining",
+          "to have examined"
+        ],
+        "exp": "相信手稿「先前已被檢查」，believed 後用完成式被動不定詞 to have been examined。",
+        "subject": "英文",
+        "sub_topic": "被動語態進階",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "eng-高中二年級-被動語態進階",
+        "template_id": "self-20261119-eng-高中二年級-被動語態進階-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

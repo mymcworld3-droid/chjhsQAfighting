@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-分詞與分詞構句-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "以主詞與動詞間的被動關係選擇分詞",
+      "question": {
+        "q": "______ by the sudden downpour, the outdoor performance had to be postponed.",
+        "correct": "Interrupted",
+        "wrong": [
+          "Interrupting",
+          "To interrupt",
+          "Interrupt"
+        ],
+        "exp": "主詞 performance 是「被大雨打斷」，句首用過去分詞 Interrupted 作被動修飾；其餘形式不合語意與句構。",
+        "subject": "英文",
+        "sub_topic": "分詞與分詞構句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-分詞與分詞構句",
+        "template_id": "self-20261119-eng-高中二年級-分詞與分詞構句-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-分詞與分詞構句-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "相同主詞下時間副詞子句的分詞簡化",
+      "question": {
+        "q": "While ______ for the last train, Mina checked the updated timetable.",
+        "correct": "waiting",
+        "wrong": [
+          "waited",
+          "waits",
+          "to wait"
+        ],
+        "exp": "While waiting 是省略相同主詞 Mina 與 be 動詞後的分詞片語，表同時進行的動作。",
+        "subject": "英文",
+        "sub_topic": "分詞與分詞構句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-分詞與分詞構句",
+        "template_id": "self-20261119-eng-高中二年級-分詞與分詞構句-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-分詞與分詞構句-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "完成式分詞構句表示先後順序",
+      "question": {
+        "q": "Having ______ the safety instructions twice, the students began the laboratory experiment.",
+        "correct": "read",
+        "wrong": [
+          "reading",
+          "reads",
+          "to read"
+        ],
+        "exp": "完成式分詞構句為 Having + 過去分詞；read 的過去分詞拼字仍為 read。",
+        "subject": "英文",
+        "sub_topic": "分詞與分詞構句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-分詞與分詞構句",
+        "template_id": "self-20261119-eng-高中二年級-分詞與分詞構句-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

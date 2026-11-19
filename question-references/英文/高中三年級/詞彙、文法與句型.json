@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-詞彙、文法與句型-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "就近一致原則與過去時態",
+      "question": {
+        "q": "Neither the students nor their teacher ______ aware of the schedule change at that time.",
+        "correct": "was",
+        "wrong": [
+          "were",
+          "are",
+          "be"
+        ],
+        "exp": "neither ... nor ... 連接主詞時，動詞常與較接近的主詞一致；their teacher 為單數，且 at that time 指過去，用 was。",
+        "subject": "英文",
+        "sub_topic": "詞彙、文法與句型",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中三年級-詞彙、文法與句型",
+        "template_id": "self-20261119-eng-高中三年級-詞彙、文法與句型-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-詞彙、文法與句型-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "hardly ... when 的倒裝與連接詞",
+      "question": {
+        "q": "Hardly had the lecture begun ______ the fire alarm rang.",
+        "correct": "when",
+        "wrong": [
+          "than",
+          "that",
+          "because"
+        ],
+        "exp": "固定倒裝句型 Hardly/Scarcely had ... when ... 表示「剛……就……」，不能與 no sooner ... than 混淆。",
+        "subject": "英文",
+        "sub_topic": "詞彙、文法與句型",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中三年級-詞彙、文法與句型",
+        "template_id": "self-20261119-eng-高中三年級-詞彙、文法與句型-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中三年級-詞彙、文法與句型-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "成對比較級句型與詞性",
+      "question": {
+        "q": "The more carefully the data are checked, ______ the final conclusion becomes.",
+        "correct": "the more reliable",
+        "wrong": [
+          "more reliably",
+          "the most reliable",
+          "reliable"
+        ],
+        "exp": "比較級對應句型為 The more ..., the more ...；becomes 後接形容詞 reliable 而非副詞 reliably。",
+        "subject": "英文",
+        "sub_topic": "詞彙、文法與句型",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中三年級-詞彙、文法與句型",
+        "template_id": "self-20261119-eng-高中三年級-詞彙、文法與句型-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

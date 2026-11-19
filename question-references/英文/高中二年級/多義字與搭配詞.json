@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-多義字與搭配詞-1",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "從新規範施行日期判讀固定搭配",
+      "question": {
+        "q": "The new parking rules will take effect on July 1. What does 'take effect' mean?",
+        "correct": "Begin to operate.",
+        "wrong": [
+          "Be discussed in private.",
+          "Be withdrawn from use.",
+          "Be translated into another language."
+        ],
+        "exp": "take effect 是固定搭配，意為法規、規定或措施「開始生效」，不是僅被討論或撤回。",
+        "subject": "英文",
+        "sub_topic": "多義字與搭配詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-多義字與搭配詞",
+        "template_id": "self-20261119-eng-高中二年級-多義字與搭配詞-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-多義字與搭配詞-2",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "結合受詞 shortage 判讀多義動詞",
+      "question": {
+        "q": "The school committee will address the shortage of science classrooms next semester. What does 'address' mean here?",
+        "correct": "Deal with a problem.",
+        "wrong": [
+          "Send a letter to a building.",
+          "Write a street location.",
+          "Speak directly to one person."
+        ],
+        "exp": "address a shortage 是「處理短缺問題」，不是 address 作「地址」或「致詞」時的意思。",
+        "subject": "英文",
+        "sub_topic": "多義字與搭配詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-多義字與搭配詞",
+        "template_id": "self-20261119-eng-高中二年級-多義字與搭配詞-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261119-eng-高中二年級-多義字與搭配詞-3",
+      "source": "自編高中課綱參考題（非歷屆試卷原題）",
+      "design": "動詞片語與受詞語意的關聯",
+      "question": {
+        "q": "To improve the garden, the club plans to draw on advice from local farmers. What does 'draw on' mean?",
+        "correct": "Make use of.",
+        "wrong": [
+          "Draw a picture of.",
+          "Refuse to consider.",
+          "Pay a fine for."
+        ],
+        "exp": "draw on advice 意為運用或借助建議；不能將 draw 照字面當作繪畫。",
+        "subject": "英文",
+        "sub_topic": "多義字與搭配詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-多義字與搭配詞",
+        "template_id": "self-20261119-eng-高中二年級-多義字與搭配詞-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
