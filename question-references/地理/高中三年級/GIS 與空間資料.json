@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-g3-gis-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "某市要計算每個行政區內的公園總面積，現有行政區與公園兩組面狀向量圖層。哪種GIS操作最合適？",
+        "correct": "疊合裁切（相交）後按行政區彙總面積",
+        "wrong": [
+          "只改變公園圖層顏色而不進行空間計算",
+          "僅依行政區名稱字數推算公園面積",
+          "刪除座標資訊後比較圖例"
+        ],
+        "exp": "先以空間相交將公園面積分配到行政區，再依各區加總，才能處理跨界公園。",
+        "subject": "地理",
+        "sub_topic": "GIS 與空間資料",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-GIS 與空間資料",
+        "template_id": "ref-20261119-b5-g3-gis-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-g3-gis-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "某研究需要表示每一個30公尺×30公尺網格的地表高程。哪種資料形式最適合儲存？",
+        "correct": "網格（Raster）資料",
+        "wrong": [
+          "僅記錄每座城市名稱的文字清單",
+          "不含任何位置的圖片標題",
+          "只有道路名稱而沒有座標的資料表"
+        ],
+        "exp": "固定網格可為每個像元儲存數值，例如數值地形模型的高程，屬Raster資料。",
+        "subject": "地理",
+        "sub_topic": "GIS 與空間資料",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-GIS 與空間資料",
+        "template_id": "ref-20261119-b5-g3-gis-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-g3-gis-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念與情境緊密連結，要求可驗證推理及合理干擾選項",
+      "question": {
+        "q": "某學校想找出校門步行500公尺距離內的公車站。若考量實際步行路線而非直線距離，哪種分析最適合？",
+        "correct": "以可通行路網進行服務範圍分析",
+        "wrong": [
+          "僅以校門為圓心畫500公尺直線緩衝區就視為精確步行距離",
+          "直接統計全市各站牌名稱字數",
+          "以空照影像的色彩平均值取代路線長度"
+        ],
+        "exp": "路網分析依道路與行人通道的可通行距離計算服務範圍，能區分直線距離與實際步行距離。",
+        "subject": "地理",
+        "sub_topic": "GIS 與空間資料",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geography-高中三年級-GIS 與空間資料",
+        "template_id": "ref-20261119-b5-g3-gis-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
