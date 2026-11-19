@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-ch2-evidence-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "知識及證據導向，需比較合理選項並交代推論限制",
+      "question": {
+        "q": "某校主張「增設路口行人庇護島有助於減少學生穿越道路的風險」。下列哪項資料最能直接支持此主張？",
+        "correct": "比較類似路口增設前後的行人事故率與穿越人次，並考量其他交通措施",
+        "wrong": [
+          "只記錄庇護島啟用典禮參加人數",
+          "以庇護島的造型美觀程度推定安全效果",
+          "只看庇護島工程總預算，不測量行人風險"
+        ],
+        "exp": "主張涉及安全效果，證據應以可比較的事故或危險事件與行人暴露量為核心，並控制其他變動因素。",
+        "subject": "國文",
+        "sub_topic": "證據擷取與論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-證據擷取與論證",
+        "template_id": "ref-20261119-b6-ch2-evidence-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-ch2-evidence-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "知識及證據導向，需比較合理選項並交代推論限制",
+      "question": {
+        "q": "甲校每天午餐廚餘平均100公斤，改進供餐量後降至70公斤；同期用餐人數近似不變。若僅根據資料，可作出何種最有根據的判斷？",
+        "correct": "廚餘平均量下降約30%，但仍須其他證據判定原因",
+        "wrong": [
+          "廚餘量下降70%，可直接證明所有學生都吃完餐點",
+          "用餐人數相近，代表所有人的飲食習慣完全沒有改變",
+          "廚餘平均量只下降3%，因100與70相差30公斤"
+        ],
+        "exp": "降幅=(100−70)/100=30%；前後數據顯示變化，但若同期有其他政策或季節因素，不能逕行推定單一原因。",
+        "subject": "國文",
+        "sub_topic": "證據擷取與論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-證據擷取與論證",
+        "template_id": "ref-20261119-b6-ch2-evidence-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-ch2-evidence-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "知識及證據導向，需比較合理選項並交代推論限制",
+      "question": {
+        "q": "某社區提出延長圖書館平日夜間開放的建議。以下哪組證據最直接關聯到「延長時段有使用需求且可行」？",
+        "correct": "平日傍晚後入館需求調查，以及夜間人力和營運成本估算",
+        "wrong": [
+          "圖書館外牆使用的油漆品牌，以及館員最喜歡的書名",
+          "十年前圖書館落成時的剪綵照片，以及附近商店招牌顏色",
+          "館內新書封面設計的喜好調查，以及假日花圃維護次數"
+        ],
+        "exp": "延長開放須同時檢視受眾使用需求及人力、預算等執行條件，題述兩類資料直接回應政策可行性。",
+        "subject": "國文",
+        "sub_topic": "證據擷取與論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-證據擷取與論證",
+        "template_id": "ref-20261119-b6-ch2-evidence-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
