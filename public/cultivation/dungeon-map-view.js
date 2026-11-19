@@ -64,7 +64,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-trial-wheel-style')){
       const link=document.createElement('link');
       link.id='dungeon-trial-wheel-style';link.rel='stylesheet';
-      link.href='/styles/dungeon-trial-wheel.css?v=20261119-synced-trial-v1';
+      link.href='/styles/dungeon-trial-wheel.css?v=20261119-synced-trial-v2';
       document.head.append(link);
     }
     const root=document.createElement('section');
