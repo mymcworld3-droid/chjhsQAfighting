@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b5-c2-electrolysis-1",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "在外加直流電源電解熔融氯化鈉（不含水）時，陰極主要發生哪一個半反應？",
+        "correct": "Na⁺+e⁻→Na",
+        "wrong": [
+          "2Cl⁻→Cl₂+2e⁻",
+          "Na→Na⁺+e⁻",
+          "Cl₂+2e⁻→2Cl⁻"
+        ],
+        "exp": "電解熔融NaCl時，陰極進行還原，Na⁺接受1電子變成金屬Na；Cl⁻則在陽極失電子。",
+        "subject": "化學",
+        "sub_topic": "電池與電解",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-電池與電解",
+        "template_id": "ref-20261119-b5-c2-electrolysis-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-c2-electrolysis-2",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "鋅銅原電池的鹽橋用於連接兩半電池，其最重要的功能為何？",
+        "correct": "讓離子遷移以維持兩槽的電荷平衡",
+        "wrong": [
+          "讓電子直接沿鹽橋流往銅電極",
+          "提供反應物所需的全部鋅原子",
+          "使兩槽中所有離子濃度立刻完全相同"
+        ],
+        "exp": "電子主要經外電路傳輸，鹽橋中的離子遷移可補償各槽電荷變化，讓原電池持續工作。",
+        "subject": "化學",
+        "sub_topic": "電池與電解",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-電池與電解",
+        "template_id": "ref-20261119-b5-c2-electrolysis-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b5-c2-electrolysis-3",
+      "source": "高中觀念自編參考題（非歷屆原題）",
+      "design": "觀念對應題幹清晰、答案唯一、計算可複核",
+      "question": {
+        "q": "用外加電流將含Cu²⁺溶液中的銅鍍到金屬物品表面，該物品應連接至電解槽哪一極？",
+        "correct": "陰極（接外加電源負極）",
+        "wrong": [
+          "陽極（接外加電源正極）",
+          "原電池的鋅陽極",
+          "鹽橋中間而不連接任何電源"
+        ],
+        "exp": "電鍍需Cu²⁺+2e⁻→Cu(s)的還原反應在被鍍表面發生，所以被鍍物品作為電解槽陰極。",
+        "subject": "化學",
+        "sub_topic": "電池與電解",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-電池與電解",
+        "template_id": "ref-20261119-b5-c2-electrolysis-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
