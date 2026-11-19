@@ -8,6 +8,7 @@ const {generateDungeonLayout}=require('../dungeon-map-generator.cjs');
 const AI=require('../dungeon-enemy-ai.cjs');
 const PlayerCombat=require('../dungeon-player-combat.cjs');
 const SkillCombat=require('../dungeon-skill-combat.cjs');
+const QuizCredits=require('../dungeon-quiz-credit.cjs');
 const manualRecord={
   school:'sword',books:{'sword-wind':{exp:2500}},
   equipped:['wind-slash'],
@@ -21,6 +22,21 @@ catch(_){playwright=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/pla
 const app=express();app.use(express.json());
 const map=generateDungeonLayout('stage6-browser-visual-1');
 let room=null,clockLoop=null;const watchers=new Set(),requests=[];
+const quizState=Object.fromEntries(['a','b'].map(uid=>[uid,{answered:0,
+  pending:{},reviews:{},lastReview:null}]));
+const question=(uid,n)=>({id:uid+'-q-'+n,q:'副本問道測試：請選出整數加法的正確算式。',
+  opts:['2+3=3','2+3=4','2+3=5','2+3=6'],
+  subject:'數學',topic:'整數加法',difficulty:'easy'});
+const quizView=uid=>{
+  const q=quizState[uid],index=q.answered;
+  return {roomId:room.id,answered:index,question:q.pending[index]||null,
+    stock:Object.keys(q.pending).filter(k=>Number(k)>=index&&Number(k)<index+5).length,
+    lastReview:q.lastReview,
+    pendingCredits:Object.entries(q.reviews).filter(([,r])=>r.index>
+      (room.members[uid].quizCreditSeq||0)).map(([id,r])=>({
+        id,index:r.index,amount:r.amount,correct:r.correct
+      })).sort((a,b)=>a.index-b.index)};
+};
 const clone=x=>JSON.parse(JSON.stringify(x));
 const currentRoom=()=>{
   if(!room)return null;
@@ -59,6 +75,37 @@ app.get('/cultivation/data/project-repository.js',(_req,res)=>res.type('text/jav
   "export const getMainUser=()=>({uid:sessionStorage.mockUid||'a'});"+
   "export const authenticatedMainFetch=(url,init={})=>fetch(url,{...init,headers:{...init.headers,'content-type':'application/json','x-test-user':getMainUser().uid}});"
 ));
+app.post('/api/dungeon/quiz/state',(req,res)=>{
+  const uid=req.get('x-test-user');requests.push('quiz-state');
+  if(!room?.members?.[uid]||room.status!=='assembled')
+    return res.status(403).json({error:'not assembled'});
+  return res.json({ok:true,state:quizView(uid)});
+});
+app.post('/api/generate-quiz',(req,res)=>{
+  const uid=req.get('x-test-user'),slot=req.body.slot??0;
+  requests.push('generate-quiz');
+  if(!room?.members?.[uid]||room.status!=='assembled'||
+      req.body.quizMode!=='dungeon'||!Number.isInteger(slot)||slot<0||slot>=5)
+    return res.status(403).json({error:'invalid slot'});
+  const state=quizState[uid],index=state.answered+slot;
+  state.pending[index]||=question(uid,index);
+  return res.json({dungeonQuestion:state.pending[index]});
+});
+app.post('/api/dungeon/quiz/answer',(req,res)=>{
+  const uid=req.get('x-test-user'),s=quizState[uid];
+  requests.push('quiz-answer');
+  if(!room?.members?.[uid]||room.status!=='assembled')
+    return res.status(403).json({error:'not assembled'});
+  const q=s.pending[s.answered],choice=req.body.choice;
+  if(!q||q.id!==req.body.questionId||!Number.isInteger(choice)||choice<0||choice>3)
+    return res.status(409).json({error:'stale answer'});
+  const correct=choice===2,review={questionId:q.id,index:s.answered+1,
+    q:q.q,opts:q.opts,correct,choice,answerIndex:2,amount:correct?4:1,
+    explanation:'因為 2 加 3 等於 5。',
+    reward:{cultivation:correct?1:0,gold:0,learning:''}};
+  s.reviews[q.id]=review;s.lastReview=review;delete s.pending[s.answered];
+  s.answered++;return res.json({ok:true,review,state:quizView(uid)});
+});
 app.post('/api/dungeon/room',(req,res)=>{
   const uid=req.get('x-test-user'),action=req.body.action;
   requests.push(action);
@@ -109,6 +156,7 @@ app.post('/api/dungeon/room',(req,res)=>{
       return res.status(409).json({ok:false,error:'not ready'});
     room.status='assembled';
     room.battleStartedAtMs=Date.now();
+     room.assembledAtMs=room.battleStartedAtMs;
     room.battleAppliedTick=0;
     room.enemyAiVersion=AI.ENEMY_AI_VERSION;
     room.enemies=AI.initialEnemies(map);
@@ -125,6 +173,7 @@ app.post('/api/dungeon/room',(req,res)=>{
         member.battleMaxHealth=100;member.downed=false;member.lastDamage=null;
         member.moveSeq=0;member.lastMove=null;
         member.strikeSeq=0;member.lastStrike=null;
+         member.quizCreditSeq=0;member.lastQuizCredit=null;
       });
     room.revision++;publish();return success();
   }
@@ -146,6 +195,15 @@ app.post('/api/dungeon/room',(req,res)=>{
       if(out.duplicate)return success();
       room.members=out.members;room.revision++;publish();return success();
     }catch(error){return res.status(error.status||409).json({ok:false,error:error.message});}
+  }
+  if(action==='quiz-credit'){
+    try{
+      const proof={roomId:room.id,sessionKey:room.id+':'+room.assembledAtMs,
+        reviews:quizState[uid].reviews};
+      const result=QuizCredits.credit(room,uid,proof,req.body.questionId,room.id);
+      if(result.duplicate)return success();
+      room.members=result.members;room.revision++;publish();return success();
+    }catch(error){return res.status(error.status||409).json({error:error.message});}
   }
   if(action==='strike'){
     try{
