@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b6-e2-revision-1",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視圖表精確解讀、語境、禮貌及不同證據的整合",
+      "question": {
+        "q": "Original draft: 'Although the new cycling routes are convenient. They do not connect to the main station.' Which revision fixes the sentence fragment while keeping the contrast?",
+        "correct": "Although the new cycling routes are convenient, they do not connect to the main station.",
+        "wrong": [
+          "Although the new cycling routes are convenient. But they do not connect to the main station.",
+          "The new cycling routes are convenient although. They do not connect to the main station.",
+          "Although the new cycling routes are convenient, but they do not connect to the main station."
+        ],
+        "exp": "An 'although' clause is subordinate and must be connected to a main clause; a comma joins the two clauses without adding 'but'.",
+        "subject": "英文",
+        "sub_topic": "連貫與修訂",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-連貫與修訂",
+        "template_id": "ref-20261119-b6-e2-revision-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e2-revision-2",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視圖表精確解讀、語境、禮貌及不同證據的整合",
+      "question": {
+        "q": "Draft: 'The team collected water samples on Monday. ______, the samples were analyzed in the laboratory on Tuesday.' Choose the best transition.",
+        "correct": "The following day",
+        "wrong": [
+          "In contrast",
+          "For example",
+          "Nevertheless"
+        ],
+        "exp": "'The following day' provides the appropriate chronological link from Monday's collection to Tuesday's analysis.",
+        "subject": "英文",
+        "sub_topic": "連貫與修訂",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-連貫與修訂",
+        "template_id": "ref-20261119-b6-e2-revision-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b6-e2-revision-3",
+      "source": "高中自編參考題（非歷屆試題）",
+      "design": "重視圖表精確解讀、語境、禮貌及不同證據的整合",
+      "question": {
+        "q": "Draft: 'The survey included forty students. The survey showed that most students supported the plan.' Which revision improves cohesion without changing the claim?",
+        "correct": "The survey included forty students, most of whom supported the plan.",
+        "wrong": [
+          "The survey included forty students because all students rejected the plan.",
+          "Most students supported the plan, although the survey contained no responses.",
+          "The survey, which contained forty schools, showed that students supported the plan."
+        ],
+        "exp": "The relative clause 'most of whom' refers clearly to the forty surveyed students and removes unnecessary repetition without inventing information.",
+        "subject": "英文",
+        "sub_topic": "連貫與修訂",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-連貫與修訂",
+        "template_id": "ref-20261119-b6-e2-revision-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
