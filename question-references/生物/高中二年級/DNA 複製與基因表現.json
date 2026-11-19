@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-bio2-dna-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依鹼基互補、半保留複製與遺傳密碼分析",
+      "question": {
+        "q": "單一雙股DNA分子有兩條原始股，於一般半保留複製下連續複製兩輪，且不考慮突變。最後4個雙股DNA分子中，含至少一條最初原始股的有幾個？",
+        "correct": "2個",
+        "wrong": [
+          "1個",
+          "3個",
+          "4個"
+        ],
+        "exp": "半保留複製下，每一條原始股會留在某個子分子中。兩輪後共有4分子，但只有2分子各含一條最初原始股。",
+        "subject": "生物",
+        "sub_topic": "DNA 複製與基因表現",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-DNA 複製與基因表現",
+        "template_id": "ref-20261119-bio2-dna-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-bio2-dna-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依鹼基互補、半保留複製與遺傳密碼分析",
+      "question": {
+        "q": "若DNA模板股由3'到5'的鹼基序列為3'-TACGGA-5'，轉錄得到的mRNA由5'到3'為何？",
+        "correct": "5'-AUGCCU-3'",
+        "wrong": [
+          "5'-TACGGA-3'",
+          "5'-UACGGA-3'",
+          "5'-ATGCCT-3'"
+        ],
+        "exp": "RNA與DNA模板股反向互補：T配A、A配U、C配G、G配C，因此mRNA為5'-AUGCCU-3'。",
+        "subject": "生物",
+        "sub_topic": "DNA 複製與基因表現",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-DNA 複製與基因表現",
+        "template_id": "ref-20261119-bio2-dna-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-bio2-dna-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "依鹼基互補、半保留複製與遺傳密碼分析",
+      "question": {
+        "q": "某蛋白質編碼區的mRNA密碼子由GAA突變成GAG，已知兩者皆編碼麩胺酸（Glu）。僅考慮該位置時，最合理的推論為何？",
+        "correct": "此位置胺基酸可能維持不變，屬同義突變",
+        "wrong": [
+          "必定變成終止密碼子",
+          "必定改變成甲硫胺酸",
+          "必使整段mRNA無法轉譯"
+        ],
+        "exp": "兩個密碼子編碼相同胺基酸，故此位置的胺基酸不因該替換而改變；是否影響其他調控需另有證據。",
+        "subject": "生物",
+        "sub_topic": "DNA 複製與基因表現",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-DNA 複製與基因表現",
+        "template_id": "ref-20261119-bio2-dna-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
