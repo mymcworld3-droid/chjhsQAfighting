@@ -3,7 +3,7 @@ import { BIOMES, drawWorld, drawMinimap } from './dungeon-map-painter.js';
 import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, setDungeonBossReady, rescueDungeonTeammate, guardDungeonTeammate, claimDungeonBossReward } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
-import { dungeonQuarterControlsHTML, energyRingFill } from './dungeon-quarter-controls.js';
+import { dungeonQuarterControlsHTML, energyRingFill, dungeonFocusCharges, dungeonFocusEmpowers } from './dungeon-quarter-controls.js';
 
 // The dungeon shares the trial's fullscreen quarter-dial presentation;
 // its exploration, combat and questions remain live, server-authoritative actions.
@@ -47,13 +47,13 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-map-view-style')){
       const style=document.createElement('link');
       style.id='dungeon-map-view-style';style.rel='stylesheet';
-      style.href='/styles/dungeon-map-view.css?v=20261119-quarter-dials-v1';
+      style.href='/styles/dungeon-map-view.css?v=20261119-focus-aura-v2';
       document.head.append(style);
     }
     if(!document.getElementById('dungeon-quarter-controls-style')){
       const stylesheet=document.createElement('link');
       stylesheet.id='dungeon-quarter-controls-style';stylesheet.rel='stylesheet';
-      stylesheet.href='/styles/dungeon-quarter-controls.css?v=20261119-trial-style-v1';
+      stylesheet.href='/styles/dungeon-quarter-controls.css?v=20261119-focus-gold-v2';
       document.head.append(stylesheet);
     }
     const root=document.createElement('section');
@@ -384,6 +384,14 @@ class DungeonMapView{
     const active=this.room?.status==='assembled'&&!!this.map;
     wheel.hidden=!active;
     wheel.dataset.mode=this.wheelMode;
+    const charges=active?dungeonFocusCharges(this.room?.members?.[this.uid]):0;
+    wheel.classList.toggle('has-focus',charges>0);
+    const badge=this.$('[data-dm-focus-indicator]');
+    if(badge){
+      badge.hidden=!active||charges===0;
+      badge.textContent=charges>0?'✦ 金身蓄勢 '+charges+'/6':'';
+      badge.title=charges>0?'剩餘 '+charges+' 次強化體術，施放後消耗一層':'';
+    }
     this.$('[data-dm-wheel-attack]').hidden=this.wheelMode!=='attack';
     this.$('[data-dm-wheel-move]').hidden=this.wheelMode!=='move';
     for(const name of ['attack','move'])
@@ -648,8 +656,7 @@ class DungeonMapView{
     const stamina=Number.isSafeInteger(member.explorationStamina)?
       member.explorationStamina:0;
     const downed=member.downed===true||member.battleHealth===0;
-    const charges=Number.isSafeInteger(member.focusCharges)?
-      Math.max(0,Math.min(6,member.focusCharges)):0;
+    const charges=dungeonFocusCharges(member);
     this.$('[data-dm-focus]').textContent=charges>0?
       '✦ 金身蓄勢 '+charges+'/6 · 體術減耗':'';
     const aimed=this.currentAim();
@@ -664,10 +671,10 @@ class DungeonMapView{
     this.root.querySelectorAll('[data-dm-skills] button,[data-dm-wheel-skills] button').forEach(button=>{
       const skill=skills.find(v=>v.id===button.dataset.skillId);
       if(!skill)return;
-      const empowered=charges>0&&skill.school==='body'&&
-        skill.kind!=='fist-focus';
+      const empowered=dungeonFocusEmpowers(member,skill);
       const cost=empowered?Math.ceil(skill.cost/2):skill.cost;
-      // Only actually empowered body attacks turn gold.
+      // Match the server's school/kind rule, including disabled-to-aim skills.
+      // The right quarter wheel uses a separate CSS skin, so mark BOTH copies.
       button.classList.toggle('is-focus-empowered',empowered);
       button.dataset.focusEmpowered=String(empowered);
       button.textContent=(empowered?'✦ ':'')+skill.name+' · '+cost+' 體力';
@@ -1479,27 +1486,32 @@ class DungeonMapView{
         present.add(member.uid);
         let aura=this.focusAuras.get(member.uid);
         if(!aura){
-          // GPU-friendly CSS animations: never redraw the full maze on a
-          // timer. Sparks and double rings surround, not cover, the avatar.
+          // CSS handles continuous shimmer independent of room update rate.
+          // Halo, flares and motes surround the sprite; center stays clear.
           aura=document.createElement('div');
           aura.className='dm-focus-aura';
           aura.dataset.focusUid=member.uid;
-          aura.innerHTML='<span class="dm-focus-ring"></span>'+
+          aura.innerHTML='<span class="dm-focus-glow"></span>'+
+            '<span class="dm-focus-flames"></span>'+
+            '<span class="dm-focus-ring"></span>'+
             '<span class="dm-focus-orbit"></span>'+
             '<span class="dm-focus-spark dm-spark-a"></span>'+
             '<span class="dm-focus-spark dm-spark-b"></span>'+
             '<span class="dm-focus-spark dm-spark-c"></span>'+
             '<span class="dm-focus-spark dm-spark-d"></span>'+
+            '<span class="dm-focus-spark dm-spark-e"></span>'+
+            '<span class="dm-focus-spark dm-spark-f"></span>'+
             '<span class="dm-focus-count"></span>';
           this.focusAuras.set(member.uid,aura);
           layer.append(aura);
         }
         aura.style.left=x+'px';aura.style.top=y+'px';
         aura.style.setProperty('--dm-focus-size',
-          clamp(geometry.cell*1.65,42,104)+'px');
+          clamp(geometry.cell*2.05,58,148)+'px');
         aura.dataset.charges=String(charges);
+        aura.classList.toggle('is-self',member.uid===this.uid);
         aura.querySelector('.dm-focus-count').textContent=
-          member.uid===this.uid?'✦ '+charges:'✦';
+          member.uid===this.uid?'蓄勢 '+charges+'/6':'✦ '+charges;
         aura.title='蓄勢金身 · 剩餘 '+charges+' 招';
       });
     }
