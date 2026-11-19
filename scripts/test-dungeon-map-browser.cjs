@@ -464,7 +464,8 @@ async function main(){
     room.revision++;publish();
     await a.page.locator('#dungeon-map-view [data-dm="cast"][data-skill-id="wind-slash"]')
       .waitFor({timeout:5000});
-    await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
+    if(await a.page.locator('#dungeon-map-view [data-dm-inspector]').isHidden())
+      await a.page.locator('#dungeon-map-view [data-dm="beasts"]').click();
     await a.page.locator('#dungeon-map-view [data-dm-beast-list] button').first().click();
     const skillButton=a.page.locator('#dungeon-map-view [data-dm="cast"][data-skill-id="wind-slash"]');
     await skillButton.click();
