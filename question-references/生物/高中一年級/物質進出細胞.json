@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-bio1-membrane-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "比較滲透、膜通透性與ATP依賴的運輸",
+      "question": {
+        "q": "將健康植物細胞放入比細胞液更低滲透壓的溶液，水分持續進入時，為何細胞通常不會像無細胞壁的動物細胞一樣容易脹破？",
+        "correct": "細胞壁可提供抵抗膨脹的機械支持",
+        "wrong": [
+          "細胞壁會主動把所有水分分解",
+          "植物細胞的膜完全不透水",
+          "植物細胞沒有滲透作用"
+        ],
+        "exp": "外液較低張時，水傾向透過滲透作用進入；細胞壁限制膨脹並建立膨壓，有助於防止破裂。",
+        "subject": "生物",
+        "sub_topic": "物質進出細胞",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-物質進出細胞",
+        "template_id": "ref-20261119-bio1-membrane-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-bio1-membrane-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "比較滲透、膜通透性與ATP依賴的運輸",
+      "question": {
+        "q": "一個透水但不透蔗糖的透析袋內裝0.30 M蔗糖水溶液，外界為0.10 M蔗糖水溶液，忽略其他溶質。初始時淨水流方向為何？",
+        "correct": "由袋外進入袋內",
+        "wrong": [
+          "由袋內流向袋外",
+          "沒有淨水流，因兩側都有蔗糖",
+          "蔗糖大量擴散到袋外並使袋內失水"
+        ],
+        "exp": "蔗糖不能穿膜，但水可通過；袋內溶質濃度較高、水勢較低，水最初淨流入袋內。",
+        "subject": "生物",
+        "sub_topic": "物質進出細胞",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-物質進出細胞",
+        "template_id": "ref-20261119-bio1-membrane-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-bio1-membrane-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "比較滲透、膜通透性與ATP依賴的運輸",
+      "question": {
+        "q": "動物細胞利用鈉鉀幫浦將Na⁺排出細胞、K⁺送入細胞。這項運輸的直接能量來源主要為何？",
+        "correct": "ATP水解",
+        "wrong": [
+          "光合作用產生的光子直接推動",
+          "兩種離子完全不需要能量就逆梯度移動",
+          "DNA鹼基配對"
+        ],
+        "exp": "鈉鉀幫浦屬初級主動運輸，利用ATP水解提供能量，維持細胞內外Na⁺、K⁺梯度。",
+        "subject": "生物",
+        "sub_topic": "物質進出細胞",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-物質進出細胞",
+        "template_id": "ref-20261119-bio1-membrane-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
