@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-sentencepolish-1",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "原句：「為了讓學生因為參加社團的原因所以可以增加彼此之間的交流。」哪個修改最簡潔且保留原意？",
+        "correct": "參加社團有助於增加學生之間的交流。",
+        "wrong": [
+          "由於參加社團的原因，因此所以可以促進交流。",
+          "學生因為社團，所以因為交流而參加社團。",
+          "社團與學生交流沒有關係，因此不必參加。"
+        ],
+        "exp": "刪去「為了」「因為……的原因」「所以」等重複語，改成主語與述語清楚的完整句，保留因果關係。",
+        "subject": "國文",
+        "sub_topic": "文句推敲",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-文句推敲",
+        "template_id": "ref-20261119-b8-ch2-sentencepolish-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-sentencepolish-2",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "原句：「根據調查，所有學生可能都一定喜歡新的午餐菜單。」但調查只有100人中的70人表示喜歡。哪個修訂最準確？",
+        "correct": "在受訪的100名學生中，有70人表示喜歡新菜單。",
+        "wrong": [
+          "調查證明全校每一位學生都喜歡新菜單。",
+          "多數學生一定會永遠喜歡所有午餐菜色。",
+          "本次調查完全沒有任何學生提出不喜歡的意見。"
+        ],
+        "exp": "調查只支持樣本中70/100受訪者表態喜歡；去除「所有」「可能都一定」等互相矛盾且過度推論的措辭。",
+        "subject": "國文",
+        "sub_topic": "文句推敲",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-文句推敲",
+        "template_id": "ref-20261119-b8-ch2-sentencepolish-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b8-ch2-sentencepolish-3",
+      "source": "高中自編參考題（非歷屆考題）",
+      "design": "從觀念出發，含可檢核的文本證據、邏輯與修訂理由",
+      "question": {
+        "q": "原句：「這份報告討論關於學校節能的議題，並且在結論之中提出了許多關於節能的建議。」哪個修改最適合正式報告，且不改變資訊？",
+        "correct": "這份報告探討校園節能議題，並於結論提出多項改善建議。",
+        "wrong": [
+          "這份報告證明所有節能方案都毫無成本。",
+          "這份報告因為節能，所以結論就是節能的議題之中。",
+          "這份報告只研究節能設備的購買價格，沒有提供建議。"
+        ],
+        "exp": "簡化重複的「關於」「議題」「結論之中」，使主詞與動詞明確，同時保留探討主題與提出建議兩項資訊。",
+        "subject": "國文",
+        "sub_topic": "文句推敲",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-文句推敲",
+        "template_id": "ref-20261119-b8-ch2-sentencepolish-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
