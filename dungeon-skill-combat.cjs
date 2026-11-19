@@ -17,6 +17,23 @@ const at=(p,dx,dy,n=1)=>({x:p.x+dx*n,y:p.y+dy*n});
 const present=(members,enemy)=>Object.values(members).some(m=>isAlive(m)&&same(m.position,enemy));
 const occupied=(p,enemies,ignore='')=>enemies.some(e=>e.id!==ignore&&same(e.position,p));
 const tile=(map,p)=>walkable(map,p);
+function visible(map,a,b){
+  if(!tile(map,a)||!tile(map,b))return false;
+  let x=a.x,y=a.y;
+  const dx=Math.abs(b.x-x),dy=Math.abs(b.y-y);
+  const sx=x<b.x?1:-1,sy=y<b.y?1:-1;
+  let error=dx-dy;
+  while(x!==b.x||y!==b.y){
+    const oldX=x,oldY=y,twice=error*2;
+    if(twice>-dy){error-=dy;x+=sx;}
+    if(twice<dx){error+=dx;y+=sy;}
+    if(!tile(map,{x,y}))return false;
+    // A diagonal sight ray must not pass through a closed wall corner.
+    if(x!==oldX&&y!==oldY&&
+        !tile(map,{x:oldX,y})&&!tile(map,{x,y:oldY}))return false;
+  }
+  return true;
+}
 const skillOf=(id,record,score)=>{
   const s=Manuals.BY_SKILL[id];
   if(!s||!Manuals.unlocked(record,id)||!Manuals.meetsRealm(s,score))return null;
@@ -79,7 +96,7 @@ const front=(map,origin,d,tShape=false)=>{
     const p=forward(origin,d,n,side);
     if(tile(map,p))cells.push(p);
   }
-  return cells.filter(p=>tile(map,p));
+  return cells.filter(p=>tile(map,p)&&visible(map,origin,p));
 };
 function beamArray(map,center,sk){
   const rays=[];
@@ -173,15 +190,17 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   }else if(sk.kind==='sword-array'){
     if(distance(origin,target)>sk.range)throw fail('劍陣中心超出技能範圍',409);
     // The center must be visible by a 4-connected open corridor.
-    const axial=axis(origin,target);
-    if(axial&&!rayTo(map,origin,target,sk.range))
+    if(!visible(map,origin,target))
       throw fail('岩壁阻擋劍陣中心',409);
     const rays=beamArray(map,target,sk);
     cells=[target,...rays.flatMap(r=>r.cells)];
     for(const e of targets(cells)){
       if(same(e.position,target)){
-        const repeats=sk.orthogonal?8:2;
-        const each=(sk.centerPower||sk.power)/repeats;
+        // The center receives only beams that can actually traverse the map.
+        // A missing ray never becomes a free bonus hit through stone walls.
+        const repeats=sk.orthogonal?rays.length:
+          new Set(rays.map(r=>Math.sign(r.dx*r.dy))).size;
+        const each=(sk.centerPower||sk.power)/(sk.orthogonal?8:2);
         for(let i=0;i<repeats;i++)apply(e,each);
       }else if(sk.orthogonal){
         for(const r of rays.filter(r=>r.cells.some(p=>same(p,e.position))))
@@ -215,7 +234,6 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
     const d=axis(origin,target);
     if(!d||distance(origin,target)!==1)
       throw fail('請選擇相鄰的上下左右方向',409);
-    const originEnemy=sk.kind==='fist-chain'?null:null;
     if(sk.kind==='fist-chain'){
       let current={...origin};
       for(let n=0;n<(sk.steps||4);n++){
@@ -269,4 +287,4 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   return {duplicate:false,members,enemies:surviving,result,cells};
 }
 module.exports={attackPower,initialCombatLoadout,loadout,switchLoadout,
-  ray,rayTo,beamArray,castSkill};
+  ray,rayTo,visible,beamArray,castSkill};
