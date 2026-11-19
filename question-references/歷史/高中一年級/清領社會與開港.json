@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b2-hist1-qing-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從開港產業、移墾衝突與清末建設理解臺灣史",
+      "question": {
+        "q": "十九世紀臺灣開港通商後，北臺灣部分地區的茶葉種植、加工與出口擴大。這最能說明哪項經濟變化？",
+        "correct": "在地農業與國際商品市場的連結增強",
+        "wrong": [
+          "臺灣完全不再種植任何糧食",
+          "所有茶葉只能在臺灣境內交易",
+          "全球航運在此時已經全面停止"
+        ],
+        "exp": "茶葉成為開港後重要出口商品之一，反映區域產業透過港口與海外市場連結，但不代表農業全面單一化。",
+        "subject": "歷史",
+        "sub_topic": "清領社會與開港",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-清領社會與開港",
+        "template_id": "ref-20261119-b2-hist1-qing-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-hist1-qing-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從開港產業、移墾衝突與清末建設理解臺灣史",
+      "question": {
+        "q": "研究清代臺灣的地方械鬥與社會衝突，下列哪一種解釋較符合多因素的歷史分析？",
+        "correct": "族群籍貫、土地水源競爭和地方利益可能相互影響",
+        "wrong": [
+          "所有械鬥只可能因單一天氣事件而起",
+          "所有衝突均與土地資源及社會組織無關",
+          "任何兩群人只要說同一種語言便不可能發生衝突"
+        ],
+        "exp": "清領臺灣地方衝突常涉及移民群體、祖籍認同、土地與灌溉資源等，應依不同史料作脈絡分析。",
+        "subject": "歷史",
+        "sub_topic": "清領社會與開港",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-清領社會與開港",
+        "template_id": "ref-20261119-b2-hist1-qing-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b2-hist1-qing-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "從開港產業、移墾衝突與清末建設理解臺灣史",
+      "question": {
+        "q": "清末劉銘傳在臺灣推動鐵路、電報等建設，若放入十九世紀東亞的歷史脈絡，最適合如何理解？",
+        "correct": "反映清朝部分官員試圖以近代化設施強化交通、行政與防務",
+        "wrong": [
+          "表示臺灣已在當時全面進入數位網路時代",
+          "證明所有傳統交通方式當時立即消失",
+          "說明清朝完全不再面對外部威脅"
+        ],
+        "exp": "清末近代化建設具有改善運輸、通信與治理等功能，也與當時東亞的國際競爭和自強改革有關。",
+        "subject": "歷史",
+        "sub_topic": "清領社會與開港",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-清領社會與開港",
+        "template_id": "ref-20261119-b2-hist1-qing-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
