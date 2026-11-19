@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b9-en1-shortnarrative-1",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "Listening transcript: 'Our class planted trees near the sports field last spring. We water them twice a week, but during rainy weeks we check the soil before adding more water.' What can be inferred about the class?",
+        "correct": "They adjust watering according to soil conditions.",
+        "wrong": [
+          "They water the trees every day regardless of rainfall.",
+          "They have stopped caring for the trees.",
+          "They planted all the trees indoors."
+        ],
+        "exp": "The speaker says they check soil during rainy weeks before adding water, showing that the schedule is adapted rather than rigid.",
+        "subject": "英文",
+        "sub_topic": "簡短敘述",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-簡短敘述",
+        "template_id": "ref-20261119-b9-en1-shortnarrative-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en1-shortnarrative-2",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "Listening transcript: 'I used to buy a drink in a disposable cup each morning. After my friend gave me a reusable bottle, I started filling it at school.' What changed?",
+        "correct": "The speaker began using a reusable bottle instead of buying a drink in a disposable cup each morning.",
+        "wrong": [
+          "The speaker stopped drinking any water at school.",
+          "The school removed all drinking-water stations.",
+          "The speaker began buying two disposable drinks every morning."
+        ],
+        "exp": "The speaker contrasts an earlier daily habit with the newer practice of refilling a reusable bottle at school.",
+        "subject": "英文",
+        "sub_topic": "簡短敘述",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-簡短敘述",
+        "template_id": "ref-20261119-b9-en1-shortnarrative-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b9-en1-shortnarrative-3",
+      "source": "高中自編參考題（非歷屆試卷原題）",
+      "design": "聽讀情境與學科應用結合，避免失真與過度推論",
+      "question": {
+        "q": "Listening transcript: 'I missed the first train because I arrived late. I checked the schedule, took the next train, and still reached the exhibition before it opened.' Which statement is supported?",
+        "correct": "The speaker arrived at the exhibition before opening despite missing the first train.",
+        "wrong": [
+          "The speaker never reached the exhibition.",
+          "The exhibition opened before the speaker arrived.",
+          "The speaker traveled by bus instead of taking a later train."
+        ],
+        "exp": "The final clause explicitly states the speaker reached the exhibition before opening after taking the next train.",
+        "subject": "英文",
+        "sub_topic": "簡短敘述",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-簡短敘述",
+        "template_id": "ref-20261119-b9-en1-shortnarrative-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
