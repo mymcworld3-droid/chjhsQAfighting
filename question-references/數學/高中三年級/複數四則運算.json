@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261119-b3-math3-complex-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "設i²=−1，計算(2+3i)+(4−5i)。",
+        "correct": "6−2i",
+        "wrong": [
+          "6+8i",
+          "−2−2i",
+          "8−15i"
+        ],
+        "exp": "實部相加2+4=6，虛部係數相加3−5=−2，所以6−2i。",
+        "subject": "數學",
+        "sub_topic": "複數四則運算",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中三年級-複數四則運算",
+        "template_id": "ref-20261119-b3-math3-complex-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math3-complex-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "若z=1−2i，則z乘其共軛複數的值為何？",
+        "correct": "5",
+        "wrong": [
+          "−3",
+          "1−4i",
+          "3+4i"
+        ],
+        "exp": "共軛為1+2i；乘積(1−2i)(1+2i)=1−(2i)²=1+4=5。",
+        "subject": "數學",
+        "sub_topic": "複數四則運算",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中三年級-複數四則運算",
+        "template_id": "ref-20261119-b3-math3-complex-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261119-b3-math3-complex-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "重視題幹明確、可檢核的答案與推導",
+      "question": {
+        "q": "設i²=−1，複數(3+i)/(1−i)化簡為何？",
+        "correct": "1+2i",
+        "wrong": [
+          "1−2i",
+          "2+i",
+          "−1+2i"
+        ],
+        "exp": "分子分母同乘共軛1+i，得到(3+i)(1+i)/(1−i²)=(2+4i)/2=1+2i。",
+        "subject": "數學",
+        "sub_topic": "複數四則運算",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中三年級-複數四則運算",
+        "template_id": "ref-20261119-b3-math3-complex-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
