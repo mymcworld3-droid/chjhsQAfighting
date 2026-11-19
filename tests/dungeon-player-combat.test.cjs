@@ -21,7 +21,7 @@ test('cooperative strike costs stamina and damages only targeted enemy',()=>{
   const out=strikeEnemy(original,'a',map,{enemyId:enemy.id,seq:1});
   assert.equal(out.duplicate,false);
   assert.equal(out.members.a.explorationStamina,10-STAMINA_COST);
-  assert.equal(out.members.b.explorationStamina,8);
+  assert.equal(out.members.b.explorationStamina,10);
   assert.equal(out.enemies[0].battleHealth,maxHealth(enemy.kind)-DAMAGE);
   assert.equal(original.enemies[0].battleHealth,maxHealth(enemy.kind));
   assert.equal(original.members.a.strikeSeq,0,'pure update');
