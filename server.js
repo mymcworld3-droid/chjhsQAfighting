@@ -33,6 +33,8 @@ const { registerItemImageApi } = require('./item-image-api.cjs');
 const registerRaidRewardApi = require('./raid-reward-api.cjs');
 const registerRaidRoomApi = require('./raid-room-api.cjs');
 const registerDungeonRoomApi = require('./dungeon-room-api.cjs');
+const registerDungeonQuizApi = require('./dungeon-quiz-api.cjs');
+const dungeonQuiz = registerDungeonQuizApi.__test;
 const registerBattleRewardApi = require('./battle-reward-api.cjs');
 const registerDongtianSettlementApi = require('./dongtian-settlement-api.cjs');
 const registerImmortalsCleanupApi = require('./world-immortals-cleanup-api.cjs');
@@ -108,6 +110,7 @@ registerAdminArtifactDeleteApi(app);
 registerItemImageApi(app);
 registerRaidRoomApi(app);
 registerDungeonRoomApi(app);
+registerDungeonQuizApi(app);
 registerRaidRewardApi(app);
 registerBattleRewardApi(app);
 registerDongtianSettlementApi(app);
@@ -539,6 +542,7 @@ async function generateQuiz(req, res) {
     const raidTicketMode = raidQuickSimple || String(quizMode || '') === 'raid-standard';
     const enlightenmentMode = String(quizMode || '') === 'enlightenment-trial';
     const tacticalMode = String(quizMode || '') === 'tactical';
+    const dungeonMode = String(quizMode || '') === 'dungeon';
     // This mode is reachable only from an in-process authenticated prewarm job.
     const tacticalBankFill = String(quizMode || '') === 'tactical-bank-fill';
     if (tacticalBankFill) {
@@ -568,6 +572,7 @@ async function generateQuiz(req, res) {
     let enlightenmentContext = null;
     let adaptiveContext = null;
     let tacticalContext = null;
+    let dungeonContext = null;
     if (tacticalMode) {
         try {
             const uid = await verifyMainIdentity(req), db = playerRepository.resolve().db;
@@ -605,6 +610,50 @@ async function generateQuiz(req, res) {
             avoidQuestions=tacticalContext.history;avoidQuestionMeta=tacticalContext.historyMeta||[];
         } catch(error) {
             return res.status(error.status||503).json({error:error.status?error.message:'戰場題目準備失敗，請重試'});
+        }
+    }
+    if (dungeonMode) {
+        try {
+            // The input contains only the room identifier and a 0..4 preload
+            // offset. Scope, question index, history and difficulty come from
+            // the authenticated player in A and the assembled room in C.
+            const uid=await verifyMainIdentity(req), db=playerRepository.resolve().db;
+            const c=raidRepository.resolve().db;
+            const slot=Number(req.body?.slot??0);
+            dungeonContext={uid,db,...await dungeonQuiz.prepareQuestion(
+                db,c,uid,String(req.body?.roomId||''),slot)};
+            if(dungeonContext.pending)
+                return res.json({dungeonQuestion:dungeonContext.pending});
+            if(dungeonContext.bankSource){
+                const selected=tacticalSourceBankCatalog.load(dungeonContext.bankSource);
+                if(!selected.files.length)
+                    return res.status(404).json({error:'找不到所選題庫，請重新選擇範圍'});
+                const usable=selected.questions.filter(q=>
+                    Array.isArray(q.wrong)&&q.wrong.length===3&&
+                    typeof q.exp==='string'&&q.exp.trim());
+                if(!usable.length)
+                    return res.status(409).json({error:'所選題庫尚無具解析且完成校對的四選一題目'});
+                const match=usable.filter(q=>q.difficulty===dungeonContext.difficulty);
+                const available=match.length?match:usable;
+                const fresh=available.filter(q=>!dungeonContext.history.some(
+                    previous=>isTooSimilarQuestion(q.q,[previous])));
+                const list=fresh.length?fresh:available;
+                const parsed=list[crypto.randomInt(list.length)];
+                if(!dungeonContext.subject)
+                    dungeonContext.subject=String(parsed.subject||'題庫').slice(0,40);
+                const question=await dungeonQuiz.commitQuestion(
+                    db,uid,dungeonContext,parsed);
+                return res.json({dungeonQuestion:question,provider:'selected-bank'});
+            }
+            subject=dungeonContext.subject;level=dungeonContext.level;rank=0;
+            difficulty=dungeonContext.difficulty;
+            specificTopic=dungeonContext.topic||'綜合測驗';topic=specificTopic;
+            knowledgeMap=null;
+            avoidQuestions=dungeonContext.history;
+            avoidQuestionMeta=dungeonContext.historyMeta||[];
+        }catch(error){
+            return res.status(error.status||503).json({
+                error:error.status?error.message:'副本題目準備失敗，請稍後重試'});
         }
     }
     if (raidTicketMode) {
@@ -718,17 +767,18 @@ async function generateQuiz(req, res) {
             adaptiveContext=await adaptiveLearning.prepare(req,{adaptiveScope:towerContext.adaptiveScope,adaptiveConceptId:towerContext.adaptiveConceptId||''});
             difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
         }catch(error){return res.status(error.status||503).json({error:error.status?error.message:'範圍分析暫未完成，請稍後重試'});}
-    }else if(tacticalMode&&tacticalContext?.adaptiveScope){
+    }else if((tacticalMode&&tacticalContext?.adaptiveScope)||(dungeonMode&&dungeonContext?.adaptiveScope)){
+        const practiceContext=tacticalMode?tacticalContext:dungeonContext;
         // The selected chapter uses the same diagnostic/review schedule and
         // facet-specific generation criteria as main's focused solo quiz.
         try {
             adaptiveContext=await adaptiveLearning.prepare(req,{
-                adaptiveScope:tacticalContext.adaptiveScope,
-                adaptivePending:tacticalContext.adaptivePending||[]
+                adaptiveScope:practiceContext.adaptiveScope,
+                adaptivePending:practiceContext.adaptivePending||[]
             });
             // Concurrent first/second slots request different plan targets.
             const choose=adaptiveContext.target;
-            adaptiveContext.target=index=>choose(index+(tacticalContext.batchSlot||0));
+            adaptiveContext.target=index=>choose(index+(tacticalMode?(tacticalContext.batchSlot||0):dungeonContext.slot||0));
             subject=adaptiveContext.scope.subject;
             level=adaptiveContext.scope.level;
             specificTopic=adaptiveContext.scope.topic;
@@ -749,10 +799,10 @@ async function generateQuiz(req, res) {
     }
     // Tactics consume the same independently approved, durable AI bank as solo.
     // PvE/PvP question answers remain server-only and are shuffled per battle.
-    let aiBankAllowed = aiQuestionBank.enabled && (tacticalMode || tacticalBankFill);
+    let aiBankAllowed = aiQuestionBank.enabled && (tacticalMode || dungeonMode || tacticalBankFill);
     // Match the solo source policy: custom focused units cannot receive
     // generic pre-reviewed bank items in lieu of their exact selected scope.
-    if(tacticalMode&&adaptiveContext&&(adaptiveContext.scope.path.includes('/自訂/')||adaptiveContext.scope.path.endsWith('/自訂')))
+    if((tacticalMode||dungeonMode)&&adaptiveContext&&(adaptiveContext.scope.path.includes('/自訂/')||adaptiveContext.scope.path.endsWith('/自訂')))
         aiBankAllowed=false;
     if (!correction && typeof aiQuestionBank !== 'undefined' && aiQuestionBank.enabled && (!quizMode || quizMode === 'solo')) {
         if (adaptiveContext) aiBankAllowed = !/\/自訂(?:\/|$)/.test(adaptiveContext.scope.path); // custom focused ranges never expand the AI bank
@@ -908,18 +958,19 @@ async function generateQuiz(req, res) {
     const requestedSession = String(quizSessionId || '');
     const sessionOwner = raidTicketMode ? `raid:${raidIdentity}:${raidRoomId}`
         : tacticalMode ? `tactical:${tacticalContext.uid}:${tacticalContext.roomId}`
+        : dungeonMode ? `dungeon:${dungeonContext.uid}:${dungeonContext.sessionKey}`
         : tacticalBankFill ? `tactical-bank:${aiQuestionBank.scopeCode(req.__trustedTacticalBankTarget)}`
         : enlightenmentMode ? `trial:${enlightenmentContext.uid}`
         : towerMode ? `tower:${towerContext.uid}:${towerContext.runId}`
         : avatarMode ? `avatar:${avatarContext.uid}:${avatarContext.runId}`
         : meditationMode ? `meditation:${meditationContext.uid}:${meditationContext.runId}`
         : /^[a-zA-Z0-9_-]{20,128}$/.test(requestedSession) ? `session:${requestedSession}` : '';
-    const useReferences = tacticalMode || tacticalBankFill;
+    const useReferences = tacticalMode || dungeonMode || tacticalBankFill;
     const referencesFor = facet => useReferences ? quizReferences({
         subject, level, topic:targetTopic, scope:adaptiveContext?.scope, facet, exclusions:scopeExclusions, referenceSeed:randomSeed
     }) : [];
     const spareKey = correction ? '' : quizSparePool.key({
-        owner: adaptiveContext ? 'adaptive:'+adaptiveContext.uid : sessionOwner, mode: tacticalMode?'tactical-references-v1':adaptiveContext?'adaptive-solo':String(quizMode || 'solo'), subject, level,
+        owner: adaptiveContext ? 'adaptive:'+adaptiveContext.uid : sessionOwner, mode: (tacticalMode||dungeonMode)?'tactical-references-v1':adaptiveContext?'adaptive-solo':String(quizMode || 'solo'), subject, level,
         topic: targetTopic, difficulty:adaptiveContext?'adaptive':difficulty, rank:adaptiveContext?'adaptive':rank,
         knowledge: adaptiveContext ? adaptiveContext.scope.scopeId+':'+adaptiveContext.plan.version : diagnosticInfo
     });
@@ -1088,7 +1139,7 @@ async function generateQuiz(req, res) {
                     }
                     // Expand on low stock. This runs after the cached question is returned
                     // and must not delay a player or replace the unanswered question.
-                    if (bankResult.count < (tacticalMode ? 5 : aiQuestionBank.LOW_WATER)) {
+                    if (bankResult.count < ((tacticalMode||dungeonMode) ? 5 : aiQuestionBank.LOW_WATER)) {
                         aiQuestionBank.schedule(bankTarget, async ()=>{
                             const more = await aiRouter.generateJSON(promptForTask(0), {
                                 task:'quiz-generate',parallel:false,timeoutMs:90000,
@@ -1114,6 +1165,13 @@ async function generateQuiz(req, res) {
                         await questionQualityAnalytics.recordGenerated(playerRepository.resolve().db, bankQuestion.q, difficulty)
                             .catch(()=>{});
                         return res.json({tacticalQuestion:question,provider:'ai-bank',model:'approved',fromAiBank:true});
+                    }
+                    if(dungeonMode){
+                        const question=await dungeonQuiz.commitQuestion(
+                            dungeonContext.db,dungeonContext.uid,dungeonContext,bankQuestion);
+                        await questionQualityAnalytics.recordGenerated(
+                            playerRepository.resolve().db,bankQuestion.q,difficulty).catch(()=>{});
+                        return res.json({dungeonQuestion:question,provider:'ai-bank',model:'approved',fromAiBank:true});
                     }
                     return soloResponse(bankQuestion, {provider:'ai-bank',model:'approved',fromAiBank:true});
                 }
@@ -1210,6 +1268,20 @@ async function generateQuiz(req, res) {
                 }
                 return res.json({tacticalQuestion:question});
             }
+            if (dungeonMode) {
+                const question=await dungeonQuiz.commitQuestion(
+                    dungeonContext.db,dungeonContext.uid,dungeonContext,parsed);
+                await trackDelivered();
+                if(tacticalArchiveTarget){
+                    const archive={...parsed};
+                    aiQuestionBank.schedule(tacticalArchiveTarget,async()=>{
+                        const verdict=independentReview||await reviewCandidate(
+                            archive,tacticalArchiveTarget,routed.model,deliveredFacet);
+                        await aiQuestionBank.publish(tacticalArchiveTarget,archive,verdict);
+                    });
+                }
+                return res.json({dungeonQuestion:question});
+            }
             if (meditationMode) {
                 const session = await meditationQuiz.createService({db:meditationContext.db}).commitQuestion(
                     meditationContext.uid,meditationContext,parsed);
@@ -1297,7 +1369,7 @@ async function generateQuiz(req, res) {
             // Parallel slot-1 generation can legitimately become stale when
             // the user answers slot 0 first. Return that conflict immediately
             // instead of buying three more API generations for a dead slot.
-            if(tacticalMode&&error?.status===409)
+            if((tacticalMode||dungeonMode)&&error?.status===409)
                 return res.status(409).json({error:error.message});
             console.error(`Attempt ${attempts + 1} failed:`, error.message);
             lastGenerationIssue = String(error?.message || '答案與解析不一致');
