@@ -6,6 +6,7 @@ on:
     paths:
       - 'public/cultivation/first-answer-guide.js'
       - 'public/cultivation/tactical-combat.js'
+      - 'public/cultivation/tactical-renderer.js'
       - 'public/cultivation/scope-fullscreen.js'
       - 'public/cultivation/curriculum-pages.js'
       - 'public/main-legacy.js'

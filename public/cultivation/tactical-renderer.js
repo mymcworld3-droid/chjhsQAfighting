@@ -856,6 +856,26 @@ export class TacticalRenderer{
       if(myTurn&&this.mode==='move')
         Threats.drawGuidance(c,this.threatPlan,viewport,reduced);
     }
+    // The newcomer guide highlights the ONE intended tile, not the whole
+    // movement range. It sits beneath actors and health bars, so the target
+    // glow cannot cover the hero or spirit beast.
+    const tutorialGuideStep=!this.preview&&s.mode==='pve'&&s.trial?.stage===1
+      ? window.firstAnswerGuideStep?.(this.uid) : -1;
+    const guideTarget=tutorialGuideStep===5?R.TUTORIAL_STAGE1?.move:
+      tutorialGuideStep===7?R.TUTORIAL_STAGE1?.enemy:null;
+    if(guideTarget&&!animating){
+      const x=ox+guideTarget.x*cell,y=oy+guideTarget.y*cell;
+      const alpha=reduced?.95:.68+.25*(.5+.5*Math.sin(now/330));
+      c.save();
+      c.strokeStyle='rgba(255,217,128,'+alpha.toFixed(3)+')';
+      c.lineWidth=Math.max(2.5,cell*.082);
+      c.shadowColor='#f5c768';c.shadowBlur=cell*.23;
+      c.strokeRect(x+cell*.12,y+cell*.12,cell*.76,cell*.76);
+      c.shadowBlur=0;
+      c.fillStyle='rgba(255,210,116,.14)';
+      c.fillRect(x+cell*.14,y+cell*.14,cell*.72,cell*.72);
+      c.restore();
+    }
     // Edge navigation badges are drawn below all characters and HP text.
     // They do not affect the threat, skill range or grid hit-testing rules.
     this.compassMarkers=!animating&&!this.preview?

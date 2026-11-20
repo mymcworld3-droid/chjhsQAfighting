@@ -59,3 +59,17 @@ test('a signed solo learning question may place its correct answer at A without 
   assert.equal(receipt.read('different-account',{proof,question:parsed.q,options},key),null);
   assert.equal(receipt.read(uid,{proof,question:parsed.q,options:['wrong',...options.slice(1)]},key),null);
 });
+
+test('first-stage target glows on the ground beneath hero, beast and their HP labels',()=>{
+  const {readFileSync}=require('node:fs'),{join}=require('node:path');
+  const src=readFileSync(join(__dirname,'../public/cultivation/tactical-renderer.js'),'utf8');
+  const start=src.indexOf('const tutorialGuideStep='),end=src.indexOf('// Edge navigation badges',start);
+  const actor=src.indexOf('// and BEFORE heroes and beasts',start);
+  assert.ok(start>=0&&end>start&&actor>end,'guide target is drawn before actor and HP rendering');
+  const block=src.slice(start,end);
+  assert.match(block,/tutorialGuideStep===5\?R\.TUTORIAL_STAGE1\?\.move/);
+  assert.match(block,/tutorialGuideStep===7\?R\.TUTORIAL_STAGE1\?\.enemy/);
+  assert.match(block,/c\.strokeRect\(/);
+  assert.match(block,/c\.restore\(\)/);
+  assert.doesNotMatch(block,/addEventListener|pointer-events|onSelect/);
+});
