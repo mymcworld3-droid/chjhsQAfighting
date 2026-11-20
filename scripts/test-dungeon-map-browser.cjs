@@ -780,7 +780,7 @@ async function main(){
     assert.equal(room.enemies[0].id,Boss.ID);
     for(const {page} of [a,b]){
       await page.locator('[data-dm-boss-health]:not([hidden])').waitFor();
-      assert.equal(await page.locator('[data-dm-boss-progress]').getAttribute('aria-valuemax'),'900');
+      assert.equal(await page.locator('[data-dm-boss-progress]').getAttribute('aria-valuemax'),String(Boss.HP));
       await page.waitForFunction(()=>{
         const canvas=document.querySelector('#dungeon-map-view [data-dm-world]');
         return canvas?.dataset.bossEffects==='active'&&
