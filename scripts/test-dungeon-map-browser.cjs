@@ -15,6 +15,7 @@ const Portal=require('../dungeon-portal-readiness.cjs');
 const Movement=require('../dungeon-movement.cjs');
 const Rescue=require('../dungeon-team-rescue.cjs');
 const Victory=require('../dungeon-victory-reward.cjs');
+const Manuals=require('../public/cultivation/manual-rules.js');
 const manualRecord={
   school:'sword',books:{'sword-wind':{exp:2500}},
   equipped:['wind-slash'],
@@ -149,12 +150,27 @@ app.post('/api/dungeon/quiz/next',(req,res)=>{
     return res.status(409).json({error:'review mismatch'});
   return res.json({ok:true,state:quizView(uid)});
 });
+// Account-side mastery data is fetched only after the dungeon's
+// authenticated, idempotent manuscript credit action.
+app.get('/api/tactical/manuals',(req,res)=>{
+  const uid=req.get('x-test-user');
+  requests.push('manuals-read');
+  if(!['a','b'].includes(uid))return res.status(403).json({error:'unauthorized'});
+  const state=clone(manualRecord);
+  state.books['sword-wind'].exp+=room?.manualExp?.[uid]?.['sword-wind']||0;
+  return res.json({ok:true,state:Manuals.publicState(state,6)});
+});
 app.post('/api/dungeon/room',(req,res)=>{
   const uid=req.get('x-test-user'),action=req.body.action;
   requests.push(action);
   const success=()=>res.json({ok:true,roomId:room?.id||null,room:currentRoom()});
   if(!['a','b'].includes(uid))return res.status(401).json({ok:false,error:'sign-in required'});
   if(action==='list-public')return res.json({ok:true,rooms:[]});
+  if(action==='claim-manual-exp'){
+    if(!room?.members?.[uid])return res.status(403).json({error:'not a participant'});
+    return res.json({ok:true,roomId:room.id,
+      manualProgress:{credited:{},pending:false}});
+  }
   if(action==='recent-victories'){
     const rewards=(victoryInbox[uid]||[]).map(row=>{
       const witness=victoryArchives.get(row.roomId),
@@ -214,6 +230,8 @@ app.post('/api/dungeon/room',(req,res)=>{
     room.battleStartedAtMs=Date.now();
      room.assembledAtMs=room.battleStartedAtMs;
     room.battleAppliedTick=0;
+    room.manualProgressSession=room.assembledAtMs;
+    room.manualExp={a:{'sword-wind':0},b:{}};
     room.enemyAiVersion=AI.ENEMY_AI_VERSION;
     const seeded=Objectives.spawn(map,AI.initialEnemies(map));
     room.enemies=seeded.enemies;room.dungeonProgress=seeded.progress;
@@ -460,6 +478,49 @@ async function main(){
       assert.equal(dims.stamina,'10');
       assert.equal(dims.obsolete,null,'retired panels must not be mounted');
     }
+    // The server alone publishes a verified per-book kill ledger. A's
+    // overlay must use the trial's book painting, XP animation, level bar
+    // and one 'spirit-pulse' per actual change, without alerting teammate B.
+    await a.page.evaluate(()=>{
+      window.__dungeonXpSounds=[];
+      window.QAGameAudio={play:(name)=>{
+        if(name==='spirit-pulse')window.__dungeonXpSounds.push(name);
+      }};
+    });
+    room.manualExp.a['sword-wind']=35;
+    room.revision++;publish();
+    const xpPopup=a.page.locator('#dungeon-map-view [data-manual-xp-toast]');
+    await xpPopup.waitFor({timeout:9000});
+    await a.page.locator('#dungeon-map-view [data-manual-progress-confirmed]')
+      .waitFor({timeout:9000});
+    const xpVisual=await a.page.evaluate(()=>{
+      const toast=document.querySelector('#dungeon-map-view [data-manual-xp-toast]');
+      return {
+        text:toast?.textContent,
+        artwork:toast?.querySelector('img')?.getAttribute('src'),
+        animation:getComputedStyle(toast).animationName,
+        progress:toast?.querySelector('[data-manual-xp-progress]')?.getAttribute('data-manual-xp-progress'),
+        soundEvents:window.__dungeonXpSounds||[],
+        pointerEvents:getComputedStyle(toast.closest('[data-manual-xp-host]')).pointerEvents
+      };
+    });
+    assert.match(xpVisual.text,/流風劍訣/);
+    assert.match(xpVisual.text,/\\+35 EXP/);
+    assert.match(xpVisual.text,/Lv\\./);
+    assert.equal(xpVisual.artwork,'/assets/books/sword-wind.png');
+    assert.equal(xpVisual.progress,'sword-wind');
+    assert.equal(xpVisual.pointerEvents,'none');
+    assert.match(xpVisual.animation,/tc-manual-xp-enter|none/);
+    assert.deepEqual(xpVisual.soundEvents,['spirit-pulse']);
+    assert.equal(await b.page.locator('#dungeon-map-view [data-manual-xp-toast]').count(),0,
+      'a teammate must not see another player manuscript credit');
+    assert.ok(requests.includes('claim-manual-exp'));
+    assert.ok(requests.includes('manuals-read'));
+    // Same ledger, higher revision: no invented second EXP popup or sound.
+    room.revision++;publish();
+    await a.page.waitForTimeout(150);
+    assert.deepEqual(await a.page.evaluate(()=>window.__dungeonXpSounds),
+      ['spirit-pulse']);
     assert.equal(room.dungeonArena,'exploration');
     assert.equal(Object.keys(room.members).length,2);
     const startPositions=clone(Object.fromEntries(
