@@ -53,9 +53,16 @@ const currentMap=()=>room?.dungeonArena==='boss'?
   Boss.mapFor('legacy:'+room.id):map;
 const quizState=Object.fromEntries(['a','b'].map(uid=>[uid,{answered:0,
   pending:{},reviews:{},lastReview:null,errorRefunds:[]}]));
-const question=(uid,n)=>({id:uid+'-q-'+n,q:'副本問道測試：請選出整數加法的正確算式。',
+const exclusionScope={path:'數學/高中二年級/上學期/數學',
+  detail:'平面向量內積',sub_topics:[]};
+const quizRevision={a:0,b:0},exclusionRules={a:[],b:[]};
+const question=(uid,n)=>({id:uid+'-q-'+n+
+  (uid==='a'&&n===0&&quizRevision.a?'-v'+quizRevision.a:''),
+  q:'副本問道測試：請選出整數加法的正確算式。'+
+    (uid==='a'&&n===0&&quizRevision.a?'（新範圍規則已套用）':''),
   opts:['2+3=3','2+3=4','2+3=5','2+3=6'],
-  subject:'數學',topic:'整數加法',difficulty:'easy'});
+  subject:'數學',topic:'整數加法',difficulty:'easy',
+  ...(uid==='a'&&n===0?{adaptive:{scope:exclusionScope}}:{})});
 const quizView=uid=>{
   const q=quizState[uid],index=q.answered;
   return {roomId:room.id,answered:index,question:q.pending[index]||null,
@@ -108,6 +115,35 @@ app.get('/cultivation/data/project-repository.js',(_req,res)=>res.type('text/jav
   "export const getMainUser=()=>({uid:sessionStorage.mockUid||'a'});"+
   "export const authenticatedMainFetch=(url,init={})=>fetch(url,{...init,headers:{...init.headers,'content-type':'application/json','x-test-user':getMainUser().uid}});"
 ));
+// The normal study/trial scope-rule editor is loaded in the real browser,
+ // while this endpoint mocks the same authenticated A revision and invalidates
+ // still-unanswered server-side questions before the next dungeon draw.
+app.post('/api/quiz/scope-exclusions',(req,res)=>{
+  const uid=req.get('x-test-user'),action=req.body?.action;
+  if(!room?.members?.[uid])return res.status(403).json({error:'not joined'});
+  if(JSON.stringify(req.body?.unit)!==JSON.stringify(exclusionScope))
+    return res.status(409).json({error:'scope changed'});
+  const rules=exclusionRules[uid];
+  if(action==='add'){
+    const text=String(req.body.text||'').trim();
+    if(text.length<4)return res.status(400).json({error:'invalid text'});
+    rules.push({id:'test-'+rules.length,text});
+    quizRevision[uid]++;
+    const q=quizState[uid];
+    for(const index of Object.keys(q.pending))
+      if(Number(index)>=q.answered)delete q.pending[index];
+    requests.push('scope-exclusion');
+  }else if(action==='remove'){
+    const i=rules.findIndex(r=>r.id===req.body.id);
+    if(i<0)return res.status(404).json({error:'not found'});
+    rules.splice(i,1);quizRevision[uid]++;
+    for(const index of Object.keys(quizState[uid].pending))
+      if(Number(index)>=quizState[uid].answered)delete quizState[uid].pending[index];
+    requests.push('scope-exclusion');
+  }
+  return res.json({ok:true,state:{scopeKey:'test',revision:'v'+quizRevision[uid],
+    rules:rules.map(r=>({...r,unitKey:'test'}))},rules});
+});
 app.post('/api/dungeon/quiz/state',(req,res)=>{
   const uid=req.get('x-test-user');requests.push('quiz-state');
   if(!room?.members?.[uid]||room.status!=='assembled')
@@ -677,6 +713,29 @@ async function main(){
     await stem.waitFor();
     assert.ok((await stem.textContent()).length>8);
     assert.equal(await a.page.locator('.dm-quiz-options button[data-dq="answer"]').count(),4);
+    const beforeBan=quizState.a.pending[0].id;
+    // The actual shared scope editor is used here, not a mocked battle-only
+    // component. Saving a rule invalidates C's ungraded question without
+    // counting an incorrect answer, costing stamina, or pausing teammate B.
+    await a.page.evaluate(async()=>import(
+      '/cultivation/quiz-scope-exclusion.js?v=20261120-battle-scope-parity-v1'));
+    await a.page.locator('[data-dq="scope-exclusion"]:visible').click();
+    await a.page.locator('#quiz-scope-exclusion-text').fill(
+      '此範圍不要再出三維向量內積的計算');
+    await a.page.locator('#quiz-scope-exclusion-dialog button:has-text("儲存禁出規則")').click();
+    await a.page.waitForFunction(()=>
+      document.querySelector('#quiz-scope-exclusion-dialog [role="status"]')
+        ?.textContent.includes('已儲存'));
+    await a.page.locator('#quiz-scope-exclusion-dialog button:has-text("關閉")').click();
+    await a.page.waitForFunction(()=>
+      document.querySelector('.dm-quiz-question')?.textContent
+        .includes('新範圍規則已套用'),null,{timeout:9000});
+    const afterBan=quizState.a.pending[0].id;
+    assert.notEqual(beforeBan,afterBan);
+    assert.equal(quizState.a.answered,0);
+    assert.equal(room.members.a.explorationStamina,savedStamina);
+    assert.equal(quizState.b.answered,0);
+    assert.ok(requests.includes('scope-exclusion'));
     assert.equal(await a.page.locator('.dm-quiz-panel [data-helper-panel],'+
       '.dm-quiz-panel [data-helper-toggle],.dm-quiz-panel [data-helper-input]').count(),0);
     await a.page.locator('.dm-quiz-panel [data-dq="whiteboard"]').click();
@@ -708,6 +767,7 @@ async function main(){
     await a.page.locator('[data-dq="answer"][data-choice="2"]').click();
     await a.page.locator('[data-dq="next"]:not([hidden])').waitFor();
     assert.match(await a.page.locator('.dm-quiz-explanation').innerText(),/加 3 等於 5/);
+    assert.match(await a.page.locator('.dm-quiz-cultivation').innerText(),/\+1 修為/);
     assert.equal(room.members.a.quizCreditSeq,1);
     assert.equal(room.members.a.explorationStamina,10,'correct +4 clamps to ten');
     assert.equal(room.members.b.explorationStamina,10);
@@ -717,7 +777,7 @@ async function main(){
       const response=await fetch('/api/dungeon/room',{method:'POST',
         headers:{'content-type':'application/json','x-test-user':'a'},
         body:JSON.stringify({action:'quiz-credit',roomId:'dungroom000001',
-          questionId:'a-q-0'})});
+          questionId:afterBan})});
       return response.status;
     });
     assert.equal(retryCredit,200);
