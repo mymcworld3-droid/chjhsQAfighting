@@ -22,6 +22,8 @@ on:
       - 'public/cultivation/dungeon-*.js'
       - 'public/styles/dungeon-lobby.css'
       - 'public/styles/dungeon-map-view.css'
+      - 'public/styles/quiz-scroll.css'
+      - 'public/index.html'
       - 'scripts/test-dungeon-map-browser.cjs'
       - '.github/workflows/dungeon-browser.yml'
   workflow_dispatch:
