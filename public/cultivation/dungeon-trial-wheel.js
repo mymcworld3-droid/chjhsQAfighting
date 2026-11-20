@@ -115,14 +115,14 @@ function wheelText(label,name,cost,art=''){
     if(image.getAttribute('src')!==art)image.src=art;
   }else image?.remove();
 }
-export function renderDungeonTrialWheel(wheel,{mode='attack',options=[],selected,
+export function renderDungeonTrialWheel(wheel,{mode='attack',options=[],moveOptions=[],selected,
   locked=false,stamina=0,focusCharges=0}={}){
   if(!wheel)return;
   const attacking=mode!=='move';
   const choices=wheel.querySelector('.tc-wheel-options');
   const shown=attacking?(options.length?options:[{
     value:'basic',name:'普通攻擊',cost:2
-  }]):[{value:'player',name:'玩家',cost:'1 體力/格'}];
+  }]):(moveOptions.length?moveOptions:[{value:'player',name:'角色',cost:'1 體力/格'}]);
   const key=shown.map(item=>item.value).join('|');
   const count=shown.length;
   if(choices.dataset.choices!==key){
@@ -180,7 +180,7 @@ export function renderDungeonTrialWheel(wheel,{mode='attack',options=[],selected
   setSlider(wheel,'detail',count,detailAngle);
   wheel.setAttribute('aria-label',attacking?
     '行動：攻擊，'+selection.name+'，'+cost:
-    '行動：移動，目標：玩家，1 體力/格');
+    '行動：移動，目標：'+selection.name+'，'+cost);
   return selection.value;
 }
 export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick}={}){
