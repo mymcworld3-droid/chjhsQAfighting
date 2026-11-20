@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-geo3-regionvariance-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用空間資料、標準化比率與地區條件建立推論，避免過度概括",
+      "question": {
+        "q": "甲區人口2萬、診所8間；乙區人口5萬、診所15間。若只比較每萬人口的診所數，哪區較高？",
+        "correct": "甲區每萬人4間，高於乙區3間",
+        "wrong": [
+          "乙區每萬人15間，高於甲區8間",
+          "兩區每萬人診所數相同",
+          "甲區每萬人2間，乙區每萬人5間"
+        ],
+        "exp": "甲區8/2=每萬人4間；乙區15/5=每萬人3間，甲的人均診所密度較高。",
+        "subject": "地理",
+        "sub_topic": "區域差異",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geography-高中三年級-區域差異",
+        "template_id": "ref-20261120-b12-geo3-regionvariance-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-geo3-regionvariance-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用空間資料、標準化比率與地區條件建立推論，避免過度概括",
+      "question": {
+        "q": "比較山區與平原地區的救護車到達時間，哪項分析最能反映區域差異而避免錯誤歸因？",
+        "correct": "以實際路網、道路狀況、人口分布與服務據點位置共同評估",
+        "wrong": [
+          "只比較兩區政府辦公室的直線距離就可推定救護到達時間",
+          "只看地區面積即可排除道路與醫療資源的影響",
+          "因山區地形較複雜，便可假定每筆出勤時間都一定比平原長"
+        ],
+        "exp": "救護可近性取決於路網、地形、交通和據點，不只與直線距離或行政面積相關。",
+        "subject": "地理",
+        "sub_topic": "區域差異",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geography-高中三年級-區域差異",
+        "template_id": "ref-20261120-b12-geo3-regionvariance-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-geo3-regionvariance-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用空間資料、標準化比率與地區條件建立推論，避免過度概括",
+      "question": {
+        "q": "兩地農業年產量相同，但甲地種植高度依賴單一作物，乙地作物種類較多。若市場價格波動與病蟲害條件可能改變，何項比較較有根據？",
+        "correct": "甲地可能對該單一作物價格或專一性病害更敏感，但須進一步評估",
+        "wrong": [
+          "年產量相同表示兩地未來收入波動必完全一致",
+          "乙地作物種類較多，就能保證任何災害都不造成損失",
+          "甲地只種一種作物，因此不需要考慮市場或氣候風險"
+        ],
+        "exp": "產業或作物集中度可能影響市場與環境風險暴露；年產量相同並不足以推論韌性相同。",
+        "subject": "地理",
+        "sub_topic": "區域差異",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geography-高中三年級-區域差異",
+        "template_id": "ref-20261120-b12-geo3-regionvariance-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
