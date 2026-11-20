@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-chem1-crystals-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "結合結構、平衡與滴定計量，解析說明各條件及適用範圍",
+      "question": {
+        "q": "固態NaCl與固態蔗糖皆是晶體。若比較構成粒子，下列何者最正確？",
+        "correct": "NaCl晶體由正、負離子排列；蔗糖晶體主要由分子排列",
+        "wrong": [
+          "兩者皆由獨立的NaCl或蔗糖離子作為唯一單位",
+          "兩者皆是單一元素的金屬晶體",
+          "NaCl晶體由中性NaCl分子排列，蔗糖晶體由原子核直接排列"
+        ],
+        "exp": "NaCl為離子晶體，以Na⁺與Cl⁻形成晶格；蔗糖則為分子晶體，由完整分子透過分子間作用力凝聚。",
+        "subject": "化學",
+        "sub_topic": "分子與晶體",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-分子與晶體",
+        "template_id": "ref-20261120-b12-chem1-crystals-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chem1-crystals-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "結合結構、平衡與滴定計量，解析說明各條件及適用範圍",
+      "question": {
+        "q": "同一溫度下，固態NaCl通常不導電，但熔融NaCl能導電。下列解釋何者最適當？",
+        "correct": "熔融後Na⁺及Cl⁻可移動，能攜帶電荷",
+        "wrong": [
+          "熔融時所有Na⁺與Cl⁻都變成自由電子",
+          "固態NaCl中的離子不存在，所以不能導電",
+          "熔融使NaCl必定完全變成金屬鈉與氯氣"
+        ],
+        "exp": "固態離子受晶格限制，無法大範圍遷移；熔融後可移動離子傳導電流，不必發生分解反應。",
+        "subject": "化學",
+        "sub_topic": "分子與晶體",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-分子與晶體",
+        "template_id": "ref-20261120-b12-chem1-crystals-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chem1-crystals-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "結合結構、平衡與滴定計量，解析說明各條件及適用範圍",
+      "question": {
+        "q": "石墨與鑽石皆由碳元素構成，卻具有不同硬度與導電性。哪個原因最能解釋差異？",
+        "correct": "碳原子鍵結方式與空間排列不同，造成物性差異",
+        "wrong": [
+          "兩者化學元素不同，才有不同物性",
+          "兩者只因樣品質量不同，原子鍵結必然相同",
+          "石墨由氧化碳分子構成，鑽石由氮氣分子構成"
+        ],
+        "exp": "石墨主要是層狀共價結構、具有可移動的電子；鑽石為三維共價網絡，結構差異影響硬度與導電性。",
+        "subject": "化學",
+        "sub_topic": "分子與晶體",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-分子與晶體",
+        "template_id": "ref-20261120-b12-chem1-crystals-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
