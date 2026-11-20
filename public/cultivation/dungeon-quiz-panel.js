@@ -29,7 +29,7 @@ export class DungeonQuizPanel{
     // Trial-style quiz and shared learning system, but NO 問道助手.
     // Question complaints use server-side evidence, never a client answer key.
     panel.innerHTML='<section class="dm-quiz-sheet">'+
-      '<header class="dm-quiz-top"><div><small>青雲問道 · 問道試煉</small>'+
+      '<header class="dm-quiz-top"><div><small>青雲問道 · 合作副本</small>'+
       '<h3>答題充能</h3></div>'+
       '<button type="button" data-dq="collapse" aria-label="返回戰場">返回戰場</button></header>'+
       '<p class="dm-quiz-info">答對恢復 4 體力，答錯恢復 1 體力（上限 10）。'+
@@ -37,6 +37,7 @@ export class DungeonQuizPanel{
       '<div class="dm-quiz-toolbar"><span data-dq="scope">依選擇的學習範圍出題</span>'+
       '<div class="dm-quiz-tools">'+
       '<button type="button" data-dq="report-toggle" aria-expanded="false">題目有錯</button>'+
+      '<button type="button" data-dq="scope-exclusion" hidden>此題超過學習範圍</button>'+
       '<button type="button" data-dq="whiteboard" aria-expanded="false">計算白板</button></div></div>'+
       '<section class="dm-quiz-report" data-dq="report-panel" hidden aria-label="回報題目錯誤">'+
       '<label for="dm-quiz-report-reason">請具體指出題幹、選項、計算或排版上的錯誤</label>'+
@@ -75,6 +76,7 @@ export class DungeonQuizPanel{
         this.toggleWhiteboard(action==='whiteboard'?undefined:false);
       else if(action==='whiteboard-clear')this.clearWhiteboard();
       else if(action==='report-toggle')this.toggleReport();
+      else if(action==='scope-exclusion')this.openScopeExclusion();
       else if(action==='report-close')this.toggleReport(false);
       else if(action==='report-submit')void this.sendReport();
       else if(action==='correction')void this.queueCorrection();
@@ -209,6 +211,47 @@ export class DungeonQuizPanel{
     if(window.currentTacticalQuiz===this.learningQuiz)window.currentTacticalQuiz=null;
     this.root.querySelector('[data-dm="quiz"]')?.focus({preventScroll:true});
   }
+  openScopeExclusion(){
+    const item=this.review||this.question;
+    if(!this.valid()||!this.visible||!item?.adaptive?.scope?.path||
+        this.answering||this.reportBusy)return;
+    const epoch=this.epoch,account=this.uid,roomId=this.roomId;
+    const questionId=item.questionId||item.id;
+    const current=()=>this.valid(epoch)&&this.uid===account&&
+      this.roomId===roomId&&this.visible&&
+      (this.review?.questionId||this.question?.id)===questionId;
+    if(typeof window.openQuizScopeExclusion!=='function'){
+      this.reportStatus('學習範圍管理介面尚未載入，請重新整理頁面。');
+      return;
+    }
+    void window.openQuizScopeExclusion({
+      mode:'dungeon',quiz:{data:{q:item.q},adaptive:item.adaptive},
+      answered:!!this.review,isCurrent:current,
+      onUpdated:()=>{
+        if(!current())return;
+        // The server scope version invalidates old queued questions and
+        // in-flight commits. The view must discard its own old question
+        // and any promises that were racing the saved exclusion revision.
+        ++this.epoch;
+        this.loading=false;this.prefetching=false;this.warming=false;
+        this.warmUntil=0;
+        if(!this.review){
+          this.question=null;
+          if(window.currentTacticalQuiz===this.learningQuiz)
+            window.currentTacticalQuiz=null;
+          this.learningQuiz=null;
+          this.reportOpen=false;this.errorMessage='';
+          this.reportStatus('已更新禁出規則，本題不計錯，正在重新取得題目。');
+          this.clearWhiteboard();this.paint();
+          void this.load();
+        }else{
+          // Never discard an already graded review and its explanation.
+          this.reportStatus('禁出規則已更新，從下一題開始套用。');
+          this.paint();
+        }
+      }
+    });
+  }
   toggleReport(force){
     const item=this.review||this.question;
     if(!this.valid()||!this.visible||!item||this.reportBusy)return;
@@ -267,6 +310,9 @@ export class DungeonQuizPanel{
     report.hidden=!this.visible||!item||!this.reportOpen;
     this.$('report-toggle').hidden=!this.visible||!item;
     this.$('report-toggle').setAttribute('aria-expanded',String(!report.hidden));
+    const exclude=this.$('scope-exclusion');
+    exclude.hidden=!this.visible||!item?.adaptive?.scope?.path;
+    exclude.disabled=this.answering||this.reportBusy;
     this.$('report-submit').disabled=this.reportBusy;
     this.$('report-submit').textContent=this.reportBusy?'獨立審核中…':'送交獨立審核';
     if(!this.visible)return;
@@ -331,6 +377,15 @@ export class DungeonQuizPanel{
           (r.correct?'答對':'答錯')+
             (this.isAdmin?' · 管理員體力固定 10/10':' · 體力 +'+r.amount);
       feedback.append(heading);
+      if(!r.skipped&&Number.isFinite(Number(r.reward?.cultivation))){
+        const reward=document.createElement('p');
+        reward.className='dm-quiz-cultivation';
+        const amount=Number(r.reward.cultivation);
+        reward.textContent=(r.errorConfirmed?'原始作答：':'本題獲得：')+
+          (amount>=0?'+':'')+amount+' 修為'+
+          (r.errorConfirmed?'（錯題補償另行結算）':'');
+        feedback.append(reward);
+      }
       const explanation=document.createElement('section');
       explanation.className='dm-quiz-explanation';
       const label=document.createElement('strong');label.textContent='解析';
