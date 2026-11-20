@@ -17,7 +17,8 @@ export function nextManualExpedition(state,requestedBookId,rules) {
   if(!enemyRealm||!Number.isFinite(Number(enemyRealm.exp))||enemyRealm.exp<=0)return null;
   const activeIndex=Number.isInteger(state.activeLoadout)&&state.activeLoadout>=0&&
     state.activeLoadout<(state.loadouts?.length||0)?state.activeLoadout:0;
-  const active=state.loadouts?.[activeIndex]?.skillIds||state.equipped||[];
+  const active=Array.isArray(state.weaponIds)?state.equipped||[]:
+    state.loadouts?.[activeIndex]?.skillIds||state.equipped||[];
   const equipped=Array.isArray(active)?active:[];
   const enabledSkills=(book.skills||[]).filter(skill=>skill.unlocked);
   const activeSkill=enabledSkills.find(skill=>equipped.includes(skill.id))||null;
@@ -43,7 +44,8 @@ export function nextManualExpedition(state,requestedBookId,rules) {
     targetLevel:anticipation?.targetLevel||null,
     remaining:upcoming,estimatedKills:kills,
     path,action,activeSkillName:activeSkill?.name||null,
-    activeLoadout:activeIndex,activeLoadoutName:state.loadouts?.[activeIndex]?.name||('配置 '+(activeIndex+1)),
+    activeLoadout:activeIndex,activeLoadoutName:Array.isArray(state.weaponIds)?'三武器裝備':
+      state.loadouts?.[activeIndex]?.name||('配置 '+(activeIndex+1)),
     title,nextGoal,unlockedSkills:enabledSkills.length
   };
 }
