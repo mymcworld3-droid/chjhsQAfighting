@@ -923,10 +923,11 @@ async function main(){
         assert.match(layout.charging.background,/gradient/,'charging surface is a green gradient');
         assert.equal(layout.charging.ready,!layout.charging.disabled,'pulse only appears when quiz is actionable');
         if(layout.charging.ready)assert.equal(layout.charging.animation,'tc-charge-ready-pulse');
-        for(const required of ['attack','beastToggle','close','end','loadoutToggle','move','quiz','wheelAction'])
+        for(const required of ['attack','beastToggle','close','end','loadoutToggle','move','quiz'])
           assert(layout.visible.includes(required),'missing '+required+' control');
         assert.equal(await quick.locator('.tc-quarter-energy .tc-left-move').count(),1,'movement is on left');
-        assert.equal(await quick.locator('.tc-open-weapon-ring').isVisible(),true,'weapons are on right outer ring');
+        assert.equal(await quick.locator('.tc-weapon-outer-choices .tc-weapon-sector').count(),3,'three weapon stations exist');
+        assert.equal(await quick.locator('.tc-open-weapon-ring').count(),1,'outer weapon ring is accessible even when the tutorial has expanded it');
         assert.ok(Math.abs(layout.energy.x)<.015&&Math.abs(layout.energy.y+layout.energy.h-1)<.015);
         assert.ok(Math.abs(layout.actions.x+layout.actions.w-1)<.015&&Math.abs(layout.actions.y+layout.actions.h-1)<.015);
         assert.ok(Math.abs(layout.map.x)<.015&&Math.abs(layout.map.y)<.015);
@@ -969,7 +970,8 @@ async function main(){
       await quick.waitForFunction(()=>
         document.querySelector('[data-energy-number]')?.textContent==='8'&&
         document.querySelector('[data-quiz]')?.classList.contains('is-charge-ready'));
-      await quick.locator('[data-wheel-action="attack-ring"]').first().click();
+      if(await quick.locator('.tc-weapon-outer-choices').isHidden())
+        await quick.locator('[data-wheel-action="attack-ring"]:visible').first().click();
       assert.equal(await quick.locator('[data-weapon-choice="sword-wind"]').count(),1);
       await quick.locator('[data-weapon-choice="sword-wind"]').click();
       assert.equal(await quick.locator('[data-wheel-choice^="manual:"]').count(),3);
