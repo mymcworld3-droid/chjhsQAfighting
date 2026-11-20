@@ -53,9 +53,14 @@ function view(state,creditedThrough=0){
   const reviews=Object.entries(state.reviews||{}).map(([id,r])=>({
     id,index:r.index,amount:r.amount,correct:r.correct
   })).filter(r=>r.index>creditedThrough).sort((a,b)=>a.index-b.index);
+  const errorRefunds=Object.entries(state.errorReports||{})
+    .filter(([id,claim])=>claim?.approved===true&&!claim.skipped&&
+      state.reviews?.[id]?.correct===false)
+    .map(([id,claim])=>({id,index:claim.index}));
   return {roomId:state.roomId,sessionKey:state.sessionKey,
     answered:index,stock,question:publicQuestion(questions[index]),
-    lastReview:state.lastReview||null,pendingCredits:reviews};
+    lastReview:state.lastReview||null,pendingCredits:reviews,
+    errorRefunds:errorRefunds.slice(-128)};
 }
 async function state(dbA,dbC,uid,roomId,now=Date.now()){
   const {room,sessionKey}=await session(dbC,uid,roomId,now);
@@ -290,6 +295,12 @@ function register(app,{resolveA=()=>playerRepository.resolve(),
     await answer(a,c,uid,req.body,now)));
   app.post('/api/dungeon/quiz/next',route(async(a,c,uid,req,now)=>
     await acknowledge(a,c,uid,req.body,now)));
+  const errors=require('./dungeon-question-report.cjs');
+  app.post('/api/dungeon/quiz/report',route(async(a,c,uid,req,now)=>
+    await errors.report(a,c,uid,req.body,now)));
+  app.post('/api/dungeon/quiz/review-math-issue',
+    route(async(a,c,uid,req,now)=>
+      await errors.reviewMath(a,c,uid,req.body,now)));
 }
 module.exports=register;
 module.exports.__test={COLLECTION,MAX_BUFFER,validSession,session,matching,view,
