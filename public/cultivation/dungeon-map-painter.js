@@ -233,7 +233,8 @@ export function drawWorld(ctx,map,camera,width,height,
     ctx.restore();
   }
   if(map.arena==='boss'){
-    marker(map.spawn,'隊伍入口','#9edbc9','●');
+    // The player sprites already mark the party entrance. An extra old
+    // circular spawn marker would sit directly over their bodies.
   }else{
     if(objectives?.guardianStatus==='defeated')
       marker(map.guardianSite,'守鑰已破','#d4b46b','✦');
@@ -244,7 +245,7 @@ export function drawWorld(ctx,map,camera,width,height,
       portalOpen?'首領傳送門':portalReady?'可啟動傳送陣':'封印傳送陣',
       portalOpen?'#b5a5ff':portalReady?'#82e5db':'#8e9e99',
       portalOpen?'✦':'◇');
-    marker(map.spawn,'起點','#bde9ab','●');
+    // Do not draw the old round start marker under the player avatar.
   }
   // Render hostile creatures beneath player markers so characters remain
   // visible when the AI reaches melee distance (no damage in stage 9).
@@ -363,13 +364,14 @@ export function drawWorld(ctx,map,camera,width,height,
     const playerArt=sex==='female'?art?.female:art?.male;
     const painted=cell>=10&&atlas(ctx,playerArt,0,0,112,
       sx-cell*.55,sy-cell*.77,cell*1.10,cell*1.10);
-    ctx.beginPath();ctx.arc(sx,sy,radius,0,Math.PI*2);
-    if(!painted){ctx.fillStyle=partyColors[index];ctx.fill();}
-    ctx.strokeStyle=member.uid===selfUid?'#fff5d1':partyColors[index];
-    ctx.lineWidth=member.uid===selfUid?2:1.4;ctx.stroke();
-    if(member.uid===selfUid){
-      ctx.beginPath();ctx.arc(sx,sy,radius+3,0,Math.PI*2);
-      ctx.strokeStyle='#fff5d1';ctx.lineWidth=1.5;ctx.stroke();
+    // Do not retain the legacy circular player token/selection rings behind
+    // a successfully drawn character sprite. Keep a fallback only when the
+    // image atlas has failed to load so nobody becomes invisible.
+    if(!painted){
+      ctx.beginPath();ctx.arc(sx,sy,radius,0,Math.PI*2);
+      ctx.fillStyle=partyColors[index];ctx.fill();
+      ctx.strokeStyle=member.uid===selfUid?'#fff5d1':partyColors[index];
+      ctx.lineWidth=member.uid===selfUid?2:1.4;ctx.stroke();
     }
     const healthMax=Number.isSafeInteger(member.battleMaxHealth)&&
       member.battleMaxHealth>0?member.battleMaxHealth:100;
