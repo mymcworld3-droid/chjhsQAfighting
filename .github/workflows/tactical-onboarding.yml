@@ -10,6 +10,7 @@ on:
       - 'public/cultivation/curriculum-pages.js'
       - 'public/main-legacy.js'
       - 'public/main.js'
+      - 'public/styles/first-visit.css'
       - 'public/module-versions.json'
       - 'tests/first-answer-guide.test.cjs'
       - 'tests/tactical-quarter-camera.test.cjs'
