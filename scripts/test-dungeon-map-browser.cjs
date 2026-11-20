@@ -52,7 +52,7 @@ function archiveVictory(){
 const currentMap=()=>room?.dungeonArena==='boss'?
   Boss.mapFor('legacy:'+room.id):map;
 const quizState=Object.fromEntries(['a','b'].map(uid=>[uid,{answered:0,
-  pending:{},reviews:{},lastReview:null}]));
+  pending:{},reviews:{},lastReview:null,errorRefunds:[]}]));
 const question=(uid,n)=>({id:uid+'-q-'+n,q:'副本問道測試：請選出整數加法的正確算式。',
   opts:['2+3=3','2+3=4','2+3=5','2+3=6'],
   subject:'數學',topic:'整數加法',difficulty:'easy'});
@@ -60,7 +60,7 @@ const quizView=uid=>{
   const q=quizState[uid],index=q.answered;
   return {roomId:room.id,answered:index,question:q.pending[index]||null,
     stock:Object.keys(q.pending).filter(k=>Number(k)>=index&&Number(k)<index+5).length,
-    lastReview:q.lastReview,
+    lastReview:q.lastReview,errorRefunds:q.errorRefunds,
     pendingCredits:Object.entries(q.reviews).filter(([,r])=>r.index>
       (room.members[uid].quizCreditSeq||0)).map(([id,r])=>({
         id,index:r.index,amount:r.amount,correct:r.correct
@@ -139,6 +139,29 @@ app.post('/api/dungeon/quiz/answer',(req,res)=>{
   s.reviews[q.id]=review;s.lastReview=review;delete s.pending[s.answered];
   s.answered++;return res.json({ok:true,review,state:quizView(uid)});
 });
+app.post('/api/dungeon/quiz/report',(req,res)=>{
+  const uid=req.get('x-test-user'),state=quizState[uid];
+  requests.push('quiz-report');
+  if(!room?.members?.[uid]||!state||room.status!=='assembled')
+    return res.status(403).json({error:'not joined'});
+  const reason=String(req.body?.reason||'').trim();
+  if(reason.length<6)return res.status(400).json({error:'至少六字'});
+  const questionId=req.body?.questionId;
+  if(state.lastReview?.questionId!==questionId)
+    return res.status(409).json({error:'not reviewed'});
+  const old=state.errorRefunds.find(row=>row.id===questionId);
+  if(!old){
+    const corrected={...state.lastReview,errorConfirmed:true};
+    state.lastReview=corrected;state.reviews[questionId]=corrected;
+    if(!corrected.correct)
+      state.errorRefunds.push({id:questionId,index:corrected.index});
+  }
+  return res.json({ok:true,status:old?'duplicate':'confirmed',
+    valid:true,compensated:!old,cultivationAdded:old?0:1,
+    skipped:false,state:quizView(uid)});
+});
+app.post('/api/dungeon/quiz/review-math-issue',(req,res)=>
+  res.json({ok:true,status:'submitted',submitted:true}));
 app.post('/api/dungeon/quiz/next',(req,res)=>{
   const uid=req.get('x-test-user'),s=quizState[uid];
   requests.push('quiz-next');
@@ -212,6 +235,21 @@ app.post('/api/dungeon/room',(req,res)=>{
     return res.json({ok:true,roomId:room.id,clock:currentRoom().battleClock});
   }
   if(action==='heartbeat')return res.json({ok:true,roomId:room.id,revision:room.revision});
+  if(action==='quiz-error-refund'){
+    const proof=quizState[uid].errorRefunds.find(v=>v.id===req.body.questionId);
+    const receipt=room.members[uid].lastQuizErrorRefund;
+    if(!proof)return res.status(403).json({ok:false,error:'not independently verified'});
+    if(room.members[uid].quizCreditSeq<proof.index)
+      return res.status(409).json({ok:false,error:'quiz credit pending'});
+    if(!receipt||receipt.questionId!==proof.id){
+      const member=room.members[uid];
+      const gained=Math.min(10-member.explorationStamina,3);
+      member.explorationStamina+=gained;
+      member.lastQuizErrorRefund={questionId:proof.id,granted:gained,nominal:3};
+      room.revision++;publish();
+    }
+    return success();
+  }
   if(action==='subscribe'){
     res.set({'Content-Type':'text/event-stream','Cache-Control':'no-cache'});
     res.flushHeaders?.();
@@ -683,6 +721,64 @@ async function main(){
     assert.equal(retryCredit,200);
     assert.equal(room.members.a.explorationStamina,10);
     assert.equal(room.members.a.quizCreditSeq,1);
+    // Real browser parity: no helper, correction goes to the shared queue,
+    // manual report uses the trusted backend and C-side refund is repeatable.
+    await a.page.evaluate(()=>{
+      window.__dungeonCorrections=[];
+      window.__dungeonLearning=[];
+      window.queueTacticalSoloCorrection=async payload=>{
+        window.__dungeonCorrections.push(payload);return {ok:true};
+      };
+      const original=window.QAAdaptiveLearning?.render;
+      window.QAAdaptiveLearning={...window.QAAdaptiveLearning,
+        render:(quiz,host)=>{
+          window.__dungeonLearning.push({id:quiz.id,topic:quiz.learningTopic,
+            attached:host?.classList.contains('dm-quiz-question')});
+          original?.(quiz,host);
+        }};
+    });
+    await charge.click();
+    await a.page.locator('[data-dq="next"]:not([hidden])').click();
+    await a.page.locator('[data-dq="answer"][data-choice="0"]').waitFor();
+    await a.page.locator('[data-dq="answer"][data-choice="0"]').click();
+    const correction=a.page.locator('[data-dq="correction"]');
+    await correction.waitFor({timeout:8000});
+    assert.equal(await a.page.locator('[data-dq="report-toggle"]').count(),1);
+    assert.equal(await a.page.locator('[data-helper-toggle],[data-helper-input]').count(),0);
+    await correction.click();
+    await a.page.waitForFunction(()=>window.__dungeonCorrections?.length===1);
+    assert.match(await correction.innerText(),/已加入共用待答題庫/);
+    const corr=await a.page.evaluate(()=>window.__dungeonCorrections[0]);
+    assert.ok(corr.question.includes('整數加法'));
+    assert.equal(corr.topic,'整數加法');
+    assert.ok((await a.page.evaluate(()=>window.__dungeonLearning))
+      .some(v=>v.id==='a-q-1'&&v.attached));
+    // The actual C-room world keeps updating while the question form is open.
+    room.members.a.explorationStamina=7;room.revision++;publish();
+    await a.page.locator('[data-dq="report-toggle"]').click();
+    await a.page.locator('[data-dq="report-reason"]')
+      .fill('此題的題目條件不足，應獨立確認後補償體力。');
+    await a.page.locator('[data-dq="report-submit"]').click();
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-dq="report-status"]')?.textContent.includes('已確認'),
+      null,{timeout:9000});
+    await a.page.waitForFunction(()=>
+      document.querySelector('[data-dm-energy]')?.textContent==='10',
+      null,{timeout:9000});
+    assert.equal(room.members.a.lastQuizErrorRefund.questionId,'a-q-1');
+    assert.equal(room.members.a.lastQuizErrorRefund.granted,3);
+    assert.equal(room.members.a.quizCreditSeq,2);
+    const refunded=room.members.a.explorationStamina;
+    const repeated=await a.page.evaluate(async()=>{
+      const response=await fetch('/api/dungeon/room',{
+        method:'POST',headers:{'content-type':'application/json','x-test-user':'a'},
+        body:JSON.stringify({action:'quiz-error-refund',
+          roomId:'dungroom000001',questionId:'a-q-1'})});
+      return response.status;
+    });
+    assert.equal(repeated,200);
+    assert.equal(room.members.a.explorationStamina,refunded);
+    await a.page.locator('[data-dq="collapse"]').click();
 
     // Regression for the reported real-game symptom: four-step shove must
     // traverse FOUR clear tiles when no beast, teammate or wall is ahead.
