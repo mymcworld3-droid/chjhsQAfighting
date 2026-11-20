@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-m2-bayes-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "針對常見計算與推論迷思設計可檢驗的單一正解",
+      "question": {
+        "q": "某零件有1%的不良率。檢測不良品的陽性率為90%，良品的誤報陽性率為5%。若檢測結果為陽性，零件實際不良的機率為何？",
+        "correct": "2/13",
+        "wrong": [
+          "9/10",
+          "1/20",
+          "9/100"
+        ],
+        "exp": "P(不良且陽)=0.01×0.90=0.009，P(良且陽)=0.99×0.05=0.0495，所以P(不良|陽)=0.009/(0.009+0.0495)=2/13。",
+        "subject": "數學",
+        "sub_topic": "貝氏定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h2-貝氏定理",
+        "template_id": "ref-20261120-b12-m2-bayes-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-m2-bayes-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "針對常見計算與推論迷思設計可檢驗的單一正解",
+      "question": {
+        "q": "甲廠供應70%零件、不良率2%；乙廠供應30%、不良率6%。若抽到一個不良零件，來自甲廠的機率為何？",
+        "correct": "7/16",
+        "wrong": [
+          "7/10",
+          "1/4",
+          "3/8"
+        ],
+        "exp": "甲廠且不良的機率0.7×0.02=0.014；乙廠且不良為0.3×0.06=0.018，故後驗機率=0.014/0.032=7/16。",
+        "subject": "數學",
+        "sub_topic": "貝氏定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h2-貝氏定理",
+        "template_id": "ref-20261120-b12-m2-bayes-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-m2-bayes-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "針對常見計算與推論迷思設計可檢驗的單一正解",
+      "question": {
+        "q": "先以相同機率選甲袋或乙袋，各抽一球。甲袋紅球占3/4，乙袋紅球占1/4。已知抽到紅球，原先選甲袋的機率為何？",
+        "correct": "3/4",
+        "wrong": [
+          "1/2",
+          "1/4",
+          "3/8"
+        ],
+        "exp": "兩袋先驗各1/2。甲袋且抽紅機率(1/2)(3/4)=3/8，乙袋且抽紅(1/2)(1/4)=1/8；給定紅球後甲袋機率(3/8)/(4/8)=3/4。",
+        "subject": "數學",
+        "sub_topic": "貝氏定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h2-貝氏定理",
+        "template_id": "ref-20261120-b12-m2-bayes-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
