@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-bio2-plantrepro-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "兼顧生態數量關係、生理機制與演化條件，避免以個體意志取代自然選擇",
+      "question": {
+        "q": "被子植物授粉且完成受精後，一般而言胚珠與子房分別主要發育成什麼構造？",
+        "correct": "種子與果實",
+        "wrong": [
+          "果實與種子",
+          "花粉與花瓣",
+          "花柱與胚乳"
+        ],
+        "exp": "胚珠通常發育成種子，子房通常發育成果實；胚乳則主要源自雙重受精中的另一個受精事件。",
+        "subject": "生物",
+        "sub_topic": "植物的生殖與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物的生殖與調節",
+        "template_id": "ref-20261120-b12-bio2-plantrepro-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-bio2-plantrepro-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "兼顧生態數量關係、生理機制與演化條件，避免以個體意志取代自然選擇",
+      "question": {
+        "q": "幼苗的莖受到單側光照時常向光彎曲。以一般莖部向光性模型解釋，最接近的機制為何？",
+        "correct": "生長素在背光側作用較強，使該側細胞伸長較多",
+        "wrong": [
+          "受光側細胞在任何情況下都不再生長，因此無須任何激素",
+          "莖內所有細胞一定同速伸長，彎曲只來自植株重量",
+          "光照會立即使莖的細胞分裂全部停止，造成永久彎曲"
+        ],
+        "exp": "莖向光性通常涉及生長素分布不均，背光側較強的伸長使莖向光源彎曲。",
+        "subject": "生物",
+        "sub_topic": "植物的生殖與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物的生殖與調節",
+        "template_id": "ref-20261120-b12-bio2-plantrepro-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-bio2-plantrepro-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "兼顧生態數量關係、生理機制與演化條件，避免以個體意志取代自然選擇",
+      "question": {
+        "q": "若某種開花植物必須經歷適當長度的連續黑暗期才能促進開花，下列哪個實驗最直接檢驗光週期作用？",
+        "correct": "控制相同溫度與水分，改變每日明暗時數並比較開花比例",
+        "wrong": [
+          "同時改變溫度、肥料與光照，僅記錄總高度",
+          "只比較不同品種且未控制環境的單株開花日期",
+          "完全不記錄明暗時數，只觀察植株葉片顏色"
+        ],
+        "exp": "光週期研究須操作明暗時數並控制其他主要變因，才較能判斷開花是否對光暗週期敏感。",
+        "subject": "生物",
+        "sub_topic": "植物的生殖與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物的生殖與調節",
+        "template_id": "ref-20261120-b12-bio2-plantrepro-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
