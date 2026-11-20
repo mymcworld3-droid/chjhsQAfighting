@@ -321,3 +321,45 @@ test('a real four-step shove advances four tiles across an empty corridor',()=>{
   assert.equal(out.members.a.explorationStamina,6);
   assert.equal(out.enemies[0].position.x,10);
 });
+
+
+test('independent flying-sword movement costs half the even shortest path and credits a single hit',()=>{
+  const record=sword(),initial=room(record,beast(7,5,'beast-1',600));
+  const enabled=S.switchLoadout(initial,'a',record,2);
+  let state={...initial,members:enabled.members};
+  const summoned=cast(state,record,'flight-summon',{x:6,y:5});
+  assert.equal(summoned.members.a.explorationStamina,8);
+  state=next(state,summoned);
+  const moved=S.castSkill(state,'a',map,record,{
+    skillId:'flight-summon',target:{x:8,y:5},seq:2,moveSword:true
+  });
+  assert.equal(moved.result.moveSword,true);
+  assert.equal(moved.result.cost,1);
+  assert.equal(moved.members.a.explorationStamina,7);
+  assert.deepStrictEqual(moved.members.a.position,{x:5,y:5});
+  assert.deepStrictEqual(moved.members.a.flyingSword,{x:8,y:5});
+  assert.equal(moved.result.hits.filter(hit=>hit.enemyId==='beast-1').length,1);
+  assert.ok(moved.result.totalDamage>0);
+  const retry=S.castSkill(next(state,moved),'a',map,record,{
+    skillId:'flight-summon',target:{x:8,y:5},seq:2,moveSword:true
+  });
+  assert.equal(retry.duplicate,true);
+  assert.throws(()=>S.castSkill(state,'a',map,record,{
+    skillId:'flight-summon',target:{x:6,y:6},seq:2,moveSword:true
+  }),/偶數格/);
+});
+test('dungeon sword movement remains available after switching loadouts',()=>{
+  const record=sword(),initial=room(record,beast(9,9));
+  const switched=S.switchLoadout(initial,'a',record,2);
+  let state={...initial,members:switched.members};
+  const summoned=cast(state,record,'flight-summon',{x:6,y:5});
+  state=next(state,summoned);
+  const swapped=S.switchLoadout(state,'a',record,0);
+  state={...state,members:swapped.members};
+  assert.ok(!state.members.a.dungeonSkillIds.includes('flight-summon'));
+  const moved=S.castSkill(state,'a',map,record,{
+    skillId:'flight-summon',target:{x:8,y:5},seq:2,moveSword:true
+  });
+  assert.deepStrictEqual(moved.members.a.flyingSword,{x:8,y:5});
+  assert.equal(moved.result.cost,1);
+});
