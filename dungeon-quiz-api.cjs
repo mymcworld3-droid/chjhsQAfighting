@@ -9,6 +9,7 @@ const Adaptive=require('./public/cultivation/adaptive-learning-rules.js');
 const Knowledge=require('./public/cultivation/knowledge-points.js');
 const Solo=require('./public/cultivation/solo-learning-rules.js');
 const Growth=require('./public/cultivation/nascent-growth.js');
+const LearningCorrection=require('./dungeon-learning-correction.cjs');
 const {recordEvent}=require('./public/cultivation/quest-rules.js');
 const {FieldValue}=require('./storage-values.cjs');
 const COLLECTION='dungeonQuizStates',MAX_BUFFER=5,MAX_HISTORY=40;
@@ -70,8 +71,9 @@ async function state(dbA,dbC,uid,roomId,now=Date.now()){
   ]);
   const user=exists(userSnap);if(!user)throw fail('玩家資料不存在',404);
   const scopeKey=Scope.key(Scope.snapshot(user));
-  return view(matching(exists(snap),roomId,sessionKey,scopeKey),
+  const result=view(matching(exists(snap),roomId,sessionKey,scopeKey),
     count(room.members[uid]?.quizCreditSeq));
+  return {...result,progress:LearningCorrection.progress(user)};
 }
 async function prepareQuestion(dbA,dbC,uid,roomId,slot=0,now=Date.now()){
   if(!safeRoom(roomId))throw fail('副本房間代碼無效',400);
@@ -236,6 +238,8 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
     s.history=[...(s.history||[]),q.q].slice(-MAX_HISTORY);
     s.historyMeta=[...(s.historyMeta||[]),{...q.meta,q:q.q}].slice(-MAX_HISTORY);
     s.lastReview=review;s.reviews={...(s.reviews||{}),[q.id]:review};
+    const correctionEvidence=LearningCorrection.evidenceBefore(
+      stats,q,correct,help,now,patch);
     // Retain a bounded recovery window; C remembers the highest credited
     // sequence, so replay is impossible even after A trims old reviews.
     const reviewIds=Object.keys(s.reviews);
@@ -250,6 +254,7 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
       questionForm:q.meta?.question_form||'',cognitiveLevel:q.meta?.cognitive_level||null,
       reasoningSteps:q.meta?.reasoning_steps||null,conceptId:q.meta?.concept_id||'',
       mode:'infinite',topic:'Dungeon',rankAtTime:'多人合作副本',
+      learningCorrectionEvidence:correctionEvidence,
       timestamp:FieldValue.serverTimestamp(),
       timeTaken:Math.max(0,Math.min(86400,Number(input.timeTaken)||0))
     });
@@ -257,17 +262,11 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
     // Only the current user sees their already-committed progress. This is
     // the same post-grade client refresh used by the main PvE question UI;
     // the shared learning footprint must not display stale mastery data.
-    const progress={stats:{
-      totalScore:patch['stats.totalScore'],
-      totalAnswered:patch['stats.totalAnswered'],
-      totalCorrect:patch['stats.totalCorrect'],
-      knowledgeMap:patch['stats.knowledgeMap'],
-      knowledgePointMapV1:patch['stats.knowledgePointMapV1'],
-      soloLearningV1:patch['stats.soloLearningV1'],
-      ...(Object.hasOwn(patch,'stats.adaptiveLearningV1')?
-        {adaptiveLearningV1:patch['stats.adaptiveLearningV1']}:{})
-    }};
-    return {review,state:view(s),progress};
+    const updated={...user,stats:{...stats,
+      ...Object.fromEntries(Object.entries(patch)
+        .filter(([key])=>key.startsWith('stats.'))
+        .map(([key,value])=>[key.slice('stats.'.length),value]))}};
+    return {review,state:view(s),progress:LearningCorrection.progress(updated)};
   });
 }
 async function acknowledge(dbA,dbC,uid,input,now=Date.now()){
