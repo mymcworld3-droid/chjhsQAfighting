@@ -708,8 +708,12 @@ function createHandler({
           const after=staminaFor(member);
           const granted=Math.min(QuizCredit.MAX_STAMINA-after,
             verified.nominal);
+          const refunded=Array.isArray(member.quizErrorRefunds)?
+            member.quizErrorRefunds.filter(id=>typeof id==='string'):[];
           const members={...evolved.members,[uid]:{...member,
             explorationStamina:after+granted,
+            quizErrorRefunds:[...refunded.filter(id=>id!==questionId),
+              questionId].slice(-128),
             lastQuizErrorRefund:{questionId,
               granted,nominal:verified.nominal}}};
           tx.set(receiptRef,{uid,roomId,
