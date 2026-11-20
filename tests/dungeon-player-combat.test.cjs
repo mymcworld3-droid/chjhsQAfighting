@@ -36,7 +36,9 @@ test('same committed request is idempotent; different target or skipped sequence
   assert.throws(()=>strikeEnemy(state,'a',map,{enemyId:'beast-9999',seq:1}),/不同步/);
 });
 test('two different players defeat exactly one shared beast, with no double damage',()=>{
-  const first=strikeEnemy(room(),'a',map,{enemyId:enemy.id,seq:1});
+  const weakened=room();
+  weakened.enemies[0].battleHealth=2*DAMAGE;
+  const first=strikeEnemy(weakened,'a',map,{enemyId:enemy.id,seq:1});
   const second=strikeEnemy({status:'assembled',battleAppliedTick:0,...first},
     'b',map,{enemyId:enemy.id,seq:1});
   assert.equal(second.enemies.length,0);
@@ -58,4 +60,17 @@ test('rejects forging, range, zero energy and downed players without mutation',(
   s.members.a.explorationStamina=10;s.members.a.downed=true;
   assert.throws(()=>strikeEnemy(s,'a',map,{enemyId:enemy.id,seq:1}),/倒地/);
   assert.equal(before.enemies[0].battleHealth,s.enemies[0].battleHealth);
+});
+
+test('築基副本普通靈獸耐久增加，仍使用伺服器可信攻擊屬性',()=>{
+  assert.equal(maxHealth('wolf'),500);
+  assert.equal(maxHealth('wisp'),440);
+  assert.equal(maxHealth('golem'),650);
+  const r=room();
+  r.members.a.battleAttack=220;
+  const out=strikeEnemy(r,'a',map,{enemyId:enemy.id,seq:1});
+  assert.equal(out.hit.damage,220);
+  assert.equal(out.enemies[0].battleHealth,280);
+  assert.equal(r.members.a.battleAttack,220);
+  assert.equal(r.enemies[0].battleHealth,500);
 });
