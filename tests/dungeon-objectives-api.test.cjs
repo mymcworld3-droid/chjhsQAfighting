@@ -81,6 +81,9 @@ test('stage 14 guardian/key/portal: two C instances share one objective and deny
   const pos=adjacent(f.map,guardian.position);
   assert.ok(pos);
   room.members.a.position={...pos};room.members.b.position={...pos};
+  // Fixed early-築基 training values make this twelve-hit shared key test
+  // exercise both players and the stamina-recharge checkpoint.
+  room.members.a.battleAttack=100;room.members.b.battleAttack=100;
   for(let i=1;i<=5;i++){
     const x=await f.call('a','strike',{
       roomId:f.id,enemyId:guardian.id,seq:i},i%2);
@@ -89,7 +92,7 @@ test('stage 14 guardian/key/portal: two C instances share one objective and deny
     assert.equal(x.status,200,x.body?.error);
     assert.equal(y.status,200,y.body?.error);
   }
-  assert.equal(f.getRoom().enemies[0].battleHealth,60);
+  assert.equal(f.getRoom().enemies[0].battleHealth,200);
   // The preceding ten hits spent both players' ten stamina. Test fixture
   // now represents a separately verified recharge; the quiz-credit suite
   // independently rejects forged or duplicate replenishment.
