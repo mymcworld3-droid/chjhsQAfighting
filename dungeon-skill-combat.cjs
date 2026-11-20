@@ -4,7 +4,7 @@
 const Manuals=require('./public/cultivation/manual-rules.js');
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {isAlive}=require('./dungeon-enemy-combat.cjs');
-const {maxHealth,MAX_STRIKE_SEQ}=require('./dungeon-player-combat.cjs');
+const {maxHealth,recordedMax,MAX_STRIKE_SEQ}=require('./dungeon-player-combat.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
 const {staminaFor,staminaAfterCost}=require('./dungeon-stamina-rules.cjs');
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
@@ -62,14 +62,14 @@ const describeDungeonSkill=skill=>{
       '副本中沒有回合或冷卻時間限制。');
   return String(skill.description||'');
 };
-const loadout=(record,score,index)=>{
+const loadout=(record,score,index,member=null)=>{
   const s=Manuals.normalize(record);
   if(!Number.isInteger(index)||index<0||index>=3)throw fail('技能配置編號無效',400);
   const item=s.loadouts[index],ids=item.skillIds.filter(id=>skillOf(id,s,score));
   return {dungeonLoadoutIndex:index,dungeonLoadoutNames:s.loadouts.map(v=>v.name),
     dungeonSkillIds:ids,dungeonSkills:ids.map(id=>{
       const skill=skillOf(id,s,score);
-      const preview=Manuals.singleHitDamage(attackPower(s),skill);
+      const preview=Manuals.singleHitDamage(attackPower(s,member),skill);
       return {id,name:skill.name,kind:skill.kind,school:skill.school,
         cost:skill.cost,range:skill.range,level:skill.level,
         singleHitDamage:preview.damage||preview.potential||0,
@@ -77,25 +77,30 @@ const loadout=(record,score,index)=>{
         description:describeDungeonSkill(skill)};
     })};
 };
-function attackPower(record){
-  // Independent dungeon scale (not the old tactical player's base attack).
-  return 30+Math.min(200,Manuals.manualAttackBonus(record));
+function attackPower(record,member=null){
+  // A dungeon is a 築基 trial: the server's trusted combat attack should
+  // match the real trial, not the obsolete fixed 30-point dungeon scale.
+  // Manuscript bonuses are re-read from A before each cast; any legacy
+  // member without a trusted snapshot keeps its original fallback.
+  const trusted=Number.isSafeInteger(member?.battleAttack)&&
+    member.battleAttack>0?member.battleAttack:30;
+  return trusted+Math.min(200,Manuals.manualAttackBonus(record));
 }
 function initialCombatLoadout(member,raw){
   const record=Manuals.normalize(raw),score=member.accessScore||0;
-  return {...loadout(record,score,record.activeLoadout),
-    dungeonAttack:attackPower(record),flyingSword:null,focusCharges:0,
+  return {...loadout(record,score,record.activeLoadout,member),
+    dungeonAttack:attackPower(record,member),flyingSword:null,focusCharges:0,
     skillSeq:0,lastSkill:null};
 }
 function switchLoadout(room,uid,raw,index){
   const member=room.members?.[uid];
   if(room.status!=='assembled'||!member)throw fail('目前無法切換副本功法',409);
-  const setting=loadout(Manuals.normalize(raw),member.accessScore||0,index);
+  const setting=loadout(Manuals.normalize(raw),member.accessScore||0,index,member);
   if(member.dungeonLoadoutIndex===index&&
     JSON.stringify(member.dungeonSkillIds||[])===JSON.stringify(setting.dungeonSkillIds))
     return {duplicate:true,members:room.members};
   return {duplicate:false,members:{...room.members,
-    [uid]:{...member,...setting,dungeonAttack:attackPower(raw)}}};
+    [uid]:{...member,...setting,dungeonAttack:attackPower(raw,member)}}};
 }
 // Pure directed ray. Neither a client point nor an NPC can pass a wall.
 function ray(map,from,to,range){
@@ -178,7 +183,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
     sword=member.flyingSword||null;
   // Re-derive attack from the latest verified A-side manual snapshot: A can
   // gain manuscript EXP in another session while this C dungeon stays open.
-  const base=attackPower(normalized);
+  const base=attackPower(normalized,member);
   player.dungeonAttack=base;
   const damageFor=power=>Math.max(1,Math.round(base*power));
   const healthy=e=>Number.isSafeInteger(e.battleHealth)?
@@ -199,7 +204,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
     }else{
       damage=Math.min(health,damageFor(power));
       enemy.battleHealth=health-damage;
-      enemy.battleMaxHealth=maxHealth(enemy.kind);
+      enemy.battleMaxHealth=recordedMax(enemy);
     }
     hits.push({enemyId:enemy.id,damage,remainingHealth:enemy.battleHealth,
       defeated:enemy.battleHealth===0,
