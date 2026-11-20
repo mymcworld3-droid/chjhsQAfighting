@@ -218,7 +218,7 @@ test('assembly trusts only Firebase A manuscript documents, never empty C aliase
 });
 
 
-test('two C server instances cannot double-credit one A-graded answer',async()=>{
+test('two C server instances record one A-grade without extra energy in v2',async()=>{
   const {f,id,raw}=await setup();
   raw.members.a.explorationStamina=6;
   const qid='dungeon-question-a-1';
@@ -234,10 +234,11 @@ test('two C server instances cannot double-credit one A-graded answer',async()=>
   assert.equal(first.status,200);assert.equal(retry.status,200);
   const snapshot=f.c.records.get('dungeonRooms/'+id);
   assert.equal(snapshot.members.a.quizCreditSeq,1);
-  assert.equal(snapshot.members.a.explorationStamina,10);
+  assert.equal(snapshot.members.a.explorationStamina,6);
   assert.equal(snapshot.members.b.quizCreditSeq,0);
   assert.equal(snapshot.members.b.explorationStamina,10);
-  assert.equal(snapshot.members.a.lastQuizCredit.granted,4);
+  assert.equal(snapshot.members.a.lastQuizCredit.granted,0);
+  assert.equal(snapshot.members.a.lastQuizCredit.nominal,0);
   const revision=snapshot.revision;
   assert.equal((await f.call('a','quiz-credit',{roomId:id,questionId:qid})).status,200);
   assert.equal(f.c.records.get('dungeonRooms/'+id).revision,revision);
@@ -264,13 +265,13 @@ test('quiz credit is member- and session-bound; rejects ungraded, out-of-order a
     'at cap still acknowledge the receipt once');
   f.c.records.get('dungeonRooms/'+id).members.a.explorationStamina=6;
   const second=await f.call('a','quiz-credit',{roomId:id,questionId:'two'});
-  assert.equal(second.status,200);assert.equal(second.body.room.members.a.explorationStamina,10);
+  assert.equal(second.status,200);assert.equal(second.body.room.members.a.explorationStamina,6);
   const oldA=f.a.records.get('dungeonQuizStates/a');
   f.a.records.set('dungeonQuizStates/a',{...oldA,sessionKey:'old-room:123'});
   assert.equal((await f.call('a','quiz-credit',{roomId:id,questionId:'two'})).status,403);
 });
 
-test('independently confirmed wrong question refunds exactly 3 stamina once across C servers',async()=>{
+test('independently confirmed wrong question keeps a single C receipt but grants no v2 energy',async()=>{
   const {f,id,raw}=await setup();
   const qid='dungeon-wrong-report-0001';
   raw.members.a.explorationStamina=5;
@@ -290,10 +291,10 @@ test('independently confirmed wrong question refunds exactly 3 stamina once acro
   assert.equal(one.status,200,one.body?.error);
   assert.equal(two.status,200,two.body?.error);
   const applied=f.c.records.get('dungeonRooms/'+id);
-  assert.equal(applied.members.a.explorationStamina,8);
+  assert.equal(applied.members.a.explorationStamina,5);
   assert.equal(applied.members.b.explorationStamina,10);
-  assert.equal(applied.members.a.lastQuizErrorRefund.nominal,3);
-  assert.equal(applied.members.a.lastQuizErrorRefund.granted,3);
+  assert.equal(applied.members.a.lastQuizErrorRefund.nominal,0);
+  assert.equal(applied.members.a.lastQuizErrorRefund.granted,0);
   assert.deepEqual(applied.members.a.quizErrorRefunds,[qid]);
   assert.equal(applied.revision,revision+1);
   const receipts=[...f.c.records.keys()]
@@ -306,7 +307,7 @@ test('independently confirmed wrong question refunds exactly 3 stamina once acro
     {roomId:id,questionId:qid})).status,403);
   assert.equal((await f.call('a','quiz-error-refund',
     {roomId:id,questionId:'forged-report-id'})).status,403);
-  assert.equal(f.c.records.get('dungeonRooms/'+id).members.a.explorationStamina,8);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).members.a.explorationStamina,5);
 });
 
 test('report refund is ordered after original quiz credit; pending skips never get extra +3',async()=>{
