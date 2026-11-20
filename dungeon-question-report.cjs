@@ -40,7 +40,7 @@ async function report(dbA,dbC,uid,input,now=Date.now(),{
   if(!record||record.roomId!==roomId||record.sessionKey!==sessionKey)
     throw fail('目前沒有可信的副本題目',409);
   const known=record.errorReports?.[questionId];
-  if(known?.approved===true&&known.learningReversed===true){
+  if(known?.approved===true&&(known.learningReversed===true||known.skipped===true)){
     const user=exists(await dbA.collection('users').doc(uid).get());
     return {status:'duplicate',valid:true,compensated:false,
       reason:'本題已確認有誤，學習紀錄已排除此題，不會重複補償。',
