@@ -40,7 +40,7 @@
       const help=Math.min(3,count(event.help));s.answered++;
       s.facets[meta.facetId]=update(s.facets[meta.facetId],event.correct,help,now,meta.difficulty);
       s.concepts[meta.conceptId]=update(s.concepts[meta.conceptId],event.correct,help,now,meta.difficulty);
-      s.recent=[...s.recent,{facetId:meta.facetId,conceptId:meta.conceptId,role:meta.role,difficulty:meta.difficulty||'',correct:event.correct,help,at:now}].slice(-8);
+      s.recent=[...s.recent,{id,facetId:meta.facetId,conceptId:meta.conceptId,role:meta.role,difficulty:meta.difficulty||'',correct:event.correct,help,at:now}].slice(-8);
     }else return raw||{version:1,scopes:{}};
     // Bound history without copying full questions or AI outlines into the profile.
     const scopes={...(raw?.scopes||{}),[meta.scopeId]:s};
