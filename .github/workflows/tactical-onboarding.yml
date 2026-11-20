@@ -1,0 +1,40 @@
+name: Tactical onboarding acceptance
+
+on:
+  push:
+    branches: [stamina-battle]
+    paths:
+      - 'public/cultivation/first-answer-guide.js'
+      - 'public/cultivation/tactical-combat.js'
+      - 'public/cultivation/scope-fullscreen.js'
+      - 'public/cultivation/curriculum-pages.js'
+      - 'public/main-legacy.js'
+      - 'public/main.js'
+      - 'public/module-versions.json'
+      - 'tests/first-answer-guide.test.cjs'
+      - '.github/workflows/tactical-onboarding.yml'
+  workflow_dispatch:
+
+jobs:
+  onboarding:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Verify asset version manifest
+        run: npm run check:module-versions
+      - name: Verify newcomer tutorial, scope routing and battle interactions
+        run: >-
+          node --test tests/first-answer-guide.test.cjs
+          tests/scope-fullscreen.test.cjs
+          tests/tactical-mode-navigation.test.cjs
+          tests/tactical-combat.test.cjs
+          tests/tactical-question-pair.test.cjs
+          tests/tactical-quarter-camera.test.cjs
