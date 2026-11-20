@@ -46,7 +46,7 @@ function matching(state,roomId,sessionKey,scopeKey){
     return {...state,scopeKey,questions:{}};
   return state;
 }
-function view(state,creditedThrough=0){
+function view(state,creditedThrough=0,refundedIds=[]){
   const index=count(state.answered);
   const questions=state.questions||{};
   const stock=Array.from({length:MAX_BUFFER},(_,i)=>questions[index+i])
@@ -54,9 +54,10 @@ function view(state,creditedThrough=0){
   const reviews=Object.entries(state.reviews||{}).map(([id,r])=>({
     id,index:r.index,amount:r.amount,correct:r.correct
   })).filter(r=>r.index>creditedThrough).sort((a,b)=>a.index-b.index);
+  const alreadyRefunded=new Set(refundedIds);
   const errorRefunds=Object.entries(state.errorReports||{})
     .filter(([id,claim])=>claim?.approved===true&&!claim.skipped&&
-      state.reviews?.[id]?.correct===false)
+      state.reviews?.[id]?.correct===false&&!alreadyRefunded.has(id))
     .map(([id,claim])=>({id,index:claim.index}));
   return {roomId:state.roomId,sessionKey:state.sessionKey,
     answered:index,stock,question:publicQuestion(questions[index]),
@@ -71,8 +72,12 @@ async function state(dbA,dbC,uid,roomId,now=Date.now()){
   ]);
   const user=exists(userSnap);if(!user)throw fail('玩家資料不存在',404);
   const scopeKey=Scope.key(Scope.snapshot(user));
+  const member=room.members[uid];
+  const refundedIds=[...(Array.isArray(member.quizErrorRefunds)?
+    member.quizErrorRefunds:[]),member.lastQuizErrorRefund?.questionId]
+    .filter(Boolean);
   const result=view(matching(exists(snap),roomId,sessionKey,scopeKey),
-    count(room.members[uid]?.quizCreditSeq));
+    count(member.quizCreditSeq),refundedIds);
   return {...result,progress:LearningCorrection.progress(user)};
 }
 async function prepareQuestion(dbA,dbC,uid,roomId,slot=0,now=Date.now()){
