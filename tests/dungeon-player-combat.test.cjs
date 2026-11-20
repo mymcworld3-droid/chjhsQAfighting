@@ -54,7 +54,7 @@ test('rejects forging, range, zero energy and downed players without mutation',(
   assert.throws(()=>strikeEnemy(s,'c',map,{enemyId:enemy.id,seq:1}),/隊員/);
   s.members.a.position=map.spawn;
   if(Math.abs(map.spawn.x-enemy.position.x)+Math.abs(map.spawn.y-enemy.position.y)>1)
-    assert.throws(()=>strikeEnemy(s,'a',map,{enemyId:enemy.id,seq:1}),/相鄰/);
+    assert.throws(()=>strikeEnemy(s,'a',map,{enemyId:enemy.id,seq:1}),/兩格|岩壁/);
   s.members.a.position=spot;s.members.a.explorationStamina=0;
   assert.throws(()=>strikeEnemy(s,'a',map,{enemyId:enemy.id,seq:1}),/不足/);
   s.members.a.explorationStamina=10;s.members.a.downed=true;
