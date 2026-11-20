@@ -121,6 +121,11 @@
       previous.step>=8&&previous.step<stages.length;
     step=resume?previous.step:0;
     roomId=resume?String(previous.roomId||''):'';
+    // A browser refresh physically closes the previous result screen.
+    // Requiring its now-gone button would strand returning new players.
+    const battleVisible=visible(document.querySelector('#tactical-combat'));
+    const nextStage=Number(window.getCurrentUserData?.()?.tacticalTrialV1?.stage||0);
+    if(resume&&!battleVisible&&(step===9||(step===8&&nextStage>=2)))step=10;
     persist('pending');
     timer = setInterval(tick, 160);
     tick();

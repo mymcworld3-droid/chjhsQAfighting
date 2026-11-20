@@ -203,3 +203,18 @@ test('the first stage guide ignores events from unrelated rooms or later stages'
   h.event('attack-selected','', 'new-account',{stage:2});
   assert.equal(JSON.parse(h.store.get(key('new-account'))).step,4);
 });
+
+test('a refresh after the verified first victory resumes at 修煉 instead of an unavailable result button', () => {
+  const stored = JSON.stringify({status:'pending',step:9,roomId:'arena-newbie'});
+  const h=harness({[key('new-account')]:stored});
+  h.window.scheduleFirstAnswerGuide('new-account',false);
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step,10);
+  assert.match(h.layer().querySelector('h2').textContent,/前往修煉/);
+});
+test('progress saved during an uncompleted battle does not falsely skip the fight after reload',()=>{
+  const stored=JSON.stringify({status:'pending',step:8,roomId:'arena-newbie'});
+  const h=harness({[key('new-account')]:stored});
+  h.window.scheduleFirstAnswerGuide('new-account',false);
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step,8);
+  assert.equal(h.layer(),null,'must first re-enter the ongoing battlefield');
+});

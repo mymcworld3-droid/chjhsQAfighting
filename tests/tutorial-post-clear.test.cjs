@@ -74,6 +74,7 @@ test('tutorial progress after first attack survives reload and is account-bound'
   assert.match(guide,/previous\?\.status==='pending'&&Number\.isInteger\(previous\.step\)/);
   assert.match(guide,/previous\.step>=8&&previous\.step<stages\.length/);
   assert.match(guide,/roomId=resume\?String\(previous\.roomId\|\|''\):''/);
+  assert.match(guide,/if\(resume&&!battleVisible&&\(step===9\|\|\(step===8&&nextStage>=2\)\)\)step=10/);
   assert.match(guide,/uid && uid === account \? step : -1/);
   assert.match(guide,/if \(step===12 && detail\.verified!==true\)return/);
 });
