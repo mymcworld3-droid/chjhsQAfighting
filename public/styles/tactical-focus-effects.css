@@ -1,0 +1,198 @@
+/* Focus presentation synchronised from the cooperative dungeon.
+   Keep the same aura structure, motion timings and transparent center. */
+#tactical-combat.tc-quarter-layout .tc-focus-layer{
+  position:absolute;inset:0;z-index:3;
+  overflow:hidden;pointer-events:none;isolation:isolate;
+}
+#tactical-combat.tc-quarter-layout .tc-focus-indicator:not([hidden]){
+  position:absolute;right:calc(10px + env(safe-area-inset-right,0px));
+  bottom:calc(var(--tc-dial) + 9px);z-index:5;
+  display:block;max-width:min(45vw,235px);
+  padding:5px 10px;border-radius:13px;
+  color:#fff2bd;background:rgba(96,58,18,.91);
+  border:1.5px solid #ffe0a0;
+  box-shadow:0 0 14px #ffc96399;
+  font:800 clamp(10px,2vw,12px)/1.25 system-ui,"Noto Sans TC",sans-serif;
+  text-align:center;pointer-events:none;text-shadow:0 0 6px #fff1bd6b;
+}
+@media(orientation:portrait){
+  #tactical-combat.tc-quarter-layout .tc-focus-indicator:not([hidden]){
+    bottom:calc(var(--tc-dial) + 6px);
+    max-width:min(45vw,190px);
+    font-size:clamp(9px,2.3vw,11px);padding:4px 7px;
+  }
+}
+/* The avatar remains visible through the transparent center of the halo.
+   The layer tracks the same camera geometry and sprite overlap offsets. */
+#tactical-combat.tc-quarter-layout .tc-focus-layer{
+  position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;
+}
+#tactical-combat.tc-quarter-layout .dm-focus-aura{
+  --dm-focus-size:52px;
+  position:absolute;
+  width:var(--dm-focus-size);height:var(--dm-focus-size);
+  transform:translate(-50%,-50%);
+  pointer-events:none;isolation:isolate;
+  filter:drop-shadow(0 0 8px #e8a33d90);
+  contain:layout style;
+}
+#tactical-combat.tc-quarter-layout .dm-focus-ring{
+  position:absolute;inset:13%;border:2px solid #ffeab0;
+  border-radius:50%;
+  background:radial-gradient(circle,transparent 0%,transparent 52%,
+    #ffcf5840 71%,#eaaa4766 100%);
+  box-shadow:0 0 12px 3px #ffd76a8a,inset 0 0 13px #ffd36b6b;
+  animation:dmFocusBreath 2.1s ease-in-out infinite;
+}
+#tactical-combat.tc-quarter-layout .dm-focus-orbit{
+  position:absolute;inset:1%;border-radius:50%;
+  border:1.7px dashed #ffe6a7c9;
+  box-shadow:0 0 15px #f7bd5f80;
+  animation:dmFocusOrbit 6s linear infinite;
+}
+#tactical-combat.tc-quarter-layout .dm-focus-spark{
+  position:absolute;width:5px;height:5px;top:50%;left:50%;
+  border:1px solid #fffee0;
+  border-radius:1px;transform:rotate(45deg);
+  background:#ffe8a0;
+  box-shadow:0 0 8px 3px #ffc251aa;
+  animation:dmFocusMote 2.1s ease-in-out infinite;
+}
+#tactical-combat.tc-quarter-layout .dm-spark-a{left:12%;top:68%;animation-delay:-.15s}
+#tactical-combat.tc-quarter-layout .dm-spark-b{left:83%;top:55%;animation-delay:-.85s}
+#tactical-combat.tc-quarter-layout .dm-spark-c{left:42%;top:90%;animation-delay:-1.35s}
+#tactical-combat.tc-quarter-layout .dm-spark-d{left:63%;top:13%;animation-delay:-1.7s}
+#tactical-combat.tc-quarter-layout .dm-focus-count{
+  position:absolute;right:-3px;top:-11px;min-width:26px;
+  padding:1px 4px;white-space:nowrap;
+  font:900 11px/1.3 system-ui,"Noto Sans TC",sans-serif;
+  text-align:center;color:#fff5bf;background:#3a2815e8;
+  border:1px solid #f4d882;border-radius:12px;
+  text-shadow:0 0 5px #fff7c7;
+  box-shadow:0 0 8px #ffd77d88;
+}
+@keyframes dmFocusBreath{
+  0%,100%{transform:scale(.91);opacity:.70}
+  50%{transform:scale(1.12);opacity:1}
+}
+@keyframes dmFocusOrbit{
+  from{transform:rotate(0deg)}to{transform:rotate(360deg)}
+}
+@keyframes dmFocusMote{
+  0%{transform:translateY(6px) scale(.55) rotate(45deg);opacity:0}
+  26%{opacity:1}
+  82%{opacity:.8}
+  100%{transform:translateY(-23px) scale(1.1) rotate(160deg);opacity:0}
+}
+@media(prefers-reduced-motion:reduce){
+  #tactical-combat.tc-quarter-layout .dm-skills button.is-focus-empowered,
+  #tactical-combat.tc-quarter-layout .dm-focus-ring,
+  #tactical-combat.tc-quarter-layout .dm-focus-orbit,
+  #tactical-combat.tc-quarter-layout .dm-focus-spark{animation:none!important}
+  #tactical-combat.tc-quarter-layout .dm-focus-spark{opacity:.85}
+}
+
+/* Stronger character-centered, nonblocking 金身蓄勢 halo.
+   Painted as an outer ring; the avatar remains visible at the center.
+   The server-provided focusCharges count alone controls its lifetime. */
+#tactical-combat.tc-quarter-layout .dm-focus-aura{
+  z-index:1;filter:drop-shadow(0 0 11px #f5b351c7);
+  opacity:1;
+}
+#tactical-combat.tc-quarter-layout .dm-focus-glow{
+  position:absolute;inset:-3%;border-radius:50%;
+  background:radial-gradient(circle,
+    transparent 0 30%,#fff5d20e 39%,#ffd17042 51%,#ec9c3678 63%,
+    #ffda8a45 70%,transparent 78%);
+  box-shadow:0 0 25px #f2b74c66;
+  animation:dmFocusGoldGlow 2.2s ease-in-out infinite;
+}
+#tactical-combat.tc-quarter-layout .dm-focus-flames{
+  position:absolute;inset:0;border-radius:50%;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 17% 33% at 17% 50%,#ffd17b79,transparent 92%),
+    radial-gradient(ellipse 16% 30% at 81% 50%,#ffc16d80,transparent 92%),
+    radial-gradient(ellipse 22% 14% at 49% 88%,#fff0a579,transparent 95%);
+  filter:drop-shadow(0 0 6px #ffbd51ad);
+  animation:dmFocusFlameRise 2.0s ease-in-out infinite alternate;
+}
+#tactical-combat.tc-quarter-layout .dm-focus-ring{
+  inset:11%;border:2.5px solid #ffe7a1;
+  background:radial-gradient(circle,transparent 0 49%,
+    #ffc36619 60%,#ffce6975 78%,#ffb45055 100%);
+  box-shadow:0 0 16px 4px #ffd169a6,inset 0 0 15px #ffe08384;
+}
+#tactical-combat.tc-quarter-layout .dm-focus-orbit{
+  inset:1%;border:2px dashed #fff3b8e2;
+  box-shadow:0 0 15px 2px #ffd1699c;
+}
+#tactical-combat.tc-quarter-layout .dm-focus-spark{
+  width:6px;height:6px;background:#fff0b7;border:1px solid #fffce8;
+  box-shadow:0 0 8px 3px #ffc251d6;
+}
+#tactical-combat.tc-quarter-layout .dm-spark-e{left:5%;top:39%;animation-delay:-.42s}
+#tactical-combat.tc-quarter-layout .dm-spark-f{left:93%;top:71%;animation-delay:-1.12s}
+#tactical-combat.tc-quarter-layout .dm-focus-count{
+  right:-3px;top:-15px;min-width:34px;
+  padding:2px 6px;
+  font:900 11px/1.2 system-ui,"Noto Sans TC",sans-serif;
+  background:#6e4216ed;color:#fff6cb;
+  border:1.5px solid #ffe0a0;
+  box-shadow:0 0 12px #ffc963c9;
+}
+#tactical-combat.tc-quarter-layout .dm-focus-aura:not(.is-self) .dm-focus-count{
+  font-size:10px;min-width:22px;
+}
+@keyframes dmFocusGoldGlow{
+  0%,100%{transform:scale(.93);opacity:.79}
+  50%{transform:scale(1.06);opacity:1}
+}
+@keyframes dmFocusFlameRise{
+  0%{transform:translateY(3px) scale(.97);opacity:.7}
+  100%{transform:translateY(-4px) scale(1.08);opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+  #tactical-combat.tc-quarter-layout .dm-focus-glow,
+  #tactical-combat.tc-quarter-layout .dm-focus-flames{animation:none!important;opacity:1}
+}
+
+
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-wheel-options>.tc-sector[data-wheel-choice].is-focus-empowered[aria-pressed]{
+  background:linear-gradient(115deg,#fff3c1 0%,#f6d278 33%,#e2a444 72%,#bf7d28 100%)!important;
+  color:#302009!important;
+  border-color:#fff0b9!important;
+  box-shadow:inset 0 1px 2px #fffbe9bc,0 0 14px 2px #ffca65b0!important;
+  animation:tcFocusGoldSkill 1.65s ease-in-out infinite;
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-options>.tc-sector.is-focus-empowered .tc-wheel-copy{
+  color:#302009!important;text-shadow:0 1px 0 #fff7d1bf;
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-options>.tc-sector.is-focus-empowered .tc-wheel-cost{
+  color:#51310f!important;
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-detail-marker.is-focus-empowered{
+  color:#38200b!important;background:#f6d47f!important;
+  border-color:#fff2c6!important;box-shadow:0 0 16px #ffd575b6!important;
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-detail-marker.is-focus-empowered .tc-wheel-copy{
+  color:#35200e!important;text-shadow:none!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action.has-focus{
+  box-shadow:0 -5px 22px #08100db3,inset 0 0 0 3px #101b16,0 0 14px #ffc75e72;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz]:focus-visible,
+#tactical-combat.tc-quarter-layout .tc-quarter-action button:focus-visible{
+  outline:3px solid #f5dfab!important;outline-offset:-5px!important;
+}
+@keyframes tcFocusGoldSkill{
+  0%,100%{filter:brightness(1) drop-shadow(0 0 4px #f9ce64aa)}
+  50%{filter:brightness(1.1) drop-shadow(0 0 11px #ffe0a4bb)}
+}
+@media(prefers-reduced-motion:reduce){
+  #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-wheel-options>.tc-sector[data-wheel-choice].is-focus-empowered[aria-pressed]{
+    animation:none!important;
+  }
+}
+
+
