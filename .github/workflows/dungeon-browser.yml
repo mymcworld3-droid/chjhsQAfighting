@@ -9,6 +9,8 @@ on:
       - 'dungeon-team-rescue.cjs'
       - 'dungeon-victory-reward.cjs'
       - 'dungeon-skill-combat.cjs'
+      - 'dungeon-manual-progression.cjs'
+      - 'manual-reward-rules.cjs'
       - 'dungeon-quiz-api.cjs'
       - 'dungeon-quiz-credit.cjs'
       - 'public/cultivation/dungeon-*.js'
