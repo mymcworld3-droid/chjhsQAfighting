@@ -27,7 +27,8 @@ export function validateClassroomDraft(editor) {
   return '';
 }
 export function parseClassroomAIQuestion(payload, subject, labelsOf) {
-  const json = String(payload?.text || '').match(/\{[\s\S]*\}/)?.[0] || '{}';
+  const json = String(payload?.text || '').match(/\{[\s\S]*\}/)?.[0];
+  if (!json) throw Error('AI 回傳的題目不是有效 JSON。');
   let raw;
   try { raw = JSON.parse(json); } catch (_) { throw Error('AI 回傳的題目不是有效 JSON。'); }
   if (!raw || typeof raw.question !== 'string' || typeof raw.correct !== 'string' ||
