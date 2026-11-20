@@ -40,7 +40,9 @@ export function dungeonEnemyReactionEvents(before,after){
       hit.amount<=0||typeof hit.sourceId!=='string'||
       (prior.lastDamage?.tick===hit.tick&&
        prior.lastDamage?.sourceId===hit.sourceId))continue;
-    const source=(after.enemies||[]).find(e=>e.id===hit.sourceId);
+    const source=(after.enemies||[]).find(e=>e.id===hit.sourceId)||
+      (before.enemies||[]).find(e=>e.id===hit.sourceId);
+    if(!normalKinds.has(source?.kind))continue;
     result.push({key:'enemy-hurt:'+uid+':'+hit.sourceId+':'+hit.tick,
       kind:'hurt',uid,sourceId:hit.sourceId,
       origin:validPoint(source?.position)?copy(source.position):null,
