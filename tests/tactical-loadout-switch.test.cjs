@@ -68,7 +68,7 @@ test('client exposes equipment editing and 3+3 combat wheel, without a main-weap
   assert.match(src,/function editBattleWeapon/);
   assert.match(src,/renderModernWeaponWheel/);
   assert.match(src,/weaponRing\.replaceChildren/);
-  assert.match(src,/skills\.map\(\(skill,i\)/);
+  assert.match(src,/displaySkills\?skills:\[\]/);
   assert.match(src,/energy\.append\(move\)/);
   assert.match(style,/\.tc-left-move/);
   assert.match(style,/\.tc-modern-skill-sector/);
