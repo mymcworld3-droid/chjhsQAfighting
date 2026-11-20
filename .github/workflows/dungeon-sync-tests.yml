@@ -20,6 +20,9 @@ on:
       - 'dungeon-skill-combat.cjs'
       - 'dungeon-quiz-api.cjs'
       - 'dungeon-question-report.cjs'
+      - 'dungeon-learning-correction.cjs'
+      - 'public/cultivation/adaptive-learning.js'
+      - 'public/cultivation/adaptive-learning-rules.js'
       - 'dungeon-quiz-error-refund.cjs'
       - 'question-report-api.cjs'
       - 'dungeon-quiz-credit.cjs'
@@ -67,6 +70,7 @@ jobs:
           node --check dungeon-skill-combat.cjs
           node --check dungeon-quiz-api.cjs
           node --check dungeon-question-report.cjs
+          node --check dungeon-learning-correction.cjs
           node --check dungeon-quiz-error-refund.cjs
           node --check dungeon-quiz-credit.cjs
           node --check server.js
