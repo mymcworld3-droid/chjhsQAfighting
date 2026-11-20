@@ -463,7 +463,6 @@ function updateWheelChoices(container,options,selected,moveCost,hero,locked){
     button.title=unavailable||option.name+' · '+price+(description?' · '+description:'');
     button.classList.toggle('is-unavailable',!!unavailable);
     button.classList.toggle('is-focus-empowered',empowered);
-    button.dataset.focusEmpowered=String(empowered);
     if(empowered)button.title='✦ 金身蓄勢強化 · 體力減半 · '+option.name+' · '+price;
     wheelText(button.firstElementChild,empowered?'✦ '+option.name:option.name,price,skillArt(option.skill));
   }
