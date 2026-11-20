@@ -18,8 +18,12 @@ const recordedMax=enemy=>Number.isSafeInteger(enemy?.battleMaxHealth)&&
 // C-room snapshots contain trusted trial attack, rather than the old
 // temporary 30-point dungeon attack. Preserve fallback for legacy sessions.
 const playerStrikeDamage=member=>
-  Number.isSafeInteger(member?.battleAttack)&&member.battleAttack>0?
-    member.battleAttack:DAMAGE;
+  // Initial/switch-loadout values come from verified A-side manuscript state.
+  // The trial includes this bonus even when no technique is equipped.
+  Number.isSafeInteger(member?.dungeonAttack)&&member.dungeonAttack>0?
+    member.dungeonAttack:
+    Number.isSafeInteger(member?.battleAttack)&&member.battleAttack>0?
+      member.battleAttack:DAMAGE;
 function strikeEnemy(room,uid,map,{enemyId,seq}={}){
   if(typeof enemyId!=='string'||!(/^(beast-[1-9][0-9]{0,4}|guardian-1|boss-1)$/.test(enemyId)))
     throw fail('靈獸目標無效',400);
