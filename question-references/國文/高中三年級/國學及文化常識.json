@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-chi3-classics-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "語文辨識與論證能力分開評估，選項不依賴單純閱讀速度",
+      "question": {
+        "q": "以傳統四部分類法「經、史、子、集」分類，下列哪一組著作與部類的搭配正確？",
+        "correct": "《莊子》——子部",
+        "wrong": [
+          "《史記》——集部",
+          "《唐詩三百首》——經部",
+          "《論語》——史部"
+        ],
+        "exp": "《莊子》屬諸子著作，歸子部；《史記》歸史部，詩文總集歸集部，《論語》在傳統分類中屬經部。",
+        "subject": "國文",
+        "sub_topic": "國學及文化常識",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-國學及文化常識",
+        "template_id": "ref-20261120-b12-chi3-classics-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chi3-classics-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "語文辨識與論證能力分開評估，選項不依賴單純閱讀速度",
+      "question": {
+        "q": "某生想比較《史記》與《資治通鑑》的史書體例，哪項說明正確？",
+        "correct": "《史記》以人物與類目組織史事，《資治通鑑》主要依年代敘述",
+        "wrong": [
+          "《史記》與《資治通鑑》均為以帝王年號為唯一線索的編年體",
+          "《資治通鑑》為紀傳體斷代史，《史記》則為小說總集",
+          "《史記》與《資治通鑑》均不涉及政治與歷史事件"
+        ],
+        "exp": "《史記》為紀傳體通史，以本紀、世家、列傳等組織；《資治通鑑》為編年體通史，依時間編排。",
+        "subject": "國文",
+        "sub_topic": "國學及文化常識",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-國學及文化常識",
+        "template_id": "ref-20261120-b12-chi3-classics-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chi3-classics-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "語文辨識與論證能力分開評估，選項不依賴單純閱讀速度",
+      "question": {
+        "q": "關於《詩經》中的「風、雅、頌」，下列何種概括最恰當？",
+        "correct": "三者是依作品性質及音樂用途等形成的主要類別",
+        "wrong": [
+          "「風、雅、頌」就是三種固定的五言律詩格律",
+          "「風」專指唐代邊塞詩，「頌」專指宋代詞",
+          "三者均為同一位作者在同一年編寫的篇章"
+        ],
+        "exp": "《詩經》主要分風、雅、頌；傳統上涉及地域歌謠、朝廷宴饗及宗廟祭祀等不同性質與用途，不等同後世近體詩體裁。",
+        "subject": "國文",
+        "sub_topic": "國學及文化常識",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-國學及文化常識",
+        "template_id": "ref-20261120-b12-chi3-classics-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
