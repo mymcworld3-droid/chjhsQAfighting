@@ -19,6 +19,7 @@ import './tactical-threat-visuals.js';
 import {dungeonThreatPlan} from './dungeon-threat-plan.js';
 import {dungeonAnimationEvents,paintDungeonScene,drawDungeonHitNumbers} from './dungeon-skill-animation.js';
 import {dungeonMovementEvents,sampleDungeonMovement,continueDungeonMovement,previewDungeonMovement} from './dungeon-movement-animation.js';
+import {dungeonEnemyReactionEvents} from './dungeon-enemy-animation.js';
 
 // The dungeon shares the trial's fullscreen quarter-dial presentation;
 // its exploration, combat and questions remain live, server-authoritative actions.
@@ -49,6 +50,7 @@ class DungeonMapView{
     this.focusAuras=new Map();this.sprites={};
     this.visualScenes=new Map(); // authenticated room events only; never controls damage
     this.travelScenes=new Map(); // sampled trial movement; server positions remain untouched
+    this.enemyReactionScenes=new Map(); // committed enemy attacks / personal damage
     this.pendingMovementPreview=null; // visual only; never enters C-room rules
     this.ambiencePlan=null;this.environmentPlan=null;
     this.ambientTimer=null;this.bossTransition=null;
@@ -266,6 +268,7 @@ class DungeonMapView{
     if(room.status==='assembled')void this.quiz?.warm();
     this.map=null;this.camera=Camera.initialCamera();
     this.visualScenes.clear();this.travelScenes.clear();
+    this.enemyReactionScenes.clear();
     this.pendingMovementPreview=null;this.pendingAction=null;
     clearTimeout(this.ambientTimer);this.ambientTimer=null;
     this.ambiencePlan=null;this.environmentPlan=null;
@@ -1473,6 +1476,7 @@ class DungeonMapView{
     const previous=this.room;
     if(changedArena){
       this.visualScenes?.clear();this.travelScenes?.clear();
+    this.enemyReactionScenes?.clear();
       this.pendingMovementPreview=null;this.pendingAction=null;
       this.ambiencePlan=null;this.environmentPlan=null;
       this.bossTransition=null;
@@ -1508,6 +1512,15 @@ class DungeonMapView{
       }
       while(this.visualScenes.size>12)
         this.visualScenes.delete(this.visualScenes.keys().next().value);
+      // Only publish VFX for server-confirmed lastAttack / lastDamage
+      // transitions. Repeated room pushes never replay the same impact.
+      for(const event of dungeonEnemyReactionEvents(previous,room)){
+        if(!this.enemyReactionScenes.has(event.key))
+          this.enemyReactionScenes.set(event.key,{event,startedAt:now,
+            soundPlayed:false});
+      }
+      while(this.enemyReactionScenes.size>20)
+        this.enemyReactionScenes.delete(this.enemyReactionScenes.keys().next().value);
     }
     this.room=room;
     this.quiz?.setAdmin(room.members[this.uid]?.dungeonAdmin===true);
@@ -1540,6 +1553,7 @@ class DungeonMapView{
     clearTimeout(this.actionFeedbackTimer);this.actionFeedbackTimer=null;
     this.quiz?.destroy();
     this.visualScenes?.clear();this.travelScenes?.clear();
+    this.enemyReactionScenes?.clear();
     this.pendingMovementPreview=null;this.pendingAction=null;
     clearTimeout(this.ambientTimer);this.ambientTimer=null;
     this.ambiencePlan=null;this.environmentPlan=null;
@@ -1834,6 +1848,24 @@ class DungeonMapView{
       }
       scenes.push({scene:entry.scene,p});
     }
+    const enemyImpactScenes=[];
+    for(const [key,entry] of this.enemyReactionScenes||[]){
+      const elapsed=now-entry.startedAt;
+      if(elapsed>=entry.event.duration){
+        this.enemyReactionScenes.delete(key);continue;
+      }
+      const progress=reduceMotion?.42:clamp(
+        elapsed/Math.max(1,entry.event.duration),0,1);
+      const scene={...entry.event,progress};
+      enemyImpactScenes.push(scene);
+      // One impact sound per confirmed enemy strike; never play when all
+      // players dodged and never infer a hit from the warning alone.
+      if(!entry.soundPlayed&&entry.event.kind==='strike'&&
+          entry.event.hits?.length&&progress>=.16){
+        entry.soundPlayed=true;
+        try{window.QAGameAudio?.play('combat-impact',{volume:.24});}catch(_){}
+      }
+    }
     const paintEffects=(context,view,above)=>{
       const renderer=globalThis.QATacticalSkillEffects;
       for(const {scene,p} of scenes){
@@ -1865,6 +1897,8 @@ class DungeonMapView{
       Math.floor((clock.elapsedMs+Math.max(0,now-clock.receivedAt))/
         clock.tickMs)):
       Number(this.room?.battleAppliedTick)||0;
+    const windupTick=clock?Math.max(displayTick,
+      (clock.elapsedMs+Math.max(0,now-clock.receivedAt))/clock.tickMs):displayTick;
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:visualMembers,selfUid:this.uid,showRoutes:false,
       rangeTiles:this.rangeTiles,rangeKind:this.rangeKind,
@@ -1874,6 +1908,7 @@ class DungeonMapView{
       ambiencePlan:this.ambiencePlan,
       environmentPlan:this.environmentPlan,
       bossTransition:phasePulse,displayTick,
+      windupTick,enemyImpactScenes,
       pendingAction:this.pendingAction,
       reducedMotion:reduceMotion,
       currentTick:Number(this.room?.battleClock?.appliedTick)||0,
@@ -1902,7 +1937,7 @@ class DungeonMapView{
       this.canvas.dataset.visualHero=visualHero.x.toFixed(3)+','+visualHero.y.toFixed(3);
     else if(this.canvas.hasAttribute('data-visual-hero'))
       this.canvas.removeAttribute('data-visual-hero');
-    if((scenes.length||queuedScenes||phasePulse)&&!reduceMotion)
+    if((scenes.length||queuedScenes||phasePulse||enemyImpactScenes.length)&&!reduceMotion)
       this.drawSoon();
     if(travelActive&&!reduceMotion)this.drawSoon();
     // 20fps atmosphere refresh (not a 60fps polling loop). Pause entirely
