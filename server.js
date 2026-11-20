@@ -972,7 +972,12 @@ async function generateQuiz(req, res) {
     const spareKey = correction ? '' : quizSparePool.key({
         owner: adaptiveContext ? 'adaptive:'+adaptiveContext.uid : sessionOwner, mode: (tacticalMode||dungeonMode)?'tactical-references-v1':adaptiveContext?'adaptive-solo':String(quizMode || 'solo'), subject, level,
         topic: targetTopic, difficulty:adaptiveContext?'adaptive':difficulty, rank:adaptiveContext?'adaptive':rank,
-        knowledge: adaptiveContext ? adaptiveContext.scope.scopeId+':'+adaptiveContext.plan.version : diagnosticInfo
+        // A newly excluded question type must never reuse a spare generated
+        // before that rule was saved, including in the parallel question race.
+        knowledge: adaptiveContext
+          ? adaptiveContext.scope.scopeId+':'+adaptiveContext.plan.version+
+            ':exclude:'+(adaptiveContext.user?.questionScopeExclusions?.revision||'')
+          : diagnosticInfo
     });
     const validateCandidate = (parsed, extraQuestions = [], extraTemplates = []) => {
         Knowledge.assertLabel(parsed, subject, targetKnowledgePointId);
