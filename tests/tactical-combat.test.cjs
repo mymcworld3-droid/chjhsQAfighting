@@ -580,12 +580,12 @@ test('a flying sword remains separate from the player and can move two cells per
   Object.assign(s.actors[1],{x:5,y:3,hp:800,maxHp:800});
   s=R.apply(s,'u1',{type:'manual',skillId:'flight-summon',x:4,y:3},fixed);
   assert.deepStrictEqual(s.actors[0].flyingSword,{x:4,y:3});
-  assert.equal(s.actors[0].stamina,8);
+  assert.equal(s.actors[0].stamina,7);
   assert.throws(()=>R.apply(s,'u1',{type:'sword-move',x:4,y:4},fixed),/偶數格/);
   const next=R.apply(s,'u1',{type:'sword-move',x:6,y:3},fixed);
   assert.deepStrictEqual({x:next.actors[0].x,y:next.actors[0].y},{x:3,y:3});
   assert.deepStrictEqual(next.actors[0].flyingSword,{x:6,y:3});
-  assert.equal(next.actors[0].stamina,7);
+  assert.equal(next.actors[0].stamina,6);
   assert.ok(next.actors[1].hp<800);
   assert.equal(next.actors[0].attacks,1,'moving a sword does not spend a second skill cast');
 });
