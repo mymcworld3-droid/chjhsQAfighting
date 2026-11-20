@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-hist3-genderhistory-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用制度、時代及史料種類推導結論，避免以單一來源推定全體",
+      "question": {
+        "q": "史家發現某城市1900年與1950年的女性中等教育入學率大幅增加，但同期某些職業仍限制女性任職。哪項歷史分析最恰當？",
+        "correct": "教育機會擴張不必然使職業限制同步消失，應分別研究制度變化",
+        "wrong": [
+          "只要入學率增加，便能證明當時所有職業都已實現完全平等",
+          "職業仍有限制，表示女性中等教育人數不可能增加",
+          "教育與就業資料不同，因此完全不能共同分析性別變遷"
+        ],
+        "exp": "受教育機會與就業資格屬不同制度面向，兩者可能變化速度不同，需比較法規、職場與社會文化。",
+        "subject": "歷史",
+        "sub_topic": "性別與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-性別與社會變遷",
+        "template_id": "ref-20261120-b12-hist3-genderhistory-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-hist3-genderhistory-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用制度、時代及史料種類推導結論，避免以單一來源推定全體",
+      "question": {
+        "q": "某年代政府人口普查僅把有薪工作列入「勞動人口」，家庭無酬照顧與家務未列入。若研究女性勞動史，哪項補充最重要？",
+        "correct": "參考家計簿、日記、訪談與其他生活史料，辨識統計未涵蓋的無酬工作",
+        "wrong": [
+          "既然普查未列入無酬家務，就可推論當時不存在照顧勞動",
+          "只計算工資總額，便能完整衡量所有勞動投入",
+          "只把未列入普查者視為完全未參與家庭經濟"
+        ],
+        "exp": "普查分類反映當時對工作的定義，可能漏掉無酬照顧與家務勞動，需結合不同種類史料重建。",
+        "subject": "歷史",
+        "sub_topic": "性別與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-性別與社會變遷",
+        "template_id": "ref-20261120-b12-hist3-genderhistory-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-hist3-genderhistory-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用制度、時代及史料種類推導結論，避免以單一來源推定全體",
+      "question": {
+        "q": "某年代廣告把家庭照顧描寫為女性的唯一責任，但同期勞動紀錄顯示不少女性也從事有薪工作。如何整合兩種史料最適當？",
+        "correct": "區分廣告所宣傳的性別規範與人們的實際工作經驗，分析兩者之間的差距",
+        "wrong": [
+          "廣告是公開出版品，因此必然比勞動紀錄更能代表所有人的實際生活",
+          "既然有人受雇工作，就能推論當時社會不存在任何性別角色期待",
+          "兩類史料表面不同，便表示其中一類沒有任何研究價值"
+        ],
+        "exp": "廣告往往反映或塑造理想規範，勞動紀錄反映部分實際行為；兩者可共同分析規範與實踐的落差。",
+        "subject": "歷史",
+        "sub_topic": "性別與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-性別與社會變遷",
+        "template_id": "ref-20261120-b12-hist3-genderhistory-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
