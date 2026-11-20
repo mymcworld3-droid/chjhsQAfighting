@@ -2084,9 +2084,31 @@ class DungeonMapView{
       Number(this.room?.battleAppliedTick)||0;
     const windupTick=clock?Math.max(displayTick,
       (clock.elapsedMs+Math.max(0,now-clock.receivedAt))/clock.tickMs):displayTick;
+    // Only server-confirmed skill scenes animate the sword. Paths never
+    // change authority or collision logic on the client.
+    const swordVisuals={};
+    for(const {scene,p} of scenes){
+      if(scene.style!=='flying-sword'||!Array.isArray(scene.path)||
+        scene.path.length<2||!scene.actor)continue;
+      const length=scene.path.length-1,travel=Math.max(0,Math.min(length,p*length));
+      const step=Math.min(length-1,Math.floor(travel)),fraction=travel-step;
+      const from=scene.path[step],to=scene.path[step+1];
+      swordVisuals[scene.actor]={
+        x:from.x+(to.x-from.x)*fraction,
+        y:from.y+(to.y-from.y)*fraction
+      };
+    }
+    const own=this.room?.members?.[this.uid],aim=this.aimTile;
+    const previewSword=own?.flyingSword&&aim&&(
+      this.wheelMode==='move'&&this.moveTarget==='sword'||
+      this.wheelMode==='attack'&&this.selectedSkillId==='flight-summon');
+    const swordPreviewRoute=previewSword&&this.rangeTiles.some(p=>
+      p.x===aim.x&&p.y===aim.y)?
+      dungeonSwordRoute(m,own.flyingSword,aim,this.creatures()):null;
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:visualMembers,selfUid:this.uid,showRoutes:false,
       rangeTiles:this.rangeTiles,rangeKind:this.rangeKind,
+      swordPreviewRoute,swordVisuals,
       enemies:visualEnemies,objectives:this.room?.dungeonProgress,
       aimTile:this.currentAim(),art:this.sprites,
       dangerPlan:warning,showDangerGuidance:this.wheelMode==='move',
