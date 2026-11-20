@@ -8,6 +8,8 @@
   // browser catalog at use time so the first import cannot hide equipped skills.
   const manuals=()=>typeof module==='object'&&module.exports
     ?require('./manual-rules.js'):globalThis.QAManuals;
+  const swordPaths=()=>typeof module==='object'&&module.exports
+    ?require('./flying-sword-path.js'):globalThis.QAFlyingSwordPath;
   const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,events:64,turns:60,turnMs:30000,answerMs:50000});
   const MAPS=Object.freeze([
     {id:'courtyard',name:'演武庭',width:7,height:7,terrain:2,description:'開闊石庭，練習近身與迂迴。'},
@@ -739,18 +741,39 @@
     }
     return route;
   }
+  function swordRoute(s,a,p){
+    if(!a?.flyingSword||blocked(s,p))return null;
+    return swordPaths().route({from:a.flyingSword,to:p,
+      walkable:q=>!blocked(s,q),
+      enemies:s.actors.filter(t=>alive(t)&&t.team!==a.team)
+        .map(t=>({...t,position:point(t)}))});
+  }
+  function swordMoveCells(s,a){
+    if(!a?.flyingSword||!alive(a)||a.actions>=LIMITS.actions)return [];
+    const limit=a.stamina*2,paths=swordPaths();
+    const distances=paths.distances(a.flyingSword,p=>!blocked(s,p),limit);
+    const cells=[];
+    for(const [where,length] of distances){
+      if(length<2||length%2||at(s,(()=>{const [x,y]=where.split(',').map(Number);return {x,y};})()))continue;
+      const [x,y]=where.split(',').map(Number);
+      cells.push({x,y,cost:length/2});
+    }
+    return cells;
+  }
   function techniquePath(s,a,sk,p){
     if(sk.kind==='dash-cleave')return dashRoute(s,a,sk,p);
     if(sk.kind==='flying-sword'){
-      const origin=a.flyingSword||a;
-      return [point(origin),...line(s,origin,p,Math.min(a.flyingSword?sk.travel:sk.range,dist(origin,p)))];
+      return a.flyingSword?swordRoute(s,a,p)||[]:[point(a),point(p)];
     }
     return [];
   }
   function validPathTarget(s,a,sk,p){
+    if(sk.kind==='flying-sword'){
+      if(!p||blocked(s,p)||at(s,p)||dist(a,p)<1||dist(a,p)>2)return false;
+      return !a.flyingSword||Boolean(swordRoute(s,a,p)?.length>1);
+    }
     const route=techniquePath(s,a,sk,p);
-    return route.length>1&&key(route.at(-1))===key(p)&&
-      (sk.kind!=='flying-sword'||a.flyingSword||!at(s,p));
+    return route.length>1&&key(route.at(-1))===key(p);
   }
   const fistDirectional=sk=>['fist-sweep','fist-throw','fist-chain'].includes(sk.kind);
   const offset=(a,d,forward,side=0)=>({x:a.x+d.x*forward-d.y*side,y:a.y+d.y*forward+d.x*side});
@@ -822,12 +845,15 @@
     if(sk.kind==='cleave'){const cells=new Map();for(const d of [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}])for(const p of rectangle(s,a,sk,{x:a.x+d.x,y:a.y+d.y}))cells.set(key(p),p);return [...cells.values()];}
     if(sk.kind==='line')return CARDINALS.flatMap(([dx,dy])=>
       line(s,a,{x:a.x+dx,y:a.y+dy},lineRange(s,sk)));
-    if(['dash-cleave','flying-sword'].includes(sk.kind)){
-      const origin=sk.kind==='flying-sword'&&a.flyingSword||a;
-      const range=origin===a?sk.range:sk.travel;
-      return CARDINALS.flatMap(([dx,dy])=>line(s,origin,{x:origin.x+dx,y:origin.y+dy},range))
-        .filter(p=>validPathTarget(s,a,sk,p));
+    if(sk.kind==='flying-sword'){
+      const cells=[];
+      for(let y=a.y-2;y<=a.y+2;y++)for(let x=a.x-2;x<=a.x+2;x++){
+        const p={x,y};if(dist(a,p)>=1&&dist(a,p)<=2&&validPathTarget(s,a,sk,p))cells.push(p);
+      }
+      return cells;
     }
+    if(sk.kind==='dash-cleave')return CARDINALS.flatMap(([dx,dy])=>
+      line(s,a,{x:a.x+dx,y:a.y+dy},sk.range)).filter(p=>validPathTarget(s,a,sk,p));
     const cells=[];
     for(let y=Math.max(0,a.y-sk.range);y<=Math.min(s.height-1,a.y+sk.range);y++)for(let x=Math.max(0,a.x-sk.range);x<=Math.min(s.width-1,a.x+sk.range);x++){
       const p={x,y};if(skillDistance(a,p,sk)>sk.range||skillDistance(a,p,sk)<(sk.minRange||0)||blocked(s,p)||!sight(s,a,p))continue;
@@ -861,8 +887,12 @@
       if(!fistDirection(s,a,p,sk))fail('請選擇上下左右的出拳方向');
       return;
     }
-    if(['dash-cleave','flying-sword'].includes(sk.kind)){
-      if(!validPathTarget(s,a,sk,p))fail(sk.kind==='dash-cleave'?'請選擇直線上可突進的空地':'請選擇飛劍可到達的直線地格');
+    if(sk.kind==='flying-sword'){
+      if(!validPathTarget(s,a,sk,p))fail('請選擇距離玩家兩格內、飛劍可到達的空地');
+      return;
+    }
+    if(sk.kind==='dash-cleave'){
+      if(!validPathTarget(s,a,sk,p))fail('請選擇直線上可突進的空地');
       return;
     }
     if(blocked(s,p)||(sk.kind==='cleave'?!rectangle(s,a,sk,p).some(c=>key(c)===key(p)):
@@ -893,12 +923,17 @@
     if(sk.kind==='dash-cleave'){
       Object.assign(a,point(p));motion(s,a,route,'dash',a.name+'向前突進');
     }
-    if(sk.kind==='flying-sword')a.flyingSword=point(p);
+    if(sk.kind==='flying-sword'){
+      a.flyingSword=point(p);
+      a.flyingSwordPower=sk.power;
+      a.flyingSwordManualId=sk.manualId;
+    }
     const origin=sk.kind==='flying-sword'?route[0]:point(a);
     const aim=sk.kind==='dash-cleave'?attackDirection(route[0],p):null;
     const targetPoint=aim?{x:p.x+aim.x,y:p.y+aim.y}:point(p);
     const castEvent=log(s,a.name+'施展「'+sk.name+'」','cast',{actor:a.uid,skill:sk.id,x:p.x,y:p.y,
       animation:{kind:'cast',style:sk.kind,origin,target:targetPoint,cells,
+        ...(sk.kind==='flying-sword'?{path:route}:{}),
         // A stored Firestore array cannot directly contain another array.
         ...(rays?{rays:rays.map(cells=>({cells}))}:{}),...(cuts?{cuts:cuts.map(cells=>({cells}))}:{}),...(sk.hits?{hits:sk.hits}:{}),...(sk.kind==='fist-chain'?{step:1}:{}),
         color:sk.color||(CORES[a.core]||CORES.none).color,changes:[appearance(a)]}});
@@ -1300,7 +1335,29 @@
     if(a.actions>=LIMITS.actions&&command.type!=='end')fail('本回合行動已達上限，請結束回合');
     const p={x:command.x,y:command.y};
     let endsTurn=command.type==='end';
-    if(command.type==='move'){
+    if(command.type==='sword-move'){
+      if(!a.flyingSword)fail('場上尚無飛劍');
+      const route=swordRoute(s,a,p);
+      const steps=route?route.length-1:0;
+      if(!steps||steps%2)fail('飛劍只能沿最短路徑移動偶數格');
+      if(at(s,p))fail('飛劍落點必須是空地');
+      const cost=steps/2;
+      if(cost>a.stamina)fail('移動飛劍的體力不足');
+      const origin=point(a.flyingSword);
+      a.stamina-=cost;a.flyingSword=point(p);
+      if(s.pveMetrics)s.pveMetrics.staminaSpent+=cost;
+      const cells=route.slice(1);
+      const hits=s.actors.filter(t=>alive(t)&&t.team!==a.team&&intersects(t,cells));
+      const movement=log(s,a.name+'御使飛劍移動 '+steps+' 格，消耗 '+cost+' 體力','cast',{
+        actor:a.uid,skill:'flight-summon',x:p.x,y:p.y,
+        animation:{kind:'cast',style:'flying-sword',origin,target:point(p),path:route,cells,
+          changes:[appearance(a)]}});
+      strikeSeals(s,cells);
+      for(const target of hits){
+        if(alive(target))damage(s,a,target,a.atk*(a.flyingSwordPower||1.1),{
+          skill:'flight-summon',manualId:a.flyingSwordManualId||'sword-flight'});
+      }
+    }else if(command.type==='move'){
       const route=path(s,a,p,a.uid),cost=route?route.length-1:0;
       if(!route||route.length<2)fail('此地格無法到達');
       if(a.slow&&cost>2)fail('緩速中，本次最多移動 2 格');
@@ -1392,5 +1449,5 @@
     if(s.pveMetrics)Object.assign(s.pveMetrics,{outcome:'loss',reason:'forfeit',turns:s.actors.find(a=>a.uid===uid)?.turns||0});
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });
