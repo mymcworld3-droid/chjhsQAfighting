@@ -970,6 +970,14 @@ async function main(){
       await quick.waitForFunction(()=>
         document.querySelector('[data-energy-number]')?.textContent==='8'&&
         document.querySelector('[data-quiz]')?.classList.contains('is-charge-ready'));
+      // Seed a real owned sword during this SOLO trial. The API must update
+      // the live actor without a restart; the three weapon stations were empty.
+      db.records.set(service.MANUALS+'/u1',
+        {version:2,school:'sword',books:{'sword-wind':{exp:0}},equipped:[]});
+      await service.updateLoadout(db,'u1',{index:0,weaponId:'sword-wind'});
+      await quick.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
+      await quick.waitForFunction(()=>
+        !!document.querySelector('[data-weapon-choice="sword-wind"]'));
       if(await quick.locator('.tc-weapon-outer-choices').isHidden())
         await quick.locator('[data-wheel-action="attack-ring"]:visible').first().click();
       assert.equal(await quick.locator('[data-weapon-choice="sword-wind"]').count(),1);
