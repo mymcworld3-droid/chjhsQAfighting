@@ -25,11 +25,11 @@ function credit(room,uid,source,questionId,roomId){
   if(review.index!==previous+1)
     throw fail('請先領取較早完成的題目體力',409);
   const stamina=staminaFor(member);
-  const received=Math.min(MAX_STAMINA-stamina,review.amount);
+  const received=room.mapVersion===2?0:Math.min(MAX_STAMINA-stamina,review.amount);
   const updated={...member,explorationStamina:stamina+received,
     quizCreditSeq:review.index,lastQuizCredit:{
       questionId,index:review.index,correct:review.correct,
-      granted:received,nominal:review.amount
+      granted:received,nominal:room.mapVersion===2?0:review.amount
     }};
   return {duplicate:false,members:{...room.members,[uid]:updated},
     credit:updated.lastQuizCredit};

@@ -5,6 +5,7 @@
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {STAGE,REALM}=require('./dungeon-manual-progression.cjs');
 const {dueTick,isRunning}=require('./dungeon-battle-clock.cjs');
+const {replenishMembers}=require('./dungeon-stamina-rules.cjs');
 const Combat=require('./dungeon-enemy-combat.cjs');
 const {clampStamina,staminaFor,staminaAfterCost}=require('./dungeon-stamina-rules.cjs');
 const VERSION=1,ID='boss-1',KIND='boss',NAME='玄炎鎮殿獸',HP=2800;
@@ -321,7 +322,7 @@ function advance(room,map,now){
     boss.attack={...boss.attack,
       resolvesAtTick:Math.max(boss.attack.resolvesAtTick,
         due+Combat.WINDUP_TICKS)};
-  return {enemies:[boss],members,
+  return {enemies:[boss],members:replenishMembers(room,members,due-applied),
     battleAppliedTick:due,battleAppliedAtMs:now};
 }
 function onDefeat(room,enemies,uid){

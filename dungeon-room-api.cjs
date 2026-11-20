@@ -6,7 +6,7 @@ const crypto = require('node:crypto');
 const { playerRepository, raidRepository } = require('./server-repositories.cjs');
 const { verifyMainIdentity } = require('./raid-question-ticket.cjs');
 const {streamDungeonRoom} = require('./dungeon-room-stream.cjs');
-const {LAYOUT_VERSION,generateDungeonLayout} = require('./dungeon-map-generator.cjs');
+const {LAYOUT_VERSION,CURRENT_LAYOUT_VERSION,supportedVersion} = require('./dungeon-map-generator.cjs');
 const {roomMap,startExplorationMembers,moveOnMap,moveRouteOnMap} = require('./dungeon-movement.cjs');
 const {trustedRaidPlayerSnapshot}=require('./raid-authority.cjs');
 const {initialClock,projectClock} = require('./dungeon-battle-clock.cjs');
@@ -52,7 +52,8 @@ const memberOnline=(member,at)=>Number(member?.heartbeatAtMs)>0 &&
   Math.max(0,at-Number(member.heartbeatAtMs))<=PRESENCE_STALE_MS;
 const publicRoom=(roomId,room,at=Date.now(),viewerUid='')=>({
   id:roomId,mode:'dungeon',version:room.version,revision:room.revision,
-  status:room.status,visibility:room.visibility==='public'?'public':'private',code:room.code,
+  status:room.status,mapVersion:room.mapVersion??LAYOUT_VERSION,
+  visibility:room.visibility==='public'?'public':'private',code:room.code,
   hostUid:room.hostUid,createdAtMs:room.createdAtMs,
   assembledAtMs:room.assembledAtMs||0,
   // Only reveal this player's trusted server kill ledger to their client.
@@ -275,7 +276,7 @@ function createHandler({
               mode:'dungeon',version:VERSION,revision:1,status:'waiting',
               visibility:action==='quick'||req.body?.visibility==='public'?'public':'private',code,hostUid:uid,createdAtMs:at,
               expiresAtMs:at+LOBBY_TTL_MS,maxMembers:MAX_MEMBERS,
-              mapVersion:LAYOUT_VERSION,mapSeed,
+              mapVersion:CURRENT_LAYOUT_VERSION,mapSeed,
               members:{[uid]:makeMember(uid,name,at,playerSnap.data())}
             };
             tx.set(roomRef,room);
@@ -388,7 +389,7 @@ function createHandler({
         // Render instances regenerate the same map from the trusted room seed.
         // Pre-v5 waiting rooms derive a stable fallback from the room ID.
         const seed=current.mapSeed||('legacy:'+roomId);
-        if(current.mapVersion!==undefined&&current.mapVersion!==LAYOUT_VERSION)
+        if(!supportedVersion(current.mapVersion??LAYOUT_VERSION))
           throw err('副本地圖版本尚未支援',409);
         return res.json({ok:true,roomId,map:roomMap(current,roomId)});
       }
@@ -478,16 +479,17 @@ function createHandler({
           if(current.status!=='assembled')
             throw err('請先完成全隊集結',409);
           const map=roomMap(current,roomId);
+          // Settle due server ticks (including earned passive stamina) BEFORE
+          // checking the movement cost; otherwise a zero-stamina member could
+          // remain stuck when their SSE briefly disconnects.
+          const battleDelta=advanceWorld(current,map,at);
+          const evolved={...current,...(battleDelta||{})};
           const outcome=action==='move-route'?
-            moveRouteOnMap(current,uid,map,{vectors,step}):
-            moveOnMap(current,uid,map,{dx,dy,step});
-          if(outcome.duplicate)return current;
-          // AI decisions observe the newly committed player position in this
-          // same transaction; clients cannot trigger extra NPC actions.
-          const battleDelta=advanceWorld({...current,members:outcome.members},map,at);
-          const next={...current,members:outcome.members,...(battleDelta||{}),
-            revision:current.revision+1};
-          tx.update(roomRef,{members:next.members,...(battleDelta||{}),
+            moveRouteOnMap(evolved,uid,map,{vectors,step}):
+            moveOnMap(evolved,uid,map,{dx,dy,step});
+          if(outcome.duplicate&&!battleDelta)return current;
+          const next={...evolved,members:outcome.members,revision:current.revision+1};
+          tx.update(roomRef,{...(battleDelta||{}),members:next.members,
             revision:next.revision});
           return next;
         });

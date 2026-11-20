@@ -28,7 +28,7 @@ function calculate(room,uid,source,questionId,roomId){
     throw fail('請先補領本題原本的答題體力，再返還錯題差額',409);
   const original=review.correct?RIGHT:WRONG;
   if(review.amount!==original)throw fail('答題體力紀錄無法驗證',403);
-  const nominal=RIGHT-original;
+  const nominal=room.mapVersion===2?0:RIGHT-original;
   const stamina=staminaFor(member);
   const granted=Math.min(MAX_STAMINA-stamina,nominal);
   return {member,nominal,granted,session:room.assembledAtMs,

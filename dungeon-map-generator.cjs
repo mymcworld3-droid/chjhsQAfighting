@@ -3,7 +3,10 @@
 // Immutable procedural blueprint v1 for cooperative dungeon exploration.
 // The only inputs are the room's server-issued seed and this layout version.
 // Never change this version's geometry: old rooms must regenerate identically.
-const LAYOUT_VERSION=1;
+const LAYOUT_VERSION=1; // immutable legacy geometry for existing rooms
+const FAST_LAYOUT_VERSION=2; // newly created ~5-minute exploration
+const CURRENT_LAYOUT_VERSION=FAST_LAYOUT_VERSION;
+const supportedVersion=version=>version===LAYOUT_VERSION||version===FAST_LAYOUT_VERSION;
 const WALL=0, CORRIDOR=1, CHAMBER=2;
 const BIOMES=Object.freeze([
   {id:'bamboo',name:'青竹幽徑'},
@@ -58,10 +61,11 @@ function turns(route){
   }
   return count;
 }
-function makeCandidate(seed,attempt){
-  const rng=randomGenerator(seed+':dungeon:v1:attempt:'+attempt);
-  const logicalWidth=11+rng.int(2);
-  const logicalHeight=9+rng.int(2);
+function makeCandidate(seed,attempt,version=LAYOUT_VERSION){
+  const fast=version===FAST_LAYOUT_VERSION;
+  const rng=randomGenerator(seed+':dungeon:v'+version+':attempt:'+attempt);
+  const logicalWidth=(fast?8:11)+rng.int(2);
+  const logicalHeight=(fast?7:9)+rng.int(2);
   const width=logicalWidth*4+3,height=logicalHeight*4+3;
   const start={x:0,y:2+rng.int(logicalHeight-4)};
   const inside=p=>p.x>=0&&p.y>=0&&p.x<logicalWidth&&p.y<logicalHeight;
@@ -81,7 +85,7 @@ function makeCandidate(seed,attempt){
     stack.push(n);
   }
   const farthest=[...depth].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))[0];
-  if(!farthest||farthest[1]<29)return null;
+  if(!farthest||farthest[1]<(fast?18:29))return null;
   const farRoute=[];
   for(let current=farthest[0];current;){
     const [x,y]=current.split(',').map(Number);
@@ -90,13 +94,15 @@ function makeCandidate(seed,attempt){
     current=parent?key(parent):null;
   }
   farRoute.reverse();
-  const targetLength=23+rng.int(6);
+  // A shorter spine and two optional branches preserve the guardian/key
+  // objective without turning exploration into an eight-minute maze.
+  const targetLength=fast?14+rng.int(4):23+rng.int(6);
   const main=farRoute.slice(0,targetLength);
-  if(main.length!==targetLength||turns(main)<5)return null;
+  if(main.length!==targetLength||turns(main)<(fast?4:5))return null;
   const occupied=new Set(main.map(key));
-  const requestedBranches=2+rng.int(3);
+  const requestedBranches=fast?2:2+rng.int(3);
   const possibleOrigins=rng.shuffle(main.map((p,index)=>({p,index}))
-    .filter(item=>item.index>=4&&item.index<=main.length-9));
+    .filter(item=>item.index>=(fast?3:4)&&item.index<=main.length-(fast?6:9)));
   const branches=[],origins=[];
   function grow(origin,wanted){
     const selected=[],local=new Set();
@@ -118,7 +124,7 @@ function makeCandidate(seed,attempt){
     if(origins.some(other=>Math.abs(other-index)<3))continue;
     // A branch is deliberately shorter than the remaining primary spine,
     // keeping the key guardian at the unambiguous deepest destination.
-    const length=3+rng.int(3);
+    const length=fast?2+rng.int(2):3+rng.int(3);
     const side=grow(p,length);
     if(!side)continue;
     for(const point of side)occupied.add(key(point));
@@ -182,20 +188,21 @@ function makeCandidate(seed,attempt){
     {x:entrance.x,y:entrance.y+1},{x:entrance.x+1,y:entrance.y+1}];
   const walkableCount=tiles.reduce((sum,tile)=>sum+(tile!==WALL?1:0),0);
   const biome=BIOMES[rng.int(BIOMES.length)];
-  const fingerprint=hash(seed+'|'+width+':'+height+':'+tiles.join(''));
+  const fingerprint=hash(seed+(fast?'|v2':'')+'|'+width+':'+height+':'+tiles.join(''));
   return {
-    mode:'dungeon',layoutVersion:LAYOUT_VERSION,seed,
-    layoutId:'dungeon-v1-'+fingerprint.toString(16).padStart(8,'0'),
+    mode:'dungeon',layoutVersion:version,seed,
+    layoutId:'dungeon-v'+version+'-'+fingerprint.toString(16).padStart(8,'0'),
     width,height,tiles,biome:biome.id,title:biome.name,
     spawn:entrance,spawnPads,entrance,deepest,guardianSite,portalSite,
     mainRoute,mainTurns:turns(main),branches:branchesOut,
     branchCount:branchesOut.length,walkableCount
   };
 }
-function generateDungeonLayout(seed){
+function generateDungeonLayout(seed,version=LAYOUT_VERSION){
   if(!validSeed(seed))throw new TypeError('地圖種子碼無效');
+  if(!supportedVersion(version))throw new RangeError('不支援的副本地圖版本');
   for(let attempt=0;attempt<64;attempt++){
-    const candidate=makeCandidate(seed,attempt);
+    const candidate=makeCandidate(seed,attempt,version);
     if(candidate)return candidate;
   }
   throw new Error('無法生成符合連通性與支線限制的副本地圖');
@@ -205,5 +212,6 @@ const walkable=(layout,p)=>{
     p.x<0||p.y<0||p.x>=layout.width||p.y>=layout.height)return false;
   return Number(layout.tiles[p.y*layout.width+p.x])!==WALL;
 };
-module.exports={LAYOUT_VERSION,WALL,CORRIDOR,CHAMBER,BIOMES,generateDungeonLayout,walkable};
+module.exports={LAYOUT_VERSION,FAST_LAYOUT_VERSION,CURRENT_LAYOUT_VERSION,
+  supportedVersion,WALL,CORRIDOR,CHAMBER,BIOMES,generateDungeonLayout,walkable};
 module.exports.__test={hash,randomGenerator,turns,makeCandidate};

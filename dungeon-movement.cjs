@@ -4,7 +4,7 @@
 // server and written in the same Firestore transaction as the room revision.
 // This temporary dungeon exploration pool is independent from raid tickets,
 // tactical combat and main-account resources until quiz charging arrives.
-const {generateDungeonLayout,LAYOUT_VERSION,walkable}=require('./dungeon-map-generator.cjs');
+const {generateDungeonLayout,LAYOUT_VERSION,supportedVersion,walkable}=require('./dungeon-map-generator.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
 const {START_STAMINA,STEP_COST,staminaFor,staminaAfterCost}=require('./dungeon-stamina-rules.cjs');
 const MAX_STEPS=100000;
@@ -12,11 +12,11 @@ const error=(message,status=409)=>Object.assign(new Error(message),{status});
 const order=members=>Object.values(members||{}).sort((a,b)=>
   Number(a.joinedAtMs)-Number(b.joinedAtMs)||String(a.uid).localeCompare(String(b.uid)));
 function roomMap(room,roomId){
-  if(room?.mapVersion!==undefined&&room.mapVersion!==LAYOUT_VERSION)
-    throw error('副本地圖版本尚未支援',409);
+  const version=room?.mapVersion??LAYOUT_VERSION;
+  if(!supportedVersion(version))throw error('副本地圖版本尚未支援',409);
   const seed=room?.mapSeed||('legacy:'+roomId);
   return room?.dungeonArena==='boss'?Boss.mapFor(seed):
-    generateDungeonLayout(seed);
+    generateDungeonLayout(seed,version);
 }
 function spawnFor(room,uid,map){
   const index=order(room?.members).findIndex(m=>m.uid===uid);

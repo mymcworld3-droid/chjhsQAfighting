@@ -6,6 +6,7 @@ const {dueTick,isRunning}=require('./dungeon-battle-clock.cjs');
 const Combat=require('./dungeon-enemy-combat.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
 const {maxHealth}=require('./dungeon-player-combat.cjs');
+const {replenishMembers}=require('./dungeon-stamina-rules.cjs');
 const {STAGE,REALM}=require('./dungeon-manual-progression.cjs');
 const ENEMY_AI_VERSION=1;
 const MAX_CATCHUP_TICKS=24;
@@ -233,8 +234,9 @@ function advanceWorld(room,map,now){
       safeCatchup,committedTick:applied
     }):
     {enemies:base,members:room.members};
+  const members=replenishMembers(room,outcome.members,due-applied);
   return {enemies:outcome.enemies,enemyAiVersion:ENEMY_AI_VERSION,
-    ...(outcome.members!==room.members?{members:outcome.members}:{}),
+    ...(members!==room.members?{members}:{}),
     ...(due>applied?{battleAppliedTick:due,battleAppliedAtMs:now}:{})};
 }
 module.exports={ENEMY_AI_VERSION,MAX_CATCHUP_TICKS,KINDS,DIRECTIONS,
