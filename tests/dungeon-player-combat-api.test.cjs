@@ -166,6 +166,21 @@ test('two servers resolve simultaneous equipped skills against one shared enemy'
   assert.equal(stored.members.b.explorationStamina,8);
   assert.ok(stored.members.a.lastSkill.totalDamage+
     stored.members.b.lastSkill.totalDamage===400);
+  // One server owns the last hit; only that player's actual equipped book
+  // receives the same 35 EXP as a stage-five trial beast.
+  const killer=['a','b'].find(uid=>stored.members[uid].lastSkill.hits
+    .some(hit=>hit.defeated));
+  assert.ok(killer);
+  assert.equal(stored.manualExp[killer]['sword-wind'],35);
+  assert.equal(Object.values(stored.manualExp).length,1);
+  for(const uid of 'ab')
+    assert.equal(f.a.records.get('tacticalManuals/'+uid).books['sword-wind'].exp,
+      2500+(uid===killer?35:0));
+  const once=await f.call(killer,'claim-manual-exp',{roomId:id});
+  assert.equal(once.status,200);
+  assert.deepEqual(once.body.manualProgress.credited,{});
+  assert.equal(f.a.records.get('tacticalManuals/'+killer)
+    .books['sword-wind'].exp,2535);
   const before=stored.revision;
   const stale=await f.call('b','skill',{roomId:id,skillId:'wind-slash',
     target:wolf.position,seq:1},0);
