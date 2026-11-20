@@ -6,7 +6,7 @@ const {walkable}=require('./dungeon-map-generator.cjs');
 const {dueTick,isRunning}=require('./dungeon-battle-clock.cjs');
 const Combat=require('./dungeon-enemy-combat.cjs');
 const {clampStamina,staminaFor,staminaAfterCost}=require('./dungeon-stamina-rules.cjs');
-const VERSION=1,ID='boss-1',KIND='boss',NAME='玄炎鎮殿獸',HP=900;
+const VERSION=1,ID='boss-1',KIND='boss',NAME='玄炎鎮殿獸',HP=2800;
 const SIZE=2,WIDTH=23,HEIGHT=17;
 const SHIELD_MAX=180,COMBO_WINDOW_TICKS=5,GUARD_DURATION_TICKS=5;
 const ALLY_GUARD_COST=3,SELF_GUARD_COST=6;
@@ -67,7 +67,8 @@ function cells(enemy){
 }
 const occupies=(enemy,p)=>cells(enemy).some(q=>same(q,p));
 const reach=(from,enemy)=>Math.min(...cells(enemy).map(p=>dist(from,p)),Infinity);
-const phase=hp=>hp>HP*.7?1:hp>HP*.35?2:3;
+// Legacy rooms retain their stored maxHP, including their original phase gates.
+const phase=(hp,maximum=HP)=>hp>maximum*.7?1:hp>maximum*.35?2:3;
 const tickOf=room=>Number.isSafeInteger(room?.battleAppliedTick)?
   Math.max(0,room.battleAppliedTick):0;
 const int=(value,otherwise=0)=>Number.isSafeInteger(value)&&value>=0?value:otherwise;
@@ -263,7 +264,7 @@ function plan(map,boss,members,tick){
       a.localeCompare(b));
   if(!living.length)return null;
   const [targetUid,target]=living[0],step=boss.attackCount||0;
-  const p=phase(boss.battleHealth);
+  const p=phase(boss.battleHealth,boss.battleMaxHealth||HP);
   const pattern=p===1?'quake':p===2?['quake','charge'][step%2]:
     ['quake','charge','flame'][step%3];
   const rules={quake:['震地裂環',11],charge:['玄甲衝鋒',13],
@@ -307,9 +308,9 @@ function advance(room,map,now){
       const warning=plan(map,boss,members,tick);
       if(warning){
         boss={...boss,attack:warning,intent:'windup',
-          phase:phase(boss.battleHealth),targetUid:warning.targetUid,
+          phase:phase(boss.battleHealth,boss.battleMaxHealth||HP),targetUid:warning.targetUid,
           attackCount:(boss.attackCount||0)+1,
-          nextActionTick:tick+(phase(boss.battleHealth)===3?3:4),
+          nextActionTick:tick+(phase(boss.battleHealth,boss.battleMaxHealth||HP)===3?3:4),
           lastActionTick:tick};
       }else boss.nextActionTick=tick+2;
     }
