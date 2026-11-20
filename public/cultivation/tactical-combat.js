@@ -190,6 +190,38 @@ async function refreshBattleLoadouts(){
     }
   }finally{if(loadoutFetchingFor===key)loadoutFetchingFor='';}
 }
+
+function showBattleWeaponChoices(slot){
+  if(!battleLoadouts||!Number.isInteger(slot)||slot<0||slot>2)return;
+  const host=$('[data-battle-weapon-candidates]');
+  if(!host)return;
+  const worn=battleLoadouts.weaponIds||[];
+  const available=(battleLoadouts.library||[]).filter(book=>book.owned);
+  host.hidden=false;
+  host.innerHTML='<p>選擇第 '+(slot+1)+' 欄（相同武器不可重複裝備）</p>'+
+    available.map(book=>{
+      const other=worn.indexOf(book.id),disabled=other>=0&&other!==slot;
+      return '<button type="button" data-battle-equip="'+slot+'" data-weapon-id="'+esc(book.id)+
+        '" '+(disabled?'disabled':'')+'>'+esc(book.name)+' · Lv.'+book.level+
+        (disabled?'（已裝備）':'')+'</button>';
+    }).join('');
+}
+async function editBattleWeapon(slot,weaponId){
+  if(!state||state.mode!=='pve'||state.status!=='active'||!Number.isInteger(slot)||
+    slot<0||slot>2||busy||!battleLoadouts)return;
+  const roomId=state.id,account=uid,session=epoch;
+  busy=true;updateControls();
+  try{
+    const result=await api('/api/tactical/manuals/loadout',{index:slot,weaponId});
+    if(!valid(session,account)||state?.id!==roomId)return;
+    battleLoadouts=result.state;loadoutFetchedFor=account;
+    loadoutMenuOpen=false;weaponSelectionOpen=false;selectedWeaponId='';
+    // One atomic server transaction updated both the save and live solo actor.
+    await sync();
+    if(valid(session,account))notice(weaponId?'武器已裝備，可立即選用三招':'武器已卸下');
+  }catch(error){if(valid(session,account))notice(error.message||'武器更新失敗');}
+  finally{busy=false;if(valid(session,account)){renderBattleLoadouts();updateControls();}}
+}
 async function switchBattleLoadout(index){
   if(!state||state.status!=='active'||state.mode!=='pve'||busy||!Number.isInteger(index)||index<0||index>2)return;
   const current=Number.isInteger(myActor()?.manualLoadoutIndex)?myActor().manualLoadoutIndex:
@@ -448,6 +480,117 @@ function wheelSliderShape(slider,count){
   slider.querySelector('.tc-wheel-slider-shape')?.setAttribute('d',wheelSlicePath(count,lane.outer,lane.inner));
   slider.dataset.optionCount=String(count);
 }
+
+function leftWheelWedge(start,end,outer,inner){
+  const points=[];
+  for(let i=0;i<=24;i++){const rad=(start+(end-start)*i/24)*Math.PI/180;
+    points.push([(outer*Math.cos(rad)).toFixed(3),(100+outer*Math.sin(rad)).toFixed(3)]);
+  }
+  for(let i=24;i>=0;i--){const rad=(start+(end-start)*i/24)*Math.PI/180;
+    points.push([(inner*Math.cos(rad)).toFixed(3),(100+inner*Math.sin(rad)).toFixed(3)]);
+  }
+  return 'polygon('+points.map(p=>p[0]+'% '+p[1]+'%').join(',')+')';
+}
+function renderModernWeaponWheel(hero,locked,mine){
+  const ring=$('.tc-quarter-action'),energy=$('.tc-quarter-energy');
+  if(!ring||!energy)return;
+  root.classList.add('tc-modern-weapon-wheel');
+  const worn=(hero.manualWeaponIds||[]).slice(0,3);
+  if(!selectedWeaponId&&action==='manual')
+    selectedWeaponId=Manuals.BY_SKILL[selectedManualSkill]?.manualId||'';
+  if(!worn.includes(selectedWeaponId))selectedWeaponId='';
+  const expanded=weaponSelectionOpen;
+  const attack=ring.querySelector('[data-wheel-action="attack-ring"]');
+  const end=ring.querySelector('[data-end]'),choices=ring.querySelector('.tc-wheel-options');
+  if(attack){
+    attack.hidden=expanded&&!!selectedWeaponId;
+    attack.style.clipPath=wheelWedge(-90,-180,74,49);
+    if(attack.dataset.newText!=='attack'){
+      attack.dataset.newText='attack';attack.innerHTML='<span>攻擊</span>';
+    }
+    attack.setAttribute('aria-label','攻擊：選擇已裝備武器與技能');
+    attack.disabled=!mine||locked;
+  }
+  if(end)end.disabled=!mine||locked;
+  const move=energy.querySelector('[data-action="move"]');
+  if(move){move.disabled=!mine||locked;move.setAttribute('aria-pressed',String(action==='move'));}
+  let weaponRing=ring.querySelector('.tc-weapon-outer-choices');
+  if(!weaponRing){
+    weaponRing=document.createElement('div');weaponRing.className='tc-weapon-outer-choices';
+    weaponRing.setAttribute('role','group');weaponRing.setAttribute('aria-label','已裝備武器');
+    ring.append(weaponRing);
+  }
+  let open=ring.querySelector('.tc-open-weapon-ring');
+  if(!open){
+    open=document.createElement('button');open.type='button';open.className='tc-open-weapon-ring';
+    open.dataset.wheelAction='attack-ring';open.innerHTML='<span>武器</span>';ring.append(open);
+  }
+  open.hidden=expanded;open.disabled=!mine||locked;
+  open.style.clipPath=wheelWedge(-90,-180,100,74);
+  weaponRing.hidden=!expanded;
+  const weaponKey=worn.join('|');
+  if(weaponRing.dataset.key!==weaponKey){
+    weaponRing.dataset.key=weaponKey;
+    const nodes=Array.from({length:3},(_,i)=>{
+      const weaponId=worn[i],book=Manuals.BY_BOOK[weaponId];
+      const button=document.createElement('button');button.type='button';
+      button.className='tc-weapon-sector';
+      button.style.clipPath=wheelWedge(-90-30*i,-120-30*i,100,74);
+      if(weaponId)button.dataset.weaponChoice=weaponId;
+      const label=document.createElement('span');label.className='tc-modern-weapon-label';
+      wheelMarker(label,-105-30*i,87);
+      label.innerHTML=book?'<span class="tc-modern-weapon-art manual-weapon-art manual-weapon-art--'+esc(weaponId)+'"></span>'+
+        '<small>'+esc(book.name)+'</small>':'<small>空欄 '+(i+1)+'</small>';
+      button.append(label);return button;
+    });
+    weaponRing.replaceChildren(...nodes);
+  }
+  [...weaponRing.children].forEach((button,i)=>{
+    button.disabled=!mine||locked||!worn[i];
+    button.setAttribute('aria-pressed',String(!!worn[i]&&selectedWeaponId===worn[i]));
+    button.title=worn[i]?Manuals.BY_BOOK[worn[i]]?.name||'武器':'尚未裝備武器';
+  });
+  const book=Manuals.BY_BOOK[selectedWeaponId],skills=book?.skills||[];
+  const displaySkills=expanded&&!!book;
+  choices.hidden=!displaySkills;
+  const key=displaySkills?selectedWeaponId:'';
+  if(choices.dataset.weaponKey!==key){
+    choices.dataset.weaponKey=key;
+    const nodes=(displaySkills?skills:[]).map((skill,i)=>{
+      const button=document.createElement('button');button.type='button';
+      button.className='tc-sector tc-modern-skill-sector';
+      button.dataset.wheelChoice='manual:'+skill.id;
+      button.style.clipPath=wheelWedge(-90-30*i,-120-30*i,74,49);
+      const label=document.createElement('span');label.className='tc-modern-skill-label';
+      wheelMarker(label,-105-30*i,63);
+      label.innerHTML='<img alt="" decoding="async" loading="lazy" src="'+esc(skillArt(skill))+'">'+
+        '<small>'+esc(skill.name)+'</small>';
+      button.append(label);return button;
+    });
+    choices.replaceChildren(...nodes);
+  }
+  [...choices.children].forEach((button,i)=>{
+    const skill=skills[i],available=skill&&R.manualSkillFor(hero,skill.id);
+    const cost=available?R.techniqueCost(hero,available):null;
+    button.disabled=!mine||locked||!available;
+    button.classList.toggle('is-locked',!available);
+    button.setAttribute('aria-pressed',String(!!available&&selectedManualSkill===skill.id&&action==='manual'));
+    button.title=available?skill.name+' · '+cost+' 體力':
+      skill?'尚未符合武器 Lv.'+skill.levelRequired+' 與境界條件':'不可使用';
+    button.setAttribute('aria-label',button.title);
+  });
+  ring.classList.toggle('is-weapon-expanded',expanded);
+  ring.setAttribute('aria-label',expanded?
+    '武器選擇：'+(book?.name||'請選擇武器')+'；'+(book?'點選中圈三招之一':'選擇外圈武器'):
+    '攻擊選單，請點選武器');
+  let fly=energy.querySelector('[data-action="sword-move"]');
+  if(hero.flyingSword&&!fly){
+    fly=document.createElement('button');fly.type='button';fly.className='tc-left-fly-sword';
+    fly.dataset.action='sword-move';fly.textContent='移動飛劍';energy.append(fly);
+  }
+  if(fly){fly.hidden=!hero.flyingSword;fly.disabled=!mine||locked;}
+}
+
 function wheelWedge(start,end,outer,inner){
   const points=[];
   for(let i=0;i<=12;i++){
@@ -788,10 +931,11 @@ function buildGame(){
     attack.dataset.wheelAction='attack-ring';
     attack.style.clipPath=wheelWedge(-90,-135,74,49);
     attack.innerHTML='<span>攻擊</span>';
-    move.className='tc-sector tc-sector-move';
+    move.className='tc-left-move';
     move.dataset.wheelAction='move';
-    move.style.clipPath=wheelWedge(-135,-180,74,49);
-    move.innerHTML='<span>移動</span>';
+    move.style.clipPath=leftWheelWedge(-90,0,82,58);
+    move.innerHTML='<span><i class="fa-solid fa-person-walking" aria-hidden="true"></i>移動</span>';
+    energy.append(move);
     end.className='tc-sector tc-sector-end';
     end.style.clipPath=wheelWedge(-90,-180,49,0);
     end.innerHTML='<span>結束\n回合</span>';
@@ -835,12 +979,14 @@ function buildGame(){
       return Math.max(-180,Math.min(-90,Math.atan2(e.clientY-bounds.bottom,e.clientX-bounds.right)*180/Math.PI));
     };
     actions.addEventListener('pointerdown',e=>{
+      if(myActor()?.manualWeaponMode)return;
       if(pointer||e.target.closest('[data-end]'))return;
       const b=e.target.closest('button[data-wheel-action],button[data-wheel-choice]');
       if(!b||b.disabled)return;
       pointer={id:e.pointerId,x:e.clientX,y:e.clientY,ring:b.dataset.wheelChoice?'detail':'action',moved:false};
     });
     actions.addEventListener('pointermove',e=>{
+      if(myActor()?.manualWeaponMode)return;
       if(!pointer||pointer.id!==e.pointerId)return;
       if(Math.hypot(e.clientX-pointer.x,e.clientY-pointer.y)>8){
         if(!pointer.moved){
@@ -1143,7 +1289,9 @@ function updateControls(){
       }
     }
   });
-  if(quarter){
+  if(quarter&&me.manualWeaponMode){
+    renderModernWeaponWheel(me,locked,mine);
+  }else if(quarter){
     const attacking=action!=='move'&&action!=='sword-move';
     const chosenCost=cost+' 體力',moveCostLabel=moveStamina===null?'1 體力/格':moveStamina+' 體力';
     const ring=$('.tc-quarter-action'),choices=ring.querySelector('.tc-wheel-options');
