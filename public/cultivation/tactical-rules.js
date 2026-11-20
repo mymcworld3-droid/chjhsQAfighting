@@ -933,6 +933,8 @@
     const targetPoint=aim?{x:p.x+aim.x,y:p.y+aim.y}:point(p);
     const castEvent=log(s,a.name+'施展「'+sk.name+'」','cast',{actor:a.uid,skill:sk.id,x:p.x,y:p.y,
       animation:{kind:'cast',style:sk.kind,origin,target:targetPoint,cells,
+        ...(sk.kind==='fist-focus'?{focusActivated:true}:{}),
+        ...(focusTurns(a)>0&&sk.school==='body'&&sk.kind!=='fist-focus'?{focusEmpowered:true}:{}),
         ...(sk.kind==='flying-sword'?{path:route}:{}),
         // A stored Firestore array cannot directly contain another array.
         ...(rays?{rays:rays.map(cells=>({cells}))}:{}),...(cuts?{cuts:cuts.map(cells=>({cells}))}:{}),...(sk.hits?{hits:sk.hits}:{}),...(sk.kind==='fist-chain'?{step:1}:{}),
