@@ -47,7 +47,7 @@ test('solo attacks chip the shield and HP without needing any cooperative token'
     r=update(r,result);
   }
   assert.equal(r.enemies[0].shield,0,'six solo hits break 180 shield');
-  assert.ok(r.enemies[0].battleHealth<900,'shield still permits HP damage');
+  assert.ok(r.enemies[0].battleHealth<Boss.HP,'shield still permits HP damage');
   assert.equal(r.enemies[0].lastTeamHit.shieldBroken,true);
   assert.equal(r.enemies[0].exposedUntilTick,6);
   const prev=r.enemies[0].battleHealth;
