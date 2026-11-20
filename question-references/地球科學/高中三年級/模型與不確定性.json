@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-earth3-modelerror-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "地史、天文幾何與模型風險分開命題，避免不當的確定性結論",
+      "question": {
+        "q": "某氣候模型以1980–2010年資料調整參數，並只用同一期間資料檢查準確度。評估其預測能力時還應優先增加何種驗證？",
+        "correct": "以未參與參數調整的獨立年份或地區資料檢驗",
+        "wrong": [
+          "只重複在同一批資料上計算誤差，並把結果視為完全獨立",
+          "刪除與模型不符的觀測，就能證明所有預測都可靠",
+          "只把模式網格變細，便可排除所有資料與參數的不確定性"
+        ],
+        "exp": "模型若在校正資料上評分，可能過度樂觀；需要獨立資料評估其對新情境的泛化能力。",
+        "subject": "地球科學",
+        "sub_topic": "模型與不確定性",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中三年級-模型與不確定性",
+        "template_id": "ref-20261120-b12-earth3-modelerror-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-earth3-modelerror-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "地史、天文幾何與模型風險分開命題，避免不當的確定性結論",
+      "question": {
+        "q": "某颱風預報集合共10次模擬，其中7次預測某地區出現豪雨。哪項解讀最嚴謹？",
+        "correct": "7次模擬支持豪雨情境，但不能直接把70%視為已校準的實際降雨機率",
+        "wrong": [
+          "10次模擬有7次豪雨，便可確定未來實際降雨機率精確等於70%",
+          "只要有3次沒豪雨，便能斷言豪雨不可能發生",
+          "模擬結果不完全相同，表示所有預報都沒有資訊價值"
+        ],
+        "exp": "集合成員的比例反映所選模型及初始條件下的分布；若未做偏差修正與機率校準，不能等同真實機率。",
+        "subject": "地球科學",
+        "sub_topic": "模型與不確定性",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中三年級-模型與不確定性",
+        "template_id": "ref-20261120-b12-earth3-modelerror-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-earth3-modelerror-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "地史、天文幾何與模型風險分開命題，避免不當的確定性結論",
+      "question": {
+        "q": "研究某海岸的未來淹水風險，模型只考慮海平面上升，忽略風暴潮與地層下陷。使用結果時最應強調什麼？",
+        "correct": "模型省略其他重要淹水因素，估計不能直接視為完整風險",
+        "wrong": [
+          "既然已考慮海平面上升，就必定包含所有颱風與地層因素",
+          "風暴潮與地層下陷會在任何地點完全抵消",
+          "只要模型可算出單一數值，就表示預測完全沒有不確定性"
+        ],
+        "exp": "風暴潮、地層下陷與海平面變化可能共同影響相對水位和淹水，模型未納入時須說明適用範圍和限制。",
+        "subject": "地球科學",
+        "sub_topic": "模型與不確定性",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中三年級-模型與不確定性",
+        "template_id": "ref-20261120-b12-earth3-modelerror-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
