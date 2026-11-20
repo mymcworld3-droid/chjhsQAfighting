@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-chem2-acidbase-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "結合結構、平衡與滴定計量，解析說明各條件及適用範圍",
+      "question": {
+        "q": "25°C且忽略活度效應的水溶液中，若[H⁺]=1.0×10⁻⁵ M，pOH約為多少？",
+        "correct": "9",
+        "wrong": [
+          "5",
+          "7",
+          "14"
+        ],
+        "exp": "pH=−log(10⁻⁵)=5；在25°C，pH+pOH=14，因此pOH=9。",
+        "subject": "化學",
+        "sub_topic": "酸鹼平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中二年級-酸鹼平衡",
+        "template_id": "ref-20261120-b12-chem2-acidbase-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chem2-acidbase-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "結合結構、平衡與滴定計量，解析說明各條件及適用範圍",
+      "question": {
+        "q": "一元弱酸HA的解離平衡為HA⇌H⁺+A⁻。若平衡時[H⁺]=0.010 M、[A⁻]=0.010 M、[HA]=0.10 M，則Ka約為多少？",
+        "correct": "1.0×10⁻³",
+        "wrong": [
+          "1.0×10⁻²",
+          "1.0×10⁻⁴",
+          "1.0×10⁻¹"
+        ],
+        "exp": "Ka=[H⁺][A⁻]/[HA]=(0.010×0.010)/0.10=0.001=1.0×10⁻³。",
+        "subject": "化學",
+        "sub_topic": "酸鹼平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中二年級-酸鹼平衡",
+        "template_id": "ref-20261120-b12-chem2-acidbase-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chem2-acidbase-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "結合結構、平衡與滴定計量，解析說明各條件及適用範圍",
+      "question": {
+        "q": "一種弱酸HA與其共軛鹼A⁻組成緩衝液，若兩者濃度相等並可套用亨德森–哈塞爾巴爾赫公式，哪項關係正確？",
+        "correct": "pH≈pKa",
+        "wrong": [
+          "pH≈2pKa",
+          "pH≈14−pKa",
+          "pH必等於7"
+        ],
+        "exp": "pH=pKa+log([A⁻]/[HA])；兩者濃度相等時比值為1，log1=0，所以pH≈pKa，不必等於7。",
+        "subject": "化學",
+        "sub_topic": "酸鹼平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中二年級-酸鹼平衡",
+        "template_id": "ref-20261120-b12-chem2-acidbase-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
