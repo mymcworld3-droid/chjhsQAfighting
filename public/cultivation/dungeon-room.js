@@ -212,6 +212,12 @@ export const acknowledgeDungeonReview=(roomId,questionId)=>
   dungeonQuizRequest('/api/dungeon/quiz/next',{roomId,questionId});
 export const claimDungeonQuizStamina=(roomId,questionId)=>
   request('quiz-credit',{roomId,questionId});
+export const reportDungeonQuestion=(roomId,questionId,reason)=>
+  dungeonQuizRequest('/api/dungeon/quiz/report',{roomId,questionId,reason});
+export const reviewDungeonMathIssue=(roomId,questionId)=>
+  dungeonQuizRequest('/api/dungeon/quiz/review-math-issue',{roomId,questionId});
+export const refundDungeonQuestionStamina=(roomId,questionId)=>
+  request('quiz-error-refund',{roomId,questionId});
 
 // The server computes clock ticks from its own assembly epoch. This request
 // never accepts client timestamps or a requested tick value.
