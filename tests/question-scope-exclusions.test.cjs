@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const Scope = require('../quiz-scope-exclusions.cjs');
+const StudyScope = require('../trial-tower-scope.cjs');
 
 const unit = {path:'數學/高中一年級/全學年/數學',detail:'向量內積',sub_topics:['二維向量','內積']};
 const another = {path:'數學/高中一年級/全學年/數學',detail:'空間幾何',sub_topics:[]};
@@ -71,4 +72,38 @@ test('new screen and server keep exclusions separate from wrong-answer reporting
   assert.match(study,/exclusionRevision:/);
   assert.match(study,/qa:scope-exclusions-updated/);
   assert.match(html,/id="btn-quiz-scope-exclusion"/);
+});
+
+test('scope exclusion revision invalidates both PvE trial and dungeon question buffers',()=>{
+  const user=player();
+  const original=StudyScope.key(StudyScope.snapshot(user));
+  const storedScope=Scope.scopeKey(user);
+  user.questionScopeExclusions={scopeKey:storedScope,revision:'rule-1',
+    rules:[{id:'one',unitKey:Scope.unitKey(unit),
+      text:'不要出三維向量內積'}]};
+  const afterAdd=StudyScope.key(StudyScope.snapshot(user));
+  assert.notEqual(afterAdd,original);
+  user.questionScopeExclusions.revision='rule-2';
+  const afterUpdate=StudyScope.key(StudyScope.snapshot(user));
+  assert.notEqual(afterAdd,afterUpdate);
+  assert.equal(StudyScope.snapshot(user).exclusionRevision,'rule-2');
+  // Reordering the selected chapters does not invalidate the same rules.
+  user.gameSettings.focusedUnits.reverse();
+  assert.equal(StudyScope.key(StudyScope.snapshot(user)),afterUpdate);
+  user.gameSettings.sourceMode='random';
+  assert.equal(StudyScope.snapshot(user).exclusionRevision,'');
+  user.gameSettings.sourceMode='focused';
+  user.gameSettings.focusedUnits=[unit];
+  assert.equal(StudyScope.snapshot(user).exclusionRevision,'',
+    'unrelated old rules may not affect the new selected scope');
+});
+test('combat scope exclusion editor reuses the main authenticated UI',()=>{
+  const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/quiz-scope-exclusion.js'),'utf8');
+  const dungeon=fs.readFileSync(path.join(__dirname,'../public/cultivation/dungeon-quiz-panel.js'),'utf8');
+  const trial=fs.readFileSync(path.join(__dirname,'../public/main-legacy.js'),'utf8');
+  assert.match(source,/context\.onUpdated/);
+  assert.match(source,/window\.QATrialQuestion\?\.next/);
+  assert.match(dungeon,/data-dq="scope-exclusion"/);
+  assert.match(dungeon,/openQuizScopeExclusion/);
+  assert.match(trial,/pendingQuizScopeExclusions/);
 });
