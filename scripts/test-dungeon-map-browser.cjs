@@ -484,7 +484,7 @@ async function main(){
       });
       await page.goto('http://127.0.0.1:'+server.address().port+'/dungeon-test.html');
       try{
-        await page.locator('#gameplay-dungeon-entry').waitFor({timeout:8000});
+        await page.locator('#gameplay-dungeon-entry').waitFor({state:'attached',timeout:8000});
       }catch(error){
         console.error('[Dungeon preview startup]',uid,errors,await page.evaluate(async()=>({
           state:document.readyState,
