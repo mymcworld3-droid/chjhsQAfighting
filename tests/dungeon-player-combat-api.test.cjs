@@ -294,6 +294,7 @@ test('independently confirmed wrong question refunds exactly 3 stamina once acro
   assert.equal(applied.members.b.explorationStamina,10);
   assert.equal(applied.members.a.lastQuizErrorRefund.nominal,3);
   assert.equal(applied.members.a.lastQuizErrorRefund.granted,3);
+  assert.deepEqual(applied.members.a.quizErrorRefunds,[qid]);
   assert.equal(applied.revision,revision+1);
   const receipts=[...f.c.records.keys()]
     .filter(k=>k.startsWith('dungeonQuizErrorRefunds/'));
