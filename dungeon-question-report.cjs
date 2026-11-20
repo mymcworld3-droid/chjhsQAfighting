@@ -4,6 +4,8 @@
 // the player's authenticated C room owns combat stamina and its receipts.
 const Quiz=require('./dungeon-quiz-api.cjs').__test;
 const Reports=require('./question-report-api.cjs').__test;
+const Learning=require('./dungeon-learning-correction.cjs');
+const crypto=require('node:crypto');
 const COLLECTION=Quiz.COLLECTION;
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
 const exists=snap=>snap?.exists?snap.data():null;
@@ -38,14 +40,24 @@ async function report(dbA,dbC,uid,input,now=Date.now(),{
   if(!record||record.roomId!==roomId||record.sessionKey!==sessionKey)
     throw fail('目前沒有可信的副本題目',409);
   const known=record.errorReports?.[questionId];
-  if(known?.approved===true){
+  if(known?.approved===true&&known.learningReversed===true){
+    const user=exists(await dbA.collection('users').doc(uid).get());
     return {status:'duplicate',valid:true,compensated:false,
-      reason:'本題已經獨立審核確認，補償不會重複領取。',
+      reason:'本題已確認有誤，學習紀錄已排除此題，不會重複補償。',
       skipped:known.skipped===true,
-      state:Quiz.view(record)};
+      state:Quiz.view(record),
+      progress:Learning.progress(user)};
   }
   const found=source(record,questionId);
-  if(!found)throw fail('這道題目已失效，請回到目前題目重新回報',409);
+  if(!found){
+    // Old confirmed reports can outlive the bounded answer history.
+    // Never fabricate a learning rollback without the trusted question.
+    if(known?.approved)return {status:'duplicate',valid:true,
+      compensated:false,skipped:known.skipped===true,
+      reason:'本題原有審核已確認；歷史題目已不在可修正區間。',
+      state:Quiz.view(record)};
+    throw fail('這道題目已失效，請回到目前題目重新回報',409);
+  }
   const trusted=validateSource(found.question,reason);
   if(trusted.error)throw fail(trusted.error,400);
   // Reuse a previous trusted server-side compensation proof only for the
@@ -59,7 +71,8 @@ async function report(dbA,dbC,uid,input,now=Date.now(),{
     JSON.stringify(claimed.options)===JSON.stringify(trusted.options);
   let decision;
   try{
-    decision=accepted?{status:'confirmed',reason:claimed.reviewReason,
+    decision=known?.approved?{status:'confirmed',reason:known.reason||'已確認有誤'}:
+      accepted?{status:'confirmed',reason:claimed.reviewReason,
       issueType:claimed.issueType}:
       await review(trusted,{trusted:true});
   }catch(error){
@@ -74,15 +87,25 @@ async function report(dbA,dbC,uid,input,now=Date.now(),{
       reason:found.pending?'獨立審核未確認本題有實質錯誤。':
         String(decision.reason||'獨立審核未確認題目錯誤。').slice(0,300)};
   }
-  const awardResult=await award(dbA,uid,trusted,decision,{goldReward:0});
-  // Currency is issued only by the shared A receipt, and never per report
-  // retry. The next transaction is deliberately repeatable after an outage.
+  const awardResult=known?.approved?
+    {status:'duplicate',compensated:false,cultivationAdded:0}:
+    await award(dbA,uid,trusted,decision,{goldReward:0});
+  // Independent reward receipt and learning correction are repeatable.
+  // If the server fails after paying, the same approved report can resume.
   const updated=await dbA.runTransaction(async tx=>{
-    const snapshot=await tx.get(ref),current=exists(snapshot);
+    const userRef=dbA.collection('users').doc(uid);
+    const logRef=dbA.collection('exam_logs').doc(
+      crypto.createHash('sha256').update('dungeon-quiz\n'+uid+'\n'+questionId).digest('hex'));
+    // Firestore transaction rule: ALL reads happen before ANY writes.
+    const [snapshot,userSnap,logSnap]=await Promise.all([
+      tx.get(ref),tx.get(userRef),tx.get(logRef)]);
+    const current=exists(snapshot),user=exists(userSnap),log=exists(logSnap);
     if(!current||current.roomId!==roomId||current.sessionKey!==sessionKey)
       throw fail('題目狀態已變更，請重新同步後再補領',409);
-    if(current.errorReports?.[questionId]?.approved)
-      return {state:current,entry:current.errorReports[questionId]};
+    if(!user)throw fail('玩家資料不存在',404);
+    const prior=current.errorReports?.[questionId];
+    if(prior?.approved&&prior.learningReversed===true)
+      return {state:current,entry:prior,user};
     const match=source(current,questionId);
     if(!match)throw fail('題目已失效，請重新取得最新紀錄',409);
     const evidence=validateSource(match.question,reason);
@@ -90,11 +113,27 @@ async function report(dbA,dbC,uid,input,now=Date.now(),{
         JSON.stringify(evidence.options)!==JSON.stringify(trusted.options)||
         evidence.correctIndex!==trusted.correctIndex)
       throw fail('題目資料已變更，拒絕使用舊審核結果',409);
-    const skipped=match.pending;
+    const skipped=prior?.approved?prior.skipped===true:match.pending;
     const question=match.question;
-    const index=skipped?Math.max(0,Number(current.answered)||0)+1:
+    const index=prior?.approved?prior.index:
+      skipped?Math.max(0,Number(current.answered)||0)+1:
       question.index;
     if(!Number.isSafeInteger(index)||index<1)throw fail('答題序號無效',409);
+    let amendedUser=user;
+    if(!skipped&&log?.uid===uid&&log?.question===question.q){
+      const patch=Learning.reverse(user,question,log);
+      tx.update(userRef,patch);
+      tx.update(logRef,{errorConfirmed:true,excludedFromLearning:true,
+        invalidatedAtMs:now,invalidReason:String(decision.reason||'').slice(0,300)});
+      amendedUser={...user,stats:{...(user.stats||{}),
+        ...Object.fromEntries(Object.entries(patch)
+          .filter(([key])=>key.startsWith('stats.'))
+          .map(([key,value])=>[key.slice(6),value]))}};
+    }else if(!skipped&&!prior?.learningReversed){
+      // Never subtract a synthetic grade: the old exam log is the only
+      // server-authoritative proof that these stats were written.
+      throw fail('答題學習憑據暫時無法核對，請重新送審',409);
+    }
     if(skipped){
       // An invalid unanswered question is removed, not counted as a
       // correct answer or learning success. A synthetic +4 C receipt
@@ -115,23 +154,25 @@ async function report(dbA,dbC,uid,input,now=Date.now(),{
       current.historyMeta=[...(current.historyMeta||[]),
         {...question.meta,q:question.q}].slice(-40);
     }else{
-      const saved={...question,errorConfirmed:true};
+      const saved={...question,errorConfirmed:true,
+        excludedFromLearning:true};
       current.reviews={...(current.reviews||{}),[questionId]:saved};
       if(current.lastReview?.questionId===questionId)
         current.lastReview=saved;
     }
-    const entry={approved:true,skipped,index,
+    const entry={approved:true,skipped,index,learningReversed:true,
       reviewedAtMs:now,reason:String(decision.reason||'').slice(0,300)};
     current.errorReports={...(current.errorReports||{}),
       [questionId]:entry};
     tx.set(ref,current);
-    return {state:current,entry};
+    return {state:current,entry,user:amendedUser};
   });
   return {...awardResult,valid:true,
     status:awardResult.status,skipped:updated.entry.skipped,
     reason:'獨立審核已確認本題有誤。'+
       (awardResult.status==='limit'?' '+awardResult.reason:''),
-    state:Quiz.view(updated.state)};
+    state:Quiz.view(updated.state),
+    progress:Learning.progress(updated.user)};
 }
 // Formula errors are accepted as an integrity report, not an answer hint.
 // It cannot automatically pay compensation or skip the question.
