@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-bio3-evolution-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "兼顧生態數量關係、生理機制與演化條件，避免以個體意志取代自然選擇",
+      "question": {
+        "q": "某昆蟲族群中先天存在抗藥性變異，連續施藥後抗藥性等位基因比例上升。哪項說法較符合自然選擇？",
+        "correct": "抗藥性個體在施藥環境中有較高存活及繁殖機會，改變族群等位基因頻率",
+        "wrong": [
+          "藥劑會依需求讓每隻昆蟲立即產生相同的有利突變",
+          "每隻昆蟲因努力抵抗藥劑而改變其生殖細胞的基因",
+          "族群性狀頻率變化只可能由個體練習累積產生"
+        ],
+        "exp": "自然選擇作用於已有或新產生的可遺傳差異，抗藥性個體相對繁殖成功可提高相關等位基因頻率。",
+        "subject": "生物",
+        "sub_topic": "演化機制",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-演化機制",
+        "template_id": "ref-20261120-b12-bio3-evolution-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-bio3-evolution-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "兼顧生態數量關係、生理機制與演化條件，避免以個體意志取代自然選擇",
+      "question": {
+        "q": "兩個原本隔離的同種族群因新建生態廊道開始互相繁殖，最直接可能造成哪種演化效應？",
+        "correct": "增加族群間基因流動，使等位基因可在族群間交換",
+        "wrong": [
+          "使每個個體的基因組立即完全相同",
+          "保證兩族群的基因突變率變成零",
+          "使兩個族群立刻形成無法繁殖的新物種"
+        ],
+        "exp": "族群間遷移與交配會帶來基因流，可能減少遺傳差異，但是否完全趨同仍受其他因素影響。",
+        "subject": "生物",
+        "sub_topic": "演化機制",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-演化機制",
+        "template_id": "ref-20261120-b12-bio3-evolution-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-bio3-evolution-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "兼顧生態數量關係、生理機制與演化條件，避免以個體意志取代自然選擇",
+      "question": {
+        "q": "某微生物族群的遺傳變異來源包含隨機突變。若環境突然轉冷，下列哪項理解較科學？",
+        "correct": "突變通常不是因個體需要而定向出現，環境可篩選較有利的既有或新生變異",
+        "wrong": [
+          "環境變冷會保證所有新突變都恰好提升抗寒能力",
+          "只要環境改變，族群中便不可能再出現中性突變",
+          "有利變異必先由族群共同決議後，才會出現在DNA中"
+        ],
+        "exp": "突變產生並非預先朝生物需求定向，環境壓力透過存活與繁殖差異改變變異的頻率。",
+        "subject": "生物",
+        "sub_topic": "演化機制",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-演化機制",
+        "template_id": "ref-20261120-b12-bio3-evolution-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
