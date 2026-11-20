@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 512 512" role="img" aria-label="body-tiger">
+<defs>
+<radialGradient id="bg" cx=".55" cy=".32" r=".85"><stop stop-color="#422725"/><stop offset=".55" stop-color="#10232b"/><stop offset="1" stop-color="#050c15"/></radialGradient>
+<radialGradient id="halo"><stop stop-color="#f49b3d" stop-opacity=".36"/><stop offset=".55" stop-color="#f49b3d" stop-opacity=".12"/><stop offset="1" stop-color="#f49b3d" stop-opacity="0"/></radialGradient>
+<linearGradient id="steel" x1="0" y1="0" x2="1" y2=".4"><stop stop-color="#f49b3d"/><stop offset=".3" stop-color="#ffe8bb"/><stop offset=".54" stop-color="#4a6f85"/><stop offset=".83" stop-color="#f49b3d"/><stop offset="1" stop-color="#142e3f"/></linearGradient>
+<linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#694d37"/><stop offset=".2" stop-color="#f7c46a"/><stop offset=".45" stop-color="#fff5cd"/><stop offset=".73" stop-color="#b18a53"/><stop offset="1" stop-color="#634a33"/></linearGradient>
+<linearGradient id="stone" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#19262b"/><stop offset=".4" stop-color="#5c5847"/><stop offset=".72" stop-color="#3a3735"/><stop offset="1" stop-color="#121d24"/></linearGradient>
+<filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter>
+<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="1" dy="13" stdDeviation="11" flood-color="#030a0f" flood-opacity=".82"/></filter>
+</defs>
+<rect width="512" height="512" fill="url(#bg)"/>
+<circle cx="256" cy="205" r="198" fill="url(#halo)" opacity=".65"/>
+<path d="M0 350 Q105 210 177 345 Q225 248 315 344 Q423 207 512 354 L512 512H0Z" fill="#152e35" opacity=".54"/>
+<path d="M0 419 Q127 333 249 400 Q387 302 512 396 L512 512 H0Z" fill="#061925" opacity=".66"/>
+<g fill="none" stroke="#f49b3d" opacity=".4" stroke-width="1.8">
+<circle cx="256" cy="236" r="158"/><circle cx="256" cy="236" r="172" stroke-dasharray="12 14"/>
+<path d="M83 278 Q256 12 429 278 M89 313 Q256 50 421 313" opacity=".4"/>
+</g>
+<circle cx="71" cy="63" r="1" fill="#fff6ce" opacity="0.24"/><circle cx="168" cy="200" r="2" fill="#f49b3d" opacity="0.37"/><circle cx="265" cy="337" r="3" fill="#f49b3d" opacity="0.5"/><circle cx="362" cy="24" r="4" fill="#fff6ce" opacity="0.63"/><circle cx="459" cy="161" r="1" fill="#f49b3d" opacity="0.24"/><circle cx="71" cy="298" r="2" fill="#f49b3d" opacity="0.37"/><circle cx="168" cy="435" r="3" fill="#fff6ce" opacity="0.5"/><circle cx="265" cy="122" r="4" fill="#f49b3d" opacity="0.63"/><circle cx="362" cy="259" r="1" fill="#f49b3d" opacity="0.24"/><circle cx="459" cy="396" r="2" fill="#fff6ce" opacity="0.37"/><circle cx="71" cy="83" r="3" fill="#f49b3d" opacity="0.5"/><circle cx="168" cy="220" r="4" fill="#f49b3d" opacity="0.63"/><circle cx="265" cy="357" r="1" fill="#fff6ce" opacity="0.24"/><circle cx="362" cy="44" r="2" fill="#f49b3d" opacity="0.37"/><circle cx="459" cy="181" r="3" fill="#f49b3d" opacity="0.5"/><circle cx="71" cy="318" r="4" fill="#fff6ce" opacity="0.63"/><circle cx="168" cy="455" r="1" fill="#f49b3d" opacity="0.24"/><circle cx="265" cy="142" r="2" fill="#f49b3d" opacity="0.37"/><circle cx="362" cy="279" r="3" fill="#fff6ce" opacity="0.5"/><circle cx="459" cy="416" r="4" fill="#f49b3d" opacity="0.63"/><circle cx="71" cy="103" r="1" fill="#f49b3d" opacity="0.24"/><circle cx="168" cy="240" r="2" fill="#fff6ce" opacity="0.37"/><circle cx="265" cy="377" r="3" fill="#f49b3d" opacity="0.5"/><circle cx="362" cy="64" r="4" fill="#f49b3d" opacity="0.63"/>
+<path d="M25 458 Q225 427 487 468 M63 483 Q288 463 454 482" fill="none" stroke="#f7c46a" opacity=".3"/>
+<g stroke="#f49b3d" fill="none" opacity=".8" filter="url(#glow)" stroke-width="11">
+<path d="M95 342Q47 203 155 146Q260 103 324 152Q436 186 425 315"/>
+<path d="M60 303Q25 372 122 414 M454 310Q491 377 393 419"/></g><g filter="url(#shadow)">
+<path d="M177 116L334 116L365 171L347 406L165 406L146 171Z" fill="url(#stone)" stroke="#f7c46a" stroke-width="10" stroke-linejoin="round"/>
+<path d="M170 144H344L326 386H187Z" fill="url(#gold)" opacity=".18"/>
+<path d="M160 156L207 133L305 133L354 156L335 180H177Z" fill="url(#gold)" stroke="#fff3c8" stroke-width="5"/>
+<path d="M175 376L340 376L362 411H150Z" fill="url(#gold)" stroke="#fceab0" stroke-width="7"/>
+<path d="M142 406L373 406L390 448H125Z" fill="#5d5139" stroke="#f7c46a" stroke-width="8"/>
+<path d="M132 440H381L394 472H118Z" fill="url(#gold)" stroke="#fff5bd" stroke-width="7"/>
+<g fill="none" stroke="#ffe8bb" opacity=".4"><path d="M181 188L196 354M331 190L319 355"/><path d="M196 169H315M179 400H339"/></g>
+<path d="M149 194L173 148L217 176L293 176L335 146L366 195L356 303Q321 353 256 370Q191 353 156 303Z" fill="#d8ac59" stroke="#fff1b6" stroke-width="7"/>
+<path d="M165 194L179 165L210 184M347 194L333 165L302 184" fill="#643d21" stroke="#f7ce87" stroke-width="5"/>
+<path d="M187 226q28-23 58 2M267 228q28-25 58-2" fill="none" stroke="#422717" stroke-width="15"/>
+<path d="M185 242q29-13 50 2M276 244q23-14 52-2" fill="none" stroke="#ffe9b9" stroke-width="5"/>
+<path d="M245 268L267 268L256 284Z" fill="#332118"/>
+<path d="M213 308Q257 340 298 308L282 347L257 361L233 345Z" fill="#5b2e23" stroke="#ffce88" stroke-width="5"/>
+<path d="M219 310L231 343L242 316M292 310L281 343L271 316" fill="#fff8df"/>
+<path d="M253 195L252 221M226 192L237 219M279 192L267 219" stroke="#472a24" stroke-width="13" stroke-linecap="round"/>
+<path d="M178 275l-27 11M334 274l28 12" stroke="#573524" stroke-width="10" stroke-linecap="round"/>
+<circle cx="256" cy="117" r="39" fill="url(#gold)" stroke="#fff1c3" stroke-width="7"/>
+<circle cx="256" cy="117" r="23" fill="#f49b3d" stroke="#ffe8bb" stroke-width="5"/>
+<path d="M256 91L265 117L256 144L247 117Z" fill="#fff7dc"/>
+<circle cx="256" cy="455" r="8" fill="#fff9cd"/>
+</g>
+<path d="M13 13H499V499H13Z" fill="none" stroke="#f7c46a" stroke-width="8" opacity=".75"/>
+<path d="M38 17H17V38M474 17H495V38M38 495H17V474M474 495H495V474" fill="none" stroke="#ffe8bb" stroke-width="5"/>
+</svg>
