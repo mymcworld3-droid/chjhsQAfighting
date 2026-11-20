@@ -144,7 +144,9 @@ function renderVictoryHistory(){
       return '<div class="dg-victory-row"><div><strong>玄炎鎮殿 · '+
         esc(date)+'</strong><small>'+Math.max(1,Math.min(4,Number(v.partySize)||1))+
         ' 人合作 · 120 靈石＋3 修為 · '+
-        (v.claimed?'已領取':'可補領')+'</small></div>'+
+        (v.claimed?'已領取':'可補領')+
+        (v.manualDrop?.name?' · 功法《'+esc(v.manualDrop.name)+'》':'')+
+        '</small></div>'+
         (v.claimed?'<span class="dg-victory-claimed">✓ 已入帳</span>':
           '<button data-dg="claim-recovered" data-room-id="'+id+
           '">領取獎勵</button>')+'</div>';
@@ -172,7 +174,9 @@ async function claimRecovered(roomId){
     if(!validSession(uid,serial))return;
     announce(result?.reward?.status==='duplicate'?
       '這場勝利先前已領取，不會重複發放。':
-      '副本獎勵已入帳：120 靈石、3 修為。');
+      '副本獎勵已入帳：120 靈石、3 修為'+
+        (result?.reward?.manualDrop?.name?
+          '，獲得功法《'+result.reward.manualDrop.name+'》！':'（本場未掉落新功法）')+'。');
     await refreshVictories();
   }catch(error){
     if(validSession(uid,serial))announce(error?.message||'暫時無法領取，請稍後再試');
