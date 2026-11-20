@@ -10,7 +10,7 @@ const Growth=require('./public/cultivation/nascent-growth.js');
 const {recordEvent}=require('./public/cultivation/quest-rules.js');
 const {trustedRaidPlayerSnapshot}=require('./raid-authority.cjs');
 const StudyScope=require('./trial-tower-scope.cjs');
-const {playerRepository}=require('./server-repositories.cjs');
+const {playerRepository,raidRepository}=require('./server-repositories.cjs');
 const {verifyMainIdentity}=require('./raid-question-ticket.cjs');
 const {FieldValue}=require('./storage-values.cjs');
 const {read:readSoloReceipt}=require('./solo-question-receipt.cjs');
@@ -241,11 +241,7 @@ async function assertLoadoutUnlocked(tx,db,uid){
 // dungeon and PvP are locked while underway. Read all affected room records
 // before the first write, so saved weapons and the live actor stay atomic.
 async function weaponEditableRooms(tx,db,uid){
-  const [pointerSnap,dungeonSnap]=await Promise.all([
-    tx.get(db.collection(PLAYERS).doc(uid)),
-    tx.get(db.collection('dungeonRoomMemberships').doc(uid))
-  ]);
-  const pointer=exists(pointerSnap)||{},dungeon=exists(dungeonSnap)||{};
+  const pointer=exists(await tx.get(db.collection(PLAYERS).doc(uid)))||{};
   const ids=[...new Set([pointer.roomId,...Object.values(pointer.roomIds||{})].filter(Boolean))];
   const rooms=await Promise.all(ids.map(id=>tx.get(db.collection(ROOMS).doc(id))));
   if(rooms.some(s=>{
@@ -253,14 +249,19 @@ async function weaponEditableRooms(tx,db,uid){
     return room?.mode==='pvp'&&['active','waiting'].includes(room.status)&&
       room.actors?.some(a=>a.uid===uid);
   }))throw error('多人鬥法進行中，不可更換武器',409);
-  if(dungeon.roomId){
-    const dungeonRoom=exists(await tx.get(db.collection('dungeonRooms').doc(dungeon.roomId)));
-    if(dungeonRoom?.status==='assembled'&&dungeonRoom.members&&
-      Object.hasOwn(dungeonRoom.members,uid))
-      throw error('多人副本進行中，不可裝備或卸下武器',409);
-  }
-  return rooms.map(s=>exists(s)).filter(room=>room?.mode==='pve'&&
+   return rooms.map(s=>exists(s)).filter(room=>room?.mode==='pve'&&
     room.status==='active'&&room.actors?.some(a=>a.uid===uid));
+}
+
+async function assertDungeonWeaponEditable(playerDb,uid){
+  // Dungeon membership/rooms are in project C, whereas weapon ownership
+  // lives in project A. A C-room read is required; reading A silently fails.
+  const dungeonDb=playerDb?.records instanceof Map?playerDb:raidRepository.resolve().db;
+  const pointer=exists(await dungeonDb.collection('dungeonRoomMemberships').doc(uid).get());
+  if(!pointer?.roomId)return;
+  const room=exists(await dungeonDb.collection('dungeonRooms').doc(pointer.roomId).get());
+  if(room?.status==='assembled'&&room.members&&Object.hasOwn(room.members,uid))
+    throw error('多人副本進行中，不可裝備或卸下武器',409);
 }
 async function updateLoadout(db,uid,input){
   const index=input?.index;
@@ -281,6 +282,7 @@ async function updateLoadout(db,uid,input){
       if(weaponId&&!modern.books[weaponId])throw error('尚未獲得這件武器',403);
       if(weaponId&&modern.weaponIds.some((id,i)=>i!==index&&id===weaponId))
         throw error('同一種武器不能重複裝備',400);
+      await assertDungeonWeaponEditable(db,uid);
       const soloRooms=await weaponEditableRooms(tx,db,uid);
       const weaponIds=[...modern.weaponIds];
       weaponIds[index]=weaponId;
