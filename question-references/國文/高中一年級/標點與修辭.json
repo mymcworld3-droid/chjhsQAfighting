@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-chi1-punct-rhetoric-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "語文辨識與論證能力分開評估，選項不依賴單純閱讀速度",
+      "question": {
+        "q": "校刊文章要接續說明「我們提出三項建議」，下列哪一句的冒號與頓號使用最恰當？",
+        "correct": "我們提出三項建議：減少紙張浪費、增加回收桶、公布每月成果。",
+        "wrong": [
+          "我們提出三項建議，：減少紙張浪費、增加回收桶、公布每月成果。",
+          "我們提出三項建議：減少紙張浪費，、增加回收桶，、公布每月成果。",
+          "我們提出三項建議、減少紙張浪費：增加回收桶：公布每月成果。"
+        ],
+        "exp": "冒號用於引出具體列舉，並列項目以頓號分隔，句末用句號。頓號前不應再加逗號。",
+        "subject": "國文",
+        "sub_topic": "標點與修辭",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-標點與修辭",
+        "template_id": "ref-20261120-b12-chi1-punct-rhetoric-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chi1-punct-rhetoric-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "語文辨識與論證能力分開評估，選項不依賴單純閱讀速度",
+      "question": {
+        "q": "自編句子：「傍晚的風翻閱樹葉，讓整條小巷沙沙作響。」其中「翻閱」最主要運用哪一種修辭？",
+        "correct": "擬人：把風寫成會翻書的行動者",
+        "wrong": [
+          "借代：以樹葉代替所有行人",
+          "設問：先提出問題再自行回答",
+          "頂真：以前句末語接續後句開頭"
+        ],
+        "exp": "「翻閱」原為人閱讀書頁的動作，用來描寫風掀動樹葉，賦予自然現象人的行為，屬擬人。",
+        "subject": "國文",
+        "sub_topic": "標點與修辭",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-標點與修辭",
+        "template_id": "ref-20261120-b12-chi1-punct-rhetoric-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chi1-punct-rhetoric-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "語文辨識與論證能力分開評估，選項不依賴單純閱讀速度",
+      "question": {
+        "q": "句子「他在雨中等了一分鐘、十分鐘，彷彿等過整整一個世紀」，後半句主要透過何種修辭強調等待的感受？",
+        "correct": "誇飾：擴大主觀等待時間以突出焦急",
+        "wrong": [
+          "映襯：把兩位人物的性格放在同一句對照",
+          "引用：直接援引他人已說過的原話",
+          "層遞：依實際鐘錶紀錄精確計算每秒"
+        ],
+        "exp": "「彷彿等過整整一個世紀」不是實際時間，而是大幅誇張等待的感覺，用來凸顯情緒。",
+        "subject": "國文",
+        "sub_topic": "標點與修辭",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-標點與修辭",
+        "template_id": "ref-20261120-b12-chi1-punct-rhetoric-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
