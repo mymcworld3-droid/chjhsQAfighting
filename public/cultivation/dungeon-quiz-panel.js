@@ -222,9 +222,10 @@ export class DungeonQuizPanel{
   }
   bindLearning(item){
     if(!item||!this.visible)return;
-    if(this.learningQuiz?.id!==item.id){
+    const questionId=item.questionId||item.id;
+    if(this.learningQuiz?.id!==questionId){
       this.learningQuiz={
-        id:item.id,
+        id:questionId,
         data:{q:item.q,opts:item.opts},
         learningSubject:item.subject,learningTopic:item.learningTopic||item.topic,
         learningDifficulty:item.difficulty||'easy',
