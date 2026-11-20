@@ -318,6 +318,9 @@ async function loadLearningAnalysis({ studentUid = null, more = false, returnTab
   }, '/api/classrooms', 30000);
   const data = result.analysis;
   if (state.classroom?.id !== classId) return;
+  if (more && old.rosterVersion !== data.rosterVersion) {
+    throw Error('班級學生名單已更新。請按「重新統計」以相同名單重新計算，避免混用不同名單的成績。');
+  }
   const previous = more ? old.rows : [];
   const seen = new Set(previous.map(r => r.id));
   const rows = [...previous, ...data.rows.filter(row => !seen.has(row.id))];

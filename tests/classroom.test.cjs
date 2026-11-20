@@ -573,6 +573,7 @@ test('long-term learning analysis pages four assignments at a time, survives lat
   assert.equal(first.rows[0].title,'長期評量 9');
   assert.equal(first.rows[1].title,'長期評量 8');
   assert.equal(first.studentCount,2);
+  assert.equal(first.rosterVersion,2);
   assert.equal(first.rows[0].average,null);
   assert.equal(first.rows[0].submitted,0);
   assert.equal(first.rows[0].notStarted,2);
@@ -631,6 +632,7 @@ test('learning analysis uses only current roster and prevents revoked teachers a
   await f.act('teacher','removeStudent',{studentUid:'student'});
   const after = (await f.act('teacher','learningAnalysisPage')).analysis;
   assert.equal(after.rows[0].studentCount,1);
+  assert.notEqual(after.rosterVersion,before.rosterVersion);
   assert.equal(after.rows[0].submitted,0);
   assert.equal(after.rows[0].average,null);
   await assert.rejects(f.act('teacher','studentLearningPage',{studentUid:'student'}),e=>e.status===404);

@@ -418,6 +418,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
     return {
       analysis: {
         classId, className: latest.name, studentCount: members.length,
+        rosterVersion: latest.rosterVersion || 0,
         ...(studentMode ? { student: { uid: studentUid, name: member(latest, studentUid).name,
           seat: member(latest, studentUid).seat } } : {}),
         rows, nextCursor, scanned: keys.length, totalAssigned: ids.length,
