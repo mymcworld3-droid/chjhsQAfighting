@@ -11,6 +11,7 @@
     { target: '#tactical-combat [data-wheel-action="attack-ring"], #tactical-combat [data-action="attack"]', title: '先認識攻擊按鈕', text: '右側行動指示已切至「攻擊」。請親自按一下「攻擊」按鈕，了解如何切換攻擊模式。' },
     { target: '#tactical-combat canvas', title: '向右移動一格', text: '已切回移動模式。靈狼在你右方三格；請點選角色正右方的第一格，只移動一格，靠近靈狼。' },
     { target: '#tactical-combat [data-wheel-action="attack-ring"], #tactical-combat [data-action="attack"]', title: '再次選擇攻擊', text: '移動完成！請再按一次右側的「攻擊」按鈕，準備朝靈狼出招。' },
+    { target: '#tactical-combat canvas', title: '選擇靈狼方向', text: '靈狼現在位於你正右方兩格。點選右側紅色攻擊方向，對準靈狼發動攻擊！' },
     { target: '#tactical-combat canvas', title: '完成第一關', text: '已學會基本攻擊！接下來自由作戰，擊敗靈狼並完成第一關，再學習如何裝備技能。' },
     { target: '#tactical-combat [data-tutorial-collapse]', title: '收起戰場', text: '第一關通關了！請按結算畫面的「收起戰場」，回到宗門。' },
     { target: '#nav-training', title: '前往修煉', text: '點選下方的「修煉」，進入功法閣，準備裝備第一招。' },
