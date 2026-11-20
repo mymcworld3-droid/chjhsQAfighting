@@ -50,6 +50,6 @@ body.first-visit-active #bottom-nav,body.first-visit-active #btn-extended-practi
 #first-answer-guide p{margin:10px 0 18px;font-size:16px;line-height:1.7}
 #first-answer-guide .fag-actions{display:flex;justify-content:space-between;align-items:center;gap:12px}
 #first-answer-guide .fag-prompt{font-size:12px;color:#d5d8c6}
-#first-answer-guide button{min-height:44px;padding:10px 18px;border:1px solid #bc9d63;border-radius:10px;font:inherit;font-size:15px;color:#fff0d0;background:#31564b;cursor:pointer}
+#first-answer-guide button{min-height:44px;padding:10px 18px;border:1px solid #bc9d63;border-radius:10px;font:inherit;font-size:15px;color:#fff0d0;background:#31564b;cursor:pointer;pointer-events:auto}
 #first-answer-guide [data-guide-skip]{background:transparent;border-color:#78908066;color:#b4c7ba}
 #first-answer-guide button:focus-visible{outline:3px solid #f3dc9c;outline-offset:3px}
