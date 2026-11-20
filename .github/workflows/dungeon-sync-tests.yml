@@ -5,6 +5,9 @@ on:
     branches: [stamina-battle]
     paths:
       - 'dungeon-room-*.cjs'
+      - 'public/cultivation/gameplay-page.js'
+      - 'public/styles/gameplay-page.css'
+      - 'tests/gameplay-page.test.cjs'
       - 'dungeon-map-generator.cjs'
       - 'dungeon-stamina-rules.cjs'
       - 'dungeon-movement.cjs'
@@ -83,4 +86,4 @@ jobs:
             node --input-type=module --check < "$module"
           done
       - name: Test multiplayer lobby, SSE, reconnect and permissions
-        run: node --test tests/dungeon-*.test.cjs
+        run: node --test tests/dungeon-*.test.cjs tests/gameplay-page.test.cjs

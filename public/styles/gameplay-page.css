@@ -1,0 +1,25 @@
+/* Game modes live in their own page, not in the crowded home shortcuts. */
+#page-gameplay.gameplay-page{overflow-y:auto;overscroll-behavior:contain;padding-bottom:110px}
+#page-gameplay .gameplay-shell{
+  width:min(720px,100%);margin:0 auto;padding:clamp(16px,4vw,32px) 0;
+  display:grid;gap:20px;align-content:start;
+}
+#page-gameplay .gameplay-heading{border-bottom:1px solid #a89b7047;padding-bottom:15px}
+#page-gameplay .gameplay-heading small{
+  display:block;color:#acbfaa;letter-spacing:.2em;font-size:11px;margin-bottom:5px;
+}
+#page-gameplay .gameplay-heading h2{
+  font:700 clamp(23px,5vw,31px)/1.4 "Noto Serif TC",serif;
+  color:#e9d7aa;letter-spacing:.12em;margin:0;
+}
+#page-gameplay .gameplay-entries{display:grid;gap:12px;min-width:0}
+#page-gameplay .gameplay-entries>button{max-width:100%;box-sizing:border-box}
+#nav-gameplay{min-width:0;padding-inline:2px}
+#nav-gameplay i{color:#a9b29e}
+#nav-gameplay>span{color:#9ca69b;white-space:nowrap}
+#nav-gameplay:hover i,#nav-gameplay:hover>span,
+#nav-gameplay.active-nav-btn i,#nav-gameplay.active-nav-btn>span{color:#e6d3a1}
+@media(max-width:420px){
+  #page-gameplay .gameplay-shell{padding-top:16px;gap:14px}
+  #nav-gameplay i{font-size:17px}
+}

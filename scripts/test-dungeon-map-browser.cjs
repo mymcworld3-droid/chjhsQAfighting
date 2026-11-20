@@ -107,8 +107,14 @@ const advanceWorld=()=>{
 app.get('/dungeon-test.html',(_req,res)=>res.type('html').send(
   '<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">'+
   '<meta name="viewport" content="width=device-width,initial-scale=1"></head>'+
-  '<body style="margin:0;background:#132119"><div id="page-home">'+
-  '<div class="xiuxian-quick-actions" style="width:310px;margin:20px auto"></div></div>'+
+  '<body style="margin:0;background:#132119">'+
+  '<nav id="nav-grid"><button type="button" data-target="page-home">宗門</button>'+
+  '<button type="button" id="nav-training" data-target="page-training">修煉</button>'+
+  '<button type="button" data-target="page-settings">設定</button></nav>'+
+  '<div id="page-home"></div><div id="page-gameplay" hidden>'+
+  '<div class="gameplay-entries" style="width:310px;margin:20px auto"></div></div>'+
+  '<script>window.switchToPage=id=>{document.getElementById("page-gameplay").hidden=id!=="page-gameplay";};</script>'+
+  '<script type="module" src="/cultivation/gameplay-page.js"></script>'+
   '<script type="module" src="/cultivation/dungeon-lobby.js"></script></body></html>'
 ));
 app.get('/cultivation/data/project-repository.js',(_req,res)=>res.type('text/javascript').send(
@@ -478,12 +484,12 @@ async function main(){
       });
       await page.goto('http://127.0.0.1:'+server.address().port+'/dungeon-test.html');
       try{
-        await page.locator('#home-dungeon-entry').waitFor({timeout:8000});
+        await page.locator('#gameplay-dungeon-entry').waitFor({timeout:8000});
       }catch(error){
         console.error('[Dungeon preview startup]',uid,errors,await page.evaluate(async()=>({
           state:document.readyState,
-          host:document.querySelector('#page-home .xiuxian-quick-actions')?.outerHTML,
-          entry:document.querySelector('#home-dungeon-entry')?.outerHTML,
+          host:document.querySelector('#page-gameplay .gameplay-entries')?.outerHTML,
+          entry:document.querySelector('#gameplay-dungeon-entry')?.outerHTML,
           links:[...document.querySelectorAll('script')].map(node=>node.src),
           loaded:(await Promise.all(['/cultivation/dungeon-lobby.js',
             '/cultivation/dungeon-map-view.js','/cultivation/data/project-repository.js']
@@ -492,7 +498,13 @@ async function main(){
         })));
         throw error;
       }
-      await page.locator('#home-dungeon-entry').click();
+      await page.locator('#nav-gameplay').waitFor();
+      await page.locator('#nav-gameplay').click();
+      const order=await page.locator('#nav-grid button').evaluateAll(nodes=>
+        nodes.map(node=>node.id||node.dataset.target));
+      assert.equal(order.indexOf('nav-gameplay'),order.indexOf('nav-training')+1);
+      assert.equal(await page.locator('#page-gameplay').isVisible(),true);
+      await page.locator('#gameplay-dungeon-entry').click();
       return {page,context};
     }
     const a=await client('a',{width:390,height:844});

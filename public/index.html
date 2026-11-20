@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="styles/first-visit.css?v=20261120-google-binding-button-v1">
     <link rel="stylesheet" href="styles/social-compact.css?v=20261120-single-row-v1">
+    <link rel="stylesheet" href="styles/gameplay-page.css?v=20261120-gameplay-tab-v1">
     <link rel="stylesheet" href="styles/in-app-select.css">
     <link rel="stylesheet" href="styles/notification-dots.css">
     <link rel="stylesheet" href="styles/solo-cultivation-feedback.css">
@@ -897,6 +898,16 @@ body.xianxia-theme main:has(#page-training.active-page),
             </div>
         </section>
 
+        <section id="page-gameplay" class="page-section hidden px-4 gameplay-page" aria-labelledby="gameplay-page-title">
+            <div class="gameplay-shell">
+                <header class="gameplay-heading">
+                    <small>問道遊歷</small>
+                    <h2 id="gameplay-page-title">玩法</h2>
+                </header>
+                <div class="gameplay-entries" aria-label="選擇遊戲玩法"></div>
+            </div>
+        </section>
+
         <div id="page-training" class="page-section hidden px-4 training-page training-page-v3" data-static-layout="1">
             <div class="training-page-heading-v3">
                 <div>
@@ -1539,7 +1550,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <script src="visual-viewport-guard.js?v=20261013-page-layout1"></script>
     <script src="answer-zoom-policy.js?v=20261007-answer-zoom2"></script>
     <script type="module" src="cultivation/in-app-select.js"></script>
-    <script type="module" src="main.js?v=20261120-dungeon-five-minute-v1"></script>
+    <script type="module" src="main.js?v=20261120-gameplay-tab-v1"></script>
     <script type="module" src="cultivation/daily-vocabulary-page.js?v=20261116-back-to-words"></script>
 </body>
 </html>

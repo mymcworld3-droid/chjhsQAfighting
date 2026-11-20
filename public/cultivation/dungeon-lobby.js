@@ -66,10 +66,10 @@ function mount(){
   });
 }
 function entryMount(){
-  const target=document.querySelector('#page-home .xiuxian-quick-actions');
-  if(!target||document.getElementById('home-dungeon-entry'))return;
+  const target=document.querySelector('#page-gameplay .gameplay-entries');
+  if(!target||document.getElementById('gameplay-dungeon-entry'))return;
   entry=document.createElement('button');
-  entry.type='button';entry.id='home-dungeon-entry';entry.className='home-dungeon-entry';
+  entry.type='button';entry.id='gameplay-dungeon-entry';entry.className='gameplay-dungeon-entry';
   entry.innerHTML='<i class="fa-solid fa-people-group" aria-hidden="true"></i>'+
     '<span><strong>合作副本</strong><small>1～4 人組隊 · 秘境集結</small></span>'+
     '<i class="fa-solid fa-chevron-right" aria-hidden="true"></i>';

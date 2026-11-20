@@ -20,6 +20,8 @@ on:
       - 'question-report-api.cjs'
       - 'dungeon-quiz-credit.cjs'
       - 'public/cultivation/dungeon-*.js'
+      - 'public/cultivation/gameplay-page.js'
+      - 'public/styles/gameplay-page.css'
       - 'public/styles/dungeon-lobby.css'
       - 'public/styles/dungeon-map-view.css'
       - 'public/styles/quiz-scroll.css'
