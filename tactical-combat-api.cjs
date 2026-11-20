@@ -165,21 +165,7 @@ async function saveManualKills(tx,db,s,uid){
   const applied=applyManualKills(s,uid,exists(await tx.get(ref)));
   if(applied.changed)tx.set(ref,applied.state);
 }
-function rollManualDrop(s,uid,raw){
-  const state=raw?.version===2?raw:Manuals.normalize(raw);
-  const available=Manuals.BOOKS.filter(book=>!state.books[book.id]);
-  if(!available.length)return {state,changed:false,drop:null};
-  if(state.dropMisses<3&&crypto.randomInt(100)>=30){
-    state.dropMisses++;return {state,changed:true,drop:null};
-  }
-  const sameSchool=available.filter(book=>book.school===state.school);
-  const pool=sameSchool.length&&crypto.randomInt(100)<70?sameSchool:available;
-  const picked=pool[crypto.randomInt(pool.length)];
-  state.books[picked.id]={exp:0};
-  state.dropMisses=0;
-  s.manualDrops||={};s.manualDrops[uid]={id:picked.id,name:picked.name};
-  return {state,changed:true,drop:picked.id};
-}
+const rollManualDrop=require('./manual-reward-rules.cjs').roll;
 function manualResponse(record,user,gold=Rules.num(user.stats?.gold)){
   // Use the same authoritative, artifact-free attack snapshot as a new
   // tactical trial. Browser projections may omit timed attack modifiers.
