@@ -1,6 +1,6 @@
 // A single skill-details surface for the selected, already-owned manual.
 // The same server-validated equip/upgrade handlers are used by the main page.
-export function renderManualSkillDetail(book,skillId,{esc,skillArt,descriptionWithDamage,attack=200,gold=0,equipped=[],moveIdOf}={}){
+export function renderManualSkillDetail(book,skillId,{esc,skillArt,descriptionWithDamage,attack=200,gold=0,equipped=[],moveIdOf,weaponIds=null}={}){
   const skill=book?.skills?.find(item=>item.id===skillId);
   if(!book?.owned||!skill)return '';
   const fmt=value=>Math.max(0,Math.round(Number(value)||0)).toLocaleString('zh-TW');
@@ -17,7 +17,13 @@ export function renderManualSkillDetail(book,skillId,{esc,skillArt,descriptionWi
   const upgradeAction=!locked&&upgrade?
     `<button type="button" class="manual-upgrade" data-skill-upgrade="${esc(skill.id)}" ${Number(gold)<Number(upgrade.gold)?'disabled':''}>
       ${Number(gold)<Number(upgrade.gold)?'靈石不足 · ':''}強化至 Lv. ${fmt(upgrade.targetLevel)} · ${fmt(upgrade.gold)} 靈石</button>`:'';
-  const equipment=locked?
+  const weaponMode=Array.isArray(weaponIds);
+  const worn=weaponMode&&weaponIds.includes(book.id);
+  const equipment=weaponMode?
+    (locked?`<p class="manual-focus-skill-lock">尚需 ${esc(missing.join('、')||'符合領悟條件')}</p>`:
+      `<button type="button" data-manual-equip="${esc(skill.id)}" ${worn?'disabled':''}>
+        ${worn?'此武器已裝備':'裝備整件武器（三招自動啟用）'}</button>`):
+    locked?
     `<p class="manual-focus-skill-lock"><i class="fa-solid fa-lock" aria-hidden="true"></i>
       尚需 ${esc(missing.join('、')||'符合領悟條件')}</p>`:
     `<button type="button" data-manual-equip="${esc(skill.id)}" ${other===skill.id||full?'disabled':''}>
