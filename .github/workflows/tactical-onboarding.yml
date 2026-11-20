@@ -12,6 +12,8 @@ on:
       - 'public/main.js'
       - 'public/module-versions.json'
       - 'tests/first-answer-guide.test.cjs'
+      - 'tests/tactical-quarter-camera.test.cjs'
+      - 'tests/scope-fullscreen.test.cjs'
       - '.github/workflows/tactical-onboarding.yml'
   workflow_dispatch:
 
