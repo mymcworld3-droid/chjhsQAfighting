@@ -5,10 +5,21 @@ const {isAlive}=require('./dungeon-enemy-combat.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
 const {staminaFor,staminaAfterCost}=require('./dungeon-stamina-rules.cjs');
 const STAMINA_COST=2,DAMAGE=30,MAX_STRIKE_SEQ=100000;
-const ENEMY_HEALTH=Object.freeze({wolf:60,wisp:60,golem:90,guardian:360,boss:Boss.HP});
+// 築基期 (stage 5) encounter budget: regular trial beasts begin near 500 HP.
+// Faster ranged beasts are slightly frailer; armored enemies trade speed for HP.
+const ENEMY_HEALTH=Object.freeze({
+  wolf:500,wisp:440,golem:650,guardian:1200,boss:Boss.HP
+});
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
-const maxHealth=kind=>ENEMY_HEALTH[kind]||60;
+const maxHealth=kind=>ENEMY_HEALTH[kind]||ENEMY_HEALTH.wolf;
+const recordedMax=enemy=>Number.isSafeInteger(enemy?.battleMaxHealth)&&
+  enemy.battleMaxHealth>0?enemy.battleMaxHealth:maxHealth(enemy?.kind);
+// C-room snapshots contain trusted trial attack, rather than the old
+// temporary 30-point dungeon attack. Preserve fallback for legacy sessions.
+const playerStrikeDamage=member=>
+  Number.isSafeInteger(member?.battleAttack)&&member.battleAttack>0?
+    member.battleAttack:DAMAGE;
 function strikeEnemy(room,uid,map,{enemyId,seq}={}){
   if(typeof enemyId!=='string'||!(/^(beast-[1-9][0-9]{0,4}|guardian-1|boss-1)$/.test(enemyId)))
     throw fail('靈獸目標無效',400);
@@ -34,20 +45,20 @@ function strikeEnemy(room,uid,map,{enemyId,seq}={}){
   const stamina=staminaFor(member);
   if(stamina<STAMINA_COST)throw fail('探索體力不足，無法攻擊',409);
   const health=Number.isSafeInteger(enemy.battleHealth)?
-    Math.max(0,Math.min(maxHealth(enemy.kind),enemy.battleHealth)):
-    maxHealth(enemy.kind);
+    Math.max(0,Math.min(recordedMax(enemy),enemy.battleHealth)):
+    recordedMax(enemy);
   if(health===0)throw fail('靈獸已被擊敗',409);
   const tick=Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0;
-  const updated={...enemy};
+  const updated={...enemy},damageAmount=playerStrikeDamage(member);
   const teamwork=enemy.kind==='boss'?
-    Boss.damage(updated,uid,DAMAGE,tick,Boss.comboReady(enemy,uid,tick)):null;
-  const remaining=teamwork?updated.battleHealth:Math.max(0,health-DAMAGE);
+    Boss.damage(updated,uid,damageAmount,tick,Boss.comboReady(enemy,uid,tick)):null;
+  const remaining=teamwork?updated.battleHealth:Math.max(0,health-damageAmount);
   const defeated=remaining===0;
   if(!teamwork){
     updated.battleHealth=remaining;
-    updated.battleMaxHealth=maxHealth(enemy.kind);
+    updated.battleMaxHealth=recordedMax(enemy);
   }
-  const hit={seq,enemyId,origin:{...member.position},target:{...enemy.position},damage:teamwork?.damage??Math.min(health,DAMAGE),
+  const hit={seq,enemyId,origin:{...member.position},target:{...enemy.position},damage:teamwork?.damage??Math.min(health,damageAmount),
     remainingHealth:remaining,defeated,tick,
     ...(teamwork?{shieldDamage:teamwork.shieldDamage,combo:teamwork.combo,
       shieldBroken:teamwork.shieldBroken}:{})};
@@ -57,4 +68,4 @@ function strikeEnemy(room,uid,map,{enemyId,seq}={}){
     explorationStamina:staminaAfterCost(member,STAMINA_COST),strikeSeq:seq,lastStrike:hit}};
   return {duplicate:false,members,enemies,hit};
 }
-module.exports={STAMINA_COST,DAMAGE,MAX_STRIKE_SEQ,ENEMY_HEALTH,maxHealth,strikeEnemy};
+module.exports={STAMINA_COST,DAMAGE,MAX_STRIKE_SEQ,ENEMY_HEALTH,maxHealth,recordedMax,playerStrikeDamage,strikeEnemy};
