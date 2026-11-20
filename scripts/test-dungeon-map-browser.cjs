@@ -741,16 +741,29 @@ async function main(){
     await a.page.locator('.dm-quiz-panel [data-dq="whiteboard"]').click();
     const scratch=a.page.locator('[data-dq-whiteboard-canvas]');
     await scratch.waitFor({state:'visible'});
+    // The exclusion dialog can leave the answer sheet scrolled at its prior
+    // position; make real pen events hit the visible canvas, not the toolbar.
+    await scratch.scrollIntoViewIfNeeded();
     const rect=await scratch.boundingBox();assert.ok(rect&&rect.width>60);
-    await a.page.mouse.move(rect.x+20,rect.y+25);
+    await a.page.mouse.move(rect.x+rect.width*.25,rect.y+rect.height*.45);
     await a.page.mouse.down();
-    await a.page.mouse.move(rect.x+80,rect.y+40,{steps:8});
+    await a.page.mouse.move(rect.x+rect.width*.55,
+      rect.y+rect.height*.55,{steps:8});
     await a.page.mouse.up();
     const drawn=await scratch.evaluate(canvas=>{
       const data=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
       for(let i=3;i<data.length;i+=4)if(data[i]!==0)return true;
       return false;
     });
+    if(!drawn)console.error('[Scope exclusion whiteboard diagnostics]',
+      await scratch.evaluate(canvas=>{
+        const r=canvas.getBoundingClientRect();
+        const center=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);
+        return {box:{x:r.x,y:r.y,width:r.width,height:r.height},
+          target:center?.tagName,selector:center?.getAttribute('data-dq'),
+          visible:getComputedStyle(canvas).visibility,
+          panelHidden:canvas.closest('.dm-quiz-whiteboard')?.hidden};
+      }));
     assert.equal(drawn,true,'the independent scratchpad must accept pointer drawing');
     await a.page.locator('.dm-quiz-panel [data-dq="whiteboard-clear"]').click();
     assert.equal(await scratch.evaluate(canvas=>{
