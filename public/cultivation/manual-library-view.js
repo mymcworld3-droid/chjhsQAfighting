@@ -29,9 +29,9 @@ export function renderManualCollectionHeader(state, filter, {esc}) {
       <h3>${Array.isArray(state?.weaponIds)?'武器收藏':'功法收藏'} <span class="manual-library-owned-count">${owned.length} ${Array.isArray(state?.weaponIds)?'件':'本'}</span></h3>
       <p>${Array.isArray(state?.weaponIds)?'選取已獲得的劍或圖騰，於下方修煉或裝備。':'選擇功法，即可在上方集中修煉與強化。'}</p>
     </div>
-    <button type="button" class="manual-refresh" data-manual-refresh title="同步功法資料"
-      aria-label="更新功法資料"><i class="fa-solid fa-rotate" aria-hidden="true"></i> 更新</button>
-    <div class="manual-library-filters" role="group" aria-label="篩選已獲得功法">${tabs}</div>
+    <button type="button" class="manual-refresh" data-manual-refresh title="同步武器資料"
+      aria-label="更新武器資料"><i class="fa-solid fa-rotate" aria-hidden="true"></i> 更新</button>
+    <div class="manual-library-filters" role="group" aria-label="篩選已獲得武器">${tabs}</div>
   </div>`;
 }
 
