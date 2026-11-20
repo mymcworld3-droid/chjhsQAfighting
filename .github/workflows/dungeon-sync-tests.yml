@@ -11,6 +11,8 @@ on:
       - 'dungeon-enemy-ai.cjs'
       - 'dungeon-enemy-combat.cjs'
       - 'dungeon-player-combat.cjs'
+      - 'dungeon-manual-progression.cjs'
+      - 'manual-reward-rules.cjs'
       - 'dungeon-objectives.cjs'
       - 'dungeon-boss-battle.cjs'
       - 'dungeon-team-rescue.cjs'
@@ -52,6 +54,8 @@ jobs:
           node --check dungeon-enemy-ai.cjs
           node --check dungeon-enemy-combat.cjs
           node --check dungeon-player-combat.cjs
+          node --check dungeon-manual-progression.cjs
+          node --check manual-reward-rules.cjs
           node --check dungeon-objectives.cjs
           node --check dungeon-boss-battle.cjs
           node --check dungeon-team-rescue.cjs
