@@ -1,0 +1,43 @@
+name: Classroom browser acceptance
+
+on:
+  push:
+    branches: [stamina-battle]
+    paths:
+      - classroom-api.cjs
+      - public/cultivation/classroom.js
+      - public/cultivation/classroom-view.js
+      - public/styles/classroom.css
+      - scripts/check-classroom-ui.cjs
+      - tests/classroom-view.test.cjs
+      - .github/workflows/classroom-browser.yml
+  pull_request:
+    branches: [stamina-battle, main]
+    paths:
+      - classroom-api.cjs
+      - public/cultivation/classroom.js
+      - public/cultivation/classroom-view.js
+      - public/styles/classroom.css
+      - scripts/check-classroom-ui.cjs
+      - tests/classroom-view.test.cjs
+      - .github/workflows/classroom-browser.yml
+
+jobs:
+  classroom-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Install Playwright
+        run: npm install --no-save --no-audit --no-fund playwright@1.62.1
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Teacher and student classroom acceptance
+        run: node scripts/check-classroom-ui.cjs
