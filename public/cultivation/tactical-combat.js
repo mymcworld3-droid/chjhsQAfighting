@@ -218,6 +218,12 @@ function ensure(){
     document.head.append(link);
   }
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
+  if(!document.getElementById('tactical-focus-effects-style')){
+    const link=document.createElement('link');
+    link.id='tactical-focus-effects-style';link.rel='stylesheet';
+    link.href='/styles/tactical-focus-effects.css?v=20261120-focus-parity-v1';
+    document.head.append(link);
+  }
   if(!document.getElementById('tactical-boss-presentation-style')){
     const link=document.createElement('link');link.id='tactical-boss-presentation-style';
     link.rel='stylesheet';link.href='/styles/tactical-boss-presentation.css?v=20261118-combat-phase3-v1';
