@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-phy2-optics-sound-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "以物理定律及測量原則設計可重算的單一答案",
+      "question": {
+        "q": "理想薄凸透鏡的焦距為20 cm，實物置於鏡前60 cm。依薄透鏡公式，實像距透鏡多遠？",
+        "correct": "30 cm",
+        "wrong": [
+          "15 cm",
+          "40 cm",
+          "60 cm"
+        ],
+        "exp": "1/f=1/u+1/v，故1/v=1/20−1/60=1/30，得v=30 cm，為鏡後實像。",
+        "subject": "物理",
+        "sub_topic": "幾何光學與聲音",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-幾何光學與聲音",
+        "template_id": "ref-20261120-b12-phy2-optics-sound-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-phy2-optics-sound-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "以物理定律及測量原則設計可重算的單一答案",
+      "question": {
+        "q": "一人在山谷大喊後，經1.5秒聽見來自正前方垂直山壁的回聲。若聲速約340 m/s，忽略其他反射，山壁距離約多少？",
+        "correct": "255 m",
+        "wrong": [
+          "510 m",
+          "170 m",
+          "340 m"
+        ],
+        "exp": "回聲走的是往返距離2d，故2d=v×t=340×1.5=510 m，d=255 m。",
+        "subject": "物理",
+        "sub_topic": "幾何光學與聲音",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-幾何光學與聲音",
+        "template_id": "ref-20261120-b12-phy2-optics-sound-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-phy2-optics-sound-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "以物理定律及測量原則設計可重算的單一答案",
+      "question": {
+        "q": "一束單色光由空氣斜射入一般玻璃，忽略色散與吸收。下列哪種變化最合理？",
+        "correct": "光在玻璃中的速率降低，頻率維持不變",
+        "wrong": [
+          "光速變快，頻率也增加",
+          "光速不變，但頻率必減半",
+          "光在介面處折射時頻率隨入射角任意改變"
+        ],
+        "exp": "介質交界處光的頻率保持連續；一般玻璃折射率較空氣大，使光速減小、波長縮短。",
+        "subject": "物理",
+        "sub_topic": "幾何光學與聲音",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-幾何光學與聲音",
+        "template_id": "ref-20261120-b12-phy2-optics-sound-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
