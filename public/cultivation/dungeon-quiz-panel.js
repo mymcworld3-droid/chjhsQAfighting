@@ -1,6 +1,7 @@
 import {
   getDungeonQuizState,generateDungeonQuestion,answerDungeonQuestion,
-  acknowledgeDungeonReview,claimDungeonQuizStamina
+  acknowledgeDungeonReview,claimDungeonQuizStamina,
+  reportDungeonQuestion,reviewDungeonMathIssue,refundDungeonQuestionStamina
 } from './dungeon-room.js';
 import {getMainUser} from './data/project-repository.js';
 
@@ -19,11 +20,14 @@ export class DungeonQuizPanel{
     this.prefetching=false;this.pendingCredits=[];this.warming=false;
     this.warmUntil=0;this.questionStartedAt=0;this.errorMessage='';
     this.isAdmin=false;
+    this.errorRefunds=[];this.reportOpen=false;this.reportBusy=false;
+    this.correctionBusy=false;this.queuedCorrections=new Set();
+    this.learningQuiz=null;this.mathReports=new Set();
     const panel=document.createElement('aside');
     panel.className='dm-quiz-panel';panel.hidden=true;
     panel.setAttribute('role','region');panel.setAttribute('aria-label','副本獨立答題');
-    // Trial-style page: one question, four full-width choices, immediate review
-    // and an explicit next button. No 問道助手 or AI hint requests.
+    // Trial-style quiz and shared learning system, but NO 問道助手.
+    // Question complaints use server-side evidence, never a client answer key.
     panel.innerHTML='<section class="dm-quiz-sheet">'+
       '<header class="dm-quiz-top"><div><small>青雲問道 · 問道試煉</small>'+
       '<h3>答題充能</h3></div>'+
@@ -31,7 +35,18 @@ export class DungeonQuizPanel{
       '<p class="dm-quiz-info">答對恢復 4 體力，答錯恢復 1 體力（上限 10）。'+
       '逐題批改、查看解析，再按下一題。作答時戰鬥及隊友行動不暫停。</p>'+
       '<div class="dm-quiz-toolbar"><span data-dq="scope">依選擇的學習範圍出題</span>'+
-      '<button type="button" data-dq="whiteboard" aria-expanded="false">計算白板</button></div>'+
+      '<div class="dm-quiz-tools">'+
+      '<button type="button" data-dq="report-toggle" aria-expanded="false">題目有錯</button>'+
+      '<button type="button" data-dq="whiteboard" aria-expanded="false">計算白板</button></div></div>'+
+      '<section class="dm-quiz-report" data-dq="report-panel" hidden aria-label="回報題目錯誤">'+
+      '<label for="dm-quiz-report-reason">請具體指出題幹、選項、計算或排版上的錯誤</label>'+
+      '<textarea id="dm-quiz-report-reason" data-dq="report-reason" rows="3" maxlength="1200" '+
+      'placeholder="請至少輸入 6 個字，獨立審核確認後才會補償"></textarea>'+
+      '<div class="dm-quiz-report-actions"><button type="button" data-dq="report-submit">送交獨立審核</button>'+
+      '<button type="button" data-dq="report-close">取消</button></div>'+
+      '<small>未作答也可回報。確認為錯題才跳過或補正；審核中可返回戰場。</small>'+
+      '</section>'+
+      '<p data-dq="report-status" class="dm-quiz-report-status" role="status" aria-live="polite"></p>'+
       '<p data-dq="status" class="dm-quiz-status" role="status" aria-live="polite"></p>'+
       '<div data-dq-content class="dm-quiz-content"></div>'+
       '<section class="dm-quiz-whiteboard" data-dq-whiteboard hidden aria-label="計算白板">'+
@@ -43,6 +58,7 @@ export class DungeonQuizPanel{
       '<div class="dm-quiz-actions">'+
       '<button type="button" data-dq="retry" hidden>重新取得題目</button>'+
       '<button type="button" data-dq="credit" hidden>重試補充體力</button>'+
+      '<button type="button" data-dq="error-credit" hidden>重試錯題補償</button>'+
       '<button type="button" data-dq="next" hidden>下一題</button></div>'+
       '</section>';
     this.element=panel;root.append(panel);
@@ -58,11 +74,28 @@ export class DungeonQuizPanel{
       else if(action==='whiteboard'||action==='whiteboard-close')
         this.toggleWhiteboard(action==='whiteboard'?undefined:false);
       else if(action==='whiteboard-clear')this.clearWhiteboard();
+      else if(action==='report-toggle')this.toggleReport();
+      else if(action==='report-close')this.toggleReport(false);
+      else if(action==='report-submit')void this.sendReport();
+      else if(action==='correction')void this.queueCorrection();
+      else if(action==='error-credit')void this.retryErrorRefunds();
     });
     panel.addEventListener('keydown',event=>{
       if(event.key==='Escape'){event.stopPropagation();event.preventDefault();this.hide();}
     });
     this.bindWhiteboard();
+    window.addEventListener('qa:invalid-tex',event=>{
+      const node=event.detail?.node;
+      if(!this.visible||!this.valid()||!node||
+          !this.element.contains(node)||!this.roomId)return;
+      const questionId=this.review?.questionId||this.question?.id;
+      if(!questionId||this.mathReports.has(questionId))return;
+      this.mathReports.add(questionId);
+      const epoch=this.epoch,roomId=this.roomId;
+      void reviewDungeonMathIssue(roomId,questionId).catch(()=>{
+        if(this.valid(epoch))this.mathReports.delete(questionId);
+      });
+    });
   }
   bindWhiteboard(){
     const canvas=this.element.querySelector('[data-dq-whiteboard-canvas]');
@@ -128,7 +161,9 @@ export class DungeonQuizPanel{
     this.epoch++;this.roomId=roomId;this.uid=uid;this.isAdmin=isAdmin===true;
     this.clearWhiteboard();this.toggleWhiteboard(false);
     this.visible=false;this.element.hidden=true;
-    this.question=null;this.review=null;this.pendingCredits=[];
+    this.question=null;this.review=null;this.pendingCredits=[];this.errorRefunds=[];
+    this.reportOpen=false;this.reportBusy=false;this.learningQuiz=null;
+    this.mathReports.clear();this.queuedCorrections.clear();
     this.loading=false;this.answering=false;this.prefetching=false;
     this.warming=false;this.warmUntil=0;this.errorMessage='';
     this.questionStartedAt=0;this.paint();
@@ -136,8 +171,12 @@ export class DungeonQuizPanel{
   destroy(){
     this.epoch++;this.visible=false;this.element.hidden=true;
     this.roomId='';this.uid='';this.question=null;this.review=null;
-    this.pendingCredits=[];this.prefetching=false;this.loading=false;
+    this.pendingCredits=[];this.errorRefunds=[];
+    this.reportOpen=false;this.reportBusy=false;this.correctionBusy=false;
+    this.prefetching=false;this.loading=false;
     this.answering=false;this.warming=false;this.warmUntil=0;
+    if(window.currentTacticalQuiz===this.learningQuiz)window.currentTacticalQuiz=null;
+    this.learningQuiz=null;this.mathReports.clear();this.queuedCorrections.clear();
     this.errorMessage='';this.questionStartedAt=0;this.isAdmin=false;
     this.clearWhiteboard();this.toggleWhiteboard(false);
   }
@@ -167,7 +206,35 @@ export class DungeonQuizPanel{
   }
   hide(){
     this.visible=false;this.element.hidden=true;
+    if(window.currentTacticalQuiz===this.learningQuiz)window.currentTacticalQuiz=null;
     this.root.querySelector('[data-dm="quiz"]')?.focus({preventScroll:true});
+  }
+  toggleReport(force){
+    const item=this.review||this.question;
+    if(!this.valid()||!this.visible||!item||this.reportBusy)return;
+    this.reportOpen=force===undefined?!this.reportOpen:Boolean(force);
+    this.$('report-panel').hidden=!this.reportOpen;
+    this.$('report-toggle')?.setAttribute('aria-expanded',String(this.reportOpen));
+    if(this.reportOpen)this.$('report-reason')?.focus({preventScroll:true});
+  }
+  reportStatus(message=''){
+    const node=this.$('report-status');if(node)node.textContent=message;
+  }
+  bindLearning(item){
+    if(!item||!this.visible)return;
+    if(this.learningQuiz?.id!==item.id){
+      this.learningQuiz={
+        id:item.id,
+        data:{q:item.q,opts:item.opts},
+        learningSubject:item.subject,learningTopic:item.learningTopic||item.topic,
+        learningDifficulty:item.difficulty||'easy',
+        meta:item.meta||{},adaptive:item.adaptive||null,
+        adaptiveAnswered:!!this.review,adaptiveHelp:0
+      };
+    }else this.learningQuiz.adaptiveAnswered=!!this.review;
+    window.currentTacticalQuiz=this.learningQuiz;
+    const host=this.element.querySelector('.dm-quiz-question');
+    if(host)window.QAAdaptiveLearning?.render?.(this.learningQuiz,host);
   }
   status(message=''){
     const node=this.$('status');if(node)node.textContent=message;
