@@ -137,7 +137,7 @@ function renderBattleLoadouts(){
   const active=state?.status==='active'&&state.mode==='pve',actor=myActor();
   const index=Number.isInteger(actor?.manualLoadoutIndex)?actor.manualLoadoutIndex:
     (battleLoadouts?.activeLoadout??0);
-  toggle.hidden=!active||!actor?.manualWeaponMode;toggle.disabled=busy;
+  toggle.hidden=!active;toggle.disabled=busy;
   const weapons=Array.isArray(battleLoadouts?.weaponIds);
   toggle.textContent=weapons?'武器 '+(battleLoadouts?.weaponIds?.filter(Boolean).length||0)+'/3':'配置 '+(index+1);
   toggle.setAttribute('aria-expanded',String(active&&loadoutMenuOpen));
