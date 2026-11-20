@@ -100,35 +100,35 @@
 #manual-training-root .manual-library-art-zone[data-manual-approach="imminent"]::before{
   border-color:#f0d99f;box-shadow:0 0 21px rgba(237,197,116,.26);
 }
-#tactical-combat .tc-manual-breakthrough{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-breakthrough{
   display:grid;gap:6px;min-width:0;
   margin-top:9px;padding:9px 10px;
   background:rgba(75,56,27,.52);border:1px solid rgba(230,193,115,.65);
   border-radius:9px;color:#f7e1b5;
 }
-#tactical-combat .tc-manual-breakthrough--realm{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-breakthrough--realm{
   background:rgba(61,45,29,.75);border-color:rgba(215,158,94,.7);
 }
-#tactical-combat .tc-manual-breakthrough-title{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-breakthrough-title{
   display:flex;gap:8px;align-items:baseline;justify-content:space-between;min-width:0;
 }
-#tactical-combat .tc-manual-breakthrough-title strong{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-breakthrough-title strong{
   font-size:11px;color:#ffdf98;line-height:1.35;overflow-wrap:anywhere;
 }
-#tactical-combat .tc-manual-breakthrough-title small{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-breakthrough-title small{
   color:#ffeca9;white-space:nowrap;font-size:11px;font-variant-numeric:tabular-nums;
 }
-#tactical-combat .tc-manual-breakthrough-track{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-breakthrough-track{
   height:8px;border-radius:20px;background:rgba(9,22,16,.95);
   border:1px solid rgba(219,194,126,.52);padding:1px;overflow:hidden;
 }
-#tactical-combat .tc-manual-breakthrough-track>span{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-breakthrough-track>span{
   display:block;height:100%;border-radius:15px;min-width:0;
   background:linear-gradient(90deg,#6b9470,#e2bf76,#fff1b1);
   box-shadow:0 0 9px rgba(235,190,112,.36);
   transition:width .4s ease-out;
 }
-#tactical-combat .tc-manual-breakthrough>small{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-breakthrough>small{
   font-size:10px;color:#d5c9ad;line-height:1.5;
 }
 @keyframes manual-anticipation-glow{
@@ -144,7 +144,7 @@
 }
 @media(prefers-reduced-motion:reduce){
   #manual-training-root .manual-anticipation-track>span,
-  #tactical-combat .tc-manual-breakthrough-track>span{
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-breakthrough-track>span{
     animation:none!important;transition:none!important;
   }
 }
