@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-en3-paraphrase-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "文法搭配、語義條件與篇章改寫皆具單一最佳答案",
+      "question": {
+        "q": "Original: 'The community garden provided fresh vegetables and encouraged neighbors to meet. However, few volunteers were available during summer holidays, making maintenance difficult.' Which summary retains both the benefits and the limitation?",
+        "correct": "The garden supported food production and community ties, but seasonal staff shortages made upkeep challenging.",
+        "wrong": [
+          "The garden produced no food because neighbors refused to cooperate.",
+          "The garden's benefits were permanent, and it never needed volunteers.",
+          "A summer staffing shortage proved the garden had never helped the community."
+        ],
+        "exp": "A balanced summary must retain both the reported positive functions and the limited volunteer capacity during holidays.",
+        "subject": "英文",
+        "sub_topic": "摘要與改寫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-摘要與改寫",
+        "template_id": "ref-20261120-b12-en3-paraphrase-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-en3-paraphrase-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "文法搭配、語義條件與篇章改寫皆具單一最佳答案",
+      "question": {
+        "q": "Original: 'The school did not cancel the outdoor event until weather officials issued a severe storm warning.' Which rewrite preserves the timing?",
+        "correct": "The school canceled the outdoor event only after a severe storm warning was issued.",
+        "wrong": [
+          "The school canceled the event before weather officials issued any warning.",
+          "The outdoor event went ahead despite the severe storm warning.",
+          "The school canceled the event as soon as it was first announced, before any storm warning."
+        ],
+        "exp": "'Not ... until' specifies that cancellation did not occur before the warning; 'only after' preserves the sequence.",
+        "subject": "英文",
+        "sub_topic": "摘要與改寫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-摘要與改寫",
+        "template_id": "ref-20261120-b12-en3-paraphrase-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-en3-paraphrase-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "文法搭配、語義條件與篇章改寫皆具單一最佳答案",
+      "question": {
+        "q": "Original: 'After new bicycle lanes were introduced, cycling trips increased, but the survey did not establish whether the lanes caused the increase.' Which paraphrase is accurate?",
+        "correct": "Cycling became more common after the lanes opened, although their causal effect remains uncertain.",
+        "wrong": [
+          "The survey proved the lanes were solely responsible for more cycling trips.",
+          "Cycling trips decreased when the new lanes opened.",
+          "Because causation was uncertain, the survey showed no change in cycling trips."
+        ],
+        "exp": "The sentence states an observed increase and explicitly limits the causal conclusion. An accurate rewrite keeps both facts.",
+        "subject": "英文",
+        "sub_topic": "摘要與改寫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-摘要與改寫",
+        "template_id": "ref-20261120-b12-en3-paraphrase-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
