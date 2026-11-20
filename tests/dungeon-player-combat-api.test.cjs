@@ -269,3 +269,56 @@ test('quiz credit is member- and session-bound; rejects ungraded, out-of-order a
   f.a.records.set('dungeonQuizStates/a',{...oldA,sessionKey:'old-room:123'});
   assert.equal((await f.call('a','quiz-credit',{roomId:id,questionId:'two'})).status,403);
 });
+
+test('independently confirmed wrong question refunds exactly 3 stamina once across C servers',async()=>{
+  const {f,id,raw}=await setup();
+  const qid='dungeon-wrong-report-0001';
+  raw.members.a.explorationStamina=5;
+  raw.members.a.quizCreditSeq=1;
+  f.a.records.set('dungeonQuizStates/a',{
+    roomId:id,sessionKey:id+':'+raw.assembledAtMs,
+    reviews:{[qid]:{uid:'a',questionId:qid,index:1,
+      correct:false,amount:1,skipped:false}},
+    errorReports:{[qid]:{approved:true,skipped:false,index:1}}
+  });
+  const revision=raw.revision;
+  const [one,two]=await Promise.all([
+    f.call('a','quiz-error-refund',{roomId:id,questionId:qid,
+      requestedStamina:100000,proof:{approved:true}},0),
+    f.call('a','quiz-error-refund',{roomId:id,questionId:qid},1)
+  ]);
+  assert.equal(one.status,200,one.body?.error);
+  assert.equal(two.status,200,two.body?.error);
+  const applied=f.c.records.get('dungeonRooms/'+id);
+  assert.equal(applied.members.a.explorationStamina,8);
+  assert.equal(applied.members.b.explorationStamina,10);
+  assert.equal(applied.members.a.lastQuizErrorRefund.nominal,3);
+  assert.equal(applied.members.a.lastQuizErrorRefund.granted,3);
+  assert.equal(applied.revision,revision+1);
+  const receipts=[...f.c.records.keys()]
+    .filter(k=>k.startsWith('dungeonQuizErrorRefunds/'));
+  assert.equal(receipts.length,1);
+  assert.equal((await f.call('a','quiz-error-refund',
+    {roomId:id,questionId:qid})).status,200);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).revision,revision+1);
+  assert.equal((await f.call('b','quiz-error-refund',
+    {roomId:id,questionId:qid})).status,403);
+  assert.equal((await f.call('a','quiz-error-refund',
+    {roomId:id,questionId:'forged-report-id'})).status,403);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).members.a.explorationStamina,8);
+});
+
+test('report refund is ordered after original quiz credit; pending skips never get extra +3',async()=>{
+  const {f,id,raw}=await setup(),qid='dungeon-skip-report-0002';
+  f.a.records.set('dungeonQuizStates/a',{
+    roomId:id,sessionKey:id+':'+raw.assembledAtMs,
+    reviews:{[qid]:{uid:'a',questionId:qid,index:1,
+      correct:true,amount:4,skipped:true}},
+    errorReports:{[qid]:{approved:true,skipped:true,index:1}}
+  });
+  assert.equal((await f.call('a','quiz-error-refund',{roomId:id,questionId:qid})).status,403);
+  assert.equal((await f.call('a','quiz-credit',{roomId:id,questionId:qid})).status,200);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).members.a.quizCreditSeq,1);
+  assert.equal((await f.call('a','quiz-error-refund',{roomId:id,questionId:qid})).status,403);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).members.a.explorationStamina,10);
+});
