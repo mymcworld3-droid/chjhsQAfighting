@@ -30,6 +30,9 @@ test('older invalid adaptive question is removed without erasing newer valid wor
   const evidence={before:before.scopes[S],after:invalid.scopes[S],
     eventId:meta.questionId,at:2000,help:0};
   const fixed=Learning.inverseAdaptive(latest,meta,false,evidence);
+  const expected=observe(before,'later_valid_answer',true,3000);
+  assert.deepEqual(fixed,expected,
+    'after invalidation later valid answers must retain their true review schedule');
   const state=Adaptive.scopeState(fixed,S);
   assert.equal(state.answered,2);
   assert.equal(state.concepts[C].n,2);
