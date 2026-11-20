@@ -29,7 +29,8 @@
   function occupies(enemy,p){
     const pos=enemy.position||enemy;
     if(!valid(pos))return false;
-    const size=enemy.footprint||{width:enemy.kind==='boss'?2:1,height:enemy.kind==='boss'?2:1};
+    const size=typeof enemy.footprint==='number'?{width:enemy.footprint,height:enemy.footprint}:
+      enemy.footprint||{width:enemy.kind==='boss'?2:1,height:enemy.kind==='boss'?2:1};
     return p.x>=pos.x&&p.x<pos.x+(size.width||1)&&
       p.y>=pos.y&&p.y<pos.y+(size.height||1);
   }
