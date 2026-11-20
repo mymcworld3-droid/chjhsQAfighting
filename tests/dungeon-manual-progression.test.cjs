@@ -107,7 +107,9 @@ test('manual credit can be reclaimed using stored C ledger after leaving a close
   const result=await Progress.claim(db,'dungroomA123456',left,'a');
   assert.equal(result.credited[key],35);
   assert.equal(db.records.get('tacticalManuals/a').books[key].exp,35);
-  assert.deepEqual((await Progress.claim(db,'dungroomA123456',left,'outsider')).credited,{});
+  await assert.rejects(
+    Progress.claim(db,'dungroomA123456',left,'outsider'),
+    error=>error.status===403&&/資格/.test(error.message));
   assert.equal(db.records.get('tacticalManuals/a').books[key].exp,35);
 });
 
