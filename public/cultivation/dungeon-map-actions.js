@@ -90,7 +90,14 @@ export function dungeonAttackTiles(map,from,skill,enemies=[]){
   const kind=skill?.kind||'attack';
   const range=Math.max(0,Math.min(15,Number(skill?.range)||1));
   if(kind==='fist-focus'){add(from.x,from.y);return cells;}
-  if(['attack','fist-sweep','fist-throw','fist-chain'].includes(kind)){
+  if(kind==='attack'){
+    // The trial's ordinary attack traces two cells in each cardinal
+    // direction. A wall cuts off the rest of that ray.
+    for(const [dx,dy]of DIRS)for(let n=1;n<=2;n++)
+      if(!add(from.x+dx*n,from.y+dy*n))break;
+    return cells;
+  }
+  if(['fist-sweep','fist-throw','fist-chain'].includes(kind)){
     for(const [dx,dy]of DIRS)add(from.x+dx,from.y+dy);
     return cells;
   }
