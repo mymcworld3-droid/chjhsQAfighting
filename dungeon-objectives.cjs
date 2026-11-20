@@ -4,6 +4,7 @@
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {isAlive}=require('./dungeon-enemy-combat.cjs');
 const {maxHealth}=require('./dungeon-player-combat.cjs');
+const {STAGE,REALM}=require('./dungeon-manual-progression.cjs');
 const GUARDIAN_ID='guardian-1',GUARDIAN_NAME='鎮鑰玄甲獸',VERSION=1;
 const GUARDIAN_HP=maxHealth('guardian');
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
@@ -24,6 +25,7 @@ function spawn(map,enemies){
   const path=map.mainRoute.slice(-17);
   const patrolIndex=Math.max(0,path.findIndex(p=>same(p,position)));
   const guardian={id:GUARDIAN_ID,name:GUARDIAN_NAME,kind:'guardian',
+    realmStage:STAGE,realm:REALM,
     zone:'guardian',position:{...position},spawn:{...position},
     patrolIndex,patrolDirection:patrolIndex===0?1:-1,
     cadence:3,aggroRange:8,intent:'patrol',targetUid:null,
