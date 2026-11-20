@@ -297,7 +297,8 @@ class DungeonMapView{
     this.room=room;this.roomId=room.id;this.uid=playerUid;
     this.quiz?.attach(room.id,playerUid,
       room.members[playerUid]?.dungeonAdmin===true,room.mapVersion===2);
-    if(room.status==='assembled')void this.quiz?.warm();
+    // Passive regen does not need questions: only prepare AI quizzes on demand.
+    if(room.status==='assembled'&&room.mapVersion!==2)void this.quiz?.warm();
     this.map=null;this.camera=Camera.initialCamera();
     this.visualScenes.clear();this.travelScenes.clear();
     this.enemyReactionScenes.clear();
@@ -1627,7 +1628,8 @@ class DungeonMapView{
       this.alert('全隊正在進入首領戰場…');
       void this.load();
     }
-    if(room.status==='assembled')void this.quiz?.warm();
+    // Passive regen does not need questions: only prepare AI quizzes on demand.
+    if(room.status==='assembled'&&room.mapVersion!==2)void this.quiz?.warm();
     this.syncClockAnchor(room);
     this.updateStatus();
     if(xpDelta)this.showLiveManualXp(xpDelta);

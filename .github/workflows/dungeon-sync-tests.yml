@@ -6,6 +6,7 @@ on:
     paths:
       - 'dungeon-room-*.cjs'
       - 'dungeon-map-generator.cjs'
+      - 'dungeon-stamina-rules.cjs'
       - 'dungeon-movement.cjs'
       - 'dungeon-battle-clock.cjs'
       - 'dungeon-enemy-ai.cjs'

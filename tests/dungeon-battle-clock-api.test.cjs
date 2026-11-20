@@ -190,3 +190,62 @@ test('old stage-7 rooms with only assembledAtMs use stable clock without migrati
   assert.equal(clockReply.body.clock.tick,22);
   assert.equal(f.c.records.get('dungeonRooms/'+id).battleAppliedTick,22);
 });
+
+// v2 passive charging is a server clock resource, not a request or quiz reward.
+test('v2 regeneration adds exactly one energy per elapsed second for each member and caps at ten',async()=>{
+  const f=fixture(),{id}=await assembledRoom(f);
+  const stored=f.c.records.get('dungeonRooms/'+id);
+  assert.equal(stored.mapVersion,2);
+  stored.members.a.explorationStamina=0;
+  stored.members.b.explorationStamina=2;
+  f.clock(2999);
+  const calls=await Promise.all([
+    f.call('a','clock',{roomId:id},0),
+    f.call('b','clock',{roomId:id},1),
+    f.call('a','clock',{roomId:id},1)
+  ]);
+  assert.ok(calls.every(call=>call.status===200));
+  let snapshot=f.c.records.get('dungeonRooms/'+id);
+  assert.equal(snapshot.battleAppliedTick,2);
+  assert.equal(snapshot.members.a.explorationStamina,2);
+  assert.equal(snapshot.members.b.explorationStamina,4);
+  const rev=snapshot.revision;
+  assert.equal((await f.call('a','clock',{roomId:id})).status,200);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).revision,rev,
+    'multiple clients cannot credit the same server tick twice');
+  f.clock(6500);
+  assert.equal((await f.call('b','clock',{roomId:id},1)).status,200);
+  snapshot=f.c.records.get('dungeonRooms/'+id);
+  assert.equal(snapshot.battleAppliedTick,9);
+  assert.equal(snapshot.members.a.explorationStamina,9);
+  assert.equal(snapshot.members.b.explorationStamina,10);
+  f.clock(2000);
+  await f.call('a','clock',{roomId:id});
+  assert.equal(f.c.records.get('dungeonRooms/'+id).members.a.explorationStamina,10);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).members.b.explorationStamina,10);
+});
+test('a player with zero energy may move exactly one tile when one server tick passed without SSE',async()=>{
+  const f=fixture(),{id,room}=await assembledRoom(f);
+  const stored=f.c.records.get('dungeonRooms/'+id);
+  stored.members.a.explorationStamina=0;
+  const map=generateDungeonLayout(SECRET,2),from=room.members.a.position;
+  const direction=[[0,1],[1,0],[0,-1],[-1,0]].find(([dx,dy])=>
+    walkable(map,{x:from.x+dx,y:from.y+dy})&&
+    !(room.enemies||[]).some(e=>e.position.x===from.x+dx&&e.position.y===from.y+dy));
+  assert.ok(direction);
+  f.clock(1001);
+  const [dx,dy]=direction;
+  const move=await f.call('a','move',{roomId:id,dx,dy,step:1});
+  assert.equal(move.status,200,move.body?.error);
+  assert.equal(move.body.room.members.a.explorationStamina,0,
+    'regen and one-tile cost each commit once in the same transaction');
+  assert.equal(move.body.room.battleClock.appliedTick,1);
+  assert.equal(move.body.room.members.a.moveSeq,1);
+  const repeat=await f.call('a','move',{roomId:id,dx,dy,step:1},1);
+  assert.equal(repeat.status,200);
+  assert.equal(repeat.body.room.members.a.explorationStamina,0);
+  f.clock(1000);
+  const next=await f.call('b','clock',{roomId:id},1);
+  assert.equal(next.status,200);
+  assert.equal(f.c.records.get('dungeonRooms/'+id).members.a.explorationStamina,1);
+});
