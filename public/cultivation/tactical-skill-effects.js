@@ -175,6 +175,16 @@
         c.fillRect(ox+tile.x*size+2,oy+tile.y*size+2,size-4,size-4);
         if(move!=='wind-step')circle(at,.29+beat*.05,beat*.25,ink,.014);
       }
+      // Both dungeon and tactical battles use the same explicit focus
+      // animation flags from their authoritative combat results.
+      if(scene.focusActivated){
+        for(let i=0;i<3;i++)
+          circle(from,.32+i*.17+p*.18,beat*(.82-i*.15),gold,.025);
+      }
+      if(scene.focusEmpowered){
+        for(const at of hit.slice(0,12))
+          circle(at,.24+beat*.12,beat*.65,gold,.024);
+      }
       if(move==='dragon-roar'||move==='flight-summon'){
         c.save();c.translate((move==='dragon-roar'?from:to).x,(move==='dragon-roar'?from:to).y);
         c.rotate((move==='dragon-roar'?1:-1)*p*.9);
@@ -188,6 +198,17 @@
         c.restore();
       }
       c.restore();return true;
+    }
+    if(scene.focusActivated){
+      // A bright but hollow gold release, so the avatar never vanishes
+      // behind the effect as the six dungeon charges / trial buff begin.
+      circle(from,.26+beat*.4,beat*.9,white,.038);
+      sparks(from,14,gold,.64);
+    }else if(scene.focusEmpowered){
+      for(const at of hit.slice(0,10)){
+        circle(at,.15+beat*.30,beat*.66,gold,.035);
+        circle(at,.10+beat*.22,beat*.5,white,.016);
+      }
     }
     if(move==='wind-slash'){
       const end=hit.at(-1)||to,q=phase(p,.06,.8);
