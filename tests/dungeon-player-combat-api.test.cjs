@@ -76,6 +76,8 @@ async function setup(){
 }
 test('two distinct servers commit concurrent strikes once and share one enemy health',async()=>{
   const {f,id,raw,wolf}=await setup();
+  // Leave enough HP for BOTH independently verified foundation-stage hits.
+  wolf.battleHealth=raw.members.a.battleAttack+raw.members.b.battleAttack-1;
   const account=structuredClone(f.a.records.get('users/a'));
   const [a,b]=await Promise.all([
     f.call('a','strike',{roomId:id,enemyId:wolf.id,seq:1,
@@ -132,7 +134,7 @@ test('authoritative C-side manual equipment enables skills and replaces basic at
   assert.equal(cast.status,200);
   const result=cast.body.room.members.a.lastSkill;
   assert.equal(result.skillId,'wind-slash');
-  assert.ok(result.totalDamage>0&&result.totalDamage<=60);
+  assert.ok(result.totalDamage>0&&result.totalDamage<=wolf.battleMaxHealth);
   assert.equal(cast.body.room.members.a.explorationStamina,8);
   const before=f.c.records.get('dungeonRooms/'+id).revision;
   const retry=await f.call('a','skill',{roomId:id,skillId:'wind-slash',
@@ -144,6 +146,8 @@ test('authoritative C-side manual equipment enables skills and replaces basic at
 });
 test('two servers resolve simultaneous equipped skills against one shared enemy',async()=>{
   const {f,id,raw,wolf}=await setup();
+  // 400 HP survives the first trusted strike but falls to the second.
+  wolf.battleHealth=400;
   for(const uid of 'ab'){
     f.a.records.set('tacticalManuals/'+uid,skillRecord());
     assert.equal((await f.call(uid,'loadout',{roomId:id,index:0})).status,200);
@@ -159,7 +163,7 @@ test('two servers resolve simultaneous equipped skills against one shared enemy'
   assert.equal(stored.members.a.explorationStamina,8);
   assert.equal(stored.members.b.explorationStamina,8);
   assert.ok(stored.members.a.lastSkill.totalDamage+
-    stored.members.b.lastSkill.totalDamage===60);
+    stored.members.b.lastSkill.totalDamage===400);
   const before=stored.revision;
   const stale=await f.call('b','skill',{roomId:id,skillId:'wind-slash',
     target:wolf.position,seq:1},0);
