@@ -7,8 +7,12 @@ const finiteCount=value=>{
 
 export function manualXpDelta(previous,next,uid,catalog){
   if(!previous||!next||!uid||previous.id!==next.id||
-    previous.mode!=='pve'||next.mode!=='pve'||
-    !['active','finished'].includes(next.status)||
+    previous.mode!==next.mode||!['pve','dungeon'].includes(next.mode)||
+    !(next.mode==='dungeon'?next.status==='assembled':
+      ['active','finished'].includes(next.status))||
+    (next.mode==='dungeon'&&
+      (previous.manualProgressSession||previous.assembledAtMs)!==
+      (next.manualProgressSession||next.assembledAtMs))||
     Number(next.revision)<Number(previous.revision))return null;
   const ownedCatalog=catalog?.BY_BOOK||{};
   const perBook=new Map();
@@ -56,4 +60,48 @@ export function renderManualXpToast(delta,{esc,bookArt}={}){
     <div class="tc-manual-xp-entries">${lines}</div>
     ${extra}
   </div>`;
+}
+
+// The dungeon and trial use this same book artwork/EXP toast; only the
+// verified A-side mastery snapshot may add exact level and percentage text.
+export function renderManualXpProgress(delta,manualState,catalog,{esc}={}){
+  if(!delta?.books?.length||!Array.isArray(manualState?.library)||
+    typeof catalog?.mastery!=='function')return '';
+  const escape=typeof esc==='function'?esc:value=>String(value??'');
+  const owned=new Map(manualState.library.filter(book=>book?.owned)
+    .map(book=>[book.id,book]));
+  const list=delta.books.slice(0,3).map(row=>{
+    const book=owned.get(row.id);
+    if(!book)return '';
+    const mastery=catalog.mastery(book.totalExp??book.exp);
+    if(!Number.isInteger(mastery.level)||mastery.level<1)return '';
+    const capped=mastery.level>=catalog.MAX_LEVEL;
+    const percent=capped?100:Math.max(0,Math.min(100,mastery.progress));
+    const fmt=value=>Math.max(0,Math.trunc(Number(value)||0))
+      .toLocaleString('zh-TW');
+    const next=capped?'已達最高等級':
+      '距 Lv. '+(mastery.level+1)+' 還差 '+
+        fmt(mastery.expToNext-mastery.expInLevel)+' EXP';
+    const label='Lv. '+mastery.level+(capped?'（滿級）':
+      ' → Lv. '+(mastery.level+1));
+    return `<div class="tc-manual-xp-progress-item"
+      data-manual-xp-progress="${escape(row.id)}">
+      <div class="tc-manual-xp-progress-title">
+        <strong>${escape(book.name)}</strong>
+        <span>${escape(label)}</span>
+      </div>
+      <div class="tc-manual-xp-progress-track" role="progressbar"
+        aria-label="${escape(book.name)}目前功法等級進度"
+        aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}">
+        <span style="width:${percent}%"></span>
+      </div>
+      <small>${capped?'最高 Lv. '+mastery.level:
+        fmt(mastery.expInLevel)+' / '+fmt(mastery.expToNext)+' EXP · '+
+        escape(next)}</small>
+    </div>`;
+  }).filter(Boolean);
+  return list.length?`<div class="tc-manual-xp-progress"
+    data-manual-progress-confirmed aria-label="功法等級進度，已依角色帳號確認">
+    ${list.join('')}
+  </div>`:'';
 }
