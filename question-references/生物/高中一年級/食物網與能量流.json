@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-bio1-foodweb-energy-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "兼顧生態數量關係、生理機制與演化條件，避免以個體意志取代自然選擇",
+      "question": {
+        "q": "某食物鏈為浮游植物→浮游動物→小魚。假設每一營養階層平均僅將10%的能量傳至下一階層，若浮游植物有8,000 kJ能量，小魚約可取得多少？",
+        "correct": "80 kJ",
+        "wrong": [
+          "800 kJ",
+          "8 kJ",
+          "1,600 kJ"
+        ],
+        "exp": "第一階傳給浮游動物8000×0.1=800 kJ，再傳給小魚800×0.1=80 kJ。這是簡化模型，不表示所有生態系固定10%。",
+        "subject": "生物",
+        "sub_topic": "食物網與能量流",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-食物網與能量流",
+        "template_id": "ref-20261120-b12-bio1-foodweb-energy-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-bio1-foodweb-energy-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "兼顧生態數量關係、生理機制與演化條件，避免以個體意志取代自然選擇",
+      "question": {
+        "q": "食物鏈中的能量流與碳等元素的物質循環，有何主要差異？",
+        "correct": "能量通常沿食物鏈傳遞並以熱形式散失，元素則可在生物與環境間循環",
+        "wrong": [
+          "能量與碳都會無限制地在每個營養階層完全回收",
+          "元素只能單向流過食物鏈，永遠不返回環境",
+          "生產者不需要外界能量便能持續累積有機物"
+        ],
+        "exp": "生態系中的能量最終多以熱散失，需要持續輸入；碳、氮等元素可經分解與代謝返回環境，形成循環。",
+        "subject": "生物",
+        "sub_topic": "食物網與能量流",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-食物網與能量流",
+        "template_id": "ref-20261120-b12-bio1-foodweb-energy-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-bio1-foodweb-energy-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "兼顧生態數量關係、生理機制與演化條件，避免以個體意志取代自然選擇",
+      "question": {
+        "q": "某草地食物網中，兔與昆蟲都取食植物；狐可捕食兔，也可捕食其他小型動物。若兔的數量因疾病突然下降，為何不一定能直接斷言狐一定隨之滅絕？",
+        "correct": "狐可能使用其他食物來源，結果須考量整體食物網與食物供應",
+        "wrong": [
+          "狐狸的數量只受兔的影響，其他獵物完全無關",
+          "兔減少會使狐不需攝取能量而永久存活",
+          "食物網中的捕食者不可能改變食物選擇"
+        ],
+        "exp": "食物網包含多條能量路徑，單一獵物下降可能造成壓力，但是否影響存活與數量還取決於替代獵物和環境條件。",
+        "subject": "生物",
+        "sub_topic": "食物網與能量流",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-食物網與能量流",
+        "template_id": "ref-20261120-b12-bio1-foodweb-energy-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
