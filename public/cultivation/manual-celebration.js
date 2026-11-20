@@ -69,7 +69,10 @@ export function renderManualCelebration(result,{esc,bookArt,skillArt,findSkill})
   const skill= result.skillId?findSkill(result.skillId):null;
   const artwork=discovery||result.kind==='manual-upgrade'?bookArt(result.bookId):skillArt(skill||result.skillId);
   const fallback=discovery?'卷':'✦';
-  const icon=artwork
+  const icon=artwork&&result.bookId&&(discovery||result.kind==='manual-upgrade')
+    ?`<span class="manual-weapon-art manual-weapon-art--${esc(result.bookId)} manual-celebration-art"
+      role="img" aria-label="${esc(result.name)}圖像"></span>`
+    :artwork
     ?`<img src="${esc(artwork)}" alt="" decoding="async" class="manual-celebration-art">`
     :`<span class="manual-celebration-art-fallback" aria-hidden="true">${fallback}</span>`;
   const reveal=discovery||isUnlock;
