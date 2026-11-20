@@ -569,3 +569,23 @@ test('sword-array effects can be persisted and replayed, then an old room can co
   assert.ok(oldCast.rays.every(Array.isArray),'older clients can still replay the saved rays');
   assert.deepEqual(next.events.filter(event=>event.type==='cast'&&event.skill==='dragon-guard').map(event=>event.animation.step),[1,2,3,4]);
 });
+
+
+test('a flying sword remains separate from the player and can move two cells per stamina',()=>{
+  let s=battle('pve',{players:[hero('u1',{
+    manualSkills:['flight-summon'],trainingAccessScore:68
+  })]});
+  s.blocks=[];
+  Object.assign(s.actors[0],{x:3,y:3,stamina:10});
+  Object.assign(s.actors[1],{x:5,y:3,hp:800,maxHp:800});
+  s=R.apply(s,'u1',{type:'manual',skillId:'flight-summon',x:4,y:3},fixed);
+  assert.deepStrictEqual(s.actors[0].flyingSword,{x:4,y:3});
+  assert.equal(s.actors[0].stamina,8);
+  assert.throws(()=>R.apply(s,'u1',{type:'sword-move',x:4,y:4},fixed),/偶數格/);
+  const next=R.apply(s,'u1',{type:'sword-move',x:6,y:3},fixed);
+  assert.deepStrictEqual({x:next.actors[0].x,y:next.actors[0].y},{x:3,y:3});
+  assert.deepStrictEqual(next.actors[0].flyingSword,{x:6,y:3});
+  assert.equal(next.actors[0].stamina,7);
+  assert.ok(next.actors[1].hp<800);
+  assert.equal(next.actors[0].attacks,1,'moving a sword does not spend a second skill cast');
+});
