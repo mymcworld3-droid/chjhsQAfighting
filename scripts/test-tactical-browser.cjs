@@ -1057,7 +1057,10 @@ async function main(){
             document.querySelector('.tc-arena canvas').dispatchEvent(
               new KeyboardEvent('keydown',{key:'0',bubbles:true}));
           });
-          await quick.locator('[data-action="attack"]').click();await cell(quick,2,1);
+          await quick.locator('[data-action="attack"]').click();
+          await quick.locator('[data-weapon-choice="sword-wind"] .tc-modern-weapon-label').click();
+          await quick.locator('[data-wheel-choice="manual:wind-slash"] .tc-modern-skill-label').click();
+          await cell(quick,2,1);
           await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='8');
           assert.equal((await read(quick)).objective.points[0].hp,1);
           await quick.waitForFunction(()=>window.__objectiveFrames?.some(f=>
