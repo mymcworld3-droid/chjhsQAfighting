@@ -5,6 +5,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 import { energyRingFill, dungeonFocusCharges, dungeonFocusEmpowers } from './dungeon-quarter-controls.js';
 import { dungeonTrialWheelHTML, bindDungeonTrialWheel, renderDungeonTrialWheel } from './dungeon-trial-wheel.js';
+import './flying-sword-path.js?v=20261120-sword-movement-v1';
 import { dungeonRoute, dungeonReachableTiles, dungeonAttackTiles, dungeonSwordRoute, dungeonSwordTiles } from './dungeon-map-actions.js';
 import { skillArt, bookArt } from './manual-art.js';
 import { manualXpDelta, renderManualXpToast, renderManualXpProgress } from './tactical-manual-xp-feedback.js';
