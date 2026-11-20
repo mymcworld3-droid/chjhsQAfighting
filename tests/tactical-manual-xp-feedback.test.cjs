@@ -117,9 +117,9 @@ test('dungeon uses the same book-art popup only on a real private C-ledger delta
   const delta=manualXpDelta(previous,next,'u1',catalog);
   assert.equal(delta.total,35);
   const html=renderManualXpToast(delta,opts);
-  assert.match(html,/sword-wind\\.png/);
+  assert.match(html,/sword-wind\.png/);
   assert.match(html,/流風劍訣/);
-  assert.match(html,/\\+35 EXP/);
+  assert.match(html,/\+35 EXP/);
   assert.match(html,/tc-manual-xp-toast/);
   assert.equal(manualXpDelta(next,{...next,revision:12},'u1',catalog),null);
   assert.equal(manualXpDelta(previous,next,'u2',catalog),null);
@@ -140,14 +140,14 @@ test('verified A-side mastery data adds accurate next-level bar without fabricat
   const progress=renderManualXpProgress(delta,state,manuals,{esc:escape});
   assert.match(progress,/tc-manual-xp-progress-track/);
   assert.match(progress,/role="progressbar"/);
-  assert.match(progress,/Lv\\. 1 → Lv\\. 2/);
-  assert.match(progress,/35 \\/ 40 EXP/);
-  assert.match(progress,/距 Lv\\. 2 還差 5 EXP/);
+  assert.match(progress,/Lv\. 1 → Lv\. 2/);
+  assert.match(progress,/35 \/ 40 EXP/);
+  assert.match(progress,/距 Lv\. 2 還差 5 EXP/);
   assert.match(progress,/aria-valuenow="87"/);
   assert.equal(renderManualXpProgress(delta,{library:[]},manuals,{esc:escape}),'');
   const capped=manuals.publicState({version:2,school:'sword',
     books:{'sword-wind':{exp:manuals.MAX_EXP}}},6);
   const maximum=renderManualXpProgress(delta,capped,manuals,{esc:escape});
-  assert.match(maximum,/最高 Lv\\. 20/);
+  assert.match(maximum,/最高 Lv\. 20/);
   assert.match(maximum,/aria-valuenow="100"/);
 });
