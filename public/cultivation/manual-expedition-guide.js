@@ -51,7 +51,7 @@ export function renderManualExpedition(guide,{esc}={}) {
   if(!guide)return '';
   const safe=typeof esc==='function'?esc:value=>String(value??'');
   const actionText=guide.action==='battle'?'前往問道試煉':
-    guide.action==='skills'?'查看招式解鎖條件':'前往配置招式';
+    guide.action==='skills'?'查看招式解鎖條件':'前往裝備武器';
   const estimate=guide.estimatedKills?
     `<strong>約 ${formatAmount(guide.estimatedKills)} 次</strong>
      <span>皆由此功法完成擊殺估算，並非保證次數</span>`:
@@ -68,7 +68,7 @@ export function renderManualExpedition(guide,{esc}={}) {
       <div class="manual-expedition-summary">
         <span class="manual-expedition-eyebrow"><i class="fa-solid fa-compass" aria-hidden="true"></i> 下一場試煉</span>
         <strong>第 ${formatAmount(guide.stage)} 關 · ${safe(guide.enemyRealm)}境</strong>
-        <span class="manual-expedition-reward">功法擊殺 <b>+${formatAmount(guide.xpPerKill)} EXP</b>／隻</span>
+        <span class="manual-expedition-reward">武器擊殺 <b>+${formatAmount(guide.xpPerKill)} EXP</b>／隻</span>
       </div>
       <button type="button" class="manual-expedition-action"
         data-manual-expedition-action="${guide.action}" data-manual-expedition-id="${safe(guide.bookId)}">
