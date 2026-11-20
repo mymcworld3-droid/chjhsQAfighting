@@ -24,7 +24,8 @@ window.syncQuizScopeExclusionButton = quiz => {
   if (!control) return;
   // The main study flow can replace an ungraded question without impacting
   // battle authority. Battle question exclusion still applies server-side.
-  const ordinary = !quiz?.mode || quiz.mode === 'solo';
+  const ordinary = !quiz?.mode || quiz.mode === 'solo' ||
+    window.isTrialQuestionSessionActive?.();
   control.hidden = !ordinary || !hasSelectedScope(quiz);
   control.disabled = !ordinary || !hasSelectedScope(quiz);
 };
@@ -36,8 +37,13 @@ async function request(payload) {
   if (!response.ok || !result.ok) throw Error(result.error || '排除規則無法儲存，請稍後重試');
   return result;
 }
-window.openQuizScopeExclusion = async () => {
-  const quiz = window.currentActiveQuiz, unit = quiz?.adaptive?.scope;
+// One authenticated rule editor for regular study, 問道試煉 and the
+// dungeon. Battle callers supply a trusted active-question context; no
+// answer key, combat state or unverified question text is sent as a rule.
+window.openQuizScopeExclusion = async (context = {}) => {
+  const battle=!!context?.quiz;
+  const quiz = battle ? context.quiz : window.currentActiveQuiz;
+  const unit = quiz?.adaptive?.scope;
   const uid = getMainUser()?.uid;
   if (!unit?.path || !uid) {
     window.showToast?.('請先在專注練習選擇章節並開啟題目');
@@ -88,8 +94,21 @@ window.openQuizScopeExclusion = async () => {
   dialog=root;
   const owner=uid, origin=quiz;
   const alive=()=>dialog===root && getMainUser()?.uid===owner;
-  cancel.onclick=close;
-  root.addEventListener('cancel',event=>{event.preventDefault();close()});
+  const current=()=>battle
+    ? context.isCurrent?.()===true
+    : window.currentActiveQuiz===origin;
+  let battleChanged=null,trialRefresh=false;
+  const closeAndApply=()=>{
+    const saved=battleChanged,refresh=trialRefresh;
+    close();
+    if(saved&&battle&&getMainUser()?.uid===owner)
+      void Promise.resolve(context.onUpdated?.(saved)).catch(error=>
+        console.warn('[Battle scope exclusion]',error?.message||error));
+    if(refresh&&getMainUser()?.uid===owner)
+      void window.QATrialQuestion?.next?.();
+  };
+  cancel.onclick=closeAndApply;
+  root.addEventListener('cancel',event=>{event.preventDefault();closeAndApply()});
   function renderRules(rules) {
     existingRows.replaceChildren();
     if (!rules?.length) {
@@ -111,6 +130,9 @@ window.openQuizScopeExclusion = async () => {
           status.textContent='已取消這項排除規則。';
           renderRules(result.rules);
           window.dispatchEvent(new CustomEvent('qa:scope-exclusions-updated',{detail:{state:result.state,quiz:origin,changed:true}}));
+          if(battle)battleChanged=result.state;
+          else if(window.isTrialQuestionSessionActive?.()&&current() &&
+            $('feedback-section')?.classList.contains('hidden'))trialRefresh=true;
         }catch(error){if(alive())status.textContent=error.message;}
         finally{if(remove.isConnected)remove.disabled=false;}
       };
@@ -123,7 +145,7 @@ window.openQuizScopeExclusion = async () => {
       status.textContent='請具體描述禁止出現的考法，至少 4 個字。';
       input.focus();return;
     }
-    if(!alive() || window.currentActiveQuiz!==origin){
+    if(!alive() || !current()){
       status.textContent='題目或登入帳號已變更，請關閉後重開。';return;
     }
     save.disabled=true;status.textContent='正在儲存這項範圍限制…';
@@ -131,11 +153,18 @@ window.openQuizScopeExclusion = async () => {
       const result=await request({action:'add',unit,text:exclusion});
       if(!alive())return;
       renderRules(result.rules);input.value='';
-      const alreadyAnswered = !$('feedback-section')?.classList.contains('hidden');
-      status.textContent = window.isTrialQuestionSessionActive?.() || alreadyAnswered
-        ? '已儲存；從下一題起套用，本題既有作答或戰場狀態不變。'
-        : '已儲存；本題不計錯，將依新限制重新取題。';
+      const alreadyAnswered = battle ? !!context.answered :
+        !$('feedback-section')?.classList.contains('hidden');
+      status.textContent = alreadyAnswered
+        ? '已儲存；從下一題起套用，既有批改及戰場狀態不變。'
+        : battle
+          ? '已儲存；關閉後換一題，本題不計錯、不消耗體力。'
+          : window.isTrialQuestionSessionActive?.()
+            ? '已儲存；關閉後重新取題，本題不計錯、不影響戰場。'
+            : '已儲存；本題不計錯，將依新限制重新取題。';
       window.dispatchEvent(new CustomEvent('qa:scope-exclusions-updated',{detail:{state:result.state,quiz:origin,changed:true}}));
+      if(battle)battleChanged=result.state;
+      else if(window.isTrialQuestionSessionActive?.()&&!alreadyAnswered)trialRefresh=true;
     }catch(error){if(alive())status.textContent=error.message;}
     finally{if(save.isConnected)save.disabled=false;}
   };
