@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-earth2-celestial-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "地史、天文幾何與模型風險分開命題，避免不當的確定性結論",
+      "question": {
+        "q": "若地球某處正觀察到日食，太陽、月球與地球大致如何排列？",
+        "correct": "月球位於地球與太陽之間，且接近軌道交點方向",
+        "wrong": [
+          "地球位於太陽與月球之間，且月球完全進入地影",
+          "太陽位於地球與月球之間，三者順序固定不變",
+          "月球必須與太陽相差180°方向，才能遮住日面"
+        ],
+        "exp": "日食需新月附近月球運行至日地之間，且軌道位置使其影子落到地球；僅新月不保證日食。",
+        "subject": "地球科學",
+        "sub_topic": "天體運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天體運動",
+        "template_id": "ref-20261120-b12-earth2-celestial-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-earth2-celestial-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "地史、天文幾何與模型風險分開命題，避免不當的確定性結論",
+      "question": {
+        "q": "月球接近滿月時，通常在哪個時段較容易看到月球從東方地平線升起？",
+        "correct": "日落前後",
+        "wrong": [
+          "日出前後",
+          "正午前後",
+          "午夜才從東方升起"
+        ],
+        "exp": "滿月大致與太陽分處天空相反方向，因此太陽西落時月球約由東升起，實際時間有偏差。",
+        "subject": "地球科學",
+        "sub_topic": "天體運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天體運動",
+        "template_id": "ref-20261120-b12-earth2-celestial-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-earth2-celestial-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "地史、天文幾何與模型風險分開命題，避免不當的確定性結論",
+      "question": {
+        "q": "從地球看，某些外行星在背景恆星間短期呈現逆行。最常見的幾何解釋是什麼？",
+        "correct": "地球與外行星相對公轉速度和觀測位置改變，造成視方向暫時反向",
+        "wrong": [
+          "外行星的公轉方向必在此時真的逆轉",
+          "背景所有恆星會在同時停止自身運動",
+          "太陽在外行星與地球之間突然改變引力方向"
+        ],
+        "exp": "外行星通常持續同向繞日公轉，地球超越外行星附近的相對視線變化，可造成觀測到的視運動逆行。",
+        "subject": "地球科學",
+        "sub_topic": "天體運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天體運動",
+        "template_id": "ref-20261120-b12-earth2-celestial-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
