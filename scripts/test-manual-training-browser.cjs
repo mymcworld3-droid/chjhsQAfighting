@@ -91,7 +91,8 @@ async function main(){
     db.records.get('users/u1').stats.totalScore=100;
     db.records.get(service.MANUALS+'/u1').books['body-rock'].exp=280;
     await page.locator('[data-manual-refresh]').click();
-    await page.locator('[data-manual-slot="1"] .manual-weapon-skill.is-learned').first().waitFor();
+    await page.waitForFunction(()=>
+      document.querySelectorAll('[data-manual-slot="1"] .manual-weapon-skill.is-learned').length===2);
     assert.equal(await page.locator('[data-manual-slot="1"] .manual-weapon-skill.is-learned').count(),2);
     // An empty third slot must not invent a weapon or skill.
     assert.equal(await page.locator('[data-manual-slot="2"] .manual-weapon-skill').count(),0);
