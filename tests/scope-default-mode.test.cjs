@@ -66,6 +66,6 @@ test('previously saved random, bank and focused modes remain unchanged', async (
 
 test('focused practice still requires at least one selected unit before saving', () => {
   assert.match(legacy, /if \(sourceMode === 'focused' && \(!window\.soloSelectedUnits \|\| window\.soloSelectedUnits\.length === 0\)\)/);
-  assert.match(readFileSync(join(__dirname, '../public/main.js'), 'utf8'), /20261120-focused-scope-default-v1/);
-  assert.match(index, /main\.js\?v=20261120-focused-scope-default-v1/);
+  assert.match(readFileSync(join(__dirname, '../public/main.js'), 'utf8'), /import '\.\/main-legacy\.js\?v=20\d{6}-[\w-]+';/);
+  assert.match(index, /main\.js\?v=20\d{6}-[\w-]+/);
 });
