@@ -141,7 +141,7 @@ test('real boss collision, dodgeable warning, 2-server shared kill and retry pre
     Combat.scaledDamage(warning.damage,raw.members.b));
   const current=f.raw();current.members.a.position={x:11,y:8};
   current.members.b.position={x:12,y:8};
-  current.enemies[0].battleHealth=40; // Two valid shielded hits kill this fixture.
+  current.enemies[0].battleHealth=240; // Survives first trusted hit; second combo kills.
   const [strikeA,strikeB]=await Promise.all([
     f.call('a','strike',{roomId:f.id,enemyId:Boss.ID,seq:1,
       damage:99999,battleHealth:1},0),
