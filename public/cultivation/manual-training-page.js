@@ -79,6 +79,12 @@ function ensure(){
     link.href='/styles/manual-training-streamlined.css?v=20261118-level20-ranks-v1';
     document.head.append(link);
   }
+  if(!document.getElementById('manual-training-weapons-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='manual-training-weapons-style';
+    link.href='/styles/manual-training-weapons.css?v=20261120-weapon-v1';
+    document.head.append(link);
+  }
   return root;
 }
 async function request(url,body){
