@@ -153,3 +153,105 @@ test('math formatting audit is read-only and never compensates by itself',async(
   assert.equal(result.submitted,true);
   assert.deepEqual(f.a.records.get('dungeonQuizStates/a'),before);
 });
+
+test('confirmed graded error removes only its learning footprint, not strategic stamina',async()=>{
+  awards=0;const f=setup(),q=await question(f);
+  const before=f.a.records.get('users/a');
+  const choice=q.opts.findIndex(v=>v!==q.answerText);
+  await Quiz.answer(f.a,f.c,'a',{roomId:ID,questionId:q.id,choice},AT);
+  const graded=f.a.records.get('dungeonQuizStates/a');
+  const stamina=Credits.credit(f.room,'a',graded,q.id,ID);
+  f.room.members=stamina.members;
+  assert.equal(f.room.members.a.explorationStamina,6);
+  let user=f.a.records.get('users/a');
+  assert.equal(user.stats.totalAnswered,1);
+  assert.equal(user.stats.knowledgeMap[q.subject]['基本定義'].total,1);
+  assert.equal(Object.keys(user.stats.soloLearningV1.mistakes).length,1);
+  const result=await Reports.report(f.a,f.c,'a',{
+    roomId:ID,questionId:q.id,reason:'本題的條件不足，無法排除不只一個正確答案'},AT,{review,award});
+  assert.equal(result.valid,true);
+  assert.equal(result.state.lastReview.excludedFromLearning,true);
+  user=f.a.records.get('users/a');
+  assert.equal(user.stats.totalAnswered,before.stats.totalAnswered);
+  assert.equal(user.stats.totalCorrect,before.stats.totalCorrect);
+  assert.equal(user.stats.knowledgeMap[q.subject]['基本定義'].total,0);
+  assert.equal(user.stats.knowledgeMap[q.subject]['基本定義'].correct,0);
+  assert.equal(Object.keys(user.stats.soloLearningV1.mistakes).length,0);
+  assert.equal(result.progress.stats.totalAnswered,0);
+  const log=[...f.a.records.entries()].find(([key])=>key.startsWith('exam_logs/'))?.[1];
+  assert.equal(log?.errorConfirmed,true);
+  assert.equal(log?.excludedFromLearning,true);
+  assert.ok(log.learningCorrectionEvidence);
+  assert.equal(f.room.members.a.explorationStamina,6,
+    'correcting learning evidence must not alter stamina rules');
+  assert.equal(ErrorRefund.calculate(f.room,'a',
+    f.a.records.get('dungeonQuizStates/a'),q.id,ID).nominal,3);
+  const again=await Reports.report(f.a,f.c,'a',{
+    roomId:ID,questionId:q.id,reason:'第二裝置再送相同的錯題回報'},AT,{review,award});
+  assert.equal(again.status,'duplicate');
+  assert.equal(again.progress.stats.totalAnswered,0);
+  assert.equal(f.a.records.get('users/a').stats.totalAnswered,0);
+  assert.equal(awards,1);
+  f.room.members.a.lastQuizErrorRefund={questionId:q.id,granted:3,nominal:3};
+  f.c.records.set('dungeonRooms/'+ID,f.room);
+  assert.equal((await Quiz.state(f.a,f.c,'a',ID,AT)).errorRefunds.length,0);
+});
+test('invalid correct answer retracts success metrics without removing earned cultivation',async()=>{
+  const f=setup(),q=await question(f);
+  const choice=q.opts.indexOf(q.answerText);
+  await Quiz.answer(f.a,f.c,'a',{roomId:ID,questionId:q.id,choice},AT);
+  const earned=f.a.records.get('users/a').stats.totalScore;
+  assert.equal(f.a.records.get('users/a').stats.totalCorrect,1);
+  const report=await Reports.report(f.a,f.c,'a',{
+    roomId:ID,questionId:q.id,reason:'原本被認定的答案其實不唯一'},AT,{review,award});
+  assert.equal(report.valid,true);
+  const user=f.a.records.get('users/a');
+  assert.equal(user.stats.totalCorrect,0);
+  assert.equal(user.stats.totalAnswered,0);
+  assert.equal(user.stats.currentStreak,0);
+  assert.equal(user.stats.totalScore,earned);
+  assert.equal(report.progress.stats.totalCorrect,0);
+  assert.equal(report.state.errorRefunds.length,0);
+});
+test('later independent answers are preserved while older bad answer is retracted',async()=>{
+  const f=setup(),q=await question(f);
+  await Quiz.answer(f.a,f.c,'a',{
+    roomId:ID,questionId:q.id,choice:q.opts.findIndex(v=>v!==q.answerText)
+  },AT);
+  await Quiz.acknowledge(f.a,f.c,'a',{roomId:ID,questionId:q.id},AT);
+  const ctx=await Quiz.prepareQuestion(f.a,f.c,'a',ID,0,AT);
+  const next=await Quiz.commitQuestion(f.a,'a',ctx,{
+    q:'下列哪一項是另外一題獨立成立的條件？',
+    correct:'第一個條件成立',wrong:['第二個條件不成立','第三個條件不成立','第四個條件不成立'],
+    exp:'將各條件代入定義，只有第一個條件可以正確成立。',
+    subject:ctx.subject,sub_topic:'其他觀念'},AT);
+  await Quiz.answer(f.a,f.c,'a',{roomId:ID,questionId:next.id,
+    choice:next.opts.indexOf('第一個條件成立')},AT);
+  const corrected=await Reports.report(f.a,f.c,'a',{
+    roomId:ID,questionId:q.id,reason:'第一題中的條件不符合唯一選項的要求'},AT,{review,award});
+  assert.equal(corrected.valid,true);
+  const user=f.a.records.get('users/a');
+  assert.equal(user.stats.totalAnswered,1);
+  assert.equal(user.stats.totalCorrect,1);
+  assert.equal(user.stats.knowledgeMap[ctx.subject]['其他觀念'].total,1);
+  assert.equal(user.stats.knowledgeMap[q.subject]['基本定義'].total,0);
+  assert.equal(user.stats.lastQuizAnswer.question,next.q);
+  assert.equal(corrected.state.lastReview.questionId,next.id);
+});
+test('previously approved report repairs missing learning exclusion without repaying',async()=>{
+  const f=setup(),q=await question(f);
+  await Quiz.answer(f.a,f.c,'a',{roomId:ID,questionId:q.id,
+    choice:q.opts.findIndex(v=>v!==q.answerText)},AT);
+  const saved=f.a.records.get('dungeonQuizStates/a');
+  saved.errorReports={[q.id]:{approved:true,skipped:false,index:1,reason:'既有的獨立審核'}};
+  f.a.records.set('dungeonQuizStates/a',saved);
+  const repaired=await Reports.report(f.a,f.c,'a',{roomId:ID,
+    questionId:q.id,reason:'補做已確認錯題的學習修正'},AT,{
+      review:async()=>{throw Error('independent review must not run again');},
+      award:async()=>{throw Error('duplicate compensation must not pay again');}
+    });
+  assert.equal(repaired.status,'duplicate');
+  assert.equal(repaired.state.lastReview.errorConfirmed,true);
+  assert.equal(repaired.progress.stats.totalAnswered,0);
+  assert.equal(f.a.records.get('dungeonQuizStates/a').errorReports[q.id].learningReversed,true);
+});
