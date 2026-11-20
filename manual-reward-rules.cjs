@@ -11,7 +11,8 @@ function roll(s,uid,raw,randomInt=crypto.randomInt){
   // A first-stage beginner without any scripture must have a real, usable
   // skill to equip at the end of onboarding. Grant exactly one starter book
   // inside the same idempotent server victory transaction (no client loot).
-  if(s?.mode==='pve'&&s.trial?.stage===1&&!Object.keys(state.books).length){
+  if(s?.mode==='pve'&&s.trial?.stage===1&&s.trial.layoutVersion===4&&
+     !Object.keys(state.books).length){
     const starter=Manuals.starterFor(state.school)||'sword-wind';
     state.books[starter]={exp:0};state.dropMisses=0;
     s.manualDrops||={};s.manualDrops[uid]={id:starter,name:Manuals.BY_BOOK[starter].name};

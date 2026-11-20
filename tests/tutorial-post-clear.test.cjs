@@ -9,7 +9,7 @@ const read=file=>readFileSync(join(__dirname,'..',file),'utf8');
 
 test('first-stage victory guarantees an actual introductory manual for an unbound beginner',()=>{
   for(const school of [null,'sword','body']){
-    const room={mode:'pve',trial:{stage:1}};
+    const room={mode:'pve',trial:{stage:1,layoutVersion:4}};
     const initial=Manuals.normalize({school,books:{},dropMisses:0});
     const result=roll(room,'learner',initial,()=>99);
     const id=Manuals.starterFor(school)||'sword-wind';
@@ -27,11 +27,13 @@ test('tutorial drop rule does not change probability for later stages or a playe
   const normal=roll(room2,'learner',Manuals.normalize({}),()=>99);
   assert.equal(normal.drop,null);
   assert.equal(normal.state.dropMisses,1);
-  const room1={mode:'pve',trial:{stage:1}};
+  const room1={mode:'pve',trial:{stage:1,layoutVersion:4}};
   const owned=roll(room1,'learner',Manuals.normalize({books:{'sword-wind':{exp:0}}}),()=>99);
   assert.equal(owned.drop,null);
   assert.equal(owned.state.dropMisses,1);
   assert.deepEqual(Object.keys(owned.state.books),['sword-wind']);
+  const legacy=roll({mode:'pve',trial:{stage:1,layoutVersion:3}},'learner',Manuals.normalize({}),()=>99);
+  assert.equal(legacy.drop,null,'legacy v3 retries retain the original drop policy');
 });
 test('post-clear guide is gated on a real victory and follows verified battle close, training, slot and equip',()=>{
   const battle=read('public/cultivation/tactical-combat.js');
@@ -75,6 +77,7 @@ test('tutorial progress after first attack survives reload and is account-bound'
   assert.match(guide,/previous\.step>=8&&previous\.step<stages\.length/);
   assert.match(guide,/roomId=resume\?String\(previous\.roomId\|\|''\):''/);
   assert.match(guide,/if\(resume&&!battleVisible&&\(step===9\|\|\(step===8&&nextStage>=2\)\)\)step=10/);
+  assert.match(guide,/target\.scrollIntoView\?\.\(\{ block: 'center', behavior: 'smooth' \}\)/);
   assert.match(guide,/uid && uid === account \? step : -1/);
   assert.match(guide,/if \(step===12 && detail\.verified!==true\)return/);
 });

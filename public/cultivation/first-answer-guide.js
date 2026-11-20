@@ -19,7 +19,7 @@
     { target: '#manual-training-root [data-manual-pick-skill], #manual-training-root [data-manual-guide-finish]', title: '裝備第一招', text: '選擇一招已領悟的技能並等候儲存成功。若已自動裝備，可按「確認已裝備」完成。' }
   ];
   const events = ['entered', 'question', 'scope-saved', 'answered', 'attack-selected', 'moved', 'attack-selected', 'attacked', 'stage-cleared', 'battle-closed', 'training-opened', 'slot-opened', 'skill-equipped'];
-  let account = '', roomId = '', step = 0, timer = null, layer = null;
+  let account = '', roomId = '', step = 0, timer = null, layer = null, scrolledStep = -1;
   const tutorialMove={x:2,y:3},tutorialEnemy={x:4,y:3};
   function read(uid) {
     try { return JSON.parse(localStorage.getItem(KEY + uid) || 'null'); } catch (_) { return null; }
@@ -29,7 +29,7 @@
     try { localStorage.setItem(KEY + account, JSON.stringify({ status, step, roomId })); } catch (_) {}
   }
   function hide() { layer?.remove(); layer = null; }
-  function cancel() { if (timer !== null) clearInterval(timer); timer = null; hide(); account = ''; roomId = ''; }
+  function cancel() { if (timer !== null) clearInterval(timer); timer = null; hide(); account = ''; roomId = ''; scrolledStep = -1; }
   function finish() {
     if (account) persist('done');
     window.showToast?.('好了，接下來開始盡情修煉吧！');
@@ -106,6 +106,12 @@
     if (!available()) { hide(); return; }
     const target = document.querySelector(stages[step].target);
     if (!visible(target)) { hide(); return; }
+    // Manual loadout cards can be below the fold on narrow phones. Bring
+    // the real control into view once per stage, never every polling frame.
+    if ((step === 9 || step >= 11) && scrolledStep !== step) {
+      scrolledStep = step;
+      target.scrollIntoView?.({ block: 'center', behavior: 'smooth' });
+    }
     show(target);
   }
   window.scheduleFirstAnswerGuide = (uid, newAccount = false) => {
