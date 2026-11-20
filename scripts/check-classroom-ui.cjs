@@ -225,6 +225,11 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
     await page.setViewportSize({ width: 1366, height: 850 });
     await click(page, 'back');
     assert.match(await page.locator('.cc-class-panel').innerText(), /批次練習/);
+    // Open the class containing the original student's submission, not an arbitrary copy target.
+    await click(page, 'home');
+    await page.locator('.cc-workspace-room').filter({hasText:'七年一班'})
+      .locator('[data-action=workspace-class]').click();
+    await ready(page);
     // Edit member info, import CSV by stable uid, then verify removal preserves historic grades.
     await click(page, 'class-tab', 2);
     await page.locator('.cc-roster-item').filter({hasText:'王同學'}).locator('[data-action=roster-edit]').click();

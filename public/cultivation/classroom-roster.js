@@ -121,7 +121,8 @@ export function renderRosterPanel(state, helpers) {
     button('roster-import-apply','確認更新 ' + preview.updates.length + ' 位學生',
       (errors.length || !preview.updates.length || !active ? 'disabled' : 'class="cc-primary"')) +
     '<p class="cc-muted">CSV 只會修改已有學生的姓名／座號；不會新增或合併帳號、修改作答或成績。</p></div>' : '';
-  const imported = '<details class="cc-card cc-roster-import"><summary>CSV 匯入學生資料</summary>' +
+  const imported = '<details class="cc-card cc-roster-import"' + (state.rosterPreview ? ' open' : '') +
+    '><summary>CSV 匯入學生資料</summary>' +
     '<p class="cc-muted">先匯出名單，使用 uid、name、seat 三欄修改後再匯入；只以不可變動的 uid 比對，不會猜測相同姓名是否為同一人。</p>' +
     '<label>選取 CSV 檔案<input id="cc-roster-file" type="file" accept=".csv,text/csv" ' + (active?'':'disabled') + '></label>' +
     '<label>或貼上 CSV 內容<textarea id="cc-roster-csv" rows="5" placeholder="uid,name,seat" ' +
