@@ -6,6 +6,7 @@ const {dueTick,isRunning}=require('./dungeon-battle-clock.cjs');
 const Combat=require('./dungeon-enemy-combat.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
 const {maxHealth}=require('./dungeon-player-combat.cjs');
+const {STAGE,REALM}=require('./dungeon-manual-progression.cjs');
 const ENEMY_AI_VERSION=1;
 const MAX_CATCHUP_TICKS=24;
 const DIRECTIONS=Object.freeze([[0,-1],[1,0],[0,1],[-1,0]]);
@@ -54,6 +55,7 @@ function initialEnemies(map){
     occupied.add(key(position));
     const type=spec.definition;
     out.push({id:'beast-'+(index+1),name:type.name,kind:type.kind,
+      realmStage:STAGE,realm:REALM,
       zone:spec.zone,position,spawn:{...position},patrolIndex:pathIndex,
       patrolDirection:pathIndex===path.length-1?-1:1,
       cadence:type.cadence,aggroRange:type.aggroRange,
