@@ -442,6 +442,8 @@ async function openAssignmentCopy(sourceClassId, sourceAssignmentId) {
   state.copyTargets = rooms;
   state.copyCursor = list.dashboard.nextCursor;
   state.copyResults = null;
+  state.copySelected = [];
+  state.copyTitle = '';
   state.view = 'copy';
   render();
 }
@@ -712,6 +714,10 @@ function mount() {
   panel.dataset.classroomMounted = 'true';
   panel.addEventListener('submit', event => { event.preventDefault(); });
   panel.addEventListener('input', event => {
+    if (event.target.matches('#cc-copy input[name="title"]')) {
+      state.copyTitle = event.target.value;
+      return;
+    }
     if (event.target.closest('#cc-editor')) {
       captureEditor();
       touchEditor();
@@ -731,6 +737,10 @@ function mount() {
     filterClassroomList(panel, type);
   });
   panel.addEventListener('change', event => {
+    if (event.target.matches('#cc-copy input[name="targetClass"]')) {
+      state.copySelected = [...panel.querySelectorAll('#cc-copy input[name="targetClass"]:checked')].map(input => input.value);
+      return;
+    }
     if (event.target.closest('#cc-editor') && event.target.matches('select,input[type="datetime-local"]')) {
       captureEditor();
       touchEditor();

@@ -66,10 +66,11 @@ test('reuse view shows only available target choices and escapes user data', asy
     copySource:{id:'a',title:'<script>標題</script>',subject:'數學',questionCount:4},
     copyTargets:[{id:'active',name:'七年一班',studentCount:4,status:'active'},
       {id:'archived',name:'封存班級',studentCount:3,status:'archived'}],
-    copyCursor:'more'
+    copyCursor:'more', copySelected:['active'], copyTitle:'段考「複習」'
   },helper);
   assert.match(html,/value="archived" disabled/);
-  assert.match(html,/value="active"/);
+  assert.match(html,/value="active" checked/);
+  assert.match(html,/value="段考「複習」"/);
   assert.match(html,/data-action="copy-confirm"/);
   assert.match(html,/data-action="copy-more-classes"/);
   assert.match(html,/&lt;script&gt;標題&lt;\/script&gt;/);

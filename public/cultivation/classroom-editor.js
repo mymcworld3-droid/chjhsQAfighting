@@ -125,8 +125,9 @@ export function renderClassroomCopy(state, helpers) {
   const rooms = state.copyTargets || [];
   const result = state.copyResults;
   const available = rooms.filter(r => r.status === 'active');
+  const selected = new Set(state.copySelected || []);
   const targetList = rooms.map(room => '<label class="cc-copy-target"><input type="checkbox" name="targetClass" value="' +
-    e(room.id) + '" ' + (room.status !== 'active' ? 'disabled' : '') +
+    e(room.id) + '" ' + (room.status !== 'active' ? 'disabled' : selected.has(room.id) ? 'checked' : '') +
     '><span><strong>' + e(room.name) + '</strong><small>' + room.studentCount +
     ' 位學生' + (room.status === 'active' ? '' : ' · 已封存') + '</small></span></label>').join('');
   const details = result ? '<div class="cc-card cc-copy-result"><h4>複製結果</h4>' +
@@ -145,7 +146,8 @@ export function renderClassroomCopy(state, helpers) {
     '<p class="cc-muted">可同時選多個教室，各自建立草稿；須逐份審核發布。預設不帶入舊截止時間。</p>' +
     '<div class="cc-copy-target-grid">' + targetList + '</div>' +
     (state.copyCursor ? button('copy-more-classes', '載入更多教室') : '') +
-    '<label>新草稿名稱（選填，各教室使用同名）<input name="title" maxlength="80" placeholder="預設：原作業名稱（副本）"></label>' +
+    '<label>新草稿名稱（選填，各教室使用同名）<input name="title" maxlength="80" value="' +
+    e(state.copyTitle || '') + '" placeholder="預設：原作業名稱（副本）"></label>' +
     '<div class="cc-actions">' + button('copy-confirm', '建立所選教室草稿', 'class="cc-primary" ' + (!available.length ? 'disabled' : '')) + '</div>' +
     '</section></form>' + details + '</div>';
 }
