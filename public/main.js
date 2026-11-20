@@ -117,7 +117,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261120-postclear-skill-guide-v1';
+const XIUXIAN_FEATURE_BUILD = '20261120-dungeon-five-minute-v1';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。

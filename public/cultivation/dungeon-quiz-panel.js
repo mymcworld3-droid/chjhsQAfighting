@@ -19,7 +19,7 @@ export class DungeonQuizPanel{
     this.question=null;this.review=null;this.loading=false;this.answering=false;
     this.prefetching=false;this.pendingCredits=[];this.warming=false;
     this.warmUntil=0;this.questionStartedAt=0;this.errorMessage='';
-    this.isAdmin=false;
+    this.isAdmin=false;this.autoRegeneration=false;
     this.errorRefunds=[];this.reportOpen=false;this.reportBusy=false;
     this.correctionBusy=false;this.queuedCorrections=new Set();
     this.learningQuiz=null;this.mathReports=new Set();
@@ -30,9 +30,9 @@ export class DungeonQuizPanel{
     // Question complaints use server-side evidence, never a client answer key.
     panel.innerHTML='<section class="dm-quiz-sheet">'+
       '<header class="dm-quiz-top"><div><small>青雲問道 · 合作副本</small>'+
-      '<h3>答題充能</h3></div>'+
+      '<h3 data-dq="title">答題充能</h3></div>'+
       '<button type="button" data-dq="collapse" aria-label="返回戰場">返回戰場</button></header>'+
-      '<p class="dm-quiz-info">答對恢復 4 體力，答錯恢復 1 體力（上限 10）。'+
+      '<p class="dm-quiz-info" data-dq="info">答對恢復 4 體力，答錯恢復 1 體力（上限 10）。'+
       '逐題批改、查看解析，再按下一題。作答時戰鬥及隊友行動不暫停。</p>'+
       '<div class="dm-quiz-toolbar"><span data-dq="scope">依選擇的學習範圍出題</span>'+
       '<div class="dm-quiz-tools">'+
@@ -152,15 +152,28 @@ export class DungeonQuizPanel{
     const admin=flag===true;
     if(this.isAdmin!==admin){this.isAdmin=admin;if(this.visible)this.paint();}
   }
+  setAutoRegeneration(flag){
+    const on=flag===true;
+    if(this.autoRegeneration===on)return;
+    this.autoRegeneration=on;
+    const title=this.$('title'),info=this.$('info');
+    if(title)title.textContent=on?'自由問道':'答題充能';
+    if(info)info.textContent=on?
+      '副本能量每秒自動恢復 1 點（上限 10），不需答題充能。這裡可自由作答、累積修為並查看解析；作答時靈獸與隊友仍持續行動。':
+      '答對恢復 4 體力，答錯恢復 1 體力（上限 10）。逐題批改、查看解析，再按下一題。作答時戰鬥及隊友行動不暫停。';
+    if(this.visible)this.paint();
+  }
   $(name){return this.element.querySelector('[data-dq="'+name+'"]');}
   valid(epoch=this.epoch){
     return epoch===this.epoch&&this.roomId&&this.uid===getMainUser()?.uid;
   }
-  attach(roomId,uid,isAdmin=false){
+  attach(roomId,uid,isAdmin=false,autoRegeneration=false){
     if(this.roomId===roomId&&this.uid===uid){
-      this.setAdmin(isAdmin);return;
+      this.setAdmin(isAdmin);this.setAutoRegeneration(autoRegeneration);return;
     }
     this.epoch++;this.roomId=roomId;this.uid=uid;this.isAdmin=isAdmin===true;
+    this.autoRegeneration=!Boolean(autoRegeneration);
+    this.setAutoRegeneration(autoRegeneration);
     this.clearWhiteboard();this.toggleWhiteboard(false);
     this.visible=false;this.element.hidden=true;
     this.question=null;this.review=null;this.pendingCredits=[];this.errorRefunds=[];
@@ -180,6 +193,7 @@ export class DungeonQuizPanel{
     if(window.currentTacticalQuiz===this.learningQuiz)window.currentTacticalQuiz=null;
     this.learningQuiz=null;this.mathReports.clear();this.queuedCorrections.clear();
     this.errorMessage='';this.questionStartedAt=0;this.isAdmin=false;
+    this.autoRegeneration=false;
     this.clearWhiteboard();this.toggleWhiteboard(false);
   }
   async warm(){
@@ -306,7 +320,9 @@ export class DungeonQuizPanel{
     retry.hidden=!this.visible||!!item||this.loading;
     next.hidden=!this.review;
     claim.hidden=!this.pendingCredits.length;
+    claim.textContent=this.autoRegeneration?'重試同步答題紀錄':'重試補充體力';
     refund.hidden=!this.errorRefunds.length;
+    refund.textContent=this.autoRegeneration?'重試錯題紀錄同步':'重試錯題補償';
     report.hidden=!this.visible||!item||!this.reportOpen;
     this.$('report-toggle').hidden=!this.visible||!item;
     this.$('report-toggle').setAttribute('aria-expanded',String(!report.hidden));
@@ -370,12 +386,14 @@ export class DungeonQuizPanel{
       const heading=document.createElement('strong');
       heading.className=r.errorConfirmed||r.correct?'tc-correct':'tc-wrong';
       heading.textContent=r.skipped?
-        '本題有誤 · 已跳過'+(this.isAdmin?'':' · 補充體力 +4'):
+        '本題有誤 · 已跳過'+(this.autoRegeneration||this.isAdmin?'':' · 補充體力 +4'):
         r.errorConfirmed?
           '本題有誤 · 已排除學習統計'+
-            (this.isAdmin?'':' · 原答題體力 +'+r.amount):
+            (this.autoRegeneration?' · 體力仍每秒自動恢復':
+              this.isAdmin?'':' · 原答題體力 +'+r.amount):
           (r.correct?'答對':'答錯')+
-            (this.isAdmin?' · 管理員體力固定 10/10':' · 體力 +'+r.amount);
+            (this.autoRegeneration?' · 能量每秒 +1':
+              this.isAdmin?' · 管理員體力固定 10/10':' · 體力 +'+r.amount);
       feedback.append(heading);
       if(!r.skipped&&Number.isFinite(Number(r.reward?.cultivation))){
         const reward=document.createElement('p');
@@ -428,7 +446,8 @@ export class DungeonQuizPanel{
       content.append(feedback);
     }else if(this.question){
       this.status(this.errorMessage||'請選擇 A、B、C、D · '+
-        (this.isAdmin?'管理員體力固定 10/10，答題仍計入學習紀錄':
+        (this.autoRegeneration?'能量每秒自動 +1 · 答題不額外補充能量':
+          this.isAdmin?'管理員體力固定 10/10，答題仍計入學習紀錄':
           '答對 +4、答錯 +1 · 可隨時返回戰場'));
     }else this.status(this.errorMessage||'正在填充題庫中…');
     this.bindLearning(item);
@@ -477,7 +496,9 @@ export class DungeonQuizPanel{
         this.errorRefunds=this.errorRefunds.filter(item=>item.id!==row.id);
       }catch(error){
         if(this.valid(epoch)){
-          this.errorMessage='錯題審核已確認，但體力差額尚未補入：'+
+          this.errorMessage=(this.autoRegeneration?
+            '錯題審核已確認，但紀錄尚未同步：':
+            '錯題審核已確認，但體力差額尚未補入：')+
             (error?.message||'請稍後重試');
           this.paint();
         }
@@ -529,7 +550,9 @@ export class DungeonQuizPanel{
         ' · 修為 +'+(result.cultivationAdded||0):'';
       const status=result.skipped?
         '已跳過這道有誤的題目，不計入答題成績。':
-        '題目已確認有誤，原答題體力與補正差額依帳號紀錄入帳。';
+        this.autoRegeneration?
+          '題目已確認有誤，答題紀錄已更新，能量仍每秒自動恢復。':
+          '題目已確認有誤，原答題體力與補正差額依帳號紀錄入帳。';
       this.reportStatus(status+reward+
         (result.status==='limit'?' · 今日補償額度已達上限':''));
       this.paint();
@@ -556,8 +579,11 @@ export class DungeonQuizPanel{
         if(response?.room)this.onRoom(response.room);
         this.pendingCredits=this.pendingCredits.filter(x=>x.id!==record.id);
       }catch(error){
-        this.errorMessage='答題已記錄，但體力補發尚未完成：'+error.message+
-          '。可按「重試補充體力」。';
+        this.errorMessage=this.autoRegeneration?
+          '答題已記錄，但伺服器紀錄尚未同步：'+error.message+
+            '。可按「重試同步答題紀錄」。':
+          '答題已記錄，但體力補發尚未完成：'+error.message+
+            '。可按「重試補充體力」。';
         this.paint();return;
       }
     }

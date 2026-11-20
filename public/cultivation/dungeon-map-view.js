@@ -31,7 +31,7 @@ const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[char]);
 const clamp=(value,lo,hi)=>Math.max(lo,Math.min(hi,value));
-const mapValid=map=>map?.mode==='dungeon'&&map.layoutVersion===1&&
+const mapValid=map=>map?.mode==='dungeon'&&[1,2].includes(map.layoutVersion)&&
   Number.isInteger(map.width)&&map.width>5&&map.width<=128&&
   Number.isInteger(map.height)&&map.height>5&&map.height<=128&&
   Array.isArray(map.tiles)&&map.tiles.length===map.width*map.height&&
@@ -295,7 +295,8 @@ class DungeonMapView{
     this.close();
     this.previousFocus=document.activeElement;
     this.room=room;this.roomId=room.id;this.uid=playerUid;
-    this.quiz?.attach(room.id,playerUid,room.members[playerUid]?.dungeonAdmin===true);
+    this.quiz?.attach(room.id,playerUid,
+      room.members[playerUid]?.dungeonAdmin===true,room.mapVersion===2);
     if(room.status==='assembled')void this.quiz?.warm();
     this.map=null;this.camera=Camera.initialCamera();
     this.visualScenes.clear();this.travelScenes.clear();
@@ -384,10 +385,17 @@ class DungeonMapView{
     const energy=this.$('[data-dm-energy]');
     if(energy)energy.textContent=String(Math.max(0,Math.min(10,stamina)));
     const chargeLabel=this.$('[data-dm="quiz"]');
-    if(chargeLabel)chargeLabel.setAttribute('aria-label',
-      '答題充能，體力 '+Math.max(0,Math.min(10,stamina))+
-      ' / 10，'+(own?.dungeonAdmin===true?'管理員體力固定十點，答題仍可累積學習紀錄':
-      '答對增加 4 點、答錯增加 1 點，無作答次數限制'));
+    const autoRegeneration=this.room?.mapVersion===2;
+    if(chargeLabel){
+      const label=chargeLabel.querySelector('.tc-charge-label');
+      if(label)label.textContent=autoRegeneration?'自由答題':'答題充能';
+      chargeLabel.setAttribute('aria-label',
+        (autoRegeneration?'自由答題':'答題充能')+'，能量 '+
+        Math.max(0,Math.min(10,stamina))+' / 10，'+
+        (own?.dungeonAdmin===true?'管理員體力固定十點，答題仍可累積學習紀錄':
+          autoRegeneration?'每秒自動恢復 1 點，答題不再額外補充能量':
+          '答對增加 4 點、答錯增加 1 點，無作答次數限制'));
+    }
     this.$('[data-dm-quarter-energy]').hidden=!active||!this.map;
     this.root.querySelectorAll('[data-dm-energy-segment]').forEach((segment,index)=>
       segment.classList.toggle('is-filled',index<energyRingFill(stamina)));
@@ -407,7 +415,9 @@ class DungeonMapView{
     const threat=this.$('[data-dm-threat]');
     if(threat){
       threat.hidden=!threatened.length&&!downed;
-      if(downed)threat.textContent='已倒地 · 可以答題蓄力自救，或等待隊友靠近救援';
+      if(downed)threat.textContent=autoRegeneration?
+        '已倒地 · 能量每秒回復，可蓄力自救或等待隊友靠近救援':
+        '已倒地 · 可以答題蓄力自救，或等待隊友靠近救援';
       else if(threatened.length){
         const fire=Math.min(...threatened.map(beast=>beast.attack.resolvesAtTick));
         const applied=Number(this.room?.battleClock?.appliedTick)||0;
@@ -1608,6 +1618,7 @@ class DungeonMapView{
     }
     this.room=room;
     this.quiz?.setAdmin(room.members[this.uid]?.dungeonAdmin===true);
+    this.quiz?.setAutoRegeneration(room.mapVersion===2);
     if(changedArena){
       this.map=null;this.camera=Camera.initialCamera();
       this.follow=true;this.followBeast=false;
