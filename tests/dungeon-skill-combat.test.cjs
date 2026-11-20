@@ -99,17 +99,19 @@ test('sword array can damage multiple enemies, with multiple center intersection
   assert.ok(out.result.hits.some(v=>v.enemyId==='beast-2'));
   assert.equal(out.members.a.explorationStamina,6);
 });
-test('flying sword summons to vacant tile then attacks along cardinal trail',()=>{
-  const record=sword(),initial=room(record,beast(8,5));
+test('flying sword summons within two cells and attacks along the shortest beast-aware route',()=>{
+  const record=sword(),initial=room(record,beast(6,6));
   const preset=S.switchLoadout(initial,'a',record,2);
   let state={...initial,members:preset.members};
-  const summoned=cast(state,record,'flight-summon',{x:6,y:5});
+  const summoned=cast(state,record,'flight-summon',{x:5,y:6});
   assert.equal(summoned.result.totalDamage,0);
-  assert.deepStrictEqual(summoned.members.a.flyingSword,{x:6,y:5});
+  assert.deepStrictEqual(summoned.members.a.flyingSword,{x:5,y:6});
   state=next(state,summoned);
-  const through=cast(state,record,'flight-summon',{x:8,y:5},2);
+  const through=cast(state,record,'flight-summon',{x:7,y:5},2);
   assert.ok(through.result.totalDamage>0);
   assert.ok(through.enemies[0].battleHealth<400);
+  assert.equal(through.result.path.length-1,3);
+  assert.ok(through.result.path.some(p=>p.x===6&&p.y===6));
 });
 test('body focus grants six reduced-cost casts and expires without turn limits',()=>{
   const record=body(),r=room(record,beast(7,5));
