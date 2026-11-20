@@ -45,11 +45,41 @@ function inverseAdaptive(raw,metadata,correct,evidence){
     else scopes[id]=copy(evidence.before);
     return {...raw,scopes};
   }
-  // An independent question/lesson may already have been recorded. In that
-  // case preserve the later evidence and retract only this observation's
-  // contribution rather than clobbering the whole scope.
+  // When the bounded event history still contains every subsequent
+  // observation, replay those verified observations from the pre-answer
+  // snapshot. This exactly restores review spacing, streaks, and levels
+  // without disturbing any later correct or incorrect work.
   const questionId=meta.questionId||'';
   const observedId=evidence?.eventId||questionId;
+  const recent=Array.isArray(current.recent)?current.recent:[];
+  const index=recent.findIndex(row=>row?.id===observedId);
+  const later=index>=0?recent.slice(index+1):[];
+  const seenAfter=Array.isArray(evidence?.after?.seen)?
+    evidence.after.seen:[];
+  const subsequent=Array.isArray(current.seen)?
+    current.seen.filter(x=>!seenAfter.includes(x)):[];
+  const complete=index>=0&&Array.isArray(evidence?.after?.seen)&&
+    subsequent.length===later.length&&
+    subsequent.every((value,i)=>value===later[i]?.id)&&
+    later.every(row=>row?.id&&row?.facetId&&row?.conceptId&&
+      typeof row.correct==='boolean');
+  if(complete){
+    const scopes={...raw.scopes};
+    if(evidence.before===null||evidence.before===undefined)
+      delete scopes[id];
+    else scopes[id]=copy(evidence.before);
+    let replayed={...raw,scopes};
+    for(const row of later){
+      replayed=Adaptive.record(replayed,{
+        scopeId:id,questionId:row.id,
+        facetId:row.facetId,conceptId:row.conceptId,
+        difficulty:row.difficulty,role:row.role
+      },{id:row.id,correct:row.correct,help:row.help,at:row.at});
+    }
+    return replayed;
+  }
+  // If later event history was trimmed or includes an unseen lesson, preserve
+  // the later evidence and retract safe counts rather than rewriting history.
   const hasSeen=Array.isArray(current.seen)&&current.seen.includes(observedId);
   if(!hasSeen)return raw;
   const next={...current,answered:Math.max(0,nonnegative(current.answered)-1),
@@ -78,10 +108,10 @@ function inverseAdaptive(raw,metadata,correct,evidence){
     next[kind][key]=row;
   };
   adjust('facets',meta.facetId);adjust('concepts',meta.conceptId);
-  const recent=Array.isArray(next.recent)?next.recent:[];
+  const retainedRecent=Array.isArray(next.recent)?next.recent:[];
   // Newly recorded events carry their ID; legacy events are recognized
   // only if all their distinctive fields (including time) match.
-  next.recent=recent.filter(x=>x?.id!==observedId&&!(
+  next.recent=retainedRecent.filter(x=>x?.id!==observedId&&!(
     !x?.id&&x?.facetId===meta.facetId&&x?.conceptId===meta.conceptId&&
     x?.at===evidence?.at&&x?.correct===correct
   ));
