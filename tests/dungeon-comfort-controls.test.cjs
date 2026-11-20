@@ -100,9 +100,9 @@ test('resize callbacks defer backing-store writes and identical dimensions do no
   view.scheduleResize();
   assert.equal(ops.length,1);
 });
-test('only avatar fallback uses a legacy circular token',()=>{
+test('avatars never paint the legacy round player token',()=>{
   const painter=read('public/cultivation/dungeon-map-painter.js');
-  assert.match(painter,/if\(!painted\)\{\s*ctx\.beginPath\(\);ctx\.arc\(sx,sy,radius/);
+  assert.match(painter,/if\(!painted\)\{[\s\S]*ctx\.moveTo\(sx,sy-radius\*1\.5\)/);
   assert.doesNotMatch(painter,/marker\(map\.spawn/);
   assert.doesNotMatch(painter,/ctx\.arc\(sx,sy,radius\+3/);
   assert.match(source,/new ResizeObserver\(\(\)=>this\.scheduleResize\(\)\)/);
