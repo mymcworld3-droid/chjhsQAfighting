@@ -1,6 +1,6 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
-import './main-legacy.js?v=20261120-focused-scope-default-v1';
+import './main-legacy.js?v=20261120-guest-account-delete-v1';
 import './cultivation/dongtian-entry.js';
 // Sound is optional and cannot hold up authentication or gameplay readiness.
 void import('./game-audio.js').catch(error => console.warn('[Game audio] unavailable', error));
@@ -28,7 +28,7 @@ void import('./cultivation/data/index.js').catch((error) => {
 });
 
 // 帳號刪除是登入核心旁的獨立增強；載入失敗也不能阻斷 Google 登入。
-void import('./account-delete.js').catch((error) => {
+void import('./account-delete.js?v=20261120-guest-account-delete-v1').catch((error) => {
   console.error('[Account Delete] failed to load account deletion controls', error);
 });
 

@@ -10,6 +10,7 @@ on:
       - 'public/cultivation/curriculum-pages.js'
       - 'public/main-legacy.js'
       - 'public/cultivation/first-visit.js'
+      - 'public/account-delete.js'
       - 'public/index.html'
       - 'public/main.js'
       - 'public/styles/first-visit.css'
@@ -17,6 +18,8 @@ on:
       - 'tests/first-answer-guide.test.cjs'
       - 'tests/login-auto-entry.test.cjs'
       - 'tests/first-visit.test.cjs'
+      - 'tests/account-delete.test.cjs'
+      - 'tests/guest-account-delete.test.cjs'
       - 'tests/tactical-quarter-camera.test.cjs'
       - 'tests/scope-fullscreen.test.cjs'
       - 'tests/scope-default-mode.test.cjs'
@@ -43,6 +46,8 @@ jobs:
           node --test tests/first-answer-guide.test.cjs
           tests/login-auto-entry.test.cjs
           tests/first-visit.test.cjs
+          tests/account-delete.test.cjs
+          tests/guest-account-delete.test.cjs
           tests/scope-fullscreen.test.cjs
           tests/scope-default-mode.test.cjs
           tests/tactical-mode-navigation.test.cjs

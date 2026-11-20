@@ -14,9 +14,9 @@ const artifactSystem = read('public/cultivation/artifact-system.js');
 const bag = read('public/cultivation/unified-inventory-grid.js');
 
 test('account delete control is loaded as a core module and placed directly below logout', () => {
-  assert.match(main, /void import\('\.\/account-delete\.js'\)\.catch/);
+  assert.match(main, /void import\('\.\/account-delete\.js\?v=20\d{6}-[\w-]+'\)\.catch/);
   assert.ok(
-    main.indexOf("void import('./account-delete.js')") < main.indexOf('const XIUXIAN_FEATURE_MODULES'),
+    main.indexOf("void import('./account-delete.js?v=") < main.indexOf('const XIUXIAN_FEATURE_MODULES'),
     'account deletion must not depend on optional cultivation feature loading'
   );
   assert.match(accountDelete, /button\[onclick="logout\(\)"\]/);
@@ -24,9 +24,11 @@ test('account delete control is loaded as a core module and placed directly belo
   assert.match(accountDelete, /刪除帳號/);
 });
 
-test('account deletion is destructive only after two confirmations and a fresh Google reauthentication', () => {
+test('linked-account deletion keeps two confirmations and a fresh Google reauthentication', () => {
   const confirmations = accountDelete.match(/await confirmDialog\(/g) || [];
   assert.equal(confirmations.length, 2);
+  assert.match(accountDelete, /if \(!unbound\) \{\s*const second = await confirmDialog/);
+  assert.match(accountDelete, /if \(!unbound\) \{\s*await reauthenticateWithPopup/);
   assert.match(accountDelete, /reauthenticateWithPopup\(user, new GoogleAuthProvider\(\)\)/);
   assert.match(accountDelete, /auth\/popup-closed-by-user/);
   assert.match(accountDelete, /auth\/popup-blocked/);
@@ -61,6 +63,7 @@ test('successful account deletion clears local session state', () => {
   assert.match(accountDelete, /localStorage\.clear\(\)/);
   assert.match(accountDelete, /sessionStorage\.clear\(\)/);
   assert.match(accountDelete, /account-permanently-deleted/);
+  assert.match(accountDelete, /handleFirstVisitAccountDeleted\?\.\(\)/);
 });
 
 test('four-slot artifact equipment remains complete and persisted', () => {

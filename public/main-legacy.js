@@ -632,6 +632,11 @@ function initialPlayerData(user, friendCode) {
     data.stats.rankLevel = calculateRankFromScore(data.stats.totalScore, user.uid);
     return data;
 }
+// Firebase can briefly retain a stale anonymous flag after a successful Google
+// link. Do not delete an already bound identity as an unbound guest.
+window.isUnboundGuestAccount = user => Boolean(user?.isAnonymous &&
+    linkedGoogleIdentity?.uid !== user.uid &&
+    !user.providerData?.some(provider => provider?.providerId && provider.providerId !== 'anonymous'));
 function syncAccountBindingUI(user = auth.currentUser) {
     const linked = !!user && (user.isAnonymous === false || linkedGoogleIdentity?.uid === user.uid);
     const bindingButton = document.getElementById('btn-bind-guest');

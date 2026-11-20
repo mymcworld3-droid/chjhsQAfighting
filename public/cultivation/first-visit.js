@@ -110,6 +110,17 @@ import './first-answer-guide.js';
     removeLayer();
     return true;
   };
+  // Account deletion is different from ordinary sign-out: even a player who
+  // completed arrival must see the guest / existing-account choices again.
+  window.handleFirstVisitAccountDeleted = () => {
+    user = null;
+    window.cancelFirstAnswerGuide?.();
+    store({ stage: 'welcome', completed: false, joining: false, guestUid: '' });
+    removeLayer();
+    if (QA) return false;
+    welcome();
+    return true;
+  };
   window.isFirstVisitActive = () => !QA && state.stage === 'gender';
   window.getFirstVisitState = () => ({ ...state });
   window.handleFirstVisitSignedOut = () => {

@@ -17,7 +17,8 @@ import {
 } from './data-store.js';
 
 // 帳號刪除屬於登入核心能力，不依賴修仙附加模組。
-// 流程：二次確認 -> Google 重新驗證 -> 清除玩家自有資料 -> 刪除 users/{uid} -> 刪除 Firebase Auth。
+// 已綁定：二次確認 -> Google 重新驗證 -> 刪除玩家資料與 Firebase Auth。
+// 未綁定的免註冊帳號：單次警告確認，不要求無法完成的 Google 重新驗證。
 (function () {
   'use strict';
 
@@ -113,23 +114,34 @@ import {
       return;
     }
 
+    const unbound = typeof window.isUnboundGuestAccount === 'function'
+      ? window.isUnboundGuestAccount(user)
+      : Boolean(user.isAnonymous && !user.providerData?.some(provider =>
+          provider?.providerId && provider.providerId !== 'anonymous'));
     const first = await confirmDialog(
-      '確定要永久刪除帳號嗎？\n\n角色、修為、背包、裝備與已建立內容將被刪除，而且無法復原。'
+      unbound
+        ? '目前是未綁定的免註冊帳號。\n\n刪除後修為、答題紀錄及所有修行資料都無法復原。確定永久刪除？'
+        : '確定要永久刪除帳號嗎？\n\n角色、修為、背包、裝備與已建立內容將被刪除，而且無法復原。'
     );
     if (!first) return;
 
-    const second = await confirmDialog(
-      '最後確認：刪除後無法復原。\n\n系統會要求你再次用 Google 驗證身分。確定永久刪除？'
-    );
-    if (!second) return;
+    if (!unbound) {
+      const second = await confirmDialog(
+        '最後確認：刪除後無法復原。\n\n系統會要求你再次用 Google 驗證身分。確定永久刪除？'
+      );
+      if (!second) return;
+    }
 
     deleting = true;
     const originalHtml = button?.innerHTML || '<i class="fa-solid fa-user-xmark mr-2"></i> 刪除帳號';
     setButtonState(button, true, '<i class="fa-solid fa-spinner fa-spin mr-2"></i> 驗證身分中...');
 
     try {
-      // 主動重新驗證，避免最後 deleteUser 因 requires-recent-login 造成半刪除。
-      await reauthenticateWithPopup(user, new GoogleAuthProvider());
+      // A Firebase anonymous identity has no Google credential to reverify.
+      // Bound accounts still require recent Google authentication before deletion.
+      if (!unbound) {
+        await reauthenticateWithPopup(user, new GoogleAuthProvider());
+      }
 
       const database = db();
       setButtonState(button, true, '<i class="fa-solid fa-spinner fa-spin mr-2"></i> 清除角色資料中...');
@@ -145,19 +157,33 @@ import {
       try { sessionStorage.clear(); } catch (_) {}
 
       window.dispatchEvent(new CustomEvent('account-permanently-deleted', {
-        detail: { cleanupWarnings: warnings.slice() }
+        detail: { uid: user.uid, unbound, cleanupWarnings: warnings.slice() }
       }));
+
+      // Firebase sign-out events can race with local cleanup. Reset the in-memory
+      // arrival state explicitly (localStorage.clear alone cannot reset it).
+      document.querySelectorAll('.page-section').forEach(page => {
+        page.classList.remove('active-page');
+        page.classList.add('hidden');
+      });
+      document.getElementById('bottom-nav')?.classList.add('hidden');
+      document.getElementById('login-screen')?.classList.remove('hidden');
+      try { window.handleFirstVisitAccountDeleted?.(); }
+      catch (error) { console.warn('[Account Delete] welcome recovery failed', error); }
 
       if (warnings.length) {
         console.warn('[Account Delete] account removed with optional cleanup warnings', warnings);
       }
-      window.alert?.('帳號已永久刪除。');
+      if (unbound) window.showToast?.('免註冊帳號已刪除。');
+      else window.alert?.('帳號已永久刪除。');
     } catch (error) {
       console.error('[Account Delete]', error);
       let message = '刪除帳號失敗，帳號尚未完整刪除。';
       if (error?.code === 'auth/popup-closed-by-user') message = '已取消身分驗證，帳號沒有刪除。';
       else if (error?.code === 'auth/popup-blocked') message = '瀏覽器阻擋了 Google 驗證視窗，請允許彈出視窗後再試。';
-      else if (error?.code === 'auth/requires-recent-login') message = '登入驗證已過期，請重新登入後再刪除帳號。';
+      else if (error?.code === 'auth/requires-recent-login') message = unbound
+        ? '此免註冊帳號的登入驗證已過期，暫時無法直接刪除；資料仍需由系統重新驗證後才能刪除。'
+        : '登入驗證已過期，請重新登入後再刪除帳號。';
       else if (error?.message) message += `\n\n${error.message}`;
       window.alert?.(message);
     } finally {
