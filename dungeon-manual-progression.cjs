@@ -36,6 +36,9 @@ async function claim(db,roomId,room,uid){
   if(room?.mode!=='dungeon'||room.version!==1||
       !/^[A-Za-z0-9_-]{8,160}$/.test(String(roomId||'')))
     throw fail('副本經驗憑證無效',403);
+  if(!Object.hasOwn(room.members||{},uid)&&
+      !Object.hasOwn(room.manualExp||{},uid))
+    throw fail('你沒有此副本的功法經驗領取資格',403);
   const totals=room.manualExp?.[uid];
   if(!totals||typeof totals!=='object'||Array.isArray(totals))
     return {credited:{},pending:false};
