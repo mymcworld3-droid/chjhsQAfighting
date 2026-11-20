@@ -59,8 +59,7 @@ const describeDungeonSkill=skill=>{
   if(skill.kind==='fist-focus')
     return '立即凝聚六層蓄勢。接下來六次成功施放的體修攻擊，體力消耗減半並向上取整；每次耗一層。副本中沒有回合或冷卻時間限制。';
   if(skill.kind==='flying-sword')
-    return String(skill.description||'').replace('每回合最多用兩次。',
-      '副本中沒有回合或冷卻時間限制。');
+    return String(skill.description||'')+'副本中沒有回合或冷卻時間限制。';
   return String(skill.description||'');
 };
 const loadout=(record,score,index,member=null)=>{
