@@ -4,6 +4,7 @@ const assert=require('node:assert/strict');
 const {PROJECT_IDS}=require('../firebase-admin-projects.cjs');
 const {__test:API}=require('../dungeon-room-api.cjs');
 const {generateDungeonLayout,walkable}=require('../dungeon-map-generator.cjs');
+const Player=require('../dungeon-player-combat.cjs');
 const SECRET='0a1b2c3d4e5f60718293a4b5';
 function store(initial={}){
   const records=new Map(Object.entries(initial));let serial=0,chain=Promise.resolve();
@@ -77,7 +78,8 @@ async function setup(){
 test('two distinct servers commit concurrent strikes once and share one enemy health',async()=>{
   const {f,id,raw,wolf}=await setup();
   // Leave enough HP for BOTH independently verified foundation-stage hits.
-  wolf.battleHealth=raw.members.a.battleAttack+raw.members.b.battleAttack-1;
+  wolf.battleHealth=Player.playerStrikeDamage(raw.members.a)+
+    Player.playerStrikeDamage(raw.members.b)-1;
   const account=structuredClone(f.a.records.get('users/a'));
   const [a,b]=await Promise.all([
     f.call('a','strike',{roomId:id,enemyId:wolf.id,seq:1,
