@@ -49,11 +49,18 @@ const membersOf=room=>room?.members&&typeof room.members==='object'&&!Array.isAr
 const hasMember=(room,uid)=>Object.prototype.hasOwnProperty.call(membersOf(room),uid);
 const memberOnline=(member,at)=>Number(member?.heartbeatAtMs)>0 &&
   Math.max(0,at-Number(member.heartbeatAtMs))<=PRESENCE_STALE_MS;
-const publicRoom=(roomId,room,at=Date.now())=>({
+const publicRoom=(roomId,room,at=Date.now(),viewerUid='')=>({
   id:roomId,mode:'dungeon',version:room.version,revision:room.revision,
   status:room.status,visibility:room.visibility==='public'?'public':'private',code:room.code,
   hostUid:room.hostUid,createdAtMs:room.createdAtMs,
   assembledAtMs:room.assembledAtMs||0,
+  // Only reveal this player's trusted server kill ledger to their client.
+  // The cumulative totals let an SSE skip multiple revisions without
+  // losing XP animations; other teammates' mastery stays private.
+  ...(viewerUid&&hasMember(room,viewerUid)?{
+    manualProgressSession:room.manualProgressSession||room.assembledAtMs||0,
+    manualExp:{[viewerUid]:room.manualExp?.[viewerUid]||{}}
+  }:{}),
   expiresAtMs:room.expiresAtMs,maxMembers:MAX_MEMBERS,
   battleClock:projectClock(room,at),
   dungeonProgress:Objectives.publicProgress(room.dungeonProgress),
@@ -157,7 +164,7 @@ function createHandler({
         const room=roomSnap.exists?roomSnap.data():null;
         return sessionRoom(room,at)&&hasMember(room,uid)?{id:pointed,room}:null;
       };
-      const respond=(roomId,room)=>res.json({ok:true,roomId:roomId||null,room:room?publicRoom(roomId,room,at):null});
+      const respond=(roomId,room)=>res.json({ok:true,roomId:roomId||null,room:room?publicRoom(roomId,room,at,uid):null});
       // A member may already be exploring when this version is deployed or
       // may gain/lose administrator permissions while a room stays active.
       // Revalidate the Firebase A flag on reconnect/get/stream-open, then
@@ -392,7 +399,8 @@ function createHandler({
         if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
         current=await refreshAdmin(roomId,current);
         return streamDungeonRoom({req,res,ref:roomRef,uid,initialRoom:current,
-          project:publicRoom,isActive:room=>sessionRoom(room,clock()),clock,logger,
+          project:(id,room,at)=>publicRoom(id,room,at,uid),
+          isActive:room=>sessionRoom(room,clock()),clock,logger,
           onTick:syncBattleClock});
       }
       if(action==='heartbeat'){
