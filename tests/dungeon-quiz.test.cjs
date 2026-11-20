@@ -165,3 +165,66 @@ test('answering advances only the individual question cursor, never the C world 
   assert.equal(c.records.get('dungeonRooms/'+roomId).battleAppliedTick,undefined);
   assert.equal((await Q.state(a,c,'b',roomId,at)).answered,0);
 });
+
+test('focused exclusion revision discards all stale dungeon questions and prevents in-flight commit',async()=>{
+  const {a,c}=environment();
+  const player=a.records.get('users/a');
+  const unit={path:'數學/高中二年級/上學期/數學',
+    detail:'平面向量內積',sub_topics:['向量內積']};
+  player.gameSettings={sourceMode:'focused',focusedUnits:[unit]};
+  a.records.set('users/a',player);
+  const first=await Q.prepareQuestion(a,c,'a',roomId,0,at);
+  const pending=await Q.commitQuestion(a,'a',first,item('數學'),at);
+  const inFlight=await Q.prepareQuestion(a,c,'a',roomId,1,at);
+  assert.equal((await Q.state(a,c,'a',roomId,at)).question.id,pending.id);
+  const Exclusions=require('../quiz-scope-exclusions.cjs');
+  player.questionScopeExclusions={
+    scopeKey:Exclusions.scopeKey(player),revision:'revision-after-ban',
+    rules:[{unitKey:Exclusions.unitKey(unit),
+      id:'ban-3d',text:'不要再出三維向量內積的計算'}]
+  };
+  a.records.set('users/a',player);
+  const nextState=await Q.state(a,c,'a',roomId,at);
+  assert.equal(nextState.question,null);
+  assert.equal(nextState.stock,0);
+  await assert.rejects(
+    Q.answer(a,c,'a',{roomId,questionId:pending.id,choice:0},at),/失效/);
+  await assert.rejects(
+    Q.commitQuestion(a,'a',inFlight,{...item('數學'),q:'另一道較早開始生成的舊題目'},at),
+    /範圍已更改/);
+  const next=await Q.prepareQuestion(a,c,'a',roomId,0,at);
+  assert.notEqual(next.scopeKey,first.scopeKey);
+  const newQuestion=await Q.commitQuestion(a,'a',next,
+    {...item('數學'),q:'符合更新後範圍的平面向量選擇題'},at);
+  assert.equal((await Q.state(a,c,'a',roomId,at)).question.id,newQuestion.id);
+});
+test('dungeon answer history stores the same concept and adaptive metadata as trial',async()=>{
+  const {a,c}=environment();
+  const prepared=await Q.prepareQuestion(a,c,'a',roomId,0,at);
+  const adaptive={scopeId:'a'.repeat(24),conceptId:'c_'+'b'.repeat(16),
+    facetId:'f_'+'c'.repeat(16),questionId:'question_history_123',
+    role:'diagnostic',difficulty:'medium'};
+  const parsed={...item(prepared.subject),adaptive,
+    template_id:'unit-123',concept_id:'vector-geometry',
+    question_form:'direct-application',cognitive_level:2,reasoning_steps:3};
+  const q=await Q.commitQuestion(a,'a',prepared,parsed,at);
+  const correct=q.opts.indexOf(parsed.correct);
+  await Q.answer(a,c,'a',{
+    roomId,questionId:q.id,choice:correct,help:0,timeTaken:17
+  },at);
+  const logs=[...a.records.entries()].filter(([id])=>id.startsWith('exam_logs/'));
+  assert.equal(logs.length,1);
+  const log=logs[0][1];
+  assert.equal(log.templateId,'unit-123');
+  assert.equal(log.conceptId,'vector-geometry');
+  assert.equal(log.questionForm,'direct-application');
+  assert.equal(log.cognitiveLevel,2);
+  assert.equal(log.reasoningSteps,3);
+  assert.equal(log.learningDifficulty,'medium');
+  assert.equal(log.adaptiveScopeId,adaptive.scopeId);
+  assert.equal(log.adaptiveConceptId,adaptive.conceptId);
+  assert.equal(log.adaptiveFacetId,adaptive.facetId);
+  assert.equal(log.assistanceLevel,0);
+  assert.equal(log.adaptiveSkipped,false);
+  assert.equal(log.timeTaken,17);
+});
