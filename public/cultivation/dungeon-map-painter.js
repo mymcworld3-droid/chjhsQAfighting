@@ -36,7 +36,8 @@ export function hashCell(map,x,y){
 export function drawWorld(ctx,map,camera,width,height,
   {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0,
     aimTile=null,visualTimeMs=0,objectives=null,art=null,
-    rangeTiles=[],rangeKind='move',animationUnderlay=null,animationOverlay=null,
+    rangeTiles=[],rangeKind='move',swordPreviewRoute=null,swordVisuals={},
+    animationUnderlay=null,animationOverlay=null,
     dangerPlan=null,showDangerGuidance=false,ambiencePlan=null,
     environmentPlan=null,bossTransition=null,displayTick=currentTick,
     windupTick=displayTick,enemyImpactScenes=[],
@@ -128,8 +129,10 @@ export function drawWorld(ctx,map,camera,width,height,
   // outlines and actors, so no attack/range mask hides their sprites.
   const moveOverlay=rangeKind==='move';
   const fillColor=moveOverlay?'rgba(166,176,180,.18)':
+    rangeKind==='sword'?'rgba(85,225,209,.14)':
     rangeKind==='dash'?'rgba(245,199,111,.17)':'rgba(226,86,74,.17)';
   const strokeColor=moveOverlay?'rgba(223,229,236,.46)':
+    rangeKind==='sword'?'rgba(125,255,228,.55)':
     rangeKind==='dash'?'rgba(251,219,131,.62)':'rgba(255,142,126,.58)';
   if(Array.isArray(rangeTiles)&&rangeTiles.length){
     ctx.save();ctx.fillStyle=fillColor;ctx.strokeStyle=strokeColor;
@@ -141,6 +144,28 @@ export function drawWorld(ctx,map,camera,width,height,
       ctx.fillRect(x+.7,y+.7,Math.max(1,cell-1.4),Math.max(1,cell-1.4));
       if(cell>=12)ctx.strokeRect(x+1.3,y+1.3,
         Math.max(1,cell-2.6),Math.max(1,cell-2.6));
+    }
+    ctx.restore();
+  }
+  if(Array.isArray(swordPreviewRoute)&&swordPreviewRoute.length>1){
+    // Keep the path line thin and underneath enemies/players.
+    ctx.save();ctx.beginPath();
+    swordPreviewRoute.forEach((p,i)=>{
+      const x=g.ox+(p.x+.5)*cell,y=g.oy+(p.y+.5)*cell;
+      if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    });
+    ctx.strokeStyle='#79f4dd';ctx.lineWidth=clamp(cell*.095,1.5,4);
+    ctx.setLineDash([clamp(cell*.24,3,9),clamp(cell*.12,2,5)]);
+    ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#eaba81';
+    for(const p of swordPreviewRoute.slice(1)){
+      if(!enemies.some(e=>{
+        const q=e?.position,span=e?.kind==='boss'?2:1;
+        return q&&e.battleHealth!==0&&p.x>=q.x&&p.x<q.x+span&&
+          p.y>=q.y&&p.y<q.y+span;
+      }))continue;
+      ctx.beginPath();ctx.arc(g.ox+(p.x+.5)*cell,g.oy+(p.y+.5)*cell,
+        clamp(cell*.12,2,5),0,Math.PI*2);ctx.fill();
     }
     ctx.restore();
   }
@@ -437,6 +462,24 @@ export function drawWorld(ctx,map,camera,width,height,
         ctx.font='bold 11px system-ui';
         ctx.fillText('-'+member.lastDamage.amount,sx,sy-cell*.63);
       }
+      ctx.restore();
+    }
+    // Flying swords are persistent independent friendly units, owned by a
+    // member but never attached to that member's rendering coordinates.
+    const sword=swordVisuals?.[member.uid]||member.flyingSword;
+    if(sword&&Number.isFinite(sword.x)&&Number.isFinite(sword.y)){
+      const fx=g.ox+(sword.x+.5)*cell,fy=g.oy+(sword.y+.30)*cell;
+      const tint=member.uid===selfUid?'#9cfce5':'#f6d7a2';
+      ctx.save();ctx.translate(fx,fy);
+      ctx.shadowColor=tint;ctx.shadowBlur=clamp(cell*.2,3,12);
+      ctx.fillStyle=tint;ctx.strokeStyle=tint;
+      ctx.lineWidth=clamp(cell*.055,1.3,3);
+      ctx.beginPath();ctx.moveTo(0,-cell*.29);
+      ctx.lineTo(cell*.06,cell*.07);ctx.lineTo(-cell*.06,cell*.07);
+      ctx.closePath();ctx.fill();
+      ctx.beginPath();ctx.moveTo(-cell*.12,cell*.09);
+      ctx.lineTo(cell*.12,cell*.09);ctx.moveTo(0,cell*.09);
+      ctx.lineTo(0,cell*.23);ctx.stroke();
       ctx.restore();
     }
   });
