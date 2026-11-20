@@ -321,3 +321,67 @@ test('teacher overview shows recent live-class progress without student access o
   await assert.rejects(f.act('student', 'overview'), e => e.status === 403);
   await assert.rejects(f.act('outsider', 'overview'), e => e.status === 403);
 });
+
+
+test('teacher workspace summaries are scoped, bounded and contain no student submissions or answers', async () => {
+  const f = await fixture();
+  await f.join('student', '王同學');
+  const draft = await f.draft();
+  const dashboard = (await f.call('teacher', 'teacherDashboard')).dashboard;
+  assert.equal(dashboard.classes.length, 1);
+  assert.equal(dashboard.classes[0].studentCount, 1);
+  assert.equal(dashboard.classes[0].assignments.length, 1);
+  assert.equal(dashboard.classes[0].assignments[0].id, draft.id);
+  assert.equal(dashboard.classes[0].assignments[0].status, 'draft');
+  assert.equal(dashboard.classes[0].assignments[0].questions, undefined);
+  assert.doesNotMatch(JSON.stringify(dashboard), /王同學|answerIndex|explanation|joinCode/);
+  await assert.rejects(f.call('student', 'teacherDashboard'), error => error.status === 403);
+  await assert.rejects(f.call('outsider', 'teacherDashboard'), error => error.status === 403);
+});
+test('teacher can load a single assignment submission overview on demand, student cannot', async () => {
+  const f = await fixture();
+  await f.join('student', '王同學');
+  await f.join('late', '林同學');
+  const published = await f.publish();
+  await submit(f, published);
+  const result = (await f.act('teacher', 'teacherAssignmentProgress', { assignmentId:published.id })).progress;
+  assert.deepEqual([result.studentCount,result.submitted,result.inProgress,result.notStarted,result.pendingCount],[2,1,0,1,1]);
+  assert.deepEqual(result.pendingStudents.map(s => s.name), ['林同學']);
+  assert.equal(result.pendingStudents[0].status, 'not-started');
+  assert.ok(result.pendingStudents.every(s => !Object.hasOwn(s, 'answers') && !Object.hasOwn(s, 'score')));
+  await assert.rejects(f.act('student', 'teacherAssignmentProgress', { assignmentId:published.id }), e => e.status === 403);
+  await assert.rejects(f.act('outsider', 'teacherAssignmentProgress', { assignmentId:published.id }), e => e.status === 403);
+  const draft = await f.draft();
+  await assert.rejects(f.act('teacher', 'teacherAssignmentProgress', { assignmentId:draft.id }), e => e.status === 404);
+});
+test('approved teachers only see assigned classes and lose dashboard and progress access when revoked', async () => {
+  const f = await fixture();
+  await f.db.doc('users/mentor').set({ isAdmin:false,displayName:'林老師' });
+  await f.db.doc('classroomTeacherAccounts/mentor').set({ uid:'mentor',status:'approved',name:'林老師',school:'青雲中學',version:1 });
+  const assignment = await f.publish();
+  await f.act('teacher','assignTeacher',{ teacherUid:'mentor',expectedOwnerUid:'teacher' });
+  const dashboard = (await f.call('mentor','teacherDashboard')).dashboard;
+  assert.equal(dashboard.classes.length,1);
+  assert.equal(dashboard.classes[0].id,f.classId);
+  assert.equal(dashboard.classes[0].assignments[0].id,assignment.id);
+  const progress = (await f.act('mentor','teacherAssignmentProgress',{assignmentId:assignment.id})).progress;
+  assert.equal(progress.submitted,0);
+  await f.db.doc('classroomTeacherAccounts/mentor').update({status:'revoked'});
+  await assert.rejects(f.call('mentor','teacherDashboard'),e=>e.status===403);
+  await assert.rejects(f.act('mentor','teacherAssignmentProgress',{assignmentId:assignment.id}),e=>e.status===403);
+});
+test('administrator teacher dashboard is paginated without counting unchecked classes as loaded', async () => {
+  const f = await fixture();
+  for (let i=0;i<24;i++) {
+    const roomId = 'page-' + String(i).padStart(2,'0');
+    await f.db.doc('classrooms/'+roomId).set({ id:roomId,name:'第'+i+'班',teacherName:'管理員',
+      ownerUid:'teacher',status:'active',members:[],assignmentIds:[],createdAtMs:CLOCK });
+  }
+  const first = (await f.call('teacher','teacherDashboard')).dashboard;
+  assert.equal(first.classes.length,20);
+  assert.ok(first.nextCursor);
+  const second = (await f.call('teacher','teacherDashboard',{cursor:first.nextCursor})).dashboard;
+  assert.equal(second.classes.length,5);
+  assert.equal(second.nextCursor,null);
+  assert.equal(new Set([...first.classes,...second.classes].map(r=>r.id)).size,25);
+});

@@ -112,3 +112,82 @@
   #section-classes .cc-task-actions button{flex:1 1 auto}
   #section-classes .cc-class-panel{padding-top:8px}
 }
+
+/* Phase 2: unified teacher workspace within the existing classroom entry. */
+#section-classes .cc-teacher-workspace{min-width:0}
+#section-classes .cc-workspace-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  padding:26px 25px 22px;margin-bottom:14px;border-radius:16px;border:1px solid #89724e8a;
+  background:linear-gradient(110deg,#2a4030 0%,#1b3128 55%,#17231e 100%)}
+#section-classes .cc-workspace-hero h2{margin:5px 0 7px;font-size:clamp(23px,3.1vw,29px);line-height:1.25;
+  color:#f6e8ca;font-weight:760}
+#section-classes .cc-workspace-hero p{font-size:13px;color:#d1c5ac;margin:0;max-width:32rem}
+#section-classes .cc-workspace-hero .cc-actions{margin-left:auto}
+#section-classes .cc-workspace-tabs{display:flex;gap:8px;padding:8px 2px 12px;max-width:100%;
+  background:#111813;position:sticky;top:0;z-index:4;overflow-x:auto;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+#section-classes .cc-workspace-tabs button{flex:1 0 100px;white-space:nowrap;min-height:44px;border-radius:10px;
+  border-color:#5b6956;background:#192720;color:#d7d0bb;font-weight:650}
+#section-classes .cc-workspace-tabs button[aria-selected="true"]{background:#4b644a;color:#fff0c8;
+  border-color:#d0b781;box-shadow:inset 0 -3px #d1b67d}
+#section-classes .cc-workspace-tabs button:focus-visible{outline:2px solid #f1d9a2;outline-offset:-3px}
+#section-classes .cc-workspace-panel{min-width:0;padding-top:12px}
+#section-classes .cc-workspace-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:9px}
+#section-classes .cc-workspace-metrics .cc-metric{min-height:100px;justify-content:space-between}
+#section-classes .cc-workspace-scope{margin:0 0 24px}
+#section-classes .cc-workspace-section{margin-bottom:27px;min-width:0}
+#section-classes .cc-workspace-section-title{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;
+  gap:12px;margin-bottom:12px}
+#section-classes .cc-workspace-section-title h3{font-size:18px;line-height:1.4;margin:0;color:#f2e4c6}
+#section-classes .cc-workspace-section-title p{margin:3px 0 0}
+#section-classes .cc-workspace-quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#section-classes .cc-workspace-quick button{min-width:0;min-height:66px;white-space:normal;font-weight:650;
+  border-radius:12px;border-color:#67735d;background:#202e24;color:#eadbb8}
+#section-classes .cc-workspace-room-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,315px),1fr));gap:12px}
+#section-classes .cc-workspace-room-grid .cc-card,#section-classes .cc-workspace-task-grid .cc-card{margin-bottom:0}
+#section-classes .cc-workspace-room{display:flex;flex-direction:column;gap:13px;min-height:146px}
+#section-classes .cc-workspace-room-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+#section-classes .cc-workspace-room-head h4{font-size:16px;overflow-wrap:anywhere;flex:1}
+#section-classes .cc-workspace-room>p{margin:0}
+#section-classes .cc-workspace-room>.cc-actions{margin-top:auto}
+#section-classes .cc-workspace-task-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:12px}
+#section-classes .cc-workspace-task{display:flex;flex-direction:column;gap:12px;min-width:0}
+#section-classes .cc-workspace-task-head{display:flex;justify-content:space-between;align-items:flex-start;gap:9px;flex-wrap:wrap}
+#section-classes .cc-workspace-task-head>div{flex:1 1 155px;min-width:0}
+#section-classes .cc-workspace-task h4{font-size:16px;margin:3px 0 0;line-height:1.45;overflow-wrap:anywhere}
+#section-classes .cc-workspace-task>p{margin:0}
+#section-classes .cc-workspace-task>.cc-actions{margin-top:auto}
+#section-classes .cc-workspace-pending{display:flex;flex-wrap:wrap;gap:6px;max-width:100%}
+#section-classes .cc-workspace-pending span{padding:3px 9px;border-radius:8px;border:1px solid #77684d;
+  background:#292b22;color:#e8d5b7;font-size:12px;overflow-wrap:anywhere}
+#section-classes .cc-workspace-progress{padding:12px;margin-top:3px;border:1px solid #71816a66;border-radius:10px;
+  background:#1b3023}
+#section-classes .cc-workspace-progress strong{color:#e6ddbc}
+#section-classes .cc-workspace-progress p{margin:5px 0 8px}
+#section-classes .cc-workspace-tools{display:flex;flex-wrap:wrap;align-items:end;gap:10px 16px;margin:0 0 16px}
+#section-classes .cc-workspace-tools .cc-search{flex:1 1 245px;max-width:380px}
+#section-classes .cc-workspace-tools .cc-filters{flex:1 1 330px;align-items:center}
+#section-classes .cc-workspace-more{display:flex;justify-content:center;margin:20px 0}
+#section-classes .cc-workspace-admin-create{margin-top:28px;border-color:#907c5666}
+#section-classes .cc-workspace-admin-create h4{margin:0 0 10px}
+#section-classes .cc-workspace-admin-create .cc-form{max-width:600px}
+#section-classes .cc-workspace-join{margin-top:16px}
+#section-classes .cc-workspace-join .cc-form{max-width:600px}
+#section-classes .cc-workspace-unavailable{margin:14px 0}
+#section-classes [data-workspace-task][hidden],#section-classes [data-workspace-empty][hidden]{display:none!important}
+@media(max-width:760px){
+  #section-classes .cc-workspace-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #section-classes .cc-workspace-metrics .cc-metric{min-height:80px}
+  #section-classes .cc-workspace-quick{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #section-classes .cc-workspace-tabs button{flex:1 0 auto}
+}
+@media(max-width:540px){
+  #section-classes .cc-workspace-hero{padding:17px 16px}
+  #section-classes .cc-workspace-hero .cc-actions{margin:0;width:100%}
+  #section-classes .cc-workspace-hero .cc-actions button{flex:1}
+  #section-classes .cc-workspace-metrics{gap:8px}
+  #section-classes .cc-workspace-metrics .cc-metric{padding:12px;text-align:left;align-items:flex-start}
+  #section-classes .cc-workspace-metrics .cc-metric strong{font-size:25px}
+  #section-classes .cc-workspace-room-grid,#section-classes .cc-workspace-task-grid{grid-template-columns:1fr}
+  #section-classes .cc-workspace-quick button{min-height:54px}
+  #section-classes .cc-workspace-task>.cc-actions button,#section-classes .cc-workspace-room>.cc-actions button{flex:1 1 auto}
+  #section-classes .cc-workspace-tools .cc-search{flex-basis:100%;max-width:none}
+}

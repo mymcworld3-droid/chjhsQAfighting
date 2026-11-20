@@ -77,7 +77,20 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
     const code = await page.locator('.cc-code').innerText();
     await page.locator('summary').filter({ hasText: '指派班級教師' }).click();
     await page.locator('[data-form=assign] [name=teacherUid]').selectOption('applicant'); await click(page, 'assign-teacher');
-    await as(page, 'applicant'); assert.equal(await page.locator('[data-form=create]').count(), 0); await click(page, 'class');
+    // Exercise the shared teacher workspace across two independently assigned classrooms.
+    await click(page, 'home');
+    assert.match(await page.locator('.cc-workspace-hero').innerText(), /教師工作台/);
+    await page.locator('[data-form=create] [name=name]').fill('八年二班');
+    await page.locator('[data-form=create] [name=teacherName]').fill('陳老師');
+    await click(page, 'create');
+    await click(page, 'class-tab', 5);
+    await page.locator('summary').filter({ hasText: '指派班級教師' }).click();
+    await page.locator('[data-form=assign] [name=teacherUid]').selectOption('applicant'); await click(page, 'assign-teacher');
+    await as(page, 'applicant');
+    assert.equal(await page.locator('[data-form=create]').count(), 0);
+    assert.equal(await page.locator('.cc-workspace-room').count(), 2);
+    await page.locator('.cc-workspace-room').filter({hasText:'七年一班'}).locator('[data-action=workspace-class]').click();
+    await ready(page);
     assert.equal(await page.locator('.cc-class-tabs [role=tab]').count(), 6);
     await click(page, 'class-tab', 4);
     await page.locator('[data-form=notice] [name=content]').fill('週五記得完成複習');
@@ -121,7 +134,14 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
     await measure(page);
     if (process.env.CLASSROOM_CAPTURE_DIR) { fs.mkdirSync(process.env.CLASSROOM_CAPTURE_DIR, { recursive: true }); await page.screenshot({ path: path.join(process.env.CLASSROOM_CAPTURE_DIR, 'student-portrait.png') }); }
     await as(page, 'teacher'); await page.setViewportSize({ width: 1366, height: 850 });
-    await click(page, 'class');
+    assert.match(await page.locator('.cc-workspace-hero').innerText(), /教師工作台/);
+    await click(page, 'workspace-tab', 2);
+    await page.locator('.cc-workspace-task').filter({hasText:'加法練習'}).locator('[data-action=workspace-progress]').click();
+    await ready(page);
+    assert.match(await page.locator('.cc-workspace-progress').innerText(), /已繳交 1 \/ 1/);
+    await click(page, 'workspace-tab', 1);
+    await page.locator('.cc-workspace-room').filter({hasText:'七年一班'}).locator('[data-action=workspace-class]').click();
+    await ready(page);
     await click(page, 'class-tab', 3);
     await click(page, 'overview');
     assert.match(await page.locator('#section-classes').innerText(), /近期作業狀態/);

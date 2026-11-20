@@ -2,6 +2,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import './knowledge-points.js';
 import { buildClassroomView, tabsForClass } from './classroom-view.js';
+import { buildTeacherWorkspace } from './teacher-workspace.js';
 
 const $ = id => document.getElementById(id);
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -66,6 +67,33 @@ function field(name, label, value = '', attrs = '') {
 }
 function homeView() {
   const admin = state.access?.isAdmin, account = state.access?.account;
+
+  if (state.access?.isTeacher) {
+    const portal = buildTeacherWorkspace(state, { escape, date, status, button });
+    const adminSetup = admin ? '<section class="cc-card cc-workspace-admin-create" id="cc-admin-create">' +
+      '<h4>管理員建班</h4><p class="cc-muted">核准教師帳號後，由管理員建立並指派班級。</p>' +
+      '<form class="cc-form" data-form="create">' +
+      field('name', '班級名稱', '', 'required maxlength="60"') +
+      field('teacherName', '教師稱呼', '', 'required maxlength="40"') +
+      button('create', '建立班級', 'class="cc-primary"') + '</form></section>' : '';
+    const join = '<details class="cc-card cc-workspace-join"><summary>以加入碼加入其他班級</summary>' +
+      '<form data-form="join" class="cc-form">' +
+      field('joinCode', '八碼加入碼', '', 'required maxlength="8" autocomplete="off" style="text-transform:uppercase"') +
+      field('name', '老師辨識用的姓名', '', 'required maxlength="40" autocomplete="name"') +
+      field('seat', '座號（選填）', '', 'maxlength="12"') +
+      button('join', '加入班級', 'class="cc-primary"') + '</form></details>';
+    const existing = !state.dashboard && (state.classes || []).some(c => c.role === 'teacher')
+      ? '<div class="cc-grid">' + state.classes.filter(c => c.role === 'teacher').map(c =>
+        '<article class="cc-card"><h4>' + escape(c.name) + '</h4>' +
+        button('class', '進入教室', 'data-id="' + escape(c.id) + '"') + '</article>').join('') + '</div>' : '';
+    const enrolledClasses = (state.classes || []).filter(c => c.role === 'student');
+    const enrolled = enrolledClasses.length ?
+      '<section class="cc-workspace-section cc-workspace-enrolled"><h3>我加入的其他班級</h3><div class="cc-grid">' +
+      enrolledClasses.map(c => '<article class="cc-card"><h4>' + escape(c.name) + '</h4><p class="cc-muted">' +
+        escape(c.teacherName) + '</p>' + button('class', '前往學生教室', 'data-id="' + escape(c.id) + '"') +
+        '</article>').join('') + '</div></section>' : '';
+    return portal + existing + enrolled + adminSetup + join;
+  }
   const rooms = state.classes.map(room => `<article class="cc-card"><h4>${escape(room.name)}</h4><p class="cc-muted">${room.role === 'teacher' ? '教師' : '學生'} · ${room.studentCount} 位學生${room.status === 'archived' ? ' · 已封存' : ''}</p><p>${escape(room.teacherName)}</p>${button('class', '進入班級', `data-id="${room.id}"`)}</article>`).join('');
   const application = admin ? `<section class="cc-card"><h4>管理員建班</h4><form class="cc-form" data-form="create">
       ${field('name', '班級名稱', '', 'required maxlength="60"')}${field('teacherName', '教師稱呼', '', 'required maxlength="40"')}
@@ -166,6 +194,21 @@ function filterClassroomList(panel, type) {
   const empty = panel.querySelector('[data-cc-empty="' + type + '"]');
   if (empty) empty.hidden = visible > 0;
 }
+function filterWorkspaceTasks(panel) {
+  const input = panel.querySelector('input[data-workspace-search-input]');
+  const rows = [...panel.querySelectorAll('[data-workspace-task]')];
+  if (!rows.length) return;
+  const query = (input?.value || '').trim().toLocaleLowerCase('zh-Hant');
+  const filter = state.workspaceFilter || 'all';
+  let visible = 0;
+  for (const row of rows) {
+    const matches = (row.dataset.workspaceSearch || '').toLocaleLowerCase('zh-Hant').includes(query);
+    row.hidden = !(matches && (filter === 'all' || row.dataset.workspaceFilter === filter));
+    if (!row.hidden) visible++;
+  }
+  const empty = panel.querySelector('[data-workspace-empty]');
+  if (empty) empty.hidden = visible > 0;
+}
 function render() {
   const panel = $('section-classes'); if (!panel) return;
   const views = { home: homeView, accounts: accountsView, class: classView, overview: overviewView, editor: editorView, preview: previewView, work: workView, report: reportView };
@@ -173,9 +216,26 @@ function render() {
   panel.innerHTML = `<div class="cc-shell"><div data-message role="status" aria-live="polite"></div>${views[state.view]()}</div>`;
   filterClassroomList(panel, 'assignment');
   filterClassroomList(panel, 'student');
+  filterWorkspaceTasks(panel);
   void window.quizMathTypeset?.([panel]);
 }
-async function loadHome(more = false) { const data = await request({ action: 'list', ...(more ? { cursor: state.nextCursor } : {}) }); state = { ...data, view: 'home', classes: more ? [...state.classes, ...data.classes] : data.classes }; render(); window.dispatchEvent(new CustomEvent('xiuxian:teacher-access')); }
+async function loadHome(more = false) {
+  const data = await request({ action: 'list', ...(more ? { cursor: state.nextCursor } : {}) });
+  state = { ...state, ...data, view: 'home',
+    classes: more ? [...state.classes, ...data.classes] : data.classes,
+    dashboard: null, workspaceProgress: {}, workspaceError: '' };
+  render();
+  window.dispatchEvent(new CustomEvent('xiuxian:teacher-access'));
+  if (data.access?.isTeacher) {
+    try {
+      const result = await request({ action: 'teacherDashboard' });
+      state.dashboard = result.dashboard;
+    } catch (error) {
+      state.workspaceError = error.message;
+    }
+    render();
+  }
+}
 async function loadAccounts(status = state.accountReview?.status || 'pending', more = false) {
   const data = await request({ action: 'teacherAccounts', status, ...(more ? { cursor: state.accountReview.nextCursor } : {}) });
   state.accountReview = { ...data, status, accounts: more ? [...state.accountReview.accounts, ...data.accounts] : data.accounts }; state.view = 'accounts'; render();
@@ -228,6 +288,58 @@ function validForm(name) {
 }
 async function act(target) {
   const action = target.dataset.action, classId = state.classroom?.id;
+  if (action === 'workspace-tab') {
+    state.workspaceTab = target.dataset.tab;
+    render();
+    $('section-classes')?.querySelector('.cc-workspace-tabs [aria-selected="true"]')?.focus({ preventScroll: true });
+    return;
+  }
+  if (action === 'workspace-refresh') return loadHome();
+  if (action === 'workspace-more') {
+    if (!state.dashboard?.nextCursor) return;
+    const data = await request({ action: 'teacherDashboard', cursor: state.dashboard.nextCursor });
+    const current = new Map(state.dashboard.classes.map(c => [c.id, c]));
+    for (const room of data.dashboard.classes) current.set(room.id, room);
+    state.dashboard = { ...data.dashboard, classes: [...current.values()] };
+    render(); return;
+  }
+  if (action === 'workspace-filter') { state.workspaceFilter = target.dataset.filter; render(); return; }
+  if (action === 'workspace-create') {
+    if (!state.access?.isAdmin) return;
+    const input = $('cc-admin-create')?.querySelector('input[name="name"]');
+    input?.scrollIntoView({ behavior: 'smooth', block: 'center' }); input?.focus({ preventScroll: true }); return;
+  }
+  if (action === 'workspace-cave') {
+    if (!window.QATeacherDongtian?.open) throw Error('教師洞天尚未載入，請重新開啟遊戲後再試。');
+    await window.QATeacherDongtian.open(); return;
+  }
+  if (['workspace-class', 'workspace-grades', 'workspace-new', 'workspace-edit', 'workspace-preview', 'workspace-report'].includes(action)) {
+    const targetClassId = target.dataset.classId || target.dataset.id;
+    await loadClass(targetClassId);
+    if (state.classroom?.role !== 'teacher') throw Error('已失去此班級的管理權限');
+    if (action === 'workspace-class') return;
+    if (action === 'workspace-grades') { state.classTab = 'grades'; render(); return; }
+    if (action === 'workspace-new') {
+      if (state.classroom.status !== 'active') throw Error('此班級已封存，請先恢復');
+      state.editor = { title: '', subject: '數學', questions: [blankQuestion()] };
+      state.view = 'editor'; render(); return;
+    }
+    if (action === 'workspace-report') return loadReport(target.dataset.id);
+    if (action === 'workspace-preview') return loadAssignment(target.dataset.id, 'preview');
+    if (action === 'workspace-edit') {
+      const data = await request({ action: 'getAssignment', classId: state.classroom.id, assignmentId: target.dataset.id });
+      if (data.assignment.status !== 'draft') throw Error('目前只能編輯草稿');
+      state.editor = { ...data.assignment, dueLocal: data.assignment.dueAtMs ? localDate(data.assignment.dueAtMs) : '' };
+      state.view = 'editor'; render(); return;
+    }
+  }
+  if (action === 'workspace-progress') {
+    const classId = target.dataset.classId, assignmentId = target.dataset.id;
+    const result = await request({ action: 'teacherAssignmentProgress', classId, assignmentId });
+    state.workspaceProgress = { ...(state.workspaceProgress || {}),
+      [classId + ':' + assignmentId]: result.progress };
+    render(); return;
+  }
   if (action === 'home') return loadHome();
   if (action === 'more-classes') return loadHome(true);
   if (action === 'teacher-accounts' || action === 'account-filter') return loadAccounts(target.dataset.status || 'pending');
@@ -360,6 +472,12 @@ function mount() {
   panel.dataset.classroomMounted = 'true';
   panel.addEventListener('submit', event => { event.preventDefault(); });
   panel.addEventListener('input', event => {
+    const workspaceInput = event.target.closest('input[data-workspace-search-input]');
+    if (workspaceInput) {
+      state.workspaceSearch = workspaceInput.value;
+      filterWorkspaceTasks(panel);
+      return;
+    }
     const input = event.target.closest('input[data-cc-search]');
     if (!input) return;
     const type = input.dataset.ccSearch;
@@ -368,8 +486,9 @@ function mount() {
     filterClassroomList(panel, type);
   });
   panel.addEventListener('keydown', event => {
-    if (!event.target.matches('.cc-class-tabs [role="tab"]')) return;
-    const tabs = [...panel.querySelectorAll('.cc-class-tabs [role="tab"]')];
+    const workspace = event.target.matches('.cc-workspace-tabs [role="tab"]');
+    if (!workspace && !event.target.matches('.cc-class-tabs [role="tab"]')) return;
+    const tabs = [...panel.querySelectorAll(workspace ? '.cc-workspace-tabs [role="tab"]' : '.cc-class-tabs [role="tab"]')];
     const current = tabs.indexOf(event.target);
     let next = current;
     if (event.key === 'ArrowRight') next = (current + 1) % tabs.length;

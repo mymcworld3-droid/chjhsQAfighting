@@ -166,7 +166,64 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
       return { classroom: summary(room, uid, roles) };
     });
   }
+  if (body.action === 'teacherDashboard') {
+    if (!roles.admin && !roles.teacher) throw fail('只有教師可以查看教師工作台', 403);
+    let snaps, nextCursor = null;
+    if (roles.admin) {
+      let query = db.collection('classrooms').orderBy('__name__').limit(21);
+      if (body.cursor) query = query.startAfter(id(body.cursor));
+      const rows = await query.get();
+      snaps = rows.docs.slice(0, 20);
+      nextCursor = rows.docs.length > 20 ? rows.docs[19].id : null;
+    } else {
+      const profile = await profileRef.get();
+      snaps = await Promise.all((profile.data()?.classIds || []).slice(0, LIMITS.classes)
+        .map(key => ref(db, 'classrooms', key).get()));
+    }
+    const allowed = snaps.filter(s => s.exists).map(s => s.data()).filter(r => canManage(r, uid, roles));
+    // Only the most recent six assignments in each class are read. Submission records stay on demand.
+    const recent = await Promise.all(allowed.map(async room => {
+      const ids = room.assignmentIds.slice(-6);
+      const values = await Promise.all(ids.map(key => ref(db, 'classroomAssignments', key).get()));
+      return values.filter(s => s.exists).map(s => s.data())
+        .filter(a => a.classId === room.id).map(assignmentSummary);
+    }));
+    const [freshRoles, ...freshRooms] = await Promise.all([
+      authority(), ...allowed.map(room => ref(db, 'classrooms', room.id).get())
+    ]);
+    if (!freshRoles.admin && !freshRoles.teacher) throw fail('教師資格已失效', 403);
+    const classes = allowed.flatMap((room, i) => {
+      const latest = freshRooms[i].data();
+      if (!latest || !canManage(latest, uid, freshRoles)) return [];
+      return [{ id: latest.id, name: latest.name, status: latest.status, teacherName: latest.teacherName,
+        studentCount: latest.members.length, assignments: recent[i] }];
+    });
+    return { dashboard: { classes, nextCursor, scope: '每班最近六份作業；繳交人數需按需載入，不含學生個資' } };
+  }
   const classId = id(body.classId), roomRef = ref(db, 'classrooms', classId);
+  if (body.action === 'teacherAssignmentProgress') {
+    const assignmentId = id(body.assignmentId);
+    const [roomSnap, assignmentSnap] = await Promise.all([
+      roomRef.get(), ref(db, 'classroomAssignments', assignmentId).get()
+    ]);
+    const room = roomSnap.data(), assignment = assignmentSnap.data();
+    requireAccess(room, uid, true, roles);
+    if (!assignment || assignment.classId !== classId || assignment.status === 'draft') throw fail('找不到已發布作業', 404);
+    const members = room.members;
+    const submissions = await Promise.all(members.map(m => ref(db, 'classroomSubmissions', assignmentId + '_' + m.uid).get()));
+    const [latestRoom, latestRoles] = await Promise.all([roomRef.get(), authority()]);
+    requireAccess(latestRoom.data(), uid, true, latestRoles);
+    const currentMembers = new Set(latestRoom.data().members.map(m => m.uid));
+    const kept = members.map((m, i) => ({ ...m, status: submissions[i].data()?.status || 'not-started' }))
+      .filter(m => currentMembers.has(m.uid));
+    const submitted = kept.filter(m => m.status === 'submitted').length;
+    const inProgress = kept.filter(m => m.status === 'in-progress').length;
+    const pending = kept.filter(m => m.status !== 'submitted')
+      .sort((a,b) => a.seat.localeCompare(b.seat, 'zh-Hant', { numeric: true }) || a.name.localeCompare(b.name, 'zh-Hant'));
+    return { progress: { classId, assignmentId, studentCount: kept.length, submitted, inProgress,
+      notStarted: kept.length - submitted - inProgress, pendingCount: pending.length,
+      pendingStudents: pending.slice(0, 12).map(m => ({ name: m.name, seat: m.seat, status: m.status })) } };
+  }
   if (['postNotice', 'deleteNotice'].includes(body.action)) {
     const content = body.action === 'postNotice' ? text(body.content, 1000, '公告內容') : null;
     const noticeId = body.action === 'deleteNotice' ? id(body.noticeId) : null;
@@ -410,7 +467,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
 }
 
 function registerClassroomApi(app, { resolveA = () => playerRepository.resolve(), logger = console } = {}) {
-  const allowed = new Set(['applyTeacher', 'teacherAccounts', 'reviewTeacher', 'assignTeacher', 'list', 'createClass', 'joinClass', 'classDetail', 'postNotice', 'deleteNotice', 'overview', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'saveAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'updateDeadline', 'reopenAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
+  const allowed = new Set(['applyTeacher', 'teacherAccounts', 'reviewTeacher', 'assignTeacher', 'list', 'teacherDashboard', 'teacherAssignmentProgress', 'createClass', 'joinClass', 'classDetail', 'postNotice', 'deleteNotice', 'overview', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'saveAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'updateDeadline', 'reopenAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
   app.post('/api/classrooms', async (req, res) => {
     res.set('Cache-Control', 'no-store');
     try {
