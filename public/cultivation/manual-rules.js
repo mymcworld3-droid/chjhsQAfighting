@@ -317,14 +317,14 @@
       &&levelForExp(s.books[skill.manualId].exp)>=skill.levelRequired;
   }
   function publicState(raw,realmScore=0){
-    const s=weaponize(raw),score=normalizedScore(realmScore);
+    const s=normalize(raw),weaponIds=weaponize(raw).weaponIds,score=normalizedScore(realmScore);
     // Do not expose undiscovered scriptures to the cultivation UI.
     const library=BOOKS.filter(book=>!!s.books[book.id]).map(book=>{
       const levelInfo=mastery(s.books[book.id].exp);
       return {id:book.id,name:book.name,school:book.school,weaponType:book.weaponType,tierRealm:book.tierRealm,description:book.description,
         owned:true,...levelInfo,upgrade:upgradeQuote(levelInfo.exp),skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level,score,s.skillLevels[skill.id]))};
     });
-    return {...s,realmScore:score,realmName:realmForScore(score).name,
+    return {...s,weaponIds,realmScore:score,realmName:realmForScore(score).name,
       attackBonus:manualAttackBonus(s),maxManualLevel:MAX_LEVEL,library};
   }
   // Sum all owned manuscript levels, including a Lv.1 manuscript (+1).
