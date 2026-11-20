@@ -12,7 +12,7 @@ let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,se
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
-const label=school=>school==='sword'?'劍修':'體修';
+const label=school=>school==='sword'?'靈劍':'圖騰';
 const visible=()=>!!root?.closest('#page-training.active-page:not(.hidden)');
 function ensure(){
   const page=document.getElementById('page-training');
@@ -128,14 +128,14 @@ function markup(){
     </article>`
   ).join('');
   return `
-    <section class="manual-library" aria-label="功法收藏藏經閣">
+    <section class="manual-library" aria-label="武器收藏">
       ${renderManualCollectionHeader(current,libraryFilter,{esc})}
       <div class="manual-book-grid">${cards||'<p class="manual-empty">尚無此流派已取得的功法，請切換篩選查看。</p>'}</div>
     </section>
     ${hero}${expedition}
     <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>
     ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
-      esc,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
+      esc,bookArt,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
     })}
     <details class="manual-xp-reference"><summary>其他靈獸境界 EXP 對照</summary>
       <div>${Catalog.REALMS.map(realm=>`<span>${esc(realm.name)}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
@@ -278,7 +278,8 @@ async function mutate(url,body){
         skill?`「${skill.name}」已升至 Lv. ${skill.level}。`:
         `已升級《${target?.name||'功法'}》。`;
     }else{
-      message=url.endsWith('/school')?'修行流派已切換。':'功法配置已儲存。';
+      message=url.endsWith('/school')?'武器流派已切換。':
+        Object.hasOwn(body||{},'weaponId')?'武器裝備已儲存。':'武器配置已儲存。';
       window.dispatchEvent(new CustomEvent('xiuxian:manual-loadout-updated',{detail:{equipped:next.equipped}}));
       if(url.endsWith('/loadout')&&Array.isArray(body?.skillIds)&&body.skillIds.length&&
         selectedLoadout===next.activeLoadout&&body.skillIds.every(id=>next.equipped.includes(id)))
@@ -417,6 +418,14 @@ function boot(){
     if(button.dataset.manualPickSlot!==undefined){
       const slot=Number(button.dataset.manualPickSlot);
       if(Number.isInteger(slot)&&slot>=0&&slot<=2&&current){
+        if(Array.isArray(current.weaponIds)){
+          selectedLoadout=slot;
+          pickerSlot=pickerSlot===slot?null:slot;
+          paint();
+          if(pickerSlot!==null)requestAnimationFrame(()=>
+            root?.querySelector('[data-manual-picker]')?.scrollIntoView({block:'nearest',behavior:'smooth'}));
+          return;
+        }
         const filled=current.loadouts?.[selectedLoadout]?.skillIds?.length||0;
         const targetSlot=Math.min(slot,filled);
         pickerSlot=pickerSlot===targetSlot?null:targetSlot;
@@ -431,6 +440,26 @@ function boot(){
             });
           });
         }
+      }
+      return;
+    }
+    if(button.dataset.manualPickWeapon){
+      const weaponId=button.dataset.manualPickWeapon;
+      const slot=Number(button.dataset.manualTargetSlot);
+      if(!Number.isInteger(slot)||slot<0||slot>2||
+        !current?.library?.some(book=>book.owned&&book.id===weaponId))return;
+      if(current.weaponIds?.includes(weaponId)){
+        pickerSlot=null;paint();return;
+      }
+      selectedLoadout=slot;pickerSlot=null;
+      void mutate('/api/tactical/manuals/loadout',{index:slot,weaponId});
+      return;
+    }
+    if(button.dataset.manualRemoveWeapon!==undefined){
+      const slot=Number(button.dataset.manualRemoveWeapon);
+      if(Number.isInteger(slot)&&slot>=0&&slot<3){
+        pickerSlot=null;
+        void mutate('/api/tactical/manuals/loadout',{index:slot,weaponId:null});
       }
       return;
     }
@@ -455,7 +484,12 @@ function boot(){
       return;
     }
     if(button.hasAttribute('data-loadout-rename')){void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,name:root.querySelector('[data-loadout-name]')?.value||''});return;}
-    if(button.hasAttribute('data-loadout-apply')){void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,apply:true});return;}
+    if(button.hasAttribute('data-loadout-apply')){
+      const slot=button.hasAttribute('data-loadout-slot')?Number(button.dataset.loadoutSlot):selectedLoadout;
+      if(!Number.isInteger(slot)||slot<0||slot>2)return;
+      selectedLoadout=slot;
+      void mutate('/api/tactical/manuals/loadout',{index:slot,apply:true});return;
+    }
     if(button.hasAttribute('data-manual-refresh')){void load({force:true});return;}
     if(button.dataset.manualSchool){void mutate('/api/tactical/manuals/school',{school:button.dataset.manualSchool});return;}
     if(button.dataset.manualUpgrade){
@@ -473,7 +507,18 @@ function boot(){
       return;
     }
     if(button.dataset.manualEquip){
-      const id=button.dataset.manualEquip,equipped=current?.loadouts?.[selectedLoadout]?.skillIds||[],other=equippedVersion(id,equipped);
+      const id=button.dataset.manualEquip;
+      if(Array.isArray(current?.weaponIds)){
+        const weaponId=Catalog.BY_SKILL[id]?.manualId;
+        if(!weaponId)return;
+        const existing=current.weaponIds.indexOf(weaponId);
+        if(existing>=0){selectedLoadout=existing;pickerSlot=null;paint();return;}
+        const empty=current.weaponIds.findIndex(item=>!item);
+        const slot=empty>=0?empty:selectedLoadout;
+        void mutate('/api/tactical/manuals/loadout',{index:slot,weaponId});
+        return;
+      }
+      const equipped=current?.loadouts?.[selectedLoadout]?.skillIds||[],other=equippedVersion(id,equipped);
       const skillIds=other?equipped.map(slot=>slot===other?id:slot):[...equipped,id];
       void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,skillIds});return;
     }
