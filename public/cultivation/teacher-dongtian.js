@@ -91,7 +91,7 @@ async function loadReports(more = false) {
   state.reports = more ? [...state.reports, ...data.reports] : data.reports; state.reportCursor = data.nextCursor; state.view = 'reports'; render();
 }
 function reportsView() {
-  return `<div class="cc-toolbar"><h3>${esc(state.cave.name)} · 題目回報</h3><div class="cc-actions">${btn('return-edit', '編輯洞天')}${btn('refresh', '重新整理')}${btn('back', '返回列表')}</div></div>${state.reports.map(r => `<article class="cc-card"><h4>第 ${r.questionIndex + 1} 題 · ${r.status === 'teacher-resolved' ? '已處理' : '待處理'}</h4><div class="cc-question">${esc(r.questionSnapshot?.q)}</div><p style="white-space:pre-wrap">${esc(r.reason)}</p>${r.status === 'teacher-resolved' ? `<p class="cc-muted">處理說明：${esc(r.resolution || '已確認處理')}</p>` : `<label>處理說明（選填）<input name="resolution" maxlength="600"></label>${btn('resolve-report', '標示已處理', `data-id="${r.id}"`)}`}</article>`).join('') || '<p class="cc-muted">目前沒有教師洞天回報。</p>'}${state.reportCursor ? btn('more-reports', '載入更多回報') : ''}`;
+  return `<div class="cc-toolbar"><h3>${esc(state.cave.name)} · 題目回報</h3><div class="cc-actions">${btn('return-edit', '編輯洞天')}${btn('refresh', '重新整理')}${btn('back', '返回列表')}</div></div>${state.reports.map(r => `<article class="cc-card"><h4>第 ${r.questionIndex + 1} 題 · ${r.status === 'teacher-resolved' ? '已處理' : '待處理'}</h4><div class="cc-question">${esc(r.questionSnapshot?.q)}</div><p style="white-space:pre-wrap">${esc(r.reason)}</p>${state.cave.questions?.some(q => q.id === r.questionId) ? btn('edit-reported-question', '直接編輯此題', `data-question-id="${esc(r.questionId)}"`) : '<p class="cc-muted">這是舊題目版本的回報；目前題組已更動，請先核對內容。</p>'}${r.status === 'teacher-resolved' ? `<p class="cc-muted">處理說明：${esc(r.resolution || '已確認處理')}</p>` : `<label>處理說明（選填）<input name="resolution" maxlength="600"></label>${btn('resolve-report', '標示已處理', `data-id="${r.id}"`)}`}</article>`).join('') || '<p class="cc-muted">目前沒有教師洞天回報。</p>'}${state.reportCursor ? btn('more-reports', '載入更多回報') : ''}`;
 }
 function sourceView() {
   return `<div class="cc-toolbar"><h3>從教材生成洞天</h3>${btn('back', '返回列表')}</div><form id="td-source" class="cc-form cc-card"><label>教材文字<textarea name="text" maxlength="16000" rows="7" placeholder="貼上課文、教學筆記或出題重點"></textarea></label><label>教材圖片（最多八張，每張 2 MB）<input type="file" name="images" accept="image/png,image/jpeg,image/webp" multiple></label><span data-td-files class="cc-muted">${files.length ? `已選擇 ${files.length} 張圖片` : '文字與圖片至少提供一項'}</span><div class="cc-fields">${select('level', '適用程度', levels.map(v => [v, v]), '國中一年級')}${select('amount', '生成題數', [['low', '10–14 題'], ['medium', '15–20 題'], ['high', '21–30 題']], 'low')}</div>${btn('generate', '生成洞天草稿', 'class="cc-primary"')}<p class="cc-muted">生成完成後可直接編輯，儲存及確認發布前不會公開。</p></form>`;
@@ -134,6 +134,7 @@ function render() {
 function changed(cave) { window.dispatchEvent(new CustomEvent('teacher-dongtian:changed', { detail: { id: cave.id } })); }
 async function save(preview = false) {
   capture(); const c = state.cave;
+  if (c.status === 'active' && !window.confirm('此洞天已發布；儲存修改會立即影響正在開放的題組，正在作答的學生可能需要重新進入。建議先暫停開放或複製新草稿。確定儲存？')) return;
   state.cave = (await api({ ...c, action: 'save', tags: Array.isArray(c.tags) ? c.tags.join(',') : c.tags || '' })).cave; changed(state.cave);
   if (preview) state.view = 'preview'; render(); notice('洞天修改已儲存');
 }
@@ -172,6 +173,16 @@ async function action(target) {
   if (command === 'refresh') { await refreshAccess(true); if (state.allowed) { if (state.view === 'reports') await loadReports(); else await loadList(); } else render(); return; }
   if (command === 'reports') { state.cave = (await api({ action: 'get', id: target.dataset.id })).cave; return loadReports(); }
   if (command === 'more-reports') return loadReports(true);
+  if (command === 'edit-reported-question') {
+    const current = (await api({ action: 'get', id: state.cave.id })).cave;
+    const index = current.questions.findIndex(q => q.id === target.dataset.questionId);
+    if (index < 0) throw Error('這題已被修改或移除；不能依舊回報位置直接編輯。請檢查最新題組。');
+    state.cave = current; state.view = 'edit'; render();
+    const field = $('td-editor')?.querySelector(`[name="q-${index}"]`);
+    field?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    field?.focus({ preventScroll: true });
+    return;
+  }
   if (command === 'resolve-report') { await api({ action: 'resolveReport', id: state.cave.id, reportId: target.dataset.id, resolution: target.closest('article').querySelector('[name=resolution]').value }); return loadReports(); }
   if (command === 'back') { if (state.view === 'edit' && !confirm('返回列表？尚未儲存的修改將不保留。')) return; return loadList(); }
   if (command === 'more') return loadList(true);
