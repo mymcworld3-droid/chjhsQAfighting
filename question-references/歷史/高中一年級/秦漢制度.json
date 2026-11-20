@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-hist1-qinhan-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用制度、時代及史料種類推導結論，避免以單一來源推定全體",
+      "question": {
+        "q": "比較秦朝的郡縣制度與西漢初年的地方治理，哪項敘述較符合史實？",
+        "correct": "秦朝以郡縣制為主要地方制度；西漢初年則在部分地方並行郡縣與封國",
+        "wrong": [
+          "秦朝完全採世襲諸侯分封，西漢初年才首次建立郡縣",
+          "秦朝與西漢初年都由地方居民普選郡守與諸侯王",
+          "西漢初年立即廢除一切封國，只留下完全獨立的城邦"
+        ],
+        "exp": "秦以中央任命的郡縣官僚管理地方；西漢初年在郡縣之外存在封國，形成郡國並行格局。",
+        "subject": "歷史",
+        "sub_topic": "秦漢制度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-秦漢制度",
+        "template_id": "ref-20261120-b12-hist1-qinhan-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-hist1-qinhan-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用制度、時代及史料種類推導結論，避免以單一來源推定全體",
+      "question": {
+        "q": "漢武帝實施「推恩令」，使諸侯王部分封地可分給子弟。其主要政治影響為何？",
+        "correct": "有助於逐漸分散諸侯王國力量、加強中央對地方的控制",
+        "wrong": [
+          "使所有王國的土地立即合併成一個更大的諸侯國",
+          "將郡縣官員的任命權完全交給地方民眾",
+          "停止中央對各地的治理，讓諸侯取得不受限制的軍政權"
+        ],
+        "exp": "推恩令使封國可進一步分割，長期削弱大封國的資源與政治力量，是漢武帝加強中央集權的措施之一。",
+        "subject": "歷史",
+        "sub_topic": "秦漢制度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-秦漢制度",
+        "template_id": "ref-20261120-b12-hist1-qinhan-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-hist1-qinhan-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用制度、時代及史料種類推導結論，避免以單一來源推定全體",
+      "question": {
+        "q": "若研究秦漢官員如何將命令傳達至各地，最適合比較哪類史料以了解行政運作？",
+        "correct": "簡牘中的公文、法律及官員往返紀錄",
+        "wrong": [
+          "只根據後世小說描寫推定每位官員的工作細節",
+          "只使用現代城市地圖，不查考當時行政文件",
+          "以一件宮廷裝飾品直接代表所有地區的公文制度"
+        ],
+        "exp": "簡牘與出土行政文書保留官府公文、法令及紀錄，可直接反映制度實際運作；其他材料可補充但無法單獨替代。",
+        "subject": "歷史",
+        "sub_topic": "秦漢制度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-秦漢制度",
+        "template_id": "ref-20261120-b12-hist1-qinhan-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
