@@ -89,6 +89,13 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
     await as(page, 'applicant');
     assert.equal(await page.locator('[data-form=create]').count(), 0);
     assert.equal(await page.locator('.cc-workspace-room').count(), 2);
+    await page.setViewportSize({ width: 320, height: 640 });
+    await measure(page);
+    await page.locator('.cc-workspace-tabs [data-tab=summary]').focus();
+    await page.keyboard.press('ArrowRight');
+    await page.waitForFunction(() => document.querySelector('.cc-workspace-tabs [data-tab=classes]')?.getAttribute('aria-selected') === 'true');
+    await measure(page);
+    await page.setViewportSize({ width: 1366, height: 850 });
     await page.locator('.cc-workspace-room').filter({hasText:'七年一班'}).locator('[data-action=workspace-class]').click();
     await ready(page);
     assert.equal(await page.locator('.cc-class-tabs [role=tab]').count(), 6);
