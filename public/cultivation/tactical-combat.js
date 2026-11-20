@@ -216,8 +216,10 @@ async function editBattleWeapon(slot,weaponId){
     if(!valid(session,account)||state?.id!==roomId)return;
     battleLoadouts=result.state;loadoutFetchedFor=account;
     loadoutMenuOpen=false;weaponSelectionOpen=false;selectedWeaponId='';
-    // One atomic server transaction updated both the save and live solo actor.
-    await sync();
+    // Refresh directly: task()/sync() would refuse while this edit is busy.
+    const live=await api('/api/tactical/state?mode=pve');
+    if(valid(session,account)&&state?.id===roomId&&live.state)
+      accept(live.state,++op);
     if(valid(session,account))notice(weaponId?'武器已裝備，可立即選用三招':'武器已卸下');
   }catch(error){if(valid(session,account))notice(error.message||'武器更新失敗');}
   finally{busy=false;if(valid(session,account)){renderBattleLoadouts();updateControls();}}
