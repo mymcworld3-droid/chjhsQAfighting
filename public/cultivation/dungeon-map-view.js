@@ -891,7 +891,16 @@ class DungeonMapView{
             result.skillName+chainProgress+' · '+result.totalDamage+
             ' 傷害 · '+(result.hits?.length||0)+' 次命中'+
             (result.focusEmpowered?' · 蓄勢剩餘 '+result.focusCharges+'/6':'')+
-            (defeated?' · 擊敗 '+defeated+' 隻':''));
+            (defeated?' · 擊敗 '+defeated+' 隻':'')+
+            (result.manualMastery?.exp?
+              ' · 《'+result.manualMastery.bookName+'》+'+
+              result.manualMastery.exp+' EXP':''));
+          if(result.manualMastery?.exp){
+            // C has already committed the kill. Reconcile the A receipt
+            // separately, including retries after transient account errors.
+            void import('./dungeon-room.js').then(api=>
+              api.claimDungeonManualExp(roomId)).catch(()=>{});
+          }
           if(result.position){
             this.follow=true;this.followBeast=false;
             this.camera=Camera.focusOn(this.camera,this.selfPad(),
