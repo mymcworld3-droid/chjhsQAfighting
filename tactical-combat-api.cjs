@@ -199,13 +199,8 @@ async function chooseSchool(db,uid,input){
         next.equipped.push(introductory.id);
       }
     }
-    const modern=Manuals.weaponize(next);
-    if(!modern.weaponIds.some(Boolean)){
-      const starter=Manuals.starterFor(school);
-      if(modern.books[starter])modern.weaponIds[0]=starter;
-    }
-    const saved=Manuals.normalize(modern);
-    tx.set(ref,saved);return manualResponse(saved,exists(user));
+    next.loadouts[next.activeLoadout].skillIds=[...next.equipped];
+    tx.set(ref,next);return manualResponse(next,exists(user));
   });
 }
 async function equipManualSkills(db,uid,input){
