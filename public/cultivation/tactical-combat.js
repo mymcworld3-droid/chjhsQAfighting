@@ -442,6 +442,8 @@ function updateWheelChoices(container,options,selected,moveCost,hero,locked){
   }
   for(const [index,option] of options.entries()){
     const button=container.children[index],cost=option.skill?R.techniqueCost(hero,option.skill):null;
+    const empowered=!!option.skill&&R.focusTurns(hero)>0&&
+      option.skill.school==='body'&&option.skill.kind!=='fist-focus';
     const price=cost===null?(option.value==='sword'?'每 2 格 1 體力':moveCost):cost+' 體力';
     const unavailable=cost===null?'':hero.attacks>=R.attackLimit(hero)?'本回合出手次數已滿':
       hero.actions>=R.LIMITS.actions?'本回合行動次數已滿':
@@ -454,7 +456,10 @@ function updateWheelChoices(container,options,selected,moveCost,hero,locked){
       (description?'。'+description:'')+(unavailable?'，'+unavailable:''));
     button.title=unavailable||option.name+' · '+price+(description?' · '+description:'');
     button.classList.toggle('is-unavailable',!!unavailable);
-    wheelText(button.firstElementChild,option.name,price,skillArt(option.skill));
+    button.classList.toggle('is-focus-empowered',empowered);
+    button.dataset.focusEmpowered=String(empowered);
+    if(empowered)button.title='✦ 金身蓄勢強化 · 體力減半 · '+option.name+' · '+price;
+    wheelText(button.firstElementChild,empowered?'✦ '+option.name:option.name,price,skillArt(option.skill));
   }
 }
 function wheelMarker(marker,angle,radius){
@@ -632,7 +637,7 @@ function nextSealRangeFocus(){
 function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
   root.classList.toggle('tc-quarter-layout',state?.mode==='pve');
-  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><div class="tc-seal-range-toolbar" data-seal-range-toolbar role="group" aria-label="陣眼效果範圍" hidden><button type="button" data-seal-range-toggle aria-pressed="true" title="切換陣眼效果範圍">陣眼範圍：全部</button><button type="button" data-seal-range-next hidden title="查看下一座陣眼的範圍">下一座</button><button type="button" data-seal-guide-help title="再看一次陣眼攻擊教學" aria-label="陣眼攻擊教學">？</button><span data-seal-range-note aria-live="polite"></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><span data-threat-a11y class="tc-threat-a11y" role="status" aria-live="polite" aria-atomic="true"></span><div class="tc-seal-guide" data-seal-guide hidden role="note"><strong>封印關卡 · 攻擊陣眼</strong><p>發光的懸浮晶核是可破壞的目標。先選擇普通攻擊或有效功法，再點選紅色射程內的陣眼；通常命中兩次就能破除。體力不足可先答題充能。</p><button type="button" data-seal-guide-dismiss>知道了</button></div><div class="tc-seal-target-hint" data-seal-target-hint hidden role="status" aria-live="polite"></div><div class="tc-objective" data-objective role="status" aria-live="polite" hidden></div>
+  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><div class="tc-seal-range-toolbar" data-seal-range-toolbar role="group" aria-label="陣眼效果範圍" hidden><button type="button" data-seal-range-toggle aria-pressed="true" title="切換陣眼效果範圍">陣眼範圍：全部</button><button type="button" data-seal-range-next hidden title="查看下一座陣眼的範圍">下一座</button><button type="button" data-seal-guide-help title="再看一次陣眼攻擊教學" aria-label="陣眼攻擊教學">？</button><span data-seal-range-note aria-live="polite"></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-focus-layer" data-focus-layer aria-hidden="true"></div><span class="tc-focus-indicator" data-focus-indicator role="status" aria-live="polite" hidden></span><span data-threat-a11y class="tc-threat-a11y" role="status" aria-live="polite" aria-atomic="true"></span><div class="tc-seal-guide" data-seal-guide hidden role="note"><strong>封印關卡 · 攻擊陣眼</strong><p>發光的懸浮晶核是可破壞的目標。先選擇普通攻擊或有效功法，再點選紅色射程內的陣眼；通常命中兩次就能破除。體力不足可先答題充能。</p><button type="button" data-seal-guide-dismiss>知道了</button></div><div class="tc-seal-target-hint" data-seal-target-hint hidden role="status" aria-live="polite"></div><div class="tc-objective" data-objective role="status" aria-live="polite" hidden></div>
       <section class="tc-boss-hud" data-boss-hud data-phase="1" data-boss-kind="rock" aria-label="首領生命與攻擊預告" hidden>
         <div class="tc-boss-line"><strong class="tc-boss-name" data-boss-name></strong><span class="tc-boss-phase" data-boss-phase>第一階段</span></div>
         <div class="tc-boss-health" data-boss-health role="progressbar" aria-label="首領生命">
@@ -933,6 +938,15 @@ function updateControls(){
     chosenSkill=action==='manual'?R.manualSkillFor(me,selectedManualSkill):basic,
     shown=chosenSkill||basic,animating=renderer?.isAnimating,locked=busy||animating;
   const quizButton=$('[data-quiz]');
+  const focusTurns=me?R.focusTurns(me):0;
+  const focusBadge=$('[data-focus-indicator]');
+  if(focusBadge){
+    const active=state.mode==='pve'&&state.status==='active'&&
+      R.alive(me)&&focusTurns>0;
+    focusBadge.hidden=!active;
+    focusBadge.textContent=active?'✦ 金身蓄勢 '+focusTurns+'/2 回合':'';
+    focusBadge.title=active?'體術技能體力減半；每回合最多施放三次技能':'';
+  }
   quizButton.disabled=!canQuestion()||locked;
   if(root.classList.contains('tc-quarter-layout')){
     const ready=!quizButton.disabled&&!modalOpen;
@@ -1042,6 +1056,7 @@ function updateControls(){
     const ring=$('.tc-quarter-action'),choices=ring.querySelector('.tc-wheel-options');
     const options=wheelDetailOptions(me,!attacking),selected=attacking?attackChoice:(action==='sword-move'?'sword':'player');
     updateWheelChoices(choices,options,selected,moveCostLabel,me,!mine||locked);
+    ring.classList.toggle('has-focus',focusTurns>0);
     choices.setAttribute('aria-label',attacking?'選擇攻擊技能':'移動目標');
     const targetName=attacking?shown.name:action==='sword-move'?'飛劍':'角色',targetCost=attacking?chosenCost:moveCostLabel;
     const detailSelection=Math.max(0,options.findIndex(option=>option.value===selected));
@@ -1052,7 +1067,11 @@ function updateControls(){
     const actionThumb=$('.tc-wheel-action-marker'),detailThumb=$('.tc-wheel-detail-marker');
     actionThumb.textContent=attacking?'攻擊':'移動';
     wheelText(detailThumb,targetName,targetCost,attacking?skillArt(shown):'');
-    detailThumb.title=targetName+' · '+targetCost+(attacking?' · '+description:'');
+    const chosenEmpowered=attacking&&focusTurns>0&&shown.school==='body'&&
+      shown.kind!=='fist-focus';
+    detailThumb.classList.toggle('is-focus-empowered',chosenEmpowered);
+    detailThumb.title=(chosenEmpowered?'✦ 金身蓄勢強化 · ':'')+
+      targetName+' · '+targetCost+(attacking?' · '+description:'');
     const actionAngle=attacking?WHEEL_ANGLES.upper:WHEEL_ANGLES.lower;
     wheelMarker(actionThumb,actionAngle,WHEEL_RADII.action);
     wheelMarker(detailThumb,selectedAngle,WHEEL_RADII.detail);
