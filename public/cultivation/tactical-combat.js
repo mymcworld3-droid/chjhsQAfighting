@@ -3,7 +3,8 @@ import {skillArt,bookArt} from './manual-art.js';
 import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-recap.js';
 import {manualXpDelta,renderManualXpToast} from './tactical-manual-xp-feedback.js';
 import {manualRoomExp,battleBreakthroughEstimate,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
-import './tactical-rules.js?v=20261116-pve-v4';
+import './flying-sword-path.js?v=20261120-sword-movement-v1';
+import './tactical-rules.js?v=20261120-sword-movement-v1';
 import './tactical-seal-targeting.js?v=20261119-seal-target-v1';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261118-phase7-compass-v1';
 import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
@@ -185,7 +186,7 @@ function syncPvpSkillTabs(){
   const tabs=$('.tc-action-tabs'),actor=myActor();
   if(!tabs||!actor)return;
   const skills=equippedTechniques(actor);
-  const key=skills.map(skill=>skill.id).join('|')||'basic';
+  const key=(skills.map(skill=>skill.id).join('|')||'basic')+'|sword:'+!!actor.flyingSword;
   if(tabs.dataset.loadoutKey===key)return;
   const move=tabs.querySelector('[data-action="move"]')||document.createElement('button');
   move.type='button';move.dataset.action='move';move.textContent='移動';
@@ -195,7 +196,9 @@ function syncPvpSkillTabs(){
     return button;
   }):[Object.assign(document.createElement('button'),{type:'button',textContent:'普通攻擊 · 2'})];
   if(!skills.length)buttons[0].dataset.action='attack';
-  tabs.replaceChildren(move,...buttons);tabs.dataset.loadoutKey=key;
+  const moveSword=document.createElement('button');
+  moveSword.type='button';moveSword.dataset.action='sword-move';moveSword.textContent='移動飛劍';
+  tabs.replaceChildren(move,...(actor.flyingSword?[moveSword]:[]),...buttons);tabs.dataset.loadoutKey=key;
 }
 function ensure(){
   if(root){keyboardGuard||=installTacticalKeyboardGuard(root);return;}
@@ -411,7 +414,8 @@ function wheelWedge(start,end,outer,inner){
   return 'polygon('+points.map(([x,y])=>x.toFixed(3)+'% '+y.toFixed(3)+'%').join(',')+')';
 }
 function wheelDetailOptions(hero,moving){
-  if(moving)return [{value:'player',name:'玩家'}];
+  if(moving)return [{value:'player',name:'角色'},
+    ...(hero?.flyingSword?[{value:'sword',name:'飛劍'}]:[])];
   const skills=equippedTechniques(hero);
   const attacks=skills.length?skills:[R.basicFor(hero)];
   return attacks.map(skill=>({
@@ -438,7 +442,7 @@ function updateWheelChoices(container,options,selected,moveCost,hero,locked){
   }
   for(const [index,option] of options.entries()){
     const button=container.children[index],cost=option.skill?R.techniqueCost(hero,option.skill):null;
-    const price=cost===null?moveCost:cost+' 體力';
+    const price=cost===null?(option.value==='sword'?'每 2 格 1 體力':moveCost):cost+' 體力';
     const unavailable=cost===null?'':hero.attacks>=R.attackLimit(hero)?'本回合出手次數已滿':
       hero.actions>=R.LIMITS.actions?'本回合行動次數已滿':
       cost>hero.stamina?'體力不足，還需要 '+(cost-hero.stamina)+' 點':'';
@@ -519,11 +523,16 @@ function selectWheel(value){
   syncEquippedAttack();
   if(value==='attack-ring'||value==='attack')value=attackChoice;
   if(value==='player'){
-    if(action!=='move')return;
-    updateControls();return;
+    if(action!=='move'&&action!=='sword-move')return;
+    value='move';
+  }
+  if(value==='sword'){
+    if(!myActor()?.flyingSword)return;
+    value='sword-move';
   }
   const previousAction=action,previousManual=selectedManualSkill;
   if(value==='move')action='move';
+  else if(value==='sword-move'&&myActor()?.flyingSword)action='sword-move';
   else if(value==='attack'&&!equippedTechniques(myActor()).length){
     action='attack';attackChoice='attack';
   }else if(value.startsWith('manual:')&&R.manualSkillFor(myActor(),value.slice(7))){
@@ -533,7 +542,7 @@ function selectWheel(value){
   if(action!==previousAction||selectedManualSkill!==previousManual){
     sealPeekPosition=null;selection=null;
     const me=myActor(),attackSkill=action==='manual'?R.manualSkillFor(me,selectedManualSkill):R.basicFor(me);
-    if(me&&action!=='move'&&(attackSkill?.range===0||attackSkill?.kind==='ring')){
+    if(me&&action!=='move'&&action!=='sword-move'&&(attackSkill?.range===0||attackSkill?.kind==='ring')){
       selection={x:me.x,y:me.y};
     }
   }
@@ -808,14 +817,14 @@ function buildGame(){
   renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){
     // In move mode a live seal is an information target, not a walk tile.
     // Attack mode retains its existing tap-to-cast and direction handling.
-    if(action==='move'&&R.sealInfo(state,p)?.active&&sealInspector?.inspect(p))return;
+    if((action==='move'||action==='sword-move')&&R.sealInfo(state,p)?.active&&sealInspector?.inspect(p))return;
     sealPeekPosition=null;selection=p;renderer.update(state,uid,battlefieldMode(),selection);updateControls();
     // The sketch has no extra confirm button: choosing a valid map tile
     // directly executes the selected move or directional attack.
     const selectedSeal=R.sealInfo(state,p);
     if(root.classList.contains('tc-quarter-layout')&&
-      ['move','attack','skill','manual'].includes(action)&&
-      !(selectedSeal?.active&&action==='move')&&
+      ['move','sword-move','attack','skill','manual'].includes(action)&&
+      !(selectedSeal?.active&&(action==='move'||action==='sword-move'))&&
       !$('[data-execute]').disabled)void execute();
   }},()=>{
     if(!opened||!state||!renderer)return;updateControls();
@@ -942,16 +951,24 @@ function updateControls(){
   const quarter=root.classList.contains('tc-quarter-layout'),cost=R.techniqueCost(me,shown);
   const basicTab=$('[data-action="attack"]');
   if(basicTab&&!quarter&&basicTab.dataset.action==='attack')basicTab.textContent='普通攻擊 · '+basic.cost;
-  let label=action==='move'?'選擇移動位置':directional?'選擇攻擊方向':
+  let label=action==='move'?'選擇移動位置':action==='sword-move'?'選擇飛劍移動位置':directional?'選擇攻擊方向':
     shown.kind==='ring'?'震擊周圍':shown.kind==='dash-cleave'?'選擇突進落點':
       shown.kind==='flying-sword'?(me.flyingSword?'選擇飛劍移動位置':'選擇召劍位置'):'選擇施放位置';
   let error='',moveStamina=null;
   const d=selection&&directional&&(selection.x===me.x||selection.y===me.y)?
     R.attackDirection(me,selection):null;
   const direction=d?(d.x>0?'右':d.x<0?'左':d.y>0?'下':'上'):'';
-  if(action==='move'&&selectedSeal?.active){
+  if((action==='move'||action==='sword-move')&&selectedSeal?.active){
     label='這是可攻擊的陣眼，請切換攻擊模式';
     error='此處是陣眼，請先選擇攻擊招式';
+  }else if(action==='sword-move'&&selection){
+    const route=R.swordRoute(state,me,selection),steps=route?route.length-1:0;
+    if(steps>0&&steps%2===0)moveStamina=steps/2;
+    label=steps>0?'飛劍移動 '+steps+' 格 · '+(steps/2)+' 體力':'無法移動飛劍至此';
+    if(!me.flyingSword)error='目前沒有飛劍';
+    else if(!steps||steps%2)error='飛劍必須移動偶數格';
+    else if(R.at(state,selection))error='飛劍落點必須是空地';
+    else if(steps/2>me.stamina)error='體力不足';
   }else if(action==='move'&&selection){
     const route=R.path(state,me,selection,uid),cost=route?route.length-1:0;
     if(route&&route.length>1)moveStamina=cost;
@@ -968,7 +985,7 @@ function updateControls(){
   }
   // A valid aim does not guarantee that an AoE actually hits the seal.
   // Block an auto-cast when the selected seal is outside its real hit cells.
-  if(selectedSeal?.active&&action!=='move'&&!error){
+  if(selectedSeal?.active&&action!=='move'&&action!=='sword-move'&&!error){
     const guidance=SealTargets.at(renderer?.sealTargetPlan,selection);
     if(guidance&&guidance.status!=='ready')error=guidance.reason;
     let affected=[];
@@ -978,10 +995,11 @@ function updateControls(){
   }
   const description=Manuals.descriptionWithDamage(me.atk,shown,
     {flyingSwordReady:!!me.flyingSword});
-  $('[data-skill-title]').textContent=action==='move'?'移動說明':
+  $('[data-skill-title]').textContent=action==='move'||action==='sword-move'?'移動說明':
     `${shown.name} · ${cost} 體力`;
   $('[data-skill]').innerHTML=action==='move'?
     '<p>每移動一格固定消耗 1 體力，路線繞路也計入；緩速時一次最多移動 2 格。選好位置後移動。</p>':
+    action==='sword-move'?'<p>飛劍沿最短路徑移動偶數格，每 2 格消耗 1 體力，穿過靈獸會造成傷害。</p>':
     `<p>${esc(description)}</p>`;
   $('[data-execute]').textContent=error||label;
   $('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
@@ -1019,18 +1037,18 @@ function updateControls(){
     }
   });
   if(quarter){
-    const attacking=action!=='move';
+    const attacking=action!=='move'&&action!=='sword-move';
     const chosenCost=cost+' 體力',moveCostLabel=moveStamina===null?'1 體力/格':moveStamina+' 體力';
     const ring=$('.tc-quarter-action'),choices=ring.querySelector('.tc-wheel-options');
-    const options=wheelDetailOptions(me,!attacking),selected=attacking?attackChoice:'player';
+    const options=wheelDetailOptions(me,!attacking),selected=attacking?attackChoice:(action==='sword-move'?'sword':'player');
     updateWheelChoices(choices,options,selected,moveCostLabel,me,!mine||locked);
     choices.setAttribute('aria-label',attacking?'選擇攻擊技能':'移動目標');
-    const targetName=attacking?shown.name:'玩家',targetCost=attacking?chosenCost:moveCostLabel;
+    const targetName=attacking?shown.name:action==='sword-move'?'飛劍':'角色',targetCost=attacking?chosenCost:moveCostLabel;
     const detailSelection=Math.max(0,options.findIndex(option=>option.value===selected));
     const selectedAngle=detailAngle(detailSelection,options.length);
     ring.setAttribute('aria-label',attacking?
       '行動：攻擊；'+targetName+'，'+targetCost:
-      '行動：移動；目標：玩家，'+moveCostLabel);
+      '行動：移動；目標：'+targetName+'，'+moveCostLabel);
     const actionThumb=$('.tc-wheel-action-marker'),detailThumb=$('.tc-wheel-detail-marker');
     actionThumb.textContent=attacking?'攻擊':'移動';
     wheelText(detailThumb,targetName,targetCost,attacking?skillArt(shown):'');
@@ -1044,8 +1062,10 @@ function updateControls(){
     wheelSliderAngle($('.tc-wheel-slider-detail'),selectedAngle);
   }
   $('[data-range-legend]').textContent=(action==='move'?'灰格可走':
+    action==='sword-move'?'青格可飛':
     ['dash-cleave','flying-sword'].includes(shown.kind)?'金格為落點':'紅格射程')+' · 紅框預告';
   const hint=action==='move'?'點選灰格移動':
+    action==='sword-move'?'點選青格讓飛劍沿最短路徑移動':
     action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):
     shown.kind==='dash-cleave'?'點選金色地格突進，紅格為攻擊範圍':
     shown.kind==='flying-sword'?(me.flyingSword?'點選金色地格御劍':'點選金色地格召喚飛劍'):
