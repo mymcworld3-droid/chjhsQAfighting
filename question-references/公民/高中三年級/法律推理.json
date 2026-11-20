@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-civ3-legalreason-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "公平與法律要件以題目明示的條件分析，避免過度概括",
+      "question": {
+        "q": "某場地規則明定：「必須事先登記，且攜帶有效識別證，才能入場。」甲已登記但未帶證件；乙未登記但帶證件。若無例外規定，哪項判斷正確？",
+        "correct": "甲、乙皆不符合全部入場必要條件",
+        "wrong": [
+          "甲已登記，所以即使未帶證件也一定符合規則",
+          "乙已帶識別證，所以無須登記即可入場",
+          "只要兩人各符合一項，便可共同視為完成全部條件"
+        ],
+        "exp": "規則以「且」連結兩個必要條件，必須同時滿足；兩人都欠缺其中一項。",
+        "subject": "公民",
+        "sub_topic": "法律推理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中三年級-法律推理",
+        "template_id": "ref-20261120-b12-civ3-legalreason-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-civ3-legalreason-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "公平與法律要件以題目明示的條件分析，避免過度概括",
+      "question": {
+        "q": "假設一項校規明定：「因實驗課程需要且經授課教師核准者，可以在課堂錄影；其他情況不得錄影。」某生因社團宣傳而錄影，雖有同學口頭同意，但未經授課教師核准。依規則文字最適當的判斷為何？",
+        "correct": "未符合實驗課程需要與教師核准的條件，因此不在允許範圍內",
+        "wrong": [
+          "同學口頭同意可自動取代校規中全部要件",
+          "只要錄影用途是社團宣傳，就可推定屬於實驗課程",
+          "規則既設例外，便表示任何錄影行為都已開放"
+        ],
+        "exp": "例外許可須同時具備實驗課程需要及教師核准；社團宣傳與同學同意並不滿足明示條件。",
+        "subject": "公民",
+        "sub_topic": "法律推理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中三年級-法律推理",
+        "template_id": "ref-20261120-b12-civ3-legalreason-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-civ3-legalreason-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "公平與法律要件以題目明示的條件分析，避免過度概括",
+      "question": {
+        "q": "某規定寫明：「凡於9月1日以後完成登記者，適用新收費標準；此前完成登記者適用舊標準。」甲於8月30日完成，乙於9月2日完成。若無其他例外，哪項判斷正確？",
+        "correct": "甲適用舊標準，乙適用新標準",
+        "wrong": [
+          "甲、乙均適用新標準，因規定發布後一律回溯",
+          "甲、乙均適用舊標準，因同屬9月以前的申請期",
+          "甲適用新標準，乙適用舊標準"
+        ],
+        "exp": "以完成登記日而非使用日判斷：8月30日在9月1日前；9月2日在9月1日後，所以分別適用舊、新標準。",
+        "subject": "公民",
+        "sub_topic": "法律推理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中三年級-法律推理",
+        "template_id": "ref-20261120-b12-civ3-legalreason-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
