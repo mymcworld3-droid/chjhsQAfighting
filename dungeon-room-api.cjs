@@ -547,7 +547,8 @@ function createHandler({
           const evolved={...current,...(battleDelta||{})};
           const outcome=action==='skill'?
             Skills.castSkill(evolved,uid,map,record,{
-              skillId:req.body?.skillId,target:req.body?.target,seq:req.body?.seq
+              skillId:req.body?.skillId,target:req.body?.target,seq:req.body?.seq,
+              moveSword:req.body?.moveSword===true
             }):Skills.switchLoadout(evolved,uid,record,req.body?.index);
           if(outcome.duplicate&&!battleDelta)return current;
           const mastery=action==='skill'&&!outcome.duplicate?
