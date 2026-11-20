@@ -239,8 +239,19 @@
     }else if(move==='flight-summon'){
       const hadSword=!!scene.before?.find(a=>a.uid===scene.actor)?.flyingSword;
       if(hadSword){
-        const q=phase(p,.05,.92),tip=beam(from,to,q,jade,.045);
-        for(let i=0;i<5;i++)circle(point(from,tip,i/5),.07+i*.012,(1-p)*.55,white,.014);
+        const track=Array.isArray(scene.path)&&scene.path.length>1?
+          scene.path.map(center):[from,to];
+        const travel=phase(p,.05,.92)*(track.length-1);
+        const index=Math.min(track.length-2,Math.floor(travel));
+        const q=travel-index,tip=point(track[index],track[index+1],q);
+        glow(jade,.18);
+        for(let i=0;i<index;i++){
+          stroke(track[i],track[i+1],jade,.09,(1-p)*.65);
+          stroke(track[i],track[i+1],white,.025,(1-p)*.82);
+        }
+        stroke(track[index],tip,jade,.12,(1-p)*.7);
+        stroke(track[index],tip,white,.036,(1-p)*.9);
+        circle(tip,.14,beat*.65,white,.025);
         sparks(tip,8,jade,.38);
       }else{
         circle(to,.12+p*.5,beat,jade,.035);circle(to,.44-p*.18,beat*.8,white,.018);
