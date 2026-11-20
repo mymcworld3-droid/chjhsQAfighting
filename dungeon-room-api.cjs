@@ -15,6 +15,7 @@ const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
 const {strikeEnemy,recordedMax}=require('./dungeon-player-combat.cjs');
 const Skills=require('./dungeon-skill-combat.cjs');
 const QuizCredit=require('./dungeon-quiz-credit.cjs');
+const QuizErrorRefund=require('./dungeon-quiz-error-refund.cjs');
 const {staminaFor,clampStamina}=require('./dungeon-stamina-rules.cjs');
 const Objectives=require('./dungeon-objectives.cjs');
 const Boss=require('./dungeon-boss-battle.cjs');
@@ -151,7 +152,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','move-route','strike','skill','loadout','quiz-credit','activate-portal','enter-boss','boss-ready','boss-guard','rescue','claim-boss-reward','claim-manual-exp','recent-victories','clock'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','move-route','strike','skill','loadout','quiz-credit','quiz-error-refund','activate-portal','enter-boss','boss-ready','boss-guard','rescue','claim-boss-reward','claim-manual-exp','recent-victories','clock'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -673,6 +674,50 @@ function createHandler({
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
             revision:next.revision});
           return next;
+        });
+        return respond(roomId,updated);
+      }
+      if(action==='quiz-error-refund'){
+        // A-side approved-report proof is read only by the authenticated
+        // server. The C receipt and stamina update are one transaction:
+        // parallel retries from multiple devices can never pay twice.
+        const questionId=req.body?.questionId;
+        const snapA=await resolveA().db.collection('dungeonQuizStates').doc(uid).get();
+        const report=snapA.exists?snapA.data():null;
+        const updated=await db.runTransaction(async tx=>{
+          const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
+          if(!current||!hasMember(current,uid))
+            throw err('你不是此副本的隊員',403);
+          if(!sessionRoom(current,at)||current.status!=='assembled')
+            throw err('副本已結束或房間已過期',410);
+          const verified=QuizErrorRefund.calculate(current,uid,report,
+            questionId,roomId);
+          const receiptRef=db.collection(QuizErrorRefund.RECEIPTS)
+            .doc(verified.receiptId);
+          const receipt=await tx.get(receiptRef);
+          const map=roomMap(current,roomId);
+          const battleDelta=advanceWorld(current,map,at);
+          if(receipt.exists&&!battleDelta)return current;
+          const evolved={...current,...(battleDelta||{})};
+          if(receipt.exists){
+            tx.update(roomRef,{...(battleDelta||{}),
+              revision:current.revision+1});
+            return {...evolved,revision:current.revision+1};
+          }
+          const member=evolved.members[uid];
+          const after=staminaFor(member);
+          const granted=Math.min(QuizCredit.MAX_STAMINA-after,
+            verified.nominal);
+          const members={...evolved.members,[uid]:{...member,
+            explorationStamina:after+granted,
+            lastQuizErrorRefund:{questionId,
+              granted,nominal:verified.nominal}}};
+          tx.set(receiptRef,{uid,roomId,
+            session:verified.session,questionId,
+            granted,nominal:verified.nominal,createdAtMs:at});
+          tx.update(roomRef,{...(battleDelta||{}),
+            members,revision:current.revision+1});
+          return {...evolved,members,revision:current.revision+1};
         });
         return respond(roomId,updated);
       }
