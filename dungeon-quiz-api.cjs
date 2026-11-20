@@ -226,7 +226,9 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
     }
     const review={uid,questionId:q.id,index:index+1,choice,answerIndex:q.answerIndex,
       correct,amount,explanation:q.explanation,q:q.q,opts:q.opts,
-      subject:q.subject,topic:q.topic,reward:{
+      subject:q.subject,topic:q.topic,learningTopic:q.learningTopic,
+      difficulty:q.difficulty,adaptive:q.adaptive||null,meta:q.meta||{},
+      reward:{
         cultivation,gold:0,learning:learningReward.message||''
       }};
     s.answered=index+1;
