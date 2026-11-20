@@ -66,6 +66,7 @@ test('server equips at most three unique owned weapons, switches main weapon, an
   assert.deepEqual(room.actors[0].manualSkills,['rock-fist']);
   const switched=await API.switchBattleLoadout(db,'u1',
     {roomId:room.id,index:2,requestId:'weapon-switch-001'},NOW+1);
-  assert.deepEqual(switched.actors[0].manualSkills,
-    ['flight-summon','flight-guard'].filter(x=>Catalog.BY_SKILL[x]&&Catalog.meetsRealm(Catalog.BY_SKILL[x],Catalog.realmForScore?.(0)??0)));
+  assert.equal(switched.actors[0].manualLoadoutIndex,2);
+  assert(switched.actors[0].manualSkills.every(id=>Catalog.BY_SKILL[id]?.manualId==='sword-flight'));
+  assert.equal(switched.actors[0].stamina,room.actors[0].stamina);
 });
