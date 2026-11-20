@@ -4434,8 +4434,10 @@ window.openQuizScopeSettings = () => {
         window.showToast?.('範圍設定準備中，請稍後再試。');
         return false;
     }
-    window.switchToPage('page-settings');
-    window.openCurriculumStudio();
+    // Scope editor is an overlay: keep the live quiz and trial session underneath.
+    // Returning from quiz goes back to quiz; opening from settings stays in settings.
+    const origin = document.querySelector('.page-section.active-page')?.id || 'page-settings';
+    window.openCurriculumStudio({ returnPage: origin });
     return true;
 };
 // Older cached quiz markup uses this name; it now opens settings too.

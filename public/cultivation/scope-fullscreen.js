@@ -6,6 +6,7 @@ import { playerRepository } from './data/player-repository.js';
   const $ = id => document.getElementById(id);
   let studio, block, scopeBody, saveButton, cartSource, opened = false;
   let baseline = null, previousFocus = null, bodyOverflow = '', htmlOverflow = '', saving = false;
+  let returnPage = 'page-settings';
   let sharing = false, lastShared = '';
   let transferFocus = null;
   const clone = value => JSON.parse(JSON.stringify(value));
@@ -199,8 +200,14 @@ import { playerRepository } from './data/player-repository.js';
     finishTransition?.();
   }
 
-  function open() {
+  function open(options = {}) {
     if (!mount() || opened) return;
+    const activePage = document.querySelector('.page-section.active-page')?.id;
+    returnPage = options?.returnPage || activePage || 'page-settings';
+    const backLabel = returnPage === 'page-quiz' ? '返回問道試煉' : '返回設定';
+    const closeButton = $('ss-close');
+    closeButton?.setAttribute('aria-label', backLabel);
+    if (closeButton?.querySelector('span')) closeButton.querySelector('span').textContent = backLabel;
     const finishTransition = window.beginSceneTransition?.(document.querySelector('.active-page'), studio, 'scroll', 'scope-open');
     previousFocus = document.activeElement;
     baseline = snapshot();
@@ -255,6 +262,10 @@ import { playerRepository } from './data/player-repository.js';
     document.body.style.overflow = bodyOverflow;
     document.documentElement.style.overflow = htmlOverflow;
     updateSummary();
+    // Closing the overlay must restore its origin, never unconditionally navigate to settings.
+    const activePage = document.querySelector('.page-section.active-page')?.id;
+    if (returnPage && activePage !== returnPage)
+      window.switchToPage?.(returnPage, { preserveTrialTower: true });
     if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
     else $('dongfu-scope-card')?.querySelector('.dongfu-collapse-head')?.focus({ preventScroll: true });
     finishTransition?.();
@@ -274,11 +285,21 @@ import { playerRepository } from './data/player-repository.js';
         if (feedback) feedback.textContent = '尚未儲存，請確認暱稱、題庫或至少一個單元。';
         return;
       }
+      const scopeChanged = changed();
       baseline = snapshot();
       if (feedback) feedback.textContent = '出題範圍已儲存。';
       updateSummary();
       saving = false;
+      const origin = returnPage;
       close(true);
+      window.dispatchEvent(new CustomEvent('qingyun:tactical-tutorial', {
+        detail: { uid: window.getCurrentUserData?.()?.uid, kind: 'scope-saved', origin }
+      }));
+      // Avoid presenting an old question after the learner changes the selected scope.
+      if (scopeChanged && origin === 'page-quiz' && window.isTrialQuestionSessionActive?.()) {
+        void window.QATrialQuestion?.next?.().catch(error =>
+          console.warn('[Scope Studio] Could not reload question for updated scope', error));
+      }
     } catch (error) {
       console.error('[Scope Studio] save failed:', error);
       saveButton.textContent = '儲存出題範圍';
@@ -438,6 +459,7 @@ import { playerRepository } from './data/player-repository.js';
 
   window.openCurriculumStudio = open;
   window.closeCurriculumStudio = close;
+  window.curriculumStudioReturnPage = () => returnPage;
   window.openSharedCurriculum = openShared;
   window.addEventListener('dongfu:settings-collapsible-ready', mount);
   window.addEventListener('curriculum:scope-draft-change', updateSummary);

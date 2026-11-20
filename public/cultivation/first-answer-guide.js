@@ -1,118 +1,129 @@
-// Three short pointers for newly created accounts; no sample questions or rewards.
+// New-player tactical walkthrough. Advance only after real, server-confirmed actions.
+// It is deliberately non-modal: tutorial highlights must not intercept map or quiz input.
 (function () {
   'use strict';
-  const KEY = 'qingyun:first-answer-guide:v1:';
-  const steps = [
-    { target: 'btn-home-start', title: '開始答題', text: '從這裡開始答題。', action: '開始答題' },
-    { target: 'btn-report', title: '題目有錯', text: '如果題目有問題，可以按下「題目有錯」。', action: '下一個' },
-    { target: 'quiz-helper-launcher', title: '問道助手', text: '有問題隨時提問！', action: '開始作答' }
+  const KEY = 'qingyun:tactical-first-turn:v2:';
+  const stages = [
+    { target: '#btn-home-start', title: '進入問道試煉', text: '點選「問道試煉」，進入你的第一場戰鬥。' },
+    { target: '#tactical-combat [data-quiz]', title: '答題充能', text: '先按左側的「答題充能」，答題可以補充移動與攻擊需要的體力。' },
+    { target: '#btn-giveup', title: '選擇學習範圍', text: '按「設定範圍」，選擇適合自己的年級、科目及章節，儲存後會返回這道試煉題目。' },
+    { target: '#options-container button:not(:disabled)', title: '完成第一題', text: '閱讀題目並選擇答案。批改後可以先看解析，再按「返回戰場」。' },
+    { target: '#tactical-combat [data-wheel-action="move"], #tactical-combat [data-action="move"]', title: '移動角色', text: '在右側選擇「移動」，再點選地圖上的灰色地格。移動一格消耗 1 體力。' },
+    { target: '#tactical-combat [data-wheel-action="attack-ring"], #tactical-combat [data-action="attack"]', title: '攻擊靈獸', text: '選擇右側的「攻擊」與招式，再點選有效的攻擊地格。若體力不足，可再次答題充能。' },
+    { target: '#tactical-combat [data-end]', title: '結束回合', text: '移動與攻擊完成後，按「結束回合」，讓靈獸行動。之後可繼續答題與戰鬥。' }
   ];
-  const $ = id => document.getElementById(id);
-  let account = '', step = 0, timer = null, layer = null, waiting = false, starting = false;
-  const sessionDone = new Set();
-  function stored(uid) {
+  const events = ['entered', 'question', 'scope-saved', 'answered', 'moved', 'attacked', 'ended'];
+  let account = '', step = 0, timer = null, layer = null;
+  function read(uid) {
     try { return JSON.parse(localStorage.getItem(KEY + uid) || 'null'); } catch (_) { return null; }
   }
-  function save(status) {
+  function persist(status) {
+    if (!account) return;
     try { localStorage.setItem(KEY + account, JSON.stringify({ status, step })); } catch (_) {}
   }
   function hide() { layer?.remove(); layer = null; }
-  function cancel() { clearInterval(timer); timer = null; hide(); account = ''; starting = false; }
+  function cancel() { if (timer !== null) clearInterval(timer); timer = null; hide(); account = ''; }
   function finish() {
-    if (account) { save('done'); sessionDone.add(account); }
+    if (account) persist('done');
+    window.showToast?.('第一回合教學完成，繼續你的問道之旅！');
     cancel();
   }
-  function visible(el) { return !!el && el.getClientRects().length > 0 && !el.closest('.hidden,[hidden]'); }
+  function visible(el) {
+    return !!el && el.getClientRects().length > 0 && !el.closest?.('.hidden,[hidden]');
+  }
   function blocked() {
-    return !!document.querySelector('#first-visit-layer,#game-startup-gate,#startup-cloud-curtain,#scope-studio:not([hidden]),#xiuxian-story-layer,#dongtian-overlay,#opportunity-overlay,#custom-alert-modal:not(.hidden),#report-modal:not(.hidden)');
+    return !!document.querySelector(
+      '#first-visit-layer,#game-startup-gate,#startup-cloud-curtain,' +
+      '#scope-studio:not([hidden]),#xiuxian-story-layer,#dongtian-overlay,' +
+      '#opportunity-overlay,#custom-alert-modal:not(.hidden),#report-modal:not(.hidden),' +
+      '#tactical-combat [data-modal]:not([hidden])'
+    );
+  }
+  function available() {
+    if (blocked()) return false;
+    if (step === 0) return visible(document.querySelector('#page-home'));
+    if (step === 2 || step === 3)
+      return visible(document.querySelector('#page-quiz')) &&
+        visible(document.querySelector('#quiz-container'));
+    return visible(document.querySelector('#tactical-combat'));
   }
   function position(target) {
     const rect = target.getBoundingClientRect();
     const width = document.documentElement.clientWidth, height = document.documentElement.clientHeight;
-    const left = Math.max(4, rect.left - 5), top = Math.max(4, rect.top - 5);
-    const right = Math.min(width - 4, rect.right + 5), bottom = Math.min(height - 4, rect.bottom + 5);
-    const hole = layer.querySelector('.fag-highlight');
-    Object.assign(hole.style, { left: left + 'px', top: top + 'px', width: Math.max(0, right - left) + 'px', height: Math.max(0, bottom - top) + 'px' });
+    const left = Math.max(4, Math.min(width - 4, rect.left - 5));
+    const top = Math.max(4, Math.min(height - 4, rect.top - 5));
+    const right = Math.max(left, Math.min(width - 4, rect.right + 5));
+    const bottom = Math.max(top, Math.min(height - 4, rect.bottom + 5));
+    Object.assign(layer.querySelector('.fag-highlight').style, {
+      left: left + 'px', top: top + 'px', width: (right - left) + 'px', height: (bottom - top) + 'px'
+    });
     const masks = layer.querySelectorAll('.fag-mask');
-    const boxes = [[0, 0, width, top], [0, bottom, width, height-bottom], [0, top, left, bottom-top], [right, top, width-right, bottom-top]];
+    const boxes = [[0, 0, width, top], [0, bottom, width, height - bottom],
+      [0, top, left, bottom - top], [right, top, width - right, bottom - top]];
     masks.forEach((mask, i) => {
       const [x, y, w, h] = boxes[i];
-      Object.assign(mask.style, { left:x+'px', top:y+'px', width:Math.max(0,w)+'px', height:Math.max(0,h)+'px' });
+      Object.assign(mask.style, { left: x + 'px', top: y + 'px',
+        width: Math.max(0, w) + 'px', height: Math.max(0, h) + 'px' });
     });
     const card = layer.querySelector('.fag-card');
     const cardHeight = card.getBoundingClientRect().height;
-    const cardTop = top >= cardHeight + 28 ? top - cardHeight - 18 : bottom + cardHeight + 28 <= height ? bottom + 18 : 16;
+    const above = top - cardHeight - 18;
+    const below = bottom + 18;
+    const cardTop = above >= 12 ? above : below + cardHeight <= height - 12 ? below : 12;
     card.style.top = Math.max(12, Math.min(height - cardHeight - 12, cardTop)) + 'px';
   }
-  function render(target) {
+  function show(target) {
     if (!layer) {
-      layer = document.createElement('section'); layer.id = 'first-answer-guide';
-      layer.setAttribute('role', 'dialog'); layer.setAttribute('aria-labelledby', 'first-answer-guide-title');
-      layer.innerHTML = '<div class="fag-mask"></div>'.repeat(4) + '<div class="fag-highlight"></div><div class="fag-card"><small></small><h2 id="first-answer-guide-title"></h2><p></p><div class="fag-actions"><button type="button" data-guide-skip>略過</button><button type="button" data-guide-next></button></div></div>';
+      layer = document.createElement('section');
+      layer.id = 'first-answer-guide';
+      layer.setAttribute('role', 'status');
+      layer.setAttribute('aria-live', 'polite');
+      layer.innerHTML = '<div class="fag-mask"></div>'.repeat(4) +
+        '<div class="fag-highlight"></div><div class="fag-card">' +
+        '<small></small><h2></h2><p></p><div class="fag-actions">' +
+        '<button type="button" data-guide-skip>略過教學</button>' +
+        '<span class="fag-prompt">依提示完成操作</span></div></div>';
       layer.querySelector('[data-guide-skip]').onclick = finish;
-      layer.querySelector('[data-guide-next]').onclick = () => {
-        if (step === 0) { if (!starting) $(steps[0].target)?.click(); }
-        else if (step === 1) { step = 2; save('pending'); hide(); tick(); }
-        else finish();
-      };
       document.body.append(layer);
-      layer.querySelector('small').textContent = `${step + 1} / 3`;
-      layer.querySelector('h2').textContent = steps[step].title;
-      layer.querySelector('p').textContent = steps[step].text;
-      layer.querySelector('[data-guide-next]').textContent = steps[step].action;
-      layer.querySelector('[data-guide-next]').focus({ preventScroll: true });
     }
+    layer.querySelector('small').textContent = '新手教學 · ' + (step + 1) + ' / ' + stages.length;
+    layer.querySelector('h2').textContent = stages[step].title;
+    layer.querySelector('p').textContent = stages[step].text;
     position(target);
   }
   function tick() {
     if (!account) return;
     if (window.getCurrentUserData?.()?.uid !== account) { cancel(); return; }
-    if (blocked()) { hide(); return; }
-    if (waiting) {
-      if (visible($('page-quiz')) && visible($('quiz-container'))) {
-        waiting = false; starting = false; step = 1; save('pending');
-      } else return;
-    }
-    if (step > 0 && !visible($('page-quiz'))) { hide(); return; }
-    if (step === 0 && !visible($('page-home'))) { hide(); return; }
-    const target = $(steps[step].target);
+    if (!available()) { hide(); return; }
+    const target = document.querySelector(stages[step].target);
     if (!visible(target)) { hide(); return; }
-    if (!layer) target.scrollIntoView({ block:'center', inline:'nearest', behavior:'instant' });
-    render(target);
+    show(target);
   }
   window.scheduleFirstAnswerGuide = (uid, newAccount = false) => {
-    if (!uid) return;
-    const record = stored(uid);
-    if (sessionDone.has(uid) || record?.status === 'done') return;
-    if (!newAccount && record?.status !== 'pending') return;
-    if (account === uid && timer) return;
-    cancel(); account = uid;
-    // Resuming after a reload starts at the entry, since the quiz page is not restored yet.
-    step = 0; waiting = false; save('pending');
+    if (!uid || read(uid)?.status === 'done') return;
+    if (!newAccount && read(uid)?.status !== 'pending') return;
+    if (timer !== null && account === uid) return;
+    cancel();
+    account = uid;
+    // Do not resume mid-combat against a different room after refresh/re-login.
+    step = 0;
+    persist('pending');
     timer = setInterval(tick, 160);
+    tick();
   };
   window.cancelFirstAnswerGuide = cancel;
-  document.addEventListener('click', event => {
-    if (!account || !layer) return;
-    if (step === 0 && event.target.closest?.('#btn-home-start')) {
-      event.preventDefault(); event.stopImmediatePropagation();
-      if (starting) return;
-      starting = true; waiting = true; hide();
-      const uid = account;
-      Promise.resolve().then(() => window.startQuizFlow?.()).catch(() => {
-        window.showToast?.('題目暫時無法載入，請再試一次。');
-      }).finally(() => {
-        if (account !== uid || !waiting) return;
-        starting = false;
-        if (!visible($('page-quiz'))) { waiting = false; step = 0; }
-        tick();
-      });
-    } else if (step === 1 && event.target.closest?.('#btn-report')) {
-      step = 2; save('pending'); hide();
-    } else if (step === 2 && event.target.closest?.('#quiz-helper-launcher')) finish();
-  }, true);
+  window.addEventListener('qingyun:tactical-tutorial', event => {
+    const detail = event.detail || {};
+    if (!account || detail.uid !== account || detail.kind !== events[step]) return;
+    if (step === 2 && detail.origin !== 'page-quiz') return;
+    if (step === stages.length - 1) { finish(); return; }
+    step += 1;
+    persist('pending');
+    hide();
+    tick();
+  });
   document.addEventListener('keydown', event => {
-    if (layer && event.key === 'Escape') { event.preventDefault(); finish(); }
+    if (layer && event.key === 'Escape') hide(); // Pauses the hint, never marks it complete.
   });
   window.addEventListener('resize', () => { if (layer) tick(); });
 })();

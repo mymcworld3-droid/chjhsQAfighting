@@ -34,7 +34,9 @@
       if (item) item.hidden = i!==active;
     }
     const back = $('cs-prev'), next = $('cs-next');
-    if (back) back.textContent = active===0 ? '← 返回設定' : '← 返回上一步';
+    if (back) back.textContent = active===0
+      ? (window.curriculumStudioReturnPage?.() === 'page-quiz' ? '← 返回問道試煉' : '← 返回設定')
+      : '← 返回上一步';
     if (next) {
       next.textContent = active===2?'查看已選範圍':'下一步　→';
       next.disabled = active<2 && !current(fields[active]);

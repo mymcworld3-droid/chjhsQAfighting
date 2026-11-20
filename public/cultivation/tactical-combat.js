@@ -87,6 +87,9 @@ async function api(path,body,signal){
 }
 function valid(e,account){return opened&&e===epoch&&account===getMainUser()?.uid;}
 function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;box.hidden=!text;}}
+function tutorialEvent(kind){
+  if(mode==='pve'&&uid)window.dispatchEvent(new CustomEvent('qingyun:tactical-tutorial',{detail:{uid,kind}}));
+}
 function clearLiveManualXp(){
   if(manualXpTimer!==null)clearTimeout(manualXpTimer);
   manualXpTimer=null;
@@ -1287,11 +1290,17 @@ async function send(command){
   if(!state||renderer?.isAnimating&&command.type!=='leave')return;
   // Retrying the same command uses the same idempotency key after a lost response.
   const request={...command,roomId:state.id,revision:state.revision,actionRevision:state.actionRevision,requestId:id()};
-  await task(async()=>{
+  const committed=await task(async()=>{
     try{return (await api('/api/tactical/action',request)).state;}
     catch(err){if(!err.status||err.status>=500){try{return (await api('/api/tactical/action',request)).state;}catch(_){}}
       if(err.status===409){const latest=await api('/api/tactical/state?mode='+mode);if(latest.state)accept(latest.state,++op);}throw err;}
   });
+  // A real successful server action, not a wheel selection or preview, advances the guide.
+  if(committed&&committed.id===request.roomId&&committed.revision>request.revision){
+    if(command.type==='move')tutorialEvent('moved');
+    else if(['attack','manual','skill'].includes(command.type))tutorialEvent('attacked');
+    else if(command.type==='end')tutorialEvent('ended');
+  }
 }
 async function execute(){
   const previousMode=battlefieldMode();
@@ -1443,6 +1452,7 @@ async function soloBattleQuestion(){
         timeTaken:Math.max(0,(Date.now()-startedAt)/1000)
       });
       if(next?.review?.questionId!==input.questionId)throw Error('答題狀態不同步，請重試');
+      if(current())tutorialEvent('answered');
       // Let the common feedback renderer capture the pre-answer score first.
       if(current()){state=next;appliedOp=++op;}
       return {review:next.review,applyProgress:()=>{if(getMainUser()?.uid===account)applyProgress(next);}};
@@ -1456,6 +1466,7 @@ async function soloBattleQuestion(){
       return result;
     }
   });
+  if(current())tutorialEvent('question');
 }
 async function question(){
   if(!state||busy||root.hidden||!canQuestion()||renderer?.isAnimating&&!modalOpen)return;
@@ -1925,6 +1936,7 @@ async function enterTrial(e,account){
     const result=await prepared;if(!valid(e,account))return;
     if(result.error)throw result.error;
     root.hidden=false;accept(result.value.state,++op);$('[data-close]').focus();
+    tutorialEvent('entered');
   };
   try{
     if(typeof window.playStartupCloudCurtain==='function')await window.playStartupCloudCurtain(reveal,{isCurrent:()=>valid(e,account),blockInput:true});
