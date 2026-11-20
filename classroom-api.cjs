@@ -131,19 +131,23 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
       access: { isAdmin: roles.admin, isTeacher: roles.admin || roles.teacher, account: accountView(roles.account) }, nextCursor: roles.admin ? nextCursor : null };
   }
   if (body.action === 'createClass') {
-    requireAdmin(roles);
-    const name = text(body.name, 60, '班級名稱'), teacherName = text(body.teacherName, 40, '教師名稱');
+    if (!roles.admin && !roles.teacher) throw fail('只有已核准的教師或管理員可以建立班級', 403);
+    const name = text(body.name, 60, '班級名稱');
+    const adminTeacherName = roles.admin ? text(body.teacherName, 40, '教師名稱') : null;
     const classId = id(makeId()), joinCode = makeCode();
     const roomRef = ref(db, 'classrooms', classId), codeRef = ref(db, 'classroomCodes', joinCode);
     return db.runTransaction(async tx => {
-      requireAdmin(await authority(tx));
+      const current = await authority(tx);
+      if (!current.admin && !current.teacher) throw fail('教師資格尚未核准或已失效', 403);
       const [profile, existing, code] = await Promise.all([tx.get(profileRef), tx.get(roomRef), tx.get(codeRef)]);
       const classIds = profile.data()?.classIds || [];
       if (classIds.length >= LIMITS.classes) throw fail('最多可加入或管理 20 個班級', 409);
       if (existing.exists || code.exists) throw fail('代碼正在使用，請重新建立班級', 409);
-      const room = { id: classId, name, teacherName, ownerUid: uid, createdByUid: uid, joinCode, status: 'active', members: [], assignmentIds: [], createdAtMs: clock };
+      const teacherName = current.admin ? adminTeacherName : text(current.account.name, 40, '教師名稱');
+      const room = { id: classId, name, teacherName, ownerUid: uid, createdByUid: uid, joinCode,
+        status: 'active', members: [], rosterVersion: 0, assignmentIds: [], createdAtMs: clock };
       tx.create(roomRef, room); tx.create(codeRef, { classId }); tx.set(profileRef, { classIds: [...classIds, classId] });
-      return { classroom: summary(room, uid, roles) };
+      return { classroom: summary(room, uid, current) };
     });
   }
   if (body.action === 'joinClass') {
@@ -160,8 +164,13 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
       const classIds = profile.data()?.classIds || [], enrolled = member(room, uid);
       if (!enrolled && room.members.length >= LIMITS.students) throw fail('班級已達 100 人上限', 409);
       if (!classIds.includes(room.id) && classIds.length >= LIMITS.classes) throw fail('最多可加入或管理 20 個班級', 409);
-      const student = { uid, name, seat, joinedAtMs: enrolled?.joinedAtMs || clock };
+      const student = enrolled?.editedByTeacher
+        ? { ...enrolled, joinedAtMs: enrolled.joinedAtMs || clock }
+        : { uid, name, seat, joinedAtMs: enrolled?.joinedAtMs || clock };
       room.members = [...room.members.filter(m => m.uid !== uid), student];
+      if (!enrolled || student.name !== enrolled.name || student.seat !== enrolled.seat) {
+        room.rosterVersion = (room.rosterVersion || 0) + 1;
+      }
       tx.set(roomRef, room); tx.set(profileRef, { classIds: [...new Set([...classIds, room.id])] });
       return { classroom: summary(room, uid, roles) };
     });
@@ -262,7 +271,9 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
       if (room.ownerUid !== teacherUid && oldProfile.exists) tx.set(oldRef, { classIds: (oldProfile.data().classIds || []).filter(key => key !== classId) });
       tx.set(nextRef, { classIds: [...new Set([...classIds, classId])] });
       room.ownerUid = teacherUid; room.teacherName = account.data()?.name || user.data().displayName || '教師';
+      const teacherWasMember = room.members.some(m => m.uid === teacherUid);
       room.members = room.members.filter(m => m.uid !== teacherUid);
+      if (teacherWasMember) room.rosterVersion = (room.rosterVersion || 0) + 1;
       room.teacherAssignedAtMs = clock; room.teacherAssignedByUid = uid;
       tx.set(roomRef, room); return { classroom: summary(room, uid, roles) };
     });
@@ -277,8 +288,68 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
     const latestRoom = (await roomRef.get()).data(); roles = await authority();
     requireAccess(latestRoom, uid, teacher, roles);
     return { access: { isAdmin: roles.admin, isTeacher: roles.admin || roles.teacher, account: accountView(roles.account) },
-      classroom: { ...summary(room, uid, roles), notices: (room.notices || []).map(n => ({ id: n.id, content: n.content, createdAtMs: n.createdAtMs })), ...(teacher ? { members: room.members } : { student: member(room, uid) }) },
+      classroom: { ...summary(latestRoom, uid, roles), notices: (latestRoom.notices || []).map(n => ({ id: n.id, content: n.content, createdAtMs: n.createdAtMs })),
+        ...(teacher ? { members: latestRoom.members, rosterVersion: latestRoom.rosterVersion || 0 } : { student: member(latestRoom, uid) }) },
       assignments: assignments.map((a, i) => ({ ...assignmentSummary(a), ...(!teacher ? { submission: progressView(submissions[i]?.data()) } : {}) })) };
+  }
+  if (body.action === 'updateStudents') {
+    if (!Array.isArray(body.updates) || !body.updates.length || body.updates.length > LIMITS.students) {
+      throw fail('請提供 1–100 位學生的修改資料');
+    }
+    const updates = body.updates.map(row => ({
+      uid: id(row?.uid), name: text(row?.name, 40, '學生姓名'),
+      seat: text(row?.seat ?? '', 12, '座號', false)
+    }));
+    if (new Set(updates.map(row => row.uid)).size !== updates.length) throw fail('名單中有重複的學生代碼');
+    if (!Number.isSafeInteger(body.rosterVersion) || body.rosterVersion < 0) throw fail('學生名單版本無效');
+    return db.runTransaction(async tx => {
+      const [snap, current] = await Promise.all([tx.get(roomRef), authority(tx)]);
+      const room = snap.data();
+      requireAccess(room, uid, true, current);
+      if (room.status !== 'active') throw fail('封存班級不可修改學生名單', 409);
+      if ((room.rosterVersion || 0) !== body.rosterVersion) throw fail('學生名單已更新，請重新載入後再儲存', 409);
+      const byId = new Map(room.members.map(m => [m.uid, m]));
+      for (const row of updates) {
+        if (!byId.has(row.uid) || row.uid === room.ownerUid) throw fail('找不到可編輯的學生', 404);
+      }
+      let modified = 0;
+      const edits = new Map(updates.map(row => [row.uid, row]));
+      const members = room.members.map(m => {
+        const row = edits.get(m.uid);
+        if (!row || m.name === row.name && m.seat === row.seat) return m;
+        modified++;
+        return { ...m, name: row.name, seat: row.seat, editedByTeacher: true, updatedAtMs: clock };
+      });
+      if (modified) tx.update(roomRef, { members, rosterVersion: body.rosterVersion + 1 });
+      return { updated: modified, rosterVersion: body.rosterVersion + (modified ? 1 : 0) };
+    });
+  }
+  if (body.action === 'batchRemoveStudents') {
+    if (!Array.isArray(body.studentUids) || !body.studentUids.length || body.studentUids.length > 20) {
+      throw fail('每次最多可移出 20 位學生');
+    }
+    const ids = body.studentUids.map(id);
+    if (new Set(ids).size !== ids.length) throw fail('移出名單不可重複');
+    if (!Number.isSafeInteger(body.rosterVersion) || body.rosterVersion < 0) throw fail('學生名單版本無效');
+    return db.runTransaction(async tx => {
+      const [snap, current] = await Promise.all([tx.get(roomRef), authority(tx)]);
+      const room = snap.data();
+      requireAccess(room, uid, true, current);
+      if (room.status !== 'active') throw fail('封存班級不可移出學生', 409);
+      if ((room.rosterVersion || 0) !== body.rosterVersion) throw fail('學生名單已更新，請重新載入後再操作', 409);
+      const existing = new Set(room.members.map(m => m.uid));
+      if (ids.some(key => !existing.has(key) || key === room.ownerUid)) throw fail('移出名單包含不在班的學生', 404);
+      const snaps = await Promise.all(ids.map(key => tx.get(ref(db, 'classroomProfiles', key))));
+      const selected = new Set(ids);
+      for (let i = 0; i < ids.length; i++) {
+        if (snaps[i].exists) tx.set(ref(db, 'classroomProfiles', ids[i]), {
+          classIds: (snaps[i].data().classIds || []).filter(key => key !== classId)
+        });
+      }
+      tx.update(roomRef, { members: room.members.filter(m => !selected.has(m.uid)),
+        rosterVersion: body.rosterVersion + 1 });
+      return { removed: ids.length, rosterVersion: body.rosterVersion + 1 };
+    });
   }
   if (['renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass'].includes(body.action)) {
     const nextCode = body.action === 'rotateCode' ? makeCode() : null;
@@ -298,7 +369,9 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
         const target = body.action === 'leaveClass' ? uid : text(body.studentUid, 128, '學生代碼');
         if (target.includes('/') || target === room.ownerUid) throw fail('教師不能退出自己建立的班級');
         const targetRef = ref(db, 'classroomProfiles', target), profile = await tx.get(targetRef);
+        const existed = room.members.some(m => m.uid === target);
         room.members = room.members.filter(m => m.uid !== target);
+        if (existed) room.rosterVersion = (room.rosterVersion || 0) + 1;
         if (profile.exists) tx.set(targetRef, { classIds: (profile.data().classIds || []).filter(key => key !== classId) });
       }
       tx.set(roomRef, room); return { classroom: summary(room, uid, roles) };
@@ -498,7 +571,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
 }
 
 function registerClassroomApi(app, { resolveA = () => playerRepository.resolve(), logger = console } = {}) {
-  const allowed = new Set(['applyTeacher', 'teacherAccounts', 'reviewTeacher', 'assignTeacher', 'list', 'teacherDashboard', 'teacherAssignmentProgress', 'createClass', 'joinClass', 'classDetail', 'postNotice', 'deleteNotice', 'overview', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'saveAssignment', 'copyAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'updateDeadline', 'reopenAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
+  const allowed = new Set(['applyTeacher', 'teacherAccounts', 'reviewTeacher', 'assignTeacher', 'list', 'teacherDashboard', 'teacherAssignmentProgress', 'createClass', 'joinClass', 'classDetail', 'postNotice', 'deleteNotice', 'overview', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'updateStudents', 'batchRemoveStudents', 'saveAssignment', 'copyAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'updateDeadline', 'reopenAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
   app.post('/api/classrooms', async (req, res) => {
     res.set('Cache-Control', 'no-store');
     try {

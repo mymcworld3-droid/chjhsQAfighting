@@ -260,3 +260,41 @@
   #section-classes .cc-editor-question-nav button{flex-basis:112px}
   #section-classes .cc-editor-ai .cc-actions button{flex:1 1 auto}
 }
+
+
+/* Phase 4: teacher-owned classes and roster management. */
+#section-classes .cc-roster-section{min-width:0}
+#section-classes .cc-roster-batchbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 14px;
+  padding:12px 14px;background:#1d2b20;border:1px solid #6272567d;border-radius:11px}
+#section-classes .cc-roster-batchbar .cc-muted{flex:1;min-width:80px}
+#section-classes .cc-roster-batchbar button:disabled{opacity:.45}
+#section-classes .cc-roster-grid{margin-bottom:20px}
+#section-classes .cc-roster-item{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#section-classes .cc-roster-info{flex:1;min-width:92px;display:flex;flex-direction:column;overflow-wrap:anywhere}
+#section-classes .cc-roster-info strong{font-size:15px;color:#f4e5c9}
+#section-classes .cc-roster-info small{color:#b9b1a3;font-size:12px}
+#section-classes .cc-roster-check{min-width:22px;display:flex;align-items:center}
+#section-classes .cc-roster-check input{width:20px;height:20px;accent-color:#8cb285}
+#section-classes .cc-roster-item .cc-seat{flex:0 0 38px;width:38px;height:38px}
+#section-classes .cc-roster-item .cc-roster-student-actions{margin-left:auto}
+#section-classes .cc-roster-editor{flex:1 1 100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;align-items:end;padding-top:12px;border-top:1px solid #66745270}
+#section-classes .cc-roster-editor .cc-actions{grid-column:1/-1}
+#section-classes .cc-roster-import{padding:18px}
+#section-classes .cc-roster-import>details,#section-classes .cc-roster-import>summary{cursor:pointer}
+#section-classes .cc-roster-import label{margin:12px 0;display:grid;gap:5px}
+#section-classes .cc-roster-import input[type=file]{min-width:0;max-width:100%;padding:8px;
+  border:1px solid #64725b;border-radius:7px;background:#18251c}
+#section-classes .cc-roster-import textarea{font-family:monospace;font-size:12px}
+#section-classes .cc-roster-preview{border-top:1px solid #64725b;margin-top:14px;padding-top:14px}
+#section-classes .cc-roster-preview p{margin:7px 0}
+#section-classes .cc-roster-error{color:#ffc3b8;padding:4px 8px;border-left:2px solid #e4a39a;background:#3c241c}
+#section-classes .cc-roster-preview .cc-table-wrap{max-height:370px;overflow:auto;margin:12px 0}
+#section-classes .cc-roster-preview table{white-space:normal}
+@media(max-width:590px){
+  #section-classes .cc-roster-editor{grid-template-columns:1fr}
+  #section-classes .cc-roster-grid{grid-template-columns:1fr}
+  #section-classes .cc-roster-item .cc-roster-student-actions{width:100%;margin-left:0}
+  #section-classes .cc-roster-item .cc-roster-student-actions button{flex:1}
+  #section-classes .cc-roster-batchbar button{flex:1 1 auto}
+}

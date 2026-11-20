@@ -190,7 +190,7 @@ async function approve(f, uid = 'applicant') {
   const account = (await f.call(uid, 'applyTeacher', application)).account;
   return (await f.call('teacher', 'reviewTeacher', { teacherUid: uid, decision: 'approve', version: account.version })).account;
 }
-test('only administrators create classes; applications never self-grant teacher or administrator access', async () => {
+test('only approved teachers and administrators create classes; fake flags and pending applications cannot self-grant', async () => {
   const f = await fixture();
   const create = () => f.call('applicant', 'createClass', { name: '禁止建班', teacherName: '偽教師', isAdmin: true, role: 'admin', uid: 'teacher' });
   await assert.rejects(create(), e => e.status === 403);
@@ -200,8 +200,15 @@ test('only administrators create classes; applications never self-grant teacher 
   assert.equal((await f.call('applicant', 'list')).access.isTeacher, false);
   await assert.rejects(f.call('applicant', 'teacherAccounts'), e => e.status === 403);
   await assert.rejects(f.call('applicant', 'reviewTeacher', { teacherUid: 'applicant', version: pending.version, decision: 'approve' }), e => e.status === 403);
-  await approve(f); assert.equal((await f.call('applicant', 'list')).access.isTeacher, true);
-  await assert.rejects(create(), e => e.status === 403);
+  const approved = await approve(f);
+  assert.equal((await f.call('applicant', 'list')).access.isTeacher, true);
+  const created = await create();
+  const owned = (await f.db.doc('classrooms/' + created.classroom.id).get()).data();
+  assert.equal(owned.ownerUid, 'applicant');
+  assert.equal(owned.teacherName, '林老師');
+  assert.notEqual(owned.teacherName, '偽教師');
+  await f.call('teacher', 'reviewTeacher', { teacherUid:'applicant', decision:'revoke',version:approved.version });
+  await assert.rejects(create(), error => error.status === 403);
 });
 test('application review has explicit approval, rejection, resubmission, revocation and revision protection', async () => {
   const f = await fixture();
@@ -452,4 +459,93 @@ test('copying is blocked for archived destinations and leaves published source u
     sourceClassId:f.classId,sourceAssignmentId:original.id
   }),err=>err.status===409);
   assert.equal((await f.act('teacher','getAssignment',{assignmentId:original.id})).assignment.status,'published');
+});
+
+
+
+test('teacher-owned classes respect the 20-class limit and spoofed identities never grant rights', async () => {
+  const f = await fixture();
+  await approve(f,'mentor');
+  for (let i = 0; i < 20; i++) {
+    const room = (await f.call('mentor','createClass',
+      {name:'我建的班級 '+i,teacherName:'假管理員',uid:'teacher',isAdmin:true},
+      {makeId:()=> 'mentor-room-'+i,
+       makeCode:()=> 'TEACH'+String.fromCharCode(65+Math.floor(i/26))+String.fromCharCode(65+i%26)+'Z'})).classroom;
+    assert.equal(room.role,'teacher');
+    assert.equal((await f.db.doc('classrooms/'+room.id).get()).data().teacherName,'林老師');
+  }
+  await assert.rejects(f.call('mentor','createClass',{name:'超出上限'}),err=>err.status===409);
+  assert.equal((await f.call('mentor','list')).classes.length,20);
+  await assert.rejects(f.call('outsider','createClass',{name:'越權',isTeacher:true}),err=>err.status===403);
+});
+test('teacher single and bulk roster updates use immutable uid and preserve submitted grades and correction history', async () => {
+  const f = await fixture();
+  await f.join('student','王同學');
+  await f.join('other','李同學');
+  const a = await f.publish();
+  await submit(f,a);
+  const original = (await f.act('teacher','classDetail')).classroom;
+  assert.equal(original.rosterVersion,2);
+  const result = await f.act('teacher','updateStudents',{rosterVersion:original.rosterVersion,updates:[
+    {uid:'student',name:'王小明',seat:'05'},
+    {uid:'other',name:'李小芳',seat:'12'}
+  ]});
+  assert.equal(result.updated,2);
+  assert.equal(result.rosterVersion,3);
+  const renamed = (await f.act('teacher','classDetail')).classroom;
+  assert.equal(renamed.members.find(x=>x.uid==='student').name,'王小明');
+  assert.equal(renamed.members.find(x=>x.uid==='other').seat,'12');
+  const report = (await f.act('teacher','report',{assignmentId:a.id})).report;
+  assert.equal(report.totals.average,50);
+  assert.equal(report.students.find(m=>m.uid==='student').name,'王小明');
+  assert.equal(report.students.find(m=>m.uid==='student').seat,'05');
+  assert.equal((await f.act('student','getAssignment',{assignmentId:a.id})).submission.score,50);
+  // Rejoining with the original access code cannot overwrite teacher-managed data.
+  await f.join('student','惡意修改姓名');
+  const afterRejoin = (await f.act('teacher','classDetail')).classroom;
+  assert.equal(afterRejoin.members.find(x=>x.uid==='student').name,'王小明');
+  assert.equal(afterRejoin.rosterVersion,3);
+  await assert.rejects(f.act('student','updateStudents',{rosterVersion:3,updates:[
+    {uid:'student',name:'假冒修改',seat:'1'}]}),err=>err.status===403);
+  await assert.rejects(f.act('outsider','updateStudents',{rosterVersion:3,updates:[
+    {uid:'student',name:'假冒修改',seat:'1'}]}),err=>err.status===403);
+});
+test('roster version conflicts, invalid uid batches and archived classes reject all edits atomically', async () => {
+  const f = await fixture();
+  await f.join();
+  await f.join('other','林同學');
+  const before = (await f.act('teacher','classDetail')).classroom;
+  const good = {rosterVersion:before.rosterVersion,updates:[{uid:'student',name:'改名',seat:'7'}]};
+  await f.act('teacher','updateStudents',good);
+  await assert.rejects(f.act('teacher','updateStudents',good),err=>err.status===409);
+  await assert.rejects(f.act('teacher','updateStudents',{rosterVersion:before.rosterVersion+1,
+    updates:[{uid:'student',name:'合法',seat:'1'},{uid:'ghost',name:'不在班上',seat:'2'}]}),err=>err.status===404);
+  await assert.rejects(f.act('teacher','updateStudents',{rosterVersion:before.rosterVersion+1,
+    updates:[{uid:'student',name:'甲',seat:'1'},{uid:'student',name:'乙',seat:'2'}]}),err=>err.status===400);
+  const unchanged = (await f.act('teacher','classDetail')).classroom;
+  assert.equal(unchanged.members.find(m=>m.uid==='student').name,'改名');
+  assert.equal(unchanged.members.find(m=>m.uid==='other').name,'林同學');
+  await f.act('teacher','archiveClass',{archived:true});
+  await assert.rejects(f.act('teacher','updateStudents',{rosterVersion:unchanged.rosterVersion,
+    updates:[{uid:'student',name:'不能改',seat:'1'}]}),err=>err.status===409);
+  await assert.rejects(f.act('teacher','batchRemoveStudents',{rosterVersion:unchanged.rosterVersion,
+    studentUids:['student']}),err=>err.status===409);
+});
+test('batch removal updates indexes atomically and preserves historic published-assignment results', async () => {
+  const f = await fixture(); await f.join(); await f.join('other','林同學');
+  const a = await f.publish(); await submit(f,a);
+  const room = (await f.act('teacher','classDetail')).classroom;
+  const removed = await f.act('teacher','batchRemoveStudents',{
+    rosterVersion:room.rosterVersion,studentUids:['student','other']});
+  assert.equal(removed.removed,2);
+  const after = (await f.act('teacher','classDetail')).classroom;
+  assert.equal(after.studentCount,0); assert.equal(after.rosterVersion,room.rosterVersion+1);
+  assert.equal((await f.call('student','list')).classes.length,0);
+  assert.equal((await f.call('other','list')).classes.length,0);
+  const report = (await f.act('teacher','report',{assignmentId:a.id})).report;
+  assert.equal(report.students.length,2);
+  assert.equal(report.students.find(m=>m.uid==='student').score,50);
+  await assert.rejects(f.act('student','classDetail'),err=>err.status===403);
+  await assert.rejects(f.act('teacher','batchRemoveStudents',{rosterVersion:after.rosterVersion,
+    studentUids:['student']}),err=>err.status===404);
 });

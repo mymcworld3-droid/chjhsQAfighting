@@ -2,6 +2,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import './knowledge-points.js';
 import { buildClassroomView, tabsForClass } from './classroom-view.js';
+import { renderRosterPanel, parseRosterCSV, exportRosterCSV } from './classroom-roster.js';
 import { renderClassroomEditor, renderClassroomCopy, validateClassroomDraft, parseClassroomAIQuestion, MAX_CLASSROOM_QUESTIONS } from './classroom-editor.js';
 import { buildTeacherWorkspace } from './teacher-workspace.js';
 
@@ -74,12 +75,14 @@ function homeView() {
 
   if (state.access?.isTeacher) {
     const portal = buildTeacherWorkspace(state, { escape, date, status, button });
-    const adminSetup = admin ? '<section class="cc-card cc-workspace-admin-create" id="cc-admin-create">' +
-      '<h4>管理員建班</h4><p class="cc-muted">核准教師帳號後，由管理員建立並指派班級。</p>' +
+    const adminSetup = '<section class="cc-card cc-workspace-admin-create" id="cc-admin-create">' +
+      '<h4>' + (admin ? '建立班級 · 管理員' : '建立我的教室') + '</h4>' +
+      '<p class="cc-muted">' + (admin ? '管理員可建立班級，再將班級指派給核准教師。' :
+        '教師資格已核准，可直接建立自己管理的班級；教師稱呼以審核資料為準。') + '</p>' +
       '<form class="cc-form" data-form="create">' +
       field('name', '班級名稱', '', 'required maxlength="60"') +
-      field('teacherName', '教師稱呼', '', 'required maxlength="40"') +
-      button('create', '建立班級', 'class="cc-primary"') + '</form></section>' : '';
+      (admin ? field('teacherName', '教師稱呼', '', 'required maxlength="40"') : '') +
+      button('create', '建立教室', 'class="cc-primary"') + '</form></section>';
     const join = '<details class="cc-card cc-workspace-join"><summary>以加入碼加入其他班級</summary>' +
       '<form data-form="join" class="cc-form">' +
       field('joinCode', '八碼加入碼', '', 'required maxlength="8" autocomplete="off" style="text-transform:uppercase"') +
@@ -102,7 +105,7 @@ function homeView() {
   const application = admin ? `<section class="cc-card"><h4>管理員建班</h4><form class="cc-form" data-form="create">
       ${field('name', '班級名稱', '', 'required maxlength="60"')}${field('teacherName', '教師稱呼', '', 'required maxlength="40"')}
       ${button('create', '建立班級', 'class="cc-primary"')}</form><p class="cc-muted">建立後可在班級設定指派已核准的教師。</p></section>`
-    : `<section class="cc-card"><h4>教師帳號申請</h4>${account ? `<p class="cc-status">${({ pending: '等待管理員審核', approved: '教師資格已核准，請等候管理員指派班級', rejected: '申請已退回，可修改後重新申請', revoked: '教師資格已撤銷' })[account.status]}</p>${account.reviewNote ? `<p>${escape(account.reviewNote)}</p>` : ''}` : '<p class="cc-muted">教師功能須先向管理員申請，由管理員審核並分配班級。</p>'}
+    : `<section class="cc-card"><h4>教師帳號申請</h4>${account ? `<p class="cc-status">${({ pending: '等待管理員審核', approved: '教師資格已核准，可自行建立班級', rejected: '申請已退回，可修改後重新申請', revoked: '教師資格已撤銷' })[account.status]}</p>${account.reviewNote ? `<p>${escape(account.reviewNote)}</p>` : ''}` : '<p class="cc-muted">教師功能須先向管理員申請，由管理員審核並分配班級。</p>'}
       ${!account || ['rejected', 'revoked'].includes(account.status) ? `<form data-form="apply" class="cc-form">${field('name', '教師稱呼', account?.name || '', 'required maxlength="40"')}${field('school', '學校／任教單位', account?.school || '', 'required maxlength="80"')}<label>申請說明<textarea name="reason" required maxlength="600">${escape(account?.reason || '')}</textarea></label>${button('apply-teacher', '送出教師申請', 'class="cc-primary"')}</form>` : ''}</section>`;
   return `<div class="cc-toolbar"><h3>${admin ? '班級管理' : '我的班級'}</h3><div class="cc-actions">${admin ? button('teacher-accounts', '教師帳號審核') : ''}${button('refresh', '重新整理')}</div></div>
     ${rooms ? `<div class="cc-grid">${rooms}</div>` : '<p class="cc-muted">目前沒有可管理或已加入的班級。</p>'}${state.nextCursor ? button('more-classes', '載入更多班級') : ''}
@@ -118,7 +121,8 @@ function accountsView() {
     ${review.accounts.map(a => `<article class="cc-card"><h4>${escape(a.name)}</h4><p>${escape(a.school)}</p><p class="cc-muted">帳號：${escape(a.uid)} · 申請：${date(a.requestedAtMs)}</p><p style="white-space:pre-wrap;overflow-wrap:anywhere">${escape(a.reason)}</p>${a.reviewNote ? `<p class="cc-muted">審核備註：${escape(a.reviewNote)}</p>` : ''}${['pending', 'approved'].includes(a.status) ? `<label>審核備註（選填）<input name="reviewNote" maxlength="300"></label><div class="cc-actions" style="margin-top:10px">${(a.status === 'pending' ? [['approve', '核准教師'], ['reject', '退回申請']] : [['revoke', '撤銷教師資格']]).map(([decision, title]) => button('review-teacher', title, `data-uid="${escape(a.uid)}" data-version="${a.version}" data-decision="${decision}"`)).join('')}</div>` : ''}</article>`).join('') || '<p class="cc-muted">目前沒有符合此狀態的教師帳號。</p>'}${review.nextCursor ? button('more-accounts', '載入更多帳號') : ''}`;
 }
 function classView() {
-  return buildClassroomView(state, { escape, date, status, button, currentUid: getMainUser()?.uid || '' });
+  return buildClassroomView(state, { escape, date, status, button, currentUid: getMainUser()?.uid || '',
+    rosterPanel: (data, helpers) => renderRosterPanel(data, helpers) });
 }
 
 const blankQuestion = () => ({ question: '', options: ['', '', '', ''], answerIndex: 0, explanation: '', knowledge_points: [] });
@@ -284,6 +288,8 @@ async function loadClass(classId = state.classroom?.id) {
     assignmentFilter: changedClass ? 'all' : (state.assignmentFilter || 'all'),
     assignmentSearch: changedClass ? '' : (state.assignmentSearch || ''),
     studentSearch: changedClass ? '' : (state.studentSearch || ''),
+    studentSort: changedClass ? 'seat' : (state.studentSort || 'seat'),
+    rosterSelected: [], editStudentUid: null, rosterPreview: null, rosterCsvText: '',
     overview: changedClass ? null : state.overview };
   render();
 }
@@ -392,29 +398,25 @@ async function generateQuestions(count = 1) {
     if (node) node.textContent = '已完成 ' + finished + ' / ' + wanted + ' 次生成，新增 ' + accepted +
       ' 題，略過 ' + failures.length + ' 題。';
   };
+  // One generation API request must produce exactly one question. Keep requests sequential
+  // so each next request can avoid all previously accepted questions.
   while (finished < wanted) {
-    const waveSize = Math.min(3, wanted - finished);
     const avoidQuestions = e.questions.filter(q => q.question?.trim())
       .map(q => q.question.trim().slice(0, 500)).slice(-20);
-    const batch = await Promise.allSettled(Array.from({ length: waveSize }, () =>
-      request({ subject: e.subject, level: e.level, specificTopic: e.topic,
-        difficulty: 'medium', quizMode: 'classroom-draft',
-        avoidQuestions }, '/api/generate-quiz', 60000)));
-    for (const result of batch) {
-      finished++;
-      if (result.status === 'rejected') { failures.push(result.reason?.message || '生成請求失敗'); update(); continue; }
-      try {
-        const q = parseClassroomAIQuestion(result.value, e.subject, window.QAKnowledgePoints.labels);
-        const key = q.question.replace(/\s+/g, '').toLowerCase();
-        if (existing.has(key)) throw Error('題目重複');
-        existing.add(key);
-        if (replacement && accepted === 0) e.questions[0] = q;
-        else e.questions.push(q);
-        state.editorIndex = e.questions.length - 1;
-        accepted++;
-      } catch (error) { failures.push(error.message); }
-      update();
-    }
+    try {
+      const result = await request({ subject: e.subject, level: e.level, specificTopic: e.topic,
+        difficulty: 'medium', quizMode: 'classroom-draft', questionCount: 1,
+        avoidQuestions }, '/api/generate-quiz', 60000);
+      const q = parseClassroomAIQuestion(result, e.subject, window.QAKnowledgePoints.labels);
+      const key = q.question.replace(/\s+/g, '').toLowerCase();
+      if (existing.has(key)) throw Error('題目重複');
+      existing.add(key);
+      if (replacement && accepted === 0) e.questions[0] = q;
+      else e.questions.push(q);
+      state.editorIndex = e.questions.length - 1;
+      accepted++;
+    } catch (error) { failures.push(error.message || '產生失敗'); }
+    finally { finished++; update(); }
   }
   if (!accepted) throw Error('本次 AI 未產生可用的新題目。' + (failures[0] ? '原因：' + failures[0] : ''));
   touchEditor();
@@ -498,7 +500,7 @@ async function act(target) {
   }
   if (action === 'workspace-filter') { state.workspaceFilter = target.dataset.filter; render(); return; }
   if (action === 'workspace-create') {
-    if (!state.access?.isAdmin) return;
+    if (!state.access?.isTeacher) return;
     const input = $('cc-admin-create')?.querySelector('input[name="name"]');
     input?.scrollIntoView({ behavior: 'smooth', block: 'center' }); input?.focus({ preventScroll: true }); return;
   }
@@ -608,6 +610,73 @@ async function act(target) {
     await request({ action: 'deleteNotice', classId, noticeId: target.dataset.id }); return loadClass();
   }
   if (action === 'rename') { const values = validForm('rename'); if (!values) return; await request({ action: 'renameClass', classId, ...values }); return loadClass(); }
+
+  if (action === 'roster-sort') {
+    state.studentSort = state.studentSort === 'name' ? 'seat' : 'name';
+    render(); return;
+  }
+  if (action === 'roster-select-visible') {
+    const selected = new Set(state.rosterSelected || []);
+    for (const node of $('section-classes').querySelectorAll('.cc-roster-item:not([hidden]) input[data-roster-select]:not(:disabled)')) {
+      selected.add(node.dataset.rosterSelect);
+    }
+    state.rosterSelected = [...selected];
+    render(); return;
+  }
+  if (action === 'roster-edit') {
+    state.editStudentUid = target.dataset.studentUid;
+    render();
+    $('section-classes')?.querySelector('form[data-form="student-edit"] input[name="name"]')?.focus();
+    return;
+  }
+  if (action === 'roster-edit-cancel') { state.editStudentUid = null; render(); return; }
+  if (action === 'roster-save') {
+    const form = target.closest('form');
+    if (!form?.reportValidity()) return;
+    const uid = target.dataset.studentUid;
+    const values = Object.fromEntries(new FormData(form));
+    await request({ action: 'updateStudents', classId, rosterVersion: state.classroom.rosterVersion,
+      updates: [{ uid, name: values.name, seat: values.seat }] });
+    await loadClass();
+    message('學生資料已更新，原始作答與成績保持不變。'); return;
+  }
+  if (action === 'roster-batch-remove') {
+    const studentUids = [...(state.rosterSelected || [])];
+    if (!studentUids.length || studentUids.length > 20) throw Error('每次只能移出 1 至 20 位學生。');
+    if (!window.confirm('確定將選取的 ' + studentUids.length + ' 位學生移出班級？既有已發布作業的成績保留，但這些學生將無法繼續進入教室。')) return;
+    const result = await request({ action: 'batchRemoveStudents', classId,
+      rosterVersion: state.classroom.rosterVersion, studentUids });
+    await loadClass();
+    message('已移出 ' + result.removed + ' 位學生；歷史成績未刪除。'); return;
+  }
+  if (action === 'roster-export') {
+    const content = exportRosterCSV(state.classroom.members || []);
+    const url = URL.createObjectURL(new Blob([content], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url; link.download = 'classroom-roster.csv'; link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    return;
+  }
+  if (action === 'roster-import-preview') {
+    const input = $('cc-roster-csv');
+    const text = input?.value || '';
+    const preview = parseRosterCSV(text, state.classroom.members || []);
+    state.rosterCsvText = text;
+    state.rosterPreview = preview;
+    render();
+    message(preview.errors.length ? 'CSV 有 ' + preview.errors.length + ' 個問題，修正後才能匯入。' :
+      'CSV 已核對：' + preview.updates.length + ' 位學生的姓名或座號將更新。', !!preview.errors.length);
+    return;
+  }
+  if (action === 'roster-import-apply') {
+    const preview = state.rosterPreview;
+    if (!preview || preview.errors.length || !preview.updates.length) throw Error('請先預覽有效且含有變更的 CSV。');
+    if (!window.confirm('確認將 ' + preview.updates.length + ' 位學生的姓名或座號更新到本班？學生帳號與成績完全不變。')) return;
+    const result = await request({ action: 'updateStudents', classId,
+      rosterVersion: state.classroom.rosterVersion, updates: preview.updates });
+    await loadClass();
+    message('匯入完成：更新 ' + result.updated + ' 位學生。'); return;
+  }
   if (action === 'rotate-code') {
     if (!window.confirm('更新後舊加入碼會失效，已加入的學生不受影響。')) return;
     await request({ action: 'rotateCode', classId }); return loadClass();
@@ -714,6 +783,11 @@ function mount() {
   panel.dataset.classroomMounted = 'true';
   panel.addEventListener('submit', event => { event.preventDefault(); });
   panel.addEventListener('input', event => {
+    if (event.target.matches('#cc-roster-csv')) {
+      state.rosterCsvText = event.target.value;
+      state.rosterPreview = null;
+      return;
+    }
     if (event.target.matches('#cc-copy input[name="title"]')) {
       state.copyTitle = event.target.value;
       return;
@@ -737,6 +811,31 @@ function mount() {
     filterClassroomList(panel, type);
   });
   panel.addEventListener('change', event => {
+    if (event.target.matches('#cc-roster-file')) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      if (file.size > 100000) { message('CSV 檔案過大，請使用本班名單範本。', true); return; }
+      const currentRoom = state.classroom?.id;
+      void file.text().then(csv => {
+        if (state.classroom?.id !== currentRoom || state.view !== 'class') return;
+        state.rosterCsvText = csv; state.rosterPreview = null;
+        const textarea = $('cc-roster-csv');
+        if (textarea) textarea.value = csv;
+        message('CSV 已載入，請點「預覽變更」確認後再匯入。');
+      }).catch(error => message(error.message, true));
+      return;
+    }
+    if (event.target.matches('input[data-roster-select]')) {
+      const selection = new Set(state.rosterSelected || []);
+      if (event.target.checked) selection.add(event.target.dataset.rosterSelect);
+      else selection.delete(event.target.dataset.rosterSelect);
+      state.rosterSelected = [...selection];
+      const label = $('cc-roster-selected-count');
+      if (label) label.textContent = '已選取 ' + selection.size + ' 位';
+      const remove = panel.querySelector('[data-action="roster-batch-remove"]');
+      if (remove) remove.disabled = !selection.size || selection.size > 20;
+      return;
+    }
     if (event.target.matches('#cc-copy input[name="targetClass"]')) {
       state.copySelected = [...panel.querySelectorAll('#cc-copy input[name="targetClass"]:checked')].map(input => input.value);
       return;
@@ -762,7 +861,7 @@ function mount() {
   panel.addEventListener('click', event => {
     const target = event.target.closest('button[data-action]');
     if (!target || target.disabled) return;
-    if (['create', 'join', 'rename', 'post-notice', 'apply-teacher', 'assign-teacher', 'save-draft', 'save-preview'].includes(target.dataset.action) && !target.closest('form')?.reportValidity()) return;
+    if (['create', 'join', 'rename', 'post-notice', 'apply-teacher', 'assign-teacher', 'save-draft', 'save-preview', 'roster-save'].includes(target.dataset.action) && !target.closest('form')?.reportValidity()) return;
     void run(() => act(target));
   });
   render();

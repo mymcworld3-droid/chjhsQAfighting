@@ -17,7 +17,8 @@ const switcher = legacy.match(/window.switchSocialTab = \(tab\) => \{[\s\S]*?\n}
 const html = `<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>班級驗收</title><style>
 body{margin:0;background:#0d110f;color:#e8ddc5;font:14px system-ui;height:100vh}*{box-sizing:border-box}.hidden{display:none!important}.flex{display:flex}.flex-col{flex-direction:column}.flex-1{flex:1;min-height:0}.h-full{height:100%}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.relative{position:relative}.absolute{position:absolute}.gap-2{gap:8px}.p-4{padding:16px}.px-4{padding-left:16px;padding-right:16px}.py-2{padding-top:8px;padding-bottom:8px}.mb-2{margin-bottom:8px}button{font:inherit;color:inherit;background:#30281d;border:1px solid #78664b;border-radius:7px;cursor:pointer}h2{font-size:21px;margin:0}.ui-social-heading{padding:14px 0 2px;border-bottom:1px solid #776247}.ui-social-tabs button{min-height:40px}.bg-cyan-600{background:#76603b}
 </style><body><button id="btn-social-nav" data-target="page-social" onclick="window.__allianceEntered=true" style="position:fixed;bottom:0;right:0;z-index:10">仙盟入口測試</button><div id="page-social" class="h-full flex flex-col">${social}</div><script>window.__uid='teacher';window.__authCallbacks=[];window.getCurrentUserData=()=>({stats:{totalScore:0}});window.beginSceneTransition=()=>()=>{};window.loadFriendList=()=>{};let chatUnsub=null;function listenToGlobalChat(){};${switcher}</script><script type="module" src="/cultivation/classroom.js"></script><script type="module" src="/cultivation/cultivation-progression-v2.js"></script></body></html>`;
-let delayReport = false, quizSerial = 0;
+let delayReport = false, quizSerial = 0, quizActive = 0, quizPeak = 0;
+const quizRequests = [];
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
@@ -32,6 +33,11 @@ const server = http.createServer(async (req, res) => {
       const body = JSON.parse(data), uid = req.headers.authorization?.slice(7);
       let result;
       if (url.pathname === '/api/generate-quiz') {
+        assert.equal(body.questionCount, 1, 'Each API request must generate exactly one question');
+        quizRequests.push({ count: body.questionCount, avoids: body.avoidQuestions?.length || 0 });
+        quizActive++; quizPeak = Math.max(quizPeak, quizActive);
+        await new Promise(resolve => setTimeout(resolve, 15));
+        quizActive--;
         const n = ++quizSerial + 3;
         result = { text: JSON.stringify({ question: n + ' + 2 = ?', correct: String(n + 2),
           wrong: [String(n), String(n + 1), String(n + 3)], explanation: '整數加法計算。',
@@ -92,8 +98,13 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
     await page.locator('summary').filter({ hasText: '指派班級教師' }).click();
     await page.locator('[data-form=assign] [name=teacherUid]').selectOption('applicant'); await click(page, 'assign-teacher');
     await as(page, 'applicant');
-    assert.equal(await page.locator('[data-form=create]').count(), 0);
-    assert.equal(await page.locator('.cc-workspace-room').count(), 2);
+    assert.equal(await page.locator('[data-form=create]').count(), 1);
+    // Approved teachers can create their own classes without administrator assignment.
+    await page.locator('[data-form=create] [name=name]').fill('七年三班');
+    await click(page, 'create');
+    assert.match(await page.locator('.cc-class-header').innerText(), /七年三班.*陳老師/s);
+    await click(page, 'home');
+    assert.equal(await page.locator('.cc-workspace-room').count(), 3);
     await page.setViewportSize({ width: 320, height: 640 });
     await measure(page);
     await page.locator('.cc-workspace-tabs [data-tab=summary]').focus();
@@ -181,7 +192,7 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
     await click(page, 'copy-assignment');
     assert.match(await page.locator('.cc-copy-shell').innerText(), /重用作業題組/);
     const choices = page.locator('#cc-copy input[name=targetClass]:not(:disabled)');
-    assert.equal(await choices.count(), 2);
+    assert.equal(await choices.count(), 3);
     for (let i = 0; i < 2; i++) await choices.nth(i).check();
     await click(page, 'copy-confirm');
     assert.match(await page.locator('.cc-copy-result').innerText(), /成功建立 2 份草稿/);
@@ -204,12 +215,40 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
     assert.equal(await page.locator('.cc-editor-question-nav [data-action=editor-select]').count(), 6);
     await click(page, 'remove-question');
     assert.equal(await page.locator('.cc-editor-question-nav [data-action=editor-select]').count(), 5);
+    assert.equal(quizRequests.length, 6, 'single + batch of 5 must use six API calls');
+    assert.equal(quizPeak, 1, 'generation requests must run sequentially');
+    assert.ok(quizRequests.every(x => x.count === 1));
+    assert.ok(quizRequests[5].avoids > quizRequests[1].avoids, 'later questions must avoid previously accepted questions');
     await page.waitForFunction(() => document.querySelector('#cc-editor-save-status')?.textContent.includes('已自動儲存'), { timeout: 10000 });
     await page.setViewportSize({ width: 320, height: 640 });
     await measure(page);
     await page.setViewportSize({ width: 1366, height: 850 });
     await click(page, 'back');
     assert.match(await page.locator('.cc-class-panel').innerText(), /批次練習/);
+    // Edit member info, import CSV by stable uid, then verify removal preserves historic grades.
+    await click(page, 'class-tab', 2);
+    await page.locator('.cc-roster-item').filter({hasText:'王同學'}).locator('[data-action=roster-edit]').click();
+    await page.locator('[data-form=student-edit] [name=name]').fill('王小明');
+    await page.locator('[data-form=student-edit] [name=seat]').fill('08');
+    await click(page, 'roster-save');
+    assert.match(await page.locator('.cc-roster-item').innerText(), /王小明/);
+    assert.match(await page.locator('.cc-roster-item').innerText(), /08/);
+    const rosterDownload = page.waitForEvent('download');
+    await page.locator('.cc-roster-section [data-action=roster-export]').first().click();
+    assert.equal((await rosterDownload).suggestedFilename(), 'classroom-roster.csv');
+    await page.locator('.cc-roster-import summary').click();
+    await page.locator('#cc-roster-csv').fill('uid,name,seat\\nstudent,王小明,09\\n'.replaceAll('\\n','\n'));
+    await click(page, 'roster-import-preview');
+    assert.match(await page.locator('.cc-roster-preview').innerText(), /待修改 1 位/);
+    await click(page, 'roster-import-apply');
+    assert.match(await page.locator('.cc-roster-item').innerText(), /09/);
+    await page.locator('.cc-roster-item input[data-roster-select]').check();
+    await click(page, 'roster-batch-remove');
+    assert.equal(await page.locator('.cc-roster-item').count(), 0);
+    await click(page, 'class-tab', 3);
+    await click(page, 'report');
+    assert.match(await page.locator('tbody').innerText(), /王同學|王小明/);
+    assert.match(await page.locator('tbody').innerText(), /50/);
     delayReport = true; await page.locator('[data-action=refresh]').click(); await page.waitForTimeout(40);
     await as(page, 'outsider'); await page.waitForTimeout(600);
     assert.doesNotMatch(await page.locator('#section-classes').innerText(), /王同學|加法練習|50 分/);

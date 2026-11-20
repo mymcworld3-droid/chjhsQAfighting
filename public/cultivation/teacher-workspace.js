@@ -83,7 +83,7 @@ export function buildTeacherWorkspace(state, helpers) {
     btn('workspace-tab', '我的教室', 'data-tab="classes"') +
     btn('workspace-tab', '近期作業', 'data-tab="tasks"') +
     btn('workspace-cave', '教師洞天') +
-    (state.access?.isAdmin ? btn('workspace-create', '管理員建班') : '') +
+    btn('workspace-create', state.access?.isAdmin ? '管理員建班' : '建立教室') +
     '</div></section>';
   const navigation = '<nav class="cc-workspace-tabs" role="tablist" aria-label="教師工作台選單">' +
     [['summary','總覽'],['classes','我的教室'],['tasks','作業與待辦']].map(([id,label]) =>

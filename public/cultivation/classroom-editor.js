@@ -104,7 +104,7 @@ export function renderClassroomEditor(state, helpers) {
     field('topic', '出題範圍', editor.topic || '', 'maxlength="180"') +
     field('level', '適用年級', editor.level || '國中一年級', 'maxlength="32"') +
     '<div class="cc-actions">' + generation + '</div>' +
-    '<p class="cc-muted">每次最多三個請求同時產生；有重複或格式不完整的題目會略過，所有題目仍需教師核對。</p>' +
+    '<p class="cc-muted">每次 API 只產生一題，依序生成並避開已完成題目；格式不完整或重複的題目會略過。請教師逐題核對。</p>' +
     '<span id="cc-ai-batch-status" class="cc-muted" role="status"></span></div></details></section>' +
     '<div class="cc-editor-layout"><aside class="cc-card cc-editor-side">' +
     '<div class="cc-editor-side-head"><h4>題目清單</h4><span class="cc-muted">' + editor.questions.length + ' / 30</span></div>' +

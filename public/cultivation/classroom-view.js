@@ -79,6 +79,8 @@ export function buildClassroomView(state, helpers) {
       (tasks.length ? '<p class="cc-empty" data-cc-empty="assignment" hidden>沒有符合條件的作業。</p>' :
         '<p class="cc-empty">目前尚無作業。</p>');
   } else if (tab === 'students') {
+    if (typeof helpers.rosterPanel === 'function') panel = helpers.rosterPanel(state, helpers);
+    else {
     const members = (room.members || []).slice().sort((a, b) =>
       (a.seat || '').localeCompare(b.seat || '', 'zh-Hant', { numeric:true }));
     panel = bar('學生名單') + '<p class="cc-muted">共 ' + members.length + ' 位學生；可以搜尋姓名或座號。</p>' +
@@ -90,6 +92,7 @@ export function buildClassroomView(state, helpers) {
           ${button('remove-student', '移出班級', attr(m.uid) + ' data-name="' + e(m.name) + '" class="cc-danger"')}</div>`).join('') +
       '</div>' + (members.length ? '<p class="cc-empty" data-cc-empty="student" hidden>沒有符合條件的學生。</p>' :
         '<p class="cc-empty">尚無學生加入。可從設定頁複製加入碼。</p>');
+    }
   } else if (tab === 'grades') {
     const graded = tasks.filter(a => a.status !== 'draft');
     panel = bar('成績與學習分析', button('overview', '學習總覽', 'class="cc-primary"')) +
