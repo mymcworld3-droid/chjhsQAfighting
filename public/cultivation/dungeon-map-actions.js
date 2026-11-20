@@ -1,3 +1,42 @@
+import './flying-sword-path.js?v=20261120-sword-movement-v1';
+
+// The same pathfinder is used by both battle engines and both UI previews.
+const swordWalkable=(map,p)=>Boolean(map&&Number.isSafeInteger(p?.x)&&Number.isSafeInteger(p?.y)&&
+  p.x>=0&&p.y>=0&&p.x<map.width&&p.y<map.height&&
+  map.tiles?.[p.y*map.width+p.x]!==0&&
+  map.tiles?.[p.y*map.width+p.x]!==undefined);
+const swordOccupied=(p,enemies=[],members=[])=>
+  enemies.some(e=>e&&e.battleHealth!==0&&globalThis.QAFlyingSwordPath.occupies(e,p))||
+  members.some(m=>m?.position?.x===p.x&&m?.position?.y===p.y);
+export function dungeonSwordRoute(map,from,to,enemies=[]){
+  return globalThis.QAFlyingSwordPath.route({from,to,enemies,
+    walkable:p=>swordWalkable(map,p)});
+}
+export function dungeonSwordTiles(map,player,sword,enemies=[],members=[],stamina=0,move=false){
+  if(!swordWalkable(map,player))return [];
+  const cells=[];
+  if(!move){
+    for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
+      const d=Math.abs(dx)+Math.abs(dy);
+      if(!d||d>2)continue;
+      const p={x:player.x+dx,y:player.y+dy};
+      if(!swordWalkable(map,p)||swordOccupied(p,enemies,members))continue;
+      if(sword&&!dungeonSwordRoute(map,sword,p,enemies))continue;
+      cells.push(p);
+    }
+    return cells;
+  }
+  if(!sword||stamina<=0)return [];
+  const reachable=globalThis.QAFlyingSwordPath.distances(sword,
+    p=>swordWalkable(map,p),Math.min(1000,stamina*2));
+  for(const [where,steps] of reachable){
+    if(!steps||steps%2||steps>stamina*2)continue;
+    const [x,y]=where.split(',').map(Number),p={x,y};
+    if(!swordOccupied(p,enemies,members))cells.push(p);
+  }
+  return cells;
+}
+
 // Local preview pathfinding for the same single-click movement used in
 // 問道試煉. This path has no authority: the C-room validates every tile,
 // stamina point and enemy occupancy inside the atomic move-route action.
