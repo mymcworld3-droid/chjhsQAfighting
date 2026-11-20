@@ -435,8 +435,11 @@ function createHandler({
         // or a failed cross-project request. Only C's server-owned ledger
         // for this authenticated UID is accepted as evidence.
         const snap=await roomRef.get();
-        if(!snap.exists)throw err('找不到副本經驗紀錄',404);
-        const room=snap.data();
+        const archived=snap.exists?null:
+          await db.collection(Victory.ARCHIVES).doc(roomId).get();
+        const room=snap.exists?snap.data():
+          archived?.exists?archived.data():null;
+        if(!room)throw err('找不到副本經驗紀錄',404);
         const result=await ManualProgress.claim(resolveA().db,roomId,room,uid);
         return res.json({ok:true,roomId,manualProgress:result});
       }
@@ -885,6 +888,10 @@ function createHandler({
             tx.set(codeRef,{roomId,status:'closed',expiresAtMs:room.expiresAtMs});
           return next;
         });
+        if(updated.manualExp?.[uid]){
+          try{await ManualProgress.claim(resolveA().db,roomId,updated,uid);}
+          catch(error){logger.warn?.('[Dungeon disband XP retry]',error.message);}
+        }
         return respond(roomId,updated);
       }
       if(action==='leave'){
@@ -931,6 +938,10 @@ function createHandler({
             tx.set(codeRef,{roomId,status:'closed',expiresAtMs:room.expiresAtMs});
           return {id:roomId,room:updated};
         });
+        if(outcome?.room?.manualExp?.[uid]){
+          try{await ManualProgress.claim(resolveA().db,roomId,outcome.room,uid);}
+          catch(error){logger.warn?.('[Dungeon departure XP retry]',error.message);}
+        }
         return respond(outcome?.id,outcome?.room);
       }
     }catch(error){
