@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-civ2-fairness-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "公平與法律要件以題目明示的條件分析，避免過度概括",
+      "question": {
+        "q": "某縣兩校獲得相同數量的平板電腦，但甲校學生通勤時間長、校外網路不穩，乙校則可普遍使用家中網路。若以實質教育機會公平衡量，哪項政策較周全？",
+        "correct": "除相同設備外，另評估課後網路可近性並提供必要支持",
+        "wrong": [
+          "兩校已有相同設備，便可推定學習條件不存在任何差異",
+          "只要學生人數相同，通勤與家庭網路條件都不必納入比較",
+          "應只補助網路較好的學校，以避免資源使用效率不確定"
+        ],
+        "exp": "形式上給相同設備不一定消除不同背景帶來的障礙；實質機會公平可納入使用條件與需求。",
+        "subject": "公民",
+        "sub_topic": "公平與正義",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中二年級-公平與正義",
+        "template_id": "ref-20261120-b12-civ2-fairness-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-civ2-fairness-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "公平與法律要件以題目明示的條件分析，避免過度概括",
+      "question": {
+        "q": "某公共補助制度決定採公開且相同的評分標準，但有申請人指出評審未說明理由，且沒有申訴管道。此爭議最直接關乎哪一面向？",
+        "correct": "程序公平，包含理由透明及適當的救濟機會",
+        "wrong": [
+          "純粹自然資源稀缺，與行政程序無關",
+          "只要結果符合預算，程序是否透明就不影響任何正義判斷",
+          "只有受補助總額多少才與公平有關，評分及申訴制度完全無關"
+        ],
+        "exp": "程序正義不只看結果，也看標準是否一致、決策是否可說明、是否有適當質疑及救濟機制。",
+        "subject": "公民",
+        "sub_topic": "公平與正義",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中二年級-公平與正義",
+        "template_id": "ref-20261120-b12-civ2-fairness-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-civ2-fairness-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "公平與法律要件以題目明示的條件分析，避免過度概括",
+      "question": {
+        "q": "甲、乙家庭月所得分別為3萬元與9萬元，兩家每月都支付6,000元必要照護費。若只比較費用占所得比例，哪項正確？",
+        "correct": "甲為20%，乙約6.7%，甲的相對負擔較重",
+        "wrong": [
+          "甲為6.7%，乙為20%，乙的相對負擔較重",
+          "兩家支出金額相同，代表負擔占比也完全相同",
+          "甲為2%，乙約0.67%，兩家都不超過5%"
+        ],
+        "exp": "甲6,000/30,000=20%；乙6,000/90,000≈6.67%。金額相同但所得不同，對家庭造成的相對負擔不同。",
+        "subject": "公民",
+        "sub_topic": "公平與正義",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中二年級-公平與正義",
+        "template_id": "ref-20261120-b12-civ2-fairness-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
