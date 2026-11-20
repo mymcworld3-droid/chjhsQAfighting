@@ -141,7 +141,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','strike','skill','loadout','quiz-credit','activate-portal','enter-boss','boss-ready','boss-guard','rescue','claim-boss-reward','recent-victories','clock'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move','move-route','strike','skill','loadout','quiz-credit','activate-portal','enter-boss','boss-ready','boss-guard','rescue','claim-boss-reward','recent-victories','clock'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
