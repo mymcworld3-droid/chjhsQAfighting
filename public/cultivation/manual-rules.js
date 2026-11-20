@@ -210,7 +210,8 @@
     if(skill.kind==='flying-sword'){
       const amount=fmt(value.potential??value.damage);
       const described=description.replace('穿過敵人時造成傷害',
-        '穿過敵人時每次造成 '+amount+' 傷害');
+        '穿過敵人時每次造成 '+amount+' 傷害').replace('沿途造成傷害',
+        '沿途每次造成 '+amount+' 傷害');
       return described+(options.flyingSwordReady===true?'':options.flyingSwordReady===false
         ?'本次召劍不造成傷害。':'首次召劍不造成傷害。');
     }
