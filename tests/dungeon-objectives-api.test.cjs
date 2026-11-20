@@ -84,6 +84,7 @@ test('stage 14 guardian/key/portal: two C instances share one objective and deny
   // Fixed early-築基 training values make this twelve-hit shared key test
   // exercise both players and the stamina-recharge checkpoint.
   room.members.a.battleAttack=100;room.members.b.battleAttack=100;
+  room.members.a.dungeonAttack=100;room.members.b.dungeonAttack=100;
   for(let i=1;i<=5;i++){
     const x=await f.call('a','strike',{
       roomId:f.id,enemyId:guardian.id,seq:i},i%2);
