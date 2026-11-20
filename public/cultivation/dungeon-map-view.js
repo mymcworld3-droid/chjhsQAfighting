@@ -16,7 +16,7 @@ import './tactical-impact-presentation.js';
 import {dungeonEnvironmentPlan} from './dungeon-environment-effects.js';
 import {dungeonBossTransition} from './dungeon-boss-visuals.js';
 import './tactical-threat-visuals.js';
-import {dungeonThreatPlan} from './dungeon-threat-plan.js';
+import {dungeonThreatPlan,dungeonIncomingDamage} from './dungeon-threat-plan.js';
 import {dungeonAnimationEvents,paintDungeonScene,drawDungeonHitNumbers} from './dungeon-skill-animation.js';
 import {dungeonMovementEvents,sampleDungeonMovement,continueDungeonMovement,previewDungeonMovement} from './dungeon-movement-animation.js';
 import {dungeonEnemyReactionEvents} from './dungeon-enemy-animation.js';
@@ -381,8 +381,14 @@ class DungeonMapView{
       else if(threatened.length){
         const fire=Math.min(...threatened.map(beast=>beast.attack.resolvesAtTick));
         const applied=Number(this.room?.battleClock?.appliedTick)||0;
+        const expected=threatened.map(beast=>
+          dungeonIncomingDamage(beast.attack,own)).filter(Number.isFinite);
+        const total=expected.reduce((sum,damage)=>sum+damage,0);
         threat.textContent='危險！'+threatened.length+
-          ' 隻靈獸鎖定腳下 · 約 '+Math.max(0,fire-applied)+' 秒後命中，請立即移開';
+          ' 隻靈獸鎖定腳下 · 約 '+Math.max(0,fire-applied)+
+          ' 秒後命中'+(expected.length===threatened.length?
+            ' · 若不閃避，預估累計 '+total+' 傷害（未計掩護）':'')+
+          '，請立即移開';
       }
     }
     const party=this.$('[data-dm-team-status]');
@@ -1211,7 +1217,11 @@ class DungeonMapView{
         (selected.targetUid?' · 已發現修士':'')+
         ' · 節拍 T'+(selected.lastActionTick||0)+
         (selected.attack?' · '+selected.attack.label+
-          ' 即將於 T'+selected.attack.resolvesAtTick+' 攻擊（紅格危險）':'')+
+          ' 即將於 T'+selected.attack.resolvesAtTick+' 攻擊（紅格危險）'+
+          (dungeonIncomingDamage(selected.attack,this.room?.members?.[this.uid])!==null?
+            ' · 若命中你，預估 '+
+            dungeonIncomingDamage(selected.attack,this.room?.members?.[this.uid])+
+            ' 傷害（未計掩護）':''):'')+
         (selected.lastAttack?.hits?.length?' · 最近命中 '+
           selected.lastAttack.hits.length+' 位修士':'');
     }else details.textContent='點選靈獸可查看最新行動';
