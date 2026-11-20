@@ -1,5 +1,14 @@
 // Read-only adapter from C-room telegraphs to the exact warning renderer
 // shared with 問道試煉. A client cannot create attacks or alter hit tiles.
+// Read-only UI estimate: the server resolves damage as a percentage of the
+// trusted player's maximum HP. Boss guard/other mitigations are NOT assumed.
+export function dungeonIncomingDamage(attack,member){
+  const base=attack?.damage;
+  if(!Number.isFinite(base)||base<0)return null;
+  const max=Number.isSafeInteger(member?.battleMaxHealth)&&
+    member.battleMaxHealth>0?member.battleMaxHealth:100;
+  return Math.max(1,Math.round(base*max/100));
+}
 const key=p=>p.x+','+p.y;
 const legal=(map,p)=>Number.isInteger(p?.x)&&Number.isInteger(p?.y)&&
   p.x>=0&&p.y>=0&&p.x<map?.width&&p.y<map?.height&&
