@@ -3,6 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict');
 const Rescue=require('../dungeon-team-rescue.cjs');
 const Victory=require('../dungeon-victory-reward.cjs');
 const Boss=require('../dungeon-boss-battle.cjs');
+const Player=require('../dungeon-player-combat.cjs');
 const {generateDungeonLayout,walkable}=require('../dungeon-map-generator.cjs');
 const {PROJECT_IDS}=require('../firebase-admin-projects.cjs');
 const {__test:API}=require('../dungeon-room-api.cjs');
@@ -228,7 +229,11 @@ test('real boss death atomically archives a permanent C victory and personal inb
   assert.equal((await f.call('a','recent-victories')).body.rewards.length,0,
     'live boss cannot be mistaken for a completed victory');
   const fight=f.raw();
-  fight.enemies[0].battleHealth=240; // Requires both trusted foundation strikes.
+  const probe={...fight.enemies[0],battleHealth:Boss.HP};
+  const firstDamage=Boss.damage(probe,'a',
+    Player.playerStrikeDamage(fight.members.a),
+    fight.battleAppliedTick).damage;
+  fight.enemies[0].battleHealth=firstDamage+1; // Both contributors must hit.
   fight.members.a.position={x:11,y:8};
   fight.members.b.position={x:12,y:8};
   const [a,b]=await Promise.all([
