@@ -254,7 +254,20 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
       timeTaken:Math.max(0,Math.min(86400,Number(input.timeTaken)||0))
     });
     tx.update(userRef,patch);tx.set(recordRef,s);
-    return {review,state:view(s)};
+    // Only the current user sees their already-committed progress. This is
+    // the same post-grade client refresh used by the main PvE question UI;
+    // the shared learning footprint must not display stale mastery data.
+    const progress={stats:{
+      totalScore:patch['stats.totalScore'],
+      totalAnswered:patch['stats.totalAnswered'],
+      totalCorrect:patch['stats.totalCorrect'],
+      knowledgeMap:patch['stats.knowledgeMap'],
+      knowledgePointMapV1:patch['stats.knowledgePointMapV1'],
+      soloLearningV1:patch['stats.soloLearningV1'],
+      ...(Object.hasOwn(patch,'stats.adaptiveLearningV1')?
+        {adaptiveLearningV1:patch['stats.adaptiveLearningV1']}:{})
+    }};
+    return {review,state:view(s),progress};
   });
 }
 async function acknowledge(dbA,dbC,uid,input,now=Date.now()){
