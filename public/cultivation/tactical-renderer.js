@@ -608,16 +608,17 @@ export class TacticalRenderer{
   // no visual state is ever used for combat authority.
   updateFocusAuras(geometry,actors,now){
     const layer=this.canvas.parentElement?.querySelector('[data-focus-layer]');
-    if(!layer||!geometry||this.preview)return;
+    if(!layer||!geometry)return;
     const present=new Set(),state=this.state;
-    if(state?.mode==='pve'&&state.status==='active'){
+    if(!this.preview&&state?.mode==='pve'&&state.status==='active'){
       for(const actor of actors){
         const authentic=state.actors.find(a=>a.uid===actor.uid);
         const remaining=authentic?R.focusTurns(authentic):0;
         if(!remaining||!R.alive(authentic)||actor.bot||
             !Number.isFinite(actor.x)||!Number.isFinite(actor.y))continue;
         const cell=geometry.cell;
-        const pose=Ambience.idlePose(actor,now,this.reducedMotion.matches||this.isAnimating);
+        const pose=Ambience.idlePose(actor,now,
+          !this.ambience||this.reducedMotion.matches||this.isAnimating);
         const x=geometry.ox+(actor.x+.5+(actor.sway||0))*cell+(pose?.dx||0)*cell;
         const groundY=geometry.oy+(actor.y+.5)*cell;
         const y=Math.max(cell*.82,groundY-(actor.lift||0)*cell)+(pose?.dy||0)*cell;
