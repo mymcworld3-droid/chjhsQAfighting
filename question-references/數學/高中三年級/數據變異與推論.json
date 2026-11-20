@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-m3-variance-inference-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "針對常見計算與推論迷思設計可檢驗的單一正解",
+      "question": {
+        "q": "甲組資料為4、6、8，乙組資料為2、6、10。兩組平均皆為6，若以母體標準差比較，哪一組較大？",
+        "correct": "乙組，因其標準差為甲組的2倍",
+        "wrong": [
+          "甲組，因甲組每筆資料較接近平均數",
+          "兩組平均相同，因此標準差必相同",
+          "乙組的標準差為甲組的4倍"
+        ],
+        "exp": "甲組離差為−2、0、2，母體變異數8/3；乙組離差為−4、0、4，變異數32/3，故標準差的比為√4=2。",
+        "subject": "數學",
+        "sub_topic": "數據變異與推論",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-數據變異與推論",
+        "template_id": "ref-20261120-b12-m3-variance-inference-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-m3-variance-inference-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "針對常見計算與推論迷思設計可檢驗的單一正解",
+      "question": {
+        "q": "某問卷只在校門口早上7點半發放，想推論全校學生的通勤方式。哪一項修正最能降低抽樣偏差？",
+        "correct": "依年級及不同到校時段設計抽樣，讓未在該時段出現的學生也有機會被抽中",
+        "wrong": [
+          "只在7點半多發放一千份，就能保證代表全校",
+          "只問願意填答的騎腳踏車者，因其通勤經驗較豐富",
+          "把早上7點半的所有受訪結果直接當作全校母體比例"
+        ],
+        "exp": "單一時段、單一地點易漏掉其他時間到校者；改善抽樣涵蓋範圍及分層設計較能提高代表性，擴大同一偏差樣本並不足夠。",
+        "subject": "數學",
+        "sub_topic": "數據變異與推論",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-數據變異與推論",
+        "template_id": "ref-20261120-b12-m3-variance-inference-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-m3-variance-inference-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "針對常見計算與推論迷思設計可檢驗的單一正解",
+      "question": {
+        "q": "同一班成績原平均70、標準差8。全體成績依統一規則改為新分數Y=1.5X+5，則新平均與標準差各為何？",
+        "correct": "平均110、標準差12",
+        "wrong": [
+          "平均110、標準差17",
+          "平均105、標準差12",
+          "平均75、標準差8"
+        ],
+        "exp": "平均線性變換為1.5×70+5=110；標準差只乘常數絕對值，為1.5×8=12，加5不影響離散程度。",
+        "subject": "數學",
+        "sub_topic": "數據變異與推論",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-數據變異與推論",
+        "template_id": "ref-20261120-b12-m3-variance-inference-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
