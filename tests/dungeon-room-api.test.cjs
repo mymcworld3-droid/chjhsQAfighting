@@ -259,3 +259,29 @@ test('migration from a 100 HP room preserves injury ratio, not free health',asyn
   const snapshot=f.c.records.get(key);
   assert.equal(snapshot.members.a.battleHealth,500);
 });
+
+test('server room projection reveals only each authenticated member mastery ledger',()=>{
+  const room={
+    mode:'dungeon',version:1,revision:12,status:'assembled',
+    expiresAtMs:1800000004000,assembledAtMs:1800000001000,
+    manualProgressSession:1800000001000,
+    manualExp:{
+      a:{'sword-wind':70},
+      b:{'body-rock':140}
+    },
+    members:{a:{uid:'a',battleHealth:100,explorationStamina:8},
+      b:{uid:'b',battleHealth:100,explorationStamina:7}},
+    enemies:[],battleAppliedTick:0
+  };
+  const own=API.publicRoom('dungroom000001',room,1800000002000,'a');
+  assert.deepEqual(own.manualExp,{a:{'sword-wind':70}});
+  assert.equal(own.manualProgressSession,room.manualProgressSession);
+  assert.equal(own.manualExp.b,undefined);
+  const other=API.publicRoom('dungroom000001',room,1800000002000,'b');
+  assert.deepEqual(other.manualExp,{b:{'body-rock':140}});
+  const anonymous=API.publicRoom('dungroom000001',room,1800000002000);
+  assert.equal(anonymous.manualExp,undefined);
+  const outsider=API.publicRoom('dungroom000001',room,1800000002000,'visitor');
+  assert.equal(outsider.manualExp,undefined);
+  assert.deepEqual(room.manualExp.a,{'sword-wind':70},'projection must remain pure');
+});
