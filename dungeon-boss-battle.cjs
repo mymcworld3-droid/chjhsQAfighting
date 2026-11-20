@@ -3,6 +3,7 @@
 // collision creature, not four independently damageable NPCs or a client
 // animation. Map generation is deterministic and separate from v1 exploration.
 const {walkable}=require('./dungeon-map-generator.cjs');
+const {STAGE,REALM}=require('./dungeon-manual-progression.cjs');
 const {dueTick,isRunning}=require('./dungeon-battle-clock.cjs');
 const Combat=require('./dungeon-enemy-combat.cjs');
 const {clampStamina,staminaFor,staminaAfterCost}=require('./dungeon-stamina-rules.cjs');
@@ -175,7 +176,8 @@ function resolveGuardedAttack(boss,members,tick){
   return {members:next,hits};
 }
 function initialBoss(){
-  return {id:ID,name:NAME,kind:KIND,position:{...ANCHOR},
+  return {id:ID,name:NAME,kind:KIND,realmStage:STAGE,realm:REALM,
+    position:{...ANCHOR},
     battleHealth:HP,battleMaxHealth:HP,shield:SHIELD_MAX,
     exposedUntilTick:-1,lastContributorUid:null,lastContributorTick:-1,
     lastTeamHit:null,
