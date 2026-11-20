@@ -283,6 +283,11 @@ function ensure(){
     document.head.append(link);
   }
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
+  if(!document.getElementById('tactical-quarter-weapons-style')){
+    const link=document.createElement('link');link.id='tactical-quarter-weapons-style';
+    link.rel='stylesheet';link.href='/styles/tactical-quarter-weapons.css?v=20261121-v1';
+    document.head.append(link);
+  }
   if(!document.getElementById('tactical-focus-effects-style')){
     const link=document.createElement('link');
     link.id='tactical-focus-effects-style';link.rel='stylesheet';
@@ -931,11 +936,16 @@ function buildGame(){
     attack.dataset.wheelAction='attack-ring';
     attack.style.clipPath=wheelWedge(-90,-135,74,49);
     attack.innerHTML='<span>攻擊</span>';
-    move.className='tc-left-move';
-    move.dataset.wheelAction='move';
-    move.style.clipPath=leftWheelWedge(-90,0,82,58);
-    move.innerHTML='<span><i class="fa-solid fa-person-walking" aria-hidden="true"></i>移動</span>';
-    energy.append(move);
+    if(myActor()?.manualWeaponMode){
+      move.className='tc-left-move';move.dataset.wheelAction='move';
+      move.style.clipPath=leftWheelWedge(-90,0,82,58);
+      move.innerHTML='<span><i class="fa-solid fa-person-walking" aria-hidden="true"></i>移動</span>';
+      energy.append(move);
+    }else{
+      move.className='tc-sector tc-sector-move';move.dataset.wheelAction='move';
+      move.style.clipPath=wheelWedge(-135,-180,74,49);
+      move.innerHTML='<span>移動</span>';
+    }
     end.className='tc-sector tc-sector-end';
     end.style.clipPath=wheelWedge(-90,-180,49,0);
     end.innerHTML='<span>結束\n回合</span>';
@@ -1481,6 +1491,7 @@ function accept(next,serial){
     hideBossBanner();bossTransitionPending=null;
     beastInspector?.dismiss();sealInspector?.dismiss();
     battleLoadouts=null;loadoutFetchedFor='';loadoutMenuOpen=false;
+    weaponSelectionOpen=false;selectedWeaponId='';
     battleMasteryBaseline=null;
     clearLiveManualXp();
   }
