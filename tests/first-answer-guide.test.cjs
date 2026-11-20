@@ -149,14 +149,37 @@ test('scope editor retains its opener instead of always navigating to settings',
   assert.match(studio, /scopeChanged && origin === 'page-quiz'/);
   assert.match(read('cultivation/curriculum-pages.js'), /curriculumStudioReturnPage/);
 });
-test('tutorial listens to server-confirmed move/attack/end and first validated answer', () => {
+test('tutorial listens to confirmed move/attack and first validated answer', () => {
   const src = read('cultivation/tactical-combat.js');
   assert.match(src, /tutorialEvent\('entered'\)/);
   assert.match(src, /tutorialEvent\('question'\)/);
   assert.match(src, /tutorialEvent\('answered'\)/);
   assert.match(src, /committed\.revision>request\.revision/);
-  for (const stage of ['moved','attacked']) assert.ok(src.includes("tutorialEvent('" + stage + "')"));
+  for (const stage of ['moved','attacked']) assert.match(src,new RegExp("tutorialEvent\\('"+stage+"'"));
   assert.match(src, /tutorialEvent\('attack-selected'\)/);
   assert.match(src, /selectWheel\('attack-ring',true\)/);
   assert.match(src, /if\(prior===4&&tutorialStep\(\)===5\)selectWheel\('move',true\)/);
+});
+
+test('only the learner’s real first guided question is rearranged to A, and remains scoped to the account', () => {
+  const h=harness();h.window.scheduleFirstAnswerGuide('new-account',true);
+  const quiz={data:{q:'1+1=?',opts:['3','4','2','5'],ans:2,exp:'2'}};
+  assert.equal(h.window.arrangeFirstGuideAnswerA('new-account',quiz),false,'no battle entered');
+  h.event('entered');h.page('battle');h.event('question');
+  assert.equal(h.window.arrangeFirstGuideAnswerA('other-account',quiz),false);
+  assert.equal(h.window.arrangeFirstGuideAnswerA('new-account',quiz),true);
+  assert.deepEqual(quiz.data.opts,['2','4','3','5']);
+  assert.equal(quiz.data.ans,0);
+  h.event('scope-saved','page-quiz');h.event('answered');
+  assert.equal(h.window.arrangeFirstGuideAnswerA('new-account',quiz),false,'no further question reordering during action tutorial');
+});
+test('the first stage guide ignores events from unrelated rooms or later stages', () => {
+  const h=harness();h.window.scheduleFirstAnswerGuide('new-account',true);
+  h.event('entered','', 'new-account',{roomId:'other-room',stage:2});
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step,0);
+  h.event('entered');h.event('question','', 'new-account',{roomId:'other-room'});
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step,1);
+  h.event('question');h.event('scope-saved','page-quiz');h.event('answered');h.page('battle');
+  h.event('attack-selected','', 'new-account',{stage:2});
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step,4);
 });

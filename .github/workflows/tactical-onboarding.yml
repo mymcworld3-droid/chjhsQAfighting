@@ -16,6 +16,7 @@ on:
       - 'public/styles/first-visit.css'
       - 'public/module-versions.json'
       - 'tests/first-answer-guide.test.cjs'
+      - 'tests/tactical-first-stage-onboarding.test.cjs'
       - 'tests/login-auto-entry.test.cjs'
       - 'tests/first-visit.test.cjs'
       - 'tests/account-delete.test.cjs'
@@ -44,6 +45,7 @@ jobs:
       - name: Verify newcomer tutorial, scope routing and battle interactions
         run: >-
           node --test tests/first-answer-guide.test.cjs
+          tests/tactical-first-stage-onboarding.test.cjs
           tests/login-auto-entry.test.cjs
           tests/first-visit.test.cjs
           tests/account-delete.test.cjs
