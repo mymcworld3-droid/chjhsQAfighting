@@ -21,6 +21,7 @@ const Boss=require('./dungeon-boss-battle.cjs');
 const Portal=require('./dungeon-portal-readiness.cjs');
 const Rescue=require('./dungeon-team-rescue.cjs');
 const Victory=require('./dungeon-victory-reward.cjs');
+const ManualProgress=require('./dungeon-manual-progression.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -65,6 +66,8 @@ const publicRoom=(roomId,room,at=Date.now())=>({
   // never the secret map seed or server-side patrol/decision internals.
   enemies:Array.isArray(room.enemies)?room.enemies.map(e=>({
     id:e.id,name:e.name,kind:e.kind,position:e.position,
+    realm:e.realm||ManualProgress.REALM,
+    realmStage:e.realmStage||ManualProgress.STAGE,
     ...(e.kind==='boss'?{footprint:2,phase:Boss.phase(e.battleHealth,recordedMax(e)),
       shield:Math.max(0,Number(e.shield)||0),shieldMax:Boss.SHIELD_MAX,
       exposedUntilTick:e.exposedUntilTick||0,
@@ -427,12 +430,26 @@ function createHandler({
         return res.json({ok:true,roomId,revision:updated.revision,
           heartbeatAtMs:Number(membersOf(updated)[uid]?.heartbeatAtMs)||0});
       }
+      if(action==='claim-manual-exp'){
+        // A receipt may need recovery after a disconnect, a closed lobby,
+        // or a failed cross-project request. Only C's server-owned ledger
+        // for this authenticated UID is accepted as evidence.
+        const snap=await roomRef.get();
+        if(!snap.exists)throw err('找不到副本經驗紀錄',404);
+        const room=snap.data();
+        const result=await ManualProgress.claim(resolveA().db,roomId,room,uid);
+        return res.json({ok:true,roomId,manualProgress:result});
+      }
       if(action==='get'){
         const snap=await roomRef.get();
         if(!snap.exists)throw err('副本房間不存在',404);
         const room=snap.data();
         if(!hasMember(room,uid))throw err('你不是此副本的隊員',403);
         if(!sessionRoom(room,at))throw err('副本房間已關閉或過期',410);
+        if(room.manualExp?.[uid]){
+          try{await ManualProgress.claim(resolveA().db,roomId,room,uid);}
+          catch(error){logger.warn?.('[Dungeon manual XP retry]',error.message);}
+        }
         return respond(roomId,await refreshAdmin(roomId,room));
       }
       if(action==='move'||action==='move-route'){
@@ -521,12 +538,22 @@ function createHandler({
               skillId:req.body?.skillId,target:req.body?.target,seq:req.body?.seq
             }):Skills.switchLoadout(evolved,uid,record,req.body?.index);
           if(outcome.duplicate&&!battleDelta)return current;
+          const mastery=action==='skill'&&!outcome.duplicate?
+            ManualProgress.recordKills(evolved,outcome,uid,req.body?.skillId):null;
+          if(mastery?.award){
+            outcome.members={...outcome.members,[uid]:{
+              ...outcome.members[uid],
+              lastSkill:{...outcome.members[uid].lastSkill,
+                manualMastery:mastery.award}
+            }};
+          }
           const progress=action==='skill'&&!outcome.duplicate?
             Objectives.combatProgress(evolved,outcome.enemies,uid):
             evolved.dungeonProgress;
           const bossEncounter=action==='skill'&&!outcome.duplicate?
             Boss.onDefeat(evolved,outcome.enemies,uid):evolved.bossEncounter;
           const next={...evolved,members:outcome.members,
+            ...(mastery?{manualExp:mastery.ledger}:{}),
             ...(action==='skill'?{enemies:outcome.enemies}:{}),
             ...(progress?{dungeonProgress:progress}:{}),
             ...(bossEncounter?{bossEncounter}:{}),
@@ -536,6 +563,7 @@ function createHandler({
             bossEncounter?.status==='defeated'?
             await Victory.prepareArchive(tx,db,roomId,next,at):null;
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
+            ...(mastery?{manualExp:next.manualExp}:{}),
             ...(action==='skill'?{enemies:next.enemies}:{}),
             ...(progress!==evolved.dungeonProgress?{dungeonProgress:progress}:{}),
             ...(bossEncounter!==evolved.bossEncounter?{bossEncounter}:{}),
@@ -543,6 +571,10 @@ function createHandler({
           saveVictory?.();
           return next;
         });
+        if(action==='skill'&&updated.manualExp?.[uid]){
+          try{await ManualProgress.claim(resolveA().db,roomId,updated,uid);}
+          catch(error){logger.warn?.('[Dungeon manual XP pending retry]',error.message);}
+        }
         return respond(roomId,updated);
       }
       if(action==='activate-portal'){
@@ -686,6 +718,8 @@ function createHandler({
           if(!sessionRoom(witness,at))
             throw err('舊版副本已逾期，且沒有可恢復的勝利存檔',410);
         }
+        try{await ManualProgress.claim(resolveA().db,roomId,witness,uid);}
+        catch(error){logger.warn?.('[Dungeon archived manual XP pending]',error.message);}
         const reward=await Victory.claim(resolveA().db,roomId,witness,uid,at);
         return res.json({ok:true,roomId,reward});
       }
@@ -766,11 +800,13 @@ function createHandler({
               dungeonArena:'exploration',bossEncounter:null,
               bossPortalReady:{version:Portal.VERSION,votes:{}},
               ...clockState,...enemyState,members:startingMembers,
+              manualProgressSession:at,manualExp:{},
               revision:room.revision+1};
             tx.update(roomRef,{status:next.status,assembledAtMs:at,
               dungeonArena:'exploration',bossEncounter:null,
               bossPortalReady:next.bossPortalReady,
               ...clockState,...enemyState,members:startingMembers,
+              manualProgressSession:at,manualExp:{},
               revision:next.revision});
             return next;
           }
