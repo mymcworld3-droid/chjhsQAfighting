@@ -9,11 +9,11 @@ export function detectManualCelebration(before,after,context={}) {
   if(newBooks.length){
     const book=newBooks[0],starter=context.kind==='school';
     return {kind:'discovery',school:book.school,bookId:book.id,
-      name:book.name,level:Number(book.level)||1,
-      heading:starter?'初悟功法':'新功法入藏',
-      kicker:starter?'入門功法 · 首次習得':'試煉機緣 · 功法收錄',
-      detail:starter?'入門功法已加入藏經閣，可開始修煉。':'新功法已正式加入藏經閣。',
-      extra:newBooks.length>1?`本次共取得 ${newBooks.length} 本功法`:''
+      name:book.name,level:Number(book.level)||1,weaponType:book.weaponType||null,
+      heading:book.weaponType?(starter?'初獲武器':'新武器入庫'):(starter?'初悟功法':'新功法入藏'),
+      kicker:book.weaponType?(starter?'入門武器 · 首次獲得':'試煉機緣 · 武器收藏'):(starter?'入門功法 · 首次習得':'試煉機緣 · 功法收錄'),
+      detail:book.weaponType?(starter?'入門武器已加入兵器閣，可開始修煉。':'新武器已加入兵器閣。'):(starter?'入門功法已加入藏經閣，可開始修煉。':'新功法已正式加入藏經閣。'),
+      extra:newBooks.length>1?`本次共取得 ${newBooks.length} ${book.weaponType?'件武器':'本功法'}`:''
     };
   }
   const upgrades=[],unlocks=[];
@@ -31,8 +31,8 @@ export function detectManualCelebration(before,after,context={}) {
   if(unlocks.length){
     const {book,skill}=unlocks[0];
     return {kind:'unlock',school:book.school,bookId:book.id,skillId:skill.id,
-      name:skill.name,level:Number(book.level)||1,heading:'招式領悟',
-      kicker:'功法突破 · 新招式',detail:`《${book.name}》已領悟「${skill.name}」`,
+      name:skill.name,level:Number(book.level)||1,weaponType:book.weaponType||null,heading:'招式領悟',
+      kicker:book.weaponType?'武器突破 · 新招式':'功法突破 · 新招式',detail:`《${book.name}》已領悟「${skill.name}」`,
       extra:unlocks.length>1?`另外領悟 ${unlocks.length-1} 招`:'',
       bookName:book.name};
   }
@@ -43,8 +43,8 @@ export function detectManualCelebration(before,after,context={}) {
     const skill=newBook?.skills.find(item=>item.id===context.skillId);
     if(skill&&oldSkill&&Number(skill.level)>Number(oldSkill.level)){
       return {kind:'skill-upgrade',school:newBook.school,bookId:newBook.id,skillId:skill.id,
-        name:skill.name,level:Number(skill.level)||1,previousLevel:Number(oldSkill.level)||1,
-        heading:'招式精進',kicker:'修行精進 · 功法招式',
+        name:skill.name,level:Number(skill.level)||1,previousLevel:Number(oldSkill.level)||1,weaponType:newBook.weaponType||null,
+        heading:'招式精進',kicker:newBook.weaponType?'修行精進 · 武器招式':'修行精進 · 功法招式',
         detail:`「${skill.name}」威力更上一層。`,extra:''};
     }
   }
@@ -52,10 +52,10 @@ export function detectManualCelebration(before,after,context={}) {
     const entry=upgrades.find(item=>item.book.id===context.bookId)||upgrades[0];
     const {book,old}=entry;
     const nextSkill=(book.skills||[]).find((skill,i)=>!(old.skills?.[i]?.unlocked) && skill.mastered && !skill.realmReady);
-    const extra=nextSkill?`已達「${nextSkill.name}」的功法等級門檻，仍需符合修士境界。`:'';
+    const extra=nextSkill?`已達「${nextSkill.name}」的${book.weaponType?'武器':'功法'}等級門檻，仍需符合修士境界。`:'';
     return {kind:'manual-upgrade',school:book.school,bookId:book.id,
-      name:book.name,level:Number(book.level)||1,previousLevel:Number(old.level)||1,
-      heading:'功法精進',kicker:'修行突破 · 境界提升',
+      name:book.name,level:Number(book.level)||1,previousLevel:Number(old.level)||1,weaponType:book.weaponType||null,
+      heading:book.weaponType?'武器精進':'功法精進',kicker:'修行突破 · 境界提升',
       detail:`《${book.name}》熟練度已提升。`,extra};
   }
   return null;
@@ -77,8 +77,8 @@ export function renderManualCelebration(result,{esc,bookArt,skillArt,findSkill})
     :`<span class="manual-celebration-art-fallback" aria-hidden="true">${fallback}</span>`;
   const reveal=discovery||isUnlock;
   const noLevel=discovery;
-  const levelLine=noLevel?'已收入藏經閣':
-    `<span class="manual-celebration-level-label">${result.kind==='skill-upgrade'?'招式':'功法'} Lv.</span>
+  const levelLine=noLevel?(result.weaponType?'已收入兵器閣':'已收入藏經閣'):
+    `<span class="manual-celebration-level-label">${result.kind==='skill-upgrade'?'招式':result.weaponType?'武器':'功法'} Lv.</span>
       ${result.previousLevel?`<span class="manual-celebration-old-level">${Number(result.previousLevel)}</span>
        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>`:''}
       <b>${Number(result.level)||1}</b>`;
