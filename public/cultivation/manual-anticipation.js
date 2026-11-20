@@ -76,20 +76,24 @@ export function battleBreakthroughEstimate(snapshot,room,uid,delta,catalog,basel
   candidates.sort((a,b)=>priority[a.status]-priority[b.status]||a.remaining-b.remaining);
   return candidates[0]||null;
 }
-export function renderBattleBreakthroughEstimate(hint,esc){
+export function renderBattleBreakthroughEstimate(hint,esc,{confirmed=false}={}){
   if(!hint)return '';
   const txt=v=>esc(String(v??'')),fmt=v=>Math.max(0,Number(v)||0).toLocaleString('zh-TW');
   const realm=hint.status==='realm';
   const title=realm?'功法門檻已達 · 待境界提升':
     hint.status==='imminent'?'靈氣將滿 · 接近突破':'功法逐漸接近門檻';
   const detail=realm?'仍須達到修士 '+hint.realmName+'境':
-    '試算距 Lv. '+hint.targetLevel+' 等級門檻約 '+fmt(hint.remaining)+' EXP';
+    (confirmed?'距 Lv. ':'試算距 Lv. ')+hint.targetLevel+
+      ' 等級門檻'+(confirmed?'還差 ':'約 ')+fmt(hint.remaining)+' EXP';
+  const note=confirmed?
+    'EXP 已依角色帳號確認，領悟招式仍須達到指定境界。':
+    '本場僅為試算，實際 EXP 與領悟以伺服器結算為準。';
   return `<div class="tc-manual-breakthrough tc-manual-breakthrough--${hint.status}"
     data-manual-battle-breakthrough data-manual-breakthrough-status="${hint.status}">
     <div class="tc-manual-breakthrough-title"><strong>${txt(title)}</strong><small>${hint.percent}%</small></div>
     <div class="tc-manual-breakthrough-track" role="progressbar"
       aria-valuemin="0" aria-valuemax="100" aria-valuenow="${hint.percent}"
       aria-label="本場試算功法門檻進度"><span style="width:${hint.percent}%"></span></div>
-    <small> ${txt(detail)} · 本場僅為試算，實際 EXP 與領悟以伺服器結算為準。</small>
+    <small>${txt(detail)} · ${txt(note)}</small>
   </div>`;
 }
