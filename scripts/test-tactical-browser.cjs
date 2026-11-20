@@ -981,9 +981,9 @@ async function main(){
       if(await quick.locator('.tc-weapon-outer-choices').isHidden())
         await quick.locator('[data-wheel-action="attack-ring"]:visible').first().click();
       assert.equal(await quick.locator('[data-weapon-choice="sword-wind"]').count(),1);
-      await quick.locator('[data-weapon-choice="sword-wind"]').click();
+      await quick.locator('[data-weapon-choice="sword-wind"] .tc-modern-weapon-label').click();
       assert.equal(await quick.locator('[data-wheel-choice^="manual:"]').count(),3);
-      await quick.locator('[data-wheel-choice="manual:wind-slash"]').click();
+      await quick.locator('[data-wheel-choice="manual:wind-slash"] .tc-modern-skill-label').click();
       await cell(quick,2,1);
       await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='6');
       const result=await read(quick);
