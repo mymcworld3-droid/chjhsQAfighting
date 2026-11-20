@@ -5,7 +5,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 import { energyRingFill, dungeonFocusCharges, dungeonFocusEmpowers } from './dungeon-quarter-controls.js';
 import { dungeonTrialWheelHTML, bindDungeonTrialWheel, renderDungeonTrialWheel } from './dungeon-trial-wheel.js';
-import { dungeonRoute, dungeonReachableTiles, dungeonAttackTiles } from './dungeon-map-actions.js';
+import { dungeonRoute, dungeonReachableTiles, dungeonAttackTiles, dungeonSwordRoute, dungeonSwordTiles } from './dungeon-map-actions.js';
 import { skillArt, bookArt } from './manual-art.js';
 import { manualXpDelta, renderManualXpToast, renderManualXpProgress } from './tactical-manual-xp-feedback.js';
 import {manualAnticipation,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
@@ -61,7 +61,7 @@ class DungeonMapView{
     this.ambiencePlan=null;this.environmentPlan=null;
     this.ambientTimer=null;this.bossTransition=null;
     this.pendingAction=null;this.queuedSkill=null;
-    this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;
+    this.wheelMode='attack';this.moveTarget='player';this.selectedSkillId='';this.manualOpen=false;
     this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
     this.routePending=false;this.actionFeedbackTimer=null;
     this.rangeSignature='';this.rangeTiles=[];this.rangeKind='move';
@@ -309,7 +309,7 @@ class DungeonMapView{
     this.portalPending=false;this.bossPending=false;
     this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
     this.loadoutPending=false;this.aimTile=null;this.skillSignature='';
-    this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;this.wheelSwipeStart=null;
+    this.wheelMode='attack';this.moveTarget='player';this.selectedSkillId='';this.manualOpen=false;this.wheelSwipeStart=null;
     this.routePending=false;this.rangeSignature='';this.rangeTiles=[];
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
     this.beastIds='';this.touchOrigins.clear();this.gestureMulti=false;
@@ -461,10 +461,16 @@ class DungeonMapView{
     this.updateWheelHUD();
   }
   selectTrialWheel(value){
+    if(value==='player'||value==='sword'){
+      if(value==='sword'&&!this.room?.members?.[this.uid]?.flyingSword)return;
+      this.moveTarget=value;this.wheelMode='move';this.aimTile=null;
+      this.selectedBeastId=null;this.rangeSignature='';
+      this.updateBeastHUD();this.updateSkillHUD();this.updateWheelHUD();
+      this.drawSoon();return;
+    }
     if(value==='move'||value==='attack'){
       this.setWheelMode(value);return;
     }
-    if(value==='player')return;
     const own=this.room?.members?.[this.uid];
     const skills=own?.dungeonSkills||[];
     if(value!=='basic'&&!skills.some(skill=>skill.id===value))return;
@@ -504,9 +510,12 @@ class DungeonMapView{
       return {value:skill.id,name:skill.name,cost,
         description:skill.description||'',art,empowered};
     }):[{value:'basic',name:'普通攻擊',cost:2}];
+    if(this.moveTarget==='sword'&&!own?.flyingSword)this.moveTarget='player';
     renderDungeonTrialWheel(wheel,{
       mode:this.wheelMode,options,
-      selected:this.wheelMode==='move'?'player':this.selectedSkillId,
+      moveOptions:[{value:'player',name:'角色',cost:'1 體力/格'},
+        ...(own?.flyingSword?[{value:'sword',name:'飛劍',cost:'每 2 格 1 體力'}]:[])],
+      selected:this.wheelMode==='move'?this.moveTarget:this.selectedSkillId,
       stamina:Math.max(0,Math.min(10,Number(own?.explorationStamina)||0)),
       focusCharges:charges,
       locked:!active||this.movePending||this.routePending||
@@ -819,6 +828,7 @@ class DungeonMapView{
     const own=this.room?.members?.[this.uid]?.position;
     if(!own)return null;
     if(skill?.kind==='fist-focus')return {...own};
+    if(skill?.kind==='flying-sword')return this.aimTile;
     const picked=this.currentAim();
     if(!picked)return null;
     if(['fist-throw','fist-sweep','fist-chain'].includes(skill?.kind)){
@@ -868,17 +878,19 @@ class DungeonMapView{
       if(this.isCurrent()&&this.seq===token)this.updateSkillHUD();
     }
   }
-  async cast(skillId,requestedTarget=null){
+  async cast(skillId,requestedTarget=null,moveSword=false){
     const member=this.room?.members?.[this.uid];
     if(!this.isCurrent()||!member||this.loadoutPending||
       this.room.status!=='assembled')return;
-    const skill=member.dungeonSkills?.find(v=>v.id===skillId);
+    const skill=member.dungeonSkills?.find(v=>v.id===skillId)||
+      (moveSword&&member.flyingSword&&skillId==='flight-summon'?{
+        id:'flight-summon',name:'移動飛劍',kind:'flying-sword'}:null);
     if(!skill)return;
     const target=requestedTarget||this.targetFor(skill);
     if(!target){this.skillAlert('請先選擇同一直線上的目標，或空白地格');return;}
     if(this.skillPending){
       // Keep only the most recent follow-up input and its original target.
-      this.queuedSkill={skillId,target:{...target},
+      this.queuedSkill={skillId,target:{...target},moveSword,
         roomId:this.roomId,token:this.seq};
       this.skillAlert('下一招已預備 · 前一招結算後立即施放');
       return;
@@ -888,12 +900,12 @@ class DungeonMapView{
     let committed=false;
     this.skillPending=true;this.updateSkillHUD();
     this.pendingAction={kind:'skill',target:{...target},
-      origin:{...member.position},skillId,style:skill.kind,
+      origin:{...(skill.kind==='flying-sword'&&member.flyingSword||member.position)},skillId,style:skill.kind,
       startedAt:performance.now()};
     this.skillAlert('出招中 · 正在確認命中結果');
     this.drawSoon();
     try{
-      const response=await castDungeonSkill(roomId,skillId,target,seq);
+      const response=await castDungeonSkill(roomId,skillId,target,seq,moveSword);
       if(!this.isCurrent()||this.seq!==token||this.roomId!==roomId)return;
       if(response?.room){
         this.updateRoom(response.room);
@@ -957,7 +969,7 @@ class DungeonMapView{
         // resource spend occurs while waiting for the response.
         if(committed&&queued?.token===token&&queued.roomId===roomId)
           queueMicrotask(()=>{if(this.isCurrent()&&this.seq===token)
-            void this.cast(queued.skillId,queued.target);});
+            void this.cast(queued.skillId,queued.target,queued.moveSword);});
         else if(!committed&&queued)
           this.skillAlert('上一招未成功，預備招式已取消，請重新施放');
       }
@@ -1142,7 +1154,8 @@ class DungeonMapView{
     this.updateBeastHUD();this.updateStrikeHUD();
     this.updateSkillHUD();this.drawSoon();
     if(this.wheelMode==='move'){
-      void this.moveTo(tile);
+      if(this.moveTarget==='sword')void this.cast('flight-summon',tile,true);
+      else void this.moveTo(tile);
     }else if(this.selectedSkillId&&this.selectedSkillId!=='basic'){
       const own=this.room?.members?.[this.uid];
       const skill=own?.dungeonSkills?.find(s=>s.id===this.selectedSkillId);
@@ -1698,7 +1711,7 @@ class DungeonMapView{
     this.guardPending=false;this.guardSignature='';
     this.aimTile=null;this.skillSignature='';
     this.wheelSwipeStart=null;this.manualOpen=false;this.wheelMode='attack';
-    this.selectedSkillId='';this.routePending=false;
+    this.moveTarget='player';this.selectedSkillId='';this.routePending=false;
     this.rangeSignature='';this.rangeTiles=[];
     clearTimeout(this.actionFeedbackTimer);this.actionFeedbackTimer=null;
     this.quiz?.destroy();
@@ -1930,20 +1943,29 @@ class DungeonMapView{
     if(!member)return;
     const revision=Number(this.room.revision)||0;
     const key=this.roomId+'|'+this.seq+'|'+revision+'|'+
-      this.wheelMode+'|'+this.selectedSkillId;
+      this.wheelMode+'|'+this.moveTarget+'|'+this.selectedSkillId;
     if(this.rangeSignature===key)return;
     this.rangeSignature=key;
     const from=this.selfPad(),enemies=this.creatures();
     if(this.wheelMode==='move'){
-      this.rangeKind='move';
-      this.rangeTiles=dungeonReachableTiles(this.map,from,enemies,
-        member.dungeonAdmin===true?48:
-        Math.max(0,Math.min(10,member.explorationStamina||0)));
+      if(this.moveTarget==='sword'&&member.flyingSword){
+        this.rangeKind='sword';
+        this.rangeTiles=dungeonSwordTiles(this.map,from,member.flyingSword,
+          enemies,this.members(),member.dungeonAdmin===true?10:
+            Math.max(0,Math.min(10,member.explorationStamina||0)),true);
+      }else{
+        this.rangeKind='move';
+        this.rangeTiles=dungeonReachableTiles(this.map,from,enemies,
+          member.dungeonAdmin===true?48:
+          Math.max(0,Math.min(10,member.explorationStamina||0)));
+      }
     }else{
       const skill=(member.dungeonSkills||[]).find(s=>s.id===this.selectedSkillId)||
         {kind:'attack',range:2};
       this.rangeKind=skill.kind==='dash-cleave'?'dash':'attack';
-      this.rangeTiles=dungeonAttackTiles(this.map,from,skill,enemies);
+      this.rangeTiles=skill.kind==='flying-sword'?
+        dungeonSwordTiles(this.map,from,member.flyingSword,enemies,this.members()):
+        dungeonAttackTiles(this.map,from,skill,enemies);
     }
   }
   drawSoon(){
