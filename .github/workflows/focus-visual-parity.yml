@@ -1,0 +1,40 @@
+name: Focus visual parity
+
+on:
+  push:
+    branches: [stamina-battle]
+    paths:
+      - 'public/cultivation/tactical-rules.js'
+      - 'public/cultivation/tactical-combat.js'
+      - 'public/cultivation/tactical-renderer.js'
+      - 'public/cultivation/tactical-skill-effects.js'
+      - 'public/cultivation/tactical-animation.js'
+      - 'public/styles/tactical-focus-effects.css'
+      - 'public/styles/tactical-quarter-controls.css'
+      - 'public/styles/dungeon-map-view.css'
+      - 'public/styles/dungeon-trial-wheel.css'
+      - 'tests/tactical-focus-visuals.test.cjs'
+      - 'tests/tactical-skill-effects.test.cjs'
+      - 'tests/dungeon-focus-visuals.test.cjs'
+      - 'tests/dungeon-trial-wheel.test.cjs'
+      - '.github/workflows/focus-visual-parity.yml'
+  workflow_dispatch:
+
+jobs:
+  focus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Confirm static asset manifest
+        run: npm run check:module-versions
+      - name: Test trial and dungeon focus presentation without unrelated app suites
+        run: |
+          node --test \
+            tests/tactical-focus-visuals.test.cjs \
+            tests/tactical-skill-effects.test.cjs \
+            tests/dungeon-focus-visuals.test.cjs \
+            tests/dungeon-trial-wheel.test.cjs
