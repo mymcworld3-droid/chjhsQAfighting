@@ -1,5 +1,3 @@
-import './flying-sword-path.js?v=20261120-sword-movement-v1';
-
 // The same pathfinder is used by both battle engines and both UI previews.
 const swordWalkable=(map,p)=>Boolean(map&&Number.isSafeInteger(p?.x)&&Number.isSafeInteger(p?.y)&&
   p.x>=0&&p.y>=0&&p.x<map.width&&p.y<map.height&&
