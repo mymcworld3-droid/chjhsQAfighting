@@ -4,6 +4,7 @@
 // Firebase A. Across the two Firebases there is no fabricated atomic commit.
 const crypto=require('node:crypto');
 const Boss=require('./dungeon-boss-battle.cjs');
+const ManualDrops=require('./manual-reward-rules.cjs');
 const GOLD=120,CULTIVATION=3,RECEIPTS='dungeonVictoryClaims';
 const ARCHIVES='dungeonVictoryRecords',INBOXES='dungeonVictoryInbox',MAX_RECENT=16;
 const fail=(msg,status=409)=>Object.assign(new Error(msg),{status});
@@ -52,6 +53,10 @@ function makeArchive(roomId,room,at=Date.now()){
       enteredAtTick:b.enteredAtTick,defeatedAtTick:b.defeatedAtTick,
       defeatedByUid:b.defeatedByUid},
     enemies:[],
+    // Carry the trusted C-side kill totals into an immutable victory proof,
+    // so a player can recover uncredited EXP after the room has expired.
+    manualProgressSession:room.manualProgressSession||room.assembledAtMs,
+    manualExp:room.manualExp||{},
     members:Object.fromEntries(Object.keys(room.members).map(uid=>
       [uid,{uid}]))
   };
@@ -102,11 +107,13 @@ async function recent(dbA,dbC,uid){
     catch(_){continue;}
     const receipt=await dbA.collection(RECEIPTS)
       .doc(receiptId(roomId,proof.session,uid)).get();
+    const reward=receipt.exists?receipt.data():null;
     results.push({roomId,archivedAtMs:archive.data().archivedAtMs||0,
       defeatedAtTick:proof.defeatedAtTick,
       partySize:proof.partySize,
       claimed:receipt.exists,
-      claimedAtMs:receipt.exists?(receipt.data()?.claimedAtMs||0):0,
+      claimedAtMs:reward?.claimedAtMs||0,
+      manualDrop:reward?.manualDrop||null,
       gold:GOLD,cultivation:CULTIVATION});
   }
   return results;
@@ -117,15 +124,17 @@ async function claim(db,roomId,room,uid,now=Date.now()){
   return db.runTransaction(async tx=>{
     const claimRef=db.collection(RECEIPTS).doc(id);
     const userRef=db.collection('users').doc(uid);
-    const [claimed,userSnap]=await Promise.all([tx.get(claimRef),tx.get(userRef)]);
+    const manualRef=db.collection('tacticalManuals').doc(uid);
+    const [claimed,userSnap,manualSnap]=await Promise.all([
+      tx.get(claimRef),tx.get(userRef),tx.get(manualRef)]);
     if(!userSnap.exists)throw fail('玩家資料不存在',404);
     const user=userSnap.data()||{};
     if(user.uid&&user.uid!==uid)throw fail('玩家身分與記錄不符',403);
     if(claimed.exists){
       const prev=claimed.data()||{};
       return {status:'duplicate',awarded:false,gold:prev.gold,
-        cultivation:prev.cultivation,roomId,session:proof.session,
-        claimedAtMs:prev.claimedAtMs};
+        cultivation:prev.cultivation,manualDrop:prev.manualDrop||null,
+        roomId,session:proof.session,claimedAtMs:prev.claimedAtMs};
     }
     const stats=user.stats||{};
     const gold=amount(stats.gold),score=amount(stats.totalScore),
@@ -133,14 +142,22 @@ async function claim(db,roomId,room,uid,now=Date.now()){
     const patch={'stats.gold':gold+GOLD,
       'stats.totalScore':score+CULTIVATION,
       'stats.dungeonBossWins':wins+1};
+    // The exact same 30%-with-pity policy is used by 問道試煉;
+    // each party member independently receives one verified victory roll.
+    const rolled=ManualDrops.roll(null,uid,
+      manualSnap.exists?manualSnap.data():null);
+    const manualDrop=rolled.drop?
+      {id:rolled.drop,name:rolled.dropName}:null;
     const receipt={uid,roomId,session:proof.session,
       bossId:Boss.ID,partySize:proof.partySize,
       defeatedAtTick:proof.defeatedAtTick,
-      gold:GOLD,cultivation:CULTIVATION,claimedAtMs:now};
+      gold:GOLD,cultivation:CULTIVATION,manualDrop,claimedAtMs:now};
     tx.update(userRef,patch);
+    if(rolled.changed)tx.set(manualRef,rolled.state);
     tx.set(claimRef,receipt);
     return {status:'awarded',awarded:true,gold:GOLD,
-      cultivation:CULTIVATION,goldBalance:patch['stats.gold'],
+      cultivation:CULTIVATION,manualDrop,
+      goldBalance:patch['stats.gold'],
       cultivationBalance:patch['stats.totalScore'],
       roomId,session:proof.session,claimedAtMs:now};
   });
