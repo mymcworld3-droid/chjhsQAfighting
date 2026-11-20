@@ -65,7 +65,7 @@ test('only a living member standing near activated portal can teleport all teamm
   assert.equal(outcome.room.dungeonArena,'boss');
   assert.equal(outcome.room.bossEncounter.status,'fighting');
   assert.equal(outcome.room.enemies.length,1);
-  assert.equal(outcome.room.enemies[0].battleHealth,900);
+  assert.equal(outcome.room.enemies[0].battleHealth,Boss.HP);
   assert.deepStrictEqual(outcome.room.members.a.position,Boss.mapFor(seed).spawnPads[0]);
   assert.deepStrictEqual(outcome.room.members.b.position,Boss.mapFor(seed).spawnPads[1]);
   assert.equal(outcome.room.members.a.battleHealth,76);
@@ -79,9 +79,9 @@ test('only a living member standing near activated portal can teleport all teamm
 });
 test('three boss HP phases produce nonempty, walkable quake, charge and flame warnings',()=>{
   const map=Boss.mapFor(seed),boss=Boss.initialBoss();
-  assert.equal(Boss.phase(900),1);
-  assert.equal(Boss.phase(630),2);
-  assert.equal(Boss.phase(315),3);
+  assert.equal(Boss.phase(Boss.HP),1);
+  assert.equal(Boss.phase(Boss.HP*.7),2);
+  assert.equal(Boss.phase(Boss.HP*.35),3);
   const p={x:11,y:10};
   for(const kind of ['quake','charge','flame']){
     const warning=Boss.attackCells(map,boss,kind,p);
@@ -95,7 +95,7 @@ test('three boss HP phases produce nonempty, walkable quake, charge and flame wa
   const quake=Boss.plan(map,boss,targets,2);
   assert.equal(quake.kind,'quake');
   assert.equal(quake.resolvesAtTick,4);
-  const charge=Boss.plan(map,{...boss,battleHealth:600,attackCount:1},targets,7);
+  const charge=Boss.plan(map,{...boss,battleHealth:Boss.HP*.5,attackCount:1},targets,7);
   assert.equal(charge.kind,'charge');
   const flame=Boss.plan(map,{...boss,battleHealth:200,attackCount:2},targets,11);
   assert.equal(flame.kind,'flame');
@@ -156,4 +156,11 @@ test('boss defeat is idempotent and does not hand out unimplemented rewards',()=
   const view=Boss.publicEncounter(completed);
   assert.equal(view.status,'defeated');
   assert.equal('secret' in view,false);
+});
+
+test('boss phases also honor a persisted earlier encounter maximum HP',()=>{
+  assert.equal(Boss.HP,2800);
+  assert.equal(Boss.phase(900,900),1);
+  assert.equal(Boss.phase(630,900),2);
+  assert.equal(Boss.phase(315,900),3);
 });
