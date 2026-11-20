@@ -206,12 +206,12 @@ function ensure(){
   }
   if(!document.getElementById('tactical-manual-xp-feedback-style')){
     const link=document.createElement('link');link.id='tactical-manual-xp-feedback-style';link.rel='stylesheet';
-    link.href='/styles/tactical-manual-xp-feedback.css?v=20261118-live-exp-v1';
+    link.href='/styles/tactical-manual-xp-feedback.css?v=20261120-dungeon-mastery-v1';
     document.head.append(link);
   }
   if(!document.getElementById('tactical-manual-anticipation-style')){
     const link=document.createElement('link');link.id='tactical-manual-anticipation-style';link.rel='stylesheet';
-    link.href='/styles/manual-anticipation.css?v=20261118-breakthrough-phase8';
+    link.href='/styles/manual-anticipation.css?v=20261120-dungeon-mastery-v1';
     document.head.append(link);
   }
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
