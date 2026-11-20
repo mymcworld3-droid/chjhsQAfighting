@@ -93,11 +93,15 @@ function showLesson(quiz, lesson, { beforeAnswer = false } = {}) {
   const tactical=window.currentTacticalQuiz===quiz;
   if (!uid || !(window.currentActiveQuiz===quiz||tactical) || !meta || !scopeSelected(meta) || lesson.scopeId !== meta.scopeId || lesson.conceptId !== meta.conceptId) return;
   document.getElementById('adaptive-concept-lesson')?.remove();
-  const host = tactical
+  const host = quiz.adaptiveSurface==='dungeon'
     ? document.querySelector(beforeAnswer
-      ? '#tactical-combat [data-question-text]'
-      : '#tactical-combat .tc-feedback-text')
-    : document.getElementById(beforeAnswer ? 'question-text' : 'feedback-text');
+      ? '#dungeon-map-view .dm-quiz-question'
+      : '#dungeon-map-view .dm-quiz-explanation')
+    : tactical
+      ? document.querySelector(beforeAnswer
+        ? '#tactical-combat [data-question-text]'
+        : '#tactical-combat .tc-feedback-text')
+      : document.getElementById(beforeAnswer ? 'question-text' : 'feedback-text');
   if (!host) return;
   // The lesson is a compact native disclosure until the player opens it.
   const panel = document.createElement('details'); panel.id = 'adaptive-concept-lesson'; panel.className = 'adaptive-concept-lesson';
