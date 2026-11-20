@@ -13,6 +13,8 @@
 #first-visit-layer button:disabled{opacity:.55;cursor:wait;transform:none}
 #first-visit-layer button:focus-visible,#first-visit-layer input:focus-visible{outline:3px solid #e9d198;outline-offset:4px}
 #first-visit-layer .fv-secondary{background:transparent;border-color:#8ba29955;color:#b8cdc3;font-size:14px}
+#first-visit-layer .fv-google-button{display:inline-flex;justify-content:center;align-items:center;gap:10px}
+#first-visit-layer .fv-google-mark{display:block;flex:none;width:21px;height:21px}
 #first-visit-layer .fv-error{color:#ffbdac;min-height:1em;font-size:14px}
 #first-visit-layer .fv-portraits{position:absolute;inset:4% 2% 0;display:flex;align-items:flex-end;justify-content:space-between;pointer-events:none}
 #first-visit-layer .fv-portraits img{width:37%;height:95%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 0 35px #bcdecc22)}

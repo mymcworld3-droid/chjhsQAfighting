@@ -6,7 +6,7 @@ import './cultivation/adaptive-learning.js?v=20261112-stamina-main-solo-learning
 import './cultivation/ability-insights-core.js';
 import './cultivation/answer-gold-rules.js';
 import './cultivation/quest-rules.js';
-import './cultivation/first-visit.js';
+import './cultivation/first-visit.js?v=20261120-google-binding-button-v1';
 import { resolvePlayerAvatar } from './cultivation/profile-avatar.js';
 import './cultivation/curriculum-range-rules.js';
 import { subscribeSocialFeed } from './cultivation/social-feed.js';

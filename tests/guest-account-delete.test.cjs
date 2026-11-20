@@ -105,7 +105,8 @@ test('deletion explicitly resets the prior completed-arrival state and offers bo
   assert.match(arrival, /store\(\{ stage: 'welcome', completed: false, joining: false, guestUid: '' \}\)/);
   assert.match(arrival, /welcome\(\);\s*return true;/);
   assert.match(arrival, /免註冊，開始答題/);
-  assert.match(arrival, /已有帳號？直接登入/);
+  assert.match(arrival, /<span>綁定帳號<\/span>/);
+  assert.match(arrival, /使用 Google 綁定帳號或登入/);
   assert.match(legacy, /window\.isUnboundGuestAccount = user => Boolean/);
   assert.match(legacy, /linkedGoogleIdentity\?\.uid !== user\.uid/);
 });
