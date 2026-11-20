@@ -97,7 +97,7 @@ export function buildClassroomView(state, helpers) {
     const graded = tasks.filter(a => a.status !== 'draft');
     panel = bar('成績與學習分析', '<div class="cc-actions">' +
         button('learning-analysis', '長期學習分析', 'class="cc-primary"') +
-        button('overview', '近期六份總覽') + '</div>') +
+        button('overview', '近期學習總覽（六份）') + '</div>') +
       '<p class="cc-muted">長期分析採按需分頁載入，可比較各次首次繳交及知識點表現；點擊作業可查看完整成績。</p>' +
       (graded.length ? '<div class="cc-task-grid">' + graded.map(a => assignment(a, true)).join('') + '</div>' :
         '<p class="cc-empty">尚無已發布作業。</p>');
