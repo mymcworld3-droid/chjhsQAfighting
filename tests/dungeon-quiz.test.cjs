@@ -79,6 +79,15 @@ test('graded answer changes only answering player progression and C credit is on
   assert.equal(result.review.amount,4);
   assert.equal(result.review.answerIndex,choice);
   assert.ok(result.review.explanation.length>5);
+  assert.equal(result.progress.stats.totalAnswered,1);
+  assert.equal(result.progress.stats.totalCorrect,1);
+  assert.equal(result.progress.stats.totalScore,a.records.get('users/a').stats.totalScore);
+  assert.deepEqual(result.progress.stats.knowledgeMap,
+    a.records.get('users/a').stats.knowledgeMap);
+  assert.deepEqual(result.progress.stats.knowledgePointMapV1,
+    a.records.get('users/a').stats.knowledgePointMapV1);
+  assert.deepEqual(result.progress.stats.soloLearningV1,
+    a.records.get('users/a').stats.soloLearningV1);
   assert.equal(a.records.get('users/a').stats.totalAnswered,1);
   assert.equal(a.records.get('users/a').stats.totalCorrect,1);
   assert.equal(a.records.get('users/b').stats.totalAnswered,0);
