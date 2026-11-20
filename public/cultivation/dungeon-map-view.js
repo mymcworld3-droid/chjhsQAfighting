@@ -113,12 +113,12 @@ class DungeonMapView{
         <strong class="tc-boss-name" data-dm-boss-label>玄炎鎮殿獸</strong>
         <span class="tc-boss-phase" data-dm-phase>第一階段</span>
       </div>
-      <div class="tc-boss-health" data-dm-boss-progress role="progressbar" aria-label="首領生命" aria-valuemin="0" aria-valuemax="900" aria-valuenow="900">
+      <div class="tc-boss-health" data-dm-boss-progress role="progressbar" aria-label="首領生命" aria-valuemin="0" aria-valuemax="2800" aria-valuenow="2800">
         <div class="tc-boss-fill" data-dm-boss-meter></div><div class="tc-boss-half" aria-hidden="true"></div>
       </div>
       <div class="tc-boss-subline">
         <span class="tc-boss-intent" data-dm-teamwork-hint></span>
-        <span class="tc-boss-number" data-dm-boss-value>900 / 900</span>
+        <span class="tc-boss-number" data-dm-boss-value>2800 / 2800</span>
       </div>
       <div class="dm-boss-shield" data-dm-boss-shield hidden>
         <span>玄甲護盾 <em data-dm-shield-value>180 / 180</em></span>
@@ -625,7 +625,9 @@ class DungeonMapView{
       award?'✓ 已領取本場獎勵':'領取 120 靈石 ＋ 3 修為';
     status.textContent=award?
       (award.status==='duplicate'?'本場獎勵先前已領取，不再重複發放':
-        '已成功存入原本的玩家帳號，重新進入宗門可查看增加後數值'):
+        '已成功存入玩家帳號')+
+      (award.manualDrop?.name?' · 獲得功法《'+award.manualDrop.name+'》':
+        ' · 本場未掉落新功法'):
       '每場每人限領一次；離開隊伍後仍可從副本入口的勝利紀錄補領。';
   }
   async rescue(targetUid){
@@ -688,25 +690,24 @@ class DungeonMapView{
     const member=this.room?.members?.[this.uid];
     const target=this.creatures().find(e=>e.id===this.selectedBeastId);
     const current=member?.position;
-    const adjacent=target&&current&&
-      (target.kind==='boss'?[
-        {x:target.position.x,y:target.position.y},
-        {x:target.position.x+1,y:target.position.y},
-        {x:target.position.x,y:target.position.y+1},
-        {x:target.position.x+1,y:target.position.y+1}
-      ]:[target.position]).some(p=>
-        Math.abs(p.x-current.x)+Math.abs(p.y-current.y)===1);
+    const visible=target&&current&&this.map&&
+      dungeonAttackTiles(this.map,current,{kind:'attack',range:2})
+        .some(p=>p.x>=target.position.x&&
+          p.x<target.position.x+(target.kind==='boss'?2:1)&&
+          p.y>=target.position.y&&
+          p.y<target.position.y+(target.kind==='boss'?2:1));
     const energy=Number.isSafeInteger(member?.explorationStamina)?
       member.explorationStamina:0;
     button.hidden=Boolean(member?.dungeonSkillIds?.length);
     button.disabled=this.room?.status!=='assembled'||!this.map||
-      !adjacent||this.strikePending||member?.downed===true||
+      !visible||this.strikePending||member?.downed===true||
       Number(member?.battleHealth)===0||energy<2;
     button.textContent=this.strikePending?'攻擊結算中…':target?
       '攻擊 '+String(target.name||'靈獸').slice(0,8)+' · 2 體力':
       '選擇靈獸後攻擊 · 2 體力';
     button.title=!target?'點擊地圖或靈獸名單選取目標':
-      !adjacent?'必須移至目標相鄰一格':'無冷卻，攻擊成功後可再次施放';
+      !visible?'須與目標位於同一行列的兩格內，且不能隔著岩壁':
+        '直線攻擊前方兩格，可同時命中沿線靈獸；無冷卻';
   }
   updateSkillHUD(){
     const member=this.room?.members?.[this.uid];
@@ -959,7 +960,9 @@ class DungeonMapView{
         if(result?.seq===seq&&result.enemyId===enemy.id){
           this.strikeAlert(result.defeated?'擊敗 '+enemy.name+'！':
             '命中 '+enemy.name+' · 傷害 '+result.damage+
-            ' · 剩餘生命 '+result.remainingHealth);
+            ' · 剩餘生命 '+result.remainingHealth+
+            (result.hits?.length>1?' · 沿線另命中 '+(result.hits.length-1)+' 隻':'')
+          );
         }
       }
     }catch(error){
@@ -1213,6 +1216,7 @@ class DungeonMapView{
         (state[selected.intent]||'巡邏中')+
         ' · 座標 ('+selected.position.x+','+selected.position.y+')'+
         ' · 每 '+selected.cadence+' 秒行動一次'+
+        ' · 境界 '+(selected.realm||'築基')+
         ' · 生命 '+(selected.battleHealth??'—')+'/'+(selected.battleMaxHealth??'—')+
         (selected.targetUid?' · 已發現修士':'')+
         ' · 節拍 T'+(selected.lastActionTick||0)+
@@ -1321,7 +1325,7 @@ class DungeonMapView{
       bossBar.hidden=!bossFight;
       if(bossFight){
         const hp=Math.max(0,boss?.battleHealth||0),
-          max=boss?.battleMaxHealth||900,phase=boss?.phase||1;
+          max=boss?.battleMaxHealth||2800,phase=boss?.phase||1;
         this.$('[data-dm-boss-label]').textContent=encounter?.status==='defeated'?
           '✓ 玄炎鎮殿獸已擊敗':'玄炎鎮殿獸';
         this.$('[data-dm-phase]').textContent=
@@ -1822,7 +1826,7 @@ class DungeonMapView{
         Math.max(0,Math.min(10,member.explorationStamina||0)));
     }else{
       const skill=(member.dungeonSkills||[]).find(s=>s.id===this.selectedSkillId)||
-        {kind:'attack',range:1};
+        {kind:'attack',range:2};
       this.rangeKind=skill.kind==='dash-cleave'?'dash':'attack';
       this.rangeTiles=dungeonAttackTiles(this.map,from,skill,enemies);
     }
