@@ -136,6 +136,11 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
     await as(page, 'teacher'); await page.setViewportSize({ width: 1366, height: 850 });
     assert.match(await page.locator('.cc-workspace-hero').innerText(), /教師工作台/);
     await click(page, 'workspace-tab', 2);
+    await page.locator('[data-action=workspace-filter][data-filter=published]').click();
+    await ready(page);
+    assert.match(await page.locator('.cc-workspace-task:visible').innerText(), /加法練習/);
+    await page.locator('[data-action=workspace-filter][data-filter=all]').click();
+    await ready(page);
     await page.locator('.cc-workspace-task').filter({hasText:'加法練習'}).locator('[data-action=workspace-progress]').click();
     await ready(page);
     assert.match(await page.locator('.cc-workspace-progress').innerText(), /已繳交 1 \/ 1/);

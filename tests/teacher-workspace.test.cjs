@@ -83,3 +83,16 @@ test('empty teacher dashboard displays guidance and never fabricates class data'
   assert.match(html, /尚未有獲指派的班級/);
   assert.doesNotMatch(html, /未繳交 0 人/);
 });
+
+test('teacher workspace distinguishes loading from errors and ignores archived-class deadlines', async () => {
+  const { buildTeacherWorkspace, summarizeTeacherWorkspace } = await workspace;
+  const loading = buildTeacherWorkspace({ access:{isAdmin:false}, workspaceLoading:true }, helpers);
+  assert.match(loading, /正在整理教師工作台/);
+  assert.doesNotMatch(loading, /無法載入/);
+  const empty = buildTeacherWorkspace({ access:{isAdmin:false}, workspaceError:'暫時無法連線' }, helpers);
+  assert.match(empty, /暫時無法連線/);
+  const data = dashboard();
+  data.classes[1].assignments[0].status = 'published';
+  data.classes[1].assignments[0].dueAtMs = NOW + 86400000;
+  assert.equal(summarizeTeacherWorkspace(data, NOW).dueSoon.length, 1);
+});

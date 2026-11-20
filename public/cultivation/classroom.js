@@ -203,7 +203,9 @@ function filterWorkspaceTasks(panel) {
   let visible = 0;
   for (const row of rows) {
     const matches = (row.dataset.workspaceSearch || '').toLocaleLowerCase('zh-Hant').includes(query);
-    row.hidden = !(matches && (filter === 'all' || row.dataset.workspaceFilter === filter));
+    const matchesStatus = filter === 'all' || (filter === 'published' ?
+      row.dataset.workspaceStatus === 'published' : row.dataset.workspaceFilter === filter);
+    row.hidden = !(matches && matchesStatus);
     if (!row.hidden) visible++;
   }
   const empty = panel.querySelector('[data-workspace-empty]');
@@ -223,7 +225,7 @@ async function loadHome(more = false) {
   const data = await request({ action: 'list', ...(more ? { cursor: state.nextCursor } : {}) });
   state = { ...state, ...data, view: 'home',
     classes: more ? [...state.classes, ...data.classes] : data.classes,
-    dashboard: null, workspaceProgress: {}, workspaceError: '' };
+    dashboard: null, workspaceProgress: {}, workspaceError: '', workspaceLoading: data.access?.isTeacher === true };
   render();
   window.dispatchEvent(new CustomEvent('xiuxian:teacher-access'));
   if (data.access?.isTeacher) {
@@ -232,6 +234,8 @@ async function loadHome(more = false) {
       state.dashboard = result.dashboard;
     } catch (error) {
       state.workspaceError = error.message;
+    } finally {
+      state.workspaceLoading = false;
     }
     render();
   }

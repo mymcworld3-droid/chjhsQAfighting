@@ -5,8 +5,8 @@ export function summarizeTeacherWorkspace(dashboard, now = Date.now()) {
     ...a, classId: room.id, className: room.name, classStatus: room.status
   })));
   const drafts = assignments.filter(a => a.status === 'draft' && a.classStatus === 'active');
-  const overdue = assignments.filter(a => a.status === 'published' && a.dueAtMs && a.dueAtMs <= now);
-  const dueSoon = assignments.filter(a => a.status === 'published' && a.dueAtMs && a.dueAtMs > now && a.dueAtMs <= now + 3 * 86400000);
+  const overdue = assignments.filter(a => a.classStatus === 'active' && a.status === 'published' && a.dueAtMs && a.dueAtMs <= now);
+  const dueSoon = assignments.filter(a => a.classStatus === 'active' && a.status === 'published' && a.dueAtMs && a.dueAtMs > now && a.dueAtMs <= now + 3 * 86400000);
   const attention = [...overdue, ...dueSoon, ...drafts].sort((a,b) => {
     const priority = a => a.status === 'draft' ? 2 : a.dueAtMs <= now ? 0 : 1;
     return priority(a) - priority(b) || (a.dueAtMs || 0) - (b.dueAtMs || 0);
@@ -65,7 +65,8 @@ export function buildTeacherWorkspace(state, helpers) {
           '<span>' + esc(p.seat || '—') + ' · ' + esc(p.name) + '</span>').join('') + '</div>' :
         '<p class="cc-muted">目前學生皆已繳交。</p>') + '</div>' : '';
     return '<article class="cc-card cc-workspace-task" data-workspace-task data-workspace-filter="' + filter +
-      '" data-workspace-search="' + esc(task.title + ' ' + task.subject + ' ' + task.className) + '">' +
+      '" data-workspace-status="' + task.status + '" data-workspace-search="' +
+      esc(task.title + ' ' + task.subject + ' ' + task.className) + '">' +
       '<div class="cc-workspace-task-head"><div><span class="cc-muted">' + esc(task.className) +
       '</span><h4>' + esc(task.title) + '</h4></div><span class="cc-tag">' + esc(actionTag(task)) + '</span></div>' +
       '<p class="cc-muted">' + esc(task.subject) + ' · ' + task.questionCount + ' 題 · ' + esc(info) + '</p>' +
@@ -87,6 +88,8 @@ export function buildTeacherWorkspace(state, helpers) {
     [['summary','總覽'],['classes','我的教室'],['tasks','作業與待辦']].map(([id,label]) =>
       btn('workspace-tab', label, 'data-tab="' + id + '" role="tab" id="cc-workspace-tab-' + id +
         '" aria-controls="cc-workspace-panel" aria-selected="' + (tab === id) + '" tabindex="' + (tab === id ? 0 : -1) + '"')).join('') + '</nav>';
+  if (!dashboard && state.workspaceLoading) return hero +
+    '<section class="cc-card" role="status"><h3>正在整理教師工作台</h3><p class="cc-muted">讀取近期作業與班級資訊，不會批次查詢學生作答資料。</p></section>';
   if (!dashboard) return hero + '<section class="cc-card cc-workspace-unavailable"><h3>無法載入工作台總覽</h3>' +
     '<p>班級入口仍可使用。請重新整理，或稍後再試。</p>' +
     (state.workspaceError ? '<p class="cc-muted">' + esc(state.workspaceError) + '</p>' : '') +
@@ -118,7 +121,7 @@ export function buildTeacherWorkspace(state, helpers) {
         '<p class="cc-empty">尚未有可管理的班級，請聯繫管理員指派。</p>') + '</section>' + loaded;
   } else {
     const filter = state.workspaceFilter || 'all';
-    const buttons = [['all','全部'],['draft','草稿'],['soon','即將截止'],['overdue','已過截止'],['published','進行中'],['closed','已結束']];
+    const buttons = [['all','全部'],['draft','草稿'],['soon','即將截止'],['overdue','已過截止'],['published','已發布'],['closed','已結束']];
     body = metrics + note + '<section class="cc-workspace-section">' +
       title('作業與待辦', '跨班級列出近期作業，可直接編輯草稿、查看成績或載入繳交概況。') +
       '<div class="cc-workspace-tools"><label class="cc-search">搜尋作業' +
