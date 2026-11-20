@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-civ1-genderequity-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "公平與法律要件以題目明示的條件分析，避免過度概括",
+      "question": {
+        "q": "某校發現不同性別學生參加機器人社的比例有差異。若想判斷是否存在不平等的參與障礙，最合適的方法為何？",
+        "correct": "比較社團資訊取得、選拔規則、設備使用機會及學生意願等資料",
+        "wrong": [
+          "直接把參與率差異視為各性別天生能力不同的證據",
+          "只訪問已加入社團者，便能完全代表未參加者遇到的障礙",
+          "要求所有學生必須表達完全相同的興趣，才能說明公平"
+        ],
+        "exp": "參與率差異可能來自資訊、制度、資源或偏好等因素，應蒐集具體資料，不可直接以刻板印象推斷能力。",
+        "subject": "公民",
+        "sub_topic": "性別平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-性別平等",
+        "template_id": "ref-20261120-b12-civ1-genderequity-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-civ1-genderequity-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "公平與法律要件以題目明示的條件分析，避免過度概括",
+      "question": {
+        "q": "某企業招募工程師時，面試官認為「某性別通常不適合管理專案」，即使候選人具有相同專業資歷，也以性別作為主要淘汰理由。此做法最主要的問題是什麼？",
+        "correct": "以性別刻板印象代替對個別能力與職務條件的評估",
+        "wrong": [
+          "所有候選人專業相同時，只能依性別安排工作",
+          "性別偏見只要被面試官當成個人意見，就不會影響機會公平",
+          "只要雇主沒有公開偏好，就可假定其評選完全不涉及差別待遇"
+        ],
+        "exp": "若職務能力相當而用群體性別印象決定聘用，會造成不合理差別待遇，公平評估應聚焦職務相關能力。",
+        "subject": "公民",
+        "sub_topic": "性別平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-性別平等",
+        "template_id": "ref-20261120-b12-civ1-genderequity-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-civ1-genderequity-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "公平與法律要件以題目明示的條件分析，避免過度概括",
+      "question": {
+        "q": "校園宣導海報寫「照顧家人本來就是女性的責任」，但學校正在推動所有學生學習家務與照顧技能。對此海報最合理的評析為何？",
+        "correct": "將照顧工作固定歸給單一性別，可能強化刻板印象與分工不平等",
+        "wrong": [
+          "海報能證明任何男性都不可能學會照顧技能",
+          "只要是在校園張貼的宣導文字，就一定不會影響性別觀念",
+          "每個家庭分工不同，因此學校不應討論照顧責任的公平性"
+        ],
+        "exp": "照顧與家務是可由不同性別共同學習與分擔的能力；將其自然化為某一性別責任可能妨礙公平分工。",
+        "subject": "公民",
+        "sub_topic": "性別平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-性別平等",
+        "template_id": "ref-20261120-b12-civ1-genderequity-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
