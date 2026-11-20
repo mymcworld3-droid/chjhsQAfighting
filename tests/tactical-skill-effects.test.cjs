@@ -67,10 +67,10 @@ test('every manual slot resolves to an animated skill using the committed battle
 test('flying sword animation follows the previous sword position and each chain cast marks its step',()=>{
   const s=fixture('flight-summon');
   const summoned=R.apply(s,'hero',{type:'manual',skillId:'flight-summon',x:5,y:4},now);
-  const moved=R.apply(summoned,'hero',{type:'manual',skillId:'flight-summon',x:8,y:4},now);
+  const moved=R.apply(summoned,'hero',{type:'manual',skillId:'flight-summon',x:6,y:4},now);
   const scene=A.plan(summoned,moved,'hero').find(item=>item.kind==='cast');
   assert.deepEqual(scene.origin,{x:5,y:4});
-  assert.deepEqual(scene.target,{x:8,y:4});
+  assert.deepEqual(scene.target,{x:6,y:4});
   const chain=fixture('dragon-guard');
   Object.assign(chain.actors[1],{x:5,y:4});
   const after=R.apply(chain,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
