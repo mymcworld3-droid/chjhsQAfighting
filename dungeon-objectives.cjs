@@ -3,8 +3,9 @@
 // No browser or player-account item can grant the shared key.
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {isAlive}=require('./dungeon-enemy-combat.cjs');
+const {maxHealth}=require('./dungeon-player-combat.cjs');
 const GUARDIAN_ID='guardian-1',GUARDIAN_NAME='鎮鑰玄甲獸',VERSION=1;
-const GUARDIAN_HP=360;
+const GUARDIAN_HP=maxHealth('guardian');
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
 const same=(a,b)=>a?.x===b?.x&&a?.y===b?.y;
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
