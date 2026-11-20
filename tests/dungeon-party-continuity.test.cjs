@@ -79,7 +79,7 @@ async function assembled(f){
 test('one departure during exploration never resets survivors or NPC clock',async()=>{
   const f=fixture(),roomId=await assembled(f);
   const before=(await f.call('b','get',{roomId})).body.room;
-  const map=generateDungeonLayout(SEED);
+  const map=generateDungeonLayout(SEED,2);
   const p=before.members.b.position;
   const [dx,dy]=[[1,0],[0,1],[-1,0],[0,-1]]
     .find(([x,y])=>walkable(map,{x:p.x+x,y:p.y+y}));
@@ -115,7 +115,7 @@ test('one departure during exploration never resets survivors or NPC clock',asyn
 });
 test('leaving a live boss fight cannot teleport or reset the remaining players',async()=>{
   const f=fixture(),roomId=await assembled(f);
-  const map=generateDungeonLayout(SEED);
+  const map=generateDungeonLayout(SEED,2);
   const stored=f.c.records.get(API.ROOMS+'/'+roomId);
   stored.dungeonProgress={...stored.dungeonProgress,guardianStatus:'defeated',
     keyAcquired:true,portalStatus:'open'};
@@ -157,7 +157,7 @@ test('leaving a live boss fight cannot teleport or reset the remaining players',
 // Test helper: C stores a server-issued map; only the test arranges characters
 // next to the portal so we can exercise voting independently of movement.
 function openPortal(f,roomId){
-  const map=generateDungeonLayout(SEED);
+  const map=generateDungeonLayout(SEED,2);
   const stored=f.c.records.get(API.ROOMS+'/'+roomId);
   stored.dungeonProgress={...stored.dungeonProgress,
     guardianStatus:'defeated',keyAcquired:true,portalStatus:'open'};
@@ -245,9 +245,9 @@ test('unactivated portal, distant players and downed members cannot give consent
   const f=fixture(),roomId=await assembled(f);
   assert.equal((await f.call('a','enter-boss',{roomId})).status,409);
   const stored=openPortal(f,roomId);
-  stored.members.a.position={...generateDungeonLayout(SEED).spawn};
+  stored.members.a.position={...generateDungeonLayout(SEED,2).spawn};
   assert.equal((await f.call('a','boss-ready',{roomId,ready:true})).status,409);
-  stored.members.a.position={...generateDungeonLayout(SEED).portalSite};
+  stored.members.a.position={...generateDungeonLayout(SEED,2).portalSite};
   stored.members.a.downed=true;
   assert.equal((await f.call('a','boss-ready',{roomId,ready:true})).status,409);
   assert.equal((await f.call('d','boss-ready',{roomId,ready:true})).status,403);

@@ -61,7 +61,7 @@ async function create(){
   await call('a','ready',{roomId:id,ready:true});
   await call('b','ready',{roomId:id,ready:true},1);
   assert.equal((await call('a','start',{roomId:id})).status,200);
-  const map=generateDungeonLayout(SEED);
+  const map=generateDungeonLayout(SEED,2);
   const raw=()=>c.records.get('dungeonRooms/'+id);
   return {a,c,id,map,call,raw,advance:ms=>{now+=ms;}};
 }

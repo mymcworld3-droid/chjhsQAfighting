@@ -123,7 +123,7 @@ test('idle reconnect and movement catch up without game tick depending on player
   const restored=(await f.call('b','reconnect',{},1)).body.room;
   assert.equal(restored.battleClock.tick,17);
   assert.equal(restored.battleClock.appliedTick,0);
-  const map=generateDungeonLayout(SECRET),from=room.members.a.position;
+  const map=generateDungeonLayout(SECRET,2),from=room.members.a.position;
   const [dx,dy]=[[0,1],[1,0],[0,-1],[-1,0]]
     .find(([dx,dy])=>walkable(map,{x:from.x+dx,y:from.y+dy}));
   const move=await f.call('a','move',{roomId:id,dx,dy,step:1},0);

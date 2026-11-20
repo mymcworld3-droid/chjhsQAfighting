@@ -83,7 +83,7 @@ async function assembled(f,withFriend=true){
   if(withFriend)await f.call('b','ready',{roomId:id,ready:true},1);
   const started=await f.call('a','start',{roomId:id});
   assert.equal(started.status,200);
-  return {id,room:started.body.room,map:generateDungeonLayout(SECRET)};
+  return {id,room:started.body.room,map:generateDungeonLayout(SECRET,2)};
 }
 test('server assembles ordinary NPCs plus one guardian transactionally, without harming accounts',async()=>{
   const f=fixture(),first=structuredClone(f.a.records.get('users/a'));

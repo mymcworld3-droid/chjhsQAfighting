@@ -70,7 +70,7 @@ async function fixture(){
     assert.equal((await call(uid,'ready',{roomId,ready:true})).status,200);
   assert.equal((await call('a','start',{roomId})).status,200);
   const raw=()=>c.records.get('dungeonRooms/'+roomId);
-  return {a,c,call,roomId,raw,map:generateDungeonLayout(SEED)};
+  return {a,c,call,roomId,raw,map:generateDungeonLayout(SEED,2)};
 }
 function adjacent(map,p){
   return [[1,0],[-1,0],[0,1],[0,-1]]
@@ -87,7 +87,7 @@ function win(room,uid='a'){
   room.enemies=[];
 }
 test('rescue rules: 8 stamina ally, 10 stamina self and exact HP, sequence replay',()=>{
-  const map=generateDungeonLayout(SEED);
+  const map=generateDungeonLayout(SEED,2);
   const x={...map.spawnPads[0]},y=adjacent(map,x);
   assert.ok(y);
   const room={mode:'dungeon',status:'assembled',dungeonArena:'exploration',
@@ -119,7 +119,7 @@ test('rescue rules: 8 stamina ally, 10 stamina self and exact HP, sequence repla
   assert.equal(room.members.b.battleHealth,0,'pure computation never mutates room');
 });
 test('rescue guardrails: no teleport, self spoof, negative stamina or unlimited revives',()=>{
-  const map=generateDungeonLayout(SEED);
+  const map=generateDungeonLayout(SEED,2);
   const base={mode:'dungeon',status:'assembled',members:{
     a:{uid:'a',position:map.spawn,explorationStamina:4,battleHealth:100},
     b:{uid:'b',position:map.deepest,explorationStamina:30,

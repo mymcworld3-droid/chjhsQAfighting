@@ -85,7 +85,7 @@ async function readyGroup(f,code){
   for(const uid of 'abcd')await f.call(uid,'ready',{roomId:id,ready:true});
   const assembled=await f.call('a','start',{roomId:id});
   assert.equal(assembled.status,200);
-  return {id,room:assembled.body.room,map:generateDungeonLayout(SECRET)};
+  return {id,room:assembled.body.room,map:generateDungeonLayout(SECRET,2)};
 }
 test('only assembled players get four distinct server-stored positions and 10 private movement stamina',async()=>{
   const f=fixture(),created=(await f.call('a','create')).body;
@@ -94,7 +94,7 @@ test('only assembled players get four distinct server-stored positions and 10 pr
   for(const uid of 'abcd')await f.call(uid,'ready',{roomId:created.roomId,ready:true});
   const assembled=await f.call('a','start',{roomId:created.roomId});
   assert.equal(assembled.status,200);
-  const map=generateDungeonLayout(SECRET);
+  const map=generateDungeonLayout(SECRET,2);
   for(let i=0;i<4;i++){
     const member=assembled.body.room.members['abcd'[i]];
     assert.deepStrictEqual(member.position,map.spawnPads[i]);
@@ -169,7 +169,7 @@ test('outsiders, stale lobbies, expired rooms and leave cannot mutate exploratio
   assert.equal((await f.call('invalid','move',{roomId:id,dx:1,dy:0,step:1})).status,401);
   await f.call('a','ready',{roomId:id,ready:true});
   const start=(await f.call('a','start',{roomId:id})).body.room;
-  const map=generateDungeonLayout(SECRET),[dx,dy]=cardinal(map,start.members.a.position);
+  const map=generateDungeonLayout(SECRET,2),[dx,dy]=cardinal(map,start.members.a.position);
   f.clock(2*60*60*1000+1);
   assert.equal((await f.call('a','move',{roomId:id,dx,dy,step:1})).status,410);
   const another=fixture(),next=(await another.call('a','create')).body,other=next.roomId;

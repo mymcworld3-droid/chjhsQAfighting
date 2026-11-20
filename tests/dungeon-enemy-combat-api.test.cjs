@@ -83,7 +83,7 @@ async function setup(){
   await f.call('b','join-code',{roomCode:created.room.code},1);
   for(const uid of 'ab')await f.call(uid,'ready',{roomId:id,ready:true});
   const initial=(await f.call('a','start',{roomId:id})).body.room;
-  const map=generateDungeonLayout(SECRET);
+  const map=generateDungeonLayout(SECRET,2);
   const raw=f.c.records.get(ROOMS+'/'+id);
   // Place a single trusted NPC adjacent to a waiting player.
   const player=raw.members.a.position;

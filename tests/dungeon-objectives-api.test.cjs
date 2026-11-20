@@ -62,7 +62,7 @@ async function game(){
     assert.equal((await call(uid,'ready',{roomId:id,ready:true})).status,200);
   const begin=await call('a','start',{roomId:id});
   assert.equal(begin.status,200);
-  return {a,c,call,id,map:generateDungeonLayout(SEED),
+  return {a,c,call,id,map:generateDungeonLayout(SEED,2),
     getRoom:()=>c.records.get('dungeonRooms/'+id)};
 }
 const adjacent=(map,p)=>[[0,1],[1,0],[0,-1],[-1,0]]

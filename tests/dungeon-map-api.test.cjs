@@ -74,7 +74,7 @@ test('room stores secure 24-digit seed once and does not trust request-supplied 
   const created=await f.call('a','create',{mapSeed:'user-forged',seed:'user-forged'});
   assert.equal(created.status,200);
   const roomId=created.body.roomId,raw=f.c.records.get(API.ROOMS+'/'+roomId);
-  assert.equal(raw.mapVersion,LAYOUT_VERSION);
+  assert.equal(raw.mapVersion,2);
   assert.equal(raw.mapSeed,SECRET);
   assert.ok(!JSON.stringify(created.body.room).includes(SECRET),'room snapshot must not leak map seed');
   assert.deepStrictEqual(f.a.records.get('users/a'),original);
@@ -94,11 +94,11 @@ test('all authorized members, on separate server instances, receive exactly the 
   for(const item of all){
     assert.equal(item.body.roomId,created.roomId);
     assert.deepStrictEqual(item.body.map,all[0].body.map);
-    assert.equal(item.body.map.layoutVersion,LAYOUT_VERSION);
+    assert.equal(item.body.map.layoutVersion,2);
     assert.equal(item.body.map.branchCount,item.body.map.branches.length);
     assert.equal(item.body.map.seed,SECRET);
   }
-  assert.deepStrictEqual(all[0].body.map,generateDungeonLayout(SECRET));
+  assert.deepStrictEqual(all[0].body.map,generateDungeonLayout(SECRET,2));
   assert.ok(JSON.stringify(all[0].body).length<200000);
   // Read-only layout discovery cannot consume raid tickets or create map state.
   assert.equal(f.c.records.size,6);

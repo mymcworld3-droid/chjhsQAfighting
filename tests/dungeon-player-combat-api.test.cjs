@@ -68,7 +68,7 @@ async function setup(){
   assert.equal((await f.call('a','start',{roomId:id})).status,200);
   const raw=f.c.records.get('dungeonRooms/'+id);
   const wolf=raw.enemies.find(e=>e.kind==='wolf');
-  const map=generateDungeonLayout(SECRET);
+  const map=generateDungeonLayout(SECRET,2);
   const spot=[[0,-1],[1,0],[0,1],[-1,0]].map(([dx,dy])=>
     ({x:wolf.position.x+dx,y:wolf.position.y+dy})).find(p=>walkable(map,p));
   assert.ok(spot);
