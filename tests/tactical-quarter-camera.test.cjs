@@ -94,7 +94,7 @@ test('PvE uses tap-to-act, retaining server-authoritative quiz and turn actions'
   for(const marker of [
     "send({type:'guard'})","send({type:'end'})",
     "renderer?.resetView()",'void question()','void execute()',
-    "['move','attack','skill','manual'].includes(action)",
+    "['move','sword-move','attack','skill','manual'].includes(action)",
     "root.classList.toggle('tc-quarter-layout',state?.mode==='pve')",
     "root.classList.remove('tc-quarter-layout')"
   ])assert.ok(ui.includes(marker),marker);
