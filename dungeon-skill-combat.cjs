@@ -2,6 +2,7 @@
 // Stage 11B: deterministic dungeon-only martial arts, independent of tactical
 // turns. The server owns loadouts, geometry, stamina, damage and NPC positions.
 const Manuals=require('./public/cultivation/manual-rules.js');
+const SwordPath=require('./public/cultivation/flying-sword-path.js');
 const {walkable}=require('./dungeon-map-generator.cjs');
 const {isAlive}=require('./dungeon-enemy-combat.cjs');
 const {maxHealth,recordedMax,MAX_STRIKE_SEQ}=require('./dungeon-player-combat.cjs');
@@ -150,7 +151,7 @@ function beamArray(map,center,sk){
   }
   return rays;
 }
-function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
+function castSkill(room,uid,map,raw,{skillId,target,seq,moveSword=false}={}){
   if(typeof skillId!=='string'||!Manuals.BY_SKILL[skillId])
     throw fail('功法技能無效',400);
   if(!target||!Number.isSafeInteger(target.x)||!Number.isSafeInteger(target.y)||
@@ -161,26 +162,35 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
   if(!member)throw fail('你不是此副本的隊員',403);
   const prior=Number.isSafeInteger(member.skillSeq)?member.skillSeq:0;
   if(seq===prior&&member.lastSkill?.skillId===skillId&&
+      member.lastSkill.moveSword===Boolean(moveSword)&&
       same(member.lastSkill.target,target))
     return {duplicate:true,members:room.members,enemies:room.enemies};
   if(seq!==prior+1)throw fail('技能操作已不同步，請重新取得戰場資料',409);
   if(!isAlive(member)||!tile(map,member.position))throw fail('角色倒地或位置無效',409);
-  if(!Array.isArray(member.dungeonSkillIds)||
-      !member.dungeonSkillIds.includes(skillId))throw fail('此技能尚未裝備於目前配置',403);
+  if(moveSword&&(skillId!=='flight-summon'||!member.flyingSword))
+    throw fail('沒有可控制的飛劍',409);
+  if(!moveSword&&(!Array.isArray(member.dungeonSkillIds)||
+      !member.dungeonSkillIds.includes(skillId)))throw fail('此技能尚未裝備於目前配置',403);
   const normalized=Manuals.normalize(raw);
   const sk=skillOf(skillId,normalized,member.accessScore||0);
   if(!sk)throw fail('功法尚未解鎖或修士境界不足',403);
   const empowered=isFocusEmpowered(member,sk);
-  const cost=focusCost(member,sk);
-  const stamina=staminaFor(member);
-  if(stamina<cost)throw fail('探索體力不足，無法施放技能',409);
   const origin=member.position;
   if(!tile(map,target))throw fail('目標不能位於牆壁或界外',409);
+  const swordPath=sk.kind==='flying-sword'&&member.flyingSword?
+    SwordPath.route({from:member.flyingSword,to:target,
+      walkable:p=>tile(map,p),enemies:room.enemies||[]}):null;
+  const swordSteps=swordPath?swordPath.length-1:0;
+  if(moveSword&&(!swordSteps||swordSteps%2))
+    throw fail('飛劍必須沿最短路徑移動正偶數格',409);
+  const cost=moveSword?swordSteps/2:focusCost(member,sk);
+  const stamina=staminaFor(member);
+  if(stamina<cost)throw fail('探索體力不足，無法施放技能',409);
   const enemies=(room.enemies||[]).map(e=>({...e,position:{...e.position}}));
   const startingPositions=new Map(enemies.map(e=>[e.id,{...e.position}]));
   const members={...room.members};
   let player={...member},hits=[],cells=[],position=null,chainSteps=[],
-    sword=member.flyingSword||null;
+    sword=member.flyingSword||null,flightPath=null;
   // Re-derive attack from the latest verified A-side manual snapshot: A can
   // gain manuscript EXP in another session while this C dungeon stays open.
   const base=attackPower(normalized,member);
@@ -265,13 +275,22 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
       }
     }
   }else if(sk.kind==='flying-sword'){
-    const start=sword||origin,range=sword?(sk.travel||4):sk.range;
-    const trace=rayTo(map,start,target,range);
-    if(!trace)throw fail('飛劍只能沿無阻擋的直線移動',409);
-    if(!sword&&(occupied(target,enemies)||present(members,target)))
-      throw fail('初次召劍請選擇空地',409);
-    if(sword){cells=trace;for(const e of targets(trace))apply(e,sk.power);}
+    if(occupied(target,enemies)||present(members,target))
+      throw fail('飛劍落點必須是空地',409);
+    if(!moveSword&&(distance(origin,target)<1||distance(origin,target)>2))
+      throw fail('召劍只能指定玩家曼哈頓距離兩格內的空地',409);
+    if(sword){
+      if(!swordSteps)throw fail('飛劍找不到通往目標的最短路徑',409);
+      flightPath=swordPath.map(p=>({...p}));
+      cells=flightPath.slice(1);
+      const power=moveSword?(member.flyingSwordPower||sk.power):sk.power;
+      for(const e of targets(cells))apply(e,power);
+    }else{
+      if(moveSword)throw fail('飛劍尚未召喚',409);
+      flightPath=[{...origin},{...target}];
+    }
     player.flyingSword={...target};
+    if(!moveSword)player.flyingSwordPower=sk.power;
   }else if(sk.kind==='dash-cleave'){
     const path=rayTo(map,origin,target,sk.range);
     if(!path||path.some(p=>occupied(p,enemies)||present(members,p)))
@@ -356,7 +375,9 @@ function castSkill(room,uid,map,raw,{skillId,target,seq}={}){
     !same(startingPositions.get(e.id),e.position)).slice(0,12).map(e=>({
       enemyId:e.id,from:{...startingPositions.get(e.id)},to:{...e.position}
     }));
-  const result={seq,skillId,skillName:sk.name,origin:{...origin},target:{...target},
+  const result={seq,skillId,skillName:moveSword?'移動飛劍':sk.name,
+    moveSword:Boolean(moveSword),origin:{...origin},target:{...target},
+    ...(flightPath?{path:flightPath}:{}),
     cost,hits,visualMoves,...(chainSteps.length?{chainSteps}:{}),
     totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
