@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-phy3-atomic-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "以物理定律及測量原則設計可重算的單一答案",
+      "question": {
+        "q": "某放射性樣品初始有80 g，經12天後剩餘10 g未衰變。若服從固定半衰期的指數衰變模型，其半衰期為何？",
+        "correct": "4天",
+        "wrong": [
+          "3天",
+          "6天",
+          "12天"
+        ],
+        "exp": "80→40→20→10，共歷經3個半衰期；12天/3=4天。",
+        "subject": "物理",
+        "sub_topic": "原子、原子核與量子概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-原子、原子核與量子概念",
+        "template_id": "ref-20261120-b12-phy3-atomic-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-phy3-atomic-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "以物理定律及測量原則設計可重算的單一答案",
+      "question": {
+        "q": "原子發出能量3.0×10⁻¹⁹ J的單一光子，取普朗克常數h=6.0×10⁻³⁴ J·s。光子頻率為何？",
+        "correct": "5.0×10¹⁴ Hz",
+        "wrong": [
+          "1.8×10⁻⁵² Hz",
+          "2.0×10¹⁵ Hz",
+          "5.0×10⁻¹⁵ Hz"
+        ],
+        "exp": "光子能量E=hf，f=E/h=(3.0×10⁻¹⁹)/(6.0×10⁻³⁴)=5.0×10¹⁴ Hz。",
+        "subject": "物理",
+        "sub_topic": "原子、原子核與量子概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-原子、原子核與量子概念",
+        "template_id": "ref-20261120-b12-phy3-atomic-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-phy3-atomic-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "以物理定律及測量原則設計可重算的單一答案",
+      "question": {
+        "q": "若原子核發生一次β⁻衰變（中子轉為質子並放出電子與反微中子），新原子核的原子序與質量數通常如何改變？",
+        "correct": "原子序增加1，質量數不變",
+        "wrong": [
+          "原子序減少1，質量數不變",
+          "原子序不變，質量數減少4",
+          "原子序增加2，質量數減少4"
+        ],
+        "exp": "β⁻衰變中一個中子變成質子，核子總數不變，所以原子序Z增加1、質量數A不變。",
+        "subject": "物理",
+        "sub_topic": "原子、原子核與量子概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-原子、原子核與量子概念",
+        "template_id": "ref-20261120-b12-phy3-atomic-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
