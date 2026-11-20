@@ -6,6 +6,7 @@ import {manualAnticipation} from './manual-anticipation.js';
 import {renderManualSkillDetail} from './manual-skill-detail-view.js';
 
 export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt, label, totalExpForLevel, selectedSkillId=null, descriptionWithDamage=()=>'', moveIdOf=()=>null, equipped=[], attack=200 }) {
+  const weaponMode=Array.isArray(state?.weaponIds);
   const owned=(state?.library||[]).filter(book=>book.owned);
   const chosen=owned.find(book=>book.id===selectedBookId)
     || owned.find(book=>book.school===state?.school)
@@ -16,8 +17,8 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
       <i class="fa-solid ${school==='sword'?'fa-khanda':'fa-hand-fist'}" aria-hidden="true"></i>
       ${label(school)}</button>`).join('');
   const heading=`<div class="manual-hero-top">
-    <div class="manual-hero-brand"><span class="manual-hero-kicker">問道 · 功法閣</span>
-      <h2>功法修煉</h2></div>
+    <div class="manual-hero-brand"><span class="manual-hero-kicker">問道 · ${weaponMode?'兵器閣':'功法閣'}</span>
+      <h2>${weaponMode?'武器修煉':'功法修煉'}</h2></div>
     <div class="manual-hero-schools" role="group" aria-label="選擇修行流派">${schoolButtons}</div>
   </div>`;
   if(!chosen) return {
@@ -36,7 +37,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
   const growth=renderManualVisualMilestones(book,esc);
   const anticipation=manualAnticipation(book,totalExpForLevel);
   const nextNote=anticipation?
-    anticipation.status==='realm'?'功法已達 Lv. '+anticipation.targetLevel+'，待修士 '+anticipation.realmName+'境':
+    anticipation.status==='realm'?(weaponMode?'武器':'功法')+'已達 Lv. '+anticipation.targetLevel+'，待修士 '+anticipation.realmName+'境':
     anticipation.status==='pending'?'領悟條件待同步確認':
     '距第 '+(anticipation.targetLevel===5?'二':'三')+' 招等級門檻尚差 '+Math.max(0,anticipation.remaining).toLocaleString('zh-TW')+' EXP':
     '';
@@ -51,14 +52,16 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
     Math.max(0,Number(state.attackBonus)):
     owned.reduce((sum,item)=>sum+Math.max(1,Number(item.level)||1),0);
   const cover=bookArt(book.id);
-  const coverMarkup=cover
-    ?`<img class="manual-hero-cover" src="${esc(cover)}" alt="${esc(book.name)}封面" decoding="async" fetchpriority="high">`
-    :'<span class="manual-hero-cover-fallback" aria-hidden="true">卷</span>';
+  const coverMarkup=weaponMode?
+    `<span class="manual-weapon-art manual-weapon-art--${esc(book.id)} manual-hero-cover"
+      role="img" aria-label="${esc(book.name)}武器圖像"></span>`:
+    cover?`<img class="manual-hero-cover" src="${esc(cover)}" alt="${esc(book.name)}封面" decoding="async" fetchpriority="high">`:
+    '<span class="manual-hero-cover-fallback" aria-hidden="true">卷</span>';
   const steps=book.skills.map((skill,index)=>{
     const unlocked=!!skill.unlocked;
     const skillState=manualSkillVisualState(skill);
     const missing=[
-      !skill.mastered?`功法 Lv. ${skill.levelRequired}`:null,
+      !skill.mastered?`${weaponMode?'武器':'功法'} Lv. ${skill.levelRequired}`:null,
       !skill.realmReady?`${skill.realmName}境`:null
     ].filter(Boolean).join(' · ');
     const detail=unlocked?
@@ -86,7 +89,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
       <i class="fa-solid fa-arrow-up-right-dots" aria-hidden="true"></i>
       ${needGold?'靈石不足 · ':''}升至 Lv. ${fmt(upgrade.targetLevel)}
       <span>${fmt(upgrade.gold)} 靈石</span></button>`
-    :maxed?'':`<span class="manual-hero-max-level">Lv.10 後需以功法技能擊殺靈獸累積 EXP</span>`;
+    :maxed?'':`<span class="manual-hero-max-level">Lv.10 後需以武器技能擊殺靈獸累積 EXP</span>`;
 
   return {
     bookId:book.id,
@@ -104,11 +107,11 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
           <span class="manual-hero-qi-spark manual-hero-qi-spark--one" aria-hidden="true"></span>
           <span class="manual-hero-qi-spark manual-hero-qi-spark--two" aria-hidden="true"></span>
           ${coverMarkup}
-          <span class="manual-hero-art-caption manual-hero-tier-badge is-tier-${tierClass}">${esc(book.tierRealm||'煉氣')}功法</span>
+          <span class="manual-hero-art-caption manual-hero-tier-badge is-tier-${tierClass}">${esc(book.tierRealm||'煉氣')}${weaponMode?'武器':'功法'}</span>
         </div>
         <div class="manual-hero-details">
           <div class="manual-hero-title-row">
-            <div><span class="manual-hero-eyebrow">正在查看的功法</span>
+            <div><span class="manual-hero-eyebrow">${weaponMode?'正在查看的武器':'正在查看的功法'}</span>
               <h3>${esc(book.name)}</h3></div>
           </div>
           <div class="manual-hero-mastery" data-manual-mastery-stage="${visual.stage}">
@@ -120,7 +123,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
               <span class="manual-hero-stage-badge">${esc(visual.label)}</span>
               <span class="manual-hero-mastery-status">${progressLabel}</span>
             </div>
-            <small class="manual-hero-attack-bonus">本功法攻擊 +${fmt(ownAttack)} · 已獲功法合計 +${fmt(allAttack)}</small>
+            <small class="manual-hero-attack-bonus">${weaponMode?'本武器':'本功法'}攻擊 +${fmt(ownAttack)} · 已獲${weaponMode?'武器':'功法'}合計 +${fmt(allAttack)}</small>
             ${growth}
             ${nextNote?`<small class="manual-hero-next-inline">${esc(nextNote)}</small>`:''}
             <small class="manual-hero-mastery-footnote">Lv.5、10 為招式等級門檻，真正領悟仍需符合修士境界。</small>
@@ -134,7 +137,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
         <div class="manual-hero-path-heading"><strong>三招修行路線</strong><small>點選招式查看詳細效果與強化選項</small></div>
         <div class="manual-hero-path-grid">${steps}</div>
         ${renderManualSkillDetail(book,selectedSkillId,{esc,skillArt,descriptionWithDamage,attack,
-          gold:state.gold,equipped,moveIdOf})}
+          gold:state.gold,equipped,moveIdOf,weaponIds:weaponMode?state.weaponIds:null})}
       </div>
     </section>`
   };
