@@ -71,7 +71,9 @@ test('progress names appear only after explicit load and are escaped; admin gets
   assert.match(result, /已繳交 28 \/ 32/);
   assert.match(result, /尚未繳交 4 人/);
   assert.match(result, /&lt;script&gt;/);
-  assert.match(result, /data-action="workspace-create"/);
+  state.workspaceTab = 'summary';
+  const adminSummary = buildTeacherWorkspace(state, helpers);
+  assert.match(adminSummary, /data-action="workspace-create"/);
   assert.match(result, /data-action="teacher-accounts"/);
   assert.doesNotMatch(result, /<script>/);
 });
