@@ -27,11 +27,11 @@ function harness(initial = {}) {
     };
   }
   for (const id of ['page-home', 'page-quiz', 'quiz-container', 'tactical-combat',
-    'btn-home-start', 'btn-giveup', 'options-container']) nodes.set('#' + id, element(id));
+    'btn-home-start', 'btn-giveup', 'options-container', 'option-btn-0']) nodes.set('#' + id, element(id));
   for (const name of ['#tactical-combat [data-quiz]',
     '#tactical-combat [data-wheel-action="move"], #tactical-combat [data-action="move"]',
     '#tactical-combat [data-wheel-action="attack-ring"], #tactical-combat [data-action="attack"]',
-    '#tactical-combat [data-end]', '#options-container button:not(:disabled)'])
+    '#tactical-combat [data-end]', '#tactical-combat canvas', '#options-container button:not(:disabled)'])
     nodes.set(name, element(name));
   const blocked = { value: false };
   const document = {
@@ -69,8 +69,9 @@ function harness(initial = {}) {
     owner(value) { owner = value; },
     block(value) { blocked.value = value; },
     tick() { for (const cb of timers.values()) cb(); },
-    event(kind, origin = '', uid = owner) {
-      listeners.get('qingyun:tactical-tutorial')({ detail: { kind, origin, uid } });
+    event(kind, origin = '', uid = owner, details = {}) {
+      listeners.get('qingyun:tactical-tutorial')({ detail: { kind, origin, uid,
+        roomId: 'arena-newbie', stage: 1, ...details } });
     }
   };
 }
@@ -84,7 +85,7 @@ test('new accounts begin at the real trial entry, without submitting a demo ques
   h.block(true); h.tick(); assert.equal(h.layer(), null);
   h.block(false); h.tick(); assert.ok(h.layer());
 });
-test('only successful, ordered tactical events advance the seven steps', () => {
+test('only the exact attack-selection, single-step move and rightward strike complete the eight steps', () => {
   const h = harness(); h.window.scheduleFirstAnswerGuide('new-account', true);
   h.event('attacked'); assert.equal(JSON.parse(h.store.get(key('new-account'))).step, 0);
   h.event('entered'); h.page('battle'); h.tick();
@@ -96,10 +97,19 @@ test('only successful, ordered tactical events advance the seven steps', () => {
   h.event('scope-saved', 'page-quiz');
   assert.match(h.layer().querySelector('h2').textContent, /完成第一題/);
   h.event('answered'); h.page('battle'); h.tick();
-  assert.match(h.layer().querySelector('h2').textContent, /移動角色/);
-  h.event('moved'); assert.match(h.layer().querySelector('h2').textContent, /攻擊靈獸/);
-  h.event('attacked'); assert.match(h.layer().querySelector('h2').textContent, /結束回合/);
-  h.event('ended'); assert.equal(h.layer(), null);
+  assert.match(h.layer().querySelector('h2').textContent, /攻擊按鈕/);
+  h.event('moved', '', 'new-account', {x:2,y:3});
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step, 4);
+  h.event('attack-selected');assert.match(h.layer().querySelector('h2').textContent, /向右移動一格/);
+  h.event('moved', '', 'new-account', {x:3,y:3});
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step, 5);
+  h.event('moved', '', 'new-account', {x:2,y:3});
+  assert.match(h.layer().querySelector('h2').textContent, /再次選擇攻擊/);
+  h.event('attack-selected');assert.match(h.layer().querySelector('h2').textContent, /選擇靈狼方向/);
+  h.event('attacked', '', 'new-account', {x:3,y:3});
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step, 7);
+  h.event('attacked', '', 'new-account', {x:4,y:3});
+  assert.equal(h.layer(), null);
   assert.equal(JSON.parse(h.store.get(key('new-account'))).status, 'done');
   assert.equal(h.notices(), 1);
   h.window.scheduleFirstAnswerGuide('new-account', true);
@@ -145,5 +155,8 @@ test('tutorial listens to server-confirmed move/attack/end and first validated a
   assert.match(src, /tutorialEvent\('question'\)/);
   assert.match(src, /tutorialEvent\('answered'\)/);
   assert.match(src, /committed\.revision>request\.revision/);
-  for (const stage of ['moved','attacked','ended']) assert.ok(src.includes("tutorialEvent('" + stage + "')"));
+  for (const stage of ['moved','attacked']) assert.ok(src.includes("tutorialEvent('" + stage + "')"));
+  assert.match(src, /tutorialEvent\('attack-selected'\)/);
+  assert.match(src, /selectWheel\('attack-ring',true\)/);
+  assert.match(src, /if\(prior===4&&tutorialStep\(\)===5\)selectWheel\('move',true\)/);
 });

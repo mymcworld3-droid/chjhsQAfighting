@@ -4,7 +4,7 @@ import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-re
 import {manualXpDelta,renderManualXpToast} from './tactical-manual-xp-feedback.js';
 import {manualRoomExp,battleBreakthroughEstimate,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
 import './flying-sword-path.js?v=20261120-sword-movement-v1';
-import './tactical-rules.js?v=20261120-sword-movement-v1';
+import './tactical-rules.js?v=20261120-guided-first-stage-v1';
 import './tactical-seal-targeting.js?v=20261119-seal-target-v1';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261118-phase7-compass-v1';
 import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
@@ -87,8 +87,14 @@ async function api(path,body,signal){
 }
 function valid(e,account){return opened&&e===epoch&&account===getMainUser()?.uid;}
 function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;box.hidden=!text;}}
-function tutorialEvent(kind){
-  if(mode==='pve'&&uid)window.dispatchEvent(new CustomEvent('qingyun:tactical-tutorial',{detail:{uid,kind}}));
+function tutorialStep(){
+  return mode==='pve'&&state?.trial?.stage===1
+    ? (window.firstAnswerGuideStep?.(uid)??-1) : -1;
+}
+function tutorialEvent(kind,details={}){
+  if(mode==='pve'&&uid)window.dispatchEvent(new CustomEvent('qingyun:tactical-tutorial',{
+    detail:{uid,kind,roomId:state?.id,stage:state?.trial?.stage,...details}
+  }));
 }
 function clearLiveManualXp(){
   if(manualXpTimer!==null)clearTimeout(manualXpTimer);
@@ -300,7 +306,10 @@ function ensure(){
     else if(b.dataset.action){selectWheel(b.dataset.action);}
     else if(b.hasAttribute('data-execute'))void execute();
     else if(b.hasAttribute('data-guard'))void send({type:'guard'});
-    else if(b.hasAttribute('data-end'))void send({type:'end'});
+    else if(b.hasAttribute('data-end')){
+      if(tutorialStep()>=4&&tutorialStep()<=7)notice('先完成移動與攻擊教學，或按「略過教學」。');
+      else void send({type:'end'});
+    }
     else if(b.hasAttribute('data-quiz'))void question();
     else if(b.hasAttribute('data-dismiss')){hideModal();if(state&&$('canvas'))paint();}
     else if(b.hasAttribute('data-continue')){hideModal();paint();if(state.quizRound&&canQuestion())void question();}
@@ -531,8 +540,9 @@ function wheelSliderAngle(slider,angle){
   const rotor=slider?.querySelector('.tc-wheel-slider-rotor');
   if(rotor)rotor.style.transform='rotate('+(angle-WHEEL_ANGLES.upper).toFixed(3)+'deg)';
 }
-function selectWheel(value){
+function selectWheel(value,tutorialAutomatic=false){
   if(!state||busy||renderer?.isAnimating||!myAction())return;
+  const pressedAttack=value==='attack-ring'||value==='attack';
   syncEquippedAttack();
   if(value==='attack-ring'||value==='attack')value=attackChoice;
   if(value==='player'){
@@ -561,6 +571,11 @@ function selectWheel(value){
   }
   renderer?.update(state,uid,battlefieldMode(),selection);
   updateControls();
+  if(pressedAttack&&!tutorialAutomatic&&tutorialStep()>=4){
+    const prior=tutorialStep();
+    tutorialEvent('attack-selected');
+    if(prior===4&&tutorialStep()===5)selectWheel('move',true);
+  }
 }
 
 
@@ -828,6 +843,15 @@ function buildGame(){
     command.prepend(energy,actions);
   }
   renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){
+    const step=tutorialStep(),target=R.TUTORIAL_STAGE1;
+    if(step===4||step===6){notice('請先按右側的「攻擊」按鈕。');return;}
+    if(step===5&&(action!=='move'||p.x!==target.move.x||p.y!==target.move.y)){
+      notice('這一階段請點選角色正右方一格（只移動一格）。');return;
+    }
+    if(step===7&&(!['attack','manual'].includes(action)||
+      p.x!==target.enemy.x||p.y!==target.enemy.y)){
+      notice('請點選正右方靈狼的方向，對準牠攻擊。');return;
+    }
     // In move mode a live seal is an information target, not a walk tile.
     // Attack mode retains its existing tap-to-cast and direction handling.
     if((action==='move'||action==='sword-move')&&R.sealInfo(state,p)?.active&&sealInspector?.inspect(p))return;
@@ -1297,8 +1321,9 @@ async function send(command){
   });
   // A real successful server action, not a wheel selection or preview, advances the guide.
   if(committed&&committed.id===request.roomId&&committed.revision>request.revision){
-    if(command.type==='move')tutorialEvent('moved');
-    else if(['attack','manual','skill'].includes(command.type))tutorialEvent('attacked');
+    if(command.type==='move')tutorialEvent('moved',{x:command.x,y:command.y});
+    else if(['attack','manual','skill'].includes(command.type))
+      tutorialEvent('attacked',{x:command.x,y:command.y});
     else if(command.type==='end')tutorialEvent('ended');
   }
 }
@@ -1431,6 +1456,7 @@ async function soloBattleQuestion(){
     root.hidden=false;
     renderer?.setPaused(false);
     paint();
+    if(tutorialStep()===4)selectWheel('attack-ring',true);
     $('[data-quiz]')?.focus({preventScroll:true});
   };
   const previousPage=document.querySelector('.page-section.active-page')?.id||'page-home';
@@ -1452,7 +1478,7 @@ async function soloBattleQuestion(){
         timeTaken:Math.max(0,(Date.now()-startedAt)/1000)
       });
       if(next?.review?.questionId!==input.questionId)throw Error('答題狀態不同步，請重試');
-      if(current())tutorialEvent('answered');
+      if(current()&&next.review.correct)tutorialEvent('answered');
       // Let the common feedback renderer capture the pre-answer score first.
       if(current()){state=next;appliedOp=++op;}
       return {review:next.review,applyProgress:()=>{if(getMainUser()?.uid===account)applyProgress(next);}};

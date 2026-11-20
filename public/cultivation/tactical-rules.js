@@ -306,8 +306,24 @@
     layout.layoutHash=(hash>>>0).toString(16).padStart(8,'0');
     return layout;
   }
+  const TUTORIAL_STAGE1=Object.freeze({spawn:Object.freeze({x:1,y:3}),
+    move:Object.freeze({x:2,y:3}),enemy:Object.freeze({x:4,y:3})});
+  function tutorialStageLayout(seed){
+    const spawn={...TUTORIAL_STAGE1.spawn},enemy={...TUTORIAL_STAGE1.enemy};
+    const layout={seed,stage:1,layoutVersion:4,attempt:0,map:'ruins',
+      width:7,height:7,title:'初入問道 · 靈狼試煉',biome:'碧水庭苑',structure:'tutorial',
+      terrain:2,ground:Array(49).fill(2),blocks:[{x:4,y:1,kind:'rock'},{x:4,y:5,kind:'rock'}],
+      spawn,enemies:[{...enemy,species:0,name:'靈狼',role:'chase',home:{...enemy},
+        hpFactor:3.2,attackFactor:.48,intentRange:2,intentRadius:0,moveSteps:2,level:1}],
+      mode:'elimination',variant:'tutorial',objective:{type:'elimination',completed:false}};
+    let hash=2166136261;
+    for(const c of JSON.stringify({...layout,seed:'shared-first-stage-v1'})){hash^=c.charCodeAt(0);hash=Math.imul(hash,16777619);}
+    layout.layoutHash=(hash>>>0).toString(16).padStart(8,'0');
+    return layout;
+  }
   function stageLayoutV4(seed,stage=1){
     stage=Math.max(1,Math.min(1000000,num(stage)));
+    if(stage===1)return tutorialStageLayout(seed);
     const stream=name=>seeded(String(seed)+':stage:'+stage+':v4:'+name);
     const pick=(r,items)=>items[Math.floor(r()*items.length)];
     const shuffle=(r,items)=>{items=items.slice();for(let i=items.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[items[i],items[j]]=[items[j],items[i]];}return items;};
@@ -1451,5 +1467,5 @@
     if(s.pveMetrics)Object.assign(s.pveMetrics,{outcome:'loss',reason:'forfeit',turns:s.actors.find(a=>a.uid===uid)?.turns||0});
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

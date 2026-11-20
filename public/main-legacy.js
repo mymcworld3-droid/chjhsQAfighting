@@ -4289,6 +4289,7 @@ function displaySoloQuiz(quiz) {
         renderQuiz(quiz.data, quiz.rank, quiz.badge);
         return;
     }
+    window.arrangeFirstGuideAnswerA?.(auth.currentUser?.uid, quiz);
     soloDraws.set(quiz, soloCacheRevision);
     session.question = quiz;
     session.skipped = false;
@@ -4299,6 +4300,9 @@ function displaySoloQuiz(quiz) {
     const choose = async (index) => {
         if (session.pending || session.skipped || trialQuestionSession !== session ||
             window.currentActiveQuiz !== quiz || answeredSoloQuizzes.has(quiz)) return;
+        const guideStep = window.firstAnswerGuideStep?.(auth.currentUser?.uid);
+        if (guideStep===2) { window.showToast?.('請先設定並儲存學習範圍。'); return; }
+        if (guideStep===3 && index!==0) { window.showToast?.('新手教學請先選擇 A。'); return; }
         if (!quiz.bankQuestionId && !quiz.soloProof) {
             window.QASoloQuestionQueue.refreshUnverified();
             if (quiz.extendedPractice) window.currentActiveQuiz = null;

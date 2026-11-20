@@ -7,13 +7,15 @@
     { target: '#btn-home-start', title: '進入問道試煉', text: '點選「問道試煉」，進入你的第一場戰鬥。' },
     { target: '#tactical-combat [data-quiz]', title: '答題充能', text: '先按左側的「答題充能」，答題可以補充移動與攻擊需要的體力。' },
     { target: '#btn-giveup', title: '選擇學習範圍', text: '按「設定範圍」，選擇適合自己的年級、科目及章節，儲存後會返回這道試煉題目。' },
-    { target: '#options-container button:not(:disabled)', title: '完成第一題', text: '閱讀題目並選擇答案。批改後可以先看解析，再按「返回戰場」。' },
-    { target: '#tactical-combat [data-wheel-action="move"], #tactical-combat [data-action="move"]', title: '移動角色', text: '在右側選擇「移動」，再點選地圖上的灰色地格。移動一格消耗 1 體力。' },
-    { target: '#tactical-combat [data-wheel-action="attack-ring"], #tactical-combat [data-action="attack"]', title: '攻擊靈獸', text: '選擇右側的「攻擊」與招式，再點選有效的攻擊地格。若體力不足，可再次答題充能。' },
-    { target: '#tactical-combat [data-end]', title: '結束回合', text: '移動與攻擊完成後，按「結束回合」，讓靈獸行動。之後可繼續答題與戰鬥。' }
+    { target: '#option-btn-0', title: '完成第一題 · 答案 A', text: '教學首題的正確答案固定在 A。請選擇 A，查看解析後按「返回戰場」。' },
+    { target: '#tactical-combat [data-wheel-action="attack-ring"], #tactical-combat [data-action="attack"]', title: '先認識攻擊按鈕', text: '右側行動指示已切至「攻擊」。請親自按一下「攻擊」按鈕，了解如何切換攻擊模式。' },
+    { target: '#tactical-combat canvas', title: '向右移動一格', text: '已切回移動模式。靈狼在你右方三格；請點選角色正右方的第一格，只移動一格，靠近靈狼。' },
+    { target: '#tactical-combat [data-wheel-action="attack-ring"], #tactical-combat [data-action="attack"]', title: '再次選擇攻擊', text: '移動完成！請再按一次右側的「攻擊」按鈕，準備朝靈狼出招。' },
+    { target: '#tactical-combat canvas', title: '選擇靈狼方向', text: '靈狼現在位於你正右方兩格。點選右側紅色攻擊方向，對準靈狼發動攻擊！' }
   ];
-  const events = ['entered', 'question', 'scope-saved', 'answered', 'moved', 'attacked', 'ended'];
-  let account = '', step = 0, timer = null, layer = null;
+  const events = ['entered', 'question', 'scope-saved', 'answered', 'attack-selected', 'moved', 'attack-selected', 'attacked'];
+  let account = '', roomId = '', step = 0, timer = null, layer = null;
+  const tutorialMove={x:2,y:3},tutorialEnemy={x:4,y:3};
   function read(uid) {
     try { return JSON.parse(localStorage.getItem(KEY + uid) || 'null'); } catch (_) { return null; }
   }
@@ -22,10 +24,10 @@
     try { localStorage.setItem(KEY + account, JSON.stringify({ status, step })); } catch (_) {}
   }
   function hide() { layer?.remove(); layer = null; }
-  function cancel() { if (timer !== null) clearInterval(timer); timer = null; hide(); account = ''; }
+  function cancel() { if (timer !== null) clearInterval(timer); timer = null; hide(); account = ''; roomId = ''; }
   function finish() {
     if (account) persist('done');
-    window.showToast?.('第一回合教學完成，繼續你的問道之旅！');
+    window.showToast?.('好了，接下來開始盡情修煉吧！');
     cancel();
   }
   function visible(el) {
@@ -105,6 +107,7 @@
     if (timer !== null && account === uid) return;
     cancel();
     account = uid;
+    roomId = '';
     // Do not resume mid-combat against a different room after refresh/re-login.
     step = 0;
     persist('pending');
@@ -112,12 +115,33 @@
     tick();
   };
   window.cancelFirstAnswerGuide = cancel;
+  window.firstAnswerGuideStep = uid => uid && uid === account ? step : -1;
+  // A solo receipt authenticates the option multiset, not presentation order.
+  // Move the signed correct choice to A without changing grading or question.
+  window.arrangeFirstGuideAnswerA = (uid,quiz) => {
+    if(uid !== account || step < 1 || step > 3 || !quiz?.data)return false;
+    const data=quiz.data,answer=Number(data.ans);
+    if(!Array.isArray(data.opts)||data.opts.length<2||
+       !Number.isInteger(answer)||answer<0||answer>=data.opts.length)return false;
+    if(answer!==0){
+      [data.opts[0],data.opts[answer]]=[data.opts[answer],data.opts[0]];
+      data.ans=0;
+    }
+    return true;
+  };
   window.addEventListener('qingyun:tactical-tutorial', event => {
     const detail = event.detail || {};
     if (!account || detail.uid !== account || detail.kind !== events[step]) return;
-    if (step === 2 && detail.origin !== 'page-quiz') return;
-    if (step === stages.length - 1) { finish(); return; }
-    step += 1;
+    if (step===0) {
+      if(detail.stage!==1 || !detail.roomId)return;
+      roomId=detail.roomId;
+    } else if(detail.roomId && roomId && detail.roomId!==roomId)return;
+    if (step===2 && detail.origin!=='page-quiz')return;
+    if (step>=4 && detail.stage!==1)return;
+    if (step===5 && (detail.x!==tutorialMove.x || detail.y!==tutorialMove.y))return;
+    if (step===7 && (detail.x!==tutorialEnemy.x || detail.y!==tutorialEnemy.y))return;
+    if (step===stages.length-1){finish();return;}
+    step+=1;
     persist('pending');
     hide();
     tick();
