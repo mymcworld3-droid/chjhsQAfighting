@@ -230,12 +230,25 @@ export class DungeonQuizPanel{
         learningSubject:item.subject,learningTopic:item.learningTopic||item.topic,
         learningDifficulty:item.difficulty||'easy',
         meta:item.meta||{},adaptive:item.adaptive||null,
+        adaptiveSurface:'dungeon',
         adaptiveAnswered:!!this.review,adaptiveHelp:0
       };
     }else this.learningQuiz.adaptiveAnswered=!!this.review;
     window.currentTacticalQuiz=this.learningQuiz;
     const host=this.element.querySelector('.dm-quiz-question');
     if(host)window.QAAdaptiveLearning?.render?.(this.learningQuiz,host);
+  }
+  syncLearningProgress(response){
+    const progress=response?.progress?.stats||response?.state?.progress?.stats;
+    if(!progress||getMainUser()?.uid!==this.uid)return;
+    const own=window.getCurrentUserData?.();
+    if(!own?.stats||own.uid&&own.uid!==this.uid)return;
+    // The A-side transaction is authoritative. Sync only the fields it
+    // returned and never recreate a grade or a learning observation locally.
+    Object.assign(own.stats,progress);
+    window.refreshXiuxianLiveSync?.(progress.totalScore);
+    window.updateUIStats?.();
+    window.renderKnowledgeGraph?.();
   }
   status(message=''){
     const node=this.$('status');if(node)node.textContent=message;
@@ -285,9 +298,11 @@ export class DungeonQuizPanel{
           node.dataset.choice=String(index);node.disabled=this.answering;
         }
         node.className='dm-quiz-option'+
-          (this.review&&!this.review.skipped&&index===this.review.answerIndex?
+          (this.review&&!this.review.skipped&&
+            !this.review.errorConfirmed&&index===this.review.answerIndex?
             ' is-correct':'')+
           (this.review&&!this.review.skipped&&
+            !this.review.errorConfirmed&&
             index===this.review.choice&&index!==this.review.answerIndex?
             ' is-wrong':'');
         const letter=document.createElement('span');
@@ -307,18 +322,28 @@ export class DungeonQuizPanel{
       const feedback=document.createElement('section');
       feedback.className='dm-quiz-feedback tc-feedback-section glass-panel';
       const heading=document.createElement('strong');
-      heading.className=r.correct||r.skipped?'tc-correct':'tc-wrong';
+      heading.className=r.errorConfirmed||r.correct?'tc-correct':'tc-wrong';
       heading.textContent=r.skipped?
         '本題有誤 · 已跳過'+(this.isAdmin?'':' · 補充體力 +4'):
-        (r.correct?'答對':'答錯')+
-        (this.isAdmin?' · 管理員體力固定 10/10':' · 體力 +'+r.amount);
+        r.errorConfirmed?
+          '本題有誤 · 已排除學習統計'+
+            (this.isAdmin?'':' · 原答題體力 +'+r.amount):
+          (r.correct?'答對':'答錯')+
+            (this.isAdmin?' · 管理員體力固定 10/10':' · 體力 +'+r.amount);
       feedback.append(heading);
       const explanation=document.createElement('section');
       explanation.className='dm-quiz-explanation';
       const label=document.createElement('strong');label.textContent='解析';
       const detail=document.createElement('div');
       detail.innerHTML=rich(r.explanation||'本題尚未提供解析');
-      explanation.append(label,detail);
+      if(r.errorConfirmed){
+        label.textContent='原始解析（題目已確認有誤）';
+        const original=document.createElement('details');
+        const summary=document.createElement('summary');
+        summary.textContent='查看已失效的原始解析';
+        original.append(summary,detail);
+        explanation.append(label,original);
+      }else explanation.append(label,detail);
       if(r.reward?.learning){
         const learning=document.createElement('p');
         learning.textContent=r.reward.learning;explanation.append(learning);
@@ -427,6 +452,7 @@ export class DungeonQuizPanel{
         return;
       }
       const state=result.state;
+      this.syncLearningProgress(result);
       this.answered=state.answered;
       this.pendingCredits=state.pendingCredits||[];
       this.errorRefunds=state.errorRefunds||[];
@@ -490,6 +516,7 @@ export class DungeonQuizPanel{
       const response=await getDungeonQuizState(this.roomId);
       if(!this.valid(epoch))return;
       const state=response.state;
+      this.syncLearningProgress(response);
       this.answered=state.answered;
       this.pendingCredits=state.pendingCredits||[];
       this.errorRefunds=state.errorRefunds||[];
@@ -550,17 +577,7 @@ export class DungeonQuizPanel{
       const result=await answerDungeonQuestion(this.roomId,q.id,choice,0,
         Math.max(0,Math.floor((Date.now()-startedAt)/1000)));
       if(!this.valid(epoch))return;
-      // Match the trial: refresh only the authenticated account's
-      // server-confirmed learning stats before re-rendering its footprint.
-      const progress=result.progress?.stats;
-      const own=window.getCurrentUserData?.();
-      if(progress&&getMainUser()?.uid===this.uid&&
-          own?.stats&&(!own.uid||own.uid===this.uid)){
-        Object.assign(own.stats,progress);
-        window.refreshXiuxianLiveSync?.(progress.totalScore);
-        window.updateUIStats?.();
-        window.renderKnowledgeGraph?.();
-      }
+      this.syncLearningProgress(result);
       this.review=result.review;this.question=null;
       this.answered=result.state.answered;
       this.pendingCredits=result.state.pendingCredits||[];
