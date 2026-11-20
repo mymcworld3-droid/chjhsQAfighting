@@ -247,6 +247,33 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
       tx.set(roomRef, room); return { classroom: summary(room, uid, roles) };
     });
   }
+  // The class-wide overview has no assignmentId; authorize it before parsing assignment IDs.
+  if (body.action === 'overview') {
+    const snap = await roomRef.get(), room = snap.data();
+    requireAccess(room, uid, true, roles);
+    const assignmentSnaps = await Promise.all(room.assignmentIds.map(key => ref(db, 'classroomAssignments', key).get()));
+    const assignments = assignmentSnaps.filter(s => s.exists).map(s => s.data())
+      .filter(a => a.classId === classId && ['published', 'closed'].includes(a.status)).slice(-6).reverse();
+    const members = room.members;
+    const records = await Promise.all(assignments.map(a =>
+      Promise.all(members.map(m => ref(db, 'classroomSubmissions', a.id + '_' + m.uid).get()))));
+    requireAccess((await roomRef.get()).data(), uid, true, await authority());
+    const summaryOf = values => {
+      const submitted = values.filter(s => s?.status === 'submitted');
+      return { submitted: submitted.length, inProgress: values.filter(s => s?.status === 'in-progress').length,
+        notStarted: values.length - submitted.length - values.filter(s => s?.status === 'in-progress').length,
+        average: submitted.length ? Math.round(submitted.reduce((sum, s) => sum + s.score, 0) / submitted.length * 100) / 100 : null };
+    };
+    const summaries = assignments.map((a, i) => ({
+      ...assignmentSummary(a), ...summaryOf(records[i].map(s => s.data()))
+    }));
+    const students = members.map((m, i) => ({
+      uid: m.uid, name: m.name, seat: m.seat,
+      ...summaryOf(records.map(row => row[i].data()))
+    })).sort((a, b) => a.seat.localeCompare(b.seat, 'zh-Hant', { numeric: true }) || a.name.localeCompare(b.name, 'zh-Hant'));
+    return { overview: { className: room.name, studentCount: members.length, assignmentCount: assignments.length,
+      assignments: summaries, students, scope: '最近六份已發布或已結束作業；僅統計目前在班學生' } };
+  }
   const assignmentId = body.action === 'saveAssignment' && !body.assignmentId ? id(makeId()) : id(body.assignmentId);
   const assignmentRef = ref(db, 'classroomAssignments', assignmentId);
   if (body.action === 'saveAssignment') {
@@ -308,32 +335,6 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
       assignment.version++; tx.set(assignmentRef, assignment);
       return { assignment: assignmentSummary(assignment) };
     });
-  }
-  if (body.action === 'overview') {
-    const snap = await roomRef.get(), room = snap.data();
-    requireAccess(room, uid, true, roles);
-    const assignmentSnaps = await Promise.all(room.assignmentIds.map(key => ref(db, 'classroomAssignments', key).get()));
-    const assignments = assignmentSnaps.filter(s => s.exists).map(s => s.data())
-      .filter(a => a.classId === classId && ['published', 'closed'].includes(a.status)).slice(-6).reverse();
-    const members = room.members;
-    const records = await Promise.all(assignments.map(a =>
-      Promise.all(members.map(m => ref(db, 'classroomSubmissions', a.id + '_' + m.uid).get()))));
-    requireAccess((await roomRef.get()).data(), uid, true, await authority());
-    const summaryOf = values => {
-      const submitted = values.filter(s => s?.status === 'submitted');
-      return { submitted: submitted.length, inProgress: values.filter(s => s?.status === 'in-progress').length,
-        notStarted: values.length - submitted.length - values.filter(s => s?.status === 'in-progress').length,
-        average: submitted.length ? Math.round(submitted.reduce((sum, s) => sum + s.score, 0) / submitted.length * 100) / 100 : null };
-    };
-    const summaries = assignments.map((a, i) => ({
-      ...assignmentSummary(a), ...summaryOf(records[i].map(s => s.data()))
-    }));
-    const students = members.map((m, i) => ({
-      uid: m.uid, name: m.name, seat: m.seat,
-      ...summaryOf(records.map(row => row[i].data()))
-    })).sort((a, b) => a.seat.localeCompare(b.seat, 'zh-Hant', { numeric: true }) || a.name.localeCompare(b.name, 'zh-Hant'));
-    return { overview: { className: room.name, studentCount: members.length, assignmentCount: assignments.length,
-      assignments: summaries, students, scope: '最近六份已發布或已結束作業；僅統計目前在班學生' } };
   }
   if (['report', 'exportReport'].includes(body.action)) {
     const [r, a] = await Promise.all([roomRef.get(), assignmentRef.get()]), room = r.data(), assignment = a.data();
