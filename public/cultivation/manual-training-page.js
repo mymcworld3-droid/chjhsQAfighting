@@ -127,15 +127,16 @@ function markup(){
        })}
     </article>`
   ).join('');
-  return `${hero}${expedition}
-    <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>
-    ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
-      esc,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
-    })}
+  return `
     <section class="manual-library" aria-label="功法收藏藏經閣">
       ${renderManualCollectionHeader(current,libraryFilter,{esc})}
       <div class="manual-book-grid">${cards||'<p class="manual-empty">尚無此流派已取得的功法，請切換篩選查看。</p>'}</div>
     </section>
+    ${hero}${expedition}
+    <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>
+    ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
+      esc,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
+    })}
     <details class="manual-xp-reference"><summary>其他靈獸境界 EXP 對照</summary>
       <div>${Catalog.REALMS.map(realm=>`<span>${esc(realm.name)}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
       <p>只有以功法技能完成擊殺才能獲得熟練經驗；招式仍需要功法等級及修士境界。</p>
