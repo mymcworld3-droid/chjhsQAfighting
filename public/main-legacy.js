@@ -2131,6 +2131,10 @@ window.switchToPage = (pageId, {preserveTrialTower = false} = {}) => {
     
     updateTexts();
     finishTransition();
+    if(pageId==='page-training'&&currentUserData?.uid)
+        window.dispatchEvent(new CustomEvent('qingyun:tactical-tutorial',{
+            detail:{uid:currentUserData.uid,kind:'training-opened'}
+        }));
 };
 
 let brandHomeNavigationPending = false;

@@ -26,12 +26,15 @@ function harness(initial = {}) {
       }
     };
   }
-  for (const id of ['page-home', 'page-quiz', 'quiz-container', 'tactical-combat',
-    'btn-home-start', 'btn-giveup', 'options-container', 'option-btn-0']) nodes.set('#' + id, element(id));
+  for (const id of ['page-home', 'page-quiz', 'page-training', 'quiz-container', 'tactical-combat',
+    'btn-home-start', 'btn-giveup', 'options-container', 'option-btn-0', 'nav-training']) nodes.set('#' + id, element(id));
   for (const name of ['#tactical-combat [data-quiz]',
     '#tactical-combat [data-wheel-action="move"], #tactical-combat [data-action="move"]',
     '#tactical-combat [data-wheel-action="attack-ring"], #tactical-combat [data-action="attack"]',
-    '#tactical-combat [data-end]', '#tactical-combat canvas', '#options-container button:not(:disabled)'])
+    '#tactical-combat [data-end]', '#tactical-combat canvas', '#tactical-combat [data-tutorial-collapse]',
+    '#manual-training-root [data-manual-pick-slot="0"]',
+    '#manual-training-root [data-manual-pick-skill], #manual-training-root [data-manual-guide-finish]',
+    '#options-container button:not(:disabled)'])
     nodes.set(name, element(name));
   const blocked = { value: false };
   const document = {
@@ -43,6 +46,8 @@ function harness(initial = {}) {
       if (selector === '#page-home') node.hidden = current !== 'page-home';
       if (selector === '#page-quiz' || selector === '#quiz-container') node.hidden = current !== 'page-quiz';
       if (selector === '#tactical-combat') node.hidden = current !== 'battle';
+      if (selector === '#page-training') node.hidden = current !== 'page-training';
+      if (selector === '#nav-training') node.hidden = false;
       return node;
     },
     createElement() { return element('guide'); },
@@ -85,7 +90,7 @@ test('new accounts begin at the real trial entry, without submitting a demo ques
   h.block(true); h.tick(); assert.equal(h.layer(), null);
   h.block(false); h.tick(); assert.ok(h.layer());
 });
-test('only the exact attack-selection, single-step move and rightward strike complete the eight steps', () => {
+test('battle onboarding proceeds through the first real victory, closing and verified skill equipment', () => {
   const h = harness(); h.window.scheduleFirstAnswerGuide('new-account', true);
   h.event('attacked'); assert.equal(JSON.parse(h.store.get(key('new-account'))).step, 0);
   h.event('entered'); h.page('battle'); h.tick();
@@ -109,6 +114,21 @@ test('only the exact attack-selection, single-step move and rightward strike com
   h.event('attacked', '', 'new-account', {x:3,y:3});
   assert.equal(JSON.parse(h.store.get(key('new-account'))).step, 7);
   h.event('attacked', '', 'new-account', {x:4,y:3});
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step, 8);
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).status, 'pending');
+  h.event('stage-cleared','', 'new-account',{won:false});
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step,8);
+  h.event('stage-cleared','', 'new-account',{won:true});
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step,9);
+  h.event('battle-closed');h.page('page-home');
+  assert.match(h.layer().querySelector('h2').textContent,/前往修煉/);
+  h.event('training-opened');h.page('page-training');h.tick();
+  assert.match(h.layer().querySelector('h2').textContent,/選擇技能槽/);
+  h.event('slot-opened');
+  assert.match(h.layer().querySelector('h2').textContent,/裝備第一招/);
+  h.event('skill-equipped','', 'new-account',{verified:false});
+  assert.equal(JSON.parse(h.store.get(key('new-account'))).step,12);
+  h.event('skill-equipped','', 'new-account',{verified:true});
   assert.equal(h.layer(), null);
   assert.equal(JSON.parse(h.store.get(key('new-account'))).status, 'done');
   assert.equal(h.notices(), 1);

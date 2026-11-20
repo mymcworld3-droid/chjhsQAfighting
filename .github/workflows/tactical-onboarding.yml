@@ -14,6 +14,10 @@ on:
       - 'public/account-delete.js'
       - 'public/index.html'
       - 'public/main.js'
+      - 'public/cultivation/manual-training-page.js'
+      - 'public/styles/social-compact.css'
+      - 'manual-reward-rules.cjs'
+      - 'tests/tutorial-post-clear.test.cjs'
       - 'public/styles/first-visit.css'
       - 'public/module-versions.json'
       - 'tests/first-answer-guide.test.cjs'
@@ -47,6 +51,7 @@ jobs:
         run: >-
           node --test tests/first-answer-guide.test.cjs
           tests/tactical-first-stage-onboarding.test.cjs
+          tests/tutorial-post-clear.test.cjs
           tests/login-auto-entry.test.cjs
           tests/first-visit.test.cjs
           tests/account-delete.test.cjs

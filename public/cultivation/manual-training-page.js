@@ -199,6 +199,10 @@ function showManualCelebration(reward){
   const duration=reward.kind==='discovery'?3700:reward.kind==='unlock'?2700:1700;
   celebrationTimer=setTimeout(()=>{host.replaceChildren();celebrationTimer=null;},duration);
 }
+function tutorialManualEvent(kind,details={}){
+  const uid=getMainUser()?.uid;
+  if(uid)window.dispatchEvent(new CustomEvent('qingyun:tactical-tutorial',{detail:{uid,kind,...details}}));
+}
 function paint(message='',{loadoutFeedback=false}={}){
   ensure();if(!root)return;
   const template=document.createElement('template');template.innerHTML=markup();
@@ -209,6 +213,18 @@ function paint(message='',{loadoutFeedback=false}={}){
   if(status)status.textContent=message;
   const deckStatus=root.querySelector('[data-manual-loadout-status]');
   if(deckStatus)deckStatus.textContent=loadoutFeedback?message:'';
+  // An existing starter skill may already be equipped by the server.
+  // The optional completion action always rechecks authoritative manual state.
+  if(window.firstAnswerGuideStep?.(loadedFor)===12&&current?.equipped?.length){
+    const picker=root.querySelector('[data-manual-picker]');
+    if(picker&&!picker.querySelector('[data-manual-guide-finish]')){
+      const button=document.createElement('button');
+      button.type='button';button.className='manual-picker-close';
+      button.setAttribute('data-manual-guide-finish','');
+      button.textContent='確認已裝備技能，完成教學';
+      picker.append(button);
+    }
+  }
   root.querySelectorAll('button').forEach(button=>{
     if(busy)button.disabled=true;
   });
@@ -263,6 +279,9 @@ async function mutate(url,body){
     }else{
       message=url.endsWith('/school')?'修行流派已切換。':'功法配置已儲存。';
       window.dispatchEvent(new CustomEvent('xiuxian:manual-loadout-updated',{detail:{equipped:next.equipped}}));
+      if(url.endsWith('/loadout')&&Array.isArray(body?.skillIds)&&body.skillIds.length&&
+        selectedLoadout===next.activeLoadout&&body.skillIds.every(id=>next.equipped.includes(id)))
+        tutorialManualEvent('skill-equipped',{verified:true,skillIds:[...next.equipped]});
     }
   }catch(error){message=error.message;}
   finally{
@@ -310,6 +329,21 @@ function boot(){
     }
     if(busy)return;
     const button=event.target.closest('button');if(!button)return;
+    if(button.hasAttribute('data-manual-guide-finish')){
+      const uid=getMainUser()?.uid;
+      if(window.firstAnswerGuideStep?.(uid)!==12)return;
+      button.disabled=true;
+      void request('/api/tactical/manuals').then(server=>{
+        if(getMainUser()?.uid!==uid)return;
+        if(!Array.isArray(server?.equipped)||!server.equipped.length){
+          paint('目前尚未裝備技能，請先從招式清單選擇。');return;
+        }
+        current=server;loadedFor=uid;
+        tutorialManualEvent('skill-equipped',{verified:true,skillIds:[...server.equipped]});
+        paint();
+      }).catch(error=>{if(getMainUser()?.uid===uid)paint(error.message);});
+      return;
+    }
     if(button.dataset.manualExpeditionAction){
       const guide=nextManualExpedition(current,featuredBookId,Catalog);
       if(!guide||guide.bookId!==button.dataset.manualExpeditionId)return;
@@ -387,6 +421,8 @@ function boot(){
         pickerSlot=pickerSlot===targetSlot?null:targetSlot;
         paint();
         if(pickerSlot!==null){
+          tutorialManualEvent('slot-opened');
+          if(window.firstAnswerGuideStep?.(getMainUser()?.uid)===12)paint();
           requestAnimationFrame(()=>{
             root?.querySelector('[data-manual-picker]')?.scrollIntoView({
               behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',

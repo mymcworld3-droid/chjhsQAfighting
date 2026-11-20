@@ -284,6 +284,7 @@ function ensure(){
     else if(b.hasAttribute('data-join'))void start($('[data-code]').value);
     else if(b.hasAttribute('data-resume'))paint();
     else if(b.hasAttribute('data-hub')){hideModal();mode==='pve'?close():renderHub();}
+    else if(b.hasAttribute('data-tutorial-collapse'))close();
     else if(b.hasAttribute('data-next-stage')||b.hasAttribute('data-retry-entry'))void open('pve');
     else if(b.hasAttribute('data-manual-training')){
       const account=uid;
@@ -1241,7 +1242,9 @@ function resultDialog(){
   const manualRecap=state.mode==='pve'?manualRecapMarkup(state,uid):'';
   if(state.mode==='pve'){
     const stage=state.trial?.stage||1,next=state.nextStage||stage+1;
-    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}</p>${manualRecap}${drop?'<p class="tc-manual-loot">獲得功法：《'+esc(drop.name)+'》！前往修煉查看。</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}<button type="button" class="tc-primary" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
+    const guideCollapse=win&&stage===1&&tutorialStep()>=7&&tutorialStep()<=9
+      ?'<button type="button" class="tc-primary" data-tutorial-collapse>收起戰場</button>':'';
+    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}</p>${manualRecap}${drop?'<p class="tc-manual-loot">獲得功法：《'+esc(drop.name)+'》！前往修煉查看。</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}${guideCollapse}<button type="button" class="${guideCollapse?'':'tc-primary'}" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
     if(manualRecap)void refreshManualRecap();
     return;
   }
@@ -1275,6 +1278,10 @@ function accept(next,serial){
   }
   if(bossTransition)bossTransitionPending={roomId:next.id,...bossTransition};
   state=next;if(!keepSelection)selection=null;
+  // Only a server-settled first-stage victory can release the final tutorial.
+  // Replaying a finished room also restores this step after a page refresh.
+  if(next?.mode==='pve'&&next.trial?.stage===1&&next.status==='finished'&&next.winner==='player')
+    tutorialEvent('stage-cleared',{won:true});
   // EXP sound and animated cue are emitted after paint, never from a guessed kill.
   if(next?.manualDrops?.[uid])window.dispatchEvent(new CustomEvent('xiuxian:manual-loot'));
   // Kick off real match-scoped question requests immediately on an eligible
@@ -1322,8 +1329,13 @@ async function send(command){
   // A real successful server action, not a wheel selection or preview, advances the guide.
   if(committed&&committed.id===request.roomId&&committed.revision>request.revision){
     if(command.type==='move')tutorialEvent('moved',{x:command.x,y:command.y});
-    else if(['attack','manual','skill'].includes(command.type))
+    else if(['attack','manual','skill'].includes(command.type)){
       tutorialEvent('attacked',{x:command.x,y:command.y});
+      // A single finishing blow can settle before the 'attacked' guide event.
+      // Replay the verified win event after the attack so neither is lost.
+      if(state?.mode==='pve'&&state?.trial?.stage===1&&state?.status==='finished'&&state?.winner==='player')
+        tutorialEvent('stage-cleared',{won:true});
+    }
     else if(command.type==='end')tutorialEvent('ended');
   }
 }
@@ -2002,11 +2014,14 @@ async function open(nextMode='pve'){
 }
 function close(){
   if(!root)return;
+  const completedFirstStage=mode==='pve'&&state?.trial?.stage===1&&state.status==='finished'&&
+    state.winner==='player'&&tutorialStep()===9;
   hideBossBanner();bossTransitionPending=null;
   sealPeekPosition=null;sealGuideForced=false;
   beastInspector?.dismiss();sealInspector?.reset();
   window.QATrialQuestion?.close();keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;manualRecapCache=null;manualRecapLoadingKey='';battleMasteryBaseline=null;clearLiveManualXp();clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
+  if(completedFirstStage)tutorialEvent('battle-closed');
 }
 window.openTacticalCombat=open;
 window.startQuizFlow=()=>open('pve');
