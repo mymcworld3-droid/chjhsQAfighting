@@ -1,13 +1,13 @@
 /* Per-kill manual EXP cue, rooted above the battlefield controls.
    This is an informational, pointer-transparent overlay, never a modal.
    Only server-confirmed ledger increments may create it. */
-#tactical-combat .tc-manual-xp-host{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-host{
   position:absolute;z-index:4;top:clamp(48px,8dvh,67px);left:50%;
   transform:translateX(-50%);width:min(328px,calc(100% - 30px));
   pointer-events:none;display:grid;justify-items:center;
 }
-#tactical-combat .tc-manual-xp-host:empty{display:none}
-#tactical-combat .tc-manual-xp-toast{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-host:empty{display:none}
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-toast{
   width:100%;min-width:0;overflow:hidden;
   padding:12px 14px;border:1px solid rgba(214,184,111,.78);
   border-radius:14px;
@@ -15,56 +15,56 @@
   box-shadow:0 12px 34px rgba(0,0,0,.42),inset 0 0 0 1px rgba(245,231,185,.06);
   animation:tc-manual-xp-enter .32s cubic-bezier(.2,.83,.22,1.2) both;
 }
-#tactical-combat .tc-manual-xp-top{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-top{
   display:flex;align-items:center;justify-content:space-between;gap:8px;
   padding-bottom:8px;margin-bottom:7px;
   border-bottom:1px solid rgba(206,178,111,.35);
 }
-#tactical-combat .tc-manual-xp-top>span{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-top>span{
   display:inline-flex;align-items:center;gap:6px;
   font-size:11px;letter-spacing:.05em;font-weight:850;color:#efd49b;
 }
-#tactical-combat .tc-manual-xp-top i{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-top i{
   color:#e9c179;font-size:12px;
 }
-#tactical-combat .tc-manual-xp-top>strong{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-top>strong{
   white-space:nowrap;font-size:18px;color:#a7f2c7;
   font-weight:900;font-variant-numeric:tabular-nums;
   text-shadow:0 0 12px rgba(124,217,166,.3);
 }
-#tactical-combat .tc-manual-xp-entries{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-entries{
   display:grid;gap:6px;
 }
-#tactical-combat .tc-manual-xp-entry{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-entry{
   --xp-highlight:#96e2da;
   display:flex;align-items:center;gap:8px;min-width:0;
   padding:5px 6px;border:1px solid rgba(105,170,148,.33);
   border-radius:8px;background:rgba(8,23,18,.65);
 }
-#tactical-combat .tc-manual-xp-entry--body{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-entry--body{
   --xp-highlight:#eec38c;
   border-color:rgba(212,167,104,.39);
   background:rgba(49,35,23,.5);
 }
-#tactical-combat .tc-manual-xp-art{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-art{
   display:grid;place-items:center;flex:0 0 30px;width:30px;height:30px;
   overflow:hidden;border-radius:7px;
   background:rgba(7,14,11,.5);border:1px solid var(--xp-highlight);
   color:var(--xp-highlight);font-size:13px;
 }
-#tactical-combat .tc-manual-xp-art>img{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-art>img{
   display:block;width:100%;height:100%;object-fit:contain;
 }
-#tactical-combat .tc-manual-xp-name{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-name{
   min-width:0;flex:1;color:#f6e9c9;
   font-size:12px;font-weight:760;overflow:hidden;text-overflow:ellipsis;
   white-space:nowrap;
 }
-#tactical-combat .tc-manual-xp-value{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-value{
   white-space:nowrap;color:var(--xp-highlight);
   font-size:12px;font-weight:850;font-variant-numeric:tabular-nums;
 }
-#tactical-combat .tc-manual-xp-more{
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-more{
   display:block;margin-top:8px;color:#d9c59b;
   font-size:10px;line-height:1.5;
 }
@@ -74,25 +74,67 @@
   to{opacity:1;transform:translateY(0) scale(1)}
 }
 @media (orientation:landscape) and (max-height:620px){
-  #tactical-combat .tc-manual-xp-host{
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-host{
     top:45px;width:min(294px,calc(100% - 28px));
   }
-  #tactical-combat .tc-manual-xp-toast{padding:8px 10px}
-  #tactical-combat .tc-manual-xp-top{padding-bottom:5px;margin-bottom:5px}
-  #tactical-combat .tc-manual-xp-art{width:25px;height:25px;flex-basis:25px}
-  #tactical-combat .tc-manual-xp-entry{padding:3px 5px}
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-toast{padding:8px 10px}
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-top{padding-bottom:5px;margin-bottom:5px}
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-art{width:25px;height:25px;flex-basis:25px}
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-entry{padding:3px 5px}
 }
 @media(max-width:410px){
-  #tactical-combat .tc-manual-xp-host{
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-host{
     width:min(284px,calc(100% - 18px));
   }
-  #tactical-combat .tc-manual-xp-toast{padding:9px 11px}
-  #tactical-combat .tc-manual-xp-top>strong{font-size:16px}
-  #tactical-combat .tc-manual-xp-name{font-size:11px}
-  #tactical-combat .tc-manual-xp-value{font-size:11px}
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-toast{padding:9px 11px}
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-top>strong{font-size:16px}
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-name{font-size:11px}
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-value{font-size:11px}
 }
 @media(prefers-reduced-motion:reduce){
-  #tactical-combat .tc-manual-xp-toast{
+  :is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-toast{
     animation:none!important;transition:none!important;
+  }
+}
+
+/* The dungeon shares the exact trial toast artwork, animation and layout.
+   Keep it below the battle header and above the map, without intercepting
+   clicks, swipes, skill casts, or quiz answers. */
+#dungeon-map-view .tc-manual-xp-host{
+  z-index:25;
+  top:clamp(76px,10dvh,102px);
+}
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-progress{
+  display:grid;gap:7px;margin-top:9px;padding-top:8px;
+  border-top:1px solid rgba(206,178,111,.35);
+}
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-progress-item{
+  display:grid;gap:4px;
+}
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-progress-title{
+  display:flex;justify-content:space-between;align-items:baseline;
+  gap:8px;font-size:11px;color:#f4dfb7;
+}
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-progress-title strong{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;
+}
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-progress-title span{
+  flex:0 0 auto;color:#a8e9c1;font-variant-numeric:tabular-nums;
+}
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-progress-track{
+  width:100%;height:8px;padding:1px;overflow:hidden;border-radius:16px;
+  border:1px solid rgba(219,194,126,.52);background:rgba(9,22,16,.95);
+}
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-progress-track>span{
+  display:block;height:100%;border-radius:14px;
+  background:linear-gradient(90deg,#6b9470,#e2bf76,#fff1b1);
+  transition:width .4s ease-out;
+}
+:is(#tactical-combat,#dungeon-map-view) .tc-manual-xp-progress-item>small{
+  font-size:10px;line-height:1.4;color:#dbcfb4;
+}
+@media (orientation:landscape) and (max-height:620px){
+  #dungeon-map-view .tc-manual-xp-host{
+    top:55px;width:min(294px,calc(100% - 28px));
   }
 }
