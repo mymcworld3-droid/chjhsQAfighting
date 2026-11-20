@@ -378,7 +378,7 @@ export function drawWorld(ctx,map,camera,width,height,
       ctx.lineTo(sx,sy+radius*.45);
       ctx.lineTo(sx-radius*.95,sy+radius*.8);
       ctx.lineTo(sx-radius*.77,sy-radius*.45);
-      ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.lineTo(sx,sy-radius*1.5);ctx.fill();ctx.stroke();
       ctx.restore();
     }
     const healthMax=Number.isSafeInteger(member.battleMaxHealth)&&
