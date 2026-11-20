@@ -550,6 +550,17 @@ export class DungeonQuizPanel{
       const result=await answerDungeonQuestion(this.roomId,q.id,choice,0,
         Math.max(0,Math.floor((Date.now()-startedAt)/1000)));
       if(!this.valid(epoch))return;
+      // Match the trial: refresh only the authenticated account's
+      // server-confirmed learning stats before re-rendering its footprint.
+      const progress=result.progress?.stats;
+      const own=window.getCurrentUserData?.();
+      if(progress&&getMainUser()?.uid===this.uid&&
+          own?.stats&&(!own.uid||own.uid===this.uid)){
+        Object.assign(own.stats,progress);
+        window.refreshXiuxianLiveSync?.(progress.totalScore);
+        window.updateUIStats?.();
+        window.renderKnowledgeGraph?.();
+      }
       this.review=result.review;this.question=null;
       this.answered=result.state.answered;
       this.pendingCredits=result.state.pendingCredits||[];
