@@ -505,8 +505,8 @@ async function main(){
       };
     });
     assert.match(xpVisual.text,/流風劍訣/);
-    assert.match(xpVisual.text,/\\+35 EXP/);
-    assert.match(xpVisual.text,/Lv\\./);
+    assert.match(xpVisual.text,/\+35 EXP/);
+    assert.match(xpVisual.text,/Lv\./);
     assert.equal(xpVisual.artwork,'/assets/books/sword-wind.png');
     assert.equal(xpVisual.progress,'sword-wind');
     assert.equal(xpVisual.pointerEvents,'none');
