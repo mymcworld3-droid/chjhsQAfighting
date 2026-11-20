@@ -190,3 +190,23 @@ test('room restart resets exploration counters only after a new ready assembly',
   assert.equal(restarted.body.room.members.a.moveSeq,0);
   assert.equal(restarted.body.room.members.a.explorationStamina,START_STAMINA);
 });
+
+test('tap-to-walk move-route is admitted by the API and advances exactly one move',async()=>{
+  const f=fixture(),{id,room,map}=await readyGroup(f);
+  const [dx,dy]=cardinal(map,room.members.a.position);
+  const payload={roomId:id,vectors:[{dx,dy}],step:1};
+  const first=await f.call('a','move-route',payload);
+  assert.equal(first.status,200,first.body?.error);
+  assert.deepStrictEqual(first.body.room.members.a.position,{
+    x:room.members.a.position.x+dx,y:room.members.a.position.y+dy
+  });
+  assert.equal(first.body.room.members.a.moveSeq,1);
+  assert.equal(first.body.room.members.a.explorationStamina,START_STAMINA-1);
+  const duplicate=await f.call('a','move-route',payload,1);
+  assert.equal(duplicate.status,200,duplicate.body?.error);
+  assert.equal(duplicate.body.room.revision,first.body.room.revision,
+    'retries cannot double-charge movement');
+  assert.equal((await f.call('a','move-route',{
+    roomId:id,vectors:[{dx:2,dy:0}],step:2
+  })).status,400,'invalid vectors remain rejected');
+});
