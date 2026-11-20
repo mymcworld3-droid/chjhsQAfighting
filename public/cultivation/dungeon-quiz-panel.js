@@ -329,7 +329,8 @@ export class DungeonQuizPanel{
         confirmed.textContent='獨立審核已確認本題有誤，補正由伺服器驗證入帳。';
         feedback.append(confirmed);
       }
-      if(!r.correct&&!r.skipped&&Number.isInteger(r.choice)&&r.choice>=0){
+      if(!r.correct&&!r.skipped&&!r.errorConfirmed&&
+          Number.isInteger(r.choice)&&r.choice>=0){
         const correction=document.createElement('div');
         correction.className='dm-quiz-correction';
         const button=document.createElement('button');
@@ -351,6 +352,113 @@ export class DungeonQuizPanel{
     }else this.status(this.errorMessage||'正在填充題庫中…');
     this.bindLearning(item);
     try{window.quizMathTypeset?.(content);}catch(_){}
+  }
+  async queueCorrection(){
+    const review=this.review;
+    if(!this.valid()||!review||review.correct||review.skipped||
+        review.errorConfirmed||this.correctionBusy||
+        this.queuedCorrections.has(review.questionId))return;
+    const uid=this.uid,epoch=this.epoch,questionId=review.questionId;
+    this.correctionBusy=true;this.paint();
+    try{
+      if(typeof window.queueTacticalSoloCorrection!=='function')
+        throw Error('共用訂正練習系統尚未就緒');
+      // This is the same main-solo queue used by 問道試煉, NOT a dungeon
+      // duplicate. Its own reward logic grants +1 only on real recovery.
+      await window.queueTacticalSoloCorrection({
+        question:review.q,subject:review.subject,
+        topic:review.learningTopic||review.topic,
+        difficulty:review.difficulty,
+        adaptive:review.adaptive||null
+      });
+      if(!this.valid(epoch)||uid!==this.uid)return;
+      this.queuedCorrections.add(questionId);
+      this.reportStatus('訂正題已加入主問道共用待答題庫。');
+    }catch(error){
+      if(this.valid(epoch))this.reportStatus(
+        error?.message||'訂正題暫時無法生成，請重試');
+    }finally{
+      this.correctionBusy=false;
+      if(this.valid(epoch))this.paint();
+    }
+  }
+  async retryErrorRefunds(){
+    if(!this.valid()||!this.errorRefunds.length)return;
+    const epoch=this.epoch;
+    // The authenticated C receipt makes these retries safe even when a
+    // browser reconnects or a previous response was lost in transit.
+    for(const row of [...this.errorRefunds].sort((a,b)=>a.index-b.index)){
+      if(!this.valid(epoch))return;
+      try{
+        const result=await refundDungeonQuestionStamina(this.roomId,row.id);
+        if(!this.valid(epoch))return;
+        if(result?.room)this.onRoom(result.room);
+        this.errorRefunds=this.errorRefunds.filter(item=>item.id!==row.id);
+      }catch(error){
+        if(this.valid(epoch)){
+          this.errorMessage='錯題審核已確認，但體力差額尚未補入：'+
+            (error?.message||'請稍後重試');
+          this.paint();
+        }
+        return;
+      }
+    }
+    if(this.valid(epoch)){
+      this.errorMessage='';
+      this.paint();
+    }
+  }
+  async sendReport(){
+    const item=this.review||this.question,reason=this.$('report-reason')?.value?.trim()||'';
+    if(!this.valid()||!item||this.reportBusy)return;
+    if(reason.length<6){
+      this.reportStatus('請至少用 6 個字具體指出題目錯誤。');
+      return;
+    }
+    const epoch=this.epoch,uid=this.uid,roomId=this.roomId,questionId=item.questionId||item.id;
+    this.reportBusy=true;this.paint();
+    this.reportStatus('正在進行獨立雙重審核；審核完成後才會補償。');
+    try{
+      const result=await reportDungeonQuestion(roomId,questionId,reason);
+      if(!this.valid(epoch)||this.uid!==uid||this.roomId!==roomId)return;
+      if(!result.valid){
+        this.reportStatus(result.reason||'審核尚未確認本題有誤。');
+        return;
+      }
+      const state=result.state;
+      this.answered=state.answered;
+      this.pendingCredits=state.pendingCredits||[];
+      this.errorRefunds=state.errorRefunds||[];
+      // Do not discard another question if this report finished while the
+      // player was switching panels or a fresh SSE snapshot arrived.
+      if((this.question?.id||this.review?.questionId)===questionId){
+        if(state.lastReview?.questionId===questionId){
+          this.review=state.lastReview;this.question=null;
+        }
+      }
+      this.reportOpen=false;
+      this.$('report-panel').hidden=true;
+      this.$('report-reason').value='';
+      this.paint();
+      await this.retryCredits();
+      await this.retryErrorRefunds();
+      if(!this.valid(epoch))return;
+      const reward=result.compensated?
+        ' · 修為 +'+(result.cultivationAdded||0):'';
+      const status=result.skipped?
+        '已跳過這道有誤的題目，不計入答題成績。':
+        '題目已確認有誤，原答題體力與補正差額依帳號紀錄入帳。';
+      this.reportStatus(status+reward+
+        (result.status==='limit'?' · 今日補償額度已達上限':''));
+      this.paint();
+    }catch(error){
+      if(this.valid(epoch)){
+        this.reportStatus(error?.message||'錯題審核暫時無法完成，請重新送審');
+      }
+    }finally{
+      this.reportBusy=false;
+      if(this.valid(epoch))this.paint();
+    }
   }
   async retryCredits(){
     if(!this.valid())return;
@@ -383,7 +491,9 @@ export class DungeonQuizPanel{
       const state=response.state;
       this.answered=state.answered;
       this.pendingCredits=state.pendingCredits||[];
+      this.errorRefunds=state.errorRefunds||[];
       await this.retryCredits();
+      if(this.valid(epoch))await this.retryErrorRefunds();
       if(!this.valid(epoch))return;
       // A response can be reloaded in another browser without skipping the
       // original explanation. Only "下一題" acknowledges this review.
@@ -399,7 +509,8 @@ export class DungeonQuizPanel{
         question=generated.dungeonQuestion;
       }
       if(!this.valid(epoch))return;
-      this.question=question;this.review=null;this.questionStartedAt=Date.now();this.paint();
+      this.question=question;this.review=null;this.reportOpen=false;
+      this.questionStartedAt=Date.now();this.paint();
       // Fill the next four independent slots without locking up the screen.
       // Main solo generation performs normal scope checks and AI review.
       void this.prefetch(epoch);
@@ -441,8 +552,10 @@ export class DungeonQuizPanel{
       this.review=result.review;this.question=null;
       this.answered=result.state.answered;
       this.pendingCredits=result.state.pendingCredits||[];
-      this.paint();
+      this.errorRefunds=result.state.errorRefunds||[];
+      this.reportOpen=false;this.paint();
       await this.retryCredits();
+      if(this.valid(epoch))await this.retryErrorRefunds();
     }catch(error){
       if(this.valid(epoch))this.errorMessage=error?.message||'批改失敗，請重試';
     }finally{
@@ -451,13 +564,16 @@ export class DungeonQuizPanel{
     }
   }
   async next(){
-    if(!this.valid()||!this.review)return;
+    if(!this.valid()||!this.review||this.reportBusy)return;
     const epoch=this.epoch,reviewId=this.review.questionId;
     this.$('next').disabled=true;
     try{
       await acknowledgeDungeonReview(this.roomId,reviewId);
       if(!this.valid(epoch))return;
       this.review=null;this.question=null;this.errorMessage='';
+      this.reportOpen=false;this.reportStatus('');
+      if(window.currentTacticalQuiz===this.learningQuiz)window.currentTacticalQuiz=null;
+      this.learningQuiz=null;
       this.clearWhiteboard();this.toggleWhiteboard(false);
       this.questionStartedAt=Date.now();
       this.paint();await this.load();
