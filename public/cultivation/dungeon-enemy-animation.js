@@ -7,9 +7,10 @@ const copy=p=>({x:p.x,y:p.y});
 const normalKinds=new Set(['wolf','wisp','golem','guardian']);
 const attackKinds=new Set(['bite','ray','fan']);
 const same=(a,b)=>a?.x===b?.x&&a?.y===b?.y;
+const appliedTick=room=>room?.battleClock?.appliedTick??room?.battleAppliedTick;
 const fresh=(tick,room)=>Number.isSafeInteger(tick)&&tick>=0&&
-  Number.isSafeInteger(room?.battleAppliedTick)&&
-  tick<=room.battleAppliedTick&&room.battleAppliedTick-tick<=2;
+  Number.isSafeInteger(appliedTick(room))&&
+  tick<=appliedTick(room)&&appliedTick(room)-tick<=2;
 
 export function dungeonEnemyReactionEvents(before,after){
   if(!before||!after||before.id!==after.id||
@@ -52,7 +53,8 @@ export function dungeonEnemyReactionEvents(before,after){
 export function dungeonWindupPose(enemy,tick,now=0,reducedMotion=false){
   const attack=enemy?.attack;
   if(!normalKinds.has(enemy?.kind)||!validPoint(enemy.position)||
-    !attackKinds.has(attack?.kind)||!same(attack?.from,enemy.position)||
+    !attackKinds.has(attack?.kind)||(attack.from&&
+      !same(attack.from,enemy.position))||
     !Number.isFinite(attack?.startedAtTick)||
     !Number.isFinite(attack?.resolvesAtTick)||
     attack.resolvesAtTick<=attack.startedAtTick||
