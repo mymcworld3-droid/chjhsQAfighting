@@ -244,15 +244,22 @@ export class DungeonQuizPanel{
     if(!content)return;
     content.replaceChildren();
     const retry=this.$('retry'),claim=this.$('credit'),next=this.$('next');
-    retry.hidden=!this.visible||!!this.review||!!this.question||this.loading;
+    const refund=this.$('error-credit'),report=this.$('report-panel');
+    const item=this.review||this.question;
+    retry.hidden=!this.visible||!!item||this.loading;
     next.hidden=!this.review;
-    claim.hidden=!this.review||!this.pendingCredits.length;
+    claim.hidden=!this.pendingCredits.length;
+    refund.hidden=!this.errorRefunds.length;
+    report.hidden=!this.visible||!item||!this.reportOpen;
+    this.$('report-toggle').hidden=!this.visible||!item;
+    this.$('report-toggle').setAttribute('aria-expanded',String(!report.hidden));
+    this.$('report-submit').disabled=this.reportBusy;
+    this.$('report-submit').textContent=this.reportBusy?'獨立審核中…':'送交獨立審核';
     if(!this.visible)return;
     if(this.loading&&!this.question&&!this.review){
       this.status('正在填充題庫中，已通過審核的題目會自動出現…');
       return;
     }
-    const item=this.review||this.question;
     const scope=this.$('scope');
     if(scope)scope.textContent=item?
       '第 '+(this.review?.index||this.answered+1)+' 題 · '+
@@ -277,8 +284,10 @@ export class DungeonQuizPanel{
           node.dataset.choice=String(index);node.disabled=this.answering;
         }
         node.className='dm-quiz-option'+
-          (this.review&&index===this.review.answerIndex?' is-correct':'')+
-          (this.review&&index===this.review.choice&&index!==this.review.answerIndex?
+          (this.review&&!this.review.skipped&&index===this.review.answerIndex?
+            ' is-correct':'')+
+          (this.review&&!this.review.skipped&&
+            index===this.review.choice&&index!==this.review.answerIndex?
             ' is-wrong':'');
         const letter=document.createElement('span');
         letter.className='dm-quiz-letter';
@@ -291,12 +300,16 @@ export class DungeonQuizPanel{
     }
     if(this.review){
       const r=this.review;
-      this.status(this.errorMessage||'本題已批改 · 請閱讀解析後按下一題');
+      this.status(this.errorMessage||(r.skipped?
+        '獨立審核已確認本題有誤，已跳過且不計入成績 · 請按下一題':
+        '本題已批改 · 請閱讀解析後按下一題'));
       const feedback=document.createElement('section');
       feedback.className='dm-quiz-feedback tc-feedback-section glass-panel';
       const heading=document.createElement('strong');
-      heading.className=r.correct?'tc-correct':'tc-wrong';
-      heading.textContent=(r.correct?'答對':'答錯')+
+      heading.className=r.correct||r.skipped?'tc-correct':'tc-wrong';
+      heading.textContent=r.skipped?
+        '本題有誤 · 已跳過'+(this.isAdmin?'':' · 補充體力 +4'):
+        (r.correct?'答對':'答錯')+
         (this.isAdmin?' · 管理員體力固定 10/10':' · 體力 +'+r.amount);
       feedback.append(heading);
       const explanation=document.createElement('section');
@@ -309,12 +322,34 @@ export class DungeonQuizPanel{
         const learning=document.createElement('p');
         learning.textContent=r.reward.learning;explanation.append(learning);
       }
-      feedback.append(explanation);content.append(feedback);
+      feedback.append(explanation);
+      if(r.errorConfirmed&&!r.skipped){
+        const confirmed=document.createElement('p');
+        confirmed.className='dm-quiz-error-confirmed';
+        confirmed.textContent='獨立審核已確認本題有誤，補正由伺服器驗證入帳。';
+        feedback.append(confirmed);
+      }
+      if(!r.correct&&!r.skipped&&Number.isInteger(r.choice)&&r.choice>=0){
+        const correction=document.createElement('div');
+        correction.className='dm-quiz-correction';
+        const button=document.createElement('button');
+        button.type='button';button.dataset.dq='correction';
+        const queued=this.queuedCorrections.has(r.questionId);
+        button.disabled=this.correctionBusy||queued;
+        button.textContent=queued?'✓ 已加入共用待答題庫':
+          this.correctionBusy?'訂正題生成中…':
+          '加入訂正練習 · 訂正成功修為 +1';
+        const note=document.createElement('small');
+        note.textContent='與問道試煉共用訂正題；完成同觀念訂正後依原有規則獲得回饋。';
+        correction.append(button,note);feedback.append(correction);
+      }
+      content.append(feedback);
     }else if(this.question){
       this.status(this.errorMessage||'請選擇 A、B、C、D · '+
         (this.isAdmin?'管理員體力固定 10/10，答題仍計入學習紀錄':
           '答對 +4、答錯 +1 · 可隨時返回戰場'));
     }else this.status(this.errorMessage||'正在填充題庫中…');
+    this.bindLearning(item);
     try{window.quizMathTypeset?.(content);}catch(_){}
   }
   async retryCredits(){
