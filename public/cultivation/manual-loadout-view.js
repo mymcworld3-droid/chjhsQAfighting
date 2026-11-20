@@ -28,7 +28,7 @@ export function selectSkillForSlot(ids, slotIndex, skillId, moveIdOf) {
   return new Set(result.map(moveIdOf)).size===result.length?result:null;
 }
 
-export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skillArt,moveIdOf}) {
+function renderLegacyManualLoadout(state, selectedIndex, pickerSlot, {esc,skillArt,moveIdOf}) {
   const presets=Array.isArray(state?.loadouts)?state.loadouts.slice(0,3):[];
   const selected=Number.isInteger(selectedIndex)&&selectedIndex>=0&&selectedIndex<presets.length
     ?selectedIndex:Math.max(0,Math.min(presets.length-1,Number(state?.activeLoadout)||0));
@@ -153,4 +153,66 @@ export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skill
       ${picker}
     </div>
   </section>`;
+}
+
+ 
+// Weapon-era interface. Keep the old renderer available for old snapshots and
+// integration tests; current server projections always provide weaponIds.
+export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,skillArt,moveIdOf}={}){
+  if(!Array.isArray(state?.weaponIds))
+    return renderLegacyManualLoadout(state,selectedIndex,pickerSlot,{esc,skillArt,moveIdOf});
+  const slots=state.weaponIds.slice(0,3),owned=(state.library||[]).filter(book=>book.owned);
+  const books=new Map(owned.map(book=>[book.id,book]));
+  const selected=Number.isInteger(selectedIndex)&&selectedIndex>=0&&selectedIndex<3?selectedIndex:0;
+  const active=Number.isInteger(state.activeLoadout)?state.activeLoadout:0;
+  const art=book=>book?
+    '<span class="manual-weapon-art manual-weapon-art--'+esc(book.id)+'" role="img" aria-label="'+esc(book.name)+'"></span>':
+    '<i class="fa-solid fa-plus" aria-hidden="true"></i>';
+  const cards=Array.from({length:3},(_,i)=>{
+    const book=books.get(slots[i]),current=i===active,chosen=i===selected;
+    const names=(book?.skills||[]).map((skill,index)=>
+      '<span class="manual-weapon-skill '+(skill.unlocked?'is-learned':'is-locked')+
+      '" title="'+esc(skill.unlocked?skill.name:'Lv.'+skill.levelRequired+'／'+skill.realmName+'境解鎖')+'">'+
+      '<small>'+['一','二','三'][index]+'式</small><strong>'+esc(skill.name)+'</strong>'+
+      (skill.unlocked?' ✓':' 🔒')+'</span>').join('');
+    return '<div class="manual-weapon-slot '+(book?'is-equipped':'is-empty')+' '+(chosen?'is-selected':'')+
+      ' '+(current?'is-active':'')+'" data-manual-slot="'+i+'">'+
+      '<div class="manual-weapon-slot-top"><span>武器 '+(i+1)+'</span><span>'+
+      (current?'● 當前使用':chosen?'選取中':'備用')+'</span></div>'+
+      '<button type="button" class="manual-weapon-slot-picker" data-manual-pick-slot="'+i+
+      '" aria-expanded="'+(pickerSlot===i)+'" aria-label="'+(book?'更換':'裝備')+'第'+(i+1)+'格武器">'+
+      '<span class="manual-weapon-slot-art">'+art(book)+'</span>'+
+      '<span class="manual-weapon-slot-info"><strong>'+esc(book?.name||'尚未裝備武器')+'</strong>'+
+      '<small>'+esc(book?((book.weaponType==='totem'?'圖騰':'靈劍')+' · Lv.'+book.level):'點擊選擇已持有武器')+'</small></span>'+
+      '<i class="fa-solid fa-rotate" aria-hidden="true"></i></button>'+
+      (book?'<div class="manual-weapon-skill-list">'+names+'</div>':
+       '<div class="manual-weapon-slot-hint">每件武器有三招，隨武器熟練度自動解鎖</div>')+
+      '<div class="manual-weapon-slot-actions">'+
+      (book?'<button type="button" data-manual-remove-weapon="'+i+'">卸下</button>':'')+
+      (current?'<span>已啟用</span>':'<button type="button" data-loadout-select="'+i+
+        '" class="manual-weapon-select" aria-pressed="'+chosen+'">選取此欄</button>')+
+      (book&&!current?'<button type="button" data-loadout-apply data-loadout-slot="'+i+'">切換為主武器</button>':'')+
+      '</div></div>';
+  }).join('');
+  const picked=Number.isInteger(pickerSlot)&&pickerSlot>=0&&pickerSlot<3;
+  const chooser=picked?'<div class="manual-picker manual-weapon-picker" data-manual-picker>'+
+    '<div class="manual-picker-heading"><div><span class="manual-picker-eyebrow">武器庫 · 第 '+(pickerSlot+1)+' 欄</span>'+
+    '<h4>選擇已持有的劍或圖騰</h4></div><button type="button" class="manual-picker-close" data-manual-close-picker>收起</button></div>'+
+    '<p class="manual-picker-hint">每種武器只能裝備一次；各武器的三招會隨熟練等級與境界自動開放。</p>'+
+    '<div class="manual-weapon-choice-grid">'+owned.map(book=>{
+      const inSlot=slots.indexOf(book.id),chosen=inSlot===pickerSlot;
+      return '<button type="button" class="manual-weapon-choice '+(chosen?'is-current':'')+
+        '" data-manual-pick-weapon="'+esc(book.id)+'" data-manual-target-slot="'+pickerSlot+
+        '" '+(inSlot>=0&&!chosen?'disabled':'')+'><span class="manual-weapon-choice-art">'+art(book)+'</span>'+
+        '<span><strong>'+esc(book.name)+'</strong><small>'+esc(book.weaponType==='totem'?'圖騰':'劍')+
+        ' · Lv. '+book.level+' · '+book.skills.filter(s=>s.unlocked).length+'/3 招</small></span>'+
+        '<em>'+ (chosen?'目前裝備':inSlot>=0?'已裝備於第 '+(inSlot+1)+' 欄':'裝備')+'</em></button>';
+    }).join('')+'</div></div>':'';
+  return '<section class="manual-loadout manual-weapons" aria-label="三種武器裝備">'+
+    '<div class="manual-deck-heading"><div><span class="manual-deck-kicker">戰前準備 · WEAPON LOADOUT</span>'+
+    '<h3><i class="fa-solid fa-khanda" aria-hidden="true"></i> 武器裝備</h3></div>'+
+    '<small>最多三種武器 · 每種武器三招 · 戰場可自由切換</small></div>'+
+    '<div class="manual-weapon-grid">'+cards+'</div>'+
+    '<div class="manual-deck-feedback" data-manual-loadout-status role="status" aria-live="polite"></div>'+
+    chooser+'</section>';
 }
