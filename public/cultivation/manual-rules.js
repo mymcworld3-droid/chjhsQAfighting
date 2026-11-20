@@ -286,10 +286,11 @@
         .filter(skill=>levelForExp(legacy.books[weaponId].exp)>=skill.levelRequired)
         .map(skill=>skill.id):[]
     }));
-    const requested=legacy.activeLoadout;
-    const activeLoadout=weaponIds[requested]?requested:Math.max(0,weaponIds.findIndex(Boolean));
-    return {...legacy,version:3,weaponIds,loadouts,activeLoadout,
-      equipped:[...loadouts[activeLoadout].skillIds]};
+    // There is no "main" weapon. Every equipped weapon's unlocked moves are
+    // available simultaneously. All three slots are independently editable.
+    const equipped=loadouts.flatMap(slot=>slot.skillIds);
+    return {...legacy,version:3,weaponIds,loadouts,activeLoadout:0,
+      equipped};
   }
   // Preserve the six original book IDs, their EXP, and upgraded skill levels.
   // Project old skill presets into weapon slots only when a V3 save is written.
@@ -317,7 +318,7 @@
       &&levelForExp(s.books[skill.manualId].exp)>=skill.levelRequired;
   }
   function publicState(raw,realmScore=0){
-    const s=normalize(raw),weaponIds=weaponize(raw).weaponIds,score=normalizedScore(realmScore);
+    const s=weaponize(raw),weaponIds=s.weaponIds,score=normalizedScore(realmScore);
     // Do not expose undiscovered scriptures to the cultivation UI.
     const library=BOOKS.filter(book=>!!s.books[book.id]).map(book=>{
       const levelInfo=mastery(s.books[book.id].exp);
