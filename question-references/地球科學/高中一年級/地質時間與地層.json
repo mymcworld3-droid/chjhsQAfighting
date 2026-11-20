@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-earth1-stratigraphy-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "地史、天文幾何與模型風險分開命題，避免不當的確定性結論",
+      "question": {
+        "q": "在未翻轉的沉積地層中，下方砂岩層被一條火成岩岩脈切穿，而上方較新的泥岩層未被岩脈切穿。哪項相對年代判斷最合理？",
+        "correct": "砂岩先形成，岩脈次之，泥岩較晚沉積",
+        "wrong": [
+          "岩脈一定比砂岩更早形成，泥岩最早",
+          "泥岩必先形成，砂岩與岩脈形成順序無從比較",
+          "只要岩脈由地下岩漿形成，它必比地表所有沉積岩更古老"
+        ],
+        "exp": "由地層上下關係及交切定律，岩脈較被切穿的砂岩年輕；若其止於上覆泥岩之下，可推泥岩沉積較晚。",
+        "subject": "地球科學",
+        "sub_topic": "地質時間與地層",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地質時間與地層",
+        "template_id": "ref-20261120-b12-earth1-stratigraphy-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-earth1-stratigraphy-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "地史、天文幾何與模型風險分開命題，避免不當的確定性結論",
+      "question": {
+        "q": "研究者在相隔數百公里的兩套沉積岩層中發現同一種廣布且生存年代短的化石。這種化石最主要的地層研究用途為何？",
+        "correct": "作為指準化石，用於比對不同地點地層的大致年代",
+        "wrong": [
+          "直接證明兩地岩層的岩石成分必完全相同",
+          "證明所有含該化石的岩層都是同一日沉積",
+          "只根據化石數量就能算出板塊每年的移動速率"
+        ],
+        "exp": "廣布且存在時期短的物種有助於跨地區地層對比，但不能推定岩石完全相同或精確到日期。",
+        "subject": "地球科學",
+        "sub_topic": "地質時間與地層",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地質時間與地層",
+        "template_id": "ref-20261120-b12-earth1-stratigraphy-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-earth1-stratigraphy-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "地史、天文幾何與模型風險分開命題，避免不當的確定性結論",
+      "question": {
+        "q": "某不整合面下方岩層傾斜且受侵蝕，上方覆蓋近水平沉積層。此構造最直接顯示哪種地質事件順序？",
+        "correct": "下方地層先沉積、後變形與侵蝕，再由上方地層覆蓋",
+        "wrong": [
+          "上方水平層先沉積，才造成下方古老地層形成",
+          "上下兩套岩層必定連續沉積，中間完全無時間間隔",
+          "只要出現不整合，就代表上方地層一定比下方更古老"
+        ],
+        "exp": "角度不整合常反映較早地層先沉積並傾斜、受侵蝕，隨後新沉積層覆蓋，表示有沉積中斷或侵蝕期。",
+        "subject": "地球科學",
+        "sub_topic": "地質時間與地層",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地質時間與地層",
+        "template_id": "ref-20261120-b12-earth1-stratigraphy-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
