@@ -75,8 +75,8 @@ test('old, boss, changing arena or first-join snapshots cannot replay attacks',(
   const stale=clone(after);stale.battleClock.appliedTick=15;
   assert.equal(Vfx.dungeonEnemyReactionEvents(before,stale).length,0);
   const boss=clone(after);boss.enemies[0].kind='boss';
-  assert.equal(Vfx.dungeonEnemyReactionEvents(before,boss)
-    .some(e=>e.kind==='strike'),false);
+  assert.equal(Vfx.dungeonEnemyReactionEvents(before,boss).length,0,
+    'Boss attacks keep their own existing cinematic and damage VFX');
   assert.equal(Vfx.dungeonEnemyReactionEvents(null,after).length,0);
 });
 test('windup uses only published warning and never represents a hit',()=>{
