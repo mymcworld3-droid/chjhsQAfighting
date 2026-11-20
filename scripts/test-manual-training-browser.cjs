@@ -53,10 +53,13 @@ async function main(){
     assert.equal(await page.locator('[data-manual-slot="0"] .manual-weapon-skill.is-learned').count(),1);
     assert.equal(await page.locator('.manual-hero-cover').count(),1);
     const artwork=page.locator('[data-manual-book="sword-wind"] .manual-weapon-art');
-    assert.match(await artwork.evaluate(node=>getComputedStyle(node).backgroundImage),/weapon-art-atlas\.webp/);
-    const image=await page.request.get(origin+'/assets/weapons/weapon-art-atlas.webp');
-    assert.equal(image.status(),200);
-    assert.match(image.headers()['content-type']||'',/image\/webp/);
+    assert.match(await artwork.evaluate(node=>getComputedStyle(node).backgroundImage),/sword-wind\.svg/);
+    for(const id of ['sword-wind','sword-flight','sword-sky','body-rock','body-dragon','body-tiger']){
+      const image=await page.request.get(origin+'/assets/weapons/'+id+'.svg');
+      assert.equal(image.status(),200);
+      assert.match(image.headers()['content-type']||'',/(svg|xml)/);
+      assert.match(await image.text(),/<svg /);
+    }
     await page.locator('[data-manual-jump-skill="wind-slash"]').click();
     await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
     assert.equal(await page.locator('.manual-focus-skill').count(),1);
@@ -72,12 +75,18 @@ async function main(){
     const equipped=db.records.get(service.MANUALS+'/u1');
     assert.deepEqual(equipped.weaponIds,['sword-wind','body-rock',null]);
     assert.equal(equipped.books['body-rock'].exp,40);
-    // Change active weapon without consuming a question, turn or stamina.
-    await page.locator('[data-manual-slot="1"] [data-loadout-apply]').click();
-    await page.waitForFunction(()=>document.querySelector('[data-manual-slot="1"]')?.classList.contains('is-active'));
+    // All three weapon slots are peers. No activation/main-weapon button exists.
+    assert.equal(await page.locator('[data-loadout-apply]').count(),0);
+    assert.equal(await page.locator('.manual-weapon-slot.is-active').count(),0);
     const record=db.records.get(service.MANUALS+'/u1');
-    assert.equal(record.activeLoadout,1);
-    assert.deepEqual(record.equipped,['rock-fist']);
+    assert.deepEqual(record.equipped,['wind-slash','rock-fist']);
+    // A normal solo player can remove and restore equipment without losing XP.
+    await page.locator('[data-manual-remove-weapon="1"]').click();
+    await page.waitForFunction(()=>document.querySelector('[data-manual-slot="1"] .manual-weapon-slot-info strong')?.textContent==='尚未裝備武器');
+    assert.equal(db.records.get(service.MANUALS+'/u1').books['body-rock'].exp,40);
+    await page.locator('[data-manual-pick-slot="1"]').click();
+    await page.locator('[data-manual-pick-weapon="body-rock"]').click();
+    await page.waitForFunction(()=>document.querySelector('[data-manual-slot="1"] .manual-weapon-slot-info strong')?.textContent==='玄嶽圖騰');
     assert.equal(await page.locator('[data-manual-slot="0"] .manual-weapon-skill').count(),3);
     // Upgrading the original sword keeps both weapon artwork nodes stable.
     await library.locator('[data-manual-book="sword-wind"] .manual-library-choice').click();
@@ -113,7 +122,7 @@ async function main(){
     await page.evaluate(()=>window.dispatchEvent(new CustomEvent('xiuxian:manual-battle-settled',{detail:{uid:'u1'}})));
     assert.equal((await refreshed).ok(),true);
     assert.deepEqual(errors,[]);
-    console.log('Weapon library, artwork, equip/active switching, Lv.5 unlock and responsive layout verified.');
+    console.log('Three peer weapon slots, vector artwork, free equip/unequip, Lv.5 unlock and responsive layout verified.');
   }finally{
     if(browser)await browser.close();
     await new Promise(resolve=>server.close(resolve));
