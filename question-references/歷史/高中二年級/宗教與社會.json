@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-hist2-religion-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用制度、時代及史料種類推導結論，避免以單一來源推定全體",
+      "question": {
+        "q": "研究中古絲路佛教傳播時，發現某地石窟雕刻同時出現印度、中亞與中國的藝術特徵。哪項判斷最合理？",
+        "correct": "佛教傳播過程伴隨不同地區的文化交流與在地轉化",
+        "wrong": [
+          "不同藝術風格同現表示各地從未發生接觸",
+          "石窟出現多種風格，就能斷定所有作品在同一天完成",
+          "宗教傳播只可能保持完全一致的形式，不受地方文化影響"
+        ],
+        "exp": "多樣的造像與藝術風格可反映跨區域交流及地方改造，但仍需結合年代、製作背景等證據。",
+        "subject": "歷史",
+        "sub_topic": "宗教與社會",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-宗教與社會",
+        "template_id": "ref-20261120-b12-hist2-religion-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-hist2-religion-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用制度、時代及史料種類推導結論，避免以單一來源推定全體",
+      "question": {
+        "q": "十六世紀歐洲印刷技術發展，有助於宗教改革相關小冊與不同語言的聖經流傳。從宗教與社會關係看，這最能說明什麼？",
+        "correct": "傳播媒介的變化能擴大宗教觀點與公共辯論的接觸範圍",
+        "wrong": [
+          "印刷技術使歐洲所有地區立即接受完全相同的宗教立場",
+          "印刷出現後，宗教文獻不再需要讀者識字或解釋",
+          "宗教改革只發生在沒有印刷業的地方，與傳播手段完全無關"
+        ],
+        "exp": "印刷使相關論述可被更快與更廣泛複製，但不同地區接受程度及讀者能力仍有差異。",
+        "subject": "歷史",
+        "sub_topic": "宗教與社會",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-宗教與社會",
+        "template_id": "ref-20261120-b12-hist2-religion-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-hist2-religion-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用制度、時代及史料種類推導結論，避免以單一來源推定全體",
+      "question": {
+        "q": "某中世紀城市的節慶、慈善施濟與教育活動均與宗教組織密切相關。研究者可從中提出哪項較有根據的推論？",
+        "correct": "宗教組織不僅承擔信仰活動，也可能參與地方社會服務與文化生活",
+        "wrong": [
+          "宗教組織只在個人私人祈禱時出現，與城市公共生活無關",
+          "只要宗教組織提供慈善，便能推論當時所有居民都過著同樣富裕的生活",
+          "宗教節慶存在代表城市從不需要其他政治或經濟機構"
+        ],
+        "exp": "節慶、慈善與教育可呈現宗教組織在社會中的多重角色，但不能據此概括所有居民經濟狀況。",
+        "subject": "歷史",
+        "sub_topic": "宗教與社會",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-宗教與社會",
+        "template_id": "ref-20261120-b12-hist2-religion-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
