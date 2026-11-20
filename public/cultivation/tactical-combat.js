@@ -127,19 +127,20 @@ function renderBattleLoadouts(){
   const index=Number.isInteger(actor?.manualLoadoutIndex)?actor.manualLoadoutIndex:
     (battleLoadouts?.activeLoadout??0);
   toggle.hidden=!active;toggle.disabled=busy;
-  toggle.textContent='配置 '+(index+1);
+  const weapons=Array.isArray(battleLoadouts?.weaponIds);
+  toggle.textContent=weapons?(battleLoadouts?.loadouts?.[index]?.name||'武器 '+(index+1)):'配置 '+(index+1);
   toggle.setAttribute('aria-expanded',String(active&&loadoutMenuOpen));
   menu.hidden=!active||!loadoutMenuOpen;
   if(menu.hidden)return;
   const presets=battleLoadouts?.loadouts||[];
-  menu.innerHTML='<strong>戰場技能配置</strong><small>切換不耗體力，也不占行動次數</small>'+
+  menu.innerHTML='<strong>'+(weapons?'切換主武器':'戰場技能配置')+'</strong><small>切換不耗體力，也不占行動次數</small>'+
     Array.from({length:3},(_,i)=>{
       const preset=presets[i],ids=preset?.skillIds||[];
       const names=ids.map(id=>Manuals.BY_SKILL[id]?.name).filter(Boolean);
       const label=preset?.name||'配置 '+(i+1);
       return '<button type="button" data-loadout-index="'+i+'" aria-pressed="'+(index===i)+
         '" '+(busy||index===i?'disabled':'')+'><span>'+esc(label)+'</span><small>'+
-        esc(names.length?names.join(' · '):'普通攻擊')+(index===i?' · 使用中':'')+'</small></button>';
+        esc(names.length?names.join(' · '):weapons?'尚未裝備武器':'普通攻擊')+(index===i?' · 使用中':'')+'</small></button>';
     }).join('');
 }
 async function refreshBattleLoadouts(){
