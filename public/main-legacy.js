@@ -642,8 +642,40 @@ function syncAccountBindingUI(user = auth.currentUser) {
         : '免註冊修行 · 尚未綁定帳號';
 }
 
+// Popup/anonymous sign-in can resolve for an already-authenticated UID without
+// a second onAuthStateChanged notification. Restore navigation from the current
+// verified player session instead of asking the player to reload the page.
+async function finishAuthenticatedEntry(person, { arrivalHandled = false } = {}) {
+    if (!person?.uid || auth.currentUser?.uid !== person.uid) return false;
+    window.handleFirstVisitAuthPending?.(person);
+    // Fresh sign-ins still run the full auth observer: no gameplay before
+    // migration, feature validation, and the actual account record are ready.
+    if (currentUserData?.uid !== person.uid ||
+        !window.__xiuxianMigrationApproved ||
+        !window.__xiuxianFeaturesReady ||
+        document.getElementById('game-startup-gate')) return false;
+
+    const handled = arrivalHandled
+        ? window.isFirstVisitActive?.() === true
+        : await window.handleFirstVisitReady?.(person, currentUserData, false) === true;
+    if (auth.currentUser?.uid !== person.uid) return false;
+
+    document.getElementById('login-screen')?.classList.add('hidden');
+    if (!handled) {
+        if (!document.querySelector('.page-section.active-page')) {
+            window.switchToPage?.('page-home');
+        }
+        document.getElementById('bottom-nav')?.classList.remove('hidden');
+    }
+    return true;
+}
+
 // 綁定全域函式
-window.startFirstVisitGuest = () => signInAnonymously(auth);
+window.startFirstVisitGuest = async () => {
+    const result = await signInAnonymously(auth);
+    await finishAuthenticatedEntry(result.user);
+    return result;
+};
 window.googleLogin = async () => {
     const guest = auth.currentUser;
     if (guest?.isAnonymous && linkedGoogleIdentity?.uid !== guest.uid && currentUserData?.uid === guest.uid) {
@@ -664,6 +696,7 @@ window.googleLogin = async () => {
                 const existing = await signInWithCredential(auth, credential);
                 linkedGoogleIdentity = null;
                 syncAccountBindingUI(existing.user);
+                await finishAuthenticatedEntry(existing.user);
                 return existing;
             }
             const person = result.user;
@@ -686,15 +719,15 @@ window.googleLogin = async () => {
             syncAccountBindingUI(person);
             if (auth.currentUser?.uid !== person.uid) return result;
             await window.handleFirstVisitReady?.(person, currentUserData, false);
+            await finishAuthenticatedEntry(person, { arrivalHandled: true });
             return result;
         }
         const result = await signInWithPopup(auth, provider);
         linkedGoogleIdentity = null;
         syncAccountBindingUI(result.user);
-        // A same-account popup need not fire an auth-state change; resume setup explicitly.
-        if (currentUserData?.uid === result.user.uid && window.__xiuxianFeaturesReady && window.getFirstVisitState?.().joining) {
-            await window.handleFirstVisitReady?.(result.user, currentUserData, false);
-        }
+        // Also handle the same-account popup path when Firebase does not
+        // emit another auth-state notification (including the welcome screen).
+        await finishAuthenticatedEntry(result.user);
         return result;
     } catch (error) {
         if (!window.isFirstVisitActive?.() && !document.getElementById('first-visit-layer')) {
@@ -1363,6 +1396,7 @@ onAuthStateChanged(auth, async (user) => {
         }
 
         showGameStartupGate('正在載入玩家資料…');
+        window.handleFirstVisitAuthPending?.(user);
         syncAccountBindingUI(user);
 
         injectSocialUI();
@@ -1465,7 +1499,9 @@ onAuthStateChanged(auth, async (user) => {
             listenToSystemCommands();  
             
             updateUserAvatarDisplay();
-            await updateSettingsInputs();
+            // Range catalogs are optional remote requests. They must not hold
+            // the welcome/login screen hostage when either endpoint is slow.
+            void updateSettingsInputs().catch(error => console.warn('[Login settings]', error));
             checkAdminRole(currentUserData.isAdmin);
             updateUIStats();
             // saved game identity wins over Google profile in every game session

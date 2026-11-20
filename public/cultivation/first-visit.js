@@ -102,6 +102,14 @@ import './first-answer-guide.js';
     $('bottom-nav')?.classList.remove('hidden');
     window.dispatchEvent(new CustomEvent('xiuxian:arrival-completed'));
   }
+  // A confirmed Firebase sign-in owns the screen immediately. The signed-out
+  // welcome dialog must not cover the real loading gate while profile data
+  // and game modules initialize. Do not mark onboarding complete here.
+  window.handleFirstVisitAuthPending = person => {
+    if (!person?.uid) return false;
+    removeLayer();
+    return true;
+  };
   window.isFirstVisitActive = () => !QA && state.stage === 'gender';
   window.getFirstVisitState = () => ({ ...state });
   window.handleFirstVisitSignedOut = () => {
