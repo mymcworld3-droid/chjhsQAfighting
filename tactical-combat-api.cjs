@@ -199,8 +199,13 @@ async function chooseSchool(db,uid,input){
         next.equipped.push(introductory.id);
       }
     }
-    next.loadouts[next.activeLoadout].skillIds=[...next.equipped];
-    tx.set(ref,next);return manualResponse(next,exists(user));
+    const modern=Manuals.weaponize(next);
+    if(!modern.weaponIds.some(Boolean)){
+      const starter=Manuals.starterFor(school);
+      if(modern.books[starter])modern.weaponIds[0]=starter;
+    }
+    const saved=Manuals.normalize(modern);
+    tx.set(ref,saved);return manualResponse(saved,exists(user));
   });
 }
 async function equipManualSkills(db,uid,input){
@@ -211,6 +216,8 @@ async function equipManualSkills(db,uid,input){
     const ref=db.collection(MANUALS).doc(uid);
     const [user,record]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(ref)]);
     if(!exists(user))throw error('玩家資料不存在',404);
+    if(Array.isArray(exists(record)?.weaponIds))
+      throw error('新版武器裝備請從三個武器欄選擇，技能依武器等級自動解鎖',400);
     const next=Manuals.normalize(exists(record));
     const score=TrainingAccess.score(exists(user));
     if(ids.some(id=>!Manuals.unlocked(next,id)))throw error('不能裝備功法等級尚未解鎖的技能',403);
@@ -244,6 +251,23 @@ async function updateLoadout(db,uid,input){
     const ref=db.collection(MANUALS).doc(uid);
     const [userSnap,record]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(ref)]);
     const user=exists(userSnap);if(!user)throw error('玩家資料不存在',404);
+    if(Object.hasOwn(input||{},'weaponId')){
+      const weaponId=input.weaponId;
+      if(weaponId!==null&&(typeof weaponId!=='string'||!Manuals.BY_BOOK[weaponId]))
+        throw error('選取的武器不存在',400);
+      const modern=Manuals.weaponize(exists(record));
+      if(weaponId&&!modern.books[weaponId])throw error('尚未獲得這件武器',403);
+      if(weaponId&&modern.weaponIds.some((id,i)=>i!==index&&id===weaponId))
+        throw error('同一種武器不能重複裝備',400);
+      await assertLoadoutUnlocked(tx,db,uid);
+      const weaponIds=[...modern.weaponIds];
+      weaponIds[index]=weaponId;
+      const saved=Manuals.normalize({...modern,weaponIds,
+        activeLoadout:input?.apply===true?index:modern.activeLoadout});
+      tx.set(ref,saved);return manualResponse(saved,user);
+    }
+    if(Array.isArray(exists(record)?.weaponIds)&&ids!==undefined)
+      throw error('新版武器配置由武器等級決定技能，請改用 weaponId',400);
     const next=Manuals.normalize(exists(record));
     const chosen=ids===undefined?next.loadouts[index].skillIds:ids;
     if(chosen.some(id=>!Manuals.unlocked(next,id)))throw error('不能裝備功法等級尚未解鎖的技能',403);
@@ -476,7 +500,10 @@ async function switchBattleLoadout(db,uid,input,now=Date.now()){
     const [userSnap,manualSnap]=await Promise.all([tx.get(userRef),tx.get(manualRef)]);
     const user=exists(userSnap);if(!user||user.uid&&user.uid!==uid)throw error('玩家資料不存在',404);
     const manuals=Manuals.normalize(exists(manualSnap)),preset=manuals.loadouts[index];
-    const ids=preset.skillIds,score=TrainingAccess.score(user);
+    const score=TrainingAccess.score(user);
+    const ids=Array.isArray(manuals.weaponIds)?
+      preset.skillIds.filter(skillId=>Manuals.meetsRealm(Manuals.BY_SKILL[skillId],score)):
+      preset.skillIds;
     if(ids.some(skillId=>!Manuals.unlocked(manuals,skillId)))throw error('此配置包含尚未解鎖的功法技能',403);
     if(ids.some(skillId=>!Manuals.meetsRealm(Manuals.BY_SKILL[skillId],score)))throw error('此配置包含境界未達門檻的技能',403);
     if(new Set(ids.map(skillId=>Manuals.BY_SKILL[skillId].moveId)).size!==ids.length)
