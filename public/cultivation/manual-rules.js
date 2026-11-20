@@ -84,8 +84,8 @@
     ]),
     book('sword-flight','御劍真訣','sword','御使飛劍，控制敵人的站位。',[
       shared(straight,'flight-slash'),
-      technique('flight-summon','召劍',2,3,'flying-sword',1.1,
-        '在自身直線三格內的空地召劍。再用此招可讓飛劍直線移動最多四格，穿過敵人時造成傷害。每回合最多用兩次。',
+      technique('flight-summon','召劍',2,2,'flying-sword',1.1,
+        '在自身曼哈頓距離兩格內的空地召劍。場上已有飛劍時，飛劍沿優先經過靈獸的最短路徑回到所選位置，沿途造成傷害。另可在移動選項中以每兩格一體力移動飛劍。',
         {travel:4,cooldown:0}),
       shared(breakLine,'flight-break')
     ],[6,6,28],'築基'),
