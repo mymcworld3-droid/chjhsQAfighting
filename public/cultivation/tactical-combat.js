@@ -24,6 +24,8 @@ const id=()=>globalThis.crypto.randomUUID();
 const localUser=()=>window.getCurrentUserData?.()||{};
 let root=null,keyboardGuard=null,renderer=null,beastInspector=null,sealInspector=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
 let attackChoice='attack',selectedManualSkill='',wheelIgnoreClickUntil=0;
+// Selection only: every equipped weapon is equally usable, never a main weapon.
+let selectedWeaponId='',weaponSelectionOpen=false;
 // Local view preference; never sent to the server or charged as a battle action.
 let sealRangeMode='all',sealRangeFocusId=null;
 let sealPeekPosition=null,sealGuideForced=false;
@@ -46,6 +48,15 @@ const myActor=()=>state?.actors.find(a=>a.uid===uid);
 const equippedTechniques=hero=>(hero?.manualSkills||[]).map(id=>R.manualSkillFor(hero,id)).filter(Boolean);
 function syncEquippedAttack(hero=myActor()){
   const skills=equippedTechniques(hero);
+  if(hero?.manualWeaponMode){
+    const worn=hero.manualWeaponIds||[];
+    if(selectedWeaponId&&!worn.includes(selectedWeaponId))selectedWeaponId='';
+    if(action==='manual'&&!skills.some(skill=>skill.id===selectedManualSkill)){
+      action='move';selection=null;selectedManualSkill='';
+    }
+    attackChoice=action==='manual'?'manual:'+selectedManualSkill:'attack';
+    return skills;
+  }
   if(skills.length){
     if(!skills.some(skill=>skill.id===selectedManualSkill)){
       selectedManualSkill=skills[0].id;
@@ -126,14 +137,26 @@ function renderBattleLoadouts(){
   const active=state?.status==='active'&&state.mode==='pve',actor=myActor();
   const index=Number.isInteger(actor?.manualLoadoutIndex)?actor.manualLoadoutIndex:
     (battleLoadouts?.activeLoadout??0);
-  toggle.hidden=!active;toggle.disabled=busy;
+  toggle.hidden=!active||!actor?.manualWeaponMode;toggle.disabled=busy;
   const weapons=Array.isArray(battleLoadouts?.weaponIds);
-  toggle.textContent=weapons?(battleLoadouts?.loadouts?.[index]?.name||'武器 '+(index+1)):'配置 '+(index+1);
+  toggle.textContent=weapons?'武器 '+(battleLoadouts?.weaponIds?.filter(Boolean).length||0)+'/3':'配置 '+(index+1);
   toggle.setAttribute('aria-expanded',String(active&&loadoutMenuOpen));
   menu.hidden=!active||!loadoutMenuOpen;
   if(menu.hidden)return;
   const presets=battleLoadouts?.loadouts||[];
-  menu.innerHTML='<strong>'+(weapons?'切換主武器':'戰場技能配置')+'</strong><small>切換不耗體力，也不占行動次數</small>'+
+  if(weapons){
+    const worn=battleLoadouts.weaponIds||[];
+    menu.innerHTML='<strong>戰場武器裝備</strong><small>單人試煉可隨時調整，最多三件，沒有主武器。</small>'+
+      Array.from({length:3},(_,i)=>{
+        const name=Manuals.BY_BOOK[worn[i]]?.name||'空白武器欄';
+        return '<div class="tc-weapon-manage-slot"><span>第 '+(i+1)+' 欄 · '+esc(name)+'</span>'+
+          (worn[i]?'<button type="button" data-battle-unequip="'+i+'">卸下</button>':'')+
+          '<button type="button" data-battle-weapon-picker="'+i+'">更換</button></div>';
+      }).join('')+
+      '<div class="tc-weapon-manage-candidates" data-battle-weapon-candidates hidden></div>';
+    return;
+  }
+  menu.innerHTML='<strong>戰場技能配置</strong><small>切換不耗體力，也不占行動次數</small>'+
     Array.from({length:3},(_,i)=>{
       const preset=presets[i],ids=preset?.skillIds||[];
       const names=ids.map(id=>Manuals.BY_SKILL[id]?.name).filter(Boolean);
@@ -302,7 +325,11 @@ function ensure(){
     else if(b.hasAttribute('data-seal-guide-help')){sealGuideForced=true;refreshSealTargetGuidance();}
     else if(b.hasAttribute('data-loadout-toggle')){loadoutMenuOpen=!loadoutMenuOpen;renderBattleLoadouts();}
     else if(b.hasAttribute('data-loadout-index'))void switchBattleLoadout(Number(b.dataset.loadoutIndex));
+    else if(b.hasAttribute('data-battle-unequip'))void editBattleWeapon(Number(b.dataset.battleUnequip),null);
+    else if(b.hasAttribute('data-battle-weapon-picker'))showBattleWeaponChoices(Number(b.dataset.battleWeaponPicker));
+    else if(b.hasAttribute('data-battle-equip'))void editBattleWeapon(Number(b.dataset.battleEquip),b.dataset.weaponId);
     else if(b.hasAttribute('data-intro-ack'))void acknowledgeIntro();
+    else if(b.dataset.weaponChoice){selectWheel('weapon:'+b.dataset.weaponChoice);}
     else if(b.dataset.wheelChoice){selectWheel(b.dataset.wheelChoice);}
     else if(b.dataset.wheelAction){selectWheel(b.dataset.wheelAction);}
     else if(b.dataset.action){selectWheel(b.dataset.action);}
@@ -546,6 +573,34 @@ function selectWheel(value,tutorialAutomatic=false){
   if(!state||busy||renderer?.isAnimating||!myAction())return;
   const pressedAttack=value==='attack-ring'||value==='attack';
   syncEquippedAttack();
+  const hero=myActor();
+  if(hero?.manualWeaponMode){
+    if(value==='attack-ring'){
+      weaponSelectionOpen=true;
+      if(!equippedTechniques(hero).length&&!hero.manualWeaponIds?.some(Boolean)){
+        action='attack';selection=null;
+        renderer?.update(state,uid,battlefieldMode(),selection);
+      }
+      updateControls();
+      if(!tutorialAutomatic&&tutorialStep()>=4){
+        const prior=tutorialStep();tutorialEvent('attack-selected');
+        if(prior===4&&tutorialStep()===5)selectWheel('move',true);
+      }
+      return;
+    }
+    if(value.startsWith('weapon:')){
+      const weaponId=value.slice(7);
+      if(!hero.manualWeaponIds?.includes(weaponId))return;
+      selectedWeaponId=weaponId;weaponSelectionOpen=true;
+      // Do not automatically cast or privilege the first skill.
+      if(action==='manual'){action='move';selection=null;}
+      renderer?.update(state,uid,battlefieldMode(),selection);
+      updateControls();return;
+    }
+    if(value.startsWith('manual:')&&
+      !hero.manualWeaponIds?.includes(Manuals.BY_SKILL[value.slice(7)]?.manualId))return;
+    if(value==='move'||value==='sword-move')weaponSelectionOpen=false;
+  }
   if(value==='attack-ring'||value==='attack')value=attackChoice;
   if(value==='player'){
     if(action!=='move'&&action!=='sword-move')return;
@@ -562,6 +617,10 @@ function selectWheel(value,tutorialAutomatic=false){
     action='attack';attackChoice='attack';
   }else if(value.startsWith('manual:')&&R.manualSkillFor(myActor(),value.slice(7))){
     action='manual';selectedManualSkill=value.slice(7);
+    if(myActor()?.manualWeaponMode){
+      selectedWeaponId=Manuals.BY_SKILL[selectedManualSkill]?.manualId||'';
+      weaponSelectionOpen=true;
+    }
     attackChoice=value;
   }else return;
   if(action!==previousAction||selectedManualSkill!==previousManual){
