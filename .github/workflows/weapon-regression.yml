@@ -1,0 +1,25 @@
+name: Weapon system fast acceptance
+on:
+  push:
+    branches: [stamina-battle]
+    paths:
+      - 'public/cultivation/manual-rules.js'
+      - 'public/cultivation/tactical-rules.js'
+      - 'tactical-combat-api.cjs'
+      - 'dungeon-skill-combat.cjs'
+      - 'tests/weapon-loadout.test.cjs'
+      - 'tests/tactical-loadout-switch.test.cjs'
+      - '.github/workflows/weapon-regression.yml'
+  workflow_dispatch:
+jobs:
+  weapon:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --no-audit --no-fund
+      - name: Weapon security and equipment regression
+        run: node --test tests/weapon-loadout.test.cjs tests/tactical-loadout-switch.test.cjs
