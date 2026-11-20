@@ -20,8 +20,8 @@ test('stage 14 guardian spawns uniquely near deepest site for 800 irregular seed
     const guardian=enemies.at(-1);
     assert.equal(guardian.id,Objectives.GUARDIAN_ID);
     assert.equal(guardian.kind,'guardian');
-    assert.equal(guardian.battleHealth,360);
-    assert.equal(PlayerCombat.maxHealth('guardian'),360);
+    assert.equal(guardian.battleHealth,Objectives.GUARDIAN_HP);
+    assert.equal(PlayerCombat.maxHealth('guardian'),1200);
     assert.ok(walkable(map,guardian.position),'seed='+n);
     assert.ok(map.mainRoute.slice(-17).some(p=>same(p,guardian.position)));
     assert.ok(!regular.some(e=>same(e.position,guardian.position)));
