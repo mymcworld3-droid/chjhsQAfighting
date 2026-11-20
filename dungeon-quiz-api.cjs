@@ -259,6 +259,17 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
       knowledgePoints:Knowledge.labels(q,q.subject),
       questionForm:q.meta?.question_form||'',cognitiveLevel:q.meta?.cognitive_level||null,
       reasoningSteps:q.meta?.reasoning_steps||null,conceptId:q.meta?.concept_id||'',
+      templateId:q.meta?.template_id||'',
+      learningTopic:q.learningTopic||q.topic||'',
+      learningDifficulty:q.difficulty||'',
+      ...(q.adaptive?{
+        adaptiveScopeId:q.adaptive.scopeId||'',
+        adaptiveConceptId:q.adaptive.conceptId||'',
+        adaptiveFacetId:q.adaptive.facetId||'',
+        assistanceLevel:help,adaptiveSkipped:false,
+        adaptiveRole:q.adaptive.role||'',
+        adaptiveDifficulty:q.adaptive.difficulty||q.difficulty||''
+      }:{assistanceLevel:help,adaptiveSkipped:false}),
       mode:'infinite',topic:'Dungeon',rankAtTime:'多人合作副本',
       learningCorrectionEvidence:correctionEvidence,
       timestamp:FieldValue.serverTimestamp(),
