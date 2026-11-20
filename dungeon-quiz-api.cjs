@@ -177,7 +177,8 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
     // Any recent receipt can be replayed without mutating the user stats,
     // even if another question was answered in a second browser meanwhile.
     if(s.reviews?.[input.questionId])
-      return {review:s.reviews[input.questionId],state:view(s)};
+      return {review:s.reviews[input.questionId],state:view(s),
+        progress:LearningCorrection.progress(user)};
     if(s.lastReview)
       throw fail('請先查看本題解析並按「下一題」',409);
     const index=count(s.answered),q=s.questions?.[index];
