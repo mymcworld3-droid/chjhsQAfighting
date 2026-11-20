@@ -556,7 +556,13 @@ function createHandler({
           const bossEncounter=action==='skill'&&!outcome.duplicate?
             Boss.onDefeat(evolved,outcome.enemies,uid):evolved.bossEncounter;
           const next={...evolved,members:outcome.members,
-            ...(mastery?{manualExp:mastery.ledger}:{}),
+            ...(mastery?{
+              manualExp:mastery.ledger,
+              // Mid-session migration: retain the original session even if
+              // an older room is later disbanded and clears assembledAtMs.
+              manualProgressSession:evolved.manualProgressSession||
+                evolved.assembledAtMs
+            }:{}),
             ...(action==='skill'?{enemies:outcome.enemies}:{}),
             ...(progress?{dungeonProgress:progress}:{}),
             ...(bossEncounter?{bossEncounter}:{}),
@@ -566,7 +572,8 @@ function createHandler({
             bossEncounter?.status==='defeated'?
             await Victory.prepareArchive(tx,db,roomId,next,at):null;
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
-            ...(mastery?{manualExp:next.manualExp}:{}),
+            ...(mastery?{manualExp:next.manualExp,
+              manualProgressSession:next.manualProgressSession}:{}),
             ...(action==='skill'?{enemies:next.enemies}:{}),
             ...(progress!==evolved.dungeonProgress?{dungeonProgress:progress}:{}),
             ...(bossEncounter!==evolved.bossEncounter?{bossEncounter}:{}),
