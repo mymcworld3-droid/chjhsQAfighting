@@ -34,7 +34,7 @@ const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/wo
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{},onSealPeek=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.onSealPeek=onSealPeek;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.focusBeastIndex=0;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;this.sealRangePlan={seals:[]};this.sealRangeMode='all';this.sealRangeFocusId=null;this.sealTargetPlan={seals:[]};this.objectiveCues=[];
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.onSealPeek=onSealPeek;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.focusBeastIndex=0;this.queue=[];this.scene=null;this.focusAuras=new Map();this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;this.sealRangePlan={seals:[]};this.sealRangeMode='all';this.sealRangeFocusId=null;this.sealTargetPlan={seals:[]};this.objectiveCues=[];
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
@@ -390,7 +390,7 @@ export class TacticalRenderer{
     this.draw();return true;
   }
   resetView(){this.camera=Camera.create();this.focusBeastIndex=0;this.setHoverPreview(null);this.draw();}
-  destroy(){this.destroyed=true;this.canvas.removeEventListener('click',this.onCanvasClick);this.canvas.removeEventListener('keydown',this.onCanvasKeyDown);this.queue=[];this.scene=null;this.ambienceLayer=null;this.ambience=null;this.stageKey=null;clearTimeout(this.ambientTimer);this.ambientTimer=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.canvas.removeEventListener('contextmenu',this.onContextMenu);this.resize.disconnect();cancelAnimationFrame(this.frame);cancelAnimationFrame(this.gestureFrame);this.gestureFrame=0;document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const img of Object.values(this.images)){img.onload=null;img.onerror=null;}for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
+  destroy(){this.destroyed=true;for(const aura of this.focusAuras.values())aura.remove();this.focusAuras.clear();this.canvas.removeEventListener('click',this.onCanvasClick);this.canvas.removeEventListener('keydown',this.onCanvasKeyDown);this.queue=[];this.scene=null;this.ambienceLayer=null;this.ambience=null;this.stageKey=null;clearTimeout(this.ambientTimer);this.ambientTimer=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.canvas.removeEventListener('contextmenu',this.onContextMenu);this.resize.disconnect();cancelAnimationFrame(this.frame);cancelAnimationFrame(this.gestureFrame);this.gestureFrame=0;document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const img of Object.values(this.images)){img.onload=null;img.onerror=null;}for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
   sprite(id,sx,sy,sw,sh,x,y,w,h){
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;
@@ -586,6 +586,74 @@ export class TacticalRenderer{
       c.fillStyle=ink;c.font=`500 ${Math.min(30,size*.6)}px "Noto Serif TC",serif`;c.textAlign='center';c.textBaseline='middle';c.fillText(scene.label,pt.x,pt.y);
     }
     c.restore();
+  }
+  // Matches the dungeon's persistent Canvas fallback: the halo surrounds
+  // the character instead of tinting or covering its sprite.
+  drawFocusHalo(c,x,y,cell){
+    const radius=Math.max(10,Math.min(31,cell*.56));
+    c.save();
+    c.strokeStyle='#ffe097';c.lineWidth=Math.max(2,Math.min(4,cell*.09));
+    c.shadowColor='#ffc252';c.shadowBlur=Math.max(7,Math.min(22,cell*.32));
+    c.globalAlpha=.94;
+    c.beginPath();c.arc(x,y,radius,0,Math.PI*2);c.stroke();
+    c.shadowBlur=0;c.fillStyle='#fff1ad';c.globalAlpha=.9;
+    for(const angle of [-Math.PI*.62,-Math.PI*.13,Math.PI*.37,Math.PI*.85]){
+      c.beginPath();c.arc(x+Math.cos(angle)*radius,y+Math.sin(angle)*radius,
+        Math.max(1.5,Math.min(3.4,cell*.068)),0,Math.PI*2);c.fill();
+    }
+    c.restore();
+  }
+  // CSS aura, identical to the cooperative dungeon's glow/flames/orbit/motes.
+  // Its position is derived from the same camera coordinates as Canvas actors;
+  // no visual state is ever used for combat authority.
+  updateFocusAuras(geometry,actors,now){
+    const layer=this.canvas.parentElement?.querySelector('[data-focus-layer]');
+    if(!layer||!geometry||this.preview)return;
+    const present=new Set(),state=this.state;
+    if(state?.mode==='pve'&&state.status==='active'){
+      for(const actor of actors){
+        const authentic=state.actors.find(a=>a.uid===actor.uid);
+        const remaining=authentic?R.focusTurns(authentic):0;
+        if(!remaining||!R.alive(authentic)||actor.bot||
+            !Number.isFinite(actor.x)||!Number.isFinite(actor.y))continue;
+        const cell=geometry.cell;
+        const pose=Ambience.idlePose(actor,now,this.reducedMotion.matches||this.isAnimating);
+        const x=geometry.ox+(actor.x+.5+(actor.sway||0))*cell+(pose?.dx||0)*cell;
+        const groundY=geometry.oy+(actor.y+.5)*cell;
+        const y=Math.max(cell*.82,groundY-(actor.lift||0)*cell)+(pose?.dy||0)*cell;
+        const bounds=this.canvas.getBoundingClientRect();
+        if(x< -80||y< -80||x>bounds.width+80||y>bounds.height+80)continue;
+        present.add(actor.uid);
+        let aura=this.focusAuras.get(actor.uid);
+        if(!aura){
+          aura=document.createElement('div');aura.className='dm-focus-aura';
+          aura.dataset.focusUid=actor.uid;
+          aura.innerHTML='<span class="dm-focus-glow"></span>'+
+            '<span class="dm-focus-flames"></span>'+
+            '<span class="dm-focus-ring"></span>'+
+            '<span class="dm-focus-orbit"></span>'+
+            '<span class="dm-focus-spark dm-spark-a"></span>'+
+            '<span class="dm-focus-spark dm-spark-b"></span>'+
+            '<span class="dm-focus-spark dm-spark-c"></span>'+
+            '<span class="dm-focus-spark dm-spark-d"></span>'+
+            '<span class="dm-focus-spark dm-spark-e"></span>'+
+            '<span class="dm-focus-spark dm-spark-f"></span>'+
+            '<span class="dm-focus-count"></span>';
+          this.focusAuras.set(actor.uid,aura);layer.append(aura);
+        }
+        aura.style.left=x+'px';aura.style.top=y+'px';
+        aura.style.setProperty('--dm-focus-size',
+          Math.max(58,Math.min(148,cell*2.05))+'px');
+        aura.dataset.charges=String(remaining);
+        aura.classList.toggle('is-self',actor.uid===this.uid);
+        aura.querySelector('.dm-focus-count').textContent=
+          actor.uid===this.uid?'蓄勢 '+remaining+'/2':'✦ '+remaining;
+        aura.title='金身蓄勢 · 剩餘 '+remaining+' 回合';
+      }
+    }
+    for(const [uid,aura]of this.focusAuras)if(!present.has(uid)){
+      aura.remove();this.focusAuras.delete(uid);
+    }
   }
   draw(){
     cancelAnimationFrame(this.frame);this.frame=0;
@@ -902,6 +970,8 @@ export class TacticalRenderer{
     }
     const actors=scene?A.sample(scene,progress):s.actors;
     const positions=actors.filter(R.alive).sort((a,b)=>a.y-b.y);
+    const focusedIds=new Set(s.mode==='pve'&&s.status==='active'?
+      s.actors.filter(a=>R.alive(a)&&!a.bot&&R.focusTurns(a)>0).map(a=>a.uid):[]);
     for(const a of positions){
       const {x,y}=a;
       const sizeFactor=a.boss?2:1;
@@ -916,6 +986,7 @@ export class TacticalRenderer{
         halo.addColorStop(1,'rgba(180,222,176,0)');
         c.fillStyle=halo;c.beginPath();c.ellipse(px,groundY,cell*.63,cell*.43,0,0,Math.PI*2);c.fill();
       }
+      if(focusedIds.has(a.uid))this.drawFocusHalo(c,actorPx,actorPy,cell);
       c.strokeStyle=own?'#f8d58a':enemy?'#f29c83':'#a2d8c4';c.lineWidth=own?2.5:1.5;
       c.beginPath();c.ellipse(px,py+cell*.15,cell*.34,cell*.2,0,0,Math.PI*2);c.stroke();
       if(a.uid===this.inspectedUid&&!animating){
@@ -969,6 +1040,7 @@ export class TacticalRenderer{
     }
     if(!frameless){c.strokeStyle='#d9c69380';c.lineWidth=1.5;c.strokeRect(ox+view.x*cell,oy+view.y*cell,cell*view.width,cell*view.height);}
     if(weight)c.restore();
+    this.updateFocusAuras(g,positions,now);
     if(!this.preview&&animating){
       // Combat animations keep their original smooth frame timing.
       this.frame=requestAnimationFrame(()=>this.draw());
