@@ -5,6 +5,7 @@ const {__test:API}=require('../dungeon-room-api.cjs');
 const {generateDungeonLayout}=require('../dungeon-map-generator.cjs');
 const Boss=require('../dungeon-boss-battle.cjs');
 const Combat=require('../dungeon-enemy-combat.cjs');
+const Player=require('../dungeon-player-combat.cjs');
 const SEED='0a1b2c3d4e5f60718293a4b5',NOW=1800000000000;
 function store(initial={}){
   const records=new Map(Object.entries(initial)),clone=x=>structuredClone(x);
@@ -141,7 +142,13 @@ test('real boss collision, dodgeable warning, 2-server shared kill and retry pre
     Combat.scaledDamage(warning.damage,raw.members.b));
   const current=f.raw();current.members.a.position={x:11,y:8};
   current.members.b.position={x:12,y:8};
-  current.enemies[0].battleHealth=240; // Survives first trusted hit; second combo kills.
+  // Calibrate a 2-hit kill to the real trusted attack value, regardless
+  // of which account has a weapon/manuscript equipped in the fixture.
+  const probe={...current.enemies[0],battleHealth:Boss.HP};
+  const firstDamage=Boss.damage(probe,'a',
+    Player.playerStrikeDamage(current.members.a),
+    current.battleAppliedTick).damage;
+  current.enemies[0].battleHealth=firstDamage+1;
   const [strikeA,strikeB]=await Promise.all([
     f.call('a','strike',{roomId:f.id,enemyId:Boss.ID,seq:1,
       damage:99999,battleHealth:1},0),
