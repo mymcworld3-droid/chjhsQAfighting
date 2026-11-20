@@ -157,7 +157,7 @@ test('guard cannot be used while far away, downed, short of stamina or after vic
 });
 
 test('solo victory remains possible with capped 10 stamina and verified quiz recharges',()=>{
-  let r=room({a:member('a',near)});
+  let r=room({a:{...member('a',near),battleAttack:200}});
   let strikes=0;
   while(r.enemies.some(e=>e.id===Boss.ID)&&strikes<50){
     if(r.members.a.explorationStamina<2)r=earnStamina(r);
