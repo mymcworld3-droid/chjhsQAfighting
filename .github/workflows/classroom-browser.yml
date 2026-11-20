@@ -35,6 +35,8 @@ jobs:
           node-version: '24'
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
+      - name: Classroom server and view unit tests
+        run: node --test tests/classroom.test.cjs tests/classroom-view.test.cjs
       - name: Install Playwright
         run: npm install --no-save --no-audit --no-fund playwright@1.62.1
       - name: Install Chromium
