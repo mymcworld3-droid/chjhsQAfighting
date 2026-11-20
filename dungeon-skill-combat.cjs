@@ -65,12 +65,16 @@ const describeDungeonSkill=skill=>{
 const loadout=(record,score,index,member=null)=>{
   const s=Manuals.normalize(record);
   if(!Number.isInteger(index)||index<0||index>=3)throw fail('技能配置編號無效',400);
-  const item=s.loadouts[index],ids=item.skillIds.filter(id=>skillOf(id,s,score));
-  return {dungeonLoadoutIndex:index,dungeonLoadoutNames:s.loadouts.map(v=>v.name),
+  const item=s.loadouts[index];
+  const weaponMode=Array.isArray(s.weaponIds);
+  const ids=(weaponMode?s.equipped:item.skillIds).filter(id=>skillOf(id,s,score));
+  return {dungeonLoadoutIndex:weaponMode?0:index,
+    dungeonLoadoutNames:weaponMode?[]:s.loadouts.map(v=>v.name),
+    dungeonWeaponIds:weaponMode?[...s.weaponIds]:[],
     dungeonSkillIds:ids,dungeonSkills:ids.map(id=>{
       const skill=skillOf(id,s,score);
       const preview=Manuals.singleHitDamage(attackPower(s,member),skill);
-      return {id,name:skill.name,kind:skill.kind,school:skill.school,
+      return {id,weaponId:skill.manualId,name:skill.name,kind:skill.kind,school:skill.school,
         cost:skill.cost,range:skill.range,level:skill.level,
         singleHitDamage:preview.damage||preview.potential||0,
         ...(preview.center!==undefined?{centerHitDamage:preview.center}:{}),
@@ -93,6 +97,8 @@ function initialCombatLoadout(member,raw){
     skillSeq:0,lastSkill:null};
 }
 function switchLoadout(room,uid,raw,index){
+  if(Array.isArray(raw?.weaponIds))
+    throw fail('多人副本戰鬥中不可切換、裝備或卸下武器',409);
   const member=room.members?.[uid];
   if(room.status!=='assembled'||!member)throw fail('目前無法切換副本功法',409);
   const setting=loadout(Manuals.normalize(raw),member.accessScore||0,index,member);
