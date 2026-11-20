@@ -273,3 +273,51 @@ test('teacher revocation racing with a draft save is checked in the same transac
   await assert.rejects(f.act('applicant', 'saveAssignment', { title: '撤權後禁止', subject: '數學', questions: questions() }), e => e.status === 403);
   assert.equal((await f.act('teacher', 'classDetail')).assignments.length, 0);
 });
+
+test('class notices are teacher-only writes, safely bounded and visible only to members', async () => {
+  const f = await fixture(); await f.join();
+  await assert.rejects(f.act('student', 'postNotice', { content: '冒充教師' }), e => e.status === 403);
+  await assert.rejects(f.act('student', 'deleteNotice', { noticeId: 'anything' }), e => e.status === 403);
+  const post = await f.act('teacher', 'postNotice', { content: '<script>提醒</script>' });
+  assert.equal(post.notices.length, 1);
+  assert.equal((await f.act('student', 'classDetail')).classroom.notices[0].content, '<script>提醒</script>');
+  assert.ok(!(await f.call('outsider', 'list')).classes.length);
+  await assert.rejects(f.act('outsider', 'classDetail'), e => e.status === 403);
+  await assert.rejects(f.act('teacher', 'postNotice', { content: 'x'.repeat(1001) }));
+  await f.act('teacher', 'archiveClass', { archived: true });
+  await assert.rejects(f.act('teacher', 'postNotice', { content: '封存公告' }), e => e.status === 409);
+  await f.act('teacher', 'deleteNotice', { noticeId: post.notices[0].id });
+  assert.deepEqual((await f.act('student', 'classDetail')).classroom.notices, []);
+});
+test('teachers can extend deadlines and reopen closed assignments without rewriting first scores', async () => {
+  const f = await fixture(); await f.join(); await f.join('late', '遲交生');
+  const a = await f.publish(); const original = await submit(f, a);
+  const later = { now: () => CLOCK + 60001 };
+  await assert.rejects(submit(f, a, [1, 3], 0, 'late', later), e => e.status === 409);
+  await assert.rejects(f.act('student', 'updateDeadline', { assignmentId: a.id, version: a.version, dueAtMs: CLOCK + 200000 }, later), e => e.status === 403);
+  await assert.rejects(f.act('teacher', 'updateDeadline', { assignmentId: a.id, version: a.version, dueAtMs: CLOCK - 1 }, later));
+  const updated = (await f.act('teacher', 'updateDeadline', { assignmentId: a.id, version: a.version, dueAtMs: CLOCK + 300000 }, later)).assignment;
+  await assert.rejects(f.act('teacher', 'closeAssignment', { assignmentId: a.id, version: a.version }, later), e => e.status === 409);
+  const closed = (await f.act('teacher', 'closeAssignment', { assignmentId: a.id, version: updated.version }, later)).assignment;
+  await assert.rejects(submit(f, a, [1, 3], 0, 'late', later), e => e.status === 409);
+  const reopened = (await f.act('teacher', 'reopenAssignment', { assignmentId: a.id, version: closed.version }, later)).assignment;
+  assert.equal(reopened.status, 'published');
+  assert.equal((await submit(f, a, [1, 3], 0, 'late', later)).submission.score, 100);
+  assert.equal((await submit(f, a, [1, 3], 0, 'student', later)).submission.score, original.submission.score);
+  await assert.rejects(f.act('teacher', 'reopenAssignment', { assignmentId: a.id, version: reopened.version }, later), e => e.status === 409);
+});
+test('teacher overview shows recent live-class progress without student access or counting missing grades as zero', async () => {
+  const f = await fixture(); await f.join(); await f.join('other', '另一位');
+  const a = await f.publish(); await submit(f, a, [1, 0]);
+  await progress(f, a, [null, 0], 0, 'other');
+  await f.draft();
+  const overview = (await f.act('teacher', 'overview')).overview;
+  assert.equal(overview.assignmentCount, 1);
+  assert.equal(overview.studentCount, 2);
+  assert.equal(overview.assignments[0].submitted, 1);
+  assert.equal(overview.assignments[0].inProgress, 1);
+  assert.equal(overview.assignments[0].average, 50);
+  assert.equal(overview.students.find(s => s.uid === 'other').average, null);
+  await assert.rejects(f.act('student', 'overview'), e => e.status === 403);
+  await assert.rejects(f.act('outsider', 'overview'), e => e.status === 403);
+});

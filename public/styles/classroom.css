@@ -32,3 +32,5 @@
 .cc-shell progress{width:100%;height:7px;accent-color:#c7a56b}
 .cc-stat{font-size:25px;color:#ead3a0;font-variant-numeric:tabular-nums}.cc-shell details>summary{cursor:pointer;color:#d9be82;padding:7px 0}
 @media(max-width:540px){#section-classes{padding:12px 12px 84px}.cc-card{padding:13px}.cc-fields{grid-template-columns:1fr}.cc-shell button{min-height:42px}.cc-toolbar h3{font-size:17px}}
+
+.cc-notice{padding:12px 0;border-top:1px solid #6d604647}.cc-notice:first-of-type{margin-top:10px}.cc-notice .cc-toolbar{margin-bottom:4px}.cc-notice-body{white-space:pre-wrap;overflow-wrap:anywhere;color:#f0e7d8}

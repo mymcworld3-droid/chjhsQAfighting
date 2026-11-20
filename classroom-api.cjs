@@ -167,6 +167,25 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
     });
   }
   const classId = id(body.classId), roomRef = ref(db, 'classrooms', classId);
+  if (['postNotice', 'deleteNotice'].includes(body.action)) {
+    const content = body.action === 'postNotice' ? text(body.content, 1000, '公告內容') : null;
+    const noticeId = body.action === 'deleteNotice' ? id(body.noticeId) : null;
+    const newId = body.action === 'postNotice' ? id(makeId()) : null;
+    return db.runTransaction(async tx => {
+      const snap = await tx.get(roomRef), room = snap.data();
+      requireAccess(room, uid, true, await authority(tx));
+      const notices = Array.isArray(room.notices) ? room.notices : [];
+      if (body.action === 'postNotice') {
+        if (room.status !== 'active') throw fail('封存班級無法發布公告，請先恢復班級', 409);
+        room.notices = [{ id: newId, content, createdAtMs: clock }, ...notices].slice(0, 20);
+      } else {
+        if (!notices.some(n => n.id === noticeId)) throw fail('找不到公告', 404);
+        room.notices = notices.filter(n => n.id !== noticeId);
+      }
+      tx.set(roomRef, room);
+      return { notices: room.notices.map(n => ({ id: n.id, content: n.content, createdAtMs: n.createdAtMs })) };
+    });
+  }
   if (body.action === 'assignTeacher') {
     requireAdmin(roles);
     const teacherUid = text(body.teacherUid, 128, '教師代碼');
@@ -201,7 +220,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
     const latestRoom = (await roomRef.get()).data(); roles = await authority();
     requireAccess(latestRoom, uid, teacher, roles);
     return { access: { isAdmin: roles.admin, isTeacher: roles.admin || roles.teacher, account: accountView(roles.account) },
-      classroom: { ...summary(room, uid, roles), ...(teacher ? { members: room.members } : { student: member(room, uid) }) },
+      classroom: { ...summary(room, uid, roles), notices: (room.notices || []).map(n => ({ id: n.id, content: n.content, createdAtMs: n.createdAtMs })), ...(teacher ? { members: room.members } : { student: member(room, uid) }) },
       assignments: assignments.map((a, i) => ({ ...assignmentSummary(a), ...(!teacher ? { submission: progressView(submissions[i]?.data()) } : {}) })) };
   }
   if (['renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass'].includes(body.action)) {
@@ -260,7 +279,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
       return { deleted: true };
     });
   }
-  if (['publishAssignment', 'closeAssignment'].includes(body.action)) {
+  if (['publishAssignment', 'closeAssignment', 'updateDeadline', 'reopenAssignment'].includes(body.action)) {
     return db.runTransaction(async tx => {
       const [r, a] = await Promise.all([tx.get(roomRef), tx.get(assignmentRef)]), room = r.data(), assignment = a.data();
       requireAccess(room, uid, true, await authority(tx));
@@ -271,13 +290,50 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
         if (body.reviewed !== true) throw fail('請先預覽並確認題目與答案');
         if (assignment.dueAtMs && assignment.dueAtMs <= clock) throw fail('截止時間已過，請先修改草稿');
         assignment.status = 'published'; assignment.publishedAtMs = clock; assignment.roster = room.members;
-      } else {
+      } else if (body.action === 'closeAssignment') {
         if (assignment.status !== 'published') throw fail('只有已發布的作業可以結束', 409);
         assignment.status = 'closed';
+      } else if (body.action === 'updateDeadline') {
+        if (room.status !== 'active' || !['published', 'closed'].includes(assignment.status)) throw fail('目前無法調整截止時間', 409);
+        if (!Object.prototype.hasOwnProperty.call(body, 'dueAtMs')) throw fail('請提供新的截止時間');
+        const dueAtMs = body.dueAtMs === null || body.dueAtMs === '' ? null : Number(body.dueAtMs);
+        if (dueAtMs !== null && (!Number.isSafeInteger(dueAtMs) || dueAtMs <= clock || dueAtMs > clock + 366 * 86400000)) throw fail('截止時間需在未來一年內');
+        assignment.dueAtMs = dueAtMs;
+      } else {
+        if (room.status !== 'active' || assignment.status !== 'closed' || assignment.dueAtMs !== null && assignment.dueAtMs <= clock) {
+          throw fail('請先恢復班級，並將截止時間延後再重新開放作業', 409);
+        }
+        assignment.status = 'published';
       }
       assignment.version++; tx.set(assignmentRef, assignment);
       return { assignment: assignmentSummary(assignment) };
     });
+  }
+  if (body.action === 'overview') {
+    const snap = await roomRef.get(), room = snap.data();
+    requireAccess(room, uid, true, roles);
+    const assignmentSnaps = await Promise.all(room.assignmentIds.map(key => ref(db, 'classroomAssignments', key).get()));
+    const assignments = assignmentSnaps.filter(s => s.exists).map(s => s.data())
+      .filter(a => a.classId === classId && ['published', 'closed'].includes(a.status)).slice(-6).reverse();
+    const members = room.members;
+    const records = await Promise.all(assignments.map(a =>
+      Promise.all(members.map(m => ref(db, 'classroomSubmissions', a.id + '_' + m.uid).get()))));
+    requireAccess((await roomRef.get()).data(), uid, true, await authority());
+    const summaryOf = values => {
+      const submitted = values.filter(s => s?.status === 'submitted');
+      return { submitted: submitted.length, inProgress: values.filter(s => s?.status === 'in-progress').length,
+        notStarted: values.length - submitted.length - values.filter(s => s?.status === 'in-progress').length,
+        average: submitted.length ? Math.round(submitted.reduce((sum, s) => sum + s.score, 0) / submitted.length * 100) / 100 : null };
+    };
+    const summaries = assignments.map((a, i) => ({
+      ...assignmentSummary(a), ...summaryOf(records[i].map(s => s.data()))
+    }));
+    const students = members.map((m, i) => ({
+      uid: m.uid, name: m.name, seat: m.seat,
+      ...summaryOf(records.map(row => row[i].data()))
+    })).sort((a, b) => a.seat.localeCompare(b.seat, 'zh-Hant', { numeric: true }) || a.name.localeCompare(b.name, 'zh-Hant'));
+    return { overview: { className: room.name, studentCount: members.length, assignmentCount: assignments.length,
+      assignments: summaries, students, scope: '最近六份已發布或已結束作業；僅統計目前在班學生' } };
   }
   if (['report', 'exportReport'].includes(body.action)) {
     const [r, a] = await Promise.all([roomRef.get(), assignmentRef.get()]), room = r.data(), assignment = a.data();
@@ -353,7 +409,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
 }
 
 function registerClassroomApi(app, { resolveA = () => playerRepository.resolve(), logger = console } = {}) {
-  const allowed = new Set(['applyTeacher', 'teacherAccounts', 'reviewTeacher', 'assignTeacher', 'list', 'createClass', 'joinClass', 'classDetail', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'saveAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
+  const allowed = new Set(['applyTeacher', 'teacherAccounts', 'reviewTeacher', 'assignTeacher', 'list', 'createClass', 'joinClass', 'classDetail', 'postNotice', 'deleteNotice', 'overview', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'saveAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'updateDeadline', 'reopenAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
   app.post('/api/classrooms', async (req, res) => {
     res.set('Cache-Control', 'no-store');
     try {

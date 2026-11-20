@@ -91,8 +91,12 @@ function classView() {
     </div></div><p class="cc-muted">${escape(a.subject)} · ${a.questionCount} 題 · 截止：${date(a.dueAtMs)}</p></article>`).join('');
   const members = teacher ? `<details class="cc-card"><summary>學生名單（${room.members.length} 人）</summary><div class="cc-table-wrap"><table><thead><tr><th>座號</th><th>姓名</th><th>管理</th></tr></thead><tbody>${room.members.map(m => `<tr><td>${escape(m.seat || '—')}</td><td>${escape(m.name)}</td><td>${button('remove-student', '移出班級', `data-id="${escape(m.uid)}" data-name="${escape(m.name)}"`)}</td></tr>`).join('') || '<tr><td colspan="3">尚無學生加入</td></tr>'}</tbody></table></div></details>` : '';
   return `<div class="cc-toolbar"><div><h3>${escape(room.name)}</h3><span class="cc-muted">${escape(room.teacherName)}${room.status === 'archived' ? ' · 已封存' : ''}</span></div><div class="cc-actions">${button('home', '所有班級')}${button('refresh', '重新整理')}</div></div>
-    ${teacher ? `<section class="cc-card"><div class="cc-toolbar"><div><span class="cc-muted">班級加入碼</span><div class="cc-code">${escape(room.joinCode)}</div></div><div class="cc-actions">${button('copy-code', '複製加入碼')}${button('new-assignment', '新增作業', `class="cc-primary" ${room.status !== 'active' ? 'disabled' : ''}`)}</div></div><details><summary>班級設定</summary><form data-form="rename" class="cc-form">${field('name', '班級名稱', room.name, 'required maxlength="60"')}<div class="cc-actions">${button('rename', '儲存名稱')}${button('rotate-code', '更新加入碼')}${button('archive', room.status === 'active' ? '封存班級' : '恢復班級')}</div></form></details></section>` : `<div class="cc-actions" style="margin-bottom:14px">${button('leave', '退出班級')}</div>`}
+    ${teacher ? `<section class="cc-card"><div class="cc-toolbar"><div><span class="cc-muted">班級加入碼</span><div class="cc-code">${escape(room.joinCode)}</div></div><div class="cc-actions">${button('copy-code', '複製加入碼')}${button('overview', '學習總覽')}${button('new-assignment', '新增作業', `class="cc-primary" ${room.status !== 'active' ? 'disabled' : ''}`)}</div></div><details><summary>班級設定</summary><form data-form="rename" class="cc-form">${field('name', '班級名稱', room.name, 'required maxlength="60"')}<div class="cc-actions">${button('rename', '儲存名稱')}${button('rotate-code', '更新加入碼')}${button('archive', room.status === 'active' ? '封存班級' : '恢復班級')}</div></form></details></section>` : `<div class="cc-actions" style="margin-bottom:14px">${button('leave', '退出班級')}</div>`}
     ${state.access?.isAdmin ? `<details class="cc-card"><summary>指派班級教師</summary><form data-form="assign" class="cc-form"><label>已核准的教師<select name="teacherUid"><option value="${escape(getMainUser()?.uid)}">由我（管理員）管理</option>${(state.approvedTeachers || []).map(a => `<option value="${escape(a.uid)}" ${a.uid === room.ownerUid ? 'selected' : ''}>${escape(a.name)} · ${escape(a.school)}（${escape(a.uid)}）</option>`).join('')}</select></label><div class="cc-actions">${button('assign-teacher', '指派教師')}${state.nextApprovedCursor ? button('more-approved', '載入更多教師') : ''}</div></form></details>` : ''}
+    <section class="cc-card"><div class="cc-toolbar"><h4>班級公告</h4><span class="cc-muted">最新公告優先顯示</span></div>
+      ${teacher && room.status === 'active' ? `<form data-form="notice" class="cc-form"><label>發布給全班的公告<textarea name="content" maxlength="1000" required placeholder="例如：下週上課範圍、作業提醒"></textarea></label><div class="cc-actions">${button('post-notice', '發布公告', 'class="cc-primary"')}</div></form>` : ''}
+      ${(room.notices || []).length ? room.notices.map(n => `<article class="cc-notice"><div class="cc-toolbar"><span class="cc-muted">${date(n.createdAtMs)}</span>${teacher ? button('delete-notice', '刪除', `data-id="${escape(n.id)}" class="cc-danger"`) : ''}</div><div class="cc-notice-body">${escape(n.content)}</div></article>`).join('') : '<p class="cc-muted">目前沒有公告。</p>'}
+    </section>
     ${members}<div class="cc-toolbar"><h3>班級作業</h3></div>${list || '<p class="cc-muted">目前沒有作業。</p>'}`;
 }
 const blankQuestion = () => ({ question: '', options: ['', '', '', ''], answerIndex: 0, explanation: '', knowledge_points: [] });
@@ -139,9 +143,18 @@ function workView() {
   return `<div class="cc-toolbar"><h3>${escape(a.title)}</h3>${button('back', '返回班級')}</div><p class="cc-muted">已完成 ${done} / ${a.questions.length} 題 · 截止：${date(a.dueAtMs)}</p><progress max="${a.questions.length}" value="${done}"></progress>${closed ? '<p role="status">作業已截止，目前只能查看已保存的作答。</p>' : ''}
     <section class="cc-card"><h4>第 ${i + 1} / ${a.questions.length} 題</h4><div class="cc-question">${escape(q.question)}</div><div class="cc-options">${q.options.map((o, n) => button('answer', `${labels[n]}. ${escape(o)}`, `data-option="${n}" aria-pressed="${answers[i] === n}" ${closed ? 'disabled' : ''}`)).join('')}</div><div class="cc-toolbar">${button('previous-question', '上一題', i === 0 ? 'disabled' : '')}${i < a.questions.length - 1 ? button('next-question', '下一題') : button('submit', '繳交作業', `class="cc-primary" ${done !== a.questions.length || closed ? 'disabled' : ''}`)}</div></section>`;
 }
+function overviewView() {
+  const o = state.overview;
+  return `<div class="cc-toolbar"><div><h3>${escape(o.className)} · 學習總覽</h3><p class="cc-muted">${escape(o.scope)}</p></div><div class="cc-actions">${button('back', '返回班級')}${button('refresh', '重新整理')}</div></div>
+    <div class="cc-grid"><section class="cc-card"><span class="cc-muted">目前學生</span><div class="cc-stat">${o.studentCount}</div></section><section class="cc-card"><span class="cc-muted">近期已發布作業</span><div class="cc-stat">${o.assignmentCount}</div></section></div>
+    <section class="cc-card cc-table-wrap"><h4>近期作業狀態</h4><table><thead><tr><th>作業</th><th>已繳交</th><th>作答中</th><th>未開始</th><th>首次平均</th><th>操作</th></tr></thead><tbody>${o.assignments.map(a => `<tr><td>${escape(a.title)}<div class="cc-muted">截止：${date(a.dueAtMs)}</div></td><td>${a.submitted}</td><td>${a.inProgress}</td><td>${a.notStarted}</td><td>${a.average === null ? '—' : a.average + ' 分'}</td><td>${button('report', '成績', `data-id="${a.id}"`)}</td></tr>`).join('') || '<tr><td colspan="6">尚無已發布作業</td></tr>'}</tbody></table></section>
+    <section class="cc-card cc-table-wrap"><h4>學生繳交概況</h4><table><thead><tr><th>座號</th><th>姓名</th><th>已繳交</th><th>作答中</th><th>未開始</th><th>首次平均</th></tr></thead><tbody>${o.students.map(s => `<tr><td>${escape(s.seat || '—')}</td><td>${escape(s.name)}</td><td>${s.submitted}</td><td>${s.inProgress}</td><td>${s.notStarted}</td><td>${s.average === null ? '—' : s.average + ' 分'}</td></tr>`).join('') || '<tr><td colspan="6">尚無學生</td></tr>'}</tbody></table><p class="cc-muted">未繳交不計零分；平均只計首次已繳交成績。</p></section>`;
+}
 function reportView() {
   const r = state.report;
   return `<div class="cc-toolbar"><div><h3>${escape(r.assignment.title)}</h3><span class="cc-muted">${status(r.assignment.status)} · 截止：${date(r.assignment.dueAtMs)}</span></div><div class="cc-actions">${button('back', '返回班級')}${button('refresh', '重新整理')}${button('export', '匯出成績')}${r.assignment.status === 'published' ? button('close-assignment', '結束收件') : ''}</div></div>
+    <section class="cc-card cc-form"><h4>收件與截止管理</h4><p class="cc-muted">可延長截止時間或取消截止限制；已繳交學生的首次成績不變。已結束作業須明確重新開放。</p>
+      <form class="cc-form" data-form="deadline">${field('dueAtMs', '截止時間（留空表示不限時間）', r.assignment.dueAtMs ? localDate(r.assignment.dueAtMs) : '', 'type="datetime-local"')}<div class="cc-actions">${button('update-deadline', '更新截止時間')}${r.assignment.status === 'closed' ? button('reopen-assignment', '重新開放收件', 'class="cc-primary"') : ''}</div></form></section>
     <div class="cc-grid"><section class="cc-card"><span class="cc-muted">繳交人數</span><div class="cc-stat">${r.totals.submitted} / ${r.totals.students}</div></section><section class="cc-card"><span class="cc-muted">已繳交學生的首次平均</span><div class="cc-stat">${r.totals.average === null ? '—' : r.totals.average + ' 分'}</div></section></div>
     <section class="cc-card cc-table-wrap"><table><thead><tr><th>座號</th><th>姓名</th><th>狀態</th><th>首次成績</th><th>錯題訂正</th></tr></thead><tbody>${r.students.map(s => `<tr><td>${escape(s.seat || '—')}</td><td>${escape(s.name)}${s.active ? '' : '（已退出）'}</td><td>${status(s.status)}</td><td>${s.score === null ? '—' : s.score}</td><td>${s.wrongCount === null ? '—' : s.correctedCount + ' / ' + s.wrongCount}</td></tr>`).join('') || '<tr><td colspan="5">尚無學生</td></tr>'}</tbody></table></section>
     <section class="cc-card"><h4>各題首次作答</h4>${r.questions.map((q, i) => `<details><summary>第 ${i + 1} 題 · ${q.total ? Math.round(q.correct / q.total * 100) + '%' : '尚無作答'}（${q.correct} / ${q.total}）</summary><div class="cc-question">${escape(q.question)}</div><p class="cc-muted">${q.knowledge_points.map(p => escape(p.name)).join('、') || '未標記知識點'}</p></details>`).join('')}</section>
@@ -149,7 +162,7 @@ function reportView() {
 }
 function render() {
   const panel = $('section-classes'); if (!panel) return;
-  const views = { home: homeView, accounts: accountsView, class: classView, editor: editorView, preview: previewView, work: workView, report: reportView };
+  const views = { home: homeView, accounts: accountsView, class: classView, overview: overviewView, editor: editorView, preview: previewView, work: workView, report: reportView };
   window.quizMathClear?.(panel);
   panel.innerHTML = `<div class="cc-shell"><div data-message role="status" aria-live="polite"></div>${views[state.view]()}</div>`;
   void window.quizMathTypeset?.([panel]);
@@ -167,6 +180,10 @@ async function loadClass(classId = state.classroom?.id) {
 async function loadAssignment(assignmentId, view) {
   const data = await request({ action: 'getAssignment', classId: state.classroom.id, assignmentId });
   state = { ...state, ...data, view, questionIndex: 0 }; render();
+}
+async function loadOverview() {
+  const data = await request({ action: 'overview', classId: state.classroom.id });
+  state.overview = data.overview; state.view = 'overview'; render();
 }
 async function loadReport(assignmentId = state.report?.assignment.id) {
   const data = await request({ action: 'report', classId: state.classroom.id, assignmentId }); state.report = data.report; state.view = 'report'; render();
@@ -217,7 +234,8 @@ async function act(target) {
     await request({ action: 'assignTeacher', classId, expectedOwnerUid: state.classroom.ownerUid, ...values }); return loadClass();
   }
   if (action === 'class') return loadClass(target.dataset.id);
-  if (action === 'refresh') return state.view === 'home' ? loadHome() : state.view === 'accounts' ? loadAccounts() : state.view === 'report' ? loadReport() : loadClass();
+  if (action === 'overview') return loadOverview();
+  if (action === 'refresh') return state.view === 'home' ? loadHome() : state.view === 'accounts' ? loadAccounts() : state.view === 'report' ? loadReport() : state.view === 'overview' ? loadOverview() : loadClass();
   if (action === 'create' || action === 'join') {
     const values = validForm(action); if (!values) return;
     const data = await request({ action: action === 'create' ? 'createClass' : 'joinClass', ...values }); return loadClass(data.classroom.id);
@@ -230,6 +248,14 @@ async function act(target) {
     if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(state.classroom.joinCode); message('加入碼已複製'); }
     else message('班級加入碼：' + state.classroom.joinCode);
     return;
+  }
+  if (action === 'post-notice') {
+    const values = validForm('notice'); if (!values) return;
+    await request({ action: 'postNotice', classId, content: values.content }); return loadClass();
+  }
+  if (action === 'delete-notice') {
+    if (!window.confirm('確定刪除此公告？')) return;
+    await request({ action: 'deleteNotice', classId, noticeId: target.dataset.id }); return loadClass();
   }
   if (action === 'rename') { const values = validForm('rename'); if (!values) return; await request({ action: 'renameClass', classId, ...values }); return loadClass(); }
   if (action === 'rotate-code') {
@@ -283,6 +309,17 @@ async function act(target) {
     const data = await request({ action: 'correct', classId, assignmentId: state.assignment.id, questionId: q.id, selectedIndex: Number(target.dataset.option) });
     state.submission = data.submission; render(); message(data.correct ? '訂正已記錄' : '再看一次解析，重新選擇答案。'); return;
   }
+  if (action === 'update-deadline') {
+    const values = validForm('deadline'); if (!values) return;
+    await request({ action: 'updateDeadline', classId, assignmentId: state.report.assignment.id,
+      version: state.report.assignment.version, dueAtMs: values.dueAtMs ? new Date(values.dueAtMs).getTime() : null });
+    await loadReport(); message('截止時間已更新；已繳交成績維持不變。'); return;
+  }
+  if (action === 'reopen-assignment') {
+    if (!window.confirm('確定重新開放這份作業？未繳交的學生可以繼續作答，原有成績不變。')) return;
+    await request({ action: 'reopenAssignment', classId, assignmentId: state.report.assignment.id, version: state.report.assignment.version });
+    await loadReport(); message('作業已重新開放。'); return;
+  }
   if (action === 'close-assignment') {
     if (!window.confirm('確定結束收件？學生之後仍可查看結果與訂正。')) return;
     await request({ action: 'closeAssignment', classId, assignmentId: state.report.assignment.id, version: state.report.assignment.version }); return loadReport();
@@ -301,7 +338,7 @@ function mount() {
   panel.addEventListener('click', event => {
     const target = event.target.closest('button[data-action]');
     if (!target || target.disabled) return;
-    if (['create', 'join', 'rename', 'apply-teacher', 'assign-teacher', 'save-draft', 'save-preview'].includes(target.dataset.action) && !target.closest('form')?.reportValidity()) return;
+    if (['create', 'join', 'rename', 'post-notice', 'apply-teacher', 'assign-teacher', 'save-draft', 'save-preview'].includes(target.dataset.action) && !target.closest('form')?.reportValidity()) return;
     void run(() => act(target));
   });
   render();
