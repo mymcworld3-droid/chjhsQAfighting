@@ -23,11 +23,11 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
   </div>`;
   if(!chosen) return {
     bookId:'',
-    html:`<section class="manual-hero manual-hero--empty" aria-label="功法修煉">
+    html:`<section class="manual-hero manual-hero--empty" aria-label="武器修煉">
       ${heading}<div class="manual-hero-empty-state">
         <i class="fa-solid fa-book-open" aria-hidden="true"></i>
         <strong>你的修行之路即將開始</strong>
-        <p>選擇劍修或體修，即可免費習得第一本入門功法。</p>
+        <p>選擇劍修或體修，即可免費習得第一件入門武器。</p>
       </div></section>`
   };
 
@@ -78,7 +78,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
       <span class="manual-hero-node-tier">第 ${index+1} 招 · Lv. ${fmt(skill.levelRequired)}</span>
       <strong>${esc(skill.name)}</strong>
       <small>${esc(detail)}</small>
-      <span class="manual-hero-node-status">${unlocked?'已領悟':skillState==='realm-locked'?'修士境界未達':'功法等級未達'}</span>
+      <span class="manual-hero-node-status">${unlocked?'已領悟':skillState==='realm-locked'?'修士境界未達':'武器等級未達'}</span>
     </button>`;
   }).join('');
   const upgrade=book.upgrade;
@@ -95,7 +95,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
     bookId:book.id,
     html:`<section class="manual-hero manual-hero--${book.school} manual-hero--tier-${visual.stage} ${near?'manual-hero--approaching':''} ${anticipation?.status==='imminent'?'manual-hero--imminent':''}"
       data-manual-visual-stage="${visual.stage}" data-manual-visual-level="${visual.level}"
-      aria-label="功法修煉焦點">
+      aria-label="武器修煉焦點">
       ${heading}
       <div class="manual-hero-main">
         <div class="manual-hero-art-stage">
