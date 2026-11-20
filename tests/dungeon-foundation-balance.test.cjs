@@ -7,6 +7,9 @@ const Boss=require('../dungeon-boss-battle.cjs');
 const Objectives=require('../dungeon-objectives.cjs');
 const Manuals=require('../public/cultivation/manual-rules.js');
 const Combat=require('../dungeon-enemy-combat.cjs');
+const AI=require('../dungeon-enemy-ai.cjs');
+const {generateDungeonLayout}=require('../dungeon-map-generator.cjs');
+const API=require('../dungeon-room-api.cjs').__test;
 const fs=require('node:fs'),path=require('node:path');
 const threatSource=fs.readFileSync(path.join(__dirname,
   '../public/cultivation/dungeon-threat-plan.js'),'utf8')
@@ -135,4 +138,26 @@ test('telegraph UI labels show server-scaled damage, not misleading raw 8 HP',()
   assert.match(view,/預估累計/);
   assert.match(view,/預估 '/);
   assert.match(view,/未計掩護/);
+});
+
+test('all spawned normal, guardian and boss enemies carry trusted foundation realm',()=>{
+  const dungeon=generateDungeonLayout('foundation-realm-check');
+  const regular=AI.initialEnemies(dungeon);
+  const spawned=Objectives.spawn(dungeon,regular);
+  const all=[...spawned.enemies,Boss.initialBoss()];
+  assert.ok(all.length>2);
+  for(const enemy of all){
+    assert.equal(enemy.realmStage,5,enemy.id);
+    assert.equal(enemy.realm,'築基',enemy.id);
+  }
+  const now=1800000000000;
+  const view=API.publicRoom('dungroomA123456',{
+    mode:'dungeon',version:1,status:'assembled',revision:1,
+    members:{a:{uid:'a',name:'A',position:{x:2,y:2},heartbeatAtMs:now}},
+    enemies:all,expiresAtMs:now+60000,
+    battleStartedAtMs:now,battleAppliedTick:0,
+    dungeonArena:'boss',bossEncounter:null,dungeonProgress:null
+  },now);
+  assert.ok(view.enemies.every(enemy=>
+    enemy.realm==='築基'&&enemy.realmStage===5));
 });
