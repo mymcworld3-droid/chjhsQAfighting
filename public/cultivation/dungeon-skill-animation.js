@@ -62,11 +62,13 @@ const durationFor=id=>{
 };
 function buildSkill(uid,result,previous,next){
   const source=previous?.members?.[uid],newSource=next?.members?.[uid];
-  const origin=validPoint(result.origin)?result.origin:source?.position;
+  const origin=Array.isArray(result.path)&&validPoint(result.path[0])?
+    result.path[0]:validPoint(result.origin)?result.origin:source?.position;
   const target=result.target;
   if(!validPoint(origin)||!validPoint(target))return null;
   const skill=source?.dungeonSkills?.find(s=>s.id===result.skillId)||
-    newSource?.dungeonSkills?.find(s=>s.id===result.skillId);
+    newSource?.dungeonSkills?.find(s=>s.id===result.skillId)||
+    (result.skillId==='flight-summon'&&Array.isArray(result.path)?{kind:'flying-sword'}:null);
   if(!skill)return null;
   const move=dungeonVisualMove(result.skillId);
   const cells=(result.effectCells||[]).filter(validPoint).slice(0,72)
@@ -108,6 +110,7 @@ function buildSkill(uid,result,previous,next){
       absorbed:hit.shieldDamage||0,combo:hit.combo===true}));
   const scene={kind:'cast',style:skill.kind,actor:uid,
     skill:result.skillId,origin:copyPoint(origin),target:copyPoint(target),
+    ...(Array.isArray(result.path)?{path:result.path.filter(validPoint).slice(0,1024).map(copyPoint)}:{}),
     cells,moves,numbers,hits,before,focusEmpowered:result.focusEmpowered===true,
     focusActivated:result.focusActivated===true,
     parallelImpact:numbers.length>0,impactStart:skill.kind==='fist-chain'?.15:.45,
