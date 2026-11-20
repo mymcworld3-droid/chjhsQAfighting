@@ -65,7 +65,7 @@
   const technique=(id,name,cost,range,kind,power,description,extra={})=>
     Object.freeze({id,name,cost,range,kind,power,description,...extra,cooldown:0});
   const book=(id,name,school,description,skills,realms=[1,6,28],tierRealm='煉氣')=>Object.freeze({
-    id,name,school,description,tierRealm,skills:Object.freeze(skills.map((skill,index)=>
+    id,name,school,weaponType:school==='sword'?'sword':'totem',description,tierRealm,skills:Object.freeze(skills.map((skill,index)=>
       Object.freeze({...skill,moveId:skill.moveId||skill.id,manualId:id,school,
         levelRequired:[1,5,10][index],realmRequired:realms[index]})))
   });
@@ -76,13 +76,13 @@
     '劍氣沿直線延伸至石障或邊界。命中後將存活敵人推至最遠的可落腳格。',{unlimited:true,pushToEdge:true});
   const straightFist=technique('rock-fist','直拳',2,2,'line',1.2,'攻擊前方直線兩格。');
   const BOOKS=Object.freeze([
-    book('sword-wind','流風劍訣','sword','以身法切入，再以劍氣逼退敵人。',[
+    book('sword-wind','流風靈劍','sword','以身法切入，再以劍氣逼退敵人。',[
       straight,
       technique('wind-step','突進橫斬',4,4,'dash-cleave',2.8,
         '沿直線突進最多四格，再揮出三格寬的劍氣兩次。',{hits:2}),
       breakLine
     ]),
-    book('sword-flight','御劍真訣','sword','御使飛劍，控制敵人的站位。',[
+    book('sword-flight','御靈飛劍','sword','御使飛劍，控制敵人的站位。',[
       shared(straight,'flight-slash'),
       technique('flight-summon','召劍',3,2,'flying-sword',1.1,
         '在自身曼哈頓距離兩格內的空地召劍。場上已有飛劍時，飛劍沿優先經過靈獸的最短路徑回到所選位置，沿途造成傷害。另可在移動選項中以每兩格一體力移動飛劍。',
@@ -90,7 +90,7 @@
       shared(breakLine,'flight-break')
     ],[6,6,28],'築基'),
     // Preserve the former 青霄劍典 book and slot IDs in existing saves.
-    book('sword-sky','八方劍典','sword','以多路劍氣交擊一點，兼及周圍敵人。',[
+    book('sword-sky','八方天劍','sword','以多路劍氣交擊一點，兼及周圍敵人。',[
       shared(straight,'sky-pierce'),
       technique('sky-cloud','交叉劍斬',4,3,'sword-array',1.1,
         '選擇三格內的中心，揮出兩道交叉劍氣，各從中心向兩端延伸兩格。中心最多命中兩次。',
@@ -99,21 +99,21 @@
         '選擇四格內的中心。正向各延伸三格、斜向各延伸兩格，八路劍氣向中心匯聚。',
         {orthogonal:3,diagonal:2,centerPower:2.4})
     ],[6,28,68],'元嬰'),
-    book('body-rock','玄嶽鍛體訣','body','突進破陣，將敵人擊退。',[
+    book('body-rock','玄嶽圖騰','body','突進破陣，將敵人擊退。',[
       straightFist,
       technique('rock-quake','突進震拳',3,3,'dash-cleave',1.15,
         '直線突進最多三格，再攻擊落點前方的 T 形四格。',{tShape:true}),
       technique('rock-break','崩山拳',3,2,'fist-sweep',1.25,
         '攻擊前方 T 形四格，將命中的敵人沿出拳方向擊退最多三格。',{tShape:true,push:3})
     ]),
-    book('body-dragon','龍象真身訣','body','連步逼退對手，蓄勢後連續出拳。',[
+    book('body-dragon','龍象圖騰','body','連步逼退對手，蓄勢後連續出拳。',[
       shared(straightFist,'dragon-strike'),
       technique('dragon-guard','四步連推',4,1,'fist-chain',.65,
         '最多四段。每段攻擊前方一排並將敵人推退一格，再前進一格。敵人無法被推退時追加撞擊傷害；前路受阻則停止。',{steps:4,collisionPower:.45}),
       technique('dragon-roar','蓄勢',7,0,'fist-focus',0,
         '立即結束回合。接下來自己的兩個回合各可出手三次，其他拳法體力消耗減半並向上取整。',{cooldown:3})
     ],[6,28,68],'元嬰'),
-    book('body-tiger','伏虎擒拿訣','body','以步法貼近敵人，借力改變敵人的站位。',[
+    book('body-tiger','伏虎圖騰','body','以步法貼近敵人，借力改變敵人的站位。',[
       shared(straightFist,'tiger-fist'),
       technique('tiger-step','踏步連拳',4,2,'dash-cleave',1.5,
         '直線踏步最多兩格，再攻擊落點前方橫排三格兩次。',{hits:2}),
@@ -226,7 +226,7 @@
     return {...stats,mastered,realmReady,realmName:realmForScore(skill.realmRequired).name,
       unlocked,upgrade:unlocked?skillUpgradeQuote(stats.level):null};
   };
-  function normalize(raw){
+  function normalizeLegacy(raw){
     const books={};
     for(const [id,record] of Object.entries(raw?.books||{})){
       if(!Object.hasOwn(BY_BOOK,id))continue;
@@ -268,17 +268,60 @@
       dropMisses:Math.max(0,Math.min(3,Math.trunc(Number(raw?.dropMisses)||0))),
       starterClaimed:raw?.starterClaimed===true};
   }
+
+  // V3 stores at most three unique owned weapons. An equipped weapon grants
+  // all three techniques at their original Lv.1/5/10 proficiency thresholds.
+  function normalize(raw){
+    const legacy=normalizeLegacy(raw);
+    if(!Array.isArray(raw?.weaponIds))return legacy;
+    const used=new Set(),weaponIds=Array.from({length:3},(_,index)=>{
+      const id=raw.weaponIds[index];
+      if(typeof id!=='string'||!legacy.books[id]||!BY_BOOK[id]||used.has(id))return null;
+      used.add(id);return id;
+    });
+    const loadouts=weaponIds.map(weaponId=>({
+      name:weaponId?BY_BOOK[weaponId].name:'空白武器槽',
+      weaponId,
+      skillIds:weaponId?BY_BOOK[weaponId].skills
+        .filter(skill=>levelForExp(legacy.books[weaponId].exp)>=skill.levelRequired)
+        .map(skill=>skill.id):[]
+    }));
+    const requested=legacy.activeLoadout;
+    const activeLoadout=weaponIds[requested]?requested:Math.max(0,weaponIds.findIndex(Boolean));
+    return {...legacy,version:3,weaponIds,loadouts,activeLoadout,
+      equipped:[...loadouts[activeLoadout].skillIds]};
+  }
+  // Preserve the six original book IDs, their EXP, and upgraded skill levels.
+  // Project old skill presets into weapon slots only when a V3 save is written.
+  function weaponize(raw){
+    if(Array.isArray(raw?.weaponIds))return normalize(raw);
+    const legacy=normalizeLegacy(raw),weaponIds=[null,null,null],used=new Set();
+    const add=(id,slot)=>{
+      if(!id||!legacy.books[id]||used.has(id))return false;
+      if(slot<0||slot>2||weaponIds[slot])return false;
+      weaponIds[slot]=id;used.add(id);return true;
+    };
+    const active=legacy.activeLoadout;
+    add(BY_SKILL[legacy.equipped[0]]?.manualId,active);
+    legacy.loadouts.forEach((item,index)=>add(BY_SKILL[item.skillIds[0]]?.manualId,index));
+    const leftovers=[...legacy.equipped,...legacy.loadouts.flatMap(item=>item.skillIds)];
+    for(const skillId of leftovers){
+      const bookId=BY_SKILL[skillId]?.manualId;
+      if(!used.has(bookId))add(bookId,weaponIds.findIndex(item=>!item));
+    }
+    return normalize({...legacy,version:3,weaponIds});
+  }
   function unlocked(state,id){
     const s=normalize(state),skill=BY_SKILL[id];
     return !!skill&&!!s.books[skill.manualId]
       &&levelForExp(s.books[skill.manualId].exp)>=skill.levelRequired;
   }
   function publicState(raw,realmScore=0){
-    const s=normalize(raw),score=normalizedScore(realmScore);
+    const s=weaponize(raw),score=normalizedScore(realmScore);
     // Do not expose undiscovered scriptures to the cultivation UI.
     const library=BOOKS.filter(book=>!!s.books[book.id]).map(book=>{
       const levelInfo=mastery(s.books[book.id].exp);
-      return {id:book.id,name:book.name,school:book.school,tierRealm:book.tierRealm,description:book.description,
+      return {id:book.id,name:book.name,school:book.school,weaponType:book.weaponType,tierRealm:book.tierRealm,description:book.description,
         owned:true,...levelInfo,upgrade:upgradeQuote(levelInfo.exp),skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level,score,s.skillLevels[skill.id]))};
     });
     return {...s,realmScore:score,realmName:realmForScore(score).name,
@@ -291,5 +334,5 @@
     return Object.values(state.books).reduce((sum,row)=>sum+levelForExp(row.exp),0);
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_GOLD_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,unlocked,manualAttackBonus,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_GOLD_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,weaponize,unlocked,manualAttackBonus,publicState,starterFor});
 });
