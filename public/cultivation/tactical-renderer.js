@@ -1,5 +1,6 @@
 import './manual-rules.js?v=20261116-loadout-presets-v1';
-import './tactical-rules.js?v=20261116-pve-v4';
+import './flying-sword-path.js?v=20261120-sword-movement-v1';
+import './tactical-rules.js?v=20261120-sword-movement-v1';
 import './tactical-animation.js?v=20261116-stability-v1';
 import './tactical-skill-effects.js?v=20261116-long-line-afterglow-v1';
 import './tactical-camera.js';
@@ -302,7 +303,7 @@ export class TacticalRenderer{
     }
     if(this.state!==state||this.uid!==uid||this.mode!==mode){
       const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
-      this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,attackSkill(me,mode))):[];
+      this.range=mine?(mode==='move'?R.moveCells(state,me):mode==='sword-move'?R.swordMoveCells(state,me):R.aimCells(state,me,attackSkill(me,mode))):[];
     }
     this.threatPlan=Threats.derive(state,uid,mode,this.range);
     // Compute once per authoritative state update, never in the animation loop.
@@ -698,6 +699,9 @@ export class TacticalRenderer{
         c.save();c.translate(w/2+dx*scale,h/2+dy*scale);c.rotate(Math.atan2(dy,dx));c.fillStyle=nextMarker.color;c.beginPath();c.moveTo(8,0);c.lineTo(-6,-6);c.lineTo(-6,6);c.closePath();c.fill();c.restore();
       }
     }
+    if(myTurn&&this.mode==='sword-move'){
+      for(const p of this.range)fill(p,'#6bdedb38','#7efff2a6');
+    }
     if(myTurn&&this.mode==='move'){
       // Absolute time keeps the same soft pulse at any refresh rate. The BFS is
       // cached by update(), rather than repeated on every animation frame.
@@ -712,6 +716,17 @@ export class TacticalRenderer{
         const preview=R.techniquePreview(s,mine,sk,this.selection);
         for(const p of [...preview.path.slice(1),...preview.landings])fill(p,'#e9cf8165','#e5cc87');
         for(const p of preview.cells)fill(p,'#ef39398c','#ffb1a3');
+      }
+    }
+    if(myTurn&&this.mode==='sword-move'&&this.selection&&mine?.flyingSword){
+      const route=R.swordRoute(s,mine,this.selection);
+      if(route?.length>1){
+        c.save();c.beginPath();
+        route.forEach((p,i)=>c[i?'lineTo':'moveTo'](ox+(p.x+.5)*cell,oy+(p.y+.5)*cell));
+        c.strokeStyle='#7efff2';c.lineWidth=Math.max(2,cell*.075);
+        c.setLineDash([cell*.17,cell*.12]);c.stroke();c.setLineDash([]);c.restore();
+        for(const p of route.slice(1))if(s.actors.some(t=>R.alive(t)&&t.team!==mine.team&&R.covers(t,p)))
+          fill(p,'#f6a36c44','#ffbd7d');
       }
     }
     if(!animating){
@@ -934,9 +949,13 @@ export class TacticalRenderer{
       const own=a.uid===this.uid;
       if(scene?.style==='flying-sword'&&scene.actor===a.uid){
         const {origin,target}=scene;
+        const trail=Array.isArray(scene.path)&&scene.path.length>1?scene.path:[origin,target];
+        const index=Math.min(trail.length-2,Math.floor(progress*(trail.length-1)));
+        const fraction=Math.max(0,Math.min(1,progress*(trail.length-1)-index));
+        const first=trail[index],last=trail[index+1];
         const moving=!!sword,position=moving?
-          {x:origin.x+(target.x-origin.x)*progress,y:origin.y+(target.y-origin.y)*progress}:target;
-        const angle=moving?Math.atan2(target.y-origin.y,target.x-origin.x)+Math.PI/2:Math.PI/5;
+          {x:first.x+(last.x-first.x)*fraction,y:first.y+(last.y-first.y)*fraction}:target;
+        const angle=moving?Math.atan2(last.y-first.y,last.x-first.x)+Math.PI/2:Math.PI/5;
         this.drawFlyingSword(position,own?'#d1efe1':'#f6c8a9',moving?1:Math.min(1,progress*3),angle);
       }else if(sword)this.drawFlyingSword(sword,own?'#d1efe1':'#f6c8a9');
     }
