@@ -12,7 +12,7 @@ const {trustedRaidPlayerSnapshot}=require('./raid-authority.cjs');
 const {initialClock,projectClock} = require('./dungeon-battle-clock.cjs');
 const {initialEnemies,advanceWorld,ENEMY_AI_VERSION} = require('./dungeon-enemy-ai.cjs');
 const {pendingPublic} = require('./dungeon-enemy-combat.cjs');
-const {strikeEnemy,maxHealth}=require('./dungeon-player-combat.cjs');
+const {strikeEnemy,recordedMax}=require('./dungeon-player-combat.cjs');
 const Skills=require('./dungeon-skill-combat.cjs');
 const QuizCredit=require('./dungeon-quiz-credit.cjs');
 const {staminaFor,clampStamina}=require('./dungeon-stamina-rules.cjs');
@@ -65,14 +65,14 @@ const publicRoom=(roomId,room,at=Date.now())=>({
   // never the secret map seed or server-side patrol/decision internals.
   enemies:Array.isArray(room.enemies)?room.enemies.map(e=>({
     id:e.id,name:e.name,kind:e.kind,position:e.position,
-    ...(e.kind==='boss'?{footprint:2,phase:Boss.phase(e.battleHealth),
+    ...(e.kind==='boss'?{footprint:2,phase:Boss.phase(e.battleHealth,recordedMax(e)),
       shield:Math.max(0,Number(e.shield)||0),shieldMax:Boss.SHIELD_MAX,
       exposedUntilTick:e.exposedUntilTick||0,
       lastTeamHit:e.lastTeamHit||null}:{}),
     intent:e.intent,targetUid:e.targetUid||null,
     lastActionTick:e.lastActionTick,cadence:e.cadence,
-    battleHealth:Number.isSafeInteger(e.battleHealth)?e.battleHealth:maxHealth(e.kind),
-    battleMaxHealth:maxHealth(e.kind),
+    battleHealth:Number.isSafeInteger(e.battleHealth)?e.battleHealth:recordedMax(e),
+    battleMaxHealth:recordedMax(e),
     attack:pendingPublic(e.attack),
     lastAttack:e.lastAttack?{
       tick:e.lastAttack.tick,kind:e.lastAttack.kind,
