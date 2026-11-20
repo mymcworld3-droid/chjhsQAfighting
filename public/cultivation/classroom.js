@@ -2,6 +2,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import './knowledge-points.js';
 import { buildClassroomView, tabsForClass } from './classroom-view.js';
+import { renderClassroomEditor, renderClassroomCopy, validateClassroomDraft, parseClassroomAIQuestion, MAX_CLASSROOM_QUESTIONS } from './classroom-editor.js';
 import { buildTeacherWorkspace } from './teacher-workspace.js';
 
 const $ = id => document.getElementById(id);
@@ -13,11 +14,14 @@ const status = value => ({ draft: '草稿', published: '進行中', closed: '已
 const button = (action, label, attrs = '') => `<button type="button" data-action="${action}" ${attrs}>${label}</button>`;
 let owner = '', epoch = 0, busy = false;
 let state = { view: 'home', classes: [] };
+let editorTimer = null, editorSession = 0, editorRevision = 0, editorSavedRevision = 0;
+let editorWrite = Promise.resolve();
 
 function resetOwner() {
   const next = getMainUser()?.uid || '';
   if (next !== owner) {
-    owner = next; epoch++; busy = false; state = { view: 'home', classes: [] };
+    owner = next; epoch++; busy = false; editorSession++; clearTimeout(editorTimer);
+    state = { view: 'home', classes: [] };
     const panel = $('section-classes');
     if (panel) { panel.inert = false; panel.replaceChildren(); render(); }
   }
@@ -118,25 +122,52 @@ function classView() {
 }
 
 const blankQuestion = () => ({ question: '', options: ['', '', '', ''], answerIndex: 0, explanation: '', knowledge_points: [] });
+
+function beginEditor(editor) {
+  editorSession++;
+  clearTimeout(editorTimer);
+  state.editor = { ...editor, questions: editor.questions.map(q => ({
+    ...q, options: [...q.options], knowledge_points: [...(q.knowledge_points || [])]
+  })) };
+  state.editorIndex = 0;
+  state.editorSaveLabel = editor.id ? '已載入伺服器草稿' : '尚未建立草稿';
+  editorRevision = 0;
+  editorSavedRevision = editor.id ? 0 : -1;
+  state.view = 'editor';
+  render();
+}
 function captureEditor() {
-  const form = $('cc-editor'); if (!form) return;
+  const form = $('cc-editor');
+  if (!form || state.view !== 'editor') return;
   const values = new FormData(form);
-  state.editor = { ...state.editor, title: values.get('title'), subject: values.get('subject'), dueLocal: values.get('dueLocal'), topic: values.get('topic'), level: values.get('level'),
-    questions: state.editor.questions.map((q, i) => {
-      const pointId = values.get(`point-${i}`), group = window.QAKnowledgePoints.SUBJECTS.find(s => s.points.some(p => p.id === pointId));
-      const point = group?.points.find(p => p.id === pointId);
-      return { question: values.get(`question-${i}`), options: labels.map((_, n) => values.get(`option-${i}-${n}`)), answerIndex: Number(values.get(`answer-${i}`)), explanation: values.get(`explanation-${i}`), knowledge_points: point ? [{ subject: group.name, ...point }] : [] };
-    }) };
+  const index = state.editorIndex || 0;
+  const old = state.editor.questions[index];
+  if (!old) return;
+  const pointId = values.get('point-' + index);
+  const group = window.QAKnowledgePoints.SUBJECTS.find(s => s.points.some(p => p.id === pointId));
+  const point = group?.points.find(p => p.id === pointId);
+  const q = {
+    ...old, question: String(values.get('question-' + index) ?? ''),
+    options: labels.map((_, n) => String(values.get('option-' + index + '-' + n) ?? '')),
+    answerIndex: Number(values.get('answer-' + index)),
+    explanation: String(values.get('explanation-' + index) ?? ''),
+    knowledge_points: point ? [{ subject: group.name, ...point }] : []
+  };
+  const questions = state.editor.questions.slice();
+  questions[index] = q;
+  state.editor = { ...state.editor,
+    title: String(values.get('title') ?? ''), subject: String(values.get('subject') ?? ''),
+    dueLocal: String(values.get('dueLocal') ?? ''), topic: String(values.get('topic') ?? ''),
+    level: String(values.get('level') ?? ''), questions
+  };
 }
 function editorView() {
-  const e = state.editor;
-  const points = selected => '<option value="">未標記</option>' + window.QAKnowledgePoints.SUBJECTS.map(s => `<optgroup label="${s.name}">${s.points.map(p => `<option value="${p.id}" ${p.id === selected ? 'selected' : ''}>${p.name}</option>`).join('')}</optgroup>`).join('');
-  return `<div class="cc-toolbar"><h3>${e.id ? '編輯作業' : '新增作業'}</h3>${button('back', '返回班級')}</div><p class="cc-muted">發布前請核對題目與答案；發布後題組固定，避免學生使用不同版本。</p>
-    <form id="cc-editor" class="cc-form"><div class="cc-card cc-form">${field('title', '作業名稱', e.title, 'required maxlength="80"')}<div class="cc-fields"><label>科目<select name="subject">${['綜合', ...window.QAKnowledgePoints.SUBJECT_NAMES].map(s => `<option ${s === e.subject ? 'selected' : ''}>${s}</option>`).join('')}</select></label>${field('dueLocal', '截止時間（選填）', e.dueLocal || '', 'type="datetime-local"')}</div>
-    <details><summary>協助出題</summary><div class="cc-form">${field('topic', '出題範圍', e.topic || '', 'maxlength="180"')}${field('level', '適用年級', e.level || '國中一年級', 'maxlength="32"')}${button('generate-question', 'AI 產生一題')}<span class="cc-muted">產生的內容會加入草稿，請編輯並審核後再發布。</span></div></details></div>
-    ${e.questions.map((q, i) => `<section class="cc-card cc-form"><div class="cc-toolbar"><h4>第 ${i + 1} 題</h4>${button('remove-question', '移除此題', `data-index="${i}" ${e.questions.length < 2 ? 'disabled' : ''}`)}</div><label>題目<textarea name="question-${i}" required maxlength="4000">${escape(q.question)}</textarea></label><div class="cc-fields">${q.options.map((o, n) => field(`option-${i}-${n}`, `選項 ${labels[n]}`, o, 'required maxlength="1200"')).join('')}</div><div class="cc-fields"><label>正確答案<select name="answer-${i}">${labels.map((l, n) => `<option value="${n}" ${n === q.answerIndex ? 'selected' : ''}>${l}</option>`).join('')}</select></label><label>知識點（選填）<select name="point-${i}">${points(q.knowledge_points?.[0]?.id)}</select></label></div><label>解析（選填）<textarea name="explanation-${i}" maxlength="4000">${escape(q.explanation)}</textarea></label></section>`).join('')}
-    <div class="cc-actions">${button('add-question', '新增一題', e.questions.length >= 30 ? 'disabled' : '')}${button('save-draft', '儲存草稿')}${button('save-preview', '儲存並預覽', 'class="cc-primary"')}</div></form>`;
+  return renderClassroomEditor(state, { escape, button, field,
+    subjectNames: window.QAKnowledgePoints.SUBJECT_NAMES,
+    subjects: window.QAKnowledgePoints.SUBJECTS });
 }
+function copyView() { return renderClassroomCopy(state, { escape, button }); }
+
 function questionView(q, i, extras = '') {
   return `<article class="cc-card"><h4>第 ${i + 1} 題</h4><div class="cc-question">${escape(q.question)}</div><div class="cc-options">${q.options.map((o, n) => `<div ${n === q.answerIndex ? 'class="cc-status"' : ''}>${labels[n]}. ${escape(o)}${n === q.answerIndex ? ' ✓' : ''}</div>`).join('')}</div>${extras}${q.explanation ? `<div class="cc-explanation">${escape(q.explanation)}</div>` : ''}</article>`;
 }
@@ -213,7 +244,7 @@ function filterWorkspaceTasks(panel) {
 }
 function render() {
   const panel = $('section-classes'); if (!panel) return;
-  const views = { home: homeView, accounts: accountsView, class: classView, overview: overviewView, editor: editorView, preview: previewView, work: workView, report: reportView };
+  const views = { home: homeView, accounts: accountsView, class: classView, overview: overviewView, editor: editorView, copy: copyView, preview: previewView, work: workView, report: reportView };
   window.quizMathClear?.(panel);
   panel.innerHTML = `<div class="cc-shell"><div data-message role="status" aria-live="polite"></div>${views[state.view]()}</div>`;
   filterClassroomList(panel, 'assignment');
@@ -267,31 +298,187 @@ async function loadOverview() {
 async function loadReport(assignmentId = state.report?.assignment.id) {
   const data = await request({ action: 'report', classId: state.classroom.id, assignmentId }); state.report = data.report; state.view = 'report'; render();
 }
-async function saveDraft(preview) {
-  const form = $('cc-editor'); if (!form.reportValidity()) return;
-  captureEditor(); const e = state.editor;
-  const data = await request({ action: 'saveAssignment', classId: state.classroom.id, assignmentId: e.id, version: e.version,
-    title: e.title, subject: e.subject, dueAtMs: e.dueLocal ? new Date(e.dueLocal).getTime() : null, questions: e.questions });
-  state.editor = { ...e, ...data.assignment }; state.assignment = data.assignment;
-  if (preview) { state.view = 'preview'; render(); } else message('草稿已儲存');
+
+function setEditorSaveLabel(label) {
+  state.editorSaveLabel = label;
+  const node = $('cc-editor-save-status');
+  if (node) node.textContent = label;
 }
-async function generateQuestion() {
-  captureEditor(); const e = state.editor;
-  if (e.subject === '綜合' || !e.topic?.trim()) throw Error('請先選擇科目並填寫出題範圍');
-  if (e.questions.length >= 30) throw Error('每份作業最多 30 題');
-  const payload = await request({ subject: e.subject, level: e.level, specificTopic: e.topic, difficulty: 'medium', quizMode: 'classroom-draft', avoidQuestions: e.questions.map(q => q.question).filter(Boolean) }, '/api/generate-quiz', 60000);
-  const raw = JSON.parse(String(payload.text || '').match(/\{[\s\S]*\}/)?.[0] || '{}');
-  if (typeof raw.question !== 'string' || typeof raw.correct !== 'string' || !Array.isArray(raw.wrong) || raw.wrong.length !== 3 || raw.wrong.some(v => typeof v !== 'string')) throw Error('產生的題目格式不完整，請重試或自行編輯');
-  const q = { question: raw.question, options: [raw.correct, ...raw.wrong], answerIndex: 0, explanation: String(raw.explanation || ''), knowledge_points: window.QAKnowledgePoints.labels(raw, e.subject) };
-  if (e.questions.length === 1 && !e.questions[0].question && e.questions[0].options.every(o => !o)) e.questions = [q]; else e.questions.push(q);
-  render(); message('題目已加入草稿，請核對內容與答案。');
+function scheduleEditorAutosave() {
+  clearTimeout(editorTimer);
+  if (state.view !== 'editor') return;
+  if (validateClassroomDraft(state.editor)) return;
+  editorTimer = setTimeout(() => {
+    if (state.view === 'editor') void persistEditorDraft(false, true).catch(() => {});
+  }, 2600);
 }
+function touchEditor() {
+  editorRevision++;
+  setEditorSaveLabel('有修改尚未儲存');
+  scheduleEditorAutosave();
+}
+async function persistEditorDraft(preview = false, silent = false) {
+  clearTimeout(editorTimer);
+  if (state.view !== 'editor') return;
+  if (!silent && !$('cc-editor')?.reportValidity()) return;
+  captureEditor();
+  const session = editorSession;
+  const save = editorWrite.then(async () => {
+    if (session !== editorSession || state.view !== 'editor') return;
+    captureEditor();
+    const e = state.editor;
+    const invalid = validateClassroomDraft(e);
+    if (invalid) {
+      if (silent) { setEditorSaveLabel('部分題目尚未填妥，完成後會自動儲存'); return; }
+      throw Error(invalid);
+    }
+    const revision = editorRevision;
+    setEditorSaveLabel(silent ? '正在自動儲存…' : '正在儲存草稿…');
+    try {
+      const data = await request({
+        action: 'saveAssignment', classId: state.classroom.id, assignmentId: e.id,
+        version: e.version, title: e.title, subject: e.subject,
+        dueAtMs: e.dueLocal ? new Date(e.dueLocal).getTime() : null,
+        questions: e.questions.map(q => ({
+          question: q.question, options: [...q.options], answerIndex: q.answerIndex,
+          explanation: q.explanation, knowledge_points: [...(q.knowledge_points || [])]
+        }))
+      });
+      if (session !== editorSession || state.view !== 'editor') return;
+      // Never replace in-memory questions: teacher may have continued typing during the request.
+      state.editor = { ...state.editor, id: data.assignment.id, version: data.assignment.version };
+      state.assignment = data.assignment;
+      if (editorRevision === revision) {
+        editorSavedRevision = revision;
+        setEditorSaveLabel(silent ? '已自動儲存至伺服器' : '草稿已儲存');
+      } else {
+        setEditorSaveLabel('儲存期間有新修改，等待下一次儲存');
+        scheduleEditorAutosave();
+      }
+      if (preview) {
+        if (editorRevision !== revision) throw Error('請等待最新修改儲存完成後再預覽。');
+        clearTimeout(editorTimer);
+        state.view = 'preview';
+        editorSession++;
+        render();
+      } else if (!silent) {
+        message('草稿已儲存。');
+      }
+    } catch (error) {
+      if (session === editorSession && state.view === 'editor') {
+        setEditorSaveLabel('儲存未成功：' + error.message);
+      }
+      throw error;
+    }
+  });
+  editorWrite = save.catch(() => {});
+  return save;
+}
+async function generateQuestions(count = 1) {
+  captureEditor();
+  const e = state.editor;
+  if (e.subject === '綜合' || !e.topic?.trim()) throw Error('請先選擇科目並填寫出題範圍。');
+  const isBlank = q => !q.question?.trim() && q.options.every(o => !String(o || '').trim());
+  const replacement = e.questions.length === 1 && isBlank(e.questions[0]);
+  const slots = MAX_CLASSROOM_QUESTIONS - e.questions.length + (replacement ? 1 : 0);
+  if (slots < 1) throw Error('每份作業最多 30 題。');
+  const wanted = Math.min(Math.max(1, Number(count) || 1), 10, slots);
+  const existing = new Set(e.questions.filter(q => q.question?.trim())
+    .map(q => q.question.trim().replace(/\s+/g, '').toLowerCase()));
+  let finished = 0, accepted = 0;
+  const failures = [];
+  const update = () => {
+    const node = $('cc-ai-batch-status');
+    if (node) node.textContent = '已完成 ' + finished + ' / ' + wanted + ' 次生成，新增 ' + accepted +
+      ' 題，略過 ' + failures.length + ' 題。';
+  };
+  while (finished < wanted) {
+    const waveSize = Math.min(3, wanted - finished);
+    const avoidQuestions = e.questions.filter(q => q.question?.trim())
+      .map(q => q.question.trim().slice(0, 500)).slice(-20);
+    const batch = await Promise.allSettled(Array.from({ length: waveSize }, () =>
+      request({ subject: e.subject, level: e.level, specificTopic: e.topic,
+        difficulty: 'medium', quizMode: 'classroom-draft',
+        avoidQuestions }, '/api/generate-quiz', 60000)));
+    for (const result of batch) {
+      finished++;
+      if (result.status === 'rejected') { failures.push(result.reason?.message || '生成請求失敗'); update(); continue; }
+      try {
+        const q = parseClassroomAIQuestion(result.value, e.subject, window.QAKnowledgePoints.labels);
+        const key = q.question.replace(/\s+/g, '').toLowerCase();
+        if (existing.has(key)) throw Error('題目重複');
+        existing.add(key);
+        if (replacement && accepted === 0) e.questions[0] = q;
+        else e.questions.push(q);
+        state.editorIndex = e.questions.length - 1;
+        accepted++;
+      } catch (error) { failures.push(error.message); }
+      update();
+    }
+  }
+  if (!accepted) throw Error('本次 AI 未產生可用的新題目。' + (failures[0] ? '原因：' + failures[0] : ''));
+  touchEditor();
+  render();
+  message('已加入 ' + accepted + ' 題 AI 草稿' +
+    (failures.length ? '；另有 ' + failures.length + ' 次產生失敗或重複，已略過。' : '。') +
+    '請逐題核對題意、正解與解析。');
+}
+
+
+async function openAssignmentCopy(sourceClassId, sourceAssignmentId) {
+  if (!state.classroom || state.classroom.id !== sourceClassId) await loadClass(sourceClassId);
+  if (state.classroom.role !== 'teacher') throw Error('只能重用自己有管理權限的班級作業。');
+  const [source, list] = await Promise.all([
+    request({ action: 'getAssignment', classId: sourceClassId, assignmentId: sourceAssignmentId }),
+    request({ action: 'teacherDashboard' })
+  ]);
+  const rooms = list.dashboard.classes;
+  if (!rooms.some(room => room.id === state.classroom.id)) {
+    rooms.push({ ...state.classroom, assignments: undefined });
+  }
+  clearTimeout(editorTimer);
+  editorSession++;
+  state.copySource = { ...source.assignment, classId: sourceClassId };
+  state.copyTargets = rooms;
+  state.copyCursor = list.dashboard.nextCursor;
+  state.copyResults = null;
+  state.view = 'copy';
+  render();
+}
+async function copyAssignmentToClasses() {
+  const form = $('cc-copy');
+  if (!form?.reportValidity()) return;
+  const ids = [...form.querySelectorAll('input[name="targetClass"]:checked')].map(input => input.value);
+  if (!ids.length) throw Error('請至少選擇一個要建立草稿的教室。');
+  const title = String(new FormData(form).get('title') || '').trim();
+  const copy = state.copySource;
+  const success = [], failures = [];
+  for (const classId of ids) {
+    const room = state.copyTargets.find(r => r.id === classId);
+    if (!room || room.status !== 'active') {
+      failures.push({ classId, className: room?.name || classId, message: '教室已封存或不在可管理名單中' });
+      continue;
+    }
+    try {
+      const result = await request({ action: 'copyAssignment',
+        classId, sourceClassId: copy.classId, sourceAssignmentId: copy.id, ...(title ? { title } : {}) });
+      success.push({ classId, className: room.name, id: result.assignment.id });
+    } catch (error) {
+      failures.push({ classId, className: room.name, message: error.message });
+    }
+  }
+  state.copyResults = { success, failures };
+  render();
+  message('成功建立 ' + success.length + ' 份草稿，失敗 ' + failures.length + ' 份。每份草稿都需要預覽確認後才會發布。', !!failures.length);
+}
+
 function validForm(name) {
   const form = $('section-classes').querySelector(`[data-form="${name}"]`);
   return form?.reportValidity() ? Object.fromEntries(new FormData(form)) : null;
 }
 async function act(target) {
   const action = target.dataset.action, classId = state.classroom?.id;
+  if (action === 'workspace-copy') return openAssignmentCopy(target.dataset.classId, target.dataset.id);
   if (action === 'workspace-tab') {
     state.workspaceTab = target.dataset.tab;
     render();
@@ -325,16 +512,14 @@ async function act(target) {
     if (action === 'workspace-grades') { state.classTab = 'grades'; render(); return; }
     if (action === 'workspace-new') {
       if (state.classroom.status !== 'active') throw Error('此班級已封存，請先恢復');
-      state.editor = { title: '', subject: '數學', questions: [blankQuestion()] };
-      state.view = 'editor'; render(); return;
+      beginEditor({ title: '', subject: '數學', topic: '', level: '國中一年級', questions: [blankQuestion()] }); return;
     }
     if (action === 'workspace-report') return loadReport(target.dataset.id);
     if (action === 'workspace-preview') return loadAssignment(target.dataset.id, 'preview');
     if (action === 'workspace-edit') {
       const data = await request({ action: 'getAssignment', classId: state.classroom.id, assignmentId: target.dataset.id });
       if (data.assignment.status !== 'draft') throw Error('目前只能編輯草稿');
-      state.editor = { ...data.assignment, dueLocal: data.assignment.dueAtMs ? localDate(data.assignment.dueAtMs) : '' };
-      state.view = 'editor'; render(); return;
+      beginEditor({ ...data.assignment, dueLocal: data.assignment.dueAtMs ? localDate(data.assignment.dueAtMs) : '' }); return;
     }
   }
   if (action === 'workspace-progress') {
@@ -364,6 +549,23 @@ async function act(target) {
     if (!window.confirm('確定變更班級教師？原教師將失去此班級的管理權限。')) return;
     await request({ action: 'assignTeacher', classId, expectedOwnerUid: state.classroom.ownerUid, ...values }); return loadClass();
   }
+  if (action === 'copy-assignment') return openAssignmentCopy(classId, target.dataset.id);
+  if (action === 'copy-more-classes') {
+    if (!state.copyCursor) return;
+    const data = await request({ action: 'teacherDashboard', cursor: state.copyCursor });
+    const merged = new Map(state.copyTargets.map(room => [room.id, room]));
+    for (const room of data.dashboard.classes) merged.set(room.id, room);
+    state.copyTargets = [...merged.values()];
+    state.copyCursor = data.dashboard.nextCursor;
+    render(); return;
+  }
+  if (action === 'copy-confirm') return copyAssignmentToClasses();
+  if (action === 'copy-open') {
+    await loadClass(target.dataset.classId);
+    const data = await request({ action: 'getAssignment', classId: state.classroom.id, assignmentId: target.dataset.id });
+    beginEditor({ ...data.assignment, dueLocal: data.assignment.dueAtMs ? localDate(data.assignment.dueAtMs) : '' });
+    return;
+  }
   if (action === 'class') return loadClass(target.dataset.id);
   if (action === 'class-tab') {
     if (!tabsForClass(state.classroom?.role === 'teacher').some(([id]) => id === target.dataset.tab)) return;
@@ -381,7 +583,13 @@ async function act(target) {
     const data = await request({ action: action === 'create' ? 'createClass' : 'joinClass', ...values }); return loadClass(data.classroom.id);
   }
   if (action === 'back') {
-    if (state.view === 'editor' && !window.confirm('離開編輯畫面？尚未儲存的修改將不會保留。')) return;
+    if (state.view === 'editor') {
+      captureEditor();
+      if (editorRevision !== editorSavedRevision &&
+          !window.confirm('尚有未儲存變更，確定離開編輯畫面？')) return;
+      editorSession++;
+      clearTimeout(editorTimer);
+    }
     return loadClass();
   }
   if (action === 'copy-code') {
@@ -411,10 +619,10 @@ async function act(target) {
     if (!window.confirm(action === 'leave' ? '確定退出班級？' : `確定將 ${target.dataset.name} 移出班級？已發布作業的成績仍會保留。`)) return;
     await request({ action: action === 'leave' ? 'leaveClass' : 'removeStudent', classId, studentUid: target.dataset.id }); return action === 'leave' ? loadHome() : loadClass();
   }
-  if (action === 'new-assignment') { state.editor = { title: '', subject: '數學', questions: [blankQuestion()] }; state.view = 'editor'; return render(); }
+  if (action === 'new-assignment') return beginEditor({ title: '', subject: '數學', topic: '', level: '國中一年級', questions: [blankQuestion()] });
   if (action === 'edit') {
     const data = await request({ action: 'getAssignment', classId, assignmentId: target.dataset.id });
-    state.editor = { ...data.assignment, dueLocal: data.assignment.dueAtMs ? localDate(data.assignment.dueAtMs) : '' }; state.view = 'editor'; return render();
+    return beginEditor({ ...data.assignment, dueLocal: data.assignment.dueAtMs ? localDate(data.assignment.dueAtMs) : '' });
   }
   if (action === 'delete-draft') {
     if (!window.confirm('確定刪除這份尚未發布的草稿？')) return;
@@ -422,14 +630,42 @@ async function act(target) {
   }
   if (action === 'preview' || action === 'work') return loadAssignment(target.dataset.id, action);
   if (action === 'report') return loadReport(target.dataset.id);
-  if (action === 'add-question' || action === 'remove-question') {
+  if (action === 'editor-select') {
     captureEditor();
-    if (action === 'add-question' && state.editor.questions.length < 30) state.editor.questions.push(blankQuestion());
-    if (action === 'remove-question' && state.editor.questions.length > 1) state.editor.questions.splice(Number(target.dataset.index), 1);
-    return render();
+    const next = Number(target.dataset.index);
+    if (!Number.isInteger(next) || next < 0 || next >= state.editor.questions.length) return;
+    state.editorIndex = next;
+    render();
+    $('section-classes')?.querySelector('.cc-editor-question')?.scrollIntoView({ block: 'nearest' });
+    return;
   }
-  if (action === 'save-draft' || action === 'save-preview') return saveDraft(action === 'save-preview');
-  if (action === 'generate-question') return generateQuestion();
+  if (['add-question', 'remove-question', 'editor-up', 'editor-down', 'editor-duplicate'].includes(action)) {
+    captureEditor();
+    const index = state.editorIndex || 0;
+    const rows = state.editor.questions;
+    if (action === 'add-question' && rows.length < MAX_CLASSROOM_QUESTIONS) {
+      rows.splice(index + 1, 0, blankQuestion());
+      state.editorIndex = index + 1;
+    } else if (action === 'remove-question' && rows.length > 1) {
+      rows.splice(index, 1);
+      state.editorIndex = Math.min(index, rows.length - 1);
+    } else if (action === 'editor-duplicate' && rows.length < MAX_CLASSROOM_QUESTIONS) {
+      const q = rows[index];
+      rows.splice(index + 1, 0, {
+        ...q, options: [...q.options], knowledge_points: (q.knowledge_points || []).map(p => ({ ...p }))
+      });
+      state.editorIndex = index + 1;
+    } else if (action === 'editor-up' && index > 0) {
+      [rows[index], rows[index - 1]] = [rows[index - 1], rows[index]];
+      state.editorIndex = index - 1;
+    } else if (action === 'editor-down' && index < rows.length - 1) {
+      [rows[index], rows[index + 1]] = [rows[index + 1], rows[index]];
+      state.editorIndex = index + 1;
+    } else return;
+    touchEditor(); render(); return;
+  }
+  if (action === 'save-draft' || action === 'save-preview') return persistEditorDraft(action === 'save-preview');
+  if (action === 'generate-question') return generateQuestions(target.dataset.count || 1);
   if (action === 'publish') {
     if (!$('cc-reviewed').checked) throw Error('請先核對題組並勾選確認');
     await request({ action: 'publishAssignment', classId, assignmentId: state.assignment.id, version: state.assignment.version, reviewed: true }); return loadClass();
@@ -476,6 +712,11 @@ function mount() {
   panel.dataset.classroomMounted = 'true';
   panel.addEventListener('submit', event => { event.preventDefault(); });
   panel.addEventListener('input', event => {
+    if (event.target.closest('#cc-editor')) {
+      captureEditor();
+      touchEditor();
+      return;
+    }
     const workspaceInput = event.target.closest('input[data-workspace-search-input]');
     if (workspaceInput) {
       state.workspaceSearch = workspaceInput.value;
@@ -488,6 +729,12 @@ function mount() {
     if (type === 'assignment') state.assignmentSearch = input.value;
     if (type === 'student') state.studentSearch = input.value;
     filterClassroomList(panel, type);
+  });
+  panel.addEventListener('change', event => {
+    if (event.target.closest('#cc-editor') && event.target.matches('select,input[type="datetime-local"]')) {
+      captureEditor();
+      touchEditor();
+    }
   });
   panel.addEventListener('keydown', event => {
     const workspace = event.target.matches('.cc-workspace-tabs [role="tab"]');

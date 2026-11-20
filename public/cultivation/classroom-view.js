@@ -28,6 +28,7 @@ export function buildClassroomView(state, helpers) {
     } else {
       actions = button('work', a.submission?.status === 'submitted' ? '結果與訂正' : '開啟作業', attr(a.id));
     }
+    if (teacher && !compact) actions += button('copy-assignment', '複製為草稿', attr(a.id));
     const filter = teacher ? a.status : a.submission?.status === 'submitted' ? 'submitted' : 'pending';
     const extra = compact ? '' : 'data-cc-item="assignment" data-cc-filter="' + filter +
       '" data-cc-search="' + e(a.title + ' ' + a.subject) + '"';

@@ -331,6 +331,37 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
     return { overview: { className: room.name, studentCount: members.length, assignmentCount: assignments.length,
       assignments: summaries, students, scope: '最近六份已發布或已結束作業；僅統計目前在班學生' } };
   }
+  if (body.action === 'copyAssignment') {
+    const sourceClassId = id(body.sourceClassId), sourceAssignmentId = id(body.sourceAssignmentId);
+    const newId = id(makeId()), newRef = ref(db, 'classroomAssignments', newId);
+    const sourceRoomRef = ref(db, 'classrooms', sourceClassId);
+    const sourceRef = ref(db, 'classroomAssignments', sourceAssignmentId);
+    return db.runTransaction(async tx => {
+      const [targetSnap, sourceRoomSnap, sourceSnap, destSnap, freshRoles] = await Promise.all([
+        tx.get(roomRef), tx.get(sourceRoomRef), tx.get(sourceRef), tx.get(newRef), authority(tx)
+      ]);
+      const target = targetSnap.data(), sourceRoom = sourceRoomSnap.data(), original = sourceSnap.data();
+      requireAccess(target, uid, true, freshRoles);
+      requireAccess(sourceRoom, uid, true, freshRoles);
+      if (!original || original.classId !== sourceClassId || !sourceRoom.assignmentIds.includes(sourceAssignmentId)) {
+        throw fail('找不到來源作業', 404);
+      }
+      if (target.status !== 'active') throw fail('目標班級已封存，請先恢復班級', 409);
+      if (target.assignmentIds.length >= LIMITS.assignments) throw fail('目標班級已達 100 份作業上限', 409);
+      if (destSnap.exists) throw fail('新作業代碼已被使用，請重試', 409);
+      const title = text(body.title || (original.title.length > 72 ? original.title.slice(0, 72) : original.title) + '（副本）', 80, '作業名稱');
+      const copy = {
+        id: newId, classId, teacherUid: uid, title, subject: original.subject,
+        questions: original.questions.map((q, i) => ({ ...q, id: 'q' + (i + 1),
+          options: [...q.options], knowledge_points: (q.knowledge_points || []).map(p => ({ ...p })) })),
+        dueAtMs: null, status: 'draft', version: 1, createdAtMs: clock, updatedAtMs: clock,
+        copiedFromId: sourceAssignmentId
+      };
+      tx.create(newRef, copy);
+      tx.update(roomRef, { assignmentIds: [...target.assignmentIds, newId] });
+      return { assignment: { ...assignmentSummary(copy), questions: copy.questions } };
+    });
+  }
   const assignmentId = body.action === 'saveAssignment' && !body.assignmentId ? id(makeId()) : id(body.assignmentId);
   const assignmentRef = ref(db, 'classroomAssignments', assignmentId);
   if (body.action === 'saveAssignment') {
@@ -467,7 +498,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
 }
 
 function registerClassroomApi(app, { resolveA = () => playerRepository.resolve(), logger = console } = {}) {
-  const allowed = new Set(['applyTeacher', 'teacherAccounts', 'reviewTeacher', 'assignTeacher', 'list', 'teacherDashboard', 'teacherAssignmentProgress', 'createClass', 'joinClass', 'classDetail', 'postNotice', 'deleteNotice', 'overview', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'saveAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'updateDeadline', 'reopenAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
+  const allowed = new Set(['applyTeacher', 'teacherAccounts', 'reviewTeacher', 'assignTeacher', 'list', 'teacherDashboard', 'teacherAssignmentProgress', 'createClass', 'joinClass', 'classDetail', 'postNotice', 'deleteNotice', 'overview', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'saveAssignment', 'copyAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'updateDeadline', 'reopenAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
   app.post('/api/classrooms', async (req, res) => {
     res.set('Cache-Control', 'no-store');
     try {

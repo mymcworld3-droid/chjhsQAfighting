@@ -55,6 +55,7 @@ export function buildTeacherWorkspace(state, helpers) {
     const actions = task.status === 'draft'
       ? btn('workspace-edit', '編輯草稿', attrs) + btn('workspace-preview', '預覽發布', attrs)
       : btn('workspace-report', '成績報表', attrs) + btn('workspace-progress', '查看繳交', attrs);
+    const copyAction = btn('workspace-copy', '複製題組', attrs);
     const details = progress ? '<div class="cc-workspace-progress"><strong>已繳交 ' +
       progress.submitted + ' / ' + progress.studentCount + '</strong><p class="cc-muted">' +
       '作答中 ' + progress.inProgress + ' · 未開始 ' + progress.notStarted + '</p>' +
@@ -70,7 +71,7 @@ export function buildTeacherWorkspace(state, helpers) {
       '<div class="cc-workspace-task-head"><div><span class="cc-muted">' + esc(task.className) +
       '</span><h4>' + esc(task.title) + '</h4></div><span class="cc-tag">' + esc(actionTag(task)) + '</span></div>' +
       '<p class="cc-muted">' + esc(task.subject) + ' · ' + task.questionCount + ' 題 · ' + esc(info) + '</p>' +
-      '<div class="cc-actions">' + actions + '</div>' + details + '</article>';
+      '<div class="cc-actions">' + actions + copyAction + '</div>' + details + '</article>';
   }
   const hero = '<header class="cc-workspace-hero"><div><span class="cc-eyebrow">青雲問道 · 教學管理</span>' +
     '<h2>教師工作台</h2><p>從這裡管理所有教室、安排作業、追蹤學生學習。</p></div>' +

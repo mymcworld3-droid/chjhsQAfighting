@@ -385,3 +385,71 @@ test('administrator teacher dashboard is paginated without counting unchecked cl
   assert.equal(second.nextCursor,null);
   assert.equal(new Set([...first.classes,...second.classes].map(r=>r.id)).size,25);
 });
+
+
+test('copying an assignment creates an independent, unpublished draft without deadlines, submissions or mutable links', async () => {
+  const f = await fixture();
+  await f.join();
+  const original = await f.publish();
+  await submit(f, original);
+  const destination = (await f.call('teacher', 'createClass',
+    { name: '八年二班', teacherName: '陳老師' })).classroom;
+  const copied = (await f.call('teacher', 'copyAssignment', {
+    classId: destination.id, sourceClassId: f.classId, sourceAssignmentId: original.id
+  })).assignment;
+  assert.notEqual(copied.id, original.id);
+  assert.equal(copied.status, 'draft');
+  assert.equal(copied.title, '加法練習（副本）');
+  assert.equal(copied.dueAtMs, null);
+  assert.equal(copied.questions.length, 2);
+  assert.deepEqual(copied.questions.map(q => q.answerIndex), [1, 3]);
+  assert.equal(copied.version, 1);
+  assert.equal((await f.call('teacher', 'classDetail', { classId:destination.id })).assignments.length, 1);
+  assert.equal((await f.act('teacher', 'report', { assignmentId: original.id })).report.totals.average, 50);
+  await f.call('teacher', 'publishAssignment', { classId:destination.id, assignmentId:copied.id,
+    version:copied.version, reviewed:true });
+  assert.equal((await f.call('teacher', 'getAssignment', { classId:destination.id,
+    assignmentId:copied.id })).submission, null);
+  assert.equal((await f.act('teacher', 'getAssignment', { assignmentId:original.id })).assignment.status, 'published');
+  await assert.rejects(f.call('student', 'copyAssignment', { classId:destination.id,
+    sourceClassId:f.classId, sourceAssignmentId:original.id }), err => err.status === 403);
+  await assert.rejects(f.call('outsider', 'copyAssignment', { classId:destination.id,
+    sourceClassId:f.classId, sourceAssignmentId:original.id }), err => err.status === 403);
+});
+test('teacher assignment copies require access to both the source class and destination class', async () => {
+  const f = await fixture();
+  const draft = await f.draft();
+  const destination = (await f.call('teacher', 'createClass',
+    { name:'另一間教室',teacherName:'管理員' })).classroom;
+  await f.db.doc('users/mentor').set({ displayName:'林老師',isAdmin:false });
+  await f.db.doc('classroomTeacherAccounts/mentor').set({
+    uid:'mentor',name:'林老師',school:'中學',status:'approved',version:1
+  });
+  await f.act('teacher', 'assignTeacher', { teacherUid:'mentor',expectedOwnerUid:'teacher' });
+  await assert.rejects(f.call('mentor','copyAssignment',{
+    classId:destination.id,sourceClassId:f.classId,sourceAssignmentId:draft.id
+  }),err=>err.status===403);
+  const copied = (await f.call('mentor','copyAssignment',{
+    classId:f.classId,sourceClassId:f.classId,sourceAssignmentId:draft.id,
+    title:'本班複習'
+  })).assignment;
+  assert.equal(copied.title,'本班複習');
+  assert.equal(copied.status,'draft');
+  await f.db.doc('classroomTeacherAccounts/mentor').update({status:'revoked'});
+  await assert.rejects(f.call('mentor','copyAssignment',{
+    classId:f.classId,sourceClassId:f.classId,sourceAssignmentId:draft.id
+  }),err=>err.status===403);
+  const missing = await f.call('teacher','copyAssignment',{
+    classId:destination.id,sourceClassId:destination.id,sourceAssignmentId:draft.id
+  }).catch(error => error);
+  assert.equal(missing.status,404);
+});
+test('copying is blocked for archived destinations and leaves published source unchanged', async () => {
+  const f=await fixture();
+  const original=await f.publish();
+  await f.act('teacher','archiveClass',{archived:true});
+  await assert.rejects(f.act('teacher','copyAssignment',{
+    sourceClassId:f.classId,sourceAssignmentId:original.id
+  }),err=>err.status===409);
+  assert.equal((await f.act('teacher','getAssignment',{assignmentId:original.id})).assignment.status,'published');
+});

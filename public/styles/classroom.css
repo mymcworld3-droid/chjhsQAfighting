@@ -191,3 +191,72 @@
   #section-classes .cc-workspace-task>.cc-actions button,#section-classes .cc-workspace-room>.cc-actions button{flex:1 1 auto}
   #section-classes .cc-workspace-tools .cc-search{flex-basis:100%;max-width:none}
 }
+
+
+/* Phase 3: compact single-question editor and reusable assignment drafts. */
+#section-classes .cc-editor-shell{min-width:0}
+#section-classes .cc-editor-shell>.cc-toolbar{margin-bottom:13px}
+#section-classes .cc-editor-shell>.cc-toolbar p{margin:2px 0 0}
+#section-classes .cc-editor-settings{display:grid;gap:13px}
+#section-classes .cc-editor-settings h4{font-size:17px}
+#section-classes .cc-editor-ai{padding:8px 12px;border:1px solid #65725675;border-radius:10px;background:#1d2720}
+#section-classes .cc-editor-ai>summary{font-weight:700}
+#section-classes .cc-editor-ai>div{padding:9px 0}
+#section-classes .cc-editor-ai .cc-actions button{flex:0 1 auto}
+#section-classes .cc-editor-layout{display:grid;grid-template-columns:minmax(210px,245px) minmax(0,1fr);align-items:start;gap:14px}
+#section-classes .cc-editor-layout>.cc-card{margin-bottom:0}
+#section-classes .cc-editor-side{position:sticky;top:64px;min-width:0;max-height:min(65vh,690px);overflow:auto}
+#section-classes .cc-editor-side-head{display:flex;justify-content:space-between;gap:9px;align-items:center;margin-bottom:10px}
+#section-classes .cc-editor-side-head h4{font-size:16px}
+#section-classes .cc-editor-question-nav{display:grid;gap:6px}
+#section-classes .cc-editor-question-nav button{display:flex;align-items:center;text-align:left;gap:9px;
+  min-width:0;padding:9px 10px;min-height:41px;background:#1c281f;border-color:#566250;font-size:12px}
+#section-classes .cc-editor-question-nav button[aria-current=true]{background:#3c563e;border-color:#c5ab70;box-shadow:inset 3px 0 #e5c78a}
+#section-classes .cc-editor-number{font-variant-numeric:tabular-nums;flex:0 0 24px;color:#d8c18d;font-weight:700}
+#section-classes .cc-editor-nav-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#section-classes .cc-editor-nav-status{flex:0 0 auto;color:#9ab68d;font-size:16px}
+#section-classes .cc-editor-add{margin-top:11px}
+#section-classes .cc-editor-add button{width:100%}
+#section-classes .cc-editor-question{min-width:0;display:grid;gap:14px}
+#section-classes .cc-editor-question-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+#section-classes .cc-editor-question-heading h4{font-size:18px}
+#section-classes .cc-editor-question-heading p{margin:3px 0 0}
+#section-classes .cc-editor-question-heading .cc-actions{justify-content:flex-end}
+#section-classes .cc-editor-question textarea[name^="question-"]{min-height:125px}
+#section-classes .cc-editor-question textarea[name^="explanation-"]{min-height:105px}
+#section-classes .cc-editor-next{display:flex;gap:10px;justify-content:space-between;align-items:center;border-top:1px solid #65725658;padding-top:12px}
+#section-classes .cc-editor-footer{position:sticky;bottom:-2px;z-index:5;display:flex;align-items:center;
+  justify-content:space-between;gap:13px;flex-wrap:wrap;padding:12px 15px;
+  border:1px solid #9a825a82;border-radius:11px;background:#202c22f5;backdrop-filter:blur(10px);
+  box-shadow:0 -7px 18px #0005}
+#section-classes .cc-editor-save-note{display:flex;flex-direction:column;gap:3px;min-width:0}
+#section-classes .cc-editor-save-note strong{color:#f1d89b;font-size:13px;overflow-wrap:anywhere}
+#section-classes .cc-editor-save-note small{font-size:11px;color:#c8beab}
+#section-classes .cc-copy-shell{min-width:0}
+#section-classes .cc-copy-target-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px}
+#section-classes .cc-copy-target{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #6877607d;border-radius:9px;
+  background:#1b2820;cursor:pointer}
+#section-classes .cc-copy-target:has(input:checked){border-color:#d7b984;background:#374836}
+#section-classes .cc-copy-target:has(input:disabled){opacity:.5;cursor:default}
+#section-classes .cc-copy-target input{flex:0 0 18px}
+#section-classes .cc-copy-target span{min-width:0;display:flex;flex-direction:column;gap:2px;overflow-wrap:anywhere}
+#section-classes .cc-copy-target strong{font-size:13px;color:#f0e0c6}
+#section-classes .cc-copy-target small{font-size:11px;color:#bbb7a7}
+#section-classes .cc-copy-result{margin-top:15px}
+#section-classes .cc-copy-result-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-bottom:1px solid #71634b4f;padding:7px 0}
+@media(max-width:780px){
+  #section-classes .cc-editor-layout{grid-template-columns:1fr}
+  #section-classes .cc-editor-side{position:static;overflow:visible;max-height:none}
+  #section-classes .cc-editor-question-nav{display:flex;gap:6px;overflow-x:auto;max-width:100%;
+    overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+  #section-classes .cc-editor-question-nav button{flex:0 0 128px;max-width:155px}
+  #section-classes .cc-editor-add button{width:auto}
+}
+@media(max-width:540px){
+  #section-classes .cc-editor-footer{position:static;padding:12px}
+  #section-classes .cc-editor-footer>.cc-actions{width:100%}
+  #section-classes .cc-editor-footer>.cc-actions button{flex:1}
+  #section-classes .cc-editor-question-heading .cc-actions button{flex:1 1 auto}
+  #section-classes .cc-editor-question-nav button{flex-basis:112px}
+  #section-classes .cc-editor-ai .cc-actions button{flex:1 1 auto}
+}
