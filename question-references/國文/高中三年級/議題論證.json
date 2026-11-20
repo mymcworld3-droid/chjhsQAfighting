@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-chi3-public-argument-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "語文辨識與論證能力分開評估，選項不依賴單純閱讀速度",
+      "question": {
+        "q": "某校宣稱「開放晚間自習室使全校讀書時間增加」，但證據只有使用自習室的學生自評。若要改進論證，最應補充哪類資料？",
+        "correct": "比較不同學生群體的讀書時間及參與前後變化，並考慮選擇參與的差異",
+        "wrong": [
+          "把自評結果當成全校完整的時間紀錄，不需再比對",
+          "只訪問最常使用自習室的學生，以確保評價更正面",
+          "把學生認為有幫助直接等同於已證明全校成績提升"
+        ],
+        "exp": "自評與自願參與樣本均可能偏誤；應檢查資料涵蓋程度、時間變化與其他因素，避免把關聯直接推為因果。",
+        "subject": "國文",
+        "sub_topic": "議題論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-議題論證",
+        "template_id": "ref-20261120-b12-chi3-public-argument-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chi3-public-argument-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "語文辨識與論證能力分開評估，選項不依賴單純閱讀速度",
+      "question": {
+        "q": "某篇評論主張市府應增加人行道樹蔭，反對者指出樹木根系可能妨礙行人。哪種回應最具論證力？",
+        "correct": "承認根系與無障礙動線的顧慮，提出樹穴規格與維護方案，並評估實際效果",
+        "wrong": [
+          "只重複「樹蔭很重要」，完全不回應根系問題",
+          "因為有安全疑慮，就斷言任何植樹都不可能改善環境",
+          "認為提出反對意見的人都不喜歡自然，因此其證據無須檢驗"
+        ],
+        "exp": "有效的反駁並非忽略對方問題，而是辨識可驗證的限制、提出對策與證據，兼顧政策目的。",
+        "subject": "國文",
+        "sub_topic": "議題論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-議題論證",
+        "template_id": "ref-20261120-b12-chi3-public-argument-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chi3-public-argument-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "語文辨識與論證能力分開評估，選項不依賴單純閱讀速度",
+      "question": {
+        "q": "某市試辦共享單車，使用人次上升。文章因此主張「共享單車已使汽車排放減半」。最能直接檢驗這項主張的資料為何？",
+        "correct": "使用者原本的交通方式、汽車實際行駛里程及相關排放估計",
+        "wrong": [
+          "單車的顏色與停車柱外觀是否吸引人",
+          "只記錄單車被租借的總次數，不問原本替代哪種交通方式",
+          "只檢視單車公司廣告中宣稱的環保口號"
+        ],
+        "exp": "租借數無法判斷是否取代汽車，也不足以推算排放減量；需要原交通方式與車公里等資料。",
+        "subject": "國文",
+        "sub_topic": "議題論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-議題論證",
+        "template_id": "ref-20261120-b12-chi3-public-argument-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
