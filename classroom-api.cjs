@@ -4,6 +4,7 @@ const { randomUUID, randomBytes } = require('node:crypto');
 const { playerRepository } = require('./server-repositories.cjs');
 const { verifyRequest } = require('./invitation-api.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
+const { summarizeClassAssignment, summarizeStudentAssignment } = require('./classroom-learning-analysis.cjs');
 const LIMITS = Object.freeze({ classes: 20, students: 100, assignments: 100, questions: 30 });
 const fail = (message, status = 400) => Object.assign(Error(message), { status });
 const ref = (db, collection, id) => db.collection(collection).doc(id);
@@ -377,6 +378,55 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
       tx.set(roomRef, room); return { classroom: summary(room, uid, roles) };
     });
   }
+  if (body.action === 'learningAnalysisPage' || body.action === 'studentLearningPage') {
+    const snap = await roomRef.get(), room = snap.data();
+    requireAccess(room, uid, true, roles);
+    const studentMode = body.action === 'studentLearningPage';
+    const studentUid = studentMode ? id(body.studentUid) : null;
+    if (studentMode && !member(room, studentUid)) throw fail('學生不在目前班級', 404);
+    // Cursor is the last scanned assignment ID, not an offset. Appending drafts or
+    // published assignments does not shift a previously issued cursor.
+    const ids = room.assignmentIds || [];
+    const last = body.cursor == null || body.cursor === '' ? ids.length :
+      ids.indexOf(id(body.cursor));
+    if (last < 0) throw fail('作業名單已更新，請重新載入學習分析', 409);
+    const pageLimit = studentMode ? 8 : 4;
+    const keys = ids.slice(Math.max(0, last - pageLimit), last).reverse();
+    const assignmentSnaps = await Promise.all(keys.map(key =>
+      ref(db, 'classroomAssignments', key).get()));
+    const assignments = assignmentSnaps.filter(s => s.exists).map(s => s.data())
+      .filter(a => a.classId === classId && ['published', 'closed'].includes(a.status));
+    // Class-wide analysis reads at most 4 x 100 submissions per explicit click;
+    // an individual student view reads at most 8 submissions. No automatic full-history scan.
+    const members = room.members;
+    const records = await Promise.all(assignments.map(a =>
+      studentMode ? ref(db, 'classroomSubmissions', a.id + '_' + studentUid).get() :
+        Promise.all(members.map(m => ref(db, 'classroomSubmissions', a.id + '_' + m.uid).get()))
+    ));
+    const [latestSnap, freshRoles] = await Promise.all([roomRef.get(), authority()]);
+    const latest = latestSnap.data();
+    requireAccess(latest, uid, true, freshRoles);
+    if ((room.rosterVersion || 0) !== (latest.rosterVersion || 0)) {
+      throw fail('學生名單已有變更，請重新載入學習分析', 409);
+    }
+    if (studentMode && !member(latest, studentUid)) throw fail('學生已不在班級', 404);
+    const rows = assignments.map((assignment, i) => studentMode
+      ? summarizeStudentAssignment(assignment, records[i].data()) :
+        summarizeClassAssignment(assignment, members, records[i].map(s => s.data())));
+    const nextCursor = keys.length && ids.indexOf(keys[keys.length - 1]) > 0
+      ? keys[keys.length - 1] : null;
+    return {
+      analysis: {
+        classId, className: latest.name, studentCount: members.length,
+        ...(studentMode ? { student: { uid: studentUid, name: member(latest, studentUid).name,
+          seat: member(latest, studentUid).seat } } : {}),
+        rows, nextCursor, scanned: keys.length, totalAssigned: ids.length,
+        scope: studentMode
+          ? '每次最多讀取八份作業的單一學生作答；只統計首次繳交與另外記錄的訂正'
+          : '每次最多讀取四份作業、各班目前在班學生；僅計首次繳交的答案與分數，未繳交不算零分'
+      }
+    };
+  }
   // The class-wide overview has no assignmentId; authorize it before parsing assignment IDs.
   if (body.action === 'overview') {
     const snap = await roomRef.get(), room = snap.data();
@@ -571,7 +621,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
 }
 
 function registerClassroomApi(app, { resolveA = () => playerRepository.resolve(), logger = console } = {}) {
-  const allowed = new Set(['applyTeacher', 'teacherAccounts', 'reviewTeacher', 'assignTeacher', 'list', 'teacherDashboard', 'teacherAssignmentProgress', 'createClass', 'joinClass', 'classDetail', 'postNotice', 'deleteNotice', 'overview', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'updateStudents', 'batchRemoveStudents', 'saveAssignment', 'copyAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'updateDeadline', 'reopenAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
+  const allowed = new Set(['applyTeacher', 'teacherAccounts', 'reviewTeacher', 'assignTeacher', 'list', 'teacherDashboard', 'teacherAssignmentProgress', 'createClass', 'joinClass', 'classDetail', 'postNotice', 'deleteNotice', 'overview', 'learningAnalysisPage', 'studentLearningPage', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'updateStudents', 'batchRemoveStudents', 'saveAssignment', 'copyAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'updateDeadline', 'reopenAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
   app.post('/api/classrooms', async (req, res) => {
     res.set('Cache-Control', 'no-store');
     try {

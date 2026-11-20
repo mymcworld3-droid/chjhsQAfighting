@@ -549,3 +549,108 @@ test('batch removal updates indexes atomically and preserves historic published-
   await assert.rejects(f.act('teacher','batchRemoveStudents',{rosterVersion:after.rosterVersion,
     studentUids:['student']}),err=>err.status===404);
 });
+
+
+test('long-term learning analysis pages four assignments at a time, survives later draft creation and never exposes answers', async () => {
+  const f = await fixture();
+  await f.join();
+  await f.join('other', '陳同學');
+  const ids = [];
+  for (let i = 0; i < 10; i++) {
+    const draft = (await f.act('teacher', 'saveAssignment', {
+      title: '長期評量 ' + i, subject: '數學', questions: questions()
+    })).assignment;
+    await f.act('teacher', 'publishAssignment', {
+      assignmentId: draft.id, version: draft.version, reviewed: true
+    });
+    ids.push(draft.id);
+    if (i % 2 === 0) await submit(f, draft, i < 4 ? [0,0] : [1,0]);
+  }
+  const first = (await f.act('teacher','learningAnalysisPage')).analysis;
+  assert.equal(first.rows.length, 4);
+  assert.equal(first.scanned, 4);
+  assert.equal(first.totalAssigned, 10);
+  assert.equal(first.rows[0].title,'長期評量 9');
+  assert.equal(first.rows[1].title,'長期評量 8');
+  assert.equal(first.studentCount,2);
+  assert.equal(first.rows[0].average,null);
+  assert.equal(first.rows[0].submitted,0);
+  assert.equal(first.rows[0].notStarted,2);
+  assert.equal(first.rows[1].average,50);
+  assert.equal(first.rows[1].submitted,1);
+  assert.equal(first.rows[1].knowledgePoints[0].correct,1);
+  assert.equal(first.rows[1].knowledgePoints[0].total,1);
+  assert.ok(first.nextCursor);
+  assert.doesNotMatch(JSON.stringify(first), /"answers"|"answerIndex"|"correctOption"|"explanation"|"options"/);
+  // Appending a new draft must not move the cursor or re-read the newest assignment.
+  await f.draft();
+  const second = (await f.act('teacher','learningAnalysisPage',{cursor:first.nextCursor})).analysis;
+  assert.deepEqual(second.rows.map(x=>x.title),['長期評量 5','長期評量 4','長期評量 3','長期評量 2']);
+  const last = (await f.act('teacher','learningAnalysisPage',{cursor:second.nextCursor})).analysis;
+  assert.deepEqual(last.rows.map(x=>x.title),['長期評量 1','長期評量 0']);
+  assert.equal(last.nextCursor,null);
+  assert.equal(first.rows.length+second.rows.length+last.rows.length,10);
+  await assert.rejects(f.act('teacher','learningAnalysisPage',{cursor:'unknown'}),e=>e.status===409);
+});
+test('individual student learning history is paginated, tracks corrections separately and isolates classmates', async () => {
+  const f = await fixture();
+  await f.join();
+  await f.join('other','小陳');
+  const a = await f.publish();
+  await submit(f,a,[0,0]);
+  await f.act('student','correct',{assignmentId:a.id,questionId:'q1',selectedIndex:1});
+  const summary = (await f.act('teacher','studentLearningPage',{studentUid:'student'})).analysis;
+  assert.equal(summary.student.name,'王同學');
+  assert.equal(summary.rows.length,1);
+  assert.equal(summary.rows[0].score,0);
+  assert.equal(summary.rows[0].correctedCount,1);
+  assert.equal(summary.rows[0].wrongCount,2);
+  assert.equal(summary.rows[0].workStatus,'submitted');
+  assert.equal(summary.rows[0].knowledgePoints[0].correct,0);
+  assert.equal(summary.rows[0].knowledgePoints[0].total,1);
+  assert.doesNotMatch(JSON.stringify(summary), /"answers"|"answerIndex"|"explanation"|"options"|小陳/);
+  const absent = (await f.act('teacher','studentLearningPage',{studentUid:'other'})).analysis;
+  assert.equal(absent.rows[0].workStatus,'not-started');
+  assert.equal(absent.rows[0].score,null);
+  assert.equal(absent.rows[0].correctedCount,0);
+  for (const action of ['learningAnalysisPage','studentLearningPage']) {
+    await assert.rejects(f.act('student',action,{studentUid:'other'}),e=>e.status===403);
+    await assert.rejects(f.act('outsider',action,{studentUid:'student'}),e=>e.status===403);
+  }
+  await assert.rejects(f.act('teacher','studentLearningPage',{studentUid:'not-a-member'}),e=>e.status===404);
+});
+test('learning analysis uses only current roster and prevents revoked teachers and removed-student history', async () => {
+  const f = await fixture();
+  await f.join();
+  await f.join('other','另一位');
+  const a = await f.publish();
+  await submit(f,a,[1,0]);
+  const before = (await f.act('teacher','learningAnalysisPage')).analysis;
+  assert.equal(before.rows[0].studentCount,2);
+  assert.equal(before.rows[0].submitted,1);
+  await f.act('teacher','removeStudent',{studentUid:'student'});
+  const after = (await f.act('teacher','learningAnalysisPage')).analysis;
+  assert.equal(after.rows[0].studentCount,1);
+  assert.equal(after.rows[0].submitted,0);
+  assert.equal(after.rows[0].average,null);
+  await assert.rejects(f.act('teacher','studentLearningPage',{studentUid:'student'}),e=>e.status===404);
+  const original = (await f.act('teacher','report',{assignmentId:a.id})).report;
+  assert.equal(original.students.find(row=>row.uid==='student').score,50);
+  await approve(f,'mentor');
+  await f.act('teacher','assignTeacher',{teacherUid:'mentor',expectedOwnerUid:'teacher'});
+  const approved = (await f.call('mentor','learningAnalysisPage',{classId:f.classId})).analysis;
+  assert.equal(approved.rows.length,1);
+  const mentor = (await f.db.doc('classroomTeacherAccounts/mentor').get()).data();
+  await f.call('teacher','reviewTeacher',{teacherUid:'mentor',version:mentor.version,decision:'revoke'});
+  await assert.rejects(f.call('mentor','learningAnalysisPage',{classId:f.classId}),e=>e.status===403);
+});
+test('learning analysis is explicit on-demand and skips drafts without inventing grades', async () => {
+  const f = await fixture();
+  await f.draft();
+  const first = (await f.act('teacher','learningAnalysisPage')).analysis;
+  assert.equal(first.rows.length,0);
+  assert.equal(first.scanned,1);
+  assert.equal(first.nextCursor,null);
+  assert.equal(first.totalAssigned,1);
+  assert.match(first.scope,/首次/);
+});

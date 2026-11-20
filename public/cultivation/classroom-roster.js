@@ -103,6 +103,7 @@ export function renderRosterPanel(state, helpers) {
     return '<article class="cc-card cc-student cc-roster-item" data-cc-item="student" data-cc-search="' +
       e((m.seat || '') + ' ' + m.name) + '">' +
       select + info + '<div class="cc-actions cc-roster-student-actions">' +
+      button('roster-history','學習歷程',attr('student-uid',m.uid)) +
       button('roster-edit','編輯', attr('student-uid',m.uid) + (active ? '' : ' disabled')) +
       button('remove-student','移出',attr('id',m.uid)+attr('name',m.name) + (active ? ' class="cc-danger"' : ' disabled')) +
       '</div>' + (editing ? editor : '') + '</article>';

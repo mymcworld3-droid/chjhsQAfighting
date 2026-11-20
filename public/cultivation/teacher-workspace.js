@@ -37,7 +37,8 @@ export function buildTeacherWorkspace(state, helpers) {
         (draft ? ' · ' + draft + ' 份草稿' : '') + '</p>' +
       '<div class="cc-actions">' + btn('workspace-class', '進入教室', roomAttr(room)) +
       btn('workspace-new', '新增作業', roomAttr(room) + (room.status !== 'active' ? ' disabled' : ' class="cc-primary"')) +
-      btn('workspace-grades', '查看成績', roomAttr(room)) + '</div></article>';
+      btn('workspace-grades', '查看成績', roomAttr(room)) +
+      btn('workspace-analysis', '學習分析', roomAttr(room)) + '</div></article>';
   }
   function actionTag(task) {
     if (task.status === 'draft') return '草稿待審核';

@@ -95,8 +95,10 @@ export function buildClassroomView(state, helpers) {
     }
   } else if (tab === 'grades') {
     const graded = tasks.filter(a => a.status !== 'draft');
-    panel = bar('成績與學習分析', button('overview', '學習總覽', 'class="cc-primary"')) +
-      '<p class="cc-muted">查看各份作業的繳交、正確率與訂正狀況。學習總覽只在點擊後載入。</p>' +
+    panel = bar('成績與學習分析', '<div class="cc-actions">' +
+        button('learning-analysis', '長期學習分析', 'class="cc-primary"') +
+        button('overview', '近期六份總覽') + '</div>') +
+      '<p class="cc-muted">長期分析採按需分頁載入，可比較各次首次繳交及知識點表現；點擊作業可查看完整成績。</p>' +
       (graded.length ? '<div class="cc-task-grid">' + graded.map(a => assignment(a, true)).join('') + '</div>' :
         '<p class="cc-empty">尚無已發布作業。</p>');
   } else if (tab === 'notices') {

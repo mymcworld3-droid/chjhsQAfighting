@@ -186,9 +186,39 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
     await measure(page);
     await page.setViewportSize({ width: 1366, height: 850 });
     if (process.env.CLASSROOM_CAPTURE_DIR) await page.screenshot({ path: path.join(process.env.CLASSROOM_CAPTURE_DIR, 'teacher-landscape.png') });
-    // Reuse a published assignment into independent drafts in two classes.
+    // Phase 5: only explicitly opening analysis fetches summary data, not the class homepage.
     await click(page, 'back');
+    await click(page, 'class-tab', 3);
+    await click(page, 'learning-analysis');
+    assert.match(await page.locator('.cc-learning-view').innerText(), /長期成績與學習分析/);
+    assert.match(await page.locator('.cc-learning-view').innerText(), /已繳交 1／1/);
+    assert.match(await page.locator('.cc-learning-view').innerText(), /首次成績平均/);
+    assert.equal(await page.locator('.cc-learning-trend-row').count(), 1);
+    assert.equal(await page.locator('[data-action="learning-more"]').count(), 0);
+    assert.ok(await page.locator('[data-action="learning-remediate"]').count() >= 1);
+    await page.setViewportSize({ width: 320, height: 640 });
+    await measure(page);
+    await page.setViewportSize({ width: 1366, height: 850 });
+    await page.locator('.cc-learning-topic [data-action="learning-remediate"]').first().click();
+    await ready(page);
+    assert.match(await page.locator('#cc-editor [name="title"]').inputValue(), /補強練習/);
+    assert.ok((await page.locator('#cc-editor [name="topic"]').inputValue()).length > 0);
+    assert.equal(await page.locator('#cc-editor [name="question-0"]').inputValue(), '');
+    await click(page, 'back');
+    await click(page, 'class-tab', 3);
+    await click(page, 'learning-analysis');
+    await click(page, 'learning-students');
+    await page.locator('.cc-roster-item').filter({hasText:'王同學'}).locator('[data-action="roster-history"]').click();
+    await ready(page);
+    assert.match(await page.locator('.cc-learning-view').innerText(), /個人學習檔案 · 王同學/);
+    assert.match(await page.locator('.cc-learning-view').innerText(), /已訂正 1／1 道錯題/);
+    assert.match(await page.locator('.cc-learning-view').innerText(), /50 分/);
+    await page.setViewportSize({ width: 320, height: 640 });
+    await measure(page);
+    await page.setViewportSize({ width: 1366, height: 850 });
+    await click(page, 'learning-back');
     await click(page, 'class-tab', 1);
+    // Reuse a published assignment into independent drafts in two classes.
     await click(page, 'copy-assignment');
     assert.match(await page.locator('.cc-copy-shell').innerText(), /重用作業題組/);
     const choices = page.locator('#cc-copy input[name=targetClass]:not(:disabled)');

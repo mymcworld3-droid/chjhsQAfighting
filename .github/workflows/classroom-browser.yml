@@ -5,15 +5,19 @@ on:
     branches: [stamina-battle]
     paths:
       - classroom-api.cjs
+      - classroom-learning-analysis.cjs
       - public/cultivation/classroom.js
       - public/cultivation/classroom-view.js
       - public/cultivation/classroom-roster.js
+      - public/cultivation/classroom-analysis.js
       - public/cultivation/classroom-editor.js
       - public/cultivation/teacher-workspace.js
       - public/styles/classroom.css
       - scripts/check-classroom-ui.cjs
       - tests/classroom-view.test.cjs
       - tests/classroom-roster.test.cjs
+      - tests/classroom-analysis.test.cjs
+      - tests/classroom.test.cjs
       - tests/classroom-editor.test.cjs
       - tests/teacher-workspace.test.cjs
       - .github/workflows/classroom-browser.yml
@@ -21,15 +25,19 @@ on:
     branches: [stamina-battle, main]
     paths:
       - classroom-api.cjs
+      - classroom-learning-analysis.cjs
       - public/cultivation/classroom.js
       - public/cultivation/classroom-view.js
       - public/cultivation/classroom-roster.js
+      - public/cultivation/classroom-analysis.js
       - public/cultivation/classroom-editor.js
       - public/cultivation/teacher-workspace.js
       - public/styles/classroom.css
       - scripts/check-classroom-ui.cjs
       - tests/classroom-view.test.cjs
       - tests/classroom-roster.test.cjs
+      - tests/classroom-analysis.test.cjs
+      - tests/classroom.test.cjs
       - tests/classroom-editor.test.cjs
       - tests/teacher-workspace.test.cjs
       - .github/workflows/classroom-browser.yml
@@ -48,7 +56,7 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
       - name: Classroom server and view unit tests
-        run: node --test tests/classroom.test.cjs tests/classroom-view.test.cjs tests/classroom-editor.test.cjs tests/classroom-roster.test.cjs tests/teacher-workspace.test.cjs
+        run: node --test tests/classroom.test.cjs tests/classroom-view.test.cjs tests/classroom-editor.test.cjs tests/classroom-roster.test.cjs tests/classroom-analysis.test.cjs tests/teacher-workspace.test.cjs
       - name: Install Playwright
         run: npm install --no-save --no-audit --no-fund playwright@1.62.1
       - name: Install Chromium

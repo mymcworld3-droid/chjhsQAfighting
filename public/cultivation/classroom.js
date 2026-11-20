@@ -5,6 +5,7 @@ import { buildClassroomView, tabsForClass } from './classroom-view.js';
 import { renderRosterPanel, parseRosterCSV, exportRosterCSV } from './classroom-roster.js';
 import { renderClassroomEditor, renderClassroomCopy, validateClassroomDraft, parseClassroomAIQuestion, MAX_CLASSROOM_QUESTIONS } from './classroom-editor.js';
 import { buildTeacherWorkspace } from './teacher-workspace.js';
+import { renderLearningAnalysis } from './classroom-analysis.js';
 
 const $ = id => document.getElementById(id);
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -196,6 +197,9 @@ function workView() {
   return `<div class="cc-toolbar"><h3>${escape(a.title)}</h3>${button('back', '返回班級')}</div><p class="cc-muted">已完成 ${done} / ${a.questions.length} 題 · 截止：${date(a.dueAtMs)}</p><progress max="${a.questions.length}" value="${done}"></progress>${closed ? '<p role="status">作業已截止，目前只能查看已保存的作答。</p>' : ''}
     <section class="cc-card"><h4>第 ${i + 1} / ${a.questions.length} 題</h4><div class="cc-question">${escape(q.question)}</div><div class="cc-options">${q.options.map((o, n) => button('answer', `${labels[n]}. ${escape(o)}`, `data-option="${n}" aria-pressed="${answers[i] === n}" ${closed ? 'disabled' : ''}`)).join('')}</div><div class="cc-toolbar">${button('previous-question', '上一題', i === 0 ? 'disabled' : '')}${i < a.questions.length - 1 ? button('next-question', '下一題') : button('submit', '繳交作業', `class="cc-primary" ${done !== a.questions.length || closed ? 'disabled' : ''}`)}</div></section>`;
 }
+function learningView() {
+  return renderLearningAnalysis(state, { escape, button, date, status });
+}
 function overviewView() {
   const o = state.overview;
   return `<div class="cc-toolbar"><div><h3>${escape(o.className)} · 學習總覽</h3><p class="cc-muted">${escape(o.scope)}</p></div><div class="cc-actions">${button('back', '返回班級')}${button('refresh', '重新整理')}</div></div>
@@ -248,7 +252,7 @@ function filterWorkspaceTasks(panel) {
 }
 function render() {
   const panel = $('section-classes'); if (!panel) return;
-  const views = { home: homeView, accounts: accountsView, class: classView, overview: overviewView, editor: editorView, copy: copyView, preview: previewView, work: workView, report: reportView };
+  const views = { home: homeView, accounts: accountsView, class: classView, overview: overviewView, learning: learningView, editor: editorView, copy: copyView, preview: previewView, work: workView, report: reportView };
   window.quizMathClear?.(panel);
   panel.innerHTML = `<div class="cc-shell"><div data-message role="status" aria-live="polite"></div>${views[state.view]()}</div>`;
   filterClassroomList(panel, 'assignment');
@@ -290,7 +294,8 @@ async function loadClass(classId = state.classroom?.id) {
     studentSearch: changedClass ? '' : (state.studentSearch || ''),
     studentSort: changedClass ? 'seat' : (state.studentSort || 'seat'),
     rosterSelected: [], editStudentUid: null, rosterPreview: null, rosterCsvText: '',
-    overview: changedClass ? null : state.overview };
+    overview: changedClass ? null : state.overview,
+    learning: changedClass ? null : state.learning };
   render();
 }
 async function loadAssignment(assignmentId, view) {
@@ -301,6 +306,31 @@ async function loadOverview() {
   const data = await request({ action: 'overview', classId: state.classroom.id });
   state.overview = data.overview; state.view = 'overview'; render();
 }
+
+async function loadLearningAnalysis({ studentUid = null, more = false, returnTab = null } = {}) {
+  const classId = state.classroom.id;
+  const old = more ? state.learning : null;
+  if (more && !old?.nextCursor) return;
+  const result = await request({
+    action: studentUid ? 'studentLearningPage' : 'learningAnalysisPage',
+    classId, ...(studentUid ? { studentUid } : {}),
+    ...(more ? { cursor: old.nextCursor } : {})
+  }, '/api/classrooms', 30000);
+  const data = result.analysis;
+  if (state.classroom?.id !== classId) return;
+  const previous = more ? old.rows : [];
+  const seen = new Set(previous.map(r => r.id));
+  const rows = [...previous, ...data.rows.filter(row => !seen.has(row.id))];
+  state.learning = { ...data, rows, scanned: (more ? old.scanned : 0) + data.scanned };
+  state.learningStudentUid = studentUid;
+  if (!more) {
+    state.learningSubject = 'all';
+    state.learningReturnTab = returnTab || state.classTab || 'grades';
+  }
+  state.view = 'learning';
+  render();
+}
+
 async function loadReport(assignmentId = state.report?.assignment.id) {
   const data = await request({ action: 'report', classId: state.classroom.id, assignmentId }); state.report = data.report; state.view = 'report'; render();
 }
@@ -508,12 +538,13 @@ async function act(target) {
     if (!window.QATeacherDongtian?.open) throw Error('教師洞天尚未載入，請重新開啟遊戲後再試。');
     await window.QATeacherDongtian.open(); return;
   }
-  if (['workspace-class', 'workspace-grades', 'workspace-new', 'workspace-edit', 'workspace-preview', 'workspace-report'].includes(action)) {
+  if (['workspace-class', 'workspace-grades', 'workspace-analysis', 'workspace-new', 'workspace-edit', 'workspace-preview', 'workspace-report'].includes(action)) {
     const targetClassId = target.dataset.classId || target.dataset.id;
     await loadClass(targetClassId);
     if (state.classroom?.role !== 'teacher') throw Error('已失去此班級的管理權限');
     if (action === 'workspace-class') return;
     if (action === 'workspace-grades') { state.classTab = 'grades'; render(); return; }
+    if (action === 'workspace-analysis') return loadLearningAnalysis({ returnTab: 'grades' });
     if (action === 'workspace-new') {
       if (state.classroom.status !== 'active') throw Error('此班級已封存，請先恢復');
       beginEditor({ title: '', subject: '數學', topic: '', level: '國中一年級', questions: [blankQuestion()] }); return;
@@ -580,8 +611,45 @@ async function act(target) {
     return;
   }
   if (action === 'assignment-filter') { state.assignmentFilter = target.dataset.filter; render(); return; }
+
+  if (action === 'learning-analysis') return loadLearningAnalysis({ returnTab: 'grades' });
+  if (action === 'roster-history') {
+    if (!state.classroom?.members?.some(m => m.uid === target.dataset.studentUid)) throw Error('學生已不在此班級。');
+    return loadLearningAnalysis({ studentUid: target.dataset.studentUid, returnTab: 'students' });
+  }
+  if (action === 'learning-more') return loadLearningAnalysis({
+    studentUid: state.learningStudentUid || null, more: true
+  });
+  if (action === 'learning-refresh') return loadLearningAnalysis({
+    studentUid: state.learningStudentUid || null, returnTab: state.learningReturnTab || 'grades'
+  });
+  if (action === 'learning-back') {
+    state.classTab = state.learningReturnTab || 'grades';
+    state.view = 'class'; render(); return;
+  }
+  if (action === 'learning-students') {
+    state.classTab = 'students';
+    state.view = 'class'; render(); return;
+  }
+  if (action === 'learning-subject') {
+    const subject = target.dataset.subject || 'all';
+    const available = ['all', ...(state.learning?.rows || []).map(row => row.subject)];
+    if (!available.includes(subject)) return;
+    state.learningSubject = subject; render(); return;
+  }
+  if (action === 'learning-remediate') {
+    if (state.classroom?.status !== 'active' || state.classroom?.role !== 'teacher') throw Error('此班級目前不可建立補強草稿。');
+    const group = window.QAKnowledgePoints.SUBJECTS.find(s => s.name === target.dataset.subject);
+    const point = group?.points.find(p => p.id === target.dataset.pointId);
+    if (!point) throw Error('找不到對應知識點，請重新選擇。');
+    const title = ('補強練習 · ' + point.name).slice(0, 80);
+    beginEditor({ title, subject: group.name, topic: point.name, level: '國中一年級',
+      questions: [{ ...blankQuestion(), knowledge_points: [{ subject: group.name, ...point }] }] });
+    message('已建立「' + title + '」的編輯草稿，請依學生程度選擇年級、生成或編輯題目後再預覽發布。');
+    return;
+  }
   if (action === 'overview') return loadOverview();
-  if (action === 'refresh') return state.view === 'home' ? loadHome() : state.view === 'accounts' ? loadAccounts() : state.view === 'report' ? loadReport() : state.view === 'overview' ? loadOverview() : loadClass();
+  if (action === 'refresh') return state.view === 'home' ? loadHome() : state.view === 'accounts' ? loadAccounts() : state.view === 'report' ? loadReport() : state.view === 'learning' ? loadLearningAnalysis({ studentUid: state.learningStudentUid || null }) : state.view === 'overview' ? loadOverview() : loadClass();
   if (action === 'create' || action === 'join') {
     const values = validForm(action); if (!values) return;
     const data = await request({ action: action === 'create' ? 'createClass' : 'joinClass', ...values }); return loadClass(data.classroom.id);
