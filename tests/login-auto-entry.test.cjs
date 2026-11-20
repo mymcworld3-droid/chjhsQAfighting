@@ -103,5 +103,5 @@ test('auth observer releases welcome overlay early, and remote settings do not b
   assert.match(arrival, /window\.handleFirstVisitAuthPending = person =>/);
   assert.match(arrival, /if \(!person\?\.uid\) return false;/);
   assert.match(arrival, /removeLayer\(\);\s*return true;/);
-  assert.match(fs.readFileSync(path.join(__dirname, '../public/main.js'), 'utf8'), /20261120-auth-entry-v1/);
+  assert.match(fs.readFileSync(path.join(__dirname, '../public/main.js'), 'utf8'), /import '\.\/main-legacy\.js\?v=20\d{6}-[\w-]+';/);
 });
