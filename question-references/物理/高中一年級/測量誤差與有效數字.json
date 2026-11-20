@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-phy1-measurement-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "以物理定律及測量原則設計可重算的單一答案",
+      "question": {
+        "q": "標準長度為20.0 cm，某次測量值21.0 cm。若以標準值為分母，該次測量的相對誤差大小為何？",
+        "correct": "5.0%",
+        "wrong": [
+          "1.0%",
+          "4.8%",
+          "10.0%"
+        ],
+        "exp": "相對誤差=|21.0−20.0|/20.0×100%=1.0/20.0×100%=5.0%。",
+        "subject": "物理",
+        "sub_topic": "測量誤差與有效數字",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量誤差與有效數字",
+        "template_id": "ref-20261120-b12-phy1-measurement-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-phy1-measurement-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "以物理定律及測量原則設計可重算的單一答案",
+      "question": {
+        "q": "量得長方形兩邊長為1.20 m與2.5 m。若依乘法有效數字原則，面積應記為何？",
+        "correct": "3.0 m²",
+        "wrong": [
+          "3.000 m²",
+          "3 m²",
+          "3.00 m²"
+        ],
+        "exp": "原始乘積1.20×2.5=3.00，乘法結果保留最少的2位有效數字，因此寫成3.0 m²。",
+        "subject": "物理",
+        "sub_topic": "測量誤差與有效數字",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量誤差與有效數字",
+        "template_id": "ref-20261120-b12-phy1-measurement-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-phy1-measurement-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "以物理定律及測量原則設計可重算的單一答案",
+      "question": {
+        "q": "下列數值0.00340 m具有幾位有效數字？",
+        "correct": "3位",
+        "wrong": [
+          "2位",
+          "4位",
+          "5位"
+        ],
+        "exp": "小數點後前導零不算有效數字；3、4及末尾的小數零均為有效數字，共3位。",
+        "subject": "物理",
+        "sub_topic": "測量誤差與有效數字",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量誤差與有效數字",
+        "template_id": "ref-20261120-b12-phy1-measurement-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
