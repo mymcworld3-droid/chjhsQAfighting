@@ -54,18 +54,19 @@ class DungeonMapView{
     this.pendingMovementPreview=null; // visual only; never enters C-room rules
     this.ambiencePlan=null;this.environmentPlan=null;
     this.ambientTimer=null;this.bossTransition=null;
-    this.pendingAction=null;
+    this.pendingAction=null;this.queuedSkill=null;
     this.wheelMode='attack';this.selectedSkillId='';this.manualOpen=false;
     this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
     this.routePending=false;this.actionFeedbackTimer=null;
     this.rangeSignature='';this.rangeTiles=[];this.rangeKind='move';
-    this.width=0;this.height=0;this.frame=0;this.observer=null;this.previousFocus=null;
+    this.width=0;this.height=0;this.frame=0;this.resizeFrame=0;
+    this.observer=null;this.previousFocus=null;
     this.clockTimer=null;this.clockAnchor=null;this.clockTickFloor=0;
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
     this.beastIds='';this.touchOrigins=new Map();this.gestureMulti=false;
     this.longPressTimer=null;this.longPressTriggered=false;
-    this.onResize=()=>this.resize();
-    this.onVisibility=()=>{if(!document.hidden&&this.opened)this.resize();};
+    this.onResize=()=>this.scheduleResize();
+    this.onVisibility=()=>{if(!document.hidden&&this.opened)this.scheduleResize();};
   }
   mount(){
     if(this.root)return;
@@ -270,6 +271,7 @@ class DungeonMapView{
     this.visualScenes.clear();this.travelScenes.clear();
     this.enemyReactionScenes.clear();
     this.pendingMovementPreview=null;this.pendingAction=null;
+    this.queuedSkill=null;
     clearTimeout(this.ambientTimer);this.ambientTimer=null;
     this.ambiencePlan=null;this.environmentPlan=null;
     this.bossTransition=null;
@@ -286,7 +288,8 @@ class DungeonMapView{
     this.root.hidden=false;
     this.$('[data-dm="close"]').focus({preventScroll:true});
     if(typeof ResizeObserver==='function'){
-      this.observer=new ResizeObserver(()=>this.resize());
+      // Canvas writes inside ResizeObserver can trigger an undelivered loop.
+      this.observer=new ResizeObserver(()=>this.scheduleResize());
       this.observer.observe(this.stage);
     }else window.addEventListener('resize',this.onResize);
     window.addEventListener('orientationchange',this.onResize);
@@ -472,7 +475,7 @@ class DungeonMapView{
       stamina:Math.max(0,Math.min(10,Number(own?.explorationStamina)||0)),
       focusCharges:charges,
       locked:!active||this.movePending||this.routePending||
-        this.skillPending||this.loadoutPending||this.strikePending||
+        this.loadoutPending||this.strikePending||
         own?.downed===true||Number(own?.battleHealth)===0
     });
     const toggle=this.$('[data-dm="loadouts"]');
@@ -764,7 +767,8 @@ class DungeonMapView{
           (skill.singleHitDamage||0)+
           (skill.centerHitDamage?'，劍陣中心每擊約 '+skill.centerHitDamage:'')+'。'))+
         (skill.description||'');
-      button.disabled=this.skillPending||this.loadoutPending||this.movePending||
+      // Permit a second skill press while awaiting the first response.
+      button.disabled=this.loadoutPending||this.movePending||
         downed||stamina<cost||
         (skill.kind!=='fist-focus'&&!aimed);
     });
@@ -828,16 +832,24 @@ class DungeonMapView{
       if(this.isCurrent()&&this.seq===token)this.updateSkillHUD();
     }
   }
-  async cast(skillId){
+  async cast(skillId,requestedTarget=null){
     const member=this.room?.members?.[this.uid];
-    if(!this.isCurrent()||!member||this.skillPending||this.loadoutPending||
+    if(!this.isCurrent()||!member||this.loadoutPending||
       this.room.status!=='assembled')return;
     const skill=member.dungeonSkills?.find(v=>v.id===skillId);
     if(!skill)return;
-    const target=this.targetFor(skill);
+    const target=requestedTarget||this.targetFor(skill);
     if(!target){this.skillAlert('請先選擇同一直線上的目標，或空白地格');return;}
+    if(this.skillPending){
+      // Keep only the most recent follow-up input and its original target.
+      this.queuedSkill={skillId,target:{...target},
+        roomId:this.roomId,token:this.seq};
+      this.skillAlert('下一招已預備 · 前一招結算後立即施放');
+      return;
+    }
     const seq=(Number.isSafeInteger(member.skillSeq)?member.skillSeq:0)+1;
     const roomId=this.roomId,token=this.seq;
+    let committed=false;
     this.skillPending=true;this.updateSkillHUD();
     this.pendingAction={kind:'skill',target:{...target},
       origin:{...member.position},skillId,style:skill.kind,
@@ -849,6 +861,7 @@ class DungeonMapView{
       if(!this.isCurrent()||this.seq!==token||this.roomId!==roomId)return;
       if(response?.room){
         this.updateRoom(response.room);
+        committed=true;
         window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
           detail:{room:response.room}
         }));
@@ -896,8 +909,16 @@ class DungeonMapView{
       }
     }finally{
       this.skillPending=false;this.pendingAction=null;
+      const queued=this.queuedSkill;this.queuedSkill=null;
       if(this.isCurrent()&&this.seq===token){
         this.updateSkillHUD();this.drawSoon();
+        // Queue uses the newly committed server sequence; no fake hit or
+        // resource spend occurs while waiting for the response.
+        if(committed&&queued?.token===token&&queued.roomId===roomId)
+          queueMicrotask(()=>{if(this.isCurrent()&&this.seq===token)
+            void this.cast(queued.skillId,queued.target);});
+        else if(!committed&&queued)
+          this.skillAlert('上一招未成功，預備招式已取消，請重新施放');
       }
     }
   }
@@ -1545,6 +1566,7 @@ class DungeonMapView{
   close(){
     ++this.seq;this.opened=false;this.pointers.clear();this.movePending=false;
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
+    this.queuedSkill=null;
     this.guardPending=false;this.guardSignature='';
     this.aimTile=null;this.skillSignature='';
     this.wheelSwipeStart=null;this.manualOpen=false;this.wheelMode='attack';
@@ -1555,6 +1577,7 @@ class DungeonMapView{
     this.visualScenes?.clear();this.travelScenes?.clear();
     this.enemyReactionScenes?.clear();
     this.pendingMovementPreview=null;this.pendingAction=null;
+    this.queuedSkill=null;
     clearTimeout(this.ambientTimer);this.ambientTimer=null;
     this.ambiencePlan=null;this.environmentPlan=null;
     this.bossTransition=null;
@@ -1566,6 +1589,8 @@ class DungeonMapView{
     this.followBeast=false;this.beastIds='';
     clearInterval(this.clockTimer);this.clockTimer=null;this.clockAnchor=null;this.clockTickFloor=0;
     this.observer?.disconnect();this.observer=null;
+    if(this.resizeFrame)cancelAnimationFrame(this.resizeFrame);
+    this.resizeFrame=0;
     window.removeEventListener('resize',this.onResize);
     window.removeEventListener('orientationchange',this.onResize);
     document.removeEventListener('visibilitychange',this.onVisibility);
@@ -1685,16 +1710,25 @@ class DungeonMapView{
     }catch(_){}
   }
   wheel(event){if(this.opened)event.preventDefault();}
+  scheduleResize(){
+    if(!this.opened||this.resizeFrame)return;
+    this.resizeFrame=requestAnimationFrame(()=>{
+      this.resizeFrame=0;
+      if(this.opened)this.resize();
+    });
+  }
   resize(){
     if(!this.opened||!this.stage)return;
     const rect=this.stage.getBoundingClientRect();
     const width=Math.max(1,Math.round(rect.width)),height=Math.max(1,Math.round(rect.height));
+    const dpr=clamp(window.devicePixelRatio||1,1,2);
+    const pixelsWide=Math.round(width*dpr),pixelsHigh=Math.round(height*dpr);
+    if(width===this.width&&height===this.height&&
+        this.canvas.width===pixelsWide&&this.canvas.height===pixelsHigh)return;
     if(this.map)this.camera=Camera.lockToPlayer(this.selfPad(),this.map,width,height);
     this.width=width;this.height=height;
-    const dpr=clamp(window.devicePixelRatio||1,1,2);
-    if(this.canvas.width!==Math.round(width*dpr)||this.canvas.height!==Math.round(height*dpr)){
-      this.canvas.width=Math.round(width*dpr);this.canvas.height=Math.round(height*dpr);
-    }
+    if(this.canvas.width!==pixelsWide)this.canvas.width=pixelsWide;
+    if(this.canvas.height!==pixelsHigh)this.canvas.height=pixelsHigh;
     this.ctx?.setTransform(dpr,0,0,dpr,0,0);this.drawSoon();
   }
   updateFocusAuras(geometry,visualMembers=this.members()){
