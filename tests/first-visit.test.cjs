@@ -166,16 +166,16 @@ test('arrival assets exist, the survey is absent, and the first quest explicitly
 
 test('welcome account action shows Google emblem with only the label 綁定帳號', () => {
   assert.match(intro, /id="fv-login" class="fv-secondary fv-google-button"/);
-  assert.match(intro, /<span>綁定帳號<\\/span>/);
-  assert.match(intro, /aria-label="使用 Google 綁定帳號或登入"/);
-  assert.match(intro, /viewBox="0 0 48 48"/);
+  assert.ok(intro.includes('<span>綁定帳號</span>'));
+  assert.ok(intro.includes('aria-label="使用 Google 綁定帳號或登入"'));
+  assert.ok(intro.includes('viewBox="0 0 48 48"'));
   for (const color of ['#EA4335', '#4285F4', '#FBBC05', '#34A853']) {
     assert.ok(intro.includes(color), 'Google icon color ' + color);
   }
   assert.doesNotMatch(intro, /已有帳號？直接登入/);
-  assert.match(intro, /layer\\.querySelector\\('#fv-login'\\)\\.onclick = \\(\\) => action/);
-  assert.match(intro, /try \\{ await window\\.googleLogin\\(\\); \\}/);
+  assert.ok(intro.includes("layer.querySelector('#fv-login').onclick = () => action"));
+  assert.ok(intro.includes('try { await window.googleLogin(); }'));
   const css = fs.readFileSync(path.join(__dirname, '../public/styles/first-visit.css'), 'utf8');
-  assert.match(css, /\\.fv-google-button\\{display:inline-flex/);
-  assert.match(css, /\\.fv-google-mark\\{display:block/);
+  assert.ok(css.includes('.fv-google-button{display:inline-flex'));
+  assert.ok(css.includes('.fv-google-mark{display:block'));
 });
