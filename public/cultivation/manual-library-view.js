@@ -12,7 +12,7 @@ export function filterOwnedManuals(state, filter='all') {
 export function renderManualCollectionHeader(state, filter, {esc}) {
   const owned=filterOwnedManuals(state);
   const options=[
-    {id:'all',title:'全部功法',count:owned.length},
+    {id:'all',title:Array.isArray(state?.weaponIds)?'全部武器':'全部功法',count:owned.length},
     {id:'sword',title:'劍修',count:owned.filter(book=>book.school==='sword').length},
     {id:'body',title:'體修',count:owned.filter(book=>book.school==='body').length}
   ];
@@ -25,9 +25,9 @@ export function renderManualCollectionHeader(state, filter, {esc}) {
   }).join('');
   return `<div class="manual-library-heading">
     <div class="manual-library-heading-copy">
-      <span class="manual-library-kicker">問道 · 藏經閣</span>
-      <h3>功法收藏 <span class="manual-library-owned-count">${owned.length} 本</span></h3>
-      <p>選擇功法，即可在上方集中修煉與強化。</p>
+      <span class="manual-library-kicker">問道 · ${Array.isArray(state?.weaponIds)?'兵器閣':'藏經閣'}</span>
+      <h3>${Array.isArray(state?.weaponIds)?'武器收藏':'功法收藏'} <span class="manual-library-owned-count">${owned.length} ${Array.isArray(state?.weaponIds)?'件':'本'}</span></h3>
+      <p>${Array.isArray(state?.weaponIds)?'選取已獲得的劍或圖騰，於下方修煉或裝備。':'選擇功法，即可在上方集中修煉與強化。'}</p>
     </div>
     <button type="button" class="manual-refresh" data-manual-refresh title="同步功法資料"
       aria-label="更新功法資料"><i class="fa-solid fa-rotate" aria-hidden="true"></i> 更新</button>
@@ -46,7 +46,10 @@ export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt
     anticipation.status==='imminent'?'突破在即':'接近突破':
     learned===3?'三招皆已領悟':visual.label;
   const cover=bookArt(book.id);
-  const art=cover?`<img class="manual-book-art manual-library-cover" src="${esc(cover)}"
+  const art=book.weaponType?
+    `<span class="manual-weapon-art manual-weapon-art--${esc(book.id)} manual-library-cover"
+       role="img" aria-label="${esc(book.name)}武器圖像"></span>`:
+    cover?`<img class="manual-book-art manual-library-cover" src="${esc(cover)}"
     alt="" loading="lazy" decoding="async">`:
     '<span class="manual-library-cover-fallback" aria-hidden="true">功法</span>';
   return `<button type="button" class="manual-book-top manual-library-choice"
@@ -56,8 +59,8 @@ export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt
       data-manual-approach="${near?anticipation.status:'none'}">
       <span class="manual-library-cover-glow" aria-hidden="true"></span>
       <span class="manual-library-cover-wrap">${art}</span>
-      <span class="manual-library-school-tag is-tier-${tierClass}">${esc(book.tierRealm||'煉氣')}功法</span>
-      ${current?'<span class="manual-library-featured-tag">展示中</span>':''}
+      <span class="manual-library-school-tag is-tier-${tierClass}">${esc(book.tierRealm||'煉氣')}${book.weaponType?'武器':'功法'}</span>
+      ${current?'<span class="manual-library-featured-tag">修煉中</span>':''}
     </span>
     <span class="manual-library-card-info">
       <span class="manual-library-name-row"><strong>${esc(book.name)}</strong>
