@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-chem3-titration-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "結合結構、平衡與滴定計量，解析說明各條件及適用範圍",
+      "question": {
+        "q": "以0.100 M NaOH滴定20.0 mL、0.150 M HCl，理想完全中和所需NaOH體積為多少？",
+        "correct": "30.0 mL",
+        "wrong": [
+          "20.0 mL",
+          "15.0 mL",
+          "45.0 mL"
+        ],
+        "exp": "HCl莫耳數=0.150×0.0200=0.00300 mol，NaOH與HCl為1:1中和，所需體積0.00300/0.100=0.0300 L=30.0 mL。",
+        "subject": "化學",
+        "sub_topic": "滴定與圖表",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-滴定與圖表",
+        "template_id": "ref-20261120-b12-chem3-titration-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chem3-titration-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "結合結構、平衡與滴定計量，解析說明各條件及適用範圍",
+      "question": {
+        "q": "以強鹼滴定一元弱酸，25°C下到達當量點時，若忽略活度等影響，當量點溶液通常呈現何種酸鹼性？",
+        "correct": "pH大於7，因弱酸的共軛鹼發生水解",
+        "wrong": [
+          "pH必等於7，因任何中和反應都形成中性鹽",
+          "pH小於7，因當量點仍有大量未中和弱酸",
+          "pH必等於0，因原溶液含酸"
+        ],
+        "exp": "弱酸被強鹼中和後，當量點主要存在其共軛鹼，會與水反應產生OH⁻，故通常偏鹼。",
+        "subject": "化學",
+        "sub_topic": "滴定與圖表",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-滴定與圖表",
+        "template_id": "ref-20261120-b12-chem3-titration-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-chem3-titration-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "結合結構、平衡與滴定計量，解析說明各條件及適用範圍",
+      "question": {
+        "q": "酸鹼滴定實驗中，指示劑出現終點顏色變化，但理論當量點是由反應物化學計量決定。哪項敘述最正確？",
+        "correct": "指示劑終點應盡量接近當量點，但兩者不一定完全重合",
+        "wrong": [
+          "只要看見指示劑變色，終點必與當量點毫無誤差地相同",
+          "當量點完全取決於指示劑用量，與酸鹼莫耳數無關",
+          "選擇任何變色範圍的指示劑，都可保證相同準確度"
+        ],
+        "exp": "當量點由化學計量關係決定；實驗終點取決於指示劑變色範圍與操作觀察，合適的指示劑可降低終點誤差。",
+        "subject": "化學",
+        "sub_topic": "滴定與圖表",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-滴定與圖表",
+        "template_id": "ref-20261120-b12-chem3-titration-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
