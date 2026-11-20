@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-geo2-maps-stats-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用空間資料、標準化比率與地區條件建立推論，避免過度概括",
+      "question": {
+        "q": "某地形圖比例尺為1:50,000，圖上兩處直線距離3.0公分。實際水平距離約為多少公里？",
+        "correct": "1.5公里",
+        "wrong": [
+          "0.15公里",
+          "15公里",
+          "0.6公里"
+        ],
+        "exp": "實際距離=3.0×50,000=150,000公分=1,500公尺=1.5公里。",
+        "subject": "地理",
+        "sub_topic": "地圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-地圖與統計圖",
+        "template_id": "ref-20261120-b12-geo2-maps-stats-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-geo2-maps-stats-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用空間資料、標準化比率與地區條件建立推論，避免過度概括",
+      "question": {
+        "q": "甲縣人口100萬、乙縣人口20萬；甲縣有圖書館50間，乙縣有20間。若按每10萬人口圖書館數比較，哪項正確？",
+        "correct": "乙縣10間，甲縣5間，乙的相對服務密度較高",
+        "wrong": [
+          "甲縣50間、乙縣20間，因此甲的每人服務密度較高",
+          "兩縣均是每10萬人口5間",
+          "甲縣5間、乙縣2間，因此甲的相對服務密度較高"
+        ],
+        "exp": "甲50/10=每10萬人5間；乙20/2=每10萬人10間。總數較多不代表人均服務量較高。",
+        "subject": "地理",
+        "sub_topic": "地圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-地圖與統計圖",
+        "template_id": "ref-20261120-b12-geo2-maps-stats-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-geo2-maps-stats-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用空間資料、標準化比率與地區條件建立推論，避免過度概括",
+      "question": {
+        "q": "某地雨量長條圖以縱軸從90毫米起算，顯示兩個月雨量分別95與100毫米。若希望圖表不過度放大差距，最合適的修正為何？",
+        "correct": "以0為長條圖縱軸起點，並清楚註明數值與單位",
+        "wrong": [
+          "將兩個月的長條改成更深的顏色，不標示縱軸",
+          "只留下雨量100毫米那個月，避免讀者比較",
+          "把縱軸起點改為94毫米，使兩柱看起來差異更大"
+        ],
+        "exp": "長條圖以長度表示量值時，截斷縱軸易誇大95與100間僅5毫米的差距；零起點及標籤可改善判讀。",
+        "subject": "地理",
+        "sub_topic": "地圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-地圖與統計圖",
+        "template_id": "ref-20261120-b12-geo2-maps-stats-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
