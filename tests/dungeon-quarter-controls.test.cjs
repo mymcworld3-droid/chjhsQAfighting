@@ -56,7 +56,7 @@ test('the trial wheel is still operational without duplicate cast or quiz contro
   assert.match(view,/getDungeonMap\(roomId\)/);
   assert.match(view,/moveDungeonMember\(roomId,dx,dy,step\)/);
   assert.match(view,/strikeDungeonBeast\(roomId,enemy\.id,seq\)/);
-  assert.match(view,/castDungeonSkill\(roomId,skillId,target,seq\)/);
+  assert.match(view,/castDungeonSkill\(roomId,skillId,target,seq(?:,moveSword)?\)/);
   assert.match(view,/bindDungeonTrialWheel\(wheel/);
   assert.match(view,/if\(name==='loadouts'\)/);
 });
