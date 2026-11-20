@@ -364,14 +364,22 @@ export function drawWorld(ctx,map,camera,width,height,
     const playerArt=sex==='female'?art?.female:art?.male;
     const painted=cell>=10&&atlas(ctx,playerArt,0,0,112,
       sx-cell*.55,sy-cell*.77,cell*1.10,cell*1.10);
-    // Do not retain the legacy circular player token/selection rings behind
-    // a successfully drawn character sprite. Keep a fallback only when the
-    // image atlas has failed to load so nobody becomes invisible.
+    // No legacy circular player token, even if an avatar is still loading.
+    // Use a compact humanoid silhouette as the offline/low-zoom fallback.
     if(!painted){
-      ctx.beginPath();ctx.arc(sx,sy,radius,0,Math.PI*2);
-      ctx.fillStyle=partyColors[index];ctx.fill();
+      ctx.save();
+      ctx.fillStyle=partyColors[index];
       ctx.strokeStyle=member.uid===selfUid?'#fff5d1':partyColors[index];
-      ctx.lineWidth=member.uid===selfUid?2:1.4;ctx.stroke();
+      ctx.lineWidth=member.uid===selfUid?2:1.4;
+      ctx.beginPath();
+      ctx.moveTo(sx,sy-radius*1.5);
+      ctx.lineTo(sx+radius*.77,sy-radius*.45);
+      ctx.lineTo(sx+radius*.95,sy+radius*.8);
+      ctx.lineTo(sx,sy+radius*.45);
+      ctx.lineTo(sx-radius*.95,sy+radius*.8);
+      ctx.lineTo(sx-radius*.77,sy-radius*.45);
+      ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.restore();
     }
     const healthMax=Number.isSafeInteger(member.battleMaxHealth)&&
       member.battleMaxHealth>0?member.battleMaxHealth:100;
