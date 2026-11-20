@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-geo1-gis-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用空間資料、標準化比率與地區條件建立推論，避免過度概括",
+      "question": {
+        "q": "某市的道路中心線與公車站牌位置，要分別以GIS資料呈現，哪種向量幾何型態最適合？",
+        "correct": "道路用線、站牌用點",
+        "wrong": [
+          "道路用點、站牌用面",
+          "道路用面、站牌用線",
+          "道路與站牌都只能使用衛星影像像元，不能用向量資料"
+        ],
+        "exp": "向量資料可用點表示位置、線表示道路網，面表示具有範圍的區域；站牌通常用點，路段用線。",
+        "subject": "地理",
+        "sub_topic": "地理資訊系統與遙測",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地理資訊系統與遙測",
+        "template_id": "ref-20261120-b12-geo1-gis-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-geo1-gis-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用空間資料、標準化比率與地區條件建立推論，避免過度概括",
+      "question": {
+        "q": "研究者想在衛星影像中區分較窄的河道，兩套資料的像元大小分別為10公尺與30公尺。若其他條件相近，哪套影像較可能呈現河道細節？",
+        "correct": "10公尺像元的影像，因空間解析度較高",
+        "wrong": [
+          "30公尺像元的影像，因像元越大空間解析度必越高",
+          "兩者空間解析度完全相同，只要拍攝時間一樣",
+          "任何衛星影像都不能用來辨識河流"
+        ],
+        "exp": "較小的地面像元通常代表較高的空間解析度，較可能分辨窄小地物；仍需考量雲、波段及影像品質。",
+        "subject": "地理",
+        "sub_topic": "地理資訊系統與遙測",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地理資訊系統與遙測",
+        "template_id": "ref-20261120-b12-geo1-gis-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-geo1-gis-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "用空間資料、標準化比率與地區條件建立推論，避免過度概括",
+      "question": {
+        "q": "同一城市兩張地圖的道路圖層和人口密度圖層出現整體錯位。進行空間套疊前，最重要的檢查為何？",
+        "correct": "兩圖層是否採用一致且正確轉換的坐標參考系統",
+        "wrong": [
+          "只要兩圖層顏色相同，便能保證位置一致",
+          "把道路圖層透明度改為零，就能修正坐標誤差",
+          "只更改圖例文字，不必處理任何位置資料"
+        ],
+        "exp": "GIS套疊仰賴正確地理定位；不同坐標系統或未正確轉換可造成圖層位移，需先確認與校正。",
+        "subject": "地理",
+        "sub_topic": "地理資訊系統與遙測",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-地理資訊系統與遙測",
+        "template_id": "ref-20261120-b12-geo1-gis-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
