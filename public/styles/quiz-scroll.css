@@ -176,51 +176,51 @@ html body.xianxia-theme #page-quiz .quiz-helper-launcher {
 #page-quiz .adaptive-concept-row ul { padding-left: 1.1rem; margin-top: .3rem; list-style: disc; }
 #page-quiz .adaptive-concept-row li { margin: .25rem 0; line-height: 1.6; }
 /* Compact, expandable lesson on both the regular quiz and tactical battlefield. */
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson {
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson {
   margin: .65rem 0; padding: .45rem .7rem; min-width: 0;
   color: #173e2c; background: #ede4c6;
   border: 1px solid #648b70; border-left: 4px solid #527c58;
   border-radius: .35rem; line-height: 1.7; overflow-wrap: anywhere;
 }
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson > summary {
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson > summary {
   display: flex; gap: .65rem; align-items: center; min-height: 2rem;
   cursor: pointer; list-style: none; font-weight: 700;
   font-size: .88rem; color: inherit;
 }
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson > summary::-webkit-details-marker { display: none; }
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson > summary > span {
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson > summary::-webkit-details-marker { display: none; }
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson > summary > span {
   display: block; flex: 1 1 auto; min-width: 0;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson > summary::after {
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson > summary::after {
   content: '展開'; flex: 0 0 auto; font-size: .76rem; font-weight: 600; opacity: .8;
 }
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson[open] > summary::after { content: '收合'; }
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson[open] > summary > span {
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson[open] > summary::after { content: '收合'; }
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson[open] > summary > span {
   white-space: normal; overflow: visible;
 }
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson > h4 {
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson > h4 {
   font-weight: 700; font-size: .9rem; margin-top: .8rem; padding-top: .2rem;
 }
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson > .adaptive-lesson-copy {
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson > .adaptive-lesson-copy {
   font-size: var(--adaptive-lesson-font-size, .95rem); line-height: 1.85; color: inherit;
 }
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson .adaptive-lesson-zoom {
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson .adaptive-lesson-zoom {
   display: flex; justify-content: flex-end; gap: .5rem; margin-top: .8rem;
 }
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson .adaptive-lesson-zoom > button {
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson .adaptive-lesson-zoom > button {
   min-width: 2.3rem; min-height: 2rem; padding: .2rem .5rem;
   border: 1px solid #648b70; border-radius: .35rem;
   color: #173e2c !important; background: #e1d5b2 !important;
   font-size: .9rem; font-weight: 700; cursor: pointer;
 }
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson :is(mjx-container, .MathJax, .katex, math, .quiz-math-fallback),
-:is(#page-quiz, #tactical-combat) .adaptive-concept-lesson :is(mjx-container, .MathJax, .katex, math, .quiz-math-fallback) * {
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson :is(mjx-container, .MathJax, .katex, math, .quiz-math-fallback),
+:is(#page-quiz, #tactical-combat, #dungeon-map-view) .adaptive-concept-lesson :is(mjx-container, .MathJax, .katex, math, .quiz-math-fallback) * {
   color: inherit !important; background: transparent !important;
 }
-#tactical-combat .adaptive-concept-lesson {
+:is(#tactical-combat, #dungeon-map-view) .adaptive-concept-lesson {
   color: #f1e9d5; background: rgba(20, 43, 35, .96); border-color: #75957b;
 }
-#tactical-combat .adaptive-concept-lesson .adaptive-lesson-zoom > button {
+:is(#tactical-combat, #dungeon-map-view) .adaptive-concept-lesson .adaptive-lesson-zoom > button {
   color: #f1e9d5 !important; background: #244738 !important;
 }
