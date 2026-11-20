@@ -101,6 +101,6 @@ test('client shows auto recharge and keeps quizzes optional for new v2 rooms',()
   assert.match(view,/this\.quiz\?\.setAutoRegeneration\(room\.mapVersion===2\)/);
   assert.match(view,/room\.mapVersion!==2\)void this\.quiz\?\.warm\(\)/);
   assert.match(panel,/副本能量每秒自動恢復 1 點/);
-  assert.match(panel,/答題不再額外補充能量/);
+  assert.match(view,/答題不再額外補充能量/);
   assert.match(api,/\[1,2\]\.includes\(map\.layoutVersion\)/);
 });
