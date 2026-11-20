@@ -23,7 +23,7 @@ function ensure(){
   if(root?.parentElement!==page){
     root=document.createElement('div');
     root.id='manual-training-root';root.className='manual-training';
-    root.innerHTML='<div class="manual-loading">正在開啟功法閣…</div>';
+    root.innerHTML='<div class="manual-loading">正在開啟兵器閣…</div>';
     page.append(root);
   }
   if(!document.getElementById('manual-training-style')){
@@ -92,7 +92,7 @@ async function request(url,body){
     ...(body!==undefined?{method:'POST',body:JSON.stringify(body)}:{method:'GET'})
   });
   let result={};try{result=await response.json();}catch(_){}
-  if(!response.ok||!result.ok)throw Error(result.error||'功法資料同步失敗');
+  if(!response.ok||!result.ok)throw Error(result.error||'武器資料同步失敗');
   return result.state;
 }
 function equippedVersion(id,equipped=current?.loadouts?.[selectedLoadout]?.skillIds||[]){
@@ -122,7 +122,7 @@ function featuredHeroMarkup(){
   return view.html;
 }
 function markup(){
-  if(!current)return '<div class="manual-loading">正在讀取功法…</div>';
+  if(!current)return '<div class="manual-loading">正在讀取武器…</div>';
   const hero=featuredHeroMarkup();
   const expedition=renderManualExpedition(nextManualExpedition(current,featuredBookId,Catalog),{esc,bookArt});
   const cards=filterOwnedManuals(current,libraryFilter).map(book=>
@@ -136,7 +136,7 @@ function markup(){
   return `
     <section class="manual-library" aria-label="武器收藏">
       ${renderManualCollectionHeader(current,libraryFilter,{esc})}
-      <div class="manual-book-grid">${cards||'<p class="manual-empty">尚無此流派已取得的功法，請切換篩選查看。</p>'}</div>
+      <div class="manual-book-grid">${cards||'<p class="manual-empty">尚無此流派已取得的武器，請切換篩選查看。</p>'}</div>
     </section>
     ${hero}${expedition}
     <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>
@@ -145,7 +145,7 @@ function markup(){
     })}
     <details class="manual-xp-reference"><summary>其他靈獸境界 EXP 對照</summary>
       <div>${Catalog.REALMS.map(realm=>`<span>${esc(realm.name)}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
-      <p>只有以功法技能完成擊殺才能獲得熟練經驗；招式仍需要功法等級及修士境界。</p>
+      <p>只有以武器技能完成擊殺才能獲得熟練經驗；招式仍需要武器等級及修士境界。</p>
     </details>
     <div class="manual-celebration-host" data-manual-celebration-host></div>`;
 
@@ -239,7 +239,7 @@ function paint(message='',{loadoutFeedback=false}={}){
 async function load({force=false}={}){
   if(busy)return;
   ensure();const uid=getMainUser()?.uid;
-  if(!uid){clearManualCelebration();current=null;loadedFor='';paint('請先登入後查看功法。');return;}
+  if(!uid){clearManualCelebration();current=null;loadedFor='';paint('請先登入後查看武器。');return;}
   if(!force&&loadedFor===uid&&Date.now()-lastFetch<15000){paint();return;}
   const token=++sequence;lastFetch=Date.now();
   try{
@@ -260,7 +260,7 @@ async function mutate(url,body){
   if(busy)return;
   const uid=getMainUser()?.uid;if(!uid)return;
   const upgrading=url.endsWith('/upgrade');
-  ++sequence;busy=true;paint(body.skillId?'正在升級招式…':upgrading?'正在升級功法…':'正在保存功法配置…');
+  ++sequence;busy=true;paint(body.skillId?'正在升級招式…':upgrading?'正在升級武器…':'正在保存武器裝備…');
   let message='',successful=false,reward=null;
   const equippedSlot=pickerSlot;
   try{
@@ -280,9 +280,9 @@ async function mutate(url,body){
       if(local){local.stats||={};local.stats.gold=next.gold;window.updateUIStats?.();}
       const skill=body.skillId&&skillDetails(body.skillId);
       const target=body.bookId&&next.library.find(book=>book.id===body.bookId);
-      message=!reward?'功法資料已同步，等級沒有變更。':
+      message=!reward?'武器資料已同步，等級沒有變更。':
         skill?`「${skill.name}」已升至 Lv. ${skill.level}。`:
-        `已升級《${target?.name||'功法'}》。`;
+        `已升級《${target?.name||'武器'}》。`;
     }else{
       message=url.endsWith('/school')?'武器流派已切換。':
         Object.hasOwn(body||{},'weaponId')?'武器裝備已儲存。':'武器配置已儲存。';
@@ -325,7 +325,7 @@ function ensureNav(){
   delete nav.dataset.foundationTraining;
   nav.hidden=false;nav.disabled=false;
   nav.classList.remove('hidden','is-locked');
-  nav.setAttribute('aria-label','功法修煉');
+  nav.setAttribute('aria-label','武器修煉');
   document.body.classList.add('cultivation-training-unlocked');
 }
 function boot(){
@@ -473,11 +473,11 @@ function boot(){
       const id=button.dataset.manualPickSkill;
       if(!Number.isInteger(pickerSlot)||!current)return;
       const allowed=current.library.some(book=>book.owned&&book.skills.some(skill=>skill.id===id&&skill.unlocked));
-      if(!allowed){paint('招式尚未解鎖，請重新整理功法資料。');return;}
+      if(!allowed){paint('招式尚未解鎖，請重新整理武器資料。');return;}
       const equipped=current.loadouts?.[selectedLoadout]?.skillIds||[];
       const skillIds=selectSkillForSlot(equipped,pickerSlot,id,
         skillId=>Catalog.BY_SKILL[skillId]?.moveId);
-      if(!skillIds){paint('無法裝備此招式，請確認技能配置。');return;}
+      if(!skillIds){paint('無法裝備此招式，請確認武器裝備。');return;}
       if(skillIds.join('\u001f')===equipped.join('\u001f')){pickerSlot=null;paint();return;}
       void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,skillIds});
       return;
