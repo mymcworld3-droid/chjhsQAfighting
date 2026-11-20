@@ -19,6 +19,7 @@ on:
       - 'tests/first-visit.test.cjs'
       - 'tests/tactical-quarter-camera.test.cjs'
       - 'tests/scope-fullscreen.test.cjs'
+      - 'tests/scope-default-mode.test.cjs'
       - '.github/workflows/tactical-onboarding.yml'
   workflow_dispatch:
 
@@ -43,6 +44,7 @@ jobs:
           tests/login-auto-entry.test.cjs
           tests/first-visit.test.cjs
           tests/scope-fullscreen.test.cjs
+          tests/scope-default-mode.test.cjs
           tests/tactical-mode-navigation.test.cjs
           tests/tactical-combat.test.cjs
           tests/tactical-question-pair.test.cjs

@@ -1190,11 +1190,11 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <label class="text-[10px] font-bold text-yellow-500 mb-1 block uppercase">出題模式</label>
                         <select id="set-source-mode" class="input-cyber w-full mb-3" onchange="toggleSourceMode()">
                             <option value="random">🌟 綜合練習 (隨機出題)</option>
-                            <option value="focused">🎯 專注練習 (自訂單元)</option>
+                            <option value="focused" selected>🎯 專注練習 (自訂單元)</option>
                             <option value="bank">📚 題庫練習 (固定題庫)</option>
                         </select>
 
-                        <div id="comprehensive-source-container" class="cs-scope">
+                        <div id="comprehensive-source-container" class="cs-scope hidden">
                             <p class="cs-note">依你的程度跨科隨機出題。若想指定章節或複習範圍，請選擇專注練習。</p>
                         </div>
 
@@ -1204,7 +1204,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                             <p id="bank-selection-hint" class="text-[10px] text-gray-500 mt-1 font-mono">請選擇題庫…</p>
                         </div>
 
-                        <div id="focused-source-container" class="hidden bg-slate-900/50 p-3 rounded-lg border border-white/5">
+                        <div id="focused-source-container" class="bg-slate-900/50 p-3 rounded-lg border border-white/5">
                             <div id="solo-unit-selectors-container" class="space-y-2">
                                 <div class="text-center py-2 text-gray-500 text-xs">載入單元資料中...</div>
                             </div>
@@ -1538,7 +1538,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <script src="visual-viewport-guard.js?v=20261013-page-layout1"></script>
     <script src="answer-zoom-policy.js?v=20261007-answer-zoom2"></script>
     <script type="module" src="cultivation/in-app-select.js"></script>
-    <script type="module" src="main.js?v=20261120-auth-entry-v1"></script>
+    <script type="module" src="main.js?v=20261120-focused-scope-default-v1"></script>
     <script type="module" src="cultivation/daily-vocabulary-page.js?v=20261116-back-to-words"></script>
 </body>
 </html>

@@ -2402,11 +2402,13 @@ async function updateSettingsInputs() {
         document.getElementById('set-strong').value = currentUserData.profile.strongSubjects || "";
         document.getElementById('set-weak').value = currentUserData.profile.weakSubjects || "";
         
-        const settings = currentUserData.gameSettings || { sourceMode: 'random', source: 'ai', difficulty: 'medium', focusedUnits: [] };
+        // The scope picker starts in focused mode until the player saves a
+        // preference. A previously saved random or bank choice still wins.
+        const settings = currentUserData.gameSettings || { sourceMode: 'focused', source: 'ai', difficulty: 'medium', focusedUnits: [] };
         
         const sourceModeSelect = document.getElementById('set-source-mode');
         if(sourceModeSelect) {
-            sourceModeSelect.value = settings.sourceMode || 'random';
+            sourceModeSelect.value = settings.sourceMode || 'focused';
             window.toggleSourceMode();
         }
 
