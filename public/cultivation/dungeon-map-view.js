@@ -1,6 +1,6 @@
 import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld } from './dungeon-map-painter.js';
-import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, moveDungeonMemberRoute, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, setDungeonBossReady, rescueDungeonTeammate, guardDungeonTeammate, claimDungeonBossReward } from './dungeon-room.js';
+import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, moveDungeonMemberRoute, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, setDungeonBossReady, rescueDungeonTeammate, guardDungeonTeammate, claimDungeonBossReward, claimDungeonManualExp } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 import { energyRingFill, dungeonFocusCharges, dungeonFocusEmpowers } from './dungeon-quarter-controls.js';
@@ -898,8 +898,7 @@ class DungeonMapView{
           if(result.manualMastery?.exp){
             // C has already committed the kill. Reconcile the A receipt
             // separately, including retries after transient account errors.
-            void import('./dungeon-room.js').then(api=>
-              api.claimDungeonManualExp(roomId)).catch(()=>{});
+            void claimDungeonManualExp(roomId).catch(()=>{});
           }
           if(result.position){
             this.follow=true;this.followBeast=false;
