@@ -967,3 +967,21 @@
   #dungeon-map-view .dm-quiz-report{padding:10px}
   #dungeon-map-view .dm-quiz-correction button{width:100%}
 }
+
+/* Same persisted exclusion rules as ordinary study and 問道試煉. */
+#dungeon-map-view .dm-quiz-tools [data-dq="scope-exclusion"]{
+  background:rgba(83,58,31,.86);color:#ffe6b9;
+  border:1px solid #d2ad71;border-radius:6px;
+}
+#dungeon-map-view .dm-quiz-tools [data-dq="scope-exclusion"]:disabled{
+  opacity:.5;cursor:not-allowed;
+}
+#dungeon-map-view .dm-quiz-cultivation{
+  margin:9px 0 0;color:#e6c783;font-size:13px;font-weight:750;
+  font-variant-numeric:tabular-nums;
+}
+@media(max-width:520px){
+  #dungeon-map-view .dm-quiz-tools [data-dq="scope-exclusion"]{
+    flex:1 0 100%;
+  }
+}
