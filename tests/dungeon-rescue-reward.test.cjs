@@ -228,7 +228,7 @@ test('real boss death atomically archives a permanent C victory and personal inb
   assert.equal((await f.call('a','recent-victories')).body.rewards.length,0,
     'live boss cannot be mistaken for a completed victory');
   const fight=f.raw();
-  fight.enemies[0].battleHealth=45;
+  fight.enemies[0].battleHealth=240; // Requires both trusted foundation strikes.
   fight.members.a.position={x:11,y:8};
   fight.members.b.position={x:12,y:8};
   const [a,b]=await Promise.all([
