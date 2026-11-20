@@ -1603,11 +1603,11 @@ function injectSocialUI() {
     
     pageSocial.innerHTML = `
         <div class="ui-social-heading sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 border-b border-slate-800">
-            <h2 class="text-2xl font-bold text-cyan-400 flex items-center gap-2 p-4 pb-2">
+            <h2 class="text-2xl font-bold text-cyan-400 flex items-center gap-2">
                 <i class="fa-solid fa-comments"></i> 仙盟 <span id="alliance-chat-title-unread" class="alliance-chat-badge with-count" hidden aria-label="未讀好友訊息"></span>
             </h2>
             
-            <div class="ui-social-tabs flex px-4 gap-2 mb-2" role="tablist" aria-label="仙盟功能">
+            <div class="ui-social-tabs flex gap-2" role="tablist" aria-label="仙盟功能">
                 <button type="button" role="tab" aria-controls="section-friends" aria-selected="true" onclick="switchSocialTab('friends')" id="tab-btn-friends" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg">
                     <i class="fa-solid fa-user-group"></i> 好友 <span id="alliance-friend-unread" class="alliance-chat-badge with-count" hidden aria-label="好友私訊未讀"></span>
                 </button>

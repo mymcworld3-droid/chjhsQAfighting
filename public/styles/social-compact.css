@@ -1,0 +1,30 @@
+/* Single compact line: title + four social tabs; leave the content panel its height. */
+#page-social .ui-social-heading{
+  display:flex!important;flex-direction:row!important;align-items:center!important;
+  flex-wrap:nowrap!important;gap:clamp(5px,1.2vw,12px)!important;
+  padding:6px clamp(6px,1.8vw,14px)!important;min-height:48px;
+  box-sizing:border-box;
+}
+#page-social .ui-social-heading > h2{
+  display:inline-flex;align-items:center;gap:5px;flex:0 0 auto;
+  padding:0!important;margin:0!important;
+  font-size:clamp(13px,3.2vw,20px)!important;line-height:1.2;
+  white-space:nowrap;
+}
+#page-social .ui-social-tabs{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));
+  align-items:stretch;flex:1 1 0;min-width:0;
+  padding:0!important;margin:0!important;gap:clamp(2px,.7vw,8px)!important;
+}
+#page-social .ui-social-tabs > button{
+  display:inline-flex;justify-content:center;align-items:center;
+  min-width:0;min-height:34px;gap:3px;padding:5px 2px!important;margin:0;
+  font-size:clamp(9px,2.5vw,12px)!important;line-height:1.15;
+  white-space:nowrap;overflow:visible;
+}
+@media(max-width:420px){
+  #page-social .ui-social-heading{gap:5px!important}
+  #page-social .ui-social-heading > h2{font-size:14px!important;gap:3px}
+  #page-social .ui-social-tabs > button{gap:0}
+  #page-social .ui-social-tabs > button > i{display:none}
+}
