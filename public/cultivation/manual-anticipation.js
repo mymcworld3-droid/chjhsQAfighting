@@ -93,7 +93,7 @@ export function renderBattleBreakthroughEstimate(hint,esc,{confirmed=false}={}){
     <div class="tc-manual-breakthrough-title"><strong>${txt(title)}</strong><small>${hint.percent}%</small></div>
     <div class="tc-manual-breakthrough-track" role="progressbar"
       aria-valuemin="0" aria-valuemax="100" aria-valuenow="${hint.percent}"
-      aria-label="本場試算功法門檻進度"><span style="width:${hint.percent}%"></span></div>
+      aria-label="${confirmed?'已確認':'本場試算'}功法門檻進度"><span style="width:${hint.percent}%"></span></div>
     <small>${txt(detail)} · ${txt(note)}</small>
   </div>`;
 }
