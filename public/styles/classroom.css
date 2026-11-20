@@ -34,3 +34,81 @@
 @media(max-width:540px){#section-classes{padding:12px 12px 84px}.cc-card{padding:13px}.cc-fields{grid-template-columns:1fr}.cc-shell button{min-height:42px}.cc-toolbar h3{font-size:17px}}
 
 .cc-notice{padding:12px 0;border-top:1px solid #6d604647}.cc-notice:first-of-type{margin-top:10px}.cc-notice .cc-toolbar{margin-bottom:4px}.cc-notice-body{white-space:pre-wrap;overflow-wrap:anywhere;color:#f0e7d8}
+
+/* Classroom phase 1: role-aware, responsive tabbed workspace */
+#section-classes .cc-classroom{min-width:0}
+#section-classes .cc-class-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
+  padding:22px 24px;margin-bottom:12px;border:1px solid #78684d7d;border-radius:14px;
+  background:linear-gradient(115deg,#26382d,#18261f 62%,#161d19)}
+#section-classes .cc-class-title{min-width:0}
+#section-classes .cc-class-title h2{font-size:clamp(21px,3vw,28px);line-height:1.25;margin:5px 0;color:#f5e7c7;overflow-wrap:anywhere}
+#section-classes .cc-class-title p{margin:0;color:#c3baaa}
+#section-classes .cc-eyebrow{font-size:11px;color:#c6af81;letter-spacing:.08em}
+#section-classes .cc-header-actions{display:flex;flex-wrap:wrap;gap:8px}
+#section-classes .cc-class-tabs{display:flex;gap:7px;overflow-x:auto;max-width:100%;
+  position:sticky;top:0;z-index:3;background:#0f1511;padding:8px 2px 11px;scrollbar-width:thin;
+  overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+#section-classes .cc-class-tabs button{flex:1 0 auto;min-width:87px;min-height:43px;border-radius:9px;
+  background:#1b2921;color:#c9c5b7;border-color:#556150;white-space:nowrap;font-weight:600}
+#section-classes .cc-class-tabs button[aria-selected="true"]{background:#435841;color:#fff0c7;
+  border-color:#cbb278;box-shadow:inset 0 -3px #d4bb86}
+#section-classes .cc-class-tabs button:focus-visible{outline:2px solid #edd69a;outline-offset:-3px}
+#section-classes .cc-class-panel{min-width:0;padding-top:12px}
+#section-classes .cc-section{margin-bottom:22px}
+#section-classes .cc-section-title{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:0 0 12px}
+#section-classes .cc-section-title h3{margin:0;font-size:18px;color:#f1e5c9}
+#section-classes .cc-section-footer{margin-top:12px}
+#section-classes .cc-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:24px}
+#section-classes .cc-metric{min-width:0;padding:15px 17px;border:1px solid #6574567d;border-radius:11px;background:#1d2921;
+  display:flex;flex-direction:column;gap:5px}
+#section-classes .cc-metric span{font-size:12px;color:#c5beac}
+#section-classes .cc-metric strong{font-size:28px;font-weight:700;line-height:1.3;color:#f0dbab;font-variant-numeric:tabular-nums}
+#section-classes .cc-task-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,315px),1fr));gap:12px}
+#section-classes .cc-task-grid .cc-card{margin:0}
+#section-classes .cc-task{display:flex;flex-direction:column;gap:9px}
+#section-classes .cc-task-header{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+#section-classes .cc-task-header h4{font-size:16px;flex:1;min-width:130px;overflow-wrap:anywhere}
+#section-classes .cc-task .cc-muted{margin:0}
+#section-classes .cc-task-actions{margin-top:auto}
+#section-classes .cc-tag{padding:2px 10px;border-radius:99px;background:#463926;border:1px solid #907b557d;
+  color:#e8d4a9;font-size:11px;white-space:nowrap}
+#section-classes .cc-list-tools{display:flex;align-items:end;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+#section-classes .cc-search{flex:1 1 230px;max-width:380px}
+#section-classes .cc-filters{display:flex;gap:6px;flex-wrap:wrap}
+#section-classes .cc-filters button{min-height:38px;padding:5px 12px}
+#section-classes .cc-filters button[aria-pressed="true"]{background:#465d42;border-color:#b4a272;color:#fff0c7}
+#section-classes .cc-student-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,315px),1fr));gap:10px}
+#section-classes .cc-student{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0}
+#section-classes .cc-student strong{flex:1;overflow-wrap:anywhere;min-width:80px}
+#section-classes .cc-seat{display:grid;place-items:center;flex:0 0 42px;height:42px;border:1px solid #6d7b69;
+  border-radius:9px;background:#29392e;color:#eddaa9;font-variant-numeric:tabular-nums}
+#section-classes .cc-empty{padding:16px;border:1px dashed #6c674f;border-radius:9px;color:#beb5a3;font-size:13px}
+#section-classes .cc-notice-entry{padding:13px 0;border-bottom:1px solid #6d604647}
+#section-classes .cc-notice-entry:first-child{padding-top:0}
+#section-classes .cc-notice-entry:last-child{border-bottom:0;padding-bottom:0}
+#section-classes .cc-notice-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
+#section-classes .cc-code-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#section-classes .cc-code-row code{flex:1}
+#section-classes .cc-name-form{margin-top:12px;max-width:540px}
+#section-classes .cc-name-form button{justify-self:start}
+#section-classes .cc-danger-zone{border-color:#9e666088}
+#section-classes [data-cc-item][hidden],#section-classes [data-cc-empty][hidden]{display:none!important}
+#section-classes .cc-table-wrap{max-width:100%}
+@media(max-width:720px){
+  #section-classes .cc-class-header{padding:16px}
+  #section-classes .cc-class-tabs button{flex:0 0 auto;min-width:85px;padding-inline:12px}
+  #section-classes .cc-task-grid,#section-classes .cc-student-grid{grid-template-columns:1fr}
+  #section-classes .cc-metrics{gap:8px}
+  #section-classes .cc-metric{padding:12px}
+  #section-classes .cc-metric strong{font-size:24px}
+}
+@media(max-width:540px){
+  #section-classes .cc-header-actions{width:100%}
+  #section-classes .cc-header-actions button{flex:1}
+  #section-classes .cc-search{flex-basis:100%;max-width:none}
+  #section-classes .cc-metric{padding:11px 7px;text-align:center;align-items:center}
+  #section-classes .cc-metric span{font-size:11px}
+  #section-classes .cc-metric strong{font-size:21px}
+  #section-classes .cc-task-actions button{flex:1 1 auto}
+  #section-classes .cc-class-panel{padding-top:8px}
+}

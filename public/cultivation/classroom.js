@@ -1,6 +1,7 @@
 import { getMainUser, authenticatedMainFetch } from './data/project-repository.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import './knowledge-points.js';
+import { buildClassroomView, tabsForClass } from './classroom-view.js';
 
 const $ = id => document.getElementById(id);
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -85,20 +86,9 @@ function accountsView() {
     ${review.accounts.map(a => `<article class="cc-card"><h4>${escape(a.name)}</h4><p>${escape(a.school)}</p><p class="cc-muted">帳號：${escape(a.uid)} · 申請：${date(a.requestedAtMs)}</p><p style="white-space:pre-wrap;overflow-wrap:anywhere">${escape(a.reason)}</p>${a.reviewNote ? `<p class="cc-muted">審核備註：${escape(a.reviewNote)}</p>` : ''}${['pending', 'approved'].includes(a.status) ? `<label>審核備註（選填）<input name="reviewNote" maxlength="300"></label><div class="cc-actions" style="margin-top:10px">${(a.status === 'pending' ? [['approve', '核准教師'], ['reject', '退回申請']] : [['revoke', '撤銷教師資格']]).map(([decision, title]) => button('review-teacher', title, `data-uid="${escape(a.uid)}" data-version="${a.version}" data-decision="${decision}"`)).join('')}</div>` : ''}</article>`).join('') || '<p class="cc-muted">目前沒有符合此狀態的教師帳號。</p>'}${review.nextCursor ? button('more-accounts', '載入更多帳號') : ''}`;
 }
 function classView() {
-  const room = state.classroom, teacher = room.role === 'teacher';
-  const list = [...state.assignments].reverse().map(a => `<article class="cc-card"><div class="cc-toolbar"><div><h4>${escape(a.title)}</h4><span class="cc-status">${status(a.status)}${!teacher ? ' · ' + status(a.submission?.status) : ''}</span></div><div class="cc-actions">
-    ${teacher ? a.status === 'draft' ? button('edit', '編輯', `data-id="${a.id}"`) + button('preview', '預覽與發布', `data-id="${a.id}"`) + button('delete-draft', '刪除草稿', `data-id="${a.id}"`) : button('report', '查看成績', `data-id="${a.id}"`) + button('preview', '查看題組', `data-id="${a.id}"`) : button('work', a.submission?.status === 'submitted' ? '結果與訂正' : '開啟作業', `data-id="${a.id}"`)}
-    </div></div><p class="cc-muted">${escape(a.subject)} · ${a.questionCount} 題 · 截止：${date(a.dueAtMs)}</p></article>`).join('');
-  const members = teacher ? `<details class="cc-card"><summary>學生名單（${room.members.length} 人）</summary><div class="cc-table-wrap"><table><thead><tr><th>座號</th><th>姓名</th><th>管理</th></tr></thead><tbody>${room.members.map(m => `<tr><td>${escape(m.seat || '—')}</td><td>${escape(m.name)}</td><td>${button('remove-student', '移出班級', `data-id="${escape(m.uid)}" data-name="${escape(m.name)}"`)}</td></tr>`).join('') || '<tr><td colspan="3">尚無學生加入</td></tr>'}</tbody></table></div></details>` : '';
-  return `<div class="cc-toolbar"><div><h3>${escape(room.name)}</h3><span class="cc-muted">${escape(room.teacherName)}${room.status === 'archived' ? ' · 已封存' : ''}</span></div><div class="cc-actions">${button('home', '所有班級')}${button('refresh', '重新整理')}</div></div>
-    ${teacher ? `<section class="cc-card"><div class="cc-toolbar"><div><span class="cc-muted">班級加入碼</span><div class="cc-code">${escape(room.joinCode)}</div></div><div class="cc-actions">${button('copy-code', '複製加入碼')}${button('overview', '學習總覽')}${button('new-assignment', '新增作業', `class="cc-primary" ${room.status !== 'active' ? 'disabled' : ''}`)}</div></div><details><summary>班級設定</summary><form data-form="rename" class="cc-form">${field('name', '班級名稱', room.name, 'required maxlength="60"')}<div class="cc-actions">${button('rename', '儲存名稱')}${button('rotate-code', '更新加入碼')}${button('archive', room.status === 'active' ? '封存班級' : '恢復班級')}</div></form></details></section>` : `<div class="cc-actions" style="margin-bottom:14px">${button('leave', '退出班級')}</div>`}
-    ${state.access?.isAdmin ? `<details class="cc-card"><summary>指派班級教師</summary><form data-form="assign" class="cc-form"><label>已核准的教師<select name="teacherUid"><option value="${escape(getMainUser()?.uid)}">由我（管理員）管理</option>${(state.approvedTeachers || []).map(a => `<option value="${escape(a.uid)}" ${a.uid === room.ownerUid ? 'selected' : ''}>${escape(a.name)} · ${escape(a.school)}（${escape(a.uid)}）</option>`).join('')}</select></label><div class="cc-actions">${button('assign-teacher', '指派教師')}${state.nextApprovedCursor ? button('more-approved', '載入更多教師') : ''}</div></form></details>` : ''}
-    <section class="cc-card"><div class="cc-toolbar"><h4>班級公告</h4><span class="cc-muted">最新公告優先顯示</span></div>
-      ${teacher && room.status === 'active' ? `<form data-form="notice" class="cc-form"><label>發布給全班的公告<textarea name="content" maxlength="1000" required placeholder="例如：下週上課範圍、作業提醒"></textarea></label><div class="cc-actions">${button('post-notice', '發布公告', 'class="cc-primary"')}</div></form>` : ''}
-      ${(room.notices || []).length ? room.notices.map(n => `<article class="cc-notice"><div class="cc-toolbar"><span class="cc-muted">${date(n.createdAtMs)}</span>${teacher ? button('delete-notice', '刪除', `data-id="${escape(n.id)}" class="cc-danger"`) : ''}</div><div class="cc-notice-body">${escape(n.content)}</div></article>`).join('') : '<p class="cc-muted">目前沒有公告。</p>'}
-    </section>
-    ${members}<div class="cc-toolbar"><h3>班級作業</h3></div>${list || '<p class="cc-muted">目前沒有作業。</p>'}`;
+  return buildClassroomView(state, { escape, date, status, button, currentUid: getMainUser()?.uid || '' });
 }
+
 const blankQuestion = () => ({ question: '', options: ['', '', '', ''], answerIndex: 0, explanation: '', knowledge_points: [] });
 function captureEditor() {
   const form = $('cc-editor'); if (!form) return;
@@ -160,11 +150,29 @@ function reportView() {
     <section class="cc-card"><h4>各題首次作答</h4>${r.questions.map((q, i) => `<details><summary>第 ${i + 1} 題 · ${q.total ? Math.round(q.correct / q.total * 100) + '%' : '尚無作答'}（${q.correct} / ${q.total}）</summary><div class="cc-question">${escape(q.question)}</div><p class="cc-muted">${q.knowledge_points.map(p => escape(p.name)).join('、') || '未標記知識點'}</p></details>`).join('')}</section>
     ${r.knowledgePoints?.length ? `<section class="cc-card"><h4>本次作業的知識點表現</h4>${r.knowledgePoints.map(p => `<p>${escape(p.subject)} · ${escape(p.name)}：${p.total ? Math.round(p.correct / p.total * 100) + '%' : '尚無作答'}（${p.correct} / ${p.total}）</p>`).join('')}<p class="cc-muted">依本次固定題組統計，樣本少時請搭配實際作答判讀。</p></section>` : ''}`;
 }
+function filterClassroomList(panel, type) {
+  const input = panel?.querySelector('input[data-cc-search="' + type + '"]');
+  const items = [...(panel?.querySelectorAll('[data-cc-item="' + type + '"]') || [])];
+  if (!items.length) return;
+  const query = (input?.value || '').trim().toLocaleLowerCase('zh-Hant');
+  let visible = 0;
+  for (const item of items) {
+    const matches = (item.dataset.ccSearch || '').toLocaleLowerCase('zh-Hant').includes(query);
+    const filter = state.assignmentFilter || 'all';
+    const matchesStatus = type !== 'assignment' || filter === 'all' || item.dataset.ccFilter === filter;
+    item.hidden = !(matches && matchesStatus);
+    if (!item.hidden) visible++;
+  }
+  const empty = panel.querySelector('[data-cc-empty="' + type + '"]');
+  if (empty) empty.hidden = visible > 0;
+}
 function render() {
   const panel = $('section-classes'); if (!panel) return;
   const views = { home: homeView, accounts: accountsView, class: classView, overview: overviewView, editor: editorView, preview: previewView, work: workView, report: reportView };
   window.quizMathClear?.(panel);
   panel.innerHTML = `<div class="cc-shell"><div data-message role="status" aria-live="polite"></div>${views[state.view]()}</div>`;
+  filterClassroomList(panel, 'assignment');
+  filterClassroomList(panel, 'student');
   void window.quizMathTypeset?.([panel]);
 }
 async function loadHome(more = false) { const data = await request({ action: 'list', ...(more ? { cursor: state.nextCursor } : {}) }); state = { ...data, view: 'home', classes: more ? [...state.classes, ...data.classes] : data.classes }; render(); window.dispatchEvent(new CustomEvent('xiuxian:teacher-access')); }
@@ -173,9 +181,16 @@ async function loadAccounts(status = state.accountReview?.status || 'pending', m
   state.accountReview = { ...data, status, accounts: more ? [...state.accountReview.accounts, ...data.accounts] : data.accounts }; state.view = 'accounts'; render();
 }
 async function loadClass(classId = state.classroom?.id) {
+  const changedClass = state.classroom?.id !== classId;
   const data = await request({ action: 'classDetail', classId });
   const approved = data.access?.isAdmin ? await request({ action: 'teacherAccounts', status: 'approved' }) : null;
-  state = { ...state, ...data, approvedTeachers: approved?.accounts || [], nextApprovedCursor: approved?.nextCursor, view: 'class' }; render();
+  state = { ...state, ...data, approvedTeachers: approved?.accounts || [], nextApprovedCursor: approved?.nextCursor,
+    view: 'class', classTab: changedClass ? 'summary' : (state.classTab || 'summary'),
+    assignmentFilter: changedClass ? 'all' : (state.assignmentFilter || 'all'),
+    assignmentSearch: changedClass ? '' : (state.assignmentSearch || ''),
+    studentSearch: changedClass ? '' : (state.studentSearch || ''),
+    overview: changedClass ? null : state.overview };
+  render();
 }
 async function loadAssignment(assignmentId, view) {
   const data = await request({ action: 'getAssignment', classId: state.classroom.id, assignmentId });
@@ -234,6 +249,15 @@ async function act(target) {
     await request({ action: 'assignTeacher', classId, expectedOwnerUid: state.classroom.ownerUid, ...values }); return loadClass();
   }
   if (action === 'class') return loadClass(target.dataset.id);
+  if (action === 'class-tab') {
+    if (!tabsForClass(state.classroom?.role === 'teacher').some(([id]) => id === target.dataset.tab)) return;
+    state.classTab = target.dataset.tab;
+    render();
+    $('section-classes')?.querySelector('[role="tab"][aria-selected="true"]')?.focus({ preventScroll: true });
+    if ($('section-classes')) $('section-classes').scrollTop = 0;
+    return;
+  }
+  if (action === 'assignment-filter') { state.assignmentFilter = target.dataset.filter; render(); return; }
   if (action === 'overview') return loadOverview();
   if (action === 'refresh') return state.view === 'home' ? loadHome() : state.view === 'accounts' ? loadAccounts() : state.view === 'report' ? loadReport() : state.view === 'overview' ? loadOverview() : loadClass();
   if (action === 'create' || action === 'join') {
@@ -335,6 +359,26 @@ function mount() {
   const panel = $('section-classes'); if (!panel || panel.dataset.classroomMounted) return;
   panel.dataset.classroomMounted = 'true';
   panel.addEventListener('submit', event => { event.preventDefault(); });
+  panel.addEventListener('input', event => {
+    const input = event.target.closest('input[data-cc-search]');
+    if (!input) return;
+    const type = input.dataset.ccSearch;
+    if (type === 'assignment') state.assignmentSearch = input.value;
+    if (type === 'student') state.studentSearch = input.value;
+    filterClassroomList(panel, type);
+  });
+  panel.addEventListener('keydown', event => {
+    if (!event.target.matches('.cc-class-tabs [role="tab"]')) return;
+    const tabs = [...panel.querySelectorAll('.cc-class-tabs [role="tab"]')];
+    const current = tabs.indexOf(event.target);
+    let next = current;
+    if (event.key === 'ArrowRight') next = (current + 1) % tabs.length;
+    else if (event.key === 'ArrowLeft') next = (current + tabs.length - 1) % tabs.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = tabs.length - 1;
+    else return;
+    event.preventDefault(); tabs[next]?.click();
+  });
   panel.addEventListener('click', event => {
     const target = event.target.closest('button[data-action]');
     if (!target || target.disabled) return;
