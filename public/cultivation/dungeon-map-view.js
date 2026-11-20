@@ -79,7 +79,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-map-view-style')){
       const style=document.createElement('link');
       style.id='dungeon-map-view-style';style.rel='stylesheet';
-      style.href='/styles/dungeon-map-view.css?v=20261119-focus-aura-v2';
+      style.href='/styles/dungeon-map-view.css?v=20261120-scope-exclusion-v1';
       document.head.append(style);
     }
     if(!document.getElementById('tactical-manual-xp-feedback-style')){
