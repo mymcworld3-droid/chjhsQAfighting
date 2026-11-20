@@ -786,13 +786,13 @@ async function main(){
     assert.equal(room.members.b.explorationStamina,10);
     assert.equal(quizState.b.answered,0);
     await a.page.locator('[data-dq="collapse"]').click();
-    const retryCredit=await a.page.evaluate(async()=>{
+    const retryCredit=await a.page.evaluate(async(questionId)=>{
       const response=await fetch('/api/dungeon/room',{method:'POST',
         headers:{'content-type':'application/json','x-test-user':'a'},
         body:JSON.stringify({action:'quiz-credit',roomId:'dungroom000001',
-          questionId:afterBan})});
+          questionId})});
       return response.status;
-    });
+    },afterBan);
     assert.equal(retryCredit,200);
     assert.equal(room.members.a.explorationStamina,10);
     assert.equal(room.members.a.quizCreditSeq,1);
