@@ -28,6 +28,7 @@ test('repeated hits use explicit number of strikes and individual damage, not a 
 });
 test('buffs, flying swords and every manual use valid conditional descriptions',()=>{
   assert.match(desc('dragon-roar'),/不造成直接傷害。$/);
+  assert.equal(Q.BY_SKILL['flight-summon'].cost,3,'召劍技能消耗 3 體力');
   assert.match(desc('flight-summon'),/沿途每次造成 220 傷害。.*首次召劍不造成傷害。$/);
   assert.match(desc('flight-summon',200,1,{flyingSwordReady:false}),/本次召劍不造成傷害。$/);
   assert.doesNotMatch(desc('flight-summon',200,1,{flyingSwordReady:true}),/本次召劍不造成傷害/);
