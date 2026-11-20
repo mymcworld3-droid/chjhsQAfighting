@@ -1,12 +1,14 @@
 import * as Camera from './dungeon-map-camera.js';
 import { BIOMES, drawWorld } from './dungeon-map-painter.js';
 import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill, switchDungeonLoadout, moveDungeonMemberRoute, getDungeonRoom, activateDungeonPortal, enterDungeonBoss, setDungeonBossReady, rescueDungeonTeammate, guardDungeonTeammate, claimDungeonBossReward, claimDungeonManualExp } from './dungeon-room.js';
-import { getMainUser } from './data/project-repository.js';
+import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 import { energyRingFill, dungeonFocusCharges, dungeonFocusEmpowers } from './dungeon-quarter-controls.js';
 import { dungeonTrialWheelHTML, bindDungeonTrialWheel, renderDungeonTrialWheel } from './dungeon-trial-wheel.js';
 import { dungeonRoute, dungeonReachableTiles, dungeonAttackTiles } from './dungeon-map-actions.js';
-import { skillArt } from './manual-art.js';
+import { skillArt, bookArt } from './manual-art.js';
+import { manualXpDelta, renderManualXpToast, renderManualXpProgress } from './tactical-manual-xp-feedback.js';
+import {manualAnticipation,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
 // The trial's original shared manual catalog, animation timing and VFX.
 import './manual-rules.js';
 import './tactical-animation.js';
@@ -24,6 +26,9 @@ import {dungeonEnemyReactionEvents} from './dungeon-enemy-animation.js';
 // The dungeon shares the trial's fullscreen quarter-dial presentation;
 // its exploration, combat and questions remain live, server-authoritative actions.
 const safeRoom=id=>/^[A-Za-z0-9_-]{8,160}$/.test(String(id||''));
+const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+})[char]);
 const clamp=(value,lo,hi)=>Math.max(lo,Math.min(hi,value));
 const mapValid=map=>map?.mode==='dungeon'&&map.layoutVersion===1&&
   Number.isInteger(map.width)&&map.width>5&&map.width<=128&&
@@ -46,6 +51,7 @@ class DungeonMapView{
     this.portalPending=false;this.bossPending=false;
     this.rescuePending=false;this.guardPending=false;this.guardSignature='';
     this.rewardPending=false;this.rewardResult=null;
+    this.manualXpTimer=null;this.manualXpGeneration=0;
     this.aimTile=null;this.skillSignature='';
     this.focusAuras=new Map();this.sprites={};
     this.visualScenes=new Map(); // authenticated room events only; never controls damage
@@ -75,6 +81,20 @@ class DungeonMapView{
       style.id='dungeon-map-view-style';style.rel='stylesheet';
       style.href='/styles/dungeon-map-view.css?v=20261119-focus-aura-v2';
       document.head.append(style);
+    }
+    if(!document.getElementById('tactical-manual-xp-feedback-style')){
+      const link=document.createElement('link');
+      link.id='tactical-manual-xp-feedback-style';
+      link.rel='stylesheet';
+      link.href='/styles/tactical-manual-xp-feedback.css?v=20261120-dungeon-mastery-v1';
+      document.head.append(link);
+    }
+    if(!document.getElementById('tactical-manual-anticipation-style')){
+      const link=document.createElement('link');
+      link.id='tactical-manual-anticipation-style';
+      link.rel='stylesheet';
+      link.href='/styles/manual-anticipation.css?v=20261120-dungeon-mastery-v1';
+      document.head.append(link);
     }
     if(!document.getElementById('dungeon-trial-boss-style')){
       const link=document.createElement('link');
@@ -165,6 +185,15 @@ class DungeonMapView{
     </div>
   </div>
 </div>`;
+    // Same pointer-transparent live EXP overlay as 問道試煉. Keep it outside
+    // .dm-stage, whose overflow would clip the animation on small screens.
+    const xpHost=document.createElement('div');
+    xpHost.className='tc-manual-xp-host';
+    xpHost.dataset.manualXpHost='';
+    xpHost.setAttribute('role','status');
+    xpHost.setAttribute('aria-live','polite');
+    xpHost.setAttribute('aria-atomic','true');
+    root.append(xpHost);
     const stage=root.querySelector('[data-dm-stage]');
     stage.insertAdjacentHTML('beforeend',dungeonTrialWheelHTML());
     const loadoutToggle=root.querySelector('[data-dm="loadouts"]');
@@ -895,11 +924,8 @@ class DungeonMapView{
             (result.manualMastery?.exp?
               ' · 《'+result.manualMastery.bookName+'》+'+
               result.manualMastery.exp+' EXP':''));
-          if(result.manualMastery?.exp){
-            // C has already committed the kill. Reconcile the A receipt
-            // separately, including retries after transient account errors.
-            void claimDungeonManualExp(roomId).catch(()=>{});
-          }
+          // The authoritative ledger update triggers the same visual XP
+          // feedback as the trial; no independent guessed popup here.
           if(result.position){
             this.follow=true;this.followBeast=false;
             this.camera=Camera.focusOn(this.camera,this.selfPad(),
@@ -1517,6 +1543,7 @@ class DungeonMapView{
     // Play only newly committed skill/strike results; duplicate SSE snapshots
     // cannot restart a visual, and entering an arena cannot replay old casts.
     const previous=this.room;
+    const xpDelta=manualXpDelta(previous,room,this.uid,globalThis.QAManuals);
     if(changedArena){
       this.visualScenes?.clear();this.travelScenes?.clear();
     this.enemyReactionScenes?.clear();
@@ -1578,12 +1605,91 @@ class DungeonMapView{
     if(room.status==='assembled')void this.quiz?.warm();
     this.syncClockAnchor(room);
     this.updateStatus();
+    if(xpDelta)this.showLiveManualXp(xpDelta);
     if(this.map){
       this.follow=true;this.followBeast=false;
       this.camera=Camera.lockToPlayer(this.selfPad(),
         this.map,this.width,this.height);
     }
     this.drawSoon();
+  }
+  clearLiveManualXp(){
+    ++this.manualXpGeneration;
+    if(this.manualXpTimer!==null)clearTimeout(this.manualXpTimer);
+    this.manualXpTimer=null;
+    this.$('[data-manual-xp-host]')?.replaceChildren();
+  }
+  scheduleManualXpClear(generation,delay){
+    if(this.manualXpTimer!==null)clearTimeout(this.manualXpTimer);
+    this.manualXpTimer=setTimeout(()=>{
+      if(this.manualXpGeneration!==generation)return;
+      this.$('[data-manual-xp-host]')?.replaceChildren();
+      this.manualXpTimer=null;
+    },delay);
+  }
+  showLiveManualXp(delta){
+    if(!delta?.books?.length||!this.isCurrent()||
+      this.root?.hidden||document.hidden)return;
+    const host=this.$('[data-manual-xp-host]');
+    if(!host)return;
+    this.clearLiveManualXp();
+    const generation=this.manualXpGeneration,roomId=this.roomId,uid=this.uid;
+    // Exactly the same book art, entry layout, entrance animation and sound
+    // as the existing PvE trial. No speculative client-side damage/EXP.
+    host.innerHTML=renderManualXpToast(delta,{esc:escapeHtml,bookArt});
+    try{window.QAGameAudio?.play('spirit-pulse',{volume:.25});}catch(_){}
+    // A network failure must not leave an overlay permanently on-screen.
+    this.scheduleManualXpClear(generation,6500);
+    void this.confirmManualXpProgress(delta,generation,roomId,uid);
+  }
+  async confirmManualXpProgress(delta,generation,roomId,uid){
+    const active=()=>this.isCurrent()&&this.roomId===roomId&&
+      this.uid===uid&&this.manualXpGeneration===generation;
+    try{
+      // Replaying this is safe: Firebase A uses the high-water XP receipt.
+      await claimDungeonManualExp(roomId);
+      if(!active())return;
+      const response=await authenticatedMainFetch('/api/tactical/manuals',{
+        method:'GET'
+      });
+      if(!response.ok)throw Error('功法等級資料讀取失敗');
+      const data=await response.json();
+      if(!active()||!data?.state)return;
+      const catalog=globalThis.QAManuals;
+      const progress=renderManualXpProgress(delta,data.state,catalog,{
+        esc:escapeHtml
+      });
+      const library=new Map((data.state.library||[]).map(book=>[book.id,book]));
+      const candidates=delta.books.map(row=>{
+        const hint=manualAnticipation(library.get(row.id),
+          catalog?.totalExpForLevel,0);
+        return hint&&['near','imminent','realm'].includes(hint.status)?
+          {...hint,bookName:row.name}:null;
+      }).filter(Boolean);
+      const priority={imminent:0,realm:1,near:2};
+      candidates.sort((a,b)=>
+        priority[a.status]-priority[b.status]||a.remaining-b.remaining);
+      const breakthrough=candidates.length?
+        renderBattleBreakthroughEstimate(candidates[0],escapeHtml,{
+          confirmed:true
+        }):'';
+      const toast=this.$('[data-manual-xp-toast]');
+      if(toast&&(progress||breakthrough)){
+        toast.insertAdjacentHTML('beforeend',progress+breakthrough);
+      }
+      this.scheduleManualXpClear(generation,2750);
+    }catch(error){
+      if(!active())return;
+      // A pending account write is NOT labelled as a confirmed level-up.
+      const toast=this.$('[data-manual-xp-toast]');
+      if(toast){
+        const message=document.createElement('small');
+        message.className='tc-manual-xp-more';
+        message.textContent='經驗已記錄，帳號進度同步中；重新連線可補入帳。';
+        toast.append(message);
+      }
+      this.scheduleManualXpClear(generation,2750);
+    }
   }
   close(){
     ++this.seq;this.opened=false;this.pointers.clear();this.movePending=false;
@@ -1618,6 +1724,7 @@ class DungeonMapView{
     document.removeEventListener('visibilitychange',this.onVisibility);
     if(this.frame)cancelAnimationFrame(this.frame);
     this.frame=0;
+    this.clearLiveManualXp();
     if(this.root)this.root.hidden=true;
     this.map=null;this.room=null;this.roomId='';this.uid='';
     const focus=this.previousFocus;this.previousFocus=null;
