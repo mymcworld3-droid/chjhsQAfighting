@@ -105,9 +105,11 @@ test('flying sword summons within two cells and attacks along the shortest beast
   let state={...initial,members:preset.members};
   const summoned=cast(state,record,'flight-summon',{x:5,y:6});
   assert.equal(summoned.result.totalDamage,0);
+  assert.equal(summoned.result.cost,3);
   assert.deepStrictEqual(summoned.members.a.flyingSword,{x:5,y:6});
   state=next(state,summoned);
   const through=cast(state,record,'flight-summon',{x:7,y:5},2);
+  assert.equal(through.result.cost,3);
   assert.ok(through.result.totalDamage>0);
   assert.ok(through.enemies[0].battleHealth<400);
   assert.equal(through.result.path.length-1,3);
@@ -328,14 +330,14 @@ test('independent flying-sword movement costs half the even shortest path and cr
   const enabled=S.switchLoadout(initial,'a',record,2);
   let state={...initial,members:enabled.members};
   const summoned=cast(state,record,'flight-summon',{x:6,y:5});
-  assert.equal(summoned.members.a.explorationStamina,8);
+  assert.equal(summoned.members.a.explorationStamina,7);
   state=next(state,summoned);
   const moved=S.castSkill(state,'a',map,record,{
     skillId:'flight-summon',target:{x:8,y:5},seq:2,moveSword:true
   });
   assert.equal(moved.result.moveSword,true);
   assert.equal(moved.result.cost,1);
-  assert.equal(moved.members.a.explorationStamina,7);
+  assert.equal(moved.members.a.explorationStamina,6);
   assert.deepStrictEqual(moved.members.a.position,{x:5,y:5});
   assert.deepStrictEqual(moved.members.a.flyingSword,{x:8,y:5});
   assert.equal(moved.result.hits.filter(hit=>hit.enemyId==='beast-1').length,1);
