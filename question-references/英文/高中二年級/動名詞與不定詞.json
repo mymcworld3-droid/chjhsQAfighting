@@ -148,6 +148,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-20261120-b12-en2-gerund-infinitive-1",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "文法搭配、語義條件與篇章改寫皆具單一最佳答案",
+      "question": {
+        "q": "The principal postponed ______ the final decision until all student groups had been consulted.",
+        "correct": "making",
+        "wrong": [
+          "to make",
+          "make",
+          "made"
+        ],
+        "exp": "'Postpone' takes a gerund as its object: postpone doing something. The other forms do not fit the verb's complement pattern.",
+        "subject": "英文",
+        "sub_topic": "動名詞與不定詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-動名詞與不定詞",
+        "template_id": "ref-20261120-b12-en2-gerund-infinitive-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-en2-gerund-infinitive-2",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "文法搭配、語義條件與篇章改寫皆具單一最佳答案",
+      "question": {
+        "q": "The sign reminded visitors ______ their phones to silent mode before entering the concert hall.",
+        "correct": "to switch",
+        "wrong": [
+          "switching",
+          "switch",
+          "switched"
+        ],
+        "exp": "The pattern is 'remind someone to do something'. 'Visitors' is the object, and 'to switch' introduces the requested action.",
+        "subject": "英文",
+        "sub_topic": "動名詞與不定詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-動名詞與不定詞",
+        "template_id": "ref-20261120-b12-en2-gerund-infinitive-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-20261120-b12-en2-gerund-infinitive-3",
+      "source": "依高中課程觀念自編（非歷屆原題）",
+      "design": "文法搭配、語義條件與篇章改寫皆具單一最佳答案",
+      "question": {
+        "q": "The committee denied ______ the survey responses after the deadline had passed.",
+        "correct": "changing",
+        "wrong": [
+          "to change",
+          "change",
+          "changed"
+        ],
+        "exp": "'Deny' is followed by a gerund when denying an action: 'denied changing'. 'Deny to change' is not the appropriate construction.",
+        "subject": "英文",
+        "sub_topic": "動名詞與不定詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-動名詞與不定詞",
+        "template_id": "ref-20261120-b12-en2-gerund-infinitive-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
