@@ -97,12 +97,13 @@ function patchedUser(user,patch){
   return next;
 }
 function manualLoadout(manualRecord,trainingAccessScore){
-  const {equipped,skillLevels,loadouts,activeLoadout}=Manuals.normalize(manualRecord);
+  const normalized=Manuals.weaponize(manualRecord);
+  const {equipped,skillLevels,weaponIds}=normalized;
   const manualSkills=equipped.filter(id=>Manuals.meetsRealm(Manuals.BY_SKILL[id],trainingAccessScore));
   const manualSkillLevels=Object.fromEntries(manualSkills.filter(id=>skillLevels[id])
     .map(id=>[id,skillLevels[id]]));
-  return {trainingAccessScore,manualSkills,manualSkillLevels,manualLoadoutName:loadouts[activeLoadout].name,
-    manualLoadoutIndex:activeLoadout};
+  return {trainingAccessScore,manualSkills,manualSkillLevels,
+    manualWeaponIds:[...weaponIds],manualWeaponMode:true};
 }
 function playerActor(user,uid,selection,catalog,manualRecord){
   const trusted=trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalog),type=trusted.goldenCore?.type||'none';
@@ -235,6 +236,32 @@ async function assertLoadoutUnlocked(tx,db,uid){
   if(rooms.some(s=>{const room=exists(s);return room&&(room.status==='active'||room.status==='waiting'&&room.createdAtMs>Date.now()-15*60000)&&room.actors?.some(a=>a.uid===uid);}))
     throw error('戰鬥進行中，請先結束戰鬥或離場再更換配置',409);
 }
+
+// A weapon can change during SOLO PvE without costing a turn. Multiplayer
+// dungeon and PvP are locked while underway. Read all affected room records
+// before the first write, so saved weapons and the live actor stay atomic.
+async function weaponEditableRooms(tx,db,uid){
+  const [pointerSnap,dungeonSnap]=await Promise.all([
+    tx.get(db.collection(PLAYERS).doc(uid)),
+    tx.get(db.collection('dungeonRoomMemberships').doc(uid))
+  ]);
+  const pointer=exists(pointerSnap)||{},dungeon=exists(dungeonSnap)||{};
+  const ids=[...new Set([pointer.roomId,...Object.values(pointer.roomIds||{})].filter(Boolean))];
+  const rooms=await Promise.all(ids.map(id=>tx.get(db.collection(ROOMS).doc(id))));
+  if(rooms.some(s=>{
+    const room=exists(s);
+    return room?.mode==='pvp'&&['active','waiting'].includes(room.status)&&
+      room.actors?.some(a=>a.uid===uid);
+  }))throw error('多人鬥法進行中，不可更換武器',409);
+  if(dungeon.roomId){
+    const dungeonRoom=exists(await tx.get(db.collection('dungeonRooms').doc(dungeon.roomId)));
+    if(dungeonRoom?.status==='assembled'&&dungeonRoom.members&&
+      Object.hasOwn(dungeonRoom.members,uid))
+      throw error('多人副本進行中，不可裝備或卸下武器',409);
+  }
+  return rooms.map(s=>exists(s)).filter(room=>room?.mode==='pve'&&
+    room.status==='active'&&room.actors?.some(a=>a.uid===uid));
+}
 async function updateLoadout(db,uid,input){
   const index=input?.index;
   if(!Number.isInteger(index)||index<0||index>2)throw error('配置不存在',400);
@@ -254,12 +281,26 @@ async function updateLoadout(db,uid,input){
       if(weaponId&&!modern.books[weaponId])throw error('尚未獲得這件武器',403);
       if(weaponId&&modern.weaponIds.some((id,i)=>i!==index&&id===weaponId))
         throw error('同一種武器不能重複裝備',400);
-      await assertLoadoutUnlocked(tx,db,uid);
+      const soloRooms=await weaponEditableRooms(tx,db,uid);
       const weaponIds=[...modern.weaponIds];
       weaponIds[index]=weaponId;
-      const saved=Manuals.normalize({...modern,weaponIds,
-        activeLoadout:input?.apply===true?index:modern.activeLoadout});
-      tx.set(ref,saved);return manualResponse(saved,user);
+      const saved=Manuals.normalize({...modern,weaponIds});
+      const projection=manualLoadout(saved,TrainingAccess.score(user));
+      for(const room of soloRooms){
+        const actor=room.actors.find(a=>a.uid===uid);
+        if(!actor)continue;
+        actor.manualSkills=[...projection.manualSkills];
+        actor.manualSkillLevels={...projection.manualSkillLevels};
+        actor.manualWeaponIds=[...projection.manualWeaponIds];
+        actor.manualWeaponMode=true;
+        delete actor.manualLoadoutIndex;
+        delete actor.manualLoadoutName;
+        if(room.pveMetrics)room.pveMetrics.loadout=[...projection.manualSkills];
+        room.revision++;room.updatedAtMs=Date.now();
+        tx.set(db.collection(ROOMS).doc(room.id),room);
+      }
+      tx.set(ref,saved);
+      return manualResponse(saved,user);
     }
     if(Array.isArray(exists(record)?.weaponIds)&&ids!==undefined)
       throw error('新版武器配置由武器等級決定技能，請改用 weaponId',400);
@@ -494,6 +535,8 @@ async function switchBattleLoadout(db,uid,input,now=Date.now()){
     const userRef=db.collection('users').doc(uid),manualRef=db.collection(MANUALS).doc(uid);
     const [userSnap,manualSnap]=await Promise.all([tx.get(userRef),tx.get(manualRef)]);
     const user=exists(userSnap);if(!user||user.uid&&user.uid!==uid)throw error('玩家資料不存在',404);
+    if(Array.isArray(exists(manualSnap)?.weaponIds))
+      throw error('新版武器沒有主武器，請直接選擇想施放的武器技能',409);
     const manuals=Manuals.normalize(exists(manualSnap)),preset=manuals.loadouts[index];
     const score=TrainingAccess.score(user);
     const ids=Array.isArray(manuals.weaponIds)?
