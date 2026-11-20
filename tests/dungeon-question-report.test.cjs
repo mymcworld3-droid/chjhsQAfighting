@@ -18,8 +18,14 @@ function store(initial={}){
           get:async ref=>{assert.equal(writing,false);return snap(ref);},
           set:(ref,value)=>{writing=true;writes.set(ref.key,clone(value));},
           update:(ref,patch)=>{
-            writing=true;const current=clone(records.get(ref.key)||{});
-            Object.assign(current,clone(patch));writes.set(ref.key,current);
+            writing=true;
+            const current=clone(writes.get(ref.key)||records.get(ref.key)||{});
+            for(const [key,value] of Object.entries(clone(patch))){
+              const parts=key.split('.');let node=current;
+              for(const part of parts.slice(0,-1))node=node[part]||={};
+              node[parts.at(-1)]=value;
+            }
+            writes.set(ref.key,current);
           }
         };
         const result=await fn(tx);
