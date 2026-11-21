@@ -1,8 +1,8 @@
-/* Three equipped swords/totems. Sprite panels are 3 columns x 2 rows. */
+/* Three equipped swords/totems. Individual HD files load on demand. */
 #manual-training-root .manual-weapon-art {
   display:block; flex:none; aspect-ratio:1/1; width:100%; height:auto;
   border-radius:10px;
-  background-image:url('/assets/weapons/weapon-art-atlas.webp?v=20261120-v1');
+  background-image:none;
   background-repeat:no-repeat; background-size:300% 200%;
   background-color:#1a302b;
   box-shadow:inset 0 0 0 1px #f5dca655,0 5px 16px #050c0bb8;
