@@ -2219,6 +2219,8 @@ async function enterTrial(e,account){
 }
 async function open(nextMode='pve'){
   window.prefetchXiuxianContext?.('trial');
+  // No rare sound downloads at login; warm combat cues on entering a fight.
+  void window.QAGameAudio?.preload(['combat-impact','spirit-pulse','reward-chime']);
   ensure();
   if(opened&&mode==='pve'&&nextMode==='pve'&&trialEntry?.uid===getMainUser()?.uid)return trialEntry.promise;
   if(opened)close();
