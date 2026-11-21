@@ -163,12 +163,13 @@ test('dungeon modern wheel exposes move and exactly two weapons, with each weapo
   const wheelSource=read('public/cultivation/dungeon-trial-wheel.js');
   const viewSource=read('public/cultivation/dungeon-map-view.js');
   const css=read('public/styles/dungeon-trial-wheel.css');
-  assert.match(wheelSource,/const heading=i===0\?'移動':i===1\?'武器一':'武器二'/);
+  assert.match(wheelSource,/const title=i===0\?'移動':i===1\?'武器一':'武器二'/);
   assert.match(wheelSource,/selectedWeaponSlot/);
   assert.match(wheelSource,/button\.disabled=locked\|\|!!item\.locked/);
   assert.match(viewSource,/selectedWeapon\?\.skills\|\|\[\]/);
   assert.match(viewSource,/this\.weaponWheelSlot>=0&&this\.wheelMode!=='attack'/);
   assert.match(css,/\.dm-modern-weapon-wheel/);
+  assert.match(wheelSource,/tc-rightwheel-v3/);
 });
 
 test('dungeon weapon submenus reject cross-weapon skills and do not move before skill selection',()=>{
