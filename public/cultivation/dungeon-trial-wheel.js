@@ -214,6 +214,8 @@ export function renderDungeonTrialWheel(wheel,{mode='attack',options=[],moveOpti
     return renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot,options,
       moveOptions,selected,locked,stamina,focusCharges});
   wheel.classList.remove('dm-modern-weapon-wheel');
+  wheel.querySelector('.tc-weapon-outer-choices')?.remove();
+  wheel.querySelector('.dm-weapon-empty-message')?.remove();
   const attacking=mode!=='move';
   const choices=wheel.querySelector('.tc-wheel-options');
   const shown=attacking?(options.length?options:[{
