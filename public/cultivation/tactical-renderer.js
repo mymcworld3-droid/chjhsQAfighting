@@ -37,8 +37,13 @@ export class TacticalRenderer{
     this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.onSealPeek=onSealPeek;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.focusBeastIndex=0;this.queue=[];this.scene=null;this.focusAuras=new Map();this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;this.sealRangePlan={seals:[]};this.sealRangeMode='all';this.sealRangeFocusId=null;this.sealTargetPlan={seals:[]};this.objectiveCues=[];
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
-    for(const [id,url]of Object.entries(SOURCES)){
-      const img=new Image();img.onload=()=>this.draw();img.onerror=()=>this.draw();img.src=url;this.images[id]=img;
+    // Only terrain and monsters are universal to every arena. Character
+    // atlases are requested when their gender actually appears in a room.
+    for(const id of ['ground','props','monsters']){
+      const img=new Image();img.decoding='async';
+      img.onload=()=>{if(!this.destroyed)this.requestDraw();};
+      img.onerror=()=>{if(!this.destroyed)this.requestDraw();};
+      img.src=SOURCES[id];this.images[id]=img;
     }
     this.resize=new ResizeObserver(()=>this.requestDraw());this.resize.observe(canvas);
 
@@ -267,7 +272,19 @@ export class TacticalRenderer{
     if(this.sealRangeMode===accepted&&this.sealRangeFocusId===target)return;
     this.sealRangeMode=accepted;this.sealRangeFocusId=target;this.requestDraw();
   }
+  ensureCharacterSprites(state){
+    const genders=new Set((state?.actors||[]).filter(a=>!a.bot)
+      .map(a=>a.gender==='female'?'female':'male'));
+    for(const id of genders){
+      if(this.images[id]||this.destroyed)continue;
+      const img=new Image();img.decoding='async';
+      img.onload=()=>{if(!this.destroyed)this.requestDraw();};
+      img.onerror=()=>{if(!this.destroyed)this.requestDraw();};
+      img.src=SOURCES[id];this.images[id]=img;
+    }
+  }
   update(state,uid,mode,selection){
+    this.ensureCharacterSprites(state);
     this.preview=null;
     // A single room can contain several stages of identical size. The map
     // layout and stage identities must be checked independently of room ID.
@@ -346,6 +363,7 @@ export class TacticalRenderer{
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
   present(state,uid,scene=null,progress=0,view=null){
+    this.ensureCharacterSprites(state);
     this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.sealRangePlan={seals:[]};this.sealTargetPlan={seals:[]};this.objectiveCues=[];this.canvas.removeAttribute('aria-description');this.canvas.removeAttribute('aria-keyshortcuts');this.draw();
   }
   get isAnimating(){return !!this.scene||this.queue.length>0;}
