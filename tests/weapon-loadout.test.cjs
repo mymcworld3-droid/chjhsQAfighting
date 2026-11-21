@@ -80,10 +80,15 @@ test('server equips at most three unique owned weapons, with all their learned s
   assert.equal(restored.equipped.length,4);
   assert.equal(db.records.get(API.ROOMS+'/'+room.id).actors[0].manualSkills.length,4);
 });
-test('multiplayer PvP and assembled co-op dungeon forbid equipment changes; waiting dungeon allows them',async()=>{
+test('PvP waiting may change weapons, but an active duel and assembled dungeon forbid changes',async()=>{
   const pvp=database();await API.chooseSchool(pvp,'u1',{school:'sword'});
-  await API.start(pvp,'u1',{mode:'pvp'},NOW);
-  await assert.rejects(API.updateLoadout(pvp,'u1',{index:0,weaponId:null}),
+  const waiting=await API.start(pvp,'u1',{mode:'pvp'},NOW);
+  const edited=await API.updateLoadout(pvp,'u1',{index:0,weaponId:null});
+  assert.deepEqual(edited.weaponIds,[null,null,null]);
+  assert.deepEqual(pvp.records.get(API.ROOMS+'/'+waiting.id).actors[0].manualSkills,[],
+    'the pending match must see updated equipment');
+  await API.start(pvp,'u2',{mode:'pvp',code:waiting.id.slice(6)},NOW+1);
+  await assert.rejects(API.updateLoadout(pvp,'u1',{index:0,weaponId:'sword-wind'}),
     /多人鬥法進行中/);
   const dungeon=database();await API.chooseSchool(dungeon,'u1',{school:'sword'});
   const roomId='dungeon-weapon-test-001';
