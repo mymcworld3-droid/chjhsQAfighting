@@ -257,11 +257,15 @@
         try { void context?.suspend?.()?.catch(() => {}); } catch (_) {}
       });
       listen(env, 'pagehide', () => { stop(); unlocked = false; });
-      listen(env, 'xiuxian:user-data-ready', () => { stop(); seen.clear(); lastPlayed.clear(); groups.clear(); syncControls(); });
+      listen(env, 'xiuxian:user-data-ready', () => {
+        stop();seen.clear();lastPlayed.clear();groups.clear();syncControls();
+        // Only a signed-in player's actual audio preferences justify requests.
+        if(preferences().enabled)void preload();
+      });
       listen(env, 'xiuxian:friend-request', () => play('reward-chime', { priority: 30, volume: .6 }));
       listen(env, 'xiuxian:features-ready', mount);
       if (doc.readyState === 'loading') listen(doc, 'DOMContentLoaded', mount, { once: true }); else mount();
-      void preload();
+      // No MP3 download on the Google login screen.
     }
     function diagnostics() {
       return { ...counts, contextState: context?.state || 'locked', active: current?.id || null,
