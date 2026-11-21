@@ -44,11 +44,17 @@ test('all unlocked moves from every worn weapon are simultaneously available, wi
   assert.deepEqual(removed.equipped,['rock-fist']);
   assert.deepEqual(db.records.get(API.ROOMS+'/'+first.id).actors[0].manualSkills,['rock-fist']);
 });
-test('PvP forbids equipping or removing weapons during battle',async()=>{
+test('PvP allows gear changes before pairing but rejects them during the duel',async()=>{
   const db=fixture();
-  await API.start(db,'u1',{mode:'pvp'},NOW);
+  const waiting=await API.start(db,'u1',{mode:'pvp'},NOW);
+  const picked=await API.updateLoadout(db,'u1',{index:1,weaponId:'body-rock'});
+  assert.deepEqual(picked.weaponIds,['sword-wind','body-rock',null]);
+  const actor=db.records.get(API.ROOMS+'/'+waiting.id).actors[0];
+  assert(actor.manualSkills.includes('rock-fist'),'waiting player should be updated');
+  const joined=await API.start(db,'u2',{mode:'pvp',code:waiting.id.slice(6)},NOW+1);
+  assert.equal(joined.status,'active');
   const prev=structuredClone(db.records.get(API.MANUALS+'/u1'));
-  await assert.rejects(API.updateLoadout(db,'u1',{index:1,weaponId:'body-rock'}),
+  await assert.rejects(API.updateLoadout(db,'u1',{index:1,weaponId:null}),
     /多人鬥法進行中/);
   assert.deepEqual(db.records.get(API.MANUALS+'/u1'),prev);
 });
