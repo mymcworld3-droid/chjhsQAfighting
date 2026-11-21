@@ -87,6 +87,19 @@ async function main(){
         await page.waitForFunction(target=>{const s=window.QAGameStage.getState(),f=document.getElementById('game-frame');
           const landscape=innerWidth>=innerHeight;return s.designWidth===(landscape?1280:360)&&f.contentDocument.documentElement.clientWidth===s.designWidth&&Math.abs(s.width-target.width)<.15&&Math.abs(s.height-target.height)<.15;},Stage.fit(size));
       }};}
+  // Annular buttons have a quarter-circle bounding box, but their actual
+  // clickable wedge is narrow. Playwright's default box-center click lands in
+  // the inner ring; click the visible sector label instead.
+  async function clickWheelSector(locator){
+    const position=await locator.evaluate(button=>{
+      const rect=button.getBoundingClientRect(),
+        label=button.querySelector('.tc-rw-sector-label')?.getBoundingClientRect();
+      if(!label)throw Error('The new right-wheel sector has no visible label');
+      return {x:label.left+label.width/2-rect.left,
+        y:label.top+label.height/2-rect.top};
+    });
+    await locator.click({position});
+  }
   const read=page=>page.evaluate(async()=>{const mode=document.querySelector('#tactical-combat')?.dataset.mode||'pve';const r=await fetch('/api/tactical/state?mode='+mode,{headers:{'X-Test-User':sessionStorage.testUid||'u1'}});return (await r.json()).state;});
   async function cell(view,x,y){const s=await read(view),point=await view.evaluate(({x,y,width,height})=>{
     const r=document.querySelector('canvas').getBoundingClientRect(),size=Math.min((r.width-20)/width,(r.height-24)/height);
@@ -444,8 +457,8 @@ async function main(){
     await view.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
     await view.waitForFunction(()=>
       !!document.querySelector('#tactical-combat [data-weapon-choice="0"]'));
-    await view.locator('[data-weapon-choice="0"]').click();
-    await view.locator('[data-wheel-choice="manual:wind-slash"]').click();
+    await clickWheelSector(view.locator('[data-weapon-choice="0"]'));
+    await clickWheelSector(view.locator('[data-wheel-choice="manual:wind-slash"]'));
     const attackSnapshot=await read(view);
     const attackPlayer=attackSnapshot.actors.find(a=>a.uid==='u1');
     const selectedSkill=Rules.manualSkillFor(attackPlayer,'wind-slash');
@@ -988,9 +1001,9 @@ async function main(){
       await quick.waitForFunction(()=>
         !!document.querySelector('[data-weapon-choice="0"]'));
       assert.equal(await quick.locator('[data-weapon-choice="0"]').count(),1);
-      await quick.locator('[data-weapon-choice="0"] .tc-rw-sector-label').click();
+      await clickWheelSector(quick.locator('[data-weapon-choice="0"]'));
       assert.equal(await quick.locator('[data-wheel-choice^="manual:"]').count(),3);
-      await quick.locator('[data-wheel-choice="manual:wind-slash"] .tc-rw-sector-label').click();
+      await clickWheelSector(quick.locator('[data-wheel-choice="manual:wind-slash"]'));
       await cell(quick,2,1);
       await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='6');
       const result=await read(quick);
@@ -1064,8 +1077,8 @@ async function main(){
             document.querySelector('.tc-arena canvas').dispatchEvent(
               new KeyboardEvent('keydown',{key:'0',bubbles:true}));
           });
-          await quick.locator('[data-weapon-choice="0"] .tc-rw-sector-label').click();
-          await quick.locator('[data-wheel-choice="manual:wind-slash"] .tc-rw-sector-label').click();
+          await clickWheelSector(quick.locator('[data-weapon-choice="0"]'));
+          await clickWheelSector(quick.locator('[data-wheel-choice="manual:wind-slash"]'));
           await cell(quick,2,1);
           await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='8');
           assert.equal((await read(quick)).objective.points[0].hp,1);
