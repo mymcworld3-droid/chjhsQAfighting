@@ -16,6 +16,16 @@ import './manual-rules.js';
 import './tactical-animation.js';
 import './tactical-skill-effects.js';
 import './tactical-ambience.js';
+// Ongoing cooperative rooms created before weapon slots existed must display
+// the same right wheel as freshly created rooms. Infer from authorized moves
+// if their serialized member lacks dungeonWeaponIds.
+function dungeonWeaponSlots(member){
+  if(Array.isArray(member?.dungeonWeaponIds)&&member.dungeonWeaponIds.length===2)
+    return member.dungeonWeaponIds.map(id=>id||null);
+  const names=[...new Set((member?.dungeonSkills||[]).map(skill=>
+    skill.weaponId||globalThis.QAManuals?.BY_SKILL?.[skill.id]?.manualId).filter(Boolean))];
+  return [names[0]||null,names[1]||null];
+}
 import './tactical-impact-presentation.js';
 import {dungeonEnvironmentPlan} from './dungeon-environment-effects.js';
 import {dungeonBossTransition} from './dungeon-boss-visuals.js';
@@ -492,7 +502,7 @@ class DungeonMapView{
   }
   selectTrialWheel(value){
     const own=this.room?.members?.[this.uid];
-    const modern=Array.isArray(own?.dungeonWeaponIds)&&own.dungeonWeaponIds.length===2;
+    const modern=!!own,weaponIds=dungeonWeaponSlots(own);
     if(modern&&value.startsWith('weapon:')){
       const slot=Number(value.slice(7));
       if(!Number.isInteger(slot)||slot<0||slot>=2)return;
@@ -524,7 +534,8 @@ class DungeonMapView{
     if(value!=='basic'&&!chosen)return;
     if(value==='basic'&&skills.length)return;
     if(modern&&(this.weaponWheelSlot<0||
-        chosen?.weaponId!==own.dungeonWeaponIds[this.weaponWheelSlot]))return;
+        (chosen?.weaponId||globalThis.QAManuals?.BY_SKILL?.[chosen?.id]?.manualId)!==
+          weaponIds[this.weaponWheelSlot]))return;
     if(this.selectedSkillId!==value){
       this.selectedSkillId=value;this.aimTile=null;this.selectedBeastId=null;
     }
@@ -548,11 +559,11 @@ class DungeonMapView{
       badge.title=charges>0?'剩餘 '+charges+' 次強化體術，施放後消耗一層':'';
     }
     const skills=Array.isArray(own?.dungeonSkills)?own.dungeonSkills:[];
-    const modern=Array.isArray(own?.dungeonWeaponIds)&&own.dungeonWeaponIds.length===2;
+    const modern=!!own,weaponIds=dungeonWeaponSlots(own);
     if(modern&&this.weaponWheelSlot<0){
       this.wheelMode='move';this.selectedSkillId='';
     }else if(modern&&this.weaponWheelSlot>=0){
-      const weaponId=own.dungeonWeaponIds[this.weaponWheelSlot];
+      const weaponId=weaponIds[this.weaponWheelSlot];
       if(!skills.some(skill=>skill.id===this.selectedSkillId&&skill.weaponId===weaponId)){
         this.selectedSkillId='';
         this.wheelMode='move';
@@ -561,7 +572,7 @@ class DungeonMapView{
       this.selectedSkillId=skills[0].id;
     else if(!skills.length)this.selectedSkillId='basic';
     const selectedWeapon=modern&&this.weaponWheelSlot>=0?
-      globalThis.QAManuals?.BY_BOOK?.[own.dungeonWeaponIds[this.weaponWheelSlot]]:null;
+      globalThis.QAManuals?.BY_BOOK?.[weaponIds[this.weaponWheelSlot]]:null;
     // Render all three moves from the chosen weapon, including locked moves.
     // Only currently server-authorized dungeon skills can be tapped.
     const visibleSkills=modern?(selectedWeapon?.skills||[]).map(template=>{
@@ -583,7 +594,7 @@ class DungeonMapView{
     if(this.moveTarget==='sword'&&!own?.flyingSword)this.moveTarget='player';
     renderDungeonTrialWheel(wheel,{
       mode:this.wheelMode,options,
-      weaponIds:modern?own.dungeonWeaponIds:null,
+      weaponIds:modern?weaponIds:null,
       selectedWeaponSlot:modern?this.weaponWheelSlot:-1,
       moveOptions:[{value:'player',name:'角色',cost:'1 體力/格'},
         ...(own?.flyingSword?[{value:'sword',name:'飛劍',cost:'每 2 格 1 體力'}]:[])],
@@ -1216,7 +1227,7 @@ class DungeonMapView{
     if(!Number.isInteger(x)||!Number.isInteger(y)||
         x<0||x>=this.map.width||y<0||y>=this.map.height||
         this.map.tiles[y*this.map.width+x]===0)return;
-    if(this.room?.members?.[this.uid]?.dungeonWeaponIds?.length===2&&
+    if(this.room?.members?.[this.uid]&&
         this.weaponWheelSlot>=0&&this.wheelMode!=='attack'){
       this.actionFeedback('請先選擇武器內圈的技能');return;
     }
@@ -2031,8 +2042,7 @@ class DungeonMapView{
     if(this.rangeSignature===key)return;
     this.rangeSignature=key;
     const from=this.selfPad(),enemies=this.creatures();
-    if(member?.dungeonWeaponIds?.length===2&&this.weaponWheelSlot>=0&&
-        this.wheelMode!=='attack'){
+    if(member&&this.weaponWheelSlot>=0&&this.wheelMode!=='attack'){
       this.rangeKind='move';this.rangeTiles=[];return;
     }
     if(this.wheelMode==='move'){
