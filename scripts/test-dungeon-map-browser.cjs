@@ -592,7 +592,7 @@ async function main(){
         pointerEvents:getComputedStyle(toast.closest('[data-manual-xp-host]')).pointerEvents
       };
     });
-    assert.match(xpVisual.text,/流風劍訣/);
+    assert.match(xpVisual.text,/流風靈劍/);
     assert.match(xpVisual.text,/\+35 EXP/);
     assert.match(xpVisual.text,/Lv\./);
     assert.equal(xpVisual.artwork,'/assets/books/sword-wind.png');
