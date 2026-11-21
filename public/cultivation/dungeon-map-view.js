@@ -107,7 +107,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-trial-wheel-style')){
       const link=document.createElement('link');
       link.id='dungeon-trial-wheel-style';link.rel='stylesheet';
-      link.href='/styles/dungeon-trial-wheel.css?v=20261121-two-weapon-ring-v1';
+      link.href='/styles/dungeon-trial-wheel.css?v=20261121-rightwheel-v3';
       document.head.append(link);
     }
     const root=document.createElement('section');
