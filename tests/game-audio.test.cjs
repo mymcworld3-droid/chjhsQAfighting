@@ -67,17 +67,23 @@ function runtime({ saved, remote = {}, supported = true, failed = false, holdDec
   };
 }
 
-test('startup prefetch never creates an audio context or queues playback before a gesture', async () => {
+test('startup prefetches only four common cues, without creating an audio context', async () => {
   const r = runtime(); r.manager.install(); await r.manager.preload();
-  assert.equal(r.contexts.length, 0); assert.equal(r.requests.length, 8);
+  assert.equal(r.contexts.length, 0); assert.equal(r.requests.length, 4);
+  assert.deepEqual(r.requests.slice().sort(),['ui-click','cloud-whoosh',
+    'answer-correct','answer-wrong'].map(id=>'assets/audio/'+id+'.mp3').sort());
   assert.equal(r.manager.play('grand-reveal'), false);
   await r.advance(5000); assert.equal(r.sources.length, 0);
   await r.ready(); assert.equal(r.sources.length, 0, 'unlock cannot replay earlier requests');
 });
-test('the entire game reuses one context, eight fetches and eight decoded buffers', async () => {
+test('optional on-demand sound packs share one context and never refetch cached cues', async () => {
   const r = runtime(); await r.ready();
-  for (let i = 0; i < 20; i++) { await r.manager.unlock(); await r.manager.preload(); }
-  assert.equal(r.contexts.length, 1); assert.equal(r.requests.length, 8); assert.equal(r.decodes.length, 8);
+  assert.equal(r.requests.length, 4);
+  await r.manager.preload(Object.keys(SOUNDS));
+  for (let i = 0; i < 20; i++) { await r.manager.unlock();
+    await r.manager.preload(['combat-impact','spirit-pulse','reward-chime','grand-reveal']); }
+  assert.equal(r.contexts.length, 1); assert.equal(r.requests.length, 8);
+  assert.equal(r.decodes.length, 8);
   assert.equal(r.manager.diagnostics().decoded, Object.keys(SOUNDS).length);
 });
 test('a single burst of click, answer, reward and breakthrough requests plays only the breakthrough', async () => {
@@ -154,7 +160,8 @@ test('missing media, unsupported audio and failed fetches never throw or block g
   const noAudio = runtime({ supported: false }); assert.equal(await noAudio.manager.unlock(), false);
   assert.equal(noAudio.manager.play('reward-chime'), false);
   const offline = runtime({ failed: true }); await offline.ready(); offline.manager.play('reward-chime'); await offline.advance(30);
-  assert.equal(offline.sources.length, 0); assert.equal(offline.manager.diagnostics().failed.length, 8);
+  assert.equal(offline.sources.length, 0);
+  assert.equal(offline.manager.diagnostics().failed.length, 5);
   assert.equal(offline.manager.play('unknown'), false);
 });
 test('saved mute preferences prevent fetching and context creation; volume zero silences immediately', async () => {
