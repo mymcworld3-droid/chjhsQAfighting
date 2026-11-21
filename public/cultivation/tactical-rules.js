@@ -512,7 +512,7 @@
     const maxHp=Math.max(1,num(raw.maxHp)||1000);
     const catalog=manuals();
     const manualSkills=Array.isArray(raw.manualSkills)&&!raw.bot
-      ?[...new Set(raw.manualSkills.filter(id=>Object.hasOwn(catalog?.BY_SKILL||{},id)))].slice(0,9):[];
+      ?[...new Set(raw.manualSkills.filter(id=>Object.hasOwn(catalog?.BY_SKILL||{},id)))].slice(0,6):[];
     const manualSkillLevels=Object.fromEntries(manualSkills.map(id=>[id,catalog.skillLevel(raw.manualSkillLevels?.[id])])
       .filter(([,level])=>level>1));
     return {uid:String(raw.uid),name:String(raw.name||'修士').slice(0,40),team:raw.team||'player',bot:!!raw.bot,
@@ -525,7 +525,7 @@
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
       ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills,manualSkillLevels}:{}),
       ...(!raw.bot&&raw.manualWeaponMode?{manualWeaponMode:true,
-        manualWeaponIds:Array.from({length:3},(_,i)=>{
+        manualWeaponIds:Array.from({length:2},(_,i)=>{
           const id=raw.manualWeaponIds?.[i];
           return typeof id==='string'&&catalog?.BY_BOOK?.[id]?id:null;
         })}:{}),
