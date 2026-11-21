@@ -63,14 +63,18 @@ function runtime({ saved, remote = {}, supported = true, failed = false, holdDec
   return { manager, env, contexts, sources, requests, decodes, storage, advance, settle,
     async ready() { await manager.unlock(); await manager.preload(); await settle(); },
     async decode() { holdDecode = false; waiting.splice(0).forEach(resolve => resolve()); await settle(); },
-    emit(target, name, detail) { for (const fn of listeners.get(target + ':' + name) || []) fn({ detail }); }
+    emit(target, name, detail) { for (const fn of listeners.get(target + ':' + name) || []) fn({ detail }); },
+    emitEvent(target,name,event){for(const fn of listeners.get(target+':'+name)||[])fn(event);} 
   };
 }
 
 test('login downloads no MP3; player-ready prefetches only four common cues', async () => {
   const r = runtime(); r.manager.install(); await r.settle();
-  assert.equal(r.contexts.length,0);
-  assert.equal(r.requests.length,0,'login screen does not preload any sounds');
+  r.emitEvent('document','pointerdown',{isTrusted:true,button:0});
+  r.emitEvent('document','keydown',{isTrusted:true,key:'Enter',repeat:false});
+  await r.settle();
+  assert.equal(r.contexts.length,0,'login gestures cannot start the audio context');
+  assert.equal(r.requests.length,0,'login gestures do not preload sounds');
   r.emit('window','xiuxian:user-data-ready');await r.settle();
   await r.manager.preload();
   assert.equal(r.contexts.length,0);assert.equal(r.requests.length,4);
