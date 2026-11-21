@@ -7,7 +7,7 @@ const {database}=require('./helpers/tactical-db.cjs');
 const NOW=2000000000000;
 const owned=()=>({books:{
   'sword-wind':{exp:280},'body-rock':{exp:1080},'sword-flight':{exp:0}},
-  weaponIds:['sword-wind','body-rock','sword-flight'],skillLevels:{'rock-fist':4}});
+  weaponIds:['sword-wind','body-rock'],skillLevels:{'rock-fist':4}});
 test('all six vector-illustrated sword/totem weapons retain the original mastery gates',()=>{
   assert.equal(Catalog.BOOKS.length,6);
   assert.equal(Catalog.BOOKS.filter(b=>b.weaponType==='sword').length,3);
@@ -35,7 +35,7 @@ test('legacy manual presets project into two equivalent weapon slots with origin
       {name:'備用',skillIds:[]}],activeLoadout:0};
   assert.equal(Catalog.normalize(old).version,2);
   const projected=Catalog.publicState(old,100);
-  assert.deepEqual(projected.weaponIds,['sword-wind','body-rock',null]);
+  assert.deepEqual(projected.weaponIds,['sword-wind','body-rock']);
   assert.equal(projected.loadouts[1].name,'玄嶽圖騰');
   assert.deepEqual(projected.equipped,['wind-slash','rock-fist']);
   const migrated=Catalog.weaponize(old);
@@ -52,7 +52,7 @@ test('server equips at most two unique owned weapons, with all their learned ski
   assert.equal(result.weaponIds[0],'sword-wind');
   await assert.rejects(API.updateLoadout(db,'u1',{index:1,weaponId:'sword-sky'}),/尚未獲得/);
   result=await API.updateLoadout(db,'u1',{index:1,weaponId:'body-rock'});
-  assert.deepEqual(result.weaponIds,['sword-wind','body-rock',null]);
+  assert.deepEqual(result.weaponIds,['sword-wind','body-rock']);
   assert.equal(db.records.get(API.MANUALS+'/u1').version,3);
   await assert.rejects(API.updateLoadout(db,'u1',{index:2,weaponId:'body-rock'}),/最多裝備兩把/);
   await assert.rejects(API.updateLoadout(db,'u1',{index:2,weaponId:'sword-flight'}),/最多裝備兩把/);
@@ -61,14 +61,14 @@ test('server equips at most two unique owned weapons, with all their learned ski
   await assert.rejects(API.updateLoadout(db,'u1',{index:3,weaponId:'sword-flight'}),/配置不存在/);
   const room=await API.start(db,'u1',{mode:'pve'},NOW);
   const hero=room.actors[0];
-  assert.deepEqual(hero.manualWeaponIds,['sword-wind','body-rock','sword-flight']);
+  assert.deepEqual(hero.manualWeaponIds,['sword-wind','body-rock']);
   assert.equal(hero.manualWeaponMode,true);
   assert.equal(hero.manualSkills.length,2);
   assert.equal(hero.manualLoadoutName,undefined);
   await assert.rejects(API.switchBattleLoadout(db,'u1',
     {roomId:room.id,index:2,requestId:'weapon-switch-001'},NOW+1),/沒有主武器/);
   const changed=await API.updateLoadout(db,'u1',{index:1,weaponId:null});
-  assert.deepEqual(changed.weaponIds,['sword-wind',null,'sword-flight']);
+  assert.deepEqual(changed.weaponIds,['sword-wind',null]);
   assert.equal(changed.equipped.length,1);
   const storedRoom=db.records.get(API.ROOMS+'/'+room.id);
   assert.deepEqual(storedRoom.actors[0].manualSkills,changed.equipped);
@@ -84,7 +84,7 @@ test('PvP waiting may change weapons, but an active duel and assembled dungeon f
   const pvp=database();await API.chooseSchool(pvp,'u1',{school:'sword'});
   const waiting=await API.start(pvp,'u1',{mode:'pvp'},NOW);
   const edited=await API.updateLoadout(pvp,'u1',{index:0,weaponId:null});
-  assert.deepEqual(edited.weaponIds,[null,null,null]);
+  assert.deepEqual(edited.weaponIds,[null,null]);
   assert.deepEqual(pvp.records.get(API.ROOMS+'/'+waiting.id).actors[0].manualSkills,[],
     'the pending match must see updated equipment');
   await API.start(pvp,'u2',{mode:'pvp',code:waiting.id.slice(6)},NOW+1);
@@ -98,5 +98,5 @@ test('PvP waiting may change weapons, but an active duel and assembled dungeon f
     /多人副本進行中/);
   dungeon.records.get('dungeonRooms/'+roomId).status='waiting';
   const valid=await API.updateLoadout(dungeon,'u1',{index:0,weaponId:null});
-  assert.deepEqual(valid.weaponIds,[null,null,null]);
+  assert.deepEqual(valid.weaponIds,[null,null]);
 });
