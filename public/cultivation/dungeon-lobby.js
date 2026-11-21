@@ -6,7 +6,7 @@ import {
   subscribeDungeonRoom,heartbeatDungeonRoom
 } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
-import { showDungeonMap, hideDungeonMap, updateDungeonMapRoom } from './dungeon-map-view.js';
+import { showDungeonMap, hideDungeonMap, updateDungeonMapRoom } from './dungeon-map-view.js?v=20261121-rightwheel-v4';
 import { listRecentDungeonVictories, claimDungeonBossReward } from './dungeon-room.js';
 
 // Only the lobby is implemented here. The server controls all membership,
