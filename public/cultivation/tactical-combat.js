@@ -38,6 +38,7 @@ const battlefieldMode=()=>action==='manual'?'manual:'+selectedManualSkill:action
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
 let bossIntroSeenRoom='',bossTransitionPending=null,bossBannerTimer=null;
+let warmedCombatAudioRoomId='';
 let autoQuizKey='',quizContext=null;
 let pairQuestions=[],pairChoices=[],pairReviews=[],pairDisplayIndex=0;
 let pairGeneration=0,pairFollowupPromise=null,pairFollowupError='';
@@ -1148,6 +1149,10 @@ function paint({preserveModal=false}={}){
     destroyRenderer();root.classList.remove('tc-quarter-layout');$('[data-main]').className='tc-main tc-waiting';
     $('[data-main]').innerHTML=`<div><h2>配對中…</h2><p>也可將代碼傳給道友加入。</p><code>${esc(state.id.replace('arena-',''))}</code><button type="button" data-copy>複製代碼</button><button type="button" data-leave>取消配對</button></div>`;return;
   }
+  if(state.status==='active'&&warmedCombatAudioRoomId!==state.id){
+    warmedCombatAudioRoomId=state.id;
+    void window.QAGameAudio?.preload(['combat-impact','spirit-pulse','reward-chime']);
+  }
   if(!renderer||!$('canvas'))buildGame();
   if(state.mode==='pvp')syncPvpSkillTabs();
   const me=myActor(),myTurn=myAction();
@@ -2219,8 +2224,6 @@ async function enterTrial(e,account){
 }
 async function open(nextMode='pve'){
   window.prefetchXiuxianContext?.('trial');
-  // No rare sound downloads at login; warm combat cues on entering a fight.
-  void window.QAGameAudio?.preload(['combat-impact','spirit-pulse','reward-chime']);
   ensure();
   if(opened&&mode==='pve'&&nextMode==='pve'&&trialEntry?.uid===getMainUser()?.uid)return trialEntry.promise;
   if(opened)close();
@@ -2246,6 +2249,7 @@ async function open(nextMode='pve'){
 }
 function close(){
   if(!root)return;
+  warmedCombatAudioRoomId='';
   const completedFirstStage=mode==='pve'&&state?.trial?.stage===1&&state.status==='finished'&&
     state.winner==='player'&&tutorialStep()===9;
   hideBossBanner();bossTransitionPending=null;
