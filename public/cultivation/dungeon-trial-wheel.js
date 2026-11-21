@@ -378,16 +378,15 @@ export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick}={}){
     refresh?.();
   });
   wheel.addEventListener('keydown',e=>{
-    const button=e.target.closest('button[data-wheel-action],button[data-wheel-choice]');
+    const button=e.target.closest('button[data-wheel-action],button[data-wheel-choice],button.tc-rw-sector');
     if(!button||!['ArrowLeft','ArrowRight'].includes(e.key))return;
     if(wheel.classList.contains('dm-modern-weapon-wheel')){
+      const container=button.closest('.tc-rw-outer,.tc-rw-inner');
+      const group=container?[...container.querySelectorAll('button.tc-rw-sector:not(:disabled)')]:[];
+      if(!group.length)return;
       e.preventDefault();
-      const choices=[...wheel.querySelectorAll('.tc-weapon-outer-choices>button')];
-      const detail=[...wheel.querySelectorAll('.tc-wheel-options>button')];
-      const group=choices.includes(button)?choices:detail;
-      const index=Math.max(0,Math.min(group.length-1,
-        group.indexOf(button)+(e.key==='ArrowRight'?-1:1)));
-      group[index]?.focus();
+      const index=group.indexOf(button);
+      group[(index+(e.key==='ArrowRight'?1:-1)+group.length)%group.length].focus();
       return;
     }
     e.preventDefault();
