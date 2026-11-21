@@ -269,12 +269,12 @@
       starterClaimed:raw?.starterClaimed===true};
   }
 
-  // V3 stores at most three unique owned weapons. An equipped weapon grants
+  // V3 stores at most two unique owned weapons. An equipped weapon grants
   // all three techniques at their original Lv.1/5/10 proficiency thresholds.
   function normalize(raw){
     const legacy=normalizeLegacy(raw);
     if(!Array.isArray(raw?.weaponIds))return legacy;
-    const used=new Set(),weaponIds=Array.from({length:3},(_,index)=>{
+    const used=new Set(),weaponIds=Array.from({length:2},(_,index)=>{
       const id=raw.weaponIds[index];
       if(typeof id!=='string'||!legacy.books[id]||!BY_BOOK[id]||used.has(id))return null;
       used.add(id);return id;
@@ -287,7 +287,7 @@
         .map(skill=>skill.id):[]
     }));
     // There is no "main" weapon. Every equipped weapon's unlocked moves are
-    // available simultaneously. All three slots are independently editable.
+    // available simultaneously. Both slots are independently editable.
     const equipped=loadouts.flatMap(slot=>slot.skillIds);
     return {...legacy,version:3,weaponIds,loadouts,activeLoadout:0,
       equipped};
@@ -296,14 +296,14 @@
   // Project old skill presets into weapon slots only when a V3 save is written.
   function weaponize(raw){
     if(Array.isArray(raw?.weaponIds))return normalize(raw);
-    const legacy=normalizeLegacy(raw),weaponIds=[null,null,null],used=new Set();
+    const legacy=normalizeLegacy(raw),weaponIds=[null,null],used=new Set();
     const add=(id,slot)=>{
       if(!id||!legacy.books[id]||used.has(id))return false;
-      if(slot<0||slot>2||weaponIds[slot])return false;
+      if(slot<0||slot>1||weaponIds[slot])return false;
       weaponIds[slot]=id;used.add(id);return true;
     };
     const active=legacy.activeLoadout;
-    add(BY_SKILL[legacy.equipped[0]]?.manualId,active);
+    add(BY_SKILL[legacy.equipped[0]]?.manualId,0);
     legacy.loadouts.forEach((item,index)=>add(BY_SKILL[item.skillIds[0]]?.manualId,index));
     const leftovers=[...legacy.equipped,...legacy.loadouts.flatMap(item=>item.skillIds)];
     for(const skillId of leftovers){
