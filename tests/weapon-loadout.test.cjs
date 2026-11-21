@@ -16,18 +16,18 @@ test('all six vector-illustrated sword/totem weapons retain the original mastery
   assert(Catalog.BOOKS.every(b=>JSON.stringify(b.skills.map(s=>s.levelRequired))==='[1,5,10]'));
   const state=Catalog.normalize({...owned(),version:3});
   assert.equal(state.version,3);
-  assert.deepEqual(state.weaponIds,owned().weaponIds);
-  assert.deepEqual(state.loadouts.map(slot=>slot.skillIds.length),[2,3,1]);
-  assert.equal(state.equipped.length,6,'three worn weapons expose six learned skills at their current levels');
+  assert.deepEqual(state.weaponIds,['sword-wind','body-rock']);
+  assert.deepEqual(state.loadouts.map(slot=>slot.skillIds.length),[2,3]);
+  assert.equal(state.equipped.length,5,'two worn weapons expose their learned skills');
   assert.deepEqual(state.equipped,state.loadouts.flatMap(slot=>slot.skillIds));
   assert.equal(state.skillLevels['rock-fist'],4);
   assert.equal(state.books['body-rock'].exp,1080);
   assert.equal(state.activeLoadout,0,'legacy field is inert, never designates a main weapon');
   const invalid=Catalog.normalize({...owned(),
     weaponIds:['body-rock','body-rock','missing-weapon','sword-flight']});
-  assert.deepEqual(invalid.weaponIds,['body-rock',null,null]);
+  assert.deepEqual(invalid.weaponIds,['body-rock',null]);
 });
-test('legacy manual presets project into all three equivalent weapon slots with original XP',()=>{
+test('legacy manual presets project into two equivalent weapon slots with original XP',()=>{
   const old={version:2,books:{'sword-wind':{exp:0},'body-rock':{exp:40}},
     equipped:['wind-slash'],loadouts:[
       {name:'先手',skillIds:['wind-slash']},
@@ -43,7 +43,7 @@ test('legacy manual presets project into all three equivalent weapon slots with 
   assert.deepEqual(migrated.weaponIds,projected.weaponIds);
   assert.equal(migrated.books['body-rock'].exp,40);
 });
-test('server equips at most three unique owned weapons, with all their learned skills at once',async()=>{
+test('server equips at most two unique owned weapons, with all their learned skills at once',async()=>{
   const db=database();await API.chooseSchool(db,'u1',{school:'sword'});
   const old=db.records.get(API.MANUALS+'/u1');
   old.books['body-rock']={exp:40};
@@ -54,22 +54,22 @@ test('server equips at most three unique owned weapons, with all their learned s
   result=await API.updateLoadout(db,'u1',{index:1,weaponId:'body-rock'});
   assert.deepEqual(result.weaponIds,['sword-wind','body-rock',null]);
   assert.equal(db.records.get(API.MANUALS+'/u1').version,3);
-  await assert.rejects(API.updateLoadout(db,'u1',{index:2,weaponId:'body-rock'}),/不能重複裝備/);
-  result=await API.updateLoadout(db,'u1',{index:2,weaponId:'sword-flight'});
-  assert.equal(result.weaponIds.filter(Boolean).length,3);
-  assert.equal(result.equipped.length,4);
+  await assert.rejects(API.updateLoadout(db,'u1',{index:2,weaponId:'body-rock'}),/最多裝備兩把/);
+  await assert.rejects(API.updateLoadout(db,'u1',{index:2,weaponId:'sword-flight'}),/最多裝備兩把/);
+  assert.equal(result.weaponIds.filter(Boolean).length,2);
+  assert.equal(result.equipped.length,2);
   await assert.rejects(API.updateLoadout(db,'u1',{index:3,weaponId:'sword-flight'}),/配置不存在/);
   const room=await API.start(db,'u1',{mode:'pve'},NOW);
   const hero=room.actors[0];
   assert.deepEqual(hero.manualWeaponIds,['sword-wind','body-rock','sword-flight']);
   assert.equal(hero.manualWeaponMode,true);
-  assert.equal(hero.manualSkills.length,4);
+  assert.equal(hero.manualSkills.length,2);
   assert.equal(hero.manualLoadoutName,undefined);
   await assert.rejects(API.switchBattleLoadout(db,'u1',
     {roomId:room.id,index:2,requestId:'weapon-switch-001'},NOW+1),/沒有主武器/);
   const changed=await API.updateLoadout(db,'u1',{index:1,weaponId:null});
   assert.deepEqual(changed.weaponIds,['sword-wind',null,'sword-flight']);
-  assert.equal(changed.equipped.length,3);
+  assert.equal(changed.equipped.length,1);
   const storedRoom=db.records.get(API.ROOMS+'/'+room.id);
   assert.deepEqual(storedRoom.actors[0].manualSkills,changed.equipped);
   assert.equal(storedRoom.actors[0].stamina,hero.stamina);
@@ -77,8 +77,8 @@ test('server equips at most three unique owned weapons, with all their learned s
   assert(storedRoom.revision>room.revision);
   assert.equal(changed.library.find(b=>b.id==='body-rock').exp,40);
   const restored=await API.updateLoadout(db,'u1',{index:1,weaponId:'body-rock'});
-  assert.equal(restored.equipped.length,4);
-  assert.equal(db.records.get(API.ROOMS+'/'+room.id).actors[0].manualSkills.length,4);
+  assert.equal(restored.equipped.length,2);
+  assert.equal(db.records.get(API.ROOMS+'/'+room.id).actors[0].manualSkills.length,2);
 });
 test('PvP waiting may change weapons, but an active duel and assembled dungeon forbid changes',async()=>{
   const pvp=database();await API.chooseSchool(pvp,'u1',{school:'sword'});
