@@ -431,6 +431,7 @@ function boot(){
       const slot=Number(button.dataset.manualPickSlot);
       if(Number.isInteger(slot)&&slot>=0&&slot<=2&&current){
         if(Array.isArray(current.weaponIds)){
+          if(slot>=2)return;
           selectedLoadout=slot;
           pickerSlot=pickerSlot===slot?null:slot;
           paint();
@@ -458,7 +459,7 @@ function boot(){
     if(button.dataset.manualPickWeapon){
       const weaponId=button.dataset.manualPickWeapon;
       const slot=Number(button.dataset.manualTargetSlot);
-      if(!Number.isInteger(slot)||slot<0||slot>2||
+      if(!Number.isInteger(slot)||slot<0||slot>=2||
         !current?.library?.some(book=>book.owned&&book.id===weaponId))return;
       if(current.weaponIds?.includes(weaponId)){
         pickerSlot=null;paint();return;
@@ -469,7 +470,7 @@ function boot(){
     }
     if(button.dataset.manualRemoveWeapon!==undefined){
       const slot=Number(button.dataset.manualRemoveWeapon);
-      if(Number.isInteger(slot)&&slot>=0&&slot<3){
+      if(Number.isInteger(slot)&&slot>=0&&slot<2){
         pickerSlot=null;
         void mutate('/api/tactical/manuals/loadout',{index:slot,weaponId:null});
       }
@@ -526,7 +527,7 @@ function boot(){
         const existing=current.weaponIds.indexOf(weaponId);
         if(existing>=0){selectedLoadout=existing;pickerSlot=null;paint();return;}
         const empty=current.weaponIds.findIndex(item=>!item);
-        const slot=empty>=0?empty:selectedLoadout;
+        const slot=empty>=0?empty:Math.min(1,selectedLoadout);
         void mutate('/api/tactical/manuals/loadout',{index:slot,weaponId});
         return;
       }
