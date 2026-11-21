@@ -11,11 +11,12 @@ import './training-access-rules.js';
 import './golden-core-art.js';
 import { trainingRenderReady, trainingRenderProfile } from './training-render-guard.js';
 
-// 啟動資源預熱：玩家資料已由 main-legacy 載入，本模組只在 startup gate 期間
-// 整理法寶／材料／配方資料，圖片只預熱金丹、修煉場景與材料；法寶圖片按需顯示。
-const STARTUP_IMAGE_LIMIT = 48;
+// Startup prepares authoritative catalog METADATA, not every catalog image.
+// Only the visible orientation's entry art and the player's current cores
+// deserve a warm request. All other images are fetched by their owning page.
+const STARTUP_IMAGE_LIMIT = 6;
 const STARTUP_TIMEOUT_MS = 5200;
-const IMAGE_CONCURRENCY = 4;
+const IMAGE_CONCURRENCY = 2;
 const SCENE_ART = Object.freeze({
   landscape: ['assets/scenes/mountains-landscape-ai.webp', 'assets/scenes/loading-landscape-ai.webp'],
   portrait: ['assets/scenes/mountains-portrait-ai.webp', 'assets/scenes/loading-portrait-ai.webp']
@@ -121,40 +122,21 @@ function collectStartupImageUrls() {
   const priority = collectPriorityDefinitions();
   const sceneOrientation = window.matchMedia?.('(orientation: portrait)')?.matches ? 'portrait' : 'landscape';
 
-  const ownedMaterials = priority.ownedMaterialIds.map(getMaterialById).filter(Boolean);
-  const recipeMaterials = priority.recipeMaterialIds.map(getMaterialById).filter(Boolean);
-  const nearbyMaterials = priority.materialIds.map(getMaterialById).filter(Boolean);
   const art = globalThis.QAGoldenCoreArt;
   const training = userData().cultivationTraining || {};
-  const coreImages = unique([
-    ...[training.equippedCore,training.core].filter(Boolean).map(core=>art.source(core.type,core.grade)),
-    ...art.all()
-  ]);
-
-  const urls = unique([
-    ...coreImages,
-    ...SCENE_ART[sceneOrientation],
-    ...trainingSceneImages(sceneOrientation),
-    'assets/training/cutouts/meditation-ai.webp',
-    'assets/training/cutouts/vault-ai.webp',
-    'assets/training/cutouts/forge-ai.webp',
-    'assets/training/cutouts/contract-ai.webp',
-    'assets/training/cutouts/secret-ai.webp',
-    'assets/training/cutouts/status-ai.webp',
-    ...definitionImageUrls(ownedMaterials),
-    ...definitionImageUrls(recipeMaterials),
-    ...definitionImageUrls(nearbyMaterials)
-  ]);
+  const coreImages = unique(
+    [training.equippedCore,training.core].filter(Boolean)
+      .map(core=>art?.source?.(core.type,core.grade))
+  );
+  const urls = unique([...coreImages,...SCENE_ART[sceneOrientation]]);
 
   return {
     priority,
-    coreImageCount: coreImages.length,
-    startup: urls.slice(0, STARTUP_IMAGE_LIMIT),
-    remaining: unique([
-      ...SCENE_ART[sceneOrientation === 'portrait' ? 'landscape' : 'portrait'],
-      ...trainingSceneImages(sceneOrientation === 'portrait' ? 'landscape' : 'portrait'),
-      ...definitionImageUrls(MATERIAL_CATALOG)
-    ]).filter((url) => !urls.slice(0, STARTUP_IMAGE_LIMIT).includes(url))
+    coreImageCount:coreImages.length,
+    startup:urls.slice(0,STARTUP_IMAGE_LIMIT),
+    // Do not warm the opposite orientation, dormant tab art, all golden
+    // cores, material catalog, or unavailable weapon HD files in background.
+    remaining:[]
   };
 }
 
@@ -199,23 +181,6 @@ async function warmQueue(urls, phase = 'images') {
   return { total, loaded, failed };
 }
 
-function warmRemainingInBackground(urls) {
-  if (!urls.length) return;
-  const run = async () => {
-    const queue = urls.slice();
-    while (queue.length) {
-      const batch = queue.splice(0, 3);
-      await Promise.all(batch.map(warmImage));
-      await new Promise((resolve) => setTimeout(resolve, 220));
-    }
-    window.__xiuxianCatalogImagesBackgroundReady = true;
-  };
-  if ('requestIdleCallback' in window) {
-    window.requestIdleCallback(() => void run(), { timeout: 2500 });
-  } else {
-    setTimeout(() => void run(), 900);
-  }
-}
 
 async function prepareStartupResources() {
   // A low-profile launch must not decode the unused high-profile scenery,
@@ -258,9 +223,6 @@ async function prepareStartupResources() {
   window.__xiuxianStartupResourcesReady = true;
   window.__xiuxianStartupResourceSnapshot = { ...snapshot, imageWarmup: result };
   dispatchProgress('ready', result.loaded || 0, result.total || 0, { ...snapshot, ...result });
-
-  // Non-critical catalog artwork keeps warming after the startup gate closes.
-  warmRemainingInBackground(images.remaining);
 
   return { ok: true, ...snapshot, imageWarmup: result };
 }
