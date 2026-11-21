@@ -270,6 +270,7 @@ async function assertDungeonWeaponEditable(playerDb,uid){
 async function updateLoadout(db,uid,input){
   const index=input?.index;
   if(!Number.isInteger(index)||index<0||index>2)throw error('配置不存在',400);
+  if(Object.hasOwn(input||{},'weaponId')&&index>=2)throw error('每人最多裝備兩把武器',400);
   const name=input?.name;
   if(name!==undefined&&(typeof name!=='string'||!name.trim()||Array.from(name.trim()).length>20))throw error('配置名稱須為 1 至 20 個字',400);
   const ids=input?.skillIds;
@@ -278,6 +279,7 @@ async function updateLoadout(db,uid,input){
     const ref=db.collection(MANUALS).doc(uid);
     const [userSnap,record]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(ref)]);
     const user=exists(userSnap);if(!user)throw error('玩家資料不存在',404);
+    if(Array.isArray(exists(record)?.weaponIds)&&index>=2)throw error('每人最多裝備兩把武器',400);
     if(Object.hasOwn(input||{},'weaponId')){
       const weaponId=input.weaponId;
       if(weaponId!==null&&(typeof weaponId!=='string'||!Manuals.BY_BOOK[weaponId]))
@@ -309,7 +311,7 @@ async function updateLoadout(db,uid,input){
       tx.set(ref,saved);
       return manualResponse(saved,user);
     }
-    if(Array.isArray(exists(record)?.weaponIds)&&ids!==undefined)
+    if(Array.isArray(exists(record)?.weaponIds))
       throw error('新版武器配置由武器等級決定技能，請改用 weaponId',400);
     const next=Manuals.normalize(exists(record));
     const chosen=ids===undefined?next.loadouts[index].skillIds:ids;
