@@ -299,6 +299,8 @@ class DungeonMapView{
     if(!safeRoom(room?.id)||!room?.members?.[playerUid]||
         playerUid!==getMainUser()?.uid)throw new Error('你不是此副本的有效隊員');
     window.prefetchXiuxianContext?.('dungeon');
+    if(room.status==='assembled')
+      void window.QAGameAudio?.preload(['combat-impact','spirit-pulse','reward-chime']);
     if(room.status==='assembled')void globalThis.QAContextualAssets?.warmImages(
       globalThis.QAContextualAssets.dungeonImages(room,playerUid),{max:8});
     this.mount();
