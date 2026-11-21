@@ -7,7 +7,7 @@ const {database}=require('./helpers/tactical-db.cjs');
 const NOW=2000000000000;
 const owned=()=>({books:{
   'sword-wind':{exp:280},'body-rock':{exp:1080},'sword-flight':{exp:0}},
-  weaponIds:['sword-wind','body-rock'],skillLevels:{'rock-fist':4}});
+  weaponIds:['sword-wind','body-rock','sword-flight'],skillLevels:{'rock-fist':4}});
 test('all six vector-illustrated sword/totem weapons retain the original mastery gates',()=>{
   assert.equal(Catalog.BOOKS.length,6);
   assert.equal(Catalog.BOOKS.filter(b=>b.weaponType==='sword').length,3);
