@@ -105,6 +105,26 @@ function manualLoadout(manualRecord,trainingAccessScore){
   return {trainingAccessScore,manualSkills,manualSkillLevels,
     manualWeaponIds:[...weaponIds],manualWeaponMode:true};
 }
+// Previously running PvE rooms survive deployments. A pre-weapon actor
+// lacks manualWeaponMode, so the client would keep drawing the obsolete
+// attack/movement wheel even when the client and CSS were the newest build.
+// Upgrade only its weapon metadata; never recreate the actor or reset progress.
+function upgradeLegacyRoomWeapons(room,uid,user,manualRecord){
+  if(room?.mode!=='pve'||room.status!=='active'||!user)return false;
+  const actor=room.actors?.find(a=>a.uid===uid&&!a.bot);
+  if(!actor||actor.manualWeaponMode&&Array.isArray(actor.manualWeaponIds)&&actor.manualWeaponIds.length===2)
+    return false;
+  const loadout=manualLoadout(manualRecord,TrainingAccess.score(user));
+  actor.manualWeaponMode=true;
+  actor.manualWeaponIds=[...loadout.manualWeaponIds];
+  actor.manualSkills=[...loadout.manualSkills];
+  actor.manualSkillLevels={...loadout.manualSkillLevels};
+  actor.trainingAccessScore=loadout.trainingAccessScore;
+  delete actor.manualLoadoutName;
+  delete actor.manualLoadoutIndex;
+  if(room.pveMetrics)room.pveMetrics.loadout=[...loadout.manualSkills];
+  return true;
+}
 function playerActor(user,uid,selection,catalog,manualRecord){
   const trusted=trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalog),type=trusted.goldenCore?.type||'none';
   const branch=Rules.savedBranch(user,type).id;
@@ -452,6 +472,7 @@ async function start(db,uid,selection={},now=Date.now()){
         prior.trial={version:1,seed:campaign.seed,stage:campaign.stage,layoutVersion:0,title:Rules.mapFor(prior.map).name};
         changed=true;tx.set(pointerRef,{...pointer,trial:campaign});
       }
+      changed=upgradeLegacyRoomWeapons(prior,uid,user,exists(manualSnap))||changed;
       changed=ensureIntroductions(prior,uid,pointer)||changed;
       if(changed)tx.set(db.collection(ROOMS).doc(prior.id),prior);
       return snapshot(prior,uid);
@@ -490,6 +511,22 @@ async function state(db,uid,now=Date.now(),mode=''){
   // No write for ordinary reads. Only an expired PvP turn requires a transaction.
   const stored=disarm(exists(await db.collection(ROOMS).doc(id).get()));if(!stored||mode&&stored.mode!==mode)return null;
   member(stored,uid);
+  // Persist the two-weapon projection before returning a resumed old room.
+  // A display-only conversion would fail as soon as the player casts a skill.
+  if(stored.status==='active'&&stored.mode==='pve'&&
+      !member(stored,uid).manualWeaponMode){
+    return db.runTransaction(async tx=>{
+      const current=await readRoom(tx,db,stored.id,uid);
+      const [userSnap,manualSnap]=await Promise.all([
+        tx.get(db.collection('users').doc(uid)),
+        tx.get(db.collection(MANUALS).doc(uid))]);
+      const upgraded=upgradeLegacyRoomWeapons(current,uid,
+        exists(userSnap),exists(manualSnap));
+      ensureIntroductions(current,uid,pointer);
+      if(upgraded)tx.set(db.collection(ROOMS).doc(current.id),current);
+      return snapshot(current,uid);
+    });
+  }
   if(stored.status==='active')ensureIntroductions(stored,uid,pointer);
   if(stored.status==='waiting'&&stored.createdAtMs<now-15*60000)return command(db,uid,{roomId:stored.id,type:'leave',requestId:crypto.randomUUID()},now);
   if(stored.status==='finished')return withProgress(stored,uid,exists(await db.collection('users').doc(uid).get()));
@@ -519,6 +556,13 @@ async function command(db,uid,input,now=Date.now()){
   const id=requestId(input.requestId);if(!id)throw error('行動識別碼無效',400);
   return db.runTransaction(async tx=>{
     const raw=await readRoom(tx,db,input.roomId,uid);
+    if(raw.mode==='pve'&&raw.status==='active'&&
+        !member(raw,uid).manualWeaponMode){
+      const [userSnap,manualSnap]=await Promise.all([
+        tx.get(db.collection('users').doc(uid)),
+        tx.get(db.collection(MANUALS).doc(uid))]);
+      upgradeLegacyRoomWeapons(raw,uid,exists(userSnap),exists(manualSnap));
+    }
     if(raw.receipts?.some(r=>r.uid===uid&&r.id===id))return raw.status==='finished'?withProgress(raw,uid,exists(await tx.get(db.collection('users').doc(uid)))):snapshot(raw,uid);
     const expired=input.type==='leave'?raw:Rules.expire(raw,now);
     if(expired!==raw){const updates=await settle(tx,db,expired);tx.set(db.collection(ROOMS).doc(expired.id),expired);return withProgress(expired,uid,updates[uid]);}
