@@ -61,11 +61,11 @@ test('PvP allows gear changes before pairing but rejects them during the duel',a
 test('invalid slots and unowned weapons are rejected by the server',async()=>{
   const db=fixture();
   await assert.rejects(API.updateLoadout(db,'u1',{index:3,weaponId:'body-rock'}),/配置不存在/);
-  await assert.rejects(API.updateLoadout(db,'u1',{index:2,weaponId:'sword-sky'}),/尚未獲得/);
+  await assert.rejects(API.updateLoadout(db,'u1',{index:1,weaponId:'sword-sky'}),/尚未獲得/);
   await API.updateLoadout(db,'u1',{index:1,weaponId:'body-rock'});
-  await assert.rejects(API.updateLoadout(db,'u1',{index:2,weaponId:'body-rock'}),/不能重複裝備/);
+  await assert.rejects(API.updateLoadout(db,'u1',{index:2,weaponId:'body-rock'}),/最多裝備兩把/);
 });
-test('client exposes equipment editing and 3+3 combat wheel, without a main-weapon switch',()=>{
+test('client exposes equipment editing and 3-category right battle wheel, without a main-weapon switch',()=>{
   const src=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
   const style=fs.readFileSync(path.join(__dirname,'../public/styles/tactical-quarter-weapons.css'),'utf8');
   const page=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-loadout-view.js'),'utf8');
@@ -74,11 +74,11 @@ test('client exposes equipment editing and 3+3 combat wheel, without a main-weap
   assert.match(src,/function editBattleWeapon/);
   assert.match(src,/renderModernWeaponWheel/);
   assert.match(src,/weaponRing\.replaceChildren/);
-  assert.match(src,/displaySkills\?skills:\[\]/);
-  assert.match(src,/energy\.append\(move\)/);
-  assert.match(style,/\.tc-left-move/);
+  assert.match(src,/selectedWeaponSlot<0\?/);
+  assert.doesNotMatch(src,/energy\.append\(move\)/);
+  assert.match(style,/Right outer: movement \/ weapon one \/ weapon two/);
   assert.match(style,/\.tc-modern-skill-sector/);
   assert.match(style,/\.tc-weapon-sector/);
-  assert.match(page,/三種武器地位相同，沒有主武器/);
+  assert.match(page,/最多裝備兩把武器，每把三招/);
   assert.doesNotMatch(page,/切換為主武器/);
 });
