@@ -1,5 +1,6 @@
-/* Weapon-first quarter wheel. Left: charge / movement / stamina. 
-   Right: end turn / three skills / three independent equipped weapons. */
+/* Two-weapon quarter wheel. Left: charge and stamina only.
+   Right outer: movement / weapon one / weapon two.
+   Right inner: movement targets or the selected weapon's three techniques. */
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-energy {
   overflow:visible;
 }
@@ -172,4 +173,48 @@
    steal pointer events from the clipped outer annular sectors. */
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action.is-weapon-expanded .tc-sector-attack{
   pointer-events:none!important;
+}
+
+/* The left dial is for charging only. The entire right outer ring is
+   permanently divided into move / weapon one / weapon two. */
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-energy>[data-quiz]{
+  width:86%!important;height:86%!important;z-index:4;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-energy-bolt{
+  left:28%;top:13%;width:45%;height:60%;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-energy-number{
+  right:13%;bottom:18%;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-charge-label{
+  left:8%;bottom:7%;width:84%;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector[hidden]{
+  display:none!important;pointer-events:none!important;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector.tc-modern-skill-sector[aria-pressed=true]>span{
+  opacity:1!important;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-label strong{
+  display:block;font-size:clamp(10px,1.45vw,17px);font-weight:800;white-space:nowrap;
+  color:#f7e5c2;text-shadow:0 1px 3px #000;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-label i{
+  font-size:clamp(16px,2.4vw,27px);color:#c0f0c6;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-skill-label i{
+  font-size:clamp(17px,2.5vw,30px);color:#c9ead1;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-weapon-sector[aria-pressed=true]{
+  outline:1px solid #e2c48a;outline-offset:-1px;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-weapon-empty-message{
+  position:absolute;z-index:3;left:37%;top:36%;width:34%;
+  text-align:center;pointer-events:none;color:#c4c7b8;
+  font-size:clamp(9px,1.25vw,13px);
+}
+@media(orientation:portrait){
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-label strong{
+    font-size:clamp(9px,2.25vw,11px);
+  }
 }
