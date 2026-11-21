@@ -177,8 +177,13 @@ test('dungeon weapon submenus reject cross-weapon skills and do not move before 
   const first=source.indexOf('  selectTrialWheel(value){');
   const last=source.indexOf('  updateWheelHUD(){',first);
   assert(first>=0&&last>first);
-  const select=new Function(source.slice(first,last).replace(
-    '  selectTrialWheel(value){','function select(value){')+'\nreturn select;')();
+  const helperStart=source.indexOf('function dungeonWeaponSlots(member){');
+  const helperEnd=source.indexOf('\n}',helperStart)+2;
+  assert(helperStart>=0&&helperEnd>helperStart);
+  const select=new Function(source.slice(helperStart,helperEnd)+'\n'+
+    source.slice(first,last).replace(
+      '  selectTrialWheel(value){','function select(value){')+
+    '\nreturn select;')();
   const state={uid:'u1',room:{members:{u1:{
     dungeonWeaponIds:['sword-wind','body-rock'],
     dungeonSkills:[{id:'wind-slash',weaponId:'sword-wind'},
@@ -205,4 +210,21 @@ test('dungeon weapon submenus reject cross-weapon skills and do not move before 
   assert.equal(state.wheelMode,'move');
   select.call(state,'weapon:2');
   assert.equal(state.weaponWheelSlot,-1);
+});
+
+test('legacy cooperative room can infer two weapon slots from its authorized skills',()=>{
+  const source=read('public/cultivation/dungeon-map-view.js');
+  const helperStart=source.indexOf('function dungeonWeaponSlots(member){');
+  const helperEnd=source.indexOf('\n}',helperStart)+2;
+  assert(helperStart>=0&&helperEnd>helperStart);
+  const infer=new Function(source.slice(helperStart,helperEnd)+
+    '\nreturn dungeonWeaponSlots;')();
+  assert.deepEqual(infer({dungeonSkills:[
+    {id:'wind-slash',weaponId:'sword-wind'},
+    {id:'rock-fist',weaponId:'body-rock'},
+    {id:'wind-step',weaponId:'sword-wind'}
+  ]}),['sword-wind','body-rock']);
+  assert.deepEqual(infer({dungeonWeaponIds:[null,'body-rock'],
+    dungeonSkills:[{id:'wind-slash',weaponId:'sword-wind'}]}),
+    [null,'body-rock'],'explicit empty equipment slot must remain empty');
 });
