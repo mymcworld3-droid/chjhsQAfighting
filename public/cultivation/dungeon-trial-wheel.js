@@ -115,9 +115,105 @@ function wheelText(label,name,cost,art=''){
     if(image.getAttribute('src')!==art)image.src=art;
   }else image?.remove();
 }
+// Weapon-era dungeon controls mirror the trial: three fixed OUTER options,
+// followed by movement targets or that weapon's three skills on the INNER ring.
+function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options=[],
+  moveOptions=[],selected='',locked=false,stamina=0,focusCharges=0}={}){
+  const chosenSlot=Number.isInteger(selectedWeaponSlot)&&selectedWeaponSlot>=0&&selectedWeaponSlot<2
+    ?selectedWeaponSlot:-1;
+  const chosenWeapon=chosenSlot>=0?weaponIds[chosenSlot]:null;
+  const book=globalThis.QAManuals?.BY_BOOK?.[chosenWeapon];
+  const optionsShown=chosenSlot<0?moveOptions:book?options:[];
+  const choices=wheel.querySelector('.tc-wheel-options');
+  wheel.classList.add('dm-modern-weapon-wheel');
+  wheel.dataset.mode=chosenSlot<0?'move':'weapon';
+  const priorAttack=wheel.querySelector('[data-dm="wheel-attack"]');
+  const priorMove=wheel.querySelector('[data-dm="wheel-move"]');
+  if(priorAttack)priorAttack.hidden=true;
+  if(priorMove)priorMove.hidden=true;
+  let outer=wheel.querySelector('.tc-weapon-outer-choices');
+  if(!outer){
+    outer=document.createElement('div');outer.className='tc-weapon-outer-choices';
+    outer.setAttribute('role','group');outer.setAttribute('aria-label','移動、武器一、武器二');
+    wheel.append(outer);
+  }
+  const key=weaponIds.join('|');
+  if(outer.dataset.key!==key){
+    outer.dataset.key=key;
+    outer.replaceChildren(...Array.from({length:3},(_,i)=>{
+      const weapon=i>0?globalThis.QAManuals?.BY_BOOK?.[weaponIds[i-1]]:null;
+      const button=document.createElement('button');
+      button.type='button';button.className='tc-weapon-sector';
+      button.dataset.dm='wheel-choice';
+      button.dataset.skillId=i===0?'move':'weapon:'+(i-1);
+      button.style.clipPath=dungeonWheelWedge(-90-30*i,-120-30*i,100,74);
+      const label=document.createElement('span');label.className='tc-modern-weapon-label';
+      setMarker(label,dungeonWheelAngle(i,3),87);
+      const heading=i===0?'移動':i===1?'武器一':'武器二';
+      label.innerHTML='<strong>'+heading+'</strong><small>'+
+        (i===0?'移動對象':weapon?weapon.name:'未裝備')+'</small>';
+      button.append(label);
+      return button;
+    }));
+  }
+  [...outer.children].forEach((button,i)=>{
+    button.disabled=locked;
+    button.setAttribute('aria-pressed',String(i===chosenSlot+1));
+  });
+  const innerKey=(chosenSlot<0?'move':'weapon:'+chosenSlot)+':'+
+    (chosenWeapon||'')+':'+optionsShown.map(item=>item.value).join('|');
+  choices.hidden=!optionsShown.length;
+  choices.setAttribute('aria-label',chosenSlot<0?'移動對象':book?'選擇'+book.name+'的三個技能':'尚未裝備武器');
+  if(choices.dataset.choices!==innerKey){
+    choices.dataset.choices=innerKey;
+    choices.replaceChildren(...optionsShown.map((item,index)=>{
+      const button=document.createElement('button');
+      button.type='button';button.className='tc-sector tc-modern-skill-sector';
+      button.dataset.dm='wheel-choice';button.dataset.skillId=item.value;
+      button.dataset.wheelChoice=item.value;
+      const sweep=90/optionsShown.length,gap=optionsShown.length>1?1:0;
+      button.style.clipPath=dungeonWheelWedge(
+        -90-sweep*index-gap,-90-sweep*(index+1)+gap,74,49);
+      const label=document.createElement('span');
+      setMarker(label,dungeonWheelAngle(index,optionsShown.length),61.5);
+      button.append(label);return button;
+    }));
+  }
+  for(const [index,item]of optionsShown.entries()){
+    const button=choices.children[index];
+    const price=typeof item.cost==='string'?item.cost:
+      item.cost==null?'尚未解鎖':item.cost+' 體力';
+    const low=typeof item.cost==='number'&&item.cost>stamina;
+    button.disabled=locked||!!item.locked;
+    button.classList.toggle('is-locked',!!item.locked);
+    button.classList.toggle('is-unavailable',low);
+    button.setAttribute('aria-pressed',String(item.value===selected));
+    button.setAttribute('aria-label',item.name+'，'+price);
+    button.title=item.locked?'尚未達到武器等級或境界門檻':
+      item.name+' · '+price;
+    wheelText(button.firstElementChild,item.name,price,item.art);
+  }
+  let hint=wheel.querySelector('.dm-weapon-empty-message');
+  if(!hint){
+    hint=document.createElement('span');
+    hint.className='dm-weapon-empty-message';
+    hint.setAttribute('aria-live','polite');wheel.append(hint);
+  }
+  hint.hidden=chosenSlot<0||!!book;
+  if(!hint.hidden)hint.textContent='此欄尚未裝備武器';
+  wheel.classList.toggle('has-focus',focusCharges>0);
+  wheel.setAttribute('aria-label',chosenSlot<0?'移動：選擇內圈移動對象':
+    book?'武器'+(chosenSlot+1)+'：'+book.name+'，選擇內圈技能':
+    '武器'+(chosenSlot+1)+'尚未裝備');
+  return selected;
+}
 export function renderDungeonTrialWheel(wheel,{mode='attack',options=[],moveOptions=[],selected,
-  locked=false,stamina=0,focusCharges=0}={}){
+  locked=false,stamina=0,focusCharges=0,weaponIds=null,selectedWeaponSlot=-1}={}){
   if(!wheel)return;
+  if(Array.isArray(weaponIds)&&weaponIds.length===2)
+    return renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot,options,
+      moveOptions,selected,locked,stamina,focusCharges});
+  wheel.classList.remove('dm-modern-weapon-wheel');
   const attacking=mode!=='move';
   const choices=wheel.querySelector('.tc-wheel-options');
   const shown=attacking?(options.length?options:[{
@@ -198,6 +294,7 @@ export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick}={}){
       Math.max(1,wheel.querySelectorAll('[data-wheel-choice]').length),where);
   };
   wheel.addEventListener('pointerdown',e=>{
+    if(wheel.classList.contains('dm-modern-weapon-wheel'))return;
     if(pointer)return;
     const button=e.target.closest('button[data-wheel-action],button[data-wheel-choice]');
     if(!button||button.disabled)return;
@@ -253,6 +350,7 @@ export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick}={}){
   // physically touched. This prevents an intended 四步連推 cast from
   // silently becoming a one-cell move. The server still validates every cast.
   wheel.addEventListener('click',event=>{
+    if(wheel.classList.contains('dm-modern-weapon-wheel'))return;
     if(Date.now()<dragClickUntil)return;
     if(wheel.dataset.mode!=='attack')return;
     const rect=wheel.getBoundingClientRect(),size=Math.min(rect.width,rect.height);
@@ -272,6 +370,16 @@ export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick}={}){
   wheel.addEventListener('keydown',e=>{
     const button=e.target.closest('button[data-wheel-action],button[data-wheel-choice]');
     if(!button||!['ArrowLeft','ArrowRight'].includes(e.key))return;
+    if(wheel.classList.contains('dm-modern-weapon-wheel')){
+      e.preventDefault();
+      const choices=[...wheel.querySelectorAll('.tc-weapon-outer-choices>button')];
+      const detail=[...wheel.querySelectorAll('.tc-wheel-options>button')];
+      const group=choices.includes(button)?choices:detail;
+      const index=Math.max(0,Math.min(group.length-1,
+        group.indexOf(button)+(e.key==='ArrowRight'?-1:1)));
+      group[index]?.focus();
+      return;
+    }
     e.preventDefault();
     const upper=e.key==='ArrowRight';
     if(button.dataset.wheelAction){
