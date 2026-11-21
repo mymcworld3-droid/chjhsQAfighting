@@ -159,14 +159,14 @@
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel *{animation:none!important;transition:none!important}
 }
 
-/* Individual 1024px-equivalent vector paintings: no low-resolution sprite stretching. */
+/* Individual 1024px HD WebP paintings. Request just the visible, owned weapons. */
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--sword-wind{background-image:url('/assets/weapons/sword-wind.svg?v=20261121-hd')!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--sword-flight{background-image:url('/assets/weapons/sword-flight.svg?v=20261121-hd')!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--sword-sky{background-image:url('/assets/weapons/sword-sky.svg?v=20261121-hd')!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--body-rock{background-image:url('/assets/weapons/body-rock.svg?v=20261121-hd')!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--body-dragon{background-image:url('/assets/weapons/body-dragon.svg?v=20261121-hd')!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--body-tiger{background-image:url('/assets/weapons/body-tiger.svg?v=20261121-hd')!important}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--sword-wind{background-image:url('/assets/weapons/sword-wind-hd.webp')!important}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--sword-flight{background-image:url('/assets/weapons/sword-flight-hd.webp')!important}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--sword-sky{background-image:url('/assets/weapons/sword-sky-hd.webp')!important}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--body-rock{background-image:url('/assets/weapons/body-rock-hd.webp')!important}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--body-dragon{background-image:url('/assets/weapons/body-dragon-hd.webp')!important}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--body-tiger{background-image:url('/assets/weapons/body-tiger-hd.webp')!important}
 
 /* Once three weapons are expanded, the underlying attack segment must not
    steal pointer events from the clipped outer annular sectors. */
