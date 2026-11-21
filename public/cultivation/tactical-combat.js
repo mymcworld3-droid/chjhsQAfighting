@@ -49,10 +49,21 @@ const pairWhiteboardInk=new Map();
 const $=selector=>root?.querySelector(selector);
 const myActor=()=>state?.actors.find(a=>a.uid===uid);
 const equippedTechniques=hero=>(hero?.manualSkills||[]).map(id=>R.manualSkillFor(hero,id)).filter(Boolean);
+// PvE always uses two weapon slots even if an older room was resumed.
+function currentWeaponIds(hero){
+  if(Array.isArray(hero?.manualWeaponIds))
+    return Array.from({length:2},(_,i)=>hero.manualWeaponIds[i]||null);
+  if(Array.isArray(battleLoadouts?.weaponIds))
+    return Array.from({length:2},(_,i)=>battleLoadouts.weaponIds[i]||null);
+  const known=[...new Set((hero?.manualSkills||[])
+    .map(skillId=>Manuals.BY_SKILL[skillId]?.manualId).filter(Boolean))];
+  return [known[0]||null,known[1]||null];
+}
+function modernPveWheel(){return state?.mode==='pve';}
 function syncEquippedAttack(hero=myActor()){
   const skills=equippedTechniques(hero);
-  if(hero?.manualWeaponMode){
-    const worn=hero.manualWeaponIds||[];
+  if(hero?.manualWeaponMode||modernPveWheel()){
+    const worn=currentWeaponIds(hero);
     if(selectedWeaponId&&!worn.includes(selectedWeaponId)){selectedWeaponId='';selectedWeaponSlot=-1;}
     if(action==='manual'&&!skills.some(skill=>skill.id===selectedManualSkill)){
       action='move';selection=null;selectedManualSkill='';
@@ -507,7 +518,7 @@ function renderModernWeaponWheel(hero,locked,mine){
   const ring=$('.tc-quarter-action');
   if(!ring)return;
   root.classList.add('tc-modern-weapon-wheel');
-  const equipped=(hero.manualWeaponIds||[]).slice(0,2);
+  const equipped=currentWeaponIds(hero);
   if(action==='manual'&&selectedWeaponSlot<0){
     selectedWeaponSlot=equipped.indexOf(Manuals.BY_SKILL[selectedManualSkill]?.manualId);
   }
@@ -518,7 +529,8 @@ function renderModernWeaponWheel(hero,locked,mine){
   // Prevent the original attack/move controls from competing for hit targets.
   // The central End Turn button is kept as the original single action.
   ring.querySelector('[data-wheel-action="attack-ring"]')?.setAttribute('hidden','');
-  ring.querySelector('.tc-action-tabs [data-wheel-action="move"]')?.setAttribute('hidden','');
+  ring.querySelector('[data-wheel-action="move"]')?.setAttribute('hidden','');
+  root.dataset.rightWheel='two-weapons-v4';
 
   let wheel=ring.querySelector('.tc-rightwheel-v3');
   if(!wheel){
@@ -747,8 +759,8 @@ function selectWheel(value,tutorialAutomatic=false){
   const pressedAttack=value==='attack-ring'||value==='attack';
   syncEquippedAttack();
   const hero=myActor();
-  if(hero?.manualWeaponMode){
-    const worn=(hero.manualWeaponIds||[]).slice(0,2);
+  if(hero?.manualWeaponMode||modernPveWheel()){
+    const worn=currentWeaponIds(hero);
     if(value==='attack-ring'){
       const first=worn.findIndex(Boolean);
       if(first>=0)selectWheel('weapon:'+first,true);
@@ -796,9 +808,9 @@ function selectWheel(value,tutorialAutomatic=false){
     action='attack';attackChoice='attack';
   }else if(value.startsWith('manual:')&&R.manualSkillFor(myActor(),value.slice(7))){
     action='manual';selectedManualSkill=value.slice(7);
-    if(myActor()?.manualWeaponMode){
+    if(myActor()?.manualWeaponMode||modernPveWheel()){
       selectedWeaponId=Manuals.BY_SKILL[selectedManualSkill]?.manualId||'';
-      selectedWeaponSlot=(myActor().manualWeaponIds||[]).indexOf(selectedWeaponId);
+      selectedWeaponSlot=currentWeaponIds(myActor()).indexOf(selectedWeaponId);
     }
     attackChoice=value;
   }else return;
@@ -1013,14 +1025,14 @@ function buildGame(){
       return Math.max(-180,Math.min(-90,Math.atan2(e.clientY-bounds.bottom,e.clientX-bounds.right)*180/Math.PI));
     };
     actions.addEventListener('pointerdown',e=>{
-      if(myActor()?.manualWeaponMode)return;
+      if(modernPveWheel())return;
       if(pointer||e.target.closest('[data-end]'))return;
       const b=e.target.closest('button[data-wheel-action],button[data-wheel-choice]');
       if(!b||b.disabled)return;
       pointer={id:e.pointerId,x:e.clientX,y:e.clientY,ring:b.dataset.wheelChoice?'detail':'action',moved:false};
     });
     actions.addEventListener('pointermove',e=>{
-      if(myActor()?.manualWeaponMode)return;
+      if(modernPveWheel())return;
       if(!pointer||pointer.id!==e.pointerId)return;
       if(Math.hypot(e.clientX-pointer.x,e.clientY-pointer.y)>8){
         if(!pointer.moved){
@@ -1096,7 +1108,7 @@ function buildGame(){
     // In move mode a live seal is an information target, not a walk tile.
     // Attack mode retains its existing tap-to-cast and direction handling.
     if((action==='move'||action==='sword-move')&&R.sealInfo(state,p)?.active&&sealInspector?.inspect(p))return;
-    if(myActor()?.manualWeaponMode&&selectedWeaponSlot>=0&&action==='move'){
+    if(modernPveWheel()&&selectedWeaponSlot>=0&&action==='move'){
       notice('請先選擇這把武器內圈的技能');return;
     }
     sealPeekPosition=null;selection=p;renderer.update(state,uid,battlefieldMode(),selection);updateControls();
@@ -1333,7 +1345,7 @@ function updateControls(){
       }
     }
   });
-  if(quarter&&me.manualWeaponMode){
+  if(quarter){
     renderModernWeaponWheel(me,locked,mine);
   }else if(quarter){
     root.classList.remove('tc-modern-weapon-wheel');
