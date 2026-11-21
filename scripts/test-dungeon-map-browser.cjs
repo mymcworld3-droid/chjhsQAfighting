@@ -962,6 +962,11 @@ async function main(){
     // Restore the exploration scenario before the guardian/boss suite.
     activeManual=manualRecord;
     room.members=savedParty;room.enemies=savedBeasts;
+    // A hand-built co-op fixture begins without equipped combat skills.
+    // Restore the real sword-wind loadout before requiring a weapon attack:
+    // the modern wheel intentionally has no implicit basic attack.
+    room.members.a={...room.members.a,
+      ...SkillCombat.initialCombatLoadout(room.members.a,manualRecord)};
     room.revision++;publish();
     clockLoop=setInterval(()=>{if(room?.status==='assembled')advanceWorld();},1000);
     clockLoop.unref?.();
