@@ -63,7 +63,7 @@ class DungeonMapView{
     this.ambiencePlan=null;this.environmentPlan=null;
     this.ambientTimer=null;this.bossTransition=null;
     this.pendingAction=null;this.queuedSkill=null;
-    this.wheelMode='attack';this.moveTarget='player';this.selectedSkillId='';this.manualOpen=false;
+    this.wheelMode='attack';this.moveTarget='player';this.selectedSkillId='';this.weaponWheelSlot=-1;this.manualOpen=false;
     this.wheelSwipeStart=null;this.wheelSwipeSuppressUntil=0;
     this.routePending=false;this.actionFeedbackTimer=null;
     this.rangeSignature='';this.rangeTiles=[];this.rangeKind='move';
@@ -107,7 +107,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-trial-wheel-style')){
       const link=document.createElement('link');
       link.id='dungeon-trial-wheel-style';link.rel='stylesheet';
-      link.href='/styles/dungeon-trial-wheel.css?v=20261119-hud-parity-v4';
+      link.href='/styles/dungeon-trial-wheel.css?v=20261121-two-weapon-ring-v1';
       document.head.append(link);
     }
     const root=document.createElement('section');
@@ -330,7 +330,7 @@ class DungeonMapView{
     this.portalPending=false;this.bossPending=false;
     this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
     this.loadoutPending=false;this.aimTile=null;this.skillSignature='';
-    this.wheelMode='attack';this.moveTarget='player';this.selectedSkillId='';this.manualOpen=false;this.wheelSwipeStart=null;
+    this.wheelMode='attack';this.moveTarget='player';this.selectedSkillId='';this.weaponWheelSlot=-1;this.manualOpen=false;this.wheelSwipeStart=null;
     this.routePending=false;this.rangeSignature='';this.rangeTiles=[];
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
     this.beastIds='';this.touchOrigins.clear();this.gestureMulti=false;
@@ -491,23 +491,42 @@ class DungeonMapView{
     this.updateWheelHUD();
   }
   selectTrialWheel(value){
+    const own=this.room?.members?.[this.uid];
+    const modern=Array.isArray(own?.dungeonWeaponIds)&&own.dungeonWeaponIds.length===2;
+    if(modern&&value.startsWith('weapon:')){
+      const slot=Number(value.slice(7));
+      if(!Number.isInteger(slot)||slot<0||slot>=2)return;
+      this.weaponWheelSlot=slot;this.selectedSkillId='';
+      // Choosing an outer weapon only opens its skill list. It cannot move
+      // or cast until a skill is explicitly selected on the inner ring.
+      this.wheelMode='move';this.aimTile=null;this.selectedBeastId=null;
+      this.rangeSignature='';
+      this.updateBeastHUD();this.updateSkillHUD();this.updateWheelHUD();
+      this.drawSoon();return;
+    }
     if(value==='player'||value==='sword'){
-      if(value==='sword'&&!this.room?.members?.[this.uid]?.flyingSword)return;
+      if(value==='sword'&&!own?.flyingSword)return;
+      if(modern&&this.weaponWheelSlot>=0)return;
+      this.weaponWheelSlot=-1;
       this.moveTarget=value;this.wheelMode='move';this.aimTile=null;
       this.selectedBeastId=null;this.rangeSignature='';
       this.updateBeastHUD();this.updateSkillHUD();this.updateWheelHUD();
       this.drawSoon();return;
     }
     if(value==='move'||value==='attack'){
+      if(modern&&value==='move'){
+        this.weaponWheelSlot=-1;this.selectedSkillId='';
+      }else if(modern&&value==='attack')return;
       this.setWheelMode(value);return;
     }
-    const own=this.room?.members?.[this.uid];
     const skills=own?.dungeonSkills||[];
-    if(value!=='basic'&&!skills.some(skill=>skill.id===value))return;
+    const chosen=skills.find(skill=>skill.id===value);
+    if(value!=='basic'&&!chosen)return;
     if(value==='basic'&&skills.length)return;
+    if(modern&&(this.weaponWheelSlot<0||
+        chosen?.weaponId!==own.dungeonWeaponIds[this.weaponWheelSlot]))return;
     if(this.selectedSkillId!==value){
-      this.selectedSkillId=value;
-      this.aimTile=null;this.selectedBeastId=null;
+      this.selectedSkillId=value;this.aimTile=null;this.selectedBeastId=null;
     }
     this.wheelMode='attack';
     this.updateBeastHUD();this.updateSkillHUD();
@@ -529,23 +548,47 @@ class DungeonMapView{
       badge.title=charges>0?'剩餘 '+charges+' 次強化體術，施放後消耗一層':'';
     }
     const skills=Array.isArray(own?.dungeonSkills)?own.dungeonSkills:[];
-    if(skills.length&&!skills.some(skill=>skill.id===this.selectedSkillId))
+    const modern=Array.isArray(own?.dungeonWeaponIds)&&own.dungeonWeaponIds.length===2;
+    if(modern&&this.weaponWheelSlot<0){
+      this.wheelMode='move';this.selectedSkillId='';
+    }else if(modern&&this.weaponWheelSlot>=0){
+      const weaponId=own.dungeonWeaponIds[this.weaponWheelSlot];
+      if(!skills.some(skill=>skill.id===this.selectedSkillId&&skill.weaponId===weaponId)){
+        this.selectedSkillId='';
+        this.wheelMode='move';
+      }
+    }else if(skills.length&&!skills.some(skill=>skill.id===this.selectedSkillId))
       this.selectedSkillId=skills[0].id;
-    if(!skills.length)this.selectedSkillId='basic';
-    const options=skills.length?skills.map(skill=>{
+    else if(!skills.length)this.selectedSkillId='basic';
+    const selectedWeapon=modern&&this.weaponWheelSlot>=0?
+      globalThis.QAManuals?.BY_BOOK?.[own.dungeonWeaponIds[this.weaponWheelSlot]]:null;
+    // Render all three moves from the chosen weapon, including locked moves.
+    // Only currently server-authorized dungeon skills can be tapped.
+    const visibleSkills=modern?(selectedWeapon?.skills||[]).map(template=>{
+      const skill=skills.find(value=>value.id===template.id);
+      const empowered=!!skill&&dungeonFocusEmpowers(own,skill);
+      let art='';try{art=skillArt(template)||''}catch(_){}
+      return {value:template.id,name:template.name,
+        cost:skill?(empowered?Math.ceil(skill.cost/2):skill.cost):null,
+        description:skill?.description||'',art,empowered,locked:!skill};
+    }):skills.map(skill=>{
       const empowered=dungeonFocusEmpowers(own,skill);
       const cost=empowered?Math.ceil(skill.cost/2):skill.cost;
-      let art='';
-      try{art=skillArt(skill)||''}catch(_){}
+      let art='';try{art=skillArt(skill)||''}catch(_){}
       return {value:skill.id,name:skill.name,cost,
         description:skill.description||'',art,empowered};
-    }):[{value:'basic',name:'普通攻擊',cost:2}];
+    });
+    const options=visibleSkills.length?visibleSkills:
+      modern?[]:[{value:'basic',name:'普通攻擊',cost:2}];
     if(this.moveTarget==='sword'&&!own?.flyingSword)this.moveTarget='player';
     renderDungeonTrialWheel(wheel,{
       mode:this.wheelMode,options,
+      weaponIds:modern?own.dungeonWeaponIds:null,
+      selectedWeaponSlot:modern?this.weaponWheelSlot:-1,
       moveOptions:[{value:'player',name:'角色',cost:'1 體力/格'},
         ...(own?.flyingSword?[{value:'sword',name:'飛劍',cost:'每 2 格 1 體力'}]:[])],
-      selected:this.wheelMode==='move'?this.moveTarget:this.selectedSkillId,
+      selected:this.wheelMode==='move'&&(!modern||this.weaponWheelSlot<0)?
+        this.moveTarget:this.selectedSkillId,
       stamina:Math.max(0,Math.min(10,Number(own?.explorationStamina)||0)),
       focusCharges:charges,
       locked:!active||this.movePending||this.routePending||
@@ -1173,6 +1216,10 @@ class DungeonMapView{
     if(!Number.isInteger(x)||!Number.isInteger(y)||
         x<0||x>=this.map.width||y<0||y>=this.map.height||
         this.map.tiles[y*this.map.width+x]===0)return;
+    if(this.room?.members?.[this.uid]?.dungeonWeaponIds?.length===2&&
+        this.weaponWheelSlot>=0&&this.wheelMode!=='attack'){
+      this.actionFeedback('請先選擇武器內圈的技能');return;
+    }
     this.aimTile={x,y};this.followBeast=false;
     // Tapping an enemy is a combat action, not an inspector popup.
     // Long-press remains dedicated to displaying beast information.
@@ -1748,7 +1795,7 @@ class DungeonMapView{
     this.guardPending=false;this.guardSignature='';
     this.aimTile=null;this.skillSignature='';
     this.wheelSwipeStart=null;this.manualOpen=false;this.wheelMode='attack';
-    this.moveTarget='player';this.selectedSkillId='';this.routePending=false;
+    this.moveTarget='player';this.selectedSkillId='';this.weaponWheelSlot=-1;this.routePending=false;
     this.rangeSignature='';this.rangeTiles=[];
     clearTimeout(this.actionFeedbackTimer);this.actionFeedbackTimer=null;
     this.quiz?.destroy();
@@ -1984,6 +2031,10 @@ class DungeonMapView{
     if(this.rangeSignature===key)return;
     this.rangeSignature=key;
     const from=this.selfPad(),enemies=this.creatures();
+    if(member?.dungeonWeaponIds?.length===2&&this.weaponWheelSlot>=0&&
+        this.wheelMode!=='attack'){
+      this.rangeKind='move';this.rangeTiles=[];return;
+    }
     if(this.wheelMode==='move'){
       if(this.moveTarget==='sword'&&member.flyingSword){
         this.rangeKind='sword';
