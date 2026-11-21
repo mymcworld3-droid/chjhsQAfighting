@@ -27,7 +27,7 @@ const localUser=()=>window.getCurrentUserData?.()||{};
 let root=null,keyboardGuard=null,renderer=null,beastInspector=null,sealInspector=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
 let attackChoice='attack',selectedManualSkill='',wheelIgnoreClickUntil=0;
 // Selection only: every equipped weapon is equally usable, never a main weapon.
-let selectedWeaponId='',weaponSelectionOpen=false;
+let selectedWeaponId='',selectedWeaponSlot=-1;
 // Local view preference; never sent to the server or charged as a battle action.
 let sealRangeMode='all',sealRangeFocusId=null;
 let sealPeekPosition=null,sealGuideForced=false;
@@ -53,7 +53,7 @@ function syncEquippedAttack(hero=myActor()){
   const skills=equippedTechniques(hero);
   if(hero?.manualWeaponMode){
     const worn=hero.manualWeaponIds||[];
-    if(selectedWeaponId&&!worn.includes(selectedWeaponId))selectedWeaponId='';
+    if(selectedWeaponId&&!worn.includes(selectedWeaponId)){selectedWeaponId='';selectedWeaponSlot=-1;}
     if(action==='manual'&&!skills.some(skill=>skill.id===selectedManualSkill)){
       action='move';selection=null;selectedManualSkill='';
     }
@@ -142,15 +142,15 @@ function renderBattleLoadouts(){
     (battleLoadouts?.activeLoadout??0);
   toggle.hidden=!active;toggle.disabled=busy;
   const weapons=Array.isArray(battleLoadouts?.weaponIds);
-  toggle.textContent=weapons?'武器 '+(battleLoadouts?.weaponIds?.filter(Boolean).length||0)+'/3':'配置 '+(index+1);
+  toggle.textContent=weapons?'武器 '+(battleLoadouts?.weaponIds?.filter(Boolean).length||0)+'/2':'配置 '+(index+1);
   toggle.setAttribute('aria-expanded',String(active&&loadoutMenuOpen));
   menu.hidden=!active||!loadoutMenuOpen;
   if(menu.hidden)return;
   const presets=battleLoadouts?.loadouts||[];
   if(weapons){
     const worn=battleLoadouts.weaponIds||[];
-    menu.innerHTML='<strong>戰場武器裝備</strong><small>單人試煉可隨時調整，最多三件，沒有主武器。</small>'+
-      Array.from({length:3},(_,i)=>{
+    menu.innerHTML='<strong>戰場武器裝備</strong><small>單人試煉可隨時調整，最多兩件，沒有主武器。</small>'+
+      Array.from({length:2},(_,i)=>{
         const name=Manuals.BY_BOOK[worn[i]]?.name||'空白武器欄';
         return '<div class="tc-weapon-manage-slot"><span>第 '+(i+1)+' 欄 · '+esc(name)+'</span>'+
           (worn[i]?'<button type="button" data-battle-unequip="'+i+'">卸下</button>':'')+
@@ -195,7 +195,7 @@ async function refreshBattleLoadouts(){
 }
 
 function showBattleWeaponChoices(slot){
-  if(!battleLoadouts||!Number.isInteger(slot)||slot<0||slot>2)return;
+  if(!battleLoadouts||!Number.isInteger(slot)||slot<0||slot>=2)return;
   const host=$('[data-battle-weapon-candidates]');
   if(!host)return;
   const worn=battleLoadouts.weaponIds||[];
@@ -211,14 +211,14 @@ function showBattleWeaponChoices(slot){
 }
 async function editBattleWeapon(slot,weaponId){
   if(!state||state.mode!=='pve'||state.status!=='active'||!Number.isInteger(slot)||
-    slot<0||slot>2||busy||!battleLoadouts)return;
+    slot<0||slot>=2||busy||!battleLoadouts)return;
   const roomId=state.id,account=uid,session=epoch;
   busy=true;updateControls();
   try{
     const result=await api('/api/tactical/manuals/loadout',{index:slot,weaponId});
     if(!valid(session,account)||state?.id!==roomId)return;
     battleLoadouts=result.state;loadoutFetchedFor=account;
-    loadoutMenuOpen=false;weaponSelectionOpen=false;selectedWeaponId='';
+    loadoutMenuOpen=false;selectedWeaponSlot=-1;selectedWeaponId='';
     // Refresh directly: task()/sync() would refuse while this edit is busy.
     const live=await api('/api/tactical/state?mode=pve');
     if(valid(session,account)&&state?.id===roomId&&live.state)
@@ -290,7 +290,7 @@ function ensure(){
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
   if(!document.getElementById('tactical-quarter-weapons-style')){
     const link=document.createElement('link');link.id='tactical-quarter-weapons-style';
-    link.rel='stylesheet';link.href='/styles/tactical-quarter-weapons.css?v=20261121-v1';
+    link.rel='stylesheet';link.href='/styles/tactical-quarter-weapons.css?v=20261121-two-weapon-ring-v2';
     document.head.append(link);
   }
   if(!document.getElementById('tactical-focus-effects-style')){
@@ -1506,7 +1506,7 @@ function accept(next,serial){
     hideBossBanner();bossTransitionPending=null;
     beastInspector?.dismiss();sealInspector?.dismiss();
     battleLoadouts=null;loadoutFetchedFor='';loadoutMenuOpen=false;
-    weaponSelectionOpen=false;selectedWeaponId='';
+    selectedWeaponSlot=-1;selectedWeaponId='';
     battleMasteryBaseline=null;
     clearLiveManualXp();
   }
