@@ -1,4 +1,5 @@
 import './manual-rules.js?v=20261118-gold-cap10-v1';
+import './contextual-asset-preloader.js';
 import {skillArt,bookArt} from './manual-art.js';
 import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-recap.js';
 import {manualXpDelta,renderManualXpToast} from './tactical-manual-xp-feedback.js';
@@ -17,6 +18,7 @@ import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
 const R=globalThis.QATactical;
 const SealTargets=globalThis.QATacticalSealTargeting;
 const Manuals=globalThis.QAManuals;
+const AssetWarmup=globalThis.QAContextualAssets;
 const CombatImpact=globalThis.QATacticalImpact;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const rich=v=>window.quizMathRichText?.(String(v||''))||esc(v);
@@ -742,6 +744,9 @@ function selectWheel(value,tutorialAutomatic=false){
       const weaponId=value.slice(7);
       if(!hero.manualWeaponIds?.includes(weaponId))return;
       selectedWeaponId=weaponId;weaponSelectionOpen=true;
+      // Prepare only the chosen weapon's three icons, not every acquired move.
+      void AssetWarmup.warmImages(
+        AssetWarmup.chosenSkills(weaponId,Manuals.BY_BOOK,skillArt),{max:3});
       // Do not automatically cast or privilege the first skill.
       if(action==='manual'){action='move';selection=null;}
       renderer?.update(state,uid,battlefieldMode(),selection);
@@ -1175,6 +1180,9 @@ function paint({preserveModal=false}={}){
     quizButton.setAttribute('aria-label',`答題充能，${quizButton.title}，目前能量 ${amount} / ${R.LIMITS.stamina}，答對增加 4，答錯增加 1`);
   }else $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
+  // Scene-specific warmup: only current players, objective art and the
+  // actively equipped weapons. No six-weapon/whole-game asset sweep.
+  void AssetWarmup.warmImages(AssetWarmup.trialImages(state,uid),{max:8});
   renderer.update(state,uid,battlefieldMode(),selection);refreshSealRangeControls();updateControls();refreshSealTargetGuidance();updateClock();
   beastInspector?.refresh();sealInspector?.refresh();updateBossHud();
   // Resume/open through room-state polling also prefetches before any click.
@@ -2210,6 +2218,7 @@ async function enterTrial(e,account){
   }
 }
 async function open(nextMode='pve'){
+  window.prefetchXiuxianContext?.('trial');
   ensure();
   if(opened&&mode==='pve'&&nextMode==='pve'&&trialEntry?.uid===getMainUser()?.uid)return trialEntry.promise;
   if(opened)close();
