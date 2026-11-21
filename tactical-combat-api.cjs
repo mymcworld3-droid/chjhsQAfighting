@@ -119,14 +119,27 @@ function upgradeLegacyRoomWeapons(room,uid,user,manualRecord){
   if(!needsWeaponSlotUpgrade(actor))
     return false;
   const loadout=manualLoadout(manualRecord,TrainingAccess.score(user));
+  // Old active rooms could have an authorized skill preset that is no longer
+  // the user's current equipment. Keep those already-authorized casts until
+  // the room ends, instead of silently revoking skills mid-fight.
+  const oldSkills=Array.isArray(actor.manualSkills)?actor.manualSkills.filter(
+    id=>Manuals.BY_SKILL[id]):[];
+  const legacyBooks=[...new Set(oldSkills.map(id=>Manuals.BY_SKILL[id].manualId))];
+  const preserveLegacy=oldSkills.some(id=>!loadout.manualSkills.includes(id))&&
+    legacyBooks.length>0&&legacyBooks.length<=2;
+  const equipped=preserveLegacy?[
+    ...legacyBooks,...Array.from({length:2-legacyBooks.length},()=>null)
+  ]:loadout.manualWeaponIds;
+  const available=preserveLegacy?oldSkills:loadout.manualSkills;
+  const levels=preserveLegacy?actor.manualSkillLevels||{}:loadout.manualSkillLevels;
   actor.manualWeaponMode=true;
-  actor.manualWeaponIds=[...loadout.manualWeaponIds];
-  actor.manualSkills=[...loadout.manualSkills];
-  actor.manualSkillLevels={...loadout.manualSkillLevels};
+  actor.manualWeaponIds=[...equipped];
+  actor.manualSkills=[...available];
+  actor.manualSkillLevels={...levels};
   actor.trainingAccessScore=loadout.trainingAccessScore;
   delete actor.manualLoadoutName;
   delete actor.manualLoadoutIndex;
-  if(room.pveMetrics)room.pveMetrics.loadout=[...loadout.manualSkills];
+  if(room.pveMetrics)room.pveMetrics.loadout=[...available];
   return true;
 }
 function playerActor(user,uid,selection,catalog,manualRecord){
