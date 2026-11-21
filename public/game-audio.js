@@ -243,8 +243,14 @@
     }
     function install() {
       if (installed || !doc) return; installed = true;
-      listen(doc, 'pointerdown', event => { if (event.isTrusted && event.button === 0) void unlock(); }, { capture: true, passive: true });
-      listen(doc, 'keydown', event => { if (event.isTrusted && !event.repeat && !event.ctrlKey && !event.metaKey && !event.altKey) void unlock(); }, true);
+      const playerReady=()=>!!env.getCurrentUserData?.()?.stats;
+      listen(doc, 'pointerdown', event => {
+        if (playerReady() && event.isTrusted && event.button === 0) void unlock();
+      }, { capture: true, passive: true });
+      listen(doc, 'keydown', event => {
+        if (playerReady() && event.isTrusted && !event.repeat && !event.ctrlKey && !event.metaKey && !event.altKey)
+          void unlock();
+      }, true);
       listen(doc, 'click', event => {
         if (!event.isTrusted || event.defaultPrevented) return;
         const button = event.target.closest?.('button,a[href],[role="button"]');
