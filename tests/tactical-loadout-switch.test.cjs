@@ -83,3 +83,41 @@ test('client exposes equipment editing and 3-category right battle wheel, withou
   assert.match(page,/最多裝備兩把武器，每把三招/);
   assert.doesNotMatch(page,/切換為主武器/);
 });
+
+test('resuming a pre-weapon PvE room migrates its actor without resetting the battle',async()=>{
+  const db=fixture(),created=await API.start(db,'u1',{mode:'pve'},NOW);
+  const live=db.records.get(API.ROOMS+'/'+created.id),hero=live.actors.find(a=>a.uid==='u1');
+  const before={x:hero.x,y:hero.y,hp:hero.hp,stamina:hero.stamina,revision:live.revision};
+  delete hero.manualWeaponMode;delete hero.manualWeaponIds;
+  hero.manualSkills=['wind-slash'];
+  const previous=db.records.get(API.MANUALS+'/u1');
+  db.records.set(API.MANUALS+'/u1',
+    Manuals.normalize({...Manuals.weaponize(previous),
+      weaponIds:['sword-wind','body-rock']}));
+  const resumed=await API.start(db,'u1',{mode:'pve'},NOW+1);
+  assert.equal(resumed.id,created.id);
+  const actor=resumed.actors.find(a=>a.uid==='u1');
+  assert.equal(actor.manualWeaponMode,true);
+  assert.deepEqual(actor.manualWeaponIds,['sword-wind','body-rock']);
+  assert(actor.manualSkills.includes('rock-fist'));
+  assert.deepEqual({x:actor.x,y:actor.y,hp:actor.hp,stamina:actor.stamina,
+    revision:resumed.revision},before);
+  assert.equal(db.records.get(API.ROOMS+'/'+created.id).actors[0].manualWeaponMode,true);
+});
+test('room-state polling upgrades legacy PvE actors persistently',async()=>{
+  const db=fixture(),created=await API.start(db,'u1',{mode:'pve'},NOW);
+  const room=db.records.get(API.ROOMS+'/'+created.id),hero=room.actors[0];
+  delete hero.manualWeaponMode;delete hero.manualWeaponIds;
+  const snapshot=await API.state(db,'u1',NOW+3,'pve');
+  assert.equal(snapshot.actors[0].manualWeaponMode,true);
+  assert.deepEqual(snapshot.actors[0].manualWeaponIds,['sword-wind',null]);
+  assert.equal(db.records.get(API.ROOMS+'/'+created.id).actors[0].manualWeaponMode,true);
+});
+test('client does not gate the PvE right ring on a legacy manualWeaponMode flag',()=>{
+  const src=fs.readFileSync(path.join(__dirname,
+    '../public/cultivation/tactical-combat.js'),'utf8');
+  assert.match(src,/if\(quarter\)\{\s*renderModernWeaponWheel\(me,locked,mine\)/);
+  assert.match(src,/if\(hero\?\.manualWeaponMode\|\|modernPveWheel\(\)\)/);
+  assert.match(src,/function currentWeaponIds\(hero\)/);
+  assert.match(src,/rightWheel='two-weapons-v4'/);
+});
