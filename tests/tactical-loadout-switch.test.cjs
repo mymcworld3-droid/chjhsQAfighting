@@ -74,11 +74,12 @@ test('client exposes equipment editing and 3-category right battle wheel, withou
   assert.match(src,/function editBattleWeapon/);
   assert.match(src,/renderModernWeaponWheel/);
   assert.match(src,/outer\.replaceChildren/);
+  assert.match(src,/tc-rightwheel-v3/);
   assert.match(src,/selectedWeaponSlot<0\?/);
   assert.doesNotMatch(src,/energy\.append\(move\)/);
-  assert.match(style,/Right outer: movement \/ weapon one \/ weapon two/);
-  assert.match(style,/\.tc-modern-skill-sector/);
-  assert.match(style,/\.tc-weapon-sector/);
+  assert.match(style,/Outer annulus 75–100%: 移動 \/ 武器一 \/ 武器二/);
+  assert.match(style,/\.tc-rw-sector--inner/);
+  assert.match(style,/\.tc-rw-sector--outer/);
   assert.match(page,/最多裝備兩把武器，每把三招/);
   assert.doesNotMatch(page,/切換為主武器/);
 });
