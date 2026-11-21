@@ -246,11 +246,15 @@ async function weaponEditableRooms(tx,db,uid){
   const rooms=await Promise.all(ids.map(id=>tx.get(db.collection(ROOMS).doc(id))));
   if(rooms.some(s=>{
     const room=exists(s);
-    return room?.mode==='pvp'&&['active','waiting'].includes(room.status)&&
+    return room?.mode==='pvp'&&room.status==='active'&&
       room.actors?.some(a=>a.uid===uid);
   }))throw error('多人鬥法進行中，不可更換武器',409);
-   return rooms.map(s=>exists(s)).filter(room=>room?.mode==='pve'&&
-    room.status==='active'&&room.actors?.some(a=>a.uid===uid));
+   // Before matchmaking completes, PvP is not yet in progress. Updating its
+  // waiting actor is essential: the joined opponent must see the latest gear.
+  return rooms.map(s=>exists(s)).filter(room=>
+    ((room?.mode==='pve'&&room.status==='active')||
+      (room?.mode==='pvp'&&room.status==='waiting'))&&
+    room.actors?.some(a=>a.uid===uid));
 }
 
 async function assertDungeonWeaponEditable(playerDb,uid){
@@ -283,12 +287,12 @@ async function updateLoadout(db,uid,input){
       if(weaponId&&modern.weaponIds.some((id,i)=>i!==index&&id===weaponId))
         throw error('同一種武器不能重複裝備',400);
       await assertDungeonWeaponEditable(db,uid);
-      const soloRooms=await weaponEditableRooms(tx,db,uid);
+      const editableRooms=await weaponEditableRooms(tx,db,uid);
       const weaponIds=[...modern.weaponIds];
       weaponIds[index]=weaponId;
       const saved=Manuals.normalize({...modern,weaponIds});
       const projection=manualLoadout(saved,TrainingAccess.score(user));
-      for(const room of soloRooms){
+      for(const room of editableRooms){
         const actor=room.actors.find(a=>a.uid===uid);
         if(!actor)continue;
         actor.manualSkills=[...projection.manualSkills];
@@ -297,7 +301,8 @@ async function updateLoadout(db,uid,input){
         actor.manualWeaponMode=true;
         delete actor.manualLoadoutIndex;
         delete actor.manualLoadoutName;
-        if(room.pveMetrics)room.pveMetrics.loadout=[...projection.manualSkills];
+        if(room.mode==='pve'&&room.pveMetrics)
+          room.pveMetrics.loadout=[...projection.manualSkills];
         room.revision++;room.updatedAtMs=Date.now();
         tx.set(db.collection(ROOMS).doc(room.id),room);
       }
