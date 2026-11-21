@@ -4,6 +4,7 @@ on:
     branches: [stamina-battle]
     paths:
       - 'public/sw.js'
+      - 'public/game-audio.js'
       - 'public/index.html'
       - 'public/cultivation/startup-resource-preloader.js'
       - 'public/cultivation/contextual-asset-preloader.js'
@@ -15,6 +16,7 @@ on:
       - 'public/styles/tactical-quarter-weapons.css'
       - 'public/module-versions.json'
       - 'tests/contextual-image-preloader.test.cjs'
+      - 'tests/game-audio.test.cjs'
       - 'tests/startup-resource-preloader.test.cjs'
       - 'tests/local-module-cache.test.cjs'
       - '.github/workflows/asset-preload-acceptance.yml'
@@ -31,4 +33,4 @@ jobs:
       - name: Check static asset hash manifest
         run: node scripts/build-module-versions.cjs --check
       - name: Confirm only needed startup, page, skill and scene assets warm
-        run: node --test tests/local-module-cache.test.cjs tests/startup-resource-preloader.test.cjs tests/contextual-image-preloader.test.cjs
+        run: node --test tests/local-module-cache.test.cjs tests/startup-resource-preloader.test.cjs tests/contextual-image-preloader.test.cjs tests/game-audio.test.cjs
