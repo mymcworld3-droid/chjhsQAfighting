@@ -435,14 +435,23 @@ async function main(){
       'touch preview does not trigger an automatic battle action');
     assert.equal((await read(view)).actors[0].stamina,player.stamina);
 
-    await view.evaluate(()=>document.querySelector('#tactical-combat [data-action="attack"]').click());
-    // The wheel replaces normal attacks with an equipped manual; inspect the
-    // actual selected skill instead of assuming the basic attack cost is 2.
-    const manuals=(player.manualSkills||[]).map(id=>Rules.manualSkillFor(player,id)).filter(Boolean);
-    const selectedSkill=manuals[0]||Rules.basicFor(player);
-    const attackMode=manuals.length?'manual:'+selectedSkill.id:'attack';
-    const attack=Rules.aimCells(snapshot,player,selectedSkill)[0]||
-      (selectedSkill.range===0?{x:player.x,y:player.y}:null);
+    // The active skill preview must use the real two-tier weapon wheel,
+    // not the hidden basic attack tab carried over for PvP compatibility.
+    db.records.set(service.MANUALS+'/u1',{
+      version:2,school:'sword',books:{'sword-wind':{exp:0}},equipped:[]
+    });
+    await service.updateLoadout(db,'u1',{index:0,weaponId:'sword-wind'});
+    await view.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
+    await view.waitForFunction(()=>
+      !!document.querySelector('#tactical-combat [data-weapon-choice="0"]'));
+    await view.locator('[data-weapon-choice="0"]').click();
+    await view.locator('[data-wheel-choice="manual:wind-slash"]').click();
+    const attackSnapshot=await read(view);
+    const attackPlayer=attackSnapshot.actors.find(a=>a.uid==='u1');
+    const selectedSkill=Rules.manualSkillFor(attackPlayer,'wind-slash');
+    const attackMode='manual:wind-slash';
+    const attack=Rules.aimCells(attackSnapshot,attackPlayer,selectedSkill)[0]||
+      (selectedSkill.range===0?{x:attackPlayer.x,y:attackPlayer.y}:null);
     assert.ok(attack,'the selected attack must have at least one aimable tile');
     const pointer=await position(attack);
     await view.evaluate(p=>{
@@ -454,7 +463,7 @@ async function main(){
       }));
     },pointer);
     const visual=require('../public/cultivation/tactical-target-visuals.js');
-    const expectation=visual.derive(snapshot,'u1',attackMode,attack,Rules);
+    const expectation=visual.derive(attackSnapshot,'u1',attackMode,attack,Rules);
     const diagnostic=await view.evaluate(()=>({
       cost:document.querySelector('.tc-arena canvas')?.dataset.hoverPreviewCost,
       valid:document.querySelector('.tc-arena canvas')?.dataset.hoverPreviewValid,
@@ -467,8 +476,8 @@ async function main(){
     await view.screenshot({path:path.join(output,'phase6-attack-focus-portrait.png')});
     await view.setViewportSize({width:844,height:390});await ratio(view);
     await view.screenshot({path:path.join(output,'phase6-attack-focus-landscape.png')});
-    assert.equal((await read(view)).revision,snapshot.revision,'visual previews cannot commit actions');
-    assert.equal((await read(view)).actors[0].stamina,player.stamina);
+    assert.equal((await read(view)).revision,attackSnapshot.revision,'visual previews cannot commit actions');
+    assert.equal((await read(view)).actors[0].stamina,attackPlayer.stamina);
   }
 
   async function threatReadabilityChecks(view){
@@ -923,11 +932,11 @@ async function main(){
         assert.match(layout.charging.background,/gradient/,'charging surface is a green gradient');
         assert.equal(layout.charging.ready,!layout.charging.disabled,'pulse only appears when quiz is actionable');
         if(layout.charging.ready)assert.equal(layout.charging.animation,'tc-charge-ready-pulse');
-        for(const required of ['attack','beastToggle','close','end','loadoutToggle','move','quiz'])
+        for(const required of ['beastToggle','close','end','loadoutToggle','quiz'])
           assert(layout.visible.includes(required),'missing '+required+' control');
-        assert.equal(await quick.locator('.tc-quarter-energy .tc-left-move').count(),1,'movement is on left');
-        assert.equal(await quick.locator('.tc-weapon-outer-choices .tc-weapon-sector').count(),3,'three weapon stations exist');
-        assert.equal(await quick.locator('.tc-open-weapon-ring').count(),1,'outer weapon ring is accessible even when the tutorial has expanded it');
+        assert.equal(await quick.locator('.tc-quarter-energy .tc-left-move').count(),0,'left dial is for charging only');
+        assert.equal(await quick.locator('.tc-rw-outer .tc-rw-sector--outer').count(),3,'three action stations: move and two weapons');
+        assert.equal(await quick.locator('.tc-rightwheel-v3').count(),1,'modern right wheel exists');
         assert.ok(Math.abs(layout.energy.x)<.015&&Math.abs(layout.energy.y+layout.energy.h-1)<.015);
         assert.ok(Math.abs(layout.actions.x+layout.actions.w-1)<.015&&Math.abs(layout.actions.y+layout.actions.h-1)<.015);
         assert.ok(Math.abs(layout.map.x)<.015&&Math.abs(layout.map.y)<.015);
@@ -977,13 +986,11 @@ async function main(){
       await service.updateLoadout(db,'u1',{index:0,weaponId:'sword-wind'});
       await quick.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
       await quick.waitForFunction(()=>
-        !!document.querySelector('[data-weapon-choice="sword-wind"]'));
-      if(await quick.locator('.tc-weapon-outer-choices').isHidden())
-        await quick.locator('[data-wheel-action="attack-ring"]:visible').first().click();
-      assert.equal(await quick.locator('[data-weapon-choice="sword-wind"]').count(),1);
-      await quick.locator('[data-weapon-choice="sword-wind"] .tc-modern-weapon-label').click();
+        !!document.querySelector('[data-weapon-choice="0"]'));
+      assert.equal(await quick.locator('[data-weapon-choice="0"]').count(),1);
+      await quick.locator('[data-weapon-choice="0"] .tc-rw-sector-label').click();
       assert.equal(await quick.locator('[data-wheel-choice^="manual:"]').count(),3);
-      await quick.locator('[data-wheel-choice="manual:wind-slash"] .tc-modern-skill-label').click();
+      await quick.locator('[data-wheel-choice="manual:wind-slash"] .tc-rw-sector-label').click();
       await cell(quick,2,1);
       await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='6');
       const result=await read(quick);
@@ -1057,9 +1064,8 @@ async function main(){
             document.querySelector('.tc-arena canvas').dispatchEvent(
               new KeyboardEvent('keydown',{key:'0',bubbles:true}));
           });
-          await quick.locator('[data-action="attack"]').click();
-          await quick.locator('[data-weapon-choice="sword-wind"] .tc-modern-weapon-label').click();
-          await quick.locator('[data-wheel-choice="manual:wind-slash"] .tc-modern-skill-label').click();
+          await quick.locator('[data-weapon-choice="0"] .tc-rw-sector-label').click();
+          await quick.locator('[data-wheel-choice="manual:wind-slash"] .tc-rw-sector-label').click();
           await cell(quick,2,1);
           await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='8');
           assert.equal((await read(quick)).objective.points[0].hp,1);
