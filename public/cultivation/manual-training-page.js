@@ -3,6 +3,7 @@ import {bookArt,skillArt} from './manual-art.js';
 import {renderManualHero} from './manual-hero-view.js';
 import {nextManualExpedition,renderManualExpedition} from './manual-expedition-guide.js';
 import {renderManualLoadout,selectSkillForSlot} from './manual-loadout-view.js';
+import './contextual-asset-preloader.js';
 import {filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary} from './manual-library-view.js';
 import {detectManualCelebration,renderManualCelebration} from './manual-celebration.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
@@ -238,6 +239,7 @@ function paint(message='',{loadoutFeedback=false}={}){
 }
 async function load({force=false}={}){
   if(busy)return;
+  if(visible())window.prefetchXiuxianContext?.('manuals');
   ensure();const uid=getMainUser()?.uid;
   if(!uid){clearManualCelebration();current=null;loadedFor='';paint('請先登入後查看武器。');return;}
   if(!force&&loadedFor===uid&&Date.now()-lastFetch<15000){paint();return;}
@@ -250,6 +252,10 @@ async function load({force=false}={}){
     current=result;if(loadedFor!==uid){selectedLoadout=result.activeLoadout||0;featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';}loadedFor=uid;
     window.setCurrentTacticalManualState?.(result,uid);
     paint();
+    // Only artwork for owned, currently browsable weapons is warmed;
+    // unowned manuals and unrelated skill icons are never requested here.
+    if(visible())void globalThis.QAContextualAssets?.warmImages(
+      globalThis.QAContextualAssets.manualImages(result),{max:3});
     showManualCelebration(reward);
   }catch(error){
     if(token!==sequence)return;
