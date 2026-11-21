@@ -23,7 +23,7 @@
     /^\/(?:assets\/|styles\/)/.test(x)))];
   function weaponImages(ids){
     return unique((Array.isArray(ids)?ids:[]).slice(0,3)
-      .filter(id=>WEAPONS.has(id)).map(id=>'/assets/weapons/'+id+'.svg'));
+      .filter(id=>WEAPONS.has(id)).map(id=>'/assets/weapons/'+id+'-hd.webp'));
   }
   function genders(people){
     const found=new Set();
