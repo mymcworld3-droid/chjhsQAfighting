@@ -1105,3 +1105,80 @@ html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.b
 /* The camera is player-locked: tiles are targetable, never draggable. */
 #dungeon-map-view.tc-quarter-layout .tc-arena>canvas,
 #dungeon-map-view.tc-quarter-layout .tc-arena>canvas:active{cursor:crosshair!important}
+
+/* Two-weapon dungeon control (the base CSS above is the exact trial mirror).
+   Only the new weapon-mode overlay differs; old saved skill-presets remain intact. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel{
+  overflow:hidden;touch-action:manipulation;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-action-lines,
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-wheel-slider,
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-wheel-marker{
+  display:none!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-sector[hidden],
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-wheel-options[hidden]{
+  display:none!important;pointer-events:none!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-weapon-outer-choices{
+  position:absolute;inset:0;z-index:5;pointer-events:none;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-weapon-sector{
+  position:absolute;inset:0;display:block;z-index:5;
+  margin:0!important;padding:0!important;min-height:0!important;
+  width:100%;height:100%;pointer-events:auto;cursor:pointer;
+  border:0!important;border-radius:0!important;
+  background:linear-gradient(145deg,#2b4034,#1d3027 70%)!important;
+  color:#f6e7c5!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-weapon-sector[aria-pressed=true]{
+  background:linear-gradient(145deg,#4c745c,#305c48 75%)!important;
+  outline:1px solid #efce92;outline-offset:-1px;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-modern-weapon-label{
+  position:absolute;width:25%;display:grid;justify-items:center;gap:2px;
+  transform:translate(-50%,-50%);pointer-events:none;text-align:center;
+  line-height:1.1;text-shadow:0 2px 3px #000;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-modern-weapon-label strong{
+  display:block;color:#f6e2af;font-size:clamp(10px,1.45vw,16px);white-space:nowrap;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-modern-weapon-label small{
+  display:block;color:#dcebcf;font-size:clamp(8px,1.1vw,12px);
+  overflow-wrap:anywhere;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-sector.tc-modern-skill-sector{
+  z-index:4!important;
+  background:linear-gradient(145deg,#1b3b32,#315143)!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-sector.tc-modern-skill-sector[aria-pressed=true]{
+  background:linear-gradient(145deg,#42735b,#345d4b)!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-sector.tc-modern-skill-sector>span,
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-sector.tc-modern-skill-sector[aria-pressed=true]>span{
+  opacity:1!important;position:absolute;
+  width:23%;transform:translate(-50%,-50%);pointer-events:none;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-sector.tc-modern-skill-sector.is-locked{
+  opacity:.45!important;filter:grayscale(.65);cursor:not-allowed;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-sector.tc-modern-skill-sector .tc-wheel-copy{
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;line-height:1.08;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-sector.tc-modern-skill-sector .tc-wheel-skill-art{
+  max-width:24px!important;max-height:24px!important;object-fit:cover;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .dm-weapon-empty-message{
+  position:absolute;z-index:3;left:38%;top:36%;width:35%;
+  text-align:center;pointer-events:none;color:#b8c7bc;
+  font-size:clamp(9px,1.2vw,13px);
+}
+@media(orientation:portrait){
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-modern-weapon-label strong{
+    font-size:clamp(9px,2.2vw,11px);
+  }
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-sector.tc-modern-skill-sector .tc-wheel-skill-art{
+    max-width:18px!important;max-height:18px!important;
+  }
+}
