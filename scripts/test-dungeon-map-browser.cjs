@@ -893,19 +893,24 @@ async function main(){
       position:{...lane.from},explorationStamina:10,
       skillSeq:0,lastSkill:null};
     room.revision++;publish();
-    await a.page.locator('[data-dm-wheel] [data-wheel-choice="dragon-guard"]')
-      .waitFor({timeout:9000});
-    // Sector buttons occupy the whole quarter-circle bounding box but are
-    // clip-pathed to annular wedges. Its geometric center is NOT clickable.
-    // Choose the actual middle of the second of three outer wedges.
-    const guardChoice=a.page.locator('[data-dm-wheel] [data-wheel-choice="dragon-guard"]');
+    // The new wheel has a fixed OUTER weapon station and an INNER
+    // three-skill submenu. Exercise both physical clip-path hit areas.
+    const outerChoice=a.page.locator('[data-dm-wheel] [data-skill-id="weapon:0"]');
+    await outerChoice.waitFor({timeout:9000});
+    const outerBounds=await outerChoice.boundingBox();
+    assert.ok(outerBounds);
+    const outerCenter=.381; // -135 degrees at radius 87.5%
+    await outerChoice.click({position:{
+      x:outerBounds.width*outerCenter,y:outerBounds.height*outerCenter}});
+    const guardChoice=a.page.locator('[data-dm-wheel] [data-skill-id="dragon-guard"]');
+    await guardChoice.waitFor({timeout:9000});
     const guardBounds=await guardChoice.boundingBox();
     assert.ok(guardBounds);
-    const point=.385; // (-135°, radius 87%) in quarter-wheel coordinates
+    const innerCenter=.568; // -135 degrees at radius 61.5%
     await guardChoice.click({position:{
-      x:guardBounds.width*point,y:guardBounds.height*point}});
+      x:guardBounds.width*innerCenter,y:guardBounds.height*innerCenter}});
     await a.page.waitForFunction(()=>
-      document.querySelector('[data-dm-wheel] [data-wheel-choice="dragon-guard"]')
+      document.querySelector('[data-dm-wheel] [data-skill-id="dragon-guard"]')
         ?.getAttribute('aria-pressed')==='true',null,{timeout:5000});
     await a.page.evaluate(()=>{
       const canvas=document.querySelector('[data-dm-world]');
