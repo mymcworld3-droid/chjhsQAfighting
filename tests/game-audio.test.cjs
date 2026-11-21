@@ -67,9 +67,13 @@ function runtime({ saved, remote = {}, supported = true, failed = false, holdDec
   };
 }
 
-test('startup prefetches only four common cues, without creating an audio context', async () => {
-  const r = runtime(); r.manager.install(); await r.manager.preload();
-  assert.equal(r.contexts.length, 0); assert.equal(r.requests.length, 4);
+test('login downloads no MP3; player-ready prefetches only four common cues', async () => {
+  const r = runtime(); r.manager.install(); await r.settle();
+  assert.equal(r.contexts.length,0);
+  assert.equal(r.requests.length,0,'login screen does not preload any sounds');
+  r.emit('window','xiuxian:user-data-ready');await r.settle();
+  await r.manager.preload();
+  assert.equal(r.contexts.length,0);assert.equal(r.requests.length,4);
   assert.deepEqual(r.requests.slice().sort(),['ui-click','cloud-whoosh',
     'answer-correct','answer-wrong'].map(id=>'assets/audio/'+id+'.mp3').sort());
   assert.equal(r.manager.play('grand-reveal'), false);
