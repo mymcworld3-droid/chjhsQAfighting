@@ -1,139 +1,220 @@
-/* Two-weapon quarter wheel. Left: charge and stamina only.
-   Right outer: movement / weapon one / weapon two.
-   Right inner: movement targets or the selected weapon's three techniques. */
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-energy {
+/*
+ * 問道試煉 / 右圈 v3 — completely independent weapon-era presentation.
+ * Outer annulus 75–100%: 移動 / 武器一 / 武器二 (fixed, never collapses).
+ * Inner annulus 49–74%: 角色/飛劍 OR the selected weapon's three moves.
+ * Central 0–49%: original server-backed 結束回合 action.
+ * The old two-state slider is never displayed or allowed to hit-test.
+ */
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel{
+  --tc-wheel:var(--tc-dial);
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action{
+  overflow:hidden;
+  isolation:isolate;
+  touch-action:manipulation;
+  background:radial-gradient(circle at 100% 100%,#101a16 0%,#1e3027 58%,#32463a 100%);
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-action-tabs,
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-wheel-options,
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-wheel-slider,
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-wheel-marker,
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-action-lines,
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-weapon-outer-choices,
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-open-weapon-ring{
+  display:none!important;
+  pointer-events:none!important;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rightwheel-v3{
+  position:absolute;inset:0;z-index:10;
+  pointer-events:none;isolation:isolate;
+  overflow:hidden;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-guides{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:1;
   overflow:visible;
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-energy>[data-quiz] {
-  width:58%!important;height:58%!important;z-index:4;
-  border-width:1.5px!important;
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-guides path{
+  fill:none;stroke:#d6c38c88;stroke-width:.7;
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-energy-bolt {
-  left:17%;top:16%;width:41%;height:60%;
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-outer,
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-inner{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-energy-number {
-  right:9%;bottom:8%;font-size:clamp(15px,2.7vw,36px);
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-charge-label {
-  left:4%;bottom:2%;width:91%;font-size:clamp(7px,1.15vw,12px);
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-left-move {
-  position:absolute;inset:0;display:block;z-index:3;
-  width:100%;height:100%;min-height:0!important;padding:0!important;margin:0!important;
-  border:0!important;border-radius:0!important;
-  background:radial-gradient(circle at 0% 100%,#466c5a 0%,#234939 70%,#182f27 100%)!important;
-  color:#fbebca!important;
-  cursor:pointer;font:700 clamp(12px,1.8vw,24px)/1.1 "Noto Serif TC",sans-serif!important;
-  transition:background .12s ease;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-left-move[aria-pressed=true] {
-  background:radial-gradient(circle at 0% 100%,#649a77,#316346 75%)!important;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-left-move>span {
-  position:absolute;left:51%;top:52%;width:35%;display:grid;gap:3px;text-align:center;
-  pointer-events:none;transform:translate(-50%,-50%);
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-left-move i {font-size:clamp(14px,2.5vw,29px)}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-left-fly-sword {
-  position:absolute;z-index:6;left:65%;top:5%;border:1px solid #a4dabd;border-radius:8px;
-  font-size:11px!important;padding:4px 6px!important;min-height:27px!important;
-  background:#173a30;color:#defbe9;white-space:nowrap;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action {overflow:hidden}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-action-lines,
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-wheel-slider,
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-wheel-marker {
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-inner[hidden]{
   display:none!important;
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-sector-attack {
-  z-index:3!important;
-  background:radial-gradient(circle at 100% 100%,#425746,#263b2c)!important;
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector{
+  position:absolute;inset:0;display:block;
+  width:100%;height:100%;
+  margin:0!important;padding:0!important;min-height:0!important;
+  border:none!important;border-radius:0!important;
+  box-shadow:none!important;
+  pointer-events:auto;cursor:pointer;
+  color:#eee9da!important;text-shadow:0 1px 3px #0b140fcc;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  transition:background-color .13s ease,filter .13s ease;
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-sector-attack>span {
-  position:absolute;left:56%;top:53%;width:34%;
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer{
+  background:radial-gradient(circle at 90% 100%,#253b30 0%,#334b3b 72%,#405645 100%)!important;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer:first-child{
+  background:radial-gradient(circle at 100% 100%,#21483b 0%,#30654e 78%,#356f57 100%)!important;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner{
+  background:radial-gradient(circle at 100% 100%,#182e28 0%,#244038 72%,#31554a 100%)!important;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector[aria-pressed="true"]{
+  background:linear-gradient(135deg,#627b58 0%,#356f57 100%)!important;
+  color:#fff4cc!important;
+  filter:brightness(1.13);
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector:hover:not(:disabled){
+  filter:brightness(1.2);
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector:focus-visible{
+  outline:3px solid #ffe3a4!important;outline-offset:-5px!important;
+  filter:brightness(1.2);
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector.is-empty,
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector.is-locked{
+  color:#aaa99c!important;
+  filter:grayscale(.48);
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector:disabled{
+  cursor:default;opacity:.48!important;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label{
+  position:absolute;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;transform:translate(-50%,-50%);
+  text-align:center;line-height:1.1;
+  min-width:0;pointer-events:none;
+  color:inherit;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label i{
+  display:block;font-size:clamp(13px,1.8vw,22px);
+  color:#e6d09b;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label strong{
+  display:block;font-family:"Noto Serif TC","Songti TC",serif;
+  font-size:clamp(11px,1.45vw,18px);
+  font-weight:750;white-space:nowrap;
+  color:inherit;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label small{
+  display:block;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:clamp(8px,.9vw,12px);color:#d3dfca;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label{
+  width:25%;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label{
+  width:31%;gap:3px;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label strong{
+  font-size:clamp(10px,1.2vw,15px);
+  white-space:normal;overflow-wrap:anywhere;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-price{
+  font-size:clamp(8px,.85vw,11px);
+  color:#c2d9c9;white-space:nowrap;
+}
+/* Keep the real End Turn button above the new annuli, and strictly in
+   the central quarter-disk. Its existing delegated handler is untouched. */
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector-end{
+  z-index:20!important;
+  background:radial-gradient(circle at 100% 100%,#16231c 0%,#263a2b 85%)!important;
+  border:0!important;pointer-events:auto;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector-end>span{
+  left:70%;top:76%;width:30%;
   transform:translate(-50%,-50%);
-  font-size:clamp(10px,1.9vw,22px);
-  text-align:center;pointer-events:none;
+  opacity:1!important;font-size:clamp(12px,1.7vw,21px);
+  line-height:1.16;
+  color:#e9d6af;
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-sector-end {
-  z-index:6!important;
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-empty{
+  position:absolute;z-index:4;left:40%;top:35%;width:32%;
+  transform:translate(-50%,-50%);
+  text-align:center;color:#c9c3a8;
+  pointer-events:none;
+  font-size:clamp(10px,1.1vw,14px);
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-sector-end>span {
-  left:70%;top:76%;width:28%;transform:translate(-50%,-50%);
-  font-size:clamp(12px,2vw,24px);
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-wheel-options[hidden],
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-weapon-outer-choices[hidden],
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-open-weapon-ring[hidden] {
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-empty[hidden]{
   display:none!important;
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-skill-sector{
-  z-index:4!important;background:linear-gradient(145deg,#183c39,#294a3a)!important;
-  border:0!important;
+/* Left charging dial must not be repurposed to show movement buttons. */
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-energy .tc-left-move,
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-energy .tc-left-fly-sword{
+  display:none!important;
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-skill-sector[aria-pressed=true]{
-  background:linear-gradient(145deg,#3e7d70,#53784c)!important;
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-energy>[data-quiz]{
+  width:81%!important;height:81%!important;z-index:4;
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-skill-sector.is-locked{
-  opacity:.46!important;filter:grayscale(.8);cursor:not-allowed;
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-energy-bolt{
+  left:24%;top:15%;width:35%;height:54%;
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-skill-sector>span{
-  position:absolute;display:grid;justify-items:center;gap:2px;width:23%;
-  transform:translate(-50%,-50%);pointer-events:none;text-align:center;
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-energy-number{
+  right:16%;bottom:19%;font-size:clamp(18px,2.4vw,36px);
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-skill-label img{
-  display:block;width:clamp(19px,3.4vw,42px);height:clamp(19px,3.4vw,42px);
-  object-fit:cover;border-radius:6px;border:1px solid #f6da9c77;box-shadow:0 0 8px #0009;
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-charge-label{
+  left:5%;bottom:4%;width:90%;font-size:clamp(9px,1.1vw,13px);
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-skill-label small{
-  font-size:clamp(9px,1.25vw,13px);font-weight:700;line-height:1.1;
-  color:#eaf5e7;text-shadow:0 2px 4px #000;
+@media(orientation:portrait){
+  /* Old 30vw wheel was too small for three buttons and three skills.
+     Keep enough room between the distinct left/right quarter controls. */
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel{
+    --tc-wheel:clamp(145px,46vw,240px);
+  }
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label i{
+    display:none;
+  }
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label{
+    width:28%;
+  }
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label strong{
+    font-size:clamp(10px,2.7vw,13px);
+  }
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label small{
+    display:none;
+  }
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label{
+    width:33%;gap:2px;
+  }
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label strong{
+    font-size:clamp(9px,2.4vw,12px);
+  }
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-price{
+    font-size:clamp(7px,2vw,9px);
+  }
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector-end>span{
+    font-size:clamp(12px,3vw,17px);
+  }
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-weapon-outer-choices{
-  position:absolute;inset:0;z-index:5;pointer-events:none;
+@media(prefers-reduced-motion:reduce){
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector{
+    transition:none!important;
+  }
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-weapon-sector,
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-open-weapon-ring{
-  position:absolute;inset:0;width:100%;height:100%;display:block;
-  pointer-events:auto;margin:0;padding:0!important;min-height:0!important;
-  border:0!important;border-radius:0!important;cursor:pointer;
-  background:linear-gradient(145deg,#2b3e37,#1e292c 65%,#324333)!important;
-  color:#f7e5c2!important;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-open-weapon-ring {
-  z-index:5;background:linear-gradient(135deg,#41543b,#26392b)!important;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-open-weapon-ring>span{
-  position:absolute;left:39%;top:39%;transform:translate(-50%,-50%);
-  font-size:clamp(10px,1.5vw,19px);font-weight:700;pointer-events:none;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-weapon-sector[aria-pressed=true]{
-  background:linear-gradient(130deg,#456958,#34547d)!important;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-weapon-sector:disabled{
-  opacity:.63;cursor:default;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-label{
-  position:absolute;display:grid;justify-items:center;gap:2px;
-  width:26%;transform:translate(-50%,-50%);pointer-events:none;text-align:center;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art{
-  display:block;width:clamp(20px,4.1vw,48px);height:clamp(20px,4.1vw,48px);
-  border:1px solid #e7b96580;border-radius:6px;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-label small{
-  display:block;font-size:clamp(9px,1.1vw,13px);color:#f5e3bf;
-  text-shadow:0 1px 4px #000;line-height:1.06;white-space:normal;
-}
+/* The weapon-management popover is separate from the right wheel. */
 #tactical-combat .tc-weapon-manage-slot{
-  display:flex;align-items:center;gap:6px;min-width:0;padding:5px 0;border-bottom:1px solid #99855733;
+  display:flex;align-items:center;gap:6px;min-width:0;
+  padding:5px 0;border-bottom:1px solid #99855733;
 }
-#tactical-combat .tc-weapon-manage-slot span{flex:1;min-width:0;font-size:12px;color:#e9d9b4}
+#tactical-combat .tc-weapon-manage-slot span{
+  flex:1;min-width:0;font-size:12px;color:#e9d9b4;
+}
 #tactical-combat .tc-weapon-manage-slot button{
-  width:auto;min-height:30px!important;font-size:11px!important;padding:4px 7px!important;
-  border:1px solid #94815b;background:#24372d;color:#f1dbac;border-radius:6px;
+  width:auto;min-height:30px!important;font-size:11px!important;
+  padding:4px 7px!important;border:1px solid #94815b;
+  background:#24372d;color:#f1dbac;border-radius:6px;
 }
-#tactical-combat .tc-weapon-manage-candidates{display:grid;gap:5px;margin-top:8px}
+#tactical-combat .tc-weapon-manage-candidates{
+  display:grid;gap:5px;margin-top:8px;
+}
 #tactical-combat .tc-weapon-manage-candidates[hidden]{display:none!important}
 #tactical-combat .tc-weapon-manage-candidates p{font-size:11px;color:#c5d7c0}
 #tactical-combat .tc-weapon-manage-candidates button{
@@ -141,80 +222,3 @@
   border-radius:6px;border:1px solid #607e6b;background:#172f29;color:#dfecd9;
 }
 #tactical-combat .tc-weapon-manage-candidates button:disabled{opacity:.42}
-@media (orientation:portrait){
-  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-left-move>span{
-    left:50%;top:52%;font-size:clamp(10px,2.6vw,15px)
-  }
-  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art{
-    width:clamp(18px,7vw,29px);height:clamp(18px,7vw,29px)
-  }
-  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-skill-label img{
-    width:clamp(18px,7vw,27px);height:clamp(18px,7vw,27px)
-  }
-  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-label small,
-  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-skill-label small{
-    font-size:clamp(8px,2.2vw,10px);
-  }
-}
-@media (prefers-reduced-motion:reduce){
-  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel *{animation:none!important;transition:none!important}
-}
-
-/* Individual 1024px HD WebP paintings. Request just the visible, owned weapons. */
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--sword-wind{background-image:url('/assets/weapons/sword-wind-hd.webp')!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--sword-flight{background-image:url('/assets/weapons/sword-flight-hd.webp')!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--sword-sky{background-image:url('/assets/weapons/sword-sky-hd.webp')!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--body-rock{background-image:url('/assets/weapons/body-rock-hd.webp')!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--body-dragon{background-image:url('/assets/weapons/body-dragon-hd.webp')!important}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-art.manual-weapon-art--body-tiger{background-image:url('/assets/weapons/body-tiger-hd.webp')!important}
-
-/* Once three weapons are expanded, the underlying attack segment must not
-   steal pointer events from the clipped outer annular sectors. */
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action.is-weapon-expanded .tc-sector-attack{
-  pointer-events:none!important;
-}
-
-/* The left dial is for charging only. The entire right outer ring is
-   permanently divided into move / weapon one / weapon two. */
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-energy>[data-quiz]{
-  width:86%!important;height:86%!important;z-index:4;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-energy-bolt{
-  left:28%;top:13%;width:45%;height:60%;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-energy-number{
-  right:13%;bottom:18%;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-charge-label{
-  left:8%;bottom:7%;width:84%;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector[hidden]{
-  display:none!important;pointer-events:none!important;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector.tc-modern-skill-sector[aria-pressed=true]>span{
-  opacity:1!important;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-label strong{
-  display:block;font-size:clamp(10px,1.45vw,17px);font-weight:800;white-space:nowrap;
-  color:#f7e5c2;text-shadow:0 1px 3px #000;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-label i{
-  font-size:clamp(16px,2.4vw,27px);color:#c0f0c6;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-skill-label i{
-  font-size:clamp(17px,2.5vw,30px);color:#c9ead1;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-weapon-sector[aria-pressed=true]{
-  outline:1px solid #e2c48a;outline-offset:-1px;
-}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-weapon-empty-message{
-  position:absolute;z-index:3;left:37%;top:36%;width:34%;
-  text-align:center;pointer-events:none;color:#c4c7b8;
-  font-size:clamp(9px,1.25vw,13px);
-}
-@media(orientation:portrait){
-  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-modern-weapon-label strong{
-    font-size:clamp(9px,2.25vw,11px);
-  }
-}
