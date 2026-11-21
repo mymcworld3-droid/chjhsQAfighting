@@ -80,12 +80,3 @@
 #manual-training-root .manual-weapon-art.manual-weapon-art--body-rock{background-image:url('/assets/weapons/body-rock.svg?v=20261121-hd')!important}
 #manual-training-root .manual-weapon-art.manual-weapon-art--body-dragon{background-image:url('/assets/weapons/body-dragon.svg?v=20261121-hd')!important}
 #manual-training-root .manual-weapon-art.manual-weapon-art--body-tiger{background-image:url('/assets/weapons/body-tiger.svg?v=20261121-hd')!important}
-
-/* High-definition artwork optional override: the second background is
-   a sharp bundled SVG fallback until the HD pack has been installed. */
-#manual-training-root .manual-weapon-art.manual-weapon-art--sword-wind{background-image:url('/assets/weapons/sword-wind-hd.webp'),url('/assets/weapons/sword-wind.svg?v=20261121-hd')!important;background-position:center,center!important;background-repeat:no-repeat,no-repeat!important;background-size:cover,cover!important}
-#manual-training-root .manual-weapon-art.manual-weapon-art--sword-flight{background-image:url('/assets/weapons/sword-flight-hd.webp'),url('/assets/weapons/sword-flight.svg?v=20261121-hd')!important;background-position:center,center!important;background-repeat:no-repeat,no-repeat!important;background-size:cover,cover!important}
-#manual-training-root .manual-weapon-art.manual-weapon-art--sword-sky{background-image:url('/assets/weapons/sword-sky-hd.webp'),url('/assets/weapons/sword-sky.svg?v=20261121-hd')!important;background-position:center,center!important;background-repeat:no-repeat,no-repeat!important;background-size:cover,cover!important}
-#manual-training-root .manual-weapon-art.manual-weapon-art--body-rock{background-image:url('/assets/weapons/body-rock-hd.webp'),url('/assets/weapons/body-rock.svg?v=20261121-hd')!important;background-position:center,center!important;background-repeat:no-repeat,no-repeat!important;background-size:cover,cover!important}
-#manual-training-root .manual-weapon-art.manual-weapon-art--body-dragon{background-image:url('/assets/weapons/body-dragon-hd.webp'),url('/assets/weapons/body-dragon.svg?v=20261121-hd')!important;background-position:center,center!important;background-repeat:no-repeat,no-repeat!important;background-size:cover,cover!important}
-#manual-training-root .manual-weapon-art.manual-weapon-art--body-tiger{background-image:url('/assets/weapons/body-tiger-hd.webp'),url('/assets/weapons/body-tiger.svg?v=20261121-hd')!important;background-position:center,center!important;background-repeat:no-repeat,no-repeat!important;background-size:cover,cover!important}
