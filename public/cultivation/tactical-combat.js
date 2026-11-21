@@ -733,34 +733,37 @@ function selectWheel(value,tutorialAutomatic=false){
   syncEquippedAttack();
   const hero=myActor();
   if(hero?.manualWeaponMode){
+    const worn=(hero.manualWeaponIds||[]).slice(0,2);
     if(value==='attack-ring'){
-      weaponSelectionOpen=true;
-      if(!equippedTechniques(hero).length&&!hero.manualWeaponIds?.some(Boolean)){
-        action='attack';selection=null;
-        renderer?.update(state,uid,battlefieldMode(),selection);
-      }
-      updateControls();
+      const first=worn.findIndex(Boolean);
+      if(first>=0)selectWheel('weapon:'+first,true);
       if(!tutorialAutomatic&&tutorialStep()>=4){
         const prior=tutorialStep();tutorialEvent('attack-selected');
         if(prior===4&&tutorialStep()===5)selectWheel('move',true);
       }
       return;
     }
-    if(value.startsWith('weapon:')){
-      const weaponId=value.slice(7);
-      if(!hero.manualWeaponIds?.includes(weaponId))return;
-      selectedWeaponId=weaponId;weaponSelectionOpen=true;
-      // Prepare only the chosen weapon's three icons, not every acquired move.
-      void AssetWarmup.warmImages(
-        AssetWarmup.chosenSkills(weaponId,Manuals.BY_BOOK,skillArt),{max:3});
-      // Do not automatically cast or privilege the first skill.
-      if(action==='manual'){action='move';selection=null;}
+    if(value==='move-menu'||value==='move'||value==='sword-move'){
+      selectedWeaponSlot=-1;selectedWeaponId='';
+      if(value==='move-menu')value='move';
+    }else if(value.startsWith('weapon:')){
+      const slot=Number(value.slice(7));
+      if(!Number.isInteger(slot)||slot<0||slot>=2)return;
+      selectedWeaponSlot=slot;selectedWeaponId=worn[slot]||'';
+      action='move';selection=null;
+      if(selectedWeaponId)void AssetWarmup.warmImages(
+        AssetWarmup.chosenSkills(selectedWeaponId,Manuals.BY_BOOK,skillArt),{max:3});
       renderer?.update(state,uid,battlefieldMode(),selection);
-      updateControls();return;
-    }
-    if(value.startsWith('manual:')&&
-      !hero.manualWeaponIds?.includes(Manuals.BY_SKILL[value.slice(7)]?.manualId))return;
-    if(value==='move'||value==='sword-move')weaponSelectionOpen=false;
+      updateControls();
+      if(!tutorialAutomatic&&selectedWeaponId&&tutorialStep()>=4){
+        const prior=tutorialStep();tutorialEvent('attack-selected');
+        if(prior===4&&tutorialStep()===5)selectWheel('move',true);
+      }
+      return;
+    }else if(value.startsWith('manual:')){
+      const skillBook=Manuals.BY_SKILL[value.slice(7)]?.manualId;
+      if(selectedWeaponSlot<0||worn[selectedWeaponSlot]!==skillBook)return;
+    }else if((value==='player'||value==='sword')&&selectedWeaponSlot>=0)return;
   }
   if(value==='attack-ring'||value==='attack')value=attackChoice;
   if(value==='player'){
@@ -780,7 +783,7 @@ function selectWheel(value,tutorialAutomatic=false){
     action='manual';selectedManualSkill=value.slice(7);
     if(myActor()?.manualWeaponMode){
       selectedWeaponId=Manuals.BY_SKILL[selectedManualSkill]?.manualId||'';
-      weaponSelectionOpen=true;
+      selectedWeaponSlot=(myActor().manualWeaponIds||[]).indexOf(selectedWeaponId);
     }
     attackChoice=value;
   }else return;
@@ -949,16 +952,9 @@ function buildGame(){
     attack.dataset.wheelAction='attack-ring';
     attack.style.clipPath=wheelWedge(-90,-135,74,49);
     attack.innerHTML='<span>攻擊</span>';
-    if(myActor()?.manualWeaponMode){
-      move.className='tc-left-move';move.dataset.wheelAction='move';
-      move.style.clipPath=leftWheelWedge(-90,0,82,58);
-      move.innerHTML='<span><i class="fa-solid fa-person-walking" aria-hidden="true"></i>移動</span>';
-      energy.append(move);
-    }else{
-      move.className='tc-sector tc-sector-move';move.dataset.wheelAction='move';
-      move.style.clipPath=wheelWedge(-135,-180,74,49);
-      move.innerHTML='<span>移動</span>';
-    }
+    move.className='tc-sector tc-sector-move';move.dataset.wheelAction='move';
+    move.style.clipPath=wheelWedge(-135,-180,74,49);
+    move.innerHTML='<span>移動</span>';
     end.className='tc-sector tc-sector-end';
     end.style.clipPath=wheelWedge(-90,-180,49,0);
     end.innerHTML='<span>結束\n回合</span>';
@@ -1074,7 +1070,7 @@ function buildGame(){
   }
   renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){
     const step=tutorialStep(),target=R.TUTORIAL_STAGE1;
-    if(step===4||step===6){notice('請先按右側的「攻擊」按鈕。');return;}
+    if(step===4||step===6){notice('請先點選右環外圈的武器一或武器二。');return;}
     if(step===5&&(action!=='move'||p.x!==target.move.x||p.y!==target.move.y)){
       notice('這一階段請點選角色正右方一格（只移動一格）。');return;
     }
@@ -1085,6 +1081,9 @@ function buildGame(){
     // In move mode a live seal is an information target, not a walk tile.
     // Attack mode retains its existing tap-to-cast and direction handling.
     if((action==='move'||action==='sword-move')&&R.sealInfo(state,p)?.active&&sealInspector?.inspect(p))return;
+    if(myActor()?.manualWeaponMode&&selectedWeaponSlot>=0&&action==='move'){
+      notice('請先選擇這把武器內圈的技能');return;
+    }
     sealPeekPosition=null;selection=p;renderer.update(state,uid,battlefieldMode(),selection);updateControls();
     // The sketch has no extra confirm button: choosing a valid map tile
     // directly executes the selected move or directional attack.
@@ -1322,6 +1321,7 @@ function updateControls(){
   if(quarter&&me.manualWeaponMode){
     renderModernWeaponWheel(me,locked,mine);
   }else if(quarter){
+    root.classList.remove('tc-modern-weapon-wheel');
     const attacking=action!=='move'&&action!=='sword-move';
     const chosenCost=cost+' 體力',moveCostLabel=moveStamina===null?'1 體力/格':moveStamina+' 體力';
     const ring=$('.tc-quarter-action'),choices=ring.querySelector('.tc-wheel-options');
