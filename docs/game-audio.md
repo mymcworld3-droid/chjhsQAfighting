@@ -16,7 +16,7 @@
 
 ## 選擇性預載
 
-啟動時最多預載 4 個常用提示音：`ui-click`、`cloud-whoosh`、`answer-correct`、`answer-wrong`，不會下載八個音效的完整清單。
+登入畫面不預載任何音效；玩家資料完成載入且音效開啟時，最多預載 4 個常用提示音：`ui-click`、`cloud-whoosh`、`answer-correct`、`answer-wrong`，不會下載八個音效的完整清單。
 
 正式進入問道試煉或多人副本時，才準備 `combat-impact`、`spirit-pulse`、`reward-chime`；稀有的 `grand-reveal` 在實際需要時下載。靜音時不預載。所有音效共用既有單一 AudioContext 與快取，不因頁面切換而重複下載。
 
