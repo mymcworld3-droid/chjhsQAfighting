@@ -301,7 +301,7 @@ function ensure(){
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
   if(!document.getElementById('tactical-quarter-weapons-style')){
     const link=document.createElement('link');link.id='tactical-quarter-weapons-style';
-    link.rel='stylesheet';link.href='/styles/tactical-quarter-weapons.css?v=20261121-rightwheel-v3';
+    link.rel='stylesheet';link.href='/styles/tactical-quarter-weapons.css?v=20261121-rightwheel-v4';
     document.head.append(link);
   }
   if(!document.getElementById('tactical-focus-effects-style')){
@@ -1078,6 +1078,17 @@ function buildGame(){
       }
     });
     actions.addEventListener('keydown',e=>{
+      if(modernPveWheel()){
+        const chosen=e.target.closest('button.tc-rw-sector');
+        if(!chosen||!['ArrowLeft','ArrowRight'].includes(e.key))return;
+        const group=chosen.closest('.tc-rw-outer,.tc-rw-inner');
+        const buttons=[...group.querySelectorAll('button.tc-rw-sector:not(:disabled)')];
+        if(!buttons.length)return;
+        const index=buttons.indexOf(chosen);
+        e.preventDefault();
+        buttons[(index+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length].focus();
+        return;
+      }
       const b=e.target.closest('button[data-wheel-action],button[data-wheel-choice]');
       if(!b||!['ArrowLeft','ArrowRight'].includes(e.key))return;
       e.preventDefault();
