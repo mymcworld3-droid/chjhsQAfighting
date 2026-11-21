@@ -109,10 +109,14 @@ function manualLoadout(manualRecord,trainingAccessScore){
 // lacks manualWeaponMode, so the client would keep drawing the obsolete
 // attack/movement wheel even when the client and CSS were the newest build.
 // Upgrade only its weapon metadata; never recreate the actor or reset progress.
+function needsWeaponSlotUpgrade(actor){
+  return actor&&(!actor.manualWeaponMode||
+    !Array.isArray(actor.manualWeaponIds)||actor.manualWeaponIds.length!==2);
+}
 function upgradeLegacyRoomWeapons(room,uid,user,manualRecord){
   if(room?.mode!=='pve'||room.status!=='active'||!user)return false;
   const actor=room.actors?.find(a=>a.uid===uid&&!a.bot);
-  if(!actor||actor.manualWeaponMode&&Array.isArray(actor.manualWeaponIds)&&actor.manualWeaponIds.length===2)
+  if(!needsWeaponSlotUpgrade(actor))
     return false;
   const loadout=manualLoadout(manualRecord,TrainingAccess.score(user));
   actor.manualWeaponMode=true;
@@ -514,7 +518,7 @@ async function state(db,uid,now=Date.now(),mode=''){
   // Persist the two-weapon projection before returning a resumed old room.
   // A display-only conversion would fail as soon as the player casts a skill.
   if(stored.status==='active'&&stored.mode==='pve'&&
-      !member(stored,uid).manualWeaponMode){
+      needsWeaponSlotUpgrade(member(stored,uid))){
     return db.runTransaction(async tx=>{
       const current=await readRoom(tx,db,stored.id,uid);
       const [userSnap,manualSnap]=await Promise.all([
@@ -557,7 +561,7 @@ async function command(db,uid,input,now=Date.now()){
   return db.runTransaction(async tx=>{
     const raw=await readRoom(tx,db,input.roomId,uid);
     if(raw.mode==='pve'&&raw.status==='active'&&
-        !member(raw,uid).manualWeaponMode){
+        needsWeaponSlotUpgrade(member(raw,uid))){
       const [userSnap,manualSnap]=await Promise.all([
         tx.get(db.collection('users').doc(uid)),
         tx.get(db.collection(MANUALS).doc(uid))]);
