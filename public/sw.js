@@ -139,16 +139,36 @@ async function serveGeneratedItemImage(request) {
   return network;
 }
 
-async function precacheModules() {
+// Explicit, bounded intent-only warmup. All actual JS/CSS requests are
+// cached on first use by serveStatic; never scan the full manifest for prefetch.
+const PREFETCH_CONTEXTS = Object.freeze({
+  trial: Object.freeze([
+    'styles/tactical-combat.css',
+    'styles/tactical-quarter-controls.css',
+    'styles/tactical-quarter-weapons.css'
+  ]),
+  manuals: Object.freeze([
+    'styles/manual-training.css','styles/manual-training-hero.css',
+    'styles/manual-training-loadout.css','styles/manual-training-library.css',
+    'styles/manual-training-weapons.css'
+  ]),
+  dungeon: Object.freeze([
+    'styles/dungeon-map-view.css','styles/dungeon-trial-boss.css',
+    'styles/dungeon-trial-wheel.css'
+  ])
+});
+async function precacheContext(context) {
+  if (!Object.prototype.hasOwnProperty.call(PREFETCH_CONTEXTS,context)) return;
   const manifest = await loadManifest(false);
   if (!manifest) return;
-  const modules = Object.keys(manifest.files).filter(path => /\.(?:js|mjs|css)$/.test(path));
-  let cursor = 0;
-  const runners = Array.from({ length: 3 }, async () => {
-    while (cursor < modules.length) {
-      const path = modules[cursor++];
-      try { await serveStatic(new Request(new URL(path, SCOPE)), path, manifest); }
-      catch (_) { /* 下次使用或下次預載會再嘗試 */ }
+  const resources = PREFETCH_CONTEXTS[context]
+    .filter(path=>manifest.files[path]&&/\.(?:js|mjs|css)$/.test(path));
+  let cursor=0;
+  const runners=Array.from({length:Math.min(2,resources.length)},async()=>{
+    while(cursor<resources.length){
+      const path=resources[cursor++];
+      try{await serveStatic(new Request(new URL(path,SCOPE)),path,manifest);}
+      catch(_){/* Optional warmup never blocks the page. */}
     }
   });
   await Promise.all(runners);
@@ -162,7 +182,10 @@ self.addEventListener('activate', event => {
   event.waitUntil(self.clients.claim());
 });
 self.addEventListener('message', event => {
-  if (event.data?.type === 'XIUXIAN_PREFETCH_MODULES') event.waitUntil(precacheModules());
+  if (event.data?.type === 'XIUXIAN_PREFETCH_CONTEXT')
+    event.waitUntil(precacheContext(event.data?.context));
+  // Older pages still sending XIUXIAN_PREFETCH_MODULES must NOT trigger a
+  // repository-wide download. Navigation and on-demand requests are cached.
 });
 
 self.addEventListener('fetch', event => {
