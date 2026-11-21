@@ -19,10 +19,10 @@ test('solo battle warms only actual map, visible actor, current objective and eq
   assert(assets.includes(policy.WORLD.monsters));
   assert(assets.includes(policy.WORLD.female));
   assert(assets.includes(policy.WORLD.seals));
-  assert(assets.includes('/assets/weapons/sword-wind.svg'));
-  assert(assets.includes('/assets/weapons/body-rock.svg'));
+  assert(assets.includes('/assets/weapons/sword-wind-hd.webp'));
+  assert(assets.includes('/assets/weapons/body-rock-hd.webp'));
   for(const unused of [policy.WORLD.male,policy.WORLD.guardian,
-    '/assets/weapons/sword-sky.svg','/assets/skills/wind-slash.png'])
+    '/assets/weapons/sword-sky-hd.webp','/assets/skills/wind-slash.png'])
     assert.equal(assets.includes(unused),false,unused+' should not preload');
   const defense=policy.trialImages({...base,objective:{type:'defense'}},'u1');
   assert(defense.includes(policy.WORLD.guardian));
@@ -41,17 +41,17 @@ test('co-op waits for an assembled room and warms only present players, not ever
   assert(!assets.includes(policy.WORLD.seals));
   assert(!assets.includes(policy.WORLD.guardian));
   assert(!assets.includes(policy.WORLD.props));
-  assert(assets.includes('/assets/weapons/sword-sky.svg'));
-  assert(assets.includes('/assets/weapons/body-tiger.svg'));
+  assert(assets.includes('/assets/weapons/sword-sky-hd.webp'));
+  assert(assets.includes('/assets/weapons/body-tiger-hd.webp'));
 });
 
 test('weapon library never preloads unowned weapons or all skill illustrations',()=>{
   const assets=policy.manualImages({library:[
     {id:'sword-wind',owned:true},{id:'body-dragon',owned:false},
     {id:'body-rock',owned:true}]});
-  assert.deepEqual(assets,['/assets/weapons/sword-wind.svg','/assets/weapons/body-rock.svg']);
+  assert.deepEqual(assets,['/assets/weapons/sword-wind-hd.webp','/assets/weapons/body-rock-hd.webp']);
   assert.deepEqual(policy.weaponImages(['body-tiger','body-tiger','invalid',null]),
-    ['/assets/weapons/body-tiger.svg']);
+    ['/assets/weapons/body-tiger-hd.webp']);
   const chosen=policy.chosenSkills('sword-wind',{
     'sword-wind':{skills:[{id:'a'},{id:'b'},{id:'c'}]},
     'sword-sky':{skills:[{id:'unused'}]}
