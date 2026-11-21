@@ -18,6 +18,12 @@
     'reward-chime': { priority: 80, group: 'reward', cooldown: 900, max: .9, gain: .65 },
     'grand-reveal': { priority: 100, group: 'reveal', cooldown: 2000, max: 1.8, gain: .70 }
   });
+  // Only cues expected during ordinary navigation/quiz are preloaded at
+  // startup. Battle, spirit and rare reward audio are warmed on their
+  // specific page or loaded when genuinely played.
+  const DEFAULT_AUDIO_WARMUP = Object.freeze([
+    'ui-click','cloud-whoosh','answer-correct','answer-wrong'
+  ]);
   const SETTINGS_KEY = 'qa-game-sfx-v1';
   const FRESH_MS = 200;
   const FADE_SECONDS = .018;
@@ -118,9 +124,11 @@
       }
       return decoding.get(id);
     }
-    function preload() {
+    function preload(ids=DEFAULT_AUDIO_WARMUP) {
       if (disposed || !preferences().enabled || !env.fetch) return Promise.resolve([]);
-      return Promise.allSettled(Object.keys(SOUNDS).map(id => context ? loadBuffer(id) : loadRaw(id)));
+      const selected=[...new Set((Array.isArray(ids)?ids:DEFAULT_AUDIO_WARMUP)
+        .filter(id=>Object.prototype.hasOwnProperty.call(SOUNDS,id)))];
+      return Promise.allSettled(selected.map(id=>context?loadBuffer(id):loadRaw(id)));
     }
     async function unlock() {
       if (!allowed() || !ensureContext()) return false;
