@@ -1,0 +1,34 @@
+name: Context-only asset warmup acceptance
+on:
+  push:
+    branches: [stamina-battle]
+    paths:
+      - 'public/sw.js'
+      - 'public/index.html'
+      - 'public/cultivation/startup-resource-preloader.js'
+      - 'public/cultivation/contextual-asset-preloader.js'
+      - 'public/cultivation/tactical-combat.js'
+      - 'public/cultivation/tactical-renderer.js'
+      - 'public/cultivation/dungeon-map-view.js'
+      - 'public/cultivation/manual-training-page.js'
+      - 'public/styles/manual-training-weapons.css'
+      - 'public/styles/tactical-quarter-weapons.css'
+      - 'public/module-versions.json'
+      - 'tests/contextual-image-preloader.test.cjs'
+      - 'tests/startup-resource-preloader.test.cjs'
+      - 'tests/local-module-cache.test.cjs'
+      - '.github/workflows/asset-preload-acceptance.yml'
+  workflow_dispatch:
+jobs:
+  selective-preload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check static asset hash manifest
+        run: node scripts/build-module-versions.cjs --check
+      - name: Confirm only needed startup, page, skill and scene assets warm
+        run: node --test tests/local-module-cache.test.cjs tests/startup-resource-preloader.test.cjs tests/contextual-image-preloader.test.cjs
