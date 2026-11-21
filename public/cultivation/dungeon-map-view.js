@@ -8,6 +8,7 @@ import { dungeonTrialWheelHTML, bindDungeonTrialWheel, renderDungeonTrialWheel }
 import './flying-sword-path.js?v=20261120-sword-movement-v1';
 import { dungeonRoute, dungeonReachableTiles, dungeonAttackTiles, dungeonSwordRoute, dungeonSwordTiles } from './dungeon-map-actions.js';
 import { skillArt, bookArt } from './manual-art.js';
+import './contextual-asset-preloader.js';
 import { manualXpDelta, renderManualXpToast, renderManualXpProgress } from './tactical-manual-xp-feedback.js';
 import {manualAnticipation,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
 // The trial's original shared manual catalog, animation timing and VFX.
@@ -231,9 +232,7 @@ class DungeonMapView{
     // failed downloads leave deterministic vector terrain/markers visible.
     const assets={
       ground:'/assets/world-map/ai/ground-atlas.webp',
-      monsters:'/assets/world-map/ai/creatures-atlas.webp',
-      male:'/assets/world-map/players/player-male.webp',
-      female:'/assets/world-map/players/player-female.webp'
+      monsters:'/assets/world-map/ai/creatures-atlas.webp'
     };
     for(const [key,src] of Object.entries(assets)){
       const img=new Image();img.decoding='async';
@@ -283,10 +282,27 @@ class DungeonMapView{
       button.textContent='重新載入地圖';node.append(button);
     }
   }
+  ensureCharacterSprites(room){
+    // Do not download both character sheets for every visitor: only the
+    // genders in the currently active multiplayer room are rendered.
+    for(const member of Object.values(room?.members||{})){
+      const id=member?.gender==='female'?'female':'male';
+      if(this.sprites[id])continue;
+      const image=new Image();image.decoding='async';
+      image.onload=()=>this.drawSoon();
+      image.onerror=()=>this.drawSoon();
+      image.src='/assets/world-map/players/player-'+id+'.webp';
+      this.sprites[id]=image;
+    }
+  }
   async open({room,playerUid}){
     if(!safeRoom(room?.id)||!room?.members?.[playerUid]||
         playerUid!==getMainUser()?.uid)throw new Error('你不是此副本的有效隊員');
+    window.prefetchXiuxianContext?.('dungeon');
+    if(room.status==='assembled')void globalThis.QAContextualAssets?.warmImages(
+      globalThis.QAContextualAssets.dungeonImages(room,playerUid),{max:8});
     this.mount();
+    if(room.status==='assembled')this.ensureCharacterSprites(room);
     if(this.opened&&this.roomId===room.id){
       this.updateRoom(room);
       this.$('[data-dm="close"]')?.focus({preventScroll:true});
@@ -1618,6 +1634,11 @@ class DungeonMapView{
         this.enemyReactionScenes.delete(this.enemyReactionScenes.keys().next().value);
     }
     this.room=room;
+    if(room.status==='assembled'){
+      this.ensureCharacterSprites(room);
+      void globalThis.QAContextualAssets?.warmImages(
+        globalThis.QAContextualAssets.dungeonImages(room,this.uid),{max:8});
+    }
     this.quiz?.setAdmin(room.members[this.uid]?.dungeonAdmin===true);
     this.quiz?.setAutoRegeneration(room.mapVersion===2);
     if(changedArena){
