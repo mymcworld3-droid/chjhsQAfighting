@@ -137,7 +137,7 @@
   color:#e9d6af;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-empty{
-  position:absolute;z-index:4;left:40%;top:35%;width:32%;
+  position:absolute;z-index:4;left:56%;top:56%;width:32%;
   transform:translate(-50%,-50%);
   text-align:center;color:#c9c3a8;
   pointer-events:none;
