@@ -33,14 +33,17 @@ test('every local static resource has an up-to-date independent version', () => 
   assert.ok(Object.keys(found).length >= 150);
 });
 
-test('service worker is installed early but preloads only code after all features are ready', () => {
+test('service worker installs early but only preloads explicit page-intent CSS',()=>{
   assert.match(index, /navigator\.serviceWorker\.register\('\.\/sw\.js'/);
-  assert.match(index, /xiuxian:features-ready', prefetch/);
-  assert.match(index, /XIUXIAN_PREFETCH_MODULES/);
-  const featureBuild = main.match(/XIUXIAN_FEATURE_BUILD = '([^']+)'/)?.[1];
+  assert.match(index, /prefetchXiuxianContext/);
+  assert.match(index, /XIUXIAN_PREFETCH_CONTEXT/);
+  assert.doesNotMatch(index, /XIUXIAN_PREFETCH_MODULES/);
+  const featureBuild=main.match(/XIUXIAN_FEATURE_BUILD = '([^']+)'/)?.[1];
   assert.ok(featureBuild);
   assert.ok(index.includes(`src="main.js?v=${featureBuild}"`));
-  assert.match(worker, /filter\(path => \/\\\.\(\?:js\|mjs\|css\)\$\/\.test\(path\)\)/);
+  assert.match(worker, /PREFETCH_CONTEXTS/);
+  assert.match(worker, /precacheContext\(event\.data\?\.context\)/);
+  assert.doesNotMatch(worker, /Object\.keys\(manifest\.files\)\.filter/);
   assert.doesNotMatch(worker, /firestore\.googleapis\.com|runTransaction|users\/\$\{/);
 });
 
@@ -51,7 +54,13 @@ function mockWorker() {
   const scope = 'https://example.github.io/chjhsQAfighting/';
   const versions = {
     schema: 1, build: 'f'.repeat(40),
-    files: { 'index.html': 'a'.repeat(40), 'main.js': 'b'.repeat(40), 'style.css': 'c'.repeat(40), 'assets/portrait.png': 'd'.repeat(40) }
+    files: { 'index.html': 'a'.repeat(40), 'main.js': 'b'.repeat(40),
+      'style.css': 'c'.repeat(40),'assets/portrait.png': 'd'.repeat(40),
+      'styles/tactical-combat.css':'1'.repeat(40),
+      'styles/tactical-quarter-controls.css':'2'.repeat(40),
+      'styles/tactical-quarter-weapons.css':'3'.repeat(40),
+      'styles/manual-training.css':'4'.repeat(40),
+      'cultivation/unrelated-admin.js':'5'.repeat(40) }
   };
   let offline = false;
   const caches = {
@@ -105,7 +114,13 @@ function mockWorker() {
     assert.ok(event.result, 'generated item image should be intercepted');
     return (await event.result).text();
   }
-  return { events, scope, versions, networkCalls, resource, imageResource, setOffline(v) { offline = v; },
+  async function message(type,context){
+    let job;
+    events.get('message')({data:{type,context},waitUntil(p){job=p;}});
+    if(job)await job;
+  }
+  return { events, scope, versions, networkCalls, resource, imageResource,
+    message,setOffline(v) { offline = v; },
     async seedLegacyDocument(path,body) {
       const key=new URL(path,scope);key.searchParams.set('__xiuxian_asset_sha',versions.files[path]);
       await (await caches.open('xiuxian-static-versioned-v1')).put(key.href,new Response(body));
@@ -187,4 +202,24 @@ test('non-versioned URLs and remote Firebase requests are never put in the modul
     sw.events.get('fetch')(event);
     if (name.includes('firestore.googleapis.com')) assert.equal(event.result, undefined);
   }
+});
+
+test('legacy full-cache message does nothing, and context warmup requests only matching CSS',async()=>{
+  const sw=mockWorker();
+  await sw.message('XIUXIAN_PREFETCH_MODULES');
+  assert.equal(sw.networkCalls.length,0,'legacy global prefetch must not start');
+  await sw.message('XIUXIAN_PREFETCH_CONTEXT','invalid');
+  assert.equal(sw.networkCalls.length,0,'unknown contexts must not start');
+  await sw.message('XIUXIAN_PREFETCH_CONTEXT','trial');
+  const requested=sw.networkCalls.map(x=>x.path);
+  assert.deepEqual(requested.sort(),[
+    'module-versions.json','styles/tactical-combat.css',
+    'styles/tactical-quarter-controls.css','styles/tactical-quarter-weapons.css'
+  ].sort());
+  await sw.message('XIUXIAN_PREFETCH_CONTEXT','trial');
+  assert.equal(sw.networkCalls.length,4,'already cached assets are not downloaded again');
+  await sw.message('XIUXIAN_PREFETCH_CONTEXT','manuals');
+  assert.equal(sw.networkCalls.filter(x=>x.path==='styles/manual-training.css').length,1);
+  assert.equal(sw.networkCalls.some(x=>x.path==='cultivation/unrelated-admin.js'),false);
+  assert.equal(sw.networkCalls.some(x=>x.path==='assets/portrait.png'),false);
 });
