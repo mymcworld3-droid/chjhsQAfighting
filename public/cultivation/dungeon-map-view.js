@@ -4,7 +4,7 @@ import { getDungeonMap, moveDungeonMember, strikeDungeonBeast, castDungeonSkill,
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 import { DungeonQuizPanel } from './dungeon-quiz-panel.js';
 import { energyRingFill, dungeonFocusCharges, dungeonFocusEmpowers } from './dungeon-quarter-controls.js';
-import { dungeonTrialWheelHTML, bindDungeonTrialWheel, renderDungeonTrialWheel } from './dungeon-trial-wheel.js';
+import { dungeonTrialWheelHTML, bindDungeonTrialWheel, renderDungeonTrialWheel } from './dungeon-trial-wheel.js?v=20261121-rightwheel-v4';
 import './flying-sword-path.js?v=20261120-sword-movement-v1';
 import { dungeonRoute, dungeonReachableTiles, dungeonAttackTiles, dungeonSwordRoute, dungeonSwordTiles } from './dungeon-map-actions.js';
 import { skillArt, bookArt } from './manual-art.js';
@@ -117,7 +117,7 @@ class DungeonMapView{
     if(!document.getElementById('dungeon-trial-wheel-style')){
       const link=document.createElement('link');
       link.id='dungeon-trial-wheel-style';link.rel='stylesheet';
-      link.href='/styles/dungeon-trial-wheel.css?v=20261121-rightwheel-v3';
+      link.href='/styles/dungeon-trial-wheel.css?v=20261121-rightwheel-v4';
       document.head.append(link);
     }
     const root=document.createElement('section');
