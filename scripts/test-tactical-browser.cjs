@@ -92,11 +92,14 @@ async function main(){
   // the inner ring; click the visible sector label instead.
   async function clickWheelSector(locator){
     const position=await locator.evaluate(button=>{
-      const rect=button.getBoundingClientRect(),
-        label=button.querySelector('.tc-rw-sector-label')?.getBoundingClientRect();
+      const label=button.querySelector('.tc-rw-sector-label');
       if(!label)throw Error('The new right-wheel sector has no visible label');
-      return {x:label.left+label.width/2-rect.left,
-        y:label.top+label.height/2-rect.top};
+      // Client/offset dimensions are in the element's LOCAL coordinate
+      // space. getBoundingClientRect is already transformed by the 1280x720
+      // game-stage scaler; passing those scaled pixels to locator.click
+      // would apply the transform twice and hit 結束回合 instead.
+      return {x:button.clientWidth*parseFloat(label.style.left)/100,
+        y:button.clientHeight*parseFloat(label.style.top)/100};
     });
     await locator.click({position});
   }
