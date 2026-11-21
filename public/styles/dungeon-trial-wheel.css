@@ -1182,3 +1182,108 @@ html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.b
     max-width:18px!important;max-height:18px!important;
   }
 }
+
+/* v3: a newly mounted right-wheel component, NOT the legacy attack/move
+   slider with extra weapon overlays. Geometry mirrors 問道試煉 exactly. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel{
+  overflow:hidden;isolation:isolate;touch-action:manipulation;
+  background:radial-gradient(circle at 100% 100%,#101a16 0%,#1e3027 58%,#32463a 100%);
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-action-lines,
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-wheel-slider,
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-wheel-marker,
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-wheel-options,
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-weapon-outer-choices,
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel>[data-dm="wheel-attack"],
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel>[data-dm="wheel-move"]{
+  display:none!important;pointer-events:none!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rightwheel-v3{
+  position:absolute;inset:0;z-index:10;isolation:isolate;
+  overflow:hidden;pointer-events:none;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-guides{
+  position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-guides path{
+  fill:none;stroke:#d6c38c88;stroke-width:.7;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-outer,
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-inner{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-inner[hidden]{
+  display:none!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector{
+  position:absolute;inset:0;display:block;width:100%;height:100%;
+  pointer-events:auto;margin:0!important;padding:0!important;min-height:0!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+  cursor:pointer;touch-action:manipulation;color:#eee9da!important;
+  text-shadow:0 1px 3px #0b140fcc;
+  background:radial-gradient(circle at 100% 100%,#253b30,#324b3a)!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--outer:first-child{
+  background:radial-gradient(circle at 100% 100%,#21483b,#30654e)!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner{
+  background:radial-gradient(circle at 100% 100%,#182e28,#31554a)!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector[aria-pressed="true"]{
+  background:linear-gradient(135deg,#627b58,#356f57)!important;
+  color:#fff4cc!important;filter:brightness(1.13);
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector:hover:not(:disabled){
+  filter:brightness(1.2);
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector:focus-visible{
+  outline:3px solid #ffe3a4!important;outline-offset:-5px!important;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector.is-empty,
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector.is-locked{
+  color:#aaa99c!important;filter:grayscale(.48);
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector:disabled{
+  opacity:.48!important;cursor:default;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector-label{
+  position:absolute;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;
+  transform:translate(-50%,-50%);width:25%;
+  text-align:center;line-height:1.1;
+  pointer-events:none;min-width:0;color:inherit;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector-label strong{
+  display:block;font-family:"Noto Serif TC","Songti TC",serif;
+  font-size:clamp(11px,1.45vw,18px);font-weight:750;
+  white-space:nowrap;color:inherit;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector-label small{
+  display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-size:clamp(8px,.9vw,12px);color:#d3dfca;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label{
+  width:31%;gap:3px;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label strong{
+  font-size:clamp(10px,1.2vw,15px);white-space:normal;overflow-wrap:anywhere;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-price{
+  font-size:clamp(8px,.85vw,11px);color:#c2d9c9;white-space:nowrap;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-empty{
+  position:absolute;left:40%;top:35%;width:32%;
+  transform:translate(-50%,-50%);z-index:4;
+  text-align:center;color:#c9c3a8;pointer-events:none;
+  font-size:clamp(10px,1.1vw,14px);
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-empty[hidden]{display:none!important}
+@media(orientation:portrait){
+  #dungeon-map-view.tc-quarter-layout{--tc-wheel:clamp(145px,46vw,240px)}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label{width:28%}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label{width:33%;gap:2px}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector-label strong{font-size:clamp(10px,2.7vw,13px)}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label strong{font-size:clamp(9px,2.4vw,12px)}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label small{display:none}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-price{font-size:clamp(7px,2vw,9px)}
+}
