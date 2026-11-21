@@ -24,12 +24,12 @@ function fixture(){
 test('all unlocked moves from every worn weapon are simultaneously available, without main weapon',async()=>{
   const db=fixture(),first=await API.start(db,'u1',{mode:'pve'},NOW);
   const hero=first.actors.find(a=>a.uid==='u1');
-  assert.deepEqual(hero.manualWeaponIds,['sword-wind',null,null]);
+  assert.deepEqual(hero.manualWeaponIds,['sword-wind',null]);
   assert.deepEqual(hero.manualSkills,['wind-slash','wind-step','wind-thousand']);
   assert.equal(hero.manualSkillLevels['wind-step'],3);
   assert.equal(hero.manualLoadoutIndex,undefined);
   const result=await API.updateLoadout(db,'u1',{index:1,weaponId:'body-rock'});
-  assert.deepEqual(result.weaponIds,['sword-wind','body-rock',null]);
+  assert.deepEqual(result.weaponIds,['sword-wind','body-rock']);
   const live=db.records.get(API.ROOMS+'/'+first.id).actors[0];
   assert.deepEqual(live.manualSkills,['wind-slash','wind-step','wind-thousand','rock-fist']);
   assert.equal(live.stamina,hero.stamina);
@@ -48,7 +48,7 @@ test('PvP allows gear changes before pairing but rejects them during the duel',a
   const db=fixture();
   const waiting=await API.start(db,'u1',{mode:'pvp'},NOW);
   const picked=await API.updateLoadout(db,'u1',{index:1,weaponId:'body-rock'});
-  assert.deepEqual(picked.weaponIds,['sword-wind','body-rock',null]);
+  assert.deepEqual(picked.weaponIds,['sword-wind','body-rock']);
   const actor=db.records.get(API.ROOMS+'/'+waiting.id).actors[0];
   assert(actor.manualSkills.includes('rock-fist'),'waiting player should be updated');
   const joined=await API.start(db,'u2',{mode:'pvp',code:waiting.id.slice(6)},NOW+1);
@@ -73,7 +73,7 @@ test('client exposes equipment editing and 3-category right battle wheel, withou
   assert.match(src,/data-battle-weapon-picker/);
   assert.match(src,/function editBattleWeapon/);
   assert.match(src,/renderModernWeaponWheel/);
-  assert.match(src,/weaponRing\.replaceChildren/);
+  assert.match(src,/outer\.replaceChildren/);
   assert.match(src,/selectedWeaponSlot<0\?/);
   assert.doesNotMatch(src,/energy\.append\(move\)/);
   assert.match(style,/Right outer: movement \/ weapon one \/ weapon two/);
