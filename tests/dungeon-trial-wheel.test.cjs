@@ -158,3 +158,50 @@ test('radial selection prioritizes an outer manual over an accidentally hit inne
   assert.match(wheel,/select\?\.\(chosen\.dataset\.wheelChoice\)/);
   assert.match(wheel,/wheel\.dataset\.mode!=='attack'/);
 });
+
+test('dungeon modern wheel exposes move and exactly two weapons, with each weapon three moves',()=>{
+  const wheelSource=read('public/cultivation/dungeon-trial-wheel.js');
+  const viewSource=read('public/cultivation/dungeon-map-view.js');
+  const css=read('public/styles/dungeon-trial-wheel.css');
+  assert.match(wheelSource,/const heading=i===0\\?'移動':i===1\\?'武器一':'武器二'/);
+  assert.match(wheelSource,/selectedWeaponSlot/);
+  assert.match(wheelSource,/button\\.disabled=locked\\|\\|!!item\\.locked/);
+  assert.match(viewSource,/selectedWeapon\\?\\.skills\\|\\|\\[\\]/);
+  assert.match(viewSource,/this\\.weaponWheelSlot>=0&&this\\.wheelMode!=='attack'/);
+  assert.match(css,/\\.dm-modern-weapon-wheel/);
+});
+
+test('dungeon weapon submenus reject cross-weapon skills and do not move before skill selection',()=>{
+  const source=read('public/cultivation/dungeon-map-view.js');
+  const first=source.indexOf('  selectTrialWheel(value){');
+  const last=source.indexOf('  updateWheelHUD(){',first);
+  assert(first>=0&&last>first);
+  const select=new Function(source.slice(first,last).replace(
+    '  selectTrialWheel(value){','function select(value){')+'\\nreturn select;')();
+  const state={uid:'u1',room:{members:{u1:{
+    dungeonWeaponIds:['sword-wind','body-rock'],
+    dungeonSkills:[{id:'wind-slash',weaponId:'sword-wind'},
+      {id:'rock-fist',weaponId:'body-rock'}]
+  }}},weaponWheelSlot:-1,wheelMode:'move',selectedSkillId:'',moveTarget:'player',
+    updateBeastHUD(){},updateSkillHUD(){},updateWheelHUD(){},drawSoon(){},
+    actionFeedback(){},setWheelMode(mode){this.wheelMode=mode}};
+  select.call(state,'weapon:0');
+  assert.equal(state.weaponWheelSlot,0);
+  assert.equal(state.wheelMode,'move');
+  assert.equal(state.selectedSkillId,'');
+  select.call(state,'rock-fist');
+  assert.equal(state.selectedSkillId,'','cannot select skill from weapon two within weapon one');
+  select.call(state,'wind-slash');
+  assert.equal(state.wheelMode,'attack');
+  assert.equal(state.selectedSkillId,'wind-slash');
+  select.call(state,'weapon:1');
+  assert.equal(state.wheelMode,'move');
+  assert.equal(state.selectedSkillId,'');
+  select.call(state,'rock-fist');
+  assert.equal(state.selectedSkillId,'rock-fist');
+  select.call(state,'move');
+  assert.equal(state.weaponWheelSlot,-1);
+  assert.equal(state.wheelMode,'move');
+  select.call(state,'weapon:2');
+  assert.equal(state.weaponWheelSlot,-1);
+});
