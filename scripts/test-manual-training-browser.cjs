@@ -36,7 +36,12 @@ async function main(){
     browser=await chromium.launch({headless:true,args:['--no-sandbox'],
       ...(process.env.TACTICAL_CHROMIUM?{executablePath:process.env.TACTICAL_CHROMIUM}:{})});
     const page=await browser.newPage({viewport:{width:393,height:852}}),errors=[];
+    const requestedWeaponArt=[];
     page.on('pageerror',error=>errors.push(error.message));
+    page.on('request',req=>{
+      if(/\/assets\/weapons\//.test(new URL(req.url()).pathname))
+        requestedWeaponArt.push(new URL(req.url()).pathname);
+    });
     const origin='http://127.0.0.1:'+server.address().port;
     await page.goto(origin+'/test');
     const library=page.locator('.manual-library');
@@ -53,12 +58,16 @@ async function main(){
     assert.equal(await page.locator('[data-manual-slot="0"] .manual-weapon-skill.is-learned').count(),1);
     assert.equal(await page.locator('.manual-hero-cover').count(),1);
     const artwork=page.locator('[data-manual-book="sword-wind"] .manual-weapon-art');
-    assert.match(await artwork.evaluate(node=>getComputedStyle(node).backgroundImage),/sword-wind\.svg/);
+    assert.match(await artwork.evaluate(node=>getComputedStyle(node).backgroundImage),/sword-wind-hd\.webp/);
+    assert(!requestedWeaponArt.some(url=>/body-tiger|body-dragon|sword-sky|sword-flight/.test(url)),
+      'unowned weapons must never load during library startup');
+    assert(!requestedWeaponArt.some(url=>url.endsWith('.svg')),
+      'do not download an SVG alongside a successfully available HD WebP');
     for(const id of ['sword-wind','sword-flight','sword-sky','body-rock','body-dragon','body-tiger']){
-      const image=await page.request.get(origin+'/assets/weapons/'+id+'.svg');
+      const image=await page.request.get(origin+'/assets/weapons/'+id+'-hd.webp');
       assert.equal(image.status(),200);
-      assert.match(image.headers()['content-type']||'',/(svg|xml)/);
-      assert.match(await image.text(),/<svg /);
+      assert.match(image.headers()['content-type']||'',/webp/);
+      assert((await image.body()).length>100_000,'HD weapon art must be the actual full-size file');
     }
     await page.locator('[data-manual-jump-skill="wind-slash"]').click();
     await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
