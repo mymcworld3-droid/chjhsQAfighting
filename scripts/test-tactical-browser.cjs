@@ -91,29 +91,36 @@ async function main(){
   // clickable wedge is narrow. Playwright's default box-center click lands in
   // the inner ring; click the visible sector label instead.
   async function clickWheelSector(locator){
-    await locator.evaluate(button=>{
-      window.__wheelProbe=[];
-      for(const type of ['pointerdown','pointerup','click'])button.addEventListener(type,event=>{
-        window.__wheelProbe.push({type,target:event.target.tagName,prevented:event.defaultPrevented});
-      },{once:true});
-    });
-    const position=await locator.evaluate(button=>{
-      const label=button.querySelector('.tc-rw-sector-label');
-      if(!label)throw Error('The new right-wheel sector has no visible label');
-      // Client/offset dimensions are in the element's LOCAL coordinate
-      // space. getBoundingClientRect is already transformed by the 1280x720
-      // game-stage scaler; passing those scaled pixels to locator.click
-      // would apply the transform twice and hit 結束回合 instead.
-      return {x:button.clientWidth*parseFloat(label.style.left)/100,
-        y:button.clientHeight*parseFloat(label.style.top)/100};
-    });
-    await locator.click({position});
-    const selected=await locator.evaluate(button=>({weapon:button.dataset.weaponChoice,pressed:button.getAttribute('aria-pressed'),
-      choices:[...document.querySelectorAll('[data-wheel-choice]')].map(node=>node.dataset.wheelChoice),
-      inert:!!button.closest('[inert]'),mainInert:document.querySelector('[data-main]')?.inert,
-      events:window.__wheelProbe,notice:document.querySelector('[data-notice]')?.textContent}));
-    if(selected.weapon!==undefined)assert.equal(selected.pressed,'true',JSON.stringify(selected));
+    for(let attempt=0;attempt<2;attempt++){
+      const position=await locator.evaluate(button=>{
+        const label=button.querySelector('.tc-rw-sector-label');
+        if(!label)throw Error('The right-wheel sector has no visible label');
+        // Coordinates are local to the button; the stage applies its own scale.
+        return {x:button.clientWidth*parseFloat(label.style.left)/100,
+          y:button.clientHeight*parseFloat(label.style.top)/100};
+      });
+      await locator.hover({position});
+      await locator.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      await locator.evaluate(button=>{
+        window.__wheelProbe=[];window.__wheelProbeNode=button;
+        for(const type of ['pointerdown','pointerup','click'])button.addEventListener(type,event=>{
+          window.__wheelProbe.push({type,target:event.target.tagName});
+        },{once:true});
+      });
+      await locator.click({position});
+      const selected=await locator.evaluate(button=>({weapon:button.dataset.weaponChoice,pressed:button.getAttribute('aria-pressed'),
+        choices:[...document.querySelectorAll('[data-wheel-choice]')].map(node=>node.dataset.wheelChoice),
+        inert:!!button.closest('[inert]'),replaced:button!==window.__wheelProbeNode,
+        events:window.__wheelProbe,notice:document.querySelector('[data-notice]')?.textContent}));
+      if(selected.weapon===undefined||selected.pressed==='true')return;
+      // Resize/hover or a poll may replace the target between actionability
+      // checks and dispatch. Retry one physical click only when none arrived.
+      // A delivered click that fails to select remains an immediate failure.
+      if(!attempt&&!selected.inert&&(selected.replaced||!selected.events.length))continue;
+      assert.equal(selected.pressed,'true',JSON.stringify(selected));
+    }
   }
+
   const read=page=>page.evaluate(async()=>{const mode=document.querySelector('#tactical-combat')?.dataset.mode||'pve';const r=await fetch('/api/tactical/state?mode='+mode,{headers:{'X-Test-User':sessionStorage.testUid||'u1'}});return (await r.json()).state;});
   async function cell(view,x,y){const s=await read(view),point=await view.evaluate(({x,y,width,height})=>{
     const r=document.querySelector('canvas').getBoundingClientRect(),size=Math.min((r.width-20)/width,(r.height-24)/height);
