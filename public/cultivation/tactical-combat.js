@@ -595,20 +595,20 @@ function renderModernWeaponWheel(hero,locked,mine){
     button.setAttribute('aria-pressed',String(outerOptions[i].value===outerValue));
   });
 
-  // Do not collect all equipped attacks into one mixed menu: each weapon owns
-  // its own three fixed positions, even when a move has not unlocked.
+  // Each weapon shows only its currently unlocked moves; visible options
+  // share the inner rail evenly.
   const book=Manuals.BY_BOOK[selectedWeaponId];
   const detail=basicSelected?[]:selectedWeaponSlot<0?[
     {value:'player',name:'角色',cost:'1 體力/格'},
     ...(hero.flyingSword?[{value:'sword',name:'飛劍',cost:'2 格/體力'}]:[])
-  ]:(book?.skills||[]).map(skill=>({
+  ]:(book?.skills||[]).filter(skill=>R.manualSkillFor(hero,skill.id)).map(skill=>({
     value:'manual:'+skill.id,name:skill.name,skill
   }));
   const detailKey=(selectedWeaponSlot<0?'movement':selectedWeaponSlot+':'+selectedWeaponId)+
     ':'+detail.map(item=>item.value).join('|');
   inner.hidden=!detail.length;
   inner.setAttribute('aria-label',selectedWeaponSlot<0?'移動對象':
-    book?'選擇'+book.name+'的三個技能':'武器尚未裝備');
+    book?'選擇'+book.name+'的已解鎖技能':'武器尚未裝備');
   if(inner.dataset.detail!==detailKey){
     inner.dataset.detail=detailKey;
     const count=detail.length;

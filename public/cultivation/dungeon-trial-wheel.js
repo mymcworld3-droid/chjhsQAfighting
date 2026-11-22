@@ -130,7 +130,7 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
   const basicSelected=!weaponIds.some(Boolean)&&selected==='basic';
   const outerValue=slot>=0?'weapon:'+slot:basicSelected?'attack':'move';
   const outerOptions=weaponRailOptions(weaponIds,globalThis.QAManuals?.BY_BOOK||{});
-  const detail=basicSelected?[]:slot<0?moveOptions:book?options:[];
+  const detail=basicSelected?[]:slot<0?moveOptions:book?options.filter(item=>!item.locked):[];
   wheel.classList.add('dm-modern-weapon-wheel');
   wheel.dataset.mode=basicSelected?'attack':slot<0?'move':'weapon';
   wheel.dataset.railLocked=String(locked);
@@ -185,7 +185,7 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
     detail.map(item=>item.value).join('|');
   inner.hidden=!detail.length;
   inner.setAttribute('aria-label',slot<0?'移動對象':
-    book?'選擇'+book.name+'的三個技能':'尚未裝備武器');
+    book?'選擇'+book.name+'的已解鎖技能':'尚未裝備武器');
   if(inner.dataset.detail!==key){
     inner.dataset.detail=key;
     const count=detail.length;

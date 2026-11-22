@@ -581,9 +581,10 @@ class DungeonMapView{
     else if(!skills.length)this.selectedSkillId='basic';
     const selectedWeapon=modern&&this.weaponWheelSlot>=0?
       globalThis.QAManuals?.BY_BOOK?.[weaponIds[this.weaponWheelSlot]]:null;
-    // Render all three moves from the chosen weapon, including locked moves.
-    // Only currently server-authorized dungeon skills can be tapped.
-    const visibleSkills=modern?(selectedWeapon?.skills||[]).map(template=>{
+    // Show only server-authorized moves from the selected weapon.
+    // The wheel divides its inner rail among these visible moves.
+    const visibleSkills=modern?(selectedWeapon?.skills||[])
+      .filter(template=>skills.some(skill=>skill.id===template.id)).map(template=>{
       const skill=skills.find(value=>value.id===template.id);
       const empowered=!!skill&&dungeonFocusEmpowers(own,skill);
       let art='';try{art=skillArt(template)||''}catch(_){}
