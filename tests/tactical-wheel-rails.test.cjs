@@ -15,12 +15,12 @@ function fixture(){
     dataset:index===0?{wheelAction:'move-menu'}:{weaponChoice:String(index-1)},
     closest:()=>outer,focus(){this.focused=true;}}));
   const slider={classList:classes(),querySelector:()=>({style:{}})};
-  let locked=false,restored=0,suppressed=0;
+  let locked=false,restored=0,suppressed=0,clickSuppressed=false;
   const wheel={classList:classes(),addEventListener:(type,fn)=>events[type]=fn,
     querySelector:()=>slider,getBoundingClientRect:()=>({right:200,bottom:200}),
     setPointerCapture(){},hasPointerCapture:()=>false};
   installWheelRails(wheel,{select:value=>chosen.push(value),restore:()=>restored++,
-    isLocked:()=>locked,suppressClick:()=>suppressed++});
+    isLocked:()=>locked,suppressClick:()=>{suppressed++;clickSuppressed=true;},allowClick:()=>{clickSuppressed=false;}});
   const fire=(type,{index=0,angle=-165,pointerId=1,...extra}={})=>{
     const r=175,rad=angle*Math.PI/180;
     const event={pointerId,button:0,isPrimary:true,target:{closest:()=>buttons[index]},
@@ -29,6 +29,7 @@ function fixture(){
     events[type](event);return event;
   };
   return {fire,buttons,chosen,slider,wheel,setLocked:value=>locked=value,
+    isClickSuppressed:()=>clickSuppressed,
     counts:()=>({restored,suppressed})};
 }
 
@@ -60,6 +61,12 @@ test('SVG thumbs use a real hidden attribute when a weapon or movement option is
 test('a tap remains delegated to the normal button click handler',()=>{
   const f=fixture();f.fire('pointerdown');f.fire('pointerup');
   assert.deepEqual(f.chosen,[]);assert.equal(f.counts().suppressed,0);
+});
+test('a new tap after a drag clears suppression without replaying the previous selection',()=>{
+  const f=fixture();f.fire('pointerdown');f.fire('pointermove',{angle:-105});f.fire('pointerup');
+  assert(f.isClickSuppressed());assert.deepEqual(f.chosen,['weapon:1']);
+  f.fire('pointerdown',{index:1});assert.equal(f.isClickSuppressed(),false);
+  f.fire('pointerup',{index:1});assert.deepEqual(f.chosen,['weapon:1']);
 });
 test('cancelled drag and lost capture restore the committed selection',()=>{
   for(const type of ['pointercancel','lostpointercapture']){

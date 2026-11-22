@@ -102,6 +102,10 @@ async function main(){
         y:button.clientHeight*parseFloat(label.style.top)/100};
     });
     await locator.click({position});
+    const selected=await locator.evaluate(button=>({weapon:button.dataset.weaponChoice,pressed:button.getAttribute('aria-pressed'),
+      choices:[...document.querySelectorAll('[data-wheel-choice]')].map(node=>node.dataset.wheelChoice),
+      locked:button.closest('.tc-quarter-action')?.dataset.railLocked}));
+    if(selected.weapon!==undefined)assert.equal(selected.pressed,'true',JSON.stringify(selected));
   }
   const read=page=>page.evaluate(async()=>{const mode=document.querySelector('#tactical-combat')?.dataset.mode||'pve';const r=await fetch('/api/tactical/state?mode='+mode,{headers:{'X-Test-User':sessionStorage.testUid||'u1'}});return (await r.json()).state;});
   async function cell(view,x,y){const s=await read(view),point=await view.evaluate(({x,y,width,height})=>{

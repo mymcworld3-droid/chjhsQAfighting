@@ -559,6 +559,7 @@ function renderModernWeaponWheel(hero,locked,mine){
     installWheelRails(wheel,{
       select:selectWheel,restore:updateControls,
       isLocked:()=>busy||renderer?.isAnimating||!myAction()||modalOpen,
+      allowClick:()=>{wheelIgnoreClickUntil=0;},
       suppressClick:()=>{wheelIgnoreClickUntil=Date.now()+350;}
     });
   }

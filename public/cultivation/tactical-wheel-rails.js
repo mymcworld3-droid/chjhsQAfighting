@@ -60,7 +60,7 @@ export function syncRailLabels(wheel,kind){
   });
 }
 
-export function installWheelRails(wheel,{select,restore,isLocked,suppressClick}){
+export function installWheelRails(wheel,{select,restore,isLocked,suppressClick,allowClick=()=>{}}){
   let pointer=null;
   const groupFor=button=>button.closest('.tc-rw-outer,.tc-rw-inner');
   const buttonsFor=group=>[...group.querySelectorAll('button.tc-rw-sector')];
@@ -87,6 +87,9 @@ export function installWheelRails(wheel,{select,restore,isLocked,suppressClick})
     if(pointer||isLocked()||event.isPrimary===false||event.button!==0)return;
     const button=event.target.closest('button.tc-rw-sector');
     if(!button||button.disabled)return;
+    // Suppress only the synthetic click from the completed drag. A distinct
+    // physical tap must remain usable even inside the 350 ms suppression window.
+    allowClick();
     const group=groupFor(button),kind=group.classList.contains('tc-rw-outer')?'outer':'inner';
     pointer={id:event.pointerId,x:event.clientX,y:event.clientY,start:button,group,
       slider:wheel.querySelector('[data-rail="'+kind+'"]'),moved:false,angle:0};

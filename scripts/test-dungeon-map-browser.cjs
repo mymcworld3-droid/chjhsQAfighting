@@ -997,14 +997,10 @@ async function main(){
     // first inner technique: the new wheel does not silently auto-attack.
     const windOuter=a.page.locator('[data-dm-wheel] [data-skill-id="weapon:0"]');
     await windOuter.waitFor({timeout:9000});
-    const windOuterBox=await windOuter.boundingBox();
-    await windOuter.click({position:{
-      x:windOuterBox.width*.381,y:windOuterBox.height*.381}});
+    await clickSector(windOuter);
     const windInner=a.page.locator('[data-dm-wheel] [data-skill-id="wind-slash"]');
     await windInner.waitFor({timeout:9000});
-    const windInnerBox=await windInner.boundingBox();
-    await windInner.click({position:{
-      x:windInnerBox.width*.841,y:windInnerBox.height*.406}});
+    await clickSector(windInner);
     await a.page.waitForFunction(()=>
       document.querySelector('[data-dm-wheel] [data-skill-id="wind-slash"]')
         ?.getAttribute('aria-pressed')==='true',null,{timeout:5000});

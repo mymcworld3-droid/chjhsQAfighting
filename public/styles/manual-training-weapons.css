@@ -20,7 +20,7 @@
  display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap
 }
 #manual-training-root .manual-weapons .manual-deck-heading>small{color:#abbfb2;font-size:11px}
-#manual-training-root .manual-weapon-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#manual-training-root .manual-weapon-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 #manual-training-root .manual-weapon-slot{
  padding:12px;border-radius:14px;border:1px solid #758d7470;display:grid;gap:9px;
  background:linear-gradient(153deg,#1a322b,#111f1c);min-width:0

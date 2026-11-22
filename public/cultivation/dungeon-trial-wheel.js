@@ -303,11 +303,11 @@ export function renderDungeonTrialWheel(wheel,{mode='attack',options=[],moveOpti
     '行動：移動，目標：'+selection.name+'，'+cost);
   return selection.value;
 }
-export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick}={}){
+export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick,allowClick}={}){
   installWheelRails(wheel,{
     select:choice=>select?.(choice),restore:()=>refresh?.(),
     isLocked:()=>!wheel.classList.contains('dm-modern-weapon-wheel')||wheel.dataset.railLocked==='true',
-    suppressClick:()=>ignoreClick?.()
+    suppressClick:()=>ignoreClick?.(),allowClick:()=>allowClick?.()
   });
   let pointer=null,dragClickUntil=0;
   const angle=e=>{

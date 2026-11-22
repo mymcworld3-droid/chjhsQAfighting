@@ -277,7 +277,8 @@ class DungeonMapView{
     bindDungeonTrialWheel(wheel,{
       select:choice=>this.selectTrialWheel(choice),
       refresh:()=>this.updateWheelHUD(),
-      ignoreClick:()=>{this.wheelSwipeSuppressUntil=Date.now()+350;}
+      ignoreClick:()=>{this.wheelSwipeSuppressUntil=Date.now()+350;},
+      allowClick:()=>{this.wheelSwipeSuppressUntil=0;}
     });
   }
   $(selector){return this.root?.querySelector(selector);}
