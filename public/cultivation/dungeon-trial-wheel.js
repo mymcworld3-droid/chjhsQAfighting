@@ -1,4 +1,4 @@
-import {bookArt,skillArt} from './manual-art.js';
+import {skillArt} from './manual-art.js';
 import { dungeonEnergySegments } from './dungeon-quarter-controls.js';
 import { weaponRailOptions, railAngle, syncRail, syncRailLabels, installWheelRails } from './tactical-wheel-rails.js';
 
@@ -165,9 +165,6 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
       button.style.clipPath=dungeonWheelWedge(-180+90*i/count+.6,-180+90*(i+1)/count-.6,99.5,75.5);
       const label=document.createElement('span');label.className='tc-rw-sector-label';
       setMarker(label,railAngle(i,count),87.5);
-      const artwork=entry.slot!==undefined?bookArt(weaponIds[entry.slot]):'';
-      if(artwork){const image=document.createElement('img');
-        image.className='tc-rw-art';image.src=artwork;image.alt='';image.decoding='async';image.draggable=false;label.append(image);}
       const title=document.createElement('strong');title.textContent=entry.name;
       label.append(title);
       button.append(label);
@@ -196,11 +193,8 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
         -180+90*i/count+.6,-180+90*(i+1)/count-.6,73.5,49.5);
       const label=document.createElement('span');label.className='tc-rw-sector-label';
       setMarker(label,railAngle(i,count),61.5);
-      const artwork=skillArt(item.value);
-      if(artwork){const image=document.createElement('img');
-        image.className='tc-rw-art';image.src=artwork;image.alt='';image.decoding='async';image.draggable=false;label.append(image);}
-      const title=document.createElement('strong'),price=document.createElement('small');
-      price.className='tc-rw-price';label.append(title,price);
+      wheelText(label,item.name,'',item.art||skillArt(item.value));
+      label.querySelector('.tc-wheel-cost').classList.add('tc-rw-price');
       button.append(label);return button;
     }));
   }
@@ -213,7 +207,7 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
     button.classList.toggle('is-unavailable',
       typeof item.cost==='number'&&item.cost>stamina);
     button.setAttribute('aria-pressed',String(item.value===selected));
-    button.querySelector('strong').textContent=item.name;
+    button.querySelector('.tc-wheel-name').textContent=item.name;
     button.querySelector('.tc-rw-price').textContent=price;
     button.title=item.locked?'尚未符合武器等級或境界條件':item.name+' · '+price;
     button.setAttribute('aria-label',button.title);

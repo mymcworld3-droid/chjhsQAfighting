@@ -8,8 +8,8 @@ export function weaponRailOptions(weaponIds,books){
 }
 // Both right-hand rails run from the bottom station to the top station.
 export const RAIL_LANES=Object.freeze({
-  outer:Object.freeze({inner:77.5,outer:97.5}),
-  inner:Object.freeze({inner:51.5,outer:71.5})
+  outer:Object.freeze({inner:79,outer:95}),
+  inner:Object.freeze({inner:54,outer:70})
 });
 export function railAngle(index,count){return -180+90*(index+.5)/Math.max(1,count);}
 export function railIndex(angle,count){
@@ -17,7 +17,7 @@ export function railIndex(angle,count){
 }
 export function railSlicePath(kind,count){
   const {inner,outer}=RAIL_LANES[kind];
-  const half=Math.min(38,90/Math.max(1,count)*.82)/2;
+  const half=Math.min(38,90/Math.max(1,count)*.7)/2;
   const point=(angle,radius)=>{
     const rad=angle*Math.PI/180;
     return (100+radius*Math.cos(rad)).toFixed(4)+' '+(100+radius*Math.sin(rad)).toFixed(4);
