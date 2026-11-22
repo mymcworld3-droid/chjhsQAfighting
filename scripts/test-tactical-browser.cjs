@@ -91,6 +91,12 @@ async function main(){
   // clickable wedge is narrow. Playwright's default box-center click lands in
   // the inner ring; click the visible sector label instead.
   async function clickWheelSector(locator){
+    await locator.evaluate(button=>{
+      window.__wheelProbe=[];
+      for(const type of ['pointerdown','pointerup','click'])button.addEventListener(type,event=>{
+        window.__wheelProbe.push({type,target:event.target.tagName,prevented:event.defaultPrevented});
+      },{once:true});
+    });
     const position=await locator.evaluate(button=>{
       const label=button.querySelector('.tc-rw-sector-label');
       if(!label)throw Error('The new right-wheel sector has no visible label');
@@ -104,7 +110,8 @@ async function main(){
     await locator.click({position});
     const selected=await locator.evaluate(button=>({weapon:button.dataset.weaponChoice,pressed:button.getAttribute('aria-pressed'),
       choices:[...document.querySelectorAll('[data-wheel-choice]')].map(node=>node.dataset.wheelChoice),
-      locked:button.closest('.tc-quarter-action')?.dataset.railLocked}));
+      inert:!!button.closest('[inert]'),mainInert:document.querySelector('[data-main]')?.inert,
+      events:window.__wheelProbe,notice:document.querySelector('[data-notice]')?.textContent}));
     if(selected.weapon!==undefined)assert.equal(selected.pressed,'true',JSON.stringify(selected));
   }
   const read=page=>page.evaluate(async()=>{const mode=document.querySelector('#tactical-combat')?.dataset.mode||'pve';const r=await fetch('/api/tactical/state?mode='+mode,{headers:{'X-Test-User':sessionStorage.testUid||'u1'}});return (await r.json()).state;});

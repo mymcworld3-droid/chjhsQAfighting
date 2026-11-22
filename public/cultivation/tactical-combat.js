@@ -131,7 +131,7 @@ function clearLiveManualXp(){
   $('[data-manual-xp-host]')?.replaceChildren();
 }
 function showLiveManualXp(delta){
-  if(!delta||!opened||state?.mode!=='pve'||root?.hidden||document.hidden)return;
+  if(!delta||!opened||state?.mode!=='pve'||state.status!=='active'||root?.hidden||document.hidden)return;
   const host=$('[data-manual-xp-host]');
   if(!host)return;
   clearLiveManualXp();
@@ -1542,6 +1542,7 @@ async function refreshManualRecap({force=false}={}){
   }
 }
 function resultDialog(){
+  clearLiveManualXp();
   const me=state.actors.find(a=>a.uid===uid),win=state.winner===me.team,draw=state.winner==='draw',reward=state.rewards?.[uid];
   const drop=state.manualDrops?.[uid];
   const manualRecap=state.mode==='pve'?manualRecapMarkup(state,uid):'';

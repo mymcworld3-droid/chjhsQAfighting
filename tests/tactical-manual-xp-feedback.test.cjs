@@ -151,3 +151,19 @@ test('verified A-side mastery data adds accurate next-level bar without fabricat
   assert.match(maximum,/最高 Lv\. 20/);
   assert.match(maximum,/aria-valuenow="100"/);
 });
+
+test('live EXP renders during play but cannot cover a finished battle result',()=>{
+  const ui=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
+  const fn=ui.slice(ui.indexOf('function showLiveManualXp('),ui.indexOf('// The menu stays outside',ui.indexOf('function showLiveManualXp(')));
+  const render=new Function('status',`
+    const host={innerHTML:''},state={mode:'pve',status},opened=true,root={hidden:false},document={hidden:false};
+    const $=()=>host,clearLiveManualXp=()=>{host.innerHTML='';},renderManualXpToast=()=>'<span>+35 EXP</span>',
+      esc=x=>x,bookArt=()=>'',battleBreakthroughEstimate=()=>null,battleLoadouts=null,
+      uid='u1',Manuals={},battleMasteryBaseline=null,window={};
+    let manualXpTimer=null;const setTimeout=()=>1;
+    ${fn}
+    showLiveManualXp({total:35});return host.innerHTML;
+  `);
+  assert.match(render('active'),/\+35 EXP/);
+  assert.equal(render('finished'),'');
+});

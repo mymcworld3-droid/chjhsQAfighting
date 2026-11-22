@@ -88,7 +88,8 @@ async function main(){
   await page.evaluate(()=>document.querySelector('[data-sync]').click());
   await page.locator('[data-weapon-dungeon-menu]').waitFor();
   assert.match(await page.locator('.tc-dialog').textContent(),/尖峰石域.*通關/);
-  await page.screenshot({path:path.join(output,'victory.png')});
+  assert.equal(await page.locator('[data-manual-xp-toast]').count(),0,'live XP must not obscure the results');
+  await page.screenshot({path:path.join(output,'victory.png'),animations:'disabled'});
   await page.locator('[data-weapon-dungeon-menu]').click();
   await page.waitForFunction(()=>document.querySelector('[data-wd-difficulty="1"]')?.disabled===false);
   assert.match(await page.locator('.wd-tickets').textContent(),/2 \/ 5/);
