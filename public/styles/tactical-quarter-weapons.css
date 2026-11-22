@@ -1,6 +1,6 @@
 /*
  * 問道試煉 / 雙滑軌右環 — independent weapon-era presentation.
- * Outer annulus 75–100%: 移動 / 武器一 / 武器二 (bottom to top).
+ * Outer annulus 75–100%: 移動 / 已裝備武器名稱（無武器時為攻擊）, evenly spaced.
  * Inner annulus 49–74%: 角色/飛劍 OR three skills (first skill at bottom).
  * Central 0–49%: original server-backed 結束回合 action.
  * Each inset thumb glides independently; labels stay at their tap stations.
@@ -254,3 +254,8 @@
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-selected{color:#fff4cc}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-disabled{opacity:.48}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-unavailable .tc-rw-price{color:#f1bb94}
+
+/* Weapon names remain readable on phones where the old subtitle was hidden. */
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label strong{
+  max-width:4em;white-space:normal;overflow-wrap:anywhere;text-wrap:balance;
+}

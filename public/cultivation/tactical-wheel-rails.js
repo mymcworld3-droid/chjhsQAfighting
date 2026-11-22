@@ -1,3 +1,11 @@
+// Keep storage slots intact when empty weapons disappear from the visible rail.
+export function weaponRailOptions(weaponIds,books){
+  const weapons=weaponIds.flatMap((id,slot)=>id?[{
+    value:'weapon:'+slot,slot,name:books[id]?.name||id
+  }]:[]);
+  return [{value:'move',name:'移動'},
+    ...(weapons.length?weapons:[{value:'attack',name:'攻擊'}])];
+}
 // Both right-hand rails run from the bottom station to the top station.
 export const RAIL_LANES=Object.freeze({
   outer:Object.freeze({inner:77.5,outer:97.5}),

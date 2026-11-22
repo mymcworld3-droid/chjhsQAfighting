@@ -1367,3 +1367,7 @@ html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.b
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-selected{color:#fff4cc}
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-disabled{opacity:.48}
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-unavailable .tc-rw-price{color:#f1bb94}
+
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label strong{
+  max-width:4em;white-space:normal;overflow-wrap:anywhere;text-wrap:balance;
+}

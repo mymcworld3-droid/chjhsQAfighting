@@ -951,7 +951,10 @@ async function main(){
         for(const required of ['beastToggle','close','end','loadoutToggle','quiz'])
           assert(layout.visible.includes(required),'missing '+required+' control');
         assert.equal(await quick.locator('.tc-quarter-energy .tc-left-move').count(),0,'left dial is for charging only');
-        assert.equal(await quick.locator('.tc-rw-outer .tc-rw-sector--outer').count(),3,'three action stations: move and two weapons');
+        const wheelState=await read(quick);
+        const worn=wheelState.actors.find(actor=>actor.uid==='u1').manualWeaponIds||[];
+        assert.equal(await quick.locator('.tc-rw-outer .tc-rw-sector--outer').count(),
+          1+Math.max(1,worn.filter(Boolean).length),'move plus equipped weapons or fallback attack');
         assert.equal(await quick.locator('.tc-rightwheel-v3').count(),1,'modern right wheel exists');
         assert.ok(Math.abs(layout.energy.x)<.015&&Math.abs(layout.energy.y+layout.energy.h-1)<.015);
         assert.ok(Math.abs(layout.actions.x+layout.actions.w-1)<.015&&Math.abs(layout.actions.y+layout.actions.h-1)<.015);

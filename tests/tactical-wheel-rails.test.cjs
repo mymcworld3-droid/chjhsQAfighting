@@ -4,8 +4,8 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-wheel-rails.js'),'utf8');
-const {railAngle,railIndex,railSlicePath,syncRail,installWheelRails}=new Function(
-  source.replace(/^export /gm,'')+';return {railAngle,railIndex,railSlicePath,syncRail,installWheelRails};')();
+const {weaponRailOptions,railAngle,railIndex,railSlicePath,syncRail,installWheelRails}=new Function(
+  source.replace(/^export /gm,'')+';return {weaponRailOptions,railAngle,railIndex,railSlicePath,syncRail,installWheelRails};')();
 
 function fixture(){
   const events={},chosen=[];
@@ -88,4 +88,41 @@ test('keyboard selects bottom-to-top stations, skips locked skills and supports 
   f.fire('keydown',{index:2,key:'Home'});assert.equal(f.chosen.at(-1),'move-menu');
   f.fire('keydown',{key:'End'});assert.equal(f.chosen.at(-1),'weapon:1');
   f.setLocked(true);f.fire('keydown',{key:'ArrowUp'});assert.equal(f.chosen.length,3);
+});
+
+
+test('weapon rail hides empty slots, keeps slot identities and offers one fallback attack',()=>{
+  const books={a:{name:'青雲劍'},b:{name:'玄岩拳'}};
+  for(const [ids,values,names]of [
+    [[null,null],['move','attack'],['移動','攻擊']],
+    [['a',null],['move','weapon:0'],['移動','青雲劍']],
+    [[null,'b'],['move','weapon:1'],['移動','玄岩拳']],
+    [['a','b'],['move','weapon:0','weapon:1'],['移動','青雲劍','玄岩拳']]
+  ]){
+    const options=weaponRailOptions(ids,books);
+    assert.deepEqual(options.map(x=>x.value),values);
+    assert.deepEqual(options.map(x=>x.name),names);
+    for(let i=0;i<options.length;i++)
+      assert.equal(railIndex(railAngle(i,options.length),options.length),i);
+  }
+});
+
+
+test('trial fallback attack selects basic combat and rejects hidden empty weapon slots',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
+  const start=src.indexOf('function selectWheel('),end=src.indexOf('function sealGuideKey(',start);
+  const run=new Function('ids',`
+    let state={},busy=false,renderer=null,selectedWeaponSlot=-1,selectedWeaponId='',
+      action='move',selectedManualSkill='',attackChoice='attack',selection=null,sealPeekPosition=null;
+    const hero={manualWeaponMode:true},myActor=()=>hero,myAction=()=>true,
+      currentWeaponIds=()=>ids,modernPveWheel=()=>true,syncEquippedAttack=()=>{},
+      equippedTechniques=()=>[],tutorialStep=()=>0,updateControls=()=>{},
+      R={basicFor:()=>({range:1})};
+    ${src.slice(start,end)}
+    selectWheel('weapon:0');
+    const emptySlot=selectedWeaponSlot;
+    selectWheel('attack-ring');
+    return {emptySlot,action,selectedWeaponSlot};
+  `);
+  assert.deepEqual(run([null,null]),{emptySlot:-1,action:'attack',selectedWeaponSlot:-1});
 });

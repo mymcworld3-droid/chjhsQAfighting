@@ -505,7 +505,7 @@ class DungeonMapView{
     const modern=!!own,weaponIds=dungeonWeaponSlots(own);
     if(modern&&value.startsWith('weapon:')){
       const slot=Number(value.slice(7));
-      if(!Number.isInteger(slot)||slot<0||slot>=2)return;
+      if(!Number.isInteger(slot)||slot<0||slot>=2||!weaponIds[slot])return;
       this.weaponWheelSlot=slot;this.selectedSkillId='';
       // Choosing an outer weapon only opens its skill list. It cannot move
       // or cast until a skill is explicitly selected on the inner ring.
@@ -526,7 +526,10 @@ class DungeonMapView{
     if(value==='move'||value==='attack'){
       if(modern&&value==='move'){
         this.weaponWheelSlot=-1;this.selectedSkillId='';
-      }else if(modern&&value==='attack')return;
+      }else if(modern&&value==='attack'){
+        if(weaponIds.some(Boolean))return;
+        this.weaponWheelSlot=-1;this.selectedSkillId='basic';
+      }
       this.setWheelMode(value);return;
     }
     const skills=own?.dungeonSkills||[];
@@ -560,8 +563,13 @@ class DungeonMapView{
     }
     const skills=Array.isArray(own?.dungeonSkills)?own.dungeonSkills:[];
     const modern=!!own,weaponIds=dungeonWeaponSlots(own);
+    if(modern&&this.weaponWheelSlot>=0&&!weaponIds[this.weaponWheelSlot]){
+      this.weaponWheelSlot=-1;this.wheelMode='move';this.selectedSkillId='';
+    }
     if(modern&&this.weaponWheelSlot<0){
-      this.wheelMode='move';this.selectedSkillId='';
+      if(weaponIds.some(Boolean)||this.wheelMode!=='attack'){
+        this.wheelMode='move';this.selectedSkillId='';
+      }else this.selectedSkillId='basic';
     }else if(modern&&this.weaponWheelSlot>=0){
       const weaponId=weaponIds[this.weaponWheelSlot];
       if(!skills.some(skill=>skill.id===this.selectedSkillId&&skill.weaponId===weaponId)){

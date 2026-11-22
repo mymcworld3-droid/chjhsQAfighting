@@ -159,11 +159,11 @@ test('radial selection prioritizes an outer manual over an accidentally hit inne
   assert.match(wheel,/wheel\.dataset\.mode!=='attack'/);
 });
 
-test('dungeon modern wheel exposes move and exactly two weapons, with each weapon three moves',()=>{
+test('dungeon modern wheel exposes move and equipped weapon names, with each weapon three moves',()=>{
   const wheelSource=read('public/cultivation/dungeon-trial-wheel.js');
   const viewSource=read('public/cultivation/dungeon-map-view.js');
   const css=read('public/styles/dungeon-trial-wheel.css');
-  assert.match(wheelSource,/const title=i===0\?'移動':i===1\?'武器一':'武器二'/);
+  assert.match(wheelSource,/weaponRailOptions\(weaponIds/);
   assert.match(wheelSource,/selectedWeaponSlot/);
   assert.match(wheelSource,/button\.disabled=locked\|\|!!item\.locked/);
   assert.match(viewSource,/selectedWeapon\?\.skills\|\|\[\]/);
@@ -210,6 +210,18 @@ test('dungeon weapon submenus reject cross-weapon skills and do not move before 
   assert.equal(state.wheelMode,'move');
   select.call(state,'weapon:2');
   assert.equal(state.weaponWheelSlot,-1);
+  state.room.members.u1.dungeonWeaponIds=[null,'body-rock'];
+  select.call(state,'weapon:0');
+  assert.equal(state.weaponWheelSlot,-1,'hidden empty slot cannot be selected');
+  select.call(state,'weapon:1');
+  assert.equal(state.weaponWheelSlot,1,'second slot retains its identity');
+  state.room.members.u1.dungeonWeaponIds=[null,null];
+  state.room.members.u1.dungeonSkills=[];
+  select.call(state,'attack');
+  assert.equal(state.weaponWheelSlot,-1);
+  assert.equal(state.selectedSkillId,'basic');
+  assert.equal(state.wheelMode,'attack');
+
 });
 
 test('legacy cooperative room can infer two weapon slots from its authorized skills',()=>{

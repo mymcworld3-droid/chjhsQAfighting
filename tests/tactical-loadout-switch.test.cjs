@@ -65,7 +65,7 @@ test('invalid slots and unowned weapons are rejected by the server',async()=>{
   await API.updateLoadout(db,'u1',{index:1,weaponId:'body-rock'});
   await assert.rejects(API.updateLoadout(db,'u1',{index:2,weaponId:'body-rock'}),/最多裝備兩把/);
 });
-test('client exposes equipment editing and 3-category right battle wheel, without a main-weapon switch',()=>{
+test('client exposes equipment editing and adaptive right battle wheel, without a main-weapon switch',()=>{
   const src=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
   const style=fs.readFileSync(path.join(__dirname,'../public/styles/tactical-quarter-weapons.css'),'utf8');
   const page=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-loadout-view.js'),'utf8');
@@ -77,7 +77,7 @@ test('client exposes equipment editing and 3-category right battle wheel, withou
   assert.match(src,/tc-rightwheel-v3/);
   assert.match(src,/selectedWeaponSlot<0\?/);
   assert.doesNotMatch(src,/energy\.append\(move\)/);
-  assert.match(style,/Outer annulus 75–100%: 移動 \/ 武器一 \/ 武器二/);
+  assert.match(src,/weaponRailOptions\(equipped,Manuals.BY_BOOK\)/);
   assert.match(style,/\.tc-rw-sector--inner/);
   assert.match(style,/\.tc-rw-sector--outer/);
   assert.match(page,/最多裝備兩把武器，每把三招/);
