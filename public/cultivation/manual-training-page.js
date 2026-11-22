@@ -10,6 +10,7 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const Catalog=globalThis.QAManuals;
 let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',selectedSkillId=null,pickerSlot=null,libraryFilter='all',celebrationTimer=null;
+let trainingDialogOpen=false,trainingDialogTrigger=null;
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -122,10 +123,43 @@ function featuredHeroMarkup(){
   featuredBookId=view.bookId;
   return view.html;
 }
+function closeTrainingDialog({restoreFocus=true}={}){
+  trainingDialogOpen=false;selectedSkillId=null;
+  const dialog=root?.querySelector('[data-manual-training-dialog]');
+  if(dialog?.open)dialog.close();
+  if(restoreFocus&&visible()){
+    const trigger=trainingDialogTrigger?.isConnected?trainingDialogTrigger:
+      [...(root?.querySelectorAll('[data-feature-book]')||[])]
+        .find(button=>button.dataset.featureBook===featuredBookId);
+    trigger?.focus({preventScroll:true});
+  }
+  trainingDialogTrigger=null;
+}
+function syncTrainingDialog(){
+  const dialog=root?.querySelector('[data-manual-training-dialog]');
+  if(!dialog){trainingDialogOpen=false;return;}
+  dialog.oncancel=event=>{event.preventDefault();closeTrainingDialog();};
+  if(trainingDialogOpen&&!dialog.open){
+    const body=dialog.querySelector?.('.manual-training-dialog-body');
+    if(body)body.scrollTop=0;
+    dialog.showModal();
+  }
+  else if(!trainingDialogOpen&&dialog.open)dialog.close();
+}
 function markup(){
   if(!current)return '<div class="manual-loading">正在讀取武器…</div>';
   const hero=featuredHeroMarkup();
   const expedition=renderManualExpedition(nextManualExpedition(current,featuredBookId,Catalog),{esc,bookArt});
+  const owned=current.library?.some(book=>book.owned);
+  const training=owned?`<dialog id="manual-training-dialog" class="manual-training-dialog" data-manual-training-dialog aria-labelledby="manual-training-dialog-title">
+    <header class="manual-training-dialog-header">
+      <strong id="manual-training-dialog-title">${esc(current.library.find(book=>book.id===featuredBookId)?.name||'武器')} · 武器修煉</strong>
+      <button type="button" data-manual-close-training aria-label="關閉武器修煉" autofocus>
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i> 關閉</button>
+    </header>
+    <div class="manual-training-dialog-body">${hero}${expedition}
+      <div class="manual-status" data-manual-dialog-status role="status" aria-live="polite"></div>
+    </div></dialog>`:hero;
   const cards=filterOwnedManuals(current,libraryFilter).map(book=>
     `<article class="manual-book ${book.school==='sword'?'is-sword':'is-body'} ${book.id===featuredBookId?'is-featured':''}"
        data-manual-book="${esc(book.id)}">
@@ -139,7 +173,7 @@ function markup(){
       ${renderManualCollectionHeader(current,libraryFilter,{esc})}
       <div class="manual-book-grid">${cards||'<p class="manual-empty">尚無此流派已取得的武器，請切換篩選查看。</p>'}</div>
     </section>
-    ${hero}${expedition}
+    ${training}
     <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>
     ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
       esc,bookArt,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
@@ -163,11 +197,11 @@ function reconcile(parent,template){
     }
     if(oldNode.nodeType!==1)return;
     for(const attr of [...oldNode.attributes]){
-      if(oldNode.nodeName==='DETAILS'&&attr.name==='open')continue;
+      if(['DETAILS','DIALOG'].includes(oldNode.nodeName)&&attr.name==='open')continue;
       if(!newNode.hasAttribute(attr.name))oldNode.removeAttribute(attr.name);
     }
     for(const attr of [...newNode.attributes]){
-      if(oldNode.nodeName==='DETAILS'&&attr.name==='open')continue;
+      if(['DETAILS','DIALOG'].includes(oldNode.nodeName)&&attr.name==='open')continue;
       if(oldNode.getAttribute(attr.name)!==attr.value)oldNode.setAttribute(attr.name,attr.value);
     }
     if(oldNode.nodeName==='INPUT'&&document.activeElement!==oldNode&&oldNode.value!==newNode.value)oldNode.value=newNode.value;
@@ -217,6 +251,9 @@ function paint(message='',{loadoutFeedback=false}={}){
   if(renderedFor&&renderedFor!==loadedFor)root.replaceChildren(template.content.cloneNode(true));
   else reconcile(root,template.content);
   renderedFor=loadedFor;
+  syncTrainingDialog();
+  const dialogStatus=root.querySelector('[data-manual-dialog-status]');
+  if(dialogStatus)dialogStatus.textContent=message;
   const status=root.querySelector('[data-manual-status]');
   if(status)status.textContent=message;
   const deckStatus=root.querySelector('[data-manual-loadout-status]');
@@ -234,14 +271,14 @@ function paint(message='',{loadoutFeedback=false}={}){
     }
   }
   root.querySelectorAll('button').forEach(button=>{
-    if(busy)button.disabled=true;
+    if(busy&&!button.hasAttribute('data-manual-close-training'))button.disabled=true;
   });
 }
 async function load({force=false}={}){
   if(busy)return;
   if(visible())window.prefetchXiuxianContext?.('manuals');
   ensure();const uid=getMainUser()?.uid;
-  if(!uid){clearManualCelebration();current=null;loadedFor='';paint('請先登入後查看武器。');return;}
+  if(!uid){closeTrainingDialog({restoreFocus:false});clearManualCelebration();current=null;loadedFor='';paint('請先登入後查看武器。');return;}
   if(!force&&loadedFor===uid&&Date.now()-lastFetch<15000){paint();return;}
   const token=++sequence;lastFetch=Date.now();
   try{
@@ -249,7 +286,7 @@ async function load({force=false}={}){
     if(token!==sequence||getMainUser()?.uid!==uid)return;
     const before=loadedFor===uid?current:null;
     const reward=detectManualCelebration(before,result,{kind:'sync'});
-    current=result;if(loadedFor!==uid){selectedLoadout=result.activeLoadout||0;featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';}loadedFor=uid;
+    current=result;if(loadedFor!==uid){closeTrainingDialog({restoreFocus:false});selectedLoadout=result.activeLoadout||0;featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';}loadedFor=uid;
     window.setCurrentTacticalManualState?.(result,uid);
     paint();
     // Only artwork for owned, currently browsable weapons is warmed;
@@ -337,7 +374,19 @@ function ensureNav(){
 function boot(){
   ensureNav();
   ensure();
+  const trainingPage=document.getElementById('page-training');
+  if(trainingPage)new MutationObserver(()=>{
+    if(trainingDialogOpen&&!visible())closeTrainingDialog({restoreFocus:false});
+  }).observe(trainingPage,{attributes:true,attributeFilter:['class','hidden']});
   root?.addEventListener('click',event=>{
+    const dialog=root?.querySelector('[data-manual-training-dialog]');
+    if(event.target.closest('[data-manual-close-training]')){closeTrainingDialog();return;}
+    if(event.target===dialog){
+      const rect=dialog.getBoundingClientRect();
+      if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom){
+        closeTrainingDialog();return;
+      }
+    }
     if(event.target.closest('[data-manual-celebration-dismiss]')){
       clearManualCelebration();return;
     }
@@ -362,6 +411,7 @@ function boot(){
       const guide=nextManualExpedition(current,featuredBookId,Catalog);
       if(!guide||guide.bookId!==button.dataset.manualExpeditionId)return;
       if(guide.action==='battle'){
+        closeTrainingDialog({restoreFocus:false});
         const start=window.openTacticalCombat||window.startQuizFlow;
         if(typeof start!=='function'){
           paint('戰場尚未準備完成，請從宗門的「問道試煉」入口進入。');
@@ -373,6 +423,7 @@ function boot(){
           });
         }catch(error){paint(error?.message||'無法進入問道試煉，請稍後重試。');}
       }else if(guide.action==='loadout'){
+        closeTrainingDialog({restoreFocus:false});
         selectedLoadout=guide.activeLoadout;
         pickerSlot=null;paint();
         requestAnimationFrame(()=>root?.querySelector('.manual-loadout')?.scrollIntoView({
@@ -391,15 +442,9 @@ function boot(){
       if(current?.library.some(book=>book.owned&&book.id===button.dataset.featureBook)){
         featuredBookId=button.dataset.featureBook;
         selectedSkillId=null;
+        if(!trainingDialogOpen)trainingDialogTrigger=button;
+        trainingDialogOpen=true;
         paint();
-        if(button.hasAttribute('data-manual-focus-hero')){
-          requestAnimationFrame(()=>{
-            root?.querySelector('.manual-hero')?.scrollIntoView({
-              behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
-              block:'start'
-            });
-          });
-        }
       }
       return;
     }
@@ -541,9 +586,13 @@ function boot(){
   document.addEventListener('click',event=>{
     if(event.target.closest('#nav-training,[data-target="page-training"]'))setTimeout(()=>void load({force:true}),0);
   },true);
-  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){clearManualCelebration();current=null;loadedFor='';featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';}if(visible())void load({force:true});});
+  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){closeTrainingDialog({restoreFocus:false});clearManualCelebration();current=null;loadedFor='';featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';}if(visible())void load({force:true});});
   document.addEventListener('keydown',event=>{
     if(event.key!=='Escape')return;
+    if(trainingDialogOpen){
+      event.preventDefault();
+      if(!selectedSkillId||busy){closeTrainingDialog();return;}
+    }
     if(root?.querySelector('[data-manual-celebration-host]')?.firstChild){
       clearManualCelebration();return;
     }
