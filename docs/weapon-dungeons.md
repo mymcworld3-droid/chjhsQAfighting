@@ -47,3 +47,9 @@
 `tests/weapon-dungeons.test.cjs` 涵蓋六階逐次通關、120 張地圖連通性、最深處領主、追蹤與退出射程、擊退打斷及碰撞、精確傷害、臺灣跨日與券上限、並行扣券／續戰、獎勵 30／20／50 分布、重複結算與舊存檔資料保存。
 
 `tests/weapon-dungeons-page.test.cjs` 驗證玩法入口、難度與券數彈窗、鎖定難度、零券續戰、關閉／帳號切換後忽略遲到回應。`tests/dungeon-enemy-combat.test.cjs` 額外驗證靈獸移動後立即準備攻擊、完整蓄勢時間及不會提前命中。
+
+### 完整操作回歸
+
+`npm run test:battle` 統一執行雙武器、修煉、戰棋、單人武器副本與合作副本的確定性測試。舊的三配置存檔相容測試仍驗證實際保存內容；新版對外狀態則依雙武器投影核對，不再要求已移除的第三個武器欄或顯示未解鎖招式。
+
+`scripts/test-weapon-dungeons-browser.cjs` 使用獨立測試身分與簽章題目驗證入口、三種視窗大小、已鎖技能隱藏、兩次答題與解析、免費續戰、通關及下一階解鎖。`scripts/test-manual-training-browser.cjs` 驗證修煉彈窗、兩個裝備欄、圖片節點穩定與升級成果實際可點擊；原生 dialog 開啟時，成果容器必須位於同一 top layer，不能只靠外層 z-index 疊放。

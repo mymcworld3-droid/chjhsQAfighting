@@ -138,7 +138,7 @@ test('old v3, other game modes and blocking modal hide information cleanly',()=>
 });
 test('client integration uses exclusive inspector ownership and respects attack taps',()=>{
   assert(combat.includes('new SealInspector(root,{'));
-  assert(combat.includes("if(action==='move'&&R.sealInfo(state,p)?.active&&sealInspector?.inspect(p))return;"));
+  assert(combat.includes("if((action==='move'||action==='sword-move')&&R.sealInfo(state,p)?.active&&sealInspector?.inspect(p))return;"));
   assert(combat.includes('sealInspector?.dismiss();'));
   assert(combat.includes('sealInspector?.refresh();'));
   assert(combat.includes('onFocusRange:seal=>{'));

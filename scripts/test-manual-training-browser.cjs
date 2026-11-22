@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-// Browser acceptance for the three-weapon sword/totem system.
+// Browser acceptance for the two-weapon sword/totem system.
 // Local user fixtures only; does not access production accounts.
 const assert=require('node:assert/strict');
 const path=require('node:path');
@@ -47,7 +47,7 @@ async function main(){
     const library=page.locator('.manual-library');
     await library.locator('[data-manual-book="sword-wind"]').waitFor();
     await page.locator('.manual-weapon-grid').waitFor();
-    assert.equal(await page.locator('[data-manual-slot]').count(),3);
+    assert.equal(await page.locator('[data-manual-slot]').count(),2);
     assert.equal(await library.locator('article[data-manual-book]').count(),2);
     assert.equal(await page.locator('.manual-library-heading h3').innerText().then(x=>x.includes('武器收藏')),true);
     const order=await library.evaluate(node=>
@@ -69,11 +69,16 @@ async function main(){
       assert.match(image.headers()['content-type']||'',/webp/);
       assert((await image.body()).length>100_000,'HD weapon art must be the actual full-size file');
     }
+    assert.equal(await page.locator('[data-manual-training-dialog]').isVisible(),false);
+    await library.locator('[data-manual-book="sword-wind"] .manual-library-choice').click();
+    await page.locator('[data-manual-training-dialog]').waitFor();
     await page.locator('[data-manual-jump-skill="wind-slash"]').click();
     await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
     assert.equal(await page.locator('.manual-focus-skill').count(),1);
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('.manual-focus-skill').count(),0);
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('[data-manual-training-dialog]').isVisible(),false);
     // Equipping a weapon changes one slot only; it does not change its XP.
     await page.locator('[data-manual-pick-slot="1"]').click();
     await page.locator('[data-manual-picker]').waitFor();
@@ -82,9 +87,9 @@ async function main(){
     await page.waitForFunction(()=>document.querySelector('[data-manual-status]')?.textContent==='武器裝備已儲存。');
     assert.equal(await page.locator('[data-manual-slot="1"] .manual-weapon-slot-info strong').innerText(),'玄嶽圖騰');
     const equipped=db.records.get(service.MANUALS+'/u1');
-    assert.deepEqual(equipped.weaponIds,['sword-wind','body-rock',null]);
+    assert.deepEqual(equipped.weaponIds,['sword-wind','body-rock']);
     assert.equal(equipped.books['body-rock'].exp,40);
-    // All three weapon slots are peers. No activation/main-weapon button exists.
+    // Both weapon slots are peers. No activation/main-weapon button exists.
     assert.equal(await page.locator('[data-loadout-apply]').count(),0);
     assert.equal(await page.locator('.manual-weapon-slot.is-active').count(),0);
     const record=db.records.get(service.MANUALS+'/u1');
@@ -104,34 +109,33 @@ async function main(){
     await page.waitForFunction(()=>document.querySelector('[data-manual-status]')?.textContent?.includes('已升級'));
     const visualStable=await page.evaluate(()=>window.__art.every(node=>node.isConnected));
     assert.equal(visualStable,true,'weapon image nodes should not blink after upgrade');
+    assert.equal(await page.locator('[data-manual-training-dialog] [data-manual-celebration-dismiss]').count(),1);
     await page.locator('[data-manual-celebration-dismiss]').click();
-    // The second technique appears automatically at weapon Lv.5 and realm readiness.
-    db.records.get('users/u1').stats.totalScore=100;
+    await page.keyboard.press('Escape');
+    // The second technique appears automatically at weapon Lv.5 without a player-realm requirement.
+    db.records.get('users/u1').stats.totalScore=0;
     db.records.get(service.MANUALS+'/u1').books['body-rock'].exp=280;
     await page.locator('[data-manual-refresh]').click();
     await page.waitForFunction(()=>
       document.querySelectorAll('[data-manual-slot="1"] .manual-weapon-skill.is-learned').length===2);
     assert.equal(await page.locator('[data-manual-slot="1"] .manual-weapon-skill.is-learned').count(),2);
     // An empty third slot must not invent a weapon or skill.
-    assert.equal(await page.locator('[data-manual-slot="2"] .manual-weapon-skill').count(),0);
-    await page.locator('[data-manual-pick-slot="2"]').click();
-    assert.equal(await page.locator('[data-manual-pick-weapon="body-rock"]').isDisabled(),true);
-    await page.locator('[data-manual-close-picker]').click();
-    for(const selector of ['.manual-library','.manual-hero','.manual-weapons']){
+    assert.equal(await page.locator('[data-manual-slot="2"]').count(),0);
+    for(const selector of ['.manual-library','.manual-weapons']){
       const sizes=await page.locator(selector).evaluate(node=>({scroll:node.scrollWidth,client:node.clientWidth}));
       assert(sizes.scroll<=sizes.client+3,selector+' must fit mobile width: '+JSON.stringify(sizes));
     }
     await page.setViewportSize({width:1180,height:820});
     const columns=await page.locator('.manual-weapon-grid').evaluate(node=>
       getComputedStyle(node).gridTemplateColumns.split(' ').length);
-    assert.equal(columns,3);
+    assert.equal(columns,2);
     // Returning from battle always fetches fresh authoritative weapon XP.
     const refreshed=page.waitForResponse(res=>res.url().endsWith('/api/tactical/manuals')
       &&res.request().method()==='GET');
     await page.evaluate(()=>window.dispatchEvent(new CustomEvent('xiuxian:manual-battle-settled',{detail:{uid:'u1'}})));
     assert.equal((await refreshed).ok(),true);
     assert.deepEqual(errors,[]);
-    console.log('Three peer weapon slots, vector artwork, free equip/unequip, Lv.5 unlock and responsive layout verified.');
+    console.log('Two peer weapon slots, modal training, top-layer rewards, HD artwork, free equip/unequip, Lv.5 unlock and responsive layout verified.');
   }finally{
     if(browser)await browser.close();
     await new Promise(resolve=>server.close(resolve));

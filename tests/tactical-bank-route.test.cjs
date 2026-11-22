@@ -19,7 +19,7 @@ test('bank warming is authenticated and derives school grade, subject and topic 
 });
 
 test('approved AI bank questions are used before live tactical generation',()=>{
-  assert.match(server,/aiBankAllowed = aiQuestionBank\.enabled && \(tacticalMode \|\| tacticalBankFill\)/);
+  assert.match(server,/aiBankAllowed = aiQuestionBank\.enabled && \(tacticalMode \|\| dungeonMode \|\| tacticalBankFill\)/);
   assert.match(server,/if \(bankTarget && attempts === 0 && !tacticalBankFill\)/);
   assert.match(server,/if \(tacticalMode\) \{\s*const question=await tacticalCombat\.commitQuestion\(tacticalContext\.db,tacticalContext\.uid,tacticalContext,bankQuestion\)/);
 });

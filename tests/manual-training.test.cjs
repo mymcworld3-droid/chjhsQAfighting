@@ -330,11 +330,13 @@ test('the original sword manuals retain their save slots while shared techniques
   const owned={'sword-wind':{exp:1080},'sword-sky':{exp:1080},'sword-flight':{exp:1080}};
   db.records.set(ref,{version:2,books:owned,equipped:['wind-slash','wind-step','sky-sever']});
   const state=await API.manualsState(db,'u1');
-  assert.deepEqual(state.equipped,['wind-slash','wind-step','sky-sever']);
+  assert.deepEqual(state.weaponIds,['sword-wind','sword-sky']);
+  assert.deepEqual(state.equipped,['wind-slash','wind-step','wind-thousand','sky-pierce','sky-cloud','sky-sever']);
+  assert.deepEqual(Catalog.normalize(db.records.get(ref)).equipped,['wind-slash','wind-step','sky-sever']);
   assert.deepEqual(state.library.map(book=>[book.name,...book.skills.map(skill=>skill.name)]),[
-    ['流風劍訣','流風斬','突進橫斬','遠線破擊'],
-    ['御劍真訣','流風斬','召劍','遠線破擊'],
-    ['八方劍典','流風斬','交叉劍斬','八方合劍']
+    ['流風靈劍','流風斬','突進橫斬','遠線破擊'],
+    ['御靈飛劍','流風斬','召劍','遠線破擊'],
+    ['八方天劍','流風斬','交叉劍斬','八方合劍']
   ]);
   await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['wind-slash','sky-pierce']}),/相同招式/);
   await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['wind-thousand','flight-break']}),/相同招式/);
@@ -360,20 +362,20 @@ function swordBattle(skillId,beasts){
 const castSword=(battle,skillId,x,y)=>R.apply(battle,'u1',{type:'manual',skillId,x,y},now);
 
 test('flying sword persists, crosses enemies on its own path and can be used twice in a turn',()=>{
-  const skill='flight-summon',battle=swordBattle(skill,[lowBeast('m1',5,4,500),lowBeast('m2',7,4,500)]);
-  battle.blocks=[{x:8,y:4}];
-  const summoned=castSword(battle,skill,4,4);
-  assert.deepEqual(summoned.actors[0].flyingSword,{x:4,y:4});
-  assert.equal(summoned.actors[0].stamina,8);
+  const skill='flight-summon',battle=swordBattle(skill,[lowBeast('m1',4,4,500),lowBeast('m2',6,4,500)]);
+  battle.blocks=[{x:8,y:4}];battle.actors[0].x=5;
+  const summoned=castSword(battle,skill,3,4);
+  assert.deepEqual(summoned.actors[0].flyingSword,{x:3,y:4});
+  assert.equal(summoned.actors[0].stamina,7);
   assert.equal(summoned.actors[1].hp,500);
-  assert.throws(()=>castSword(summoned,skill,8,4),/直線地格/);
+  assert.throws(()=>castSword(summoned,skill,8,4),/距離玩家兩格內/);
   const moved=castSword(summoned,skill,7,4);
   assert.deepEqual(moved.actors[0].flyingSword,{x:7,y:4});
-  assert.equal(moved.actors[0].stamina,6);
+  assert.equal(moved.actors[0].stamina,4);
   assert.deepEqual(moved.actors.slice(1).map(a=>a.hp),[390,390]);
   assert.throws(()=>castSword(moved,skill,6,4),/兩次/);
   const scenes=require('../public/cultivation/tactical-animation.js').plan(summoned,moved,'u1');
-  assert.deepEqual(scenes[0].origin,{x:4,y:4});
+  assert.deepEqual(scenes[0].origin,{x:3,y:4});
   assert.deepEqual(scenes[0].after[0].flyingSword,{x:7,y:4});
 });
 
@@ -565,22 +567,25 @@ test('four-step chain writes only serializable combat events and survives server
 test('three account presets migrate, persist, validate and lock during battles',async()=>{
   const db=database();await API.chooseSchool(db,'u1',{school:'sword'});
   let state=await API.manualsState(db,'u1');
-  assert.deepEqual(state.loadouts.map(p=>p.skillIds),[['wind-slash'],[],[]]);
+  assert.deepEqual(bookRecord(db).loadouts.map(p=>p.skillIds),[['wind-slash'],[],[]]);
+  assert.deepEqual(state.weaponIds,['sword-wind',null]);
   state=await API.updateLoadout(db,'u1',{index:1,name:'練功配置',skillIds:['wind-slash']});
-  assert.equal(state.loadouts[1].name,'練功配置');
+  assert.equal(bookRecord(db).loadouts[1].name,'練功配置');
   assert.deepEqual(state.equipped,['wind-slash']);
   await assert.rejects(API.updateLoadout(db,'u1',{index:2,skillIds:['rock-fist']}),/尚未解鎖/);
   state=await API.updateLoadout(db,'u1',{index:1,apply:true});
-  assert.equal(state.activeLoadout,1);
-  assert.equal((await API.manualsState(db,'u1')).loadouts[1].name,'練功配置');
+  assert.equal(bookRecord(db).activeLoadout,1);
+  assert.equal(bookRecord(db).loadouts[1].name,'練功配置');
+  assert.equal((await API.manualsState(db,'u1')).loadouts[0].name,'流風靈劍');
   const battle=await API.start(db,'u1',{mode:'pve'},now);
   await assert.rejects(API.updateLoadout(db,'u1',{index:0,apply:true}),/戰鬥進行中/);
   await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:[]}),/戰鬥進行中/);
   await API.updateLoadout(db,'u1',{index:2,name:'備用'});
   await API.command(db,'u1',{roomId:battle.id,revision:battle.revision,requestId:'leave-preset-test-001',type:'leave'},now);
   state=await API.updateLoadout(db,'u1',{index:2,apply:true});
-  assert.deepEqual(state.equipped,[]);
-  assert.deepEqual((await API.manualsState(db,'u1')).loadouts[0].skillIds,['wind-slash']);
+  assert.deepEqual(bookRecord(db).equipped,[]);
+  assert.deepEqual(state.weaponIds,['sword-wind',null]);
+  assert.deepEqual(bookRecord(db).loadouts[0].skillIds,['wind-slash']);
 });
 
 test('PvP pairing and active matches block switching for both participants',async()=>{
@@ -599,9 +604,11 @@ test('manual training UI omits redundant preset instructions and power calculati
   const source=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/cultivation/manual-training-page.js'),'utf8');
   assert.doesNotMatch(source,/選擇配置後，在下方裝備或卸下已解鎖的技能/);
   assert.doesNotMatch(source,/manual-power-details|查看戰棋戰力計算/);
-  assert.match(source,/data-loadout-select/);
-  assert.match(source,/manual-slot-grid/);
-  assert.match(source,/manual-power-summary/);
+  const loadout=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/cultivation/manual-loadout-view.js'),'utf8');
+  assert.match(source,/renderManualLoadout\(current/);
+  assert.match(loadout,/manual-weapon-grid/);
+  assert.match(loadout,/data-manual-pick-slot/);
+  assert.doesNotMatch(source,/manual-power-summary/);
 });
 
 test('manual realm tiers are explicit and independent of original skill/possession requirements',()=>{

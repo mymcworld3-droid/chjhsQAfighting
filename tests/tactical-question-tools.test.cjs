@@ -83,6 +83,7 @@ test('background state synchronization preserves the current question; expiry cl
   const acceptSource=source.slice(source.indexOf('function accept('),source.indexOf('function applyProgress('));
   let hides=0,preserved;const ctx={state:{id:'room',mode:'pvp',revision:1,question:{id:'q'}},appliedOp:0,clockOffset:0,modalOpen:true,
     Manuals:{EXP_PER_KILL:1},uid:'u1',pairQuestions:[],pairChoices:[],
+    manualXpDelta:()=>null,CombatImpact:{phaseTransition:()=>null},sealInspector:null,preloadTacticalQuestions(){},
     $:()=>({}),applyProgress(){},hideModal(){hides++;ctx.modalOpen=false;},notice(){},paint(options){preserved=options.preserveModal;}};
   vm.createContext(ctx);vm.runInContext(acceptSource,ctx);
   ctx.accept({id:'room',mode:'pvp',revision:2,question:{id:'q'}},1);assert.equal(hides,0);assert.equal(preserved,true);

@@ -46,3 +46,19 @@ test('cancel and page departure dismiss the dialog without leaving it above othe
   f.run('trainingDialogOpen=true;syncTrainingDialog();closeTrainingDialog({restoreFocus:false});');
   assert.equal(f.run('trainingDialogOpen'),false);
 });
+test('upgrade celebrations share the native training dialog top layer and return outside when it closes',()=>{
+  const f=fixture();
+  f.run(`
+    setTimeout=()=>1;clearTimeout=()=>{};renderManualCelebration=()=>'<button>繼續修煉</button>';
+    const host={parentElement:null,replaceChildren(){this.innerHTML='';}};
+    const dialog={open:true,append(node){node.parentElement=this;}};
+    root={closest:()=>({}),append(node){node.parentElement=this;},querySelector(selector){
+      return selector==='[data-manual-celebration-host]'?host:dialog;
+    }};
+    showManualCelebration({kind:'manual-upgrade'});
+  `);
+  assert.equal(f.run('host.parentElement===dialog'),true);
+  assert.match(f.run('host.innerHTML'),/繼續修煉/);
+  f.run("dialog.open=false;showManualCelebration({kind:'discovery'});");
+  assert.equal(f.run('host.parentElement===root'),true);
+});

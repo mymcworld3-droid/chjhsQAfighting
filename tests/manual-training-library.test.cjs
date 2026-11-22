@@ -79,7 +79,7 @@ test('shelf card only displays owned book, current level and one stage',()=>{
 
 test('the selected book is visibly marked but not claimed as a combat loadout',()=>{
   const book=library[0],card=draw(book,book.id,[book.skills[0].id]);
-  assert.match(card,/展示中/);
+  assert.match(card,/修煉中/);
   assert.match(card,/aria-pressed="true"/);
   assert.doesNotMatch(card,/此配置已裝/);
   assert.doesNotMatch(card,/主修功法/);

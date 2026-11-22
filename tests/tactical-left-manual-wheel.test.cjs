@@ -48,6 +48,7 @@ test('attack choice is automatically replaced by equipped techniques and keeps t
   const factory=new Function('R',`
     let attackChoice='attack',selectedManualSkill='',action='move',selection=null;
     const myActor=()=>null;
+    const state={mode:'pvp'};
     ${ui.slice(start,end)}
     return {
       sync:syncEquippedAttack,
@@ -131,7 +132,8 @@ test('browser rules imported before the manual catalog still resolve the equippe
   const factory=new Function('R','hero',`
     let attackChoice='attack',selectedManualSkill='',action='move',selection=null;
     const myActor=()=>hero,myAction=()=>true,updateControls=()=>{};
-    const state={},busy=false,renderer=null,uid='u1';
+    const state={mode:'pvp'},busy=false,renderer=null,uid='u1';
+    const tutorialStep=()=>-1,tutorialEvent=()=>{},battlefieldMode=()=>action;
     ${ui.slice(start,end)}
     ${pick}
     selectWheel('attack-ring');

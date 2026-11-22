@@ -88,8 +88,8 @@ test('guide and target selection are safe in touch wheel and keyboard',()=>{
  assert(combat.includes('data-seal-guide-dismiss'));
  assert(combat.includes('data-seal-guide-help'));
  assert(combat.includes('localStorage.setItem(key'));
- assert(combat.includes("if(action==='move'&&selectedSeal?.active)"));
- assert(combat.includes("!(selectedSeal?.active&&action==='move')"));
+ assert(combat.includes("if((action==='move'||action==='sword-move')&&selectedSeal?.active)"));
+ assert(combat.includes("!(selectedSeal?.active&&(action==='move'||action==='sword-move'))"));
  assert(combat.includes('if(!error&&!affected.some(p=>'));
  assert(combat.includes("guidance.status!=='ready'"));
  assert(combat.includes('refreshSealTargetGuidance()'));

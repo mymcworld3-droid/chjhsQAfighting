@@ -104,6 +104,7 @@ test('PvE returns to the battlefield after each answer and can reopen charging u
     const uid='hero',epoch=0,clockOffset=0,root={hidden:false},renderer={setPaused(){}};
     const window={QATrialQuestion:study},document={querySelector:()=>null};
     const myActor=()=>state.actors[0],valid=()=>true,close=()=>{},hideModal=()=>{},paint=()=>{},$=()=>null;
+    const tutorialStep=()=>-1,tutorialEvent=()=>{};
     ${eligibility}${soloPage}
     return {canQuestion,soloBattleQuestion,root};
   `);

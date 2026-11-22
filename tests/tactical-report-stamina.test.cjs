@@ -47,7 +47,8 @@ test('confirmed wrong answers receive only missing stamina, with authoritative p
   const out=await report(f);assert.equal(out.staminaAdded,3);assert.equal(out.staminaRefunded,3);
   assert.equal(out.status,'confirmed');assert.equal(out.valid,true);
   assert.equal(out.compensated,true);assert.equal(out.goldAdded,0);
-  assert.equal(out.cultivationAdded,1);
+  assert.equal(out.cultivationRefund,1);assert.equal(out.cultivationBonus,1);
+  assert.equal(out.cultivationAdded,2);
   assert.equal(out.questionSkipped,false);assert.equal(out.battle.actors[0].stamina,6);
   assert.equal(out.battle.progress.stats.gold,0);assert.equal(out.battle.progress.stats.totalScore,31);
   assert.equal(raw(f).actors[0].questions,1);assert.equal(raw(f).actors[0].answered,1);

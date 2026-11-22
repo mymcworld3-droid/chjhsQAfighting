@@ -17,6 +17,9 @@ on:
       - 'tests/dungeon-enemy-combat.test.cjs'
       - 'tests/weapon-loadout.test.cjs'
       - 'tests/tactical-loadout-switch.test.cjs'
+      - 'tests/manual-*.test.cjs'
+      - 'tests/tactical-*.test.cjs'
+      - 'package.json'
       - '.github/workflows/weapon-regression.yml'
   workflow_dispatch:
 jobs:
@@ -29,9 +32,5 @@ jobs:
         with:
           node-version: '24'
       - run: npm ci --no-audit --no-fund
-      - name: Weapon security and equipment regression
-        run: >-
-          node --test tests/weapon-loadout.test.cjs tests/tactical-loadout-switch.test.cjs
-          tests/weapon-dungeons.test.cjs tests/weapon-dungeons-page.test.cjs
-          tests/dungeon-enemy-combat.test.cjs tests/dungeon-skill-combat.test.cjs
-          tests/tactical-impact-presentation.test.cjs
+      - name: Weapon, tactical, cultivation and dungeon regression
+        run: npm run test:battle

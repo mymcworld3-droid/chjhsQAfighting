@@ -999,7 +999,7 @@ async function main(){
         document.querySelector('[data-energy-number]')?.textContent==='8'&&
         document.querySelector('[data-quiz]')?.classList.contains('is-charge-ready'));
       // Seed a real owned sword during this SOLO trial. The API must update
-      // the live actor without a restart; the three weapon stations were empty.
+      // the live actor without a restart; both weapon stations were empty.
       db.records.set(service.MANUALS+'/u1',
         {version:2,school:'sword',books:{'sword-wind':{exp:0}},equipped:[]});
       await service.updateLoadout(db,'u1',{index:0,weaponId:'sword-wind'});
@@ -1008,7 +1008,8 @@ async function main(){
         !!document.querySelector('[data-weapon-choice="0"]'));
       assert.equal(await quick.locator('[data-weapon-choice="0"]').count(),1);
       await clickWheelSector(quick.locator('[data-weapon-choice="0"]'));
-      assert.equal(await quick.locator('[data-wheel-choice^="manual:"]').count(),3);
+      assert.equal(await quick.locator('[data-wheel-choice^="manual:"]').count(),1);
+      assert.equal(await quick.locator('[data-wheel-choice="manual:wind-step"]').count(),0);
       await clickWheelSector(quick.locator('[data-wheel-choice="manual:wind-slash"]'));
       await cell(quick,2,1);
       await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='6');

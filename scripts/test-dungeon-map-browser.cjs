@@ -897,18 +897,15 @@ async function main(){
     // three-skill submenu. Exercise both physical clip-path hit areas.
     const outerChoice=a.page.locator('[data-dm-wheel] [data-skill-id="weapon:0"]');
     await outerChoice.waitFor({timeout:9000});
-    const outerBounds=await outerChoice.boundingBox();
-    assert.ok(outerBounds);
-    const outerCenter=.381; // -135 degrees at radius 87.5%
-    await outerChoice.click({position:{
-      x:outerBounds.width*outerCenter,y:outerBounds.height*outerCenter}});
+    const clickSector=async locator=>locator.click({position:await locator.evaluate(button=>{
+      const label=button.querySelector('.tc-rw-sector-label');
+      return {x:button.clientWidth*parseFloat(label.style.left)/100,
+        y:button.clientHeight*parseFloat(label.style.top)/100};
+    })});
+    await clickSector(outerChoice);
     const guardChoice=a.page.locator('[data-dm-wheel] [data-skill-id="dragon-guard"]');
     await guardChoice.waitFor({timeout:9000});
-    const guardBounds=await guardChoice.boundingBox();
-    assert.ok(guardBounds);
-    const innerCenter=.568; // -135 degrees at radius 61.5%
-    await guardChoice.click({position:{
-      x:guardBounds.width*innerCenter,y:guardBounds.height*innerCenter}});
+    await clickSector(guardChoice);
     await a.page.waitForFunction(()=>
       document.querySelector('[data-dm-wheel] [data-skill-id="dragon-guard"]')
         ?.getAttribute('aria-pressed')==='true',null,{timeout:5000});

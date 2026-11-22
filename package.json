@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "node --test tests/*.test.cjs",
+    "test:battle": "node --test tests/dungeon-*.test.cjs tests/manual-*.test.cjs tests/tactical-*.test.cjs tests/weapon-*.test.cjs tests/gameplay-page.test.cjs",
     "start": "node server.js",
     "dev": "node server.js",
     "build:module-versions": "node scripts/build-module-versions.cjs",

@@ -233,6 +233,11 @@ function showManualCelebration(reward){
   const host=root?.querySelector('[data-manual-celebration-host]');
   if(!host)return;
   clearManualCelebration();
+  // Native dialogs occupy the browser top layer. A sibling overlay cannot
+  // cover one regardless of z-index, so keep its reward controls in that layer.
+  const dialog=root.querySelector('[data-manual-training-dialog]');
+  const parent=dialog?.open?dialog:root;
+  if(host.parentElement!==parent)parent.append(host);
   host.innerHTML=renderManualCelebration(reward,{
     esc,bookArt,skillArt,findSkill:skillDetails
   });

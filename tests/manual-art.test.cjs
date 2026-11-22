@@ -31,8 +31,12 @@ test('all thirteen unique skills resolve to uploaded paintings, including shared
 test('manual artwork is wired to library, equipped slots and combat action UI',()=>{
   const training=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-training-page.js'),'utf8');
   const combat=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
-  for(const token of ['bookArt(book.id)','skillArt(skill)','manual-slot-art','manual-skill-art'])
-    assert.ok(training.includes(token),token);
+  const views=['manual-hero-view.js','manual-library-view.js','manual-loadout-view.js','manual-skill-detail-view.js']
+    .map(name=>fs.readFileSync(path.join(__dirname,'../public/cultivation',name),'utf8')).join('\n');
+  for(const token of ['bookArt(book.id)','skillArt(skill)','manual-slot-art','manual-weapon-art'])
+    assert.ok(views.includes(token),token);
+  assert.match(training,/renderManualHero\(current/);
+  assert.match(training,/renderManualLoadout\(current/);
   for(const token of ['skillArt(option.skill)','showPvpSkill','skillArt(shown)'])
     assert.ok(combat.includes(token),token);
 });

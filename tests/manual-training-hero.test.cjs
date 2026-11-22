@@ -138,7 +138,7 @@ test('Lv10 is a third-technique milestone, not max level; Lv20 is the new cap',(
   const mid=draw([book]);
   assert.match(mid.html,/Lv. 10/);
   assert.doesNotMatch(mid.html,/Lv. 10 \/ 20|升至 Lv. 11|data-manual-upgrade/);
-  assert.match(mid.html,/Lv.10 後需以功法技能擊殺靈獸累積 EXP/);
+  assert.match(mid.html,/Lv.10 後需以武器技能擊殺靈獸累積 EXP/);
   assert.match(mid.html,/元嬰功法/);
   assert.match(mid.html,/manual-hero-tier-badge is-tier-nascent/);
   assert.match(mid.html,/本功法攻擊 \+10/);
@@ -166,5 +166,5 @@ test('Lv14 shows one uncluttered level, and never offers paid upgrading or extra
   assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,10);
   assert.equal((html.match(/is-milestone-(1|5|10)/g)||[]).length,3);
   assert.match(html,/style="width:100\.00%"/);
-  assert.match(html,/Lv.10 後需以功法技能擊殺靈獸累積 EXP/);
+  assert.match(html,/Lv.10 後需以武器技能擊殺靈獸累積 EXP/);
 });

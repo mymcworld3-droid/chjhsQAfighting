@@ -41,7 +41,7 @@ test('the same next level at stage 5 predicts 35 XP per kill and one kill',()=>{
   assert.equal(g.xpPerKill,Catalog.expForBeast(5));
   assert.equal(g.estimatedKills,1);
   assert.match(renderManualExpedition(g,opts),/\+35/);
-  assert.match(renderManualExpedition(g,opts),/皆由此功法完成擊殺估算/);
+  assert.match(renderManualExpedition(g,opts),/皆由此武器完成擊殺估算/);
 });
 
 test('stage 10 uses 55 EXP and stage 20 uses 85, without pretending users can select stage',()=>{
@@ -52,7 +52,7 @@ test('stage 10 uses 55 EXP and stage 20 uses 85, without pretending users can se
 });
 
 test('wrong active loadout cannot be mistaken for having the selected manual equipped',()=>{
-  const s=state(250);
+  const s=state(250);delete s.weaponIds;
   s.loadouts=[{name:'劍法',skillIds:['wind-slash']},
     {name:'備用',skillIds:[]}];
   s.activeLoadout=1;
@@ -61,12 +61,12 @@ test('wrong active loadout cannot be mistaken for having the selected manual equ
   assert.equal(g.action,'loadout');
   assert.equal(g.activeLoadoutName,'備用');
   const html=renderManualExpedition(g,opts);
-  assert.match(html,/前往配置招式/);
+  assert.match(html,/前往裝備武器/);
   assert.doesNotMatch(html,/data-manual-expedition-action="battle"/);
 });
 
 test('a correct active loadout remains ready even if a different preset exists',()=>{
-  const s=state(250,{activeLoadout:0,loadouts:[
+  const s=state(250,{weaponIds:undefined,activeLoadout:0,loadouts:[
     {name:'主戰劍修',skillIds:['wind-slash']},
     {name:'另一組',skillIds:[]}
   ]});
@@ -114,7 +114,7 @@ test('all skills learned and level 10 avoids fabricated next goal',()=>{
 });
 
 test('markup escapes untrusted names and rendering never changes server data',()=>{
-  const s=state(250,{trialStage:5});
+  const s=state(250,{trialStage:5});delete s.weaponIds;
   s.library[0].name='<svg onload=alert(1)>';
   s.loadouts=[{name:'<img src=x onerror=alert(1)>',skillIds:['wind-slash']}];
   s.activeLoadout=0;
@@ -154,7 +154,7 @@ test('the compact trial strip has one CTA, no repeated book cover or next-goal p
   assert.equal((html.match(/data-manual-expedition-action=/g)||[]).length,1);
   assert.equal((html.match(/manual-expedition-more/g)||[]).length,1);
   assert.match(html,/第 1 關/);
-  assert.match(html,/功法擊殺/);
+  assert.match(html,/武器擊殺/);
   assert.doesNotMatch(html,/manual-expedition-book-copy/);
   assert.doesNotMatch(html,/manual-expedition-cover/);
   assert.doesNotMatch(html,/manual-expedition-main/);
@@ -167,5 +167,5 @@ test('fully maxed Lv20 books with all three skills learned have no future level 
   const g=nextManualExpedition(s,'sword-wind',Catalog);
   assert.equal(g.targetLevel,null);
   assert.equal(g.estimatedKills,null);
-  assert.match(g.nextGoal,/功法已達 Lv. 20/);
+  assert.match(g.nextGoal,/武器已達 Lv. 20/);
 });

@@ -26,5 +26,5 @@ test('skill picture and name + cost use one horizontal, size-limited sector labe
 test('both landscape and portrait limit art size while preserving selected marker labels',()=>{
   assert.match(css,/@media\(orientation:portrait\)\{[\s\S]*?width:14px;height:14px;max-width:14px;max-height:14px/);
   assert.match(script,/wheelText\(detailThumb,targetName,targetCost,attacking\?skillArt\(shown\):''\)/);
-  assert.match(script,/wheelText\(button\.firstElementChild,option\.name,price,skillArt\(option\.skill\)\)/);
+  assert.match(script,/wheelText\(button\.firstElementChild,empowered\?'✦ '\+option\.name:option\.name,price,skillArt\(option\.skill\)\)/);
 });
