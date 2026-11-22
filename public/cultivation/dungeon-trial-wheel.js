@@ -1,3 +1,4 @@
+import {bookArt,skillArt} from './manual-art.js';
 import { dungeonEnergySegments } from './dungeon-quarter-controls.js';
 import { weaponRailOptions, railAngle, syncRail, syncRailLabels, installWheelRails } from './tactical-wheel-rails.js';
 
@@ -164,6 +165,9 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
       button.style.clipPath=dungeonWheelWedge(-180+90*i/count+.6,-180+90*(i+1)/count-.6,99.5,75.5);
       const label=document.createElement('span');label.className='tc-rw-sector-label';
       setMarker(label,railAngle(i,count),87.5);
+      const artwork=entry.slot!==undefined?bookArt(weaponIds[entry.slot]):'';
+      if(artwork){const image=document.createElement('img');
+        image.className='tc-rw-art';image.src=artwork;image.alt='';image.decoding='async';image.draggable=false;label.append(image);}
       const title=document.createElement('strong');title.textContent=entry.name;
       label.append(title);
       button.append(label);
@@ -192,7 +196,11 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
         -180+90*i/count+.6,-180+90*(i+1)/count-.6,73.5,49.5);
       const label=document.createElement('span');label.className='tc-rw-sector-label';
       setMarker(label,railAngle(i,count),61.5);
-      label.innerHTML='<strong></strong><small class="tc-rw-price"></small>';
+      const artwork=skillArt(item.value);
+      if(artwork){const image=document.createElement('img');
+        image.className='tc-rw-art';image.src=artwork;image.alt='';image.decoding='async';image.draggable=false;label.append(image);}
+      const title=document.createElement('strong'),price=document.createElement('small');
+      price.className='tc-rw-price';label.append(title,price);
       button.append(label);return button;
     }));
   }

@@ -36,7 +36,7 @@
   overflow:visible;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-guides path{
-  fill:none;stroke:#d6c38c88;stroke-width:.7;
+  fill:none;stroke:#c6b68d66;stroke-width:.45;
 }
 /* Recessed rails and independent annular thumbs never intercept a tap. */
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider{
@@ -49,11 +49,11 @@
   transition:transform .22s cubic-bezier(.22,.8,.28,1);
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider path{
-  fill:#44765c;stroke:#e5d7a2;stroke-width:.65;
-  filter:drop-shadow(0 0 1px #a3dfb44d);
+  fill:#756346;stroke:#e6d09b;stroke-width:.55;
+  filter:drop-shadow(0 1px 2px #090e0b66);
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider[data-rail="inner"] path{
-  fill:#386e65;stroke:#b8e2cc;
+  fill:#365a41;stroke:#b8d4ae;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider.is-dragging g{transition:none}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rightwheel-v3.is-dragging{cursor:grabbing}
@@ -73,7 +73,7 @@
   border:none!important;border-radius:0!important;
   box-shadow:none!important;
   pointer-events:auto;cursor:grab;
-  color:#eee9da!important;text-shadow:0 1px 3px #0b140fcc;
+  color:#e6d9b7!important;text-shadow:0 1px 2px #101812;
   -webkit-tap-highlight-color:transparent;
   touch-action:none;
   transition:background-color .13s ease,filter .13s ease;
@@ -121,8 +121,8 @@
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label strong{
   display:block;font-family:"Noto Serif TC","Songti TC",serif;
-  font-size:clamp(14px,6cqi,20px);
-  font-weight:750;white-space:nowrap;
+  font-size:clamp(12px,5.2cqi,17px);
+  font-weight:600;white-space:nowrap;
   color:inherit;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label small{
@@ -155,7 +155,7 @@
   left:78%;top:78%;width:23%;
   transform:translate(-50%,-50%);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  opacity:1!important;font-size:clamp(14px,6.8cqi,23px);
+  opacity:1!important;font-size:clamp(13px,5.5cqi,19px);
   line-height:1.35;letter-spacing:.06em;white-space:nowrap;
   color:#e9d6af;
 }
@@ -199,7 +199,7 @@
     width:28%;
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label strong{
-    font-size:clamp(13px,7.5cqi,16px);
+    font-size:clamp(12px,6.4cqi,14px);
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label small{
     display:none;
@@ -208,13 +208,13 @@
     width:24%;gap:2px;
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label strong{
-    max-width:2em;font-size:clamp(12px,6.8cqi,15px);
+    max-width:3em;font-size:clamp(11px,5.9cqi,13px);
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-price{
     font-size:clamp(10px,5.6cqi,12px);
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector-end>span{
-    font-size:clamp(14px,8cqi,18px);
+    font-size:clamp(13px,6.8cqi,16px);
   }
 }
 @media(prefers-reduced-motion:reduce){
@@ -250,7 +250,7 @@
 /* Keep tap geometry strict while allowing complete, readable labels. */
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer{position:absolute;inset:0;z-index:4;pointer-events:none}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector>.tc-rw-sector-label{opacity:0}
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label{pointer-events:none;color:#eee9da;text-shadow:0 1px 3px #0b140f}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label{pointer-events:none;color:#e6d9b7;text-shadow:0 1px 2px #101812}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-selected{color:#fff4cc}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-disabled{opacity:.48}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-unavailable .tc-rw-price{color:#f1bb94}
@@ -258,4 +258,27 @@
 /* Weapon names remain readable on phones where the old subtitle was hidden. */
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label strong{
   max-width:4em;white-space:normal;overflow-wrap:anywhere;text-wrap:balance;
+}
+
+/* Original ink-green dial with restrained gold and jade selections. */
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action{
+  background:radial-gradient(circle at 100% 100%,#111b16 0%,#1d2a21 50%,#304035 100%);
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label{gap:3px;line-height:1.2}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label i{display:none}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-art{
+  display:block;width:clamp(17px,8cqi,27px);height:clamp(17px,8cqi,27px);
+  flex:none;object-fit:cover;border:1px solid #c6b68d88;border-radius:5px;
+  box-shadow:0 1px 4px #080e0b66;pointer-events:none;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-art{
+  width:clamp(15px,6cqi,21px);height:clamp(15px,6cqi,21px);
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label strong{letter-spacing:.025em}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-selected{color:#fff2d1}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-selected .tc-rw-art{border-color:#ecdbab}
+@media(orientation:portrait){
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label{gap:2px}
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-art{display:none}
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-price{font-size:clamp(9px,4.7cqi,11px)}
 }

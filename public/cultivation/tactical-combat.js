@@ -574,8 +574,8 @@ function renderModernWeaponWheel(hero,locked,mine){
       const label=document.createElement('span');
       label.className='tc-rw-sector-label';
       wheelMarker(label,railAngle(i,count),87.5);
-      const art=i===0?'<i class="fa-solid fa-person-walking" aria-hidden="true"></i>':
-        '<i class="fa-solid fa-khanda" aria-hidden="true"></i>';
+      const artwork=entry.slot!==undefined?bookArt(equipped[entry.slot]):'';
+      const art=artwork?'<img class="tc-rw-art" src="'+esc(artwork)+'" alt="" decoding="async" draggable="false">':'';
       label.innerHTML=art+'<strong>'+esc(entry.name)+'</strong>';
       button.append(label);
       button.title=i===0?'移動：選擇角色或飛劍':
@@ -617,7 +617,9 @@ function renderModernWeaponWheel(hero,locked,mine){
       const label=document.createElement('span');
       label.className='tc-rw-sector-label';
       wheelMarker(label,railAngle(i,count),61.5);
-      label.innerHTML='<strong>'+esc(entry.name)+'</strong><small class="tc-rw-price"></small>';
+      const artwork=entry.skill?skillArt(entry.skill):'';
+      label.innerHTML=(artwork?'<img class="tc-rw-art" src="'+esc(artwork)+'" alt="" decoding="async" draggable="false">':'')+
+        '<strong>'+esc(entry.name)+'</strong><small class="tc-rw-price"></small>';
       button.append(label);
       button.setAttribute('aria-keyshortcuts','ArrowUp ArrowDown ArrowLeft ArrowRight Home End');
       return button;
