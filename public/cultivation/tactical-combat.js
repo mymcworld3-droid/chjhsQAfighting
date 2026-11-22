@@ -540,9 +540,13 @@ function renderModernWeaponWheel(hero,locked,mine){
     wheel=document.createElement('div');
     wheel.className='tc-rightwheel-v3';
     wheel.innerHTML='<svg class="tc-rw-guides" viewBox="0 0 100 100" aria-hidden="true" focusable="false">'+
-      '<path d="M 100 1 A 99 99 0 0 0 1 100" />'+
-      '<path d="M 100 25 A 75 75 0 0 0 25 100" />'+
-      '<path d="M 100 51 A 49 49 0 0 0 51 100" /></svg>'+
+      '<path d="M 100 0 A 100 100 0 0 0 0 100"/>'+
+      '<path d="M 100 26 A 74 74 0 0 0 26 100"/>'+
+      '<path d="M 100 51 A 49 49 0 0 0 51 100"/>'+
+      '<path class="tc-wheel-lane-guide" d="M 100 5 A 95 95 0 0 0 5 100"/>'+
+      '<path class="tc-wheel-lane-guide" d="M 100 21 A 79 79 0 0 0 21 100"/>'+
+      '<path class="tc-wheel-lane-guide" d="M 100 30 A 70 70 0 0 0 30 100"/>'+
+      '<path class="tc-wheel-lane-guide" d="M 100 46 A 54 54 0 0 0 46 100"/></svg>'+
       ['outer','inner'].map(kind=>'<svg class="tc-rw-slider" data-rail="'+kind+'" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><g><path /></g></svg>').join('')+
       '<div class="tc-rw-outer" role="group" aria-label="右圈外圈行動"></div>'+
       '<div class="tc-rw-inner" role="group" aria-label="右圈內圈選項"></div>'+

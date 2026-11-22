@@ -16,6 +16,7 @@
   background:radial-gradient(circle at 100% 100%,#101a16 0%,#1e3027 58%,#32463a 100%);
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-action-tabs,
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-action-lines,
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-wheel-options,
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-wheel-slider,
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-wheel-marker,
@@ -31,15 +32,15 @@
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-guides{
   position:absolute;inset:0;width:100%;height:100%;
-  pointer-events:none;z-index:1;
+  pointer-events:none;z-index:2;
   overflow:visible;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-guides path{
-  fill:none;stroke:#d6c38c88;stroke-width:.7;
+  fill:none;stroke:#b3a37c;stroke-width:.7;opacity:.55;
 }
 /* Recessed rails and independent annular thumbs never intercept a tap. */
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider{
-  position:absolute;inset:0;width:100%;height:100%;z-index:2;
+  position:absolute;inset:0;width:100%;height:100%;z-index:3;
   pointer-events:none;overflow:visible;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider[hidden]{display:none!important}
@@ -60,7 +61,7 @@
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-sector-end>span b{font:inherit}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-outer,
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-inner{
-  position:absolute;inset:0;z-index:3;pointer-events:none;
+  position:absolute;inset:0;z-index:1;pointer-events:none;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-inner[hidden]{
   display:none!important;
@@ -462,7 +463,6 @@
     max-height:36px;
   }
 }
-#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-guides{display:none}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label{font-family:"Noto Serif TC","Songti TC",serif;font-weight:600;font-size:clamp(12px,1.65vw,24px);color:#ede5cf;text-shadow:0 1px 3px #0a1711}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label strong{font:inherit}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label i{display:none}
@@ -479,3 +479,7 @@
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector-end>span{font-size:clamp(14px,1.8vw,24px);font-weight:600;letter-spacing:.08em}
 @media(orientation:portrait){#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector-end>span{font-size:clamp(14px,3.5vw,20px)}}
+
+/* Paint tracks and thumbs over the opaque hit sectors, below readable labels. */
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-guides{display:block}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-guides .tc-wheel-lane-guide{stroke:#10251a;stroke-width:1;opacity:.55}
