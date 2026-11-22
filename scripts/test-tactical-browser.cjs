@@ -107,7 +107,18 @@ async function main(){
           window.__wheelProbe.push({type,target:event.target.tagName});
         },{once:true});
       });
-      await locator.click({position});
+      // Like the map-cell helper, map iframe-local coordinates through the
+      // outer game-stage scale. Locator.click can retain stale frame offsets
+      // after the camera-focused iframe is resized to another orientation.
+      const local=await locator.evaluate(button=>{
+        const rect=button.getBoundingClientRect(),label=button.querySelector('.tc-rw-sector-label');
+        return {x:rect.left+rect.width*parseFloat(label.style.left)/100,
+          y:rect.top+rect.height*parseFloat(label.style.top)/100,disabled:button.disabled};
+      });
+      assert.equal(local.disabled,false);
+      const page=locator.page(),frame=await page.locator('#game-frame').boundingBox();
+      const scale=await page.evaluate(()=>window.QAGameStage.getState().scale);
+      await page.mouse.click(frame.x+local.x*scale,frame.y+local.y*scale);
       const selected=await locator.evaluate(button=>({weapon:button.dataset.weaponChoice,pressed:button.getAttribute('aria-pressed'),
         choices:[...document.querySelectorAll('[data-wheel-choice]')].map(node=>node.dataset.wheelChoice),
         inert:!!button.closest('[inert]'),replaced:button!==window.__wheelProbeNode,
