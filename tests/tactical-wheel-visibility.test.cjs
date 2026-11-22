@@ -42,3 +42,28 @@ for(const name of ['tactical-combat.js','dungeon-trial-wheel.js']){
       assert(svg.includes('A '+radius+' '+radius),'missing inset lane edge '+radius);
   });
 }
+
+test('actual cloned label overlays never acquire sector classes or their opaque backgrounds',()=>{
+  const source=read('cultivation/tactical-wheel-rails.js');
+  const layers=[];
+  const element=()=>({className:'',dataset:{},style:{},children:[],innerHTML:'skill + picture',
+    setAttribute(){},append(child){this.children.push(child);},
+    get childElementCount(){return this.children.length;},
+    classList:{toggle(){}}});
+  const document={createElement:element};
+  const sync=new Function('document',source.replace(/^export /gm,'')+';return syncRailLabels;')(document);
+  const label=element();label.cloneNode=element;
+  const button={disabled:false,querySelector:()=>label,getAttribute:()=> 'true',classList:{contains:()=>false}};
+  const wheel={querySelector:()=>null,querySelectorAll:()=>[button],append:layer=>layers.push(layer)};
+  for(const kind of ['inner','outer'])sync(wheel,kind);
+  assert.equal(layers.length,2);
+  for(const [i,kind]of ['inner','outer'].entries()){
+    const classes=layers[i].className.split(/\s+/);
+    assert(classes.includes('tc-rw-label-layer--'+kind));
+    assert(!classes.some(name=>name.startsWith('tc-rw-sector')),
+      'a full-dial label overlay must not match the opaque button or inner-sector rules');
+    assert.equal(layers[i].children.length,1,'skill picture/text still cloned');
+  }
+  for(const css of ['styles/tactical-quarter-weapons.css','styles/dungeon-trial-wheel.css'])
+    assert.doesNotMatch(read(css),/\.tc-rw-label-layer\.tc-rw-sector--/);
+});

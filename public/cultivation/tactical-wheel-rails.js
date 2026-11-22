@@ -42,7 +42,7 @@ export function syncRailLabels(wheel,kind){
   let layer=wheel.querySelector('[data-rail-labels="'+kind+'"]');
   if(!layer){
     layer=document.createElement('div');
-    layer.className='tc-rw-label-layer tc-rw-sector--'+kind;
+    layer.className='tc-rw-label-layer tc-rw-label-layer--'+kind;
     layer.dataset.railLabels=kind;layer.setAttribute('aria-hidden','true');
     wheel.append(layer);
   }
