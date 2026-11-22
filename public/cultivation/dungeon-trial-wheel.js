@@ -1,4 +1,5 @@
 import { dungeonEnergySegments } from './dungeon-quarter-controls.js';
+import { railAngle, syncRail, syncRailLabels, installWheelRails } from './tactical-wheel-rails.js';
 
 // This is the same two-ring control geometry used by 問道試煉.
 // Its actions are supplied by the dungeon view, never by the turn-based engine.
@@ -128,6 +129,7 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
   const detail=slot<0?moveOptions:book?options:[];
   wheel.classList.add('dm-modern-weapon-wheel');
   wheel.dataset.mode=slot<0?'move':'weapon';
+  wheel.dataset.railLocked=String(locked);
   wheel.querySelector('[data-dm="wheel-attack"]')?.setAttribute('hidden','');
   wheel.querySelector('[data-dm="wheel-move"]')?.setAttribute('hidden','');
   let component=wheel.querySelector('.tc-rightwheel-v3');
@@ -138,6 +140,7 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
       '<path d="M 100 1 A 99 99 0 0 0 1 100"/>'+
       '<path d="M 100 25 A 75 75 0 0 0 25 100"/>'+
       '<path d="M 100 51 A 49 49 0 0 0 51 100"/></svg>'+
+      ['outer','inner'].map(kind=>'<svg class="tc-rw-slider" data-rail="'+kind+'" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><g><path /></g></svg>').join('')+
       '<div class="tc-rw-outer" role="group" aria-label="右圈外圈行動"></div>'+
       '<div class="tc-rw-inner" role="group" aria-label="右圈內圈選項"></div>'+
       '<span class="tc-rw-empty" role="status" hidden></span>';
@@ -155,9 +158,9 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
       button.type='button';button.className='tc-rw-sector tc-rw-sector--outer';
       button.dataset.dm='wheel-choice';
       button.dataset.skillId=i===0?'move':'weapon:'+(i-1);
-      button.style.clipPath=dungeonWheelWedge(-90-30*i-1.1,-120-30*i+1.1,99.5,75.5);
+      button.style.clipPath=dungeonWheelWedge(-180+30*i+.6,-150+30*i-.6,99.5,75.5);
       const label=document.createElement('span');label.className='tc-rw-sector-label';
-      setMarker(label,dungeonWheelAngle(i,3),87.5);
+      setMarker(label,railAngle(i,3),87.5);
       const title=i===0?'移動':i===1?'武器一':'武器二';
       label.innerHTML='<strong>'+title+'</strong>'+
         (i?'<small>'+(weapon?.name||'未裝備')+'</small>':'');
@@ -185,9 +188,9 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
       button.type='button';button.className='tc-rw-sector tc-rw-sector--inner';
       button.dataset.dm='wheel-choice';button.dataset.skillId=item.value;
       button.style.clipPath=dungeonWheelWedge(
-        -90-90*i/count-1.3,-90-90*(i+1)/count+1.3,73.5,49.5);
+        -180+90*i/count+.6,-180+90*(i+1)/count-.6,73.5,49.5);
       const label=document.createElement('span');label.className='tc-rw-sector-label';
-      setMarker(label,dungeonWheelAngle(i,count),61.5);
+      setMarker(label,railAngle(i,count),61.5);
       label.innerHTML='<strong></strong><small class="tc-rw-price"></small>';
       button.append(label);return button;
     }));
@@ -206,6 +209,10 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
     button.title=item.locked?'尚未符合武器等級或境界條件':item.name+' · '+price;
     button.setAttribute('aria-label',button.title);
   }
+  syncRail(component.querySelector('[data-rail="outer"]'),slot+1,3);
+  syncRail(component.querySelector('[data-rail="inner"]'),
+    detail.findIndex(item=>item.value===selected),detail.length);
+  syncRailLabels(component,'outer');syncRailLabels(component,'inner');
   empty.hidden=slot<0||!!book;
   if(!empty.hidden)empty.textContent='武器'+(slot+1)+'尚未裝備';
   wheel.classList.toggle('has-focus',focusCharges>0);
@@ -290,6 +297,11 @@ export function renderDungeonTrialWheel(wheel,{mode='attack',options=[],moveOpti
   return selection.value;
 }
 export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick}={}){
+  installWheelRails(wheel,{
+    select:choice=>select?.(choice),restore:()=>refresh?.(),
+    isLocked:()=>!wheel.classList.contains('dm-modern-weapon-wheel')||wheel.dataset.railLocked==='true',
+    suppressClick:()=>ignoreClick?.()
+  });
   let pointer=null,dragClickUntil=0;
   const angle=e=>{
     const rect=wheel.getBoundingClientRect();
@@ -380,15 +392,7 @@ export function bindDungeonTrialWheel(wheel,{select,refresh,ignoreClick}={}){
   wheel.addEventListener('keydown',e=>{
     const button=e.target.closest('button[data-wheel-action],button[data-wheel-choice],button.tc-rw-sector');
     if(!button||!['ArrowLeft','ArrowRight'].includes(e.key))return;
-    if(wheel.classList.contains('dm-modern-weapon-wheel')){
-      const container=button.closest('.tc-rw-outer,.tc-rw-inner');
-      const group=container?[...container.querySelectorAll('button.tc-rw-sector:not(:disabled)')]:[];
-      if(!group.length)return;
-      e.preventDefault();
-      const index=group.indexOf(button);
-      group[(index+(e.key==='ArrowRight'?1:-1)+group.length)%group.length].focus();
-      return;
-    }
+    if(wheel.classList.contains('dm-modern-weapon-wheel'))return;
     e.preventDefault();
     const upper=e.key==='ArrowRight';
     if(button.dataset.wheelAction){

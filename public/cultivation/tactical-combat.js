@@ -14,6 +14,7 @@ import {BeastInspector} from './tactical-beast-inspector.js?v=20261118-phase4-fo
 import {SealInspector} from './tactical-seal-inspector.js?v=20261119-seal-inspector-v2';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
+import {railAngle,syncRail,syncRailLabels,installWheelRails} from './tactical-wheel-rails.js';
 
 const R=globalThis.QATactical;
 const SealTargets=globalThis.QATacticalSealTargeting;
@@ -301,7 +302,7 @@ function ensure(){
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
   if(!document.getElementById('tactical-quarter-weapons-style')){
     const link=document.createElement('link');link.id='tactical-quarter-weapons-style';
-    link.rel='stylesheet';link.href='/styles/tactical-quarter-weapons.css?v=20261121-rightwheel-v4';
+    link.rel='stylesheet';link.href='/styles/tactical-quarter-weapons.css?v=20261122-rightwheel-rails-v5';
     document.head.append(link);
   }
   if(!document.getElementById('tactical-focus-effects-style')){
@@ -512,8 +513,7 @@ function leftWheelWedge(start,end,outer,inner){
   }
   return 'polygon('+points.map(p=>p[0]+'% '+p[1]+'%').join(',')+')';
 }
-// The weapon-era wheel is an independent two-level component. The legacy
-// slider wheel remains mounted only for compatibility with old game states.
+// Independent weapon rails: movement and the first skill sit nearest the bottom.
 function renderModernWeaponWheel(hero,locked,mine){
   const ring=$('.tc-quarter-action');
   if(!ring)return;
@@ -531,6 +531,7 @@ function renderModernWeaponWheel(hero,locked,mine){
   ring.querySelector('[data-wheel-action="attack-ring"]')?.setAttribute('hidden','');
   ring.querySelector('[data-wheel-action="move"]')?.setAttribute('hidden','');
   root.dataset.rightWheel='two-weapons-v4';
+  ring.dataset.interaction='sliding-rails';
 
   let wheel=ring.querySelector('.tc-rightwheel-v3');
   if(!wheel){
@@ -540,10 +541,16 @@ function renderModernWeaponWheel(hero,locked,mine){
       '<path d="M 100 1 A 99 99 0 0 0 1 100" />'+
       '<path d="M 100 25 A 75 75 0 0 0 25 100" />'+
       '<path d="M 100 51 A 49 49 0 0 0 51 100" /></svg>'+
+      ['outer','inner'].map(kind=>'<svg class="tc-rw-slider" data-rail="'+kind+'" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><g><path /></g></svg>').join('')+
       '<div class="tc-rw-outer" role="group" aria-label="右圈外圈行動"></div>'+
       '<div class="tc-rw-inner" role="group" aria-label="右圈內圈選項"></div>'+
       '<span class="tc-rw-empty" role="status" hidden></span>';
     ring.append(wheel);
+    installWheelRails(wheel,{
+      select:selectWheel,restore:updateControls,
+      isLocked:()=>busy||renderer?.isAnimating||!myAction()||modalOpen,
+      suppressClick:()=>{wheelIgnoreClickUntil=Date.now()+350;}
+    });
   }
   const outer=wheel.querySelector('.tc-rw-outer');
   const inner=wheel.querySelector('.tc-rw-inner');
@@ -556,12 +563,12 @@ function renderModernWeaponWheel(hero,locked,mine){
       const button=document.createElement('button');
       button.type='button';
       button.className='tc-rw-sector tc-rw-sector--outer';
-      button.style.clipPath=wheelWedge(-90-30*i-1.1,-120-30*i+1.1,99.5,75.5);
+      button.style.clipPath=wheelWedge(-180+30*i+.6,-150+30*i-.6,99.5,75.5);
       if(i===0)button.dataset.wheelAction='move-menu';
       else button.dataset.weaponChoice=String(i-1);
       const label=document.createElement('span');
       label.className='tc-rw-sector-label';
-      wheelMarker(label,-105-30*i,87.5);
+      wheelMarker(label,railAngle(i,3),87.5);
       const heading=i===0?'移動':i===1?'武器一':'武器二';
       const art=i===0?'<i class="fa-solid fa-person-walking" aria-hidden="true"></i>':
         '<i class="fa-solid fa-khanda" aria-hidden="true"></i>';
@@ -571,6 +578,7 @@ function renderModernWeaponWheel(hero,locked,mine){
       button.title=i===0?'移動：選擇角色或飛劍':
         heading+'：'+(weapon?.name||'尚未裝備');
       button.setAttribute('aria-label',button.title);
+      button.setAttribute('aria-keyshortcuts','ArrowUp ArrowDown ArrowLeft ArrowRight Home End');
       return button;
     });
     outer.replaceChildren(...sectors);
@@ -603,12 +611,14 @@ function renderModernWeaponWheel(hero,locked,mine){
       button.className='tc-rw-sector tc-rw-sector--inner';
       button.dataset.wheelChoice=entry.value;
       button.style.clipPath=wheelWedge(
-        -90-90*i/count-1.3,-90-90*(i+1)/count+1.3,73.5,49.5);
+        -180+90*i/count+.6,-180+90*(i+1)/count-.6,73.5,49.5);
       const label=document.createElement('span');
       label.className='tc-rw-sector-label';
-      wheelMarker(label,detailAngle(i,count),61.5);
+      wheelMarker(label,railAngle(i,count),61.5);
       label.innerHTML='<strong>'+esc(entry.name)+'</strong><small class="tc-rw-price"></small>';
-      button.append(label);return button;
+      button.append(label);
+      button.setAttribute('aria-keyshortcuts','ArrowUp ArrowDown ArrowLeft ArrowRight Home End');
+      return button;
     }));
   }
   [...inner.children].forEach((button,i)=>{
@@ -618,20 +628,29 @@ function renderModernWeaponWheel(hero,locked,mine){
     const price=entry.skill?(unlocked?cost+' 體力':'未解鎖'):entry.cost;
     const selected=entry.skill?action==='manual'&&selectedManualSkill===entry.skill.id:
       entry.value==='player'?action==='move':action==='sword-move';
+    const unavailable=entry.skill&&unlocked?(hero.attacks>=R.attackLimit(hero)?'本回合出手次數已滿':
+      hero.actions>=R.LIMITS.actions?'本回合行動次數已滿':
+      cost>hero.stamina?'體力不足，還需要 '+(cost-hero.stamina)+' 點':''):'';
     button.disabled=!mine||locked||!unlocked;
     button.classList.toggle('is-locked',!unlocked);
+    button.classList.toggle('is-unavailable',!!unavailable);
     button.setAttribute('aria-pressed',String(selected));
     button.querySelector('.tc-rw-price').textContent=price;
-    button.title=entry.skill?(unlocked?entry.name+' · '+price:
+    button.title=entry.skill?(unlocked?entry.name+' · '+price+(unavailable?' · '+unavailable:''):
       entry.name+'：尚未達到武器 Lv.'+entry.skill.levelRequired+' 或境界門檻'):
       entry.name+' · '+price;
     button.setAttribute('aria-label',button.title);
   });
+  syncRail(wheel.querySelector('[data-rail="outer"]'),selectedWeaponSlot+1,3);
+  const detailSelected=[...inner.children].findIndex(button=>button.getAttribute('aria-pressed')==='true');
+  syncRail(wheel.querySelector('[data-rail="inner"]'),detailSelected,detail.length);
+  syncRailLabels(wheel,'outer');syncRailLabels(wheel,'inner');
   empty.hidden=selectedWeaponSlot<0||!!book;
   if(!empty.hidden)empty.textContent='武器'+(selectedWeaponSlot+1)+'尚未裝備';
   ring.setAttribute('aria-label',selectedWeaponSlot<0?'右圈：移動，選擇內圈移動對象':
     book?'右圈：武器'+(selectedWeaponSlot+1)+'，'+book.name+'，選擇內圈技能':
       '右圈：武器'+(selectedWeaponSlot+1)+'尚未裝備');
+  ring.setAttribute('aria-description','兩圈皆可點選或沿滑軌拖曳，放開後選定；移動與第一招位於下方。');
 }
 function wheelWedge(start,end,outer,inner){
   const points=[];
@@ -984,7 +1003,8 @@ function buildGame(){
     move.innerHTML='<span>移動</span>';
     end.className='tc-sector tc-sector-end';
     end.style.clipPath=wheelWedge(-90,-180,49,0);
-    end.innerHTML='<span>結束\n回合</span>';
+    end.innerHTML='<span><b>結束</b><b>回合</b></span>';
+    end.setAttribute('aria-label','結束回合');
     const choices=document.createElement('div');
     choices.className='tc-wheel-options';
     choices.setAttribute('role','group');
@@ -1078,17 +1098,7 @@ function buildGame(){
       }
     });
     actions.addEventListener('keydown',e=>{
-      if(modernPveWheel()){
-        const chosen=e.target.closest('button.tc-rw-sector');
-        if(!chosen||!['ArrowLeft','ArrowRight'].includes(e.key))return;
-        const group=chosen.closest('.tc-rw-outer,.tc-rw-inner');
-        const buttons=[...group.querySelectorAll('button.tc-rw-sector:not(:disabled)')];
-        if(!buttons.length)return;
-        const index=buttons.indexOf(chosen);
-        e.preventDefault();
-        buttons[(index+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length].focus();
-        return;
-      }
+      if(modernPveWheel())return;
       const b=e.target.closest('button[data-wheel-action],button[data-wheel-choice]');
       if(!b||!['ArrowLeft','ArrowRight'].includes(e.key))return;
       e.preventDefault();

@@ -1,9 +1,9 @@
 /*
- * 問道試煉 / 右圈 v3 — completely independent weapon-era presentation.
- * Outer annulus 75–100%: 移動 / 武器一 / 武器二 (fixed, never collapses).
- * Inner annulus 49–74%: 角色/飛劍 OR the selected weapon's three moves.
+ * 問道試煉 / 雙滑軌右環 — independent weapon-era presentation.
+ * Outer annulus 75–100%: 移動 / 武器一 / 武器二 (bottom to top).
+ * Inner annulus 49–74%: 角色/飛劍 OR three skills (first skill at bottom).
  * Central 0–49%: original server-backed 結束回合 action.
- * The old two-state slider is never displayed or allowed to hit-test.
+ * Each inset thumb glides independently; labels stay at their tap stations.
  */
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel{
   --tc-wheel:var(--tc-dial);
@@ -11,7 +11,8 @@
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action{
   overflow:hidden;
   isolation:isolate;
-  touch-action:manipulation;
+  container-type:inline-size;
+  touch-action:none;
   background:radial-gradient(circle at 100% 100%,#101a16 0%,#1e3027 58%,#32463a 100%);
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-action-tabs,
@@ -37,9 +38,30 @@
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-guides path{
   fill:none;stroke:#d6c38c88;stroke-width:.7;
 }
+/* Recessed rails and independent annular thumbs never intercept a tap. */
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider{
+  position:absolute;inset:0;width:100%;height:100%;z-index:2;
+  pointer-events:none;overflow:visible;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider[hidden]{display:none!important}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider g{
+  transform-origin:100% 100%;
+  transition:transform .22s cubic-bezier(.22,.8,.28,1);
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider path{
+  fill:#44765c;stroke:#e5d7a2;stroke-width:.65;
+  filter:drop-shadow(0 0 1px #a3dfb44d);
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider[data-rail="inner"] path{
+  fill:#386e65;stroke:#b8e2cc;
+}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider.is-dragging g{transition:none}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rightwheel-v3.is-dragging{cursor:grabbing}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector.is-unavailable .tc-rw-price{color:#f1bb94}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-sector-end>span b{font:inherit}
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-outer,
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-inner{
-  position:absolute;inset:0;z-index:2;pointer-events:none;
+  position:absolute;inset:0;z-index:3;pointer-events:none;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-inner[hidden]{
   display:none!important;
@@ -50,32 +72,32 @@
   margin:0!important;padding:0!important;min-height:0!important;
   border:none!important;border-radius:0!important;
   box-shadow:none!important;
-  pointer-events:auto;cursor:pointer;
+  pointer-events:auto;cursor:grab;
   color:#eee9da!important;text-shadow:0 1px 3px #0b140fcc;
   -webkit-tap-highlight-color:transparent;
-  touch-action:manipulation;
+  touch-action:none;
   transition:background-color .13s ease,filter .13s ease;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer{
-  background:radial-gradient(circle at 90% 100%,#253b30 0%,#334b3b 72%,#405645 100%)!important;
+  background:transparent!important;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer:first-child{
-  background:radial-gradient(circle at 100% 100%,#21483b 0%,#30654e 78%,#356f57 100%)!important;
+  background:transparent!important;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner{
-  background:radial-gradient(circle at 100% 100%,#182e28 0%,#244038 72%,#31554a 100%)!important;
+  background:#07191424!important;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector[aria-pressed="true"]{
-  background:linear-gradient(135deg,#627b58 0%,#356f57 100%)!important;
+  background:transparent!important;
   color:#fff4cc!important;
   filter:brightness(1.13);
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector:hover:not(:disabled){
-  filter:brightness(1.2);
+  background:#bfdfa112!important;filter:brightness(1.2);
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector:focus-visible{
   outline:3px solid #ffe3a4!important;outline-offset:-5px!important;
-  filter:brightness(1.2);
+  background:#bfdfa112!important;filter:brightness(1.2);
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector.is-empty,
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector.is-locked{
@@ -94,32 +116,32 @@
   color:inherit;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label i{
-  display:block;font-size:clamp(13px,1.8vw,22px);
+  display:block;font-size:clamp(14px,6cqi,22px);
   color:#e6d09b;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label strong{
   display:block;font-family:"Noto Serif TC","Songti TC",serif;
-  font-size:clamp(11px,1.45vw,18px);
+  font-size:clamp(14px,6cqi,20px);
   font-weight:750;white-space:nowrap;
   color:inherit;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label small{
   display:block;max-width:100%;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  font-size:clamp(8px,.9vw,12px);color:#d3dfca;
+  font-size:clamp(11px,4.2cqi,14px);color:#d3dfca;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label{
   width:25%;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label{
-  width:31%;gap:3px;
+  width:23%;gap:3px;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label strong{
-  font-size:clamp(10px,1.2vw,15px);
-  white-space:normal;overflow-wrap:anywhere;
+  max-width:4em;font-size:clamp(13px,5.2cqi,17px);
+  white-space:normal;overflow-wrap:anywhere;text-wrap:balance;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-price{
-  font-size:clamp(8px,.85vw,11px);
+  font-size:clamp(10px,4cqi,13px);
   color:#c2d9c9;white-space:nowrap;
 }
 /* Keep the real End Turn button above the new annuli, and strictly in
@@ -130,10 +152,11 @@
   border:0!important;pointer-events:auto;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector-end>span{
-  left:70%;top:76%;width:30%;
+  left:78%;top:78%;width:23%;
   transform:translate(-50%,-50%);
-  opacity:1!important;font-size:clamp(12px,1.7vw,21px);
-  line-height:1.16;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:1!important;font-size:clamp(14px,6.8cqi,23px);
+  line-height:1.35;letter-spacing:.06em;white-space:nowrap;
   color:#e9d6af;
 }
 #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-empty{
@@ -167,7 +190,7 @@
   /* Old 30vw wheel was too small for three buttons and three skills.
      Keep enough room between the distinct left/right quarter controls. */
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel{
-    --tc-wheel:clamp(145px,46vw,240px);
+    --tc-wheel:clamp(156px,48vw,260px);
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label i{
     display:none;
@@ -176,26 +199,27 @@
     width:28%;
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector-label strong{
-    font-size:clamp(10px,2.7vw,13px);
+    font-size:clamp(13px,7.5cqi,16px);
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label small{
     display:none;
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label{
-    width:33%;gap:2px;
+    width:24%;gap:2px;
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label strong{
-    font-size:clamp(9px,2.4vw,12px);
+    max-width:2em;font-size:clamp(12px,6.8cqi,15px);
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-price{
-    font-size:clamp(7px,2vw,9px);
+    font-size:clamp(10px,5.6cqi,12px);
   }
   #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-quarter-action .tc-sector-end>span{
-    font-size:clamp(12px,3vw,17px);
+    font-size:clamp(14px,8cqi,18px);
   }
 }
 @media(prefers-reduced-motion:reduce){
-  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector{
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector,
+  #tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-slider g{
     transition:none!important;
   }
 }
@@ -222,3 +246,11 @@
   border-radius:6px;border:1px solid #607e6b;background:#172f29;color:#dfecd9;
 }
 #tactical-combat .tc-weapon-manage-candidates button:disabled{opacity:.42}
+
+/* Keep tap geometry strict while allowing complete, readable labels. */
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer{position:absolute;inset:0;z-index:4;pointer-events:none}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-sector>.tc-rw-sector-label{opacity:0}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label{pointer-events:none;color:#eee9da;text-shadow:0 1px 3px #0b140f}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-selected{color:#fff4cc}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-disabled{opacity:.48}
+#tactical-combat.tc-quarter-layout.tc-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-unavailable .tc-rw-price{color:#f1bb94}

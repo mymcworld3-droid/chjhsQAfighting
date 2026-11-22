@@ -1183,107 +1183,187 @@ html body.ui-cleanup #dungeon-map-view.tc-quarter-layout .tc-quiz .tc-options>.b
   }
 }
 
-/* v3: a newly mounted right-wheel component, NOT the legacy attack/move
-   slider with extra weapon overlays. Geometry mirrors 問道試煉 exactly. */
+/* Shared bottom-to-top weapon rails; dungeon remains real-time. */
 #dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel{
-  overflow:hidden;isolation:isolate;touch-action:manipulation;
+  overflow:hidden;
+  isolation:isolate;
+  container-type:inline-size;
+  touch-action:none;
   background:radial-gradient(circle at 100% 100%,#101a16 0%,#1e3027 58%,#32463a 100%);
 }
-#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-action-lines,
-#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-wheel-slider,
-#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-wheel-marker,
-#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-wheel-options,
-#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-weapon-outer-choices,
-#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel>[data-dm="wheel-attack"],
-#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel>[data-dm="wheel-move"]{
-  display:none!important;pointer-events:none!important;
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel .tc-action-tabs,
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel .tc-wheel-options,
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel .tc-wheel-slider,
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel .tc-wheel-marker,
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel .tc-action-lines,
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel .tc-weapon-outer-choices,
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel .tc-open-weapon-ring{
+  display:none!important;
+  pointer-events:none!important;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rightwheel-v3{
-  position:absolute;inset:0;z-index:10;isolation:isolate;
-  overflow:hidden;pointer-events:none;
+  position:absolute;inset:0;z-index:10;
+  pointer-events:none;isolation:isolate;
+  overflow:hidden;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-guides{
-  position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:1;
+  overflow:visible;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-guides path{
   fill:none;stroke:#d6c38c88;stroke-width:.7;
 }
+/* Recessed rails and independent annular thumbs never intercept a tap. */
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-slider{
+  position:absolute;inset:0;width:100%;height:100%;z-index:2;
+  pointer-events:none;overflow:visible;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-slider[hidden]{display:none!important}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-slider g{
+  transform-origin:100% 100%;
+  transition:transform .22s cubic-bezier(.22,.8,.28,1);
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-slider path{
+  fill:#44765c;stroke:#e5d7a2;stroke-width:.65;
+  filter:drop-shadow(0 0 1px #a3dfb44d);
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-slider[data-rail="inner"] path{
+  fill:#386e65;stroke:#b8e2cc;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-slider.is-dragging g{transition:none}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rightwheel-v3.is-dragging{cursor:grabbing}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector.is-unavailable .tc-rw-price{color:#f1bb94}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-sector-end>span b{font:inherit}
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-outer,
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-inner{
-  position:absolute;inset:0;z-index:2;pointer-events:none;
+  position:absolute;inset:0;z-index:3;pointer-events:none;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-inner[hidden]{
   display:none!important;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector{
-  position:absolute;inset:0;display:block;width:100%;height:100%;
-  pointer-events:auto;margin:0!important;padding:0!important;min-height:0!important;
-  border:0!important;border-radius:0!important;box-shadow:none!important;
-  cursor:pointer;touch-action:manipulation;color:#eee9da!important;
-  text-shadow:0 1px 3px #0b140fcc;
-  background:radial-gradient(circle at 100% 100%,#253b30,#324b3a)!important;
+  position:absolute;inset:0;display:block;
+  width:100%;height:100%;
+  margin:0!important;padding:0!important;min-height:0!important;
+  border:none!important;border-radius:0!important;
+  box-shadow:none!important;
+  pointer-events:auto;cursor:grab;
+  color:#eee9da!important;text-shadow:0 1px 3px #0b140fcc;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:none;
+  transition:background-color .13s ease,filter .13s ease;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--outer{
+  background:transparent!important;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--outer:first-child{
-  background:radial-gradient(circle at 100% 100%,#21483b,#30654e)!important;
+  background:transparent!important;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner{
-  background:radial-gradient(circle at 100% 100%,#182e28,#31554a)!important;
+  background:#07191424!important;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector[aria-pressed="true"]{
-  background:linear-gradient(135deg,#627b58,#356f57)!important;
-  color:#fff4cc!important;filter:brightness(1.13);
+  background:transparent!important;
+  color:#fff4cc!important;
+  filter:brightness(1.13);
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector:hover:not(:disabled){
-  filter:brightness(1.2);
+  background:#bfdfa112!important;filter:brightness(1.2);
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector:focus-visible{
   outline:3px solid #ffe3a4!important;outline-offset:-5px!important;
+  background:#bfdfa112!important;filter:brightness(1.2);
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector.is-empty,
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector.is-locked{
-  color:#aaa99c!important;filter:grayscale(.48);
+  color:#aaa99c!important;
+  filter:grayscale(.48);
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector:disabled{
-  opacity:.48!important;cursor:default;
+  cursor:default;opacity:.48!important;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector-label{
-  position:absolute;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:2px;
-  transform:translate(-50%,-50%);width:25%;
+  position:absolute;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;transform:translate(-50%,-50%);
   text-align:center;line-height:1.1;
-  pointer-events:none;min-width:0;color:inherit;
+  min-width:0;pointer-events:none;
+  color:inherit;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector-label i{
+  display:block;font-size:clamp(14px,6cqi,22px);
+  color:#e6d09b;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector-label strong{
   display:block;font-family:"Noto Serif TC","Songti TC",serif;
-  font-size:clamp(11px,1.45vw,18px);font-weight:750;
-  white-space:nowrap;color:inherit;
+  font-size:clamp(14px,6cqi,20px);
+  font-weight:750;white-space:nowrap;
+  color:inherit;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector-label small{
-  display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;
-  white-space:nowrap;font-size:clamp(8px,.9vw,12px);color:#d3dfca;
+  display:block;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:clamp(11px,4.2cqi,14px);color:#d3dfca;
+}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label{
+  width:25%;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label{
-  width:31%;gap:3px;
+  width:23%;gap:3px;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label strong{
-  font-size:clamp(10px,1.2vw,15px);white-space:normal;overflow-wrap:anywhere;
+  max-width:4em;font-size:clamp(13px,5.2cqi,17px);
+  white-space:normal;overflow-wrap:anywhere;text-wrap:balance;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-price{
-  font-size:clamp(8px,.85vw,11px);color:#c2d9c9;white-space:nowrap;
+  font-size:clamp(10px,4cqi,13px);
+  color:#c2d9c9;white-space:nowrap;
+}
+/* Keep the real End Turn button above the new annuli, and strictly in
+   the central quarter-disk. Its existing delegated handler is untouched. */
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel .tc-sector-end{
+  z-index:20!important;
+  background:radial-gradient(circle at 100% 100%,#16231c 0%,#263a2b 85%)!important;
+  border:0!important;pointer-events:auto;
+}
+#dungeon-map-view.tc-quarter-layout .tc-quarter-action.dm-modern-weapon-wheel .tc-sector-end>span{
+  left:78%;top:78%;width:23%;
+  transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:1!important;font-size:clamp(14px,6.8cqi,23px);
+  line-height:1.35;letter-spacing:.06em;white-space:nowrap;
+  color:#e9d6af;
 }
 #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-empty{
-  position:absolute;left:56%;top:56%;width:32%;
-  transform:translate(-50%,-50%);z-index:4;
-  text-align:center;color:#c9c3a8;pointer-events:none;
+  position:absolute;z-index:4;left:56%;top:56%;width:32%;
+  transform:translate(-50%,-50%);
+  text-align:center;color:#c9c3a8;
+  pointer-events:none;
   font-size:clamp(10px,1.1vw,14px);
 }
-#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-empty[hidden]{display:none!important}
-@media(orientation:portrait){
-  #dungeon-map-view.tc-quarter-layout{--tc-wheel:clamp(145px,46vw,240px)}
-  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label{width:28%}
-  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label{width:33%;gap:2px}
-  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector-label strong{font-size:clamp(10px,2.7vw,13px)}
-  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label strong{font-size:clamp(9px,2.4vw,12px)}
-  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label small{display:none}
-  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-price{font-size:clamp(7px,2vw,9px)}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-empty[hidden]{
+  display:none!important;
 }
+
+@media(orientation:portrait){
+  #dungeon-map-view.tc-quarter-layout{--tc-wheel:clamp(156px,48vw,260px)}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label{width:28%}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label{width:24%;gap:2px}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector-label strong{font-size:clamp(13px,7.5cqi,16px)}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--inner .tc-rw-sector-label strong{max-width:2em;font-size:clamp(12px,6.8cqi,15px)}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector--outer .tc-rw-sector-label small{display:none}
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-price{font-size:clamp(10px,5.6cqi,12px)}
+}
+@media(prefers-reduced-motion:reduce){
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector,
+  #dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-slider g{transition:none!important}
+}
+
+/* Keep tap geometry strict while allowing complete, readable labels. */
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-label-layer{position:absolute;inset:0;z-index:4;pointer-events:none}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-sector>.tc-rw-sector-label{opacity:0}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label{pointer-events:none;color:#eee9da;text-shadow:0 1px 3px #0b140f}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-selected{color:#fff4cc}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-disabled{opacity:.48}
+#dungeon-map-view.tc-quarter-layout .dm-modern-weapon-wheel .tc-rw-label-layer .tc-rw-sector-label.is-unavailable .tc-rw-price{color:#f1bb94}
