@@ -76,13 +76,13 @@ test('a correct active loadout remains ready even if a different preset exists',
   assert.equal(g.activeLoadoutName,'主戰劍修');
 });
 
-test('realm-blocked skill does not promise an unlock or kill requirement',()=>{
+test('mastered second skill points to the third mastery threshold independent of player realm',()=>{
   const g=guide(280);
-  assert.equal(g.targetLevel,5);
-  assert.equal(g.estimatedKills,null);
-  assert.equal(g.remaining,null);
-  assert.match(g.nextGoal,/仍需符合築基境門檻/);
-  assert.match(renderManualExpedition(g,opts),/已達等級門檻/);
+  assert.equal(g.targetLevel,10);
+  assert.equal(g.remaining,800);
+  assert.equal(g.estimatedKills,40);
+  assert.doesNotMatch(g.nextGoal,/境界/);
+  assert.match(renderManualExpedition(g,opts),/Lv. 10/);
 });
 
 test('owned book without any learned skills redirects to skill prerequisites',()=>{

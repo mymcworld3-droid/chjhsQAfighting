@@ -44,10 +44,10 @@ const charged=(state,cost)=>state.members.a.explorationStamina>=cost?state:
   {...state,members:{...state.members,
     a:{...state.members.a,explorationStamina:
       Math.min(10,state.members.a.explorationStamina+4)}}};
-test('skill loadout snapshots only include owned, unlocked, realm-valid abilities',()=>{
+test('skill loadout snapshots only include owned, mastery-unlocked abilities regardless of player realm',()=>{
   const record=sword(),low=S.initialCombatLoadout({accessScore:1},record);
   assert.ok(low.dungeonSkillIds.includes('wind-slash'));
-  assert.ok(!low.dungeonSkillIds.includes('wind-step')||M.BY_SKILL['wind-step'].realmRequired<=1);
+  assert.deepStrictEqual(low.dungeonSkillIds,['wind-slash','wind-step','wind-thousand']);
   const high=S.initialCombatLoadout({accessScore:200},record);
   assert.deepStrictEqual(high.dungeonSkillIds,['wind-slash','wind-step','wind-thousand']);
   assert.equal(high.dungeonSkills.length,3);

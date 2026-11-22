@@ -5,8 +5,16 @@ on:
     paths:
       - 'public/cultivation/manual-rules.js'
       - 'public/cultivation/tactical-rules.js'
+      - 'public/cultivation/weapon-*.js'
+      - 'public/cultivation/tactical-combat.js'
+      - 'public/cultivation/tactical-impact-presentation.js'
+      - 'public/styles/weapon-dungeons.css'
       - 'tactical-combat-api.cjs'
+      - 'weapon-dungeon-rewards.cjs'
+      - 'dungeon-enemy-ai.cjs'
       - 'dungeon-skill-combat.cjs'
+      - 'tests/weapon-dungeons*.test.cjs'
+      - 'tests/dungeon-enemy-combat.test.cjs'
       - 'tests/weapon-loadout.test.cjs'
       - 'tests/tactical-loadout-switch.test.cjs'
       - '.github/workflows/weapon-regression.yml'
@@ -22,4 +30,8 @@ jobs:
           node-version: '24'
       - run: npm ci --no-audit --no-fund
       - name: Weapon security and equipment regression
-        run: node --test tests/weapon-loadout.test.cjs tests/tactical-loadout-switch.test.cjs
+        run: >-
+          node --test tests/weapon-loadout.test.cjs tests/tactical-loadout-switch.test.cjs
+          tests/weapon-dungeons.test.cjs tests/weapon-dungeons-page.test.cjs
+          tests/dungeon-enemy-combat.test.cjs tests/dungeon-skill-combat.test.cjs
+          tests/tactical-impact-presentation.test.cjs

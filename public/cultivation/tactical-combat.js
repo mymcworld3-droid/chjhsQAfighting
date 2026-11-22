@@ -1,4 +1,5 @@
 import './manual-rules.js?v=20261118-gold-cap10-v1';
+import './weapon-dungeon-rules.js';
 import './contextual-asset-preloader.js';
 import {skillArt,bookArt} from './manual-art.js';
 import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-recap.js';
@@ -25,6 +26,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const rich=v=>window.quizMathRichText?.(String(v||''))||esc(v);
 const id=()=>globalThis.crypto.randomUUID();
 const localUser=()=>window.getCurrentUserData?.()||{};
+let battleChannel='pve',weaponDungeonSelection=null;
 let root=null,keyboardGuard=null,renderer=null,beastInspector=null,sealInspector=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
 let attackChoice='attack',selectedManualSkill='',wheelIgnoreClickUntil=0;
 // Selection only: every equipped weapon is equally usable, never a main weapon.
@@ -233,7 +235,7 @@ async function editBattleWeapon(slot,weaponId){
     battleLoadouts=result.state;loadoutFetchedFor=account;
     loadoutMenuOpen=false;selectedWeaponSlot=-1;selectedWeaponId='';
     // Refresh directly: task()/sync() would refuse while this edit is busy.
-    const live=await api('/api/tactical/state?mode=pve');
+    const live=await api('/api/tactical/state?mode='+battleChannel);
     if(valid(session,account)&&state?.id===roomId&&live.state)
       accept(live.state,++op);
     if(valid(session,account))notice(weaponId?'武器已裝備，可立即選用三招':'武器已卸下');
@@ -364,7 +366,9 @@ function ensure(){
     else if(b.hasAttribute('data-resume'))paint();
     else if(b.hasAttribute('data-hub')){hideModal();mode==='pve'?close():renderHub();}
     else if(b.hasAttribute('data-tutorial-collapse'))close();
-    else if(b.hasAttribute('data-next-stage')||b.hasAttribute('data-retry-entry'))void open('pve');
+    else if(b.hasAttribute('data-weapon-dungeon-menu')){close();void window.openWeaponDungeons?.();}
+    else if(b.hasAttribute('data-weapon-dungeon-retry'))void open('weapon-dungeon',weaponDungeonSelection);
+    else if(b.hasAttribute('data-next-stage')||b.hasAttribute('data-retry-entry'))void open(battleChannel,weaponDungeonSelection||{});
     else if(b.hasAttribute('data-manual-training')){
       const account=uid;
       close();window.switchToPage?.('page-training');
@@ -644,7 +648,7 @@ function renderModernWeaponWheel(hero,locked,mine){
     button.setAttribute('aria-pressed',String(selected));
     button.querySelector('.tc-rw-price').textContent=price;
     button.title=entry.skill?(unlocked?entry.name+' · '+price+(unavailable?' · '+unavailable:''):
-      entry.name+'：尚未達到武器 Lv.'+entry.skill.levelRequired+' 或境界門檻'):
+      entry.name+'：尚未達到武器 Lv.'+entry.skill.levelRequired+' 解鎖'):
       entry.name+' · '+price;
     button.setAttribute('aria-label',button.title);
   });
@@ -708,7 +712,7 @@ function updateWheelChoices(container,options,selected,moveCost,hero,locked){
       cost>hero.stamina?'體力不足，還需要 '+(cost-hero.stamina)+' 點':'';
     button.disabled=locked;
     button.setAttribute('aria-pressed',String(option.value===selected));
-    const description=option.skill?Manuals.descriptionWithDamage(hero.atk,option.skill,
+    const description=option.skill?Manuals.descriptionWithDamage(hero.atk*(state?.weaponDungeon&&option.skill?.school==='body'?1.15:1),option.skill,
       {flyingSwordReady:!!hero.flyingSword}):'';
     button.setAttribute('aria-label',option.name+'，'+price+
       (description?'。'+description:'')+(unavailable?'，'+unavailable:''));
@@ -1170,7 +1174,7 @@ function updateBossHud(){
   node.dataset.phase=String(boss.phase);
   node.dataset.bossKind=boss.kind;
   node.querySelector('[data-boss-name]').textContent=boss.name;
-  node.querySelector('[data-boss-phase]').textContent=boss.phase===2?'第二階段':'第一階段';
+  node.querySelector('[data-boss-phase]').textContent=state.weaponDungeon?(boss.dormant?'守衛庇護':'領主甦醒'):boss.phase===2?'第二階段':'第一階段';
   node.querySelector('[data-boss-intent]').textContent=boss.intent;
   node.querySelector('[data-boss-number]').textContent=Math.ceil(boss.hp)+' / '+Math.ceil(boss.maxHp);
   const meter=node.querySelector('[data-boss-health]');
@@ -1182,8 +1186,8 @@ function showBossBanner(kind,name){
   const node=$('[data-boss-announcement]');
   if(!node||!state||state.mode!=='pve')return;
   hideBossBanner();node.dataset.kind=kind;
-  const title=kind==='phase'?'靈壓暴漲 · 第二階段':'鎮關靈獸現身';
-  const subtitle=kind==='phase'?'攻擊形態已改變，留意地面的紅色預告格':'觀察首領攻擊意圖，避開危險範圍';
+  const title=state.weaponDungeon?'石域領主甦醒':kind==='phase'?'靈壓暴漲 · 第二階段':'鎮關靈獸現身';
+  const subtitle=state.weaponDungeon?'追蹤落石已啟動，可退出射程或擊退打斷':kind==='phase'?'攻擊形態已改變，留意地面的紅色預告格':'觀察首領攻擊意圖，避開危險範圍';
   node.innerHTML='<small>'+esc(title)+'</small><strong>'+esc(name)+'</strong><span>'+esc(subtitle)+'</span>';
   // Reinsert only the passive announcement; none of the battle controls move.
   node.hidden=false;
@@ -1193,7 +1197,7 @@ function showBossBanner(kind,name){
 function maybeAnnounceBoss(){
   if(modalOpen||state?.mode!=='pve'||state?.status!=='active'||state.newEnemies?.length)return;
   const boss=CombatImpact.bossStatus(state);
-  if(!boss||!boss.alive)return;
+  if(!boss||!boss.alive||boss.dormant)return;
   if(bossTransitionPending?.roomId===state.id){
     const pending=bossTransitionPending;bossTransitionPending=null;
     bossIntroSeenRoom=state.id;
@@ -1207,7 +1211,7 @@ function paint({preserveModal=false}={}){
   if(!state)return renderHub();syncEquippedAttack();if(!preserveModal)hideModal();
   renderBattleLoadouts();
   if(state.status==='active')void refreshBattleLoadouts();
-  $('[data-title]').textContent=state.mode==='pve'?'問道試煉':'鬥法論道';
+  $('[data-title]').textContent=state.weaponDungeon?state.trial.title:state.mode==='pve'?'問道試煉':'鬥法論道';
   if(state.status==='waiting'){
     destroyRenderer();root.classList.remove('tc-quarter-layout');$('[data-main]').className='tc-main tc-waiting';
     $('[data-main]').innerHTML=`<div><h2>配對中…</h2><p>也可將代碼傳給道友加入。</p><code>${esc(state.id.replace('arena-',''))}</code><button type="button" data-copy>複製代碼</button><button type="button" data-leave>取消配對</button></div>`;return;
@@ -1219,7 +1223,7 @@ function paint({preserveModal=false}={}){
   if(!renderer||!$('canvas'))buildGame();
   if(state.mode==='pvp')syncPvpSkillTabs();
   const me=myActor(),myTurn=myAction();
-  $('[data-map-name]').textContent=state.trial?'第 '+state.trial.stage+' 關 · '+state.trial.title:R.mapFor(state.map).name;
+  $('[data-map-name]').textContent=state.weaponDungeon?state.trial.title:state.trial?'第 '+state.trial.stage+' 關 · '+state.trial.title:R.mapFor(state.map).name;
   const objective=state.objective,objectiveNode=$('[data-objective]');
   objectiveNode.hidden=!objective;
   if(objective){
@@ -1231,7 +1235,7 @@ function paint({preserveModal=false}={}){
     const text=objective.type==='transport'?(objective.carrying?`${label} · 將靈物送至交付點`:`${label} · 先取得靈物`):
       objective.type==='defense'?`鎮守 · ${objective.completedRounds} / ${objective.rounds} 回合 · 靈陣 ${objective.hp} / ${objective.maxHp}`:
       objective.type==='sealing'?`封印 · ${objective.points.filter(p=>p.activated).length} / ${objective.points.length} 陣眼${state.trial?.layoutVersion===4?' · 攻擊陣眼'+(sealEffects?' · '+sealEffects:''):''}`:
-      objective.type==='boss'?'首領 · 擊敗大型靈獸':`討伐 · 剩餘 ${living} 隻靈獸`;
+      objective.type==='boss'?'首領 · 擊敗大型靈獸':state.weaponDungeon?`尖峰石域 · 剩餘 ${living} 隻 · 圖騰 +15% · 預攻擊會追蹤`:`討伐 · 剩餘 ${living} 隻靈獸`;
     objectiveNode.textContent=objective.completed&&!me.answered?'目標完成 · 請先作答一題':text;
   }
   $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.bot?`<small>${Manuals.realmForStage(a.level).name}境 · 功法 +${Manuals.expForBeast(a.level)} EXP</small>`:''}${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
@@ -1334,7 +1338,7 @@ function updateControls(){
     if(!error&&!affected.some(p=>p.x===selectedSeal.x&&p.y===selectedSeal.y))
       error='此招式不會命中所選陣眼，請改選能覆蓋陣眼的攻擊方向';
   }
-  const description=Manuals.descriptionWithDamage(me.atk,shown,
+  const description=Manuals.descriptionWithDamage(me.atk*(state?.weaponDungeon&&shown?.school==='body'?1.15:1),shown,
     {flyingSwordReady:!!me.flyingSword});
   $('[data-skill-title]').textContent=action==='move'||action==='sword-move'?'移動說明':
     `${shown.name} · ${cost} 體力`;
@@ -1356,7 +1360,7 @@ function updateControls(){
     else if(busy)reason='上一個行動處理中，請稍候';
     else if(me.actions>=R.LIMITS.actions)reason='本回合行動次數已滿，請結束回合';
     else if(attackMode&&me.attacks>=R.attackLimit(me))reason='本回合出手次數已滿（'+R.attackLimit(me)+' 次），請結束回合';
-    else if(attackMode&&action==='manual'&&!chosenSkill)reason='尚未裝備此技能，或境界尚未解鎖';
+    else if(attackMode&&action==='manual'&&!chosenSkill)reason='尚未裝備或解鎖此武器技能';
     else if(attackMode&&me.stamina<cost)reason='體力不足：需要 '+cost+' 點，目前 '+me.stamina+' 點，請答題充能';
     else if(selection&&error)reason=error;
     else if(attackMode&&shown&&!R.aimCells(state,me,shown).length)reason='目前沒有可指定的攻擊地格，請移動或改用其他招式';
@@ -1440,7 +1444,7 @@ function updateClock(){
   const quizLabel=quizPending?`答題 ${myActor().questions}/2${answerLeft!==null?' · 剩 '+answerLeft+' 秒':' · 雙方同時作答'}`:'';
   $('[data-turn]').textContent=state.status==='waiting'?'等待配對':state.status==='finished'?'戰鬥結束':state.quizRound?
     `第 ${state.quizRound} 輪 · ${quizLabel||state.phase==='answer'&&'雙方答題'||state.phase==='waiting-answer'&&'等待對手完成答題'||(mine?'你的行動':'對手行動')}${state.phase==='action'?' · 行動 '+Math.max(0,Math.ceil((state.deadlineMs-now)/1000))+' 秒':''}`:
-    `${state.trial?'第 '+state.trial.stage+' 關 · ':''}第 ${state.turn} 回合 · ${mine?'你的行動':'對手行動'}${state.deadlineMs?' · '+Math.max(0,Math.ceil((state.deadlineMs-now)/1000))+' 秒':''}`;
+    `${state.weaponDungeon?state.weaponDungeon.realm+' · ':state.trial?'第 '+state.trial.stage+' 關 · ':''}第 ${state.turn} 回合 · ${mine?'你的行動':'對手行動'}${state.deadlineMs?' · '+Math.max(0,Math.ceil((state.deadlineMs-now)/1000))+' 秒':''}`;
   const fighter=myActor(),focus=fighter?R.focusTurns(fighter):0;
   if(state.status==='active'&&mine&&focus)$('[data-turn]').textContent+=` · 蓄勢 ${focus} 回合 · 出手 ${fighter.attacks}/${R.attackLimit(fighter)}`;
   $('[data-quiz-clock]')?.replaceChildren(document.createTextNode(quizLabel||'兩題已完成'));
@@ -1462,11 +1466,12 @@ function showModal(html,{quiz=false,encounter=false}={}){
 function hideModal(){if(!root)return;window.currentTacticalQuiz=null;closePairWhiteboard();introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);beastInspector?.refresh();sealInspector?.refresh();}
 function showBeastDemo(species){
   if(!state||state.mode!=='pve'||!R.MONSTERS[Number(species)])return;
-  const beast=R.monsterProfile(species);
+  const encounter=state.actors.find(a=>a.bot&&a.species===Number(species));
+  const beast=encounter?.trackingAttack?R.monsterProfileFor(encounter):R.monsterProfile(species);
   showModal('<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="'+esc(beast.name)+
     '" style="background-position:'+(species%5/4*100)+'% '+(Math.floor(species/5)/3*100)+'%"></div>'+
     '<div><small>戰場靈獸 · 招式資料</small><h2>'+esc(beast.name)+'</h2>'+
-    '<small>第 '+beast.unlockStage+' 關起登場</small></div></div>'+
+    '<small>'+(state.weaponDungeon?'尖峰石域 · '+esc(state.weaponDungeon.realm):'第 '+beast.unlockStage+' 關起登場')+'</small></div></div>'+
     '<div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>'+esc(beast.attackName)+'</h3>'+
     '<p>'+esc(beast.attackText)+'</p></section>'+
     '<figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b>'+
@@ -1480,13 +1485,15 @@ function showBeastDemo(species){
     '<dt>應對方式</dt><dd>'+esc(beast.tip)+'</dd></dl></div>'+
     '<div class="tc-enemy-footer"><button type="button" class="tc-primary" data-dismiss>返回戰場</button></div>',
     {encounter:true});
-  introDemo=new EnemyDemo($('[data-enemy-demo]'),species);
+  if(state.weaponDungeon){$('[data-enemy-demo]').hidden=true;}
+  else introDemo=new EnemyDemo($('[data-enemy-demo]'),species);
 }
 function showEnemyIntro(error=''){
-  const species=state.newEnemies[0],p=R.monsterProfile(species),remaining=state.newEnemies.length,
+  const species=state.newEnemies[0],encounter=state.actors.find(a=>a.bot&&a.species===species),p=encounter?.trackingAttack?R.monsterProfileFor(encounter):R.monsterProfile(species),remaining=state.newEnemies.length,
     beastRealm=Manuals.realmForStage(state.trial?.stage||1);
-  showModal(`<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="${esc(p.name)}" style="background-position:${species%5/4*100}% ${Math.floor(species/5)/3*100}%"></div><div><small>初遇妖獸${state.trial?' · 第 '+state.trial.stage+' 關':''}</small><h2>${esc(p.name)}</h2><p>${beastRealm.name}境 · 功法擊殺 +${beastRealm.exp} EXP</p><small>第 ${p.unlockStage} 關起登場</small></div></div><div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>${esc(p.attackName)}</h3><p>${esc(p.attackText)}</p></section><figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b><span data-demo-mode>自動循環</span></div><canvas role="img" aria-label="${esc(p.name)}的移動、命中與閃避模擬" data-demo-species="${species}"></canvas><figcaption data-demo-caption role="status" aria-live="polite"></figcaption><div class="tc-demo-tools"><span>紅框：攻擊預告 · 金圈：修士</span><button type="button" data-demo-toggle>暫停</button><button type="button" data-demo-next hidden>下一步</button><button type="button" data-demo-replay>重播</button></div></figure><dl class="tc-enemy-details"><dt>移動</dt><dd>${esc(p.moveText)}</dd><dt>應對</dt><dd>${esc(p.tip)}</dd></dl></div><p class="tc-enemy-error" role="alert" ${error?'':'hidden'}>${esc(error)}</p><div class="tc-enemy-footer"><button type="button" class="tc-primary" data-intro-ack ${busy?'disabled':''}>${remaining>1?'記住招式 · 下一種（'+(remaining-1)+'）':'記住招式 · 開始行動'}</button><button type="button" data-exit>收起試煉</button></div>`,{encounter:true});
-  introDemo=new EnemyDemo($('[data-enemy-demo]'),species);
+  showModal(`<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="${esc(p.name)}" style="background-position:${species%5/4*100}% ${Math.floor(species/5)/3*100}%"></div><div><small>初遇妖獸${state.weaponDungeon?' · 尖峰石域':state.trial?' · 第 '+state.trial.stage+' 關':''}</small><h2>${esc(p.name)}</h2><p>${beastRealm.name}境 · 功法擊殺 +${beastRealm.exp} EXP</p><small>${state.weaponDungeon?'尖峰石域專屬招式':'第 '+p.unlockStage+' 關起登場'}</small></div></div><div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>${esc(p.attackName)}</h3><p>${esc(p.attackText)}</p></section><figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b><span data-demo-mode>自動循環</span></div><canvas role="img" aria-label="${esc(p.name)}的移動、命中與閃避模擬" data-demo-species="${species}"></canvas><figcaption data-demo-caption role="status" aria-live="polite"></figcaption><div class="tc-demo-tools"><span>紅框：攻擊預告 · 金圈：修士</span><button type="button" data-demo-toggle>暫停</button><button type="button" data-demo-next hidden>下一步</button><button type="button" data-demo-replay>重播</button></div></figure><dl class="tc-enemy-details"><dt>移動</dt><dd>${esc(p.moveText)}</dd><dt>應對</dt><dd>${esc(p.tip)}</dd></dl></div><p class="tc-enemy-error" role="alert" ${error?'':'hidden'}>${esc(error)}</p><div class="tc-enemy-footer"><button type="button" class="tc-primary" data-intro-ack ${busy?'disabled':''}>${remaining>1?'記住招式 · 下一種（'+(remaining-1)+'）':'記住招式 · 開始行動'}</button><button type="button" data-exit>收起試煉</button></div>`,{encounter:true});
+  if(state.weaponDungeon){$('[data-enemy-demo]').hidden=true;}
+  else introDemo=new EnemyDemo($('[data-enemy-demo]'),species);
 }
 async function acknowledgeIntro(){
   if(busy||!state?.newEnemies?.length)return;
@@ -1537,6 +1544,18 @@ function resultDialog(){
   const me=state.actors.find(a=>a.uid===uid),win=state.winner===me.team,draw=state.winner==='draw',reward=state.rewards?.[uid];
   const drop=state.manualDrops?.[uid];
   const manualRecap=state.mode==='pve'?manualRecapMarkup(state,uid):'';
+  if(state.weaponDungeon){
+    const info=state.weaponDungeon,result=state.weaponDungeonResult;
+    showModal(`<small>單人武器副本 · ${esc(info.realm)}</small><h2>${esc(info.name)} · ${win?'通關':'挑戰結束'}</h2>
+      <p>${win?'已擊敗石域的守衛與領主。':'副本券已消耗，可調整武器與走位後再次挑戰。'}</p>
+      <div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div>
+      ${win?`<p>${result?.unlocked>info.difficulty?'下一個難度已解鎖。':info.difficulty===5?'已完成最高難度。':''}</p>`:''}
+      <p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':''}</p>
+      ${drop?`<p class="tc-manual-loot">獲得 ${esc(drop.tierRealm)}武器：${esc(drop.name)}${drop.duplicate?'（同款數量已累計，保留最高等階）':''}</p>`:win?'<p>本次未掉落武器。</p>':''}
+      ${manualRecap}<button type="button" class="tc-primary" data-weapon-dungeon-menu>返回武器副本</button>
+      <button type="button" data-weapon-dungeon-retry>再次挑戰（消耗 1 張券）</button><button type="button" data-exit>收起</button>`);
+    if(manualRecap)void refreshManualRecap();return;
+  }
   if(state.mode==='pve'){
     const stage=state.trial?.stage||1,next=state.nextStage||stage+1;
     const guideCollapse=win&&stage===1&&tutorialStep()>=7&&tutorialStep()<=9
@@ -1586,7 +1605,7 @@ function accept(next,serial){
   // battle state, even while the player is reading an encounter introduction.
   // This happens before they can press the charging wheel.
   if(next?.status==='active'&&!(modalOpen&&pairQuestions.length))preloadTacticalQuestions();
-  if(next?.mode==='pve'&&next.trial){
+  if(next?.mode==='pve'&&!next.weaponDungeon&&next.trial){
     // Send only the authoritative habitat metadata, not actor/quiz state.
     window.dispatchEvent(new CustomEvent('xiuxian:tactical-trial-updated',{
       detail:{uid,trial:next.trial,terrain:next.terrain,map:next.map}
@@ -1612,9 +1631,9 @@ async function task(work,{render=true}={}){
   finally{if(valid(e,account)){busy=false;if(state&&$('canvas')){updateControls();const acknowledge=$('[data-intro-ack]');if(acknowledge)acknowledge.disabled=false;}else root?.querySelectorAll('[data-start]').forEach(b=>b.disabled=false);renderBattleLoadouts();schedule();}}
 }
 async function start(code=''){
-  await task(async()=>{const result=await api('/api/tactical/start',{mode,map,...(code?{code}:{})});return result.state;});
+  await task(async()=>{const result=await api('/api/tactical/start',{mode,map,...(battleChannel==='weapon-dungeon'?{activity:'weapon-dungeon',...weaponDungeonSelection}:{}),...(code?{code}:{})});return result.state;});
 }
-async function sync(){await task(async()=>{const result=await api('/api/tactical/state?mode='+mode);return result.state;});}
+async function sync(){await task(async()=>{const result=await api('/api/tactical/state?mode='+battleChannel);return result.state;});}
 async function send(command){
   if(!state||renderer?.isAnimating&&command.type!=='leave')return;
   // Retrying the same command uses the same idempotency key after a lost response.
@@ -1622,7 +1641,7 @@ async function send(command){
   const committed=await task(async()=>{
     try{return (await api('/api/tactical/action',request)).state;}
     catch(err){if(!err.status||err.status>=500){try{return (await api('/api/tactical/action',request)).state;}catch(_){}}
-      if(err.status===409){const latest=await api('/api/tactical/state?mode='+mode);if(latest.state)accept(latest.state,++op);}throw err;}
+      if(err.status===409){const latest=await api('/api/tactical/state?mode='+battleChannel);if(latest.state)accept(latest.state,++op);}throw err;}
   });
   // A real successful server action, not a wheel selection or preview, advances the guide.
   if(committed&&committed.id===request.roomId&&committed.revision>request.revision){
@@ -2267,7 +2286,7 @@ function schedule(){
 async function enterTrial(e,account){
   // Start preparation immediately while the existing full-screen clouds close.
   // Resolve failures into values so a slow curtain cannot cause an unhandled rejection.
-  const prepared=api('/api/tactical/start',{mode:'pve'}).then(value=>({value}),error=>({error}));
+  const prepared=api('/api/tactical/start',{mode:'pve',...(battleChannel==='weapon-dungeon'?{activity:'weapon-dungeon',...weaponDungeonSelection}:{})}).then(value=>({value}),error=>({error}));
   const reveal=async()=>{
     const result=await prepared;if(!valid(e,account))return;
     if(result.error)throw result.error;
@@ -2279,19 +2298,23 @@ async function enterTrial(e,account){
     else await reveal();
   }catch(error){
     if(!valid(e,account))return;
-    root.hidden=false;hideModal();destroyRenderer();$('[data-title]').textContent='問道試煉';$('[data-turn]').textContent='';
+    root.hidden=false;hideModal();destroyRenderer(); $('[data-title]').textContent=battleChannel==='weapon-dungeon'?'武器副本':'問道試煉';$('[data-turn]').textContent='';
     $('[data-main]').className='tc-main tc-waiting';
     $('[data-main]').innerHTML=`<div><h2>暫時未能進入試煉</h2><p>${esc(error.message)}</p><button type="button" class="tc-primary" data-retry-entry>重新進入</button><button type="button" data-exit>返回宗門</button></div>`;
   }finally{
     if(valid(e,account)){busy=false;if($('canvas'))paint();schedule();}
   }
 }
-async function open(nextMode='pve'){
+async function open(nextMode='pve',options={}){
+  const requestedChannel=nextMode;
+  nextMode=requestedChannel==='pvp'?'pvp':'pve';
   window.prefetchXiuxianContext?.('trial');
   ensure();
-  if(opened&&mode==='pve'&&nextMode==='pve'&&trialEntry?.uid===getMainUser()?.uid)return trialEntry.promise;
+  if(opened&&battleChannel===requestedChannel&&mode==='pve'&&nextMode==='pve'&&trialEntry?.uid===getMainUser()?.uid)return trialEntry.promise;
   if(opened)close();
-  lastTrigger=document.activeElement;mode=nextMode;root.dataset.mode=mode;
+  if(battleChannel!==requestedChannel)state=null;
+  lastTrigger=document.activeElement;mode=nextMode;battleChannel=requestedChannel;
+  weaponDungeonSelection=battleChannel==='weapon-dungeon'?{dungeonId:options.dungeonId||'peak-stone',difficulty:options.difficulty,requestId:id()}:null;root.dataset.mode=mode;
   action='move';attackChoice='attack';selectedManualSkill='';selection=null;
   sealPeekPosition=null;sealGuideForced=false;
   const accountUid=getMainUser()?.uid||'';if(uid!==accountUid||state?.mode!==nextMode)state=null;uid=accountUid;

@@ -47,15 +47,15 @@ test('progress rises from training to near to imminent without unlocking skills'
   assert.equal(hint(251).targetLevel,5);
   assert.equal(hint(251).percent,90);
   assert.match(renderManualAnticipation(hint(251),esc),/突破在即/);
-  assert.match(renderManualAnticipation(hint(251),esc),/功法等級達標後/);
+  assert.match(renderManualAnticipation(hint(251),esc),/武器 Lv.1／5／10 解鎖/);
 });
 
-test('mastery threshold is not the same as the player-realm unlock',()=>{
+test('stale mastery confirmation waits for synchronization without a player-realm gate',()=>{
   const blocked=hint(280);
-  assert.equal(blocked.status,'realm');
+  assert.equal(blocked.status,'pending');
   assert.equal(blocked.targetLevel,5);
   assert.equal(blocked.remaining,0);
-  assert.match(renderManualAnticipation(blocked,esc),/仍需達到修士 築基境/);
+  assert.match(renderManualAnticipation(blocked,esc),/資料待同步/);
   assert.doesNotMatch(renderManualAnticipation(blocked,esc),/已領悟/);
 });
 
@@ -72,11 +72,11 @@ test('after real second-skill unlock the next milestone changes to level 10',()=
   assert.equal(r2.remaining,80);
 });
 
-test('level 10 with blocked realm remains blocked, not fully learned',()=>{
+test('level 10 with stale unlock data waits for confirmation',()=>{
   const src=book(1080);
   src.skills[1].unlocked=true;
   const r=manualAnticipation(src,Catalog.totalExpForLevel);
-  assert.equal(r.status,'realm');
+  assert.equal(r.status,'pending');
   assert.equal(r.targetLevel,10);
   src.skills[2].unlocked=true;
   assert.equal(manualAnticipation(src,Catalog.totalExpForLevel),null);
@@ -135,7 +135,7 @@ test('the projection never modifies authoritative book or battle snapshots',()=>
   assert.equal(JSON.stringify([snapshot,battle]),previous);
 });
 
-test('untrusted skill titles and realm text are escaped in both views',()=>{
+test('untrusted skill titles are escaped and obsolete realm text is omitted',()=>{
   const b=book(260);b.skills[1].name='<img src=x onerror=alert(1)>';
   b.skills[1].realmName='<svg onload=alert(2)>';
   const r=manualAnticipation(b,Catalog.totalExpForLevel);
@@ -146,5 +146,5 @@ test('untrusted skill titles and realm text are escaped in both views',()=>{
   const r2=manualAnticipation(b,Catalog.totalExpForLevel);
   const html2=renderBattleBreakthroughEstimate(r2,esc);
   assert.doesNotMatch(html2,/<svg onload/);
-  assert.match(html2,/&lt;svg onload/);
+  assert.doesNotMatch(html2,/svg onload/);
 });

@@ -37,7 +37,7 @@ export function renderManualCollectionHeader(state, filter, {esc}) {
 
 export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt,label,totalExpForLevel}) {
   const visual=manualVisualState(book);
-  const tierClass=book.tierRealm==='元嬰'?'nascent':book.tierRealm==='築基'?'foundation':'qi';
+  const tierClass=({'煉氣':'qi','築基':'foundation','金丹':'golden','元嬰':'nascent'})[book.tierRealm]||'ascended';
   const anticipation=manualAnticipation(book,totalExpForLevel);
   const near=anticipation&&['near','imminent'].includes(anticipation.status);
   const current=book.id===focusId;

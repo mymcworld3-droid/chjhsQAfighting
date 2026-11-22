@@ -51,11 +51,10 @@ export function detectManualCelebration(before,after,context={}) {
   if(upgrades.length){
     const entry=upgrades.find(item=>item.book.id===context.bookId)||upgrades[0];
     const {book,old}=entry;
-    const nextSkill=(book.skills||[]).find((skill,i)=>!(old.skills?.[i]?.unlocked) && skill.mastered && !skill.realmReady);
-    const extra=nextSkill?`已達「${nextSkill.name}」的${book.weaponType?'武器':'功法'}等級門檻，仍需符合修士境界。`:'';
+    const extra='';
     return {kind:'manual-upgrade',school:book.school,bookId:book.id,
       name:book.name,level:Number(book.level)||1,previousLevel:Number(old.level)||1,weaponType:book.weaponType||null,
-      heading:book.weaponType?'武器精進':'功法精進',kicker:'修行突破 · 境界提升',
+      heading:book.weaponType?'武器精進':'功法精進',kicker:'修行突破 · 熟練提升',
       detail:`《${book.name}》熟練度已提升。`,extra};
   }
   return null;

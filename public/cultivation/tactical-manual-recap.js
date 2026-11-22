@@ -30,20 +30,18 @@ function masteryHint(book,manuals) {
   let headline='';
   if(next){
     const master=next.mastered===true;
-    const realm=next.realmReady===true;
     if(!master){
       const goalLevel=count(next.levelRequired);
       const needed=Math.max(0,count(manuals.totalExpForLevel(goalLevel))-exp);
       headline='距離第 '+goalLevel+' 級招式門檻尚需 '+format(needed)+' EXP';
-    }else if(!realm)headline='功法等級已符合，尚需達到修士境界';
+    }
     else headline='招式尚未解鎖，請在功法閣確認';
   }else headline='三招皆已領悟';
   return {
     level,progress,expInLevel:count(book.expInLevel),expToNext:count(book.expToNext),
     remaining:maxed?0:Math.max(0,count(book.expToNext)-count(book.expInLevel)),
     maxed,headline,
-    skillName:next?.name||'',
-    realmName:next?.realmReady===false?next.realmName||'指定':'' 
+    skillName:next?.name||''
   };
 }
 
@@ -79,7 +77,7 @@ export function renderManualBattleRecap(battle,uid,manuals,manualState=null,{esc
       </div>
       <div class="tc-manual-recap-goal">${mastery.skillName?
         `<strong>下一招 · ${escape(mastery.skillName)}</strong>`:''}
-        <small>${escape(mastery.headline)}${mastery.realmName?' · 需'+escape(mastery.realmName)+'境':''}</small>
+        <small>${escape(mastery.headline)}</small>
       </div>`:null;
     const progress=bar!==null?bar:`<p class="tc-manual-recap-sync">${syncFailed?'最新功法等級暫時無法取得':'正在同步功法等級與下一招目標…'}</p>`;
     return `<article class="tc-manual-recap-card tc-manual-recap--${row.school==='body'?'body':'sword'}"

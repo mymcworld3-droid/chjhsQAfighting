@@ -23,19 +23,15 @@ export function nextManualExpedition(state,requestedBookId,rules) {
   const enabledSkills=(book.skills||[]).filter(skill=>skill.unlocked);
   const activeSkill=enabledSkills.find(skill=>equipped.includes(skill.id))||null;
   const anticipation=manualAnticipation(book,rules.totalExpForLevel);
-  const missingRealm=anticipation?.status==='realm';
-  const upcoming=anticipation&&!missingRealm&&anticipation.status!=='pending'
+  const upcoming=anticipation&&anticipation.status!=='pending'
     ?Math.max(0,Math.trunc(anticipation.remaining)):null;
   const kills=upcoming>0?Math.ceil(upcoming/enemyRealm.exp):null;
   const path=activeSkill?'ready':enabledSkills.length?'needs-loadout':'locked';
   const action=path==='ready'?'battle':path==='needs-loadout'?'loadout':'skills';
   const noun=book.weaponType?'武器':'功法';
-  const title=missingRealm?'先突破修士境界':
-    anticipation?'朝下一招的門檻前進':
+  const title=anticipation?'朝下一招的門檻前進':
     Number(book.level)>=20?`${noun}圓滿，精進已領悟招式`:Number(book.level)>=10?`第三招門檻已達，繼續淬鍊${noun}`:`持續鍛鍊${noun}`;
-  const nextGoal=missingRealm?
-    noun+'等級已達成，仍需符合'+anticipation.realmName+'境門檻':
-    anticipation?('距 Lv. '+anticipation.targetLevel+' 還差 '+formatAmount(anticipation.remaining)+' EXP'):
+  const nextGoal=anticipation?('距 Lv. '+anticipation.targetLevel+' 還差 '+formatAmount(anticipation.remaining)+' EXP'):
     Number(book.level)>=20?`${noun}已達 Lv. 20`:Number(book.level)>=10?'可繼續修煉至 Lv. 20，增加攻擊力':`可持續累積${noun}修煉經驗`;
   return {
     bookId:book.id,bookName:book.name,school:book.school,weaponType:book.weaponType||null,
@@ -44,7 +40,7 @@ export function nextManualExpedition(state,requestedBookId,rules) {
     targetLevel:anticipation?.targetLevel||null,
     remaining:upcoming,estimatedKills:kills,
     path,action,activeSkillName:activeSkill?.name||null,
-    activeLoadout:activeIndex,activeLoadoutName:Array.isArray(state.weaponIds)?'三武器裝備':
+    activeLoadout:activeIndex,activeLoadoutName:Array.isArray(state.weaponIds)?'雙武器裝備':
       state.loadouts?.[activeIndex]?.name||('配置 '+(activeIndex+1)),
     title,nextGoal,unlockedSkills:enabledSkills.length
   };
@@ -64,7 +60,7 @@ export function renderManualExpedition(guide,{esc}={}) {
     `使用中的「${safe(guide.activeLoadoutName)}」已裝備 ${safe(guide.activeSkillName)}`:
     guide.path==='needs-loadout'?
       `使用中的「${safe(guide.activeLoadoutName)}」尚未裝備此${noun}招式`:
-      '目前尚無符合條件的已領悟招式，請先提升修煉等級或境界';
+      '目前尚無符合條件的已領悟招式，請先提升武器熟練等級';
   return `<section class="manual-expedition manual-expedition--${guide.school==='body'?'body':'sword'}"
     data-manual-expedition data-manual-expedition-book="${safe(guide.bookId)}"
     aria-label="下一場問道試煉">

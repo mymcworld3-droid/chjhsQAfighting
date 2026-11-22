@@ -113,3 +113,8 @@
   #manual-training-root .manual-training-dialog-header strong{font-size:15px}
   #manual-training-root .manual-training-dialog-body{padding:10px}
 }
+
+#manual-training-root .is-tier-golden{color:#f3d286;border-color:#c9a95d;background:#4a3b1c}
+
+#manual-training-root .is-tier-ascended{color:#e6d9ac;border-color:#b7a86b;background:#303e2d}
+#manual-training-root .manual-hero-weapon-copies{display:block;color:#bac9af;font-size:11px;line-height:1.8}

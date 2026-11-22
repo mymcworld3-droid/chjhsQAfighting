@@ -51,10 +51,10 @@ test('insufficient currency disables upgrade but does not invent resources',()=>
   assert.match(html,/data-skill-upgrade="a" disabled/);
   assert.match(html,/靈石不足/);
 });
-test('realm and mastery locked skills have no action buttons',()=>{
+test('mastery locked skills have no action buttons or cultivation gate',()=>{
   const html=render(book,'b',opts);
   assert.match(html,/功法 Lv. 5/);
-  assert.match(html,/修士 築基境/);
+  assert.doesNotMatch(html,/修士|築基境/);
   assert.doesNotMatch(html,/data-manual-equip=/);
   assert.doesNotMatch(html,/data-skill-upgrade=/);
 });
@@ -65,5 +65,5 @@ test('malicious skill fields cannot be interpolated as HTML',()=>{
   assert.doesNotMatch(html,/<svg onload/);
   assert.doesNotMatch(html,/<script>/);
   assert.match(html,/&lt;img src=x/);
-  assert.match(html,/&lt;svg onload/);
+  assert.doesNotMatch(html,/svg onload/);
 });

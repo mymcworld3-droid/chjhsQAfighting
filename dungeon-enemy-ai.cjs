@@ -196,7 +196,12 @@ function simulateCombat(map,enemies,members,startTick,endTick,
         if(planned){
           out={...enemy,attack:planned,intent:'windup',
             targetUid:planned.targetUid,lastActionTick:tick};
-        }else out=nextEnemy(map,enemy,currentMembers,tick,occupied);
+        }else{
+          out=nextEnemy(map,enemy,currentMembers,tick,occupied);
+          // Re-evaluate from the committed landing tile, with a full future windup.
+          const afterMove=Combat.planAttack(map,out,currentMembers,tick);
+          if(afterMove)out={...out,attack:afterMove,intent:'windup',targetUid:afterMove.targetUid};
+        }
       }else out=enemy;
       occupied.add(key(out.position));
       updated.push(out);

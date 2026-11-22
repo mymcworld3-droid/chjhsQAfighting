@@ -43,7 +43,7 @@ test('a successful manual level gain produces a level change, but not an invente
   assert.equal(result.kind,'manual-upgrade');
   assert.equal(result.previousLevel,4);
   assert.equal(result.level,5);
-  assert.match(result.extra,/仍需符合修士境界/);
+  assert.doesNotMatch(result.extra,/修士境界/);
   assert.doesNotMatch(result.heading,/領悟/);
 });
 

@@ -25,7 +25,8 @@
   const realmForScore=score=>REALMS.findLast(realm=>normalizedScore(score)>=realm.score)||{name:'凡人',score:0};
   const realmForStage=stage=>REALMS.findLast(realm=>Math.max(1,Math.floor(Number(stage)||1))>=realm.stage)||REALMS[0];
   const expForBeast=stage=>realmForStage(stage).exp;
-  const meetsRealm=(skill,score)=>normalizedScore(score)>=skill.realmRequired;
+  // Compatibility helper for old callers; techniques have no realm gate.
+  const meetsRealm=skill=>!!skill;
   const xpForNextLevel=level=>40+20*(Math.max(1,Math.floor(level))-1);
   const totalExpForLevel=level=>{
     const steps=Math.max(0,Math.floor(level)-1);
@@ -64,10 +65,10 @@
   }
   const technique=(id,name,cost,range,kind,power,description,extra={})=>
     Object.freeze({id,name,cost,range,kind,power,description,...extra,cooldown:0});
-  const book=(id,name,school,description,skills,realms=[1,6,28],tierRealm='煉氣')=>Object.freeze({
+  const book=(id,name,school,description,skills,tierRealm='煉氣')=>Object.freeze({
     id,name,school,weaponType:school==='sword'?'sword':'totem',description,tierRealm,skills:Object.freeze(skills.map((skill,index)=>
       Object.freeze({...skill,moveId:skill.moveId||skill.id,manualId:id,school,
-        levelRequired:[1,5,10][index],realmRequired:realms[index]})))
+        levelRequired:[1,5,10][index]})))
   });
   // Each book keeps its own unlock and EXP source even for a shared move.
   const shared=(move,id)=>({...move,id,moveId:move.id});
@@ -88,7 +89,7 @@
         '在自身曼哈頓距離兩格內的空地召劍。場上已有飛劍時，飛劍沿優先經過靈獸的最短路徑回到所選位置，沿途造成傷害。另可在移動選項中以每兩格一體力移動飛劍。',
         {travel:4,cooldown:0}),
       shared(breakLine,'flight-break')
-    ],[6,6,28],'築基'),
+    ],'築基'),
     // Preserve the former 青霄劍典 book and slot IDs in existing saves.
     book('sword-sky','八方天劍','sword','以多路劍氣交擊一點，兼及周圍敵人。',[
       shared(straight,'sky-pierce'),
@@ -98,7 +99,7 @@
       technique('sky-sever','八方合劍',6,4,'sword-array',1.25,
         '選擇四格內的中心。正向各延伸三格、斜向各延伸兩格，八路劍氣向中心匯聚。',
         {orthogonal:3,diagonal:2,centerPower:2.4})
-    ],[6,28,68],'元嬰'),
+    ],'金丹'),
     book('body-rock','玄嶽圖騰','body','突進破陣，將敵人擊退。',[
       straightFist,
       technique('rock-quake','突進震拳',3,3,'dash-cleave',1.15,
@@ -112,14 +113,14 @@
         '最多四段。每段攻擊前方一排並將敵人推退一格，再前進一格。敵人無法被推退時追加撞擊傷害；前路受阻則停止。',{steps:4,collisionPower:.45}),
       technique('dragon-roar','蓄勢',7,0,'fist-focus',0,
         '立即結束回合。接下來自己的兩個回合各可出手三次，其他拳法體力消耗減半並向上取整。',{cooldown:3})
-    ],[6,28,68],'元嬰'),
+    ],'金丹'),
     book('body-tiger','伏虎圖騰','body','以步法貼近敵人，借力改變敵人的站位。',[
       shared(straightFist,'tiger-fist'),
       technique('tiger-step','踏步連拳',4,2,'dash-cleave',1.5,
         '直線踏步最多兩格，再攻擊落點前方橫排三格兩次。',{hits:2}),
       technique('tiger-throw','翻摔',4,1,'fist-throw',1.5,
         '將身前橫排三格內的敵人摔到身後的對應格，落地時造成傷害。若對應落點有障礙或被占用，該目標留在原地。')
-    ],[6,28,68],'築基')
+    ],'築基')
   ]);
   const BY_BOOK=Object.freeze(Object.fromEntries(BOOKS.map(book=>[book.id,book])));
   const BY_SKILL=Object.freeze(Object.fromEntries(BOOKS.flatMap(book=>book.skills.map(skill=>[skill.id,skill]))));
@@ -221,9 +222,9 @@
     return description+suffix;
   }
   const publicSkill=(skill,masteryLevel,score,rank)=>{
-    const mastered=masteryLevel>=skill.levelRequired,realmReady=meetsRealm(skill,score);
-    const unlocked=mastered&&realmReady,stats=skillAtLevel(skill,rank);
-    return {...stats,mastered,realmReady,realmName:realmForScore(skill.realmRequired).name,
+    const mastered=masteryLevel>=skill.levelRequired;
+    const unlocked=mastered,stats=skillAtLevel(skill,rank);
+    return {...stats,mastered,realmReady:true,
       unlocked,upgrade:unlocked?skillUpgradeQuote(stats.level):null};
   };
   function normalizeLegacy(raw){
@@ -232,7 +233,13 @@
       if(!Object.hasOwn(BY_BOOK,id))continue;
       const exp=Object.prototype.hasOwnProperty.call(record||{},'exp')
         ?Number(record.exp):legacyKillsToExp(record?.kills);
-      books[id]={exp:mastery(exp).exp};
+      const tierRealm=REALMS.some(r=>r.name===record?.tierRealm)?record.tierRealm:BY_BOOK[id].tierRealm;
+      const copies=Object.fromEntries(REALMS.flatMap(r=>{
+        const count=Math.max(0,Math.min(1000000,Math.trunc(Number(record?.copies?.[r.name])||0)));
+        return count?[[r.name,count]]:[];
+      }));
+      books[id]={exp:mastery(exp).exp,...(record?.tierRealm?{tierRealm}:{}),
+        ...(Object.keys(copies).length?{copies}:{})};
     }
     const school=['sword','body'].includes(raw?.school)?raw.school:null;
     const equipped=[],moves=new Set();
@@ -322,7 +329,7 @@
     // Do not expose undiscovered scriptures to the cultivation UI.
     const library=BOOKS.filter(book=>!!s.books[book.id]).map(book=>{
       const levelInfo=mastery(s.books[book.id].exp);
-      return {id:book.id,name:book.name,school:book.school,weaponType:book.weaponType,tierRealm:book.tierRealm,description:book.description,
+      return {id:book.id,name:book.name,school:book.school,weaponType:book.weaponType,tierRealm:s.books[book.id].tierRealm||book.tierRealm,weaponCopies:s.books[book.id].copies||{[book.tierRealm]:1},description:book.description,
         owned:true,...levelInfo,upgrade:upgradeQuote(levelInfo.exp),skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level,score,s.skillLevels[skill.id]))};
     });
     return {...s,weaponIds,realmScore:score,realmName:realmForScore(score).name,

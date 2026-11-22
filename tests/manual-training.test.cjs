@@ -133,7 +133,7 @@ test('skill upgrades preserve manual XP and other skills and charge concurrent r
   await assert.rejects(API.upgradeSkill(db,'u1',{...input,targetLevel:3}),/下一級/);
   bookRecord(db).books['sword-flight']={exp:0};
   user.stats.totalScore=5;
-  await assert.rejects(API.upgradeSkill(db,'u1',{...input,skillId:'flight-slash'}),/境界未達/);
+  await assert.rejects(API.upgradeSkill(db,'u1',{...input,skillId:'flight-slash'}),/靈石不足/);
   user.stats.totalScore=30;user.stats.gold=2000;
   await assert.rejects(API.upgradeSkill(db,'u1',{skillId:'wind-slash',targetLevel:2}),/重新整理頁面/);
   await assert.rejects(API.upgradeSkill(db,'u1',{...input,expectedGold:20}),/費用已更新/);
@@ -195,31 +195,18 @@ test('only equipped manual killing blows grant EXP, once per idempotent request'
   assert.equal(bookRecord(db).books['sword-wind'].exp,60);
 });
 
-test('per-skill realm requirements are independent of manual level, using current cultivation realm cutoffs',()=>{
-  const first=Catalog.BY_SKILL['wind-slash'],second=Catalog.BY_SKILL['wind-step'],
-    third=Catalog.BY_SKILL['wind-thousand'],advanced=Catalog.BY_SKILL['sky-pierce'];
-  assert.deepEqual([first.realmRequired,second.realmRequired,third.realmRequired],[1,6,28]);
-  assert.deepEqual(Catalog.BY_BOOK['sword-sky'].skills.map(s=>s.realmRequired),[6,28,68]);
-  assert.deepEqual(Catalog.BY_BOOK['body-dragon'].skills.map(s=>s.realmRequired),[6,28,68]);
-  assert.equal(Catalog.meetsRealm(first,0),false);
-  assert.equal(Catalog.meetsRealm(first,1),true);
-  assert.equal(Catalog.realmForScore(0).name,'凡人');
-  assert.equal(Catalog.meetsRealm(second,5),false);
-  assert.equal(Catalog.meetsRealm(second,6),true);
-  assert.equal(Catalog.meetsRealm(third,27),false);
-  assert.equal(Catalog.meetsRealm(third,28),true);
-  assert.equal(Catalog.meetsRealm(advanced,5),false);
-  assert.equal(Catalog.meetsRealm(advanced,6),true);
-  const state={books:{'sword-sky':{exp:1080}},equipped:['sky-pierce','sky-cloud','sky-sever']};
-  const low=Catalog.publicState(state,5);
-  assert.equal(low.library[0].skills[0].unlocked,false);
-  assert.equal(low.library[0].skills[0].mastered,true);
-  assert.equal(low.library[0].skills[0].realmReady,false);
-  const intermediate=Catalog.publicState(state,28);
-  assert.deepEqual(intermediate.library[0].skills.map(s=>s.unlocked),[true,true,false]);
-  assert.deepEqual(Catalog.publicState(state,68).library[0].skills.map(s=>s.unlocked),[true,true,true]);
-  assert.equal(R.manualSkillFor({manualSkills:['sky-pierce'],trainingAccessScore:5},'sky-pierce'),null);
-  assert.equal(R.manualSkillFor({manualSkills:['sky-pierce'],trainingAccessScore:6},'sky-pierce')?.id,'sky-pierce');
+test('all techniques use mastery thresholds without cultivation realm requirements',()=>{
+  for(const book of Catalog.BOOKS){
+    assert.deepEqual(book.skills.map(s=>s.levelRequired),[1,5,10]);
+    assert(book.skills.every(s=>!Object.hasOwn(s,'realmRequired')));
+    for(const score of [0,1,5,28,68]){
+      const state=Catalog.publicState({books:{[book.id]:{exp:1080}},weaponIds:[book.id,null]},score);
+      assert(state.library[0].skills.every(s=>s.unlocked));
+    }
+  }
+  assert.equal(Catalog.realmForScore(0).name,'凡人','player cultivation still exists');
+  assert.equal(R.manualSkillFor({manualSkills:['sky-pierce'],trainingAccessScore:0},'sky-pierce')?.id,'sky-pierce');
+  assert.equal(R.manualSkillFor({manualSkills:[]},'sky-pierce'),null,'ownership snapshot still enforced');
 });
 test('spirit-beast realm rewards grow by trial stage, while the Lv. 5 and 10 EXP formula stays intact',()=>{
   assert.deepEqual(Catalog.REALMS.map(r=>r.exp),[20,35,55,85,120,170,235,320,430]);
@@ -234,21 +221,16 @@ test('spirit-beast realm rewards grow by trial stage, while the Lv. 5 and 10 EXP
   assert.equal(Catalog.totalExpForLevel(5),280);
   assert.equal(Catalog.totalExpForLevel(10),1080);
 });
-test('server blocks early skill equipment even when manual XP is high',async()=>{
-  const db=database();
-  await API.chooseSchool(db,'u1',{school:'sword'});
-  const user=db.records.get('users/u1'),manual=db.records.get(API.MANUALS+'/u1');
-  manual.books['sword-sky']={exp:1080};
-  user.stats.totalScore=5;
-  await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['sky-pierce']}),/境界未達/);
-  user.stats.totalScore=6;
-  assert.deepEqual((await API.equipManualSkills(db,'u1',{skillIds:['sky-pierce']})).equipped,['sky-pierce']);
-  await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['sky-cloud']}),/境界未達/);
-  user.stats.totalScore=28;
-  assert.deepEqual((await API.equipManualSkills(db,'u1',{skillIds:['sky-cloud']})).equipped,['sky-cloud']);
-  await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['sky-sever']}),/境界未達/);
-  user.stats.totalScore=68;
-  assert.deepEqual((await API.equipManualSkills(db,'u1',{skillIds:['sky-sever']})).equipped,['sky-sever']);
+test('server allows mastered weapon skills at zero player cultivation and still rejects missing mastery',async()=>{
+  const db=database();await API.chooseSchool(db,'u1',{school:'sword'});
+  db.records.get('users/u1').stats.totalScore=0;
+  const record=bookRecord(db);record.books['sword-sky']={exp:1080};
+  for(const id of ['sky-pierce','sky-cloud','sky-sever']){
+    const result=await API.equipManualSkills(db,'u1',{skillIds:[id]});
+    assert(result.equipped.includes(id));
+  }
+  bookRecord(db).books['sword-sky'].exp=0;
+  await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['sky-cloud']}),/等級尚未解鎖/);
 });
 test('real battle killing blows award the sum of each defeated beast realm XP',()=>{
   const s=R.create({id:'arena-0123456789abcdef',mode:'pve',
@@ -263,17 +245,15 @@ test('real battle killing blows award the sum of each defeated beast realm XP',(
   assert.equal(after.manualKills,undefined,'new battles use EXP receipts, not kill counts');
   assert.deepEqual(after.events.filter(e=>e.type==='manual-mastery').map(e=>e.exp),[20,35,85]);
 });
-test('battle authority refuses equipped skills when actor realm is too low',()=>{
+test('battle authority accepts the owned weapon snapshot independent of player realm',()=>{
   const s=R.create({id:'arena-0123456789abcdef',mode:'pve',
     players:[{uid:'u1',name:'u1',atk:200,maxHp:1000,
-      trainingAccessScore:5,manualSkills:['sky-pierce']}],now});
+      trainingAccessScore:0,manualSkills:['sky-pierce']}],now});
   s.blocks=[];Object.assign(s.actors[0],{x:1,y:3,stamina:10});
   s.actors=[s.actors[0],lowBeast('low',2,3)];
-  assert.throws(()=>R.apply(s,'u1',{type:'manual',skillId:'sky-pierce',x:2,y:3},now),
-    /尚未裝備|尚未解鎖/);
-  s.actors[0].trainingAccessScore=6;
   const after=R.apply(s,'u1',{type:'manual',skillId:'sky-pierce',x:2,y:3},now);
   assert(after.manualExp.u1['sword-sky']>0);
+  assert.throws(()=>R.apply(s,'u1',{type:'manual',skillId:'sky-cloud',x:2,y:3},now),/尚未裝備|尚未解鎖/);
 });
 test('cumulative kill receipts translate into XP, unlocking Lv.5 and Lv.10 without duplication',()=>{
   const raw={version:2,books:{'sword-wind':{exp:0}},equipped:['wind-slash']};
@@ -627,13 +607,13 @@ test('manual training UI omits redundant preset instructions and power calculati
 test('manual realm tiers are explicit and independent of original skill/possession requirements',()=>{
   const tiers=Object.fromEntries(Catalog.BOOKS.map(book=>[book.id,book.tierRealm]));
   assert.deepEqual(tiers,{
-    'sword-wind':'煉氣','sword-flight':'築基','sword-sky':'元嬰',
-    'body-rock':'煉氣','body-dragon':'元嬰','body-tiger':'築基'
+    'sword-wind':'煉氣','sword-flight':'築基','sword-sky':'金丹',
+    'body-rock':'煉氣','body-dragon':'金丹','body-tiger':'築基'
   });
-  assert.deepEqual(Catalog.BY_BOOK['sword-sky'].skills.map(skill=>skill.realmRequired),[6,28,68]);
+  assert(Catalog.BY_BOOK['sword-sky'].skills.every(skill=>!Object.hasOwn(skill,'realmRequired')));
   const publicBook=Catalog.publicState({books:{'sword-sky':{exp:0}}}).library[0];
-  assert.equal(publicBook.tierRealm,'元嬰');
-  assert.equal(publicBook.skills[0].realmReady,false);
+  assert.equal(publicBook.tierRealm,'金丹');
+  assert.equal(publicBook.skills[0].unlocked,true);
 });
 
 test('every owned manual level grants exactly one attack; no unowned or double-counted bonus',()=>{
@@ -660,7 +640,7 @@ test('server adds the manuscript bonus to actual battle attack and keeps existin
   record.books['sword-sky']={exp:Catalog.totalExpForLevel(20)};
   const snapshot=await API.manualsState(db,'u1');
   assert.equal(snapshot.attackBonus,30);
-  assert.equal(snapshot.library.find(b=>b.id==='sword-sky').tierRealm,'元嬰');
+  assert.equal(snapshot.library.find(b=>b.id==='sword-sky').tierRealm,'金丹');
   const actor=API.playerActor(user,'u1',{}, {},record);
   const baseline=API.playerActor(user,'u1',{}, {},null);
   assert.equal(actor.atk-baseline.atk,30);

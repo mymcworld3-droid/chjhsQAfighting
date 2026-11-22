@@ -52,7 +52,7 @@ const focusCost=(member,skill)=>isFocusEmpowered(member,skill)?
   Math.ceil(skill.cost/2):skill.cost;
 const skillOf=(id,record,score)=>{
   const s=Manuals.BY_SKILL[id];
-  if(!s||!Manuals.unlocked(record,id)||!Manuals.meetsRealm(s,score))return null;
+  if(!s||!Manuals.unlocked(record,id))return null;
   return Manuals.skillAtLevel(s,record.skillLevels?.[id]);
 };
 const describeDungeonSkill=skill=>{
@@ -178,7 +178,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq,moveSword=false}={}){
       !member.dungeonSkillIds.includes(skillId)))throw fail('此技能尚未裝備於目前配置',403);
   const normalized=Manuals.normalize(raw);
   const sk=skillOf(skillId,normalized,member.accessScore||0);
-  if(!sk)throw fail('功法尚未解鎖或修士境界不足',403);
+  if(!sk)throw fail('武器技能尚未解鎖',403);
   const empowered=isFocusEmpowered(member,sk);
   const origin=member.position;
   if(!tile(map,target))throw fail('目標不能位於牆壁或界外',409);

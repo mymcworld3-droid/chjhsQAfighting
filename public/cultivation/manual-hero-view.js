@@ -32,12 +32,12 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
   };
 
   const book=chosen;
-  const tierClass=book.tierRealm==='元嬰'?'nascent':book.tierRealm==='築基'?'foundation':'qi';
+  const tierClass=({'煉氣':'qi','築基':'foundation','金丹':'golden','元嬰':'nascent'})[book.tierRealm]||'ascended';
+  const copies=Object.entries(book.weaponCopies||{}).map(([realm,count])=>`${esc(realm)} × ${Math.max(0,Math.trunc(Number(count)||0))}`).join(' · ');
   const visual=manualVisualState(book);
   const growth=renderManualVisualMilestones(book,esc);
   const anticipation=manualAnticipation(book,totalExpForLevel);
   const nextNote=anticipation?
-    anticipation.status==='realm'?(weaponMode?'武器':'功法')+'已達 Lv. '+anticipation.targetLevel+'，待修士 '+anticipation.realmName+'境':
     anticipation.status==='pending'?'領悟條件待同步確認':
     '距第 '+(anticipation.targetLevel===5?'二':'三')+' 招等級門檻尚差 '+Math.max(0,anticipation.remaining).toLocaleString('zh-TW')+' EXP':
     '';
@@ -61,8 +61,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
     const unlocked=!!skill.unlocked;
     const skillState=manualSkillVisualState(skill);
     const missing=[
-      !skill.mastered?`${weaponMode?'武器':'功法'} Lv. ${skill.levelRequired}`:null,
-      !skill.realmReady?`${skill.realmName}境`:null
+      !skill.mastered?`${weaponMode?'武器':'功法'} Lv. ${skill.levelRequired}`:null
     ].filter(Boolean).join(' · ');
     const detail=unlocked?
       `招式 Lv. ${fmt(skill.level)} · ${fmt(skill.cost)} 體力`:
@@ -78,7 +77,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
       <span class="manual-hero-node-tier">第 ${index+1} 招 · Lv. ${fmt(skill.levelRequired)}</span>
       <strong>${esc(skill.name)}</strong>
       <small>${esc(detail)}</small>
-      <span class="manual-hero-node-status">${unlocked?'已領悟':skillState==='realm-locked'?'修士境界未達':'武器等級未達'}</span>
+      <span class="manual-hero-node-status">${unlocked?'已領悟':'武器等級未達'}</span>
     </button>`;
   }).join('');
   const upgrade=book.upgrade;
@@ -124,9 +123,10 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
               <span class="manual-hero-mastery-status">${progressLabel}</span>
             </div>
             <small class="manual-hero-attack-bonus">${weaponMode?'本武器':'本功法'}攻擊 +${fmt(ownAttack)} · 已獲${weaponMode?'武器':'功法'}合計 +${fmt(allAttack)}</small>
+            ${copies?`<small class="manual-hero-weapon-copies">持有：${copies}</small>`:''}
             ${growth}
             ${nextNote?`<small class="manual-hero-next-inline">${esc(nextNote)}</small>`:''}
-            <small class="manual-hero-mastery-footnote">Lv.5、10 為招式等級門檻，真正領悟仍需符合修士境界。</small>
+            <small class="manual-hero-mastery-footnote">武器 Lv.1、5、10 依序領悟三招。</small>
           </div>
           <div class="manual-hero-actions">${action}
             ${upgrade?'<span class="manual-hero-tip">靈石只可升至 Lv.10；之後需戰鬥修煉</span>':''}

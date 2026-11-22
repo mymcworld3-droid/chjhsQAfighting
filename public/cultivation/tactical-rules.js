@@ -10,6 +10,8 @@
     ?require('./manual-rules.js'):globalThis.QAManuals;
   const swordPaths=()=>typeof module==='object'&&module.exports
     ?require('./flying-sword-path.js'):globalThis.QAFlyingSwordPath;
+  const weaponDungeons=()=>typeof module==='object'&&module.exports
+    ?require('./weapon-dungeon-rules.js'):globalThis.QAWeaponDungeons;
   const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,events:64,turns:60,turnMs:30000,answerMs:50000});
   const MAPS=Object.freeze([
     {id:'courtyard',name:'演武庭',width:7,height:7,terrain:2,description:'開闊石庭，練習近身與迂迴。'},
@@ -70,7 +72,7 @@
   function manualSkillFor(actor,id){
     if(!actor||!Array.isArray(actor.manualSkills)||!actor.manualSkills.includes(id))return null;
     const Manuals=manuals(),skill=Manuals?.BY_SKILL?.[id];
-    return skill&&Manuals.meetsRealm(skill,actor.trainingAccessScore)?Manuals.skillAtLevel(skill,actor.manualSkillLevels?.[id]):null;
+    return skill?Manuals.skillAtLevel(skill,actor.manualSkillLevels?.[id]):null;
   }
   // The existing spirit page remains the single branch-selection surface.
   const SPIRIT_BRANCHES=Object.freeze({ocean:{tide:'tide',surge:'surge'},taichu:{renew:'renew',devour:'drain'},
@@ -196,6 +198,34 @@
   ].map((p,species)=>Object.freeze({...p,species})));
   const monsterProfile=species=>MONSTERS[Number(species)]||MONSTERS[0];
   // Keep the original generator for retries of battles created before layout v2.
+  function monsterProfileFor(m){
+    const profile=monsterProfile(m.species);
+    if(!m.trackingAttack)return profile;
+    return {...profile,name:m.name,attackName:m.weaponDungeonLord?'尖峰崩裂':'追蹤落石',
+      attack:{shape:'blast',range:m.weaponDungeonLord?4:3,radius:m.weaponDungeonLord?1:0,sight:false,power:1},
+      move:{kind:'heavy',steps:1},moveName:'重步',
+      attackText:'蓄勢落點會追蹤修士移動；退出射程可避開，成功擊退靈獸則會打斷蓄勢。',
+      moveText:'每回合最多移動一格，不會突進、跳躍或擊退。',tip:'紅框會隨你調整；請退出射程，或以擊退打斷蓄勢。'};
+  }
+  const lordSleeping=(s,m)=>m.weaponDungeonLord&&s.actors.some(a=>a.bot&&a.uid!==m.uid&&alive(a));
+  function trackingCells(s,m,hero){
+    const profile=monsterProfileFor(m),range=profile.attack.range;
+    if(Math.min(...footprint(m).map(p=>dist(p,hero)))>range)return [];
+    return area(s,hero,profile.attack.radius);
+  }
+  function trackingIntent(s,m,hero,armed=false){
+    if(lordSleeping(s,m))return {version:2,kind:'wait',cells:[],origin:point(m),target:point(hero),text:'沉眠：清除守衛後領主才會甦醒'};
+    const cells=trackingCells(s,m,hero),ready=cells.some(p=>key(p)===key(hero));
+    return {version:2,kind:ready||armed?'attack':'advance',cells,origin:point(m),target:point(hero),shape:'blast',
+      power:1,tracking:true,slow:false,push:0,text:ready?'下次：'+monsterProfileFor(m).attackName+'（追蹤，請退出射程）':armed?'已離開射程，本次落石無法命中':'下次：重步 1 格'};
+  }
+  function retargetTrackingIntents(s){
+    if(!s.weaponDungeon||s.status!=='active')return;
+    const hero=s.actors[0];
+    for(const m of s.actors.filter(a=>a.bot&&alive(a)&&a.trackingAttack)){
+      if(m.intent?.kind==='attack')m.intent=trackingIntent(s,m,hero,true);
+    }
+  }
   const LEGACY_TRIAL_TERRAINS=Object.freeze([
     {name:'竹影溪谷',terrain:0,props:'tree',enemies:[2,3,4,5]},
     {name:'荒漠殘垣',terrain:13,props:'rock',enemies:[6,7,8,9]},
@@ -518,14 +548,14 @@
     return {uid:String(raw.uid),name:String(raw.name||'修士').slice(0,40),team:raw.team||'player',bot:!!raw.bot,
       gender:raw.gender==='female'?'female':'male',species:num(raw.species),core:type,branch:branch.id,
       ...(num(raw.enemyScaleAttack)?{enemyScaleAttack:num(raw.enemyScaleAttack)}:{}),
-      ...(raw.bot?{level:Math.max(1,num(raw.level)||1)}:{}),
+      ...(raw.bot?{level:Math.max(1,num(raw.level)||1),...(raw.trackingAttack?{trackingAttack:true}:{}),...(raw.weaponDungeonLord?{weaponDungeonLord:true}:{})}:{}),
       ...(raw.bot&&raw.role?{role:raw.role,home:raw.home}:{}),
       ...(raw.boss?{boss:true,footprint:{width:2,height:2},...(raw.bossKind?{bossKind:raw.bossKind}:{})}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
       ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills,manualSkillLevels}:{}),
       ...(!raw.bot&&raw.manualWeaponMode?{manualWeaponMode:true,
-        manualWeaponIds:Array.from({length:2},(_,i)=>{
+        manualRulesVersion:2,manualWeaponIds:Array.from({length:2},(_,i)=>{
           const id=raw.manualWeaponIds?.[i];
           return typeof id==='string'&&catalog?.BY_BOOK?.[id]?id:null;
         })}:{}),
@@ -541,7 +571,8 @@
     return Math.round(base+Math.max(0,scaledHp-base)*scale);
   }
   function create({id,mode='pve',map='courtyard',players,trial=null,simultaneous=mode==='pvp',now=Date.now()}){
-    const layout=mode==='pve'&&trial&&trial.layoutVersion!==0?stageLayout(trial.seed,trial.stage,trial.layoutVersion??2):null;
+    const layout=mode==='pve'&&trial?.weaponDungeon?weaponDungeons().layout(trial.seed,trial.weaponDungeon.difficulty):
+      mode==='pve'&&trial&&trial.layoutVersion!==0?stageLayout(trial.seed,trial.stage,trial.layoutVersion??2):null;
     const m=layout||mapFor(map),mid=Math.floor(m.height/2);
     const s={version:1,id,mode,map:m.id,width:m.width,height:m.height,terrain:m.terrain,
       blocks:[],actors:[],status:mode==='pvp'&&players.length<2?'waiting':'active',revision:0,
@@ -557,6 +588,7 @@
     }else s.blocks.push({x:3,y:1},{x:3,y:5});
     s.actors=players.map((p,i)=>actor({...p,team:mode==='pvp'?p.uid:'player'},layout?layout.spawn:{x:i?m.width-2:1,y:mid}));
     if(layout?.layoutVersion===4)s.pveMetrics={mode:layout.mode,answers:0,staminaSpent:0,manualCasts:{},loadout:[...(s.actors[0].manualSkills||[])]};
+    if(layout?.weaponDungeon)s.weaponDungeon={...layout.weaponDungeon};
     const enemyScaleAttack=s.actors[0].enemyScaleAttack||s.actors[0].atk;
     if(s.trial?.layoutVersion===4&&s.objective?.type==='defense'){
       // Scale with the same trusted attack snapshot used for monster damage,
@@ -651,6 +683,11 @@
   }
   function damage(s,source,target,raw,opts={}){
     if(!alive(source)||!alive(target))return 0;
+    if(lordSleeping(s,target)){
+      log(s,'守衛石陣庇護領主：請先清除其他靈獸','guard',{actor:target.uid});return 0;
+    }
+    const manual=manuals()?.BY_BOOK?.[opts.manualId||manuals()?.BY_SKILL?.[opts.skill]?.manualId];
+    if(s.weaponDungeon&&!source.bot&&target.bot&&manual?.weaponType==='totem')raw*=1.15;
     const active=s.trial?.layoutVersion===4&&s.objective?.type==='sealing'?s.objective.points.filter(p=>!p.activated):[];
     if(source.bot&&active.some(p=>p.kind==='rage'&&dist(p,source)<=SEAL_TYPES.rage.range.radius))raw*=SEAL_TYPES.rage.damageMultiplier;
     if(target.bot&&active.some(p=>p.kind==='shield'&&dist(p,target)<=SEAL_TYPES.shield.range.radius)&&!opts.pierce)raw*=SEAL_TYPES.shield.damageMultiplier;
@@ -705,9 +742,9 @@
     return dy?{x:0,y:Math.sign(dy)}:null;
   }
   function push(s,a,target,steps,direction=pushDirection(a,target)){
-    if(!direction||target.boss)return;
+    if(!direction||target.boss&&!target.trackingAttack||lordSleeping(s,target))return;
     const route=[point(target)],{x:dx,y:dy}=direction;
-    for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(blocked(s,p)||at(s,p))break;target.x=p.x;target.y=p.y;route.push(point(target));}
+    for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(!canOccupy(s,target,p))break;target.x=p.x;target.y=p.y;route.push(point(target));}
     motion(s,target,route,'push',target.name+'被擊退');
     if(target.bot&&route.length>1)interruptMonster(target);
   }
@@ -1051,7 +1088,7 @@
     if(sk.pushToEdge)for(const t of hit)if(alive(t))push(s,a,t,boardSpan(s));
   }
   function interruptMonster(m){m.intent={version:2,kind:'stagger',cells:[],text:'位移打斷：下回合重新蓄勢'};}
-  function monsterCells(s,m,target,profile=monsterProfile(m.species)){
+  function monsterCells(s,m,target,profile=monsterProfileFor(m)){
     const attack=profile.attack,range=attack.range;
     const dx=Math.abs(target.x-m.x)>=Math.abs(target.y-m.y)?Math.sign(target.x-m.x)||1:0,dy=dx?0:Math.sign(target.y-m.y)||1;
     const side={x:-dy,y:dx},point={x:target.x,y:target.y};let shape=attack.shape,cells=[];
@@ -1100,7 +1137,7 @@
       return route.slice(0,2);
     }
     if((m.role==='guard'||m.role==='patrol')&&m.home&&dist(m.home,hero)>(m.role==='guard'?4:5))hero=m.home;
-    const profile=monsterProfile(m.species),move=profile.move,budget=Math.floor(move.steps/(1+(m.slow||0))),origin={x:m.x,y:m.y};
+    const profile=monsterProfileFor(m),move=profile.move,budget=Math.floor(move.steps/(1+(m.slow||0))),origin={x:m.x,y:m.y};
     if(!budget||move.kind==='rooted')return [origin];
     const jumping=['leap','hop','fly','teleport'].includes(move.kind),parents=new Map([[key(origin),null]]),queue=[origin];
     const open=p=>!blocked(s,p)&&(!at(s,p)||at(s,p).uid===m.uid);
@@ -1172,6 +1209,7 @@
       s.objective.hazards=active&&s.turn%SEAL_TYPES.hazard.triggerEveryTurns===0?[point(hero)]:[];
     }
     for(const m of s.actors.filter(a=>a.bot&&alive(a))){
+      if(m.trackingAttack){m.intent=trackingIntent(s,m,hero);continue;}
       if(s.trial?.layoutVersion===4&&s.objective?.type==='defense'){
         const shrine=s.objective.shrine;
         const target=dist(m,hero)<=1?hero:dist(m,shrine)<=1?shrine:null;
@@ -1199,7 +1237,7 @@
           power:1,text:ready?(radius===2?'下次：靈獸震地（第二階段）':'下次：靈獸爪擊'):'下次：大型靈獸逼近'};
         continue;
       }
-      const profile=monsterProfile(m.species),cells=monsterCells(s,m,hero,profile),ready=dist(m,hero)>=(profile.move.minDistance||0)&&cells.some(p=>key(p)===key(hero));
+      const profile=monsterProfileFor(m),cells=monsterCells(s,m,hero,profile),ready=dist(m,hero)>=(profile.move.minDistance||0)&&cells.some(p=>key(p)===key(hero));
       const name=profile.attack.shape==='guardian'?(s.turn%2===0?'天樞十字':'落石鎮壓'):profile.attackName;
       m.intent={version:2,kind:ready?'attack':profile.move.steps?'advance':'wait',cells:ready?cells:[],
         origin:{x:m.x,y:m.y},target:{x:hero.x,y:hero.y},shape:profile.attack.shape,
@@ -1208,7 +1246,7 @@
     }
   }
   function monsterTurn(s,m,hero){
-    const intent=m.intent;
+    const intent=m.trackingAttack&&m.intent?.kind==='attack'?trackingIntent(s,m,hero,true):m.intent;
     if(intent?.kind==='defense-attack'){
       if(intent.origin&&key(intent.origin)!==key(m))return;
       const p=intent.target,o=s.objective;
@@ -1259,7 +1297,7 @@
     }
     if(intent?.kind==='attack'){
       if(intent.origin&&key(intent.origin)!==key(m))return;
-      const profile=monsterProfile(m.species),shape=intent.shape==='guardian'?(s.turn%2===0?'cross':'blast'):intent.shape;
+      const profile=monsterProfileFor(m),shape=intent.shape==='guardian'?(s.turn%2===0?'cross':'blast'):intent.shape;
       log(s,m.name+'施展「'+profile.attackName+'」','monster-attack',{actor:m.uid,animation:{kind:'cast',style:shape,origin:point(m),target:intent.target,cells:intent.cells,color:profile.attack.slow?'#b8ca82':['cone','line'].includes(shape)?'#e4a06d':'#d9a080'}});
       let hit=intent.cells.some(p=>key(p)===key(hero));
       if(intent.shape==='charge'){
@@ -1283,7 +1321,7 @@
       log(s,m.name+(intent.kind==='stagger'?'重新蓄勢':'等待時機'),'wait',{actor:m.uid,animation:{kind:'guard'}});return;
     }
     const route=monsterRoute(s,m,hero),end=route.at(-1);m.slow=0;
-    if(route.length>1){m.x=end.x;m.y=end.y;log(s,m.name+'以'+monsterProfile(m.species).moveName+'移動','monster-move',{actor:m.uid,path:route,animation:{kind:'move',style:monsterProfile(m.species).move.kind}});}
+    if(route.length>1){m.x=end.x;m.y=end.y;log(s,m.name+'以'+monsterProfileFor(m).moveName+'移動','monster-move',{actor:m.uid,path:route,animation:{kind:'move',style:monsterProfileFor(m).move.kind}});}
     else log(s,m.name+'觀察戰局','wait',{actor:m.uid,animation:{kind:'guard'}});
   }
   function begin(s,a,now){
@@ -1404,6 +1442,7 @@
     }else if(command.type==='guard'){
       validateAttackLimit(a);a.guard=Math.max(.4,a.guard);a.attacks++;log(s,a.name+'凝神護身，下次自身回合前減傷 40%','guard',{actor:a.uid,animation:{kind:'guard',changes:[appearance(a)]}});
     }else if(!endsTurn)fail('未知的戰場行動');
+    retargetTrackingIntents(s);
     a.actions++;(s.turnTimeouts||={})[uid]=0;
     // A displacement or the last hit can finish an objective before enemies act.
     if(s.mode==='pve'&&s.trial?.layoutVersion>=3)checkFinished(s);
@@ -1472,5 +1511,5 @@
     if(s.pveMetrics)Object.assign(s.pveMetrics,{outcome:'loss',reason:'forfeit',turns:s.actors.find(a=>a.uid===uid)?.turns||0});
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterProfileFor,trackingCells,retargetTrackingIntents,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

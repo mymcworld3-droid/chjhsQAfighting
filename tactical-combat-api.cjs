@@ -2,6 +2,8 @@
 const crypto=require('node:crypto');
 const Rules=require('./public/cultivation/tactical-rules.js');
 const Manuals=require('./public/cultivation/manual-rules.js');
+const WeaponDungeons=require('./public/cultivation/weapon-dungeon-rules.js');
+const WeaponDungeonRewards=require('./weapon-dungeon-rewards.cjs');
 const TrainingAccess=require('./public/cultivation/training-access-rules.js');
 const Knowledge=require('./public/cultivation/knowledge-points.js');
 const SoloLearning=require('./public/cultivation/solo-learning-rules.js');
@@ -24,7 +26,8 @@ const requestId=value=>/^[A-Za-z0-9_-]{8,100}$/.test(String(value))?String(value
 const copy=v=>JSON.parse(JSON.stringify(v));
 const exists=s=>s?.exists?s.data():null;
 // Keep the legacy pointer for older clients, but resume each mode independently.
-const currentRoomId=(pointer,mode)=>pointer?.roomIds?.[mode]||pointer?.roomId;
+const currentRoomId=(pointer,mode)=>pointer?.roomIds?.[mode]||(mode==='weapon-dungeon'?null:pointer?.roomId);
+const roomChannel=s=>s?.weaponDungeon?'weapon-dungeon':s?.mode;
 // Legacy in-progress battles had snapshot weapon multipliers; remove them once.
 function disarm(s){
   if(!s)return s;
@@ -99,11 +102,11 @@ function patchedUser(user,patch){
 function manualLoadout(manualRecord,trainingAccessScore){
   const normalized=Manuals.weaponize(manualRecord);
   const {equipped,skillLevels,weaponIds}=normalized;
-  const manualSkills=equipped.filter(id=>Manuals.meetsRealm(Manuals.BY_SKILL[id],trainingAccessScore));
+  const manualSkills=[...equipped];
   const manualSkillLevels=Object.fromEntries(manualSkills.filter(id=>skillLevels[id])
     .map(id=>[id,skillLevels[id]]));
   return {trainingAccessScore,manualSkills,manualSkillLevels,
-    manualWeaponIds:[...weaponIds],manualWeaponMode:true};
+    manualWeaponIds:[...weaponIds],manualWeaponMode:true,manualRulesVersion:2};
 }
 // Previously running PvE rooms survive deployments. A pre-weapon actor
 // lacks manualWeaponMode, so the client would keep drawing the obsolete
@@ -111,7 +114,7 @@ function manualLoadout(manualRecord,trainingAccessScore){
 // Upgrade only its weapon metadata; never recreate the actor or reset progress.
 function needsWeaponSlotUpgrade(actor){
   return actor&&(!actor.manualWeaponMode||
-    !Array.isArray(actor.manualWeaponIds)||actor.manualWeaponIds.length!==2);
+    !Array.isArray(actor.manualWeaponIds)||actor.manualWeaponIds.length!==2||actor.manualRulesVersion!==2);
 }
 function upgradeLegacyRoomWeapons(room,uid,user,manualRecord){
   if(room?.mode!=='pve'||room.status!=='active'||!user)return false;
@@ -132,7 +135,7 @@ function upgradeLegacyRoomWeapons(room,uid,user,manualRecord){
   ]:loadout.manualWeaponIds;
   const available=preserveLegacy?oldSkills:loadout.manualSkills;
   const levels=preserveLegacy?actor.manualSkillLevels||{}:loadout.manualSkillLevels;
-  actor.manualWeaponMode=true;
+  actor.manualWeaponMode=true;actor.manualRulesVersion=2;
   actor.manualWeaponIds=[...equipped];
   actor.manualSkills=[...available];
   actor.manualSkillLevels={...levels};
@@ -232,7 +235,7 @@ async function chooseSchool(db,uid,input){
       const starter=Manuals.starterFor(school);
       next.books[starter]||={exp:0};next.starterClaimed=true;
       const introductory=Manuals.BY_BOOK[starter].skills[0];
-      if(!next.equipped.length&&Manuals.meetsRealm(introductory,TrainingAccess.score(exists(user)))){
+      if(!next.equipped.length){
         await assertLoadoutUnlocked(tx,db,uid);
         next.equipped.push(introductory.id);
       }
@@ -250,12 +253,9 @@ async function equipManualSkills(db,uid,input){
     const [user,record]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(ref)]);
     if(!exists(user))throw error('玩家資料不存在',404);
     if(Array.isArray(exists(record)?.weaponIds))
-      throw error('新版武器裝備請從三個武器欄選擇，技能依武器等級自動解鎖',400);
+      throw error('新版武器裝備請從兩個武器欄選擇，技能依武器等級自動解鎖',400);
     const next=Manuals.normalize(exists(record));
-    const score=TrainingAccess.score(exists(user));
     if(ids.some(id=>!Manuals.unlocked(next,id)))throw error('不能裝備功法等級尚未解鎖的技能',403);
-    if(ids.some(id=>!Manuals.meetsRealm(Manuals.BY_SKILL[id],score)))
-      throw error('修士境界未達到此功法技能的門檻',403);
     if(new Set(ids.map(id=>Manuals.BY_SKILL[id].moveId)).size!==ids.length)
       throw error('相同招式只能裝備一次，請選擇其所屬功法',400);
     await assertLoadoutUnlocked(tx,db,uid);
@@ -337,7 +337,7 @@ async function updateLoadout(db,uid,input){
         actor.manualSkills=[...projection.manualSkills];
         actor.manualSkillLevels={...projection.manualSkillLevels};
         actor.manualWeaponIds=[...projection.manualWeaponIds];
-        actor.manualWeaponMode=true;
+        actor.manualWeaponMode=true;actor.manualRulesVersion=2;
         delete actor.manualLoadoutIndex;
         delete actor.manualLoadoutName;
         if(room.mode==='pve'&&room.pveMetrics)
@@ -353,7 +353,6 @@ async function updateLoadout(db,uid,input){
     const next=Manuals.normalize(exists(record));
     const chosen=ids===undefined?next.loadouts[index].skillIds:ids;
     if(chosen.some(id=>!Manuals.unlocked(next,id)))throw error('不能裝備功法等級尚未解鎖的技能',403);
-    if(chosen.some(id=>!Manuals.meetsRealm(Manuals.BY_SKILL[id],TrainingAccess.score(user))))throw error('修士境界未達到此功法技能的門檻',403);
     if(new Set(chosen.map(id=>Manuals.BY_SKILL[id].moveId)).size!==chosen.length)throw error('相同招式只能裝備一次，請選擇其所屬功法',400);
     if(input?.apply===true||(ids!==undefined&&index===next.activeLoadout))await assertLoadoutUnlocked(tx,db,uid);
     if(name!==undefined)next.loadouts[index].name=name.trim();
@@ -399,7 +398,6 @@ async function upgradeSkill(db,uid,input){
     const user=exists(userSnap);if(!user)throw error('玩家資料不存在',404);
     const state=Manuals.normalize(exists(record)),skill=Manuals.BY_SKILL[skillId];
     if(!Manuals.unlocked(state,skillId))throw error('尚未解鎖此功法技能',403);
-    if(!Manuals.meetsRealm(skill,TrainingAccess.score(user)))throw error('修士境界未達到此功法技能的門檻',403);
     const level=Manuals.skillLevel(state.skillLevels[skillId]);
     if(level>=targetLevel)return manualResponse(state,user);
     const quote=Manuals.skillUpgradeQuote(level),gold=Rules.num(user.stats?.gold);
@@ -434,13 +432,22 @@ async function settle(tx,db,s,userOverrides={}){
     const mastered=applyManualKills(s,a.uid,exists(manualRecords[i]));
     let manualChanged=mastered.changed;
     const manuals=mastered.state;
-    const cleared=s.mode==='pve'&&s.trial&&s.winner===a.team&&['hp','objective'].includes(s.finishReason)&&currentRoomId(pointer,'pve')===s.id&&
+    const cleared=s.mode==='pve'&&!s.weaponDungeon&&s.trial&&s.winner===a.team&&['hp','objective'].includes(s.finishReason)&&currentRoomId(pointer,'pve')===s.id&&
        campaign?.seed===s.trial.seed&&campaign.stage===s.trial.stage;
     if(cleared){
       const next={...campaign,stage:Math.min(1000000,campaign.stage+1),best:Math.max(campaign.best||0,campaign.stage)};
       patch.tacticalTrialV1=next;s.nextStage=next.stage;
       tx.set(db.collection(PLAYERS).doc(a.uid),{...pointer,trial:next});
       if(reward){const dropped=rollManualDrop(s,a.uid,manuals);manualChanged=manualChanged||dropped.changed;}
+    }
+    if(s.weaponDungeon&&s.winner===a.team&&['hp','objective'].includes(s.finishReason)&&
+       currentRoomId(pointer,'weapon-dungeon')===s.id&&!s.actors.some(enemy=>enemy.bot&&Rules.alive(enemy))){
+      const dungeon=WeaponDungeons.progress(pointer?.weaponDungeonV1,s.updatedAtMs);
+      const index=s.weaponDungeon.difficulty;
+      dungeon.clears[index]++;dungeon.unlocked=Math.max(dungeon.unlocked,Math.min(5,index+1));
+      tx.set(db.collection(PLAYERS).doc(a.uid),{...pointer,weaponDungeonV1:dungeon});
+      const drop=WeaponDungeonRewards.roll(s,a.uid,manuals);manualChanged=manualChanged||!!drop;
+      s.weaponDungeonResult={cleared:true,difficulty:index,unlocked:dungeon.unlocked,tickets:dungeon.tickets,drop};
     }
     if(manualChanged)tx.set(manualRef,manuals);
     if(reward){patch['stats.gold']=Rules.num(u.stats?.gold)+reward.gold;patch['stats.totalScore']=Rules.num(u.stats?.totalScore)+reward.cultivation;}
@@ -457,8 +464,27 @@ async function readRoom(tx,db,id,uid){
   if(!roomId(id))throw error('戰場代碼無效',400);
   const s=disarm(exists(await tx.get(db.collection(ROOMS).doc(id))));if(!s)throw error('戰場不存在',404);member(s,uid);return s;
 }
+async function weaponDungeonState(db,uid,now=Date.now()){
+  return db.runTransaction(async tx=>{
+    const ref=db.collection(PLAYERS).doc(uid);
+    const [saved,user]=await Promise.all([tx.get(ref),tx.get(db.collection('users').doc(uid))]);
+    if(!exists(user))throw error('玩家資料不存在',404);
+    const pointer=exists(saved)||{},progress=WeaponDungeons.progress(pointer.weaponDungeonV1,now);
+    const id=currentRoomId(pointer,'weapon-dungeon');
+    const room=id?exists(await tx.get(db.collection(ROOMS).doc(id))):null;
+    tx.set(ref,{...pointer,weaponDungeonV1:progress});
+    return {...progress,dungeonId:WeaponDungeons.ID,name:WeaponDungeons.NAME,dailyTickets:3,maxTickets:5,
+      difficulties:WeaponDungeons.DIFFICULTIES.map(d=>({...d,locked:d.index>progress.unlocked,nextRealm:WeaponDungeons.DIFFICULTIES[d.index+1]?.name||'真仙'})),
+      active:room?.status==='active'&&room.weaponDungeon?{roomId:room.id,difficulty:room.weaponDungeon.difficulty}:null};
+  });
+}
 async function start(db,uid,selection={},now=Date.now()){
-  const mode=selection.mode==='pvp'?'pvp':'pve',map=Rules.mapFor(selection.map).id;
+  const weapon=selection.activity==='weapon-dungeon';
+  if(weapon&&(selection.mode==='pvp'||selection.code))throw error('武器副本僅限單人挑戰',400);
+  const dungeonChoice=weapon?WeaponDungeons.selection(selection):null;
+  const startRequest=weapon?requestId(selection.requestId):'';
+  if(weapon&&!startRequest)throw error('副本挑戰識別碼無效',400);
+  const mode=selection.mode==='pvp'?'pvp':'pve',channel=weapon?'weapon-dungeon':mode,map=Rules.mapFor(selection.map).id;
   const code=String(selection.code||'').trim().toLowerCase().replace(/^arena-/,'');
   if(code&&!/^[a-f0-9]{16}$/.test(code))throw error('請輸入完整的 16 碼戰場代碼',400);
   const wanted=code?'arena-'+code:'';
@@ -476,13 +502,27 @@ async function start(db,uid,selection={},now=Date.now()){
       tx.get(pointerRef),tx.get(userRef),tx.get(db.collection('gameConfig').doc('artifactCatalogV1')),
       tx.get(db.collection(MANUALS).doc(uid))]);
     const user=exists(userSnap);if(!user||user.uid&&user.uid!==uid)throw error('玩家資料不存在',404);
-    const pointer=exists(pointerSnap)||{},priorId=currentRoomId(pointer,mode);
+    const pointer=exists(pointerSnap)||{},priorId=currentRoomId(pointer,channel);
+    const dungeonProgress=weapon?WeaponDungeons.progress(pointer.weaponDungeonV1,now):null;
+    const receipt=weapon?(pointer.weaponDungeonStarts||[]).find(row=>row.requestId===startRequest):null;
+    if(receipt){
+      if(receipt.difficulty!==dungeonChoice.difficulty)throw error('挑戰識別碼已用於另一個難度',409);
+      const replay=exists(await tx.get(db.collection(ROOMS).doc(receipt.roomId)));
+      if(!replay||roomChannel(replay)!==channel)throw error('原挑戰紀錄已失效',409);
+      return snapshot(replay,uid);
+    }
+    if(weapon&&dungeonChoice.difficulty>dungeonProgress.unlocked)throw error('請先通過前一個難度',403);
     const stored=priorId?exists(await tx.get(db.collection(ROOMS).doc(priorId))):null;
-    const prior=stored?.mode===mode?disarm(stored):null;
+    // A legacy account may only have roomId. The first weapon dungeon must
+    // retain that unfinished trial before replacing the legacy last-room pointer.
+    const legacyId=pointer.roomId!==priorId&&!Object.values(pointer.roomIds||{}).includes(pointer.roomId)?pointer.roomId:null;
+    const legacy=legacyId?exists(await tx.get(db.collection(ROOMS).doc(legacyId))):null;
+    const prior=roomChannel(stored)===channel?disarm(stored):null;
     // Preserve an unfinished legacy trial when first entering PvP (and vice versa).
-    const roomIds={...pointer.roomIds,...(stored?{[stored.mode]:stored.id}:{})};
+    const roomIds={...pointer.roomIds,...(legacy?{[roomChannel(legacy)]:legacy.id}:{}),...(stored?{[roomChannel(stored)]:stored.id}:{})};
     const campaign=trialProgress(pointer.trial,seed);
     if(prior?.status==='active'){
+      if(weapon&&prior.weaponDungeon.difficulty!==dungeonChoice.difficulty)throw error('已有進行中的武器副本，請先完成或離場',409);
       // Resume old unfinished trials without moving actors or discarding a question.
       let changed=false;
       if(prior.mode==='pve'&&!prior.trial){
@@ -508,8 +548,10 @@ async function start(db,uid,selection={},now=Date.now()){
       }}
     }else if(prior?.status==='waiting')return snapshot(prior,uid);
     else{
-      const retry=mode==='pve'&&prior?.trial?.seed===campaign.seed&&prior.trial.stage===campaign.stage&&prior.winner!=='player';
-      const trial={...campaign,layoutVersion:retry?(prior.trial.layoutVersion??1):4};
+      const retry=mode==='pve'&&!weapon&&prior?.trial?.seed===campaign.seed&&prior.trial.stage===campaign.stage&&prior.winner!=='player';
+      if(weapon&&dungeonProgress.tickets<1)throw error('武器副本券不足，每日補發 3 張，最多持有 5 張',403);
+      const trial=weapon?{seed,stage:dungeonChoice.stage,layoutVersion:4,weaponDungeon:dungeonChoice}:
+        {...campaign,layoutVersion:retry?(prior.trial.layoutVersion??1):4};
       s=attachScopes(Rules.create({id:newId,mode,map:retry&&trial.layoutVersion===0?prior.map:map,players:[a],trial:mode==='pve'?trial:null,now}),[a]);
       // Actor construction deliberately limits public combat fields.
       s.actors[0].baseAtk=a.baseAtk;s.actors[0].baseMaxHp=a.baseMaxHp;s.actors[0].trainingAccessScore=a.trainingAccessScore;
@@ -517,16 +559,18 @@ async function start(db,uid,selection={},now=Date.now()){
     if(s.mode==='pvp'&&s.actors.length===2){const p=s.actors.find(p=>p.uid===uid);p.baseAtk=a.baseAtk;p.baseMaxHp=a.baseMaxHp;p.trainingAccessScore=a.trainingAccessScore;}
     ensureIntroductions(s,uid,pointer);
     if(prior?.status==='waiting'&&prior.id!==s.id)tx.set(db.collection(ROOMS).doc(prior.id),Rules.forfeit(prior,uid,now));
-    tx.set(db.collection(ROOMS).doc(s.id),s);tx.set(pointerRef,{...pointer,roomId:s.id,roomIds:{...roomIds,[mode]:s.id},...(mode==='pve'?{trial:campaign}:{})});
-    const preferences={['tacticalPreferences.'+a.core]:a.branch,...(mode==='pve'?{tacticalTrialV1:campaign}:{})};
+    tx.set(db.collection(ROOMS).doc(s.id),s);tx.set(pointerRef,{...pointer,roomId:s.id,roomIds:{...roomIds,[channel]:s.id},...(mode==='pve'&&!weapon?{trial:campaign}:{}),
+      ...(weapon?{weaponDungeonV1:{...dungeonProgress,tickets:dungeonProgress.tickets-1},
+        weaponDungeonStarts:[...(pointer.weaponDungeonStarts||[]),{requestId:startRequest,roomId:s.id,difficulty:dungeonChoice.difficulty}].slice(-32)}:{})});
+    const preferences={['tacticalPreferences.'+a.core]:a.branch,...(mode==='pve'&&!weapon?{tacticalTrialV1:campaign}:{})};
     tx.update(userRef,preferences);return snapshot(s,uid);
   });
 }
 async function state(db,uid,now=Date.now(),mode=''){
-  if(mode&&mode!=='pve'&&mode!=='pvp')throw error('戰場模式無效',400);
+  if(mode&&!['pve','pvp','weapon-dungeon'].includes(mode))throw error('戰場模式無效',400);
   const pointer=exists(await db.collection(PLAYERS).doc(uid).get()),id=mode?currentRoomId(pointer,mode):pointer?.roomId;if(!id)return null;
   // No write for ordinary reads. Only an expired PvP turn requires a transaction.
-  const stored=disarm(exists(await db.collection(ROOMS).doc(id).get()));if(!stored||mode&&stored.mode!==mode)return null;
+  const stored=disarm(exists(await db.collection(ROOMS).doc(id).get()));if(!stored||mode&&roomChannel(stored)!==mode)return null;
   member(stored,uid);
   // Persist the two-weapon projection before returning a resumed old room.
   // A display-only conversion would fail as soon as the player casts a skill.
@@ -557,7 +601,7 @@ async function acknowledgeEnemy(db,uid,input){
   const species=Number(input.species);if(!Number.isInteger(species)||!Rules.MONSTERS[species])throw error('妖獸種類無效',400);
   return db.runTransaction(async tx=>{
     const s=await readRoom(tx,db,input.roomId,uid),pointerRef=db.collection(PLAYERS).doc(uid),pointer=exists(await tx.get(pointerRef));
-    if(s.mode!=='pve'||currentRoomId(pointer,'pve')!==s.id||!s.actors.some(a=>a.bot&&a.species===species))throw error('這不是目前試煉出現的妖獸');
+    if(s.mode!=='pve'||currentRoomId(pointer,roomChannel(s))!==s.id||!s.actors.some(a=>a.bot&&a.species===species))throw error('這不是目前試煉出現的妖獸');
     ensureIntroductions(s,uid,pointer);const seen=seenSpecies(pointer),pending=s.pendingIntroductions[uid];
     if(!pending.includes(species)){
       if(seen.includes(species))return snapshot(s,uid);
@@ -608,12 +652,8 @@ async function switchBattleLoadout(db,uid,input,now=Date.now()){
     if(Array.isArray(exists(manualSnap)?.weaponIds))
       throw error('新版武器沒有主武器，請直接選擇想施放的武器技能',409);
     const manuals=Manuals.normalize(exists(manualSnap)),preset=manuals.loadouts[index];
-    const score=TrainingAccess.score(user);
-    const ids=Array.isArray(manuals.weaponIds)?
-      preset.skillIds.filter(skillId=>Manuals.meetsRealm(Manuals.BY_SKILL[skillId],score)):
-      preset.skillIds;
+    const ids=preset.skillIds;
     if(ids.some(skillId=>!Manuals.unlocked(manuals,skillId)))throw error('此配置包含尚未解鎖的功法技能',403);
-    if(ids.some(skillId=>!Manuals.meetsRealm(Manuals.BY_SKILL[skillId],score)))throw error('此配置包含境界未達門檻的技能',403);
     if(new Set(ids.map(skillId=>Manuals.BY_SKILL[skillId].moveId)).size!==ids.length)
       throw error('同一招式不可重複裝備',400);
     const actor=member(s,uid);
@@ -1008,6 +1048,7 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
     }
   };
   app.get('/api/tactical/state',route((db,uid,req)=>state(db,uid,Date.now(),req.query?.mode||'')));
+  app.get('/api/tactical/weapon-dungeons',route((db,uid)=>weaponDungeonState(db,uid)));
   app.get('/api/tactical/manuals',route((db,uid)=>manualsState(db,uid)));
   app.post('/api/tactical/manuals/school',route((db,uid,req)=>chooseSchool(db,uid,req.body)));
   app.post('/api/tactical/manuals/loadout',route((db,uid,req)=>updateLoadout(db,uid,req.body)));
@@ -1023,4 +1064,4 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.post('/api/tactical/review-math-issue',route((db,uid,req)=>reviewMathIssue(db,uid,req.body)));
 }
 module.exports=register;
-module.exports.__test={ROOMS,PLAYERS,MANUALS,reviewMathIssue,manualsState,chooseSchool,equipManualSkills,updateLoadout,switchBattleLoadout,upgradeManual,upgradeSkill,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};
+module.exports.__test={weaponDungeonState,settle,ROOMS,PLAYERS,MANUALS,reviewMathIssue,manualsState,chooseSchool,equipManualSkills,updateLoadout,switchBattleLoadout,upgradeManual,upgradeSkill,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};

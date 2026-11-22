@@ -213,7 +213,7 @@ function renderDungeonModernWheel(wheel,{weaponIds,selectedWeaponSlot=-1,options
     button.setAttribute('aria-pressed',String(item.value===selected));
     button.querySelector('.tc-wheel-name').textContent=item.name;
     button.querySelector('.tc-rw-price').textContent=price;
-    button.title=item.locked?'尚未符合武器等級或境界條件':item.name+' · '+price;
+    button.title=item.locked?'尚未達到武器熟練等級':item.name+' · '+price;
     button.setAttribute('aria-label',button.title);
   }
   syncRail(component.querySelector('[data-rail="outer"]'),

@@ -78,13 +78,13 @@ test('server-confirmed mastery supplies next level and level-5 unlock XP require
   assert.match(html,/下一招 · 突進橫斬/);
   assert.match(html,/aria-valuenow="40"/);
 });
-test('reaching level 5 is not an unlock when the realm requirement is unmet',()=>{
+test('stale level-5 unlock state requests confirmation without a realm condition',()=>{
   const html=renderManualBattleRecap(room(),'u1',manuals,{
     library:[book(5,{totalExp:310,expInLevel:30,expToNext:120,progress:25})]
   },options);
   assert.match(html,/Lv. 5/);
-  assert.match(html,/尚需達到修士境界/);
-  assert.match(html,/需築基境/);
+  assert.match(html,/招式尚未解鎖，請在功法閣確認/);
+  assert.doesNotMatch(html,/築基境|修士境界/);
   assert.doesNotMatch(html,/三招皆已領悟/);
 });
 test('level 10 has more mastery levels ahead, even with all three skills learned',()=>{

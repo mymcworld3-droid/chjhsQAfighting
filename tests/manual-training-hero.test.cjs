@@ -57,7 +57,7 @@ test('show only owned manuals, preferring the currently selected school',()=>{
   assert.doesNotMatch(switched.html,/manual-hero-roster/);
 });
 
-test('show level, XP, next milestone, realm requirements and three original skills',()=>{
+test('show level, XP, next mastery milestone and three original skills',()=>{
   const view=draw([makeBook()]);
   assert.match(view.html,/Lv. 4/);
   assert.match(view.html,/72 \/ 100 EXP/);
@@ -65,7 +65,7 @@ test('show level, XP, next milestone, realm requirements and three original skil
   assert.doesNotMatch(view.html,/class="manual-anticipation"/);
   assert.match(view.html,/功法 Lv. 5/);
   assert.equal((view.html.match(/data-manual-jump-skill=/g)||[]).length,3);
-  assert.match(view.html,/金丹境/);
+  assert.doesNotMatch(view.html,/金丹境|修士境界/);
   assert.match(view.html,/data-manual-upgrade="body-rock"/);
 });
 

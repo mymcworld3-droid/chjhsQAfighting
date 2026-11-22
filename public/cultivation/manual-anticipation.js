@@ -16,11 +16,10 @@ export function manualAnticipation(book,totalExpForLevel,projectedGain=0){
   const estimatedExp=confirmedExp+gain;
   const percent=Math.round(100*Math.max(0,Math.min(1,(estimatedExp-startExp)/(targetExp-startExp))));
   const remaining=Math.max(0,targetExp-estimatedExp);
-  const realmBlocked=skill.mastered===true&&skill.realmReady===false;
-  const stale=skill.mastered===true&&skill.realmReady===true||
+  const stale=skill.mastered===true||
     (!skill.mastered&&Number(book.level)>=targetLevel);
-  const status=realmBlocked?'realm':stale?'pending':percent>=90?'imminent':percent>=75?'near':'training';
-  return {bookId:book.id,skillId:skill.id,skillName:skill.name,realmName:skill.realmName||'指定',
+  const status=stale?'pending':percent>=90?'imminent':percent>=75?'near':'training';
+  return {bookId:book.id,skillId:skill.id,skillName:skill.name,
     level:Number(book.level)||1,targetLevel,confirmedExp,estimatedExp,projectedGain:gain,
     remaining,targetExp,percent,status};
 }
@@ -29,10 +28,8 @@ export function renderManualAnticipation(hint,esc){
   const text=value=>esc(String(value??''));
   const fmt=value=>Math.max(0,Number(value)||0).toLocaleString('zh-TW');
   const badge={training:'逐步修煉',near:'靈氣漸滿',imminent:'突破在即',
-    realm:'境界待突破',pending:'等待確認'}[hint.status]||'修煉中';
-  const message=hint.status==='realm'?
-    '功法門檻已達，仍需達到修士 '+hint.realmName+'境':
-    hint.status==='pending'?'功法門檻資料待同步，尚未確認解鎖':
+    pending:'等待確認'}[hint.status]||'修煉中';
+  const message=    hint.status==='pending'?'功法門檻資料待同步，尚未確認解鎖':
     '距 Lv. '+hint.targetLevel+' 功法門檻還差 '+fmt(hint.remaining)+' EXP';
   return `<div class="manual-anticipation manual-anticipation--${hint.status}"
     data-manual-anticipation="${hint.status}" data-manual-next-level="${hint.targetLevel}">
@@ -49,7 +46,7 @@ export function renderManualAnticipation(hint,esc){
       <span style="width:${hint.percent}%"></span>
     </div>
     <p>${text(message)}</p>
-    <small>功法等級達標後，仍須符合修士境界才能領悟招式。</small>
+    <small>招式會在武器 Lv.1／5／10 解鎖。</small>
   </div>`;
 }
 export function manualRoomExp(room,uid,bookId,catalog){
@@ -69,24 +66,21 @@ export function battleBreakthroughEstimate(snapshot,room,uid,delta,catalog,basel
     if(!book||!Number.isFinite(start)||start<0)continue;
     const gain=Math.max(0,manualRoomExp(room,uid,row.id,catalog)-start);
     const hint=manualAnticipation(book,catalog.totalExpForLevel,gain);
-    if(hint&&['near','imminent','realm'].includes(hint.status))
+    if(hint&&['near','imminent'].includes(hint.status))
       candidates.push({...hint,bookName:book.name,isEstimate:gain>0});
   }
-  const priority={imminent:0,realm:1,near:2};
+  const priority={imminent:0,near:1};
   candidates.sort((a,b)=>priority[a.status]-priority[b.status]||a.remaining-b.remaining);
   return candidates[0]||null;
 }
 export function renderBattleBreakthroughEstimate(hint,esc,{confirmed=false}={}){
   if(!hint)return '';
   const txt=v=>esc(String(v??'')),fmt=v=>Math.max(0,Number(v)||0).toLocaleString('zh-TW');
-  const realm=hint.status==='realm';
-  const title=realm?'功法門檻已達 · 待境界提升':
-    hint.status==='imminent'?'靈氣將滿 · 接近突破':'功法逐漸接近門檻';
-  const detail=realm?'仍須達到修士 '+hint.realmName+'境':
-    (confirmed?'距 Lv. ':'試算距 Lv. ')+hint.targetLevel+
+  const title=    hint.status==='imminent'?'靈氣將滿 · 接近突破':'功法逐漸接近門檻';
+  const detail=    (confirmed?'距 Lv. ':'試算距 Lv. ')+hint.targetLevel+
       ' 等級門檻'+(confirmed?'還差 ':'約 ')+fmt(hint.remaining)+' EXP';
   const note=confirmed?
-    'EXP 已依角色帳號確認，領悟招式仍須達到指定境界。':
+    'EXP 已依角色帳號確認，招式僅依武器熟練等級解鎖。':
     '本場僅為試算，實際 EXP 與領悟以伺服器結算為準。';
   return `<div class="tc-manual-breakthrough tc-manual-breakthrough--${hint.status}"
     data-manual-battle-breakthrough data-manual-breakthrough-status="${hint.status}">

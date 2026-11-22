@@ -43,6 +43,18 @@ test('wolf attack telegraphs exact adjacent tile at T2, resolves only at T4',()=
   assert.equal(room.enemies[0].attack,null);
   assert.equal(AI.advanceWorld(room,map,start+4000),null);
 });
+test('a wolf that enters melee range by moving publishes a full windup on that same tick',()=>{
+ const line=map.mainRoute.slice(3,6),player=line[0],origin=line[2];
+ assert.equal(dist(origin,player),2);
+ let room=core({kind:'wolf',cadence:2,position:origin},player);
+ room=apply(room,2);
+ assert.equal(dist(room.enemies[0].position,player),1);
+ assert.equal(room.enemies[0].attack.startedAtTick,2);
+ assert.equal(room.enemies[0].attack.resolvesAtTick,4);
+ assert.equal(room.members.a.battleHealth,100);
+ room=apply(room,3);assert.equal(room.members.a.battleHealth,100);
+ room=apply(room,4);assert.equal(room.members.a.battleHealth,92);
+});
 test('moving out of a warned tile during windup avoids all damage',()=>{
   const p=map.mainRoute[3],e={kind:'wolf',cadence:2,position:nextTo(p)};
   let room=core(e,p);

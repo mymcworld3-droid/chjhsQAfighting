@@ -66,7 +66,7 @@ test('only ten route stations and exactly three skill-unlock milestones are show
   assert.match(html,/data-manual-growth-stage="inscribed"/);
   assert.match(html,/role="progressbar"/);
   assert.match(html,/aria-valuenow="49"/);
-  assert.match(html,/領悟仍需達到修士境界/);
+  assert.match(html,/招式依武器熟練等級解鎖/);
   assert.equal((html.match(/<small>1<\/small>|<small>5<\/small>|<small>10<\/small>/g)||[]).length,3);
 });
 
@@ -80,11 +80,11 @@ test('stages and aura rings are visible with original stable cover and clickable
   assert.match(html,/data-manual-upgrade="sword-wind"/);
 });
 
-test('level threshold alone does not light up skills blocked by player realm',()=>{
+test('stale server unlocks stay dim without displaying obsolete realm requirements',()=>{
   const h=hero(makeBook(10,'sword'));
   assert.match(h,/manual-hero--tier-refined/);
-  assert.match(h,/data-manual-skill-visual="realm-locked"/);
-  assert.match(h,/修士境界未達/);
+  assert.match(h,/data-manual-skill-visual="level-locked"/);
+  assert.doesNotMatch(h,/修士境界/);
   assert.doesNotMatch(h,/三招皆已領悟/);
 });
 
@@ -117,7 +117,7 @@ test('gallery never repeats skill prerequisites already shown in the featured he
   assert.doesNotMatch(html,/功法等級未達/);
   assert.doesNotMatch(html,/is-realm-locked/);
   const view=hero(item);
-  assert.match(view,/is-realm-locked/);
+  assert.doesNotMatch(view,/is-realm-locked/);
   assert.match(view,/is-level-locked/);
 });
 

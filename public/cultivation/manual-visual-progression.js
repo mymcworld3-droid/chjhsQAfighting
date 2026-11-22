@@ -18,7 +18,6 @@ export function manualVisualState(book) {
 
 export function manualSkillVisualState(skill) {
   if(skill?.unlocked)return 'learned';
-  if(skill?.mastered&&!skill?.realmReady)return 'realm-locked';
   return 'level-locked';
 }
 
@@ -42,7 +41,7 @@ export function renderManualVisualMilestones(book,esc) {
     </span>`;
   }).join('');
   return `<div class="manual-growth-marks" data-manual-growth-stage="${stage}" role="progressbar"
-      aria-label="${esc(book?.name||'功法')}三招修行里程碑：目前 Lv. ${level}。進度條僅涵蓋 Lv. 1 至 Lv. 10 的招式門檻，修煉可繼續提升；領悟仍需達到修士境界"
+      aria-label="${esc(book?.name||'功法')}三招修行里程碑：目前 Lv. ${level}。進度條僅涵蓋 Lv. 1 至 Lv. 10 的招式門檻，修煉可繼續提升；招式依武器熟練等級解鎖"
       aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(percentage)}">
       <span class="manual-growth-flow" aria-hidden="true">
         <span class="manual-growth-flow-fill" style="width:${percentage.toFixed(2)}%"></span>

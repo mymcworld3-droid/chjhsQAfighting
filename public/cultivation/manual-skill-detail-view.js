@@ -9,8 +9,7 @@ export function renderManualSkillDetail(book,skillId,{esc,skillArt,descriptionWi
   const full=!other&&equipped.length>=3;
   const locked=!skill.unlocked;
   const missing=[
-    !skill.mastered?'功法 Lv. '+skill.levelRequired:null,
-    !skill.realmReady?'修士 '+skill.realmName+'境':null
+    !skill.mastered?'功法 Lv. '+skill.levelRequired:null
   ].filter(Boolean);
   const upgrade=skill.upgrade;
   const gain=skill.kind==='fist-focus'?'每級降低 1 體力':'每級提高 10% 基礎傷害';
@@ -41,7 +40,7 @@ export function renderManualSkillDetail(book,skillId,{esc,skillArt,descriptionWi
       ${art?`<img class="manual-skill-art" src="${esc(art)}" alt="" loading="lazy" decoding="async">`:''}
       <div class="manual-focus-skill-info">
         <strong>${esc(skill.name)}${skill.unlocked?' · Lv. '+fmt(skill.level):''}</strong>
-        <small>${fmt(skill.cost)} 體力 · ${skill.unlimited?'無固定射程':fmt(skill.range)+' 格'} · ${esc(skill.realmName)}境</small>
+        <small>${fmt(skill.cost)} 體力 · ${skill.unlimited?'無固定射程':fmt(skill.range)+' 格'}</small>
         <p>${esc(descriptionWithDamage(attack,skill))}</p>
       </div>
     </div>

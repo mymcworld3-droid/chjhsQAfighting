@@ -4,7 +4,7 @@ const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({
 })[char]);
 const positive=value=>Math.max(0,Number(value)||0);
 const pct=(value,total)=>Math.max(0,Math.min(100,Math.round(positive(value)/Math.max(1,positive(total))*100)));
-const profile=actor=>globalThis.QATactical?.monsterProfile(actor.species);
+const profile=actor=>globalThis.QATactical?.monsterProfileFor?.(actor)||globalThis.QATactical?.monsterProfile(actor.species);
 const portrait=actor=>{
   const species=Math.max(0,Math.min(19,Number(actor.species)||0));
   const x=(species%5)*25,y=Math.floor(species/5)*100/3;

@@ -36,15 +36,13 @@
     const attack=clamp(finite(stats.attack,200),1,MAX_ATTACK);
     const maxHp=clamp(finite(stats.maxHp,1000),1,MAX_HP);
     const base=Math.round(attack*2+maxHp*.2);
-    const score=safe(realmScore,0,100000000);
     const complete=manualState!==null&&manualState!==undefined;
     const normalized=Catalog.normalize(complete?manualState:{});
     const selected=[],moves=new Set();
     for(const id of normalized.equipped){
       const skill=Catalog.BY_SKILL[id],book=skill&&normalized.books[skill.manualId];
       if(!skill||!book||moves.has(skill.moveId)
-        ||Catalog.levelForExp(book.exp)<skill.levelRequired
-        ||!Catalog.meetsRealm(skill,score))continue;
+        ||Catalog.levelForExp(book.exp)<skill.levelRequired)continue;
       moves.add(skill.moveId);
       const modified=Catalog.skillAtLevel(skill,normalized.skillLevels[id]);
       selected.push({id:skill.id,moveId:skill.moveId,name:skill.name,

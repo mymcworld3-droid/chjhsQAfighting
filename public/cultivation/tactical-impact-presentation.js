@@ -12,6 +12,7 @@
   const clamp=(n,min=0,max=1)=>Math.min(max,Math.max(min,Number(n)||0));
   const positive=n=>Math.max(0,Number(n)||0);
   function bossFor(state){
+    if(state?.mode==='pve'&&state.weaponDungeon)return state.actors?.find(a=>a.weaponDungeonLord&&a.boss)||null;
     if(state?.mode!=='pve'||state?.objective?.type!=='boss')return null;
     const boss=state.actors?.find(a=>a.uid===state.objective.bossUid&&a.boss);
     return boss||null;
@@ -23,7 +24,8 @@
     return {uid:String(boss.uid),name:String(boss.name||'鎮關靈獸'),
       hp,maxHp:total,ratio:hp/total,phase:boss.phase===2?2:1,
       kind:['rock','vine','flame'].includes(boss.bossKind)?boss.bossKind:'rock',
-      intent:String(boss.intent?.text||'觀察靈獸動向'),alive:hp>0};
+      intent:String(boss.intent?.text||'觀察靈獸動向'),alive:hp>0,
+      dormant:!!boss.weaponDungeonLord&&state.actors.some(a=>a.bot&&a.uid!==boss.uid&&a.hp>0)};
   }
   function phaseTransition(before,after){
     if(!before||!after||before.id!==after.id)return null;

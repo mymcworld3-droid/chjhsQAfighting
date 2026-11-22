@@ -21,7 +21,7 @@ test('tactical strength has a transparent, bounded base and never counts inactiv
   assert.equal(empty.equipment,0);
   assert(Number.isFinite(Rules.calculate({stats:{attack:Infinity,maxHp:-1}}).total));
 });
-test('only equipped, owned, mastered and realm-eligible moves increase strength',()=>{
+test('only equipped, owned and mastered moves increase strength regardless of player realm',()=>{
   const novice=Rules.calculate({...base,manualState:own('wind-slash'),realmScore:1});
   assert(novice.skills>0);
   assert.equal(novice.items.length,1);
@@ -30,9 +30,10 @@ test('only equipped, owned, mastered and realm-eligible moves increase strength'
   const locked=Rules.calculate({...base,manualState:own('wind-step'),realmScore:1868});
   assert.equal(locked.skills,0);
   const wrongRealm=Rules.calculate({...base,manualState:own('wind-step',280),realmScore:1});
-  assert.equal(wrongRealm.skills,0);
+  assert(wrongRealm.skills>0);
   const unlocked=Rules.calculate({...base,manualState:own('wind-step',280),realmScore:6});
   assert(unlocked.skills>0);
+  assert.equal(wrongRealm.skills,unlocked.skills);
 });
 test('moving a skill from level 1 to level 5 improves rating without changing the base',()=>{
   const early=Rules.calculate({...base,manualState:own('wind-slash',0,1),realmScore:1});

@@ -30,7 +30,7 @@ test('the right outer ring offers only the attacks available in attack mode',()=
   assert.deepEqual(values(wheelDetailOptions(hero,true)),['player']);
   assert.deepEqual(values(wheelDetailOptions(hero,false)),['manual:wind-slash','manual:wind-step','manual:wind-thousand']);
   assert.deepEqual(values(wheelDetailOptions(makeActor(),false)),['attack']);
-  assert.deepEqual(values(wheelDetailOptions(makeActor(['wind-step'],1),false)),['attack']);
+  assert.deepEqual(values(wheelDetailOptions(makeActor(['wind-step'],1),false)),['manual:wind-step']);
   for(const count of [1,2,3])for(let index=0;index<count;index++){
     assert.equal(detailIndex(detailAngle(index,count),count),index);
   }

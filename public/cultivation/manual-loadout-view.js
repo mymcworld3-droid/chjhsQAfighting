@@ -114,9 +114,9 @@ function renderLegacyManualLoadout(state, selectedIndex, pickerSlot, {esc,skillA
       </div><button type="button" class="manual-picker-close" data-manual-close-picker
         aria-label="關閉招式選擇"><i class="fa-solid fa-xmark" aria-hidden="true"></i> 收起</button>
       </div>
-      <p class="manual-picker-hint">只能選擇已領悟且符合境界的招式。同類招式不會重複裝備；已裝備招式可互換位置。</p>
+      <p class="manual-picker-hint">只能選擇已領悟的招式。同類招式不會重複裝備；已裝備招式可互換位置。</p>
       <div class="manual-picker-grid">${candidateCards||
-        '<div class="manual-picker-empty">目前沒有可裝備的招式。可先提升功法等級或修士境界。</div>'}</div>
+        '<div class="manual-picker-empty">目前沒有可裝備的招式。可先提升武器熟練等級。</div>'}</div>
     </div>`;
   })():'';
 
@@ -172,7 +172,7 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
     const book=books.get(slots[i]),chosen=i===selected;
     const names=(book?.skills||[]).map((skill,index)=>
       '<span class="manual-weapon-skill '+(skill.unlocked?'is-learned':'is-locked')+
-      '" title="'+esc(skill.unlocked?skill.name:'Lv.'+skill.levelRequired+'／'+skill.realmName+'境解鎖')+'">'+
+      '" title="'+esc(skill.unlocked?skill.name:'武器 Lv.'+skill.levelRequired+' 解鎖')+'">'+
       '<small>'+['一','二','三'][index]+'式</small><strong>'+esc(skill.name)+'</strong>'+
       (skill.unlocked?' ✓':' 🔒')+'</span>').join('');
     return '<div class="manual-weapon-slot '+(book?'is-equipped':'is-empty')+' '+(chosen?'is-selected':'')+
@@ -197,7 +197,7 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
   const chooser=picked?'<div class="manual-picker manual-weapon-picker" data-manual-picker>'+
     '<div class="manual-picker-heading"><div><span class="manual-picker-eyebrow">武器庫 · 第 '+(pickerSlot+1)+' 欄</span>'+
     '<h4>選擇已持有的劍或圖騰</h4></div><button type="button" class="manual-picker-close" data-manual-close-picker>收起</button></div>'+
-    '<p class="manual-picker-hint">每種武器只能裝備一次；各武器的三招會隨熟練等級與境界自動開放。</p>'+
+    '<p class="manual-picker-hint">每種武器只能裝備一次；各武器的三招會隨熟練等級自動開放。</p>'+
     '<div class="manual-weapon-choice-grid">'+owned.map(book=>{
       const inSlot=slots.indexOf(book.id),chosen=inSlot===pickerSlot;
       return '<button type="button" class="manual-weapon-choice '+(chosen?'is-current':'')+

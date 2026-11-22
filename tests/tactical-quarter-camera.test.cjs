@@ -107,7 +107,7 @@ test('quarter-wheel battlefield shows why an action is unavailable without anoth
   assert.match(ui,/data-action-feedback role="status" aria-live="polite"/);
   assert.match(ui,/本回合出手次數已滿/);
   assert.match(ui,/體力不足：需要 /);
-  assert.match(ui,/尚未裝備此技能，或境界尚未解鎖/);
+  assert.match(ui,/尚未裝備或解鎖此武器技能/);
   assert.match(ui,/招式動畫播放中/);
   assert.match(ui,/feedback\.hidden=!reason/);
   assert.match(css,/\.tc-action-feedback\{/);
