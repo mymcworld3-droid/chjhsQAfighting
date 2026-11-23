@@ -249,54 +249,35 @@ function battleSnapshot(effects){
   return {version:1,effects:list,openingShield:Math.max(0,Math.round(sumEffect(list,'equip_shield_flat')))};
 }
 
-function trustedRaidPlayerSnapshot(player,uid,catalogDoc={}){
+function trustedRaidPlayerSnapshot(player,uid,_catalogDoc={}){
   if(!player||typeof player!=='object')throw new Error('玩家資料不存在');
-  const baseAttack=Math.max(0,finite(player?.stats?.attack,200));
-  const baseMaxHp=Math.max(1,finite(player?.stats?.maxHp,1000))+trainingAccess.hpBonus(player);
-  const core=coreSnapshot(player), soul=soulSnapshot(player,core);
-  const equipped=equippedArtifacts(player,artifactCatalog(catalogDoc));
-  const effects=equippedEffects(equipped);
-  const soulAttack=Math.max(0,Math.round(finite(soul?.attackFlat)));
-  const soulMaxHp=Math.max(0,Math.round(finite(soul?.maxHpFlat)));
-  // Match the browser wrapper exactly: nascent-soul projection first, then equipment
-  // flat/percent modifiers, then active timed attack multipliers.
-  const attackMultiplier=equipmentMultiplier(effects,'equip_attack_percent')*timedAttackMultiplier(player);
-  const hpMultiplier=equipmentMultiplier(effects,'equip_hp_percent');
-  const baseCombat={
-    attack:Math.max(1,Math.round((baseAttack+sumEffect(effects,'equip_attack_flat'))*attackMultiplier)),
-    maxHp:Math.max(1,Math.round((baseMaxHp+sumEffect(effects,'equip_hp_flat'))*hpMultiplier))
-  };
-  const combat={
-    attack:Math.max(1,Math.round((baseAttack+soulAttack+sumEffect(effects,'equip_attack_flat'))*attackMultiplier)),
-    maxHp:Math.max(1,Math.round((baseMaxHp+soulMaxHp+sumEffect(effects,'equip_hp_flat'))*hpMultiplier))
-  };
-  const artifactBattle=battleSnapshot(effects);
+  // Old Golden Core, nascent-soul, divine ability and four-slot artifact
+  // equipment were retired from stamina-battle. Never trust stale account
+  // records or browser snapshots to re-enable their combat bonuses.
+  const baseAttack=Math.max(1,Math.round(finite(player?.stats?.attack,200)));
+  const baseMaxHp=Math.max(1,Math.round(finite(player?.stats?.maxHp,1000)+trainingAccess.hpBonus(player)));
+  const combat={attack:baseAttack,maxHp:baseMaxHp};
+  const artifactBattle={version:1,effects:[],openingShield:0};
   const portrait=safePortrait(player?.equipped?.avatar) ||
     (player?.storyProgressV1?.gender==='female'?'assets/story/characters/player-female-determined.png':'assets/story/characters/player-male-determined.png');
   return {
     uid:String(uid),name:safeName(player.displayName||player?.profile?.displayName||'無名修士',40),
     portrait,totalScore:positive(player?.stats?.totalScore),rankLevel:positive(player?.stats?.rankLevel),
     trainingAccessScore:trainingAccess.score(player),
-    // Combat power intentionally scores raw+soul base stats and equipment separately,
-    // matching public/cultivation/combat-power.js without double-counting equipment stats.
-    combatPower:combatPower({attack:baseAttack+soulAttack,maxHp:baseMaxHp+soulMaxHp},core,equipped),
-    atk:combat.attack,baseAtk:baseCombat.attack,hp:combat.maxHp,maxHp:combat.maxHp,baseMaxHp:baseCombat.maxHp,
-    goldenCore:core,nascentSoul:soul,innateAbility:Innate.snapshot(player),innateAbilityState:null,
-    coreShield:!!core&&player?.stats?.goldenCoreShield===true,coreCorrectStreak:0,
-    artifactBattle,artifactShield:artifactBattle.openingShield,artifactFirstHitUsed:false,artifactCheatDeathUsed:false,
+    combatPower:combatPower(combat,null,[]),
+    atk:combat.attack,baseAtk:combat.attack,hp:combat.maxHp,maxHp:combat.maxHp,baseMaxHp:combat.maxHp,
+    goldenCore:null,nascentSoul:null,innateAbility:null,innateAbilityState:null,
+    coreShield:false,coreCorrectStreak:0,
+    artifactBattle,artifactShield:0,artifactFirstHitUsed:false,artifactCheatDeathUsed:false,
     knowledgeScope:trustedKnowledgeScope(player)
   };
 }
 async function loadTrustedRaidPlayer(db,uid){
-  const [userSnap,catalogSnap]=await Promise.all([
-    db.collection('users').doc(String(uid)).get(),
-    db.collection('gameConfig').doc('artifactCatalogV1').get().catch(()=>null)
-  ]);
+  // Artifact catalogs are no longer part of an active fighter projection.
+  const userSnap=await db.collection('users').doc(String(uid)).get();
   if(!userSnap.exists)throw Object.assign(new Error('玩家資料不存在'),{status:404});
-  const user=userSnap.data()||{};
-  return trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalogSnap?.exists?(catalogSnap.data()||{}):{});
+  return trustedRaidPlayerSnapshot(userSnap.data()||{},uid);
 }
-
 function memberSnapshotFromTrusted(player,host=false){
   return {...player,ready:false,alive:true,online:true,host,damage:0,correct:0,attempts:0,
     combatContribution:Contribution.normalize(),

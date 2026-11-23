@@ -36,3 +36,23 @@ test('old combat change popups are not generated',()=>{
  assert.doesNotMatch(growth,/popup\.innerHTML|document\.createElement\('aside'\)/);
  assert.match(growth,/showGrowthComparison = \(\) =>/);
 });
+
+test('server combat projection ignores old owned and equipped systems',()=>{
+ const {trustedRaidPlayerSnapshot}=require('../raid-authority.cjs');
+ const bare={stats:{attack:240,maxHp:900,totalScore:188}};
+ const legacy={...bare,
+   cultivationTraining:{equippedCore:{type:'ocean',grade:1}},
+   nascentSoulGrowth:{version:1,branches:{attack:10,vitality:10}},
+   artifactSystem:{equipped:{本命法寶:'void-sword'},inventory:{'void-sword':1}},
+   innateAbility:{type:'ocean',level:10}
+ };
+ const clean=trustedRaidPlayerSnapshot(bare,'u');
+ const equipped=trustedRaidPlayerSnapshot(legacy,'u');
+ assert.equal(equipped.atk,clean.atk);
+ assert.equal(equipped.maxHp,clean.maxHp);
+ assert.equal(equipped.combatPower,clean.combatPower);
+ assert.equal(equipped.goldenCore,null);
+ assert.equal(equipped.nascentSoul,null);
+ assert.equal(equipped.innateAbility,null);
+ assert.deepEqual(equipped.artifactBattle.effects,[]);
+});

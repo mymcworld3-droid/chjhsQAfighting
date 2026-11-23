@@ -48,8 +48,8 @@ test('server trusted raid HP projection matches browser before and after nascent
   user.nascentSoulGrowth={version:1,branches:{attack:10,vitality:10,core:10,cultivation:10}};
   const evolved=Raid.trustedRaidPlayerSnapshot(user,'h');
   assert.equal(evolved.baseMaxHp,1300);
-  assert.equal(evolved.maxHp,1550);
-  assert.equal(evolved.atk,235);
+  assert.equal(evolved.maxHp,1300,'retired nascent bonuses do not affect server combat');
+  assert.equal(evolved.atk,200);
 });
 
 test('combat power UI explicitly includes realm HP, without counting it as an equipped artifact',()=>{
