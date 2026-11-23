@@ -56,3 +56,15 @@ test('server combat projection ignores old owned and equipped systems',()=>{
  assert.equal(equipped.innateAbility,null);
  assert.deepEqual(equipped.artifactBattle.effects,[]);
 });
+
+test('修行 page and navigation cannot be hidden by the retired core-access gate',()=>{
+  const index=read('public/index.html');
+  const oldStyle=index.match(/<style id="golden-core-access-guard-style">([\s\S]*?)<\/style>/)?.[1]||'';
+  assert.doesNotMatch(oldStyle,/training-access-ready/);
+  assert.doesNotMatch(oldStyle,/#page-training|#nav-training/);
+  assert.match(index,/data-home-action="training" aria-label="修行"/);
+  const manual=read('public/cultivation/manual-training-page.js');
+  assert.match(manual,/nav\.setAttribute\('aria-label','修行'\)/);
+  assert.match(manual,/>修行<\/span>/);
+  assert.match(manual,/page\.classList\.add\('manual-training-active'\)/);
+});

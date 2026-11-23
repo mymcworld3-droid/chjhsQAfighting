@@ -25,7 +25,7 @@ function ensure(){
   if(root?.parentElement!==page){
     root=document.createElement('div');
     root.id='manual-training-root';root.className='manual-training';
-    root.innerHTML='<div class="manual-loading">正在開啟兵器閣…</div>';
+    root.innerHTML='<div class="manual-loading">正在開啟修行頁…</div>';
     page.append(root);
   }
   if(!document.getElementById('manual-training-style')){
@@ -365,7 +365,7 @@ function ensureNav(){
     nav=document.createElement('button');
     nav.id='nav-training';nav.type='button';nav.dataset.target='page-training';
     nav.className='nav-btn training-nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all';
-    nav.innerHTML='<div class="relative p-1 training-nav-orb"><i class="fa-solid fa-book-open text-lg"></i></div><span class="text-[10px] mt-1">修煉</span>';
+    nav.innerHTML='<div class="relative p-1 training-nav-orb"><i class="fa-solid fa-book-open text-lg"></i></div><span class="text-[10px] mt-1">修行</span>';
     const home=parent.querySelector('[data-target="page-home"]');
     if(home)home.insertAdjacentElement('afterend',nav);else parent.appendChild(nav);
     nav.addEventListener('click',()=>window.switchToPage?.('page-training'));
@@ -373,7 +373,7 @@ function ensureNav(){
   delete nav.dataset.foundationTraining;
   nav.hidden=false;nav.disabled=false;
   nav.classList.remove('hidden','is-locked');
-  nav.setAttribute('aria-label','武器修煉');
+  nav.setAttribute('aria-label','修行');
   document.body.classList.add('cultivation-training-unlocked');
 }
 function boot(){

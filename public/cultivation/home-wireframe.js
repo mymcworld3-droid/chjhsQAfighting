@@ -38,9 +38,12 @@ function activate(action) {
     case 'settings': return window.switchToPage?.('page-settings');
     case 'store': window.loadStoreItems?.(); window.switchToPage?.('page-store'); return;
     case 'training': {
+      // The new weapon/cultivation page is independent of the retired 金丹 guard.
+      // Navigate even if the auxiliary nav is not hydrated yet; its module can
+      // render the static shell after startup instead of falsely saying locked.
       const nav = $('nav-training');
-      if (nav) nav.click();
-      else window.showToast?.('修行功能將隨境界開放。');
+      if (nav && !nav.disabled && !nav.hidden) nav.click();
+      else window.switchToPage?.('page-training');
       return;
     }
     case 'gameplay': return window.switchToPage?.('page-gameplay');

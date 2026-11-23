@@ -42,13 +42,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 🔥 新增 MathJax 設定檔，強制識別 $ 符號 -->
     <style id="golden-core-access-guard-style">
-html:not(.training-access-ready) #nav-training,
-      html:not(.training-access-ready) #page-training {
-        display: none !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-      }
-
+/* The current 修行 page is governed by its normal page-section visibility.
+         Its old 金丹 unlock flag is no longer provided by the retired module. */
       html:not(.golden-core-access-ready) [data-training-tab="core"] {
         display: none !important;
         visibility: hidden !important;

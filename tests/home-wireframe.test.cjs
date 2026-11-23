@@ -27,6 +27,16 @@ test('homepage displays live balances and combat power, clearing stale values on
   setUid('b');ctx.api.update();assert.equal(nodes.get('home-art-gold').textContent,'—');assert.equal(nodes.get('home-art-name').textContent,'青雲修士');
   setUid('');ctx.api.update();assert.equal(nodes.get('home-art-power').textContent,'—');
 });
+test('home 修行 always opens the current page even without an auxiliary nav',()=>{
+  const {ctx,actions}=fixture();
+  ctx.api.activate('training');
+  assert.deepEqual(actions,['page-training']);
+  const nav={disabled:false,hidden:false,click(){actions.push('nav-training-click')}};
+  ctx.document.getElementById=id=>id==='nav-training'?nav:null;
+  ctx.api.activate('training');
+  assert.deepEqual(actions,['page-training','nav-training-click']);
+});
+
 test('homepage actions use existing meditation, leaderboard, store and navigation functions',()=>{
   const {ctx,actions}=fixture();
   for(const action of ['meditation','rank','store','settings','gameplay','social'])ctx.api.activate(action);
