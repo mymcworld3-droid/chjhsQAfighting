@@ -97,3 +97,17 @@ test('the main progress card prioritizes genuine daily progress over path or wee
   ctx.renderSpotlight();
   assert.equal(elements.get('quest-spotlight-title').textContent,'今日任務皆已完成');
 });
+
+test('artwork task list uses current daily snapshot, escapes titles, and distinguishes claimable and paid tasks',()=>{
+  const {ctx,data,elements,user,rollover}=fixture();
+  data.daily=[quest('<script>alert(1)</script>',1,1,{claimable:true}),quest('已領取',1,1,{claimed:true}),quest('尚未開放',0,1,{locked:true})];
+  data.commissions=[quest('委託',0,3)];
+  ctx.renderHomeDailyList();
+  assert.equal(elements.get('home-art-tasks-count').textContent,'（2/4）');
+  const markup=elements.get('home-art-tasks-list').innerHTML;
+  assert.doesNotMatch(markup,/<script>/);assert.match(markup,/&lt;script&gt;/);
+  assert.match(markup,/is-claim/);assert.match(markup,/已完成並領取/);assert.match(markup,/未解鎖/);
+  ctx.setBusy(true);ctx.renderHomeDailyList();assert.match(elements.get('home-art-tasks-list').innerHTML,/disabled/);
+  user({uid:'u2'});ctx.renderHomeDailyList();assert.doesNotMatch(elements.get('home-art-tasks-list').innerHTML,/已領取|alert/);
+  user({uid:'u1'});rollover();ctx.renderHomeDailyList();assert.doesNotMatch(elements.get('home-art-tasks-list').innerHTML,/alert/);
+});

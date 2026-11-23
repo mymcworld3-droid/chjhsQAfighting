@@ -1,0 +1,32 @@
+name: Homepage artwork acceptance
+on:
+  push:
+    branches: [stamina-battle]
+    paths:
+      - 'public/index.html'
+      - 'public/assets/home/**'
+      - 'public/styles/home-wireframe.css'
+      - 'public/cultivation/home-wireframe.js'
+      - 'public/cultivation/quest-system.js'
+      - 'scripts/test-home-art-browser.cjs'
+      - '.github/workflows/home-art-browser.yml'
+  workflow_dispatch:
+jobs:
+  homepage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --no-audit --no-fund
+      - run: npm install --no-save --no-audit --no-fund playwright@1.62.1
+      - run: npx playwright install --with-deps chromium
+      - run: node scripts/test-home-art-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: homepage-artwork-screenshots
+          path: /tmp/home-art-acceptance/*.png
+          if-no-files-found: ignore

@@ -643,7 +643,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <link rel="stylesheet" href="styles/xianxia-quiet.css?v=20261016-portrait-hide-full-header1">
     <link rel="stylesheet" href="styles/interface-cleanup.css?v=20261023-review1">
     <link rel="stylesheet" href="styles/interface-cleanup-pages.css?v=20261115-field-ink">
-    <link rel="stylesheet" href="styles/home-wireframe.css?v=20261116-free-quiz-v1">
+    <link rel="stylesheet" href="styles/home-wireframe.css?v=20261123-home-art-v1">
     <link rel="stylesheet" href="styles/learning-page.css?v=20261115-vocabulary-starry-button-space">
     <style id="debug-top-layer-style">
       /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
@@ -697,6 +697,35 @@ body.xianxia-theme main:has(#page-training.active-page),
         </div>
 
         <div id="page-home" class="page-section hidden px-4 relative">
+            <section class="home-art-scene" aria-label="青雲問道主頁">
+                <img class="home-art-title" src="assets/home/home-title.png" alt="青雲問道" decoding="async">
+                <section class="home-art-player" aria-label="玩家資訊">
+                    <div class="home-art-avatar"><div id="home-art-avatar-slot"></div><span id="home-art-level" aria-label="境界等級">—</span></div>
+                    <div class="home-art-identity"><strong id="home-art-name">青雲修士</strong><span id="home-art-realm">初入仙途</span><span class="home-art-power"><i class="fa-solid fa-khanda" aria-hidden="true"></i> 戰力 <b id="home-art-power">—</b></span></div>
+                </section>
+                <section class="home-art-wallet" aria-label="靈石">
+                    <span class="home-art-coin" aria-hidden="true">◉</span><span class="home-art-money"><small>靈石</small><b id="home-art-gold" aria-live="polite">—</b></span>
+                    <button type="button" data-home-action="gold" aria-label="獲取靈石">＋</button>
+                </section>
+                <nav class="home-art-tools" aria-label="主頁功能">
+                    <button type="button" data-home-action="quest" aria-label="活動"><i class="fa-solid fa-gift" aria-hidden="true"></i><span>活動</span><b class="home-art-dot" data-home-alert="quest" hidden></b></button>
+                    <button type="button" data-home-action="rank" aria-label="排名"><i class="fa-solid fa-ranking-star" aria-hidden="true"></i><span>排名</span><b class="home-art-dot" data-home-alert="rank" hidden></b></button>
+                    <button type="button" data-home-action="mail" aria-label="信件"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span>信件</span><b class="home-art-dot" data-home-alert="mail" hidden></b></button>
+                    <button type="button" data-home-action="settings" aria-label="設定"><i class="fa-solid fa-gear" aria-hidden="true"></i><span>設定</span><b class="home-art-dot" data-home-alert="settings" hidden></b></button>
+                </nav>
+                <section class="home-art-tasks" aria-labelledby="home-art-tasks-title">
+                    <header><h2 id="home-art-tasks-title">每日任務 <small id="home-art-tasks-count">（—）</small></h2><button type="button" data-home-action="quest" aria-label="查看所有任務">！</button></header>
+                    <ul id="home-art-tasks-list" aria-busy="true"><li class="home-art-task-empty">正在同步每日任務…</li></ul>
+                    <p id="home-art-tasks-status" role="status" aria-live="polite"></p>
+                </section>
+                <button class="home-art-meditation" type="button" data-home-action="meditation" aria-label="每日閉關，靜修養神，提升修為"><img src="assets/home/home-meditation.png" alt="每日閉關 · 靜修養神 · 提升修為" decoding="async"><b class="home-art-dot" data-home-alert="meditation" hidden></b></button>
+                <button id="btn-home-start" type="button" onclick="startQuizFlow()" class="home-art-trial" aria-label="進入問道試煉"><img src="assets/home/home-trial.png" alt="問道試煉 · 試煉心境 · 證道登臨" decoding="async"></button>
+                <nav class="home-art-navigation" aria-label="底部導覽">
+                    <img src="assets/home/home-navigation.png" alt="" aria-hidden="true" decoding="async">
+                    <div><button type="button" data-home-action="training" aria-label="修行"></button><button type="button" data-home-action="gameplay" aria-label="歷練"></button><button type="button" data-home-action="social" aria-label="仙盟"></button><button type="button" data-home-action="store" aria-label="商城"></button></div>
+                </nav>
+            </section>
+
             <div class="xianxia-page-heading">
                 <div><div class="xianxia-eyebrow">青雲問道</div><h2>宗門</h2><p>今日修行，由此開始。</p></div>
 
@@ -754,38 +783,10 @@ body.xianxia-theme main:has(#page-training.active-page),
                 </section>
 
 
-                <!-- 依照玩家線框稿：菱形僅代表圖示，快捷按鈕沿用矩形造型。 -->
-                <aside class="home-wireframe-rail is-left" aria-label="左側快捷操作">
-                    <button class="home-wireframe-shortcut" type="button" data-home-action="path" aria-label="圖錄"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>圖錄</span></button>
-                    <button class="home-wireframe-shortcut" type="button" data-home-action="rank" aria-label="排行"><i class="fa-solid fa-ranking-star" aria-hidden="true"></i><span>排行</span></button>
-                    <button class="home-wireframe-shortcut" type="button" data-home-action="store" aria-label="商店"><i class="fa-solid fa-store" aria-hidden="true"></i><span>商店</span></button>
-                </aside>
-                <section id="home-realm-emblem" class="home-realm-emblem" aria-label="目前問道試煉場地生態">
-                    <div class="home-realm-disc" data-ecology="bamboo">
-                        <img id="home-trial-ecology-image" src="assets/story/backgrounds/story-bg-06-bamboo-dream.png"
-                             alt="問道試煉場地預覽" decoding="async" loading="eager">
-                        <span id="home-trial-ecology-name" class="home-ecology-name">問道試煉</span>
-                    </div>
-                    <span id="home-trial-ecology-stage" class="home-disc-caption" role="status">試煉場地隨關卡變化</span>
-                </section>
-                <aside class="home-wireframe-rail is-right" aria-label="右側每日活動">
-                    <button class="home-wireframe-shortcut" type="button" data-home-action="quest" aria-label="任務"><i class="fa-solid fa-scroll" aria-hidden="true"></i><span>任務</span><b class="home-wireframe-alert" data-home-alert="quest" hidden aria-hidden="true"></b></button>
-                    <button class="home-wireframe-shortcut" type="button" data-home-action="meditation" aria-label="閉關"><i class="fa-solid fa-yin-yang" aria-hidden="true"></i><span>閉關</span><b class="home-wireframe-alert" data-home-alert="meditation" hidden aria-hidden="true"></b></button>
-                    <button class="home-wireframe-shortcut" type="button" data-home-action="learning" aria-label="學習"><span class="home-learning-star" aria-hidden="true">✦</span><span>學習</span></button>
-                </aside>
-
                 <section class="home-practice" aria-label="今日修行">
                     <h3 class="home-section-label">今日修行</h3>
         <div class="xiuxian-quick-actions" aria-label="修行快捷入口">
-<button id="btn-home-start" type="button" onclick="startQuizFlow()" class="xiuxian-quick-btn group">
-                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/40 transition border border-blue-500/30">
-                        <i class="fa-solid fa-scroll text-blue-400 text-lg group-hover:scale-110 transition-transform"></i>
-                    </div>
-                    <div class="flex flex-col items-start">
-                        <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_solo">問道試煉</span>
-                        <span class="text-[9px] text-blue-300 font-mono">答題蓄力 · 走位獵妖</span>
-                    </div>
-                </button>
+
                 <button id="btn-home-free-quiz" type="button" class="home-free-quiz" onclick="startFreeQuizFlow()">自由問道</button>
 
         </div>

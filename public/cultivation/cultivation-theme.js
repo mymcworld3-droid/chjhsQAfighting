@@ -180,7 +180,7 @@
     const next = nextRealm(value);
 
     const avatarContainer = document.getElementById('home-avatar-container');
-    const avatarSlot = document.getElementById('xiuxian-avatar-slot');
+    const avatarSlot = document.getElementById('home-art-avatar-slot') || document.getElementById('xiuxian-avatar-slot');
     if (avatarContainer && avatarSlot && avatarContainer.parentNode !== avatarSlot) {
       avatarContainer.className = '';
       avatarSlot.appendChild(avatarContainer);

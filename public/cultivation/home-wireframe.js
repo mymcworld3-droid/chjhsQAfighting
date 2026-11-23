@@ -1,114 +1,115 @@
-import './tactical-rules.js';
-import './home-trial-ecology.js';
-import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
-
-const $=id=>document.getElementById(id);
-const Ecology=globalThis.QAHomeTrialEcology;
-const Tactical=globalThis.QATactical;
-let initialized=false,selectedUid='',loadedPreview=null,query=null,lastQueryAt=0;
-
-function currentUid(){return getMainUser?.()?.uid||'';}
-function visible(){return $('page-home')?.classList.contains('active-page')===true;}
-function display(preview){
-  if(!preview)return;
-  loadedPreview=preview;
-  const disc=document.querySelector('#home-realm-emblem .home-realm-disc');
-  const image=$('home-trial-ecology-image'),name=$('home-trial-ecology-name');
-  const stage=$('home-trial-ecology-stage');
-  if(disc)disc.dataset.ecology=preview.id;
-  if(image){
-    if(image.getAttribute('src')!==preview.image)image.setAttribute('src',preview.image);
-    image.alt=preview.stage
-      ? '問道試煉第 '+preview.stage+' 關，'+preview.name+'的生態場景圖片'
-      : '問道試煉場地生態預覽圖片';
-  }
-  if(name)name.textContent=preview.name;
-  if(stage)stage.textContent=preview.stage
-    ? '問道試煉 · 第 '+preview.stage+' 關'
-    : '進入試煉後顯示目前關卡';
+// Artwork homepage. Data comes from the existing account and quest services.
+import { getMainUser } from './data/project-repository.js';
+const $ = id => document.getElementById(id);
+let initialized = false;
+function visible() { return $('page-home')?.classList.contains('active-page') === true; }
+function put(id, value) {
+  const el = $(id), text = String(value);
+  if (el && el.textContent !== text) el.textContent = text;
 }
-function refreshFromProgress(){
-  const uid=currentUid();
-  if(uid!==selectedUid){
-    selectedUid=uid;lastQueryAt=0;query=null;loadedPreview=null;
-  }
-  if(!uid){display(Ecology.DEFAULT);return;}
-  // The saved user record is bound to the signed-in UID, and the deterministic
-  // rules use the same seed and stage as the server that builds the battle.
-  const info=window.getCurrentUserData?.()?.tacticalTrialV1;
-  const scene=Ecology.fromProgress(info,Tactical);
-  if(scene && (!loadedPreview?.stage || scene.stage>loadedPreview.stage))display(scene);
-  else if(!loadedPreview)display(Ecology.DEFAULT);
+const count = value => Math.max(0, Math.floor(Number(value) || 0));
+function update() {
+  const uid = getMainUser()?.uid || '';
+  const raw = window.getCurrentUserData?.();
+  const player = uid && raw && (!raw.uid || raw.uid === uid) ? raw : null;
+  const stats = player?.stats || {};
+  if (!player && $('home-avatar-container')) $('home-avatar-container').replaceChildren();
+  put('home-art-name', player?.displayName || '青雲修士');
+  put('home-art-gold', player ? count(stats.gold).toLocaleString('zh-TW') : '—');
+  const realm = $('xiuxian-realm')?.textContent?.trim() || '凡人';
+  const sub = $('xiuxian-sub')?.textContent?.trim() || '初入仙途';
+  put('home-art-realm', player ? realm + ' · ' + sub : '初入仙途');
+  // The game has realm ranks rather than a separate character XP level.
+  // Show its existing one-based rank, never invent a new progression system.
+  const rank = window.getXiuxianRealmIndex?.(stats.totalScore) ?? stats.rankLevel;
+  put('home-art-level', player && Number.isFinite(Number(rank)) ? count(rank) + 1 : '—');
+  $('home-art-level')?.setAttribute('title', '境界等級');
+  const power = player ? window.getCombatPower?.() : null;
+  put('home-art-power', power ? count(power.total).toLocaleString('zh-TW') : '—');
+  $('home-art-power')?.setAttribute('title', power?.complete === false ? '功法同步中，暫顯示基礎戰力' : '目前裝備的戰力');
+  const avatar = $('home-avatar-container'), slot = $('home-art-avatar-slot');
+  if (avatar && slot && avatar.parentNode !== slot) slot.append(avatar);
+  syncAlerts();
 }
-async function syncTrialState(){
-  const uid=currentUid();
-  if(!uid||!visible()||query||Date.now()-lastQueryAt<30000)return;
-  lastQueryAt=Date.now();
-  query=(async()=>{
-    try{
-      const response=await authenticatedMainFetch('/api/tactical/state?mode=pve');
-      if(!response.ok)return;
-      const data=await response.json().catch(()=>({}));
-      if(currentUid()!==uid)return;
-      // An active server battle outranks the next-stage approximation.
-      const scene=Ecology.fromBattle(data.state);
-      if(scene && (!loadedPreview?.stage || scene.stage>=loadedPreview.stage))display(scene);
-    }catch(_){/* Preview must not interrupt navigation or question generation. */}
-  })().finally(()=>{query=null;});
-  await query;
+function forward(id) {
+  if ($(id)) { $(id).click(); return; }
+  window.showToast?.('這項功能尚未開啟。');
 }
-function update(){
-  refreshFromProgress();
-  if(visible())void syncTrialState();
-}
-function forward(id){
-  const button=$(id);
-  if(button){button.click();return;}
-  window.showToast?.('這項功能暫時無法開啟，請稍後重試。');
-}
-function activate(action){
-  switch(action){
-    case 'path':return forward('xiuxian-path');
-    case 'quest':return forward('quest-open');
-    case 'meditation':return forward('xiuxian-meditate');
-    case 'learning':return window.switchToPage?.('page-learning');
-    case 'rank':
-      window.switchToPage?.('page-rank');window.loadLeaderboard?.();return;
-    case 'store':
-      window.loadStoreItems?.();window.switchToPage?.('page-store');return;
+function activate(action) {
+  switch (action) {
+    case 'quest': return forward('quest-open');
+    case 'meditation': return window.openDailyMeditation?.();
+    case 'rank': window.switchToPage?.('page-rank'); window.loadLeaderboard?.(); return;
+    case 'settings': return window.switchToPage?.('page-settings');
+    case 'store': window.loadStoreItems?.(); window.switchToPage?.('page-store'); return;
+    case 'training': {
+      const nav = $('nav-training');
+      if (nav) nav.click();
+      else window.showToast?.('修行功能將隨境界開放。');
+      return;
+    }
+    case 'gameplay': return window.switchToPage?.('page-gameplay');
+    case 'social': return window.switchToPage?.('page-social');
+    case 'mail': return openMail();
+    case 'gold': return forward('quest-open');
   }
 }
-function mirrorAlert(sourceId,action){
-  const target=document.querySelector('[data-home-alert="'+action+'"]');
-  const source=$(sourceId);
-  if(!target||!source)return;
-  const sync=()=>{target.hidden=source.hidden;};
-  sync();
-  new MutationObserver(sync).observe(source,{attributes:true,attributeFilter:['hidden','aria-hidden']});
+function alertFor(action, active) {
+  const dot = document.querySelector('[data-home-alert="' + action + '"]');
+  if (dot) dot.hidden = !active;
 }
-function init(){
-  if(initialized||!$('home-realm-emblem'))return;
-  initialized=true;
-  const root=$('page-home');
-  root.addEventListener('click',event=>{
-    const button=event.target.closest?.('[data-home-action]');
-    if(button&&root.contains(button))activate(button.dataset.homeAction);
+function shown(id) {
+  const el = $(id);
+  return !!el && !el.hidden && !el.classList.contains('hidden');
+}
+function syncAlerts() {
+  const signedIn = !!getMainUser()?.uid;
+  alertFor('quest', signedIn && shown('quest-ready-dot'));
+  alertFor('meditation', signedIn && shown('meditation-pending-dot'));
+  alertFor('mail', signedIn && (shown('friend-request-badge') || shown('alliance-chat-nav-unread')));
+  // Rank and settings have no pending-action source; their dots stay hidden.
+}
+function openMail() {
+  let dialog = $('home-art-mail');
+  if (!dialog) {
+    dialog = document.createElement('dialog'); dialog.id = 'home-art-mail'; dialog.className = 'home-art-mail';
+    dialog.setAttribute('aria-labelledby', 'home-art-mail-title');
+    dialog.innerHTML = '<header><h2 id="home-art-mail-title">信件</h2><button type="button" data-close aria-label="關閉信件">×</button></header><button type="button" data-invites>好友邀請</button><button type="button" data-friends>好友訊息</button>';
+    document.body.append(dialog);
+    dialog.querySelector('[data-close]').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => document.querySelector('[data-home-action="mail"]')?.focus());
+    dialog.querySelector('[data-invites]').addEventListener('click', () => {
+      dialog.close(); window.QAFriendRequests?.open();
+    });
+    dialog.querySelector('[data-friends]').addEventListener('click', () => {
+      dialog.close(); window.switchToPage?.('page-social');
+      $('tab-btn-friends')?.click();
+    });
+  }
+  if (!dialog.open) dialog.showModal();
+}
+function init() {
+  if (initialized || !document.querySelector('.home-art-scene')) return;
+  initialized = true;
+  const root = $('page-home');
+  root.addEventListener('click', e => {
+    const button = e.target.closest?.('[data-home-action]');
+    if (button && root.contains(button)) activate(button.dataset.homeAction);
   });
-  for(const name of ['xiuxian:user-data-ready','xiuxian:user-ready','xiuxian:stats-updated'])
-    window.addEventListener(name,update);
-  window.addEventListener('xiuxian:tactical-trial-updated',event=>{
-    if(!currentUid()||event.detail?.uid!==currentUid())return;
-    const scene=Ecology.fromBattle({mode:'pve',trial:event.detail.trial,
-      terrain:event.detail.terrain,map:event.detail.map});
-    if(scene)display(scene);
-  });
-  mirrorAlert('quest-ready-dot','quest');
-  mirrorAlert('meditation-pending-dot','meditation');
-  const observer=new MutationObserver(()=>{if(visible())update();});
-  observer.observe(root,{attributes:true,attributeFilter:['class']});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});
-  window.addEventListener('pageshow',update);
+  for (const name of ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:stats-updated',
+    'xiuxian:tactical-power-updated', 'material-system-updated', 'xiuxian:features-ready'])
+    window.addEventListener(name, update);
+  // Realm markup and badges are owned by existing services. Mirror changes
+  // after their render cycle, without adding network requests or polling.
+  let queued = false;
+  new MutationObserver(records => {
+    if (!records.some(r => r.target.closest?.('#xiuxian-panel, #friend-request-badge, #alliance-chat-nav-unread, #quest-ready-dot, #meditation-pending-dot'))) return;
+    if (!queued) { queued = true; queueMicrotask(() => { queued = false; update(); }); }
+  }).observe(document.body, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class'] });
+  new MutationObserver(() => { if (visible()) update(); }).observe(root, { attributes: true, attributeFilter: ['class'] });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) update(); });
   update();
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
 else init();

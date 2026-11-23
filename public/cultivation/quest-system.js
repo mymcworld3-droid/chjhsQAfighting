@@ -17,7 +17,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     return parts.join(' · ');
   }
   function status(message) {
-    for (const id of ['quest-status', 'quest-spotlight-status']) if ($(id)) $(id).textContent = message;
+    for (const id of ['quest-status', 'quest-spotlight-status', 'home-art-tasks-status']) if ($(id)) $(id).textContent = message;
   }
   // Reuse the existing snapshot. Rendering the home card never requests data.
   function recommendedQuest() {
@@ -77,6 +77,30 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     button.classList.toggle('quest-spotlight-ready', ready);
     button.setAttribute('aria-label', `${title}${q ? `，進度 ${q.current}／${q.target}` : ''}，${reward}，${action}`);
   }
+  function homeDailyRows() {
+    if (!snapshot || account !== getMainUser()?.uid || snapshot.date !== window.XianxiaQuestRules.dateKey()) return [];
+    return [...(snapshot.daily || []).map(q => ({ q, kind:'daily' })),
+      ...(snapshot.commissions || []).map(q => ({ q, kind:'commission' }))];
+  }
+  function renderHomeDailyList() {
+    const list = $('home-art-tasks-list');
+    if (!list) return;
+    const rows = homeDailyRows();
+    list.setAttribute('aria-busy', String(busy));
+    const finished = rows.filter(({q}) => q.claimed || q.claimable).length;
+    $('home-art-tasks-count').textContent = rows.length ? `（${finished}/${rows.length}）` : '（—）';
+    if (!rows.length) {
+      list.innerHTML = `<li class="home-art-task-empty">${busy ? '正在同步每日任務…' : snapshot?.date === window.XianxiaQuestRules.dateKey() && account === getMainUser()?.uid ? '今日沒有日常任務' : '每日任務尚未同步'}<button type="button" data-home-quest-refresh ${busy ? 'disabled' : ''}>重新同步</button></li>`;
+      return;
+    }
+    list.innerHTML = rows.map(({q,kind}) => {
+      const label = q.claimable ? '領取' : '前往';
+      const action = q.claimed ? '<span class="home-art-task-check" aria-label="已完成並領取">✓</span>'
+        : q.locked ? '<span class="home-art-task-locked">未解鎖</span>'
+        : `<button type="button" data-home-quest-id="${esc(q.id)}" data-home-quest-kind="${kind}" class="${q.claimable ? 'is-claim' : ''}" ${busy ? 'disabled' : ''} aria-label="${label}：${esc(q.title)}">${label}</button>`;
+      return `<li class="home-art-task"><span class="home-art-task-label" title="${esc(q.description)}">${esc(q.title)} <small>(${Math.min(q.current,q.target)}/${q.target})</small></span>${action}</li>`;
+    }).join('');
+  }
   function syncQuestIndicator() {
     const ready = q => q?.claimable && !q.claimed && !q.locked;
     const current = account === getMainUser()?.uid ? snapshot : null;
@@ -109,6 +133,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function render() {
     syncQuestIndicator();
     renderSpotlight();
+    renderHomeDailyList();
     if (!$('quest-content')) return;
     ['path', 'daily', 'weekly'].forEach(key => {
       const button = $('quest-tab-' + key);
@@ -256,6 +281,15 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const item = recommendedDailyQuest();
       if (!item) { entry.click(); return; }
       status('');
+      if (item.q.claimable) void claim(item.q, item.kind);
+      else go(item.q.destination, item.q);
+    });
+    $('home-art-tasks-list')?.addEventListener('click', e => {
+      if (e.target.closest('[data-home-quest-refresh]')) { void refresh(true); return; }
+      const button = e.target.closest('[data-home-quest-id]');
+      if (!button || button.disabled || busy || !reconcileAccount()) return;
+      const item = homeDailyRows().find(({q,kind}) => q.id === button.dataset.homeQuestId && kind === button.dataset.homeQuestKind);
+      if (!item || item.q.claimed || item.q.locked) return;
       if (item.q.claimable) void claim(item.q, item.kind);
       else go(item.q.destination, item.q);
     });
