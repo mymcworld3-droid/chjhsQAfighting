@@ -13,7 +13,7 @@
 | IMG_0209.png | home-title.png | 舊版獨立標題，已停用 |
 | IMG_0205.png | home-trial.png | 下方中央問道試煉入口 |
 | IMG_0213.png | home-meditation.png | 右側每日閉關入口 |
-| IMG_0210.png | home-shortcut-frame.png | 右上角活動、排名、信件、設定的共用底框 |
+| IMG_0219.png | home-shortcut-frame.png | 右上角活動、排名、信件、設定的共用菱形底框；文字下方以樣式疊加黑墨筆刷痕 |
 | IMG_0206.png | home-navigation.png | 舊版獨立導覽，已停用 |
 | IMG_0207.png | home-return.png | 返回主頁素材，已收錄備用；主頁本身不重複放返回主頁按鈕 |
 | IMG_0204(4).png | 不放入正式畫面 | 直式完整配置參考圖 |
