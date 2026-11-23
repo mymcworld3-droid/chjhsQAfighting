@@ -11,7 +11,7 @@ const server = createServer(async(req,res)=>{
   if(url.pathname === '/cultivation/data/project-repository.js') {
     res.setHeader('Content-Type','text/javascript');
     return res.end(`export const getMainUser=()=>window.__homeTest.uid?{uid:window.__homeTest.uid}:null;
-      export const authenticatedMainFetch=async(url,init)=>{window.__homeTest.requests.push({url,init});return {ok:true,json:async()=>({ok:true,quests:window.__homeTest.quests})};};`);
+      export const authenticatedMainFetch=async(url,init)=>{window.__homeTest.requests.push({url,init});return {ok:true,json:async()=>({ok:true,quests:window.__homeTest.uid==='test-a'?window.__homeTest.quests:{...window.__homeTest.quests,daily:[],commissions:[]}})};};`);
   }
   try {
     const filename = path.resolve(root,'.'+(url.pathname==='/'?'/index.html':url.pathname));
@@ -50,6 +50,7 @@ const server = createServer(async(req,res)=>{
       await page.addScriptTag({type:'module',url:'/cultivation/quest-system.js'});
       await page.waitForFunction(()=>document.querySelectorAll('.home-art-task').length===6);
       assert.equal(await page.locator('#home-art-gold').textContent(),'12,580,000');
+      assert.ok(await page.locator('#home-art-gold').evaluate(el=>el.scrollWidth<=el.clientWidth),'gold amount fits without truncation');
       assert.equal(await page.locator('#home-art-name').textContent(),'雲游子');
       assert.equal(await page.locator('#home-art-tasks-count').textContent(),'（1/6）');
       assert.equal(await page.locator('.home-art-task-check').count(),1);
