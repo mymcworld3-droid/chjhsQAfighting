@@ -57,6 +57,8 @@ const server = createServer(async(req,res)=>{
       await page.addScriptTag({type:'module',url:'/cultivation/home-wireframe.js'});
       await page.addScriptTag({type:'module',url:'/cultivation/quest-system.js'});
       await page.waitForFunction(()=>document.querySelectorAll('.home-art-task').length===6);
+      assert.deepEqual(await page.locator('.home-art-navigation button span').allTextContents(),['修行','歷練','仙盟','商城']);
+      assert.equal(await page.locator('.home-art-title, .home-art-navigation img, .home-art-navigation svg').count(),0,'integrated title and dock must not be drawn twice');
       const avatarBoxes=await page.evaluate(()=>['.home-art-avatar','#home-art-avatar-slot','.ui-avatar-viewport','.ui-avatar-image'].map(selector=>{
         const el=document.querySelector('#page-home '+selector),r=el.getBoundingClientRect();return {selector,width:r.width,height:r.height};
       }));
@@ -70,7 +72,7 @@ const server = createServer(async(req,res)=>{
       assert.equal(await page.locator('.home-art-task-check').count(),1);
       const geometry=await page.evaluate(()=>{
         const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,right:r.right,bottom:r.bottom};};
-        return {scene:rect('.home-art-scene'),tasks:rect('.home-art-tasks'),trial:rect('.home-art-trial'),nav:rect('.home-art-navigation'),wallet:rect('.home-art-wallet'),tools:rect('.home-art-tools'),player:rect('.home-art-player'),title:rect('.home-art-title'),width:document.documentElement.scrollWidth,innerWidth};
+        return {scene:rect('.home-art-scene'),tasks:rect('.home-art-tasks'),trial:rect('.home-art-trial'),nav:rect('.home-art-navigation'),wallet:rect('.home-art-wallet'),tools:rect('.home-art-tools'),player:rect('.home-art-player'),width:document.documentElement.scrollWidth,innerWidth};
       });
       assert.ok(geometry.width<=viewport.width,'no horizontal overflow');
       const label={left:geometry.trial.x+geometry.trial.w*.15,right:geometry.trial.right-geometry.trial.w*.15,top:geometry.trial.y+geometry.trial.h*.4,bottom:geometry.trial.bottom-geometry.trial.h*.15};

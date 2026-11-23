@@ -39,7 +39,7 @@ test('all homepage images exist and both supplied background orientations are fu
     assert.ok(fs.existsSync(path.join(base,'public/assets/home',file)),file);
   const dimensions=file=>{const b=fs.readFileSync(path.join(base,'public/assets/home',file));return [b.readUInt32BE(16),b.readUInt32BE(20)];};
   assert.deepEqual(dimensions('home-background-portrait.png'),[941,1672]);
-  assert.deepEqual(dimensions('home-background-landscape.png'),[1672,941]);
+  assert.deepEqual(dimensions('home-background-landscape.png'),[1671,941]);
   assert.match(css,/@media \(orientation:landscape\)/);
   assert.equal((html.match(/id="btn-home-start"/g)||[]).length,1);
   assert.match(html,/id="btn-home-start"[^>]+onclick="startQuizFlow\(\)"/);

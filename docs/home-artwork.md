@@ -8,13 +8,13 @@
 
 | 上傳的原檔 | 專案檔名 | 畫面位置 |
 |---|---|---|
-| IMG_0212.png | home-background-portrait.png | 手機／平板直式全畫面背景 |
-| IMG_0211.png | home-background-landscape.png | 電腦／平板橫式全畫面背景 |
-| IMG_0209.png | home-title.png | 左上角青雲問道標題 |
+| IMG_0216.png | home-background-portrait.png | 直式整合圖：背景、左上標題、底部導覽空框 |
+| IMG_0215.png | home-background-landscape.png | 橫式整合圖：背景、左上標題、底部導覽空框 |
+| IMG_0209.png | home-title.png | 舊版獨立標題，已停用 |
 | IMG_0205.png | home-trial.png | 下方中央問道試煉入口 |
 | IMG_0213.png | home-meditation.png | 右側每日閉關入口 |
 | IMG_0210.png | home-shortcut-frame.png | 右上角活動、排名、信件、設定的共用底框 |
-| IMG_0206.png | home-navigation.png | 最底部：修行、歷練、仙盟、商城；各自有獨立點擊區 |
+| IMG_0206.png | home-navigation.png | 舊版獨立導覽，已停用 |
 | IMG_0207.png | home-return.png | 返回主頁素材，已收錄備用；主頁本身不重複放返回主頁按鈕 |
 | IMG_0204(4).png | 不放入正式畫面 | 直式完整配置參考圖 |
 | IMG_0203(2).png | 不放入正式畫面 | 橫式完整配置參考圖 |
@@ -52,3 +52,5 @@
 單元測試：`node --test tests/home-wireframe.test.cjs tests/quest-spotlight.test.cjs tests/quest-system.test.cjs`
 
 瀏覽器驗收：`node scripts/test-home-art-browser.cjs`（需安裝 Playwright 及 Chromium）。包含 390×844、941×1672、1672×941、1024×768、844×390、320×568，檢查圖片載入、重疊、按鈕路由、任務進度、未讀紅點、帳號切換與其他頁面導覽還原。對應 GitHub Actions：`Homepage artwork acceptance`。
+
+新版導覽使用透明按鈕疊在整合圖的四個空格內，圖示和「修行、歷練、仙盟、商城」文字由程式繪製，不重複疊加底框、標題或舊導覽圖片。

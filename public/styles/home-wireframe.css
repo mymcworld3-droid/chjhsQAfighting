@@ -14,7 +14,7 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
   --ha-gold:#ffe5a3;--ha-edge:#d7b971;--ha-ink:#03485b;
   position:relative;width:100%;height:100%;min-height:560px;overflow:hidden;
   color:var(--ha-gold);font-family:"Noto Serif TC",serif;
-  background:#076c9a url('../assets/home/home-background-portrait.png') center center/cover no-repeat;
+  background:#076c9a url('../assets/home/home-background-portrait.png') center center/100% 100% no-repeat;
   text-shadow:0 2px 3px #002c41,0 0 6px #00364c;
 }
 .home-art-scene,.home-art-scene *,.home-art-scene *::before,.home-art-scene *::after { box-sizing:border-box }
@@ -27,7 +27,6 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 .home-art-scene button:hover { filter:brightness(1.12) }
 .home-art-scene button:disabled { cursor:wait;opacity:.6 }
 .home-art-scene button img { display:block;width:100%;height:100%;object-fit:contain;pointer-events:none }
-.home-art-title { position:absolute;left:0;top:0;width:36%;height:auto;pointer-events:none }
 .home-art-player { position:absolute;top:6.2%;left:2.5%;width:51%;height:8%;display:flex;align-items:center;gap:9px }
 .home-art-avatar { --avatar-size:clamp(46px,12vw,104px);position:relative;flex:none;align-self:center;width:var(--avatar-size);height:var(--avatar-size);min-width:var(--avatar-size);max-width:var(--avatar-size);min-height:var(--avatar-size);max-height:var(--avatar-size);aspect-ratio:1;border:2px solid var(--ha-edge);border-radius:50%;padding:3px;background:linear-gradient(135deg,#fff0bd,#28718b 35%,#073a51 65%,#ffe19a);box-shadow:0 2px 10px #003b58 }
 #home-art-avatar-slot { position:absolute;inset:3px;width:auto;height:auto;overflow:visible;border-radius:50%;background:radial-gradient(circle at 50% 30%,#3c90aa,#0a324c) }
@@ -78,13 +77,14 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 .home-art-meditation .home-art-dot { top:7%;right:8% }
 .home-art-trial { position:absolute!important;left:7%;bottom:9%;width:86%;aspect-ratio:4/3 }
 .home-art-trial img { object-fit:contain!important }
-.home-art-navigation { position:absolute;left:0;bottom:max(6px,env(safe-area-inset-bottom));width:100%;height:10%;min-height:70px }
-.home-art-navigation>img { position:absolute;width:100%;height:170%;left:0;top:-35%;pointer-events:none }
-.home-art-navigation>div { position:absolute;inset:15% 8.5%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) }
-.home-art-navigation button { display:grid;place-items:center;min-height:48px;border-radius:4px;background:linear-gradient(#064052,#034d61);border-right:1px solid #c4a56966 }
-.home-art-navigation button:last-child { border-right:0 }
-.home-art-navigation button svg { overflow:hidden!important;display:block;width:clamp(38px,8vh,84px);height:clamp(38px,8vh,84px);pointer-events:none }
-.home-art-navigation button:focus-visible,.home-art-navigation button:hover { background:#fff2ba20 }
+/* The title and dock are baked into the scene image. Only live controls
+   overlay the four blank slots; no second frame or raster labels are added. */
+.home-art-navigation { position:absolute;left:4%;bottom:2.5%;width:92%;height:6.5%;min-height:40px }
+.home-art-navigation>div { display:grid;width:100%;height:100%;grid-template-columns:repeat(4,minmax(0,1fr)) }
+.home-art-navigation button { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:40px;border:0;border-radius:8px;background:transparent;font-size:clamp(11px,2.4vw,21px);line-height:1.15;color:#ffe5a3;text-shadow:0 2px 3px #002c41 }
+.home-art-navigation button i { font-size:clamp(18px,3.5vw,32px);color:#ffe5a3;filter:drop-shadow(0 1px 2px #00212b) }
+.home-art-navigation button span { white-space:nowrap }
+.home-art-navigation button:focus-visible,.home-art-navigation button:hover { background:#fff2ba18 }
 .home-art-mail { width:min(90vw,380px);padding:22px;border:1px solid #d4b77b;border-radius:16px;color:#ffe5a3;background:#064456;font-family:"Noto Serif TC",serif;box-shadow:0 20px 80px #001c34aa }
 .home-art-mail::backdrop { background:#001b3d99;backdrop-filter:blur(4px) }
 .home-art-mail header { display:flex;align-items:center;justify-content:space-between;margin-bottom:16px }
@@ -94,7 +94,6 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 .home-art-mail header button { border:0;padding:4px 12px;font-size:24px }
 @media (orientation:landscape) {
   .home-art-scene { min-height:440px;background-image:url('../assets/home/home-background-landscape.png') }
-  .home-art-title { width:20% }
   .home-art-player { left:20%;top:1.2%;width:24%;height:10% }
   .home-art-avatar { --avatar-size:clamp(44px,5.7vw,90px) }
   #home-art-name { font-size:clamp(16px,1.7vw,29px) }
@@ -111,7 +110,9 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
   .home-art-task { font-size:clamp(12px,1.1vw,18px);min-height:34px;padding:5px 0 }
   .home-art-meditation { right:1%;top:34%;width:25% }
   .home-art-trial { left:31%;bottom:12%;width:38%;aspect-ratio:4/3 }
-  .home-art-navigation { bottom:max(5px,env(safe-area-inset-bottom));height:13%;min-height:65px;left:5%;width:90% }
+  .home-art-navigation { bottom:3%;height:9%;min-height:40px;left:10%;width:80% }
+  .home-art-navigation button { font-size:clamp(12px,1.5vw,24px) }
+  .home-art-navigation button i { font-size:clamp(20px,2.2vw,36px) }
 }
 @media (orientation:landscape) and (max-height:550px) {
   .home-art-scene { min-height:370px }
