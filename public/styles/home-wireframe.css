@@ -80,9 +80,9 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 .home-art-navigation { position:absolute;left:0;bottom:max(6px,env(safe-area-inset-bottom));width:100%;height:10%;min-height:70px }
 .home-art-navigation>img { position:absolute;width:100%;height:170%;left:0;top:-35%;pointer-events:none }
 .home-art-navigation>div { position:absolute;inset:15% 8.5%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) }
-.home-art-navigation button { min-height:48px;border-radius:4px;background:linear-gradient(#064052,#034d61);border-right:1px solid #c4a56966 }
+.home-art-navigation button { display:grid;place-items:center;min-height:48px;border-radius:4px;background:linear-gradient(#064052,#034d61);border-right:1px solid #c4a56966 }
 .home-art-navigation button:last-child { border-right:0 }
-.home-art-navigation button svg { overflow:hidden!important;display:block;width:100%;height:100%;max-height:100%;pointer-events:none }
+.home-art-navigation button svg { overflow:hidden!important;display:block;width:clamp(38px,8vh,84px);height:clamp(38px,8vh,84px);pointer-events:none }
 .home-art-navigation button:focus-visible,.home-art-navigation button:hover { background:#fff2ba20 }
 .home-art-mail { width:min(90vw,380px);padding:22px;border:1px solid #d4b77b;border-radius:16px;color:#ffe5a3;background:#064456;font-family:"Noto Serif TC",serif;box-shadow:0 20px 80px #001c34aa }
 .home-art-mail::backdrop { background:#001b3d99;backdrop-filter:blur(4px) }
