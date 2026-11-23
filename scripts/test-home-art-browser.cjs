@@ -46,9 +46,23 @@ const server = createServer(async(req,res)=>{
         document.getElementById('xiuxian-realm').textContent='化神';document.getElementById('xiuxian-sub').textContent='神念通天';
         document.getElementById('page-home').classList.add('active-page');
       });
+      // Exercise the real avatar markup, including a tall portrait and an
+      // equipped decorative frame; the empty placeholder cannot expose stretch.
+      const legacy=await fs.readFile(path.join(root,'main-legacy.js'),'utf8');
+      const avatarStart=legacy.indexOf('function getAvatarHtml('),avatarEnd=legacy.indexOf('window.updateUserAvatarDisplay',avatarStart);
+      await page.evaluate(source=>{
+        const getAvatarHtml=new Function('escapeHtml',source+';return getAvatarHtml;')(value=>String(value));
+        document.getElementById('home-avatar-container').innerHTML=getAvatarHtml({avatar:'assets/home/home-background-portrait.png',frame:'assets/goldframe.png'},'w-16 h-16');
+      },legacy.slice(avatarStart,avatarEnd));
       await page.addScriptTag({type:'module',url:'/cultivation/home-wireframe.js'});
       await page.addScriptTag({type:'module',url:'/cultivation/quest-system.js'});
       await page.waitForFunction(()=>document.querySelectorAll('.home-art-task').length===6);
+      const avatarBoxes=await page.evaluate(()=>['.home-art-avatar','#home-art-avatar-slot','.ui-avatar-viewport','.ui-avatar-image'].map(selector=>{
+        const el=document.querySelector('#page-home '+selector),r=el.getBoundingClientRect();return {selector,width:r.width,height:r.height};
+      }));
+      for(const box of avatarBoxes)assert.ok(Math.abs(box.width-box.height)<1,'avatar stays circular: '+JSON.stringify(box));
+      assert.equal(await page.locator('#home-art-avatar-slot .ui-avatar-image').evaluate(el=>getComputedStyle(el).objectFit),'cover');
+      assert.equal(await page.locator('#home-art-avatar-slot .ui-avatar-frame').evaluate(el=>getComputedStyle(el).objectFit),'contain');
       assert.equal(await page.locator('#home-art-gold').textContent(),'12,580,000');
       assert.ok(await page.locator('#home-art-gold').evaluate(el=>el.scrollWidth<=el.clientWidth),'gold amount fits without truncation');
       assert.equal(await page.locator('#home-art-name').textContent(),'雲游子');

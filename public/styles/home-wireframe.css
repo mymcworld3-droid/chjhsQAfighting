@@ -29,12 +29,14 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 .home-art-scene button img { display:block;width:100%;height:100%;object-fit:contain;pointer-events:none }
 .home-art-title { position:absolute;left:0;top:0;width:36%;height:auto;pointer-events:none }
 .home-art-player { position:absolute;top:6.2%;left:2.5%;width:51%;height:8%;display:flex;align-items:center;gap:9px }
-.home-art-avatar { position:relative;flex:0 0 auto;width:clamp(46px,12vw,104px);aspect-ratio:1;border:2px solid var(--ha-edge);border-radius:50%;padding:3px;background:linear-gradient(135deg,#fff0bd,#28718b 35%,#073a51 65%,#ffe19a);box-shadow:0 2px 10px #003b58 }
-#home-art-avatar-slot { width:100%;height:100%;overflow:hidden;border-radius:50%;background:radial-gradient(circle at 50% 30%,#3c90aa,#0a324c) }
+.home-art-avatar { --avatar-size:clamp(46px,12vw,104px);position:relative;flex:none;align-self:center;width:var(--avatar-size);height:var(--avatar-size);min-width:var(--avatar-size);max-width:var(--avatar-size);min-height:var(--avatar-size);max-height:var(--avatar-size);aspect-ratio:1;border:2px solid var(--ha-edge);border-radius:50%;padding:3px;background:linear-gradient(135deg,#fff0bd,#28718b 35%,#073a51 65%,#ffe19a);box-shadow:0 2px 10px #003b58 }
+#home-art-avatar-slot { position:absolute;inset:3px;width:auto;height:auto;overflow:visible;border-radius:50%;background:radial-gradient(circle at 50% 30%,#3c90aa,#0a324c) }
 #home-art-avatar-slot:empty::after { content:'道';display:grid;place-content:center;height:100%;font-size:24px }
 #home-art-avatar-slot #home-avatar-container,
 #home-art-avatar-slot #home-avatar-container>div { width:100%!important;height:100%!important;border-radius:50%!important;margin:0!important }
-#home-art-avatar-slot img { width:100%!important;height:100%!important;object-fit:cover }
+#home-art-avatar-slot .ui-avatar-viewport { position:absolute;inset:0;width:100%;height:100%;border-radius:50%;overflow:hidden;display:grid;place-items:center }
+#home-art-avatar-slot .ui-avatar-image { display:block;width:100%!important;height:100%!important;object-fit:cover;object-position:center;border-radius:50% }
+#home-art-avatar-slot .ui-avatar-frame { width:145%!important;height:145%!important;max-width:none;object-fit:contain }
 .home-art-identity { min-width:0;display:flex;flex-direction:column;gap:2px;line-height:1.35;padding-right:8px;background:linear-gradient(90deg,#034358aa,transparent) }
 #home-art-name { font-size:clamp(15px,3.4vw,28px);color:#fff6df;overflow:hidden;white-space:nowrap;text-overflow:ellipsis }
 #home-art-realm { font-size:clamp(10px,2.3vw,18px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-bottom:1px solid #cfb46c66 }
@@ -94,7 +96,7 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
   .home-art-scene { min-height:440px;background-image:url('../assets/home/home-background-landscape.png') }
   .home-art-title { width:20% }
   .home-art-player { left:20%;top:1.2%;width:24%;height:10% }
-  .home-art-avatar { width:clamp(44px,5.7vw,90px) }
+  .home-art-avatar { --avatar-size:clamp(44px,5.7vw,90px) }
   #home-art-name { font-size:clamp(16px,1.7vw,29px) }
   #home-art-realm { font-size:clamp(11px,1.05vw,18px) }
   .home-art-power { font-size:clamp(12px,1.3vw,22px) }
@@ -114,7 +116,7 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 @media (orientation:landscape) and (max-height:550px) {
   .home-art-scene { min-height:370px }
   .home-art-player { height:15% }
-  .home-art-avatar { width:48px }
+  .home-art-avatar { --avatar-size:48px }
   .home-art-tasks { top:22%;max-height:48% }
   .home-art-task { font-size:12px;min-height:32px;padding:3px 0 }
   .home-art-tasks h2 { font-size:15px }
