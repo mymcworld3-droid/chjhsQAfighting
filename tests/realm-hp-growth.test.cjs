@@ -31,10 +31,10 @@ test('browser combat HP bonus applies before nascent and equipment wrappers with
   vm.runInNewContext(source,{window,document,console,Math,Number,CustomEvent:class {}});
   assert.deepEqual(JSON.parse(JSON.stringify(window.getCombatStats())),{attack:200,maxHp:1300,hp:1170});
   window.getNascentSoulBattleSnapshot=()=>({attackFlat:35,maxHpFlat:250});
-  assert.deepEqual(JSON.parse(JSON.stringify(window.getCombatStats())),{attack:235,maxHp:1550,hp:1395});
+  assert.deepEqual(JSON.parse(JSON.stringify(window.getCombatStats())),{attack:200,maxHp:1300,hp:1170},'retired nascent bonus is ignored');
   assert.equal(user.stats.maxHp,1000,'stored base maxHp must not be inflated');
   user.stats.totalScore=27;
-  assert.equal(window.getCombatStats().maxHp,1250,'below Golden Core has no realm bonus');
+  assert.equal(window.getCombatStats().maxHp,1000,'below Golden Core has no realm bonus');
 });
 
 test('server trusted raid HP projection matches browser before and after nascent growth',()=>{

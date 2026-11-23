@@ -40,13 +40,11 @@ test('home cultivation panel is present in index before JS hydration', () => {
   assert.match(theme, /panel\.dataset\.xiuxianBound/);
 });
 
-test('training page and all primary tabs are static in index', () => {
-  assert.match(index, /id="page-training"[^>]*data-static-layout="1"/);
-  assert.match(index, /data-training-tab="core"/);
-  assert.match(index, /data-training-tab="refinery"/);
-  assert.match(index, /data-training-tab="bag"/);
-  assert.match(index, /id="training-tab-content"/);
-  assert.match(index, /training-static-core-shell/);
+test('training shell contains no retired Golden Core or artifact tabs',()=>{
+  const page=index.slice(index.indexOf('id="page-training"'),index.indexOf('id="page-quiz"'));
+  assert.match(page,/data-static-layout="1"/);
+  assert.doesNotMatch(page,/data-training-tab="core"|data-training-tab="equipment"|data-training-tab="nascent-soul"/);
+  assert.doesNotMatch(page,/本命金丹|元嬰/);
 });
 
 test('training modules hydrate and preserve the static page instead of requiring reinsertion', () => {

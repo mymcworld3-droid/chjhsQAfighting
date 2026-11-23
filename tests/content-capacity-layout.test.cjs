@@ -79,7 +79,8 @@ test('capacity layout loads after the existing training and market layout layers
   const training = main.indexOf("'./cultivation/training-fluid-layout.js'");
   const market = main.indexOf("'./cultivation/market-fluid-layout.js'");
   const capacity = main.indexOf("'./cultivation/content-capacity-layout.js'");
-  assert.ok(training >= 0 && capacity > training);
+  assert.equal(training,-1,'retired training-fluid layout no longer boots');
+  assert.ok(capacity>0);
   assert.ok(market >= 0 && capacity > market);
 });
 

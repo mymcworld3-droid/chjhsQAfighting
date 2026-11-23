@@ -64,7 +64,7 @@ test('public player profile ignores retired core, nascent and artifact data', ()
   assert.equal(profile.combat.maxHp,1000);
   const html=profileMarkup(profile);
   assert.match(html,/角色戰鬥數值/);
-  assert.match(html,/70\\.0%/);
+  assert.match(html,/70\.0%/);
   assert.doesNotMatch(html,/太初回元丹|測試仙劍|已裝備法寶|本命金丹|綜合戰力/);
 });
 

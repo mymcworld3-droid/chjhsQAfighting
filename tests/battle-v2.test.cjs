@@ -261,7 +261,8 @@ test('Battle v2 displays paid rewards and only claims forfeits after a real duel
 });
 
 test('arena has xianxia combat feedback, impact animation and responsive mobile layout', () => {
-  assert.match(mainSource, /golden-core-battle-effects\.js'[\s\S]*cultivation-combat-stats\.js'[\s\S]*battle-mode-v2\.js'/);
+  assert.match(mainSource, /cultivation-combat-stats\.js'[\s\S]*battle-mode-v2\.js'/);
+  assert.doesNotMatch(mainSource, /'\.\/cultivation\/golden-core-battle-effects\.js'/);
   assert.match(battleSource, /animateSettlement/);
   assert.match(battleSource, /bv2-damage-pop/);
   assert.match(cssSource, /\.bv2-duel-rule/);
