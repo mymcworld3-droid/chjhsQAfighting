@@ -78,7 +78,7 @@ const server = createServer(async(req,res)=>{
       const portrait=viewport.height>viewport.width;
       assert.ok(Math.abs(geometry.trial.h/geometry.scene.h-(portrait?.20:.30))<.01,'trial height matches reference');
       assert.ok(Math.abs((geometry.trial.y-geometry.scene.y)/geometry.scene.h-(portrait?.71:.56))<.01,'trial position matches reference');
-      assert.deepEqual(await page.locator('.home-art-shortcuts button span').allTextContents(),['仙盟大殿','修行','歷練','活動']);
+      assert.equal(await page.locator('.home-art-shortcuts').count(),0,'no middle diamond shortcuts');
       const label={left:geometry.trial.x+geometry.trial.w*.15,right:geometry.trial.right-geometry.trial.w*.15,top:geometry.trial.y+geometry.trial.h*.4,bottom:geometry.trial.bottom-geometry.trial.h*.15};
       assert.ok(geometry.tasks.right<=label.left || geometry.tasks.x>=label.right || geometry.tasks.bottom<=label.top || geometry.tasks.y>=label.bottom,'task panel does not cover trial label');
       assert.ok(geometry.tools.x>=geometry.player.right-2,'player and tools do not overlap');

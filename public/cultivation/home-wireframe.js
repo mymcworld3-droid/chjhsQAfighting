@@ -50,7 +50,8 @@ function activate(action) {
   }
 }
 function alertFor(action, active) {
-  for (const dot of document.querySelectorAll('[data-home-alert="' + action + '"]')) dot.hidden = !active;
+  const dot = document.querySelector('[data-home-alert="' + action + '"]');
+  if (dot) dot.hidden = !active;
 }
 function shown(id) {
   const el = $(id);
