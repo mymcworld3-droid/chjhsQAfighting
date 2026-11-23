@@ -36,7 +36,20 @@ test('three progressive pages go directly from subject to merged full-year chapt
 test('only one stage is visible while pages support scrolling, progress and mobile tiles',()=>{
   assert.match(pages,/item\.hidden = i!==active/);
   assert.match(pages,/setPage\(active-1\)/);
-  assert.match(pages,/back\.textContent = active===0 \? '← 返回設定' : '← 返回上一步'/);
+  const vm=require('node:vm'),nodes=new Map();
+  for(const id of ['cs-prev','cs-stage-0','cs-stage-1','cs-stage-2'])nodes.set(id,{});
+  let returnPage='page-settings';
+  const ctx={window:{curriculumStudioReturnPage:()=>returnPage},$:id=>nodes.get(id)};
+  const start=pages.indexOf('  function setPage(page)'),end=pages.indexOf('  function visibleOptions(',start);
+  assert.ok(start>=0&&end>start);
+  vm.runInNewContext('let active=0;const root={dataset:{}};'+pages.slice(start,end)+';this.go=setPage;',ctx);
+  ctx.go(0);assert.equal(nodes.get('cs-prev').textContent,'← 返回設定');
+  returnPage='page-quiz';ctx.go(0);assert.equal(nodes.get('cs-prev').textContent,'← 返回問道試煉');
+  for(const step of [1,2]){
+    ctx.go(step);assert.equal(nodes.get('cs-prev').textContent,'← 返回上一步');
+    for(let i=0;i<3;i++)assert.equal(nodes.get('cs-stage-'+i).hidden,i!==step);
+  }
+
   assert.doesNotMatch(css,/cs-page-tab|cs-page-path|cs-page-progress|cs-pages-top/);
   assert.match(css,/#scope-studio \.cs-scope \.cs-back/);
   assert.match(css,/#scope-studio \.cs-stage\[hidden\]\{display:none!important\}/);

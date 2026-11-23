@@ -62,11 +62,17 @@ test('simulator offers all distinct techniques, casts against the real rules and
   assert.equal(app.renderer.state.actors[0].x,3);
   assert.equal(R.focusTurns(app.renderer.state.actors[0]),0);
 });
-test('summoned sword can be moved through a second cast in free mode',()=>{
+test('summoned sword uses the real even-step movement rule in free mode',()=>{
   const app=boot(),{els}=app;
   els.skill.value='flight-summon';els.skill.fire('change');
   app.renderer.select({x:4,y:4});
   assert.equal(app.renderer.state.actors[0].flyingSword.x,4);
+  assert.equal(app.renderer.mode,'sword-move');
   app.renderer.select({x:7,y:4});
-  assert.equal(app.renderer.state.actors[0].flyingSword.x,7);
+  assert.equal(app.renderer.state.actors[0].flyingSword.x,4,'odd-step route is rejected');
+  assert.match(els.message.textContent,/偶數格/);
+  app.renderer.select({x:4,y:6});
+  assert.equal(app.renderer.state.actors[0].flyingSword.y,6);
+  assert.equal(app.renderer.state.actors[0].stamina,R.LIMITS.stamina-1);
+  assert.equal(els.message.textContent,'');
 });

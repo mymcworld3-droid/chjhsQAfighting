@@ -8,7 +8,7 @@ const uid='practice-player',canvas=document.getElementById('battle');
 const $=selector=>document.querySelector(selector);
 const controls=['#school','#skill','#reset','#reset-view','#next-turn','#cast-self','#free-cast'];
 const hints={
-  cast:'點擊紅色或金色格子施放招式。飛劍可再次施放來移動。',
+  cast:'點擊紅色或金色格子施放招式。飛劍召喚後可點擊空地移動，路徑須為偶數格，每 2 格消耗 1 體力。',
   hero:'點擊空格放置角色。',
   monster:'點擊空格放置靈獸，再點靈獸可移除。',
   block:'點擊空格放置障礙，再點障礙可移除。'
@@ -59,7 +59,8 @@ function refreshControls(){
 }
 function render(selection=null){
   if(!state||!renderer)return;
-  renderer.update(state,uid,tool==='cast'?'manual:'+chosen.id:'inspect',selection);
+  const movingSword=chosen.kind==='flying-sword'&&!!hero()?.flyingSword;
+  renderer.update(state,uid,tool==='cast'?(movingSword?'sword-move':'manual:'+chosen.id):'inspect',selection);
   refreshControls();
 }
 function setSkill(id){
@@ -97,7 +98,8 @@ function castAt(point){
   if(state.status!=='active'){announce('請先重置戰場。');return;}
   try{
     const current=prepareCast();
-    state=R.apply(current,uid,{type:'manual',skillId:chosen.id,...point});
+    const movingSword=chosen.kind==='flying-sword'&&!!hero()?.flyingSword;
+    state=R.apply(current,uid,movingSword?{type:'sword-move',...point}:{type:'manual',skillId:chosen.id,...point});
     announce('');
     render();
   }catch(error){announce(error.message);}

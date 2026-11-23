@@ -98,17 +98,18 @@ test('PvE zero-gold compensation is approved, and daily limits are distinct from
   async function evaluate(result, trial=null) {
     const quiz={mode:'solo',data:{q:'題目'},async onVerifiedError(){}};
     const account={uid:'player'};
-    let outcome=null,closed=false,skipped=false;
+    let outcome=null,closed=false,skipped=false,retried=false;
     const ctx={
       result,trial,quiz,user:account,auth:{currentUser:account},
       currentUserData:{stats:{gold:60,totalScore:40}},
       window:{currentActiveQuiz:quiz,closeReportModal(){closed=true}},
       skipVerifiedQuestion(){skipped=true},
+      retryReport(){retried=true},
       renderReportOutcome(value){outcome=value},
       updateUIStats(){}
     };
     await vm.runInNewContext("(async function(){\n"+code+"\n})()",ctx);
-    return {outcome,ctx,closed:()=>closed,skipped:()=>skipped};
+    return {outcome,ctx,closed:()=>closed,skipped:()=>skipped,retried:()=>retried};
   }
   const battle={id:'room',progress:{stats:{gold:60,totalScore:41}}};
   const confirmed=await evaluate({
@@ -146,6 +147,7 @@ test('PvE zero-gold compensation is approved, and daily limits are distinct from
   },{});
   assert.equal(uncertain.outcome.kind,'incomplete');
   assert.match(uncertain.outcome.title,/補償狀態待核實/);
+  uncertain.outcome.onAction();assert.equal(uncertain.retried(),true);
 
   const normal=await evaluate({
     status:'confirmed',compensated:true,goldAdded:100,
