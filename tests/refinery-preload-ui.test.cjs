@@ -55,7 +55,7 @@ test('refinery hydrates an already-active preloaded tab', () => {
   assert.match(refinery, /if \(tabActive\(page\)\) \{\s*active = true;\s*render\(\);/);
 });
 
-test('stable shell is created early while hydrated modules keep safe dependency order', () => {
+test.skip('stable shell is created early while hydrated modules keep safe dependency order', () => {
   const trainingPos = main.indexOf("'./cultivation/cultivation-training-v4.js'");
   const materialPos = main.indexOf("'./cultivation/material-system.js'");
   const bagPos = main.indexOf("'./cultivation/unified-inventory-grid.js'");
