@@ -46,19 +46,12 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
     const data = window.getCurrentUserData?.();
     const base = normalized(data?.stats || {});
     const realmHp = window.QATrainingAccessRules?.hpBonus(data) || 0;
-    // Realm/元嬰 bonuses are projections. Never add them to permanent stats.maxHp.
+    // Realm bonus remains; retired 元嬰/化神 talent bonuses no longer apply.
     const projectedMaxHp = base.maxHp + realmHp;
-    const projected = { ...base, maxHp: projectedMaxHp,
-      hp: Math.round(projectedMaxHp * (base.hp / base.maxHp)) };
-    const soul = window.getNascentSoulBattleSnapshot?.();
-    if (!soul) return projected;
-    const attackFlat = Math.max(0, Math.min(2000, Math.round(Number(soul.attackFlat) || 0)));
-    const hpFlat = Math.max(0, Math.min(10000, Math.round(Number(soul.maxHpFlat) || 0)));
-    const maxHp = projected.maxHp + hpFlat;
     return {
-      attack: base.attack + attackFlat,
-      maxHp,
-      hp: Math.max(0, Math.min(maxHp, Math.round(maxHp * (base.hp / base.maxHp))))
+      ...base,
+      maxHp: projectedMaxHp,
+      hp: Math.round(projectedMaxHp * (base.hp / base.maxHp))
     };
   };
 

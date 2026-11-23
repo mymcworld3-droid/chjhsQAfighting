@@ -1,5 +1,4 @@
 import {} from './combat-combo.js';
-import {} from './nascent-growth.js';
 import {} from './innate-ability.js';
 // Battle v2 pure engine: deterministic, replay-safe PvP settlement.
 // No Firebase / DOM dependencies so round rules can be regression-tested independently.

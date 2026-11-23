@@ -1,7 +1,5 @@
 import './battle-cultivation-rules.js';
 import { resolvePlayerAvatar } from './profile-avatar.js';
-import {} from './soul-talents.js';
-import './nascent-growth.js';
 import './combat-contribution.js';
 import {
   doc, collection, query, where, limit, startAfter, getDocs as firestoreGetDocs, getDoc as firestoreGetDoc,
@@ -505,7 +503,7 @@ export const featureReady = (async () => {
   }
 
   function playerCoreLabel(player) {
-    return player?.goldenCore?.name ? `${player.goldenCore.name} · ${player.goldenCore.grade}品` : '未調御金丹';
+    return '';
   }
 
   function playerPowerLabel(player) {
@@ -514,7 +512,7 @@ export const featureReady = (async () => {
   }
 
   function playerNascentSealLabel(player) {
-    return [player?.nascentSoulSuppressed ? ' · 元嬰封印' : '',player?.innateAbilitySuppressed ? ' · 神通封印' : ''].join('');
+    return '';
   }
 
   function baseCombatSnapshot() {
@@ -538,10 +536,10 @@ export const featureReady = (async () => {
     const data = userData() || {};
     const baseCombat = baseCombatSnapshot();
     const combat = combatSnapshot();
-    const goldenCore = window.getEquippedGoldenCoreBattleSnapshot?.() || null;
-    const nascentSoul = window.getNascentSoulBattleSnapshot?.() || null;
-    const artifactBattle = window.getArtifactBattleSnapshot?.() || { version: 1, effects: [], openingShield: 0 };
-    const openingShield = window.getArtifactBattleOpeningShield?.(artifactBattle) ?? artifactBattle.openingShield ?? 0;
+    const goldenCore = null;
+    const nascentSoul = null;
+    const artifactBattle = { version: 1, effects: [], openingShield: 0 };
+    const openingShield = 0;
     return {
       uid: user.uid,
       name: data.displayName || user.displayName || '無名修士',
@@ -550,9 +548,9 @@ export const featureReady = (async () => {
       rankLevel: Math.max(0, Number(data.stats?.rankLevel) || 0),
       totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
       trainingAccessScore: globalThis.QATrainingAccessRules?.score(data) ?? Math.max(0, Number(data.stats?.totalScore) || 0),
-      innateAbility: globalThis.QAInnateAbility?.snapshot(data) || null,
+      innateAbility: null,
       innateAbilityState: null,
-      cultivationBonus: window.QANascentGrowth.cultivation(data, 'battle'),
+      cultivationBonus: 0,
       combatPower: Math.max(0, Math.round(Number(window.getCombatPower?.().total) || 0)),
       baseAtk: baseCombat.attack,
       baseMaxHp: baseCombat.maxHp,

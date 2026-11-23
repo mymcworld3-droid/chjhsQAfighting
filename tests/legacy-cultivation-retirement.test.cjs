@@ -1,0 +1,38 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const read = file => fs.readFileSync(path.join(__dirname,'..',file),'utf8');
+
+test('stamina branch only boots the current weapon/manual training interface',()=>{
+ const main=read('public/main.js');
+ const registry=main.match(/const XIUXIAN_FEATURE_MODULES = \[([\s\S]*?)\];/)[1];
+ for (const old of ['cultivation-training-v4','golden-core-battle-effects','artifact-system',
+   'artifact-battle-effects','soulbound-draw','cultivation-status-panel','training-scene-map',
+   'unified-inventory-grid','cultivation-refinery-v2','foundation-training-page']) {
+   assert.doesNotMatch(registry,new RegExp("'\\./cultivation/"+old+"\\.js'"),old);
+ }
+ assert.match(registry,/manual-training-page\.js/);
+ assert.match(registry,/tactical-combat\.js/);
+ assert.match(main,/QA_LEGACY_CULTIVATION_DISABLED = true/);
+ const index=read('public/index.html');
+ const shell=index.slice(index.indexOf('id="page-training"'),index.indexOf('id="page-quiz"'));
+ assert.doesNotMatch(shell,/本命金丹|data-training-tab="core"|data-training-tab="nascent-soul"/);
+});
+
+test('retired combat affixes cannot be supplied by the new duel/raid snapshots',()=>{
+ const duel=read('public/cultivation/battle-mode-v2.js');
+ const raid=read('public/cultivation/raid-mode.js');
+ const combat=read('public/cultivation/cultivation-combat-stats.js');
+ assert.match(duel,/const goldenCore = null;/);
+ assert.match(duel,/const nascentSoul = null;/);
+ assert.match(raid,/const core = null;/);
+ assert.match(raid,/const soul = null;/);
+ assert.doesNotMatch(combat,/getNascentSoulBattleSnapshot/);
+});
+
+test('old combat change popups are not generated',()=>{
+ const growth=read('public/cultivation/player-growth-feedback.js');
+ assert.doesNotMatch(growth,/popup\.innerHTML|document\.createElement\('aside'\)/);
+ assert.match(growth,/showGrowthComparison = \(\) =>/);
+});

@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, getDoc } from '../data-store.js';
-import { ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore } from './artifact-catalog.js';
+import { realmForScore } from './artifact-catalog.js';
 import './training-access-rules.js';
 import { resolvePlayerAvatar } from './profile-avatar.js';
 
@@ -28,133 +28,41 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     return '';
   }
 
-  const PERCENT_EFFECTS = new Set([
-    'equip_attack_percent', 'equip_hp_percent', 'equip_damage_percent',
-    'equip_damage_reduction_percent', 'equip_crit_chance', 'equip_crit_damage_percent',
-    'equip_combo_chance', 'equip_combo_damage_percent', 'equip_lifesteal_percent', 'equip_reflect_percent',
-    'equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent',
-    'equip_first_hit_reduction_percent', 'equip_damage_cap_percent'
-  ]);
-  const EFFECT_NAMES = Object.freeze({
-    equip_attack_flat:'攻擊', equip_attack_percent:'攻擊',
-    equip_hp_flat:'生命', equip_hp_percent:'生命',
-    equip_damage_percent:'增傷', equip_damage_reduction_flat:'固定減傷',
-    equip_damage_reduction_percent:'減傷', equip_crit_chance:'暴擊率',
-    equip_crit_damage_percent:'暴傷', equip_combo_chance:'連擊率', equip_combo_damage_percent:'連擊傷害加成',
-    equip_lifesteal_percent:'吸血', equip_reflect_percent:'反傷',
-    equip_shield_flat:'護盾', equip_true_damage_flat:'真實傷害',
-    equip_low_hp_damage_percent:'低血量增傷', equip_low_hp_reduction_percent:'低血量減傷',
-    equip_first_hit_reduction_percent:'首次受傷減傷',
-    equip_damage_cap_percent:'單次傷害上限',
-    equip_on_correct_shield_flat:'答對護盾',
-    equip_cheat_death:'免死一次', equip_copy_enemy_artifact:'複製敵方法寶'
-  });
-
-  function equippedCore(data, self) {
-    const runtime = self ? window.getEquippedGoldenCoreState?.() : null;
-    const remote = data?.cultivationTraining || {};
-    // Disabled core remains owned, but has no active combat power or public equipped effect.
-    const enabled = self ? (window.isGoldenCoreEnabled?.() ?? remote.coreEnabled !== false) : remote.coreEnabled !== false;
-    if (!enabled) return null;
-    const raw = runtime || remote.equippedCore ||
-      (remote.equipped === true ? remote.core : null);
-    if (number(data?.stats?.totalScore) < 28 || !raw?.type) return null;
-    return window.getGoldenCorePublicDetails?.(raw) ||
-      { type: raw.type, name: '本命金丹', grade: Math.min(9, Math.max(1, number(raw.grade) || 9)), effect: '' };
-  }
-
-  function equippedArtifact(data, slot) {
-    const id = String(data?.artifactSystem?.equipped?.[slot] || '');
-    if (!id || number(data?.artifactSystem?.inventory?.[id]) < 1) return null;
-    const item = getArtifactById(id);
-    if (!item || !Array.isArray(item.effects) || !item.effects.some((effect) => String(effect?.type || '').startsWith('equip_'))) return null;
-    const assigned = ARTIFACT_EQUIP_SLOTS.includes(item.equipSlot) ? item.equipSlot : '輔助法寶';
-    if (assigned !== slot) return null;
-    return item;
-  }
-
-  function effectLabel(effect) {
-    const type = String(effect?.type || '');
-    const name = EFFECT_NAMES[type];
-    if (!name) return '';
-    if (type === 'equip_cheat_death' || type === 'equip_copy_enemy_artifact') return name;
-    const value = number(effect.value);
-    return name + ' ' + (type === 'equip_damage_cap_percent' ? '' : '+') +
-      (PERCENT_EFFECTS.has(type) ? (value * 100).toLocaleString('zh-TW', { maximumFractionDigits: 1 }) + '%' : fmt(value));
-  }
-
-  // Exposed pure projection for regression tests and other public profile entry points.
+  // Public player cards expose only current character and learning data.
+  // Old core/soul/artifact inventories are deliberately not projected.
   function projectProfile(uid, data, self = false) {
     const stats = data?.stats || {};
     const score = number(stats.totalScore);
-    const core = equippedCore(data, self);
-    const tactical = window.QA_MANUAL_TRAINING_ONLY===true;
-    const power = (tactical && self ? window.getCombatPower?.() : window.calculateCombatPower?.({
-      stats: { attack: stats.attack ?? 200,
-        maxHp: Math.max(1, Number(stats.maxHp) || 1000) + (window.QATrainingAccessRules?.hpBonus(data) || 0) } ,
-      core, equipped: data?.artifactSystem?.equipped || {},
-      inventory: data?.artifactSystem?.inventory || {},realmScore:window.QATrainingAccessRules?.score(data)||score,
-      manualState:null
-    })) || { total: 0, base: 0, core: 0, equipment: 0, items: [] };
     const answered = number(stats.totalAnswered);
     const correct = Math.min(answered, number(stats.totalCorrect));
     const realm = realmForScore(score)?.name || '凡人';
-    const slots = ARTIFACT_EQUIP_SLOTS.map(slot => ({ slot, item: equippedArtifact(data, slot) }));
+    const live = self ? window.getCombatStats?.() : null;
+    const attack = number(live?.attack ?? stats.attack ?? 200);
+    const maxHp = Math.max(1, number(live?.maxHp ?? (
+      (Number(stats.maxHp) || 1000) + (window.QATrainingAccessRules?.hpBonus(data) || 0)
+    )));
     return {
-      uid, name: String(data?.displayName || '無名修士'), avatar: safeImage(resolvePlayerAvatar(data)),
-      // A high enough score alone does not award the top-five True Immortal title.
-      realm: realm === '真仙' ? '半仙' : realm, score, power, core, slots,
-      answered, correct, accuracy: answered ? (correct / answered * 100).toFixed(1) + '%' : '尚無紀錄'
+      uid, name: String(data?.displayName || '無名修士'),
+      avatar: safeImage(resolvePlayerAvatar(data)),
+      realm: realm === '真仙' ? '半仙' : realm,
+      score, combat: { attack, maxHp },
+      answered, correct,
+      accuracy: answered ? (correct / answered * 100).toFixed(1) + '%' : '尚無紀錄'
     };
   }
 
   function profileMarkup(profile) {
-    const core = profile.core;
-    if(profile.power?.mode==='tactical'){
-      const power=profile.power,complete=!!power.complete;
-      const items=power.items||[];
-      return '<div class="xpp-hero">' +
-        '<div class="xpp-avatar"><img data-xpp-avatar alt="玩家頭像" hidden><i class="fa-solid fa-user"></i></div>' +
-        '<div class="xpp-identity"><span>修士資料 · PLAYER PROFILE</span><h2>'+esc(profile.name)+
-        '</h2><p>'+esc(profile.realm)+' · 修為 '+fmt(profile.score)+'</p></div></div>' +
-        '<div class="xpp-power"><span>'+(complete?'戰棋戰力':'基礎戰力（功法未同步）')+'</span><strong>'+fmt(power.total)+
-        '</strong><small>攻擊與生命 '+fmt(power.base)+' ／ 已裝備招式 '+fmt(power.skills||0)+'</small></div>' +
-        '<div class="xpp-stats"><div><span>答對率</span><b>'+esc(profile.accuracy)+
-        '</b></div><div><span>累計答對</span><b>'+fmt(profile.correct)+
-        '</b></div><div><span>累計答題</span><b>'+fmt(profile.answered)+'</b></div></div>' +
-        '<section class="xpp-section"><h3>戰棋功法配置</h3>'+
-        (items.length?'<div class="xpp-equipment">'+items.map(item=>'<article class="xpp-equip"><strong>'+
-        esc(item.name)+'</strong><small>Lv.'+fmt(item.level)+' · 戰力 +'+fmt(item.power)+'</small></article>').join('')+
-        '</div>':'<p class="xpp-note">'+(complete?'未裝備可用招式。':'尚未取得可公開的功法裝備資料，僅展示基礎戰力。')+'</p>')+'</section>' +
-        '<p class="xpp-footnote">戰棋戰力以可用攻擊、最大生命及實際裝備招式估算；不額外計入已停用的金丹與舊法寶，亦不直接增加傷害。</p>';
-    }
-    const slots = profile.slots.map(({slot,item}) => {
-      const power = item ? Math.max(0, Number(window.calculateArtifactPower?.(item)) || 0) : 0;
-      const effects = item?.effects?.map(effectLabel).filter(Boolean).slice(0, 5) || [];
-      return '<article class="xpp-equip"><span>' + esc(slot) + '</span>' +
-        (item ? '<strong>' + esc(item.name) + '</strong><small>' + esc(item.realm) +
-          ' · 戰力 +' + fmt(power) + '</small>' +
-          (effects.length ? '<p>' + effects.map(esc).join(' · ') + '</p>' : '') :
-          '<strong class="xpp-empty">尚未裝備</strong>') + '</article>';
-    }).join('');
     return '<div class="xpp-hero">' +
       '<div class="xpp-avatar"><img data-xpp-avatar alt="玩家頭像" hidden><i class="fa-solid fa-user"></i></div>' +
       '<div class="xpp-identity"><span>修士資料 · PLAYER PROFILE</span><h2>' + esc(profile.name) +
       '</h2><p>' + esc(profile.realm) + ' · 修為 ' + fmt(profile.score) + '</p></div></div>' +
-      '<div class="xpp-power"><span>綜合戰力</span><strong>' + fmt(profile.power.total) +
-      '</strong><small>基礎 ' + fmt(profile.power.base) + ' ／ 金丹 ' + fmt(profile.power.core) +
-      ' ／ 裝備 ' + fmt(profile.power.equipment) + '</small></div>' +
       '<div class="xpp-stats"><div><span>答對率</span><b>' + esc(profile.accuracy) +
       '</b></div><div><span>累計答對</span><b>' + fmt(profile.correct) +
       '</b></div><div><span>累計答題</span><b>' + fmt(profile.answered) + '</b></div></div>' +
-      '<section class="xpp-section"><h3>本命金丹</h3>' +
-      (core ? '<div class="xpp-core">' + (globalThis.QAGoldenCoreArt?.markup(core.type,core.grade,core.name) || '') + '<div><strong>' + esc(core.name) + '</strong><b>' +
-        fmt(core.grade) + ' 品 · 戰力 +' + fmt(profile.power.core) + '</b></div>' +
-        (core.effect ? '<p>' + esc(core.effect) + '</p>' : '') + '</div>' :
-        '<p class="xpp-note">目前沒有調御中的本命金丹。</p>') + '</section>' +
-      '<section class="xpp-section"><h3>已裝備法寶</h3><div class="xpp-equipment">' +
-      slots + '</div></section>' +
-      '<p class="xpp-footnote">顯示該修士已保存的公開戰鬥資料；戰力為綜合評分，不直接增加鬥法傷害。</p>';
+      '<section class="xpp-section"><h3>角色戰鬥數值</h3><div class="xpp-stats">' +
+      '<div><span>攻擊力</span><b>' + fmt(profile.combat.attack) + '</b></div>' +
+      '<div><span>生命上限</span><b>' + fmt(profile.combat.maxHp) + '</b></div>' +
+      '</div></section>';
   }
 
   function close() {

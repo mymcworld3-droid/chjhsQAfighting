@@ -904,47 +904,8 @@ body.xianxia-theme main:has(#page-training.active-page),
             </div>
         </section>
 
-        <div id="page-training" class="page-section hidden px-4 training-page training-page-v3" data-static-layout="1">
-            <div class="training-page-heading-v3">
-                <div>
-                    <div class="training-eyebrow-v3">內丹修行</div>
-                    <h2>修煉</h2>
-                </div>
-                <div class="training-realm-seal-v3">金丹</div>
-            </div>
-
-            <div class="training-subtabs-v3" role="tablist">
-                <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true">
-                    <i class="fa-solid fa-circle-dot"></i><span>金丹</span>
-                </button>
-                <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false">
-                    <i class="fa-solid fa-hammer"></i><span>煉器</span>
-                </button>
-                <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false">
-                    <i class="fa-solid fa-shield-halved"></i><span>裝備</span>
-                </button>
-                <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false">
-                    <i class="fa-solid fa-box-open"></i><span>背包</span>
-                </button>
-            </div>
-
-            <div id="training-tab-content">
-                <section class="core-minimal-card training-static-core-shell" aria-busy="true">
-                    <div class="core-minimal-center">
-                        <div class="golden-core-stage-v3">
-                            <div class="golden-core-halo-v3 halo-a"></div>
-                            <div class="golden-core-halo-v3 halo-b"></div>
-                            <div class="golden-core-orbit-v3"></div>
-                            <div class="golden-core-sphere-v3"><span>丹</span></div>
-                            <div class="golden-core-shadow-v3"></div>
-                        </div>
-                        <div class="core-minimal-name">本命金丹</div>
-                        <div class="core-minimal-meta">修煉資料同步中</div>
-                        <button type="button" class="core-equip-btn" disabled>資料載入後可操作</button>
-                    </div>
-                </section>
-            </div>
-        </div>
+        <!-- 新版武器／功法修煉頁由 manual-training-page.js 建立，不再渲染舊金丹與裝備介面。 -->
+        <div id="page-training" class="page-section hidden px-4 training-page manual-training-active" data-static-layout="1"></div>
 
         <div id="page-quiz" class="page-section hidden px-4">
             <div id="solo-progress-panel" class="absolute top-16 right-4 flex flex-col items-end gap-1 pointer-events-none z-20 hidden">

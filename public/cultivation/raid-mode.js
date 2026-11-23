@@ -342,10 +342,10 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
     const row = data();
     const combat = window.getCombatStats?.() || window.getCombatStatDefaults?.() || { attack: 200, maxHp: 1000 };
     const maxHp = Math.max(1, Math.round(Number(combat.maxHp) || 1000));
-    const core = window.getEquippedGoldenCoreBattleSnapshot?.() || null;
-    const soul = window.getNascentSoulBattleSnapshot?.() || null;
-    const artifact = window.getArtifactBattleSnapshot?.() || { version: 1, effects: [], openingShield: 0 };
-    const openingShield = window.getArtifactBattleOpeningShield?.(artifact) ?? artifact.openingShield ?? 0;
+    const core = null;
+    const soul = null;
+    const artifact = { version: 1, effects: [], openingShield: 0 };
+    const openingShield = 0;
     return {
       uid: String(row.uid || 'raid-player'),
       name: row.displayName || row.profile?.displayName || '無名修士',
