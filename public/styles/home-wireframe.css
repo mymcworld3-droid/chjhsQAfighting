@@ -14,7 +14,7 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
   --ha-gold:#ffe5a3;--ha-edge:#d7b971;--ha-ink:#03485b;
   position:relative;width:100%;height:100%;min-height:560px;overflow:hidden;
   color:var(--ha-gold);font-family:"Noto Serif TC",serif;
-  background:#076c9a url('../assets/home/home-background-portrait.png') center center/100% 100% no-repeat;
+  background:#076c9a url('../assets/home/home-background-portrait.png') center center/cover no-repeat;
   text-shadow:0 2px 3px #002c41,0 0 6px #00364c;
 }
 .home-art-scene,.home-art-scene *,.home-art-scene *::before,.home-art-scene *::after { box-sizing:border-box }
@@ -135,4 +135,165 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 @media (max-width:360px) and (orientation:portrait) {
   .home-art-money small { display:none }
   .home-art-wallet { gap:4px }
+}
+
+
+/* Homepage refinement 2026-11-23.
+   Preserve the supplied 360:640 and 1280:720 artwork aspect ratios. The
+   individual HUD groups scale uniformly; no image or avatar is stretched to
+   make room for a different group. Their interactive hit boxes scale too. */
+.home-art-scene {
+  --ha-player-fit:.94;
+  --ha-wallet-fit:.94;
+  --ha-tools-fit:.94;
+  --ha-tasks-fit:.94;
+  --ha-meditation-fit:.94;
+  --ha-trial-fit:.94;
+  background-size:cover;
+}
+.home-art-player {
+  z-index:3;
+  isolation:isolate;
+  transform:scale(var(--ha-player-fit));
+  transform-origin:top left;
+}
+/* The blue-black mist belongs to the complete player plaque. In particular
+   it reaches BEHIND the circular portrait, rather than starting at the name. */
+.home-art-player::before {
+  content:'';
+  position:absolute;
+  z-index:-2;
+  pointer-events:none;
+  left:-7%;
+  right:-10%;
+  top:-22%;
+  bottom:-24%;
+  border-radius:42% 48% 40% 45%;
+  background:
+    radial-gradient(ellipse 48% 83% at 18% 52%,rgba(1,17,30,.94),rgba(4,37,53,.8) 66%,transparent 100%),
+    linear-gradient(90deg,rgba(1,23,35,.91) 0%,rgba(2,31,43,.89) 40%,rgba(2,34,50,.66) 72%,transparent 100%);
+  filter:blur(7px);
+}
+.home-art-player::after {
+  content:'';
+  position:absolute;
+  z-index:-1;
+  pointer-events:none;
+  left:-10%;
+  right:3%;
+  top:-15%;
+  bottom:-10%;
+  border-radius:55%;
+  background:radial-gradient(ellipse 75% 74% at 37% 54%,rgba(6,53,69,.62),rgba(4,35,50,.30) 64%,transparent 100%);
+  filter:blur(12px);
+}
+.home-art-avatar { z-index:1;aspect-ratio:1; }
+.home-art-identity {
+  position:relative;
+  z-index:1;
+  flex:1 1 auto;
+  min-width:0;
+  background:none;
+  align-items:flex-start;
+}
+/* Reference ink wash: an opaque irregular charcoal brush, not merely a
+   text-shadow or a rectangular black label. */
+.home-art-power {
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  align-self:flex-start;
+  gap:.16em;
+  isolation:isolate;
+  max-width:100%;
+  padding:.10em .55em .17em .24em;
+  margin-left:-.12em;
+  color:#fff0c6;
+  text-shadow:0 1px 2px #030a0c,0 0 3px #080f12;
+}
+.home-art-power::before {
+  content:'';
+  position:absolute;
+  pointer-events:none;
+  z-index:-1;
+  inset:-.16em -.62em -.15em -.24em;
+  background:linear-gradient(90deg,rgba(6,12,16,.99) 0%,rgba(6,12,17,.98) 61%,rgba(11,18,21,.92) 88%,rgba(11,24,28,0) 100%);
+  clip-path:polygon(0 23%,7% 12%,16% 19%,30% 9%,44% 15%,57% 4%,71% 17%,83% 9%,100% 23%,94% 49%,99% 66%,85% 79%,69% 80%,57% 96%,38% 86%,25% 95%,13% 82%,0 88%,5% 60%);
+  transform:rotate(-1deg);
+}
+.home-art-power::after {
+  content:'';
+  position:absolute;
+  pointer-events:none;
+  z-index:-2;
+  inset:-.30em -.78em -.25em -.30em;
+  border-radius:55%;
+  background:rgba(3,13,20,.72);
+  filter:blur(4px);
+}
+.home-art-wallet {
+  transform:scale(var(--ha-wallet-fit));
+  transform-origin:top right;
+}
+.home-art-tools {
+  transform:scale(var(--ha-tools-fit));
+  transform-origin:top right;
+}
+.home-art-tasks {
+  transform:scale(var(--ha-tasks-fit));
+  transform-origin:top left;
+}
+.home-art-meditation {
+  transform:scale(var(--ha-meditation-fit));
+  transform-origin:top right;
+}
+.home-art-trial {
+  transform:scale(var(--ha-trial-fit));
+  transform-origin:center bottom;
+}
+.home-art-navigation button i,
+.home-art-navigation button span {
+  transform:scale(.93);
+  transform-origin:center;
+}
+.home-art-coin,
+.home-art-tools button img,
+.home-art-meditation img,
+.home-art-trial img {
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.home-art-coin { width:28px;height:28px; }
+/* Portrait header is crowded: keep the wallet above the player line, rather
+   than narrowing or distorting the avatar/coin to fit. */
+@media (orientation:portrait) {
+  .home-art-scene {
+    --ha-player-fit:.92;
+    --ha-wallet-fit:.92;
+    --ha-tools-fit:.92;
+    --ha-tasks-fit:.94;
+    --ha-meditation-fit:.93;
+    --ha-trial-fit:.94;
+  }
+  .home-art-player { top:5.25%;left:2.5%;width:53%; }
+  .home-art-wallet { top:1%;right:2%;width:54%; }
+  .home-art-tools { top:5.6%; }
+  .home-art-identity { gap:1px; }
+  #home-art-name { font-size:clamp(14px,3.3vw,26px); }
+  #home-art-realm { font-size:clamp(10px,2.2vw,17px); }
+  .home-art-power { font-size:clamp(11px,2.4vw,19px); }
+}
+@media (orientation:landscape) {
+  .home-art-scene {
+    --ha-player-fit:.94;
+    --ha-wallet-fit:.95;
+    --ha-tools-fit:.94;
+    --ha-tasks-fit:.94;
+    --ha-meditation-fit:.94;
+    --ha-trial-fit:.93;
+  }
+  .home-art-player::before { left:-10%;right:-15%; }
+  .home-art-tasks { max-height:29%; }
+  .home-art-navigation button { gap:12px; }
 }

@@ -46,3 +46,26 @@ test('all homepage images exist and both supplied background orientations are fu
   for(const id of ['quest-open','xiuxian-meditate','xiuxian-path','home-avatar-container','display-score'])
     assert.equal(html.split('id="'+id+'"').length-1,1,id);
 });
+
+
+test('home artwork scales HUD groups uniformly and never distorts the source images',()=>{
+  const css=read('public/styles/home-wireframe.css');
+  assert.match(css,/background-size:cover/);
+  assert.doesNotMatch(css,/center center\/100% 100% no-repeat/);
+  for(const group of ['player','wallet','tools','tasks','meditation','trial']){
+    const name='home-art-'+group;
+    assert.match(css,new RegExp('\\.'+name+'\\s*\\{[^}]*transform:scale\\(var\\(--ha-'+group+'-fit\\)\\)','s'));
+  }
+  assert.match(css,/\.home-art-trial img\s*\{[^}]*object-fit:contain/);
+  assert.match(css,/\.home-art-avatar\s*\{[^}]*aspect-ratio:1/);
+  assert.match(html,/home-wireframe\.css\?v=20261123-art-fit-mist-v2/);
+});
+
+test('player name and combat-power ink wash extend behind the avatar',()=>{
+  const css=read('public/styles/home-wireframe.css');
+  assert.match(css,/\.home-art-player::before\s*\{/);
+  assert.match(css,/\.home-art-player::after\s*\{/);
+  assert.match(css,/\.home-art-identity\s*\{[^}]*background:none/s);
+  assert.match(css,/\.home-art-power::before\s*\{[^}]*clip-path:polygon/s);
+  assert.match(css,/\.home-art-power::after\s*\{[^}]*filter:blur/s);
+});
