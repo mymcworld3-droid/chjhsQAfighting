@@ -58,7 +58,7 @@ test('home artwork scales HUD groups uniformly and never distorts the source ima
   }
   assert.match(css,/\.home-art-trial img\s*\{[^}]*object-fit:contain/);
   assert.match(css,/\.home-art-avatar\s*\{[^}]*aspect-ratio:1/);
-  assert.match(html,/home-wireframe\.css\?v=20261123-art-fit-mist-v2/);
+  assert.match(html,/home-wireframe\.css\?v=20261123-compact-wallet-tasks-v3/);
 });
 
 test('player name and combat-power ink wash extend behind the avatar',()=>{
@@ -68,4 +68,23 @@ test('player name and combat-power ink wash extend behind the avatar',()=>{
   assert.match(css,/\.home-art-identity\s*\{[^}]*background:none/s);
   assert.match(css,/\.home-art-power::before\s*\{[^}]*clip-path:polygon/s);
   assert.match(css,/\.home-art-power::after\s*\{[^}]*filter:blur/s);
+});
+
+
+test('stone wallet is slim in both orientations with fit-preserving icon',()=>{
+  const css=read('public/styles/home-wireframe.css');
+  const overrides=css.slice(css.indexOf('/* Compact homepage HUD: match'));
+  assert.match(overrides,/\.home-art-wallet\s*\{[^}]*height:3\.6%;[^}]*min-height:0/s);
+  assert.match(overrides,/@media \(orientation:landscape\)\s*\{[^]*?\.home-art-wallet\s*\{[^}]*height:4\.15%;min-height:0/s);
+  assert.match(overrides,/\.home-art-coin\s*\{[^}]*object-fit:contain/s);
+  assert.match(overrides,/\.home-art-wallet button\s*\{[^}]*min-height:0/s);
+});
+
+test('daily quest card uses compact font, rows, header and actions',()=>{
+  const css=read('public/styles/home-wireframe.css');
+  const overrides=css.slice(css.indexOf('/* Compact homepage HUD: match'));
+  assert.match(overrides,/\.home-art-tasks header\s*\{[^}]*margin-bottom:2px/s);
+  assert.match(overrides,/\.home-art-task\s*\{[^}]*padding:1px 0;[^}]*line-height:1\.2/s);
+  assert.match(overrides,/\.home-art-task button\s*\{[^}]*padding:1px 3px/s);
+  assert.match(overrides,/@media \(orientation:landscape\)\s*\{[^]*?\.home-art-task\s*\{[^}]*font-size:clamp\(10px,\.93vw,15px\)/s);
 });

@@ -297,3 +297,51 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
   .home-art-tasks { max-height:29%; }
   .home-art-navigation button { gap:12px; }
 }
+
+
+/* Compact homepage HUD: match the slim currency plaque in the supplied art.
+   Shrink the contents as well as the border; do not squash any image. */
+.home-art-wallet {
+  height:3.6%;
+  min-height:0;
+  padding:0 5px;
+  gap:5px;
+}
+.home-art-wallet button {
+  min-width:22px;
+  min-height:0;
+  height:100%;
+  font-size:19px;
+  line-height:1;
+}
+.home-art-money { gap:4px; }
+.home-art-coin { width:21px;height:21px;max-height:100%;object-fit:contain; }
+#home-art-gold { line-height:1.05; }
+
+/* Dense quest list: smaller letters and significantly less vertical whitespace. */
+.home-art-tasks { padding:5px 7px; }
+.home-art-tasks header { gap:2px;padding-bottom:2px;margin-bottom:2px; }
+.home-art-tasks h2 { font-size:clamp(12px,2.75vw,20px);line-height:1.18; }
+.home-art-tasks header button { font-size:12px;min-width:22px;min-height:22px; }
+.home-art-task { gap:3px;padding:1px 0;font-size:clamp(8px,2.05vw,17px);line-height:1.2;letter-spacing:-.018em; }
+.home-art-task-label { line-height:1.2;overflow-wrap:anywhere; }
+.home-art-task-label small { font-size:.84em; }
+.home-art-task button { min-width:26px;padding:1px 3px;font-size:.91em;line-height:1.18; }
+.home-art-task-check { min-width:26px;font-size:20px; }
+.home-art-task-empty { font-size:10px;padding:7px 1px; }
+#home-art-tasks-status { font-size:10px;line-height:1.2; }
+
+@media (orientation:landscape) {
+  .home-art-wallet { height:4.15%;min-height:0;padding:0 6px;gap:5px; }
+  .home-art-coin { width:24px;height:24px; }
+  .home-art-wallet button { min-width:24px;font-size:21px; }
+  #home-art-gold { font-size:clamp(16px,1.43vw,21px); }
+  .home-art-tasks { padding:6px 9px; }
+  .home-art-tasks h2 { font-size:clamp(14px,1.25vw,20px);line-height:1.18; }
+  .home-art-task { font-size:clamp(10px,.93vw,15px);line-height:1.2;padding:1px 0; }
+}
+@media (orientation:landscape) and (max-height:550px) {
+  .home-art-wallet { height:4.15%;min-height:0; }
+  .home-art-task { font-size:10px;line-height:1.16;padding:0; }
+  .home-art-tasks h2 { font-size:14px; }
+}
