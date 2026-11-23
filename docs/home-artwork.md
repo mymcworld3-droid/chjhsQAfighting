@@ -2,7 +2,9 @@
 
 適用分支：`stamina-battle`。主頁只放背景、標題、玩家資訊、靈石列、右上功能、每日任務、每日閉關、問道試煉及底部導覽。沒有加入示意圖的公告板或中央人物。
 
-所有圖片統一放在 **`public/assets/home/`**。已隨本次提交放好，可直接使用，不需要再上傳一次。PNG 原始內容與透明度完整保留。
+本次上傳的主頁圖片統一放在 **`public/assets/home/`**。已隨本次提交放好，可直接使用，不需要再上傳一次。PNG 原始內容與透明度完整保留。
+
+靈石圖示沿用 `Main-backup` 的 **`public/assets/items/gold.webp`**（256×256，透明背景），已放入體力分支並套用至首頁靈石列。
 
 | 上傳的原檔 | 專案檔名 | 畫面位置 |
 |---|---|---|
@@ -29,7 +31,6 @@
 | 排名圖示 | home-icon-rank.png | 256×256，透明背景 |
 | 信件圖示 | home-icon-mail.png | 256×256，透明背景 |
 | 設定圖示 | home-icon-settings.png | 256×256，透明背景 |
-| 靈石圖示 | home-icon-spirit-stone.png | 128×128，透明背景 |
 | 圓形頭像裝飾框 | home-avatar-frame.png | 512×512，圓心透明 |
 | 靈石數量框 | home-currency-frame.png | 640×128，中間留白，不含數字 |
 | 每日任務面板 | home-tasks-frame.png | 720×540，中間留白，不含任務文字 |
