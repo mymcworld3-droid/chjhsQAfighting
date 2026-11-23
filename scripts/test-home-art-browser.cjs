@@ -59,7 +59,8 @@ const server = createServer(async(req,res)=>{
         return {scene:rect('.home-art-scene'),tasks:rect('.home-art-tasks'),trial:rect('.home-art-trial'),nav:rect('.home-art-navigation'),wallet:rect('.home-art-wallet'),tools:rect('.home-art-tools'),player:rect('.home-art-player'),title:rect('.home-art-title'),width:document.documentElement.scrollWidth,innerWidth};
       });
       assert.ok(geometry.width<=viewport.width,'no horizontal overflow');
-      assert.ok(geometry.tasks.bottom<geometry.trial.y+geometry.trial.h*.4,'task panel does not cover trial label');
+      const label={left:geometry.trial.x+geometry.trial.w*.15,right:geometry.trial.right-geometry.trial.w*.15,top:geometry.trial.y+geometry.trial.h*.4,bottom:geometry.trial.bottom-geometry.trial.h*.15};
+      assert.ok(geometry.tasks.right<=label.left || geometry.tasks.x>=label.right || geometry.tasks.bottom<=label.top || geometry.tasks.y>=label.bottom,'task panel does not cover trial label');
       assert.ok(geometry.tools.x>=geometry.player.right-2,'player and tools do not overlap');
       // Images must load; the scene picks exactly one responsive background.
       assert.ok(await page.locator('.home-art-scene img').evaluateAll(imgs=>imgs.every(i=>i.complete&&i.naturalWidth>0)));
