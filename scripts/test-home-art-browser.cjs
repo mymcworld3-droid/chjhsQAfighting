@@ -75,9 +75,11 @@ const server = createServer(async(req,res)=>{
         return {scene:rect('.home-art-scene'),tasks:rect('.home-art-tasks'),trial:rect('.home-art-trial'),nav:rect('.home-art-navigation'),wallet:rect('.home-art-wallet'),tools:rect('.home-art-tools'),player:rect('.home-art-player'),width:document.documentElement.scrollWidth,innerWidth};
       });
       assert.ok(geometry.width<=viewport.width,'no horizontal overflow');
-      const portrait=viewport.height>viewport.width;
-      assert.ok(Math.abs(geometry.trial.h/geometry.scene.h-(portrait?.24:.42))<.01,'trial height matches reference');
-      assert.ok(Math.abs((geometry.trial.y-geometry.scene.y)/geometry.scene.h-(portrait?.69:.50))<.01,'trial position matches reference');
+      assert.ok(Math.abs(geometry.trial.w/geometry.trial.h-4/3)<.01,'trial keeps original artwork aspect ratio');
+      assert.equal(await page.locator('.home-art-trial img').evaluate(el=>getComputedStyle(el).objectFit),'contain');
+      assert.ok(await page.locator('.home-art-navigation button').evaluateAll(buttons=>buttons.every(button=>{
+        const r=button.getBoundingClientRect();return button.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));
+      })),'navigation remains clickable above overlapping trial artwork');
       assert.equal(await page.locator('.home-art-shortcuts').count(),0,'no middle diamond shortcuts');
       const label={left:geometry.trial.x+geometry.trial.w*.15,right:geometry.trial.right-geometry.trial.w*.15,top:geometry.trial.y+geometry.trial.h*.4,bottom:geometry.trial.bottom-geometry.trial.h*.15};
       assert.ok(geometry.tasks.right<=label.left || geometry.tasks.x>=label.right || geometry.tasks.bottom<=label.top || geometry.tasks.y>=label.bottom,'task panel does not cover trial label');

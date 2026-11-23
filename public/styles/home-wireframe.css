@@ -80,11 +80,11 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 #home-art-tasks-status:empty { display:none }
 .home-art-meditation { position:absolute!important;right:1%;top:39%;width:34%;aspect-ratio:2 }
 .home-art-meditation .home-art-dot { top:7%;right:8% }
-.home-art-trial { position:absolute!important;left:9%;bottom:7%;width:82%;height:24%;aspect-ratio:auto }
-.home-art-trial img { object-fit:fill!important }
+.home-art-trial { position:absolute!important;left:9%;bottom:4.5%;width:82%;height:auto;aspect-ratio:4/3;z-index:1 }
+.home-art-trial img { object-fit:contain!important }
 /* The title and dock are baked into the scene image. Only live controls
    overlay the four blank slots; no second frame or raster labels are added. */
-.home-art-navigation { position:absolute;left:4%;bottom:2.5%;width:92%;height:6.5%;min-height:40px }
+.home-art-navigation { z-index:2;position:absolute;left:4%;bottom:2.5%;width:92%;height:6.5%;min-height:40px }
 .home-art-navigation>div { display:grid;width:100%;height:100%;grid-template-columns:repeat(4,minmax(0,1fr)) }
 .home-art-navigation button { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:40px;border:0;border-radius:8px;background:transparent;font-size:clamp(11px,2.4vw,21px);line-height:1.15;color:#ffe5a3;text-shadow:0 2px 3px #002c41 }
 .home-art-navigation button i { font-size:clamp(18px,3.5vw,32px);color:#ffe5a3;filter:drop-shadow(0 1px 2px #00212b) }
@@ -114,7 +114,7 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
   .home-art-tasks h2 { font-size:clamp(15px,1.6vw,25px) }
   .home-art-task { font-size:clamp(12px,1.1vw,18px);min-height:0;padding:3px 0 }
   .home-art-meditation { right:1%;top:34%;width:23% }
-  .home-art-trial { left:31%;bottom:8%;width:38%;height:42%;aspect-ratio:auto }
+  .home-art-trial { left:31%;bottom:4.5%;width:38%;height:auto;aspect-ratio:4/3 }
   .home-art-navigation { bottom:3%;height:9%;min-height:40px;left:10%;width:80% }
   .home-art-navigation button { flex-direction:row;gap:16px;font-size:clamp(12px,1.5vw,24px) }
   .home-art-navigation button i { font-size:clamp(20px,2.2vw,36px) }
@@ -126,7 +126,7 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
   .home-art-tasks { top:18%;max-height:30% }
   .home-art-task { font-size:10px;min-height:0;padding:2px 0 }
   .home-art-tasks h2 { font-size:15px }
-  .home-art-trial { width:38%;left:31%;bottom:8% }
+  .home-art-trial { width:38%;left:31%;bottom:4.5% }
 }
 @media (prefers-reduced-motion:reduce) { .home-art-scene * { animation:none!important;transition:none!important } }
 
