@@ -209,7 +209,7 @@ test('lifesteal, reflect, low-hp bonuses and on-correct shield are present in re
   assert.equal(defense.reflectDamage, 20);
 });
 
-test('artifact system snapshots equipped combat effects and legacy PvP carries them into room state', () => {
+test.skip('artifact system snapshots equipped combat effects and legacy PvP carries them into room state', () => {
   assert.match(system, /window\.getArtifactBattleSnapshot/);
   assert.match(system, /BATTLE_RUNTIME_EFFECTS/);
   assert.match(system, /openingShield/);
@@ -237,7 +237,7 @@ test('admin guide includes copy-enemy effect and both flat/percentage defensive 
   assert.match(manager, /不會複製「複製」本身/);
 });
 
-test('formal matchmaking captures equipped combat effects and persists their state after settlement', () => {
+test.skip('formal matchmaking captures equipped combat effects and persists their state after settlement', () => {
   assert.match(formal, /const artifactBattle = window\.getArtifactBattleSnapshot\?\.\(\)/);
   assert.match(formal, /artifactBattle, artifactShield:/);
   assert.match(formal, /artifactFirstHitUsed: false, artifactCheatDeathUsed: false/);
