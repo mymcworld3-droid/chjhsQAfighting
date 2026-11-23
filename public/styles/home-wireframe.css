@@ -35,7 +35,6 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 #home-art-avatar-slot #home-avatar-container,
 #home-art-avatar-slot #home-avatar-container>div { width:100%!important;height:100%!important;border-radius:50%!important;margin:0!important }
 #home-art-avatar-slot img { width:100%!important;height:100%!important;object-fit:cover }
-#home-art-level { position:absolute;left:-5%;bottom:-4%;min-width:24px;padding:1px 4px;font:600 12px/1.4 Georgia,serif;text-align:center;border:1px solid var(--ha-edge);border-radius:50%;background:#073c51;color:#fff0c6 }
 .home-art-identity { min-width:0;display:flex;flex-direction:column;gap:2px;line-height:1.35;padding-right:8px;background:linear-gradient(90deg,#034358aa,transparent) }
 #home-art-name { font-size:clamp(15px,3.4vw,28px);color:#fff6df;overflow:hidden;white-space:nowrap;text-overflow:ellipsis }
 #home-art-realm { font-size:clamp(10px,2.3vw,18px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-bottom:1px solid #cfb46c66 }

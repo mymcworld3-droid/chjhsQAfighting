@@ -7,7 +7,7 @@ const html=read('public/index.html'),source=read('public/cultivation/home-wirefr
 function fixture(){
   let uid='a',profile={uid:'a',displayName:'雲游子',stats:{gold:12580000,totalScore:188,rankLevel:11}};
   const nodes=new Map();
-  for(const id of ['home-art-name','home-art-gold','home-art-realm','home-art-level','home-art-power','xiuxian-realm','xiuxian-sub'])
+  for(const id of ['home-art-name','home-art-gold','home-art-realm','home-art-power','xiuxian-realm','xiuxian-sub'])
     nodes.set(id,{textContent:'',setAttribute(name,value){this[name]=value;}});
   nodes.get('xiuxian-realm').textContent='化神';nodes.get('xiuxian-sub').textContent='神念通天';
   const actions=[];

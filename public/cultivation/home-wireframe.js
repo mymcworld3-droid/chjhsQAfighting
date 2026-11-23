@@ -19,11 +19,6 @@ function update() {
   const realm = $('xiuxian-realm')?.textContent?.trim() || '凡人';
   const sub = $('xiuxian-sub')?.textContent?.trim() || '初入仙途';
   put('home-art-realm', player ? realm + ' · ' + sub : '初入仙途');
-  // The game has realm ranks rather than a separate character XP level.
-  // Show its existing one-based rank, never invent a new progression system.
-  const rank = window.getXiuxianRealmIndex?.(stats.totalScore) ?? stats.rankLevel;
-  put('home-art-level', player && Number.isFinite(Number(rank)) ? count(rank) + 1 : '—');
-  $('home-art-level')?.setAttribute('title', '境界等級');
   const power = player ? window.getCombatPower?.() : null;
   put('home-art-power', power ? count(power.total).toLocaleString('zh-TW') : '—');
   $('home-art-power')?.setAttribute('title', power?.complete === false ? '功法同步中，暫顯示基礎戰力' : '目前裝備的戰力');
