@@ -27,7 +27,7 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 .home-art-scene button:hover { filter:brightness(1.12) }
 .home-art-scene button:disabled { cursor:wait;opacity:.6 }
 .home-art-scene button img { display:block;width:100%;height:100%;object-fit:contain;pointer-events:none }
-.home-art-player { position:absolute;top:6.2%;left:2.5%;width:51%;height:8%;display:flex;align-items:center;gap:9px }
+.home-art-player { position:absolute;top:4.5%;left:2.5%;width:51%;height:8%;display:flex;align-items:center;gap:9px }
 .home-art-avatar { --avatar-size:clamp(46px,12vw,104px);position:relative;flex:none;align-self:center;width:var(--avatar-size);height:var(--avatar-size);min-width:var(--avatar-size);max-width:var(--avatar-size);min-height:var(--avatar-size);max-height:var(--avatar-size);aspect-ratio:1;border:2px solid var(--ha-edge);border-radius:50%;padding:3px;background:linear-gradient(135deg,#fff0bd,#28718b 35%,#073a51 65%,#ffe19a);box-shadow:0 2px 10px #003b58 }
 #home-art-avatar-slot { position:absolute;inset:3px;width:auto;height:auto;overflow:visible;border-radius:50%;background:radial-gradient(circle at 50% 30%,#3c90aa,#0a324c) }
 #home-art-avatar-slot:empty::after { content:'道';display:grid;place-content:center;height:100%;font-size:24px }
@@ -47,19 +47,19 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 .home-art-money small { font-size:10px;white-space:nowrap }
 #home-art-gold { font:500 clamp(15px,3.5vw,27px)/1.2 Georgia,serif;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff9e4 }
 .home-art-wallet button { flex-shrink:0;min-width:32px;min-height:32px;font:500 26px/1 Georgia,serif }
-.home-art-tools { position:absolute;right:1.5%;top:6.2%;width:43%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px }
-.home-art-tools button { z-index:0;aspect-ratio:.82;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:clamp(10px,2.6vw,20px);min-height:44px }
-.home-art-tools button::before { display:block!important;width:auto;height:auto;transform:none;border-radius:0;content:'';position:absolute;inset:-7% -4% 18%;background:url('../assets/home/home-shortcut-frame.png') center/contain no-repeat;z-index:-1;pointer-events:none }
-.home-art-tools i { margin-bottom:22%;font-size:clamp(17px,4.4vw,36px);filter:drop-shadow(0 1px 2px #001e2d);color:#ffe6ad }
+.home-art-tools { position:absolute;right:1.5%;top:5%;width:40%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px }
+:is(.home-art-tools,.home-art-shortcuts) button { z-index:0;aspect-ratio:.82;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:clamp(10px,2.6vw,20px);min-height:44px }
+:is(.home-art-tools,.home-art-shortcuts) button::before { display:block!important;width:auto;height:auto;transform:none;border-radius:0;content:'';position:absolute;inset:-7% -4% 18%;background:url('../assets/home/home-shortcut-frame.png') center/contain no-repeat;z-index:-1;pointer-events:none }
+:is(.home-art-tools,.home-art-shortcuts) i { margin-bottom:22%;font-size:clamp(17px,4.4vw,36px);filter:drop-shadow(0 1px 2px #001e2d);color:#ffe6ad }
 /* Separate the live label from the diamond. Ragged, overlapping strokes sit
    behind the gold lettering without covering the icon or the unread badge. */
-.home-art-tools span { position:absolute;bottom:0;left:0;width:100%;isolation:isolate;line-height:1.25;white-space:nowrap;text-align:center;text-shadow:0 1px 2px #000 }
-.home-art-tools span::before,.home-art-tools span::after { content:'';position:absolute;pointer-events:none;z-index:-1;background:#090e10 }
-.home-art-tools span::before { inset:-9% -7% -13%;opacity:.92;transform:rotate(-3deg);clip-path:polygon(1% 26%,12% 17%,9% 8%,31% 14%,49% 4%,66% 12%,91% 0,86% 17%,100% 23%,94% 43%,99% 66%,85% 72%,91% 85%,65% 82%,48% 98%,30% 87%,8% 100%,13% 79%,0 75%,6% 52%) }
-.home-art-tools span::after { inset:13% -12% 1%;opacity:.6;transform:rotate(2deg);clip-path:polygon(0 34%,24% 12%,48% 20%,83% 0,98% 22%,90% 51%,100% 68%,72% 79%,39% 73%,6% 100%,13% 69%) }
+:is(.home-art-tools,.home-art-shortcuts) span { position:absolute;bottom:0;left:0;width:100%;isolation:isolate;line-height:1.25;white-space:nowrap;text-align:center;text-shadow:0 1px 2px #000 }
+:is(.home-art-tools,.home-art-shortcuts) span::before,:is(.home-art-tools,.home-art-shortcuts) span::after { content:'';position:absolute;pointer-events:none;z-index:-1;background:#090e10 }
+:is(.home-art-tools,.home-art-shortcuts) span::before { inset:-9% -7% -13%;opacity:.92;transform:rotate(-3deg);clip-path:polygon(1% 26%,12% 17%,9% 8%,31% 14%,49% 4%,66% 12%,91% 0,86% 17%,100% 23%,94% 43%,99% 66%,85% 72%,91% 85%,65% 82%,48% 98%,30% 87%,8% 100%,13% 79%,0 75%,6% 52%) }
+:is(.home-art-tools,.home-art-shortcuts) span::after { inset:13% -12% 1%;opacity:.6;transform:rotate(2deg);clip-path:polygon(0 34%,24% 12%,48% 20%,83% 0,98% 22%,90% 51%,100% 68%,72% 79%,39% 73%,6% 100%,13% 69%) }
 .home-art-dot { position:absolute!important;top:0;right:6%;width:clamp(9px,2.3vw,18px);aspect-ratio:1;border-radius:50%;background:linear-gradient(#ff746a,#f82024);border:1.5px solid #fff1d1;box-shadow:0 1px 5px #66271766;pointer-events:none }
 .home-art-dot[hidden] { display:none!important }
-.home-art-tasks { position:absolute;left:2%;top:16%;width:46%;max-height:29%;display:flex;flex-direction:column;border:1px solid var(--ha-edge);border-radius:10px;padding:7px 9px;background:linear-gradient(120deg,#004558ed,#073f52eb);box-shadow:inset 0 0 15px #3299a340,0 3px 9px #002b5244 }
+.home-art-tasks { position:absolute;left:2%;top:12.2%;width:38.5%;max-height:15.2%;display:flex;flex-direction:column;border:1px solid var(--ha-edge);border-radius:10px;padding:7px 9px;background:linear-gradient(120deg,#004558ed,#073f52eb);box-shadow:inset 0 0 15px #3299a340,0 3px 9px #002b5244 }
 .home-art-tasks::before,.home-art-tasks::after { content:'✦';position:absolute;color:#fff0b7;font-size:15px;line-height:1;pointer-events:none }
 .home-art-tasks::before { top:-6px;left:8px }.home-art-tasks::after { bottom:-6px;right:8px }
 .home-art-tasks header { display:flex;justify-content:space-between;align-items:center;gap:3px;border-bottom:1px solid #b49d6566;padding-bottom:5px;margin-bottom:4px }
@@ -67,21 +67,21 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 .home-art-tasks h2 small { font-size:.78em;font-weight:400 }
 .home-art-tasks header button { font-size:14px;min-width:26px;min-height:26px;border:1px solid #c8af76;border-radius:50% }
 #home-art-tasks-list { list-style:none;padding:0;margin:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#a99056 #08495b;min-height:0 }
-.home-art-task { display:flex;align-items:center;gap:5px;padding:5px 0;min-height:32px;font-size:clamp(11px,2.65vw,18px);line-height:1.4 }
+.home-art-task { display:flex;align-items:center;gap:4px;padding:2px 0;min-height:0;font-size:clamp(9px,2.3vw,22px);line-height:1.4 }
 .home-art-task::before { content:'✦';color:#ffe4a6;font-size:.8em;flex-shrink:0 }
 .home-art-task-label { min-width:0;flex:1;color:#fff2d9 }
 .home-art-task-label small { font-family:Georgia,serif;font-size:.9em;white-space:nowrap }
-.home-art-task button { flex-shrink:0;min-width:40px;min-height:30px;padding:2px 5px;border:1px solid #b5d6cd;border-radius:8px;background:linear-gradient(#3c91a6,#0c586c);font-size:.95em;line-height:1.2 }
+.home-art-task button { flex-shrink:0;min-width:28px;min-height:0;padding:2px 4px;border:1px solid #b5d6cd;border-radius:8px;background:linear-gradient(#3c91a6,#0c586c);font-size:.95em;line-height:1.2 }
 .home-art-task button.is-claim { border-color:#ffe5a1;background:linear-gradient(#92814a,#345e61) }
 .home-art-task-check { color:#8df155;font:bold 25px/1 sans-serif;text-shadow:0 2px 2px #173b21;min-width:30px;text-align:center }
 .home-art-task-locked { opacity:.7;font-size:.85em }
 .home-art-task-empty { font-size:12px;color:#f5e5c3;padding:12px 1px }
 #home-art-tasks-status { margin:0;font-size:11px;line-height:1.4;color:#ffe7ac }
 #home-art-tasks-status:empty { display:none }
-.home-art-meditation { position:absolute!important;right:1%;top:42%;width:43%;aspect-ratio:2 }
+.home-art-meditation { position:absolute!important;right:1%;top:39%;width:34%;aspect-ratio:2 }
 .home-art-meditation .home-art-dot { top:7%;right:8% }
-.home-art-trial { position:absolute!important;left:7%;bottom:9%;width:86%;aspect-ratio:4/3 }
-.home-art-trial img { object-fit:contain!important }
+.home-art-trial { position:absolute!important;left:9%;bottom:9%;width:82%;height:20%;aspect-ratio:auto }
+.home-art-trial img { object-fit:fill!important }
 /* The title and dock are baked into the scene image. Only live controls
    overlay the four blank slots; no second frame or raster labels are added. */
 .home-art-navigation { position:absolute;left:4%;bottom:2.5%;width:92%;height:6.5%;min-height:40px }
@@ -106,27 +106,27 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
   .home-art-power { font-size:clamp(12px,1.3vw,22px) }
   .home-art-wallet { left:46%;right:auto;top:1.8%;width:25%;height:5%;min-height:32px }
   #home-art-gold { font-size:clamp(16px,1.7vw,28px) }
-  .home-art-tools { top:1.4%;right:1%;width:23% }
-  .home-art-tools button { font-size:clamp(12px,1.3vw,22px);aspect-ratio:.9 }
-  .home-art-tools i { margin-bottom:22%;font-size:clamp(20px,2.1vw,35px) }
+  .home-art-tools { top:1.4%;right:1%;width:19.5% }
+  :is(.home-art-tools,.home-art-shortcuts) button { font-size:clamp(12px,1.3vw,22px);aspect-ratio:.9 }
+  :is(.home-art-tools,.home-art-shortcuts) i { margin-bottom:22%;font-size:clamp(20px,2.1vw,35px) }
   .home-art-dot { width:clamp(10px,1.1vw,18px) }
-  .home-art-tasks { top:18%;left:1.5%;width:26%;max-height:47%;padding:9px 12px }
+  .home-art-tasks { top:18%;left:1.5%;width:20.5%;max-height:26.5%;padding:9px 12px }
   .home-art-tasks h2 { font-size:clamp(15px,1.6vw,25px) }
-  .home-art-task { font-size:clamp(12px,1.1vw,18px);min-height:34px;padding:5px 0 }
-  .home-art-meditation { right:1%;top:34%;width:25% }
-  .home-art-trial { left:31%;bottom:12%;width:38%;aspect-ratio:4/3 }
+  .home-art-task { font-size:clamp(12px,1.1vw,18px);min-height:0;padding:3px 0 }
+  .home-art-meditation { right:1%;top:34%;width:23% }
+  .home-art-trial { left:31%;bottom:14%;width:38%;height:30%;aspect-ratio:auto }
   .home-art-navigation { bottom:3%;height:9%;min-height:40px;left:10%;width:80% }
-  .home-art-navigation button { font-size:clamp(12px,1.5vw,24px) }
+  .home-art-navigation button { flex-direction:row;gap:16px;font-size:clamp(12px,1.5vw,24px) }
   .home-art-navigation button i { font-size:clamp(20px,2.2vw,36px) }
 }
 @media (orientation:landscape) and (max-height:550px) {
   .home-art-scene { min-height:370px }
   .home-art-player { height:15% }
   .home-art-avatar { --avatar-size:48px }
-  .home-art-tasks { top:22%;max-height:48% }
-  .home-art-task { font-size:12px;min-height:32px;padding:3px 0 }
+  .home-art-tasks { top:18%;max-height:30% }
+  .home-art-task { font-size:10px;min-height:0;padding:2px 0 }
   .home-art-tasks h2 { font-size:15px }
-  .home-art-trial { width:36%;left:32%;bottom:12% }
+  .home-art-trial { width:38%;left:31%;bottom:14% }
 }
 @media (prefers-reduced-motion:reduce) { .home-art-scene * { animation:none!important;transition:none!important } }
 
@@ -135,4 +135,22 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 @media (max-width:360px) and (orientation:portrait) {
   .home-art-money small { display:none }
   .home-art-wallet { gap:4px }
+}
+
+/* Reference layout: four large shortcuts above the trial in portrait,
+   two on each side in landscape. The uploaded diamond stays square. */
+.home-art-shortcuts { position:absolute;inset:0;pointer-events:none }
+.home-art-shortcuts button { position:absolute!important;top:63%;width:16%;height:8.2%;aspect-ratio:auto;pointer-events:auto;font-size:clamp(12px,3.2vw,30px) }
+.home-art-shortcuts button:nth-child(1) { left:6% }
+.home-art-shortcuts button:nth-child(2) { left:30% }
+.home-art-shortcuts button:nth-child(3) { left:54% }
+.home-art-shortcuts button:nth-child(4) { left:78% }
+.home-art-shortcuts i { font-size:clamp(24px,6.2vw,58px) }
+@media (orientation:landscape) {
+  .home-art-shortcuts button { top:60%;width:8%;height:12%;font-size:clamp(12px,1.6vw,27px) }
+  .home-art-shortcuts button:nth-child(1) { left:16% }
+  .home-art-shortcuts button:nth-child(2) { left:26% }
+  .home-art-shortcuts button:nth-child(3) { left:66% }
+  .home-art-shortcuts button:nth-child(4) { left:76% }
+  .home-art-shortcuts i { font-size:clamp(25px,3.2vw,54px) }
 }

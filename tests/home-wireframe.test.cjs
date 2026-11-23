@@ -13,7 +13,7 @@ function fixture(){
   const actions=[];
   const window={getCurrentUserData:()=>profile,getCombatPower:()=>({total:3256880,complete:true}),getXiuxianRealmIndex:()=>11,
     switchToPage:id=>actions.push(id),loadLeaderboard:()=>actions.push('leaderboard'),loadStoreItems:()=>actions.push('store'),openDailyMeditation:()=>actions.push('meditation')};
-  const document={getElementById:id=>nodes.get(id),querySelector:()=>null,readyState:'loading',addEventListener(){}};
+  const document={getElementById:id=>nodes.get(id),querySelector:()=>null,querySelectorAll:()=>[],readyState:'loading',addEventListener(){}};
   const ctx=vm.createContext({document,window,getMainUser:()=>uid?{uid}:null});
   vm.runInContext(source.replace(/^import .*$/gm,'')+'\nthis.api={update,activate};',ctx);
   return {ctx,nodes,actions,profile,setUid:value=>{uid=value;}};
