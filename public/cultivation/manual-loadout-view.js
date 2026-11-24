@@ -184,7 +184,7 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
       '" data-manual-slot="'+i+'">'+
       '<span class="manual-weapon-slot-art">'+art(book)+'</span>'+
       '<span class="manual-weapon-slot-info"><strong>'+esc(book?.name||'尚未裝備武器')+'</strong>'+
-      '<small class="manual-art-school">'+esc(book?(book.school==='body'?'體修':'劍修'):'武器 '+(i+1))+'</small>'+
+      '<small class="manual-art-school">'+esc(book?(({sword:'劍修',body:'體修',spell:'術修',arcane:'奇門'})[book.school]||'武器'):'武器 '+(i+1))+'</small>'+
       '<span class="manual-art-level">'+esc(book?'Lv. '+book.level+' / 20':'等待裝備')+'</span></span>'+
       (book?'<div class="manual-weapon-skill-list">'+names+'</div>':
        '<div class="manual-weapon-slot-hint">每件武器有三招，隨武器熟練度自動解鎖</div>')+
