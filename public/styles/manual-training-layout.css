@@ -1,14 +1,26 @@
 /* Main branch layout, drawn entirely with CSS, no interface bitmap assets. */
-#page-training.manual-training-active{background:radial-gradient(ellipse at 50% 0%,#413c2c,#29261e 45%,#1a1813)!important}
-#manual-training-root{--mt-gold:#d8ba79;--mt-text:#f8eac6;max-width:1440px;margin:0 auto 24px}
-#manual-training-root .manual-library,#manual-training-root .manual-weapons{margin:0 0 18px;padding:clamp(10px,1.8vw,22px);border:1px solid #bda36e;border-radius:16px;background:linear-gradient(150deg,#393426,#242018);box-shadow:inset 0 0 0 3px #29251b,inset 0 0 0 4px #d8ba7944,0 6px 18px #100c0766;min-width:0}
+/* The page itself is only a layout container. Keep the global scenery visible;
+   the collection and equipment panels supply their own surfaces. */
+body.xianxia-theme #page-training.manual-training-active,#page-training.manual-training-active{
+ width:100%!important;max-width:none!important;margin:0!important;
+ padding:clamp(8px,1.25vw,18px)!important;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;backdrop-filter:none!important;
+ -webkit-backdrop-filter:none!important;
+}
+#page-training.manual-training-active::before,#page-training.manual-training-active::after{content:none!important}
+#page-training.manual-training-active>#manual-training-root{
+ width:100%;max-width:none;margin:0;padding:0;background:none;border:0;box-shadow:none;
+}
+#manual-training-root{--mt-gold:#d8ba79;--mt-text:#f8eac6;max-width:none;margin:0}
+#manual-training-root .manual-library,#manual-training-root .manual-weapons{margin:0 0 14px;padding:clamp(10px,1.4vw,18px);border:1px solid #bda36e;border-radius:16px;background:linear-gradient(150deg,#393426,#242018);box-shadow:inset 0 0 0 3px #29251b,inset 0 0 0 4px #d8ba7944,0 6px 18px #100c0766;min-width:0}
 #manual-training-root .manual-library-heading{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px}
 #manual-training-root .manual-library-heading-copy h3,#manual-training-root .manual-deck-heading h3{color:var(--mt-text);font-size:clamp(18px,2.2vw,26px);margin:0}
 #manual-training-root .manual-library-kicker,#manual-training-root .manual-library-heading p,#manual-training-root .manual-deck-kicker,#manual-training-root .manual-weapons .manual-deck-heading>small{display:none}
 #manual-training-root .manual-library-filters{display:flex;flex:1;gap:6px;flex-wrap:wrap;margin:0;min-width:0}
 #manual-training-root .manual-library-filter,#manual-training-root .manual-refresh{min-height:36px;border:1px solid #bfa66f;border-radius:8px;background:linear-gradient(#4b4130,#30291e);color:#f5e8c8;font-weight:700}
 #manual-training-root .manual-library-filter.is-selected{border-color:#ffdda0;background:#51482d;box-shadow:0 0 8px #d9b96b66}
-#manual-training-root .manual-book-grid{display:grid;grid-template-columns:none;grid-template-rows:1fr;grid-auto-flow:column;grid-auto-columns:clamp(125px,13.5vw,182px);align-items:stretch;gap:10px;overflow-x:auto;overflow-y:hidden;padding:5px 4px 12px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#bfa66f #28231a;overscroll-behavior-x:contain}
+#manual-training-root .manual-book-grid{display:grid;grid-template-columns:none;grid-template-rows:1fr;grid-auto-flow:column;grid-auto-columns:clamp(125px,calc((100% - 50px)/6),182px);align-items:stretch;gap:10px;overflow-x:auto;overflow-y:hidden;padding:5px 4px 12px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#bfa66f #28231a;overscroll-behavior-x:contain}
 #manual-training-root .manual-book-grid:has(.manual-empty){display:block}
 #manual-training-root .manual-book{min-width:0;border:0;background:none;box-shadow:none;overflow:visible;scroll-snap-align:start}
 #manual-training-root .manual-native-card.manual-library-choice{display:grid;grid-template-rows:minmax(0,1fr) auto auto auto;gap:6px;width:100%;height:auto;aspect-ratio:.69;min-height:0;padding:8px 6px;border:1px solid #bda36e;border-radius:12px;background:radial-gradient(ellipse at 50% 43%,#5a4c35,#342c20 62%,#29241b);box-shadow:inset 0 0 0 2px #403626,inset 0 0 0 3px #bda36e55;text-align:center;align-items:center;justify-items:center;color:var(--mt-text)}
@@ -129,4 +141,11 @@ body.xianxia-theme #page-training.manual-training-active:has(#manual-training-ro
 @media(orientation:landscape) and (max-height:560px){
  #manual-training-root .manual-training-screen .manual-hero-art-stage{width:min(74%,300px)}
  #manual-training-root .manual-training-screen-header{padding:6px 0;margin-bottom:12px}
+}
+
+/* Keep the same horizontal scroller on compact displays and let all six
+   starter weapons fit together when the available width permits it. */
+@media(orientation:landscape) and (max-height:720px){
+ #manual-training-root .manual-native-card.manual-library-choice{aspect-ratio:.76;gap:4px;padding:6px}
+ #manual-training-root .manual-book-grid{padding-bottom:8px}
 }

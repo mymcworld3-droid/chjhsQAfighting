@@ -140,6 +140,8 @@ async function main(){
       assert(sizes.scroll<=sizes.client+3,selector+' must fit mobile width: '+JSON.stringify(sizes));
     }
     await page.setViewportSize({width:1180,height:820});
+    const outer=await page.locator('#page-training').evaluate(node=>{const s=getComputedStyle(node);return {background:s.backgroundColor,image:s.backgroundImage,shadow:s.boxShadow,radius:s.borderRadius,maxWidth:s.maxWidth};});
+    assert.deepEqual(outer,{background:'rgba(0, 0, 0, 0)',image:'none',shadow:'none',radius:'0px',maxWidth:'none'});
     const columns=await page.locator('.manual-weapon-grid').evaluate(node=>
       getComputedStyle(node).gridTemplateColumns.split(' ').length);
     assert.equal(columns,1);
