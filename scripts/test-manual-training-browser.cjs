@@ -24,7 +24,7 @@ async function main(){
   register(app,{resolve:()=>({db}),verify:async()=> 'u1'});
   app.get('/test',(_,res)=>res.type('html').send(
     '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">'+
-    '<link rel="stylesheet" href="/styles/home-wireframe.css"><link id="scene-art-shell-style" rel="stylesheet" href="/styles/scene-art-shell.css"></head><body><div id="nav-grid"></div><main id="page-training" class="active-page"></main>'+
+    '<link rel="stylesheet" href="/styles/home-wireframe.css"><link id="scene-art-shell-style" rel="stylesheet" href="/styles/scene-art-shell.css"></head><body><nav id="bottom-nav" style="position:fixed;bottom:0;left:0;right:0;z-index:50;height:64px"><div id="nav-grid"></div></nav><main id="page-training" class="active-page"></main>'+
     '<script type="module" src="/cultivation/manual-training-page.js"></script></body></html>'
   ));
   app.use(express.static(path.join(__dirname,'../public')));
@@ -76,8 +76,8 @@ async function main(){
     await page.locator('[data-manual-browse-weapon="next"]').click();
     await page.locator('.manual-focus-skill[data-manual-skill="rock-fist"]').waitFor();
     await page.locator('[data-manual-browse-weapon="prev"]').click();
-    assert.equal(await page.locator('.manual-modal-dock').isVisible(),true);
-    await page.locator('[data-manual-return-collection]').click();
+    assert.equal(await page.locator('.manual-modal-dock').count(),0);
+    await page.locator('[data-manual-close-training]').click();
     assert.equal(await page.locator('[data-manual-training-dialog]').isVisible(),false);
     await library.locator('[data-manual-book="sword-wind"] .manual-library-choice').click();
     await page.locator('[data-manual-jump-skill="wind-slash"]').click();
@@ -189,10 +189,12 @@ async function main(){
     }));
     assert(aligned,'names, school labels and levels share a center without overlapping');
     // Content scrolls over the single title in the background; the dock remains fixed.
-    const beforeScroll=await page.locator('.manual-art-navigation').boundingBox();
+    assert.equal(await page.locator('.manual-art-navigation').count(),0);
+    assert.equal(await page.locator('#bottom-nav').isVisible(),true);
+    const beforeScroll=await page.locator('#bottom-nav').boundingBox();
     await page.locator('[data-manual-refresh]').press('PageDown');
     await page.waitForFunction(()=>document.querySelector('#page-training').scrollTop>0);
-    const afterScroll=await page.locator('.manual-art-navigation').boundingBox();
+    const afterScroll=await page.locator('#bottom-nav').boundingBox();
     assert.equal(afterScroll.y,beforeScroll.y,'the bottom navigation must remain fixed');
     const masthead=await page.locator('.manual-art-masthead').evaluate(node=>({
       position:getComputedStyle(node).position,background:getComputedStyle(node).backgroundImage
