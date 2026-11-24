@@ -11,6 +11,7 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 const Catalog=globalThis.QAManuals;
 let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',selectedSkillId=null,pickerSlot=null,libraryFilter='all',celebrationTimer=null;
 let trainingDialogOpen=false,trainingDialogTrigger=null;
+let toastTimer=null,pickerTrigger=null;
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -89,7 +90,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-layout-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261124-native-v1';
+    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261124-earth-toast-v2';
     document.head.append(link);
   }
   return root;
@@ -129,7 +130,7 @@ function featuredHeroMarkup(){
   return view.html;
 }
 function closeTrainingDialog({restoreFocus=true}={}){
-  trainingDialogOpen=false;selectedSkillId=null;
+  trainingDialogOpen=false;selectedSkillId=null;clearManualToast();
   const dialog=root?.querySelector('[data-manual-training-dialog]');
   if(dialog?.open)dialog.close();
   if(restoreFocus&&visible()){
@@ -152,7 +153,7 @@ function syncTrainingDialog(){
   else if(!trainingDialogOpen&&dialog.open)dialog.close();
 }
 function markup(){
-  if(!current)return '<div class="manual-loading">正在讀取武器…</div>';
+  if(!current)return '<div class="manual-loading">正在讀取武器…</div><div class="manual-toast" data-manual-status role="status" aria-live="polite"></div>';
   const hero=featuredHeroMarkup();
   const expedition=renderManualExpedition(nextManualExpedition(current,featuredBookId,Catalog),{esc,bookArt});
   const owned=current.library?.some(book=>book.owned);
@@ -163,8 +164,7 @@ function markup(){
         <i class="fa-solid fa-xmark" aria-hidden="true"></i> 關閉</button>
     </header>
     <div class="manual-training-dialog-body">${hero}${expedition}
-      <div class="manual-status" data-manual-dialog-status role="status" aria-live="polite"></div>
-    </div></dialog>`:hero;
+      </div><div class="manual-toast" data-manual-dialog-status role="status" aria-live="polite"></div></dialog>`:hero;
   const cards=filterOwnedManuals(current,libraryFilter).map(book=>
     `<article class="manual-book ${book.school==='sword'?'is-sword':'is-body'} ${book.id===featuredBookId?'is-featured':''}"
        data-manual-book="${esc(book.id)}">
@@ -179,7 +179,7 @@ function markup(){
       <div class="manual-book-grid" role="region" aria-label="武器收藏，可左右滑動" tabindex="0">${cards||'<p class="manual-empty">尚無此流派已取得的武器，請切換篩選查看。</p>'}</div>
     </section>
     ${training}
-    <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>
+    <div class="manual-toast" data-manual-status role="status" aria-live="polite"></div>
     ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
       esc,bookArt,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
     })}
@@ -255,19 +255,42 @@ function tutorialManualEvent(kind,details={}){
   const uid=getMainUser()?.uid;
   if(uid)window.dispatchEvent(new CustomEvent('qingyun:tactical-tutorial',{detail:{uid,kind,...details}}));
 }
-function paint(message='',{loadoutFeedback=false}={}){
+function clearManualToast(){
+  if(toastTimer!==null)clearTimeout(toastTimer);toastTimer=null;
+  root?.querySelectorAll('[data-manual-status],[data-manual-dialog-status]')?.forEach(node=>{node.textContent='';node.classList.remove('is-error','is-pending');});
+}
+function showManualToast(message,kind=''){
+  clearManualToast();
+  if(!message||!visible())return;
+  const dialog=root?.querySelector('[data-manual-training-dialog]');
+  const target=root?.querySelector(dialog?.open?'[data-manual-dialog-status]':'[data-manual-status]');
+  if(!target)return;
+  if(kind)target.classList.add('is-'+kind);
+  target.textContent=String(message);
+  if(kind!=='pending')toastTimer=setTimeout(clearManualToast,3200);
+}
+function closeManualPicker({restoreFocus=true}={}){
+  const dialog=root?.querySelector('[data-manual-weapon-dialog]');
+  if(dialog?.open)dialog.close();
+  pickerSlot=null;
+  if(restoreFocus&&pickerTrigger?.isConnected)pickerTrigger.focus({preventScroll:true});
+  pickerTrigger=null;
+}
+function syncManualPicker(){
+  const dialog=root?.querySelector('[data-manual-weapon-dialog]');
+  if(!dialog)return;
+  dialog.oncancel=event=>{event.preventDefault();closeManualPicker();paint();};
+  if(pickerSlot!==null&&!dialog.open)dialog.showModal();
+}
+function paint(message='',{kind=''}={}){
   ensure();if(!root)return;
   const template=document.createElement('template');template.innerHTML=markup();
   if(renderedFor&&renderedFor!==loadedFor)root.replaceChildren(template.content.cloneNode(true));
   else reconcile(root,template.content);
   renderedFor=loadedFor;
   syncTrainingDialog();
-  const dialogStatus=root.querySelector('[data-manual-dialog-status]');
-  if(dialogStatus)dialogStatus.textContent=message;
-  const status=root.querySelector('[data-manual-status]');
-  if(status)status.textContent=message;
-  const deckStatus=root.querySelector('[data-manual-loadout-status]');
-  if(deckStatus)deckStatus.textContent=loadoutFeedback?message:'';
+  syncManualPicker();
+  if(message)showManualToast(message,kind);
   // An existing starter skill may already be equipped by the server.
   // The optional completion action always rechecks authoritative manual state.
   if(window.firstAnswerGuideStep?.(loadedFor)===12&&current?.equipped?.length){
@@ -306,14 +329,14 @@ async function load({force=false}={}){
     showManualCelebration(reward);
   }catch(error){
     if(token!==sequence)return;
-    paint(error.message);
+    paint(error.message,{kind:'error'});
   }
 }
 async function mutate(url,body){
   if(busy)return;
   const uid=getMainUser()?.uid;if(!uid)return;
   const upgrading=url.endsWith('/upgrade');
-  ++sequence;busy=true;paint(body.skillId?'正在升級招式…':upgrading?'正在升級武器…':'正在保存武器裝備…');
+  ++sequence;busy=true;paint(body.skillId?'正在升級招式…':upgrading?'正在升級武器…':'正在保存武器裝備…',{kind:'pending'});
   let message='',successful=false,reward=null;
   const equippedSlot=pickerSlot;
   try{
@@ -348,7 +371,7 @@ async function mutate(url,body){
   finally{
     busy=false;
     if(getMainUser()?.uid===uid){
-      paint(message,{loadoutFeedback:url.endsWith('/loadout')});
+      paint(message,{kind:successful?'':'error'});
       if(successful)showManualCelebration(reward);
       if(successful&&url.endsWith('/loadout')&&Array.isArray(body?.skillIds)
         &&Number.isInteger(equippedSlot)&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -397,6 +420,8 @@ function boot(){
         closeTrainingDialog();return;
       }
     }
+    const weaponDialog=root?.querySelector('[data-manual-weapon-dialog]');
+    if(event.target===weaponDialog){const rect=weaponDialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom){closeManualPicker();paint();return;}}
     if(event.target.closest('[data-manual-celebration-dismiss]')){
       clearManualCelebration();return;
     }
@@ -452,6 +477,7 @@ function boot(){
       if(current?.library.some(book=>book.owned&&book.id===button.dataset.featureBook)){
         featuredBookId=button.dataset.featureBook;
         selectedSkillId=Array.isArray(current.weaponIds)?(current.library.find(b=>b.id===featuredBookId)?.skills.find(s=>s.unlocked)?.id||null):null;
+        clearManualToast();
         if(!trainingDialogOpen)trainingDialogTrigger=button;
         trainingDialogOpen=true;
         paint();
@@ -479,27 +505,18 @@ function boot(){
       if(!book?.skills.some(skill=>skill.id===skillId))return;
       selectedSkillId=Array.isArray(current.weaponIds)?skillId:selectedSkillId===skillId?null:skillId;
       paint();
-      if(selectedSkillId)requestAnimationFrame(()=>{
-        root?.querySelector('.manual-focus-skill')?.scrollIntoView({
-          behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
-          block:'nearest'
-        });
-      });
+
       return;
     }
     if(button.hasAttribute('data-manual-close-skill')){selectedSkillId=null;paint();return;}
-    if(button.hasAttribute('data-manual-close-picker')){pickerSlot=null;paint();return;}
+    if(button.hasAttribute('data-manual-close-picker')){closeManualPicker();paint();return;}
     if(button.dataset.manualPickSlot!==undefined||button.dataset.manualChangeSlot!==undefined){
       const slot=Number(button.dataset.manualPickSlot??button.dataset.manualChangeSlot);
       if(Number.isInteger(slot)&&slot>=0&&slot<=2&&current){
         if(Array.isArray(current.weaponIds)){
           if(slot>=2)return;
-          selectedLoadout=slot;
-          pickerSlot=pickerSlot===slot?null:slot;
-          paint();
-          if(pickerSlot!==null)requestAnimationFrame(()=>
-            root?.querySelector('[data-manual-picker]')?.scrollIntoView({block:'nearest',behavior:'smooth'}));
-          return;
+          selectedLoadout=slot;pickerTrigger=button;pickerSlot=slot;
+          paint();return;
         }
         const filled=current.loadouts?.[selectedLoadout]?.skillIds?.length||0;
         const targetSlot=Math.min(slot,filled);
@@ -524,9 +541,9 @@ function boot(){
       if(!Number.isInteger(slot)||slot<0||slot>=2||
         !current?.library?.some(book=>book.owned&&book.id===weaponId))return;
       if(current.weaponIds?.includes(weaponId)){
-        pickerSlot=null;paint();return;
+        closeManualPicker();paint();return;
       }
-      selectedLoadout=slot;pickerSlot=null;
+      selectedLoadout=slot;closeManualPicker();
       void mutate('/api/tactical/manuals/loadout',{index:slot,weaponId});
       return;
     }

@@ -86,10 +86,12 @@ async function main(){
     // Equipping a weapon changes one slot only; it does not change its XP.
     await page.locator('[data-manual-pick-slot="1"]').click();
     await page.locator('[data-manual-picker]').waitFor();
+    assert.equal(await page.locator('[data-manual-weapon-dialog]').evaluate(node=>node.open),true);
     assert.equal(await page.locator('[data-manual-pick-weapon="sword-wind"]').isDisabled(),true);
     await page.locator('[data-manual-pick-weapon="body-rock"]').click();
     await page.waitForFunction(()=>document.querySelector('[data-manual-status]')?.textContent==='武器裝備已儲存。');
     assert.equal(await page.locator('[data-manual-slot="1"] .manual-weapon-slot-info strong').innerText(),'玄嶽圖騰');
+    assert.equal(await page.locator('[data-manual-status]').evaluate(node=>getComputedStyle(node).position),'fixed');
     const equipped=db.records.get(service.MANUALS+'/u1');
     assert.deepEqual(equipped.weaponIds,['sword-wind','body-rock']);
     assert.equal(equipped.books['body-rock'].exp,40);
@@ -110,7 +112,7 @@ async function main(){
     await library.locator('[data-manual-book="sword-wind"] .manual-library-choice').click();
     await page.evaluate(()=>{window.__art=[...document.querySelectorAll('.manual-weapon-art')];});
     await page.locator('[data-manual-upgrade="sword-wind"]').click();
-    await page.waitForFunction(()=>document.querySelector('[data-manual-status]')?.textContent?.includes('已升級'));
+    await page.waitForFunction(()=>document.querySelector('[data-manual-dialog-status]')?.textContent?.includes('已升級'));
     const visualStable=await page.evaluate(()=>window.__art.every(node=>node.isConnected));
     assert.equal(visualStable,true,'weapon image nodes should not blink after upgrade');
     assert.equal(await page.locator('[data-manual-training-dialog] [data-manual-celebration-dismiss]').count(),1);
