@@ -1,0 +1,38 @@
+{
+  "brand-landscape": {
+    "source": "IMG_0217(3).png",
+    "crop": [
+      0,
+      0,
+      350,
+      125
+    ]
+  },
+  "brand-portrait": {
+    "source": "IMG_0218(3).png",
+    "crop": [
+      0,
+      0,
+      320,
+      125
+    ]
+  },
+  "dock-landscape": {
+    "source": "IMG_0217(3).png",
+    "crop": [
+      0,
+      935,
+      1448,
+      1086
+    ]
+  },
+  "dock-portrait": {
+    "source": "IMG_0218(3).png",
+    "crop": [
+      0,
+      1425,
+      941,
+      1672
+    ]
+  }
+}

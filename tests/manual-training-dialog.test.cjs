@@ -21,7 +21,7 @@ test('owned weapon training appears only inside an initially closed dialog',()=>
   const dialog=html.match(/<dialog\b[\s\S]*?<\/dialog>/)?.[0];
   assert(dialog);assert.match(dialog,/manual-hero/);assert.match(dialog,/expedition/);
   assert.doesNotMatch(dialog,/\bopen(?:\s|=|>)/);
-  assert.doesNotMatch(html.replace(dialog,''),/manual-hero|expedition/);
+  assert.doesNotMatch(html.replace(dialog,''),/manual-hero|expedition|manual-xp-reference/);
   assert.match(html.replace(dialog,''),/equipment/);
 });
 test('opening is modal, data refresh keeps it open, and close restores collection focus',()=>{
@@ -62,3 +62,19 @@ test('upgrade celebrations share the native training dialog top layer and return
   f.run("dialog.open=false;showManualCelebration({kind:'discovery'});");
   assert.equal(f.run('host.parentElement===root'),true);
 });
+
+test('weapon picker opens once, closes without page movement, and restores its equipment button',()=>{
+  const f=fixture();
+  f.run(`
+    let opened=0,closed=0,focusOptions=null;
+    const picker={open:false,showModal(){this.open=true;opened++;},close(){this.open=false;closed++;}};
+    root={querySelector:()=>picker,closest:()=>({})};
+    pickerDialogTrigger={isConnected:true,focus(options){focusOptions=options;}};
+    pickerSlot=1;syncWeaponPicker();syncWeaponPicker();closeWeaponPicker();
+  `);
+  assert.equal(f.run('opened'),1);assert.equal(f.run('closed'),1);
+  assert.equal(f.run('pickerSlot'),null);
+  assert.equal(f.run('focusOptions.preventScroll'),true);
+});
+
+test('weapon training contains carousel routing and first learned skill selection',()=>{assert.match(source,/data|manualBrowseWeapon/);assert.match(source,/manualBrowseWeapon==='prev'/);assert.match(source,/book\?\.skills\?\.find\(s=>s\.unlocked\)/);});

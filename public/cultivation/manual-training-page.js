@@ -10,7 +10,7 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const Catalog=globalThis.QAManuals;
 let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',selectedSkillId=null,pickerSlot=null,libraryFilter='all',celebrationTimer=null;
-let trainingDialogOpen=false,trainingDialogTrigger=null;
+let trainingDialogOpen=false,trainingDialogTrigger=null,pickerDialogTrigger=null;
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -25,7 +25,7 @@ function ensure(){
   if(root?.parentElement!==page){
     root=document.createElement('div');
     root.id='manual-training-root';root.className='manual-training';
-    root.innerHTML='<div class="manual-loading">正在開啟兵器閣…</div>';
+    root.innerHTML='<div class="manual-loading">正在開啟修行頁…</div>';
     page.append(root);
   }
   if(!document.getElementById('manual-training-style')){
@@ -87,7 +87,31 @@ function ensure(){
     link.href='/styles/manual-training-weapons.css?v=20261120-weapon-v1';
     document.head.append(link);
   }
+  if(!document.getElementById('manual-training-art-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-jade-layout-v1';
+    document.head.append(link);
+  }
+  if(!document.getElementById('scene-art-shell-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='scene-art-shell-style';link.href='/styles/scene-art-shell.css?v=20261124-shared-shell-v1';
+    document.head.append(link);
+  }
   return root;
+}
+function closeWeaponPicker({restoreFocus=true}={}){
+  const trigger=pickerDialogTrigger;
+  pickerSlot=null;pickerDialogTrigger=null;
+  const dialog=root?.querySelector('[data-manual-weapon-dialog]');
+  if(dialog?.open)dialog.close();
+  if(restoreFocus&&visible()&&trigger?.isConnected)trigger.focus({preventScroll:true});
+}
+function syncWeaponPicker(){
+  const dialog=root?.querySelector('[data-manual-weapon-dialog]');
+  if(!dialog)return;
+  dialog.oncancel=event=>{event.preventDefault();closeWeaponPicker();paint();};
+  if(pickerSlot!==null&&!dialog.open)dialog.showModal();
+  else if(pickerSlot===null&&dialog.open)dialog.close();
 }
 async function request(url,body){
   const response=await authenticatedMainFetch(url,{
@@ -153,11 +177,15 @@ function markup(){
   const owned=current.library?.some(book=>book.owned);
   const training=owned?`<dialog id="manual-training-dialog" class="manual-training-dialog" data-manual-training-dialog aria-labelledby="manual-training-dialog-title">
     <header class="manual-training-dialog-header">
-      <strong id="manual-training-dialog-title">${esc(current.library.find(book=>book.id===featuredBookId)?.name||'武器')} · 武器修煉</strong>
+      <strong id="manual-training-dialog-title">修行</strong>
       <button type="button" data-manual-close-training aria-label="關閉武器修煉" autofocus>
-        <i class="fa-solid fa-xmark" aria-hidden="true"></i> 關閉</button>
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
     </header>
     <div class="manual-training-dialog-body">${hero}${expedition}
+      <details class="manual-xp-reference"><summary>其他靈獸境界 EXP 對照</summary>
+        <div>${Catalog.REALMS.map(realm=>`<span>${esc(realm.name)}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
+        <p>只有以武器技能完成擊殺才能獲得熟練經驗；招式依武器 Lv.1／5／10 解鎖，不受修士境界限制。</p>
+      </details>
       <div class="manual-status" data-manual-dialog-status role="status" aria-live="polite"></div>
     </div></dialog>`:hero;
   const cards=filterOwnedManuals(current,libraryFilter).map(book=>
@@ -169,20 +197,27 @@ function markup(){
     </article>`
   ).join('');
   return `
+    <header class="manual-art-masthead"><button type="button" class="manual-art-brand scene-art-brand" data-training-page="page-home" aria-label="返回宗門"></button><h2 class="manual-art-page-title">修行</h2></header>
+    <div class="manual-art-workspace">
     <section class="manual-library" aria-label="武器收藏">
+      <span class="manual-panel-body" aria-hidden="true"></span>
       ${renderManualCollectionHeader(current,libraryFilter,{esc})}
-      <div class="manual-book-grid">${cards||'<p class="manual-empty">尚無此流派已取得的武器，請切換篩選查看。</p>'}</div>
+      <div class="manual-book-grid" role="region" aria-label="武器收藏，可左右滑動" tabindex="0">${cards||'<p class="manual-empty">尚無此流派已取得的武器，請切換篩選查看。</p>'}</div>
     </section>
-    ${training}
-    <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>
+    ${owned?'':hero}
     ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
       esc,bookArt,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
     })}
-    <details class="manual-xp-reference"><summary>其他靈獸境界 EXP 對照</summary>
-      <div>${Catalog.REALMS.map(realm=>`<span>${esc(realm.name)}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
-      <p>只有以武器技能完成擊殺才能獲得熟練經驗；招式依武器 Lv.1／5／10 解鎖，不受修士境界限制。</p>
-    </details>
-    <div class="manual-celebration-host" data-manual-celebration-host></div>`;
+    </div>
+    ${owned?training:''}
+    <div class="manual-status manual-scene-status" data-manual-status role="status" aria-live="polite"></div>
+    <div class="manual-celebration-host" data-manual-celebration-host></div>
+    <nav class="manual-art-navigation home-art-navigation scene-art-dock" aria-label="底部導覽"><div>
+      <button type="button" data-training-page="page-training" aria-current="page"><i class="fa-solid fa-khanda" aria-hidden="true"></i><span>修行</span></button>
+      <button type="button" data-training-page="page-gameplay"><i class="fa-solid fa-mountain" aria-hidden="true"></i><span>歷練</span></button>
+      <button type="button" data-training-page="page-social"><i class="fa-solid fa-torii-gate" aria-hidden="true"></i><span>仙盟</span></button>
+      <button type="button" data-training-page="page-store"><i class="fa-solid fa-store" aria-hidden="true"></i><span>商城</span></button>
+    </div></nav>`;
 
 }
 // Reconcile the existing page instead of recreating every image on each
@@ -257,6 +292,7 @@ function paint(message='',{loadoutFeedback=false}={}){
   else reconcile(root,template.content);
   renderedFor=loadedFor;
   syncTrainingDialog();
+  syncWeaponPicker();
   const dialogStatus=root.querySelector('[data-manual-dialog-status]');
   if(dialogStatus)dialogStatus.textContent=message;
   const status=root.querySelector('[data-manual-status]');
@@ -276,7 +312,7 @@ function paint(message='',{loadoutFeedback=false}={}){
     }
   }
   root.querySelectorAll('button').forEach(button=>{
-    if(busy&&!button.hasAttribute('data-manual-close-training'))button.disabled=true;
+    if(busy&&!button.hasAttribute('data-manual-close-training')&&!button.hasAttribute('data-manual-close-picker'))button.disabled=true;
   });
 }
 async function load({force=false}={}){
@@ -365,7 +401,7 @@ function ensureNav(){
     nav=document.createElement('button');
     nav.id='nav-training';nav.type='button';nav.dataset.target='page-training';
     nav.className='nav-btn training-nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all';
-    nav.innerHTML='<div class="relative p-1 training-nav-orb"><i class="fa-solid fa-book-open text-lg"></i></div><span class="text-[10px] mt-1">修煉</span>';
+    nav.innerHTML='<div class="relative p-1 training-nav-orb"><i class="fa-solid fa-book-open text-lg"></i></div><span class="text-[10px] mt-1">修行</span>';
     const home=parent.querySelector('[data-target="page-home"]');
     if(home)home.insertAdjacentElement('afterend',nav);else parent.appendChild(nav);
     nav.addEventListener('click',()=>window.switchToPage?.('page-training'));
@@ -373,7 +409,7 @@ function ensureNav(){
   delete nav.dataset.foundationTraining;
   nav.hidden=false;nav.disabled=false;
   nav.classList.remove('hidden','is-locked');
-  nav.setAttribute('aria-label','武器修煉');
+  nav.setAttribute('aria-label','修行');
   document.body.classList.add('cultivation-training-unlocked');
 }
 function boot(){
@@ -381,7 +417,10 @@ function boot(){
   ensure();
   const trainingPage=document.getElementById('page-training');
   if(trainingPage)new MutationObserver(()=>{
-    if(trainingDialogOpen&&!visible())closeTrainingDialog({restoreFocus:false});
+    if(!visible()){
+      if(trainingDialogOpen)closeTrainingDialog({restoreFocus:false});
+      closeWeaponPicker({restoreFocus:false});
+    }
   }).observe(trainingPage,{attributes:true,attributeFilter:['class','hidden']});
   root?.addEventListener('click',event=>{
     const dialog=root?.querySelector('[data-manual-training-dialog]');
@@ -395,8 +434,24 @@ function boot(){
     if(event.target.closest('[data-manual-celebration-dismiss]')){
       clearManualCelebration();return;
     }
+    if(event.target.closest('[data-manual-close-picker]')){closeWeaponPicker();paint();return;}
+    const pickerDialog=root?.querySelector('[data-manual-weapon-dialog]');
+    if(event.target===pickerDialog){
+      const rect=pickerDialog.getBoundingClientRect();
+      if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom){
+        closeWeaponPicker();paint();return;
+      }
+    }
     if(busy)return;
     const button=event.target.closest('button');if(!button)return;
+    if(button.dataset.trainingPage){
+      if(button.dataset.trainingPage!=='page-training'){
+        closeTrainingDialog({restoreFocus:false});
+        closeWeaponPicker({restoreFocus:false});
+        window.switchToPage?.(button.dataset.trainingPage);
+      }
+      return;
+    }
     if(button.hasAttribute('data-manual-guide-finish')){
       const uid=getMainUser()?.uid;
       if(window.firstAnswerGuideStep?.(uid)!==12)return;
@@ -431,10 +486,7 @@ function boot(){
         closeTrainingDialog({restoreFocus:false});
         selectedLoadout=guide.activeLoadout;
         pickerSlot=null;paint();
-        requestAnimationFrame(()=>root?.querySelector('.manual-loadout')?.scrollIntoView({
-          behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
-          block:'start'
-        }));
+        root?.querySelector('[data-manual-pick-slot]')?.focus({preventScroll:true});
       }else{
         requestAnimationFrame(()=>root?.querySelector('.manual-hero-path')?.scrollIntoView({
           behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
@@ -446,18 +498,30 @@ function boot(){
     if(button.dataset.featureBook){
       if(current?.library.some(book=>book.owned&&book.id===button.dataset.featureBook)){
         featuredBookId=button.dataset.featureBook;
-        selectedSkillId=null;
+        const book=current.library.find(item=>item.id===featuredBookId);
+        selectedSkillId=Array.isArray(current.weaponIds)?(book?.skills?.find(s=>s.unlocked)||book?.skills?.[0])?.id||null:null;
         if(!trainingDialogOpen)trainingDialogTrigger=button;
         trainingDialogOpen=true;
         paint();
       }
       return;
     }
+    if(button.dataset.manualBrowseWeapon){
+      const books=filterOwnedManuals(current,libraryFilter);
+      const list=books.some(b=>b.id===featuredBookId)?books:filterOwnedManuals(current);
+      const at=list.findIndex(b=>b.id===featuredBookId);
+      if(at<0||list.length<2)return;
+      const next=list[(at+(button.dataset.manualBrowseWeapon==='prev'?-1:1)+list.length)%list.length];
+      featuredBookId=next.id;
+      selectedSkillId=(next.skills.find(s=>s.unlocked)||next.skills[0])?.id||null;
+      paint();return;
+    }
     if(button.dataset.manualCollectionFilter){
       const filter=button.dataset.manualCollectionFilter;
-      if(['all','sword','body'].includes(filter)){
+      if(['all','sword','body','spell','arcane'].includes(filter)){
         libraryFilter=filter;
         paint();
+        root?.querySelector('.manual-book-grid')?.scrollTo({left:0,behavior:'auto'});
       }
       return;
     }
@@ -465,7 +529,7 @@ function boot(){
       const skillId=button.dataset.manualJumpSkill;
       const book=current?.library?.find(item=>item.owned&&item.id===featuredBookId);
       if(!book?.skills.some(skill=>skill.id===skillId))return;
-      selectedSkillId=selectedSkillId===skillId?null:skillId;
+      selectedSkillId=Array.isArray(current.weaponIds)?skillId:selectedSkillId===skillId?null:skillId;
       paint();
       if(selectedSkillId)requestAnimationFrame(()=>{
         root?.querySelector('.manual-focus-skill')?.scrollIntoView({
@@ -483,10 +547,9 @@ function boot(){
         if(Array.isArray(current.weaponIds)){
           if(slot>=2)return;
           selectedLoadout=slot;
+          pickerDialogTrigger=button;
           pickerSlot=pickerSlot===slot?null:slot;
           paint();
-          if(pickerSlot!==null)requestAnimationFrame(()=>
-            root?.querySelector('[data-manual-picker]')?.scrollIntoView({block:'nearest',behavior:'smooth'}));
           return;
         }
         const filled=current.loadouts?.[selectedLoadout]?.skillIds?.length||0;
@@ -512,9 +575,9 @@ function boot(){
       if(!Number.isInteger(slot)||slot<0||slot>=2||
         !current?.library?.some(book=>book.owned&&book.id===weaponId))return;
       if(current.weaponIds?.includes(weaponId)){
-        pickerSlot=null;paint();return;
+        closeWeaponPicker();paint();return;
       }
-      selectedLoadout=slot;pickerSlot=null;
+      selectedLoadout=slot;closeWeaponPicker();
       void mutate('/api/tactical/manuals/loadout',{index:slot,weaponId});
       return;
     }

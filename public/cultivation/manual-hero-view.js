@@ -90,9 +90,15 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
       <span>${fmt(upgrade.gold)} 靈石</span></button>`
     :maxed?'':`<span class="manual-hero-max-level">Lv.10 後需以武器技能擊殺靈獸累積 EXP</span>`;
 
+  const carousel=weaponMode?`<div class="manual-hero-carousel">
+    <button type="button" data-manual-browse-weapon="prev" aria-label="上一件武器" ${owned.length<2?'disabled':''}>‹</button>
+    <strong>${esc(book.name)}</strong>
+    <button type="button" data-manual-browse-weapon="next" aria-label="下一件武器" ${owned.length<2?'disabled':''}>›</button>
+    <span class="manual-hero-dots" aria-label="第 ${owned.indexOf(book)+1} 件，共 ${owned.length} 件">${owned.map(item=>'<i class="'+(item.id===book.id?'is-current':'')+'"></i>').join('')}</span>
+  </div>`:'';
   return {
     bookId:book.id,
-    html:`<section class="manual-hero manual-hero--${book.school} manual-hero--tier-${visual.stage} ${near?'manual-hero--approaching':''} ${anticipation?.status==='imminent'?'manual-hero--imminent':''}"
+    html:`<section class="manual-hero ${weaponMode?'manual-hero--weapon-layout':''} manual-hero--${book.school} manual-hero--tier-${visual.stage} ${near?'manual-hero--approaching':''} ${anticipation?.status==='imminent'?'manual-hero--imminent':''}"
       data-manual-visual-stage="${visual.stage}" data-manual-visual-level="${visual.level}"
       aria-label="武器修煉焦點">
       ${heading}
@@ -108,6 +114,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
           ${coverMarkup}
           <span class="manual-hero-art-caption manual-hero-tier-badge is-tier-${tierClass}">${esc(book.tierRealm||'煉氣')}${weaponMode?'武器':'功法'}</span>
         </div>
+        ${carousel}
         <div class="manual-hero-details">
           <div class="manual-hero-title-row">
             <div><span class="manual-hero-eyebrow">${weaponMode?'正在查看的武器':'正在查看的功法'}</span>
@@ -134,7 +141,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
         </div>
       </div>
       <div class="manual-hero-path">
-        <div class="manual-hero-path-heading"><strong>三招修行路線</strong><small>點選招式查看詳細效果與強化選項</small></div>
+        <div class="manual-hero-path-heading"><strong>${weaponMode?'武器技能（'+book.skills.filter(s=>s.unlocked).length+'/'+book.skills.length+'）':'三招修行路線'}</strong><small>點選招式查看詳細效果與強化選項</small></div>
         <div class="manual-hero-path-grid">${steps}</div>
         ${renderManualSkillDetail(book,selectedSkillId,{esc,skillArt,descriptionWithDamage,attack,
           gold:state.gold,equipped,moveIdOf,weaponIds:weaponMode?state.weaponIds:null})}
