@@ -5400,7 +5400,7 @@ window.showOpponentFoundAnimation = async (oppData) => {
 function buildLocalBattlePlayer() {
     const combat = window.getCombatStats?.() || { attack: 20, hp: 100, maxHp: 100 };
     const maxHp = Math.max(1, Math.round(Number(combat.maxHp) || Number(combat.hp) || 100));
-    const artifactBattle = window.getArtifactBattleSnapshot?.() || { version: 1, effects: [], openingShield: 0 };
+    const artifactBattle = { version: 1, effects: [], openingShield: 0 };
     const openingShield = Math.max(
         0,
         Math.round(
@@ -5413,7 +5413,7 @@ function buildLocalBattlePlayer() {
         uid: auth.currentUser.uid,
         name: currentUserData.displayName || "修士",
         equipped: { ...currentUserData.equipped, avatar: resolvePlayerAvatar(currentUserData, auth.currentUser) },
-        goldenCore: window.getEquippedGoldenCoreBattleSnapshot?.() || null,
+        goldenCore: null,
         artifactBattle,
         artifactShield: openingShield,
         artifactFirstHitUsed: false,

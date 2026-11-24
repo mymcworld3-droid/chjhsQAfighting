@@ -1,6 +1,6 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
-import './main-legacy.js?v=20261120-postclear-skill-guide-v1';
+import './main-legacy.js?v=20261124-main-retire-legacy-v1';
 import './cultivation/dongtian-entry.js';
 // Sound is optional and cannot hold up authentication or gameplay readiness.
 void import('./game-audio.js').catch(error => console.warn('[Game audio] unavailable', error));
@@ -35,6 +35,8 @@ void import('./account-delete.js?v=20261120-guest-account-delete-v1').catch((err
 window.QA_TACTICAL_BATTLE_ENABLED = true;
 window.QA_WEAPON_SYSTEM_ENABLED = false;
 window.QA_MANUAL_TRAINING_ONLY = true;
+// Retired cultivation and equipment systems must not activate.
+window.QA_LEGACY_CULTIVATION_DISABLED = true;
 const XIUXIAN_FEATURE_MODULES = [
   './cultivation/realm-icons.js',
   './cultivation/realm-icon-motion.js',
@@ -44,49 +46,27 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/math-guard.js',
   './cultivation/quiz-math.js',
   './cultivation/quiz-history-view.js',
-  './cultivation/golden-core-activation-feedback.js',
   './cultivation/cultivation-rules.js',
   './cultivation/xiuxian-live-sync.js',
   './cultivation/five-immortals.js',
   './cultivation/cultivation-progression-v2.js',
   './cultivation/training-access.js',
   './cultivation/cultivation-inventory.js',
-  './cultivation/golden-core-access-guard.js',
-  './cultivation/foundation-training-page.js',
-  './cultivation/cultivation-training-v4.js',
-  './cultivation/training-scroll-fix.js',
-  './cultivation/reverse-core-multiples.js',
-  './cultivation/golden-core-battle-effects.js',
-  './cultivation/cultivation-core-visual.js',
-  './cultivation/cultivation-core-equip-warning.js',
   './cultivation/cultivation-combat-stats.js',
-  './cultivation/artifact-catalog-sync.js',
   './cultivation/material-catalog-sync.js',
-  './cultivation/artifact-system.js',
-  './cultivation/soulbound-draw.js',
-  './cultivation/artifact-battle-effects.js',
   './cultivation/combat-power.js',
   './cultivation/player-profile.js',
   './cultivation/friend-requests.js',
   './cultivation/material-system.js',
   './cultivation/startup-resource-preloader.js',
-  './cultivation/inventory-dismantle.js',
-  './cultivation/unified-inventory-grid.js',
-  './cultivation/refinery-ai-jobs.js',
-  './cultivation/cultivation-refinery-v2.js',
-  './cultivation/training-fluid-layout.js',
   './cultivation/market-fluid-layout.js',
-  './cultivation/material-realm-ui.js',
   './cultivation/content-capacity-layout.js',
-  './cultivation/material-drop-system.js',
   './cultivation/battle-v3-stability-ui.js',
   './cultivation/battle-mode-v2.js',
   './cultivation/tactical-combat.js',
   './cultivation/gameplay-page.js',
   './cultivation/weapon-dungeons-page.js',
   './cultivation/dungeon-lobby.js',
-  './cultivation/cultivation-status-panel.js',
-  './cultivation/training-scene-map.js',
   './cultivation/manual-training-page.js',
   './cultivation/home-wireframe.js',
   './cultivation/realm-breakthrough-feedback.js',
@@ -119,7 +99,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261121-rightwheel-v4';
+const XIUXIAN_FEATURE_BUILD = '20261124-main-retire-legacy-v1';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
