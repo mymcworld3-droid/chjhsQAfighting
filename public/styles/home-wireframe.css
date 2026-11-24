@@ -1,5 +1,5 @@
-/* Supplied artwork is preserved byte for byte. CSS positions its transparent
-   margins, while buttons and data remain live HTML. Only the homepage changes. */
+/* Pure scene backgrounds; the independent brand and dock are shared with
+   the cultivation page. All player data and controls remain live HTML. */
 body.ui-cleanup:has(#page-home.active-page)>header,
 body.ui-cleanup:has(#page-home.active-page)>#bottom-nav { display:none!important }
 body.ui-cleanup #page-home { padding:0!important;margin:0!important;max-width:none!important }
@@ -14,7 +14,7 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
   --ha-gold:#ffe5a3;--ha-edge:#d7b971;--ha-ink:#03485b;
   position:relative;width:100%;height:100%;min-height:560px;overflow:hidden;
   color:var(--ha-gold);font-family:"Noto Serif TC",serif;
-  background:#076c9a url('../assets/home/home-background-portrait.png') center center/cover no-repeat;
+  background:#076c9a url('../assets/home/home-scene-portrait.webp') center center/cover no-repeat;
   text-shadow:0 2px 3px #002c41,0 0 6px #00364c;
 }
 .home-art-scene,.home-art-scene *,.home-art-scene *::before,.home-art-scene *::after { box-sizing:border-box }
@@ -82,8 +82,8 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 .home-art-meditation .home-art-dot { top:7%;right:8% }
 .home-art-trial { position:absolute!important;left:9%;bottom:4.5%;width:82%;height:auto;aspect-ratio:4/3;z-index:1 }
 .home-art-trial img { object-fit:contain!important }
-/* The title and dock are baked into the scene image. Only live controls
-   overlay the four blank slots; no second frame or raster labels are added. */
+/* Common live navigation controls; scene-art-shell.css supplies the fixed
+   independent frame in both orientations. */
 .home-art-navigation { z-index:2;position:absolute;left:4%;bottom:2.5%;width:92%;height:6.5%;min-height:40px }
 .home-art-navigation>div { display:grid;width:100%;height:100%;grid-template-columns:repeat(4,minmax(0,1fr)) }
 .home-art-navigation button { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:40px;border:0;border-radius:8px;background:transparent;font-size:clamp(11px,2.4vw,21px);line-height:1.15;color:#ffe5a3;text-shadow:0 2px 3px #002c41 }
@@ -98,7 +98,7 @@ body.ui-cleanup:has(#page-home.active-page)>main { padding:0!important;overflow:
 .home-art-mail>button { display:block;width:100%;margin-top:10px }
 .home-art-mail header button { border:0;padding:4px 12px;font-size:24px }
 @media (orientation:landscape) {
-  .home-art-scene { min-height:440px;background-image:url('../assets/home/home-background-landscape.png') }
+  .home-art-scene { min-height:440px;background-image:url('../assets/home/home-scene-landscape.webp') }
   .home-art-player { left:20%;top:1.2%;width:24%;height:10% }
   .home-art-avatar { --avatar-size:clamp(44px,5.7vw,90px) }
   #home-art-name { font-size:clamp(16px,1.7vw,29px) }

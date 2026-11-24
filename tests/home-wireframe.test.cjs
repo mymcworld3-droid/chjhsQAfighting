@@ -45,7 +45,7 @@ test('homepage actions use existing meditation, leaderboard, store and navigatio
 test('all homepage images exist and both supplied background orientations are full resolution',()=>{
   const css=read('public/styles/home-wireframe.css');
   const files=[...html.matchAll(/(?:src)="assets\/home\/([^"?]+)"/g)].map(m=>m[1]);
-  for(const file of [...files,'home-background-portrait.png','home-background-landscape.png','home-shortcut-frame.png'])
+  for(const file of [...files,'home-background-portrait.png','home-background-landscape.png','home-scene-portrait.webp','home-scene-landscape.webp','home-shortcut-frame.png'])
     assert.ok(fs.existsSync(path.join(base,'public/assets/home',file)),file);
   const dimensions=file=>{const b=fs.readFileSync(path.join(base,'public/assets/home',file));return [b.readUInt32BE(16),b.readUInt32BE(20)];};
   assert.deepEqual(dimensions('home-background-portrait.png'),[941,1672]);
@@ -68,7 +68,7 @@ test('home artwork scales HUD groups uniformly and never distorts the source ima
   }
   assert.match(css,/\.home-art-trial img\s*\{[^}]*object-fit:contain/);
   assert.match(css,/\.home-art-avatar\s*\{[^}]*aspect-ratio:1/);
-  assert.match(html,/home-wireframe\.css\?v=20261123-compact-wallet-tasks-v3/);
+  assert.match(html,/home-wireframe\.css\?v=20261124-independent-shell-v4/);
 });
 
 test('player name and combat-power ink wash extend behind the avatar',()=>{

@@ -5,24 +5,27 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
 #page-training.manual-training-active.active-page{
   position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;
   padding:0!important;margin:0!important;overflow:auto!important;isolation:isolate;
-  background:#05648b url('../assets/training/art-ui/landscape.webp') center top/cover no-repeat!important;
+  --training-scene:url('../assets/training/art-ui/landscape.webp');
+  --training-background-width:max(100vw,calc(100dvh * 1448 / 1086));
+  background:#05648b var(--training-scene) center top/cover no-repeat!important;
   scrollbar-color:#d7bc75 #023d4c;scrollbar-width:thin;
 }
 #manual-training-root{
   --mt-gold:#ffe7a5;--mt-edge:#d8b86c;--mt-ink:#003c49;
   width:min(94%,1480px);max-width:none;margin:0 auto!important;
-  padding:0 0 calc(130px + env(safe-area-inset-bottom))!important;min-height:100%;
+  padding:0 0 calc(var(--scene-dock-height,130px) + 20px + env(safe-area-inset-bottom))!important;min-height:100%;
   font-family:'Noto Serif TC','Songti TC',serif;color:#fff8df;
   text-shadow:0 2px 3px #001c29,1px 0 2px #001c29,-1px 0 2px #001c29;
 }
 #manual-training-root button{font-family:inherit;touch-action:manipulation}
 #manual-training-root button:focus-visible{outline:3px solid #fff4bf!important;outline-offset:3px}
 #manual-training-root button:disabled{cursor:not-allowed}
-#manual-training-root .manual-art-masthead{height:clamp(95px,10vw,145px);position:relative}
-#manual-training-root .manual-art-brand{
-  position:absolute;top:0;left:-3.2vw;width:clamp(150px,22vw,300px);aspect-ratio:2.8;
-  background:url('../assets/training/art-ui/brand.webp') left top/contain no-repeat;
-  border:0;padding:0;cursor:pointer;
+/* The title strip stays above the scrolling collection. Match the complete
+   viewport background's cover scale so the strip has no visual seam. */
+#manual-training-root .manual-art-masthead{
+  position:sticky;top:0;z-index:40;height:clamp(95px,10vw,145px);
+  width:100%;margin:0;
+  background:var(--training-scene) center top/var(--training-background-width) auto no-repeat;
 }
 /* The supplied landscape and portrait both include the page title. */
 #manual-training-root .manual-art-page-title{
@@ -213,12 +216,6 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
 #manual-training-root .manual-xp-reference{margin:0 12px 20px;color:#f2edcb;font-size:14px}
 #manual-training-root .manual-xp-reference summary{color:#fff1c1}
 #manual-training-root .manual-empty{font-size:16px;color:#f0e9cb;border-color:#b6be8f}
-#manual-training-root .manual-art-navigation{
-  position:fixed;z-index:45;bottom:env(safe-area-inset-bottom);left:50%;transform:translateX(-50%);
-  width:100%;height:clamp(70px,9.6vw,150px);padding:clamp(22px,2.4vw,34px) 11% 0;
-  background:url('../assets/training/art-ui/navigation-landscape.webp') center bottom/100% 100% no-repeat;
-}
-#manual-training-root .manual-art-navigation>div{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:100%}
 /* Share the homepage's icon, text, hover and orientation rules directly.
    Only the fixed dock placement belongs to this scrollable page. */
 #manual-training-root .manual-art-navigation button{
@@ -228,8 +225,8 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
 #manual-training-root .manual-training-dialog-header{background:#004854;border-color:#b49e63}
 #manual-training-root .manual-training-dialog-header button{background:#075763;font-size:14px}
 @media(orientation:portrait){
-  #page-training.manual-training-active.active-page{background-image:url('../assets/training/art-ui/portrait.webp')!important;background-size:100% auto!important;background-color:#07516c!important}
-  #manual-training-root{width:97%;padding-bottom:calc(112px + env(safe-area-inset-bottom))!important}
+  #page-training.manual-training-active.active-page{--training-scene:url('../assets/training/art-ui/portrait.webp');--training-background-width:100vw;background-image:var(--training-scene)!important;background-size:100% auto!important;background-color:#07516c!important}
+  #manual-training-root{width:97%}
   #manual-training-root .manual-art-masthead{height:clamp(108px,16vw,160px)}
   #manual-training-root .manual-library{
     --panel-art:url('../assets/training/art-ui/collection-portrait.webp');
@@ -260,10 +257,6 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
   #manual-training-root .manual-weapon-skill:nth-child(1){--skill-x:45.6%}
   #manual-training-root .manual-weapon-skill:nth-child(2){--skill-x:59.8%}
   #manual-training-root .manual-weapon-skill:nth-child(3){--skill-x:74%}
-  #manual-training-root .manual-art-navigation{
-    height:110px;padding:40px 3.5% 3px;
-    background-image:url('../assets/training/art-ui/navigation-portrait.webp');
-  }
 }
 @media(max-width:1100px) and (orientation:landscape){
   #manual-training-root .manual-book-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
@@ -318,6 +311,5 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
   #manual-training-root .manual-art-lock{inset:4px;font-size:12px;border-radius:50%}
   #manual-training-root .manual-weapon-slot.is-empty{min-height:130px}
   #manual-training-root .manual-weapon-choice-grid{grid-template-columns:1fr}
-  #manual-training-root .manual-art-navigation{height:95px;padding:35px 4% 2px}
 }
 @media(prefers-reduced-motion:reduce){#manual-training-root .manual-art-card{transition:none}}

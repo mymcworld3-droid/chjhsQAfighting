@@ -89,7 +89,12 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-art-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-home-nav-v3';
+    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-fixed-title-v4';
+    document.head.append(link);
+  }
+  if(!document.getElementById('scene-art-shell-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='scene-art-shell-style';link.href='/styles/scene-art-shell.css?v=20261124-shared-shell-v1';
     document.head.append(link);
   }
   return root;
@@ -174,7 +179,7 @@ function markup(){
     </article>`
   ).join('');
   return `
-    <header class="manual-art-masthead"><button type="button" class="manual-art-brand" data-training-page="page-home" aria-label="返回宗門"></button><h2 class="manual-art-page-title">修行</h2></header>
+    <header class="manual-art-masthead"><button type="button" class="manual-art-brand scene-art-brand" data-training-page="page-home" aria-label="返回宗門"></button><h2 class="manual-art-page-title">修行</h2></header>
     <section class="manual-library" aria-label="武器收藏">
       <span class="manual-panel-body" aria-hidden="true"></span>
       ${renderManualCollectionHeader(current,libraryFilter,{esc})}
@@ -190,7 +195,7 @@ function markup(){
       <p>只有以武器技能完成擊殺才能獲得熟練經驗；招式依武器 Lv.1／5／10 解鎖，不受修士境界限制。</p>
     </details>
     <div class="manual-celebration-host" data-manual-celebration-host></div>
-    <nav class="manual-art-navigation home-art-navigation" aria-label="底部導覽"><div>
+    <nav class="manual-art-navigation home-art-navigation scene-art-dock" aria-label="底部導覽"><div>
       <button type="button" data-training-page="page-training" aria-current="page"><i class="fa-solid fa-spa" aria-hidden="true"></i><span>修行</span></button>
       <button type="button" data-training-page="page-gameplay"><i class="fa-solid fa-khanda" aria-hidden="true"></i><span>歷練</span></button>
       <button type="button" data-training-page="page-social"><i class="fa-solid fa-torii-gate" aria-hidden="true"></i><span>仙盟</span></button>
