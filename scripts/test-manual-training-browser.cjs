@@ -76,8 +76,21 @@ async function main(){
     assert.equal(await library.isVisible(),false);
     assert.equal(await page.locator('.manual-weapons').isVisible(),false);
     assert.equal(await page.locator('dialog[open]').count(),0);
-    const detailSize=await page.locator('[data-manual-training-screen]').evaluate(node=>({width:node.clientWidth,root:node.parentElement.clientWidth}));
-    assert(detailSize.width>=detailSize.root-3,'detail fills the game page width');
+    const assertFullscreen=async()=>{
+      const detail=await page.locator('[data-manual-training-screen]').evaluate(node=>{
+        const box=node.getBoundingClientRect(),style=getComputedStyle(node);
+        return {x:box.x,y:box.y,width:box.width,height:box.height,viewportWidth:innerWidth,viewportHeight:innerHeight,radius:style.borderRadius,position:style.position,bodyOverflow:getComputedStyle(node.querySelector('.manual-training-screen-body')).overflowY};
+      });
+      assert(Math.abs(detail.x)<=1&&Math.abs(detail.y)<=1,'detail must begin at the viewport origin');
+      assert(Math.abs(detail.width-detail.viewportWidth)<=1&&Math.abs(detail.height-detail.viewportHeight)<=1,'detail fills the entire game viewport');
+      assert.equal(detail.radius,'0px');assert.equal(detail.position,'fixed');assert.equal(detail.bodyOverflow,'auto');
+      assert.equal(await page.locator('.manual-native-skills-panel').evaluate(node=>getComputedStyle(node).borderRadius),'0px');
+    };
+    await assertFullscreen();
+    await page.setViewportSize({width:1180,height:820});
+    await assertFullscreen();
+    await page.setViewportSize({width:393,height:852});
+    await assertFullscreen();
     await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
     await page.locator('[data-manual-browse-weapon="next"]').click();
     await page.locator('.manual-focus-skill[data-manual-skill="rock-fist"]').waitFor();

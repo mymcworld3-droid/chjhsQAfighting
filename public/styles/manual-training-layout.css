@@ -149,3 +149,50 @@ body.xianxia-theme #page-training.manual-training-active:has(#manual-training-ro
  #manual-training-root .manual-native-card.manual-library-choice{aspect-ratio:.76;gap:4px;padding:6px}
  #manual-training-root .manual-book-grid{padding-bottom:8px}
 }
+
+/* Edge-to-edge detail scene, not a centered card. Only the detail content
+   scrolls; the game header and its reserved padding are not part of this scene. */
+html body:has(#page-training.active-page:not(.hidden) #manual-training-root.manual-detail-active)>header{
+ display:none!important;
+}
+html body:has(#page-training.active-page:not(.hidden) #manual-training-root.manual-detail-active)>main{
+ padding:0!important;overflow:hidden!important;
+}
+body.xianxia-theme #page-training.manual-training-active:has(#manual-training-root.manual-detail-active),
+#page-training.manual-training-active:has(#manual-training-root.manual-detail-active){
+ height:100%;min-height:0!important;padding:0!important;overflow:visible!important;
+ border-radius:0!important;
+}
+#page-training.manual-training-active>#manual-training-root.manual-detail-active{
+ height:100%;min-height:0;max-width:none;margin:0;padding:0;border-radius:0;
+}
+#manual-training-root .manual-training-screen:not([hidden]){
+ position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;
+ box-sizing:border-box;width:100%;height:100%;min-height:0;max-height:none;max-width:none;
+ margin:0;padding:0;border:0!important;border-radius:0!important;box-shadow:none!important;
+ background:radial-gradient(ellipse at 50% 0%,#393326,#29261e 54%,#1a1813);
+ overflow:hidden;
+}
+body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-screen:not([hidden]){
+ padding-bottom:calc(76px + env(safe-area-inset-bottom,0px));
+}
+#manual-training-root .manual-training-screen-header{
+ flex:0 0 auto;width:100%;margin:0;border-radius:0;
+ padding:calc(10px + env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) 10px max(14px,env(safe-area-inset-left,0px));
+ background:#30291f;
+}
+#manual-training-root .manual-training-screen-body{
+ flex:1 1 auto;min-height:0;max-width:none;width:100%;margin:0;
+ padding:clamp(12px,2vw,26px) max(clamp(12px,2vw,26px),env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(clamp(12px,2vw,26px),env(safe-area-inset-left,0px));
+ overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
+}
+#manual-training-root .manual-training-screen :is(.manual-hero,.manual-native-skills-panel,.manual-focus-skill,.manual-hero-mastery,.manual-expedition,.manual-hero-step){
+ border-radius:0!important;
+}
+#manual-training-root .manual-training-screen .manual-hero{border:0;box-shadow:none;background:none}
+#manual-training-root .manual-training-screen .manual-native-skills-panel,
+#manual-training-root .manual-training-screen .manual-focus-skill{box-shadow:none}
+@media(orientation:landscape) and (max-height:560px){
+ #manual-training-root .manual-training-screen-header{padding-block:calc(4px + env(safe-area-inset-top,0px)) 4px}
+ #manual-training-root .manual-training-screen-body{padding-top:8px}
+}

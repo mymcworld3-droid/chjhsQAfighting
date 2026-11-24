@@ -90,7 +90,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-layout-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261124-flat-shell-v4';
+    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261124-edge-to-edge-v5';
     document.head.append(link);
   }
   return root;
@@ -155,6 +155,8 @@ function syncTrainingDialog(){
   if(screen)screen.hidden=!trainingDialogOpen;
   if(trainingDialogOpen&&!wasActive){
     scrollContainers().forEach(node=>{node.scrollTop=0;node.scrollLeft=0;});
+    const content=screen.querySelector?.('.manual-training-screen-body');
+    if(content)content.scrollTop=0;
     screen.querySelector?.('[data-manual-close-training]')?.focus({preventScroll:true});
   }else if(!trainingDialogOpen&&wasActive){
     for(const entry of collectionScroll||[]){
