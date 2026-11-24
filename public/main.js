@@ -1,6 +1,6 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
-import './main-legacy.js?v=20261124-main-retire-legacy-v1';
+import './main-legacy.js?v=20261124-hide-coop-v1';
 import './cultivation/dongtian-entry.js';
 // Sound is optional and cannot hold up authentication or gameplay readiness.
 void import('./game-audio.js').catch(error => console.warn('[Game audio] unavailable', error));
@@ -35,6 +35,8 @@ void import('./account-delete.js?v=20261120-guest-account-delete-v1').catch((err
 window.QA_TACTICAL_BATTLE_ENABLED = true;
 window.QA_WEAPON_SYSTEM_ENABLED = false;
 window.QA_MANUAL_TRAINING_ONLY = true;
+// Temporarily hide cooperative dungeons without removing their code or saved rooms.
+window.QA_COOP_DUNGEON_ENABLED = false;
 // Retired cultivation and equipment systems must not activate.
 window.QA_LEGACY_CULTIVATION_DISABLED = true;
 const XIUXIAN_FEATURE_MODULES = [
@@ -66,7 +68,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/tactical-combat.js',
   './cultivation/gameplay-page.js',
   './cultivation/weapon-dungeons-page.js',
-  './cultivation/dungeon-lobby.js',
+  ...(window.QA_COOP_DUNGEON_ENABLED ? ['./cultivation/dungeon-lobby.js'] : []),
   './cultivation/manual-training-page.js',
   './cultivation/home-wireframe.js',
   './cultivation/realm-breakthrough-feedback.js',
@@ -99,7 +101,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261124-main-retire-legacy-v1';
+const XIUXIAN_FEATURE_BUILD = '20261124-hide-coop-v1';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。

@@ -160,3 +160,16 @@ test('lobby entry, input, guarded long-press and quiz selectability are present'
   assert.doesNotMatch(rules,/#tactical-combat\s*\*\s*\{[^}]*user-select/);
   assert.ok(quiz.length>100,'question styles remain separate and unmodified');
 });
+
+test('cooperative lobby is hidden by the startup flag without hiding solo weapon dungeons',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const read=file=>fs.readFileSync(path.join(__dirname,'..',file),'utf8');
+  const main=read('public/main.js');
+  assert.match(main,/window\.QA_COOP_DUNGEON_ENABLED = false/);
+  const registry=main.match(/const XIUXIAN_FEATURE_MODULES = (\[[\s\S]*?\]);/)[1];
+  const modules=new Function('window','return '+registry)({QA_COOP_DUNGEON_ENABLED:false});
+  assert(!modules.includes('./cultivation/dungeon-lobby.js'));
+  assert(modules.includes('./cultivation/weapon-dungeons-page.js'));
+  assert(new Function('window','return '+registry)({QA_COOP_DUNGEON_ENABLED:true}).includes('./cultivation/dungeon-lobby.js'));
+  assert.match(read('public/main-legacy.js'),/if \(Number\(data\?\.dungeonVersion\) > 0 && window\.QA_COOP_DUNGEON_ENABLED === false\) return;/);
+});

@@ -5135,6 +5135,7 @@ function listenToSystemCommands() {
 
 // 顯示邀請通知 (使用 getAvatarHtml 修正顯示)
 function showInviteToast(inviteId, data) {
+    if (Number(data?.dungeonVersion) > 0 && window.QA_COOP_DUNGEON_ENABLED === false) return;
     if (invitationBlockedByCombat()) {
         pendingIncomingInvites.delete(inviteId);
         document.querySelector?.('[data-duel-invite="' + inviteId + '"]')?.remove();
