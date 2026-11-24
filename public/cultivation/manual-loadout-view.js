@@ -170,27 +170,28 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
     '<i class="fa-solid fa-plus" aria-hidden="true"></i>';
   const cards=Array.from({length:2},(_,i)=>{
     const book=books.get(slots[i]),chosen=i===selected;
-    const names=(book?.skills||[]).map((skill,index)=>
-      '<span class="manual-weapon-skill '+(skill.unlocked?'is-learned':'is-locked')+
-      '" title="'+esc(skill.unlocked?skill.name:'武器 Lv.'+skill.levelRequired+' 解鎖')+'">'+
-      '<small>'+['一','二','三'][index]+'式</small><strong>'+esc(skill.name)+'</strong>'+
-      (skill.unlocked?' ✓':' 🔒')+'</span>').join('');
+    const names=(book?.skills||[]).map((skill,index)=>{
+      const image=skillArt?.(skill);
+      const title=skill.unlocked?skill.name:'武器 Lv.'+skill.levelRequired+' 解鎖';
+      return '<span class="manual-weapon-skill '+(skill.unlocked?'is-learned':'is-locked')+
+        '" title="'+esc(title)+'" aria-label="'+esc(skill.name+'，'+title)+'">'+
+        '<small>第'+['一','二','三'][index]+'式</small><span class="manual-weapon-skill-picture">'+
+        (image?'<img src="'+esc(image)+'" alt="" loading="lazy" decoding="async">':'')+
+        (skill.unlocked?'':'<span class="manual-art-lock">Lv.'+esc(skill.levelRequired)+'</span>')+
+        '</span><strong>'+esc(skill.name)+'</strong></span>';
+    }).join('');
     return '<div class="manual-weapon-slot '+(book?'is-equipped':'is-empty')+' '+(chosen?'is-selected':'')+
       '" data-manual-slot="'+i+'">'+
-      '<div class="manual-weapon-slot-top"><span>武器 '+(i+1)+'</span><span>'+
-      (book?'● 已裝備':'○ 空欄')+'</span></div>'+
-      '<button type="button" class="manual-weapon-slot-picker" data-manual-pick-slot="'+i+
-      '" aria-expanded="'+(pickerSlot===i)+'" aria-label="'+(book?'更換':'裝備')+'第'+(i+1)+'格武器">'+
       '<span class="manual-weapon-slot-art">'+art(book)+'</span>'+
       '<span class="manual-weapon-slot-info"><strong>'+esc(book?.name||'尚未裝備武器')+'</strong>'+
-      '<small>'+esc(book?((book.weaponType==='totem'?'圖騰':'靈劍')+' · Lv.'+book.level):'點擊選擇已持有武器')+'</small></span>'+
-      '<i class="fa-solid fa-rotate" aria-hidden="true"></i></button>'+
+      '<small class="manual-art-school">'+esc(book?(book.school==='body'?'體修':'劍修'):'武器 '+(i+1))+'</small>'+
+      '<span class="manual-art-level">'+esc(book?'Lv. '+book.level+' / 20':'等待裝備')+'</span></span>'+
       (book?'<div class="manual-weapon-skill-list">'+names+'</div>':
        '<div class="manual-weapon-slot-hint">每件武器有三招，隨武器熟練度自動解鎖</div>')+
       '<div class="manual-weapon-slot-actions">'+
+      '<button type="button" class="manual-weapon-slot-picker" data-manual-pick-slot="'+i+
+      '" aria-expanded="'+(pickerSlot===i)+'" aria-label="'+(book?'更換':'裝備')+'第'+(i+1)+'格武器">'+(book?'更換':'裝備')+'</button>'+
       (book?'<button type="button" data-manual-remove-weapon="'+i+'">卸下</button>':'')+
-      '<button type="button" data-loadout-select="'+i+
-        '" class="manual-weapon-select" aria-pressed="'+chosen+'">選取此欄</button>'+
       '</div></div>';
   }).join('');
   const picked=Number.isInteger(pickerSlot)&&pickerSlot>=0&&pickerSlot<2;
@@ -210,7 +211,7 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
   return '<section class="manual-loadout manual-weapons" aria-label="兩把武器裝備">'+
     '<div class="manual-deck-heading"><div><span class="manual-deck-kicker">戰前準備 · WEAPON LOADOUT</span>'+
     '<h3><i class="fa-solid fa-khanda" aria-hidden="true"></i> 武器裝備</h3></div>'+
-    '<small>最多裝備兩把武器，每把三招，沒有主武器。單人模式可隨時更換。</small></div>'+
+    '</div>'+
     '<div class="manual-weapon-grid">'+cards+'</div>'+
     '<div class="manual-deck-feedback" data-manual-loadout-status role="status" aria-live="polite"></div>'+
     chooser+'</section>';

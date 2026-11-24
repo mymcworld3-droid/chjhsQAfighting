@@ -52,6 +52,26 @@ test('filter all, sword and body only includes actually owned manuals',()=>{
   assert.equal(filterOwnedManuals({library:[]}).length,0);
 });
 
+test('weapon gallery filters never invent or reveal unowned schools',()=>{
+  const state={weaponIds:['sword-wind',null],library:[...library,
+    book('spell-owned','spell'),book('arcane-secret','arcane',{owned:false})]};
+  assert.deepEqual(Array.from(filterOwnedManuals(state,'spell').map(x=>x.id)),['spell-owned']);
+  assert.equal(filterOwnedManuals(state,'arcane').length,0);
+  const header=renderManualCollectionHeader(state,'spell',tools);
+  assert.match(header,/data-manual-collection-filter="spell" aria-pressed="true"/);
+  assert.match(header,/data-manual-collection-filter="arcane"/);
+});
+
+test('weapon cards show the actual school and level while keeping the modal action',()=>{
+  const card=draw(book('body-rock','body',{weaponType:'totem',level:5}),'body-rock');
+  assert.match(card,/data-feature-book="body-rock"/);
+  assert.match(card,/aria-haspopup="dialog"/);
+  assert.match(card,/aria-pressed="true"/);
+  assert.match(card,/manual-art-card-school">體修/);
+  assert.match(card,/Lv. 5 \/ 20/);
+  assert.doesNotMatch(card,/煉氣武器|築基武器|元嬰武器/);
+});
+
 test('header reports ownership counts and offers keyboard-accessible filters',()=>{
   const head=renderManualCollectionHeader({library},'body',tools);
   assert.match(head,/功法收藏/);

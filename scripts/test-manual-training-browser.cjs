@@ -128,7 +128,7 @@ async function main(){
     await page.setViewportSize({width:1180,height:820});
     const columns=await page.locator('.manual-weapon-grid').evaluate(node=>
       getComputedStyle(node).gridTemplateColumns.split(' ').length);
-    assert.equal(columns,2);
+    assert.equal(columns,1,'the two weapons are stacked horizontal equipment rows');
     // Returning from battle always fetches fresh authoritative weapon XP.
     const refreshed=page.waitForResponse(res=>res.url().endsWith('/api/tactical/manuals')
       &&res.request().method()==='GET');

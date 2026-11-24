@@ -87,6 +87,11 @@ function ensure(){
     link.href='/styles/manual-training-weapons.css?v=20261120-weapon-v1';
     document.head.append(link);
   }
+  if(!document.getElementById('manual-training-art-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-art-v1';
+    document.head.append(link);
+  }
   return root;
 }
 async function request(url,body){
@@ -169,6 +174,7 @@ function markup(){
     </article>`
   ).join('');
   return `
+    <header class="manual-art-masthead"><button type="button" class="manual-art-brand" data-training-page="page-home" aria-label="返回宗門"></button><h2 class="manual-art-page-title">修行</h2></header>
     <section class="manual-library" aria-label="武器收藏">
       ${renderManualCollectionHeader(current,libraryFilter,{esc})}
       <div class="manual-book-grid">${cards||'<p class="manual-empty">尚無此流派已取得的武器，請切換篩選查看。</p>'}</div>
@@ -182,7 +188,13 @@ function markup(){
       <div>${Catalog.REALMS.map(realm=>`<span>${esc(realm.name)}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
       <p>只有以武器技能完成擊殺才能獲得熟練經驗；招式依武器 Lv.1／5／10 解鎖，不受修士境界限制。</p>
     </details>
-    <div class="manual-celebration-host" data-manual-celebration-host></div>`;
+    <div class="manual-celebration-host" data-manual-celebration-host></div>
+    <nav class="manual-art-navigation" aria-label="主要導覽"><div>
+      <button type="button" data-training-page="page-training" aria-current="page"><i class="fa-solid fa-khanda" aria-hidden="true"></i><span>修行</span></button>
+      <button type="button" data-training-page="page-gameplay"><i class="fa-solid fa-mountain-sun" aria-hidden="true"></i><span>歷練</span></button>
+      <button type="button" data-training-page="page-social"><i class="fa-solid fa-spa" aria-hidden="true"></i><span>仙盟</span></button>
+      <button type="button" data-training-page="page-store"><i class="fa-solid fa-store" aria-hidden="true"></i><span>商城</span></button>
+    </div></nav>`;
 
 }
 // Reconcile the existing page instead of recreating every image on each
@@ -397,6 +409,13 @@ function boot(){
     }
     if(busy)return;
     const button=event.target.closest('button');if(!button)return;
+    if(button.dataset.trainingPage){
+      if(button.dataset.trainingPage!=='page-training'){
+        closeTrainingDialog({restoreFocus:false});
+        window.switchToPage?.(button.dataset.trainingPage);
+      }
+      return;
+    }
     if(button.hasAttribute('data-manual-guide-finish')){
       const uid=getMainUser()?.uid;
       if(window.firstAnswerGuideStep?.(uid)!==12)return;
@@ -455,7 +474,7 @@ function boot(){
     }
     if(button.dataset.manualCollectionFilter){
       const filter=button.dataset.manualCollectionFilter;
-      if(['all','sword','body'].includes(filter)){
+      if(['all','sword','body','spell','arcane'].includes(filter)){
         libraryFilter=filter;
         paint();
       }
