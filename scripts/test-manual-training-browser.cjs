@@ -84,7 +84,10 @@ async function main(){
       assert(Math.abs(detail.x)<=1&&Math.abs(detail.y)<=1,'detail must begin at the viewport origin');
       assert(Math.abs(detail.width-detail.viewportWidth)<=1&&Math.abs(detail.height-detail.viewportHeight)<=1,'detail fills the entire game viewport');
       assert.equal(detail.radius,'0px');assert.equal(detail.position,'fixed');assert.equal(detail.bodyOverflow,'auto');
-      assert.equal(await page.locator('.manual-native-skills-panel').evaluate(node=>getComputedStyle(node).borderRadius),'0px');
+      for(const selector of ['.manual-native-skills-panel','.manual-focus-skill','.manual-hero-mastery','.manual-hero-step']){
+        const radius=await page.locator(selector).first().evaluate(node=>parseFloat(getComputedStyle(node).borderTopLeftRadius));
+        assert(radius>0,selector+' retains rounded corners');
+      }
     };
     await assertFullscreen();
     await page.setViewportSize({width:1180,height:820});

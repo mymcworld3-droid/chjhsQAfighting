@@ -186,9 +186,7 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
  padding:clamp(12px,2vw,26px) max(clamp(12px,2vw,26px),env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(clamp(12px,2vw,26px),env(safe-area-inset-left,0px));
  overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
 }
-#manual-training-root .manual-training-screen :is(.manual-hero,.manual-native-skills-panel,.manual-focus-skill,.manual-hero-mastery,.manual-expedition,.manual-hero-step){
- border-radius:0!important;
-}
+/* Only the outer fullscreen shell is square; inner UI keeps its rounded shapes. */
 #manual-training-root .manual-training-screen .manual-hero{border:0;box-shadow:none;background:none}
 #manual-training-root .manual-training-screen .manual-native-skills-panel,
 #manual-training-root .manual-training-screen .manual-focus-skill{box-shadow:none}
