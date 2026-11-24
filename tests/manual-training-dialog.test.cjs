@@ -63,24 +63,6 @@ test('upgrade celebrations share the native training dialog top layer and return
   assert.equal(f.run('host.parentElement===root'),true);
 });
 
-test('the full collection and both equipment rows fit above the dock in either orientation',()=>{
-  for(const [width,height,dockHeight] of [[1672,941,150],[1180,820,113],[768,1024,110],[393,852,95],[852,393,82]]){
-    const f=fixture();
-    f.run(`
-      const width=${width},height=${height},dockHeight=${dockHeight};
-      const properties={};
-      const workspace={offsetHeight:height>width?1320:1020,style:{setProperty(k,v){properties[k]=Number(v);}}};
-      root={clientWidth:width,clientHeight:height,closest:()=>({}),querySelector(s){
-        return s==='.manual-art-workspace'?workspace:{offsetHeight:dockHeight};
-      }};
-      fitTrainingScene();
-    `);
-    const {scale,top,designWidth,contentHeight}=f.run(`({scale:properties['--manual-scene-scale'],top:parseFloat(workspace.style.top),designWidth:parseFloat(workspace.style.width),contentHeight:workspace.offsetHeight})`);
-    assert(scale>0);
-    assert(designWidth*scale<=width*.96+.01);
-    assert(top+contentHeight*scale<=height-dockHeight-8+.01);
-  }
-});
 test('weapon picker opens once, closes without page movement, and restores its equipment button',()=>{
   const f=fixture();
   f.run(`

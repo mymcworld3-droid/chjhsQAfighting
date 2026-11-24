@@ -11,7 +11,6 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 const Catalog=globalThis.QAManuals;
 let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',selectedSkillId=null,pickerSlot=null,libraryFilter='all',celebrationTimer=null;
 let trainingDialogOpen=false,trainingDialogTrigger=null,pickerDialogTrigger=null;
-let sceneResizeObserver=null,sceneFitFrame=0;
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -90,7 +89,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-art-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-fit-scene-v5';
+    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-scroll-scene-v6';
     document.head.append(link);
   }
   if(!document.getElementById('scene-art-shell-style')){
@@ -98,35 +97,7 @@ function ensure(){
     link.id='scene-art-shell-style';link.href='/styles/scene-art-shell.css?v=20261124-shared-shell-v1';
     document.head.append(link);
   }
-  if(!sceneResizeObserver&&typeof ResizeObserver!=='undefined'){
-    sceneResizeObserver=new ResizeObserver(scheduleSceneFit);
-    sceneResizeObserver.observe(page);
-    sceneResizeObserver.observe(root);
-  }
   return root;
-}
-// Fit the complete collection and equipment together. Dialogs live in the
-// browser top layer, so their readable controls do not inherit this scale.
-function fitTrainingScene(){
-  sceneFitFrame=0;
-  const workspace=root?.querySelector('.manual-art-workspace');
-  const dock=root?.querySelector('.manual-art-navigation');
-  if(!workspace||!visible())return;
-  const width=root.clientWidth,height=root.clientHeight;
-  if(!width||!height)return;
-  const portrait=height>width;
-  const designWidth=portrait?900:1600;
-  workspace.style.width=designWidth+'px';
-  const top=Math.min(height*.14,width*(portrait ? .21 : .085));
-  const bottom=(dock?.offsetHeight||0)+8;
-  const availableHeight=Math.max(1,height-top-bottom);
-  const scale=Math.min(width*.96/designWidth,availableHeight/workspace.offsetHeight);
-  workspace.style.setProperty('--manual-scene-scale',String(scale));
-  workspace.style.top=top+'px';
-}
-function scheduleSceneFit(){
-  if(sceneFitFrame)return;
-  sceneFitFrame=requestAnimationFrame(fitTrainingScene);
 }
 function closeWeaponPicker({restoreFocus=true}={}){
   const trigger=pickerDialogTrigger;
@@ -322,9 +293,6 @@ function paint(message='',{loadoutFeedback=false}={}){
   renderedFor=loadedFor;
   syncTrainingDialog();
   syncWeaponPicker();
-  const workspace=root.querySelector('.manual-art-workspace');
-  if(workspace)sceneResizeObserver?.observe(workspace);
-  scheduleSceneFit();
   const dialogStatus=root.querySelector('[data-manual-dialog-status]');
   if(dialogStatus)dialogStatus.textContent=message;
   const status=root.querySelector('[data-manual-status]');
@@ -452,11 +420,8 @@ function boot(){
     if(!visible()){
       if(trainingDialogOpen)closeTrainingDialog({restoreFocus:false});
       closeWeaponPicker({restoreFocus:false});
-    }else scheduleSceneFit();
+    }
   }).observe(trainingPage,{attributes:true,attributeFilter:['class','hidden']});
-  window.addEventListener('resize',scheduleSceneFit);
-  root?.addEventListener('load',scheduleSceneFit,true);
-  document.fonts?.ready.then(scheduleSceneFit);
   root?.addEventListener('click',event=>{
     const dialog=root?.querySelector('[data-manual-training-dialog]');
     if(event.target.closest('[data-manual-close-training]')){closeTrainingDialog();return;}
