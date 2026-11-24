@@ -76,6 +76,10 @@ async function main(){
     await page.locator('[data-manual-browse-weapon="next"]').click();
     await page.locator('.manual-focus-skill[data-manual-skill="rock-fist"]').waitFor();
     await page.locator('[data-manual-browse-weapon="prev"]').click();
+    assert.equal(await page.locator('.manual-modal-dock').isVisible(),true);
+    await page.locator('[data-manual-return-collection]').click();
+    assert.equal(await page.locator('[data-manual-training-dialog]').isVisible(),false);
+    await library.locator('[data-manual-book="sword-wind"] .manual-library-choice').click();
     await page.locator('[data-manual-jump-skill="wind-slash"]').click();
     await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
     assert.equal(await page.locator('.manual-focus-skill').count(),1);

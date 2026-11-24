@@ -64,7 +64,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
       !skill.mastered?`${weaponMode?'武器':'功法'} Lv. ${skill.levelRequired}`:null
     ].filter(Boolean).join(' · ');
     const detail=unlocked?
-      `招式 Lv. ${fmt(skill.level)} · ${fmt(skill.cost)} 體力`:
+      `${weaponMode?'Lv. '+fmt(skill.level)+'/5':'招式 Lv. '+fmt(skill.level)} · ${fmt(skill.cost)} 體力`:
       (missing||'尚未符合解鎖條件');
     const art=skillArt(skill);
     const artMarkup=art
@@ -98,7 +98,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
   </div>`:'';
   return {
     bookId:book.id,
-    html:`<section class="manual-hero ${weaponMode?'manual-hero--weapon-layout':''} manual-hero--${book.school} manual-hero--tier-${visual.stage} ${near?'manual-hero--approaching':''} ${anticipation?.status==='imminent'?'manual-hero--imminent':''}"
+    html:`<section class="manual-hero${weaponMode?' manual-hero--weapon-layout':''} manual-hero--${book.school} manual-hero--tier-${visual.stage} ${near?'manual-hero--approaching':''} ${anticipation?.status==='imminent'?'manual-hero--imminent':''}"
       data-manual-visual-stage="${visual.stage}" data-manual-visual-level="${visual.level}"
       aria-label="武器修煉焦點">
       ${heading}
@@ -141,8 +141,10 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
         </div>
       </div>
       <div class="manual-hero-path">
+        ${weaponMode?'<div class="manual-hero-skills-panel">':''}
         <div class="manual-hero-path-heading"><strong>${weaponMode?'武器技能（'+book.skills.filter(s=>s.unlocked).length+'/'+book.skills.length+'）':'三招修行路線'}</strong><small>點選招式查看詳細效果與強化選項</small></div>
         <div class="manual-hero-path-grid">${steps}</div>
+        ${weaponMode?'</div>':''}
         ${renderManualSkillDetail(book,selectedSkillId,{esc,skillArt,descriptionWithDamage,attack,
           gold:state.gold,equipped,moveIdOf,weaponIds:weaponMode?state.weaponIds:null})}
       </div>

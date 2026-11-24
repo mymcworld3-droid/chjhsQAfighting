@@ -89,7 +89,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-art-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-jade-layout-v1';
+    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-jade-layout-v2';
     document.head.append(link);
   }
   if(!document.getElementById('scene-art-shell-style')){
@@ -187,7 +187,12 @@ function markup(){
         <p>只有以武器技能完成擊殺才能獲得熟練經驗；招式依武器 Lv.1／5／10 解鎖，不受修士境界限制。</p>
       </details>
       <div class="manual-status" data-manual-dialog-status role="status" aria-live="polite"></div>
-    </div></dialog>`:hero;
+    </div><nav class="manual-modal-dock" aria-label="修煉視窗底部導覽"><div>
+      <button type="button" data-manual-return-collection aria-current="page" aria-label="返回武器收藏"><i class="fa-solid fa-khanda" aria-hidden="true"></i><span>修行</span></button>
+      <button type="button" data-training-page="page-gameplay"><i class="fa-solid fa-mountain" aria-hidden="true"></i><span>歷練</span></button>
+      <button type="button" data-training-page="page-social"><i class="fa-solid fa-torii-gate" aria-hidden="true"></i><span>仙盟</span></button>
+      <button type="button" data-training-page="page-store"><i class="fa-solid fa-store" aria-hidden="true"></i><span>商城</span></button>
+    </div></nav></dialog>`:hero;
   const cards=filterOwnedManuals(current,libraryFilter).map(book=>
     `<article class="manual-book ${book.school==='sword'?'is-sword':'is-body'} ${book.id===featuredBookId?'is-featured':''}"
        data-manual-book="${esc(book.id)}">
@@ -424,7 +429,7 @@ function boot(){
   }).observe(trainingPage,{attributes:true,attributeFilter:['class','hidden']});
   root?.addEventListener('click',event=>{
     const dialog=root?.querySelector('[data-manual-training-dialog]');
-    if(event.target.closest('[data-manual-close-training]')){closeTrainingDialog();return;}
+    if(event.target.closest('[data-manual-close-training], [data-manual-return-collection]')){closeTrainingDialog();return;}
     if(event.target===dialog){
       const rect=dialog.getBoundingClientRect();
       if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom){
@@ -507,8 +512,7 @@ function boot(){
       return;
     }
     if(button.dataset.manualBrowseWeapon){
-      const books=filterOwnedManuals(current,libraryFilter);
-      const list=books.some(b=>b.id===featuredBookId)?books:filterOwnedManuals(current);
+      const list=filterOwnedManuals(current);
       const at=list.findIndex(b=>b.id===featuredBookId);
       if(at<0||list.length<2)return;
       const next=list[(at+(button.dataset.manualBrowseWeapon==='prev'?-1:1)+list.length)%list.length];
