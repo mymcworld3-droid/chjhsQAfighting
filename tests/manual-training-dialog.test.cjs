@@ -21,7 +21,7 @@ test('owned weapon training appears only inside an initially closed dialog',()=>
   const dialog=html.match(/<dialog\b[\s\S]*?<\/dialog>/)?.[0];
   assert(dialog);assert.match(dialog,/manual-hero/);assert.match(dialog,/expedition/);
   assert.doesNotMatch(dialog,/\bopen(?:\s|=|>)/);
-  assert.doesNotMatch(html.replace(dialog,''),/manual-hero|expedition/);
+  assert.doesNotMatch(html.replace(dialog,''),/manual-hero|expedition|manual-xp-reference/);
   assert.match(html.replace(dialog,''),/equipment/);
 });
 test('opening is modal, data refresh keeps it open, and close restores collection focus',()=>{
@@ -61,4 +61,36 @@ test('upgrade celebrations share the native training dialog top layer and return
   assert.match(f.run('host.innerHTML'),/繼續修煉/);
   f.run("dialog.open=false;showManualCelebration({kind:'discovery'});");
   assert.equal(f.run('host.parentElement===root'),true);
+});
+
+test('the full collection and both equipment rows fit above the dock in either orientation',()=>{
+  for(const [width,height,dockHeight] of [[1672,941,150],[1180,820,113],[768,1024,110],[393,852,95],[852,393,82]]){
+    const f=fixture();
+    f.run(`
+      const width=${width},height=${height},dockHeight=${dockHeight};
+      const properties={};
+      const workspace={offsetHeight:height>width?1320:1020,style:{setProperty(k,v){properties[k]=Number(v);}}};
+      root={clientWidth:width,clientHeight:height,closest:()=>({}),querySelector(s){
+        return s==='.manual-art-workspace'?workspace:{offsetHeight:dockHeight};
+      }};
+      fitTrainingScene();
+    `);
+    const {scale,top,designWidth,contentHeight}=f.run(`({scale:properties['--manual-scene-scale'],top:parseFloat(workspace.style.top),designWidth:parseFloat(workspace.style.width),contentHeight:workspace.offsetHeight})`);
+    assert(scale>0);
+    assert(designWidth*scale<=width*.96+.01);
+    assert(top+contentHeight*scale<=height-dockHeight-8+.01);
+  }
+});
+test('weapon picker opens once, closes without page movement, and restores its equipment button',()=>{
+  const f=fixture();
+  f.run(`
+    let opened=0,closed=0,focusOptions=null;
+    const picker={open:false,showModal(){this.open=true;opened++;},close(){this.open=false;closed++;}};
+    root={querySelector:()=>picker,closest:()=>({})};
+    pickerDialogTrigger={isConnected:true,focus(options){focusOptions=options;}};
+    pickerSlot=1;syncWeaponPicker();syncWeaponPicker();closeWeaponPicker();
+  `);
+  assert.equal(f.run('opened'),1);assert.equal(f.run('closed'),1);
+  assert.equal(f.run('pickerSlot'),null);
+  assert.equal(f.run('focusOptions.preventScroll'),true);
 });

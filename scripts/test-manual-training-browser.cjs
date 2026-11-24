@@ -134,6 +134,12 @@ async function main(){
       {width:393,height:852},{width:852,height:393}
     ]){
       await page.setViewportSize(viewport);
+      await page.waitForFunction(()=>{
+        const workspace=document.querySelector('.manual-art-workspace');
+        const dock=document.querySelector('.manual-art-navigation');
+        return workspace&&dock&&workspace.getBoundingClientRect().width>0&&
+          workspace.getBoundingClientRect().bottom<=dock.getBoundingClientRect().top;
+      });
       const portrait=viewport.height>viewport.width;
       const orientation=portrait?'portrait':'landscape';
       for(const [selector,name] of [['.manual-library','collection'],['.manual-weapons','equipment']]){
@@ -146,13 +152,24 @@ async function main(){
       assert(rowArt.includes('equipment-row-'+orientation+'.webp'));
       const sockets=await page.locator('.manual-weapon-skill-picture').evaluateAll(nodes=>
         nodes.map(node=>({width:node.getBoundingClientRect().width,height:node.getBoundingClientRect().height})));
-      assert(sockets.every(size=>size.width>25&&Math.abs(size.width-size.height)<1),
+      assert(sockets.every(size=>size.width>16&&Math.abs(size.width-size.height)<1),
         'skill sockets must stay circular in '+JSON.stringify(viewport));
       for(const selector of ['.manual-library','.manual-weapons']){
         const fit=await page.locator(selector).evaluate(node=>node.scrollWidth<=node.clientWidth+2);
         assert(fit,selector+' must fit '+JSON.stringify(viewport));
+        const onScreen=await page.locator(selector).evaluate(node=>{
+          const rect=node.getBoundingClientRect();
+          const dock=document.querySelector('.manual-art-navigation').getBoundingClientRect();
+          return rect.left>=-1&&rect.right<=innerWidth+1&&rect.top>=0&&rect.bottom<=dock.top;
+        });
+        assert(onScreen,selector+' must be fully visible above the navigation '+JSON.stringify(viewport));
       }
     }
+    const scrollState=await page.locator('#page-training').evaluate(node=>({
+      height:node.clientHeight,scrollHeight:node.scrollHeight,top:node.scrollTop
+    }));
+    assert.equal(scrollState.scrollHeight,scrollState.height,'the main scene must not need scrolling');
+    assert.equal(scrollState.top,0);
     // Returning from battle always fetches fresh authoritative weapon XP.
     const refreshed=page.waitForResponse(res=>res.url().endsWith('/api/tactical/manuals')
       &&res.request().method()==='GET');

@@ -195,9 +195,9 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
       '</div></div>';
   }).join('');
   const picked=Number.isInteger(pickerSlot)&&pickerSlot>=0&&pickerSlot<2;
-  const chooser=picked?'<div class="manual-picker manual-weapon-picker" data-manual-picker>'+
+  const chooser=picked?'<dialog class="manual-picker manual-weapon-picker" data-manual-picker data-manual-weapon-dialog aria-label="選擇第'+(pickerSlot+1)+'欄武器">'+
     '<div class="manual-picker-heading"><div><span class="manual-picker-eyebrow">武器庫 · 第 '+(pickerSlot+1)+' 欄</span>'+
-    '<h4>選擇已持有的劍或圖騰</h4></div><button type="button" class="manual-picker-close" data-manual-close-picker>收起</button></div>'+
+    '<h4>選擇已持有的劍或圖騰</h4></div><button type="button" class="manual-picker-close" data-manual-close-picker autofocus>關閉</button></div>'+
     '<p class="manual-picker-hint">每種武器只能裝備一次；各武器的三招會隨熟練等級自動開放。</p>'+
     '<div class="manual-weapon-choice-grid">'+owned.map(book=>{
       const inSlot=slots.indexOf(book.id),chosen=inSlot===pickerSlot;
@@ -207,7 +207,7 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
         '<span><strong>'+esc(book.name)+'</strong><small>'+esc(book.weaponType==='totem'?'圖騰':'劍')+
         ' · Lv. '+book.level+' · '+book.skills.filter(s=>s.unlocked).length+'/3 招</small></span>'+
         '<em>'+ (chosen?'目前裝備':inSlot>=0?'已裝備於第 '+(inSlot+1)+' 欄':'裝備')+'</em></button>';
-    }).join('')+'</div></div>':'';
+    }).join('')+'</div></dialog>':'';
   return '<section class="manual-loadout manual-weapons" aria-label="兩把武器裝備">'+
     '<span class="manual-panel-body" aria-hidden="true"></span>'+
     '<div class="manual-deck-heading"><div><span class="manual-deck-kicker">戰前準備 · WEAPON LOADOUT</span>'+
@@ -215,5 +215,5 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
     '</div>'+
     '<div class="manual-weapon-grid">'+cards+'</div>'+
     '<div class="manual-deck-feedback" data-manual-loadout-status role="status" aria-live="polite"></div>'+
-    chooser+'</section>';
+    '</section>'+chooser;
 }
