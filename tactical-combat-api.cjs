@@ -444,10 +444,10 @@ async function settle(tx,db,s,userOverrides={}){
        currentRoomId(pointer,'weapon-dungeon')===s.id&&!s.actors.some(enemy=>enemy.bot&&Rules.alive(enemy))){
       const dungeon=WeaponDungeons.progress(pointer?.weaponDungeonV1,s.updatedAtMs);
       const index=s.weaponDungeon.difficulty;
-      dungeon.clears[index]++;dungeon.unlocked=Math.max(dungeon.unlocked,Math.min(5,index+1));
+      const clearedProgress=WeaponDungeons.recordClear(dungeon,s.weaponDungeon.id||WeaponDungeons.ID,index);
       tx.set(db.collection(PLAYERS).doc(a.uid),{...pointer,weaponDungeonV1:dungeon});
       const drop=WeaponDungeonRewards.roll(s,a.uid,manuals);manualChanged=manualChanged||!!drop;
-      s.weaponDungeonResult={cleared:true,difficulty:index,unlocked:dungeon.unlocked,tickets:dungeon.tickets,drop};
+      s.weaponDungeonResult={cleared:true,difficulty:index,unlocked:clearedProgress.unlocked,tickets:dungeon.tickets,drop};
     }
     if(manualChanged)tx.set(manualRef,manuals);
     if(reward){patch['stats.gold']=Rules.num(u.stats?.gold)+reward.gold;patch['stats.totalScore']=Rules.num(u.stats?.totalScore)+reward.cultivation;}
@@ -475,7 +475,8 @@ async function weaponDungeonState(db,uid,now=Date.now()){
     tx.set(ref,{...pointer,weaponDungeonV1:progress});
     return {...progress,dungeonId:WeaponDungeons.ID,name:WeaponDungeons.NAME,dailyTickets:3,maxTickets:5,
       difficulties:WeaponDungeons.DIFFICULTIES.map(d=>({...d,locked:d.index>progress.unlocked,nextRealm:WeaponDungeons.DIFFICULTIES[d.index+1]?.name||'真仙'})),
-      active:room?.status==='active'&&room.weaponDungeon?{roomId:room.id,difficulty:room.weaponDungeon.difficulty}:null};
+      dungeons:WeaponDungeons.catalog(progress),
+      active:room?.status==='active'&&room.weaponDungeon?{roomId:room.id,dungeonId:room.weaponDungeon.id||WeaponDungeons.ID,difficulty:room.weaponDungeon.difficulty}:null};
   });
 }
 async function start(db,uid,selection={},now=Date.now()){
@@ -506,12 +507,12 @@ async function start(db,uid,selection={},now=Date.now()){
     const dungeonProgress=weapon?WeaponDungeons.progress(pointer.weaponDungeonV1,now):null;
     const receipt=weapon?(pointer.weaponDungeonStarts||[]).find(row=>row.requestId===startRequest):null;
     if(receipt){
-      if(receipt.difficulty!==dungeonChoice.difficulty)throw error('挑戰識別碼已用於另一個難度',409);
+      if((receipt.dungeonId||WeaponDungeons.ID)!==dungeonChoice.id||receipt.difficulty!==dungeonChoice.difficulty)throw error('挑戰識別碼已用於另一個難度',409);
       const replay=exists(await tx.get(db.collection(ROOMS).doc(receipt.roomId)));
       if(!replay||roomChannel(replay)!==channel)throw error('原挑戰紀錄已失效',409);
       return snapshot(replay,uid);
     }
-    if(weapon&&dungeonChoice.difficulty>dungeonProgress.unlocked)throw error('請先通過前一個難度',403);
+    if(weapon&&dungeonChoice.difficulty>WeaponDungeons.progressFor(dungeonProgress,dungeonChoice.id).unlocked)throw error('請先通過前一個難度',403);
     const stored=priorId?exists(await tx.get(db.collection(ROOMS).doc(priorId))):null;
     // A legacy account may only have roomId. The first weapon dungeon must
     // retain that unfinished trial before replacing the legacy last-room pointer.
@@ -522,7 +523,7 @@ async function start(db,uid,selection={},now=Date.now()){
     const roomIds={...pointer.roomIds,...(legacy?{[roomChannel(legacy)]:legacy.id}:{}),...(stored?{[roomChannel(stored)]:stored.id}:{})};
     const campaign=trialProgress(pointer.trial,seed);
     if(prior?.status==='active'){
-      if(weapon&&prior.weaponDungeon.difficulty!==dungeonChoice.difficulty)throw error('已有進行中的武器副本，請先完成或離場',409);
+      if(weapon&&((prior.weaponDungeon.id||WeaponDungeons.ID)!==dungeonChoice.id||prior.weaponDungeon.difficulty!==dungeonChoice.difficulty))throw error('已有進行中的武器副本，請先完成或離場',409);
       // Resume old unfinished trials without moving actors or discarding a question.
       let changed=false;
       if(prior.mode==='pve'&&!prior.trial){
@@ -561,7 +562,7 @@ async function start(db,uid,selection={},now=Date.now()){
     if(prior?.status==='waiting'&&prior.id!==s.id)tx.set(db.collection(ROOMS).doc(prior.id),Rules.forfeit(prior,uid,now));
     tx.set(db.collection(ROOMS).doc(s.id),s);tx.set(pointerRef,{...pointer,roomId:s.id,roomIds:{...roomIds,[channel]:s.id},...(mode==='pve'&&!weapon?{trial:campaign}:{}),
       ...(weapon?{weaponDungeonV1:{...dungeonProgress,tickets:dungeonProgress.tickets-1},
-        weaponDungeonStarts:[...(pointer.weaponDungeonStarts||[]),{requestId:startRequest,roomId:s.id,difficulty:dungeonChoice.difficulty}].slice(-32)}:{})});
+        weaponDungeonStarts:[...(pointer.weaponDungeonStarts||[]),{requestId:startRequest,roomId:s.id,dungeonId:dungeonChoice.id,difficulty:dungeonChoice.difficulty}].slice(-32)}:{})});
     const preferences={['tacticalPreferences.'+a.core]:a.branch,...(mode==='pve'&&!weapon?{tacticalTrialV1:campaign}:{})};
     tx.update(userRef,preferences);return snapshot(s,uid);
   });

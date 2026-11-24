@@ -571,7 +571,7 @@
     return Math.round(base+Math.max(0,scaledHp-base)*scale);
   }
   function create({id,mode='pve',map='courtyard',players,trial=null,simultaneous=mode==='pvp',now=Date.now()}){
-    const layout=mode==='pve'&&trial?.weaponDungeon?weaponDungeons().layout(trial.seed,trial.weaponDungeon.difficulty):
+    const layout=mode==='pve'&&trial?.weaponDungeon?weaponDungeons().layout(trial.seed,trial.weaponDungeon.difficulty,trial.weaponDungeon.id||weaponDungeons().ID):
       mode==='pve'&&trial&&trial.layoutVersion!==0?stageLayout(trial.seed,trial.stage,trial.layoutVersion??2):null;
     const m=layout||mapFor(map),mid=Math.floor(m.height/2);
     const s={version:1,id,mode,map:m.id,width:m.width,height:m.height,terrain:m.terrain,
@@ -687,7 +687,7 @@
       log(s,'守衛石陣庇護領主：請先清除其他靈獸','guard',{actor:target.uid});return 0;
     }
     const manual=manuals()?.BY_BOOK?.[opts.manualId||manuals()?.BY_SKILL?.[opts.skill]?.manualId];
-    if(s.weaponDungeon&&!source.bot&&target.bot&&manual?.weaponType==='totem')raw*=1.15;
+    if(s.weaponDungeon&&!source.bot&&target.bot&&manual?.weaponType==='totem')raw*=s.weaponDungeon.totemDamageMultiplier??1.15;
     const active=s.trial?.layoutVersion===4&&s.objective?.type==='sealing'?s.objective.points.filter(p=>!p.activated):[];
     if(source.bot&&active.some(p=>p.kind==='rage'&&dist(p,source)<=SEAL_TYPES.rage.range.radius))raw*=SEAL_TYPES.rage.damageMultiplier;
     if(target.bot&&active.some(p=>p.kind==='shield'&&dist(p,target)<=SEAL_TYPES.shield.range.radius)&&!opts.pierce)raw*=SEAL_TYPES.shield.damageMultiplier;
