@@ -68,7 +68,7 @@
 #weapon-dungeons-dialog .wd-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;min-height:170px;margin-top:15px;border:1px solid #ad956688;border-radius:12px;padding:19px;background:#263e32;text-shadow:0 2px 6px #000}
 #weapon-dungeons-dialog .wd-hero h3{font-size:clamp(25px,4vw,38px);letter-spacing:.15em}
 #weapon-dungeons-dialog .wd-hero p{color:#eee7d4}
-#weapon-dungeons-dialog .wd-emblem{width:90px;height:100px;flex:none;background:center/contain no-repeat url('/assets/weapons/body-rock-hd.webp');filter:drop-shadow(0 4px 6px #000)}
+#weapon-dungeons-dialog .wd-emblem{width:90px;height:100px;flex:none}#weapon-dungeons-dialog .wd-stone .wd-emblem{background:center/contain no-repeat url('/assets/weapons/body-rock-hd.webp');filter:drop-shadow(0 4px 6px #000)}
 #weapon-dungeons-dialog .wd-detail-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-top:12px}
 #weapon-dungeons-dialog .wd-panel{padding:13px;border:1px solid #a9956b44;border-radius:10px;background:#192b23}
 #weapon-dungeons-dialog .wd-panel ol{margin:8px 0 0;padding-left:19px;color:#c3d0c6;font-size:12px;line-height:1.7}

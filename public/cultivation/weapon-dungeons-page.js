@@ -15,9 +15,9 @@ function ensure(){
     if(event.target.closest('[data-wd-close]')){dialog.close();return;}
     if(event.target===dialog){const b=dialog.getBoundingClientRect();if(event.clientX<b.left||event.clientX>b.right||event.clientY<b.top||event.clientY>b.bottom)dialog.close();return;}
     if(loading||!data)return;
-    if(event.target.closest('[data-wd-back]')){selectedId=null;paint();return;}
+    if(event.target.closest('[data-wd-back]')){selectedId=null;paint();dialog.querySelector?.('[data-wd-dungeon]')?.focus();return;}
     const card=event.target.closest('[data-wd-dungeon]');
-    if(card&&catalog().some(d=>d.id===card.dataset.wdDungeon)){selectedId=card.dataset.wdDungeon;paint();return;}
+    if(card&&catalog().some(d=>d.id===card.dataset.wdDungeon)){selectedId=card.dataset.wdDungeon;paint();dialog.querySelector?.('#weapon-dungeons-title')?.focus();return;}
     const button=event.target.closest('[data-wd-difficulty]');
     if(!button||button.disabled||!selected())return;
     void enter(Number(button.dataset.wdDifficulty));
@@ -48,7 +48,7 @@ function detail(d){
 }
 function paint(message=''){
   const d=selected();
-  dialog.innerHTML=`<header><div class="wd-heading">${d?'<button type="button" data-wd-back aria-label="返回秘境選擇">‹</button>':''}<div><small>青雲問道 / 玩法 / 武器副本</small><h2 id="weapon-dungeons-title">${d?esc(d.name):'武器秘境'}</h2></div></div><button type="button" data-wd-close aria-label="關閉武器副本">×</button></header>
+  dialog.innerHTML=`<header><div class="wd-heading">${d?'<button type="button" data-wd-back aria-label="返回秘境選擇">‹</button>':''}<div><small>青雲問道 / 玩法 / 武器副本</small><h2 id="weapon-dungeons-title" tabindex="-1">${d?esc(d.name):'武器秘境'}</h2></div></div><button type="button" data-wd-close aria-label="關閉武器副本">×</button></header>
     <div class="wd-body"><div class="wd-tickets"><div><strong>副本券 ${data?esc(data.tickets)+' / '+esc(data.maxTickets||5):'同步中'}</strong><div class="wd-ticket-pips" aria-hidden="true">${Array.from({length:5},(_,i)=>'<i class="'+(data&&i<data.tickets?'filled':'')+'"></i>').join('')}</div></div><span>每日補發 3 張 · 最多持有 5 張<br>臺灣時間 00:00</span></div>
     ${data?.active?'<div class="wd-active">已有進行中的挑戰，續戰不耗券；完成或離場後才能開啟其他挑戰。</div>':''}
     ${d?detail(d):`<div class="wd-section-heading"><h3>尋訪秘境</h3><span>${catalog().length} 座開放</span></div><p>選擇秘境，探索不同戰鬥法則，挑戰更高境界並尋找武器。</p><div class="wd-catalog">${catalog().map(card).join('')}<div class="wd-coming"><span aria-hidden="true">◇</span><strong>群山之外</strong><small>更多秘境尚待開放</small></div></div>`}

@@ -736,6 +736,16 @@ export class TacticalRenderer{
       if(!this.sprite('ground',t%4*128,Math.floor(t/4)*128,128,128,px,py,edgeX-px,edgeY-py)){c.fillStyle=(x+y)%2?'#5b6650':'#5f6b53';c.fillRect(px,py,edgeX-px,edgeY-py);}
       c.strokeStyle='#10291b30';c.lineWidth=.7;c.strokeRect(px,py,edgeX-px,edgeY-py);
     }
+    // Stone gate inscriptions are strictly decorative, below combat telegraphs.
+    if(s.weaponDungeon?.id==='peak-stone'&&s.trial?.structure==='three-stone-gates'){
+      c.save();c.strokeStyle='#dec69755';c.lineWidth=Math.max(1,cell*.035);
+      for(const row of [16,10,4]){
+        const x=ox+6.5*cell,y=oy+(row+.5)*cell;
+        c.beginPath();c.moveTo(x-cell*1.12,y);c.lineTo(x,y-cell*.31);c.lineTo(x+cell*1.12,y);c.lineTo(x,y+cell*.31);c.closePath();c.stroke();
+        c.beginPath();c.arc(x,y,cell*.20,0,Math.PI*2);c.stroke();
+      }
+      c.restore();
+    }
     // Ambience is painted behind tactical ranges, red warnings and actors.
     // It cannot conceal danger telegraphs or create deceptive walkable tiles.
     const ambienceActive=s.mode==='pve'&&!this.preview&&!!this.ambience;

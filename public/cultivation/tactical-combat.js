@@ -713,7 +713,7 @@ function updateWheelChoices(container,options,selected,moveCost,hero,locked){
       cost>hero.stamina?'體力不足，還需要 '+(cost-hero.stamina)+' 點':'';
     button.disabled=locked;
     button.setAttribute('aria-pressed',String(option.value===selected));
-    const description=option.skill?Manuals.descriptionWithDamage(hero.atk*(state?.weaponDungeon&&option.skill?.school==='body'?1.15:1),option.skill,
+    const description=option.skill?Manuals.descriptionWithDamage(hero.atk*(state?.weaponDungeon&&option.skill?.school==='body'?(state.weaponDungeon.totemDamageMultiplier??1.15):1),option.skill,
       {flyingSwordReady:!!hero.flyingSword}):'';
     button.setAttribute('aria-label',option.name+'，'+price+
       (description?'。'+description:'')+(unavailable?'，'+unavailable:''));
@@ -1229,6 +1229,8 @@ function paint({preserveModal=false}={}){
   objectiveNode.hidden=!objective;
   if(objective){
     const living=state.actors.filter(a=>a.bot&&a.hp>0).length;
+    const guards=state.weaponDungeon?state.actors.filter(a=>a.bot&&a.hp>0&&!a.weaponDungeonLord).length:0;
+    const tracking=state.weaponDungeon?state.actors.filter(a=>a.bot&&a.hp>0&&a.intent?.tracking&&a.intent.kind==='attack'&&a.intent.cells?.some(p=>p.x===me.x&&p.y===me.y)).length:0;
     const label=state.trial?.variant?.includes('breakthrough')?'突圍運送':objective.item?'尋物運送':'運送';
     // Keep the battlefield objective summary in sync with the server's seal metadata.
     const sealEffects=[...new Set((objective.points||[]).filter(p=>!p.activated)
@@ -1236,7 +1238,7 @@ function paint({preserveModal=false}={}){
     const text=objective.type==='transport'?(objective.carrying?`${label} · 將靈物送至交付點`:`${label} · 先取得靈物`):
       objective.type==='defense'?`鎮守 · ${objective.completedRounds} / ${objective.rounds} 回合 · 靈陣 ${objective.hp} / ${objective.maxHp}`:
       objective.type==='sealing'?`封印 · ${objective.points.filter(p=>p.activated).length} / ${objective.points.length} 陣眼${state.trial?.layoutVersion===4?' · 攻擊陣眼'+(sealEffects?' · '+sealEffects:''):''}`:
-      objective.type==='boss'?'首領 · 擊敗大型靈獸':state.weaponDungeon?`尖峰石域 · 剩餘 ${living} 隻 · 圖騰 +15% · 預攻擊會追蹤`:`討伐 · 剩餘 ${living} 隻靈獸`;
+      objective.type==='boss'?'首領 · 擊敗大型靈獸':state.weaponDungeon?`${state.weaponDungeon.name} · ${guards?'破陣：剩餘 '+guards+' 名守衛':living?'領主決戰':'秘境已征服'} · ${tracking?'危險：'+tracking+' 道追蹤落石':'圖騰 +'+Math.round(((state.weaponDungeon.totemDamageMultiplier??1.15)-1)*100)+'%'}`:`討伐 · 剩餘 ${living} 隻靈獸`;
     objectiveNode.textContent=objective.completed&&!me.answered?'目標完成 · 請先作答一題':text;
   }
   $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.bot?`<small>${Manuals.realmForStage(a.level).name}境 · 功法 +${Manuals.expForBeast(a.level)} EXP</small>`:''}${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
@@ -1339,7 +1341,7 @@ function updateControls(){
     if(!error&&!affected.some(p=>p.x===selectedSeal.x&&p.y===selectedSeal.y))
       error='此招式不會命中所選陣眼，請改選能覆蓋陣眼的攻擊方向';
   }
-  const description=Manuals.descriptionWithDamage(me.atk*(state?.weaponDungeon&&shown?.school==='body'?1.15:1),shown,
+  const description=Manuals.descriptionWithDamage(me.atk*(state?.weaponDungeon&&shown?.school==='body'?(state.weaponDungeon.totemDamageMultiplier??1.15):1),shown,
     {flyingSwordReady:!!me.flyingSword});
   $('[data-skill-title]').textContent=action==='move'||action==='sword-move'?'移動說明':
     `${shown.name} · ${cost} 體力`;
@@ -1472,7 +1474,7 @@ function showBeastDemo(species){
   showModal('<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="'+esc(beast.name)+
     '" style="background-position:'+(species%5/4*100)+'% '+(Math.floor(species/5)/3*100)+'%"></div>'+
     '<div><small>戰場靈獸 · 招式資料</small><h2>'+esc(beast.name)+'</h2>'+
-    '<small>'+(state.weaponDungeon?'尖峰石域 · '+esc(state.weaponDungeon.realm):'第 '+beast.unlockStage+' 關起登場')+'</small></div></div>'+
+    '<small>'+(state.weaponDungeon?esc(state.weaponDungeon.name)+' · '+esc(state.weaponDungeon.realm):'第 '+beast.unlockStage+' 關起登場')+'</small></div></div>'+
     '<div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>'+esc(beast.attackName)+'</h3>'+
     '<p>'+esc(beast.attackText)+'</p></section>'+
     '<figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b>'+
@@ -1492,7 +1494,7 @@ function showBeastDemo(species){
 function showEnemyIntro(error=''){
   const species=state.newEnemies[0],encounter=state.actors.find(a=>a.bot&&a.species===species),p=encounter?.trackingAttack?R.monsterProfileFor(encounter):R.monsterProfile(species),remaining=state.newEnemies.length,
     beastRealm=Manuals.realmForStage(state.trial?.stage||1);
-  showModal(`<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="${esc(p.name)}" style="background-position:${species%5/4*100}% ${Math.floor(species/5)/3*100}%"></div><div><small>初遇妖獸${state.weaponDungeon?' · 尖峰石域':state.trial?' · 第 '+state.trial.stage+' 關':''}</small><h2>${esc(p.name)}</h2><p>${beastRealm.name}境 · 功法擊殺 +${beastRealm.exp} EXP</p><small>${state.weaponDungeon?'尖峰石域專屬招式':'第 '+p.unlockStage+' 關起登場'}</small></div></div><div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>${esc(p.attackName)}</h3><p>${esc(p.attackText)}</p></section><figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b><span data-demo-mode>自動循環</span></div><canvas role="img" aria-label="${esc(p.name)}的移動、命中與閃避模擬" data-demo-species="${species}"></canvas><figcaption data-demo-caption role="status" aria-live="polite"></figcaption><div class="tc-demo-tools"><span>紅框：攻擊預告 · 金圈：修士</span><button type="button" data-demo-toggle>暫停</button><button type="button" data-demo-next hidden>下一步</button><button type="button" data-demo-replay>重播</button></div></figure><dl class="tc-enemy-details"><dt>移動</dt><dd>${esc(p.moveText)}</dd><dt>應對</dt><dd>${esc(p.tip)}</dd></dl></div><p class="tc-enemy-error" role="alert" ${error?'':'hidden'}>${esc(error)}</p><div class="tc-enemy-footer"><button type="button" class="tc-primary" data-intro-ack ${busy?'disabled':''}>${remaining>1?'記住招式 · 下一種（'+(remaining-1)+'）':'記住招式 · 開始行動'}</button><button type="button" data-exit>收起試煉</button></div>`,{encounter:true});
+  showModal(`<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="${esc(p.name)}" style="background-position:${species%5/4*100}% ${Math.floor(species/5)/3*100}%"></div><div><small>初遇妖獸${state.weaponDungeon?' · '+esc(state.weaponDungeon.name):state.trial?' · 第 '+state.trial.stage+' 關':''}</small><h2>${esc(p.name)}</h2><p>${beastRealm.name}境 · 功法擊殺 +${beastRealm.exp} EXP</p><small>${state.weaponDungeon?esc(state.weaponDungeon.name)+'專屬招式':'第 '+p.unlockStage+' 關起登場'}</small></div></div><div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>${esc(p.attackName)}</h3><p>${esc(p.attackText)}</p></section><figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b><span data-demo-mode>自動循環</span></div><canvas role="img" aria-label="${esc(p.name)}的移動、命中與閃避模擬" data-demo-species="${species}"></canvas><figcaption data-demo-caption role="status" aria-live="polite"></figcaption><div class="tc-demo-tools"><span>紅框：攻擊預告 · 金圈：修士</span><button type="button" data-demo-toggle>暫停</button><button type="button" data-demo-next hidden>下一步</button><button type="button" data-demo-replay>重播</button></div></figure><dl class="tc-enemy-details"><dt>移動</dt><dd>${esc(p.moveText)}</dd><dt>應對</dt><dd>${esc(p.tip)}</dd></dl></div><p class="tc-enemy-error" role="alert" ${error?'':'hidden'}>${esc(error)}</p><div class="tc-enemy-footer"><button type="button" class="tc-primary" data-intro-ack ${busy?'disabled':''}>${remaining>1?'記住招式 · 下一種（'+(remaining-1)+'）':'記住招式 · 開始行動'}</button><button type="button" data-exit>收起試煉</button></div>`,{encounter:true});
   if(state.weaponDungeon){$('[data-enemy-demo]').hidden=true;}
   else introDemo=new EnemyDemo($('[data-enemy-demo]'),species);
 }
