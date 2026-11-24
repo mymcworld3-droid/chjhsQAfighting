@@ -121,3 +121,9 @@ test('a level-10 manual reads 大成, while a level-20 manual is actually 圓滿
   const max=draw(book('sword-wind','sword',{level:20,progress:100,tierRealm:'元嬰'}));
   assert.match(max,/圓滿/);
 });
+
+test('weapon school badge includes the authoritative weapon realm, not the player realm',()=>{
+  assert.match(draw(book('sword-sky','sword',{weaponType:'sword',tierRealm:'金丹'})),/manual-native-school">劍修 · 金丹<\/span>/);
+  assert.match(draw(book('body-rock','body',{weaponType:'totem',tierRealm:'築基'})),/manual-native-school">體修 · 築基<\/span>/);
+  assert.match(draw(book('sword-wind','sword',{weaponType:'sword',tierRealm:'煉氣'})),/manual-native-school">劍修 · 煉氣<\/span>/);
+});
