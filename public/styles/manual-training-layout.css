@@ -37,9 +37,7 @@
 #manual-training-root .manual-weapon-slot-actions{display:flex;flex-direction:column;gap:6px;min-width:0}
 #manual-training-root .manual-weapon-slot-actions button{width:100%;min-height:34px;margin:0;border:1px solid #d8ba79;background:linear-gradient(#59492f,#352b1d);color:#f9eac9;border-radius:7px;font-weight:700}
 #manual-training-root .manual-weapon-slot-actions [data-manual-remove-weapon]{order:2;background:linear-gradient(#4c463a,#332e25)}
-#manual-training-root .manual-training-dialog{width:min(1100px,calc(100vw - 20px));max-width:calc(100vw - 20px);max-height:94dvh;background:radial-gradient(ellipse at 24% 20%,#50432e,#272118 65%);border:1px solid #d8ba79;box-shadow:0 16px 60px #000b}
-#manual-training-root .manual-training-dialog-header{background:#3a3022;border-color:#bda36e;color:#f8e7bf}
-#manual-training-root .manual-training-dialog-body{max-height:calc(94dvh - 68px);padding:clamp(12px,2vw,22px)}
+#manual-training-root .manual-training-screen-header{background:#3a3022;border-color:#bda36e;color:#f8e7bf}
 #manual-training-root .manual-native-hero{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:16px;align-items:start;background:none;border:0;box-shadow:none;padding:0;overflow:visible;--mh-accent:#e8cb8a;--mh-line:#bda36e;--mh-soft:#3c3122}
 #manual-training-root .manual-native-hero::before,#manual-training-root .manual-native-hero::after,#manual-training-root .manual-native-hero .manual-hero-top{display:none}
 #manual-training-root .manual-native-hero .manual-hero-main{display:flex;flex-direction:column;align-items:stretch;gap:12px}
@@ -93,7 +91,7 @@
 #manual-training-root .manual-native-hero{--mh-glow:#c8a56822;--mh-accent:#d8bb85;--mh-soft:#3c3122}
 #manual-training-root .manual-hero-mastery,#manual-training-root .manual-expedition,#manual-training-root .manual-hero-step,#manual-training-root .manual-weapon-choice,#manual-training-root .manual-picker{background:linear-gradient(145deg,#3d3426,#28231a);border-color:#a9915d88;color:#ede2ca}
 #manual-training-root .manual-hero-upgrade,#manual-training-root .manual-focus-skill-actions button{background:linear-gradient(#685338,#3d3020);border-color:#c6ac76;color:#f5e5be}
-#manual-training-root .manual-training-dialog-header button,#manual-training-root .manual-focus-skill-head button,#manual-training-root .manual-picker-close{background:#433625;border-color:#bda36e99;color:#f4e6c6}
+#manual-training-root .manual-training-screen-header button,#manual-training-root .manual-focus-skill-head button,#manual-training-root .manual-picker-close{background:#433625;border-color:#bda36e99;color:#f4e6c6}
 #manual-training-root .manual-xp-reference,#manual-training-root .manual-picker-hint,#manual-training-root .manual-weapon-choice small,#manual-training-root .manual-hero-mastery small{color:#c9bda3}
 #manual-training-root .manual-book-grid{overflow-anchor:none}
 #manual-training-root .manual-status,#manual-training-root .manual-deck-feedback{display:none!important}
@@ -106,3 +104,29 @@
 #manual-training-root .manual-weapon-dialog::backdrop{background:#100c09b8}
 #manual-training-root .manual-weapon-dialog .manual-picker{margin:0;padding:16px;border:0}
 @media(prefers-reduced-motion:reduce){#manual-training-root .manual-toast{animation:none}}
+
+/* Full game-page weapon detail. Original global navigation stays available. */
+body.xianxia-theme #page-training.manual-training-active:has(#manual-training-root.manual-detail-active),#page-training.manual-training-active:has(#manual-training-root.manual-detail-active){width:100%!important;max-width:none!important;margin:0!important}
+#manual-training-root.manual-detail-active{width:100%;max-width:none;margin:0 auto;min-height:var(--training-fill-height,calc(100dvh - 170px))}
+#manual-training-root .manual-training-screen[hidden]{display:none!important}
+#manual-training-root.manual-detail-active>.manual-library,#manual-training-root.manual-detail-active>.manual-loadout,#manual-training-root.manual-detail-active>.manual-xp-reference,#manual-training-root.manual-detail-active>[data-manual-status]{display:none!important}
+#manual-training-root .manual-training-screen{width:100%;min-height:inherit;color:#f5e6c7;padding:0;border:0;background:none;box-shadow:none}
+#manual-training-root .manual-training-screen-header{display:grid;grid-template-columns:minmax(64px,auto) minmax(0,1fr) minmax(64px,auto);align-items:center;gap:12px;margin:0 0 clamp(12px,2vw,24px);padding:12px 0;border:0;border-bottom:1px solid #bda36e77;background:none}
+#manual-training-root .manual-training-screen-header h2{text-align:center;margin:0;color:#f8e7bf;font-size:clamp(19px,2.8vw,32px);line-height:1.25;overflow-wrap:anywhere}
+#manual-training-root .manual-training-screen-header button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 12px;border:1px solid #bda36e99;border-radius:8px;background:#433625;color:#f4e6c6;font:inherit;font-weight:700}
+#manual-training-root .manual-training-screen-body{width:100%;max-width:1440px;margin:0 auto;padding:0 0 18px;overflow:visible}
+#manual-training-root .manual-training-screen .manual-hero{margin:0 0 16px}
+#manual-training-root .manual-training-screen .manual-hero-brand{display:none}
+#manual-training-root .manual-training-screen .manual-native-hero{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(16px,3vw,42px)}
+#manual-training-root .manual-training-screen .manual-hero-art-stage{width:min(86%,460px)}
+#manual-training-root .manual-training-screen .manual-native-hero .manual-hero-node{width:min(90%,110px)}
+@media(orientation:portrait){
+ #manual-training-root .manual-training-screen .manual-native-hero{grid-template-columns:minmax(0,1fr);gap:16px}
+ #manual-training-root .manual-training-screen .manual-hero-art-stage{width:min(72%,360px)}
+ #manual-training-root .manual-training-screen-header{gap:7px;grid-template-columns:64px minmax(0,1fr) 64px}
+ #manual-training-root .manual-training-screen-header button{padding:6px 8px}
+}
+@media(orientation:landscape) and (max-height:560px){
+ #manual-training-root .manual-training-screen .manual-hero-art-stage{width:min(74%,300px)}
+ #manual-training-root .manual-training-screen-header{padding:6px 0;margin-bottom:12px}
+}

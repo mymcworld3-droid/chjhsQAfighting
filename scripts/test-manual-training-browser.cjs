@@ -69,9 +69,15 @@ async function main(){
       assert.match(image.headers()['content-type']||'',/webp/);
       assert((await image.body()).length>100_000,'HD weapon art must be the actual full-size file');
     }
-    assert.equal(await page.locator('[data-manual-training-dialog]').isVisible(),false);
+    assert.equal(await page.locator('[data-manual-training-screen]').isVisible(),false);
     await library.locator('[data-manual-book="sword-wind"] .manual-library-choice').click();
-    await page.locator('[data-manual-training-dialog]').waitFor();
+    await page.locator('[data-manual-training-screen]').waitFor();
+    assert.equal(await page.locator('[data-manual-training-screen]').evaluate(node=>node.tagName),'SECTION');
+    assert.equal(await library.isVisible(),false);
+    assert.equal(await page.locator('.manual-weapons').isVisible(),false);
+    assert.equal(await page.locator('dialog[open]').count(),0);
+    const detailSize=await page.locator('[data-manual-training-screen]').evaluate(node=>({width:node.clientWidth,root:node.parentElement.clientWidth}));
+    assert(detailSize.width>=detailSize.root-3,'detail fills the game page width');
     await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
     await page.locator('[data-manual-browse-weapon="next"]').click();
     await page.locator('.manual-focus-skill[data-manual-skill="rock-fist"]').waitFor();
@@ -82,7 +88,8 @@ async function main(){
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('.manual-focus-skill').count(),0);
     await page.keyboard.press('Escape');
-    assert.equal(await page.locator('[data-manual-training-dialog]').isVisible(),false);
+    assert.equal(await page.locator('[data-manual-training-screen]').isVisible(),false);
+    assert.equal(await library.isVisible(),true);
     // Equipping a weapon changes one slot only; it does not change its XP.
     await page.locator('[data-manual-pick-slot="1"]').click();
     await page.locator('[data-manual-picker]').waitFor();
@@ -115,9 +122,10 @@ async function main(){
     await page.waitForFunction(()=>document.querySelector('[data-manual-dialog-status]')?.textContent?.includes('已升級'));
     const visualStable=await page.evaluate(()=>window.__art.every(node=>node.isConnected));
     assert.equal(visualStable,true,'weapon image nodes should not blink after upgrade');
-    assert.equal(await page.locator('[data-manual-training-dialog] [data-manual-celebration-dismiss]').count(),1);
+    assert.equal(await page.locator('[data-manual-celebration-host] [data-manual-celebration-dismiss]').count(),1);
     await page.locator('[data-manual-celebration-dismiss]').click();
-    await page.keyboard.press('Escape');
+    await page.locator('[data-manual-close-training]').click();
+    assert.equal(await library.isVisible(),true);
     // The second technique appears automatically at weapon Lv.5 without a player-realm requirement.
     db.records.get('users/u1').stats.totalScore=0;
     db.records.get(service.MANUALS+'/u1').books['body-rock'].exp=280;

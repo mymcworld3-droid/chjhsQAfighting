@@ -27,7 +27,7 @@ export function renderManualCollectionHeader(state, filter, {esc}) {
     <div class="manual-library-heading-copy">
       <span class="manual-library-kicker">問道 · ${Array.isArray(state?.weaponIds)?'兵器閣':'藏經閣'}</span>
       <h3>${Array.isArray(state?.weaponIds)?'武器收藏':'功法收藏'} <span class="manual-library-owned-count">${owned.length} ${Array.isArray(state?.weaponIds)?'件':'本'}</span></h3>
-      <p>${Array.isArray(state?.weaponIds)?'點選武器可開啟修煉視窗；裝備可在下方調整。':'點選功法可開啟修煉與強化視窗。'}</p>
+      <p>${Array.isArray(state?.weaponIds)?'點選武器進入修煉頁面；裝備可在下方調整。':'點選功法進入修煉與強化頁面。'}</p>
     </div>
     <button type="button" class="manual-refresh" data-manual-refresh title="同步武器資料"
       aria-label="更新武器資料"><i class="fa-solid fa-rotate" aria-hidden="true"></i> 更新</button>
@@ -39,7 +39,7 @@ export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt
   if(book.weaponType){
     const selected=book.id===focusId;
     const school=({sword:'劍修',body:'體修'})[book.school]||label(book.school);
-    return `<button type="button" class="manual-book-top manual-library-choice manual-native-card" data-feature-book="${esc(book.id)}" data-manual-focus-hero="true" aria-haspopup="dialog" aria-controls="manual-training-dialog" aria-pressed="${selected}">
+    return `<button type="button" class="manual-book-top manual-library-choice manual-native-card" data-feature-book="${esc(book.id)}" data-manual-focus-hero="true" aria-controls="manual-training-screen" aria-pressed="${selected}">
       <span class="manual-native-card-art"><span class="manual-weapon-art manual-weapon-art--${esc(book.id)} manual-library-cover" role="img" aria-label="${esc(book.name)}"></span></span>
       <strong>${esc(book.name)}</strong><span class="manual-native-school">${esc(school)}</span><span class="manual-native-level">Lv. ${esc(book.level)}/20</span>
     </button>`;
@@ -61,7 +61,7 @@ export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt
     alt="" loading="lazy" decoding="async">`:
     '<span class="manual-library-cover-fallback" aria-hidden="true">功法</span>';
   return `<button type="button" class="manual-book-top manual-library-choice"
-      data-feature-book="${esc(book.id)}" data-manual-focus-hero="true" aria-haspopup="dialog" aria-controls="manual-training-dialog" aria-pressed="${current}"
+      data-feature-book="${esc(book.id)}" data-manual-focus-hero="true" aria-controls="manual-training-screen" aria-pressed="${current}"
       aria-label="展示${esc(book.name)}，Lv. ${visual.level}，${esc(stage)}">
     <span class="manual-library-art-zone" data-manual-stage="${visual.stage}"
       data-manual-approach="${near?anticipation.status:'none'}">
