@@ -153,6 +153,33 @@ async function main(){
         assert(fit,selector+' must fit '+JSON.stringify(viewport));
       }
     }
+    // Fill the owned collection through the real server projection so the
+    // carousel is tested with overflow, rather than a synthetic DOM fixture.
+    for(const id of ['sword-flight','sword-sky','body-dragon','body-tiger']){
+      db.records.get(service.MANUALS+'/u1').books[id]={exp:280};
+    }
+    await page.locator('[data-manual-refresh]').click();
+    await page.waitForFunction(()=>document.querySelectorAll('[data-manual-book]').length===6);
+    const track=page.locator('.manual-book-grid');
+    const collection=await track.evaluate(node=>({
+      width:node.clientWidth,scroll:node.scrollWidth,
+      tops:[...node.querySelectorAll('[data-manual-book]')].map(card=>card.getBoundingClientRect().top)
+    }));
+    assert(collection.scroll>collection.width,'owned weapons overflow horizontally instead of shrinking');
+    assert(collection.tops.every(top=>Math.abs(top-collection.tops[0])<1),'weapons stay on one row');
+    for(let i=0;i<4;i++)await track.press('ArrowRight');
+    await page.waitForFunction(()=>document.querySelector('.manual-book-grid').scrollLeft>0);
+    await page.locator('[data-manual-collection-filter="body"]').click();
+    assert.equal(await track.evaluate(node=>node.scrollLeft),0,'changing school returns to the start of the collection');
+    await page.locator('[data-manual-collection-filter="all"]').click();
+    const aligned=await page.locator('.manual-art-card').evaluateAll(cards=>cards.every(card=>{
+      const rect=card.getBoundingClientRect();
+      const labels=[...card.querySelectorAll('.manual-art-card-name,.manual-art-card-school,.manual-art-card-level')];
+      const boxes=labels.map(node=>node.getBoundingClientRect());
+      return boxes.every(box=>Math.abs(box.x+box.width/2-rect.x-rect.width/2)<1)&&
+        boxes[0].bottom<=boxes[1].top&&boxes[1].bottom<=boxes[2].top;
+    }));
+    assert(aligned,'names, school labels and levels share a center without overlapping');
     // Content scrolls over the single title in the background; the dock remains fixed.
     const beforeScroll=await page.locator('.manual-art-navigation').boundingBox();
     await page.locator('[data-manual-refresh]').press('PageDown');

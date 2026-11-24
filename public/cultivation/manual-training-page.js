@@ -89,7 +89,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-art-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-aligned-collection-v7';
+    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-carousel-align-v8';
     document.head.append(link);
   }
   if(!document.getElementById('scene-art-shell-style')){
@@ -202,7 +202,7 @@ function markup(){
     <section class="manual-library" aria-label="武器收藏">
       <span class="manual-panel-body" aria-hidden="true"></span>
       ${renderManualCollectionHeader(current,libraryFilter,{esc})}
-      <div class="manual-book-grid" role="region" aria-label="武器收藏，可左右捲動" tabindex="0">${cards||'<p class="manual-empty">尚無此流派已取得的武器，請切換篩選查看。</p>'}</div>
+      <div class="manual-book-grid" role="region" aria-label="武器收藏，可左右滑動" tabindex="0">${cards||'<p class="manual-empty">尚無此流派已取得的武器，請切換篩選查看。</p>'}</div>
     </section>
     ${owned?'':hero}
     ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
@@ -510,6 +510,7 @@ function boot(){
       if(['all','sword','body','spell','arcane'].includes(filter)){
         libraryFilter=filter;
         paint();
+        root?.querySelector('.manual-book-grid')?.scrollTo({left:0,behavior:'auto'});
       }
       return;
     }
