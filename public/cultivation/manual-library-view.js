@@ -5,7 +5,7 @@ import {manualAnticipation} from './manual-anticipation.js';
 
 export function filterOwnedManuals(state, filter='all') {
   const owned=(state?.library||[]).filter(book=>book?.owned===true);
-  return ['sword','body','spell','arcane'].includes(filter)
+  return filter==='sword'||filter==='body'
     ?owned.filter(book=>book.school===filter):owned;
 }
 
@@ -16,10 +16,6 @@ export function renderManualCollectionHeader(state, filter, {esc}) {
     {id:'sword',title:'劍修',count:owned.filter(book=>book.school==='sword').length},
     {id:'body',title:'體修',count:owned.filter(book=>book.school==='body').length}
   ];
-  if(Array.isArray(state?.weaponIds))options.push(
-    {id:'spell',title:'術修',count:owned.filter(book=>book.school==='spell').length},
-    {id:'arcane',title:'奇門',count:owned.filter(book=>book.school==='arcane').length}
-  );
   const tabs=options.map(item=>{
     const selected=item.id===filter;
     return `<button type="button" class="manual-library-filter ${selected?'is-selected':''}"
@@ -42,16 +38,10 @@ export function renderManualCollectionHeader(state, filter, {esc}) {
 export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt,label,totalExpForLevel}) {
   if(book.weaponType){
     const selected=book.id===focusId;
-    const school=({sword:'劍修',body:'體修',spell:'術修',arcane:'奇門'})[book.school]||label(book.school);
-    return `<button type="button" class="manual-book-top manual-library-choice manual-art-card"
-      data-feature-book="${esc(book.id)}" data-manual-focus-hero="true" aria-haspopup="dialog"
-      aria-controls="manual-training-dialog" aria-pressed="${selected}"
-      aria-label="修煉${esc(book.name)}，Lv. ${esc(book.level)} / 20，${esc(school)}">
-      <span class="manual-art-card-picture"><span class="manual-weapon-art manual-weapon-art--${esc(book.id)} manual-library-cover"
-        role="img" aria-label="${esc(book.name)}武器圖像"></span></span>
-      <strong class="manual-art-card-name">${esc(book.name)}</strong>
-      <span class="manual-art-card-school">${esc(school)}</span>
-      <span class="manual-art-card-level">Lv. ${esc(book.level)} / 20</span>
+    const school=({sword:'劍修',body:'體修'})[book.school]||label(book.school);
+    return `<button type="button" class="manual-book-top manual-library-choice manual-native-card" data-feature-book="${esc(book.id)}" data-manual-focus-hero="true" aria-haspopup="dialog" aria-controls="manual-training-dialog" aria-pressed="${selected}">
+      <span class="manual-native-card-art"><span class="manual-weapon-art manual-weapon-art--${esc(book.id)} manual-library-cover" role="img" aria-label="${esc(book.name)}"></span></span>
+      <strong>${esc(book.name)}</strong><span class="manual-native-school">${esc(school)}</span><span class="manual-native-level">Lv. ${esc(book.level)}/20</span>
     </button>`;
   }
   const visual=manualVisualState(book);

@@ -8,15 +8,15 @@ export function renderManualSkillDetail(book,skillId,{esc,skillArt,descriptionWi
   const other=equipped.find(id=>moveIdOf(id)===moveIdOf(skill.id));
   const full=!other&&equipped.length>=3;
   const locked=!skill.unlocked;
-  const weaponMode=Array.isArray(weaponIds);
   const missing=[
-    !skill.mastered?(weaponMode?'武器':'功法')+' Lv. '+skill.levelRequired:null
+    !skill.mastered?'功法 Lv. '+skill.levelRequired:null
   ].filter(Boolean);
   const upgrade=skill.upgrade;
   const gain=skill.kind==='fist-focus'?'每級降低 1 體力':'每級提高 10% 基礎傷害';
   const upgradeAction=!locked&&upgrade?
     `<button type="button" class="manual-upgrade" data-skill-upgrade="${esc(skill.id)}" ${Number(gold)<Number(upgrade.gold)?'disabled':''}>
       ${Number(gold)<Number(upgrade.gold)?'靈石不足 · ':''}強化至 Lv. ${fmt(upgrade.targetLevel)} · ${fmt(upgrade.gold)} 靈石</button>`:'';
+  const weaponMode=Array.isArray(weaponIds);
   const worn=weaponMode&&weaponIds.includes(book.id);
   const equipment=weaponMode?
     (locked?`<p class="manual-focus-skill-lock">尚需 ${esc(missing.join('、')||'符合領悟條件')}</p>`:
@@ -39,7 +39,7 @@ export function renderManualSkillDetail(book,skillId,{esc,skillArt,descriptionWi
     <div class="manual-focus-skill-main">
       ${art?`<img class="manual-skill-art" src="${esc(art)}" alt="" loading="lazy" decoding="async">`:''}
       <div class="manual-focus-skill-info">
-        <strong>${esc(skill.name)}${skill.unlocked?' · Lv. '+fmt(skill.level)+(weaponMode?'/5':''):''}</strong>
+        <strong>${esc(skill.name)}${skill.unlocked?' · Lv. '+fmt(skill.level):''}</strong>
         <small>${fmt(skill.cost)} 體力 · ${skill.unlimited?'無固定射程':fmt(skill.range)+' 格'}</small>
         <p>${esc(descriptionWithDamage(attack,skill))}</p>
       </div>
