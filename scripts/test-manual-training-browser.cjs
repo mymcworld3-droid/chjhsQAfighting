@@ -90,6 +90,11 @@ async function main(){
       }
     };
     await assertFullscreen();
+    assert.equal(await page.locator('.manual-ritual-seal').count(),1);
+    assert.equal(await page.locator('.manual-ritual-wheel').evaluate(node=>getComputedStyle(node).animationName),'manual-ritual-spin');
+    await page.emulateMedia({reducedMotion:'reduce'});
+    assert.equal(await page.locator('.manual-ritual-wheel').evaluate(node=>getComputedStyle(node).animationName),'none');
+    await page.emulateMedia({reducedMotion:'no-preference'});
     await page.setViewportSize({width:1180,height:820});
     await assertFullscreen();
     await page.setViewportSize({width:393,height:852});

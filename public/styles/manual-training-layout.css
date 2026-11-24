@@ -320,3 +320,179 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
  #manual-training-root:not(.manual-detail-active) .manual-weapon-slot-info .manual-native-school{white-space:normal;font-size:9px;padding-inline:3px}
  #manual-training-root:not(.manual-detail-active) .manual-library-filters{flex-basis:100%}
 }
+
+/* Ritual armory — local CSS/SVG decoration; no new image dependencies.
+   Keep the warm earth UI, and reserve saturated elemental light for weapons. */
+#manual-training-root{
+ --ritual-gold:#eac783;--ritual-bright:#fff0bd;--ritual-ink:#1d1914;
+ --qi:#8edbba;--qi-glow:#47c6a440;--qi-dark:#193c34;
+}
+#manual-training-root [data-ritual-weapon="sword-wind"]{--qi:#8ff6d7;--qi-glow:#38e0bb54;--qi-dark:#123b34}
+#manual-training-root [data-ritual-weapon="sword-flight"]{--qi:#a3cfff;--qi-glow:#588fff54;--qi-dark:#202e4a}
+#manual-training-root [data-ritual-weapon="sword-sky"]{--qi:#ffe1a1;--qi-glow:#f4bb4f55;--qi-dark:#47351b}
+#manual-training-root [data-ritual-weapon="body-rock"]{--qi:#f7c17b;--qi-glow:#d7953f55;--qi-dark:#47321d}
+#manual-training-root [data-ritual-weapon="body-dragon"]{--qi:#ffd18a;--qi-glow:#f0a64555;--qi-dark:#4a2d1c}
+#manual-training-root [data-ritual-weapon="body-tiger"]{--qi:#ffb79c;--qi-glow:#e6734755;--qi-dark:#482b23}
+#manual-training-root :is(.manual-library,.manual-weapons,.manual-native-skills-panel,.manual-focus-skill){
+ background:radial-gradient(ellipse at 50% 0%,#a8803224,transparent 65%),linear-gradient(145deg,#382e21,#201c17 65%,#2b2319);
+ border-color:#c3a16b;box-shadow:inset 0 0 0 2px #221b14,inset 0 0 0 3px #d5ad5c42,0 4px 14px #120d0950;
+}
+#manual-training-root :is(.manual-library-heading-copy h3,.manual-deck-heading h3,.manual-hero-path-heading strong,.manual-focus-skill-title){
+ color:#ffe7b5;text-shadow:0 1px 2px #160f09,0 0 8px #f0b95640;font-family:"Noto Serif TC","Songti TC",serif;letter-spacing:.035em;
+}
+#manual-training-root :is(.manual-library-heading-copy h3,.manual-deck-heading h3){
+ display:inline-flex;align-items:center;gap:5px;padding:3px 8px;
+ border:1px solid #bd965e;border-radius:7px;background:linear-gradient(#53412a,#2b2218);
+ box-shadow:inset 0 1px #f5d79755;
+}
+#manual-training-root .manual-library-filter.is-selected{
+ color:#fff1c8;border-color:#ffdb91;background:linear-gradient(#765326,#3a2917);
+ box-shadow:0 0 8px #edb94e66,inset 0 1px #fff0b680;
+}
+#manual-training-root .manual-book-grid{padding-top:5px;padding-bottom:7px}
+#manual-training-root:not(.manual-detail-active) .manual-native-card.manual-library-choice{
+ position:relative;isolation:isolate;overflow:hidden;border-radius:9px;border-color:#c8a16a;
+ background:radial-gradient(ellipse at 50% 24%,var(--qi-glow),transparent 66%),linear-gradient(#2b2920,#211a14);
+ box-shadow:inset 0 0 0 2px #1e1812,inset 0 0 0 3px #d6ae6948;
+ transition:border-color .2s,box-shadow .2s;
+}
+#manual-training-root .manual-native-card::before,#manual-training-root .manual-native-card::after{
+ content:"";position:absolute;pointer-events:none;z-index:2;width:13px;height:13px;
+ border:solid #e7c17e;border-width:1px 0 0 1px;border-radius:7px 0 0 0;top:3px;left:3px;
+}
+#manual-training-root .manual-native-card::after{inset:auto 3px 3px auto;transform:rotate(180deg)}
+#manual-training-root:not(.manual-detail-active) .manual-book.is-featured .manual-native-card,
+#manual-training-root:not(.manual-detail-active) .manual-native-card:focus-visible{
+ border-color:#ffe7a5;box-shadow:0 0 8px #ffc96c99,inset 0 0 0 1px #ffe8a3,inset 0 0 12px #d6a04d35;
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card-art{
+ position:relative;isolation:isolate;background:radial-gradient(ellipse,var(--qi-dark),#211d16 82%);border-radius:6px;
+}
+#manual-training-root .manual-native-card-art::after,#manual-training-root .manual-weapon-slot-art::after{
+ content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+ background:linear-gradient(0deg,#17150f80,transparent 24%),radial-gradient(ellipse at 50% 100%,var(--qi-glow),transparent 65%);
+ box-shadow:inset 0 0 9px #19170e55;
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card-art .manual-weapon-art{
+ background-size:cover!important;filter:saturate(1.12) contrast(1.05);
+}
+#manual-training-root .manual-native-card>strong,#manual-training-root .manual-weapon-slot-info strong{color:#ffedce;text-shadow:0 1px 3px #100c08}
+#manual-training-root:not(.manual-detail-active) .manual-native-school{
+ background:linear-gradient(105deg,#b68a4c,#ffe1a2 48%,#c49a5a);border:1px solid #e5bf83;
+ color:#352414!important;border-radius:4px;
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-level{background:#211a13;border-color:#a9824e;color:#ffebbf}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-slot{
+ position:relative;border-radius:9px;border-color:#b78e56;background:radial-gradient(ellipse at 20% 50%,var(--qi-glow),transparent 52%),linear-gradient(110deg,#30281d,#201b16 62%,#362919);
+ box-shadow:inset 0 1px #efc88244,inset 0 -1px #ba945644;
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-slot.is-selected{outline:1px solid #dfb96f;outline-offset:-1px}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-slot-art{position:relative;background:var(--qi-dark);border-radius:6px;border-color:#bfa16b}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-slot-art .manual-weapon-art{background-size:cover!important}
+#manual-training-root:not(.manual-detail-active) .manual-native-skill-icon{
+ border-color:#f2cf88;box-shadow:0 0 6px var(--qi-glow),inset 0 0 0 1px #ffedb8;
+}
+#manual-training-root .manual-weapon-skill.is-locked .manual-native-skill-icon{box-shadow:none;border-color:#857257}
+#manual-training-root .manual-weapon-slot-actions [data-manual-change-slot],
+#manual-training-root .manual-hero-upgrade:not(:disabled),
+#manual-training-root .manual-focus-skill-actions .manual-upgrade:not(:disabled){
+ border-color:#ffda90;color:#fff0c9;background:linear-gradient(#826034,#513718 60%,#79521f);
+ box-shadow:0 0 8px #edb14a40,inset 0 1px #fff0bc80,inset 0 -1px #e4b45b66;
+}
+#manual-training-root :is(.manual-hero-upgrade,.manual-focus-skill-actions button,.manual-weapon-slot-actions button):disabled{filter:saturate(.35);box-shadow:none;opacity:.7}
+#manual-training-root .manual-training-screen:not([hidden]){
+ background:radial-gradient(ellipse at 25% 38%,#57432b60,transparent 56%),radial-gradient(ellipse at 85% 0%,#b3873730,transparent 52%),#1e1a15;
+}
+#manual-training-root .manual-training-screen-header{
+ background:linear-gradient(90deg,#221c16,#49351f 50%,#221c16);border-bottom:1px solid #c49a5d;
+}
+#manual-training-root .manual-training-screen-header h2{
+ font-family:"Noto Serif TC","Songti TC",serif;color:#ffdf9e;text-shadow:0 0 12px #e6ae5a66;
+}
+#manual-training-root .manual-training-screen .manual-native-hero{
+ --mh-accent:#eac783;--mh-line:#c3a16b;--mh-glow:var(--qi-glow);gap:clamp(10px,2vw,26px);
+}
+#manual-training-root .manual-training-screen .manual-native-hero .manual-hero-main{gap:8px;min-width:0}
+#manual-training-root .manual-training-screen .manual-native-hero .manual-hero-art-stage{
+ position:relative;isolation:isolate;width:min(88%,44dvh,420px);aspect-ratio:1;min-height:0;
+ padding:9%;border:0;border-radius:50%;overflow:visible;
+ background:radial-gradient(circle,var(--qi-dark) 28%,#211c15 67%,transparent 74%);
+ box-shadow:0 0 32px var(--qi-glow);
+}
+#manual-training-root .manual-native-hero .manual-hero-art-stage .manual-hero-art-halo,
+#manual-training-root .manual-native-hero .manual-hero-art-stage .manual-hero-qi-ring,
+#manual-training-root .manual-native-hero .manual-hero-art-stage .manual-hero-qi-spark{display:none}
+#manual-training-root .manual-ritual-seal{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;overflow:visible;fill:none;stroke:#e8bf75;stroke-width:.8;filter:drop-shadow(0 0 3px #e6b85c)}
+#manual-training-root .manual-ritual-outline{stroke-width:.9}
+#manual-training-root .manual-ritual-ticks{stroke-width:2}
+#manual-training-root .manual-ritual-orbit{stroke-width:.65;stroke:var(--qi)}
+#manual-training-root .manual-ritual-jewel{fill:#fff0b8;stroke:#fff4d4}
+#manual-training-root .manual-ritual-cross{stroke:#fff0b8;stroke-width:1.3}
+#manual-training-root .manual-ritual-wheel{transform-origin:120px 120px;animation:manual-ritual-spin 48s linear infinite}
+#manual-training-root .manual-ritual-energy{position:absolute;inset:6%;border-radius:50%;z-index:2;pointer-events:none;
+ background:radial-gradient(ellipse at 50% 86%,var(--qi-glow),transparent 58%),conic-gradient(from 25deg,transparent 10%,var(--qi-glow) 17%,transparent 27%,transparent 63%,var(--qi-glow) 74%,transparent 85%);
+ box-shadow:inset 0 0 18px var(--qi-glow);animation:manual-ritual-breathe 5s ease-in-out infinite alternate}
+#manual-training-root .manual-training-screen .manual-native-hero .manual-hero-cover{
+ flex:0 0 auto;position:relative;width:100%;height:auto;max-width:none;aspect-ratio:1;
+ border-radius:50%;background-size:cover!important;filter:saturate(1.16) contrast(1.04);
+ box-shadow:0 0 14px var(--qi-glow);animation:manual-ritual-arrive .35s ease-out both;
+}
+#manual-training-root .manual-native-hero .manual-hero-art-caption{
+ bottom:8%;z-index:4;padding:3px 9px;background:#211a14eb;border-color:#e5c280;
+}
+#manual-training-root .manual-native-carousel{gap:5px}
+#manual-training-root .manual-native-carousel>strong{
+ background:linear-gradient(90deg,#2b2318,#5d4425 50%,#2b2318);border-color:#efc77e;
+ text-shadow:0 1px 3px #140e08,0 0 9px #f6d58955;
+ box-shadow:0 0 8px #b98b4740;letter-spacing:.06em;padding:5px;
+}
+#manual-training-root .manual-native-carousel>button{
+ background:radial-gradient(circle,#76532a,#2e2519);border-color:#e9c584;box-shadow:0 0 6px #e0a95545;
+}
+#manual-training-root .manual-native-dots i.is-current{background:#fff0b8;box-shadow:0 0 5px #ffdc8a}
+#manual-training-root .manual-training-screen .manual-native-skills-panel,
+#manual-training-root .manual-training-screen .manual-focus-skill{
+ position:relative;border-radius:12px;padding:clamp(7px,1.2vw,14px);box-shadow:inset 0 0 0 2px #241c14,inset 0 0 0 3px #c59c6144;
+}
+#manual-training-root .manual-native-skills-panel::before,#manual-training-root .manual-focus-skill::before{
+ content:"";position:absolute;top:0;left:50%;width:7px;height:7px;transform:translate(-50%,-50%) rotate(45deg);
+ border:1px solid #ffedb2;background:#d6a558;box-shadow:0 0 8px #f6bf66;pointer-events:none;
+}
+#manual-training-root .manual-native-hero .manual-hero-path-heading{margin-bottom:6px;padding-bottom:5px}
+#manual-training-root .manual-native-hero .manual-hero-path-grid{gap:6px;grid-template-columns:repeat(3,minmax(0,1fr))}
+#manual-training-root .manual-native-hero .manual-hero-step{
+ gap:3px;border-radius:9px;background:radial-gradient(ellipse at 50% 28%,var(--qi-glow),transparent 72%),#241e17;
+ padding:6px 3px;box-shadow:inset 0 1px #e6bd7540;
+}
+#manual-training-root .manual-native-hero .manual-hero-step[aria-expanded=true]{
+ border-color:#ffe9a8;box-shadow:0 0 8px #efc16a80,inset 0 0 0 1px #ffda94;outline:0;
+}
+#manual-training-root .manual-training-screen .manual-native-hero .manual-hero-node{
+ width:min(85%,11dvh,92px);height:auto;aspect-ratio:1;border-radius:50%;border:2px solid #f1d092;box-shadow:0 0 7px var(--qi-glow);
+}
+#manual-training-root .manual-native-hero .manual-hero-step.is-locked .manual-hero-node{box-shadow:none;border-color:#8e7858}
+#manual-training-root .manual-native-hero .manual-hero-step strong{font-size:clamp(11px,1.2vw,15px);color:#ffebc2;line-height:1.2}
+#manual-training-root .manual-native-hero .manual-hero-step small,#manual-training-root .manual-native-hero .manual-hero-node-tier,#manual-training-root .manual-native-hero .manual-hero-node-status{font-size:10px;line-height:1.25}
+#manual-training-root .manual-native-hero .manual-hero-details{gap:6px}
+#manual-training-root .manual-native-hero .manual-hero-mastery{padding:7px 10px;border-radius:9px}
+#manual-training-root .manual-native-hero .manual-hero-actions{gap:5px}
+#manual-training-root .manual-native-hero .manual-hero-upgrade{min-height:34px;padding:5px 10px}
+#manual-training-root .manual-native-hero .manual-focus-skill-main>img{border-radius:50%;box-shadow:0 0 9px var(--qi-glow)}
+#manual-training-root .manual-native-hero .manual-focus-skill-actions .manual-upgrade{min-height:38px}
+#manual-training-root .manual-native-hero .manual-focus-skill{margin-top:8px}
+#manual-training-root .manual-native-hero .manual-focus-skill-info p{line-height:1.45}
+@keyframes manual-ritual-spin{to{transform:rotate(360deg)}}
+@keyframes manual-ritual-breathe{from{opacity:.4;transform:rotate(-8deg)}to{opacity:.85;transform:rotate(12deg)}}
+@keyframes manual-ritual-arrive{from{opacity:.65;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@media(orientation:portrait){
+ #manual-training-root .manual-training-screen .manual-native-hero .manual-hero-art-stage{width:min(76%,34dvh,350px);padding:7%}
+ #manual-training-root .manual-training-screen .manual-native-hero{gap:9px}
+ #manual-training-root .manual-training-screen .manual-native-hero .manual-hero-node{width:min(85%,9dvh,70px)}
+}
+@media(orientation:landscape) and (max-height:520px){
+ #manual-training-root .manual-training-screen .manual-native-hero .manual-hero-art-stage{width:min(75%,48dvh,245px);padding:5%}
+ #manual-training-root .manual-training-screen .manual-native-hero .manual-hero-node{width:min(80%,12dvh,62px)}
+}
+@media(prefers-reduced-motion:reduce){
+ #manual-training-root :is(.manual-ritual-wheel,.manual-ritual-energy,.manual-native-hero .manual-hero-cover){animation:none!important;transform:none}
+}

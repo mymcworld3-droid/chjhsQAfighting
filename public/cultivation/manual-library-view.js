@@ -39,7 +39,7 @@ export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt
   if(book.weaponType){
     const selected=book.id===focusId;
     const school=({sword:'劍修',body:'體修'})[book.school]||label(book.school);
-    return `<button type="button" class="manual-book-top manual-library-choice manual-native-card" data-feature-book="${esc(book.id)}" data-manual-focus-hero="true" aria-controls="manual-training-screen" aria-pressed="${selected}">
+    return `<button type="button" class="manual-book-top manual-library-choice manual-native-card" data-feature-book="${esc(book.id)}" data-ritual-weapon="${esc(book.id)}" data-manual-focus-hero="true" aria-controls="manual-training-screen" aria-pressed="${selected}">
       <span class="manual-native-card-art"><span class="manual-weapon-art manual-weapon-art--${esc(book.id)} manual-library-cover" role="img" aria-label="${esc(book.name)}"></span></span>
       <strong>${esc(book.name)}</strong><span class="manual-native-school">${esc([school,book.tierRealm].filter(Boolean).join(" · "))}</span><span class="manual-native-level">Lv. ${esc(book.level)}/20</span>
     </button>`;

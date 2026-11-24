@@ -127,3 +127,9 @@ test('weapon school badge includes the authoritative weapon realm, not the playe
   assert.match(draw(book('body-rock','body',{weaponType:'totem',tierRealm:'築基'})),/manual-native-school">體修 · 築基<\/span>/);
   assert.match(draw(book('sword-wind','sword',{weaponType:'sword',tierRealm:'煉氣'})),/manual-native-school">劍修 · 煉氣<\/span>/);
 });
+
+test('weapon card uses its actual identity for elemental presentation',()=>{
+ const html=draw(book('sword-flight','sword',{weaponType:'sword',tierRealm:'築基'}));
+ assert.match(html,/data-ritual-weapon="sword-flight"/);
+ assert.match(html,/劍修 · 築基/);
+});

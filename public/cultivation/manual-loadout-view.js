@@ -179,7 +179,7 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
       (skill.unlocked?'':'<i class="fa-solid fa-lock" aria-label="未解鎖"></i>')+'</span><strong>'+esc(skill.name)+'</strong></span>';
     }).join('');
     return '<div class="manual-weapon-slot '+(book?'is-equipped':'is-empty')+' '+(chosen?'is-selected':'')+
-      '" data-manual-slot="'+i+'">'+
+      '" data-manual-slot="'+i+'" data-ritual-weapon="'+esc(book?.id||'')+'">'+
       '<div class="manual-weapon-slot-top"><span>武器 '+(i+1)+'</span><span>'+
       (book?'● 已裝備':'○ 空欄')+'</span></div>'+
       '<button type="button" class="manual-weapon-slot-picker" data-manual-pick-slot="'+i+
