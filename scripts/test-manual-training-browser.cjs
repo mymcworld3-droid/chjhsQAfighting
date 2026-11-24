@@ -152,6 +152,22 @@ async function main(){
       const sizes=await page.locator(selector).evaluate(node=>({scroll:node.scrollWidth,client:node.clientWidth}));
       assert(sizes.scroll<=sizes.client+3,selector+' must fit mobile width: '+JSON.stringify(sizes));
     }
+    // Realistic viewport budget: keep both primary sections above the fixed navigation.
+    for(const [width,height,budget] of [[393,680,530],[393,852,702],[1180,820,670],[844,390,250]]){
+      await page.setViewportSize({width,height});
+      const geometry=await page.evaluate(()=>{
+        const library=document.querySelector('.manual-library').getBoundingClientRect();
+        const equipment=document.querySelector('.manual-weapons').getBoundingClientRect();
+        return {span:Math.max(library.bottom,equipment.bottom)-Math.min(library.top,equipment.top),
+          rows:[...document.querySelectorAll('.manual-weapon-slot')].map(slot=>{
+            const picker=slot.querySelector('.manual-weapon-slot-picker').getBoundingClientRect();
+            const skills=slot.querySelector('.manual-weapon-skill-list').getBoundingClientRect();
+            return Math.min(picker.bottom,skills.bottom)>Math.max(picker.top,skills.top);
+          })};
+      });
+      assert(geometry.span<=budget,'compact collection and both slots fit height budget '+width+'x'+height+': '+geometry.span);
+      assert(geometry.rows.every(Boolean),'equipment and skills share the same row');
+    }
     await page.setViewportSize({width:1180,height:820});
     const outer=await page.locator('#page-training').evaluate(node=>{const s=getComputedStyle(node);return {background:s.backgroundColor,image:s.backgroundImage,shadow:s.boxShadow,radius:s.borderRadius,maxWidth:s.maxWidth};});
     assert.deepEqual(outer,{background:'rgba(0, 0, 0, 0)',image:'none',shadow:'none',radius:'0px',maxWidth:'none'});

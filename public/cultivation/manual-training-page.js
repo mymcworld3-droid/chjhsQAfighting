@@ -90,7 +90,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-layout-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261124-weapon-realm-v6';
+    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261124-compact-height-v7';
     document.head.append(link);
   }
   return root;
