@@ -215,19 +215,15 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
 #manual-training-root .manual-empty{font-size:16px;color:#f0e9cb;border-color:#b6be8f}
 #manual-training-root .manual-art-navigation{
   position:fixed;z-index:45;bottom:env(safe-area-inset-bottom);left:50%;transform:translateX(-50%);
-  width:min(100%,1400px);height:clamp(90px,10.4vw,135px);padding:clamp(22px,2.4vw,34px) 11% 0;
+  width:100%;height:clamp(70px,9.6vw,150px);padding:clamp(22px,2.4vw,34px) 11% 0;
   background:url('../assets/training/art-ui/navigation-landscape.webp') center bottom/100% 100% no-repeat;
 }
 #manual-training-root .manual-art-navigation>div{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:100%}
+/* Share the homepage's icon, text, hover and orientation rules directly.
+   Only the fixed dock placement belongs to this scrollable page. */
 #manual-training-root .manual-art-navigation button{
-  position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;
-  min-width:0;min-height:44px;padding:3px 6px 8px;color:#ffe9a6;border:0;background:none;
-  font-size:clamp(18px,2.3vw,32px);font-weight:800;line-height:1.15;
+  position:relative;min-width:0;padding:0;box-shadow:none;font-weight:400;letter-spacing:0;
 }
-#manual-training-root .manual-art-navigation button[aria-current]{
-  color:#fff6b3;background:radial-gradient(ellipse at center bottom,#26d771a1,transparent 72%);
-}
-#manual-training-root .manual-art-navigation i{font-size:clamp(20px,2.6vw,34px)}
 #manual-training-root .manual-training-dialog{background:#003641;border-color:#e0bd72;color:#fff2d6}
 #manual-training-root .manual-training-dialog-header{background:#004854;border-color:#b49e63}
 #manual-training-root .manual-training-dialog-header button{background:#075763;font-size:14px}

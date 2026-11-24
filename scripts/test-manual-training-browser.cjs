@@ -23,8 +23,8 @@ async function main(){
   });
   register(app,{resolve:()=>({db}),verify:async()=> 'u1'});
   app.get('/test',(_,res)=>res.type('html').send(
-    '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head>'+
-    '<body><div id="nav-grid"></div><main id="page-training" class="active-page"></main>'+
+    '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">'+
+    '<link rel="stylesheet" href="/styles/home-wireframe.css"></head><body><div id="nav-grid"></div><main id="page-training" class="active-page"></main>'+
     '<script type="module" src="/cultivation/manual-training-page.js"></script></body></html>'
   ));
   app.use(express.static(path.join(__dirname,'../public')));
