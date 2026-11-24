@@ -129,6 +129,30 @@ async function main(){
     const columns=await page.locator('.manual-weapon-grid').evaluate(node=>
       getComputedStyle(node).gridTemplateColumns.split(' ').length);
     assert.equal(columns,1,'the two weapons are stacked horizontal equipment rows');
+    for(const viewport of [
+      {width:1180,height:820},{width:768,height:1024},
+      {width:393,height:852},{width:852,height:393}
+    ]){
+      await page.setViewportSize(viewport);
+      const portrait=viewport.height>viewport.width;
+      const orientation=portrait?'portrait':'landscape';
+      for(const [selector,name] of [['.manual-library','collection'],['.manual-weapons','equipment']]){
+        const image=await page.locator(selector).evaluate(node=>getComputedStyle(node,'::before').backgroundImage);
+        assert(image.includes(name+'-'+orientation+'.webp'),name+' must use its own '+orientation+' panel');
+      }
+      const rowArt=await page.locator('[data-manual-slot="0"]').evaluate(node=>{
+        const css=getComputedStyle(node);return css.backgroundImage+' '+css.borderImageSource;
+      });
+      assert(rowArt.includes('equipment-row-'+orientation+'.webp'));
+      const sockets=await page.locator('.manual-weapon-skill-picture').evaluateAll(nodes=>
+        nodes.map(node=>({width:node.getBoundingClientRect().width,height:node.getBoundingClientRect().height})));
+      assert(sockets.every(size=>size.width>25&&Math.abs(size.width-size.height)<1),
+        'skill sockets must stay circular in '+JSON.stringify(viewport));
+      for(const selector of ['.manual-library','.manual-weapons']){
+        const fit=await page.locator(selector).evaluate(node=>node.scrollWidth<=node.clientWidth+2);
+        assert(fit,selector+' must fit '+JSON.stringify(viewport));
+      }
+    }
     // Returning from battle always fetches fresh authoritative weapon XP.
     const refreshed=page.waitForResponse(res=>res.url().endsWith('/api/tactical/manuals')
       &&res.request().method()==='GET');

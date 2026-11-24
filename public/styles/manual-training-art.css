@@ -28,26 +28,42 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
 #manual-training-root .manual-art-page-title{
   position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;
 }
+/* Each orientation uses the complete supplied panel. The cap layers retain
+   the title and corner proportions when the live content changes height. */
 #manual-training-root .manual-library,
 #manual-training-root .manual-weapons{
-  position:relative;margin:0 0 42px;padding:22px 20px 18px;
-  border:1px solid #ffdc8a;border-radius:24px;
-  background:linear-gradient(135deg,#002e3bef,#004a57f2 55%,#002d3bf2);
-  box-shadow:inset 0 0 0 3px #008a9b70,inset 0 0 0 5px #b4924b80,0 5px 14px #003146aa;
+  --panel-width:2048;--panel-cap:170;--panel-foot:180;
+  position:relative;isolation:isolate;container-type:inline-size;margin:0 0 28px;padding:1.6% 3% 4.5%;
+  border:0;border-radius:0;box-shadow:none;
+  background:none;
+}
+#manual-training-root .manual-library{--panel-art:url('../assets/training/art-ui/collection-landscape.webp');--panel-center-art:url('../assets/training/art-ui/collection-landscape-center.webp')}
+#manual-training-root .manual-weapons{--panel-art:url('../assets/training/art-ui/equipment-landscape.webp');--panel-center-art:url('../assets/training/art-ui/equipment-landscape-center.webp')}
+#manual-training-root .manual-library::before,
+#manual-training-root .manual-weapons::before,
+#manual-training-root .manual-library::after,
+#manual-training-root .manual-weapons::after{
+  content:'';display:block;position:absolute;left:0;right:0;z-index:0;pointer-events:none;
+  background:var(--panel-art) center top/100% auto no-repeat;
 }
 #manual-training-root .manual-library::before,
-#manual-training-root .manual-weapons::before{display:none}
+#manual-training-root .manual-weapons::before{top:0;aspect-ratio:var(--panel-width)/var(--panel-cap)}
+#manual-training-root .manual-library::after,
+#manual-training-root .manual-weapons::after{bottom:0;aspect-ratio:var(--panel-width)/var(--panel-foot);background-position:center bottom}
+#manual-training-root .manual-library>*,
+#manual-training-root .manual-weapons>*{position:relative;z-index:1}
+#manual-training-root .manual-panel-body{
+  position:absolute;left:0;right:0;z-index:0;pointer-events:none;
+  top:calc(100cqw / .94 * var(--panel-cap) / var(--panel-width));
+  bottom:calc(100cqw / .94 * var(--panel-foot) / var(--panel-width));
+  background:var(--panel-center-art) center/100% 100% no-repeat;
+}
 #manual-training-root .manual-library-heading{
-  display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:-37px 0 14px;min-height:50px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 12px;padding-left:25%;min-height:44px;
 }
 #manual-training-root .manual-library-heading-copy,
 #manual-training-root .manual-weapons .manual-deck-heading{
-  width:clamp(195px,22vw,290px);height:60px;flex:none;margin:0;
-  background:url('../assets/training/art-ui/collection-title.webp') left center/100% 100% no-repeat;
-}
-#manual-training-root .manual-library-heading h3,
-#manual-training-root .manual-weapons .manual-deck-heading h3{
-  position:absolute;clip-path:inset(50%);width:1px;height:1px;overflow:hidden;
+  position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);margin:0;padding:0;
 }
 #manual-training-root .manual-library-kicker,
 #manual-training-root .manual-library-heading p,
@@ -101,73 +117,96 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
   position:absolute;top:86%;left:10%;right:10%;text-align:center;
   font:700 clamp(14px,1.25vw,19px)/1.3 Georgia,serif;white-space:nowrap;color:#fffbea;
 }
-#manual-training-root .manual-weapons{padding-top:27px;margin-top:26px;overflow:visible}
-#manual-training-root .manual-weapons .manual-deck-heading{
-  position:absolute;top:-30px;left:20px;background-image:url('../assets/training/art-ui/equipment-title.webp');
-}
-#manual-training-root .manual-weapon-grid{display:grid;grid-template-columns:1fr;gap:14px}
+#manual-training-root .manual-weapons{padding-top:6.8%;overflow:visible}
+#manual-training-root .manual-weapon-grid{display:grid;grid-template-columns:1fr;gap:10px}
+/* Coordinates refer to the corresponding row artwork after transparent margins
+   are trimmed. Its aspect ratio is never stretched, so every socket stays round. */
 #manual-training-root .manual-weapon-slot{
-  display:grid;grid-template-columns:19% 18% 45% 16%;gap:0 0.66%;align-items:center;
-  position:relative;padding:12px 1.3%;height:clamp(150px,13vw,205px);border:0;border-radius:22px;
-  background:transparent url('../assets/training/art-ui/equipment-row.webp') center/100% 100% no-repeat;
-  box-shadow:none;outline:0;
+  --row-art:url('../assets/training/art-ui/equipment-row-landscape.webp');
+  --row-ratio:2048/290;--skill-width:11.8%;--socket-width:46%;
+  --socket-top:28.3%;--skill-title-top:14.4%;--skill-name-top:66%;
+  position:relative;container-type:inline-size;display:block;min-width:0;
+  width:100%;height:auto;aspect-ratio:var(--row-ratio);padding:0;
+  background:var(--row-art) center/100% 100% no-repeat;
+  border:0;border-radius:0;box-shadow:none;outline:0;
 }
 #manual-training-root .manual-weapon-slot.is-selected{outline:0}
 #manual-training-root .manual-weapon-slot-art{
-  display:grid;place-items:center;width:100%;height:100%;max-height:175px;min-width:0;border-radius:22%;overflow:hidden;
+  position:absolute;left:2.2%;top:13%;width:18.1%;height:73%;max-height:none;
+  display:grid;place-items:center;min-width:0;overflow:hidden;border-radius:12%;
 }
 #manual-training-root .manual-weapon-slot-art .manual-weapon-art{
   width:100%;height:100%;aspect-ratio:auto;border-radius:0;box-shadow:none;background-color:transparent;
 }
 #manual-training-root .manual-weapon-slot-art>i{font-size:28px;color:#ffe1a0}
-#manual-training-root .manual-weapon-slot-info{display:grid;gap:8px;text-align:center;align-content:center}
-#manual-training-root .manual-weapon-slot-info strong{
-  font-size:clamp(15px,2vw,28px);font-weight:900;line-height:1.25;color:#fff9e6;white-space:nowrap;
+#manual-training-root .manual-weapon-slot-info{display:contents}
+#manual-training-root .manual-weapon-slot-info>strong{
+  position:absolute;left:21.7%;top:27%;width:13.8%;height:14%;display:grid;place-items:center;
+  font-size:clamp(14px,1.8cqw,28px);font-weight:900;line-height:1.2;color:#fff9e6;white-space:nowrap;
 }
 #manual-training-root .manual-art-school{
-  display:block!important;width:76%;margin:auto;padding:2px 5px;color:#171e14!important;
-  text-shadow:none;font-size:clamp(14px,1.5vw,20px)!important;font-weight:900;
-  background:linear-gradient(100deg,#dfb45d,#fff0b9,#dfb45d);clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);
+  position:absolute;left:23.6%;top:43.8%;width:8.2%;height:17%;display:grid!important;place-items:center;
+  margin:0;padding:0;color:#171e14!important;background:none;clip-path:none;
+  text-shadow:none;font-size:clamp(14px,1.5cqw,22px)!important;font-weight:900;line-height:1.1;
 }
 #manual-training-root .manual-art-level{
-  font:700 clamp(14px,1.5vw,22px)/1.3 Georgia,serif;color:#fff8e3;
+  position:absolute;left:22.3%;top:64%;width:11.2%;height:15%;display:grid;place-items:center;
+  font:700 clamp(14px,1.5cqw,22px)/1.2 Georgia,serif;color:#fff8e3;white-space:nowrap;
 }
-#manual-training-root .manual-weapon-skill-list{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:center;height:100%;
-}
+#manual-training-root .manual-weapon-skill-list{position:absolute;inset:0;display:block;pointer-events:none}
 #manual-training-root .manual-weapon-skill{
-  display:grid;grid-template-rows:auto minmax(44px,1fr) auto;gap:4px;align-items:center;justify-items:center;
-  height:100%;padding:0 2px 12px;min-width:0;border:0;border-radius:0;background:none;text-align:center;color:#fff8dd;
+  position:absolute;left:var(--skill-x);top:0;transform:translateX(-50%);
+  display:block;width:var(--skill-width);height:100%;padding:0;min-width:0;
+  border:0;border-radius:0;background:none;text-align:center;color:#fff8dd;
 }
-#manual-training-root .manual-weapon-skill small{font-size:14px;color:#fff1c4;white-space:nowrap;transform:translateY(9px)}
+#manual-training-root .manual-weapon-skill:nth-child(1){--skill-x:45.6%}
+#manual-training-root .manual-weapon-skill:nth-child(2){--skill-x:59.1%}
+#manual-training-root .manual-weapon-skill:nth-child(3){--skill-x:72.65%}
+#manual-training-root .manual-weapon-skill small{
+  position:absolute;left:0;top:var(--skill-title-top);width:100%;height:11%;
+  display:grid;place-items:center;font-size:clamp(12px,1.15cqw,18px);color:#fff1c4;white-space:nowrap;transform:none;
+}
 #manual-training-root .manual-weapon-skill-picture{
-  position:relative;display:block;aspect-ratio:1;width:auto;height:100%;max-height:78px;
-  border:2px solid #f6d77d;border-radius:50%;overflow:hidden;background:#004b58;box-shadow:0 0 5px #d5eccc;
+  position:absolute;left:50%;top:var(--socket-top);transform:translateX(-50%);
+  display:block;width:var(--socket-width);height:auto;max-height:none;aspect-ratio:1;
+  border:0;border-radius:50%;overflow:hidden;background:#004b58;box-shadow:none;
 }
 #manual-training-root .manual-weapon-skill img{display:block;width:100%;height:100%;object-fit:cover}
 #manual-training-root .manual-weapon-skill strong{
-  display:block;align-self:center;flex:none;font-size:clamp(14px,1.4vw,20px);font-weight:900;
-  color:#142118;text-shadow:none;white-space:nowrap;line-height:1.4;padding:2px 7px;
-  transform:translateY(-9px);
+  position:absolute;left:4%;top:var(--skill-name-top);width:92%;height:17%;
+  display:grid;place-items:center;font-size:clamp(12px,1.4cqw,20px);font-weight:900;
+  color:#142118;text-shadow:none;white-space:nowrap;line-height:1.1;padding:0;transform:none;
 }
 #manual-training-root .manual-weapon-skill.is-locked{opacity:.65}
 #manual-training-root .manual-weapon-skill.is-locked img{filter:grayscale(.8) brightness(.5)}
 #manual-training-root .manual-art-lock{
-  position:absolute;inset:0;display:grid;place-content:center;color:white;font:bold 14px Georgia,serif;background:#00172166;
+  position:absolute;inset:0;display:grid;place-content:center;color:white;
+  font:bold clamp(10px,1.1cqw,16px) Georgia,serif;background:#00172166;
 }
-#manual-training-root .manual-weapon-slot-actions{display:flex;flex-direction:column;gap:10px;justify-content:center;padding:0 12%}
+#manual-training-root .manual-weapon-slot-actions{
+  position:absolute;left:84%;top:22%;width:13%;height:59%;
+  display:flex;flex-direction:column;flex-wrap:nowrap;gap:8px;justify-content:center;padding:0;
+}
 #manual-training-root .manual-weapon-slot-actions button{
-  display:block;width:100%;min-height:40px;margin:0;padding:4px 6px;border:1px solid #ffe29a;border-radius:9px;
+  display:block;width:100%;min-height:36px;flex:1;max-height:45%;margin:0;padding:2px 6px;
+  border:1px solid #ffe29a;border-radius:9px;
   background:linear-gradient(#066773,#00323d 55%,#0898a0);box-shadow:inset 0 0 5px #a2f1db;
-  color:#fff9e3;font-size:clamp(16px,2vw,26px);font-weight:900;line-height:1.2;text-align:center;
+  color:#fff9e3;font-size:clamp(14px,1.9cqw,26px);font-weight:900;line-height:1.15;text-align:center;
 }
 #manual-training-root .manual-weapon-slot-actions [data-manual-remove-weapon]{background:linear-gradient(#6b7065,#272f2b 55%,#68766a)}
-#manual-training-root .manual-weapon-slot-hint{color:#d2e7de;padding:14px;font-size:14px;text-align:center;min-height:0}
+#manual-training-root .manual-weapon-slot-hint{display:none}
 #manual-training-root .manual-weapon-picker{
   padding:18px;margin-top:18px;background:#003a47;border:1px solid #d0b876;border-radius:14px;
 }
 #manual-training-root .manual-weapon-choice-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-#manual-training-root .manual-weapon-choice{background:#004b54;border-color:#b8a66e}
+#manual-training-root .manual-weapon-choice{
+  display:grid;grid-template-columns:52px minmax(0,1fr);gap:6px 9px;align-items:center;
+  background:#004b54;border-color:#b8a66e;padding:10px;
+}
+#manual-training-root .manual-weapon-choice-art{grid-column:1;grid-row:1/span 2}
+#manual-training-root .manual-weapon-choice>span:nth-child(2){grid-column:2;overflow-wrap:anywhere}
+#manual-training-root .manual-weapon-choice em{grid-column:2;white-space:normal}
+@media(max-width:1000px){#manual-training-root .manual-weapon-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 #manual-training-root .manual-weapon-choice strong{font-size:16px}
 #manual-training-root .manual-weapon-choice small,
 #manual-training-root .manual-weapon-choice em{font-size:14px;color:#e1ebd4}
@@ -177,7 +216,7 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
 #manual-training-root .manual-art-navigation{
   position:fixed;z-index:45;bottom:env(safe-area-inset-bottom);left:50%;transform:translateX(-50%);
   width:min(100%,1400px);height:clamp(90px,10.4vw,135px);padding:clamp(22px,2.4vw,34px) 11% 0;
-  background:url('../assets/training/art-ui/navigation.webp') center bottom/100% 100% no-repeat;
+  background:url('../assets/training/art-ui/navigation-landscape.webp') center bottom/100% 100% no-repeat;
 }
 #manual-training-root .manual-art-navigation>div{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:100%}
 #manual-training-root .manual-art-navigation button{
@@ -196,52 +235,93 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
   #page-training.manual-training-active.active-page{background-image:url('../assets/training/art-ui/portrait.webp')!important;background-size:100% auto!important;background-color:#07516c!important}
   #manual-training-root{width:97%;padding-bottom:calc(112px + env(safe-area-inset-bottom))!important}
   #manual-training-root .manual-art-masthead{height:clamp(108px,16vw,160px)}
-  #manual-training-root .manual-library{margin-bottom:55px}
-  #manual-training-root .manual-book-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  #manual-training-root .manual-library{
+    --panel-art:url('../assets/training/art-ui/collection-portrait.webp');
+    --panel-center-art:url('../assets/training/art-ui/collection-portrait-center.webp');
+    --panel-width:1402;--panel-cap:150;--panel-foot:180;padding-bottom:4%;margin-bottom:35px;
+  }
+  #manual-training-root .manual-weapons{
+    --panel-art:url('../assets/training/art-ui/equipment-portrait.webp');
+    --panel-center-art:url('../assets/training/art-ui/equipment-portrait-center.webp');
+    --panel-cap:160;--panel-foot:180;padding-top:8%;padding-bottom:3.5%;
+  }
+  #manual-training-root .manual-library-heading{padding-left:30%;gap:6px}
+  #manual-training-root .manual-library-filters{gap:4px}
+  #manual-training-root .manual-library-filter{padding:4px 6px;min-height:36px;font-size:clamp(12px,1.7vw,18px)}
+  #manual-training-root .manual-library-heading>.manual-refresh{position:absolute;right:0;top:-48px;min-height:32px;font-size:12px}
+  #manual-training-root .manual-book-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
   #manual-training-root .manual-art-card-name{font-size:clamp(14px,2.5vw,28px)}
   #manual-training-root .manual-art-card-school{font-size:clamp(14px,2.1vw,24px)}
-  #manual-training-root .manual-art-card-level{font-size:clamp(14px,2.2vw,25px)}
-  #manual-training-root .manual-art-navigation{height:110px;padding:30px 3.5% 3px}
+  #manual-training-root .manual-art-card-level{font-size:clamp(13px,2.2vw,25px)}
+  #manual-training-root .manual-weapon-slot{
+    --row-art:url('../assets/training/art-ui/equipment-row-portrait.webp');
+    --row-ratio:2048/460;--skill-width:12.4%;--socket-width:64%;
+    --socket-top:31%;--skill-title-top:16.7%;--skill-name-top:68%;
+  }
+  #manual-training-root .manual-weapon-slot-info>strong{left:21.6%;top:27%;width:15%;height:14%}
+  #manual-training-root .manual-art-school{left:24%;top:43%;width:10.5%;height:14%}
+  #manual-training-root .manual-art-level{left:22.4%;top:63%;width:14%;height:14%}
+  #manual-training-root .manual-weapon-skill:nth-child(1){--skill-x:45.6%}
+  #manual-training-root .manual-weapon-skill:nth-child(2){--skill-x:59.8%}
+  #manual-training-root .manual-weapon-skill:nth-child(3){--skill-x:74%}
+  #manual-training-root .manual-art-navigation{
+    height:110px;padding:40px 3.5% 3px;
+    background-image:url('../assets/training/art-ui/navigation-portrait.webp');
+  }
 }
 @media(max-width:1100px) and (orientation:landscape){
   #manual-training-root .manual-book-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
   #manual-training-root .manual-art-masthead{height:90px}
+  #manual-training-root .manual-library-filter{font-size:14px;padding:4px}
+  #manual-training-root .manual-library-heading>.manual-refresh{font-size:12px;padding:4px}
+  #manual-training-root .manual-weapon-slot-actions{top:18%;height:68%;gap:4px}
+  #manual-training-root .manual-weapon-slot-actions button{min-height:32px}
 }
-@media(max-width:700px){
-  #manual-training-root .manual-library,#manual-training-root .manual-weapons{padding:18px 10px 12px;border-radius:19px}
-  #manual-training-root .manual-library-heading{margin:-32px 0 10px;gap:6px}
-  #manual-training-root .manual-library-heading-copy{width:190px;height:50px}
-  #manual-training-root .manual-library-heading>.manual-refresh{order:0;font-size:14px}
-  #manual-training-root .manual-library-filters{flex-basis:100%;gap:5px}
-  #manual-training-root .manual-library-filter{max-width:none;min-height:38px;padding:5px 4px;font-size:14px}
-  #manual-training-root .manual-book-grid{gap:8px}
-  #manual-training-root .manual-weapons{padding-top:32px}
-  #manual-training-root .manual-weapons .manual-deck-heading{width:190px;height:50px;top:-27px;left:10px}
+@media(max-width:600px) and (orientation:portrait){
+  #manual-training-root .manual-library{padding:11% 3% 5%}
+  #manual-training-root .manual-library-heading{padding-left:0;margin-bottom:10px;min-height:38px}
+  #manual-training-root .manual-library-filters{flex-basis:100%}
+  #manual-training-root .manual-library-filter{min-height:36px;font-size:14px}
+  #manual-training-root .manual-library-heading>.manual-refresh{top:-38px}
+  #manual-training-root .manual-book-grid{gap:5px}
+  #manual-training-root .manual-art-card-name{font-size:clamp(11px,3vw,17px);top:63.5%}
+  #manual-training-root .manual-art-card-school{font-size:clamp(11px,2.8vw,16px)}
+  #manual-training-root .manual-art-card-level{font-size:clamp(10px,2.65vw,15px)}
+  /* At phone widths, use the portrait frame's actual border and sockets for
+     a readable two-line layout. Do not squeeze its sockets into ellipses. */
+  #manual-training-root .manual-weapons{padding-top:10%;padding-bottom:5%}
   #manual-training-root .manual-weapon-slot{
-    height:auto;min-height:170px;padding:12px;grid-template-columns:30% minmax(0,1fr) 22%;gap:10px;
-    background:linear-gradient(135deg,#034b57,#002c37);border:1px solid #f0cc7f;border-radius:16px;
-    box-shadow:inset 0 0 0 2px #3e857f;
+    display:grid;grid-template-columns:28% minmax(0,1fr) 24%;gap:10px;
+    aspect-ratio:auto;min-height:220px;padding:14px;
+    background:#003d49;border:12px solid transparent;
+    border-image:url('../assets/training/art-ui/equipment-row-portrait.webp') 80 stretch;
+    box-shadow:none;
   }
-  #manual-training-root .manual-weapon-slot-art{height:85px;max-height:none;grid-column:1;grid-row:1}
-  #manual-training-root .manual-weapon-slot-info{grid-column:2;grid-row:1;gap:5px}
-  #manual-training-root .manual-weapon-slot-info strong{font-size:clamp(14px,3.4vw,22px);white-space:normal}
-  #manual-training-root .manual-art-school{font-size:14px!important}
-  #manual-training-root .manual-art-level{font-size:16px}
-  #manual-training-root .manual-weapon-slot-actions{grid-column:3;grid-row:1;padding:0;gap:8px}
-  #manual-training-root .manual-weapon-slot-actions button{min-height:40px;font-size:16px;padding:4px}
-  #manual-training-root .manual-weapon-skill-list{grid-column:1/-1;grid-row:2;height:114px;gap:8px}
-  #manual-training-root .manual-weapon-skill{grid-template-rows:20px 62px 24px;gap:3px}
-  #manual-training-root .manual-weapon-skill small{transform:none}
-  #manual-training-root .manual-weapon-skill-picture{height:60px;width:60px}
-  #manual-training-root .manual-weapon-skill strong{font-size:14px;color:#ffe7a8;text-shadow:0 1px 2px #001923;transform:none;padding:0}
-  #manual-training-root .manual-weapon-slot-hint{grid-column:1/-1;grid-row:2;padding:6px}
+  #manual-training-root .manual-weapon-slot-art{position:static;width:100%;height:78px;grid-column:1;grid-row:1}
+  #manual-training-root .manual-weapon-slot-info{display:grid;grid-column:2;grid-row:1;gap:5px;text-align:center;align-content:center}
+  #manual-training-root .manual-weapon-slot-info>strong{position:static;width:auto;height:auto;white-space:normal;font-size:15px}
+  #manual-training-root .manual-art-school{
+    position:static;width:100%;height:24px;padding:2px 6px;font-size:14px!important;
+    background:url('../assets/training/art-ui/school-badge-portrait.webp') center/100% 100% no-repeat;
+  }
+  #manual-training-root .manual-art-level{
+    position:static;width:100%;height:25px;font-size:14px;
+    background:url('../assets/training/art-ui/level-badge-portrait.webp') center/100% 100% no-repeat;
+  }
+  #manual-training-root .manual-weapon-slot-actions{position:static;width:100%;height:auto;grid-column:3;grid-row:1;gap:8px}
+  #manual-training-root .manual-weapon-slot-actions button{min-height:38px;max-height:none;font-size:15px;padding:3px}
+  #manual-training-root .manual-weapon-skill-list{position:static;display:grid;grid-column:1/-1;grid-row:2;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+  #manual-training-root .manual-weapon-skill{position:static;display:grid;grid-template-rows:20px 60px 24px;gap:4px;width:100%;height:auto;transform:none}
+  #manual-training-root .manual-weapon-skill small{position:static;width:100%;height:auto;font-size:14px}
+  #manual-training-root .manual-weapon-skill-picture{
+    position:static;transform:none;justify-self:center;box-sizing:border-box;width:60px;height:60px;
+    padding:4px;background:url('../assets/training/art-ui/skill-socket-portrait.webp') center/contain no-repeat;
+  }
+  #manual-training-root .manual-weapon-skill img{border-radius:50%}
+  #manual-training-root .manual-weapon-skill strong{position:static;width:100%;height:auto;font-size:13px;color:#ffe7a8;text-shadow:0 1px 2px #001923;white-space:normal}
+  #manual-training-root .manual-art-lock{inset:4px;font-size:12px;border-radius:50%}
+  #manual-training-root .manual-weapon-slot.is-empty{min-height:130px}
   #manual-training-root .manual-weapon-choice-grid{grid-template-columns:1fr}
-  #manual-training-root .manual-art-navigation{height:95px;padding:22px 5% 2px}
-}
-@media(max-width:420px){
-  #manual-training-root .manual-book-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  #manual-training-root .manual-art-card-name{font-size:19px}
-  #manual-training-root .manual-art-card-school{font-size:16px}
-  #manual-training-root .manual-art-card-level{font-size:17px}
+  #manual-training-root .manual-art-navigation{height:95px;padding:35px 4% 2px}
 }
 @media(prefers-reduced-motion:reduce){#manual-training-root .manual-art-card{transition:none}}

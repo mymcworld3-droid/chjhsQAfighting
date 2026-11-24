@@ -89,7 +89,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-art-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-art-v1';
+    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261124-orientation-v2';
     document.head.append(link);
   }
   return root;
@@ -176,6 +176,7 @@ function markup(){
   return `
     <header class="manual-art-masthead"><button type="button" class="manual-art-brand" data-training-page="page-home" aria-label="返回宗門"></button><h2 class="manual-art-page-title">修行</h2></header>
     <section class="manual-library" aria-label="武器收藏">
+      <span class="manual-panel-body" aria-hidden="true"></span>
       ${renderManualCollectionHeader(current,libraryFilter,{esc})}
       <div class="manual-book-grid">${cards||'<p class="manual-empty">尚無此流派已取得的武器，請切換篩選查看。</p>'}</div>
     </section>

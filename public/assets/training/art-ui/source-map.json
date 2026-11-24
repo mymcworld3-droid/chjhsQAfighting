@@ -1,0 +1,248 @@
+{
+  "collection-landscape": {
+    "source": "IMG_0243(1).png",
+    "orientation": "landscape",
+    "sourceSize": [
+      2048,
+      684
+    ],
+    "crop": null,
+    "size": [
+      2048,
+      684
+    ],
+    "sourceSha256": "edd0a73539b5af734c28f013b2dababd53526051c4f5104b9cb546c41cf03902"
+  },
+  "collection-portrait": {
+    "source": "IMG_0248.png",
+    "orientation": "portrait",
+    "sourceSize": [
+      1402,
+      1122
+    ],
+    "crop": null,
+    "size": [
+      1402,
+      1122
+    ],
+    "sourceSha256": "a6fd9cd0cc3cf0ee39f03d5b0c01bfb2aae3d1e762b851c81e94adfe5b117799"
+  },
+  "equipment-landscape": {
+    "source": "IMG_0244(1).png",
+    "orientation": "landscape",
+    "sourceSize": [
+      2048,
+      684
+    ],
+    "crop": null,
+    "size": [
+      2048,
+      684
+    ],
+    "sourceSha256": "a0c0aa16084cbdbe2ab4c42d9b9f8b4b5a0c27d16dce4d32f158ac261234b370"
+  },
+  "equipment-portrait": {
+    "source": "IMG_0249.png",
+    "orientation": "portrait",
+    "sourceSize": [
+      2048,
+      1100
+    ],
+    "crop": null,
+    "size": [
+      2048,
+      1100
+    ],
+    "sourceSha256": "38659a365c28afd5217d3b68ec79a4e6798097a78a552331ab1cd044f0e9c176"
+  },
+  "equipment-row-landscape": {
+    "source": "IMG_0245(1).png",
+    "orientation": "landscape",
+    "sourceSize": [
+      2048,
+      682
+    ],
+    "crop": [
+      0,
+      195,
+      2048,
+      485
+    ],
+    "size": [
+      2048,
+      290
+    ],
+    "sourceSha256": "215daf021a11a3bff5e89e5a9a30423cade7a918b334ca143d421abbd45e28ae"
+  },
+  "equipment-row-portrait": {
+    "source": "IMG_0251.png",
+    "orientation": "portrait",
+    "sourceSize": [
+      2048,
+      682
+    ],
+    "crop": [
+      0,
+      110,
+      2048,
+      570
+    ],
+    "size": [
+      2048,
+      460
+    ],
+    "sourceSha256": "e39285555b2c1bc427a70b6db1305d12dafe6dc9c5d120cf2b3810922ead209e"
+  },
+  "navigation-portrait": {
+    "source": "IMG_0218(2).png",
+    "orientation": "portrait",
+    "sourceSize": [
+      941,
+      1672
+    ],
+    "crop": [
+      0,
+      1425,
+      941,
+      1672
+    ],
+    "size": [
+      941,
+      247
+    ],
+    "sourceSha256": "cf2058039355e0b282e3623a2800c70b37ca9b5e94f21543d03a8981df07654b"
+  },
+  "skill-socket-portrait": {
+    "source": "IMG_0251.png",
+    "orientation": "portrait",
+    "sourceSize": [
+      2048,
+      682
+    ],
+    "crop": [
+      834,
+      240,
+      1028,
+      430
+    ],
+    "size": [
+      194,
+      190
+    ],
+    "sourceSha256": "e39285555b2c1bc427a70b6db1305d12dafe6dc9c5d120cf2b3810922ead209e"
+  },
+  "school-badge-portrait": {
+    "source": "IMG_0251.png",
+    "orientation": "portrait",
+    "sourceSize": [
+      2048,
+      682
+    ],
+    "crop": [
+      480,
+      300,
+      722,
+      375
+    ],
+    "size": [
+      242,
+      75
+    ],
+    "sourceSha256": "e39285555b2c1bc427a70b6db1305d12dafe6dc9c5d120cf2b3810922ead209e"
+  },
+  "level-badge-portrait": {
+    "source": "IMG_0251.png",
+    "orientation": "portrait",
+    "sourceSize": [
+      2048,
+      682
+    ],
+    "crop": [
+      451,
+      389,
+      747,
+      467
+    ],
+    "size": [
+      296,
+      78
+    ],
+    "sourceSha256": "e39285555b2c1bc427a70b6db1305d12dafe6dc9c5d120cf2b3810922ead209e"
+  },
+  "collection-landscape-center": {
+    "source": "IMG_0243(1).png",
+    "orientation": "landscape",
+    "sourceSize": [
+      2048,
+      684
+    ],
+    "crop": [
+      0,
+      170,
+      2048,
+      504
+    ],
+    "size": [
+      2048,
+      334
+    ],
+    "sourceSha256": "edd0a73539b5af734c28f013b2dababd53526051c4f5104b9cb546c41cf03902"
+  },
+  "collection-portrait-center": {
+    "source": "IMG_0248.png",
+    "orientation": "portrait",
+    "sourceSize": [
+      1402,
+      1122
+    ],
+    "crop": [
+      0,
+      150,
+      1402,
+      942
+    ],
+    "size": [
+      1402,
+      792
+    ],
+    "sourceSha256": "a6fd9cd0cc3cf0ee39f03d5b0c01bfb2aae3d1e762b851c81e94adfe5b117799"
+  },
+  "equipment-landscape-center": {
+    "source": "IMG_0244(1).png",
+    "orientation": "landscape",
+    "sourceSize": [
+      2048,
+      684
+    ],
+    "crop": [
+      0,
+      170,
+      2048,
+      504
+    ],
+    "size": [
+      2048,
+      334
+    ],
+    "sourceSha256": "a0c0aa16084cbdbe2ab4c42d9b9f8b4b5a0c27d16dce4d32f158ac261234b370"
+  },
+  "equipment-portrait-center": {
+    "source": "IMG_0249.png",
+    "orientation": "portrait",
+    "sourceSize": [
+      2048,
+      1100
+    ],
+    "crop": [
+      0,
+      160,
+      2048,
+      920
+    ],
+    "size": [
+      2048,
+      760
+    ],
+    "sourceSha256": "38659a365c28afd5217d3b68ec79a4e6798097a78a552331ab1cd044f0e9c176"
+  }
+}

@@ -209,6 +209,7 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
         '<em>'+ (chosen?'目前裝備':inSlot>=0?'已裝備於第 '+(inSlot+1)+' 欄':'裝備')+'</em></button>';
     }).join('')+'</div></div>':'';
   return '<section class="manual-loadout manual-weapons" aria-label="兩把武器裝備">'+
+    '<span class="manual-panel-body" aria-hidden="true"></span>'+
     '<div class="manual-deck-heading"><div><span class="manual-deck-kicker">戰前準備 · WEAPON LOADOUT</span>'+
     '<h3><i class="fa-solid fa-khanda" aria-hidden="true"></i> 武器裝備</h3></div>'+
     '</div>'+
