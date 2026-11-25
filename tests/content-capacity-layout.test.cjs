@@ -75,11 +75,11 @@ test('admin long sections are full width, scrollable and responsive', () => {
   assert.match(layout, /@media\(max-width:640px\)/);
 });
 
-test('capacity layout loads after the existing training and market layout layers', () => {
+test('capacity layout follows the market layer without the retired training layer', () => {
   const training = main.indexOf("'./cultivation/training-fluid-layout.js'");
   const market = main.indexOf("'./cultivation/market-fluid-layout.js'");
   const capacity = main.indexOf("'./cultivation/content-capacity-layout.js'");
-  assert.ok(training >= 0 && capacity > training);
+  assert.equal(training, -1);
   assert.ok(market >= 0 && capacity > market);
 });
 

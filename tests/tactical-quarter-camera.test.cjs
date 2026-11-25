@@ -82,7 +82,7 @@ test('PvE follows the sketch: central map, left energy and right three actions o
   assert.match(css,/touch-action:none!important/);
   assert.match(css,/\.tc-top\{[\s\S]*?display:flex!important/);
   assert.match(css,/\.tc-top \[data-close\]\{/);
-  assert.match(ui,/data-close aria-label="收起戰場">收起<\/button>/);
+  assert.match(ui,/data-close data-qy-nav-action="collapse" aria-label="收起戰場">收起<\/button>/);
   assert.match(css,/@media\(orientation:portrait\)/);
 });
 
@@ -147,6 +147,6 @@ test('ready-to-answer pulse is controlled by live quiz availability and respects
   assert.match(css,/animation:none!important/);
   assert.match(css,/\.tc-energy-number\{/);
   assert.match(css,/\.tc-energy-bolt\{/);
-  assert.match(ui,/data-close aria-label="收起戰場">收起<\/button>/);
+  assert.match(ui,/data-close data-qy-nav-action="collapse" aria-label="收起戰場">收起<\/button>/);
   assert.match(css,/\.tc-top\{[\s\S]*?display:flex!important/);
 });

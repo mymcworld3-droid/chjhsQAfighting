@@ -62,64 +62,43 @@ function growthFeedbackHarness() {
   const source = fs.readFileSync(require.resolve('../public/cultivation/player-growth-feedback.js'),'utf8')
     .replace(/^import .*;\n/gm,'').replace(/if \(document.readyState === 'loading'\)[\s\S]*$/,'');
   vm.runInNewContext(source+'\nrender = () => {}; this.api = {capture,observePower,schedule,resetObservation,animateComparison};',context);
-  return {state,window,api:context.api,popup:()=>nodes.get('growth-comparison'),flush:()=>{while(frames.length)frames.shift()();},frames};
+  return {state,window,api:context.api,popup:()=>nodes.get('growth-comparison'),seedPopup:()=>nodes.set('growth-comparison',{remove(){nodes.delete('growth-comparison');}}),flush:()=>{while(frames.length)frames.shift()();},frames};
 }
 
-test('one strengthening card lists only changed values with power first and signed deltas, without action headings', () => {
-  const h = growthFeedbackHarness(), before = h.api.capture();
-  h.state.power=1200; h.state.attack=220;
-  h.window.showGrowthComparison({uid:'u',title:'法器裝備後的變化',before,after:h.api.capture(),
-    extra:[{label:'未變分支',before:{value:1},after:{value:1}}]});
-  const html=h.popup().innerHTML;
-  assert.match(html,/戰力/); assert.match(html,/1,000/); assert.match(html,/1,200/); assert.match(html,/\+200/);
-  assert.match(html,/攻擊力/); assert.match(html,/\+20/);
-  assert.ok(html.indexOf('戰力')<html.indexOf('攻擊力'));
-  assert.doesNotMatch(html,/法器裝備後的變化|<header|生命上限|未變分支/);
-  h.state.power=800; h.state.attack=180;
-  h.window.showGrowthComparison({uid:'u',before:h.api.capture(),after:{combatPower:{label:'戰力',value:600,unit:''}}});
-  assert.match(h.popup().innerHTML,/growth-decrease">-200/);
+test('growth capture exposes current combat stats and no retired power score', () => {
+  const h=growthFeedbackHarness(),before=h.api.capture();
+  assert.deepEqual(JSON.parse(JSON.stringify(before)),{
+    attack:{label:'攻擊力',value:200,unit:''},maxHp:{label:'生命上限',value:1000,unit:''}});
+  h.state.power=1200;h.state.attack=220;
+  h.window.showGrowthComparison({uid:'u',before,after:h.api.capture()});
+  assert.equal(h.popup(),undefined);assert.equal(h.api.capture().attack.value,220);
 });
 
-test('power watcher coalesces updates with explicit feedback, ignores login and tracks increases and decreases', () => {
-  const h=growthFeedbackHarness();
-  h.api.observePower(); assert.equal(h.popup(),undefined,'initial load is a baseline');
-  const before=h.api.capture(); h.state.power=1500; h.state.attack=250;
-  h.api.schedule(); h.api.schedule(); assert.equal(h.frames.length,1);
-  h.window.showGrowthComparison({uid:'u',before,after:h.api.capture(),extra:[{label:'分支等級',before:{value:1},after:{value:2}}]});
-  const explicit=h.popup(); h.flush(); assert.equal(h.popup(),explicit,'queued events cannot replace the explicit upgrade card');
-  assert.match(h.popup().innerHTML,/分支等級/);
-  h.state.power=500; h.api.schedule(); h.flush();
-  assert.match(h.popup().innerHTML,/-1,000/);
-  h.popup().remove(); h.state.uid='other'; h.state.power=9000; h.api.observePower();
-  assert.equal(h.popup(),undefined,'account changes cannot compare different players');
-  h.state.power=10000; h.api.resetObservation(); h.flush(); assert.equal(h.popup(),undefined,'hydration does not announce upgrades');
-  h.window.showGrowthComparison({uid:'u',before,after:h.api.capture()}); assert.equal(h.popup(),undefined,'stale responses cannot show feedback');
+test('power changes and account switches never recreate retired comparison cards', () => {
+  const h=growthFeedbackHarness();h.api.observePower();assert.equal(h.popup(),undefined);
+  const before=h.api.capture();h.state.power=1500;h.state.attack=250;
+  h.api.schedule();h.api.schedule();assert.equal(h.frames.length,1);
+  h.window.showGrowthComparison({uid:'u',before,after:h.api.capture()});h.flush();
+  assert.equal(h.popup(),undefined);
+  h.state.uid='other';h.state.power=9000;h.api.observePower();h.api.resetObservation();h.flush();
+  h.window.showGrowthComparison({uid:'u',before,after:h.api.capture()});assert.equal(h.popup(),undefined);
 });
 
-test('unchanged stats do not create feedback and percent changes retain units', () => {
-  const h=growthFeedbackHarness(), snapshot=h.api.capture();
-  h.window.showGrowthComparison({uid:'u',before:snapshot,after:snapshot}); assert.equal(h.popup(),undefined);
-  h.window.showGrowthComparison({uid:'u',before:{crit:{label:'暴擊率',value:10,unit:'%'}},after:{crit:{label:'暴擊率',value:12.5,unit:'%'}}});
-  assert.match(h.popup().innerHTML,/\+2.5%/); assert.doesNotMatch(h.popup().innerHTML,/戰力/);
+test('retired comparison API removes existing cards even for unchanged or percentage payloads', () => {
+  const h=growthFeedbackHarness(),snapshot=h.api.capture();
+  h.seedPopup();h.window.showGrowthComparison({uid:'u',before:snapshot,after:snapshot});assert.equal(h.popup(),undefined);
+  h.seedPopup();
+  h.window.showGrowthComparison({uid:'u',before:{crit:{value:10,unit:'%'}},after:{crit:{value:12.5,unit:'%'}}});
+  assert.equal(h.popup(),undefined);assert.equal(h.frames.length,0);
 });
 
-test('animated values use elapsed time, preserve units and settle exactly even after a suspended frame', () => {
-  const h=growthFeedbackHarness();
-  const nodes=[0,1].map(index=>({dataset:{growthValue:String(index)}}));
+test('retired comparison animation is inert and schedules no counting frames', () => {
+  const h=growthFeedbackHarness(),nodes=[{textContent:'1,000'},{textContent:'12.5%'}];
   const popup={isConnected:true,querySelectorAll:()=>nodes};
   const changes=[{before:{value:1000},after:{value:1500}},{before:{value:12.5},after:{value:10,unit:'%'}}];
-  h.api.animateComparison(popup,changes);
-  assert.equal(nodes[0].textContent,'1,000'); assert.equal(nodes[1].textContent,'12.5%');
-  h.frames.shift()(550); // 450 ms since start: cubic easing is 87.5% complete.
-  assert.equal(nodes[0].textContent,'1,438'); assert.equal(nodes[1].textContent,'10.31%');
-  h.frames.shift()(5100);
-  assert.equal(nodes[0].textContent,'1,500'); assert.equal(nodes[1].textContent,'10%');
-  assert.equal(h.frames.length,0);
-  h.api.animateComparison(popup,changes); popup.isConnected=false; h.frames.shift()(600);
-  assert.equal(h.frames.length,0,'closed or replaced cards stop requesting frames');
-  h.window.matchMedia=()=>({matches:true}); popup.isConnected=true;
-  h.api.animateComparison(popup,changes);
-  assert.equal(h.frames.length,0,'reduced motion keeps final markup and skips counting');
+  h.api.animateComparison(popup,changes);assert.equal(h.frames.length,0);
+  assert.deepEqual(nodes.map(n=>n.textContent),['1,000','12.5%']);
+  popup.isConnected=false;h.api.animateComparison(popup,changes);assert.equal(h.frames.length,0);
 });
 
 test('duel statistics use actual HP loss and exclude guarded reveal steps and overkill', () => {
@@ -213,7 +192,7 @@ test('correction celebration fires only after a successful saved reward and neve
     const quiz=question('訂正變式',{recoveryOrigin:'原題'}), events=[];
     const remote={stats:{gold:10,totalScore:68,soloLearningV1:{version:1,mistakes:{[Learning.key('原題')]:{recovered:scenario==='replay'}}}}};
     const stats=structuredClone(remote.stats), auth={currentUser:{uid:'u'}}, learningReward=Learning.reward(stats,quiz,true);
-    const context={adaptiveRows:[],db:{},doc:()=>({}),auth,answerUser:{uid:'u'},currentUserData:{stats},stats,
+    const context={...require('./helpers/resource-ui.cjs'),adaptiveRows:[],db:{},doc:()=>({}),auth,answerUser:{uid:'u'},currentUserData:{stats},stats,
       isCorrect:true,trialAnswerId:'',learningRules:Learning,learningReward,quiz,correctionFeedback:null,
       cultivationDelta:2,recoveryCoreGain:0,originalGoldenMessage:'',cultivationReward:{},scoreGain:0,
       calculateRankFromScore:()=>0,updateUIStats(){},showCultivationFeedback(){},cultivationFeedback:null,fbTitle:{},t:()=> '答對',

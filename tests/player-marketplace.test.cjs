@@ -9,11 +9,11 @@ const market = read('public/cultivation/player-marketplace.js');
 const jobs = read('public/cultivation/refinery-ai-jobs.js');
 const refinery = read('public/cultivation/cultivation-refinery-v2.js');
 
-test('the existing market is loaded after artifacts and materials and reachable from shop and recipe book', () => {
+test('the optional market loads after active materials and remains reachable from shop and legacy recipe book', () => {
   const m = main.indexOf("'./cultivation/material-system.js'");
   const p = main.indexOf('function loadPlayerMarketSafely()');
   assert.ok(m >= 0 && p > m);
-  assert.match(main, /import\(\`\.\/cultivation\/player-marketplace\.js\?v=\$\{XIUXIAN_FEATURE_BUILD\}\`\)/);
+  assert.match(main, /import\('\.\/cultivation\/player-marketplace\.js\?v=[\w-]+'\)/);
   assert.doesNotMatch(main.slice(main.indexOf('const XIUXIAN_FEATURE_MODULES'),main.indexOf('let xiuxianFeatureLoadStarted')), /player-marketplace\.js/);
   assert.match(market, /getElementById\('page-store'\)/);
   assert.match(market, /switcher\.id = 'player-market-switch'/);

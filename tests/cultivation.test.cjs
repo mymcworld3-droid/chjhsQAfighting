@@ -356,7 +356,7 @@ test('real answer flow persists mistakes and awards correction variants exactly 
  assert.equal(h.context.currentUserData.stats.lastQuizAnswer.penalty,1);
  assert.equal(h.context.currentUserData.stats.lastQuizAnswer.scoreBefore,28);
  assert.equal(h.context.currentUserData.stats.lastQuizAnswer.scoreAfter,27);
- assert.match(h.nodes.get('feedback-title').innerHTML,/-1 修為/);
+ assert.ok(h.nodes.get('feedback-title').innerHTML.includes(require('./helpers/resource-ui.cjs').cultivationMarkup('-1',{showName:true})));
  h.newQuiz();h.context.window.currentActiveQuiz.data.q='A new variation';h.context.window.currentActiveQuiz.recoveryOrigin=origin;
  await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,29);assert.equal(h.context.currentUserData.stats.gold,35);
  h.newQuiz();h.context.window.currentActiveQuiz.data.q='Another variation';h.context.window.currentActiveQuiz.recoveryOrigin=origin;
@@ -369,5 +369,5 @@ test('a second tab cannot claim an already corrected origin again',async()=>{
  h.setRemoteStats({soloLearningV1:{version:1,mistakes:{[key]:{recovered:true}}}});
  h.context.window.currentActiveQuiz.recoveryOrigin=origin;
  await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,30);assert.equal(h.context.currentUserData.stats.gold,30);
- assert.match(h.nodes.get('feedback-title').innerHTML,/\+2 修為/);
+ assert.ok(h.nodes.get('feedback-title').innerHTML.includes(require('./helpers/resource-ui.cjs').cultivationMarkup('+2',{showName:true})));
 });

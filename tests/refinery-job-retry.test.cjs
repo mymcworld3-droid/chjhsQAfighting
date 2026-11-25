@@ -46,9 +46,9 @@ test('retrying discovery after a successful AI response reuses that response and
   assert.doesNotMatch(ui, /人工智慧/);
 });
 
-test('new build query forces updated refinery code without altering module order', () => {
+test('active build queries are versioned while retired refinery jobs stay unloaded', () => {
   assert.match(main, /XIUXIAN_FEATURE_BUILD = '20\d{6}-[\w-]+'/);
   assert.match(index, /main\.js\?v=20\d{6}-[\w-]+/);
-  assert.ok(main.indexOf("'./cultivation/refinery-ai-jobs.js'") <
-    main.indexOf("'./cultivation/cultivation-refinery-v2.js'"));
+  assert.equal(main.indexOf("'./cultivation/refinery-ai-jobs.js'"), -1);
+  assert.equal(main.indexOf("'./cultivation/cultivation-refinery-v2.js'"), -1);
 });

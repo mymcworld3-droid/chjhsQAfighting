@@ -15,12 +15,13 @@ const artifactSync=read('public/cultivation/artifact-catalog-sync.js');
 const materialSync=read('public/cultivation/material-catalog-sync.js');
 const preload=read('public/cultivation/startup-resource-preloader.js');
 
-test('catalog metadata still initializes before the inventory UI',()=>{
+test('active resource preload precedes native training without loading the retired inventory',()=>{
   assert.match(artifactSync,/export const featureReady = new Promise/);
   assert.match(artifactSync,/xiuxian:artifact-catalog-startup-ready/);
   assert.match(materialSync,/export const featureReady = new Promise/);
   assert.match(materialSync,/local-fixed-catalog/);
-  const inventory=main.indexOf("'./cultivation/unified-inventory-grid.js'");
+  const inventory=main.indexOf("'./cultivation/manual-training-page.js'");
+  assert.doesNotMatch(main, /'\.\/cultivation\/unified-inventory-grid\.js'/);
   const preloader=main.indexOf("'./cultivation/startup-resource-preloader.js'");
   assert(preloader>=0&&inventory>preloader);
   assert.match(preload,/export const featureReady = prepareStartupResources\(\)/);

@@ -211,16 +211,16 @@ test('soulbound combo and inverse damage cap work in actual PvP resolution', () 
   assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999,soulbound:true}]).chance,.12);
 });
 
-test('trusted raid snapshots and boss defense honor refined soulbound values', () => {
+test('trusted raid snapshots and boss defense ignore retired refined soulbound values', () => {
   const authority = require('../raid-authority.cjs');
   const catalog = {items:[{id:'refined-sword',name:'精煉劍',realm:'元嬰',equipSlot:'本命法寶',
     effects:[{type:'equip_combo_chance',value:.35},{type:'equip_damage_cap_percent',value:.025}]}]};
   const user = {stats:{attack:200,maxHp:1000,totalScore:10},artifactSystem:{inventory:{'refined-sword':1},equipped:{'本命法寶':'refined-sword'}}};
   const member = authority.trustedRaidPlayerSnapshot(user,'tester',catalog);
-  assert.ok(member.artifactBattle.effects.every(effect=>effect.soulbound===true));
-  assert.equal(require('../public/cultivation/combat-combo.js').stats(member,member.artifactBattle.effects).chance,.12);
+  assert.deepEqual(member.artifactBattle.effects,[]);
+  assert.equal(require('../public/cultivation/combat-combo.js').stats(member,member.artifactBattle.effects).chance,0);
   const result = authority.resolveBossDefense(member,{roomId:'room-test',bossAction:{id:1,damage:500}});
-  assert.equal(result.damage,42);
+  assert.equal(result.damage,500);
 });
 
 test('generation and guidance review both use soulbound priority and expanded ranges', async () => {

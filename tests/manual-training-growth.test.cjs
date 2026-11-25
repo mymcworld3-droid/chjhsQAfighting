@@ -17,7 +17,7 @@ const {manualVisualState,manualSkillVisualState,renderManualVisualMilestones,
     read('manual-hero-view.js'),
     read('manual-library-view.js'),
     '({manualVisualState,manualSkillVisualState,renderManualVisualMilestones,renderManualHero,renderManualCollectionSummary,filterOwnedManuals})'
-  ].join('\n'),{});
+  ].join('\n'),require('./helpers/resource-ui.cjs'));
 
 const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'

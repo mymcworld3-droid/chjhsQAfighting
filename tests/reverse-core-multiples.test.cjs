@@ -75,9 +75,7 @@ test('reverse core snapshot explains repeated multiple triggers', () => {
   assert.match(state.effect, /3、6、9/);
 });
 
-test('reverse core multiple module loads immediately after golden core training', () => {
-  assert.match(
-    main,
-    /cultivation-training-v4\.js'[\s\S]*reverse-core-multiples\.js'[\s\S]*golden-core-battle-effects\.js'/
-  );
+test('retired reverse-core multipliers cannot attach to the active training page', () => {
+  assert.doesNotMatch(main, /'\.\/cultivation\/(?:cultivation-training-v4|reverse-core-multiples|golden-core-battle-effects)\.js'/);
+  assert.match(main, /'\.\/cultivation\/manual-training-page\.js'/);
 });

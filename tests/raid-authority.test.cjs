@@ -8,7 +8,7 @@ const read = rel => readFileSync(join(root, rel), 'utf8');
 const authority = require('../raid-authority.cjs');
 const tickets = require('../raid-question-ticket.cjs');
 
-test('trusted raid snapshot derives combat stats from the A user document and equipped catalog', () => {
+test('trusted raid snapshot uses account base and realm HP while ignoring the retired equipped catalog', () => {
   const user = {
     displayName:'Server Player',
     stats:{attack:200,maxHp:1000,totalScore:68,rankLevel:3},
@@ -24,11 +24,12 @@ test('trusted raid snapshot derives combat stats from the A user document and eq
     effects:[{type:'equip_attack_flat',value:50},{type:'equip_hp_flat',value:200},{type:'equip_shield_flat',value:90}]}]};
   const snap=authority.trustedRaidPlayerSnapshot(user,'u1',catalog);
   assert.equal(snap.uid,'u1');
-  assert.equal(snap.atk,250); // 200 + 50 equipment + 24 nascent soul
-  assert.equal(snap.maxHp,1400); // 1000 + 200 realm + 200 equipment (legacy nascent projection absent)
-  assert.equal(snap.artifactShield,90);
-  assert.equal(snap.goldenCore.type,'sword');
-  assert.equal(snap.nascentSoul.bonusDamage,0);
+  assert.equal(snap.atk,200);
+  assert.equal(snap.maxHp,1200); // base HP + earned realm HP
+  assert.equal(snap.artifactShield,0);
+  assert.deepEqual(snap.artifactBattle.effects,[]);
+  assert.equal(snap.goldenCore,null);
+  assert.equal(snap.nascentSoul,null);
   assert.ok(snap.combatPower>0);
 });
 

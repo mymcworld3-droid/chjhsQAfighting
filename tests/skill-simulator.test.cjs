@@ -68,5 +68,8 @@ test('summoned sword can be moved through a second cast in free mode',()=>{
   app.renderer.select({x:4,y:4});
   assert.equal(app.renderer.state.actors[0].flyingSword.x,4);
   app.renderer.select({x:7,y:4});
-  assert.equal(app.renderer.state.actors[0].flyingSword.x,7);
+  assert.equal(app.renderer.state.actors[0].flyingSword.x,4,'out-of-range recast preserves the sword');
+  assert.match(els.message.textContent,/距離玩家兩格內/);
+  app.renderer.select({x:5,y:4});
+  assert.equal(app.renderer.state.actors[0].flyingSword.x,5);
 });

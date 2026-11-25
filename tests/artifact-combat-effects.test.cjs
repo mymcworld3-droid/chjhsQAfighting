@@ -209,24 +209,19 @@ test('lifesteal, reflect, low-hp bonuses and on-correct shield are present in re
   assert.equal(defense.reflectDamage, 20);
 });
 
-test('artifact system snapshots equipped combat effects and legacy PvP carries them into room state', () => {
+test('legacy artifact rule exports remain available but matchmaking starts without equipment effects', () => {
   assert.match(system, /window\.getArtifactBattleSnapshot/);
-  assert.match(system, /BATTLE_RUNTIME_EFFECTS/);
-  assert.match(system, /openingShield/);
-
-  assert.match(legacy, /function buildLocalBattlePlayer\(\)/);
-  assert.match(legacy, /window\.getCombatStats\?\.\(\)/);
-  assert.match(legacy, /window\.getArtifactBattleSnapshot\?\.\(\)/);
-  assert.match(legacy, /artifactShield: openingShield/);
-  assert.match(legacy, /resolveArtifactBattleAttack/);
-  assert.match(legacy, /resolveArtifactBattleDefense/);
-  assert.match(legacy, /lifestealPercent/);
-  assert.match(legacy, /法寶反震/);
-
-  const systemIndex = main.indexOf("'./cultivation/artifact-system.js'");
-  const battleEffectsIndex = main.indexOf("'./cultivation/artifact-battle-effects.js'");
-  const battleIndex = main.indexOf("'./cultivation/battle-mode-v2.js'");
-  assert.ok(systemIndex >= 0 && battleEffectsIndex > systemIndex && battleIndex > battleEffectsIndex);
+  const begin=legacy.indexOf('function buildLocalBattlePlayer()');
+  const end=legacy.indexOf('\n// [修正] 接受邀請',begin);
+  assert.ok(begin>=0&&end>begin);
+  const context={auth:{currentUser:{uid:'u'}},currentUserData:{stats:{totalScore:68},equipped:{}},
+    resolvePlayerAvatar:()=>'',window:{getCombatStats:()=>({attack:200,maxHp:1200}),
+      getArtifactBattleSnapshot(){assert.fail('retired equipment must not be read');}}};
+  vm.runInNewContext(legacy.slice(begin,end)+'\nthis.player=buildLocalBattlePlayer();',context);
+  assert.deepEqual(JSON.parse(JSON.stringify(context.player.artifactBattle)),{version:1,effects:[],openingShield:0});
+  assert.equal(context.player.artifactShield,0);assert.equal(context.player.goldenCore,null);
+  assert.equal(context.player.atk,200);assert.equal(context.player.maxHp,1200);
+  assert.doesNotMatch(main, /'\.\/cultivation\/(?:artifact-system|artifact-battle-effects)\.js'/);
 });
 
 test('admin guide includes copy-enemy effect and both flat/percentage defensive choices', () => {
@@ -237,8 +232,8 @@ test('admin guide includes copy-enemy effect and both flat/percentage defensive 
   assert.match(manager, /不會複製「複製」本身/);
 });
 
-test('formal matchmaking captures equipped combat effects and persists their state after settlement', () => {
-  assert.match(formal, /const artifactBattle = window\.getArtifactBattleSnapshot\?\.\(\)/);
+test('formal matchmaking clears retired equipment while retaining deterministic settlement state', () => {
+  assert.match(formal, /const artifactBattle = \{\s*version:\s*1,\s*effects:\s*\[\],\s*openingShield:\s*0\s*\}/);
   assert.match(formal, /artifactBattle, artifactShield:/);
   assert.match(formal, /artifactFirstHitUsed: false, artifactCheatDeathUsed: false/);
   assert.match(formal, /resolveEquipmentHit: window\.resolveArtifactBattleHit/);

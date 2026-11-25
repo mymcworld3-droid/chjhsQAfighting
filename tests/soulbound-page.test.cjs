@@ -43,7 +43,7 @@ function pageRuntime(options = {}) {
     addEventListener(name, callback) { const list = events.get(name) || []; list.push(callback); events.set(name, list); },
     dispatchEvent(event) { events.get(event.type)?.forEach(callback => callback(event)); }
   };
-  const context = { window, QASoulboundPool: Pool, QATrainingAccessRules: Access,
+  const context = {...require('./helpers/resource-ui.cjs'), window, QASoulboundPool: Pool, QATrainingAccessRules: Access,
     document: { getElementById: id => nodes.get(id), createElement: () => node(),
       querySelector: selector => selector.includes('data-training-tab') ? tab : null,
       head: { append() {} }, body: node('body'),

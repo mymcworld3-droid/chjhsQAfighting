@@ -42,8 +42,8 @@ test('all surfaces put damage in description and remove wheel/card damage badges
   const battle=read('cultivation/tactical-combat.js');
   const simulator=read('cultivation/skill-simulator.js');
   assert.match(library,/descriptionWithDamage:Catalog\.descriptionWithDamage/);
-  assert.match(battle,/Manuals\.descriptionWithDamage\(me\.atk\*\(state\?\.weaponDungeon&&shown\?\.school===\x27body\x27\?1\.15:1\),shown/);
-  assert.match(battle,/Manuals\.descriptionWithDamage\(hero\.atk\*\(state\?\.weaponDungeon&&option\.skill\?\.school===\x27body\x27\?1\.15:1\),option\.skill/);
+  assert.match(battle,/Manuals\.descriptionWithDamage\(me\.atk\*\(state\?\.weaponDungeon&&shown\?\.school===\x27body\x27\?\(state\.weaponDungeon\.totemDamageMultiplier\?\?1\.15\):1\),shown/);
+  assert.match(battle,/Manuals\.descriptionWithDamage\(hero\.atk\*\(state\?\.weaponDungeon&&option\.skill\?\.school===\x27body\x27\?\(state\.weaponDungeon\.totemDamageMultiplier\?\?1\.15\):1\),option\.skill/);
   assert.match(simulator,/Manuals\.descriptionWithDamage\(player\.atk,chosen/);
   assert.doesNotMatch(library,/manual-skill-damage|damageDetails/);
   assert.doesNotMatch(battle,/tc-single-damage|tc-pvp-skill-damage|單次攻擊力/);

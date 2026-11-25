@@ -65,7 +65,8 @@ test('stamina quiz uses the very same solo prompt and learning engines with batt
   const mainSolo=read('public/main-legacy.js');
   assert.match(server,/const combatFastMode = !tacticalMode && FAST_QUIZ_MODES\.has/);
   assert.match(server,/adaptiveContext=await adaptiveLearning\.prepare\(req,\{/);
-  assert.match(server,/adaptiveScope:tacticalContext\.adaptiveScope/);
+  assert.match(server,/const practiceContext=tacticalMode\?tacticalContext:dungeonContext/);
+  assert.match(server,/adaptiveScope:practiceContext\.adaptiveScope/);
   assert.match(server,/mode:tacticalMode\?'solo':String\(quizMode \|\| 'solo'\)/);
   assert.match(battle,/SoloLearning\.reward\(stats,learningQuiz,correct,user\.profile\|\|\{\}\)/);
   assert.match(battle,/AdaptiveRules\.record\(/);

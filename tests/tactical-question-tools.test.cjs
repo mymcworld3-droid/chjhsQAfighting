@@ -80,8 +80,8 @@ test('a delayed refund updates the same room without overwriting the next questi
   assert.equal(c.accepted.length,1);
 });
 test('background state synchronization preserves the current question; expiry closes an invalid question',()=>{
-  const acceptSource=source.slice(source.indexOf('function accept('),source.indexOf('function applyProgress('));
-  let hides=0,preserved;const ctx={state:{id:'room',mode:'pvp',revision:1,question:{id:'q'}},appliedOp:0,clockOffset:0,modalOpen:true,
+  const acceptSource=source.slice(source.indexOf('function markFreshReward('),source.indexOf('function applyProgress('));
+  let hides=0,preserved;const ctx={state:{id:'room',mode:'pvp',revision:1,question:{id:'q'}},appliedOp:0,clockOffset:0,modalOpen:true,freshRewardReceipt:null,
     Manuals:{EXP_PER_KILL:1},uid:'u1',pairQuestions:[],pairChoices:[],
     manualXpDelta:()=>null,CombatImpact:{phaseTransition:()=>null},sealInspector:null,preloadTacticalQuestions(){},
     $:()=>({}),applyProgress(){},hideModal(){hides++;ctx.modalOpen=false;},notice(){},paint(options){preserved=options.preserveModal;}};

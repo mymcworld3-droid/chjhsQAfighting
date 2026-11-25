@@ -41,6 +41,7 @@ function setup() {
         showToast: text => toasts.push(text)
     };
     const context = vm.createContext({
+        QAQuestionPresentation:require('../public/cultivation/question-presentation.js'),
         window: w, auth, answeredSoloQuizzes: answered,
         document: { getElementById: get, querySelectorAll: () => buttons },
         currentUserData: { stats: { rankLevel: 0 }, gameSettings: { difficulty: 'auto' }, profile: { educationLevel: '高中二年級' } },
@@ -70,7 +71,7 @@ function setup() {
     context.cache.setActive(normal);
     context.cache.append(buffered);
     context.soloQuestionCache = context.cache;
-    vm.runInContext('let trialQuestionSession = null, soloQuizOpenSerial = 0, soloCacheRevision = 0, soloDraws = new WeakMap(), quizBuffer = [], isFetchingBuffer = false; const soloSession = { active:true, mode:"infinite", correctCount:0, wrongCount:0 };'
+    vm.runInContext('let pendingQuizScopeExclusions = null, trialQuestionSession = null, soloQuizOpenSerial = 0, soloCacheRevision = 0, soloDraws = new WeakMap(), quizBuffer = [], isFetchingBuffer = false; const soloSession = { active:true, mode:"infinite", correctCount:0, wrongCount:0 };'
         + section('const extendedPracticeState =', 'const quizHelperState =')
         + section('let soloNextBusy = false;', 'async function handleAnswer(')
         + section('async function fetchExtendedPracticeQuestion(', 'const quizWhiteboardState =')
@@ -78,6 +79,7 @@ function setup() {
         + section('async function takeSoloQuestion(', 'window.startQuizFlow =')
         + section('function displaySoloQuiz(', 'const openSoloQuestionPage')
         + section('window.startQuizFlow =', '// 🆕 單人模式選擇與啟動邏輯')
+        + 'const openSoloQuestionPage = window.startQuizFlow;\n'
         + '\n globalThis.extension = extendedPracticeState;', context);
     return {
         w, context, auth, buttons, generated, renders, toasts, get, normal, buffered,

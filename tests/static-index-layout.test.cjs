@@ -40,13 +40,11 @@ test('home cultivation panel is present in index before JS hydration', () => {
   assert.match(theme, /panel\.dataset\.xiuxianBound/);
 });
 
-test('training page and all primary tabs are static in index', () => {
-  assert.match(index, /id="page-training"[^>]*data-static-layout="1"/);
-  assert.match(index, /data-training-tab="core"/);
-  assert.match(index, /data-training-tab="refinery"/);
-  assert.match(index, /data-training-tab="bag"/);
-  assert.match(index, /id="training-tab-content"/);
-  assert.match(index, /training-static-core-shell/);
+test('index reserves one empty training host for the native weapon page', () => {
+  assert.match(index, /<div id="page-training"[^>]*data-static-layout="1"[^>]*><\/div>/);
+  const main = read('public/main.js');
+  assert.match(main, /'\.\/cultivation\/manual-training-page\.js'/);
+  assert.doesNotMatch(main, /'\.\/cultivation\/(?:cultivation-training-v4|foundation-training-page)\.js'/);
 });
 
 test('training modules hydrate and preserve the static page instead of requiring reinsertion', () => {

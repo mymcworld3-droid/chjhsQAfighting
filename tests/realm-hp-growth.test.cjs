@@ -21,7 +21,7 @@ test('each breakthrough after Foundation adds 100 max HP, once per realm',()=>{
   assert.equal(Access.hpBonus(legacy),200,'legacy unlocks receive corresponding health');
 });
 
-test('browser combat HP bonus applies before nascent and equipment wrappers without saving it',()=>{
+test('browser combat applies earned realm HP and ignores retired nascent wrappers without saving it',()=>{
   const user={stats:{attack:200,hp:900,maxHp:1000,totalScore:188}};
   const window={QATrainingAccessRules:Access,getCurrentUserData:()=>user,getNascentSoulBattleSnapshot:()=>null,
     addEventListener:()=>{}};
@@ -31,13 +31,13 @@ test('browser combat HP bonus applies before nascent and equipment wrappers with
   vm.runInNewContext(source,{window,document,console,Math,Number,CustomEvent:class {}});
   assert.deepEqual(JSON.parse(JSON.stringify(window.getCombatStats())),{attack:200,maxHp:1300,hp:1170});
   window.getNascentSoulBattleSnapshot=()=>({attackFlat:35,maxHpFlat:250});
-  assert.deepEqual(JSON.parse(JSON.stringify(window.getCombatStats())),{attack:235,maxHp:1550,hp:1395});
+  assert.deepEqual(JSON.parse(JSON.stringify(window.getCombatStats())),{attack:200,maxHp:1300,hp:1170});
   assert.equal(user.stats.maxHp,1000,'stored base maxHp must not be inflated');
   user.stats.totalScore=27;
-  assert.equal(window.getCombatStats().maxHp,1250,'below Golden Core has no realm bonus');
+  assert.equal(window.getCombatStats().maxHp,1000,'below Golden Core has no realm or retired soul bonus');
 });
 
-test('server trusted raid HP projection matches browser before and after nascent growth',()=>{
+test('server trusted raid HP matches the browser even with retired growth saved on the account',()=>{
   const user={stats:{attack:200,maxHp:1000,totalScore:188}};
   const plain=Raid.trustedRaidPlayerSnapshot(user,'h');
   assert.equal(plain.maxHp,1300);
@@ -48,8 +48,8 @@ test('server trusted raid HP projection matches browser before and after nascent
   user.nascentSoulGrowth={version:1,branches:{attack:10,vitality:10,core:10,cultivation:10}};
   const evolved=Raid.trustedRaidPlayerSnapshot(user,'h');
   assert.equal(evolved.baseMaxHp,1300);
-  assert.equal(evolved.maxHp,1550);
-  assert.equal(evolved.atk,235);
+  assert.equal(evolved.maxHp,1300);
+  assert.equal(evolved.atk,200);
 });
 
 test('combat power UI explicitly includes realm HP, without counting it as an equipped artifact',()=>{

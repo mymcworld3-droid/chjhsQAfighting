@@ -69,13 +69,15 @@ test('admin artifact and material lists are ordered by realm', () => {
   assert.match(adminSort, /materialRealmOrderByName/);
 });
 
-test('new backpack modules load after material and artifact systems and admin sorting loads last', () => {
+test('retired backpack stays unloaded while materials and admin sorting remain ordered', () => {
   const artifact = main.indexOf("'./cultivation/artifact-system.js'");
   const material = main.indexOf("'./cultivation/material-system.js'");
   const bagIndex = main.indexOf("'./cultivation/unified-inventory-grid.js'");
   const adminManager = main.indexOf("'./cultivation/admin-material-manager.js'");
   const adminSortIndex = main.indexOf("'./cultivation/admin-realm-sorting.js'");
-  assert.ok(artifact >= 0 && material > artifact && bagIndex > material);
+  assert.equal(artifact, -1);
+  assert.equal(bagIndex, -1);
+  assert.ok(material >= 0);
   assert.ok(adminManager >= 0 && adminSortIndex > adminManager);
 });
 
@@ -116,14 +118,15 @@ test('only selected backpack tab renders; empty slots choose compatible artifact
 });
 
 
-test('real equipment tab is present in the static and both stage-specific layouts', () => {
+test('legacy equipment tabs remain isolated from the static native training host', () => {
   const index = read('public/index.html');
   const foundation = read('public/cultivation/foundation-training-page.js');
   const golden = read('public/cultivation/cultivation-training-v4.js');
-  for (const [name, source] of Object.entries({index, foundation, golden})) {
+  for (const [name, source] of Object.entries({foundation, golden})) {
     assert.match(source, /data-training-tab="equipment"/,name);
     assert.match(source, /fa-shield-halved/,name);
   }
+  assert.doesNotMatch(index.match(/<div id="page-training"[^>]*>[\s\S]*?<\/div>/)[0], /data-training-tab="equipment"/);
   assert.match(foundation, /xiuxian:equipment-open-request/);
   assert.match(golden, /activeTab === 'equipment'/);
   assert.match(golden, /xiuxian:equipment-open-request/);
@@ -180,12 +183,12 @@ test('old plain-text training backpack cards are removed from both stage shells'
   assert.match(goldenBag,/uib-bag-loading/);
 });
 
-test('all runtime feature modules share one build query without changing dependency-list paths', () => {
+test('active feature registry keeps versioned loading and excludes retired inventory paths', () => {
   assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20\d{6}-[\w-]+'/);
   assert.match(main,/await import\(\`\$\{modulePath\}\?v=\$\{XIUXIAN_FEATURE_BUILD\}\`\)/);
-  assert.match(main,/'\.\/cultivation\/foundation-training-page\.js'/);
-  assert.match(main,/'\.\/cultivation\/cultivation-training-v4\.js'/);
-  assert.match(main,/'\.\/cultivation\/unified-inventory-grid\.js'/);
+  assert.doesNotMatch(main,/'\.\/cultivation\/foundation-training-page\.js'/);
+  assert.doesNotMatch(main,/'\.\/cultivation\/cultivation-training-v4\.js'/);
+  assert.doesNotMatch(main,/'\.\/cultivation\/unified-inventory-grid\.js'/);
 });
 
 test('selected equipment slot equips compatible owned artifacts directly and explains unsupported items', () => {

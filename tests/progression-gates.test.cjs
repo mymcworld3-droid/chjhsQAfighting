@@ -27,9 +27,11 @@ const startupScenes = ['loading-landscape-ai.webp', 'loading-portrait-ai.webp'].
 
 test('login core is isolated from optional cultivation module failures', () => {
   const staticImports = main.match(/^import\s+['"][^'"]+['"];$/gm) || [];
-  assert.equal(staticImports.length,2,'authentication must have only two static imports');
+  assert.equal(staticImports.length,3,'only login, pure resource presentation and the dongtian entry are static');
   assert.match(staticImports[0], /^import '\.\/main-legacy\.js\?v=20\d{6}-[\w-]+';$/);
-  assert.equal(staticImports[1], "import './cultivation/dongtian-entry.js';");
+  assert.match(staticImports[1], /^import '\.\/cultivation\/spirit-stone-ui\.js\?v=[\w-]+';$/);
+  assert.doesNotMatch(read('spirit-stone-ui.js'), /firebasejs|firebase-firestore|getFirestore|getAuth/);
+  assert.equal(staticImports[2], "import './cultivation/dongtian-entry.js';");
   const dongtianEntry = read('dongtian-entry.js');
   assert.doesNotMatch(dongtianEntry, /firebasejs|firebase-firestore|getFirestore|getAuth/);
   assert.match(main, /const XIUXIAN_FEATURE_MODULES = \[/);
@@ -38,7 +40,7 @@ test('login core is isolated from optional cultivation module failures', () => {
   assert.match(main, /\.\/cultivation\/cultivation-theme\.js/);
 });
 
-test('Status opens at account creation, Foundation features at 6, Golden Core at 28', () => {
+test('legacy progression gates retain their thresholds while the active registry uses native training', () => {
   assert.match(progression, /const FOUNDATION_SCORE = 6;/);
   assert.match(progression, /const GOLDEN_CORE_SCORE = 28;/);
   assert.match(guard, /const FOUNDATION_SCORE = 6;/);
@@ -68,8 +70,9 @@ test('Status opens at account creation, Foundation features at 6, Golden Core at
   const guardIndex = main.indexOf("'./cultivation/golden-core-access-guard.js'");
   const foundationIndex = main.indexOf("'./cultivation/foundation-training-page.js'");
   const trainingIndex = main.indexOf("'./cultivation/cultivation-training-v4.js'");
-  assert.ok(progressionIndex >= 0 && inventoryIndex > progressionIndex && guardIndex > inventoryIndex && foundationIndex > guardIndex && trainingIndex > foundationIndex,
-    'migration, shared inventory, guard, Foundation page and full Golden Core UI load in order');
+  assert.ok(progressionIndex >= 0 && inventoryIndex > progressionIndex);
+  for (const index of [guardIndex, foundationIndex, trainingIndex]) assert.equal(index,-1);
+  assert.ok(main.indexOf("'./cultivation/manual-training-page.js'") > inventoryIndex);
 });
 
 test('Golden Core UI and effects remain gated behind migration and 28 cultivation', () => {
@@ -153,21 +156,21 @@ test('combat base remains attack and HP while status reports equipped artifact e
   assert.doesNotMatch(statusPanel, /防禦力/);
 });
 
-test('Golden Core visual and lower-quality equip warning remain active', () => {
+test('retired Golden Core visuals remain available in isolation without starting in the game', () => {
   assert.match(visual, /core-quality-supreme/);
   assert.match(visual, /core-quality-rays/);
   assert.match(visual, /core-rune-ring/);
   assert.match(visual, /core-quality-sparks/);
   assert.match(equipWarning, /金丹品質下降/);
   assert.match(equipWarning, /if \(newGrade <= oldGrade\) return;/);
-  assert.match(main, /cultivation\/cultivation-core-visual\.js/);
-  assert.match(main, /cultivation\/cultivation-core-equip-warning\.js/);
-  assert.match(main, /cultivation\/cultivation-status-panel\.js/);
+  assert.doesNotMatch(main, /cultivation\/cultivation-core-visual\.js/);
+  assert.doesNotMatch(main, /cultivation\/cultivation-core-equip-warning\.js/);
+  assert.doesNotMatch(main, /cultivation\/cultivation-status-panel\.js/);
   assert.match(main, /cultivation\/realm-breakthrough-feedback\.js/);
 });
 
 
-test('Golden Core roster matches the nine current pills and battle effects', () => {
+test('retained legacy Golden Core roster is consistent but local matchmaking starts without a core', () => {
   for (const name of [
     '大海無垠丹', '太初回元丹', '凝心靜音丹', '破境衝仙丹', '星辰吞月丹',
     '無垢清心丹', '萬劫雷霆丹', '陰陽反轉丹', '破鋒劍心丹'
@@ -184,8 +187,8 @@ test('Golden Core roster matches the nine current pills and battle effects', () 
   assert.match(battleEffects, /extraDamage: 200/);
   assert.match(battleEffects, /答對蓄雷（\$\{chance\}%），本回合反擊傷害 \+75%/);
   assert.match(battleEffects, /reflectDamage: reflected/);
-  assert.match(main, /cultivation\/golden-core-battle-effects\.js/);
-  assert.match(legacy, /goldenCore: window\.getEquippedGoldenCoreBattleSnapshot/);
+  assert.doesNotMatch(main, /cultivation\/golden-core-battle-effects\.js/);
+  assert.match(legacy, /goldenCore:\s*null/);
   assert.match(legacy, /resolveGoldenCoreBattleAttack/);
   assert.match(legacy, /resolveGoldenCoreBattleCounter/);
 });

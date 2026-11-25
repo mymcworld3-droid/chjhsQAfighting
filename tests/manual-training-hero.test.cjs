@@ -74,7 +74,7 @@ test('show level, XP, next mastery milestone and three original skills',()=>{
 test('upgrade always uses the server price and disables on insufficient gold',()=>{
   const view=draw([makeBook()],undefined,{gold:5});
   assert.match(view.html,/56 靈石/);
-  assert.match(view.html,/disabled title="靈石不足"/);
+  assert.match(view.html,/<button[^>]*data-manual-upgrade=[^>]*disabled[^>]*title="[^"]*靈石不足[^"]*"/);
 });
 
 test('max-level and fully unlocked books show completion without a fabricated upgrade',()=>{

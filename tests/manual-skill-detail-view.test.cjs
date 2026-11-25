@@ -36,7 +36,8 @@ test('one learned skill displays description and server-confirmed action buttons
   assert.match(html,/data-skill-upgrade="a"/);
   assert.match(html,/data-manual-close-skill/);
   assert.match(html,/流風斬 傷害 230/);
-  assert.match(html,/Lv. 2 · 20 靈石/);
+  assert.match(html,/Lv. 2/);
+  assert.ok(html.includes(stoneCostMarkup(20)));
 });
 test('already equipped technique does not offer duplicate equip operation',()=>{
   const html=render(book,'a',{...opts,equipped:['a']});
@@ -50,7 +51,7 @@ test('full deck cannot exceed three techniques',()=>{
 });
 test('insufficient currency disables upgrade but does not invent resources',()=>{
   const html=render(book,'a',{...opts,gold:4});
-  assert.match(html,/data-skill-upgrade="a" disabled/);
+  assert.match(html,/<button[^>]*data-skill-upgrade="a"[^>]* disabled/);
   assert.match(html,/靈石不足/);
 });
 test('mastery locked skills have no action buttons or cultivation gate',()=>{

@@ -53,7 +53,7 @@ test('the entire brand is a native button that calls guarded navigation', () => 
   assert.match(button[0], /onclick="returnToImmortalHome\(\)"/);
   assert.match(button[0], /aria-label="青雲問道，返回宗門"/);
   assert.match(button[1], /青雲問道/);
-  assert.match(button[1], /以學入道 · 積微成仙/);
+  assert.match(button[1], /class="qy-brand-art" aria-hidden="true"/);
 });
 
 test('normal pages return through the existing page transition; home is a no-op', async () => {

@@ -14,7 +14,7 @@ test('corner masthead leaves the middle transparent and non-interactive',()=>{
  assert.match(html,/<header class="app-corner-header /);
  assert.match(html,/id="brand-home"[^>]*onclick="returnToImmortalHome\(\)"/);
  assert.match(html,/id="user-info"/);
- assert.match(html,/interface-cleanup.css\?v=20261125-masa-calligraphy-v7/);
+ assert.match(html,/interface-cleanup\.css\?v=[\w-]+/);
 });
 test('fullscreen and portrait exclusions also release the new scroller margin',()=>{
  const css=read('public/styles/interface-cleanup.css'),quiet=read('public/styles/xianxia-quiet.css'),training=read('public/styles/manual-training-layout.css');

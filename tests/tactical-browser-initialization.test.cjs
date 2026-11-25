@@ -31,10 +31,11 @@ test('Node and browser module registries expose the same manual skill',()=>{
   assert.equal(manuals.BY_SKILL['rock-fist'].manualId,'body-rock');
 });
 
-test('tactical browser imports manuals before invoking combat rules',()=>{
-  const combat=read('tactical-combat.js');
-  const renderer=read('tactical-renderer.js');
-  const first=src=>src.match(/^import\s+['"]([^'"]+)['"]/m)?.[1];
-  assert.match(first(combat),/^\.\/manual-rules\.js(?:\?v=[a-zA-Z0-9-]+)?$/);
-  assert.match(first(renderer),/^\.\/manual-rules\.js(?:\?v=[a-zA-Z0-9-]+)?$/);
+test('tactical browser imports manuals before invoking combat rules, allowing presentation imports first',()=>{
+  for(const name of ['tactical-combat.js','tactical-renderer.js']){
+    const imports=[...read(name).matchAll(/^import\s+(?:[^'"\n]*from\s*)?['"]([^'"]+)['"]/gm)].map(m=>m[1]);
+    const manual=imports.findIndex(p=>/^\.\/manual-rules\.js(?:\?v=[\w-]+)?$/.test(p));
+    const rules=imports.findIndex(p=>/^\.\/tactical-rules\.js(?:\?v=[\w-]+)?$/.test(p));
+    assert.ok(manual>=0&&rules>manual,name);
+  }
 });

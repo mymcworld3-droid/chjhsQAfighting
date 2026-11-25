@@ -90,7 +90,7 @@ test('only an approved and paid review can show rewards; a technical failure is 
 });
 
 test('PvE zero-gold compensation is approved, and daily limits are distinct from unsettled payouts', async () => {
-  const begin=legacy.indexOf("        // PvE intentionally pays no report gold:");
+  const begin=legacy.indexOf("        const retryReport = () => {");
   const end=legacy.indexOf("        return result;",begin);
   assert.ok(begin>0&&end>begin,'report payout decision block exists');
   const code=legacy.slice(begin,end);

@@ -29,7 +29,7 @@ test('finds the same concept for live battle and formatted background warmup', (
 
 test('respects the current facet, grade, space-vectors scope and custom exclusions', () => {
   const scope = { path: '數學/高中二年級/第一學期/平面向量', sub_topics: [] };
-  assert.equal(quizReferences({ ...target, topic: '平面向量', scope, facet: { concept:'內積的定義' } }).length, 1);
+  assert.equal(quizReferences({ ...target, topic: '平面向量', scope, facet: { concept:'內積的定義' } }).length, 3);
   for (const overrides of [
     { facet:{ concept:'向量加減' } }, { topic:'空間向量／向量內積' },
     { level:'國中二年級' }, { exclusions:['不要出投影'] }, { topic:'平面向量' }
@@ -46,7 +46,7 @@ test('whitespace in curriculum acronyms never prevents exact index lookup', () =
   ];
   for (const [subject,level,topic] of cases) {
     const expected=quizReferences({subject,level,topic});
-    assert.equal(expected.length,2,topic);
+    assert.equal(expected.length,3,topic);
     assert.ok(expected.every(r=>r.question.sub_topic===topic));
     const noSpaces=quizReferences({subject,level,topic:topic.split(' ').join('')});
     assert.deepEqual(noSpaces.map(r=>r.id),expected.map(r=>r.id));
@@ -57,11 +57,11 @@ test('loads exact Chinese curriculum concepts containing punctuation', () => {
   const target = { subject: '國文', level: '高中一年級' };
   const punctuated = '韻腳、對仗與詩意理解';
   const reference = quizReferences({ ...target, topic: punctuated });
-  assert.equal(reference.length, 2);
+  assert.equal(reference.length, 3);
   assert.ok(reference.every(item => item.question.sub_topic === punctuated));
   assert.equal(quizReferences({ ...target, topic: '高中一年級／第一學期／古典韻文（核心考點細項：韻腳、對仗與詩意理解）' })[0].id, reference[0].id);
   const other = quizReferences({ ...target, topic: '主旨、段落結構、語氣' });
-  assert.equal(other.length, 2);
+  assert.equal(other.length, 3);
   assert.ok(other.every(item => item.question.sub_topic === '主旨、段落結構、語氣'));
   assert.deepEqual(quizReferences({ ...target, topic: '化學反應' }), []);
 });
@@ -77,7 +77,7 @@ test('grade 11 Chinese first semester references follow exact fine concepts', ()
   ];
   for (const concept of concepts) {
     const refs = quizReferences({ ...target, topic: concept });
-    assert.equal(refs.length, 2, concept);
+    assert.equal(refs.length, 3, concept);
     for (const ref of refs) {
       assert.equal(ref.question.sub_topic, concept);
       assert.equal(ref.question.wrong.length, 3);
@@ -88,16 +88,16 @@ test('grade 11 Chinese first semester references follow exact fine concepts', ()
   const formatted = quizReferences({
     ...target, topic: '高中二年級／第一學期／唐宋詩詞（核心考點細項：意象、典故與詩風）'
   });
-  assert.equal(formatted.length, 2);
+  assert.equal(formatted.length, 3);
   assert.ok(formatted.every(ref => ref.question.sub_topic === '意象、典故與詩風'));
   assert.deepEqual(quizReferences({ ...target, topic: '意象、典故與詩風', exclusions:['排除典故相關題型'] }), []);
   assert.deepEqual(quizReferences({ ...target, topic: '高中三年級寫作技巧' }), []);
 });
 
-test('all five expanded history references appear across seeded samples',()=>{
+test('every expanded history reference appears across seeded three-item samples',()=>{
  const query={subject:'歷史',level:'高中二年級',topic:'宗教與社會'};
  const all=require('../question-references/歷史/高中二年級/宗教與社會.json').references;
- assert.equal(all.length,5);
+ assert.equal(all.length,8);
  const ids=new Set();
  for(let i=0;i<100;i++) for(const ref of quizReferences({...query,referenceSeed:'seed-'+i}))ids.add(ref.id);
  assert.deepEqual(ids,new Set(all.map(r=>r.id)));

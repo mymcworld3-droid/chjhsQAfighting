@@ -15,7 +15,7 @@ test('native main cultivation excludes stamina artwork and modal',()=>{
 });
 test('native sorting, left-right carousel, and multiplayer gear fix remain intact',()=>{
  const page=read('public/cultivation/manual-training-page.js'),gallery=read('public/cultivation/manual-library-view.js'),hero=read('public/cultivation/manual-hero-view.js');
- assert.match(page,/data\.manualBrowseWeapon/);assert.match(page,/leaveDungeonAndRetryEquipment/);
+ assert.match(page,/button\.dataset\.manualBrowseWeapon/);assert.match(page,/leaveDungeonAndRetryEquipment/);
  assert.match(gallery,/sortedOwnedWeapons/);assert.match(hero,/sortedOwnedWeapons/);
  assert.match(hero,/data-manual-browse-weapon/);
 });

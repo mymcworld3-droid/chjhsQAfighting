@@ -25,5 +25,5 @@ test('normal scope selection hides STEP numbers and explanatory paragraphs only'
   assert.match(curriculum, /class="cs-stage-title"><small>STEP 0/);
   assert.match(curriculum, /<h4>/);
   assert.match(css, /body:not\(:has\(#newbie-tutorial-layer\)\) #scope-studio:not\(\.fv-scope\) \.cs-stage-title > :is\(small,p\)\{display:none\}/);
-  assert.match(studio, /curriculum-studio\.css\?v=20261014-scope-concise1/);
+  assert.match(studio, /curriculum-studio\.css\?v=[\w-]+/);
 });

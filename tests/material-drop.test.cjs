@@ -31,16 +31,16 @@ test('material realm UI may decorate fixed raid materials without creating rewar
 
 test('legacy Firebase material realm editor is no longer loaded', () => {
   assert.doesNotMatch(main,/\.\/cultivation\/admin-material-realm-editor\.js/);
-  assert.match(main,/\.\/cultivation\/material-realm-ui\.js/);
-  assert.match(main,/\.\/cultivation\/material-drop-system\.js/);
+  assert.doesNotMatch(main,/\.\/cultivation\/material-realm-ui\.js/);
+  assert.doesNotMatch(main,/\.\/cultivation\/material-drop-system\.js/);
 });
 
-test('material modules still load before refinery and dongtian', () => {
+test('active materials precede dongtian while retired drop and realm modules stay unloaded', () => {
   const materialIndex = main.indexOf("'./cultivation/material-system.js'");
   const realmUiIndex = main.indexOf("'./cultivation/material-realm-ui.js'");
   const dropIndex = main.indexOf("'./cultivation/material-drop-system.js'");
   const dongtianIndex = main.indexOf("'./cultivation/dongtian.js'");
-  assert.ok(materialIndex >= 0 && realmUiIndex > materialIndex);
-  assert.ok(dropIndex > realmUiIndex);
-  assert.ok(dongtianIndex > dropIndex);
+  assert.ok(materialIndex >= 0 && dongtianIndex > materialIndex);
+  assert.equal(realmUiIndex, -1);
+  assert.equal(dropIndex, -1);
 });

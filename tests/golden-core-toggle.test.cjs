@@ -77,7 +77,7 @@ test('runtime and downstream snapshots do not expose a disabled core as active',
   assert.match(status, /getStoredGoldenCoreState\?\.\(\)/);
   assert.match(status, /已停用/);
   assert.match(battle, /if \(!core\?\.equipped\) return null/);
-  assert.match(profile, /if \(!enabled\) return null/);
+  assert.doesNotMatch(profile, /getEquippedGoldenCoreState|getStoredGoldenCoreState/);
   assert.match(css, /\.status-core-toggle:disabled/);
   assert.match(css, /grid-template-columns: minmax\(0, 1fr\) auto/);
   // Neither the phone layout nor the short-height layout may reassign the outer

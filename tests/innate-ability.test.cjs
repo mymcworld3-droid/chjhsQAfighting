@@ -7,6 +7,7 @@ const Access=require('../public/cultivation/training-access-rules.js');
 const Combo=require('../public/cultivation/combat-combo.js');
 const Talents=require('../public/cultivation/soul-talents.js');
 const Raid=require('../raid-authority.cjs');
+const legacyRuleFighter=require('./helpers/legacy-fighter.cjs');
 const read=name=>fs.readFileSync(require('node:path').join(__dirname,'..',name),'utf8');
 const clean=source=>source.replace(/^import .*;\n/gm,'').replace(/^export /gm,'');
 function account(type='ocean',branch=Innate.branches(type)[0].id,rank=10) {
@@ -15,7 +16,7 @@ function account(type='ocean',branch=Innate.branches(type)[0].id,rank=10) {
     innateAbilityGrowth:{version:1,paths:{[type]:{branch,level:rank}}}};
 }
 function fighter(type,branch,extra={}) {
-  return {...Raid.trustedRaidPlayerSnapshot(account(type,branch),'h'),maxHp:3000,hp:1200,...extra};
+  return {...legacyRuleFighter(account(type,branch),'h'),maxHp:3000,hp:1200,...extra};
 }
 function advance(p,correct) {return {...p,innateAbilityState:Innate.advance(p,correct)};}
 function engine() {
@@ -158,7 +159,7 @@ test('PvP retries replay exactly, persist counters across rounds, and never adva
 });
 test('WuGou innate light passes Dao shield while normal divine pursuit uses artifact defense',()=>{
   const p=account('wugou','clarity');p.cultivationTraining.equippedCore.grade=1;p.nascentSoulGrowth.branches.core=10;
-  const host=Raid.trustedRaidPlayerSnapshot(p,'h');
+  const host=legacyRuleFighter(p,'h');
   const shielded=duel(host,{coreShield:true,goldenCore:{type:'ningxin',grade:9}});
   assert.equal(shielded.guestHp,2928); // Existing nascent true damage remains; no innate flat true damage.
   const h=fighter('ocean','tide');h.nascentSoul=null;
@@ -166,7 +167,7 @@ test('WuGou innate light passes Dao shield while normal divine pursuit uses arti
   const base=duel({...h,innateAbility:null},{artifactBattle:{effects:[{type:'equip_damage_reduction_percent',value:.5}]}});
   assert.equal(base.guestHp-defended.guestHp,30);
 });
-test('raid snapshots trust saved core and power; retries and boss actions do not duplicate charge or reflection windows',()=>{
+test('legacy raid rule inputs replay without duplicating charge while active snapshots suppress retired powers',()=>{
   const h=fighter('thunder','rebound');h.goldenCore={type:'thunder',grade:9};h.nascentSoul=null;
   const old=JSON.stringify(h);
   const a=Raid.resolvePlayerAction(h,{roomId:'r',actionId:1,correct:true,bossHp:5000,bossMaxHp:5000});
@@ -267,7 +268,7 @@ test('updated healing percentages, conversion and execution threshold scale acro
 });
 function healingFighter(extra={}) {
   const p=account('taichu','devour');p.cultivationTraining.equippedCore.grade=1;p.nascentSoulGrowth.branches.core=10;
-  return {...Raid.trustedRaidPlayerSnapshot(p,'h'),maxHp:3000,hp:1200,...extra};
+  return {...legacyRuleFighter(p,'h'),maxHp:3000,hp:1200,...extra};
 }
 test('Guiyuan converts actual soul and artifact healing into a separate nonrecursive true strike',()=>{
   for(const [hp,life,expectedHeal,expectedTrue] of [[1200,0,100,30],[2990,0,10,3],[3000,0,0,0],[1200,.1,120,36]]) {
@@ -318,7 +319,7 @@ test('healing conversion excludes overkill and is completely suppressed against 
 });
 test('PoWang raises existing nascent execution threshold to 70% without adding a new damage bonus',()=>{
   const p=account('pojing','execute');p.nascentSoulGrowth.branches.core=10;
-  const host=Raid.trustedRaidPlayerSnapshot(p,'h');
+  const host=legacyRuleFighter(p,'h');
   for(const [hp,diff] of [[4900,0],[5000,0],[5100,95],[6000,95],[7000,95],[7001,0]]) {
     const withPower=duel(host,{hp,maxHp:10000}),without=duel({...host,innateAbility:null},{hp,maxHp:10000});
     assert.equal(without.guestHp-withPower.guestHp,diff,`PvP at ${hp}/10000`);
@@ -340,7 +341,7 @@ test('triple barrier beam is attached only to the third accumulated correct stri
 });
 function meteorFighter() {
   const p=account('xingchen','meteor');p.cultivationTraining.equippedCore.grade=1;p.nascentSoulGrowth.branches.core=10;
-  let h=Raid.trustedRaidPlayerSnapshot(p,'h');h=advance(advance(h,true),true);
+  let h=legacyRuleFighter(p,'h');h=advance(advance(h,true),true);
   return {...h,soulStarCorrectWindow:2,soulStarAnswerWindow:2,answer:{correct:false,atMs:10}};
 }
 test('each meteor settles separately, including a third wrong answer, consuming only one Dao shield per hit',()=>{

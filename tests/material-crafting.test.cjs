@@ -51,10 +51,12 @@ test('admin material catalog is fixed to ten entries while artifact recipe edito
   assert.match(artifactAdmin,/MIN_ARTIFACT_RECIPE_MATERIALS/);
 });
 
-test('material modules load before inventory and refinery', () => {
+test('active material modules keep their order without loading retired inventory or refinery', () => {
   const materialSync = main.indexOf("'./cultivation/material-catalog-sync.js'");
   const materialSystem = main.indexOf("'./cultivation/material-system.js'");
   const inventory = main.indexOf("'./cultivation/unified-inventory-grid.js'");
   const refineryPos = main.indexOf("'./cultivation/cultivation-refinery-v2.js'");
-  assert.ok(materialSync >= 0 && materialSystem > materialSync && inventory > materialSystem && refineryPos > inventory);
+  assert.ok(materialSync >= 0 && materialSystem > materialSync);
+  assert.equal(inventory, -1);
+  assert.equal(refineryPos, -1);
 });

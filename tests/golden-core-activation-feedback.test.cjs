@@ -7,13 +7,14 @@ function read(rel) {
   return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
 }
 
-test('Golden Core activation feedback module is loaded before reward rules and exposes a queued banner', () => {
+test('retired Golden Core banner remains isolated from active reward rules', () => {
   const main = read('public/main.js');
   const feedback = read('public/cultivation/golden-core-activation-feedback.js');
 
   const feedbackIndex = main.indexOf('./cultivation/golden-core-activation-feedback.js');
   const rulesIndex = main.indexOf('./cultivation/cultivation-rules.js');
-  assert.ok(feedbackIndex >= 0 && rulesIndex >= 0 && feedbackIndex < rulesIndex);
+  assert.equal(feedbackIndex, -1);
+  assert.ok(rulesIndex >= 0);
   assert.match(feedback, /window\.showGoldenCoreActivation\s*=\s*function/);
   assert.match(feedback, /金丹神通發動/);
   assert.match(feedback, /const queue = \[\]/);

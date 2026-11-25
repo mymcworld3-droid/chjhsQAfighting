@@ -69,7 +69,7 @@ test('a late lesson cannot cross accounts or ranges, and valid lesson content us
   f.uid='u1';f.response={ok:true,json:async()=>({scopeId:scope.scopeId,conceptId:quiz.adaptive.conceptId,concept:'最高點速率',explanation:'<script>bad</script>',example:'$v^2$ 示例',through:2})};await f.api.afterSaved(quiz);await tick();
   const panel=f.nodes.get('adaptive-concept-lesson');assert(panel);assert.equal(panel.tagName,'details');assert.equal(Boolean(panel.open),false);
   assert.equal(panel.children[2].innerHTML,'SAFE:<script>bad</script>');
-  assert.equal(panel.children[0].children[0].textContent,'觀念補給 · 最高點速率');
+  assert.equal(panel.children[0].textContent,'觀念補給 · 最高點速率');
   const zoom=panel.children.find(node=>node.className==='adaptive-lesson-zoom');assert(zoom);
   zoom.children[1].onclick();assert.equal(panel.styleProps['--adaptive-lesson-font-size'],'1.05rem');
   zoom.children[0].onclick();assert.equal(panel.styleProps['--adaptive-lesson-font-size'],'0.95rem');

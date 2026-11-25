@@ -35,7 +35,7 @@ test('solo transaction rechecks realm before the answer and displays the amount 
     const q = {data:{q:'test'},answerSelectedIndex:0,learningSubject:'數學',learningDifficulty:'hard'};
     const learningReward = Learning.reward(stats,q,correct);
     const title = {innerHTML:''};let patch;
-    const context = {adaptiveRows:[],db:{},doc:()=>({}),auth:{currentUser:{uid:'u'}},answerUser:{uid:'u'},currentUserData:{stats},
+    const context = {...require('./helpers/resource-ui.cjs'),adaptiveRows:[],db:{},doc:()=>({}),auth:{currentUser:{uid:'u'}},answerUser:{uid:'u'},currentUserData:{stats},
       stats,isCorrect:correct,trialAnswerId:'',learningRules:Learning,learningReward,quiz:q,
       cultivationDelta:correct?2:0,recoveryCoreGain:0,originalGoldenMessage:'',cultivationReward:{},scoreGain:30,
       calculateRankFromScore:()=>0,updateUIStats(){},showCultivationFeedback(){},cultivationFeedback:null,fbTitle:title,t:()=> '答對',CustomEvent:class{},
@@ -45,7 +45,7 @@ test('solo transaction rechecks realm before the answer and displays the amount 
     await context.persist();
     assert.equal(patch.stats.gold,correct?150:100,'元嬰 40 plus hard-question 10; wrong answers earn zero');
     assert.equal(patch.stats.totalScore,correct?70:68);
-    if(correct)assert.match(title.innerHTML,/\+50 靈石/);
+    if(correct)assert.ok(title.innerHTML.includes(require('./helpers/resource-ui.cjs').stoneCostMarkup('+50')));
     assert.equal(stats.gold,patch.stats.gold);
     assert.equal(patch.stats.adaptiveLearningV1,remote.stats.adaptiveLearningV1,'ordinary answers preserve the latest background observations');
   }

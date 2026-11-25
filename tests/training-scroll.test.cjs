@@ -7,11 +7,12 @@ function read(rel) {
   return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
 }
 
-test('training navigation resets the actual main scroll container before locking the page', () => {
+test('legacy scroll lock remains isolated from the native scrollable training page', () => {
   const main = read('public/main.js');
   const guard = read('public/cultivation/training-scroll-fix.js');
 
-  assert.match(main, /\.\/cultivation\/training-scroll-fix\.js/);
+  assert.doesNotMatch(main, /\.\/cultivation\/training-scroll-fix\.js/);
+  assert.match(main, /manual-training-page\.js/);
   assert.match(guard, /document\.querySelector\('body > main'\)/);
   assert.match(guard, /main\.scrollTop = 0/);
   assert.match(guard, /main\.scrollTo\(\{ top: 0, left: 0, behavior: 'auto' \}\)/);
