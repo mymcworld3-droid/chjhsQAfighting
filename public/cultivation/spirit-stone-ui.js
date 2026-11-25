@@ -1,7 +1,7 @@
 // Cosmetic presentation only. Do not change the transaction, reward or click semantics.
 export const STONE_IMAGE='/assets/items/gold.webp';
 // Accept both "靈石 +30" and "+30 靈石" (also balances, prices and minus signs).
-const moneyPattern=/(?:靈石|金幣)[ \t]*[:：]?[ \t]*([+＋\-−×xX]?[ \t]*(?:\d[\d,]*|—))|([+＋\-−×xX]?[ \t]*(?:\d[\d,]*|—))[ \t]*(?:靈石|金幣)/g;
+const moneyPattern=/(?:靈石|金幣)[ \t]*[:：]?[ \t]*((?:[+＋\-−×xX][ \t]*)?(?:\d[\d,]*|—))|((?:[+＋\-−×xX][ \t]*)?(?:\d[\d,]*|—))[ \t]*(?:靈石|金幣)/g;
 const num=value=>{
   const raw=String(value??'').trim();
   if(raw==='—')return raw;
@@ -23,7 +23,7 @@ export function splitStoneText(value){
   const text=String(value??''),parts=[];let last=0;
   for(const match of text.matchAll(moneyPattern)){
     if(match.index>last)parts.push({kind:'text',value:text.slice(last,match.index)});
-    parts.push({kind:'stone',value:match[1]??match[2]});
+    parts.push({kind:'stone',value:(match[1]??match[2]).replace(/[ \t]+/g,'')});
     last=match.index+match[0].length;
   }
   if(!parts.length)return null;
@@ -39,7 +39,7 @@ function stoneNode(value){
   const assist=document.createElement('span');assist.className='game-stone-sr-only';assist.textContent=' 靈石';
   outer.append(image,amount,assist);return outer;
 }
-const excluded='script,style,noscript,textarea,select,option,code,pre,svg,math,template,[contenteditable],.game-stone-cost,#home-spirit-stones';
+const excluded='script,style,noscript,textarea,select,option,code,pre,svg,math,mjx-container,.MathJax,.katex,.dm-question,.dv-question,.tc-question,.quiz-question,#page-quiz,.question-text,template,[contenteditable],.game-stone-cost,#home-spirit-stones';
 function decorateTextNode(node){
   if(!node||node.nodeType!==3||!node.isConnected)return 0;
   const parent=node.parentElement;
