@@ -49,6 +49,14 @@ async function main(){
     await page.locator('.manual-weapon-grid').waitFor();
     assert.equal(await page.locator('[data-manual-slot]').count(),2);
     assert.equal(await library.locator('article[data-manual-book]').count(),2);
+    const card=library.locator('[data-manual-book="sword-wind"] .manual-native-card');
+    assert.equal(await card.getAttribute('data-armory-equipped'),'true');
+    assert.equal(await card.locator('.manual-armory-worn').count(),1);
+    assert.equal(await card.locator('.manual-armory-exp').count(),1);
+    assert.equal(await library.locator('[data-manual-book="body-rock"] .manual-armory-worn').count(),0);
+    await page.emulateMedia({reducedMotion:'reduce'});
+    assert.equal(await card.locator('.manual-armory-sheen').evaluate(node=>getComputedStyle(node).animationName),'none');
+    await page.emulateMedia({reducedMotion:'no-preference'});
     assert.equal(await page.locator('.manual-library-heading h3').innerText().then(x=>x.includes('武器收藏')),true);
     const order=await library.evaluate(node=>
       !!(node.compareDocumentPosition(document.querySelector('.manual-hero'))&Node.DOCUMENT_POSITION_FOLLOWING));

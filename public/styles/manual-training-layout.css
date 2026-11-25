@@ -656,3 +656,178 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
  padding:0;border:0;background:none;box-shadow:none;
 }
 #manual-training-root .manual-native-hero .manual-shared-detail .manual-hero-actions:empty{display:none}
+
+/* Living armory: collection and equipment only. Use the existing home tokens
+   for neutral surfaces; elemental light belongs to the weapons, not the nav. */
+#manual-training-root:not(.manual-detail-active)>:is(.manual-library,.manual-weapons){
+ position:relative;isolation:isolate;border-radius:12px;
+ background:radial-gradient(ellipse at 8% 0%,#d2b37413,transparent 52%),
+  linear-gradient(120deg,var(--mt-realm),var(--mt-ink) 82%);
+ border-color:var(--mt-accent-line);
+ box-shadow:inset 0 0 0 2px var(--mt-ink),inset 0 0 0 3px var(--mt-line),0 5px 15px #0003;
+}
+#manual-training-root:not(.manual-detail-active)>:is(.manual-library,.manual-weapons)::before{
+ content:"";position:absolute;top:0;left:14px;width:min(42%,320px);height:1px;
+ background:linear-gradient(90deg,transparent,#e6c68a,transparent);pointer-events:none;
+}
+#manual-training-root:not(.manual-detail-active) :is(.manual-library-heading-copy h3,.manual-weapons .manual-deck-heading h3){
+ background:none;border:0;box-shadow:none;padding:2px 5px 2px 8px;
+ border-left:2px solid var(--mt-gold);border-radius:2px;color:#f2dfb5;
+ text-shadow:0 0 10px #d2b37430;
+}
+#manual-training-root:not(.manual-detail-active) .manual-library-filter.is-selected{
+ background:linear-gradient(180deg,#c9ad7229,#c9ad720b);border-color:#d2b374a0;
+ box-shadow:inset 0 -2px var(--mt-gold),0 0 7px #d2b37422;color:#f5e2b5;
+}
+#manual-training-root:not(.manual-detail-active) .manual-book-grid{
+ gap:8px;padding:5px 4px 7px;
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card.manual-library-choice{
+ --armory-metal:#ad9a70;position:relative;isolation:isolate;overflow:hidden;
+ border-color:var(--armory-metal);border-radius:10px;padding:3px 4px 5px;gap:3px;
+ background:radial-gradient(ellipse at 50% 42%,var(--qi-glow),transparent 72%),
+  linear-gradient(180deg,var(--mt-realm),var(--mt-ink) 95%);
+ box-shadow:inset 0 0 0 2px var(--mt-ink),inset 0 0 0 3px #d2b37424;
+ transition:border-color .18s,box-shadow .18s,transform .18s;
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card.manual-library-choice[data-armory-tier="foundation"]{--armory-metal:#91b8a7}
+#manual-training-root:not(.manual-detail-active) .manual-native-card.manual-library-choice[data-armory-tier="golden"]{--armory-metal:#e2be74}
+#manual-training-root:not(.manual-detail-active) .manual-native-card.manual-library-choice:is([data-armory-tier="nascent"],[data-armory-tier="ascended"],[data-armory-tier="union"],[data-armory-tier="tribulation"]){--armory-metal:#d3b9eb}
+#manual-training-root:not(.manual-detail-active) .manual-native-card.manual-library-choice::before,
+#manual-training-root:not(.manual-detail-active) .manual-native-card.manual-library-choice::after{
+ width:16px;height:16px;border-color:var(--armory-metal);border-width:1px 0 0 1px;
+ border-radius:8px 0 0 0;z-index:4;filter:drop-shadow(0 0 2px #e5ca8270);
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card.manual-library-choice .manual-native-card-art{
+ position:relative;isolation:isolate;border-radius:7px 7px 3px 3px;overflow:hidden;
+ background:radial-gradient(ellipse,var(--qi-dark),var(--mt-ink));
+ box-shadow:inset 0 0 0 1px #d2b37435;
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card-art .manual-weapon-art{
+ background-size:cover!important;background-position:center;
+ filter:saturate(1.1) contrast(1.06);transition:transform .35s ease,filter .25s ease;
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card-art::after{
+ z-index:1;background:linear-gradient(0deg,var(--mt-ink) 0%,#191a1660 10%,transparent 40%),
+  radial-gradient(ellipse at 50% 95%,var(--qi-glow),transparent 60%);
+ box-shadow:inset 0 0 10px #0004;
+}
+#manual-training-root .manual-armory-sheen{
+ position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;
+ background:linear-gradient(115deg,transparent 27%,#ffffff0d 42%,#fff0c83c 49%,transparent 63%);
+ transform:translateX(-65%);
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card[aria-pressed="true"]{
+ border-color:#ffe0a0;box-shadow:0 0 9px #e5b65b80,inset 0 0 0 1px #fff0bd,inset 0 0 12px var(--qi-glow);
+}
+#manual-training-root .manual-native-card[aria-pressed="true"] .manual-armory-sheen{
+ animation:manual-armory-sheen 7s ease-in-out infinite;
+}
+#manual-training-root .manual-armory-worn{
+ position:absolute;top:5px;right:5px;z-index:3;display:inline-flex;align-items:center;gap:3px;
+ max-width:calc(100% - 10px);padding:2px 5px;border:1px solid #a7ccb18c;border-radius:4px;
+ background:#1c312bec;color:#d0eed7;font-size:9px;font-weight:700;line-height:1.2;
+ white-space:nowrap;box-shadow:0 1px 4px #0005;
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card>strong{
+ color:var(--mt-text);font-family:"Noto Serif TC","Songti TC",serif;font-weight:800;
+ letter-spacing:.025em;text-shadow:0 1px 2px #000,0 0 8px var(--qi-glow);
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card .manual-native-school{
+ background:linear-gradient(110deg,#b49a65,#e2c58d 50%,#b49a65);
+ border-color:#e4cc9a;box-shadow:0 1px 3px #0004;
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card .manual-native-level{
+ position:relative;overflow:hidden;min-width:68%;padding:2px 5px 3px;
+ background:var(--mt-ink);border-color:var(--mt-line);font-variant-numeric:tabular-nums;
+}
+#manual-training-root .manual-armory-exp{
+ position:absolute;bottom:0;left:0;right:0;height:2px;background:#ffffff0d;pointer-events:none;
+}
+#manual-training-root .manual-armory-exp::after{
+ content:"";display:block;height:100%;width:var(--armory-progress);background:var(--qi);
+ box-shadow:0 0 5px var(--qi);transition:width .3s;
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-slot{
+ border-radius:10px;border-color:var(--mt-accent-line);
+ background:radial-gradient(ellipse at 5% 50%,var(--qi-glow),transparent 42%),
+  linear-gradient(105deg,var(--mt-realm),var(--mt-ink) 65%,var(--mt-surface));
+ box-shadow:inset 0 1px var(--mt-line);isolation:isolate;
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-slot.is-selected{
+ outline:0;border-color:var(--mt-gold);
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-slot-art{
+ border-color:var(--qi);border-radius:7px;box-shadow:0 0 9px var(--qi-glow);
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-slot-info strong{
+ font-family:"Noto Serif TC","Songti TC",serif;letter-spacing:.025em;color:var(--mt-text);
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-skill-list{
+ position:relative;isolation:isolate;border-left-color:var(--mt-line);
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-skill-list::before{
+ content:"";position:absolute;z-index:-1;left:14%;right:14%;top:50%;height:1px;
+ background:linear-gradient(90deg,transparent,var(--qi-glow),var(--mt-gold),var(--qi-glow),transparent);
+ pointer-events:none;opacity:.65;
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-skill small{
+ color:var(--mt-selected);font-weight:700;letter-spacing:.05em;
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-skill .manual-native-skill-icon{
+ border-color:#e8ca8c;box-shadow:0 0 7px var(--qi-glow),0 0 0 2px #d2b37420;
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-skill.is-locked .manual-native-skill-icon{
+ border-color:#79725e;box-shadow:none;
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-skill.is-locked strong{
+ color:var(--mt-muted);
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-slot-actions button{
+ border-radius:6px;transition:filter .18s,box-shadow .18s;
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-slot-actions [data-manual-change-slot]:not(:disabled){
+ background:linear-gradient(180deg,#e0c58d,var(--mt-action) 60%,#a98b55);
+ box-shadow:inset 0 1px #fff0bd77,0 2px 6px #0003;
+}
+#manual-training-root:not(.manual-detail-active) .manual-weapon-slot-actions [data-manual-remove-weapon]{
+ border-color:var(--mt-line);
+}
+@media(hover:hover) and (pointer:fine){
+ #manual-training-root:not(.manual-detail-active) .manual-native-card:hover{
+  border-color:#ffe0a0;box-shadow:0 0 10px var(--qi-glow),inset 0 0 0 1px var(--mt-gold);
+ }
+ #manual-training-root:not(.manual-detail-active) .manual-native-card:hover .manual-weapon-art{transform:scale(1.055);filter:saturate(1.18) contrast(1.06)}
+ #manual-training-root:not(.manual-detail-active) .manual-weapon-slot-actions button:not(:disabled):hover{filter:brightness(1.13)}
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card:active{transform:scale(.98)}
+@keyframes manual-armory-sheen{
+ 0%,66%{opacity:0;transform:translateX(-65%)}
+ 72%{opacity:.8}
+ 87%,100%{opacity:0;transform:translateX(65%)}
+}
+@media(orientation:landscape) and (min-width:1000px) and (min-height:521px){
+ #manual-training-root:not(.manual-detail-active) .manual-book-grid:has(>.manual-book:nth-child(6)){
+  grid-auto-columns:clamp(140px,calc((100% - 40px)/6),240px);
+ }
+ #manual-training-root:not(.manual-detail-active) .manual-weapon-slot{
+  grid-template-columns:minmax(0,1.15fr) minmax(0,1.8fr) clamp(80px,9vw,128px);
+  gap:clamp(8px,1.4vw,18px);
+ }
+ #manual-training-root:not(.manual-detail-active) .manual-weapon-slot-picker{
+  grid-template-columns:var(--mt-slot-art) minmax(0,1fr);gap:12px;
+ }
+ #manual-training-root:not(.manual-detail-active) .manual-weapon-skill-list{
+  grid-template-columns:repeat(3,minmax(0,110px));justify-content:center;gap:clamp(10px,3vw,44px);
+ }
+}
+@media(max-width:640px){
+ #manual-training-root:not(.manual-detail-active) .manual-book-grid{gap:6px}
+ #manual-training-root:not(.manual-detail-active) .manual-armory-worn{font-size:8px;padding:1px 3px;top:3px;right:3px}
+ #manual-training-root:not(.manual-detail-active) .manual-native-card .manual-native-level{min-width:0}
+ #manual-training-root:not(.manual-detail-active) .manual-weapon-skill-list::before{opacity:.35}
+}
+@media(prefers-reduced-motion:reduce){
+ #manual-training-root:not(.manual-detail-active) :is(.manual-native-card,.manual-native-card .manual-weapon-art,.manual-armory-exp::after,.manual-weapon-slot-actions button){transition:none!important;transform:none!important}
+ #manual-training-root .manual-armory-sheen{animation:none!important;opacity:0}
+}

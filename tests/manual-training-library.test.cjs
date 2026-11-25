@@ -133,3 +133,20 @@ test('weapon card uses its actual identity for elemental presentation',()=>{
  assert.match(html,/data-ritual-weapon="sword-flight"/);
  assert.match(html,/劍修 · 築基/);
 });
+
+test('weapon collection shows only real equipment state and bounded current-level EXP',()=>{
+ const item=book('sword-wind','sword',{weaponType:'sword',tierRealm:'煉氣',expInLevel:62,expToNext:100});
+ const worn=draw(item,item.id,[item.id]);
+ assert.match(worn,/data-armory-equipped="true"/);
+ assert.match(worn,/manual-armory-worn/);
+ assert.match(worn,/--armory-progress:62\.00%/);
+ assert.match(worn,/title="62 \/ 100 EXP"/);
+ assert.match(worn,/data-armory-tier="qi"/);
+ const other=draw(item,'',[]);
+ assert.match(other,/data-armory-equipped="false"/);
+ assert.doesNotMatch(other,/manual-armory-worn/);
+ assert.match(draw({...item,level:20,expInLevel:0,expToNext:0}),/--armory-progress:100\.00%/);
+ assert.match(draw({...item,expInLevel:900}),/--armory-progress:100\.00%/);
+ assert.match(draw({...item,expInLevel:-5}),/--armory-progress:0\.00%/);
+ assert.doesNotMatch(draw({...item,expToNext:0}),/manual-armory-exp/);
+});

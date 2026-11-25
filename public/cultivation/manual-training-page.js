@@ -90,7 +90,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-layout-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261125-shared-detail-v11';
+    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261125-living-armory-v12';
     document.head.append(link);
   }
   return root;
@@ -181,7 +181,7 @@ function markup(){
   const cards=filterOwnedManuals(current,libraryFilter).map(book=>
     `<article class="manual-book ${book.school==='sword'?'is-sword':'is-body'} ${book.id===featuredBookId?'is-featured':''}"
        data-manual-book="${esc(book.id)}">
-       ${renderManualCollectionSummary(book,featuredBookId,[],{
+       ${renderManualCollectionSummary(book,featuredBookId,current.weaponIds||[],{
          esc,bookArt,label,totalExpForLevel:Catalog.totalExpForLevel
        })}
     </article>`

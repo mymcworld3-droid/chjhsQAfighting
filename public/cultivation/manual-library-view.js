@@ -39,9 +39,14 @@ export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt
   if(book.weaponType){
     const selected=book.id===focusId;
     const school=({sword:'劍修',body:'體修'})[book.school]||label(book.school);
-    return `<button type="button" class="manual-book-top manual-library-choice manual-native-card" data-feature-book="${esc(book.id)}" data-ritual-weapon="${esc(book.id)}" data-manual-focus-hero="true" aria-controls="manual-training-screen" aria-pressed="${selected}">
-      <span class="manual-native-card-art"><span class="manual-weapon-art manual-weapon-art--${esc(book.id)} manual-library-cover" role="img" aria-label="${esc(book.name)}"></span></span>
-      <strong>${esc(book.name)}</strong><span class="manual-native-school">${esc([school,book.tierRealm].filter(Boolean).join(" · "))}</span><span class="manual-native-level">Lv. ${esc(book.level)}/20</span>
+    const worn=Array.isArray(equipped)&&equipped.includes(book.id);
+    const tier=({'煉氣':'qi','築基':'foundation','金丹':'golden','元嬰':'nascent','化神':'ascended','合體':'union','渡劫':'tribulation'})[book.tierRealm]||'unknown';
+    const exp=Number(book.expInLevel),target=Number(book.expToNext);
+    const progress=Number(book.level)>=20?100:Number.isFinite(exp)&&target>0&&Number.isFinite(target)?Math.max(0,Math.min(100,exp/target*100)):null;
+    const progressMarkup=progress===null?'':`<span class="manual-armory-exp" aria-hidden="true" style="--armory-progress:${progress.toFixed(2)}%"></span>`;
+    return `<button type="button" class="manual-book-top manual-library-choice manual-native-card" data-feature-book="${esc(book.id)}" data-ritual-weapon="${esc(book.id)}" data-armory-tier="${tier}" data-armory-equipped="${worn}" data-manual-focus-hero="true" aria-controls="manual-training-screen" aria-pressed="${selected}">
+      <span class="manual-native-card-art"><span class="manual-weapon-art manual-weapon-art--${esc(book.id)} manual-library-cover" role="img" aria-label="${esc(book.name)}"></span><span class="manual-armory-sheen" aria-hidden="true"></span>${worn?'<span class="manual-armory-worn"><i class="fa-solid fa-check" aria-hidden="true"></i> 已裝備</span>':''}</span>
+      <strong>${esc(book.name)}</strong><span class="manual-native-school">${esc([school,book.tierRealm].filter(Boolean).join(" · "))}</span><span class="manual-native-level"${progress===null?'':` title="${Number(book.level)>=20?'熟練度已滿':esc(exp+' / '+target+' EXP')}"`}>Lv. ${esc(book.level)}/20${progressMarkup}</span>
     </button>`;
   }
   const visual=manualVisualState(book);
