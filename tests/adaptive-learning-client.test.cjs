@@ -25,7 +25,7 @@ function fixture(storage=new Map(),docs=new Map([['u1',{stats:{gold:42},gameSett
     }});
   };
   const source=fs.readFileSync('public/cultivation/adaptive-learning.js','utf8').replace(/^import .*;\n/gm,'');
-  const context={window,document,localStorage:{getItem:key=>storage.get(key)||null,setItem:(key,val)=>storage.set(key,val)},getMainUser,
+  const context={window,document,QAQuestionPresentation:require('../public/cultivation/question-presentation.js'),localStorage:{getItem:key=>storage.get(key)||null,setItem:(key,val)=>storage.set(key,val)},getMainUser,
     getFirestore:()=>({}),doc:(_db,_name,uid)=>({uid}),runTransaction,QAAdaptiveLearningRules:Rules,console:{warn(){}},
     authenticatedMainFetch:async(input,init)=>{calls.push({input,init});return f.response;},setTimeout:fn=>{timers.push(fn);return 1;},Date,Map,Set,JSON};
   const f={window,document,events,calls,patches,storage,docs,state,nodes,timers,get uid(){return uid;},set uid(v){uid=v;},set fail(v){fail=v;},set afterGet(v){afterGet=v;},response:{ok:true,json:async()=>({})}};

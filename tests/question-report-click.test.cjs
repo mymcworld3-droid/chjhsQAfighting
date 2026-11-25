@@ -15,7 +15,7 @@ test('the question-error button keeps its player-facing name', () => {
 test('report modal shows status and stays accessible above story/tutorial overlays', () => {
   assert.match(html, /id="report-modal" class="hidden fixed inset-0 z-\[17000\]/);
   assert.match(html, /id="report-input-status" role="status" aria-live="polite"/);
-  assert.match(html, /id="report-loading-status" role="status" aria-live="polite"/);
+  assert.match(html, /id="report-loading-status"[^>]*role="status" aria-live="polite"/);
   assert.match(legacy, /if \(reportCloseTimer\) \{ clearTimeout\(reportCloseTimer\); reportCloseTimer = null; \}/);
   assert.match(legacy, /if \(modal\.classList\.contains\('opacity-0'\)\) modal\.classList\.add\('hidden'\)/);
 });
@@ -58,7 +58,7 @@ test('review outcome has a passed, not-passed, or retryable incomplete screen', 
     }
     return nodes.get(id);
   }
-  const ctx = { document: { getElementById: node }, window: { closeReportModal() {} } };
+  const ctx = { QAQuestionPresentation:require('../public/cultivation/question-presentation.js'), document: { getElementById: node }, window: { closeReportModal() {} } };
   vm.runInNewContext(legacy.slice(start, end) + String.fromCharCode(10) + 'this.show = renderReportOutcome;', ctx);
   ctx.show({ kind: 'approved', title: '審查通過 ✅', message: '100 靈石已入帳' });
   assert.match(node('report-result-icon').innerHTML, /circle-check/);

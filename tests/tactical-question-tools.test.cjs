@@ -9,7 +9,7 @@ function client(reply=async()=>({answer:'先把兩個數相加。'})){
   const nodes=new Map(),requests=[];const $=key=>{if(!nodes.has(key))nodes.set(key,node());return nodes.get(key);};
   const user={stats:{gold:0,totalScore:30}},legacyQuiz={data:{q:'另一頁的題目'}};
   const accepted=[],notices=[];
-  const ctx={quizContext:null,pairGeneration:0,pairQuestions:[],pairChoices:[],pairReviews:[],pairFollowupPromise:null,state:{id:'arena-one',mode:'pve'},uid:'u1',epoch:1,op:0,AbortController,
+  const ctx={QAQuestionPresentation:require('../public/cultivation/question-presentation.js'),quizContext:null,pairGeneration:0,pairQuestions:[],pairChoices:[],pairReviews:[],pairFollowupPromise:null,state:{id:'arena-one',mode:'pve'},uid:'u1',epoch:1,op:0,AbortController,
     valid:(e,uid)=>ctx.epoch===e&&uid===ctx.uid,localUser:()=>user,$,esc:String,rich:String,
     document:{createElement:node},window:{currentActiveQuiz:legacyQuiz,quizMathTypeset(){},updateUIStats(){},refreshXiuxianLiveSync(){}},
     hideModal(){},paint(){},canQuestion:()=>false,
