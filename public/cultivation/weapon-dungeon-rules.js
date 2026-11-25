@@ -7,9 +7,9 @@
     ['divine','化神',35],['unity','合體',80],['tribulation','渡劫',110]
   ].map(([id,name,stage],index)=>Object.freeze({id,name,stage,index,nextRealm:index===5?'真仙':null})));
   const CATALOG=Object.freeze([Object.freeze({id:ID,name:NAME,subtitle:'群峰深處 · 重甲之試',theme:'stone',
-    description:'穿過三重石陣，同時迎戰追蹤落石的守衛與最深處的領主。',
+    description:'穿過三重石陣擊敗深處領主即可通關，沿途守衛會持續追擊。',
     traits:['追蹤落石','重甲靈獸','領主鎮守'],bonus:'圖騰攻擊傷害 +15%',
-    tactics:['蓄勢中的落石會追蹤站位；離開射程即可閃避。','成功擊退則會打斷蓄勢，撞牆未位移不算。','領主從開戰起即可攻擊，也能直接受到傷害及擊退，不必先清除守衛。'],totemDamageMultiplier:1.15})]);
+    tactics:['蓄勢中的落石會追蹤站位；離開射程即可閃避。','成功擊退則會打斷蓄勢，撞牆未位移不算。','領主從開戰起即可攻擊，也能直接受到傷害及擊退，不必先清除守衛。','擊敗領主立即通關，剩餘守衛不必清除。'],totemDamageMultiplier:1.15})]);
   const WEAPON_REALMS=Object.freeze(['煉氣',...DIFFICULTIES.map(d=>d.name),'真仙']);
   const day=now=>Math.floor((Number(now)+8*3600000)/86400000);
   function progress(raw,now=Date.now()){
@@ -71,7 +71,7 @@
     return {id:'peak-stone',map:'peak-stone',seed,stage:definition.stage,layoutVersion:4,title:NAME+' · '+definition.realm,
       width,height,terrain:13,biome:'mountain',mode:'elimination',variant:'tracking-stone',structure:'three-stone-gates',
       attempt:0,layoutHash:'peak-stone:v2:'+index+':'+h.toString(16),
-      blocks:safeBlocks.map(p=>({...p,kind:'rock'})),ground:Array(width*height).fill(13),spawn:{x:6,y:19},enemies,objective:{type:'elimination',completed:false},weaponDungeon:definition};
+      blocks:safeBlocks.map(p=>({...p,kind:'rock'})),ground:Array(width*height).fill(13),spawn:{x:6,y:19},enemies,objective:{type:'boss',bossUid:'monster-0',completed:false},weaponDungeon:definition};
   }
   return Object.freeze({ID,NAME,DAILY_TICKETS,MAX_TICKETS,DIFFICULTIES,WEAPON_REALMS,CATALOG,day,progress,progressFor,recordClear,catalog,selection,layout});
 });
