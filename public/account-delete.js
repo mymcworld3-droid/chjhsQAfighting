@@ -28,8 +28,8 @@ import {
   function auth() { return getAuth(getApp()); }
   function db() { return getFirestore(getApp()); }
 
-  function confirmDialog(message) {
-    if (typeof window.openConfirm === 'function') return window.openConfirm(message);
+  function confirmDialog(message, owner) {
+    if (typeof window.openConfirm === 'function') return window.openConfirm(message, {kind:'danger',title:'永久刪除帳號',confirmLabel:'確認刪除',isCurrent:()=>auth().currentUser?.uid===owner});
     return Promise.resolve(window.confirm(message));
   }
 
@@ -121,15 +121,15 @@ import {
     const first = await confirmDialog(
       unbound
         ? '目前是未綁定的免註冊帳號。\n\n刪除後修為、答題紀錄及所有修行資料都無法復原。確定永久刪除？'
-        : '確定要永久刪除帳號嗎？\n\n角色、修為、背包、裝備與已建立內容將被刪除，而且無法復原。'
+        : '確定要永久刪除帳號嗎？\n\n角色、修為、背包、裝備與已建立內容將被刪除，而且無法復原。', user.uid
     );
-    if (!first) return;
+    if (!first || auth().currentUser?.uid !== user.uid || deleting) return;
 
     if (!unbound) {
       const second = await confirmDialog(
-        '最後確認：刪除後無法復原。\n\n系統會要求你再次用 Google 驗證身分。確定永久刪除？'
+        '最後確認：刪除後無法復原。\n\n系統會要求你再次用 Google 驗證身分。確定永久刪除？', user.uid
       );
-      if (!second) return;
+      if (!second || auth().currentUser?.uid !== user.uid || deleting) return;
     }
 
     deleting = true;

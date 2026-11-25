@@ -501,7 +501,10 @@ export const featureReady = (async () => {
 
     const cachedItem = (dongtianCache.getOwnedList(uid()) || []).find((item) => item.id === id);
     const displayName = cachedItem?.name || '這座洞天';
-    if (!window.confirm(`確定刪除洞天「${displayName}」？\n\n刪除後不再公開，也無法復原。`)) return false;
+    const owner=uid();
+    const message=`確定刪除洞天「${displayName}」？\n\n刪除後不再公開，也無法復原。`;
+    const confirmed=window.QADialogs?.confirmAction?await window.QADialogs.confirmAction(message,{kind:'danger',title:'刪除洞天',confirmLabel:'確認刪除',isCurrent:()=>uid()===owner}):window.confirm(message);
+    if(!confirmed||uid()!==owner)return false;
 
     const result = await dongtianRepository.deleteOwned(id);
     const cached = dongtianCache.getOwnedList(uid());
@@ -1231,9 +1234,11 @@ export const featureReady = (async () => {
     const overlay = ensureOverlay();
     const settlementBack = `<button id="dt-settle-back" class="dt-back" type="button">返回設定／宗門</button>`;
     const bindSettlementBack = () => {
-      overlay.querySelector('#dt-settle-back').onclick = () => {
+      overlay.querySelector('#dt-settle-back').onclick = async () => {
         if (state.session !== s) return;
-        if (!confirm('結算可能仍在進行。離開後可重新登入查看獎勵，確定返回？')) return;
+        const message='結算可能仍在進行。離開後可重新登入查看獎勵，確定返回？';
+        const confirmed=window.QADialogs?.confirmAction?await window.QADialogs.confirmAction(message,{title:'確認返回',confirmLabel:'返回',isCurrent:()=>state.session===s}):window.confirm(message);
+        if(!confirmed||state.session!==s)return;
         closeAfterSession();
       };
     };
@@ -1354,7 +1359,11 @@ export const featureReady = (async () => {
   async function exitDongtian() {
     const s = state.session;
     if (!s) return;
-    if (s.answers.length && !confirm('確定退出洞天？本次剩餘題目將不再繼續。')) return;
+    if(s.answers.length){
+      const message='確定退出洞天？本次剩餘題目將不再繼續。';
+      const confirmed=window.QADialogs?.confirmAction?await window.QADialogs.confirmAction(message,{kind:'danger',title:'退出洞天',confirmLabel:'確認退出',isCurrent:()=>state.session===s}):window.confirm(message);
+      if(!confirmed||state.session!==s)return;
+    }
     void writeDongtianHistory(s, false)
       .catch((error) => console.warn('[Dongtian exit history]', error));
     closeAfterSession();

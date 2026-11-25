@@ -434,6 +434,12 @@ async function mutate(url,body){
   if(busy)return;
   const uid=getMainUser()?.uid;if(!uid)return;
   const upgrading=url.endsWith('/upgrade');
+  if(upgrading){
+    const before=current;
+    const message='確定升級至 Lv. '+body.targetLevel+'？\n將消耗 '+Number(body.expectedGold).toLocaleString('zh-TW')+' 靈石。';
+    const confirmed=window.QADialogs?.confirmAction?await window.QADialogs.confirmAction(message,{title:'確認升級',confirmLabel:'確認升級',isCurrent:()=>getMainUser()?.uid===uid&&current===before&&!busy&&visible()}):typeof window.openConfirm==='function'?await window.openConfirm(message):window.confirm(message);
+    if(!confirmed||busy||getMainUser()?.uid!==uid||current!==before||!visible())return;
+  }
   ++sequence;busy=true;
   const pendingText=body.skillId?'正在升級招式…':upgrading?'正在升級武器…':'';
   paint(pendingText,pendingText?{kind:'pending'}:{});

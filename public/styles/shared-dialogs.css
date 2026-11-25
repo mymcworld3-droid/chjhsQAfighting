@@ -1,0 +1,61 @@
+/* U04/U05/U06 — shared modal surface. Native dialogs keep their original owners
+   and top-layer behavior. No global backdrop click or key handler. */
+:root{
+  --qy-modal-backdrop:rgba(8,17,13,.80);
+  --qy-modal-shadow:0 16px 56px #0008;
+  --qy-modal-padding:clamp(14px,3vw,24px);
+}
+html body.xianxia-theme :is(#quest-dialog,#weapon-dungeons-dialog,#game-issue-dialog,.qy-confirm-dialog){
+  color:var(--qy-paper)!important;background:var(--qy-surface)!important;
+  border:1px solid var(--qy-accent-line)!important;
+  border-radius:var(--qy-radius-panel)!important;box-shadow:var(--qy-modal-shadow)!important;
+}
+html body.xianxia-theme :is(#quest-dialog,#weapon-dungeons-dialog,#game-issue-dialog,#meditation-reward-receipt,.qy-confirm-dialog)::backdrop{
+  background:var(--qy-modal-backdrop)!important;
+}
+html body.xianxia-theme :is(#custom-alert-modal,#custom-confirm-modal,#report-modal,#daily-meditation-overlay,.dt-modal){
+  background:var(--qy-modal-backdrop)!important;
+}
+html body.xianxia-theme :is(#custom-alert-box,#custom-confirm-box,#report-box,.dm-card,.dt-modal-card,.tc-dialog:not(.tc-quiz):not(.tc-encounter)){
+  border-color:var(--qy-accent-line)!important;
+  background-color:var(--qy-surface)!important;
+  color:var(--qy-paper)!important;box-shadow:var(--qy-modal-shadow)!important;
+}
+html body.xianxia-theme :is(#custom-alert-box,#custom-confirm-box,#report-box,.dt-modal-card){
+  border-radius:var(--qy-radius-panel)!important;
+}
+html body.xianxia-theme :is(#custom-alert-msg,#custom-confirm-msg){
+  color:var(--qy-paper)!important;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;
+}
+html body.xianxia-theme :is(#custom-alert-box,#custom-confirm-box,#report-box,#quest-dialog,#weapon-dungeons-dialog,#game-issue-dialog,.dt-modal-card) :is(h2,h3){
+  font-family:var(--qy-font-title)!important;line-height:1.4;
+}
+html body.xianxia-theme #manual-training-root .manual-training-screen:not([hidden]),
+html body.xianxia-theme #tactical-combat,
+html body.xianxia-theme #scope-studio{
+  border-radius:0!important;
+}
+.qy-confirm-dialog{
+  box-sizing:border-box;position:fixed;inset:0;margin:auto;
+  width:min(420px,calc(100% - 24px));max-height:calc(100% - 24px);overflow:auto;
+  padding:var(--qy-modal-padding);background:var(--qy-surface,#20332a);color:var(--qy-paper,#f1e7d0);
+  border:1px solid var(--qy-accent-line,#d2b374);border-radius:var(--qy-radius-panel,14px);
+  box-shadow:var(--qy-modal-shadow);
+}
+.qy-confirm-dialog::backdrop{background:var(--qy-modal-backdrop)}
+.qy-confirm-dialog h2{font:700 var(--qy-title-section,18px)/1.4 var(--qy-font-title,serif)!important;margin:0 0 12px}
+.qy-confirm-dialog p{font-size:14px;line-height:1.75;white-space:pre-wrap;overflow-wrap:anywhere;margin:0 0 20px}
+.qy-confirm-dialog footer{display:flex;gap:8px;flex-wrap:wrap}
+.qy-confirm-dialog button{flex:1 1 110px;min-height:44px;border-radius:var(--qy-radius-control,8px);border:1px solid var(--qy-line,#a59a72);padding:8px 12px;font-size:14px;cursor:pointer}
+.qy-confirm-dialog [data-qy-cancel]{background:var(--qy-inset,#192820);color:var(--qy-paper,#f1e7d0)}
+.qy-confirm-dialog [data-qy-accept]{background:var(--qy-gold,#d2b374);color:var(--qy-ink,#14241e);font-weight:700}
+.qy-confirm-dialog[data-kind="danger"] [data-qy-accept]{background:#3a2826;color:#f5c4ba;border-color:#bc8479}
+.qy-confirm-dialog button:focus-visible{outline:2px solid var(--qy-gold,#d2b374);outline-offset:2px}
+#qy-notice-region{position:fixed;z-index:16000;top:max(12px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));width:min(320px,calc(100% - 24px));display:grid;gap:6px;pointer-events:none}
+.qy-notice{background:var(--qy-surface,#20332a);color:var(--qy-paper,#f1e7d0);border:1px solid var(--qy-line,#a59a72);border-left:3px solid var(--qy-gold,#d2b374);border-radius:var(--qy-radius-control,8px);padding:10px 12px;box-shadow:0 4px 18px #0005;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.5}
+.qy-notice[data-kind="success"]{border-left-color:var(--qy-jade,#a5cbb3)}
+.qy-notice[data-kind="warning"],.qy-notice[data-kind="error"]{border-left-color:#bc8479}
+@media(orientation:landscape) and (max-height:540px){.qy-confirm-dialog{padding:12px}.qy-confirm-dialog p{margin-bottom:12px}}
+@media(prefers-reduced-motion:reduce){
+  #custom-alert-modal,#custom-alert-box,#custom-confirm-modal,#custom-confirm-box{transition:none!important}
+}

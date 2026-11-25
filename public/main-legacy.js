@@ -1926,7 +1926,10 @@ window.formatQuizRichText = formatQuizRichText;
 
 window.copyFriendCode = () => {
     const code = document.getElementById('my-friend-code').innerText;
-    navigator.clipboard.writeText(code).then(() => alert("已複製！"));
+    navigator.clipboard.writeText(code).then(() => {
+        if (window.QADialogs?.notify) window.QADialogs.notify("已複製好友代碼", {kind:"success"});
+        else alert("已複製！");
+    });
 };
 
 window.addFriend = async () => {
@@ -7478,8 +7481,9 @@ window.buyItem = async (pid, price) => {
     // 🔥 檢查與扣除皆改為 gold
     const currentGold = currentUserData.stats.gold || 0;
     if (currentGold < price) return alert(t('msg_no_funds'));
-    const isConfirmed = await openConfirm(t('msg_buy_confirm', {price: price}));
-    if (!isConfirmed) return;
+    const owner = auth.currentUser?.uid, player = currentUserData;
+    const isConfirmed = await openConfirm(t('msg_buy_confirm', {price: price}), {title:'確認購買',confirmLabel:'確認購買',isCurrent:()=>auth.currentUser?.uid===owner&&currentUserData===player});
+    if (!isConfirmed || !owner || auth.currentUser?.uid!==owner || currentUserData!==player || (player.stats.gold||0)!==currentGold) return;
 
     try {
         const userRef = doc(db, "users", auth.currentUser.uid);
@@ -7718,7 +7722,9 @@ window.closeCustomAlert = () => {
 // ==========================================
 let confirmResolver = null; // 用於儲存 Promise 的 resolve 函式
 
-window.openConfirm = (message) => {
+window.openConfirm = (message, options = {}) => {
+    if (window.QADialogs?.confirmAction) return window.QADialogs.confirmAction(message, options);
+    if (confirmResolver) return Promise.resolve(false);
     const modal = document.getElementById('custom-confirm-modal');
     const box = document.getElementById('custom-confirm-box');
     const msgEl = document.getElementById('custom-confirm-msg');
