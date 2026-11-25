@@ -90,7 +90,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-layout-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261125-home-palette-v10';
+    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261125-shared-detail-v11';
     document.head.append(link);
   }
   return root;
@@ -481,7 +481,7 @@ function boot(){
     if(button.dataset.featureBook){
       if(current?.library.some(book=>book.owned&&book.id===button.dataset.featureBook)){
         featuredBookId=button.dataset.featureBook;
-        selectedSkillId=Array.isArray(current.weaponIds)?(current.library.find(b=>b.id===featuredBookId)?.skills.find(s=>s.unlocked)?.id||null):null;
+        selectedSkillId=null;
         clearManualToast();
         if(!trainingDialogOpen)trainingDialogTrigger=button;
         trainingDialogOpen=true;
@@ -493,7 +493,7 @@ function boot(){
       const books=filterOwnedManuals(current),at=books.findIndex(b=>b.id===featuredBookId);
       if(at<0||books.length<2)return;
       const next=books[(at+(button.dataset.manualBrowseWeapon==='prev'?-1:1)+books.length)%books.length];
-      featuredBookId=next.id;selectedSkillId=next.skills.find(s=>s.unlocked)?.id||null;
+      featuredBookId=next.id;selectedSkillId=null;
       paint();return;
     }
     if(button.dataset.manualCollectionFilter){
@@ -508,12 +508,17 @@ function boot(){
       const skillId=button.dataset.manualJumpSkill;
       const book=current?.library?.find(item=>item.owned&&item.id===featuredBookId);
       if(!book?.skills.some(skill=>skill.id===skillId))return;
-      selectedSkillId=Array.isArray(current.weaponIds)?skillId:selectedSkillId===skillId?null:skillId;
+      selectedSkillId=selectedSkillId===skillId?null:skillId;
       paint();
 
       return;
     }
-    if(button.hasAttribute('data-manual-close-skill')){selectedSkillId=null;paint();return;}
+    if(button.hasAttribute('data-manual-close-skill')){
+      const closingSkill=selectedSkillId;selectedSkillId=null;paint();
+      [...root.querySelectorAll('[data-manual-jump-skill]')]
+        .find(node=>node.dataset.manualJumpSkill===closingSkill)?.focus({preventScroll:true});
+      return;
+    }
     if(button.hasAttribute('data-manual-close-picker')){closeManualPicker();paint();return;}
     if(button.dataset.manualPickSlot!==undefined||button.dataset.manualChangeSlot!==undefined){
       const slot=Number(button.dataset.manualPickSlot??button.dataset.manualChangeSlot);

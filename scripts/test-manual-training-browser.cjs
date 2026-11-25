@@ -84,7 +84,7 @@ async function main(){
       assert(Math.abs(detail.x)<=1&&Math.abs(detail.y)<=1,'detail must begin at the viewport origin');
       assert(Math.abs(detail.width-detail.viewportWidth)<=1&&Math.abs(detail.height-detail.viewportHeight)<=1,'detail fills the entire game viewport');
       assert.equal(detail.radius,'0px');assert.equal(detail.position,'fixed');assert.equal(detail.bodyOverflow,'auto');
-      for(const selector of ['.manual-native-skills-panel','.manual-focus-skill','.manual-hero-mastery','.manual-hero-step']){
+      for(const selector of ['.manual-native-skills-panel','.manual-shared-detail > :first-child','.manual-hero-step']){
         const radius=await page.locator(selector).first().evaluate(node=>parseFloat(getComputedStyle(node).borderTopLeftRadius));
         assert(radius>0,selector+' retains rounded corners');
       }
@@ -107,15 +107,41 @@ async function main(){
     await assertFullscreen();
     await page.setViewportSize({width:393,height:852});
     await assertFullscreen();
-    await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
+    const slot=page.locator('.manual-shared-detail');
+    const mastery=async()=>{
+      assert.equal(await slot.getAttribute('data-manual-detail-mode'),'mastery');
+      assert.equal(await slot.locator('.manual-hero-mastery').count(),1);
+      assert.equal(await page.locator('.manual-focus-skill').count(),0);
+    };
+    await mastery();
     await page.locator('[data-manual-browse-weapon="next"]').click();
+    await mastery();
+    await page.locator('[data-manual-jump-skill="rock-fist"]').click();
     await page.locator('.manual-focus-skill[data-manual-skill="rock-fist"]').waitFor();
     await page.locator('[data-manual-browse-weapon="prev"]').click();
+    await mastery();
+    for(const size of [{width:1180,height:820},{width:393,height:852}]){
+      await page.setViewportSize(size);
+      const position=()=>slot.evaluate(node=>{
+        const r=node.getBoundingClientRect(),scroller=node.closest('.manual-training-screen-body');
+        return {x:r.x,y:r.y+scroller.scrollTop,width:r.width};
+      });
+      const before=await position();
+      await page.locator('[data-manual-jump-skill="wind-slash"]').click();
+      await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
+      assert.equal(await slot.getAttribute('data-manual-detail-mode'),'skill');
+      assert.equal(await page.locator('.manual-hero-mastery').count(),0);
+      const after=await position();
+      for(const key of ['x','y','width'])assert(Math.abs(before[key]-after[key])<=2,'shared detail '+key+' must not move');
+      await page.locator('[data-manual-close-skill]').click();
+      await mastery();
+      await page.locator('[data-manual-jump-skill="wind-slash"]').click();
+      await page.locator('[data-manual-jump-skill="wind-slash"]').click();
+      await mastery();
+    }
     await page.locator('[data-manual-jump-skill="wind-slash"]').click();
-    await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
-    assert.equal(await page.locator('.manual-focus-skill').count(),1);
     await page.keyboard.press('Escape');
-    assert.equal(await page.locator('.manual-focus-skill').count(),0);
+    await mastery();
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('[data-manual-training-screen]').isVisible(),false);
     assert.equal(await library.isVisible(),true);

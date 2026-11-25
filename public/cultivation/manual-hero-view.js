@@ -96,6 +96,32 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
     <button type="button" data-manual-browse-weapon="next" aria-label="下一件武器" ${owned.length<2?'disabled':''}>›</button>
     <span class="manual-native-dots" aria-label="第 ${owned.indexOf(book)+1} 件，共 ${owned.length} 件">${owned.map(item=>'<i class="'+(item.id===book.id?'is-current':'')+'"></i>').join('')}</span>
   </div>`:'';
+  const masteryMarkup=`<div class="manual-hero-details">
+          <div class="manual-hero-title-row">
+            <div><span class="manual-hero-eyebrow">${weaponMode?'正在查看的武器':'正在查看的功法'}</span>
+              <h3>${esc(book.name)}</h3></div>
+          </div>
+          <div class="manual-hero-mastery" data-manual-mastery-stage="${visual.stage}">
+            <div class="manual-hero-mastery-heading">
+              <strong>修煉熟練度</strong>
+              <span class="manual-hero-mastery-level">Lv. ${visual.level}</span>
+            </div>
+            <div class="manual-hero-mastery-summary">
+              <span class="manual-hero-stage-badge">${esc(visual.label)}</span>
+              <span class="manual-hero-mastery-status">${progressLabel}</span>
+            </div>
+            <small class="manual-hero-attack-bonus">${weaponMode?'本武器':'本功法'}攻擊 +${fmt(ownAttack)} · 已獲${weaponMode?'武器':'功法'}合計 +${fmt(allAttack)}</small>
+            ${copies?`<small class="manual-hero-weapon-copies">持有：${copies}</small>`:''}
+            ${growth}
+            ${nextNote?`<small class="manual-hero-next-inline">${esc(nextNote)}</small>`:''}
+            <small class="manual-hero-mastery-footnote">武器 Lv.1、5、10 依序領悟三招。</small>
+          </div>
+          <div class="manual-hero-actions">${action}
+            ${upgrade?'<span class="manual-hero-tip">靈石只可升至 Lv.10；之後需戰鬥修煉</span>':''}
+          </div>
+        </div>`;
+  const skillMarkup=renderManualSkillDetail(book,selectedSkillId,{esc,skillArt,descriptionWithDamage,attack,
+    gold:state.gold,equipped,moveIdOf,weaponIds:weaponMode?state.weaponIds:null});
   return {
     bookId:book.id,
     html:`<section class="manual-hero${weaponMode?' manual-native-hero':''} manual-hero--${book.school} manual-hero--tier-${visual.stage} ${near?'manual-hero--approaching':''} ${anticipation?.status==='imminent'?'manual-hero--imminent':''}"
@@ -125,38 +151,14 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
           <span class="manual-hero-art-caption manual-hero-tier-badge is-tier-${tierClass}">${esc(book.tierRealm||'煉氣')}${weaponMode?'武器':'功法'}</span>
         </div>
         ${carousel}
-        <div class="manual-hero-details">
-          <div class="manual-hero-title-row">
-            <div><span class="manual-hero-eyebrow">${weaponMode?'正在查看的武器':'正在查看的功法'}</span>
-              <h3>${esc(book.name)}</h3></div>
-          </div>
-          <div class="manual-hero-mastery" data-manual-mastery-stage="${visual.stage}">
-            <div class="manual-hero-mastery-heading">
-              <strong>修煉熟練度</strong>
-              <span class="manual-hero-mastery-level">Lv. ${visual.level}</span>
-            </div>
-            <div class="manual-hero-mastery-summary">
-              <span class="manual-hero-stage-badge">${esc(visual.label)}</span>
-              <span class="manual-hero-mastery-status">${progressLabel}</span>
-            </div>
-            <small class="manual-hero-attack-bonus">${weaponMode?'本武器':'本功法'}攻擊 +${fmt(ownAttack)} · 已獲${weaponMode?'武器':'功法'}合計 +${fmt(allAttack)}</small>
-            ${copies?`<small class="manual-hero-weapon-copies">持有：${copies}</small>`:''}
-            ${growth}
-            ${nextNote?`<small class="manual-hero-next-inline">${esc(nextNote)}</small>`:''}
-            <small class="manual-hero-mastery-footnote">武器 Lv.1、5、10 依序領悟三招。</small>
-          </div>
-          <div class="manual-hero-actions">${action}
-            ${upgrade?'<span class="manual-hero-tip">靈石只可升至 Lv.10；之後需戰鬥修煉</span>':''}
-          </div>
-        </div>
+        ${weaponMode?'':masteryMarkup}
       </div>
       <div class="manual-hero-path">
         ${weaponMode?'<div class="manual-native-skills-panel">':''}
         <div class="manual-hero-path-heading"><strong>${weaponMode?'武器技能（'+book.skills.filter(s=>s.unlocked).length+'/'+book.skills.length+'）':'三招修行路線'}</strong><small>點選招式查看詳細效果與強化選項</small></div>
         <div class="manual-hero-path-grid">${steps}</div>
         ${weaponMode?'</div>':''}
-        ${renderManualSkillDetail(book,selectedSkillId,{esc,skillArt,descriptionWithDamage,attack,
-          gold:state.gold,equipped,moveIdOf,weaponIds:weaponMode?state.weaponIds:null})}
+        ${weaponMode?`<div class="manual-shared-detail" data-manual-detail-mode="${skillMarkup?'skill':'mastery'}">${skillMarkup||masteryMarkup}</div>`:skillMarkup}
       </div>
     </section>`
   };
