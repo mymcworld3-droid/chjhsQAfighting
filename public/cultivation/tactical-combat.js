@@ -1,12 +1,12 @@
 import './manual-rules.js?v=20261118-gold-cap10-v1';
-import './weapon-dungeon-rules.js?v=20261125-weapon-lord-unprotected-v1';
+import './weapon-dungeon-rules.js?v=20261125-weapon-lord-cleared-v1';
 import './contextual-asset-preloader.js';
 import {skillArt,bookArt} from './manual-art.js';
 import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-recap.js';
 import {manualXpDelta,renderManualXpToast} from './tactical-manual-xp-feedback.js';
 import {manualRoomExp,battleBreakthroughEstimate,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
 import './flying-sword-path.js?v=20261120-sword-movement-v1';
-import './tactical-rules.js?v=20261125-weapon-lord-unprotected-v1';
+import './tactical-rules.js?v=20261125-weapon-lord-cleared-v1';
 import './tactical-seal-targeting.js?v=20261119-seal-target-v1';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261120-guided-first-stage-v2';
 import './tactical-impact-presentation.js?v=20261125-weapon-lord-unprotected-v1';
@@ -1229,16 +1229,18 @@ function paint({preserveModal=false}={}){
   objectiveNode.hidden=!objective;
   if(objective){
     const living=state.actors.filter(a=>a.bot&&a.hp>0).length;
+    const weaponLord=state.weaponDungeon?state.actors.find(a=>a.bot&&a.weaponDungeonLord):null;
     const tracking=state.weaponDungeon?state.actors.filter(a=>a.bot&&a.hp>0&&a.intent?.tracking&&a.intent.kind==='attack'&&a.intent.cells?.some(p=>p.x===me.x&&p.y===me.y)).length:0;
     const label=state.trial?.variant?.includes('breakthrough')?'突圍運送':objective.item?'尋物運送':'運送';
     // Keep the battlefield objective summary in sync with the server's seal metadata.
     const sealEffects=[...new Set((objective.points||[]).filter(p=>!p.activated)
       .map(p=>R.sealDefinition(p.kind)?.shortEffect).filter(Boolean))].join('／');
-    const text=objective.type==='transport'?(objective.carrying?`${label} · 將靈物送至交付點`:`${label} · 先取得靈物`):
+    const text=state.weaponDungeon?`${state.weaponDungeon.name} · ${weaponLord?.hp>0?'擊敗領主即通關':'領主已擊敗'} · ${tracking?'危險：'+tracking+' 道追蹤落石':'圖騰 +'+Math.round(((state.weaponDungeon.totemDamageMultiplier??1.15)-1)*100)+'%'}`:
+      objective.type==='transport'?(objective.carrying?`${label} · 將靈物送至交付點`:`${label} · 先取得靈物`):
       objective.type==='defense'?`鎮守 · ${objective.completedRounds} / ${objective.rounds} 回合 · 靈陣 ${objective.hp} / ${objective.maxHp}`:
       objective.type==='sealing'?`封印 · ${objective.points.filter(p=>p.activated).length} / ${objective.points.length} 陣眼${state.trial?.layoutVersion===4?' · 攻擊陣眼'+(sealEffects?' · '+sealEffects:''):''}`:
-      objective.type==='boss'?'首領 · 擊敗大型靈獸':state.weaponDungeon?`${state.weaponDungeon.name} · ${living?'剩餘 '+living+' 隻靈獸（含領主）':'秘境已征服'} · ${tracking?'危險：'+tracking+' 道追蹤落石':'圖騰 +'+Math.round(((state.weaponDungeon.totemDamageMultiplier??1.15)-1)*100)+'%'}`:`討伐 · 剩餘 ${living} 隻靈獸`;
-    objectiveNode.textContent=objective.completed&&!me.answered?'目標完成 · 請先作答一題':text;
+      objective.type==='boss'?'首領 · 擊敗大型靈獸':`討伐 · 剩餘 ${living} 隻靈獸`;
+    objectiveNode.textContent=objective.completed&&!state.weaponDungeon&&!me.answered?'目標完成 · 請先作答一題':text;
   }
   $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.bot?`<small>${Manuals.realmForStage(a.level).name}境 · 功法 +${Manuals.expForBeast(a.level)} EXP</small>`:''}${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
   $('[data-combat-info]').innerHTML=state.actors.filter(a=>a.hp>0&&a.intent).map(a=>'<p><b>'+esc(a.name)+'</b><span>'+esc(a.intent.text)+'</span></p>').join('');
@@ -1550,7 +1552,7 @@ function resultDialog(){
   if(state.weaponDungeon){
     const info=state.weaponDungeon,result=state.weaponDungeonResult;
     showModal(`<small>單人武器副本 · ${esc(info.realm)}</small><h2>${esc(info.name)} · ${win?'通關':'挑戰結束'}</h2>
-      <p>${win?'已擊敗石域的守衛與領主。':'副本券已消耗，可調整武器與走位後再次挑戰。'}</p>
+      <p>${win?'已擊敗石域領主，副本通關；剩餘守衛不影響結算。':'副本券已消耗，可調整武器與走位後再次挑戰。'}</p>
       <div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div>
       ${win?`<p>${result?.unlocked>info.difficulty?'下一個難度已解鎖。':info.difficulty===5?'已完成最高難度。':''}</p>`:''}
       <p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':''}</p>
