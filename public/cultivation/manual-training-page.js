@@ -89,7 +89,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-art-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261125-portrait-ratio-v9';
+    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261125-weapon-order-v10';
     document.head.append(link);
   }
   if(!document.getElementById('scene-art-shell-style')){
@@ -172,12 +172,23 @@ function syncTrainingDialog(){
 }
 function markup(){
   if(!current)return '<div class="manual-loading">正在讀取武器…</div>';
+  const collection=filterOwnedManuals(current,libraryFilter);
+  if(trainingDialogOpen&&collection.length&&!collection.some(book=>book.id===featuredBookId)){
+    featuredBookId=collection[0].id;selectedSkillId=null;
+  }
   const hero=featuredHeroMarkup();
+  const index=collection.findIndex(book=>book.id===featuredBookId);
+  const canSwitch=collection.length>1&&index>=0;
   const expedition=renderManualExpedition(nextManualExpedition(current,featuredBookId,Catalog),{esc,bookArt});
   const owned=current.library?.some(book=>book.owned);
   const training=owned?`<dialog id="manual-training-dialog" class="manual-training-dialog" data-manual-training-dialog aria-labelledby="manual-training-dialog-title">
     <header class="manual-training-dialog-header">
-      <strong id="manual-training-dialog-title">${esc(current.library.find(book=>book.id===featuredBookId)?.name||'武器')} · 武器修煉</strong>
+      <div class="manual-training-switch" role="group" aria-label="依武器收藏順序切換">
+        <button type="button" data-manual-switch-weapon="-1" aria-label="上一件武器" ${canSwitch?'':'disabled'}><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+        <div class="manual-training-switch-title"><strong id="manual-training-dialog-title">${esc(current.library.find(book=>book.id===featuredBookId)?.name||'武器')} · 武器修煉</strong>
+          <small aria-live="polite">${index>=0?index+1:0} / ${collection.length}</small></div>
+        <button type="button" data-manual-switch-weapon="1" aria-label="下一件武器" ${canSwitch?'':'disabled'}><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+      </div>
       <button type="button" data-manual-close-training aria-label="關閉武器修煉" autofocus>
         <i class="fa-solid fa-xmark" aria-hidden="true"></i> 關閉</button>
     </header>
@@ -188,7 +199,7 @@ function markup(){
       </details>
       <div class="manual-status" data-manual-dialog-status role="status" aria-live="polite"></div>
     </div></dialog>`:hero;
-  const cards=filterOwnedManuals(current,libraryFilter).map(book=>
+  const cards=collection.map(book=>
     `<article class="manual-book ${book.school==='sword'?'is-sword':'is-body'} ${book.id===featuredBookId?'is-featured':''}"
        data-manual-book="${esc(book.id)}">
        ${renderManualCollectionSummary(book,featuredBookId,[],{
@@ -493,6 +504,20 @@ function boot(){
           block:'nearest'
         }));
       }
+      return;
+    }
+    if(button.dataset.manualSwitchWeapon){
+      if(!trainingDialogOpen)return;
+      const collection=filterOwnedManuals(current,libraryFilter);
+      const index=collection.findIndex(book=>book.id===featuredBookId);
+      const direction=Number(button.dataset.manualSwitchWeapon);
+      if(collection.length<2||index<0||![-1,1].includes(direction))return;
+      featuredBookId=collection[(index+direction+collection.length)%collection.length].id;
+      selectedSkillId=null;
+      clearManualCelebration();
+      paint();
+      const body=root?.querySelector('.manual-training-dialog-body');
+      if(body)body.scrollTop=0;
       return;
     }
     if(button.dataset.featureBook){
