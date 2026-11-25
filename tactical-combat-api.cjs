@@ -301,8 +301,15 @@ async function assertDungeonWeaponEditable(playerDb,uid){
   const pointer=exists(await dungeonDb.collection('dungeonRoomMemberships').doc(uid).get());
   if(!pointer?.roomId)return;
   const room=exists(await dungeonDb.collection('dungeonRooms').doc(pointer.roomId).get());
-  if(room?.status==='assembled'&&room.members&&Object.hasOwn(room.members,uid))
-    throw error('多人副本進行中，不可裝備或卸下武器',409);
+  // Match the dungeon API's session validity. An expired room can retain
+  // its assembled status and membership for XP/reward recovery indefinitely.
+  // Never lock equipment for that stale record or a completed boss encounter.
+  const active=room?.mode==='dungeon'&&room.version===1&&
+    room.status==='assembled'&&Number(room.expiresAtMs)>Date.now()&&
+    room.bossEncounter?.status!=='defeated'&&
+    room.members&&Object.hasOwn(room.members,uid);
+  if(active)
+    throw error('多人副本進行中，不可裝備或卸下武器；請先返回多人副本並離開隊伍，或完成首領戰。',409);
 }
 async function updateLoadout(db,uid,input){
   const index=input?.index;
