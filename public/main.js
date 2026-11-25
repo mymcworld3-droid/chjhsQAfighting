@@ -166,6 +166,8 @@ async function loadXiuxianFeaturesSafely() {
         modulePath === './cultivation/battle-mode-v2.js'
       ) {
         loadedModule = await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
+      } else if (modulePath === './cultivation/manual-training-page.js') {
+        loadedModule = await import(`${modulePath}?v=20261125-dungeon-gear-recovery-v2`);
       } else {
         loadedModule = await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
       }
