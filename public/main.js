@@ -1,6 +1,7 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
 import './main-legacy.js?v=20261124-hide-coop-v1';
+import './cultivation/spirit-stone-ui.js?v=20261125-stone-price-art-v1';
 import './cultivation/dongtian-entry.js';
 // Sound is optional and cannot hold up authentication or gameplay readiness.
 void import('./game-audio.js').catch(error => console.warn('[Game audio] unavailable', error));
@@ -108,7 +109,7 @@ const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 let xiuxianMarketLoad = null;
 function loadPlayerMarketSafely() {
   if (!xiuxianMarketLoad) {
-    xiuxianMarketLoad = import(`./cultivation/player-marketplace.js?v=${XIUXIAN_FEATURE_BUILD}`)
+    xiuxianMarketLoad = import('./cultivation/player-marketplace.js?v=20261125-stone-price-art-v1')
       .catch((error) => {
         console.error('[Xiuxian] Optional player marketplace failed:', error);
         window.__xiuxianMarketplaceLoadError = true;
@@ -171,7 +172,7 @@ async function loadXiuxianFeaturesSafely() {
       } else if (modulePath === './cultivation/home-wireframe.js') {
         loadedModule = await import(`${modulePath}?v=20261125-home-stones-grid-v5`);
       } else if (modulePath === './cultivation/manual-training-page.js') {
-        loadedModule = await import(`${modulePath}?v=20261125-main-card-fill-async-gear-v2`);
+        loadedModule = await import(`${modulePath}?v=20261125-stone-price-art-v1`);
       } else {
         loadedModule = await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
       }
