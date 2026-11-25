@@ -1013,3 +1013,201 @@ body.ui-cleanup #page-home .home-shortcut-column .home-wide-actions>.home-shortc
   body.ui-cleanup #page-home .home-shortcut-column [data-home-action="quest"]{grid-area:quest!important}
   body.ui-cleanup #page-home .home-shortcut-column [data-home-action="store"]{grid-area:store!important}
 }
+
+
+/* v7 FINAL orientation-specific overrides.
+   Portrait intentionally retains the 2026-11-25 Safari layout: a full-width
+   cultivation panel, three plain rectangular buttons on each side of the
+   circular stage, then its original trial button. Only landscape changes. */
+@media (orientation:portrait){
+  body.ui-cleanup #page-home>.home-layout,
+  body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
+    grid-template-columns:clamp(48px,13vw,70px) minmax(0,1fr) clamp(48px,13vw,70px)!important;
+    grid-template-areas:
+      "realm realm realm"
+      "left emblem right"
+      "practice practice practice"!important;
+    grid-template-rows:auto auto auto!important;
+    column-gap:clamp(5px,1.6vw,14px)!important;
+    row-gap:clamp(10px,1.8vh,18px)!important;
+    align-items:start!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column{
+    display:flex!important;
+    flex-direction:column!important;
+    grid-area:realm!important;
+    gap:5px!important;
+    width:100%!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column>#xiuxian-panel{
+    grid-area:auto!important;
+    padding:14px 18px!important;
+    width:100%!important;
+    min-width:0!important;
+    align-self:stretch!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column #xiuxian-avatar-slot{
+    width:46px!important;height:46px!important;flex:0 0 46px!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column #xiuxian-panel .xiuxian-realm{
+    font-size:24px!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column>.home-daily-progress,
+  body.ui-cleanup #page-home .home-profile-column>.home-records,
+  body.ui-cleanup #page-home .home-profile-column>#home-learning-slot{
+    grid-area:auto!important;
+    width:100%!important;
+    align-self:stretch!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column{
+    display:contents!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-spirit-stones{
+    display:none!important; /* Screenshot-exact portrait: no extra currency row */
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail{
+    display:flex!important;
+    flex-direction:column!important;
+    position:relative!important;
+    top:auto!important;left:auto!important;right:auto!important;
+    transform:none!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    padding:0!important;
+    margin:0!important;
+    align-self:center!important;
+    justify-self:stretch!important;
+    justify-content:center!important;
+    gap:0!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail.is-left{
+    grid-area:left!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail.is-right{
+    grid-area:right!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail .home-wireframe-shortcut,
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail.is-right .home-shortcut--wide{
+    grid-area:auto!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:clamp(66px,10dvh,117px)!important;
+    padding:clamp(6px,1.6vw,10px) 2px!important;
+    margin:0!important;
+    border:1px solid rgba(207,177,124,.25)!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    background:rgba(49,47,38,.69)!important;
+    color:#d8ccb4!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:5px!important;
+    font:500 clamp(9px,2.4vw,12px)/1.2 "Noto Serif TC",serif!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail .home-wireframe-shortcut:first-child{
+    border-radius:12px 12px 0 0!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail .home-wireframe-shortcut:last-child{
+    border-radius:0 0 12px 12px!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--diamond::before{
+    display:none!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail .home-wireframe-shortcut :is(i,.home-learning-star){
+    font-size:clamp(17px,4vw,23px)!important;
+  }
+  body.ui-cleanup #page-home .home-realm-emblem{
+    grid-area:emblem!important;
+  }
+  body.ui-cleanup #page-home .home-trial-column{
+    display:contents!important;
+  }
+  body.ui-cleanup #page-home .home-practice{
+    grid-area:practice!important;
+    width:min(76%,350px)!important;
+    justify-self:center!important;
+    margin:0!important;
+  }
+}
+@media (orientation:landscape){
+  body.ui-cleanup #page-home .home-shortcut-column{
+    --home-diamond-size:clamp(42px,6dvh,70px);
+    --home-wide-height:clamp(62px,10dvh,92px);
+    display:grid!important;
+    grid-area:shortcuts!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-areas:
+      "stones stones"
+      "path quest"
+      "rank store"
+      ". ."
+      "meditation meditation"
+      "learning learning"!important;
+    grid-template-rows:auto var(--home-diamond-size) var(--home-diamond-size)
+      minmax(0,1fr) var(--home-wide-height) var(--home-wide-height)!important;
+    width:100%!important;
+    max-width:none!important;
+    height:max(var(--home-scene-size),calc(50px + 2 * var(--home-diamond-size) + 2 * var(--home-wide-height)))!important;
+    min-height:0!important;
+    align-self:start!important;
+    align-content:stretch!important;
+    justify-self:stretch!important;
+    row-gap:clamp(4px,.9dvh,10px)!important;
+    column-gap:clamp(4px,.9vw,12px)!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail{
+    display:contents!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-spirit-stones{grid-area:stones!important}
+  body.ui-cleanup #page-home .home-shortcut-column [data-home-action="path"]{grid-area:path!important}
+  body.ui-cleanup #page-home .home-shortcut-column [data-home-action="rank"]{grid-area:rank!important}
+  body.ui-cleanup #page-home .home-shortcut-column [data-home-action="quest"]{grid-area:quest!important}
+  body.ui-cleanup #page-home .home-shortcut-column [data-home-action="store"]{grid-area:store!important}
+  body.ui-cleanup #page-home .home-shortcut-column [data-home-action="meditation"]{grid-area:meditation!important}
+  body.ui-cleanup #page-home .home-shortcut-column [data-home-action="learning"]{grid-area:learning!important}
+  body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--diamond{
+    width:var(--home-diamond-size)!important;
+    height:var(--home-diamond-size)!important;
+    max-width:100%!important;
+    min-height:0!important;
+    justify-self:center!important;
+    align-self:center!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--wide{
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    height:var(--home-wide-height)!important;
+    min-height:var(--home-wide-height)!important;
+    padding:10px clamp(12px,2vw,24px)!important;
+    border-radius:12px!important;
+    justify-self:stretch!important;
+    align-self:stretch!important;
+    flex-direction:row!important;
+    gap:clamp(9px,1.3vw,18px)!important;
+    font:600 clamp(15px,1.7vw,21px)/1.3 "Noto Serif TC",serif!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--wide :is(i,.home-learning-star){
+    font-size:clamp(23px,2.6vw,32px)!important;
+  }
+}
+@media (orientation:landscape) and (min-width:900px){
+  body.ui-cleanup #page-home .home-shortcut-column{
+    --home-diamond-size:clamp(48px,5.3vw,76px);
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-areas:
+      "stones stones stones stones"
+      "path rank quest store"
+      ". . . ."
+      "meditation meditation meditation meditation"
+      "learning learning learning learning"!important;
+    grid-template-rows:auto var(--home-diamond-size) minmax(0,1fr)
+      var(--home-wide-height) var(--home-wide-height)!important;
+    height:max(var(--home-scene-size),calc(55px + var(--home-diamond-size) + 2 * var(--home-wide-height)))!important;
+  }
+}
