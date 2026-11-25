@@ -1,3 +1,4 @@
+import './daily-meditation-rewards.js';
 import {stoneCostMarkup,cultivationMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import './manual-rules.js?v=20261118-gold-cap10-v1';
 import './weapon-dungeon-rules.js?v=20261125-weapon-lord-cleared-v1';
@@ -1564,9 +1565,19 @@ function resultDialog(){
   }
   if(state.mode==='pve'){
     const stage=state.trial?.stage||1,next=state.nextStage||stage+1;
+    const presentation=globalThis.QARewardPresentation;
+    const rewardCards=presentation?.renderList(reward,{inline:true})||'';
+    const rewardSection=rewardCards
+      ?'<section class="tc-trial-rewards" data-trial-reward-list><h3>本次獲得</h3>'+rewardCards+'</section>'
+      :'<p>答題紀錄已保存。</p>';
     const guideCollapse=win&&stage===1&&tutorialStep()>=7&&tutorialStep()<=9
       ?'<button type="button" class="tc-primary" data-tutorial-collapse>收起戰場</button>':'';
-    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+stoneCostMarkup('+'+reward.gold)+' · '+cultivationMarkup('+'+reward.cultivation,{showName:true}):'答題紀錄已保存。'}</p>${manualRecap}${drop?'<p class="tc-manual-loot">獲得功法：《'+esc(drop.name)+'》！前往修煉查看。</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}${guideCollapse}<button type="button" class="${guideCollapse?'':'tc-primary'}" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
+    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div>${rewardSection}${manualRecap}${drop?'<p class="tc-manual-loot">獲得功法：《'+esc(drop.name)+'》！前往修煉查看。</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}${guideCollapse}<button type="button" class="${guideCollapse?'':'tc-primary'}" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
+    const receiptRoom=state,receiptUid=uid,receiptEpoch=epoch;
+    if(rewardCards)presentation.animateInline($('[data-trial-reward-list]'),{
+      uid:receiptUid,receiptId:JSON.stringify(['trial',receiptRoom.id,stage,receiptRoom.createdAtMs??null]),reward,
+      isCurrent:()=>valid(receiptEpoch,receiptUid)&&state?.id===receiptRoom.id&&state?.trial?.stage===receiptRoom.trial?.stage&&state?.status==='finished'
+    });
     if(manualRecap)void refreshManualRecap();
     return;
   }

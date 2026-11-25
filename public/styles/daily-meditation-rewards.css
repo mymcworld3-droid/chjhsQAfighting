@@ -18,3 +18,14 @@ body.meditation-reward-open{overflow:hidden!important}
 @media(orientation:landscape) and (max-height:540px){.mr-reward-panel{width:min(800px,100%);padding:16px 18px}.mr-reward-header{display:grid;grid-template-columns:52px auto;justify-content:center;column-gap:14px;align-items:center}.mr-reward-crest{grid-row:1/4;margin:0;width:48px;height:48px}.mr-reward-crest svg{width:28px;height:28px}.mr-reward-header h2{font-size:22px;margin:1px 0}.mr-reward-kicker{font-size:9px}.mr-reward-header p{font-size:11px}.mr-reward-list{flex-wrap:nowrap;gap:8px;margin:16px 0}.mr-reward-item{flex:1 1 0;min-width:0;padding:10px 6px}.mr-reward-icon{width:30px;height:30px;margin-bottom:5px}.mr-reward-icon svg{width:27px;height:27px}.mr-reward-label{font-size:10px}.mr-reward-amount{font-size:23px}.mr-reward-footer{gap:7px}.mr-reward-footer button{min-height:37px;padding:7px 20px;font-size:13px}.mr-reward-note{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.mr-reward-item,.mr-reward-crest,.mr-reward-crest:after{animation:none}.is-collecting .mr-reward-header,.is-collecting .mr-reward-footer{transition:none}}
 @media(orientation:portrait) and (max-height:700px){.mr-reward-panel{padding:18px 14px}.mr-reward-crest{width:52px;height:52px;margin-bottom:10px}.mr-reward-crest svg{width:32px;height:32px}.mr-reward-header h2{font-size:22px;margin:4px 0}.mr-reward-item{padding:12px 8px}.mr-reward-icon{width:32px;height:32px;margin-bottom:6px}.mr-reward-icon svg{width:28px;height:28px}.mr-reward-amount{font-size:24px}.mr-reward-list{margin:17px 0}}
+
+/* Shared settlement cards embedded in the existing trial dialog. */
+.mr-reward-list--static .mr-reward-item{animation:none}
+.tc-trial-rewards{min-width:0;border-top:1px solid #b9954c55;padding-top:12px}
+.tc-trial-rewards h3{margin:0;text-align:center;font:700 14px/1.4 "Noto Serif TC",serif;color:#f4d79a;letter-spacing:.08em}
+.tc-trial-rewards .mr-reward-list--inline{margin:10px 0 0;gap:8px;flex-wrap:wrap}
+.tc-trial-rewards .mr-reward-item{flex:0 1 150px;min-width:0;padding:12px 8px;text-align:center}
+.tc-trial-rewards .mr-reward-amount{font-size:clamp(19px,4.5vw,26px)}
+.mr-reward-icon>img{width:100%;height:100%;max-width:100%;object-fit:contain}
+@media(max-width:500px){.tc-trial-rewards .mr-reward-item{flex-basis:calc(50% - 4px)}}
+@media(orientation:landscape) and (max-height:540px){.tc-trial-rewards{padding-top:6px}.tc-trial-rewards .mr-reward-list--inline{margin:5px 0 0}.tc-trial-rewards .mr-reward-item{padding:7px 6px}.tc-trial-rewards .mr-reward-icon{width:30px;height:30px}.tc-trial-rewards .mr-reward-amount{margin-top:3px}}
