@@ -448,7 +448,8 @@ async function settle(tx,db,s,userOverrides={}){
       if(reward){const dropped=rollManualDrop(s,a.uid,manuals);manualChanged=manualChanged||dropped.changed;}
     }
     if(s.weaponDungeon&&s.winner===a.team&&['hp','objective'].includes(s.finishReason)&&
-       currentRoomId(pointer,'weapon-dungeon')===s.id&&!s.actors.some(enemy=>enemy.bot&&Rules.alive(enemy))){
+       currentRoomId(pointer,'weapon-dungeon')===s.id&&
+       s.actors.some(enemy=>enemy.bot&&enemy.weaponDungeonLord&&!Rules.alive(enemy))){
       const dungeon=WeaponDungeons.progress(pointer?.weaponDungeonV1,s.updatedAtMs);
       const index=s.weaponDungeon.difficulty;
       const clearedProgress=WeaponDungeons.recordClear(dungeon,s.weaponDungeon.id||WeaponDungeons.ID,index);
