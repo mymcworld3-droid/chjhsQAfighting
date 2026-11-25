@@ -1,3 +1,4 @@
+import {stoneCostMarkup} from './spirit-stone-ui.js?v=20261125-stone-price-art-v1';
 // A single skill-details surface for the selected, already-owned manual.
 // The same server-validated equip/upgrade handlers are used by the main page.
 export function renderManualSkillDetail(book,skillId,{esc,skillArt,descriptionWithDamage,attack=200,gold=0,equipped=[],moveIdOf,weaponIds=null}={}){
@@ -14,8 +15,8 @@ export function renderManualSkillDetail(book,skillId,{esc,skillArt,descriptionWi
   const upgrade=skill.upgrade;
   const gain=skill.kind==='fist-focus'?'每級降低 1 體力':'每級提高 10% 基礎傷害';
   const upgradeAction=!locked&&upgrade?
-    `<button type="button" class="manual-upgrade" data-skill-upgrade="${esc(skill.id)}" ${Number(gold)<Number(upgrade.gold)?'disabled':''}>
-      ${Number(gold)<Number(upgrade.gold)?'靈石不足 · ':''}強化至 Lv. ${fmt(upgrade.targetLevel)} · ${fmt(upgrade.gold)} 靈石</button>`:'';
+    `<button type="button" class="manual-upgrade" data-skill-upgrade="${esc(skill.id)}" title="強化至 Lv. ${fmt(upgrade.targetLevel)}，消耗 ${fmt(upgrade.gold)} 靈石" ${Number(gold)<Number(upgrade.gold)?'disabled':''}>
+      ${Number(gold)<Number(upgrade.gold)?'靈石不足 · ':''}強化 ${stoneCostMarkup(upgrade.gold)}</button>`:'';
   const weaponMode=Array.isArray(weaponIds);
   const worn=weaponMode&&weaponIds.includes(book.id);
   const equipment=weaponMode?
