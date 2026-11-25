@@ -14,6 +14,8 @@ let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,se
 let trainingDialogOpen=false,trainingDialogTrigger=null;
 let toastTimer=null,pickerTrigger=null,collectionScroll=null;
 let blockedDungeonEquip=null;
+// Equipment changes are optimistic and serialized independently of other page actions.
+let weaponServerState=null,weaponChangeQueue=[],weaponRequest=null,weaponEpoch=0,leavingDungeon=false;
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -92,7 +94,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-layout-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261125-living-armory-v12';
+    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261125-main-card-fill-async-gear-v2';
     document.head.append(link);
   }
   return root;
@@ -145,6 +147,7 @@ function closeTrainingDialog({restoreFocus=true}={}){
     trigger?.focus({preventScroll:true});
   }
   trainingDialogTrigger=null;
+  fitArmoryHeight();
 }
 function syncTrainingDialog(){
   const screen=root?.querySelector('[data-manual-training-screen]');
@@ -290,6 +293,18 @@ function syncManualPicker(){
   dialog.oncancel=event=>{event.preventDefault();closeManualPicker();paint();};
   if(pickerSlot!==null&&!dialog.open)dialog.showModal();
 }
+// Measure the scrollable main stage, not the page's current scroll position.
+ // The shelf grows to the available bottom edge without stretching its cards.
+function fitArmoryHeight(){
+  const main=root?.closest?.('main');
+  if(!main||!visible()||root.classList.contains('manual-detail-active')||
+    typeof window.getComputedStyle!=='function'||!main.getBoundingClientRect)return;
+  const mainStyle=window.getComputedStyle(main),pageStyle=window.getComputedStyle(root.parentElement);
+  const offset=root.getBoundingClientRect().top-main.getBoundingClientRect().top+main.scrollTop;
+  const available=main.clientHeight-(parseFloat(mainStyle.paddingBottom)||0)-
+    (parseFloat(pageStyle.paddingBottom)||0)-offset-2;
+  if(Number.isFinite(available))root.style.setProperty('--mt-fill-height',Math.max(0,Math.floor(available))+'px');
+}
 function paint(message='',{kind=''}={}){
   ensure();if(!root)return;
   const template=document.createElement('template');template.innerHTML=markup();
@@ -298,6 +313,7 @@ function paint(message='',{kind=''}={}){
   renderedFor=loadedFor;
   syncTrainingDialog();
   syncManualPicker();
+  fitArmoryHeight();
   if(message)showManualToast(message,kind);
   // An existing starter skill may already be equipped by the server.
   // The optional completion action always rechecks authoritative manual state.
@@ -319,7 +335,7 @@ async function load({force=false}={}){
   if(busy)return;
   if(visible())window.prefetchXiuxianContext?.('manuals');
   ensure();const uid=getMainUser()?.uid;
-  if(!uid){closeTrainingDialog({restoreFocus:false});clearManualCelebration();current=null;loadedFor='';paint('請先登入後查看武器。');return;}
+  if(!uid){resetWeaponChanges();closeTrainingDialog({restoreFocus:false});clearManualCelebration();current=null;loadedFor='';paint('請先登入後查看武器。');return;}
   if(!force&&loadedFor===uid&&Date.now()-lastFetch<15000){paint();return;}
   const token=++sequence;lastFetch=Date.now();
   try{
@@ -327,7 +343,9 @@ async function load({force=false}={}){
     if(token!==sequence||getMainUser()?.uid!==uid)return;
     const before=loadedFor===uid?current:null;
     const reward=detectManualCelebration(before,result,{kind:'sync'});
-    current=result;if(loadedFor!==uid){closeTrainingDialog({restoreFocus:false});selectedLoadout=result.activeLoadout||0;featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';blockedDungeonEquip=null;}loadedFor=uid;
+    if(loadedFor!==uid){resetWeaponChanges();closeTrainingDialog({restoreFocus:false});selectedLoadout=result.activeLoadout||0;featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';blockedDungeonEquip=null;}
+    if(weaponRequest||weaponChangeQueue.length)return;
+    weaponServerState=result;current=result;loadedFor=uid;
     window.setCurrentTacticalManualState?.(result,uid);
     paint();
     // Only artwork for owned, currently browsable weapons is warmed;
@@ -340,7 +358,79 @@ async function load({force=false}={}){
     paint(error.message,{kind:'error'});
   }
 }
+
+function resetWeaponChanges(){
+  ++weaponEpoch;weaponRequest=null;weaponChangeQueue=[];weaponServerState=null;
+  blockedDungeonEquip=null;leavingDungeon=false;
+}
+function projectWeaponChoices(base,changes){
+  if(!Array.isArray(base?.weaponIds)||!changes?.length)return base;
+  const weaponIds=[...base.weaponIds];
+  for(const change of changes)weaponIds[change.index]=change.weaponId;
+  const books=new Map((base.library||[]).filter(book=>book.owned).map(book=>[book.id,book]));
+  const loadouts=weaponIds.map((id,index)=>{
+    const book=books.get(id);
+    return {...(base.loadouts?.[index]||{}),weaponId:id,
+      name:book?.name||'空白武器槽',
+      skillIds:book?.skills?.filter(skill=>skill.unlocked).map(skill=>skill.id)||[]};
+  });
+  return {...base,weaponIds,loadouts,activeLoadout:0,
+    equipped:loadouts.flatMap(slot=>slot.skillIds),
+    library:Catalog.sortedOwnedWeapons(base.library,weaponIds)};
+}
+function withPendingWeaponChoices(serverState,includeCurrent=true){
+  const ops=[...(includeCurrent&&weaponRequest?[weaponRequest]:[]),...weaponChangeQueue];
+  return projectWeaponChoices(serverState,ops);
+}
+function changeWeaponInBackground(index,weaponId){
+  const uid=getMainUser()?.uid;
+  if(!uid||!Number.isInteger(index)||index<0||index>=2||!Array.isArray(current?.weaponIds))return;
+  if(weaponId!==null&&!current.library?.some(book=>book.owned&&book.id===weaponId))return;
+  if(weaponId!==null&&current.weaponIds.some((id,i)=>i!==index&&id===weaponId))return;
+  if(current.weaponIds[index]===weaponId)return;
+  if(!weaponServerState)weaponServerState=current;
+  weaponChangeQueue=weaponChangeQueue.filter(change=>change.index!==index);
+  weaponChangeQueue.push({uid,index,weaponId,epoch:weaponEpoch});
+  current=withPendingWeaponChoices(weaponServerState);
+  blockedDungeonEquip=null;selectedLoadout=index;
+  ++sequence;lastFetch=Date.now();
+  // A local state change is immediate; saving never enters the page-wide busy state.
+  paint();
+  void sendQueuedWeaponChanges();
+}
+async function sendQueuedWeaponChanges(){
+  if(weaponRequest||!weaponChangeQueue.length)return;
+  const job=weaponChangeQueue.shift();
+  if(job.uid!==getMainUser()?.uid||job.epoch!==weaponEpoch)return;
+  weaponRequest=job;
+  let failure='';
+  try{
+    const state=await request('/api/tactical/manuals/loadout',{index:job.index,weaponId:job.weaponId});
+    if(job!==weaponRequest||job.epoch!==weaponEpoch||getMainUser()?.uid!==job.uid)return;
+    weaponServerState=state;loadedFor=job.uid;lastFetch=Date.now();blockedDungeonEquip=null;
+    window.setCurrentTacticalManualState?.(state,job.uid);
+    window.dispatchEvent(new CustomEvent('xiuxian:manual-loadout-updated',{detail:{equipped:state.equipped}}));
+  }catch(error){
+    if(job!==weaponRequest||job.epoch!==weaponEpoch||getMainUser()?.uid!==job.uid)return;
+    failure=error.message||'武器同步失敗';
+    if(failure.includes('多人副本進行中')&&!weaponChangeQueue.some(change=>change.index===job.index))
+      blockedDungeonEquip={index:job.index,weaponId:job.weaponId};
+  }finally{
+    if(job!==weaponRequest)return;
+    weaponRequest=null;
+    ++sequence; // An older GET must never overwrite a newly saved loadout.
+    current=withPendingWeaponChoices(weaponServerState||current);
+    if(getMainUser()?.uid===job.uid){
+      paint();
+      if(failure)showManualToast(failure,'error'); // Errors only, never a saving popup.
+    }
+    if(weaponChangeQueue.length)void sendQueuedWeaponChanges();
+  }
+}
 async function mutate(url,body){
+  if(url.endsWith('/loadout')&&Object.hasOwn(body||{},'weaponId')){
+    changeWeaponInBackground(body.index,body.weaponId);return;
+  }
   if(busy)return;
   const uid=getMainUser()?.uid;if(!uid)return;
   const upgrading=url.endsWith('/upgrade');
@@ -355,7 +445,8 @@ async function mutate(url,body){
       kind:url.endsWith('/school')?'school':upgrading?'upgrade':'loadout',
       bookId:body?.bookId,skillId:body?.skillId
     });
-    current=next;loadedFor=uid;lastFetch=Date.now();successful=true;
+    weaponServerState=next;
+    current=withPendingWeaponChoices(next);loadedFor=uid;lastFetch=Date.now();successful=true;
     if(Object.hasOwn(body||{},'weaponId'))blockedDungeonEquip=null;
     if(url.endsWith('/school')){featuredBookId='';selectedSkillId=null;pickerSlot=null;}
     if(url.endsWith('/loadout')&&Array.isArray(body?.skillIds))pickerSlot=null;
@@ -399,10 +490,10 @@ async function mutate(url,body){
   }
 }
 async function leaveDungeonAndRetryEquipment(){
-  if(busy||!blockedDungeonEquip)return;
+  if(leavingDungeon||!blockedDungeonEquip)return;
   const uid=getMainUser()?.uid;if(!uid)return;
   const pending={...blockedDungeonEquip};
-  busy=true;paint('正在確認多人副本狀態…',{kind:'pending'});
+  leavingDungeon=true;
   try{
     const session=await reconnectDungeonRoom();
     if(getMainUser()?.uid!==uid)return;
@@ -410,11 +501,10 @@ async function leaveDungeonAndRetryEquipment(){
       await leaveDungeonRoom(session.roomId);
     if(getMainUser()?.uid!==uid)return;
     blockedDungeonEquip=null;
+    changeWeaponInBackground(pending.index,pending.weaponId);
   }catch(error){
-    if(getMainUser()?.uid===uid)paint('離開副本失敗：'+error.message,{kind:'error'});
-    return;
-  }finally{busy=false;}
-  if(getMainUser()?.uid===uid)void mutate('/api/tactical/manuals/loadout',pending);
+    if(getMainUser()?.uid===uid)showManualToast('離開副本失敗：'+error.message,'error');
+  }finally{leavingDungeon=false;}
 }
 function ensureNav(){
   const parent=document.getElementById('nav-grid');
@@ -658,7 +748,7 @@ function boot(){
       setTimeout(()=>void load({force:true}),0);
     }
   },true);
-  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){closeTrainingDialog({restoreFocus:false});clearManualCelebration();current=null;loadedFor='';featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';}if(visible())void load({force:true});});
+  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){resetWeaponChanges();closeTrainingDialog({restoreFocus:false});clearManualCelebration();current=null;loadedFor='';featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';}if(visible())void load({force:true});});
   document.addEventListener('keydown',event=>{
     if(event.key!=='Escape'||!visible()||root?.querySelector('[data-manual-weapon-dialog]')?.open)return;
     if(trainingDialogOpen){
@@ -683,6 +773,10 @@ function boot(){
     // Refresh after navigation rather than rendering stale pre-battle mastery.
     setTimeout(()=>{if(visible())void load({force:true});},0);
   });
+  window.addEventListener('resize',fitArmoryHeight,{passive:true});
+  if(typeof ResizeObserver!=='undefined'){
+    const main=root?.closest?.('main');if(main)new ResizeObserver(fitArmoryHeight).observe(main);
+  }
   if(visible())void load({force:true});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});
