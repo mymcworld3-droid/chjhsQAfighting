@@ -7,10 +7,8 @@ body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
   display:grid!important;
   grid-template-columns:minmax(0,1.04fr) minmax(0,1.65fr) repeat(2,minmax(0,.32fr))!important;
   grid-template-areas:
-    "realm emblem left right"
-    ". practice . ."
-    "daily records records records"!important;
-  grid-template-rows:auto auto auto!important;
+    "realm emblem left right"!important;
+  grid-template-rows:auto!important;
   column-gap:clamp(8px,1.8vw,26px)!important;
   row-gap:clamp(6px,1.2dvh,12px)!important;
   padding:0!important;
@@ -156,13 +154,11 @@ body.ui-cleanup #page-home .home-records{grid-area:records!important;align-self:
   body.ui-cleanup #page-home>.home-layout,
   body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
     grid-template-columns:58px minmax(0,1fr) 58px!important;
-    grid-template-rows:auto auto auto auto auto auto!important;
+    grid-template-rows:auto auto auto!important;
     grid-template-areas:
       "realm realm realm"
       "left emblem right"
-      "left practice right"
-      "daily daily daily"
-      "records records records"!important;
+      "practice practice practice"!important;
     gap:10px!important;
   }
   body.ui-cleanup #page-home #xiuxian-panel{min-height:0!important;padding:14px 18px!important}
@@ -272,10 +268,8 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
   body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
     grid-template-columns:minmax(0,1.04fr) minmax(0,1.65fr) repeat(2,minmax(0,.32fr))!important;
     grid-template-areas:
-      "realm emblem left right"
-      ". practice . ."
-      "daily records records records"!important;
-    grid-template-rows:auto auto auto!important;
+      "realm emblem left right"!important;
+    grid-template-rows:auto!important;
     column-gap:clamp(8px,1.8vw,26px)!important;
     row-gap:clamp(4px,1.2dvh,12px)!important;
     align-items:start!important;
@@ -354,10 +348,8 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
     grid-template-areas:
       "realm realm realm"
       "left emblem right"
-      "practice practice practice"
-      "daily daily daily"
-      "records records records"!important;
-    grid-template-rows:auto auto auto auto auto!important;
+      "practice practice practice"!important;
+    grid-template-rows:auto auto auto!important;
     column-gap:clamp(5px,1.6vw,14px)!important;
     row-gap:clamp(10px,1.8vh,18px)!important;
     align-items:start!important;
@@ -421,5 +413,60 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
     min-height:56px!important;
     padding:6px 1px!important;
     font-size:9px!important;
+  }
+}
+
+/* Realm, daily progress, records and correction history share one independent
+   profile stack. Expanded records never push the scene's CTA downward. */
+body.ui-cleanup #page-home .home-profile-column{
+  grid-area:realm;display:flex;flex-direction:column;align-items:stretch;
+  align-self:start;min-width:0;gap:8px;width:100%;
+}
+body.ui-cleanup #page-home .home-profile-column>#xiuxian-panel{
+  width:100%;align-self:stretch!important;
+}
+body.ui-cleanup #page-home .home-profile-column>.home-daily-progress,
+body.ui-cleanup #page-home .home-profile-column>.home-records{
+  width:100%;min-width:0;margin:0!important;align-self:stretch!important;
+}
+body.ui-cleanup #page-home .home-daily-progress:has(>#quest-spotlight-slot[hidden]){
+  display:none!important;
+}
+body.ui-cleanup #page-home #home-learning-slot:empty{display:none}
+body.ui-cleanup #page-home #home-learning-slot>#player-learning-progress{
+  width:100%;min-width:0;margin:0;padding:9px 11px;
+}
+body.ui-cleanup #page-home .home-profile-column>.home-records>summary{
+  padding-block:9px;
+}
+body.ui-cleanup #page-home .home-profile-column .home-stats{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+body.ui-cleanup #page-home .home-profile-column .home-stats .stat-card{
+  min-width:0;padding:6px 8px;
+}
+body.ui-cleanup #page-home .home-profile-column .home-stats .stat-card:nth-child(even){
+  border-right:0;
+}
+body.ui-cleanup #page-home .home-trial-column{
+  grid-area:emblem;display:flex;flex-direction:column;align-items:center;
+  align-self:start;min-width:0;gap:8px;
+}
+body.ui-cleanup #page-home .home-trial-column>.home-realm-emblem{
+  width:100%;align-self:center!important;
+}
+@media (orientation:landscape){
+  body.ui-cleanup #page-home .home-wireframe-rail{
+    align-self:start!important;margin-top:clamp(4px,4dvh,28px)!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column .home-daily-progress .quest-spotlight{
+    min-height:0;padding:9px 12px!important;
+  }
+}
+@media (orientation:portrait){
+  body.ui-cleanup #page-home .home-trial-column{display:contents}
+  body.ui-cleanup #page-home .home-profile-column{gap:5px}
+  body.ui-cleanup #page-home .home-profile-column .home-daily-progress .quest-spotlight{
+    min-height:0;padding:8px 12px!important;gap:5px!important;
   }
 }

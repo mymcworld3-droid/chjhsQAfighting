@@ -28,9 +28,10 @@ function render() {
   if (!slot) {
     slot = document.createElement('section'); slot.id = 'player-learning-progress'; slot.className = 'growth-learning-card';
     slot.setAttribute('aria-label','我的訂正進步');
-    const anchor = document.getElementById('quest-spotlight-slot');
-    if (anchor) anchor.after(slot); else home.appendChild(slot);
   }
+  const host = document.getElementById('home-learning-slot');
+  if (host && slot.parentElement !== host) host.appendChild(slot);
+  else if (!host && !slot.parentElement) home.appendChild(slot);
   if (slot.dataset.markup === markup) return;
   const openLearning = slot.querySelector('.growth-learning')?.open;
   slot.dataset.markup = markup; slot.innerHTML = markup;

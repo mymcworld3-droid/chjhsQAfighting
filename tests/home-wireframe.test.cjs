@@ -120,8 +120,8 @@ test('daily task, JSON/AI bank, and original battle systems stay mounted',()=>{
 test('landscape uses realm, central scene and CTA, and two right shortcut columns',()=>{
   const landscape=css.slice(css.indexOf('@media (orientation:landscape){'));
   assert.match(landscape,/"realm emblem left right"/);
-  assert.match(landscape,/"\. practice \. \."/);
-  assert.match(landscape,/"daily records records records"/);
+  assert.match(css,/\.home-trial-column\{\s*grid-area:emblem;display:flex/);
+  assert.match(css,/\.home-profile-column\{\s*grid-area:realm;display:flex/);
   assert.match(landscape,/width:min\(100%,460px,52dvh\)!important/);
   assert.match(landscape,/flex-direction:column;align-items:center;text-align:center/);
   assert.match(landscape,/@media \(orientation:landscape\) and \(max-height:460px\)/);
@@ -135,7 +135,7 @@ test('portrait side panels are anchored in the circle row instead of covering th
   assert.match(portrait,/"left emblem right"/);
   assert.match(portrait,/"practice practice practice"/);
   assert.match(portrait,/"realm realm realm"/);
-  assert.match(portrait,/"daily daily daily"/);
+  assert.match(css,/@media \(orientation:portrait\)\{\s*body.ui-cleanup #page-home \.home-trial-column\{display:contents\}/);
   assert.match(portrait,/position:relative!important/);
   assert.match(portrait,/transform:none!important/);
   assert.match(portrait,/top:auto!important/);
@@ -146,5 +146,16 @@ test('portrait side panels are anchored in the circle row instead of covering th
   assert.doesNotMatch(css,/position:fixed!important/);
   // Buttons stay inside home-layout; no DOM hoisting into document.body.
   assert.doesNotMatch(js,/document\.body\.appendChild\(homeLeftRail\)|home-rails-portal|syncPortraitRails/);
-  assert.match(html,/home-wireframe\.css\?v=20261125-responsive-lobby-v1/);
+  assert.match(html,/home-wireframe\.css\?v=20261125-profile-records-v2/);
+});
+
+test('daily progress, records and independent correction host follow realm in both orientations',()=>{
+  const column=html.match(/<div class="home-profile-column">([\s\S]*?)<div id="home-learning-slot"><\/div>\s*<\/div>/)?.[1];
+  assert.ok(column);
+  assert.ok(column.indexOf('id="xiuxian-panel"')<column.indexOf('class="home-daily-progress"'));
+  assert.ok(column.indexOf('class="home-daily-progress"')<column.indexOf('class="home-records"'));
+  const growth=read('public/cultivation/player-growth-feedback.js');
+  assert.match(growth,/getElementById\('home-learning-slot'\)/);
+  assert.match(growth,/host\.appendChild\(slot\)/);
+  assert.match(css,/#home-learning-slot:empty\{display:none\}/);
 });
