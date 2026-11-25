@@ -93,10 +93,33 @@ test('PvP waiting may change weapons, but an active duel and assembled dungeon f
   const dungeon=database();await API.chooseSchool(dungeon,'u1',{school:'sword'});
   const roomId='dungeon-weapon-test-001';
   dungeon.records.set('dungeonRoomMemberships/u1',{roomId});
-  dungeon.records.set('dungeonRooms/'+roomId,{status:'assembled',members:{u1:{}}});
+  dungeon.records.set('dungeonRooms/'+roomId,{mode:'dungeon',version:1,status:'assembled',expiresAtMs:Date.now()+3600000,members:{u1:{}}});
   await assert.rejects(API.updateLoadout(dungeon,'u1',{index:0,weaponId:null}),
     /多人副本進行中/);
   dungeon.records.get('dungeonRooms/'+roomId).status='waiting';
   const valid=await API.updateLoadout(dungeon,'u1',{index:0,weaponId:null});
   assert.deepEqual(valid.weaponIds,[null,null]);
+});
+
+test('stale or completed multiplayer dungeon cannot permanently lock weapon equipment',async()=>{
+  const db=database();await API.chooseSchool(db,'u1',{school:'sword'});
+  const roomId='dungeon-ghost-member-001',key='dungeonRooms/'+roomId;
+  db.records.set('dungeonRoomMemberships/u1',{roomId});
+  const active={mode:'dungeon',version:1,status:'assembled',expiresAtMs:Date.now()+3600000,members:{u1:{}}};
+  const inactive=[
+    {...active,expiresAtMs:Date.now()-1},
+    {...active,bossEncounter:{status:'defeated'}},
+    {...active,status:'waiting'},
+    {...active,status:'closed'},
+    {...active,members:{}},
+    {...active,expiresAtMs:undefined},
+    null
+  ];
+  for(const room of inactive){
+    if(room)db.records.set(key,room);else db.records.delete(key);
+    assert.deepEqual((await API.updateLoadout(db,'u1',{index:0,weaponId:null})).weaponIds,[null,null]);
+    await API.updateLoadout(db,'u1',{index:0,weaponId:'sword-wind'});
+  }
+  db.records.set(key,active);
+  await assert.rejects(API.updateLoadout(db,'u1',{index:0,weaponId:null}),/多人副本進行中/);
 });
