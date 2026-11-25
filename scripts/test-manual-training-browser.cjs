@@ -163,6 +163,22 @@ async function main(){
         assert(fit,selector+' must fit '+JSON.stringify(viewport));
       }
     }
+    // Extra vertical stage space belongs to the collection panel, not the cards.
+    await page.setViewportSize({width:768,height:1250});
+    const shelfHeight=await library.evaluate(node=>node.getBoundingClientRect().height);
+    const fixedCardHeight=await library.locator('.manual-art-card').first().evaluate(node=>node.getBoundingClientRect().height);
+    await page.setViewportSize({width:768,height:1650});
+    const expanded=await library.evaluate(node=>({
+      height:node.getBoundingClientRect().height,
+      equipmentBottom:document.querySelector('.manual-weapons').getBoundingClientRect().bottom,
+      dockTop:document.querySelector('.manual-art-navigation').getBoundingClientRect().top
+    }));
+    assert(expanded.height>shelfHeight+250,'taller stages expand the collection panel');
+    assert(Math.abs(await library.locator('.manual-art-card').first().evaluate(node=>node.getBoundingClientRect().height)-fixedCardHeight)<1,
+      'vertical growth never stretches weapon cards');
+    assert(Math.abs(expanded.dockTop-expanded.equipmentBottom-8)<3,
+      'equipment ends immediately above the dock: '+JSON.stringify(expanded));
+    await page.setViewportSize({width:852,height:393});
     // Fill the owned collection through the real server projection so the
     // carousel is tested with overflow, rather than a synthetic DOM fixture.
     for(const id of ['sword-flight','sword-sky','body-dragon','body-tiger']){
