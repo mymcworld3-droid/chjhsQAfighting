@@ -861,7 +861,7 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
   grid-template-columns:none;
   grid-template-rows:var(--mt-fixed-card-height);
   grid-auto-rows:var(--mt-fixed-card-height);
-  grid-auto-columns:var(--mt-fixed-card-width);
+  grid-auto-columns:var(--mt-fixed-card-width)!important;
   grid-auto-flow:column;
   align-content:center;
   align-items:start;
