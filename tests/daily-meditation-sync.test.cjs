@@ -108,3 +108,9 @@ test('an account change cannot reveal a previous players pending reward',async()
   f.actor('b');f.reconcile();release({...f.status(),claimedNow:true,reward:{gold:30}});await pending;
   assert.equal(f.feedback.length,0);
 });
+
+test('a retry of an already committed personal reward does not replay the receipt',async()=>{
+  const f=runtime();f.setState(f.status());
+  f.respond(async url=>url.endsWith('/finish')?{ok:true,awardedNow:false,record:{lastDate:'2026-10-17',lastResult:{gold:45,cultivation:4}},economy:{gold:145,score:32,drawTickets:0}}:{ok:false,error:'排行暫時離線'});
+  await f.finish();assert.equal(f.feedback.length,0);assert.equal(f.player.stats.gold,145);
+});

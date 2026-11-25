@@ -74,7 +74,8 @@ test('personal settlement, quest credit, log and result are atomic and response-
   assert.equal(f.user().stats.gold,30);assert.equal(f.user().dailyMeditation.totalDays,1);
   assert.equal(f.user().questProgress.daily.counts.meditation,1);
   assert.ok(f.db.docs.has('exam_logs/meditation_'+dayId('u1',date)));
-  const b=await f.service.finish('u1');assert.deepEqual(b.record,a.record);assert.deepEqual(f.user(),before);
+  assert.equal(a.awardedNow,true);
+  const b=await f.service.finish('u1');assert.equal(b.awardedNow,false);assert.deepEqual(b.record,a.record);assert.deepEqual(f.user(),before);
 });
 test('clock is capped by server issue time and excludes time spent on the previous explanation',async()=>{
   const f=fixture(),a={session:await ready(f,(await f.service.start('u1')).session)};f.advance(2000);

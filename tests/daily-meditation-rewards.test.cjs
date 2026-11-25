@@ -123,3 +123,41 @@ test('four active reward flows delegate rendering while preserving their origina
   assert.match(battle,/data-weapon-dungeon-retry/);
   assert.match(battle,/data-weapon-dungeon-menu/);
 });
+
+test('all six reward states have explicit labels and escape detail text',()=>{
+  for(const [state,label] of Object.entries({obtainable:'可獲得',pending:'待領取',settling:'結算中',claimed:'已領取',unconfirmed:'尚未確認入帳',none:'本次無額外獎勵'})){
+    const html=Feedback.renderStatus(state,'<detail>');
+    assert.ok(html.includes('data-reward-state="'+state+'"'));
+    assert.ok(html.includes(label));
+    assert.ok(html.includes('&lt;detail&gt;'));
+  }
+});
+test('cosmetic receipt ledger survives reload, separates accounts and does not replay sound',()=>{
+  const vm=require('node:vm'),fs=require('node:fs');
+  const src=fs.readFileSync(require.resolve('../public/cultivation/daily-meditation-rewards.js'),'utf8');
+  const storage=new Map(),sounds=[];
+  function boot(){
+    const ctx={module:{exports:{}},localStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)},QAGameAudio:{play:(...args)=>sounds.push(args)}};
+    vm.runInNewContext(src,ctx);return ctx.module.exports;
+  }
+  const opt={uid:'a',receiptId:'test:1',reward:{gold:20}};
+  assert.equal(boot().celebrate(opt),true);
+  assert.equal(boot().celebrate(opt),false);
+  assert.equal(boot().celebrate({...opt,uid:'b'}),true);
+  assert.equal(boot().celebrate({...opt,receiptId:'pending',isCurrent:()=>false}),false);
+  assert.equal(sounds.length,2);
+});
+test('skip completes numbers without a transaction or another reward sound',()=>{
+  const vm=require('node:vm'),fs=require('node:fs');
+  const src=fs.readFileSync(require.resolve('../public/cultivation/daily-meditation-rewards.js'),'utf8');
+  const frames=[],sounds=[];
+  const ctx={module:{exports:{}},performance:{now:()=>0},requestAnimationFrame:f=>{frames.push(f);return frames.length;},cancelAnimationFrame(){},QAGameAudio:{play:(...a)=>sounds.push(a)}};
+  vm.runInNewContext(src,ctx);
+  const api=ctx.module.exports,els=[{textContent:'+20'}],host={querySelector:()=>({classList:{remove(){},add(){}}}),querySelectorAll:()=>els};
+  assert.equal(api.animateInline(host,{uid:'a',receiptId:'skip',reward:{gold:20}}),true);
+  assert.equal(els[0].textContent,'+0');
+  assert.equal(api.skipInline(host),true);
+  assert.equal(els[0].textContent,'+20');
+  frames[0](100);assert.equal(els[0].textContent,'+20');
+  assert.equal(sounds.length,1);
+});

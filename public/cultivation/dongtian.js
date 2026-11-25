@@ -1237,7 +1237,7 @@ export const featureReady = (async () => {
         closeAfterSession();
       };
     };
-    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal"><i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i></div><h2>洞天通關 · 正在結算</h2><p role="status">已完成 ${total} 題，正在確認通關紀錄與首次獎勵。連線較慢時可稍候，或返回後再查看獎勵。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>狀態</span><b>確認中</b></div></div>${settlementBack}</div>`;
+    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal"><i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i></div><h2>洞天通關 · 正在結算</h2><p role="status">已完成 ${total} 題，正在確認通關紀錄與首次獎勵。連線較慢時可稍候，或返回後再查看獎勵。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>狀態</span><b>確認中</b>${globalThis.QARewardPresentation.renderStatus('settling')}</div></div>${settlementBack}</div>`;
     bindSettlementBack();
 
     const firstCompletionReward = firstCompletionSpiritStones(correct);
@@ -1250,7 +1250,7 @@ export const featureReady = (async () => {
       console.warn('[Dongtian completion]', error);
       if (state.session !== s) return;
       s.settling = false;
-      overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></div><h2>洞天結算尚未完成</h2><p role="status">尚未確認這次通關獎勵。請檢查網路後重試；重複嘗試不會再次領取已入帳的首次獎勵。</p><button id="dt-retry-settlement" class="dt-back" type="button">重新確認結算</button> ${settlementBack}</div>`;
+      overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></div><h2>洞天結算尚未完成</h2>${globalThis.QARewardPresentation.renderStatus('unconfirmed')}<p role="status">尚未確認這次通關獎勵。請檢查網路後重試；重複嘗試不會再次領取已入帳的首次獎勵。</p><button id="dt-retry-settlement" class="dt-back" type="button">重新確認結算</button> ${settlementBack}</div>`;
       overlay.querySelector('#dt-retry-settlement').onclick = () => { if (state.session === s) void finishDongtian(); };
       bindSettlementBack();
       return;

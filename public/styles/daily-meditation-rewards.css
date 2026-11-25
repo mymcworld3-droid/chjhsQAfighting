@@ -63,3 +63,12 @@ body.meditation-reward-open{overflow:hidden!important}
 .dt-reward .mr-reward-list--inline{margin:8px 0;gap:7px;flex-wrap:wrap}
 .dt-owner-settlement{margin-top:8px;color:#d6c3a0;font-size:12px}
 @media(max-width:500px){.quest-reward .mr-reward-item,.dv-today .mr-reward-item,.dv-reward .mr-reward-item{flex:0 1 calc(50% - 3px)}}
+
+/* R05/R06 shared reward state and non-blocking animation controls. */
+.mr-reward-state{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px 6px;font-size:12px;line-height:1.4;color:#d6c3a0;border:1px solid #b9954c55;border-radius:6px;padding:3px 7px;max-width:100%;overflow-wrap:anywhere}
+.mr-reward-state small{font-size:inherit;color:inherit;font-weight:400}
+.mr-reward-state--claimed{color:#bce3c3;border-color:#729a7466}.mr-reward-state--pending,.mr-reward-state--settling{color:#f3d48c}.mr-reward-state--unconfirmed{color:#e8bd9a}.mr-reward-state--none{color:#c0b9ab}
+.tc-trial-rewards>.mr-reward-state{display:table;margin:5px auto 0}
+.mr-reward-skip,.mr-reward-footer button.mr-reward-skip{min-width:0;min-height:32px;padding:5px 10px;background:transparent;color:#d6c3a0;border:1px solid #b9954c66;border-radius:6px;font-size:12px;cursor:pointer;box-shadow:none}
+.mr-reward-skip[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){.mr-reward-skip{display:none!important}.mr-reward-item{animation:none!important}}

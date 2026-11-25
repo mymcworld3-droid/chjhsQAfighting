@@ -14,7 +14,27 @@
     ['drawTickets', '本命法器抽獎券', 'M3 6h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4V6Zm9 3 1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2Z']
   ];
   const seen = new Set();
-  const seenInline = new Set();
+  const storageKey='qa.reward.presentation.seen.v2';
+  // Cosmetic ledger only: never consulted by a claim or transaction.
+  function readSeen(){
+    try {const values=JSON.parse(root.localStorage?.getItem(storageKey)||'[]');return Array.isArray(values)?values.filter(v=>typeof v==='string').slice(-1024):[];}catch{return [];}
+  }
+  function identity(options){return JSON.stringify([String(options.uid),String(options.receiptId)]);}
+  function hasSeen(key){return seen.has(key)||readSeen().includes(key);}
+  function remember(key){
+    seen.add(key);
+    try {root.localStorage?.setItem(storageKey,JSON.stringify([...new Set([...readSeen(),key])].slice(-1024)));}catch{}
+  }
+  const reducedMotion=()=>root.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches===true;
+  function eligible(options,items){return !!(options.uid&&options.receiptId&&items.length&&options.isCurrent?.()!==false&&!hasSeen(identity(options)));}
+  function cue(options){
+    if(options.sound===false)return;
+    try {root.QAGameAudio?.play('reward-chime',{key:'reward-presentation:'+identity(options)});}catch{}
+  }
+  function celebrate(options={}){
+    if(!eligible(options,entries(options.reward)))return false;
+    remember(identity(options));cue(options);return true;
+  }
   const inlineRuns = new WeakMap();
   let active = null;
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -81,10 +101,18 @@
     return '<'+tag+' class="mr-reward-list'+(inline?' mr-reward-list--inline':'')+(play?'':' mr-reward-list--static')+' mr-reward-list--'+size+'" aria-label="'+(preview?'可獲得的獎勵':'本次獲得的獎勵')+'">'+items.map((item,i)=>renderItem(item,i,{small,preview,animated:play})).join('')+'</'+tag+'>';
   }
   function renderFeedback(reward){return renderList(reward,{variant:'small'});}
+  const states=Object.freeze({
+    obtainable:'可獲得',pending:'待領取',settling:'結算中',claimed:'已領取',
+    unconfirmed:'尚未確認入帳',none:'本次無額外獎勵'
+  });
+  function renderStatus(state,detail=''){
+    const key=Object.hasOwn(states,state)?state:'unconfirmed';
+    return '<span class="mr-reward-state mr-reward-state--'+key+'" data-reward-state="'+key+'">'+esc(states[key])+(detail?'<small>'+esc(detail)+'</small>':'')+'</span>';
+  }
   function renderSettlement(reward,{emptyText='本次無額外獎勵。',pendingText='獎勵尚未確認入帳。',title='本次獲得'}={}){
     const cards=renderList(reward,{inline:true,variant:'full'});
-    if(!cards)return '<p class="mr-reward-empty" role="status">'+esc(reward==null?pendingText:emptyText)+'</p>';
-    return '<section class="tc-trial-rewards" data-trial-reward-list><h3>'+esc(title)+'</h3>'+cards+'</section>';
+    if(!cards)return '<p class="mr-reward-empty" role="status">'+renderStatus(reward==null?'unconfirmed':'none',reward==null?pendingText:emptyText)+'</p>';
+    return '<section class="tc-trial-rewards" data-trial-reward-list><h3>'+esc(title)+'</h3>'+renderStatus('claimed')+cards+'</section>';
   }
   function ensureStyle() {
     if (document.getElementById('meditation-reward-style')) return;
@@ -99,35 +127,53 @@
     if (receipt.reduced || !root.requestAnimationFrame || !root.performance?.now) {
       finishNumbers(receipt); return;
     }
+    const duration=receipt.duration||850;
+    const stagger=receipt.stagger??90;
     const started = root.performance.now();
     function tick(now) {
       if (!isActive()) return;
+      if(reducedMotion()){finishNumbers(receipt);receipt.onFinish?.();return;}
       receipt.elements.forEach((element,i)=>{
-        const t=Math.max(0,Math.min(1,(now-started-i*90)/850));
+        const t=Math.max(0,Math.min(1,(now-started-i*stagger)/duration));
         element.textContent=amountText(receipt.items[i],{value:Math.round(receipt.items[i].amount*(1-Math.pow(1-t,3)))});
       });
-      if (now-started < 850+(receipt.items.length-1)*90) receipt.frame=root.requestAnimationFrame(tick);
-      else finishNumbers(receipt);
+      if (now-started < duration+(receipt.items.length-1)*stagger) receipt.frame=root.requestAnimationFrame(tick);
+      else {finishNumbers(receipt);receipt.onFinish?.();}
     }
     receipt.frame=root.requestAnimationFrame(tick);
   }
   // Embedded receipts never take over focus, create another dialog, or claim rewards.
+  function skipInline(host){
+    const receipt=host&&inlineRuns.get(host);
+    if(!receipt)return false;
+    root.cancelAnimationFrame?.(receipt.frame);
+    finishNumbers(receipt);receipt.onFinish?.();return true;
+  }
   function animateInline(host, options = {}) {
     const items=entries(options.reward);
-    if (!host || !options.uid || !options.receiptId || !items.length || options.isCurrent?.()===false) return false;
-    const key=JSON.stringify([options.uid,options.receiptId]);
-    if (seenInline.has(key) || inlineRuns.has(host)) return false;
+    if (!host || !eligible(options,items) || inlineRuns.has(host)) return false;
     const list=host.querySelector('.mr-reward-list');
     const elements=[...host.querySelectorAll('.mr-reward-amount')];
     if (!list || elements.length!==items.length) return false;
-    const reduced=root.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
-    seenInline.add(key); if(seenInline.size>150)seenInline.delete(seenInline.values().next().value);
+    const reduced=reducedMotion();
+    remember(identity(options));cue(options);
     if (reduced || !root.requestAnimationFrame || !root.performance?.now) return false;
-    const receipt={items,elements,reduced,frame:0};
+    const important=options.important!==false;
+    const receipt={items,elements,reduced,frame:0,duration:important?850:250,stagger:important?90:30};
+    let skip;
+    receipt.onFinish=()=>{receipt.done=true;list.classList.add?.('mr-reward-list--static');skip?.remove();};
     inlineRuns.set(host,receipt);
+    if(important&&host.ownerDocument&&typeof host.appendChild==='function'){
+      skip=host.ownerDocument.createElement('button');skip.type='button';skip.className='mr-reward-skip';
+      skip.textContent='略過動畫';skip.addEventListener('click',()=>skipInline(host));host.appendChild(skip);
+    }
     list.classList.remove('mr-reward-list--static');
     elements.forEach((element,i)=>{element.textContent=amountText(items[i],{value:0});});
-    animateAmounts(receipt,()=>host.isConnected!==false&&options.isCurrent?.()!==false);
+    animateAmounts(receipt,()=>{
+      if(receipt.done)return false;
+      if(host.isConnected===false||options.isCurrent?.()===false){finishNumbers(receipt);receipt.onFinish();return false;}
+      return true;
+    });
     return true;
   }
   function clear(restoreFocus = false) {
@@ -146,7 +192,7 @@
     if (!receipt.isCurrent()) { clear(); return; }
     receipt.collecting = true; root.cancelAnimationFrame?.(receipt.frame); finishNumbers(receipt);
     receipt.overlay.querySelector('[data-mr-collect]').disabled = true;
-    if (receipt.reduced) { clear(true); return; }
+    if (receipt.reduced || reducedMotion()) { clear(true); return; }
     receipt.overlay.classList.add('is-collecting');
     const target = receipt.target?.()?.getBoundingClientRect?.();
     const destination = target?.width && target?.height ? {x:target.left+target.width/2,y:target.top+target.height/2} : {x:root.innerWidth/2,y:48};
@@ -164,28 +210,26 @@
     receipt.timer = root.setTimeout(() => { if (active === receipt) clear(true); }, 650 + cards.length*55);
     if (cards.every(card => typeof card.animate === 'function')) void Promise.allSettled(flights).then(() => { if (active === receipt) clear(true); });
   }
-  function chime(receipt) {
-    if (!receipt.sound) return;
-    root.QAGameAudio?.play('reward-chime', { key: receipt.soundKey });
-  }
   function show(options = {}) {
-    const items = entries(options.reward), key = options.uid + ':' + options.receiptId;
-    if (!options.uid || !options.receiptId || !items.length || seen.has(key) || options.isCurrent?.() === false) return false;
+    const items = entries(options.reward);
+    if (!eligible(options,items)) return false;
     ensureStyle(); clear();
     const overlay = document.createElement('dialog'); overlay.id='meditation-reward-receipt'; overlay.className='mr-reward-overlay';
     overlay.setAttribute('aria-labelledby','mr-reward-title'); overlay.setAttribute('aria-describedby','mr-reward-subtitle');
-    overlay.innerHTML = '<section class="mr-reward-panel"><header class="mr-reward-header"><div class="mr-reward-crest" aria-hidden="true">'+icon('m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z')+'</div><span class="mr-reward-kicker">'+esc(options.kicker||'閉關共修')+'</span><h2 id="mr-reward-title">'+esc(options.title||'獎勵入袋')+'</h2><p id="mr-reward-subtitle">'+esc(options.subtitle||'本次獲得')+'</p></header>'+renderList(options.reward,{animated:true,variant:'full'})+'<footer class="mr-reward-footer">'+(options.note?'<p class="mr-reward-note">'+esc(options.note)+'</p>':'')+'<button type="button" data-mr-collect>收入囊中</button></footer></section>';
+    overlay.innerHTML = '<section class="mr-reward-panel"><header class="mr-reward-header"><div class="mr-reward-crest" aria-hidden="true">'+icon('m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z')+'</div><span class="mr-reward-kicker">'+esc(options.kicker||'閉關共修')+'</span><h2 id="mr-reward-title">'+esc(options.title||'獎勵入袋')+'</h2><p id="mr-reward-subtitle">'+esc(options.subtitle||'本次獲得')+'</p></header>'+renderList(options.reward,{animated:true,variant:'full'})+'<footer class="mr-reward-footer">'+renderStatus('claimed')+(options.note?'<p class="mr-reward-note">'+esc(options.note)+'</p>':'')+'<button type="button" data-mr-collect>收入囊中</button><button type="button" class="mr-reward-skip" data-mr-skip>略過動畫</button></footer></section>';
     document.body.appendChild(overlay); document.body.classList.add('meditation-reward-open');
-    const receipt = active = {overlay,items,elements:[...overlay.querySelectorAll('.mr-reward-amount')],reduced:root.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true,isCurrent:options.isCurrent||(()=>true),target:options.target,focusTarget:options.focusTarget,sound:options.sound!==false,soundKey:'meditation-reward:'+key,animations:[],frame:0,timer:0,collecting:false};
+    const receipt = active = {overlay,items,elements:[...overlay.querySelectorAll('.mr-reward-amount')],reduced:reducedMotion(),isCurrent:options.isCurrent||(()=>true),target:options.target,focusTarget:options.focusTarget,animations:[],frame:0,timer:0,collecting:false};
     overlay.querySelector('[data-mr-collect]').addEventListener('click',collect);
+    overlay.querySelector('[data-mr-skip]').addEventListener('click',()=>clear(true));
+    if(receipt.reduced)overlay.querySelector('[data-mr-skip]').hidden=true;
     overlay.addEventListener('cancel', event=>{event.preventDefault();clear(true);});
     overlay.addEventListener('click',event=>{if(event.target===overlay)collect();});
     if (typeof overlay.showModal === 'function') overlay.showModal(); else overlay.setAttribute('open','');
-    seen.add(key); if(seen.size>150)seen.delete(seen.values().next().value);
+    remember(identity(options));
     animateAmounts(receipt,()=>{if(active!==receipt)return false;if(!receipt.isCurrent()){clear();return false;}return true;});
-    chime(receipt); return true;
+    cue(options); return true;
   }
   // Fetch the small stylesheet before a claim, so the first receipt cannot flash unstyled.
   if (typeof document === 'object' && document.head) ensureStyle();
-  return Object.freeze({entries,renderList,renderFeedback,renderSettlement,animateInline,show,clear});
+  return Object.freeze({entries,renderList,renderFeedback,renderStatus,renderSettlement,animateInline,skipInline,celebrate,show,clear});
 });

@@ -184,13 +184,13 @@ function rewardMarkup(lesson) {
   const status = progress.rewardHistory?.[lesson.date]?.status;
   if (status === 'claimed') {
     const reward = progress.rewardHistory[lesson.date].reward;
-    return `<div class="dv-reward is-granted" role="status"><strong>今日獎勵已領取</strong>
+    return `<div class="dv-reward is-granted" role="status"><strong>今日獎勵已領取</strong>${globalThis.QARewardPresentation.renderStatus('claimed')}
       <div class="dv-reward-amounts">${globalThis.QARewardPresentation.renderList(reward,{variant:'general'})||'<p>本次無額外獎勵。</p>'}</div></div>`;
   }
   const message = rewardErrors[lesson.date] || '正在領取今日獎勵…';
   return `<div class="dv-reward ${rewardErrors[lesson.date] ? 'is-waiting' : 'is-syncing'}" role="status"><strong>今日獎勵</strong>
     ${globalThis.QARewardPresentation.renderList(rules.DAILY_REWARD,{variant:'general',preview:true})}
-    <p>${escapeHtml(message)}</p>
+    <p>${globalThis.QARewardPresentation.renderStatus(rewardErrors[lesson.date]?'unconfirmed':'settling',message)}</p>
     ${rewardErrors[lesson.date] ? button('retry-reward', '重新領取', { style: 'dv-quiet' }) : ''}</div>`;
 }
 
@@ -250,7 +250,7 @@ function homeMarkup(notice) {
     <section class="dv-panel dv-today">
       <div class="dv-today-heading">
         <div><h3 tabindex="-1" data-dv-focus>今日單字</h3><p>讀字卡回想意思，再用測驗檢查記住了多少。</p>
-          <p>完成測驗可獲得</p>${globalThis.QARewardPresentation.renderList(rules.DAILY_REWARD,{variant:'general',preview:true})}</div>
+          <p>完成測驗可獲得 ${globalThis.QARewardPresentation.renderStatus('obtainable')}</p>${globalThis.QARewardPresentation.renderList(rules.DAILY_REWARD,{variant:'general',preview:true})}</div>
         <div class="dv-today-score"><strong>${studied}</strong> / ${rules.LESSON_SIZE}<span>已看字卡</span></div>
       </div>
       <div class="dv-progress" aria-hidden="true">
@@ -454,7 +454,10 @@ function render({ focus = '', resetScroll = false, motion = resetScroll ? 'enter
   updatePronunciation(pronunciation.state());
   if (rewardGranted) {
     newRewardDate = '';
-    window.QAGameAudio?.play('reward-chime', { key: `vocabulary-reward:${key}:${progress.lesson.date}` });
+    const rewardKey=key, date=progress.lesson.date, reward=progress.rewardHistory?.[date]?.reward;
+    const presentation=globalThis.QARewardPresentation;
+    const options={uid:window.getRealmUserUid?.(),receiptId:'vocabulary:'+date,reward,important:false,isCurrent:()=>key===rewardKey&&isOpen()};
+    if(!presentation.animateInline(slot.querySelector('.dv-reward-amounts'),options))presentation.celebrate(options);
   }
   showSaveNote();
   if (resetScroll) page.closest('main').scrollTop = 0;

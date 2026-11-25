@@ -41,6 +41,7 @@ let battleLoadouts=null,loadoutFetchedFor='',loadoutFetchingFor='',loadoutMenuOp
 let manualRecapCache=null,manualRecapLoadingKey='',manualXpTimer=null,battleMasteryBaseline=null;
 const battlefieldMode=()=>action==='manual'?'manual:'+selectedManualSkill:action;
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
+let freshRewardReceipt='';
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
 let bossIntroSeenRoom='',bossTransitionPending=null,bossBannerTimer=null;
 let warmedCombatAudioRoomId='';
@@ -1551,6 +1552,9 @@ function resultDialog(){
   const me=state.actors.find(a=>a.uid===uid),win=state.winner===me.team,draw=state.winner==='draw',reward=state.rewards?.[uid];
   const drop=state.manualDrops?.[uid];
   const manualRecap=state.mode==='pve'?manualRecapMarkup(state,uid):'';
+  const receiptIdentity=JSON.stringify([uid,state.id,state.trial?.stage??null,state.weaponDungeon?.difficulty??null,state.createdAtMs??null]);
+  const celebrateFresh=freshRewardReceipt===receiptIdentity;
+  if(celebrateFresh)freshRewardReceipt='';
   if(state.weaponDungeon){
     const info=state.weaponDungeon,result=state.weaponDungeonResult;
     const presentation=globalThis.QARewardPresentation;
@@ -1567,7 +1571,7 @@ function resultDialog(){
       ${manualRecap}<button type="button" class="tc-primary" data-weapon-dungeon-menu>返回武器副本</button>
       <button type="button" data-weapon-dungeon-retry>再次挑戰（消耗 1 張券）</button><button type="button" data-exit>收起</button>`);
     const receiptRoom=state,receiptUid=uid,receiptEpoch=epoch;
-    presentation.animateInline($('[data-trial-reward-list]'),{
+    if(celebrateFresh)presentation.animateInline($('[data-trial-reward-list]'),{
       uid:receiptUid,receiptId:JSON.stringify(['weapon-dungeon',receiptRoom.id,info.difficulty,receiptRoom.createdAtMs??null]),reward:dungeonReward,
       isCurrent:()=>valid(receiptEpoch,receiptUid)&&state?.id===receiptRoom.id&&state?.status==='finished'&&state?.weaponDungeon?.difficulty===info.difficulty
     });
@@ -1583,7 +1587,7 @@ function resultDialog(){
       ?'<button type="button" class="tc-primary" data-tutorial-collapse>收起戰場</button>':'';
     showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div>${rewardSection}${manualRecap}${drop?'<p class="tc-manual-loot">'+(weaponDrop&&settlementReward?'已獲得上述武器，前往修煉查看。':'獲得功法：《'+esc(drop.name)+'》！前往修煉查看。')+'</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}${guideCollapse}<button type="button" class="${guideCollapse?'':'tc-primary'}" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
     const receiptRoom=state,receiptUid=uid,receiptEpoch=epoch;
-    if($('[data-trial-reward-list]'))presentation.animateInline($('[data-trial-reward-list]'),{
+    if(celebrateFresh&&$('[data-trial-reward-list]'))presentation.animateInline($('[data-trial-reward-list]'),{
       uid:receiptUid,receiptId:JSON.stringify(['trial',receiptRoom.id,stage,receiptRoom.createdAtMs??null]),reward:settlementReward,
       isCurrent:()=>valid(receiptEpoch,receiptUid)&&state?.id===receiptRoom.id&&state?.trial?.stage===receiptRoom.trial?.stage&&state?.status==='finished'
     });
@@ -1595,6 +1599,10 @@ function resultDialog(){
 function leaveDialog(){
   if(state?.status==='finished')return state.mode==='pve'?resultDialog():renderHub();
   showModal(`<h2>${state?.status==='waiting'?'取消配對':'收法離場'}</h2><p>${state?.status==='waiting'?'取消後可以重新選擇戰場與技能分支。':'離場將結束這場戰鬥。按「收起」則能保留進度；雙人鬥法的行動時間仍會繼續。'}</p><button type="button" class="tc-primary" data-forfeit>${state?.status==='waiting'?'取消配對':'認輸並離開'}</button><button type="button" data-dismiss>繼續留在戰場</button>`);
+}
+function markFreshReward(next){
+  if(next?.status==='finished'&&state?.id===next.id&&state?.status==='active'&&next.rewarded?.includes(uid))
+    freshRewardReceipt=JSON.stringify([uid,next.id,next.trial?.stage??null,next.weaponDungeon?.difficulty??null,next.createdAtMs??null]);
 }
 function accept(next,serial){
   if(serial<appliedOp)return;appliedOp=serial;
@@ -1620,6 +1628,7 @@ function accept(next,serial){
     clearLiveManualXp();
   }
   if(bossTransition)bossTransitionPending={roomId:next.id,...bossTransition};
+  markFreshReward(next);
   state=next;if(!keepSelection)selection=null;
   // Only a server-settled first-stage victory can release the final tutorial.
   // Replaying a finished room also restores this step after a page refresh.
@@ -1835,7 +1844,7 @@ async function soloBattleQuestion(){
       if(next?.review?.questionId!==input.questionId)throw Error('答題狀態不同步，請重試');
       if(current()&&next.review.correct)tutorialEvent('answered');
       // Let the common feedback renderer capture the pre-answer score first.
-      if(current()){state=next;appliedOp=++op;}
+      if(current()){markFreshReward(next);state=next;appliedOp=++op;}
       return {review:next.review,applyProgress:()=>{if(getMainUser()?.uid===account)applyProgress(next);}};
     },
     async reviewMath(quiz){
@@ -1843,7 +1852,7 @@ async function soloBattleQuestion(){
     },
     async report(quiz,reason){
       const {state:result}=await api('/api/tactical/report-question',{...inputFor(quiz),reason});
-      if(current()&&result.battle){state=result.battle;appliedOp=++op;applyProgress(state);}
+      if(current()&&result.battle){markFreshReward(result.battle);state=result.battle;appliedOp=++op;applyProgress(state);}
       return result;
     }
   });

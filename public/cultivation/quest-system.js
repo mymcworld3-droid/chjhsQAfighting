@@ -20,11 +20,11 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function rewardMarkup(reward) {
     return globalThis.QARewardPresentation.renderList(reward,{variant:'general',preview:true});
   }
-  function status(message, reward=null, suffix='') {
+  function status(message, reward=null, suffix='', rewardState='') {
     for (const id of ['quest-status', 'quest-spotlight-status']) if ($(id)) $(id).textContent = message;
     const receipt=$('quest-reward-receipt');
     if(receipt){
-      receipt.innerHTML=reward?globalThis.QARewardPresentation.renderList(reward,{variant:'general'}):'';
+      receipt.innerHTML=(rewardState?globalThis.QARewardPresentation.renderStatus(rewardState):'')+(reward?globalThis.QARewardPresentation.renderList(reward,{variant:'general'}):'');
       receipt.hidden=!receipt.innerHTML;
     }
     // A home claim stays on the home screen: inline receipt, no extra dialog.
@@ -117,7 +117,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       <p>${esc(q.description)}</p>
       <div class="quest-progress-label"><span>${q.locked ? `需 ${q.minScore} 修為 · 先繼續問道修行` : '任務進度'}</span><b>${q.current} / ${q.target}</b></div>
       <div class="quest-progress" role="progressbar" aria-label="${esc(q.title)}" aria-valuemin="0" aria-valuemax="${q.target}" aria-valuenow="${q.current}"><i style="width:${Math.round(q.current / q.target * 100)}%"></i></div>
-      <div class="quest-reward"><i class="fa-solid fa-gift" aria-hidden="true"></i> ${rewardMarkup(q.reward)}</div>
+      <div class="quest-reward"><i class="fa-solid fa-gift" aria-hidden="true"></i> ${globalThis.QARewardPresentation.renderStatus(q.claimed?'claimed':q.claimable?'pending':'obtainable')} ${rewardMarkup(q.reward)}</div>
       <button type="button" data-quest-id="${esc(q.id)}" data-quest-kind="${kind}" ${busy || q.claimed || q.locked ? 'disabled' : ''} class="quest-action ${q.claimable ? 'quest-claim' : ''}">${busy ? '正在同步…' : label}</button>
     </article>`;
   }
@@ -205,7 +205,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if (busy) return;
     const uid = reconcileAccount();
     if (!uid) return;
-    busy = true; render(); status('正在領取獎勵…');
+    busy = true; render(); status('正在領取獎勵…',null,'','settling');
     try {
       const result = await request('/api/quests/claim', { kind, id: q.id,
         date: snapshot.date, weeklyKey:snapshot.weeklyKey });
@@ -228,10 +228,16 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       }
       const suffix=kind === 'path' && !q.supplemental && snapshot.path ? '，下一個仙道任務已開啟。' : '。';
       status(result.awarded ? '已獲得 '+rewardText(result.reward)+suffix : '此任務已領取過，進度已同步。',
-        result.awarded?result.reward:null,suffix);
-      if (result.awarded) globalThis.QAGameAudio?.play('reward-chime', { key:'quest:'+uid+':'+kind+':'+q.id+':'+snapshot.date+':'+snapshot.weeklyKey });
+        result.awarded?result.reward:null,suffix,'claimed');
+      if (result.awarded) {
+        const period=kind==='weekly'?snapshot.weeklyKey:kind==='path'?'path':snapshot.date;
+        const presentation=globalThis.QARewardPresentation;
+        const options={uid,receiptId:JSON.stringify(['quest',kind,q.id,period,!!q.supplemental]),reward:result.reward,important:false,isCurrent:()=>getMainUser()?.uid===uid};
+        const host=$('quest-dialog')?.open?$('quest-reward-receipt'):null;
+        if(!presentation.animateInline(host,options))presentation.celebrate(options);
+      }
     } catch (e) {
-      if (getMainUser()?.uid === uid) { status(`${e.message}，請重新同步後重試。`); dirty = true; }
+      if (getMainUser()?.uid === uid) { status(`${e.message}，請重新同步後重試。`,null,'','unconfirmed'); dirty = true; }
     } finally {
       busy = false; reconcileAccount(); render();
       if (getMainUser()?.uid !== uid && visible()) invalidate();

@@ -176,7 +176,7 @@ function createService({db,now=Date.now,random=Math.random,dailySets=getDailySet
     const date=dateNow();
     return db.runTransaction(async tx=>{
       const c=await own(tx,uid,date),user=c.user;sameDay(date);
-      if(c.result)return {completed:true,record:user.dailyMeditation,economy:economy(user)};
+      if(c.result)return {completed:true,awardedNow:false,record:user.dailyMeditation,economy:economy(user)};
       if(!c.session || c.session.answers.length!==sessionTotal(c.session))throw fail('請完成'+(sessionTotal(c.session)===5?'五':'三')+'題後再出關');
       const total=sessionTotal(c.session),full=c.session.answers.filter(x=>x.isCorrect).length===total;
       const answers=c.session.answers,correct=answers.filter(x=>x.isCorrect).length,old=user.dailyMeditation || {};
@@ -198,7 +198,7 @@ function createService({db,now=Date.now,random=Math.random,dailySets=getDailySet
         question:'每日閉關 · '+correct+'/'+total,isCorrect:full,correctCount:correct,totalCount:total,
         dailyMeditationAnswers:answers,timestamp:new Date(now())});
       user.dailyMeditation=record;user.stats ||= {};user.stats.totalScore=patch['stats.totalScore'];user.stats.gold=patch['stats.gold'];Growth.apply(user,growth);
-      return {completed:true,record,economy:economy(user)};
+      return {completed:true,awardedNow:true,record,economy:economy(user)};
     });
   }
   async function claim(uid,body) {

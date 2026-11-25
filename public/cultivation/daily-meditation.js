@@ -209,7 +209,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
       const status=step.claimed?'已領取':step.claimable?'點擊領取':reached?'待出關':'差 '+(step.stars-state.stars)+' 星';
       // Attribute descriptions must not contain the quoted markup used by item icons.
       const label=esc(step.stars+' 星，'+status+'，'+rewardParts(step.reward).map(([,text])=>text).join('、'));
-      return '<section class="dm-milestone'+(reached?' is-reached':'')+(step.claimed?' is-claimed':'')+(step.claimable?' is-claimable':'')+'"><button type="button" class="dm-checkpoint" data-dm-claim="'+step.stars+'" aria-label="'+label+'" title="'+label+'" '+(!step.claimable||busy?'disabled':'')+'><span aria-hidden="true">'+(step.claimed?'✓':'★')+'</span></button><strong>'+step.stars+' 星</strong><div class="dm-milestone-rewards">'+rewardMarkup(step.reward)+'</div><small>'+status+'</small></section>';
+      return '<section class="dm-milestone'+(reached?' is-reached':'')+(step.claimed?' is-claimed':'')+(step.claimable?' is-claimable':'')+'"><button type="button" class="dm-checkpoint" data-dm-claim="'+step.stars+'" aria-label="'+label+'" title="'+label+'" '+(!step.claimable||busy?'disabled':'')+'><span aria-hidden="true">'+(step.claimed?'✓':'★')+'</span></button><strong>'+step.stars+' 星</strong><div class="dm-milestone-rewards">'+rewardMarkup(step.reward)+'</div><small>'+status+'</small>'+globalThis.QARewardPresentation.renderStatus(step.claimed?'claimed':step.claimable?'pending':'obtainable')+'</section>';
     }).join('')+'</div></div>';
     html+='<p class="dm-note">自己與互為好友的同門，答對一題各得一星；達到節點即可領獎，每日最多十五星。好友稍後出關仍會增加進度。元嬰碎精與本命法器抽獎券可提前累積，金丹境開放抽取。團本券已滿時，該券折為額外靈石。</p>';
     if(state.completed){
@@ -308,7 +308,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
   async function finish() {await task(async()=>{
     const result=await request('finish');applyEconomy(result.economy);session=null;clock=null;
     // Show the committed reward even when refreshing the leaderboard is slow or offline.
-    rewardReceipt(result.record?.lastResult,{receiptId:'personal:'+result.record?.lastDate,title:'今日閉關完成',subtitle:'連續 '+(result.record?.streak||1)+' 日 · 參悟 '+(result.record?.lastResult?.stars||0)+' / '+(result.record?.lastResult?.total || QUESTION_TOTAL)+' 星'});
+    if(result.awardedNow!==false)rewardReceipt(result.record?.lastResult,{receiptId:'personal:'+result.record?.lastDate,title:'今日閉關完成',subtitle:'連續 '+(result.record?.streak||1)+' 日 · 參悟 '+(result.record?.lastResult?.stars||0)+' / '+(result.record?.lastResult?.total || QUESTION_TOTAL)+' 星'});
     await refresh({force:true});renderDashboard();
   });}
   async function claim(stars) {await task(async()=>{
