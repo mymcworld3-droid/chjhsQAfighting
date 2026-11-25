@@ -1,3 +1,4 @@
+import './daily-meditation-rewards.js';
 import {stoneCostMarkup,cultivationMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import { dongtianCache } from './dongtian-cache.js';
 import { normalizeSpirit } from './nascent-soul-rules.js';
@@ -1263,7 +1264,13 @@ export const featureReady = (async () => {
     const reward = s.settlementReward || {};
     const totalCultivation = Number(reward.cultivationAdded) || 0;
     const rewardLabel = firstCompletion ? '首次完成獎勵' : reward.newCorrect > 0 ? '訂正補領獎勵' : '本次重遊';
-    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>首次完成與首次答對分開計算；重遊訂正只補領尚未取得的獎勵。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>新增掌握</span><b>${Number(reward.newCorrect) || 0} 題</b></div></div><div class="dt-reward"><strong>${rewardLabel}</strong><br>${stoneCostMarkup('+'+(Number(reward.goldAdded)||0))}${Number(reward.realmGoldAdded) > 0 ? `（含境界加成 +${Number(reward.realmGoldAdded)}）` : ''} · ${cultivationMarkup('+'+totalCultivation,{showName:true})}${soulCultivationAdded ? `（含元嬰 +${soulCultivationAdded}）` : ''}<br>已領取的題目不重複發獎。${reward.ownerRewarded ? `<br>洞天主人已獲得 ${cultivationMarkup('+'+OWNER_CULTIVATION_REWARD,{showName:true})}、${stoneCostMarkup('+'+OWNER_GOLD_REWARD)}。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
+    const presentation=globalThis.QARewardPresentation;
+    const settlementReward=s.settlementReward==null?null:{gold:Number(reward.goldAdded)||0,cultivation:totalCultivation};
+    const rewardCards=presentation.renderSettlement(settlementReward,{title:rewardLabel,emptyText:rewardLabel+' · 本次無額外獎勵。'});
+    const bonusNotes=[Number(reward.realmGoldAdded)>0?'含境界靈石加成 +'+Number(reward.realmGoldAdded).toLocaleString('zh-TW'):'',
+      soulCultivationAdded?'含元嬰修為 +'+soulCultivationAdded.toLocaleString('zh-TW'):''].filter(Boolean);
+    const ownerCards=reward.ownerRewarded?presentation.renderList({gold:OWNER_GOLD_REWARD,cultivation:OWNER_CULTIVATION_REWARD},{variant:'small'}):'';
+    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>首次完成與首次答對分開計算；重遊訂正只補領尚未取得的獎勵。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>新增掌握</span><b>${Number(reward.newCorrect) || 0} 題</b></div></div><div class="dt-reward">${rewardCards}${bonusNotes.length?'<p>'+escapeHtml(bonusNotes.join(' · '))+'</p>':''}<p>已領取的題目不重複發獎。</p>${ownerCards?'<div class="dt-owner-settlement">洞天主人已獲得 '+ownerCards+'</div>':''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
     if (s.dongtian.teacherManaged) {
       const verdict = document.createElement('p');
       verdict.textContent = `及格標準 ${s.dongtian.settings?.passPercent ?? 60}% · ${accuracy * 100 >= (s.dongtian.settings?.passPercent ?? 60) ? '已達標' : '尚未達標'}`;
@@ -1277,6 +1284,11 @@ export const featureReady = (async () => {
       }
     }
     document.getElementById('dt-back').onclick = closeAfterSession;
+    const receiptUid=uid();
+    if(reward.applied===true) presentation.animateInline(overlay.querySelector('[data-trial-reward-list]'),{
+      uid:receiptUid,receiptId:'dongtian:'+s.runId,reward:settlementReward,
+      isCurrent:()=>uid()===receiptUid&&state.session===s
+    });
   }
 
   async function completeProgress(s, correct, total, tier) {

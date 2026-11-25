@@ -72,8 +72,8 @@ test('reward and wallet surfaces use the original bitmap without changing earnin
  const medal=read('public/cultivation/daily-meditation-rewards.js');
  const core=read('public/cultivation/cultivation-training-v4.js');
  const draw=read('public/cultivation/soulbound-draw.js');
- assert.match(vocab,/stoneCostMarkup\('\+'\+reward\.gold\)/);
- assert.match(vocab,/stoneCostMarkup\(rules\.DAILY_REWARD\.gold\)/);
+ assert.match(vocab,/QARewardPresentation\.renderList\(reward,\{variant:'general'\}\)/);
+ assert.match(vocab,/QARewardPresentation\.renderList\(rules\.DAILY_REWARD,\{variant:'general',preview:true\}\)/);
  assert.match(meditation,/label==='個人靈石'/);
  assert.match(meditation,/stoneCostMarkup\(value\)/);
  assert.match(meditation,/QARewardPresentation\.renderList\(reward,\{variant:'general',preview:true\}\)/);

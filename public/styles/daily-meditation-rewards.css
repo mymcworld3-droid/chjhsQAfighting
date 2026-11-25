@@ -53,3 +53,13 @@ body.meditation-reward-open{overflow:hidden!important}
 .mr-reward-empty{font-size:13px}
 
 .mr-reward-list--small .mr-reward-icon{order:0}.mr-reward-list--small .mr-reward-amount{order:1}.mr-reward-list--small .mr-reward-label{order:2}
+
+/* General cards within existing vocabulary and quest panels, without extra modals. */
+.dv-reward-amounts{display:block!important;min-width:0}
+.dv-reward .mr-reward-list--general,.dv-today .mr-reward-list--general,.quest-reward .mr-reward-list--general,#quest-reward-receipt .mr-reward-list--general{justify-content:flex-start;margin:6px 0;gap:6px}
+.quest-reward .mr-reward-item,.dv-today .mr-reward-item,.dv-reward .mr-reward-item{flex:0 1 105px;max-width:100%;padding:7px 5px}
+.quest-reward .mr-reward-label,.dv-today .mr-reward-label,.dv-reward .mr-reward-label{overflow-wrap:anywhere}
+#quest-reward-receipt[hidden]{display:none}
+.dt-reward .mr-reward-list--inline{margin:8px 0;gap:7px;flex-wrap:wrap}
+.dt-owner-settlement{margin-top:8px;color:#d6c3a0;font-size:12px}
+@media(max-width:500px){.quest-reward .mr-reward-item,.dv-today .mr-reward-item,.dv-reward .mr-reward-item{flex:0 1 calc(50% - 3px)}}

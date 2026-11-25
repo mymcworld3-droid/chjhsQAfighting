@@ -1553,14 +1553,24 @@ function resultDialog(){
   const manualRecap=state.mode==='pve'?manualRecapMarkup(state,uid):'';
   if(state.weaponDungeon){
     const info=state.weaponDungeon,result=state.weaponDungeonResult;
+    const presentation=globalThis.QARewardPresentation;
+    const weaponDrop=drop&&Manuals.BY_BOOK[drop.id]?drop:null;
+    const dungeonReward=reward==null?(weaponDrop?{weapon:weaponDrop}:null):{...reward,...(weaponDrop?{weapon:weaponDrop}:{})};
+    const dungeonCards=presentation.renderSettlement(dungeonReward,{emptyText:'本次無額外獎勵。'});
     showModal(`<small>單人武器副本 · ${esc(info.realm)}</small><h2>${esc(info.name)} · ${win?'通關':'挑戰結束'}</h2>
       <p>${win?'已擊敗石域領主，副本通關；剩餘守衛不影響結算。':'副本券已消耗，可調整武器與走位後再次挑戰。'}</p>
       <div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div>
       ${win?`<p>${result?.unlocked>info.difficulty?'下一個難度已解鎖。':info.difficulty===5?'已完成最高難度。':''}</p>`:''}
-      <p>${reward?.gold?'獲得 '+stoneCostMarkup('+'+reward.gold)+' · '+cultivationMarkup('+'+reward.cultivation,{showName:true}):''}</p>
-      ${drop?`<p class="tc-manual-loot">獲得 ${esc(drop.tierRealm)}武器：${esc(drop.name)}${drop.duplicate?'（同款數量已累計，保留最高等階）':''}</p>`:win?'<p>本次未掉落武器。</p>':''}
+      ${dungeonCards}
+      ${drop?.duplicate?'<p class="tc-manual-loot">同款武器數量已累計，保留最高等階。</p>':!drop&&win?'<p>本次未掉落武器。</p>':''}
+      ${drop&&!weaponDrop?`<p class="tc-manual-loot">獲得 ${esc(drop.tierRealm)}武器：${esc(drop.name)}</p>`:''}
       ${manualRecap}<button type="button" class="tc-primary" data-weapon-dungeon-menu>返回武器副本</button>
       <button type="button" data-weapon-dungeon-retry>再次挑戰（消耗 1 張券）</button><button type="button" data-exit>收起</button>`);
+    const receiptRoom=state,receiptUid=uid,receiptEpoch=epoch;
+    presentation.animateInline($('[data-trial-reward-list]'),{
+      uid:receiptUid,receiptId:JSON.stringify(['weapon-dungeon',receiptRoom.id,info.difficulty,receiptRoom.createdAtMs??null]),reward:dungeonReward,
+      isCurrent:()=>valid(receiptEpoch,receiptUid)&&state?.id===receiptRoom.id&&state?.status==='finished'&&state?.weaponDungeon?.difficulty===info.difficulty
+    });
     if(manualRecap)void refreshManualRecap();return;
   }
   if(state.mode==='pve'){

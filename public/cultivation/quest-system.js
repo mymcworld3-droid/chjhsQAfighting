@@ -1,4 +1,4 @@
-import {stoneCostMarkup,cultivationMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
+import './daily-meditation-rewards.js';
 import './quest-rules.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 
@@ -18,15 +18,21 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     return parts.join(' · ');
   }
   function rewardMarkup(reward) {
-    const parts=[];
-    if(reward.gold)parts.push(stoneCostMarkup(reward.gold));
-    if(reward.cultivation)parts.push(cultivationMarkup(reward.cultivation,{showName:true}));
-    if(reward.drawTickets)parts.push(esc(`本命法器抽獎券 ×${reward.drawTickets}`));
-    Object.entries(reward.materials||{}).forEach(([id,count])=>parts.push(esc(`${materialNames[id]||id} ×${count}`)));
-    return parts.join(' · ');
+    return globalThis.QARewardPresentation.renderList(reward,{variant:'general',preview:true});
   }
-  function status(message) {
+  function status(message, reward=null, suffix='') {
     for (const id of ['quest-status', 'quest-spotlight-status']) if ($(id)) $(id).textContent = message;
+    const receipt=$('quest-reward-receipt');
+    if(receipt){
+      receipt.innerHTML=reward?globalThis.QARewardPresentation.renderList(reward,{variant:'general'}):'';
+      receipt.hidden=!receipt.innerHTML;
+    }
+    // A home claim stays on the home screen: inline receipt, no extra dialog.
+    const home=$('quest-spotlight-status');
+    if(home&&reward){
+      const cards=globalThis.QARewardPresentation.renderFeedback(reward);
+      if(cards)home.innerHTML='已獲得 '+cards+esc(suffix||'。');
+    }
   }
   // Reuse the existing snapshot. Rendering the home card never requests data.
   function recommendedQuest() {
@@ -220,7 +226,9 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         } finally { applyingReward = false; }
         window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { source: 'quest-reward', ...result.balances } }));
       }
-      status(result.awarded ? `已獲得 ${rewardText(result.reward)}${kind === 'path' && !q.supplemental && snapshot.path ? '，下一個仙道任務已開啟。' : '。'}` : '此任務已領取過，進度已同步。');
+      const suffix=kind === 'path' && !q.supplemental && snapshot.path ? '，下一個仙道任務已開啟。' : '。';
+      status(result.awarded ? '已獲得 '+rewardText(result.reward)+suffix : '此任務已領取過，進度已同步。',
+        result.awarded?result.reward:null,suffix);
       if (result.awarded) globalThis.QAGameAudio?.play('reward-chime', { key:'quest:'+uid+':'+kind+':'+q.id+':'+snapshot.date+':'+snapshot.weeklyKey });
     } catch (e) {
       if (getMainUser()?.uid === uid) { status(`${e.message}，請重新同步後重試。`); dirty = true; }
@@ -253,7 +261,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const panel = document.createElement('section'); panel.id = 'quest-panel'; panel.className = 'quest-panel'; panel.setAttribute('aria-label', '修行任務');
     panel.innerHTML = `<header class="quest-heading"><div><small>宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
       <div class="quest-tabs" role="tablist" aria-label="任務類別"><button id="quest-tab-path" type="button" role="tab" aria-controls="quest-content" aria-selected="true">仙道 <span id="quest-path-count"></span><span id="quest-path-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-daily" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">日常 <span id="quest-daily-count"></span><span id="quest-daily-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-weekly" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">每週 <span id="quest-weekly-count"></span><span id="quest-weekly-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button></div>
-      <div class="quest-scroll" tabindex="0" role="region" aria-label="任務清單，可捲動"><p id="quest-note" class="quest-note"></p><div id="quest-content" role="tabpanel" aria-labelledby="quest-tab-path"></div><p id="quest-status" role="status" aria-live="polite"></p></div>`;
+      <div class="quest-scroll" tabindex="0" role="region" aria-label="任務清單，可捲動"><p id="quest-note" class="quest-note"></p><div id="quest-content" role="tabpanel" aria-labelledby="quest-tab-path"></div><p id="quest-status" role="status" aria-live="polite"></p><div id="quest-reward-receipt" hidden></div></div>`;
     dialog.append(panel); document.body.append(dialog);
     entry.addEventListener('click', () => {
       if (!dialog.open) dialog.showModal();

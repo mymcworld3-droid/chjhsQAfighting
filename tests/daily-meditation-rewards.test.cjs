@@ -93,3 +93,33 @@ test('settlement distinguishes missing receipts and zero rewards without blockin
   assert.match(Feedback.renderSettlement({cultivation:3}),/data-trial-reward-list/);
   assert.doesNotMatch(Feedback.renderSettlement({gold:2}),/<dialog|<button|data-mr-collect/);
 });
+
+test('phase 4 material rewards retain original quest names and quantities',()=>{
+  const html=Feedback.renderList({materials:{'raid-refine-key-ii':2,'old-test-id':3}},{variant:'general',preview:true});
+  assert.match(html,/淬靈玄印/);
+  assert.match(html,/old-test-id/);
+  assert.match(html,/>2<\/strong>/);
+  assert.match(html,/>3<\/strong>/);
+  assert.doesNotMatch(html,/weapon-dungeon-ticket/);
+});
+test('phase 4 settlement title is escaped and does not introduce a claim button',()=>{
+  const html=Feedback.renderSettlement({gold:3},{title:'<洞天>'});
+  assert.match(html,/&lt;洞天&gt;/);
+  assert.doesNotMatch(html,/<button|<dialog/);
+});
+test('four active reward flows delegate rendering while preserving their original operations',()=>{
+  const fs=require('node:fs');
+  const read=p=>fs.readFileSync(require.resolve('../public/cultivation/'+p),'utf8');
+  const vocab=read('daily-vocabulary-page.js'),quest=read('quest-system.js'),dt=read('dongtian.js'),battle=read('tactical-combat.js');
+  assert.match(vocab,/QARewardPresentation\.renderList\(reward,\{variant:'general'\}\)/);
+  assert.match(vocab,/retry-reward/);
+  assert.match(quest,/QARewardPresentation\.renderList\(reward,\{variant:'general',preview:true\}\)/);
+  assert.match(quest,/result\.awarded\?result\.reward:null/);
+  assert.match(quest,/\/api\/quests\/claim/);
+  assert.match(dt,/presentation\.renderSettlement\(settlementReward/);
+  assert.match(dt,/reward\.applied===true/);
+  assert.match(dt,/dt-retry-settlement/);
+  assert.match(battle,/presentation\.renderSettlement\(dungeonReward/);
+  assert.match(battle,/data-weapon-dungeon-retry/);
+  assert.match(battle,/data-weapon-dungeon-menu/);
+});

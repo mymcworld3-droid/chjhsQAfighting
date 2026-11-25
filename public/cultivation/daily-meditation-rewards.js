@@ -49,9 +49,10 @@
     // Legacy material IDs are displayed only when explicitly supplied; never convert them to tickets.
     for(const [id,value] of Object.entries(reward.materials||{})){
       const catalog=root.QAItemIcons?.catalog;
-      if(!catalog||!Object.hasOwn(catalog,id))continue;
+      const legacyNames={'raid-refine-key-ii':'淬靈玄印','raid-refine-key-iii':'玄天道印'};
+      const label=Object.hasOwn(legacyNames,id)?legacyNames[id]:catalog&&Object.hasOwn(catalog,id)?catalog[id].name:id;
       const amount=number(value);
-      if(amount!==null&&amount>0)result.push({key:'material',label:catalog[id].name,amount,
+      if(amount!==null&&amount>0)result.push({key:'material',label,amount,
         path:'M12 3 21 12 12 21 3 12Z'});
     }
     return result;
@@ -80,10 +81,10 @@
     return '<'+tag+' class="mr-reward-list'+(inline?' mr-reward-list--inline':'')+(play?'':' mr-reward-list--static')+' mr-reward-list--'+size+'" aria-label="'+(preview?'可獲得的獎勵':'本次獲得的獎勵')+'">'+items.map((item,i)=>renderItem(item,i,{small,preview,animated:play})).join('')+'</'+tag+'>';
   }
   function renderFeedback(reward){return renderList(reward,{variant:'small'});}
-  function renderSettlement(reward,{emptyText='本次無額外獎勵。',pendingText='獎勵尚未確認入帳。'}={}){
+  function renderSettlement(reward,{emptyText='本次無額外獎勵。',pendingText='獎勵尚未確認入帳。',title='本次獲得'}={}){
     const cards=renderList(reward,{inline:true,variant:'full'});
     if(!cards)return '<p class="mr-reward-empty" role="status">'+esc(reward==null?pendingText:emptyText)+'</p>';
-    return '<section class="tc-trial-rewards" data-trial-reward-list><h3>本次獲得</h3>'+cards+'</section>';
+    return '<section class="tc-trial-rewards" data-trial-reward-list><h3>'+esc(title)+'</h3>'+cards+'</section>';
   }
   function ensureStyle() {
     if (document.getElementById('meditation-reward-style')) return;
