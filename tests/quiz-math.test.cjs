@@ -72,7 +72,7 @@ test('all live question, choices and explanation surfaces use the shared formatt
   assert.match(battle,/quizMathTypeset\?\.\(expEl\)/);
   assert.match(dongtian,/QAQuestionPresentation\.stemMarkup\(q\.q,rich\)/);
   assert.match(dongtian,/QAQuestionPresentation\.optionMarkup\(option\.text,index,\{rich,/);
-  assert.match(dongtian,/quizMathRichText \|\| escapeHtml\)\(q\.exp/);
+  assert.match(dongtian,/explanation:q\.exp,rich:window\.quizMathRichText\|\|escapeHtml/);
   assert.match(dongtian,/quizMathTypeset\?\.\(slot\)/);
   assert.match(legacy,/quiz-rich-option/);
   assert.match(legacy,/quizMathRichText \|\| parseMarkdownImages\)\(opt\)/);

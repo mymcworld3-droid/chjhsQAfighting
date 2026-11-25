@@ -57,7 +57,7 @@ test('client claims of correct answers and stars are ignored; repeated answers c
   const f=fixture(),session=await ready(f,(await f.service.start('u1')).session);f.advance(2000);
   const body={questionId:session.question.id,choice:1,activeMs:1000,isCorrect:true,stars:999};
   const a=await f.service.answer('u1',body),b=await f.service.answer('u1',body);
-  assert.equal(a.session.correct,0);assert.deepEqual(a,b);assert.equal(a.session.feedback.correctIdx,0);
+  assert.equal(a.session.correct,0);assert.deepEqual(a,b);assert.equal(a.session.feedback.correctIdx,0);assert.equal(a.session.feedback.userIdx,1);
   await assert.rejects(f.service.answer('u1',{...body,choice:0}),/不能更換/);
   await assert.rejects(f.service.finish('u1'),/完成五題/);
 });

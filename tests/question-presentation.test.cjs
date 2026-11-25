@@ -27,3 +27,23 @@ test('image and table markup from guarded renderer are retained',()=>{
     assert.ok(optionMarkup('圖表',0,{rich:()=>html}).includes(html));
   }
 });
+
+const feedback = require('../public/cultivation/question-presentation.js');
+test('review state is explicit and deferred results remain neutral',()=>{
+  assert.equal(feedback.optionState(0,{answered:true,reveal:true,correctIndex:0,selectedIndex:1}),'correct');
+  assert.equal(feedback.optionState(1,{answered:true,reveal:true,correctIndex:0,selectedIndex:1}),'wrong');
+  assert.equal(feedback.optionState(0,{answered:true,reveal:false,correctIndex:0,selectedIndex:1}),'');
+  assert.equal(feedback.optionState(1,{answered:true,reveal:false,correctIndex:0,selectedIndex:1}),'selected');
+  assert.equal(feedback.optionState(0,{answered:false,reveal:true,correctIndex:0}),'');
+  assert.doesNotMatch(feedback.feedbackMarkup({state:'answered',explanation:'secret'}),/secret|data-qy-explanation/);
+  assert.match(feedback.feedbackMarkup({state:'correct',explanation:'<script>'}),/&lt;script&gt;/);
+});
+test('metrics preserve denominators and never invent zero-question accuracy',()=>{
+  assert.equal(feedback.scoreText(2,3),'2 / 3');
+  assert.equal(feedback.accuracyText(2,3),'67%');
+  assert.equal(feedback.accuracyText(0,0),'—');
+  assert.equal(feedback.accuracyText(4,3),'—');
+  assert.equal(feedback.progressMarkup(0,0),'');
+  assert.match(feedback.progressMarkup(1,2),/aria-valuenow="1"/);
+  assert.match(feedback.progressMarkup(1,2),/width:50%/);
+});

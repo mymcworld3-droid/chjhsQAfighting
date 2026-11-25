@@ -36,7 +36,7 @@ function publicSession(session) {
   const index=session.index, entry=session.questions[index], answer=session.answers[index];
   return {date:session.date,runId:session.runId||'',mode:session.version>=2?'literacy':'review',total:sessionTotal(session),index,answered:session.answers.length,correct:session.answers.filter(x=>x.isCorrect).length,
     questionAnswered:!!answer,question:entry?{id:entry.id,q:entry.data.q,opts:entry.data.opts,source:entry.source,subject:entry.subject||'',level:session.level||''}:null,
-    feedback:answer?{isCorrect:answer.isCorrect,correctIdx:entry.data.ans,exp:entry.data.exp || ''}:null};
+    feedback:answer?{isCorrect:answer.isCorrect,correctIdx:entry.data.ans,userIdx:answer.userIdx,exp:entry.data.exp || ''}:null};
 }
 function economy(user) {
   return {gold:count(user.stats?.gold),score:count(user.stats?.totalScore),rank:count(user.stats?.rankLevel),

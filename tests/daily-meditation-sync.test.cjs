@@ -12,7 +12,7 @@ function runtime() {
   const player={uid:'a',stats:{},friends:[]};
   const status=()=>({ok:true,date,completed:false,record:{},stars:0,milestones:[]});
   let respond=async()=>status();
-  const context={console:{info(){}},AbortController,setTimeout,clearTimeout,setInterval(){},
+  const context={QAQuestionPresentation:require('../public/cultivation/question-presentation.js'),console:{info(){}},AbortController,setTimeout,clearTimeout,setInterval(){},
     Date:class extends Date{static now(){return time;}},navigator:{onLine:true},
     QADailyMeditationRules:{meditationDateKey:()=>date},QANascentGrowth:{},
     QAMeditationRewardFeedback:{show:options=>feedback.push(options),clear(){}},

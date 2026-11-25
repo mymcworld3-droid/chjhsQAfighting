@@ -41,3 +41,24 @@ html body.xianxia-theme [data-qy-option]>[data-qy-option-content]{width:auto!imp
 @media(max-width:700px),(orientation:landscape) and (max-height:540px){
   html body.xianxia-theme :is(#page-quiz,#tactical-combat,#daily-meditation-overlay,#dongtian-overlay) [data-qy-options]>[data-qy-option]{padding:9px 12px!important;gap:9px!important}
 }
+
+/* Q03/Q04/Q05/Q10: text markers, neutral deferred review, responsive metrics.
+   Do not override formula glyphs or existing answer / combat colors. */
+.qy-option-state{display:block;grid-column:2;font-size:12px;line-height:1.5;font-weight:700;text-align:start;overflow-wrap:anywhere}
+[data-qy-option-state="correct"],[data-qy-verdict="correct"].qy-verdict{color:#a8e5b7}
+[data-qy-option-state="wrong"],[data-qy-verdict="wrong"].qy-verdict{color:#ffbcb0}
+[data-qy-option-state="selected"],[data-qy-verdict="answered"].qy-verdict,[data-qy-verdict="unanswered"].qy-verdict{color:var(--qy-gold,#d2b374)}
+html body.xianxia-theme [data-qy-explanation]{max-width:100%;min-width:0;line-height:1.8;overflow-wrap:anywhere;white-space:normal;font-size:var(--qy-option,16px)}
+[data-qy-explanation] img{display:block;max-width:100%;height:auto;object-fit:contain}
+[data-qy-explanation] .overflow-x-auto{max-width:100%;overflow-x:auto}
+[data-qy-explanation] :is(mjx-container[display="true"],.katex-display){max-width:100%;overflow-x:auto;overflow-y:hidden;padding-block:2px}
+.qy-verdict{display:block;font-weight:700;margin-bottom:6px}
+.qy-quiz-progress{display:grid;gap:4px;margin:0 0 10px;color:var(--qy-muted,#b8c6b5)}
+.qy-quiz-progress>[role="progressbar"]{height:6px;background:var(--qy-inset,#192820);overflow:hidden;border-radius:999px}
+.qy-quiz-progress i{display:block;height:100%;background:var(--qy-jade,#a5cbb3);border-radius:inherit}
+.qy-quiz-metrics{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+[data-qy-metric]{min-width:0;display:grid;gap:3px;overflow-wrap:anywhere}
+[data-qy-metric]>span{font-size:12px;color:inherit}
+[data-qy-metric]>b{font-variant-numeric:tabular-nums}
+.dv-feedback[data-qy-verdict="unanswered"]{border-color:var(--qy-gold,#d2b374)!important}
+@media(max-width:700px),(orientation:landscape) and (max-height:540px){.qy-option-state{font-size:11px}.qy-quiz-metrics{gap:5px 10px}}

@@ -12,6 +12,7 @@ const stoneCode=readFileSync(join(__dirname,'../public/cultivation/spirit-stone-
 const {stoneCostMarkup,cultivationMarkup}=vm.runInNewContext(stoneCode.replace(/^export /gm,'')+'\n({stoneCostMarkup,cultivationMarkup});');
 const QARewardPresentation=require('../public/cultivation/daily-meditation-rewards.js');
 const source = readFileSync(join(__dirname, '../public/cultivation/daily-vocabulary-page.js'), 'utf8')
+  .replace("import './question-presentation.js';", '')
   .replace("import './daily-meditation-rewards.js';", '')
   .replace("import { createVocabularyPronunciation } from './daily-vocabulary-pronunciation.mjs';", '')
   .replace("import('./daily-vocabulary-rules.js')", 'Promise.resolve(testRules)')
@@ -65,7 +66,7 @@ function harness(rules, db, storage) {
     switchToPage: name => { destination=name; },
   };
   const context = {
-    console, window, stoneCostMarkup, cultivationMarkup, QARewardPresentation, AbortController, setTimeout, clearTimeout,
+    console, window, stoneCostMarkup, cultivationMarkup, QARewardPresentation, QAQuestionPresentation:require('../public/cultivation/question-presentation.js'), AbortController, setTimeout, clearTimeout,
     CustomEvent: class { constructor(type, options) { this.type = type; this.detail = options.detail; } },
     document: { getElementById: () => root, addEventListener() {} },
     MutationObserver: class { observe() {} },

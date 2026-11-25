@@ -740,7 +740,7 @@ export const featureReady = (async () => {
     s.currentOptions = optionObjects;
     const rich = window.quizMathRichText || escapeHtml;
     window.quizMathClear?.(overlay);
-    overlay.innerHTML = `<div class="dt-runner"><header class="dt-run-head"><div><small>洞天試煉 · FIXED SEQUENCE</small><strong>${escapeHtml(s.dongtian.name)}</strong></div><button id="dt-exit" class="dt-exit" type="button" data-qy-nav-action="exit" aria-label="退出洞天"><i class="fa-solid fa-door-open"></i></button></header><div class="dt-run-meta"><div><span>題序</span><b>${s.index + 1} / ${s.dongtian.questions.length}</b></div><div><span>科目</span><b>${escapeHtml(q.subject || s.dongtian.subject)}</b></div><div><span>難度</span><b>${difficultyLabel(q.difficulty)}</b></div></div><div class="dt-progress"><i style="width:${((s.index) / s.dongtian.questions.length) * 100}%"></i></div><section class="dt-question"><div class="dt-question-title-row"><h3 data-qy-stem>${globalThis.QAQuestionPresentation.stemMarkup(q.q,rich)}</h3></div><div id="dt-options" class="dt-options" data-qy-options>${optionObjects.map((option, index) => `<button class="dt-option" type="button" data-qy-option data-dt-answer="${index}">${globalThis.QAQuestionPresentation.optionMarkup(option.text,index,{rich,contentClass:'dt-option-math',contentTag:'b'})}</button>`).join('')}</div><div id="dt-explain-slot"></div></section></div>`;
+    overlay.innerHTML = `<div class="dt-runner"><header class="dt-run-head"><div><small>洞天試煉 · FIXED SEQUENCE</small><strong>${escapeHtml(s.dongtian.name)}</strong></div><button id="dt-exit" class="dt-exit" type="button" data-qy-nav-action="exit" aria-label="退出洞天"><i class="fa-solid fa-door-open"></i></button></header><div class="dt-run-meta"><div><span>題序</span><b>${s.index + 1} / ${s.dongtian.questions.length}</b></div><div><span>科目</span><b>${escapeHtml(q.subject || s.dongtian.subject)}</b></div><div><span>難度</span><b>${difficultyLabel(q.difficulty)}</b></div></div><div class="dt-progress" ${globalThis.QAQuestionPresentation.progressAttrs(s.index,s.dongtian.questions.length)}><i style="width:${((s.index) / s.dongtian.questions.length) * 100}%"></i></div><section class="dt-question"><div class="dt-question-title-row"><h3 data-qy-stem>${globalThis.QAQuestionPresentation.stemMarkup(q.q,rich)}</h3></div><div id="dt-options" class="dt-options" data-qy-options>${optionObjects.map((option, index) => `<button class="dt-option" type="button" data-qy-option data-dt-answer="${index}">${globalThis.QAQuestionPresentation.optionMarkup(option.text,index,{rich,contentClass:'dt-option-math',contentTag:'b'})}</button>`).join('')}</div><div id="dt-explain-slot"></div></section></div>`;
     overlay.querySelector('#dt-exit').onclick = exitDongtian;
     if (s.dongtian.teacherManaged && s.dongtian.instructions) {
       const instructions = document.createElement('details'); instructions.style.cssText = 'margin-bottom:12px;color:#d9c7e1';
@@ -766,6 +766,8 @@ export const featureReady = (async () => {
       button.disabled = true;
       if (!deferred && index === correctIdx) button.classList.add('correct');
       else if (!deferred && index === optionIndex && !isCorrect) button.classList.add('wrong');
+      const presentation=globalThis.QAQuestionPresentation;
+      presentation?.markOption(button,presentation.optionState(index,{answered:true,reveal:!deferred,correctIndex:deferred?undefined:correctIdx,selectedIndex:optionIndex}));
     });
     s.answers.push({
       id: q.id,
@@ -780,8 +782,11 @@ export const featureReady = (async () => {
       exp: q.exp
     });
     const slot = document.getElementById('dt-explain-slot');
-    slot.innerHTML = `<div class="dt-explain"><strong style="color:${isCorrect ? '#86efac' : '#fca5a5'}">${isCorrect ? '答對 · 靈機相合' : '答錯 · 參悟解析'}</strong><br>${(window.quizMathRichText || escapeHtml)(q.exp || '此題暫無解析。')}</div><div class="dt-answer-actions"><button id="dt-report-question" class="dt-report-question" type="button"><i class="fa-solid fa-triangle-exclamation"></i> 問題回報</button><button id="dt-next" type="button" class="dt-next">${s.index + 1 >= s.dongtian.questions.length ? '完成洞天' : '前往下一境'}</button></div>`;
-    if (deferred) slot.querySelector('.dt-explain').textContent = '作答已記錄，完成整份洞天後顯示答案與解析。';
+    const presentation=globalThis.QAQuestionPresentation;
+    const meter=document.querySelector('#dongtian-overlay .dt-progress');
+    meter?.setAttribute('aria-valuenow',String(s.answers.length));
+    const fill=meter?.querySelector('i');if(fill)fill.style.width=(100*s.answers.length/s.dongtian.questions.length)+'%';
+    slot.innerHTML = `<div class="dt-explain">${presentation.feedbackMarkup(deferred?{state:'answered',title:'作答已記錄，完成整份洞天後顯示答案與解析。'}:{state:isCorrect?'correct':'wrong',title:isCorrect?'答對 · 靈機相合':'答錯 · 參悟解析',explanation:q.exp,rich:window.quizMathRichText||escapeHtml})}</div><div class="dt-answer-actions"><button id="dt-report-question" class="dt-report-question" type="button"><i class="fa-solid fa-triangle-exclamation"></i> 問題回報</button><button id="dt-next" type="button" class="dt-next">${s.index + 1 >= s.dongtian.questions.length ? '完成洞天' : '前往下一境'}</button></div>`;
     document.getElementById('dt-report-question').onclick = openQuestionReport;
     document.getElementById('dt-next').onclick = async () => {
       // A slow Firestore lookup must not allow two clicks to skip questions.
@@ -1243,7 +1248,7 @@ export const featureReady = (async () => {
         closeAfterSession();
       };
     };
-    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal"><i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i></div><h2>洞天通關 · 正在結算</h2><p role="status">已完成 ${total} 題，正在確認通關紀錄與首次獎勵。連線較慢時可稍候，或返回後再查看獎勵。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>狀態</span><b>確認中</b>${globalThis.QARewardPresentation.renderStatus('settling')}</div></div>${settlementBack}</div>`;
+    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal"><i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i></div><h2>洞天通關 · 正在結算</h2><p role="status">已完成 ${total} 題，正在確認通關紀錄與首次獎勵。連線較慢時可稍候，或返回後再查看獎勵。</p><div class="dt-result-grid">${globalThis.QAQuestionPresentation.metricMarkup('答對',globalThis.QAQuestionPresentation.scoreText(correct,total))}${globalThis.QAQuestionPresentation.metricMarkup('正確率',globalThis.QAQuestionPresentation.accuracyText(correct,total))}<div><span>狀態</span><b>確認中</b>${globalThis.QARewardPresentation.renderStatus('settling')}</div></div>${settlementBack}</div>`;
     bindSettlementBack();
 
     const firstCompletionReward = firstCompletionSpiritStones(correct);
@@ -1276,7 +1281,7 @@ export const featureReady = (async () => {
     const bonusNotes=[Number(reward.realmGoldAdded)>0?'含境界靈石加成 +'+Number(reward.realmGoldAdded).toLocaleString('zh-TW'):'',
       soulCultivationAdded?'含元嬰修為 +'+soulCultivationAdded.toLocaleString('zh-TW'):''].filter(Boolean);
     const ownerCards=reward.ownerRewarded?presentation.renderList({gold:OWNER_GOLD_REWARD,cultivation:OWNER_CULTIVATION_REWARD},{variant:'small'}):'';
-    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>首次完成與首次答對分開計算；重遊訂正只補領尚未取得的獎勵。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>新增掌握</span><b>${Number(reward.newCorrect) || 0} 題</b></div></div><div class="dt-reward">${rewardCards}${bonusNotes.length?'<p>'+escapeHtml(bonusNotes.join(' · '))+'</p>':''}<p>已領取的題目不重複發獎。</p>${ownerCards?'<div class="dt-owner-settlement">洞天主人已獲得 '+ownerCards+'</div>':''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
+    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>首次完成與首次答對分開計算；重遊訂正只補領尚未取得的獎勵。</p><div class="dt-result-grid">${globalThis.QAQuestionPresentation.metricMarkup('答對',globalThis.QAQuestionPresentation.scoreText(correct,total))}${globalThis.QAQuestionPresentation.metricMarkup('正確率',globalThis.QAQuestionPresentation.accuracyText(correct,total))}<div><span>新增掌握</span><b>${Number(reward.newCorrect) || 0} 題</b></div></div><div class="dt-reward">${rewardCards}${bonusNotes.length?'<p>'+escapeHtml(bonusNotes.join(' · '))+'</p>':''}<p>已領取的題目不重複發獎。</p>${ownerCards?'<div class="dt-owner-settlement">洞天主人已獲得 '+ownerCards+'</div>':''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
     if (s.dongtian.teacherManaged) {
       const verdict = document.createElement('p');
       verdict.textContent = `及格標準 ${s.dongtian.settings?.passPercent ?? 60}% · ${accuracy * 100 >= (s.dongtian.settings?.passPercent ?? 60) ? '已達標' : '尚未達標'}`;
@@ -1284,7 +1289,7 @@ export const featureReady = (async () => {
       if (s.dongtian.settings?.feedback === 'completion') {
         const review = document.createElement('details');
         review.style.cssText = 'max-height:40vh;overflow:auto;text-align:left;padding:12px';
-        review.innerHTML = '<summary>查看本次答案與解析</summary>' + s.answers.map((a, i) => `<article style="padding:10px;border-bottom:1px solid #8d76954d"><strong>第 ${i + 1} 題 · ${a.isCorrect ? '答對' : '答錯'}</strong><p>${escapeHtml(a.q)}</p><p>你的答案：${escapeHtml(a.options[a.userIdx])}<br>正確答案：${escapeHtml(a.options[a.correctIdx])}</p><div style="white-space:pre-wrap">${escapeHtml(a.exp || '此題未提供解析')}</div></article>`).join('');
+        review.innerHTML = '<summary>查看本次答案與解析</summary>' + s.answers.map((a, i) => `<article style="padding:10px;border-bottom:1px solid #8d76954d">${globalThis.QAQuestionPresentation.verdictMarkup(a.isCorrect?'correct':'wrong','第 '+(i+1)+' 題 · '+(a.isCorrect?'答對':'答錯'))}<div data-qy-stem>${globalThis.QAQuestionPresentation.stemMarkup(a.q,window.quizMathRichText||escapeHtml)}</div><div>你的答案：${globalThis.QAQuestionPresentation.stemMarkup(a.options[a.userIdx],window.quizMathRichText||escapeHtml)}</div><div>正確答案：${globalThis.QAQuestionPresentation.stemMarkup(a.options[a.correctIdx],window.quizMathRichText||escapeHtml)}</div>${globalThis.QAQuestionPresentation.explanationMarkup(a.exp,window.quizMathRichText||escapeHtml)}</article>`).join('');
         overlay.querySelector('.dt-result').appendChild(review);
         void window.quizMathTypeset?.(review);
       }

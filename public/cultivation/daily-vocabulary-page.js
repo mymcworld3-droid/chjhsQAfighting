@@ -1,3 +1,4 @@
+import './question-presentation.js';
 import './daily-meditation-rewards.js';
 import { createVocabularyPronunciation } from './daily-vocabulary-pronunciation.mjs';
 
@@ -357,7 +358,7 @@ function choicesMarkup(question, index, answer) {
     if (answer && choice.id === question.word.id) status = 'is-correct';
     else if (answer?.value === choice.id) status = 'is-incorrect';
     const label = question.format === 'cloze' ? `<span lang="en">${escapeHtml(choice.label)}</span>` : escapeHtml(choice.label);
-    const mark = status === 'is-correct' ? '<small>正解</small>' : status === 'is-incorrect' ? '<small>你的答案</small>' : '';
+    const mark = globalThis.QAQuestionPresentation.optionStateMarkup(status==='is-correct'?'correct':status==='is-incorrect'?'wrong':'');
     return button('choose', label + mark, {
       style: 'dv-choice ' + status,
       extra: `data-index="${index}" data-choice="${choice.id}"${answer ? ' disabled' : ''}`,
@@ -401,7 +402,7 @@ function quizMarkup() {
             <button type="submit" class="dv-button dv-primary">確認答案</button>
           </div>
         </form>`}
-      ${answer ? `<div class="dv-feedback ${answer.correct ? 'is-correct' : 'is-incorrect'}" tabindex="-1" data-dv-feedback>
+      ${answer ? `<div class="dv-feedback ${answer.correct ? 'is-correct' : 'is-incorrect'}" tabindex="-1" data-dv-feedback data-qy-verdict="${answer.correct?'correct':answer.value?'wrong':'unanswered'}">
         <div class="dv-feedback-top">
           <span class="dv-verdict-icon" aria-hidden="true">${answer.correct ? '✓' : '×'}</span>
           <div><strong>${answer.correct ? '答對了' : answer.value ? '答錯了' : '未作答'}</strong>
@@ -425,7 +426,7 @@ function resultMarkup() {
     : `下次測驗從「${stepLabel(lesson.level)}」調整為「${stepLabel(result.nextLevel)}」。`;
   return `${lead('今日測驗成績', change)}
     <section class="dv-panel dv-result">
-      <p class="dv-result-score"><strong>${result.score}</strong> / ${rules.LESSON_SIZE} 題答對</p>
+      <p class="dv-result-score"><strong>${result.score}</strong> / ${rules.LESSON_SIZE} 題答對</p><div class="qy-quiz-metrics">${globalThis.QAQuestionPresentation.metricMarkup('正確率',globalThis.QAQuestionPresentation.accuracyText(result.score,rules.LESSON_SIZE))}</div>
       <ul class="dv-bands">${rules.BANDS.map(band =>
         `<li data-band="${band.id}"><b>${band.label}</b><small>${result.byBand[band.id]} / ${rules.WORDS_PER_BAND} 題</small></li>`).join('')}</ul>
       <p>${result.mistakes.length ? `${result.mistakes.length} 個錯題單字，已排入明天的複習。` : '全部答對。已安排後續複習。'}</p>

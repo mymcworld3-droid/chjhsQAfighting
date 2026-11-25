@@ -14,7 +14,7 @@ function dashboard(state, busy = false, icons = Icons) {
   const status = { textContent: '' };
   const window = { getCurrentUserData: () => null, addEventListener() {} };
   const context = {
-    window, stoneCostMarkup, QARewardPresentation: Presentation, QAItemIcons: icons, QADailyMeditationRules: {}, getMainUser: () => ({ uid: 'fixture' }),
+    window, stoneCostMarkup, QAQuestionPresentation:require('../public/cultivation/question-presentation.js'), QARewardPresentation: Presentation, QAItemIcons: icons, QADailyMeditationRules: {}, getMainUser: () => ({ uid: 'fixture' }),
     document: { getElementById: id => id === 'dm-content' ? content : id === 'dm-status' ? status : null, addEventListener() {} },
     setInterval() {},
     auditState: state, auditBusy: busy

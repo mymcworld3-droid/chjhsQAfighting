@@ -20,9 +20,9 @@ const presentation=require('../public/cultivation/question-presentation.js');
 const sheet=new Function('rich','esc','pairChoices','state','globalThis',
   cut('function questionSheet(','function setQuizContext(')+'return questionSheet;'
 )(display,display,[-1,-1],{mode:'pve'},{QAQuestionPresentation:presentation});
-const layout=new Function('quizTools','questionSheet','pairQuestions','state','pairDisplayIndex','pairReviews',
+const layout=new Function('quizTools','questionSheet','pairQuestions','state','pairDisplayIndex','pairReviews','globalThis',
   cut('function pairWhiteboardMarkup(){','async function submitPair(){')+'return pairLayout;'
-)(()=>'<section class="tc-question-tools"></section>',sheet,[sample('1'),sample('2')],{quizRound:0},0,[]);
+)(()=>'<section class="tc-question-tools"></section>',sheet,[sample('1'),sample('2')],{quizRound:0},0,[],{QAQuestionPresentation:presentation});
 
 test('each stamina question repeats the actual free-question card, four answer rows and three footer controls',()=>{
   const stem=sheet(sample('1'),null,0);

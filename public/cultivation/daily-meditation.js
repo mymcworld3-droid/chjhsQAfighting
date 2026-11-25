@@ -214,7 +214,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     }).join('')+'</div></div>';
     html+='<p class="dm-note">自己與互為好友的同門，答對一題各得一星；達到節點即可領獎，每日最多十五星。好友稍後出關仍會增加進度。元嬰碎精與本命法器抽獎券可提前累積，金丹境開放抽取。團本券已滿時，該券折為額外靈石。</p>';
     if(state.completed){
-      html+='<h3 class="dm-section-title">今日出關 · '+state.personalStars+' 星</h3>'+summary([['答對',state.personalStars+' / '+personalTotal,'jade'],['作答時間',duration(result.answerTimeMs),'blue'],['個人靈石','+'+(result.gold||0),'gold'],['個人元嬰碎精','+'+(result.fragments||0),'violet']]);
+      html+='<h3 class="dm-section-title">今日出關 · '+state.personalStars+' 星</h3>'+summary([['答對',globalThis.QAQuestionPresentation.scoreText(state.personalStars,personalTotal),'jade'],['正確率',globalThis.QAQuestionPresentation.accuracyText(state.personalStars,personalTotal),'jade'],['作答時間',duration(result.answerTimeMs),'blue'],['個人靈石','+'+(result.gold||0),'gold'],['個人元嬰碎精','+'+(result.fragments||0),'violet']]);
       html+='<h3 class="dm-section-title">好友今日成績</h3><p class="dm-timing">全服每日使用同一組五題。星數優先，同星依作答時間排序。</p><table class="dm-board"><thead><tr><th>排名</th><th>同門</th><th>星數</th><th>作答時間</th></tr></thead><tbody>'+state.rankings.map(row=>'<tr'+(row.uid===uid()?' class="is-me"':'')+'><td>'+row.rank+'</td><td>'+esc(row.name)+(row.uid===uid()?'（你）':'')+'</td><td>'+row.stars+' / '+(row.total || QUESTION_TOTAL)+'</td><td>'+esc(duration(row.answerTimeMs))+'</td></tr>').join('')+'</tbody></table>';
       html+='<p class="dm-note">僅列出今日已完成閉關的好友。每日 00:00（台灣時間）重置。</p><button type="button" class="dm-action dm-action-secondary" id="dm-done">返回宗門</button>';
     }
@@ -239,14 +239,15 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
       setContent('<div class="dm-eyebrow">全服每日素養 · 第 '+(session.index+1)+' / '+total+' 題</div><p class="dm-note" data-qy-state="'+(questionLoading?'loading':'preparing')+'">'+(questionLoading?'正在讀取今日共用題目…':'今日閉關題庫正在準備中，稍後可重新同步並接續今日進度。')+'</p>'+(questionLoading?'':'<button type="button" class="dm-action" id="dm-prepare">重新讀取</button>'));
       node('dm-prepare')?.addEventListener('click',()=>void task(prepareCurrentQuestion));return;
     }
-    setContent('<div class="dm-eyebrow">'+esc(q.source)+' · '+(session.index+1)+' / '+total+' · 已得 '+session.correct+' 星</div><div class="dm-progress"><span style="width:'+Math.round(session.answered/total*100)+'%"></span></div><h3 class="dm-question" id="dm-question" data-qy-stem></h3><div class="dm-options" id="dm-options" data-qy-options></div><div id="dm-feedback" class="dm-note"></div>');
+    setContent('<div class="dm-eyebrow">'+esc(q.source)+' · '+(session.index+1)+' / '+total+' · 已得 '+session.correct+' 星</div><div class="dm-progress" '+globalThis.QAQuestionPresentation.progressAttrs(session.answered,total)+'><span style="width:'+Math.round(session.answered/total*100)+'%"></span></div><h3 class="dm-question" id="dm-question" data-qy-stem></h3><div class="dm-options" id="dm-options" data-qy-options></div><div id="dm-feedback" class="dm-note"></div>');
     node('dm-question').innerHTML=globalThis.QAQuestionPresentation.stemMarkup(q.q,window.quizMathRichText||window.formatQuizRichText);
     q.opts.forEach((value,index)=>{const button=document.createElement('button');button.type='button';button.className='dm-option';
-      button.dataset.qyOption='';button.innerHTML=globalThis.QAQuestionPresentation.optionMarkup(value,index,{rich:window.quizMathRichText||window.formatQuizRichText});
+      button.dataset.qyOption='';button.innerHTML=globalThis.QAQuestionPresentation.optionMarkup(value,index,{rich:window.quizMathRichText||window.formatQuizRichText,state:globalThis.QAQuestionPresentation.optionState(index,{answered:session.questionAnswered,reveal:session.questionAnswered,correctIndex:session.feedback?.correctIdx,selectedIndex:session.feedback?.userIdx})});
       button.disabled=session.questionAnswered;button.onclick=()=>void answer(index);node('dm-options').appendChild(button);
-      if(session.questionAnswered&&index===session.feedback.correctIdx)button.classList.add('dm-correct');});
+      if(session.questionAnswered&&index===session.feedback.correctIdx)button.classList.add('dm-correct');
+      else if(session.questionAnswered&&index===session.feedback.userIdx)button.classList.add('dm-wrong');});
     if(session.questionAnswered){
-      node('dm-feedback').textContent=(session.feedback.isCorrect?'參悟成功，獲得一顆星。':'本題未得星星。')+'\n'+session.feedback.exp;
+      node('dm-feedback').innerHTML=globalThis.QAQuestionPresentation.feedbackMarkup({state:session.feedback.isCorrect?'correct':'wrong',title:session.feedback.isCorrect?'答對 · 參悟成功，獲得一顆星。':'答錯 · 本題未得星星。',explanation:session.feedback.exp,rich:window.quizMathRichText||window.formatQuizRichText});
       const next=document.createElement('button');next.type='button';next.className='dm-action';next.textContent=session.answered===total?'出關結算':'繼續參悟';
       next.onclick=()=>session.answered===total?void finish():void nextQuestion();node('dm-content').appendChild(next);
       typeset(()=>{});

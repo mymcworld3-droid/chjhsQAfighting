@@ -3272,6 +3272,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
         btn.classList.add('opacity-50', 'cursor-not-allowed');
         if (idx === correctIdx) btn.classList.add('bg-green-600', 'border-green-400', 'text-white');
         else if (idx === userIdx && !isCorrect) btn.classList.add('bg-red-600', 'border-red-400', 'text-white');
+        const presentation=globalThis.QAQuestionPresentation;
+        presentation?.markOption(btn,presentation.optionState(idx,{answered:true,reveal:true,correctIndex:correctIdx,selectedIndex:userIdx}));
     });
     
     const fbSection = document.getElementById('feedback-section');
@@ -3279,6 +3281,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
     const fbIcon = document.getElementById('feedback-icon');
     const fbText = document.getElementById('feedback-text');
     if (fbSection) fbSection.classList.remove('hidden');
+    fbTitle?.setAttribute?.('data-qy-verdict',isCorrect?'correct':'wrong');
 
     if(isCorrect) {
         fbTitle.innerText = t('msg_correct'); 
@@ -3297,8 +3300,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
     if (window.quizMathSet) void window.quizMathSet(fbText, explanationText);
     else {
         // Fallback for early boot and isolated legacy controllers without the local formatter in scope.
-        const fallback = window.formatQuizRichText || window.quizMathRichText || (text => String(text ?? ''));
-        fbText.innerHTML = fallback(explanationText);
+        const fallback = window.formatQuizRichText || window.quizMathRichText;
+        fbText.innerHTML = globalThis.QAQuestionPresentation.stemMarkup(explanationText,fallback);
         void window.MathJax?.typesetPromise?.([fbText]).catch(err => console.warn('[Quiz explanation MathJax]', err));
     }
 

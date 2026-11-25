@@ -1564,7 +1564,7 @@ function resultDialog(){
     const dungeonCards=presentation.renderSettlement(dungeonReward,{emptyText:'本次無額外獎勵。'});
     showModal(`<small>單人武器副本 · ${esc(info.realm)}</small><h2>${esc(info.name)} · ${win?'通關':'挑戰結束'}</h2>
       <p>${win?'已擊敗石域領主，副本通關；剩餘守衛不影響結算。':'副本券已消耗，可調整武器與走位後再次挑戰。'}</p>
-      <div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div>
+      <div class="tc-result-stats qy-quiz-metrics">${globalThis.QAQuestionPresentation.metricMarkup('答對',globalThis.QAQuestionPresentation.scoreText(me.correct,me.answered))}${globalThis.QAQuestionPresentation.metricMarkup('正確率',globalThis.QAQuestionPresentation.accuracyText(me.correct,me.answered))}<b>生命 ${me.hp} / ${me.maxHp}</b></div>
       ${win?`<p>${result?.unlocked>info.difficulty?'下一個難度已解鎖。':info.difficulty===5?'已完成最高難度。':''}</p>`:''}
       ${dungeonCards}
       ${drop?.duplicate?'<p class="tc-manual-loot">同款武器數量已累計，保留最高等階。</p>':!drop&&win?'<p>本次未掉落武器。</p>':''}
@@ -1586,7 +1586,7 @@ function resultDialog(){
     const rewardSection=presentation.renderSettlement(settlementReward,{emptyText:'本次無額外獎勵；答題紀錄已保存。'});
     const guideCollapse=win&&stage===1&&tutorialStep()>=7&&tutorialStep()<=9
       ?'<button type="button" class="tc-primary" data-tutorial-collapse>收起戰場</button>':'';
-    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div>${rewardSection}${manualRecap}${drop?'<p class="tc-manual-loot">'+(weaponDrop&&settlementReward?'已獲得上述武器，前往修煉查看。':'獲得功法：《'+esc(drop.name)+'》！前往修煉查看。')+'</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}${guideCollapse}<button type="button" class="${guideCollapse?'':'tc-primary'}" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
+    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats qy-quiz-metrics">${globalThis.QAQuestionPresentation.metricMarkup('答對',globalThis.QAQuestionPresentation.scoreText(me.correct,me.answered))}${globalThis.QAQuestionPresentation.metricMarkup('正確率',globalThis.QAQuestionPresentation.accuracyText(me.correct,me.answered))}<b>生命 ${me.hp} / ${me.maxHp}</b></div>${rewardSection}${manualRecap}${drop?'<p class="tc-manual-loot">'+(weaponDrop&&settlementReward?'已獲得上述武器，前往修煉查看。':'獲得功法：《'+esc(drop.name)+'》！前往修煉查看。')+'</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}${guideCollapse}<button type="button" class="${guideCollapse?'':'tc-primary'}" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
     const receiptRoom=state,receiptUid=uid,receiptEpoch=epoch;
     if(celebrateFresh&&$('[data-trial-reward-list]'))presentation.animateInline($('[data-trial-reward-list]'),{
       uid:receiptUid,receiptId:JSON.stringify(['trial',receiptRoom.id,stage,receiptRoom.createdAtMs??null]),reward:settlementReward,
@@ -1595,7 +1595,7 @@ function resultDialog(){
     if(manualRecap)void refreshManualRecap();
     return;
   }
-  showModal(`<small>此戰已結算</small><h2>${draw?'平分秋色':win?'克敵制勝':'整裝再戰'}</h2><p>${state.finishReason==='timeout'?'連續兩次行動逾時，戰鬥結束。':state.finishReason==='forfeit'?'一方收法離場。':state.finishReason==='turn-limit'?'達到回合上限，以剩餘生命比例判定。':win?'你以走位與招式取得勝利。':'複習這次的攻擊範圍與體力分配，再次挑戰。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+stoneCostMarkup('+'+reward.gold)+' · '+cultivationMarkup('+'+reward.cultivation,{showName:true}):'本場沒有額外通關獎勵；答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-hub>返回演武司</button>`);
+  showModal(`<small>此戰已結算</small><h2>${draw?'平分秋色':win?'克敵制勝':'整裝再戰'}</h2><p>${state.finishReason==='timeout'?'連續兩次行動逾時，戰鬥結束。':state.finishReason==='forfeit'?'一方收法離場。':state.finishReason==='turn-limit'?'達到回合上限，以剩餘生命比例判定。':win?'你以走位與招式取得勝利。':'複習這次的攻擊範圍與體力分配，再次挑戰。'}</p><div class="tc-result-stats qy-quiz-metrics">${globalThis.QAQuestionPresentation.metricMarkup('答對',globalThis.QAQuestionPresentation.scoreText(me.correct,me.answered))}${globalThis.QAQuestionPresentation.metricMarkup('正確率',globalThis.QAQuestionPresentation.accuracyText(me.correct,me.answered))}<b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+stoneCostMarkup('+'+reward.gold)+' · '+cultivationMarkup('+'+reward.cultivation,{showName:true}):'本場沒有額外通關獎勵；答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-hub>返回演武司</button>`);
 }
 function leaveDialog(){
   if(state?.status==='finished')return state.mode==='pve'?resultDialog():renderHub();
@@ -1916,7 +1916,7 @@ function questionSheet(q,review=null,index=0){
     const resultClass=review?(i===review.answerIndex?' bg-green-600 border-green-400 text-white':i===review.choice?' bg-red-600 border-red-400 text-white':''):'';
     const selected=!review&&pairChoices[index]===i;
     return `<button type="button" data-qy-option class="w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2${resultClass}${selected?' is-picked':''}"  ${review?'disabled':`data-choice-for="${index}" data-choice="${i}" aria-pressed="${selected}"`}>
-      ${globalThis.QAQuestionPresentation.optionMarkup(value,i,{rich,correctMark:!!review&&i===review.answerIndex})}
+      ${globalThis.QAQuestionPresentation.optionMarkup(value,i,{rich,state:globalThis.QAQuestionPresentation.optionState(i,{answered:!!review,reveal:!!review,correctIndex:review?.answerIndex,selectedIndex:review?.choice})})}
     </button>`;
   }).join('');
   return `<article class="tc-pair-entry" data-pair-entry="${index}">
@@ -1932,7 +1932,7 @@ function questionSheet(q,review=null,index=0){
     ${review?`<div class="tc-feedback-section mt-6 glass-panel p-5 rounded-xl border border-white/10 animate-fade-in-up">
       <div class="flex items-center gap-3 mb-3">
         <div class="text-2xl"><i class="fa-solid ${review.correct?'fa-circle-check text-green-400':'fa-circle-xmark text-red-400'}"></i></div>
-        <h3 class="text-lg font-bold font-sci ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'答對':'答錯'} · 體力 +${review.gain}</h3>
+        <h3 data-qy-verdict="${review.correct?'correct':'wrong'}" class="text-lg font-bold font-sci ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'答對':'答錯'} · 體力 +${review.gain}</h3>
         ${state.mode==='pve'&&review.reward?`<div class="tc-solo-learning-reward">
           ${globalThis.QARewardPresentation.renderFeedback({cultivation:review.reward.cultivation})}
           ${review.reward.learning?`<small>${esc(review.reward.learning)}</small>`:''}
@@ -1940,7 +1940,7 @@ function questionSheet(q,review=null,index=0){
       </div>
       <div class="bg-slate-950/50 p-4 rounded-lg text-sm text-gray-300 leading-relaxed border border-white/5 mb-4">
         <span class="text-cyan-400 font-bold block mb-1 text-xs uppercase tracking-wider"><i class="fa-solid fa-magnifying-glass"></i> 題解參悟</span>
-        <span class="tc-feedback-text">${rich(review.explanation)}</span>
+        <div class="tc-feedback-text">${globalThis.QAQuestionPresentation.explanationMarkup(review.explanation,rich)}</div>
       </div>
       ${!review.correct&&review.choice>=0&&state.mode==='pve'?`<div class="tc-correction-actions">
         <button type="button" class="btn-cyber-primary" data-solo-correction-for="${index}">加入訂正練習 · 訂正修為 +1</button>
@@ -2224,7 +2224,7 @@ function pairLayout(){
   return `<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'問道試煉 · 答題充能'} · 第 ${current+1} / ${count} 題</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場</button></div>
   <div class="quiz-question-helper-layout helper-collapsed">
     <div class="quiz-main-column tc-pair-column">
-      <div class="tc-pair-list">${sheet}</div>
+      ${globalThis.QAQuestionPresentation.progressMarkup(pairReviews.length,count)}<div class="tc-pair-list">${sheet}</div>
       ${review?`<div class="tc-pair-reviewed-actions">
         <div class="tc-pair-review-status" role="status">第 ${current+1} 題已批改，請先閱讀上方解析。</div>
         <button type="button" class="btn-cyber-primary tc-pair-next" ${current+1<count?'data-next-pair-question':'data-dismiss'}>
