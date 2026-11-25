@@ -5,6 +5,10 @@ import {manualAnticipation} from './manual-anticipation.js';
 
 export function filterOwnedManuals(state, filter='all') {
   const owned=(state?.library||[]).filter(book=>book?.owned===true);
+  if(typeof globalThis.QAManuals?.sortedOwnedWeapons==='function'&&Array.isArray(state?.weaponIds)){
+    const sorted=globalThis.QAManuals.sortedOwnedWeapons(owned,state.weaponIds);
+    return ['sword','body','spell','arcane'].includes(filter)?sorted.filter(book=>book.school===filter):sorted;
+  }
   if(Array.isArray(state?.weaponIds)){
     const equipped=new Set(state.weaponIds.filter(Boolean));
     const realms=globalThis.QAManuals?.REALMS?.map(realm=>realm.name)
