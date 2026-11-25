@@ -49,7 +49,7 @@ test('icon rewards keep plain descriptions in checkpoint attributes and images i
     assert.match(button, / disabled>/);
   }
   assert.equal((html.match(/<img /g) || []).length, 9, 'each visible reward still has its item icon');
-  assert.match(html, /<p><img [^>]+>200 靈石<br><img [^>]+>團本券 ×1<br><img [^>]+>抽獎券 ×1<\/p>/);
+  assert.match(html, /<p><span class="game-stone-cost"><img [^>]+><b class="game-stone-amount">200<\/b><span class="game-stone-sr-only"> 靈石<\/span><\/span><br><img [^>]+>團本券 ×1<br><img [^>]+>抽獎券 ×1<\/p>/);
 });
 
 test('ready, claimed, pending-personal and busy checkpoints retain their claim gates', () => {
@@ -69,7 +69,14 @@ test('reward descriptions escape quoted values and still work without the icon m
   const button = checkpoints(dashboard(state))[0];
   assert.match(button, /aria-label="3 星，差 3 星，200 &quot;加成&quot; &amp; &lt;額外&gt; 靈石"/);
   const plain = dashboard(fixture(), false, null);
-  assert.doesNotMatch(plain, /<img /);
+  assert.equal((plain.match(/src="\/assets\/items\/gold.webp"/g)||[]).length,5,'gold art remains visible even when the optional item icon registry is unavailable');
   assert.equal(checkpoints(plain).length, 5);
   assert.match(checkpoints(plain)[4], /200 靈石、團本入場券 ×1、本命法器抽獎券 ×1/);
+});
+
+test('personal meditation reward places the image before the signed gold amount',()=>{
+ const finished=fixture(true);
+ finished.record.lastResult={gold:30,fragments:0,answerTimeMs:3000};
+ const html=dashboard(finished);
+ assert.match(html,/<small>個人靈石<\/small><strong><span class="game-stone-cost"><img class="game-stone-icon" src="\/assets\/items\/gold.webp"[^>]+><b class="game-stone-amount">\+30<\/b>/);
 });
