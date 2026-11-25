@@ -5,6 +5,7 @@ import './cultivation/spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import './cultivation/dongtian-entry.js';
 // Presentation only: the existing route handlers retain ownership.
 void import('./cultivation/shared-navigation.js').catch(error=>console.warn('[Shared navigation]',error));
+void import('./cultivation/shared-controls.js?v=20261125-u08-controls-v1').catch(error=>console.warn('[Shared controls]',error));
 // Sound is optional and cannot hold up authentication or gameplay readiness.
 void import('./game-audio.js').catch(error => console.warn('[Game audio] unavailable', error));
 // Auth-only: administrators can observe/resume migration even during maintenance.

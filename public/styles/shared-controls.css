@@ -1,0 +1,67 @@
+/* U03 / U07 / U08 — native controls enhanced by shared-controls.js.
+   All sizing is intrinsic; no fixed viewport, programmatic focus or keyboard scroll. */
+html body.xianxia-theme button[data-qy-control] {
+  --qy-control-bg:var(--qy-inset);
+  --qy-control-fg:var(--qy-paper);
+  --qy-control-edge:var(--qy-line);
+  box-sizing:border-box;min-width:0;
+  min-height:var(--ui-action-height,40px);
+  border:1px solid var(--qy-control-edge)!important;
+  border-radius:var(--qy-radius-control)!important;
+  background:var(--qy-control-bg)!important;
+  color:var(--qy-control-fg)!important;
+  box-shadow:none!important;
+  font-family:var(--qy-font-body)!important;
+  line-height:1.4;touch-action:manipulation;
+}
+html body.xianxia-theme button[data-qy-control="primary"] {
+  --qy-control-bg:linear-gradient(140deg,#e6cc94,var(--qy-gold));
+  --qy-control-fg:var(--qy-ink);--qy-control-edge:var(--qy-gold);
+  font-weight:700;
+}
+html body.xianxia-theme button[data-qy-control="danger"] {
+  --qy-control-bg:#3a2826;--qy-control-fg:#f5c4ba;--qy-control-edge:#bc8479;
+}
+html body.xianxia-theme button[data-qy-control="icon"] {
+  min-width:36px;min-height:36px;padding-inline:8px;
+}
+html body.xianxia-theme button:is([data-qy-control="tab"],[data-qy-control="filter"]) {
+  --qy-control-fg:var(--qy-muted);
+  position:relative;white-space:normal;overflow-wrap:anywhere;
+  font-size:13px;
+}
+html body.xianxia-theme button:is([data-qy-control="tab"],[data-qy-control="filter"]):is([aria-selected="true"],[aria-pressed="true"],.active,.active-tab,.is-selected) {
+  --qy-control-bg:var(--qy-surface);--qy-control-fg:var(--qy-paper);--qy-control-edge:var(--qy-gold);
+  box-shadow:inset 0 -2px var(--qy-gold)!important;font-weight:700;
+}
+html body.xianxia-theme button[data-qy-control]:disabled,
+html body.xianxia-theme button[data-qy-control][aria-disabled="true"] {
+  opacity:.52;cursor:default;
+}
+html body.xianxia-theme button[data-qy-control][aria-busy="true"] {cursor:progress}
+html body.xianxia-theme [data-qy-control]:is([hidden],.hidden) {display:none!important}
+html body.xianxia-theme [data-qy-control="field"] {
+  box-sizing:border-box;min-width:0;max-width:100%;
+  border:1px solid var(--qy-line)!important;
+  border-radius:var(--qy-radius-control)!important;
+  background-color:var(--qy-inset)!important;color:var(--qy-paper)!important;
+  font-family:var(--qy-font-body)!important;font-size:var(--qy-text)!important;
+  line-height:1.5;scroll-margin-block:12px;
+}
+html body.xianxia-theme [data-qy-control="field"]::placeholder {color:var(--qy-muted);opacity:.86}
+html body.xianxia-theme [data-qy-control="field"]:is(:disabled,[readonly]) {opacity:.72}
+html body.xianxia-theme [data-qy-control="field"][aria-invalid="true"] {border-color:#bc8479!important}
+html body.xianxia-theme [data-qy-control]:focus-visible {outline:2px solid var(--qy-gold)!important;outline-offset:2px}
+html body.xianxia-theme [data-qy-control="field"]:focus {border-color:var(--qy-gold)!important}
+html body.xianxia-theme :is(.cc-shell,#scope-studio,.dt-create) :is(input[type="checkbox"],input[type="radio"]) {accent-color:var(--qy-gold)}
+/* Existing scrollers and game-stage/tactical keyboard guards own the viewport. */
+@media(pointer:coarse){
+  html body.xianxia-theme [data-qy-control="field"]:is(input,textarea,select){font-size:16px!important}
+  html body.xianxia-theme button[data-qy-control="icon"]{min-width:44px;min-height:44px}
+}
+@media(hover:hover) and (pointer:fine){
+  html body.xianxia-theme button[data-qy-control]:not(:disabled):not([aria-disabled="true"]):hover{border-color:var(--qy-gold)!important;filter:brightness(1.06)}
+}
+@media(prefers-reduced-motion:reduce){
+  html body.xianxia-theme button[data-qy-control]{transition:none!important}
+}
