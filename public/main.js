@@ -169,7 +169,7 @@ async function loadXiuxianFeaturesSafely() {
       } else if (modulePath === './cultivation/tactical-combat.js') {
         loadedModule = await import(`${modulePath}?v=20261125-weapon-lord-unprotected-v1`);
       } else if (modulePath === './cultivation/manual-training-page.js') {
-        loadedModule = await import(`${modulePath}?v=20261125-native-main-cultivation-v1`);
+        loadedModule = await import(`${modulePath}?v=20261125-main-card-fill-async-gear-v2`);
       } else {
         loadedModule = await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
       }
