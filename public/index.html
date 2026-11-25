@@ -647,7 +647,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <link rel="stylesheet" href="styles/shared-controls.css?v=20261125-u08-controls-v1">
     <link rel="stylesheet" href="styles/shared-dialogs.css?v=20261125-u09-dialogs-v1">
     <link rel="stylesheet" href="styles/shared-feedback.css?v=20261125-u10-feedback-v1">
-    <link rel="stylesheet" href="styles/question-presentation.css?v=20261125-q03-q04-q05-q10-v1">
+    <link rel="stylesheet" href="styles/question-presentation.css?v=20261125-q06-q09-v1">
     <style id="debug-top-layer-style">
       /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
       #btn-show-debug{
@@ -940,7 +940,7 @@ body.xianxia-theme main:has(#page-training.active-page),
             <div id="quiz-loading" class="text-center mt-32 hidden">
                 <div class="cyber-loader mx-auto mb-6"></div>
                 <h3 class="text-xl font-bold mt-6 text-cyan-400 animate-pulse font-sci" data-i18n="loading_title">雲端大腦運算中</h3>
-                <p class="text-xs text-gray-400 mt-2" id="loading-text" data-i18n="loading_text">正在生成題目…</p>
+                <p class="text-xs text-gray-400 mt-2" id="loading-text" data-qy-learning-status="generating" role="status" aria-live="polite" data-i18n="loading_text">正在生成題目…</p>
             </div>
 
             <div id="quiz-container" class="hidden mt-4">
@@ -957,7 +957,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <span>延伸中</span>
                         <i class="fa-solid fa-xmark"></i>
                         </button>
-                        <button id="btn-quiz-whiteboard" type="button" onclick="toggleQuizWhiteboard()" class="quiz-whiteboard-toggle" aria-expanded="false" aria-controls="quiz-whiteboard-panel" title="開啟計算白板">
+                        <button id="btn-quiz-whiteboard" data-qy-tool="whiteboard" type="button" onclick="toggleQuizWhiteboard()" class="quiz-whiteboard-toggle" aria-expanded="false" aria-controls="quiz-whiteboard-panel" title="開啟計算白板">
                         <i class="fa-solid fa-pen-to-square"></i>
                         <span>白板</span>
                         </button>
@@ -1020,17 +1020,17 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <button id="btn-giveup" type="button" onclick="openQuizScopeSettings()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group">
                         <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> <span data-i18n="btn_giveup">設定範圍</span>
                         </button>
-                        <button id="btn-report" onclick="openReportModal()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-yellow-400 transition border border-transparent hover:border-yellow-500/20 rounded-lg group">
+                        <button id="btn-report" data-qy-tool="report" onclick="openReportModal()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-yellow-400 transition border border-transparent hover:border-yellow-500/20 rounded-lg group">
                         <i class="fa-solid fa-bug group-hover:rotate-12 transition-transform"></i> <span>題目有錯</span>
                         </button>
-                        <button id="btn-quiz-scope-exclusion" type="button" onclick="openQuizScopeExclusion()" hidden class="flex-1 min-w-[42%] sm:min-w-0 py-3 text-amber-300 text-xs text-center hover:text-amber-200 transition border border-transparent hover:border-amber-500/20 rounded-lg group"><i class="fa-solid fa-ban"></i> <span>此題超過學習範圍</span></button>
+                        <button id="btn-quiz-scope-exclusion" data-qy-tool="scope" type="button" onclick="openQuizScopeExclusion()" hidden class="flex-1 min-w-[42%] sm:min-w-0 py-3 text-amber-300 text-xs text-center hover:text-amber-200 transition border border-transparent hover:border-amber-500/20 rounded-lg group"><i class="fa-solid fa-ban"></i> <span>此題超過學習範圍</span></button>
                         <button id="btn-quiz-home" type="button" onclick="leaveQuizPage()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group">
                         <i class="fa-solid fa-house group-hover:-translate-y-0.5 transition-transform"></i> <span>返回宗門</span>
                         </button>
                         </div>
                     </div>
                     <aside id="quiz-helper-shell" class="quiz-helper-shell collapsed" aria-label="問道助手">
-                        <button id="quiz-helper-launcher" type="button" class="quiz-helper-launcher" onclick="toggleQuizHelper(true)" aria-label="開啟問道助手" title="問道助手">
+                        <button id="quiz-helper-launcher" data-qy-tool="helper" type="button" class="quiz-helper-launcher" onclick="toggleQuizHelper(true)" aria-label="開啟問道助手" title="問道助手">
                             <i class="fa-solid fa-comments"></i>
                             <span class="quiz-helper-launcher-label">問道</span>
                         </button>
@@ -1442,14 +1442,14 @@ body.xianxia-theme main:has(#page-training.active-page),
     </div>
 
     <div id="report-modal" class="hidden fixed inset-0 z-[17000] bg-black/90 backdrop-blur-sm flex items-center justify-center p-6 opacity-0 transition-opacity duration-300">
-        <div class="glass-panel border-2 border-yellow-500/50 rounded-2xl p-6 max-w-sm w-full shadow-[0_0_30px_rgba(234,179,8,0.3)] transform scale-95 transition-transform duration-300 relative overflow-hidden" id="report-box">
+        <div class="glass-panel border-2 border-yellow-500/50 rounded-2xl p-6 max-w-sm w-full shadow-[0_0_30px_rgba(234,179,8,0.3)] transform scale-95 transition-transform duration-300 relative overflow-hidden" id="report-box" data-qy-report-form>
             <div id="report-input-view">
                 <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2 font-sci">
                     <i class="fa-solid fa-triangle-exclamation text-yellow-400"></i>
                     <span>回報題目錯誤</span>
                 </h3>
                 <p class="text-xs text-gray-400 mb-4">請簡述題目問題 (例如: 答案錯誤、選項重複、錯字)，AI 將進行嚴格審查。</p>
-                <textarea id="report-reason" class="w-full bg-slate-900/80 border border-slate-600 rounded-lg p-3 text-sm text-white focus:border-yellow-500 outline-none resize-none h-24 mb-4" placeholder="請輸入問題描述..."></textarea>
+                <textarea id="report-reason" data-qy-report-reason aria-label="問題描述" class="w-full bg-slate-900/80 border border-slate-600 rounded-lg p-3 text-sm text-white focus:border-yellow-500 outline-none resize-none h-24 mb-4" placeholder="請輸入問題描述..."></textarea>
                 <p id="report-input-status" role="status" aria-live="polite" class="hidden text-xs mb-4 leading-relaxed"></p>
                 <div class="flex gap-3">
                     <button onclick="closeReportModal()" class="flex-1 btn-cyber-ghost py-2 rounded-lg text-xs hover:bg-white/10">取消</button>
@@ -1460,13 +1460,13 @@ body.xianxia-theme main:has(#page-training.active-page),
             <div id="report-loading-view" class="hidden flex-col items-center justify-center py-4">
                 <div class="cyber-loader border-yellow-400 mb-4"></div>
                 <h3 class="text-yellow-400 font-bold font-sci animate-pulse">AI 正在嚴格審查中...</h3>
-                <p id="report-loading-status" role="status" aria-live="polite" class="text-xs text-gray-300 mt-2 text-center leading-relaxed">正在準備審核…</p>
+                <p id="report-loading-status" data-qy-learning-status="reviewing" role="status" aria-live="polite" class="text-xs text-gray-300 mt-2 text-center leading-relaxed">正在準備審核…</p>
             </div>
 
             <div id="report-result-view" class="hidden flex-col items-center justify-center py-2 text-center">
                 <div id="report-result-icon" class="text-4xl mb-3"></div>
                 <h3 id="report-result-title" class="text-lg font-bold mb-2"></h3>
-                <p id="report-result-msg" class="text-xs text-gray-300 mb-4 bg-black/30 p-3 rounded w-full whitespace-pre-line leading-relaxed"></p>
+                <p id="report-result-msg" role="status" aria-live="polite" class="text-xs text-gray-300 mb-4 bg-black/30 p-3 rounded w-full whitespace-pre-line leading-relaxed"></p>
                 <button id="report-result-action" type="button" onclick="closeReportModal()" class="btn-cyber-primary w-full py-2 text-xs">關閉</button>
                 <button id="report-result-close" type="button" onclick="closeReportModal()" class="hidden btn-cyber-ghost w-full py-2 mt-2 text-xs">關閉</button>
             </div>

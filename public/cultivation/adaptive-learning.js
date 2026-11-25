@@ -1,4 +1,5 @@
 import './adaptive-learning-rules.js';
+import './question-presentation.js';
 import { getFirestore, doc, runTransaction } from '../data-store.js';
 import { getMainUser, authenticatedMainFetch } from './data/project-repository.js';
 
@@ -104,10 +105,7 @@ function showLesson(quiz, lesson, { beforeAnswer = false } = {}) {
       : document.getElementById(beforeAnswer ? 'question-text' : 'feedback-text');
   if (!host) return;
   // The lesson is a compact native disclosure until the player opens it.
-  const panel = document.createElement('details'); panel.id = 'adaptive-concept-lesson'; panel.className = 'adaptive-concept-lesson';
-  const heading = document.createElement('summary');
-  const headingText = document.createElement('span'); headingText.textContent = '觀念補給 · ' + lesson.concept;
-  heading.appendChild(headingText); panel.appendChild(heading);
+  const {panel} = globalThis.QAQuestionPresentation.createDisclosure(document,{id:'adaptive-concept-lesson',kind:'lesson',className:'adaptive-concept-lesson',title:'觀念補給 · '+lesson.concept});
   for (const [label, text] of [['概念講解', lesson.explanation], ['簡單示例', lesson.example]]) {
     const title = document.createElement('h4'); title.textContent = label; panel.appendChild(title);
     const body = document.createElement('div'); body.className = 'adaptive-lesson-copy';
@@ -150,11 +148,8 @@ function render(quiz, questionHost = null) {
   // tactical question overlay. No second copy of the algorithm or markup.
   const state = currentState(meta), host = questionHost || document.getElementById('question-text');
   if (!host) return;
-  const details = document.createElement('details'); details.id = 'adaptive-scope-progress'; details.className = 'adaptive-scope-progress';
-  const summary = document.createElement('summary');
   const target = Rules.diagnosticTarget(meta.outline.length);
-  summary.textContent = '範圍學習足跡' + (state.answered < target ? ` · 診斷 ${Math.min(target, state.answered)}/${target}` : '') + ' · ' + meta.concept;
-  details.appendChild(summary);
+  const {panel:details} = globalThis.QAQuestionPresentation.createDisclosure(document,{id:'adaptive-scope-progress',kind:'footprint',className:'adaptive-scope-progress',title:'範圍學習足跡' + (state.answered < target ? ` · 診斷 ${Math.min(target, state.answered)}/${target}` : '') + ' · ' + meta.concept});
   const note = document.createElement('p'); note.textContent = meta.provisional ? '目前使用暫定細項，AI 分析完成後會再補齊。' : '依作答與提示使用逐步調整；未練習的觀念保持待診斷。'; details.appendChild(note);
   for (const concept of meta.outline) {
     const item = document.createElement('div'); item.className = 'adaptive-concept-row';

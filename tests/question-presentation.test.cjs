@@ -47,3 +47,18 @@ test('metrics preserve denominators and never invent zero-question accuracy',()=
   assert.match(feedback.progressMarkup(1,2),/aria-valuenow="1"/);
   assert.match(feedback.progressMarkup(1,2),/width:50%/);
 });
+
+test('phase 13 status is explicit, accessible and escaped',()=>{
+  assert.match(feedback.learningStatusMarkup('preparing','<script>'),/data-qy-learning-status="preparing".*&lt;script&gt;/);
+  assert.match(feedback.learningStatusMarkup('unknown'),/data-qy-learning-status="neutral"/);
+  const attrs=new Map(),node={setAttribute:(k,v)=>attrs.set(k,v),hasAttribute:k=>attrs.has(k)};
+  feedback.setLearningStatus(node,'reviewing','核對中');
+  assert.equal(node.textContent,'核對中');assert.equal(attrs.get('role'),'status');
+  feedback.setLearningStatus(node,'error','重試');assert.equal(attrs.get('data-qy-learning-status'),'error');
+  assert.equal(feedback.reportState('confirmed'),'confirmed');assert.equal(feedback.reportState('rejected'),'rejected');assert.equal(feedback.reportState('unknown'),'incomplete');
+});
+test('phase 13 disclosure is native and collapsed',()=>{
+  const doc={createElement:tag=>({tag,children:[],setAttribute(k,v){this[k]=v;},appendChild(n){this.children.push(n);}})};
+  const {panel,summary}=feedback.createDisclosure(doc,{id:'lesson',kind:'lesson',title:'<script>'});
+  assert.equal(panel.tag,'details');assert.equal(panel.open,false);assert.equal(panel['data-qy-disclosure'],'lesson');assert.equal(summary.tag,'summary');assert.equal(summary.textContent,'<script>');assert.equal(panel.children[0],summary);
+});

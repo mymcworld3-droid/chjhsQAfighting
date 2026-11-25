@@ -61,7 +61,33 @@
   function metricMarkup(label,value){
     return '<div data-qy-metric><span>'+escape(label)+'</span><b>'+escape(value)+'</b></div>';
   }
-  const api=Object.freeze({stemMarkup,optionMarkup,optionState,optionStateMarkup,markOption,verdictMarkup,explanationMarkup,feedbackMarkup,scoreText,accuracyText,progressAttrs,progressMarkup,metricMarkup});
+  // Q06–Q09: presentation only. Callers own permissions, requests and awards.
+  const statusLabels=Object.freeze({loading:'載入中',generating:'生成題目中',preparing:'題庫準備中',reviewing:'審核中',pending:'待處理',confirmed:'已確認有誤',rejected:'未確認有誤',incomplete:'尚未確認',success:'已完成',error:'處理失敗',empty:'暫無可用題目',ready:'已準備好',neutral:''});
+  function statusKey(state){return Object.hasOwn(statusLabels,state)?state:'neutral';}
+  function setLearningStatus(node,state,message){
+    if(!node)return;
+    const key=statusKey(state);
+    node.setAttribute?.('data-qy-learning-status',key);
+    if(!node.hasAttribute?.('role'))node.setAttribute?.('role','status');
+    if(!node.hasAttribute?.('aria-live'))node.setAttribute?.('aria-live','polite');
+    node.textContent=String(message??statusLabels[key]);
+  }
+  function learningStatusMarkup(state,message){
+    const key=statusKey(state);
+    return '<p data-qy-learning-status="'+key+'" role="status" aria-live="polite">'+escape(message??statusLabels[key])+'</p>';
+  }
+  function reportState(status){
+    const map={confirmed:'confirmed',duplicate:'confirmed',rejected:'rejected',limit:'incomplete',approved:'confirmed',pending:'pending'};
+    return Object.hasOwn(map,status)?map[status]:'incomplete';
+  }
+  function createDisclosure(doc,{id,kind,className='',title=''}={}){
+    const panel=doc.createElement('details'),summary=doc.createElement('summary');
+    panel.id=id;panel.className=className;panel.open=false;
+    panel.setAttribute?.('data-qy-disclosure',kind==='lesson'?'lesson':'footprint');
+    summary.textContent=String(title);panel.appendChild(summary);
+    return {panel,summary};
+  }
+  const api=Object.freeze({setLearningStatus,learningStatusMarkup,reportState,createDisclosure,stemMarkup,optionMarkup,optionState,optionStateMarkup,markOption,verdictMarkup,explanationMarkup,feedbackMarkup,scoreText,accuracyText,progressAttrs,progressMarkup,metricMarkup});
   root.QAQuestionPresentation=api;
   if(typeof module==='object'&&module.exports)module.exports=api;
 })(globalThis);

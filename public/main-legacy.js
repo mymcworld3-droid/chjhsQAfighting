@@ -2776,7 +2776,7 @@ window.startQuizFlow = async function startSoloQuizFlow(isNewSession = false) {
 
     if (extendedPracticeState.active) {
         document.getElementById('quiz-loading').classList.remove('hidden');
-        document.getElementById('loading-text').innerText = `正在生成「${extendedPracticeState.knowledgePoint}」延伸練習…`;
+        globalThis.QAQuestionPresentation.setLearningStatus(document.getElementById('loading-text'),'generating',`正在生成「${extendedPracticeState.knowledgePoint}」延伸練習…`);
         try {
             const q = await fetchExtendedPracticeQuestion();
             if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
@@ -2797,7 +2797,7 @@ window.startQuizFlow = async function startSoloQuizFlow(isNewSession = false) {
             isCurrent: () => opening === soloQuizOpenSerial,
             onEmpty: () => {
                 document.getElementById('quiz-loading').classList.remove('hidden');
-                document.getElementById('loading-text').innerText = '正在填充題庫中';
+                globalThis.QAQuestionPresentation.setLearningStatus(document.getElementById('loading-text'),'preparing','正在填充題庫中');
             }
         });
         if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
@@ -4511,7 +4511,7 @@ let reportCloseTimer = null;
 function reportStatus(message = '', isError = false) {
     const status = document.getElementById('report-input-status');
     if (!status) return;
-    status.textContent = message;
+    globalThis.QAQuestionPresentation.setLearningStatus(status,isError?'error':'neutral',message);
     status.classList.toggle('hidden', !message);
     status.classList.toggle('text-red-300', isError);
     status.classList.toggle('text-yellow-200', !isError);
@@ -4519,7 +4519,7 @@ function reportStatus(message = '', isError = false) {
 
 function reportLoadingStatus(message) {
     const status = document.getElementById('report-loading-status');
-    if (status) status.textContent = message;
+    globalThis.QAQuestionPresentation.setLearningStatus(status,'reviewing',message);
 }
 
 async function waitForReportAnswerSaved(promise, deadlineMs = 12000) {
@@ -4557,7 +4557,7 @@ function renderReportOutcome({ kind, title, message, actionText = '關閉', onAc
     const heading = document.getElementById('report-result-title');
     heading.textContent = title;
     heading.className = 'text-lg font-bold mb-2 ' + appearance.className;
-    document.getElementById('report-result-msg').textContent = message;
+    globalThis.QAQuestionPresentation.setLearningStatus(document.getElementById('report-result-msg'),globalThis.QAQuestionPresentation.reportState(kind),message);
 
     const action = document.getElementById('report-result-action');
     action.textContent = actionText;

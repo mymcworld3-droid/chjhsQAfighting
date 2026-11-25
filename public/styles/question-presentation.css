@@ -62,3 +62,18 @@ html body.xianxia-theme [data-qy-explanation]{max-width:100%;min-width:0;line-he
 [data-qy-metric]>b{font-variant-numeric:tabular-nums}
 .dv-feedback[data-qy-verdict="unanswered"]{border-color:var(--qy-gold,#d2b374)!important}
 @media(max-width:700px),(orientation:landscape) and (max-height:540px){.qy-option-state{font-size:11px}.qy-quiz-metrics{gap:5px 10px}}
+
+/* Q06–Q09: shared learning tools, disclosures, review and preparation states. */
+html body.xianxia-theme [data-qy-tool]{min-height:40px;box-sizing:border-box;align-items:center;gap:6px;border-color:var(--qy-line,#8b92654d);color:var(--qy-gold,#d2b374);font-weight:600}
+html body.xianxia-theme [data-qy-tool]:focus-visible,html body.xianxia-theme [data-qy-disclosure]>summary:focus-visible{outline:2px solid var(--qy-jade,#a5cbb3);outline-offset:2px}
+html body.xianxia-theme [data-qy-tool]:disabled{opacity:.5}
+html body.xianxia-theme [data-qy-report-form]{border-color:var(--qy-line,#8b92658c);color:var(--qy-text,#f0e5cd)}
+html body.xianxia-theme [data-qy-report-reason]{box-sizing:border-box;width:100%;max-width:100%;min-height:86px;resize:vertical;border:1px solid var(--qy-line,#8b92658c);border-radius:var(--qy-radius-control,8px);padding:10px;color:var(--qy-text,#f0e5cd);background:var(--qy-inset,#192820);font:inherit}
+[data-qy-learning-status]{overflow-wrap:anywhere;white-space:pre-line;line-height:1.6;color:var(--qy-muted,#b8c6b5)}
+[data-qy-learning-status="loading"],[data-qy-learning-status="generating"],[data-qy-learning-status="preparing"],[data-qy-learning-status="reviewing"],[data-qy-learning-status="pending"],[data-qy-learning-status="incomplete"]{color:var(--qy-gold,#d2b374)}
+[data-qy-learning-status="confirmed"],[data-qy-learning-status="success"],[data-qy-learning-status="ready"]{color:var(--qy-jade,#a5cbb3)}
+[data-qy-learning-status="error"],[data-qy-learning-status="rejected"]{color:#ffbcb0}
+html body.xianxia-theme [data-qy-disclosure]{min-width:0;max-width:100%;border:1px solid var(--qy-line,#8b92654d);border-radius:var(--qy-radius-control,8px);background:var(--qy-inset,#192820);padding:8px 12px;overflow-wrap:anywhere}
+html body.xianxia-theme [data-qy-disclosure]>summary{cursor:pointer;color:var(--qy-gold,#d2b374);font-weight:700;line-height:1.5;min-height:28px}
+html body.xianxia-theme [data-qy-disclosure][open]>summary{margin-bottom:8px}
+@media(max-width:700px),(orientation:landscape) and (max-height:540px){html body.xianxia-theme [data-qy-tool]{min-height:38px}html body.xianxia-theme [data-qy-disclosure]{padding:6px 9px}}
