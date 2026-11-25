@@ -1094,7 +1094,7 @@ body.ui-cleanup #page-home .home-shortcut-column .home-wide-actions>.home-shortc
     width:100%!important;
     max-width:100%!important;
     height:auto!important;
-    min-height:clamp(66px,10dvh,117px)!important;
+    min-height:clamp(56px,9dvh,76px)!important;
     padding:clamp(6px,1.6vw,10px) 2px!important;
     margin:0!important;
     border:1px solid rgba(207,177,124,.25)!important;
