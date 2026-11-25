@@ -8,7 +8,10 @@ const { join } = require('node:path');
 const { database } = require('./helpers/tactical-db.cjs');
 const rewardApi = require('../daily-vocabulary-reward-api.cjs').__test;
 
+const stoneCode=readFileSync(join(__dirname,'../public/cultivation/spirit-stone-ui.js'),'utf8');
+const stoneCostMarkup=vm.runInNewContext(stoneCode.replace(/^export /gm,'')+'\nstoneCostMarkup;');
 const source = readFileSync(join(__dirname, '../public/cultivation/daily-vocabulary-page.js'), 'utf8')
+  .replace(/^import \{stoneCostMarkup\} from '\.\/spirit-stone-ui\.js\?v=[^']+';\n/m,'')
   .replace("import { createVocabularyPronunciation } from './daily-vocabulary-pronunciation.mjs';", '')
   .replace("import('./daily-vocabulary-rules.js')", 'Promise.resolve(testRules)')
   .replace("import('./data/project-repository.js')", 'Promise.resolve(testRepository)');
@@ -61,7 +64,7 @@ function harness(rules, db, storage) {
     switchToPage: name => { destination=name; },
   };
   const context = {
-    console, window, AbortController, setTimeout, clearTimeout,
+    console, window, stoneCostMarkup, AbortController, setTimeout, clearTimeout,
     CustomEvent: class { constructor(type, options) { this.type = type; this.detail = options.detail; } },
     document: { getElementById: () => root, addEventListener() {} },
     MutationObserver: class { observe() {} },
