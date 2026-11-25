@@ -1,10 +1,10 @@
-import './manual-rules.js?v=20261118-gold-cap10-v1';
+import './manual-rules.js?v=20261125-shared-order-v12';
 import {bookArt,skillArt} from './manual-art.js';
 import {renderManualHero} from './manual-hero-view.js';
 import {nextManualExpedition,renderManualExpedition} from './manual-expedition-guide.js';
 import {renderManualLoadout,selectSkillForSlot} from './manual-loadout-view.js';
 import './contextual-asset-preloader.js';
-import {filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary} from './manual-library-view.js';
+import {filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary} from './manual-library-view.js?v=20261125-shared-order-v12';
 import {detectManualCelebration,renderManualCelebration} from './manual-celebration.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
@@ -89,7 +89,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-art-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261125-fixed-card-width-v11';
+    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261125-exact-card-geometry-v12';
     document.head.append(link);
   }
   if(!document.getElementById('scene-art-shell-style')){
@@ -201,7 +201,7 @@ function markup(){
     </div></dialog>`:hero;
   const cards=collection.map(book=>
     `<article class="manual-book ${book.school==='sword'?'is-sword':'is-body'} ${book.id===featuredBookId?'is-featured':''}"
-       data-manual-book="${esc(book.id)}">
+       data-manual-book="${esc(book.id)}" data-weapon-equipped="${current.weaponIds?.includes(book.id)?'true':'false'}">
        ${renderManualCollectionSummary(book,featuredBookId,[],{
          esc,bookArt,label,totalExpForLevel:Catalog.totalExpForLevel
        })}
