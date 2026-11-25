@@ -640,7 +640,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <link rel="stylesheet" href="styles/xianxia-quiet.css?v=20261016-portrait-hide-full-header1">
     <link rel="stylesheet" href="styles/interface-cleanup.css?v=20261125-masa-calligraphy-v7">
     <link rel="stylesheet" href="styles/interface-cleanup-pages.css?v=20261115-field-ink">
-    <link rel="stylesheet" href="styles/home-wireframe.css?v=20261125-upper-right-diamonds-v6">
+    <link rel="stylesheet" href="styles/home-wireframe.css?v=20261125-landscape-wide-portrait-legacy-v7">
     <link rel="stylesheet" href="styles/learning-page.css?v=20261115-vocabulary-starry-button-space">
     <style id="debug-top-layer-style">
       /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
@@ -823,18 +823,17 @@ body.xianxia-theme main:has(#page-training.active-page),
                     <output id="home-spirit-stones" class="home-spirit-stones" role="status" aria-label="目前靈石餘額" aria-live="polite" aria-atomic="true">
                         <i class="fa-solid fa-coins" aria-hidden="true"></i><span>靈石</span><strong id="home-spirit-stones-count">—</strong>
                     </output>
-                    <aside class="home-wireframe-rail is-left" aria-label="圖錄與排行">
+                    <aside class="home-wireframe-rail is-left" aria-label="左側快捷操作">
                         <button class="home-wireframe-shortcut home-shortcut--diamond" type="button" data-home-action="path" aria-label="圖錄"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>圖錄</span></button>
                         <button class="home-wireframe-shortcut home-shortcut--diamond" type="button" data-home-action="rank" aria-label="排行"><i class="fa-solid fa-ranking-star" aria-hidden="true"></i><span>排行</span></button>
-                    </aside>
-                    <aside class="home-wireframe-rail is-right" aria-label="任務與商店">
-                        <button class="home-wireframe-shortcut home-shortcut--diamond" type="button" data-home-action="quest" aria-label="任務"><i class="fa-solid fa-scroll" aria-hidden="true"></i><span>任務</span><b class="home-wireframe-alert" data-home-alert="quest" hidden aria-hidden="true"></b></button>
                         <button class="home-wireframe-shortcut home-shortcut--diamond" type="button" data-home-action="store" aria-label="商店"><i class="fa-solid fa-store" aria-hidden="true"></i><span>商店</span></button>
                     </aside>
-                    <div class="home-wide-actions" role="group" aria-label="每日修行快捷入口">
+                    <aside class="home-wireframe-rail is-right" aria-label="右側每日活動">
+                        <button class="home-wireframe-shortcut home-shortcut--diamond" type="button" data-home-action="quest" aria-label="任務"><i class="fa-solid fa-scroll" aria-hidden="true"></i><span>任務</span><b class="home-wireframe-alert" data-home-alert="quest" hidden aria-hidden="true"></b></button>
                         <button class="home-wireframe-shortcut home-shortcut--wide" type="button" data-home-action="meditation" aria-label="閉關"><i class="fa-solid fa-yin-yang" aria-hidden="true"></i><span>閉關</span><b class="home-wireframe-alert" data-home-alert="meditation" hidden aria-hidden="true"></b></button>
                         <button class="home-wireframe-shortcut home-shortcut--wide" type="button" data-home-action="learning" aria-label="學習"><span class="home-learning-star" aria-hidden="true">✦</span><span>學習</span></button>
-                    </div>
+                    </aside>
+
                 </div>
 
 
@@ -1533,7 +1532,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <script src="visual-viewport-guard.js?v=20261013-page-layout1"></script>
     <script src="answer-zoom-policy.js?v=20261007-answer-zoom2"></script>
     <script type="module" src="cultivation/in-app-select.js"></script>
-    <script type="module" src="main.js?v=20261125-home-stones-grid-v5"></script>
+    <script type="module" src="main.js?v=20261125-landscape-wide-portrait-legacy-v7"></script>
     <script type="module" src="cultivation/daily-vocabulary-page.js?v=20261116-back-to-words"></script>
 </body>
 </html>
