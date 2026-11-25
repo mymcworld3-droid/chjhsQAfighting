@@ -67,7 +67,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/gameplay-page.js',
   './cultivation/weapon-dungeons-page.js',
   './cultivation/dungeon-lobby.js',
-  './cultivation/manual-training-page.js',
+  './cultivation/manual-training-page.js?v=20261125-shared-order-v12',
   './cultivation/home-wireframe.js',
   './cultivation/realm-breakthrough-feedback.js',
   './cultivation/cultivation-rank-sync.js',
