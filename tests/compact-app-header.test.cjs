@@ -14,7 +14,7 @@ test('corner masthead leaves the middle transparent and non-interactive',()=>{
  assert.match(html,/<header class="app-corner-header /);
  assert.match(html,/id="brand-home"[^>]*onclick="returnToImmortalHome\(\)"/);
  assert.match(html,/id="user-info"/);
- assert.match(html,/interface-cleanup.css\?v=20261125-corner-header-v2/);
+ assert.match(html,/interface-cleanup.css\?v=20261125-cloud-brand-v3/);
 });
 test('fullscreen and portrait exclusions also release the new scroller margin',()=>{
  const css=read('public/styles/interface-cleanup.css'),quiet=read('public/styles/xianxia-quiet.css'),training=read('public/styles/manual-training-layout.css');
@@ -23,4 +23,17 @@ test('fullscreen and portrait exclusions also release the new scroller margin',(
  assert.match(quiet,/active-page\)\s*> header \{\s*display: none !important/);
  assert.match(training,/manual-detail-active\)>header\{\s*display:none!important/);
  assert.match(training,/manual-detail-active\)>main\{\s*padding:0!important/);
+});
+
+test('cloud wordmark is compact, accessible and does not intercept surrounding content',()=>{
+ const css=read('public/styles/interface-cleanup.css'),html=read('public/index.html');
+ const button=css.match(/html body\.ui-cleanup > header\.app-corner-header #brand-home \{([^}]+)\}/)[1];
+ assert.match(button,/width:142px/);
+ assert.match(button,/border:0;border-radius:0;background:transparent!important/);
+ assert.match(button,/Kaiti TC/);
+ assert.match(css,/#brand-home \{width:127px;font-size:15px/);
+ assert.match(css,/\.app-brand-cloud \{[\s\S]*?pointer-events:none/);
+ assert.match(html,/<svg class="app-brand-cloud"[^>]*aria-hidden="true"/);
+ assert.match(html,/class="app-brand-wordmark"><span data-i18n="app_name">青雲問道/);
+ assert.match(html,/aria-label="青雲問道，返回宗門"/);
 });

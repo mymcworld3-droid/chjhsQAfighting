@@ -23,22 +23,31 @@ html body.ui-cleanup > header.app-corner-header .xianxia-brand {
   position:absolute;top:env(safe-area-inset-top,0px);left:env(safe-area-inset-left,0px);
   margin:0;font-size:15px;line-height:1;white-space:nowrap;pointer-events:none;
 }
+/* A flowing gold-ink cloud cartouche rather than a rectangular UI button. */
 html body.ui-cleanup > header.app-corner-header #brand-home {
-  box-sizing:border-box;position:relative;min-height:0;height:var(--app-header-height);
-  display:inline-flex;align-items:center;gap:4px;padding:0 13px 0 7px;
-  border:1px solid #a78b5388;border-top:0;border-left:0;border-radius:0 0 16px 0;
-  background:linear-gradient(115deg,#252820,#191a16);color:#e6d5ac;
-  box-shadow:inset 0 -1px #d0b57935;
-  font-family:var(--xq-serif,"Noto Serif TC",serif);font-weight:700;letter-spacing:.07em;
+  box-sizing:border-box;position:relative;isolation:isolate;min-height:0;height:var(--app-header-height);
+  display:inline-flex;align-items:center;justify-content:flex-start;
+  width:142px;padding:0 25px 2px 11px;gap:0;
+  border:0;border-radius:0;background:transparent!important;color:#f2e6cb;
+  box-shadow:none!important;
+  font-family:"Kaiti TC","STKaiti","KaiTi","DFKai-SB",var(--xq-serif,serif);
+  font-size:17px;font-weight:700;letter-spacing:.11em;line-height:1;
+  text-shadow:0 1px 2px #000,0 0 6px #d3b77a40;
   pointer-events:auto;
 }
-html body.ui-cleanup > header.app-corner-header #brand-home::after {
-  content:"";position:absolute;bottom:2px;left:0;right:10px;height:1px;
-  background:linear-gradient(90deg,#d0b57999,transparent);pointer-events:none;
+html body.ui-cleanup > header.app-corner-header #brand-home::after {content:none}
+html body.ui-cleanup > header.app-corner-header .xianxia-seal {display:none}
+html body.ui-cleanup > header.app-corner-header .app-brand-cloud {
+  position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;
 }
-html body.ui-cleanup > header.app-corner-header .xianxia-seal {
-  width:15px;height:17px;font-size:12px;line-height:1;outline:none;
-  border-color:#a78b5388;border-radius:2px;color:#d0b579;
+html body.ui-cleanup > header.app-corner-header #brand-home > .app-brand-wordmark {
+  position:relative;display:block;white-space:nowrap;
+}
+html body.ui-cleanup > header.app-corner-header #brand-home:focus-visible {
+  outline:1px solid #e7cd96;outline-offset:-2px;border-radius:0 8px 8px 0;
+}
+@media(hover:hover) and (pointer:fine){
+  html body.ui-cleanup > header.app-corner-header #brand-home:hover {color:#fff4d6;text-shadow:0 0 8px #d7ba78a0}
 }
 body.ui-cleanup > header .xianxia-brand small {display:none}
 html body.ui-cleanup > header.app-corner-header > div {
@@ -172,7 +181,7 @@ body.ui-cleanup #page-training .training-subtabs-v3 {box-shadow:none!important}
 @media(max-width:700px) {
   body.ui-cleanup {--app-header-height:26px}
   html body.ui-cleanup > header.app-corner-header .xianxia-brand {font-size:14px}
-  html body.ui-cleanup > header.app-corner-header #brand-home {padding-right:10px}
+  html body.ui-cleanup > header.app-corner-header #brand-home {width:127px;font-size:15px;padding:0 21px 2px 9px}
   body.ui-cleanup #user-info {font-size:10px}
   body.ui-cleanup>main {padding-bottom:80px}
   body.ui-cleanup #page-home {padding-inline:16px}
