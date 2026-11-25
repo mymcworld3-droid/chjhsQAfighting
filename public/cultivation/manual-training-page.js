@@ -533,7 +533,7 @@ function boot(){
     if(!visible()){
       if(trainingDialogOpen)closeTrainingDialog({restoreFocus:false});
       if(pickerSlot!==null){closeManualPicker({restoreFocus:false});paint();}
-    }
+    }else fitArmoryHeight();
   }).observe(trainingPage,{attributes:true,attributeFilter:['class','hidden']});
   root?.addEventListener('click',event=>{
     if(event.target.closest('[data-manual-close-training]')){closeTrainingDialog();return;}
@@ -774,6 +774,7 @@ function boot(){
     setTimeout(()=>{if(visible())void load({force:true});},0);
   });
   window.addEventListener('resize',fitArmoryHeight,{passive:true});
+  window.visualViewport?.addEventListener?.('resize',fitArmoryHeight,{passive:true});
   if(typeof ResizeObserver!=='undefined'){
     const main=root?.closest?.('main');if(main)new ResizeObserver(fitArmoryHeight).observe(main);
   }
