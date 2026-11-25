@@ -146,7 +146,7 @@ test('portrait side panels are anchored in the circle row instead of covering th
   assert.doesNotMatch(css,/position:fixed!important/);
   // Buttons stay inside home-layout; no DOM hoisting into document.body.
   assert.doesNotMatch(js,/document\.body\.appendChild\(homeLeftRail\)|home-rails-portal|syncPortraitRails/);
-  assert.match(html,/home-wireframe\.css\?v=20261125-aligned-lobby-v3/);
+  assert.match(html,/home-wireframe\.css\?v=20261125-home-diamond-wide-v4/);
 });
 
 test('daily progress, records and independent correction host follow realm in both orientations',()=>{
@@ -169,4 +169,30 @@ test('landscape centerline uses equal side tracks and shared shortcut grid',()=>
   const rail=html.match(/<div class="home-shortcut-column">([\s\S]*?)<\/div>/)?.[1];
   assert.ok(rail);
   assert.equal((rail.match(/data-home-action="/g)||[]).length,6);
+});
+
+
+test('the four secondary homepage actions are diamonds and meditation/learning are wide rectangles',()=>{
+  const diamonds=['path','rank','store','quest'],wide=['meditation','learning'];
+  for(const action of diamonds){
+    const markup=html.match(new RegExp('<button class="home-wireframe-shortcut ([^"]+)"[^>]*data-home-action="'+action+'"'));
+    assert.ok(markup,'shortcut '+action+' exists');
+    assert.equal(markup[1],'home-shortcut--diamond',action+' is a diamond');
+    assert.match(js,new RegExp("case '"+action+"'"),action+' keeps its navigation handler');
+  }
+  for(const action of wide){
+    const markup=html.match(new RegExp('<button class="home-wireframe-shortcut ([^"]+)"[^>]*data-home-action="'+action+'"'));
+    assert.ok(markup,'shortcut '+action+' exists');
+    assert.equal(markup[1],'home-shortcut--wide',action+' is a wide rectangle');
+  }
+  assert.equal((html.match(/home-shortcut--diamond"/g)||[]).length,4);
+  assert.equal((html.match(/home-shortcut--wide"/g)||[]).length,2);
+  assert.match(css,/\.home-shortcut--diamond::before\s*\{[^}]*transform:rotate\(45deg\)/s);
+  assert.match(css,/\.home-shortcut--wide\s*\{[^}]*width:100%!important/s);
+  assert.match(css,/\.home-shortcut--wide\s*\{[^}]*max-width:175px!important/s);
+  assert.match(css,/@media \(orientation:landscape\)\s*\{\s*body\.ui-cleanup #page-home \.home-shortcut-column\{/);
+  assert.match(css,/@media \(orientation:portrait\)\s*\{\s*body\.ui-cleanup #page-home \.home-shortcut-column\{/);
+  assert.match(css,/pointer-events:none;/);
+  assert.match(css,/touch-action:manipulation/);
+  assert.match(css,/prefers-reduced-motion:reduce/);
 });
