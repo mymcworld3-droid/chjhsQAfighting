@@ -1,3 +1,4 @@
+import './cultivation/community-presentation.js';
 import './cultivation/question-presentation.js';
 import {stoneCostMarkup,cultivationMarkup,formatResourceAmount} from './cultivation/spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import { createStudyQuestionBridge } from './cultivation/study-question-bridge.js';
@@ -1655,7 +1656,7 @@ function injectSocialUI() {
                 <div class="text-center text-gray-500 text-xs py-4">歡迎來到全服聊天室 👋<br>請保持友善發言</div>
             </div>
 
-            <div class="ui-chat-compose p-2 bg-slate-800 border-t border-slate-700 flex gap-2 items-center absolute bottom-0 w-full z-10">
+            <div data-qy-chat-composer class="ui-chat-compose p-2 bg-slate-800 border-t border-slate-700 flex gap-2 items-center absolute bottom-0 w-full z-10">
                 <input type="text" id="chat-input" maxlength="50" placeholder="說點什麼..." class="flex-1 bg-slate-900 border border-slate-600 text-white rounded-full px-4 py-2 text-sm outline-none focus:border-cyan-500" onkeypress="if(event.key==='Enter') sendChatMessage()">
                 <button onclick="sendChatMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition transform active:scale-95">
                     <i class="fa-solid fa-paper-plane"></i>
@@ -1729,7 +1730,7 @@ function renderChatMessage(msg, container) {
     const equipped = { frame: msg.frame || '', avatar: msg.avatar || '' };
     const avatarHtml = getAvatarHtml(equipped, "w-8 h-8");
     const rankName = getRankMarkup(msg.rankLevel || 0, msg.uid || null, msg.totalScore ?? 0);
-    const time = readTimestampDate(msg.timestamp)?.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) || '...';
+    const time = globalThis.QACommunityPresentation.messageTime(readTimestampDate(msg.timestamp)?.getTime()) || '...';
 
     const chatProfile = msg.uid ? ' data-xiuxian-profile="' + escapeHtml(msg.uid) + '"' : '';
     div.innerHTML = `
@@ -1743,7 +1744,7 @@ function renderChatMessage(msg, container) {
             </div>
             <div class="px-4 py-2 rounded-2xl text-sm break-words relative shadow-md ${isMe ? 'bg-cyan-600 text-white rounded-tr-none' : 'bg-slate-700 text-gray-200 rounded-tl-none'}">
                 ${escapeHtml(msg.text)}
-                <span class="text-[9px] opacity-50 absolute bottom-0.5 ${isMe ? 'left-[-30px]' : 'right-[-30px]'} w-8 text-center">${time}</span>
+                <time class="text-[9px] opacity-50 absolute bottom-0.5 ${isMe ? 'left-[-30px]' : 'right-[-30px]'} w-8 text-center">${time}</time>
             </div>
         </div>
     `;
@@ -1782,6 +1783,7 @@ function renderChatMessage(msg, container) {
             div.querySelector('.break-words').appendChild(card);
         }
     }
+    globalThis.QACommunityPresentation.decorateMessage(div,{mine:isMe,time:readTimestampDate(msg.timestamp)?.getTime()});
     container.appendChild(div);
 }
 
@@ -2015,11 +2017,12 @@ window.loadFriendList = async () => {
             
             const div = document.createElement('div');
             div.className = "bg-slate-800/50 p-3 rounded-xl border border-slate-700 flex items-center gap-3";
+            globalThis.QACommunityPresentation.decorateIdentity(div);
             div.innerHTML = `
                 <button type="button" class="xpp-profile-trigger" data-xiuxian-profile="${escapeHtml(d.id)}" aria-label="查看 ${escapeHtml(fData.displayName || '修士')} 的資料">${getAvatarHtml(fData.equipped, "w-12 h-12", fData.photoURL)}</button>
                 <div class="flex-1 min-w-0">
                     <div class="flex justify-between items-center">
-                        <button type="button" class="xpp-profile-trigger font-bold text-white" data-xiuxian-profile="${escapeHtml(d.id)}">${escapeHtml(fData.displayName || '修士')}</button>
+                        <button type="button" class="xpp-profile-trigger font-bold text-white" data-xiuxian-profile="${escapeHtml(d.id)}">${globalThis.QACommunityPresentation.identityMarkup({name:fData.displayName||'修士'})}</button>
                         <span class="text-xs text-yellow-500 font-mono">${getRankMarkup(calculateRankFromScore(fData.stats?.totalScore || 0, d.id), d.id, fData.stats?.totalScore)}</span>
                     </div>
                     <div class="flex justify-between items-center mt-1">
@@ -6785,9 +6788,9 @@ window.loadLeaderboard = async ({ force = false } = {}) => {
             const row = `
                 <tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''} hover:bg-slate-700/50 transition">
                     <td class="px-4 py-4 font-bold ${i===1?'text-yellow-400':(i===2?'text-gray-300':(i===3?'text-orange-400':'text-gray-500'))}">${i}</td>
-                    <td class="px-4 py-4 flex items-center gap-3">
+                    <td class="px-4 py-4 flex items-center gap-3" data-qy-player>
                         <button type="button" class="xpp-profile-trigger" data-xiuxian-profile="${escapeHtml(record.id)}" aria-label="查看 ${escapeHtml(d.displayName || '修士')} 的資料">${avatarHtml}</button>
-                        <button type="button" class="xpp-profile-trigger ${isMe ? 'text-blue-300 font-bold' : ''}" data-xiuxian-profile="${escapeHtml(record.id)}">${escapeHtml(d.displayName || '修士')}</button>
+                        <button type="button" class="xpp-profile-trigger ${isMe ? 'text-blue-300 font-bold' : ''}" data-xiuxian-profile="${escapeHtml(record.id)}">${globalThis.QACommunityPresentation.identityMarkup({name:d.displayName||'修士'})}</button>
                     </td>
                     <td class="px-4 py-4 text-right font-mono text-blue-300">
                         ${getRankMarkup(calculateRankFromScore(score, record.id), record.id, score)} <span class="text-xs text-gray-500 block">${score} 修為</span>

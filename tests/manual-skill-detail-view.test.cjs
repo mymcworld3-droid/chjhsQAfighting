@@ -8,7 +8,7 @@ const src=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-skil
 const resource=fs.readFileSync(path.join(__dirname,'../public/cultivation/spirit-stone-ui.js'),'utf8');
 const stoneCostMarkup=vm.runInNewContext(resource.replace(/^export /gm,'')+'\nstoneCostMarkup');
 const render=vm.runInNewContext(src.replace(/^import .*;\n/gm,'').replace('export function renderManualSkillDetail','function renderManualSkillDetail')+
-  '\nrenderManualSkillDetail',{stoneCostMarkup});
+  '\nrenderManualSkillDetail',{...require('./helpers/presentations.cjs'),stoneCostMarkup});
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[c]);

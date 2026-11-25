@@ -33,7 +33,7 @@ test('inline animation stays visual, skips stale or repeated receipts and respec
   const vm=require('node:vm'),fs=require('node:fs');
   const src=fs.readFileSync(require.resolve('../public/cultivation/daily-meditation-rewards.js'),'utf8');
   let now=0,frames=[],reduced=false;
-  const ctx={module:{exports:{}},matchMedia:()=>({matches:reduced}),performance:{now:()=>now},requestAnimationFrame:fn=>{frames.push(fn);return frames.length;}};
+  const ctx={...require('./helpers/presentations.cjs'),module:{exports:{}},matchMedia:()=>({matches:reduced}),performance:{now:()=>now},requestAnimationFrame:fn=>{frames.push(fn);return frames.length;}};
   vm.runInNewContext(src,ctx);
   const api=ctx.module.exports;
   function host(){const elements=[{textContent:'+25'}];return {isConnected:true,elements,querySelector:()=>({classList:{remove(){}}}),querySelectorAll:()=>elements};}
@@ -137,7 +137,7 @@ test('cosmetic receipt ledger survives reload, separates accounts and does not r
   const src=fs.readFileSync(require.resolve('../public/cultivation/daily-meditation-rewards.js'),'utf8');
   const storage=new Map(),sounds=[];
   function boot(){
-    const ctx={module:{exports:{}},localStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)},QAGameAudio:{play:(...args)=>sounds.push(args)}};
+    const ctx={...require('./helpers/presentations.cjs'),module:{exports:{}},localStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)},QAGameAudio:{play:(...args)=>sounds.push(args)}};
     vm.runInNewContext(src,ctx);return ctx.module.exports;
   }
   const opt={uid:'a',receiptId:'test:1',reward:{gold:20}};
@@ -151,7 +151,7 @@ test('skip completes numbers without a transaction or another reward sound',()=>
   const vm=require('node:vm'),fs=require('node:fs');
   const src=fs.readFileSync(require.resolve('../public/cultivation/daily-meditation-rewards.js'),'utf8');
   const frames=[],sounds=[];
-  const ctx={module:{exports:{}},performance:{now:()=>0},requestAnimationFrame:f=>{frames.push(f);return frames.length;},cancelAnimationFrame(){},QAGameAudio:{play:(...a)=>sounds.push(a)}};
+  const ctx={...require('./helpers/presentations.cjs'),module:{exports:{}},performance:{now:()=>0},requestAnimationFrame:f=>{frames.push(f);return frames.length;},cancelAnimationFrame(){},QAGameAudio:{play:(...a)=>sounds.push(a)}};
   vm.runInNewContext(src,ctx);
   const api=ctx.module.exports,els=[{textContent:'+20'}],host={querySelector:()=>({classList:{remove(){},add(){}}}),querySelectorAll:()=>els};
   assert.equal(api.animateInline(host,{uid:'a',receiptId:'skip',reward:{gold:20}}),true);

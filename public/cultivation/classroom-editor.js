@@ -1,3 +1,4 @@
+import './question-editor-presentation.js';
 
 export const MAX_CLASSROOM_QUESTIONS = 30;
 export const AI_BATCH_CHOICES = Object.freeze([1, 5, 10]);
@@ -50,7 +51,6 @@ export function renderClassroomEditor(state, helpers) {
   const editor = state.editor;
   const selected = Math.min(Math.max(0, Number(state.editorIndex) || 0), editor.questions.length - 1);
   const q = editor.questions[selected];
-  const choices = ['A', 'B', 'C', 'D'];
   const pointId = q.knowledge_points?.[0]?.id || '';
   const points = '<option value="">未標記</option>' + subjects.map(s =>
     '<optgroup label="' + e(s.name) + '">' + s.points.map(p =>
@@ -58,17 +58,8 @@ export function renderClassroomEditor(state, helpers) {
     ).join('') + '</optgroup>').join('');
   const subjectOptions = ['綜合', ...subjectNames].map(s =>
     '<option value="' + e(s) + '" ' + (s === editor.subject ? 'selected' : '') + '>' + e(s) + '</option>').join('');
-  const answerOptions = choices.map((v, i) =>
-    '<option value="' + i + '" ' + (i === q.answerIndex ? 'selected' : '') + '>' + v + '</option>').join('');
-  const nav = editor.questions.map((item, i) => {
-    const ready = Boolean(item.question?.trim()) && item.options.every(v => String(v || '').trim());
-    const preview = String(item.question || '尚未填寫題目').trim().slice(0, 38);
-    return button('editor-select', '<span class="cc-editor-number">' + String(i + 1).padStart(2, '0') +
-      '</span><span class="cc-editor-nav-text">' + e(preview) + '</span><span class="cc-editor-nav-status">' +
-      (ready ? '✓' : '·') + '</span>',
-      'data-index="' + i + '" aria-current="' + (i === selected ? 'true' : 'false') + '"' +
-      ' aria-label="切換至第 ' + (i + 1) + ' 題"');
-  }).join('');
+  const nav = globalThis.QAQuestionEditorPresentation.navigation(editor.questions,selected,(i,text,current)=>
+    button('editor-select',text,'data-index="'+i+'" aria-current="'+current+'" aria-label="切換至第 '+(i+1)+' 題"'));
   const generation = AI_BATCH_CHOICES.map(count => button('generate-question', 'AI 產生 ' + count + ' 題',
     'data-count="' + count + '" ' + (editor.questions.length >= MAX_CLASSROOM_QUESTIONS ? 'disabled' : ''))).join('');
   const question = '<section class="cc-card cc-editor-question cc-form"><div class="cc-editor-question-heading">' +
@@ -79,13 +70,7 @@ export function renderClassroomEditor(state, helpers) {
     button('editor-duplicate', '複製此題', editor.questions.length >= MAX_CLASSROOM_QUESTIONS ? 'disabled' : '') +
     button('remove-question', '刪除此題', editor.questions.length <= 1 ? 'disabled' : '') +
     '</div></div>' +
-    '<label>題目<textarea name="question-' + selected + '" required maxlength="4000">' + e(q.question) + '</textarea></label>' +
-    '<div class="cc-fields">' + q.options.map((value, i) =>
-      field('option-' + selected + '-' + i, '選項 ' + choices[i], value, 'required maxlength="1200"')).join('') + '</div>' +
-    '<div class="cc-fields"><label>正確答案<select name="answer-' + selected + '">' + answerOptions + '</select></label>' +
-    '<label>知識點（選填）<select name="point-' + selected + '">' + points + '</select></label></div>' +
-    '<label>解析（選填）<textarea name="explanation-' + selected + '" maxlength="4000">' +
-    e(q.explanation || '') + '</textarea></label>' +
+    globalThis.QAQuestionEditorPresentation.fields(q,selected,{points,field}) +
     '<div class="cc-editor-next">' +
     button('editor-select', '上一題', 'data-index="' + (selected - 1) + '" ' + (selected === 0 ? 'disabled' : '')) +
     '<span class="cc-muted">' + (selected + 1) + ' / ' + editor.questions.length + '</span>' +

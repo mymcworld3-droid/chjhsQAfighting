@@ -12,6 +12,7 @@ const stoneCode=readFileSync(join(__dirname,'../public/cultivation/spirit-stone-
 const {stoneCostMarkup,cultivationMarkup}=vm.runInNewContext(stoneCode.replace(/^export /gm,'')+'\n({stoneCostMarkup,cultivationMarkup});');
 const QARewardPresentation=require('../public/cultivation/daily-meditation-rewards.js');
 const source = readFileSync(join(__dirname, '../public/cultivation/daily-vocabulary-page.js'), 'utf8')
+  .replace(/^import '\.\/weapon-presentation\.js';\n/gm,'')
   .replace("import './question-presentation.js';", '')
   .replace("import './daily-meditation-rewards.js';", '')
   .replace("import { createVocabularyPronunciation } from './daily-vocabulary-pronunciation.mjs';", '')

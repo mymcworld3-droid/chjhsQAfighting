@@ -31,9 +31,13 @@
     if(options.sound===false)return;
     try {root.QAGameAudio?.play('reward-chime',{key:'reward-presentation:'+identity(options)});}catch{}
   }
-  function celebrate(options={}){
-    if(!eligible(options,entries(options.reward)))return false;
+  function celebrateEvent(options={}){
+    if(!options.uid||!options.receiptId||options.isCurrent?.()===false||hasSeen(identity(options)))return false;
     remember(identity(options));cue(options);return true;
+  }
+  function celebrate(options={}){
+    if(!entries(options.reward).length)return false;
+    return celebrateEvent(options);
   }
   const inlineRuns = new WeakMap();
   let active = null;
@@ -42,7 +46,7 @@
     cultivation:'cultivation',gold:'gold',fragments:'nascent-soul-essence',
     raidTickets:'raid-ticket',drawTickets:'draw-ticket',weaponDungeonTicket:'weapon-dungeon-ticket'
   });
-  const weaponIds=new Set(['sword-wind','sword-flight','sword-sky','body-rock','body-dragon','body-tiger']);
+  const weapons=root.QAWeaponPresentation||(typeof require==='function'?require('./weapon-presentation.js'):null);
   const number=value=>{
     if(typeof value!=='number'&&typeof value!=='string'||String(value).trim()==='')return null;
     const n=Number(value);return Number.isFinite(n)?Math.trunc(n):null;
@@ -58,12 +62,12 @@
     // The caller supplies already-authoritative drop / XP rows, not inventory balances.
     for(const [key,field,suffix] of [['weapon','quantity',''],['weaponXp','earned',' EXP']]){
       for(const row of rows(reward[key])){
-        if(!row||!weaponIds.has(row.id))continue;
+        if(!row||!weapons.art(row.id))continue;
         const amount=number(row[field]);
         if(amount===null||amount<=0)continue;
         const name=String(row.name||'武器');
         result.push({key,label:name,amount,suffix,detail:key==='weapon'?String(row.tierRealm||'武器'):'武器熟練度',
-          image:'/assets/weapons/'+row.id+'-hd.webp'});
+          image:weapons.art(row.id)});
       }
     }
     // Legacy material IDs are displayed only when explicitly supplied; never convert them to tickets.
@@ -231,5 +235,5 @@
   }
   // Fetch the small stylesheet before a claim, so the first receipt cannot flash unstyled.
   if (typeof document === 'object' && document.head) ensureStyle();
-  return Object.freeze({entries,renderList,renderFeedback,renderStatus,renderSettlement,animateInline,skipInline,celebrate,show,clear});
+  return Object.freeze({entries,renderList,renderFeedback,renderStatus,renderSettlement,animateInline,skipInline,celebrate,celebrateEvent,show,clear});
 });

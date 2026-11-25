@@ -3,8 +3,9 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+Object.assign(globalThis,require('./helpers/presentations.cjs'));
 const file = fs.readFileSync(path.join(__dirname,'../public/cultivation/classroom-analysis.js'));
-const loaded = import('data:text/javascript;base64,'+file.toString('base64'));
+const loaded = import('data:text/javascript;base64,'+Buffer.from(file.toString().replace(/^import .*;\n/gm,'')).toString('base64'));
 const e = s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const helpers={
   escape:e, button:(action,label,attrs='')=>'<button data-action="'+action+'" '+attrs+'>'+label+'</button>',

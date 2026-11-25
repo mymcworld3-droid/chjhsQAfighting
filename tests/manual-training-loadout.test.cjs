@@ -7,9 +7,9 @@ const vm=require('node:vm');
 
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-loadout-view.js'),'utf8');
 const {selectSkillForSlot,renderManualLoadout}=vm.runInNewContext(
-  source.replace('export function selectSkillForSlot','function selectSkillForSlot')
+  source.replace(/^import .*;\n/gm,'').replace('export function selectSkillForSlot','function selectSkillForSlot')
     .replace('export function renderManualLoadout','function renderManualLoadout')+
-    '\n({selectSkillForSlot,renderManualLoadout})',{},
+    '\n({selectSkillForSlot,renderManualLoadout})',require('./helpers/presentations.cjs'),
   {filename:'manual-loadout-view.js'}
 );
 const moves={a:'slash',b:'punch',c:'thrust',a2:'slash',unknown:null};

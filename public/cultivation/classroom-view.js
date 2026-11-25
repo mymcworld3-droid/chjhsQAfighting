@@ -1,3 +1,4 @@
+import './community-presentation.js';
 
 export const CLASSROOM_TABS = Object.freeze([
   ['summary', '總覽'], ['assignments', '作業'], ['students', '學生'],
@@ -50,7 +51,7 @@ export function buildClassroomView(state, helpers) {
     ? [['學生人數', room.studentCount], ['進行中作業', active.length], ['草稿', tasks.filter(a => a.status === 'draft').length]]
     : [['班級作業', tasks.length], ['待完成', pending.length], ['已繳交', tasks.filter(a => a.submission?.status === 'submitted').length]];
   const metricsHtml = '<div class="cc-metrics">' + metrics.map(([name, value]) =>
-    '<div class="cc-metric"><span>' + name + '</span><strong>' + value + '</strong></div>').join('') + '</div>';
+    globalThis.QACommunityPresentation.metricMarkup(name,value)).join('') + '</div>';
   let panel = '';
   if (tab === 'summary') {
     const recent = teacher ? tasks.slice(0, 3) :

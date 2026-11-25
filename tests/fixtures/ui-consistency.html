@@ -1,0 +1,60 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>共用元件驗收</title>
+<link rel="stylesheet" href="/styles/content-format.css">
+<link rel="stylesheet" href="/styles/shared-gameplay.css">
+<link rel="stylesheet" href="/styles/shared-feedback.css">
+<link rel="stylesheet" href="/styles/tactical-combat.css">
+<link rel="stylesheet" href="/styles/tactical-manual-recap.css">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#14241e;color:#f1e7d0;font-family:system-ui,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden,[hidden]{display:none!important}
+main{height:100dvh;overflow:auto;padding:max(12px,env(safe-area-inset-top)) 12px}section.page-section{min-width:0}.preview-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.preview-toolbar button{padding:8px;color:#f1e7d0;background:#20332a;border:1px solid #d2b37488;border-radius:8px}
+#battle-preview{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;max-width:980px;margin:auto}#preview-battle-canvas{width:100%;height:min(65dvh,620px);touch-action:none}.preview-health{height:8px}.preview-hud{display:grid;gap:6px}.preview-weapons{display:flex;flex-wrap:wrap;gap:18px}.page-section{width:100%}
+</style>
+<body class="xianxia-theme"><main>
+<nav class="preview-toolbar" id="nav-grid"><button data-target="page-training">武器修煉</button><button data-target="page-teacher-dongtian">教師洞天</button><button data-target="battle-preview">戰場</button><button id="open-dungeon">武器副本</button></nav>
+<section id="page-training" class="page-section active-page"></section>
+<section id="battle-preview" class="page-section hidden"><header><h1>尖峰石域</h1><p>共用戰場與結算元件</p></header><div id="preview-hud" class="preview-hud"></div><canvas id="preview-battle-canvas"></canvas><div id="preview-result"></div></section>
+</main>
+<script type="module">
+import '/cultivation/manual-rules.js';
+import '/cultivation/weapon-dungeon-rules.js';
+import '/cultivation/battle-presentation.js';
+import '/cultivation/weapon-presentation.js';
+import '/cultivation/community-presentation.js';
+import '/cultivation/question-presentation.js';
+import '/cultivation/tactical-rules.js';
+import {TacticalRenderer} from '/cultivation/tactical-renderer.js';
+import {renderManualBattleRecap} from '/cultivation/tactical-manual-recap.js';
+const M=globalThis.QAManuals,R=globalThis.QATactical;
+window.__uiRequests=[];
+window.__previewRaw={version:3,books:Object.fromEntries(M.BOOKS.map((b,i)=>[b.id,{exp:M.totalExpForLevel(i%2?5:10)+20,tierRealm:b.tierRealm}])),weaponIds:['sword-wind','body-rock']};
+window.__previewManuals=()=>({...M.publicState(window.__previewRaw,188),gold:25000,school:'sword'});
+window.__previewCave={id:'demo',name:'力學觀念練習',subject:'物理',level:'高中職',difficulty:'medium',visibility:'private',status:'draft',version:1,questions:[0,1,2].map(i=>({id:'q'+i,q:'第 '+(i+1)+' 題：如何判斷物體的運動狀態？',correct:'合力決定加速度',wrong:['速度決定合力','質量決定速度','位移決定質量'],exp:'依牛頓第二運動定律分析。'})),settings:{passPercent:60,feedback:'immediate'}};
+window.__previewApi=async(url,init)=>{
+ const body=init?.body?JSON.parse(init.body):{};window.__uiRequests.push({url,body});
+ let data;
+ if(url==='/api/tactical/manuals/loadout'){window.__previewRaw.weaponIds[body.index]=body.weaponId||null;data={state:window.__previewManuals()};}
+ else if(url==='/api/tactical/manuals')data={state:window.__previewManuals()};
+ else if(url==='/api/tactical/weapon-dungeons')data={state:{tickets:3,maxTickets:5,active:null,dungeons:[{id:'peak-stone',name:'尖峰石域',subtitle:'巖峰之間',theme:'stone',description:'追蹤落石與強悍靈獸鎮守的單人秘境。',bonus:'圖騰傷害 +15%',traits:['追蹤落石','擊退可打斷'],tactics:['離開攻擊範圍','善用地形與擊退'],clears:{0:1},difficulties:['築基','結丹','元嬰','化神','合體','渡劫'].map((name,index)=>({name,index,nextRealm:['結丹','元嬰','化神','合體','渡劫','渡劫'][index],locked:index>1}))}]}};
+ else if(body.action==='status')data={allowed:true,classes:[]};
+ else if(body.action==='get')data={cave:structuredClone(window.__previewCave)};
+ else if(body.action==='save'){window.__previewCave=structuredClone(body);data={cave:structuredClone(body)};}
+ else data={caves:[],classes:[]};
+ return {ok:true,json:async()=>({ok:true,...data})};
+};
+window.getCurrentUserData=()=>({uid:'visual-teacher',stats:{totalScore:188,gold:25000}});
+window.switchToPage=id=>{for(const p of document.querySelectorAll('.page-section')){p.hidden=p.id!==id;p.classList.toggle('hidden',p.hidden);p.classList.toggle('active-page',!p.hidden);}window.dispatchEvent(new CustomEvent('xiuxian:page-switched',{detail:{pageId:id}}));};
+for(const b of document.querySelectorAll('[data-target]'))b.onclick=()=>window.switchToPage(b.dataset.target);
+await import('/cultivation/manual-training-page.js');
+await import('/cultivation/teacher-dongtian.js');
+const {openWeaponDungeons}=await import('/cultivation/weapon-dungeons-page.js');
+document.getElementById('open-dungeon').onclick=()=>openWeaponDungeons();
+const battle=R.create({id:'preview-room',mode:'pve',players:[{uid:'visual-teacher',name:'青雲修士',atk:200,maxHp:1300,manualSkills:['wind-slash'],trainingAccessScore:188}]});
+const player=battle.actors[0];player.hp=1000;
+window.__previewRenderer=new TacticalRenderer(document.getElementById('preview-battle-canvas'),()=>{});
+window.__previewRenderer.update(battle,player.uid,'move',null);
+document.getElementById('preview-hud').innerHTML=battle.actors.slice(0,4).map(a=>'<div><b>'+a.name+'</b><small> '+QABattlePresentation.health(a).text+'</small>'+QABattlePresentation.healthMarkup(a,{trackClass:'preview-health'})+'</div>').join('');
+const finished={...battle,status:'finished',rewarded:[player.uid],manualExp:{[player.uid]:{'sword-wind':90}}};
+document.getElementById('preview-result').innerHTML=QABattlePresentation.resultMetrics({...player,correct:7,answered:10},QAQuestionPresentation)+renderManualBattleRecap(finished,player.uid,M,window.__previewManuals());
+window.__previewReady=true;
+</script></body></html>

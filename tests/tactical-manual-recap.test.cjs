@@ -7,8 +7,8 @@ const vm=require('node:vm');
 
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-manual-recap.js'),'utf8');
 const {manualBattleEarnings,renderManualBattleRecap}=vm.runInNewContext(
-  source.replaceAll('export function ','function ')+'\n({manualBattleEarnings,renderManualBattleRecap})',
-  {},{filename:'tactical-manual-recap.js'}
+  source.replace(/^import .*;\n/gm,'').replaceAll('export function ','function ')+'\n({manualBattleEarnings,renderManualBattleRecap})',
+  require('./helpers/presentations.cjs'),{filename:'tactical-manual-recap.js'}
 );
 const manuals={
   BY_BOOK:{

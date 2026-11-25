@@ -1,3 +1,4 @@
+import './weapon-presentation.js';
 // Stamina cultivation loadout view. All decisions remain server-authoritative.
 // This module only renders acquired, unlocked skills and calculates draft slot edits.
 export function selectSkillForSlot(ids, slotIndex, skillId, moveIdOf) {
@@ -166,7 +167,7 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
   const selected=Number.isInteger(selectedIndex)&&selectedIndex>=0&&selectedIndex<2?selectedIndex:0;
   // The two slots are peers; there is no active/main weapon.
   const art=book=>book?
-    '<span class="manual-weapon-art manual-weapon-art--'+esc(book.id)+'" role="img" aria-label="'+esc(book.name)+'"></span>':
+    globalThis.QAWeaponPresentation.artMarkup(book):
     '<i class="fa-solid fa-plus" aria-hidden="true"></i>';
   const cards=Array.from({length:2},(_,i)=>{
     const book=books.get(slots[i]),chosen=i===selected;
@@ -186,7 +187,7 @@ export function renderManualLoadout(state,selectedIndex,pickerSlot,{esc,bookArt,
       '" aria-expanded="'+(pickerSlot===i)+'" aria-label="'+(book?'更換':'裝備')+'第'+(i+1)+'格武器">'+
       '<span class="manual-weapon-slot-art">'+art(book)+'</span>'+
       '<span class="manual-weapon-slot-info"><strong>'+esc(book?.name||'尚未裝備武器')+'</strong>'+
-      '<small class="manual-native-school">'+esc(book?[({sword:'劍修',body:'體修'})[book.school]||'武器',book.tierRealm].filter(Boolean).join(' · '):'空欄')+'</small><span class="manual-native-level">'+esc(book?'Lv. '+book.level+'/20':'選擇武器')+'</span></span>'+
+      '<small class="manual-native-school">'+esc(book?[({sword:'劍修',body:'體修'})[book.school]||'武器',book.tierRealm].filter(Boolean).join(' · '):'空欄')+'</small><span class="manual-native-level">'+esc(book?globalThis.QAWeaponPresentation.levelText(book)+'/20':'選擇武器')+'</span></span>'+
       '<i class="fa-solid fa-rotate" aria-hidden="true"></i></button>'+
       (book?'<div class="manual-weapon-skill-list">'+names+'</div>':
        '<div class="manual-weapon-slot-hint">每件武器有三招，隨武器熟練度自動解鎖</div>')+

@@ -3,7 +3,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const source = fs.readFileSync(require('node:path').join(__dirname, '../public/cultivation/friend-requests.js'), 'utf8').replace(/^import .*;\n/, '');
+const source = fs.readFileSync(require('node:path').join(__dirname, '../public/cultivation/friend-requests.js'), 'utf8').replace(/^import .*;\n/gm, '');
 function client(fetcher) {
   let user = { uid: 'alice' }, local = { friends: [] }, timerId = 0;
   const nodes = new Map(), timers = new Map(), calls = [];
@@ -13,7 +13,7 @@ function client(fetcher) {
     head: { appendChild() {} }, body: { appendChild(el) { nodes.set(el.id, el); } }
   };
   const window = { getCurrentUserData: () => local, addEventListener() {} };
-  const context = {
+  const context = {...require('./helpers/presentations.cjs'),
     window, document, console, AbortController, Date,
     getMainUser: () => user,
     authenticatedMainFetch: async (url, init) => { calls.push({ url, body: JSON.parse(init.body), signal: init.signal }); return fetcher(calls.length, init); },

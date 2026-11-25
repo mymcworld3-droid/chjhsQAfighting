@@ -1,3 +1,4 @@
+import './weapon-presentation.js';
 // Stamina manual cultivation: confirmed reward classification and presentation.
 // IMPORTANT: this receives successive server-authoritative states. It never
 // awards items, upgrades, or changes gameplay state.
@@ -69,8 +70,7 @@ export function renderManualCelebration(result,{esc,bookArt,skillArt,findSkill})
   const artwork=discovery||result.kind==='manual-upgrade'?bookArt(result.bookId):skillArt(skill||result.skillId);
   const fallback=discovery?'卷':'✦';
   const icon=artwork&&result.bookId&&(discovery||result.kind==='manual-upgrade')
-    ?`<span class="manual-weapon-art manual-weapon-art--${esc(result.bookId)} manual-celebration-art"
-      role="img" aria-label="${esc(result.name)}圖像"></span>`
+    ?globalThis.QAWeaponPresentation.artMarkup({id:result.bookId,name:result.name},{className:'manual-celebration-art'})
     :artwork
     ?`<img src="${esc(artwork)}" alt="" decoding="async" class="manual-celebration-art">`
     :`<span class="manual-celebration-art-fallback" aria-hidden="true">${fallback}</span>`;
@@ -82,7 +82,7 @@ export function renderManualCelebration(result,{esc,bookArt,skillArt,findSkill})
        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>`:''}
       <b>${Number(result.level)||1}</b>`;
   return `<div class="manual-celebration-backdrop manual-celebration--${school} manual-celebration--${result.kind}"
-      role="status" aria-live="polite" aria-atomic="true">
+      data-qy-celebration="weapon" role="status" aria-live="polite" aria-atomic="true">
     <div class="manual-celebration-panel">
       <div class="manual-celebration-crest" aria-hidden="true">
         <span class="manual-celebration-crest-outer"></span>

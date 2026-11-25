@@ -1,3 +1,4 @@
+import './weapon-presentation.js';
 // Server-backed, per-book XP changes in the current PvE room.
 // This projection never writes experience or unlocks: room ledgers alone decide.
 const finiteCount=value=>{
@@ -30,6 +31,7 @@ export function manualXpDelta(previous,next,uid,catalog){
   }
   const books=[...perBook.entries()].map(([id,earned])=>({
     id,name:ownedCatalog[id].name,school:ownedCatalog[id].school,
+    ...(ownedCatalog[id].weaponType?{weaponType:ownedCatalog[id].weaponType}:{}),
     earned:Math.min(100000000,earned)
   })).filter(row=>row.earned>0).sort((a,b)=>b.earned-a.earned||a.id.localeCompare(b.id));
   if(!books.length)return null;
@@ -40,11 +42,12 @@ export function renderManualXpToast(delta,{esc,bookArt}={}){
   if(!delta?.books?.length)return '';
   const escape=typeof esc==='function'?esc:v=>String(v);
   const image=typeof bookArt==='function'?bookArt:()=>null;
+  const kind=delta.books.some(book=>book.weaponType)?'武器':'功法';
   const compact=delta.books.slice(0,3);
   const lines=compact.map(book=>{
     const cover=image(book.id);
-    const art=cover?`<img src="${escape(cover)}" alt="" loading="lazy" decoding="async">`:
-      '<i class="fa-solid fa-book" aria-hidden="true"></i>';
+    const art=globalThis.QAWeaponPresentation.artMarkup(book)||(cover?`<img src="${escape(cover)}" alt="" loading="lazy" decoding="async">`:
+      '<i class="fa-solid fa-book" aria-hidden="true"></i>');
     return `<div class="tc-manual-xp-entry tc-manual-xp-entry--${book.school==='body'?'body':'sword'}">
       <span class="tc-manual-xp-art">${art}</span>
       <span class="tc-manual-xp-name">${escape(book.name)}</span>
@@ -52,11 +55,11 @@ export function renderManualXpToast(delta,{esc,bookArt}={}){
     </div>`;
   }).join('');
   const extra=delta.books.length>compact.length
-    ?`<small class="tc-manual-xp-more">另外 ${delta.books.length-compact.length} 本功法也獲得經驗，可在戰後查看。</small>`:'';
+    ?`<small class="tc-manual-xp-more">另外 ${delta.books.length-compact.length} ${kind==='武器'?'件':'本'}${kind}也獲得經驗，可在戰後查看。</small>`:'';
   return `<div class="tc-manual-xp-toast" data-manual-xp-toast
-    aria-label="本場功法經驗增加">
+    aria-label="本場${kind}經驗增加">
     <div class="tc-manual-xp-top"><span><i class="fa-solid fa-sparkles" aria-hidden="true"></i>
-      功法修煉</span><strong>+${delta.total.toLocaleString('zh-TW')} EXP</strong></div>
+      ${kind}修煉</span><strong>+${delta.total.toLocaleString('zh-TW')} EXP</strong></div>
     <div class="tc-manual-xp-entries">${lines}</div>
     ${extra}
   </div>`;
@@ -73,6 +76,7 @@ export function renderManualXpProgress(delta,manualState,catalog,{esc}={}){
   const list=delta.books.slice(0,3).map(row=>{
     const book=owned.get(row.id);
     if(!book)return '';
+    if(book.weaponType)return `<div class="tc-manual-xp-progress-item" data-manual-xp-progress="${escape(row.id)}"><strong>${escape(book.name)}</strong>${globalThis.QAWeaponPresentation.masteryMarkup(book)}</div>`;
     const mastery=catalog.mastery(book.totalExp??book.exp);
     if(!Number.isInteger(mastery.level)||mastery.level<1)return '';
     const capped=mastery.level>=catalog.MAX_LEVEL;

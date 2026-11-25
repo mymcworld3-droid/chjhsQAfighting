@@ -1,3 +1,4 @@
+import './battle-presentation.js';
 import './manual-rules.js?v=20261116-loadout-presets-v1';
 import './flying-sword-path.js?v=20261120-sword-movement-v1';
 import './tactical-rules.js?v=20261120-guided-first-stage-v1';
@@ -584,12 +585,7 @@ export class TacticalRenderer{
     if(scene.kind==='dodge'&&actor)numbers.push({uid:actor.uid,text:'閃避'});
     for(const number of numbers){
       const a=numberActors.find(a=>a.uid===number.uid);if(!a)continue;
-      const at=center(a),lines=number.text?[{text:number.text,ink:'#ede1b9'}]:[
-        ...(number.damage!==undefined?[{text:'−'+number.damage+(number.hits?' · 命中 '+number.hits+' 次':''),ink:'#ffe0c5'}]:[]),
-        ...(number.absorbed?[{text:'護盾 −'+number.absorbed,ink:'#bde5ed'}]:[]),
-        ...(number.heal?[{text:'+'+number.heal+' 生命',ink:'#d1edb5'}]:[]),
-        ...(number.shield?[{text:'護盾 +'+number.shield,ink:'#bde5ed'}]:[]),
-        ...(number.gain!==undefined?[{text:'體力 +'+number.gain,ink:'#f5df9f'}]:[])];
+      const at=center(a),lines=globalThis.QABattlePresentation.eventLines(number);
       const numberProgress=number.numberProgress??impact;
       c.globalAlpha=Math.min(1,(1-numberProgress)*3);c.font=`600 ${Math.max(10,Math.min(17,size*.32))}px "Noto Sans TC",sans-serif`;c.textAlign='center';c.textBaseline='middle';c.lineWidth=3;
       for(const [i,line]of lines.entries()){
@@ -1052,9 +1048,8 @@ export class TacticalRenderer{
       if(a.guard){c.strokeStyle='#e3ca89a0';c.lineWidth=1.5;c.beginPath();c.arc(px,py-cell*.12,cell*.44,-Math.PI*.85,-Math.PI*.15);c.stroke();}
       if(a.flash){c.globalAlpha=(a.opacity??1)*a.flash;c.fillStyle='#ffe7c2';c.beginPath();c.ellipse(px,py-cell*.12,cell*.26,cell*.4,0,0,Math.PI*2);c.fill();c.globalAlpha=a.opacity??1;}
       const bar=cell*.76*sizeFactor,barY=py+cell*.34*sizeFactor;
-      c.fillStyle='#14251c';c.fillRect(px-bar/2,barY,bar,4);
-      c.fillStyle=enemy?'#df8a73':'#c8d895';c.fillRect(px-bar/2,barY,bar*a.hp/a.maxHp,4);
-      const hpText=Math.ceil(a.hp)+'/'+a.maxHp,available=cell*.97;
+      const health=globalThis.QABattlePresentation.drawHealth(c,a,px-bar/2,barY,bar,4);
+      const hpText=health.text,available=cell*.97;
       const fontSize=Math.max(9,Math.min(14,cell*.23));
       c.font='700 '+fontSize+'px system-ui,sans-serif';
       c.textAlign='center';c.textBaseline='top';c.lineJoin='round';c.lineWidth=2.8;

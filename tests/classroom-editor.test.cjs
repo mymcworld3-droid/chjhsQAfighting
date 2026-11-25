@@ -3,8 +3,9 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const fs = require('node:fs');
+Object.assign(globalThis,require('./helpers/presentations.cjs'));
 const moduleBytes = fs.readFileSync(path.join(__dirname,'../public/cultivation/classroom-editor.js'));
-const code = import('data:text/javascript;base64,' + moduleBytes.toString('base64'));
+const code = import('data:text/javascript;base64,' + Buffer.from(moduleBytes.toString().replace(/^import .*;\n/gm,'')).toString('base64'));
 const escape = value => String(value ?? '').replace(/[&<>"']/g,c=>
   ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]);
 const helper = {

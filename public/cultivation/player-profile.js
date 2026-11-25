@@ -1,3 +1,4 @@
+import './community-presentation.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, getDoc } from '../data-store.js';
@@ -54,8 +55,8 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
   function profileMarkup(profile) {
     return '<div class="xpp-hero">' +
       '<div class="xpp-avatar"><img data-xpp-avatar alt="玩家頭像" hidden><i class="fa-solid fa-user"></i></div>' +
-      '<div class="xpp-identity"><span>修士資料 · PLAYER PROFILE</span><h2>' + esc(profile.name) +
-      '</h2><p>' + esc(profile.realm) + ' · 修為 ' + fmt(profile.score) + '</p></div></div>' +
+      '<div class="xpp-identity" data-qy-player><h2>' + globalThis.QACommunityPresentation.identityMarkup({name:profile.name}) +
+      '</h2><p><span class="qy-realm-badge" data-qy-realm-kind="character">' + esc(profile.realm) + '</span> · 修為 ' + fmt(profile.score) + '</p></div></div>' +
       '<div class="xpp-stats"><div><span>答對率</span><b>' + esc(profile.accuracy) +
       '</b></div><div><span>累計答對</span><b>' + fmt(profile.correct) +
       '</b></div><div><span>累計答題</span><b>' + fmt(profile.answered) + '</b></div></div>' +

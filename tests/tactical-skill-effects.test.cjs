@@ -127,7 +127,7 @@ test('the battlefield renderer uses manual effects for new and saved cast events
   const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-renderer.js'),'utf8')
     .replace(/^import .*;$/gm,'').replace('export class TacticalRenderer','class TacticalRenderer');
   const rendererClass=new Function('globalThis',source+'\nreturn TacticalRenderer;')({
-    QATactical:R,QATacticalAnimation:A,QATacticalCamera:{},QATacticalSkillEffects:Effects
+    ...require('./helpers/presentations.cjs'),QATactical:R,QATacticalAnimation:A,QATacticalCamera:{},QATacticalSkillEffects:Effects
   });
   const before=fixture('wind-slash'),after=R.apply(before,'hero',{type:'manual',skillId:'wind-slash',x:5,y:4},now);
   const cast=A.plan(before,after,'hero').find(scene=>scene.kind==='cast');
@@ -283,7 +283,7 @@ test('renderer carries elapsed time across chain strikes without waiting a frame
   const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-renderer.js'),'utf8')
     .replace(/^import .*;$/gm,'').replace('export class TacticalRenderer','class TacticalRenderer');
   const Renderer=new Function('globalThis',source+'\nreturn TacticalRenderer;')({
-    QATactical:R,QATacticalAnimation:A,QATacticalCamera:{},QATacticalSkillEffects:Effects
+    ...require('./helpers/presentations.cjs'),QATactical:R,QATacticalAnimation:A,QATacticalCamera:{},QATacticalSkillEffects:Effects
   });
   const before=fixture('dragon-guard');before.actors[1].x=5;
   const after=R.apply(before,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
@@ -478,7 +478,7 @@ test('damage numbers appear at impact on top of the manual animation',()=>{
   const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-renderer.js'),'utf8')
     .replace(/^import .*;$/gm,'').replace('export class TacticalRenderer','class TacticalRenderer');
   const Renderer=new Function('globalThis',source+'\nreturn TacticalRenderer;')({
-    QATactical:R,QATacticalAnimation:A,QATacticalCamera:{},QATacticalSkillEffects:Effects
+    ...require('./helpers/presentations.cjs'),QATactical:R,QATacticalAnimation:A,QATacticalCamera:{},QATacticalSkillEffects:Effects
   });
   for(const skill of ['rock-break','tiger-throw']){
     const before=fixture(skill);before.actors[1].x=5;

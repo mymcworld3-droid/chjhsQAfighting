@@ -1,3 +1,5 @@
+import './weapon-presentation.js';
+import './daily-meditation-rewards.js';
 import './manual-rules.js?v=20261125-native-main-cultivation-v1';
 import {bookArt,skillArt} from './manual-art.js';
 import {renderManualHero} from './manual-hero-view.js?v=20261125-stone-price-art-v1';
@@ -252,6 +254,8 @@ function showManualCelebration(reward){
   if(!reward||!visible())return;
   const host=root?.querySelector('[data-manual-celebration-host]');
   if(!host)return;
+  const account=getMainUser()?.uid;
+  if(!globalThis.QARewardPresentation.celebrateEvent({uid:account,receiptId:JSON.stringify(['weapon-growth',reward.kind,reward.bookId,reward.skillId||'',reward.level||1]),sound:false,isCurrent:()=>getMainUser()?.uid===account&&visible()}))return;
   clearManualCelebration();
   // Reward overlay stays in the shared page layer, above both subpages.
   if(host.parentElement!==root)root.append(host);

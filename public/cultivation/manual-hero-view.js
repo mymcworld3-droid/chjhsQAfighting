@@ -1,3 +1,4 @@
+import './weapon-presentation.js';
 import {stoneCostMarkup} from './spirit-stone-ui.js?v=20261125-stone-price-art-v1';
 // Phase 1 of the stamina cultivation redesign: a read-only visual
 // projection of the existing, server-authoritative manual and skill data.
@@ -36,7 +37,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
 
   const book=chosen;
   const tierClass=({'煉氣':'qi','築基':'foundation','金丹':'golden','元嬰':'nascent'})[book.tierRealm]||'ascended';
-  const copies=Object.entries(book.weaponCopies||{}).map(([realm,count])=>`${esc(realm)} × ${Math.max(0,Math.trunc(Number(count)||0))}`).join(' · ');
+  const copies=esc(globalThis.QAWeaponPresentation.copiesText(book));
   const visual=manualVisualState(book);
   const growth=renderManualVisualMilestones(book,esc);
   const anticipation=manualAnticipation(book,totalExpForLevel);
@@ -56,8 +57,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
     owned.reduce((sum,item)=>sum+Math.max(1,Number(item.level)||1),0);
   const cover=bookArt(book.id);
   const coverMarkup=weaponMode?
-    `<span class="manual-weapon-art manual-weapon-art--${esc(book.id)} manual-hero-cover"
-      role="img" aria-label="${esc(book.name)}武器圖像"></span>`:
+    globalThis.QAWeaponPresentation.artMarkup(book,{className:'manual-hero-cover'}):
     cover?`<img class="manual-hero-cover" src="${esc(cover)}" alt="${esc(book.name)}封面" decoding="async" fetchpriority="high">`:
     '<span class="manual-hero-cover-fallback" aria-hidden="true">卷</span>';
   const steps=book.skills.map((skill,index)=>{
@@ -114,6 +114,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
             </div>
             <small class="manual-hero-attack-bonus">${weaponMode?'本武器':'本功法'}攻擊 +${fmt(ownAttack)} · 已獲${weaponMode?'武器':'功法'}合計 +${fmt(allAttack)}</small>
             ${copies?`<small class="manual-hero-weapon-copies">持有：${copies}</small>`:''}
+            ${weaponMode?globalThis.QAWeaponPresentation.masteryMarkup(book):''}
             ${growth}
             ${nextNote?`<small class="manual-hero-next-inline">${esc(nextNote)}</small>`:''}
             <small class="manual-hero-mastery-footnote">武器 Lv.1、5、10 依序領悟三招。</small>

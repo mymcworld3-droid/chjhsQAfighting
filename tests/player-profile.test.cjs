@@ -19,7 +19,7 @@ function profileModule() {
   const items = {
     sword: {id:'sword',name:'測試仙劍',realm:'元嬰',equipSlot:'本命法寶',effects:[{type:'equip_attack_flat',value:100}]}
   };
-  const context = {
+  const context = {...require('./helpers/presentations.cjs'),
     window: {
       QATrainingAccessRules: require('../public/cultivation/training-access-rules.js'),
       getGoldenCorePublicDetails: c => ({...c, name:'太初回元丹', effect:'每次悟道回元',equipped:true}),

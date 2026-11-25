@@ -10,7 +10,8 @@ test('native main cultivation excludes stamina artwork and modal',()=>{
  assert.doesNotMatch(page,/<dialog id="manual-training-dialog"/);
  assert.match(gallery,/manual-native-card/);assert.doesNotMatch(gallery,/manual-art-card/);
  assert.match(equipment,/manual-weapon-dialog/);
- assert.match(css,/assets\/weapons\/sword-wind-hd\.webp/);
+ assert.match(read('public/cultivation/weapon-presentation.js'),/assets\/weapons\//);
+ assert.doesNotMatch(css,/background-image:url/);
  assert.doesNotMatch(css,/assets\/training\/art-ui/);
 });
 test('native sorting, left-right carousel, and multiplayer gear fix remain intact',()=>{

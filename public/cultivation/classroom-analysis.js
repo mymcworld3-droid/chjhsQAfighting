@@ -1,3 +1,4 @@
+import './community-presentation.js';
 // Presentation-only learning analysis. Raw answers and answer keys are never passed here.
 export function summarizeLearningAnalysis(rows = []) {
   const newest = [...new Map(rows.map(row => [row.id, row])).values()];
@@ -110,7 +111,7 @@ export function renderLearningAnalysis(state, helpers) {
     ['已繳交紀錄', model.submissions + ' 筆'],
     ['首次成績平均', model.firstAverage == null ? '—' : model.firstAverage + ' 分'],
     ['知識點標記', model.markedQuestions + '／' + model.totalQuestions + ' 題']
-  ].map(([name, value]) => '<div class="cc-metric"><span>' + name + '</span><strong>' + value + '</strong></div>').join('') + '</div>';
+  ].map(([name, value]) => globalThis.QACommunityPresentation.metricMarkup(name,value)).join('') + '</div>';
   const history = '<section class="cc-learning-section"><div class="cc-section-title"><h3>作業歷程</h3></div>' +
     '<p class="cc-muted">依派題先後顯示最近 12 份已載入作業。長條為首次作答平均分數，並非能力測量。</p>' +
     (bars ? '<div class="cc-card cc-learning-trends">' + bars + '</div>' : '<p class="cc-empty">目前尚無可顯示的作業。</p>') + '</section>';

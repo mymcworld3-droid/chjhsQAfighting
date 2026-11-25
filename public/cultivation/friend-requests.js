@@ -1,3 +1,4 @@
+import './community-presentation.js';
 import { getMainUser, authenticatedMainFetch } from './data/project-repository.js';
 
 // Persistent inbox; live hints reuse the existing invitation connection. No polling.
@@ -111,7 +112,8 @@ function render() {
   if (!cache.pending.length) { list.textContent = '目前沒有待處理的好友邀請'; return; }
   for (const invite of cache.pending) {
     const row = document.createElement('div'); row.className = 'friend-request-row';
-    const name = document.createElement('strong'); name.textContent = invite.name || '修士'; row.appendChild(name);
+    const name = document.createElement('div'); name.innerHTML = globalThis.QACommunityPresentation.invitationHeader(invite.name || '修士'); row.appendChild(name);
+    globalThis.QACommunityPresentation.decorateIdentity(row);
     for (const [decision, label] of [['accept', '同意'], ['decline', '拒絕']]) {
       const button = document.createElement('button'); button.type = 'button'; button.textContent = label;
       button.disabled = busy;

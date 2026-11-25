@@ -1,3 +1,4 @@
+import './weapon-presentation.js';
 import './question-presentation.js';
 import {stoneCostMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import './daily-meditation-rules.js';

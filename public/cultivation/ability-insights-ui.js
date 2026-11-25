@@ -1,3 +1,4 @@
+import './community-presentation.js';
 import './knowledge-points.js';
 import './ability-insights-core.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
@@ -92,12 +93,12 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     const stats = currentSubject ? report.subjects.find(x => x.name === currentSubject) || Core.sum([]) : report;
     const coverage = inScope.filter(x => x.total).length;
     const delta = trend?.delta;
-    target.innerHTML = `
-      <div><small>有紀錄答題</small><strong>${stats.total}</strong><span>${stats.correct} 題答對</span></div>
-      <div><small>保守表現估計</small><strong>${percent(stats.estimate)}</strong><span>${stats.total ? '原始正確率 ' + percent(stats.rawAccuracy) : '尚無足夠紀錄'}</span></div>
-      <div><small>已練習知識點</small><strong>${coverage} / ${inScope.length}</strong><span>未作答的項目不列為弱點</span></div>
-      <div><small>近 7 日趨勢</small><strong>${delta == null ? '—' : (delta > 0 ? '+' : '') + delta + 'pp'}</strong>
-        <span>${trend ? (trend.recent.count + ' 題，' + (trend.previous.count ? '對比前 7 日' : '前期無資料')) : '最新答題紀錄尚未載入'}</span></div>`;
+    target.innerHTML = [
+      ['有紀錄答題',stats.total,stats.correct+' 題答對'],
+      ['保守表現估計',percent(stats.estimate),stats.total?'原始正確率 '+percent(stats.rawAccuracy):'尚無足夠紀錄'],
+      ['已練習知識點',coverage+' / '+inScope.length,'未作答的項目不列為弱點'],
+      ['近 7 日趨勢',delta==null?'—':(delta>0?'+':'')+delta+'pp',trend?(trend.recent.count+' 題，'+(trend.previous.count?'對比前 7 日':'前期無資料')):'最新答題紀錄尚未載入']
+    ].map(([label,value,detail])=>globalThis.QACommunityPresentation.metricMarkup(label,value,{detail})).join('');
   }
   function showPriority(report) {
     const node = $('ai-ability-priority');

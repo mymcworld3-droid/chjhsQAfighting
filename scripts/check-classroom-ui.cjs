@@ -1,7 +1,7 @@
 'use strict';
 // Optional browser acceptance check: node scripts/check-classroom-ui.cjs
 // Requires Playwright; no production credentials, AI requests, or remote data.
-const { chromium } = require('playwright');
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -61,7 +61,7 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
   await db.doc('users/applicant').set({ isAdmin: false, displayName: '陳老師' });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const origin = 'http://127.0.0.1:' + server.address().port;
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH || undefined });
   try {
     const page = await browser.newPage({ viewport: { width: 1366, height: 850 } });
     const errors = []; page.on('pageerror', error => errors.push(error.message));

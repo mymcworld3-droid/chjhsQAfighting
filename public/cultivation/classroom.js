@@ -1,3 +1,5 @@
+import './question-editor-presentation.js';
+import './community-presentation.js';
 import { getMainUser, authenticatedMainFetch } from './data/project-repository.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import './knowledge-points.js';
@@ -12,7 +14,7 @@ const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&a
 const date = ms => ms ? new Date(ms).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false }) : '不限時間';
 const localDate = ms => { const d = new Date(ms); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16); };
 const labels = ['A', 'B', 'C', 'D'];
-const status = value => ({ draft: '草稿', published: '進行中', closed: '已結束', submitted: '已繳交', 'in-progress': '作答中' }[value] || '未開始');
+const status = value => globalThis.QACommunityPresentation.statusMarkup(value);
 const button = (action, label, attrs = '') => `<button type="button" data-action="${action}" ${attrs}>${label}</button>`;
 let owner = '', epoch = 0, busy = false;
 let state = { view: 'home', classes: [] };
@@ -174,7 +176,7 @@ function editorView() {
 function copyView() { return renderClassroomCopy(state, { escape, button }); }
 
 function questionView(q, i, extras = '') {
-  return `<article class="cc-card"><h4>第 ${i + 1} 題</h4><div class="cc-question">${escape(q.question)}</div><div class="cc-options">${q.options.map((o, n) => `<div ${n === q.answerIndex ? 'class="cc-status"' : ''}>${labels[n]}. ${escape(o)}${n === q.answerIndex ? ' ✓' : ''}</div>`).join('')}</div>${extras}${q.explanation ? `<div class="cc-explanation">${escape(q.explanation)}</div>` : ''}</article>`;
+  return '<article class="cc-card">'+globalThis.QAQuestionEditorPresentation.preview(q,i)+extras+'</article>';
 }
 function previewView() {
   const a = state.assignment;

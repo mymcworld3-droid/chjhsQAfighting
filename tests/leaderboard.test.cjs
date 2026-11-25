@@ -17,7 +17,7 @@ function harness(players, { deferred = false } = {}) {
   const listeners = new Map();
   const reads = [];
   const requests = [];
-  const context = vm.createContext({
+  const context = vm.createContext({...require('./helpers/presentations.cjs'),
     console: { error() {} },
     Date: { now: () => now },
     auth: { currentUser: { uid: 'me' } },

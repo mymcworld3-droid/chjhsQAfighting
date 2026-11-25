@@ -7,8 +7,8 @@ const vm=require('node:vm');
 
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-celebration.js'),'utf8');
 const {detectManualCelebration,renderManualCelebration}=vm.runInNewContext(
-  source.replaceAll('export function ','function ')+
-    '\n({detectManualCelebration,renderManualCelebration})',{},
+  source.replace(/^import .*;\n/gm,'').replaceAll('export function ','function ')+
+    '\n({detectManualCelebration,renderManualCelebration})',require('./helpers/presentations.cjs'),
   {filename:'manual-celebration.js'}
 );
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({

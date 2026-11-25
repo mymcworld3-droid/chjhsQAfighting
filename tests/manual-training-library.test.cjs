@@ -13,7 +13,7 @@ const auxiliary=['manual-visual-progression.js','manual-anticipation.js']
 const {filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary}=
   vm.runInNewContext([...auxiliary,strip(source),
     '({filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary})'].join('\n'),
-    {},{filename:'manual-library-view.js'});
+    require('./helpers/presentations.cjs'),{filename:'manual-library-view.js'});
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[c]);
@@ -123,15 +123,15 @@ test('a level-10 manual reads 大成, while a level-20 manual is actually 圓滿
 });
 
 test('weapon school badge includes the authoritative weapon realm, not the player realm',()=>{
-  assert.match(draw(book('sword-sky','sword',{weaponType:'sword',tierRealm:'金丹'})),/manual-native-school">劍修 · 金丹<\/span>/);
-  assert.match(draw(book('body-rock','body',{weaponType:'totem',tierRealm:'築基'})),/manual-native-school">體修 · 築基<\/span>/);
-  assert.match(draw(book('sword-wind','sword',{weaponType:'sword',tierRealm:'煉氣'})),/manual-native-school">劍修 · 煉氣<\/span>/);
+  assert.match(draw(book('sword-sky','sword',{weaponType:'sword',tierRealm:'金丹'})),/manual-native-school">劍修 · <span[^>]*data-qy-realm-kind="weapon"[^>]*>金丹<\/span>/);
+  assert.match(draw(book('body-rock','body',{weaponType:'totem',tierRealm:'築基'})),/manual-native-school">體修 · <span[^>]*data-qy-realm-kind="weapon"[^>]*>築基<\/span>/);
+  assert.match(draw(book('sword-wind','sword',{weaponType:'sword',tierRealm:'煉氣'})),/manual-native-school">劍修 · <span[^>]*data-qy-realm-kind="weapon"[^>]*>煉氣<\/span>/);
 });
 
 test('weapon card uses its actual identity for elemental presentation',()=>{
  const html=draw(book('sword-flight','sword',{weaponType:'sword',tierRealm:'築基'}));
  assert.match(html,/data-ritual-weapon="sword-flight"/);
- assert.match(html,/劍修 · 築基/);
+ assert.match(html,/劍修 · <span[^>]*>築基/);
 });
 
 test('weapon collection shows only real equipment state and bounded current-level EXP',()=>{

@@ -1,0 +1,55 @@
+/* V2 14-20: use the sect's existing semantic tokens; keep scene geometry. */
+.qy-health{overflow:hidden;background:#14251c;border-radius:4px}
+.qy-health>i{display:block;height:100%;background:#c8d895;transition:width .24s ease-out}
+.qy-health[data-qy-health="enemy"]>i{background:#df8a73}
+[data-qy-combat-notice]{max-width:min(78vw,520px);overflow-wrap:anywhere;color:var(--qy-paper);font:inherit}
+.qy-weapon-art{display:inline-block;flex:none;width:58px;aspect-ratio:1;background-size:contain;background-position:center;background-repeat:no-repeat}
+.qy-weapon-identity{display:inline-flex;align-items:center;gap:10px;min-width:0;text-align:left}
+.qy-weapon-identity>span:last-child{display:grid;gap:4px;min-width:0}
+.qy-weapon-identity strong{color:var(--qy-paper);overflow-wrap:anywhere}
+.qy-weapon-identity small{color:var(--qy-muted);font-size:var(--qy-small)}
+.qy-weapon-identity[data-qy-weapon-size="drop"] .qy-weapon-art{width:88px}
+.qy-realm-badge,.qy-state-badge{display:inline-flex;align-items:center;gap:4px;width:max-content;max-width:100%;font-size:var(--qy-small);line-height:1.5;border:1px solid var(--qy-line);border-radius:5px;padding:1px 6px;color:var(--qy-gold);white-space:normal}
+.qy-realm-badge[data-qy-realm-kind="difficulty"]{border-color:var(--qy-accent-line)}
+.manual-native-school .qy-realm-badge{color:inherit;font-size:inherit;line-height:inherit;padding:0;border:0}
+.qy-weapon-mastery{display:grid;gap:5px;color:var(--qy-muted);font-size:var(--qy-small)}
+.qy-weapon-mastery>[role="progressbar"]{height:5px;background:var(--qy-ink);border-radius:5px;overflow:hidden}
+.qy-weapon-mastery>[role="progressbar"]>i{display:block;height:100%;background:var(--qy-jade);transition:width .24s}
+[data-qy-player]{min-width:0;overflow-wrap:anywhere}
+.qy-player-identity{display:inline-grid;gap:3px;min-width:0;color:var(--qy-paper)}
+.qy-player-identity>small{color:var(--qy-muted)}
+.qy-state-badge[data-qy-status="success"]{color:var(--qy-jade)}
+.qy-state-badge[data-qy-status="pending"]{color:var(--qy-gold)}
+.qy-state-badge[data-qy-status="neutral"]{color:var(--qy-muted)}
+.qy-invitation-header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:1;min-width:0}
+[data-qy-message]{overflow-wrap:anywhere}
+[data-qy-message] :is(.break-words,.alliance-chat-bubble){background:var(--qy-surface);color:var(--qy-paper);border:1px solid var(--qy-line);box-shadow:none}
+[data-qy-message="self"] :is(.break-words,.alliance-chat-bubble){background:var(--qy-inset);border-color:var(--qy-accent-line)}
+.alliance-chat-bubble[data-qy-message]{background:var(--qy-surface);color:var(--qy-paper);border:1px solid var(--qy-line)}
+.alliance-chat-bubble[data-qy-message="self"]{background:var(--qy-inset);border-color:var(--qy-accent-line)}
+[data-qy-message] time{font-family:var(--qy-font-number);font-size:var(--qy-meta);font-variant-numeric:tabular-nums;color:var(--qy-muted)}
+[data-qy-chat-composer]{display:flex;align-items:center;gap:8px;min-width:0}
+[data-qy-chat-composer] input{min-width:0;flex:1;border:1px solid var(--qy-line);border-radius:var(--qy-radius-control);background:var(--qy-ink);color:var(--qy-paper);padding:10px 12px}
+[data-qy-chat-composer] button{flex:none;min-width:44px;min-height:44px;border:1px solid var(--qy-accent-line);border-radius:var(--qy-radius-control);background:var(--qy-inset);color:var(--qy-jade)}
+.qy-data-metric{font-variant-numeric:tabular-nums;color:var(--qy-paper)}
+.qy-data-metric>span{color:var(--qy-muted)}
+.qy-editor-preview{margin-top:12px;border-top:1px solid var(--qy-line);padding-top:8px}
+.qy-editor-preview>summary{cursor:pointer;color:var(--qy-jade);min-height:36px}
+[data-qy-editor-preview] .cc-question,[data-qy-editor-preview] .cc-explanation{white-space:pre-wrap;overflow-wrap:anywhere}
+#td-editor .cc-editor-workspace{display:grid;grid-template-columns:minmax(140px,220px) minmax(0,1fr);gap:14px;align-items:start}
+#td-editor .cc-editor-nav{position:sticky;top:0;max-height:65dvh;overflow:auto;overscroll-behavior:contain}
+#td-editor .cc-editor-nav button{display:flex;gap:8px;text-align:left;width:100%}
+#td-editor .cc-editor-nav button[aria-current="true"]{color:var(--qy-gold);border-color:var(--qy-accent-line)}
+#td-editor .cc-editor-nav-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#td-editor .cc-editor-body{min-width:0}
+#td-editor [data-td-question][hidden]{display:none!important}
+@media(max-width:640px){
+  #td-editor .cc-editor-workspace{grid-template-columns:minmax(0,1fr)}
+  #td-editor .cc-editor-nav{display:flex;position:static;max-height:100px;gap:6px;overflow-x:auto}
+  #td-editor .cc-editor-nav button{flex:0 0 132px;min-height:44px}
+  .qy-weapon-identity[data-qy-weapon-size="drop"] .qy-weapon-art{width:64px}
+}
+@media(prefers-reduced-motion:reduce){.qy-health>i,.qy-weapon-mastery>[role="progressbar"]>i{transition:none}}
+
+.qy-skill-details{display:flex;align-items:flex-start;gap:12px;min-width:0}.qy-skill-details>img{width:64px;height:64px;object-fit:cover;border-radius:var(--qy-radius-control)}.qy-skill-details .manual-focus-skill-info{min-width:0;display:grid;gap:5px;overflow-wrap:anywhere}.qy-skill-details p{margin:0;white-space:pre-wrap}
+@media(prefers-reduced-motion:reduce){[data-qy-celebration] *,[data-qy-celebration]{animation:none!important;transition:none!important}}

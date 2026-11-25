@@ -1,3 +1,5 @@
+import './question-editor-presentation.js';
+import './community-presentation.js';
 import { getMainUser, authenticatedMainFetch } from './data/project-repository.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import './knowledge-points.js';
@@ -11,11 +13,12 @@ const btn = (action, label, attrs = '') => `<button type="button" data-td-action
 const input = (name, title, value = '', attrs = '') => `<label>${title}<input name="${name}" value="${esc(value)}" ${attrs}></label>`;
 const select = (name, title, choices, selected) => `<label>${title}<select name="${name}">${choices.map(([value, text]) => `<option value="${esc(value)}" ${value === selected ? 'selected' : ''}>${esc(text)}</option>`).join('')}</select></label>`;
 const localTime = ms => ms ? new Date(ms - new Date(ms).getTimezoneOffset() * 60000).toISOString().slice(0, 16) : '';
+let editorIndex = 0, focusQuestionAfterRender = null;
 let owner = '', epoch = 0, busy = false, statusLoading, statusAt = 0;
 let state = { allowed: false, classes: [], caves: [], view: 'list' }, files = [];
 function reset() {
   const next = getMainUser()?.uid || '';
-  if (next !== owner) { owner = next; epoch++; busy = false; statusAt = 0; statusLoading = null; files = []; state = { allowed: false, classes: [], caves: [], view: 'list' }; $(NAV)?.remove(); if ($(PAGE)) { $(PAGE).inert = false; $(PAGE).replaceChildren(); } }
+  if (next !== owner) { owner = next; editorIndex=0; focusQuestionAfterRender=null; epoch++; busy = false; statusAt = 0; statusLoading = null; files = []; state = { allowed: false, classes: [], caves: [], view: 'list' }; $(NAV)?.remove(); if ($(PAGE)) { $(PAGE).inert = false; $(PAGE).replaceChildren(); } }
   return owner;
 }
 function notice(text, error = false) { const node = $(PAGE)?.querySelector('[data-td-message]'); if (node) { node.textContent = text; node.setAttribute('role', error ? 'alert' : 'status'); } }
@@ -36,7 +39,15 @@ function mount() {
   page.addEventListener('submit', e => e.preventDefault());
   page.addEventListener('click', e => {
     const target = e.target.closest('[data-td-action]'); if (!target || target.disabled || busy) return;
-    if (['save', 'save-preview', 'generate', 'assign'].includes(target.dataset.tdAction) && !target.closest('form')?.reportValidity()) return;
+    if (['save', 'save-preview', 'generate', 'assign'].includes(target.dataset.tdAction)) {
+      const form=target.closest('form'),invalid=form?.querySelector(':invalid');
+      const question=invalid?.closest('[data-td-question]');
+      if(question?.hidden){
+        capture();editorIndex=Number(question.dataset.tdQuestion);render();
+        $('td-editor')?.reportValidity();return;
+      }
+      if(!form?.reportValidity())return;
+    }
     void run(() => action(target));
   });
   page.addEventListener('change', e => {
@@ -69,7 +80,7 @@ async function run(work) {
   reset(); if (busy) return; busy = true; const revision = epoch;
   if ($(PAGE)) $(PAGE).inert = true; notice('處理中…');
   try { await work(); } catch (error) { if (revision === epoch) notice(error.message, true); }
-  finally { if (revision === epoch) { busy = false; if ($(PAGE)) $(PAGE).inert = false; const msg = $(PAGE)?.querySelector('[data-td-message]'); if (msg?.textContent === '處理中…') msg.textContent = ''; } }
+  finally { if (revision === epoch) { busy = false; if ($(PAGE)) $(PAGE).inert = false; const msg = $(PAGE)?.querySelector('[data-td-message]'); if (msg?.textContent === '處理中…') msg.textContent = ''; if(Number.isInteger(focusQuestionAfterRender)&&state.view==='edit'){$('td-editor')?.querySelector(`[name="q-${focusQuestionAfterRender}"]`)?.focus({preventScroll:true});} focusQuestionAfterRender=null; } }
 }
 async function loadList(more = false) {
   const result = await api({ action: 'list', ...(more ? { cursor: state.nextCursor } : {}) });
@@ -79,12 +90,12 @@ async function open(id) {
   mount();
   await run(async () => { await refreshAccess(true); if (!state.allowed) { render(); return; } window.switchToPage?.(PAGE); if (id) await edit(id); else await loadList(); });
 }
-async function edit(id) { state.cave = (await api({ action: 'get', id })).cave; state.view = 'edit'; render(); }
+async function edit(id) { editorIndex=0; state.cave = (await api({ action: 'get', id })).cave; state.view = 'edit'; render(); }
 const blank = () => ({ q: '', correct: '', wrong: ['', '', ''], exp: '', knowledge_points: [] });
-function newCave() { state.cave = { name: '', subject: '數學', level: '國中一年級', difficulty: 'medium', visibility: 'private', questions: [blank()], settings: { passPercent: 60, feedback: 'immediate', shuffleQuestions: false, shuffleOptions: true } }; state.view = 'edit'; render(); }
+function newCave() { editorIndex=0; state.cave = { name: '', subject: '數學', level: '國中一年級', difficulty: 'medium', visibility: 'private', questions: [blank()], settings: { passPercent: 60, feedback: 'immediate', shuffleQuestions: false, shuffleOptions: true } }; state.view = 'edit'; render(); }
 function listView() {
   return `<div class="cc-toolbar"><h3>教師洞天</h3><div class="cc-actions">${btn('source', '從教材生成')}${btn('new', '自行編題', 'class="cc-primary"')}${btn('refresh', '重新整理')}</div></div><p class="cc-muted">生成後可直接修改題目，也能將洞天題組複製成班級作業。</p>
-    <div class="cc-grid">${state.caves.map(c => `<article class="cc-card"><h4>${esc(c.name)}</h4><p class="cc-muted">${esc(c.subject)} · ${c.questionCount} 題 · ${c.status === 'active' ? '已發布' : c.status === 'draft' ? '草稿' : '已封印'} · ${visibilities[c.visibility]}</p><div class="cc-actions">${btn('edit', '編輯與設定', `data-id="${c.id}"`)}${btn('copy', '複製為新草稿', `data-id="${c.id}"`)}${btn('reports', '題目回報', `data-id="${c.id}"`)}</div></article>`).join('') || '<p class="cc-muted">尚無洞天。可從文字與圖片生成，或自行編輯題組。</p>'}</div>${state.nextCursor ? btn('more', '載入更多洞天') : ''}`;
+    <div class="cc-grid">${state.caves.map(c => `<article class="cc-card"><h4>${esc(c.name)}</h4><p class="cc-muted">${esc(c.subject)} · ${c.questionCount} 題 · ${globalThis.QACommunityPresentation.statusMarkup(c.status==='active'?'published':c.status==='draft'?'draft':'closed',c.status==='active'?'已發布':c.status==='draft'?'草稿':'已封印')} · ${visibilities[c.visibility]}</p><div class="cc-actions">${btn('edit', '編輯與設定', `data-id="${c.id}"`)}${btn('copy', '複製為新草稿', `data-id="${c.id}"`)}${btn('reports', '題目回報', `data-id="${c.id}"`)}</div></article>`).join('') || '<p class="cc-muted">尚無洞天。可從文字與圖片生成，或自行編輯題組。</p>'}</div>${state.nextCursor ? btn('more', '載入更多洞天') : ''}`;
 }
 async function loadReports(more = false) {
   const data = await api({ action: 'reports', id: state.cave.id, ...(more ? { cursor: state.reportCursor } : {}) });
@@ -110,18 +121,23 @@ function capture() {
     }) };
 }
 function editorView() {
-  const c = state.cave, choices = ['A', 'B', 'C', 'D'];
+  const c = state.cave;
+  editorIndex=Math.min(Math.max(0,editorIndex),c.questions.length-1);
   const points = selected => '<option value="">未標記</option>' + window.QAKnowledgePoints.SUBJECTS.map(s => `<optgroup label="${s.name}">${s.points.map(p => `<option value="${p.id}" ${p.id === selected ? 'selected' : ''}>${p.name}</option>`).join('')}</optgroup>`).join('');
   return `<div class="cc-toolbar"><h3>洞天編輯與設定</h3>${btn('back', '返回列表')}</div><p class="cc-muted">可直接更改題目，無需由 AI 代改。已發布洞天儲存後立即更新，正在作答者需重新進入。</p><form id="td-editor" class="cc-form"><section class="cc-card cc-form">${input('name', '洞天名稱', c.name, 'required maxlength="80"')}<div class="cc-fields">${select('subject', '科目', ['綜合', ...window.QAKnowledgePoints.SUBJECT_NAMES].map(v => [v, v]), c.subject)}${select('level', '適用程度', levels.map(v => [v, v]), c.level)}${select('difficulty', '難度', [['easy', '基礎'], ['medium', '標準'], ['hard', '進階']], c.difficulty)}${select('visibility', '開放範圍', Object.entries(visibilities), c.visibility || 'public')}</div>
     ${c.visibility === 'class' ? select('classId', '指定班級', state.classes.map(v => [v.id, v.name]), c.classId) + (state.classCursor ? btn('more-classes', '載入更多班級') : '') : ''}
     <details><summary>教學與作答設定</summary><div class="cc-form"><label>洞天介紹<textarea name="description" maxlength="1200">${esc(c.description)}</textarea></label><label>作答說明<textarea name="instructions" maxlength="1600">${esc(c.instructions)}</textarea></label>${input('tags', '標籤（以逗號分隔，最多八個）', Array.isArray(c.tags) ? c.tags.join(',') : c.tags, 'maxlength="160"')}<div class="cc-fields">${input('open', '開始時間（選填）', localTime(c.openAtMs), 'type="datetime-local"')}${input('close', '截止時間（選填）', localTime(c.closeAtMs), 'type="datetime-local"')}${input('pass', '及格標準（正確率 %）', c.settings?.passPercent ?? 60, 'type="number" min="0" max="100" required')}${select('feedback', '解析顯示時機', [['immediate', '每題作答後'], ['completion', '整份完成後']], c.settings?.feedback || 'immediate')}</div><label class="cc-inline"><input type="checkbox" name="shuffleQuestions" ${c.settings?.shuffleQuestions ? 'checked' : ''}>打亂題序</label><label class="cc-inline"><input type="checkbox" name="shuffleOptions" ${c.settings?.shuffleOptions !== false ? 'checked' : ''}>打亂選項</label></div></details></section>
-    ${c.questions.map((q, i) => { const options = q.optionOrder || [q.correct, ...q.wrong]; return `<section class="cc-card cc-form"><div class="cc-toolbar"><h4>第 ${i + 1} 題</h4><div class="cc-actions">${btn('up', '上移', `data-index="${i}" ${i === 0 ? 'disabled' : ''}`)}${btn('down', '下移', `data-index="${i}" ${i === c.questions.length - 1 ? 'disabled' : ''}`)}${btn('remove', '移除', `data-index="${i}" ${c.questions.length < 2 ? 'disabled' : ''}`)}</div></div><label>題目<textarea name="q-${i}" maxlength="4000" required>${esc(q.q)}</textarea></label><div class="cc-fields">${options.map((v, n) => input(`option-${i}-${n}`, `選項 ${choices[n]}`, v, 'required maxlength="1200"')).join('')}${select(`answer-${i}`, '正確答案', choices.map((v, n) => [String(n), v]), String(Math.max(0, options.indexOf(q.correct))))}<label>知識點（選填）<select name="point-${i}">${points(q.knowledge_points?.[0]?.id)}</select></label></div><label>解析（選填）<textarea name="exp-${i}" maxlength="4000">${esc(q.exp)}</textarea></label></section>`; }).join('')}
+    <div class="cc-editor-workspace">${globalThis.QAQuestionEditorPresentation.navigation(c.questions.map(q=>({question:q.q})),editorIndex,(i,text,current)=>btn('select-question',text,`data-index="${i}" aria-current="${current}" aria-label="切換至第 ${i+1} 題"`))}<div class="cc-editor-body">${c.questions.map((q,i)=>{
+      const options=q.optionOrder||[q.correct,...q.wrong];
+      const model={question:q.q,options,answerIndex:Math.max(0,options.indexOf(q.correct)),explanation:q.exp};
+      return `<section class="cc-card cc-form" data-td-question="${i}" ${i===editorIndex?'':'hidden'}><div class="cc-toolbar"><h4>第 ${i+1} 題</h4><div class="cc-actions">${btn('up','上移',`data-index="${i}" ${i===0?'disabled':''}`)}${btn('down','下移',`data-index="${i}" ${i===c.questions.length-1?'disabled':''}`)}${btn('remove','移除',`data-index="${i}" ${c.questions.length<2?'disabled':''}`)}</div></div>${globalThis.QAQuestionEditorPresentation.fields(model,i,{questionName:'q-',explanationName:'exp-',points:points(q.knowledge_points?.[0]?.id),field:input})}</section>`;
+    }).join('')}</div></div>
     <div class="cc-actions">${btn('add', '新增一題', c.questions.length >= 30 ? 'disabled' : '')}${btn('save', '儲存修改')}${btn('save-preview', '儲存並預覽發布', 'class="cc-primary"')}</div></form>`;
 }
 function previewView() {
   const c = state.cave;
   return `<div class="cc-toolbar"><h3>${esc(c.name)}</h3><div class="cc-actions">${btn('return-edit', '繼續編輯')}${btn('back', '返回列表')}</div></div><section class="cc-card"><p>${visibilities[c.visibility]} · ${c.questionCount} 題 · 及格 ${c.settings?.passPercent ?? 60}%</p><p class="cc-muted">${esc(c.description)}</p><p style="white-space:pre-wrap">${esc(c.instructions)}</p><div class="cc-actions">${btn('copy-code', '複製洞天代碼', c.status !== 'active' || c.visibility === 'private' ? 'disabled' : '')}${c.status === 'active' ? btn('unpublish', '暫停開放') : ''}</div></section>
-    ${c.questions.map((q, i) => `<article class="cc-card"><h4>第 ${i + 1} 題</h4><div class="cc-question">${esc(q.q)}</div><div class="cc-options">${(q.optionOrder || [q.correct, ...q.wrong]).map((v, n) => `<div>${'ABCD'[n]}. ${esc(v)}${v === q.correct ? ' ✓' : ''}</div>`).join('')}</div><div class="cc-explanation">${esc(q.exp)}</div></article>`).join('')}
+    ${c.questions.map((q,i)=>'<article class="cc-card">'+globalThis.QAQuestionEditorPresentation.preview({question:q.q,options:q.optionOrder||[q.correct,...q.wrong],answerIndex:(q.optionOrder||[q.correct,...q.wrong]).indexOf(q.correct),explanation:q.exp},i)+'</article>').join('')}
     <section class="cc-card cc-form"><label class="cc-inline"><input id="td-reviewed" type="checkbox">已確認題目、答案與開放設定</label>${btn('publish', c.status === 'active' ? '確認發布設定' : '發布洞天', 'class="cc-primary"')}</section>
     ${state.classes.length ? `<form class="cc-card cc-form" id="td-assign"><h4>複製為班級作業</h4><p class="cc-muted">會建立固定題組草稿，請至班級預覽後發布。洞天後續改題不會改寫已派作業或成績。</p>${select('classId', '選擇班級', state.classes.map(v => [v.id, v.name]), c.classId)}${input('due', '作業截止時間（選填）', '', 'type="datetime-local"')}${btn('assign', '建立班級作業草稿')}</form>` : ''}`;
 }
@@ -170,6 +186,7 @@ async function generate() {
 }
 async function action(target) {
   const command = target.dataset.tdAction;
+  if(command==='select-question'){capture();editorIndex=Number(target.dataset.index)||0;focusQuestionAfterRender=editorIndex;render();return;}
   if (command === 'refresh') { await refreshAccess(true); if (state.allowed) { if (state.view === 'reports') await loadReports(); else await loadList(); } else render(); return; }
   if (command === 'reports') { state.cave = (await api({ action: 'get', id: target.dataset.id })).cave; return loadReports(); }
   if (command === 'more-reports') return loadReports(true);
@@ -177,7 +194,7 @@ async function action(target) {
     const current = (await api({ action: 'get', id: state.cave.id })).cave;
     const index = current.questions.findIndex(q => q.id === target.dataset.questionId);
     if (index < 0) throw Error('這題已被修改或移除；不能依舊回報位置直接編輯。請檢查最新題組。');
-    state.cave = current; state.view = 'edit'; render();
+    state.cave = current; state.view = 'edit'; editorIndex=index; focusQuestionAfterRender=index; render();
     const field = $('td-editor')?.querySelector(`[name="q-${index}"]`);
     field?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     field?.focus({ preventScroll: true });
@@ -198,7 +215,8 @@ async function action(target) {
     if (command === 'add' && rows.length < 30) rows.push(blank());
     if (command === 'up' && i > 0) [rows[i - 1], rows[i]] = [rows[i], rows[i - 1]];
     if (command === 'down' && i < rows.length - 1) [rows[i + 1], rows[i]] = [rows[i], rows[i + 1]];
-    render(); return;
+    editorIndex=command==='add'?rows.length-1:command==='up'?Math.max(0,i-1):command==='down'?Math.min(rows.length-1,i+1):Math.min(i,rows.length-1);
+    focusQuestionAfterRender=editorIndex;render(); return;
   }
   if (command === 'save' || command === 'save-preview') return save(command === 'save-preview');
   if (command === 'return-edit') { state.view = 'edit'; render(); return; }

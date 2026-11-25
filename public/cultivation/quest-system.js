@@ -1,3 +1,5 @@
+import './weapon-presentation.js';
+import './community-presentation.js';
 import './daily-meditation-rewards.js';
 import './quest-rules.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
@@ -113,7 +115,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function card(q, kind) {
     const label = q.claimed ? '已領取' : q.locked ? '尚未解鎖' : q.supplemental ? '補領抽獎券' : q.claimable ? '領取獎勵' : q.metric === 'story' ? '觀看劇情' : '前往修行';
     return `<article class="quest-card ${kind === 'path' ? 'quest-path-card' : ''} ${q.claimable ? 'quest-ready' : ''} ${q.claimed ? 'quest-claimed' : ''}">
-      <div class="quest-card-heading"><h4>${esc(q.title)}</h4><span>${q.claimed ? '已完成' : q.claimable ? '待領獎' : '進行中'}</span></div>
+      <div class="quest-card-heading"><h4>${esc(q.title)}</h4>${globalThis.QACommunityPresentation.statusMarkup(q.claimed?'complete':q.claimable?'pending':'active',q.claimed?'已完成':q.claimable?'待領獎':'進行中')}</div>
       <p>${esc(q.description)}</p>
       <div class="quest-progress-label"><span>${q.locked ? `需 ${q.minScore} 修為 · 先繼續問道修行` : '任務進度'}</span><b>${q.current} / ${q.target}</b></div>
       <div class="quest-progress" data-qy-progress="linear" role="progressbar" aria-label="${esc(q.title)}" aria-valuemin="0" aria-valuemax="${q.target}" aria-valuenow="${q.current}"><i style="width:${Math.round(q.current / q.target * 100)}%"></i></div>

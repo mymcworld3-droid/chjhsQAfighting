@@ -1,3 +1,4 @@
+import './community-presentation.js';
 import { collection, query, orderBy, limit, onSnapshot } from '../data-store.js';
 import { getProjectServices, getMainUser, authenticatedMainFetch } from './data/project-repository.js';
 
@@ -41,7 +42,7 @@ function ensureModal() {
       <button type="button" id="alliance-chat-close" aria-label="關閉私訊">×</button></header>
     <div id="alliance-chat-messages" class="alliance-chat-messages" role="log" aria-live="polite"></div>
     <p id="alliance-chat-error" class="alliance-chat-error" hidden role="alert"></p>
-    <form id="alliance-chat-form" class="alliance-chat-form">
+    <form id="alliance-chat-form" class="alliance-chat-form" data-qy-chat-composer>
       <input id="alliance-chat-input" placeholder="傳送訊息給好友…" autocomplete="off" maxlength="400" required aria-label="私訊內容">
       <button id="alliance-chat-send" type="submit" aria-label="傳送">➤</button>
     </form><small class="alliance-chat-footnote">僅雙方好友可閱讀 · 顯示最近 60 則</small>
@@ -80,10 +81,8 @@ function render() {
     const text = document.createElement('p');
     text.textContent = item.text || ''; // Message content is NEVER HTML.
     const time = document.createElement('time');
-    time.textContent = item.sentAt ? new Date(item.sentAt).toLocaleTimeString('zh-TW', {
-      hour: '2-digit', minute: '2-digit'
-    }) : '';
-    bubble.append(text, time); fragment.append(bubble);
+    time.textContent = globalThis.QACommunityPresentation.messageTime(item.sentAt);
+    bubble.append(text, time); globalThis.QACommunityPresentation.decorateMessage(bubble,{mine:item.senderUid===state.uid,time:item.sentAt}); fragment.append(bubble);
   }
   list.append(fragment); list.scrollTop = list.scrollHeight;
 }

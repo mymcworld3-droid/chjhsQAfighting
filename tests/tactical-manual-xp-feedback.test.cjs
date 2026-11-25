@@ -6,8 +6,8 @@ const path=require('node:path');
 const vm=require('node:vm');
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-manual-xp-feedback.js'),'utf8');
 const {manualXpDelta,renderManualXpToast,renderManualXpProgress}=vm.runInNewContext(
-  source.replaceAll('export function ','function ')+
-    '\n({manualXpDelta,renderManualXpToast,renderManualXpProgress})',{},
+  source.replace(/^import .*;\n/gm,'').replaceAll('export function ','function ')+
+    '\n({manualXpDelta,renderManualXpToast,renderManualXpProgress})',require('./helpers/presentations.cjs'),
   {filename:'tactical-manual-xp-feedback.js'});
 const catalog={
   BY_BOOK:{
@@ -117,7 +117,7 @@ test('dungeon uses the same book-art popup only on a real private C-ledger delta
   const delta=manualXpDelta(previous,next,'u1',catalog);
   assert.equal(delta.total,35);
   const html=renderManualXpToast(delta,opts);
-  assert.match(html,/sword-wind\.png/);
+  assert.match(html,/sword-wind-hd\.webp/);
   assert.match(html,/流風劍訣/);
   assert.match(html,/\+35 EXP/);
   assert.match(html,/tc-manual-xp-toast/);
@@ -135,10 +135,11 @@ test('verified A-side mastery data adds accurate next-level bar without fabricat
     status:'assembled',manualProgressSession:12345,manualExp:{u1:{'sword-wind':0}}});
   const next={...previous,revision:11,manualExp:{u1:{'sword-wind':35}}};
   const delta=manualXpDelta(previous,next,'u1',manuals);
+  assert.equal(delta.books[0].weaponType,manuals.BY_BOOK['sword-wind'].weaponType);
   const state=manuals.publicState({version:2,school:'sword',
     books:{'sword-wind':{exp:35}},equipped:['wind-slash']},6);
   const progress=renderManualXpProgress(delta,state,manuals,{esc:escape});
-  assert.match(progress,/tc-manual-xp-progress-track/);
+  assert.match(progress,/data-qy-weapon-mastery/);
   assert.match(progress,/role="progressbar"/);
   assert.match(progress,/Lv\. 1 → Lv\. 2/);
   assert.match(progress,/35 \/ 40 EXP/);

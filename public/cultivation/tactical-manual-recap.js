@@ -1,3 +1,4 @@
+import './weapon-presentation.js';
 // Only the server-confirmed per-room manual ledgers are used here.
 // This is a visual recap. No XP, loot, or level updates are issued by the client.
 const count = value => Number.isFinite(Number(value))
@@ -16,7 +17,7 @@ export function manualBattleEarnings(battle,uid,manuals) {
   const books=ids.map(id=>{
     const earned=count(modern[id])+count(legacy[id])*count(manuals?.EXP_PER_KILL||50);
     const info=permitted[id];
-    return {id,name:info.name,school:info.school,earned};
+    return {id,name:info.name,school:info.school,earned,...(info.weaponType?{weaponType:info.weaponType}:{})};
   }).filter(row=>row.earned>0).sort((a,b)=>b.earned-a.earned||a.id.localeCompare(b.id));
   return {books,total:books.reduce((sum,row)=>sum+row.earned,0),roomId:String(battle.id||'')};
 }
@@ -57,15 +58,18 @@ export function renderManualBattleRecap(battle,uid,manuals,manualState=null,{esc
       <p>本場沒有記錄功法 EXP。使用功法完成擊殺，或達成指定關卡的功法參與條件，才能累積經驗。</p>
     </section>`;
   }
+  const weaponMode=result.books.some(row=>row.weaponType);
+  const kind=weaponMode?'武器':'功法';
   const library=new Map((manualState?.library||[]).filter(x=>x.owned).map(book=>[book.id,book]));
   const details=result.books.map(row=>{
     const server=library.get(row.id);
     const mastery=masteryHint(server,manuals);
+    const weapon=server?.weaponType?globalThis.QAWeaponPresentation.artMarkup(server):'';
     const image=art(row.id);
-    const imageMarkup=image?`<img src="${escape(image)}" alt="" decoding="async" loading="lazy">`:
-      '<i class="fa-solid fa-book-open" aria-hidden="true"></i>';
+    const imageMarkup=weapon|| (image?`<img src="${escape(image)}" alt="" decoding="async" loading="lazy">`:
+      '<i class="fa-solid fa-book-open" aria-hidden="true"></i>');
     const levelMarkup=mastery?`<span class="tc-manual-recap-level">Lv. ${mastery.level}</span>`:'';
-    const bar=mastery?`
+    const bar=server?.weaponType?globalThis.QAWeaponPresentation.masteryMarkup(server):mastery?`
       <div class="tc-manual-recap-progress-meta">
         <span>${mastery.maxed?'功法已達最高等級':'本級熟練度 · 尚需 '+format(mastery.remaining)+' EXP 升級'}</span>
         <small>${mastery.maxed?'100%':format(mastery.expInLevel)+' / '+format(mastery.expToNext)}</small>
@@ -85,20 +89,21 @@ export function renderManualBattleRecap(battle,uid,manuals,manualState=null,{esc
       <div class="tc-manual-recap-card-top">
         <span class="tc-manual-recap-icon">${imageMarkup}</span>
         <span class="tc-manual-recap-name"><strong>${escape(row.name)}</strong>
-          <small>${row.school==='body'?'體修功法':'劍修功法'} · 本場累積</small></span>
+          <small>${row.school==='body'?'體修':'劍修'}${kind} · 本場累積</small></span>
         <span class="tc-manual-recap-exp">+${format(row.earned)} <small>EXP</small></span>
       </div>
       ${levelMarkup}
+      ${server?.weaponType&&globalThis.QAWeaponPresentation.copiesText(server)?'<small>持有：'+escape(globalThis.QAWeaponPresentation.copiesText(server))+'</small>':''}
       ${progress}
     </article>`;
   }).join('');
   return `<section class="tc-manual-recap" data-manual-recap
     aria-label="本場功法修煉紀錄">
     <div class="tc-manual-recap-title">
-      <div><small>戰鬥結算 · 功法修煉</small><strong>本場熟練度成果</strong></div>
+      <div><small>戰鬥結算 · ${kind}修煉</small><strong>本場熟練度成果</strong></div>
       <span class="tc-manual-recap-total">+${format(result.total)} <small>EXP</small></span>
     </div>
     <div class="tc-manual-recap-list">${details}</div>
-    <p class="tc-manual-recap-note">本場 EXP 由伺服器依戰鬥紀錄計算；功法等級與下一招進度另以最新功法資料確認。${manualState?'':'同步期間可先查看本場紀錄。'}</p>
+    <p class="tc-manual-recap-note">本場 EXP 依戰鬥紀錄計算；${kind}等級與下一招進度以最新資料確認。${manualState?'':'同步期間可先查看本場紀錄。'}</p>
   </section>`;
 }

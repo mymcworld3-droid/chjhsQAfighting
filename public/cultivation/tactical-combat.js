@@ -1,3 +1,5 @@
+import './weapon-presentation.js';
+import './battle-presentation.js';
 import './question-presentation.js';
 import './daily-meditation-rewards.js';
 import {stoneCostMarkup,cultivationMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
@@ -119,7 +121,7 @@ async function api(path,body,signal){
   }
 }
 function valid(e,account){return opened&&e===epoch&&account===getMainUser()?.uid;}
-function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;box.hidden=!text;}}
+function notice(text){globalThis.QABattlePresentation.notice($('[data-notice]'),text);}
 function tutorialStep(){
   return mode==='pve'&&state?.trial?.stage===1
     ? (window.firstAnswerGuideStep?.(uid)??-1) : -1;
@@ -224,7 +226,7 @@ function showBattleWeaponChoices(slot){
     available.map(book=>{
       const other=worn.indexOf(book.id),disabled=other>=0&&other!==slot;
       return '<button type="button" data-battle-equip="'+slot+'" data-weapon-id="'+esc(book.id)+
-        '" '+(disabled?'disabled':'')+'>'+esc(book.name)+' · Lv.'+book.level+
+        '" '+(disabled?'disabled':'')+'>'+globalThis.QAWeaponPresentation.identityMarkup(book,{slot:other>=0?other:undefined})+
         (disabled?'（已裝備）':'')+'</button>';
     }).join('');
 }
@@ -1181,11 +1183,9 @@ function updateBossHud(){
   node.querySelector('[data-boss-name]').textContent=boss.name;
   node.querySelector('[data-boss-phase]').textContent=state.weaponDungeon?'領主交戰':boss.phase===2?'第二階段':'第一階段';
   node.querySelector('[data-boss-intent]').textContent=boss.intent;
-  node.querySelector('[data-boss-number]').textContent=Math.ceil(boss.hp)+' / '+Math.ceil(boss.maxHp);
+  node.querySelector('[data-boss-number]').textContent=globalThis.QABattlePresentation.health(boss).text;
   const meter=node.querySelector('[data-boss-health]');
-  meter.setAttribute('aria-valuemin','0');meter.setAttribute('aria-valuemax',String(Math.ceil(boss.maxHp)));
-  meter.setAttribute('aria-valuenow',String(Math.ceil(boss.hp)));
-  node.querySelector('[data-boss-fill]').style.width=(boss.ratio*100).toFixed(2)+'%';
+  globalThis.QABattlePresentation.syncHealth(meter,node.querySelector('[data-boss-fill]'),{...boss,boss:true});
 }
 function showBossBanner(kind,name){
   const node=$('[data-boss-announcement]');
@@ -1246,7 +1246,7 @@ function paint({preserveModal=false}={}){
       objective.type==='boss'?'首領 · 擊敗大型靈獸':`討伐 · 剩餘 ${living} 隻靈獸`;
     objectiveNode.textContent=objective.completed&&!state.weaponDungeon&&!me.answered?'目標完成 · 請先作答一題':text;
   }
-  $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.bot?`<small>${Manuals.realmForStage(a.level).name}境 · 功法 +${Manuals.expForBeast(a.level)} EXP</small>`:''}${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
+  $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${globalThis.QABattlePresentation.health(a).text}</span></div>${globalThis.QABattlePresentation.healthMarkup(a)}${a.bot?`<small>${Manuals.realmForStage(a.level).name}境 · 功法 +${Manuals.expForBeast(a.level)} EXP</small>`:''}${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
   $('[data-combat-info]').innerHTML=state.actors.filter(a=>a.hp>0&&a.intent).map(a=>'<p><b>'+esc(a.name)+'</b><span>'+esc(a.intent.text)+'</span></p>').join('');
   $('[data-stamina]').innerHTML=`<b>體力 <strong>${me.stamina}</strong><span> / ${R.LIMITS.stamina}</span></b><div>${Array.from({length:10},(_,i)=>`<i class="${i<me.stamina?'filled':''}"></i>`).join('')}</div><small>出手 ${me.attacks}/${R.attackLimit(me)}</small>`;
   if(root.classList.contains('tc-quarter-layout')){
@@ -1353,7 +1353,7 @@ function updateControls(){
   $('[data-skill]').innerHTML=action==='move'?
     '<p>每移動一格固定消耗 1 體力，路線繞路也計入；緩速時一次最多移動 2 格。選好位置後移動。</p>':
     action==='sword-move'?'<p>飛劍沿最短路徑移動偶數格，每 2 格消耗 1 體力，穿過靈獸會造成傷害。</p>':
-    `<p>${esc(description)}</p>`;
+    globalThis.QAWeaponPresentation.skillMarkup(shown,{description,icon:skillArt(shown),showLevel:false,cost});
   $('[data-execute]').textContent=error||label;
   $('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
   // The confirm button is intentionally hidden in the quarter-wheel PvE layout.
@@ -1564,7 +1564,7 @@ function resultDialog(){
     const dungeonCards=presentation.renderSettlement(dungeonReward,{emptyText:'本次無額外獎勵。'});
     showModal(`<small>單人武器副本 · ${esc(info.realm)}</small><h2>${esc(info.name)} · ${win?'通關':'挑戰結束'}</h2>
       <p>${win?'已擊敗石域領主，副本通關；剩餘守衛不影響結算。':'副本券已消耗，可調整武器與走位後再次挑戰。'}</p>
-      <div class="tc-result-stats qy-quiz-metrics">${globalThis.QAQuestionPresentation.metricMarkup('答對',globalThis.QAQuestionPresentation.scoreText(me.correct,me.answered))}${globalThis.QAQuestionPresentation.metricMarkup('正確率',globalThis.QAQuestionPresentation.accuracyText(me.correct,me.answered))}<b>生命 ${me.hp} / ${me.maxHp}</b></div>
+      ${globalThis.QABattlePresentation.resultMetrics(me,globalThis.QAQuestionPresentation)}
       ${win?`<p>${result?.unlocked>info.difficulty?'下一個難度已解鎖。':info.difficulty===5?'已完成最高難度。':''}</p>`:''}
       ${dungeonCards}
       ${drop?.duplicate?'<p class="tc-manual-loot">同款武器數量已累計，保留最高等階。</p>':!drop&&win?'<p>本次未掉落武器。</p>':''}
@@ -1586,7 +1586,7 @@ function resultDialog(){
     const rewardSection=presentation.renderSettlement(settlementReward,{emptyText:'本次無額外獎勵；答題紀錄已保存。'});
     const guideCollapse=win&&stage===1&&tutorialStep()>=7&&tutorialStep()<=9
       ?'<button type="button" class="tc-primary" data-tutorial-collapse>收起戰場</button>':'';
-    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats qy-quiz-metrics">${globalThis.QAQuestionPresentation.metricMarkup('答對',globalThis.QAQuestionPresentation.scoreText(me.correct,me.answered))}${globalThis.QAQuestionPresentation.metricMarkup('正確率',globalThis.QAQuestionPresentation.accuracyText(me.correct,me.answered))}<b>生命 ${me.hp} / ${me.maxHp}</b></div>${rewardSection}${manualRecap}${drop?'<p class="tc-manual-loot">'+(weaponDrop&&settlementReward?'已獲得上述武器，前往修煉查看。':'獲得功法：《'+esc(drop.name)+'》！前往修煉查看。')+'</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}${guideCollapse}<button type="button" class="${guideCollapse?'':'tc-primary'}" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
+    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p>${globalThis.QABattlePresentation.resultMetrics(me,globalThis.QAQuestionPresentation)}${rewardSection}${manualRecap}${drop?'<p class="tc-manual-loot">'+(weaponDrop&&settlementReward?'已獲得上述武器，前往修煉查看。':'獲得功法：《'+esc(drop.name)+'》！前往修煉查看。')+'</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}${guideCollapse}<button type="button" class="${guideCollapse?'':'tc-primary'}" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
     const receiptRoom=state,receiptUid=uid,receiptEpoch=epoch;
     if(celebrateFresh&&$('[data-trial-reward-list]'))presentation.animateInline($('[data-trial-reward-list]'),{
       uid:receiptUid,receiptId:JSON.stringify(['trial',receiptRoom.id,stage,receiptRoom.createdAtMs??null]),reward:settlementReward,
@@ -1595,7 +1595,7 @@ function resultDialog(){
     if(manualRecap)void refreshManualRecap();
     return;
   }
-  showModal(`<small>此戰已結算</small><h2>${draw?'平分秋色':win?'克敵制勝':'整裝再戰'}</h2><p>${state.finishReason==='timeout'?'連續兩次行動逾時，戰鬥結束。':state.finishReason==='forfeit'?'一方收法離場。':state.finishReason==='turn-limit'?'達到回合上限，以剩餘生命比例判定。':win?'你以走位與招式取得勝利。':'複習這次的攻擊範圍與體力分配，再次挑戰。'}</p><div class="tc-result-stats qy-quiz-metrics">${globalThis.QAQuestionPresentation.metricMarkup('答對',globalThis.QAQuestionPresentation.scoreText(me.correct,me.answered))}${globalThis.QAQuestionPresentation.metricMarkup('正確率',globalThis.QAQuestionPresentation.accuracyText(me.correct,me.answered))}<b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+stoneCostMarkup('+'+reward.gold)+' · '+cultivationMarkup('+'+reward.cultivation,{showName:true}):'本場沒有額外通關獎勵；答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-hub>返回演武司</button>`);
+  showModal(`<small>此戰已結算</small><h2>${draw?'平分秋色':win?'克敵制勝':'整裝再戰'}</h2><p>${state.finishReason==='timeout'?'連續兩次行動逾時，戰鬥結束。':state.finishReason==='forfeit'?'一方收法離場。':state.finishReason==='turn-limit'?'達到回合上限，以剩餘生命比例判定。':win?'你以走位與招式取得勝利。':'複習這次的攻擊範圍與體力分配，再次挑戰。'}</p>${globalThis.QABattlePresentation.resultMetrics(me,globalThis.QAQuestionPresentation)}<p>${reward?.gold?'獲得 '+stoneCostMarkup('+'+reward.gold)+' · '+cultivationMarkup('+'+reward.cultivation,{showName:true}):'本場沒有額外通關獎勵；答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-hub>返回演武司</button>`);
 }
 function leaveDialog(){
   if(state?.status==='finished')return state.mode==='pve'?resultDialog():renderHub();

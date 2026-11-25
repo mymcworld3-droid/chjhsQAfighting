@@ -1,3 +1,4 @@
+import './weapon-presentation.js';
 import {stoneCostMarkup} from './spirit-stone-ui.js?v=20261125-stone-price-art-v1';
 // A single skill-details surface for the selected, already-owned manual.
 // The same server-validated equip/upgrade handlers are used by the main page.
@@ -37,14 +38,7 @@ export function renderManualSkillDetail(book,skillId,{esc,skillArt,descriptionWi
         <i class="fa-solid fa-xmark" aria-hidden="true"></i> 收起
       </button>
     </div>
-    <div class="manual-focus-skill-main">
-      ${art?`<img class="manual-skill-art" src="${esc(art)}" alt="" loading="lazy" decoding="async">`:''}
-      <div class="manual-focus-skill-info">
-        <strong>${esc(skill.name)}${skill.unlocked?' · Lv. '+fmt(skill.level):''}</strong>
-        <small>${fmt(skill.cost)} 體力 · ${skill.unlimited?'無固定射程':fmt(skill.range)+' 格'}</small>
-        <p>${esc(descriptionWithDamage(attack,skill))}</p>
-      </div>
-    </div>
+    ${globalThis.QAWeaponPresentation.skillMarkup(skill,{icon:art,description:descriptionWithDamage(attack,skill)})}
     ${!locked?`<small class="manual-focus-skill-benefit">${esc(gain)}</small>`:''}
     <div class="manual-focus-skill-actions">${equipment}
       ${upgradeAction}

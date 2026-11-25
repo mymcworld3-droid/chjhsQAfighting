@@ -1,3 +1,4 @@
+import './weapon-presentation.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {weaponDungeonTicketMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 let dialog=null,data=null,loading=false,serial=0,trigger=null,selectedId=null;
@@ -43,8 +44,9 @@ function detail(d){
   <div class="wd-section-heading"><h3>選擇挑戰境界</h3><span>已征服 ${count(d)} / ${d.difficulties.length}</span></div>
   <div class="wd-difficulties" role="group" aria-label="選擇副本難度">${d.difficulties.map(t=>{
     const resume=isResume(d,t.index),cleared=Number(d.clears[t.index])||0;
+    const badge=globalThis.QAWeaponPresentation.difficultyState({locked:t.locked,clears:cleared,resume});
     const status=resume?'繼續挑戰 · 不耗券':t.locked?'通過前一難度解鎖':data.active?'其他挑戰進行中':data.tickets<1?'副本券不足':(cleared?'再次挑戰 · ':'開始挑戰 · ')+weaponDungeonTicketMarkup(1);
-    return `<button type="button" data-wd-difficulty="${t.index}" ${canEnter(d,t)?'':'disabled'} class="${resume?'wd-resume':t.locked?'wd-locked':cleared?'wd-cleared':'wd-available'}"><div class="wd-tier-top"><span>${String(t.index+1).padStart(2,'0')}</span><span>${resume?'進行中':cleared?'通關 '+cleared+' 次':t.locked?'未解鎖':'已解鎖'}</span></div><strong>${esc(t.name)}</strong><small>30% ${esc(t.name)}武器 · 20% ${esc(t.nextRealm)}武器</small><span class="wd-tier-action">${status}</span></button>`;
+    return `<button type="button" data-wd-difficulty="${t.index}" data-qy-difficulty="${badge.key}" ${canEnter(d,t)?'':'disabled'} class="${resume?'wd-resume':t.locked?'wd-locked':cleared?'wd-cleared':'wd-available'}"><div class="wd-tier-top"><span>${String(t.index+1).padStart(2,'0')}</span><span>${badge.label}</span></div><strong>${globalThis.QAWeaponPresentation.realmMarkup(t.name,{kind:'difficulty'})}</strong><small>30% ${esc(t.name)}武器 · 20% ${esc(t.nextRealm)}武器</small><span class="wd-tier-action">${status}</span></button>`;
   }).join('')}</div>`;
 }
 function paint(message=''){

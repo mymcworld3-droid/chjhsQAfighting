@@ -4,8 +4,9 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 
+Object.assign(globalThis,require('./helpers/presentations.cjs'));
 const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/classroom-view.js'));
-const renderer = import('data:text/javascript;base64,' + source.toString('base64'));
+const renderer = import('data:text/javascript;base64,' + Buffer.from(source.toString().replace(/^import .*;\n/gm,'')).toString('base64'));
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const helpers = {
   escape, date: value => value ? '2026/11/23' : '不限時間',

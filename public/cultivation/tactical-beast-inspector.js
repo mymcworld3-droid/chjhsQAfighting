@@ -1,9 +1,9 @@
+import './battle-presentation.js';
 /* Read-only PvE creature inspection. Never submits an action or changes combat state. */
 const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[char]);
 const positive=value=>Math.max(0,Number(value)||0);
-const pct=(value,total)=>Math.max(0,Math.min(100,Math.round(positive(value)/Math.max(1,positive(total))*100)));
 const profile=actor=>globalThis.QATactical?.monsterProfileFor?.(actor)||globalThis.QATactical?.monsterProfile(actor.species);
 const portrait=actor=>{
   const species=Math.max(0,Math.min(19,Number(actor.species)||0));
@@ -11,10 +11,7 @@ const portrait=actor=>{
   return '<span class="tc-beast-portrait" role="img" aria-label="'+esc(actor.name)+
     '" style="background-position:'+x+'% '+y+'%"></span>';
 };
-const health=actor=>'<div class="tc-beast-hp-row"><span>生命</span><b>'+esc(Math.ceil(positive(actor.hp)))+
-  ' / '+esc(actor.maxHp)+'</b></div><div class="tc-beast-hp-track" role="progressbar" aria-label="'+
-  esc(actor.name)+'生命" aria-valuemin="0" aria-valuemax="'+esc(actor.maxHp)+
-  '" aria-valuenow="'+esc(Math.ceil(positive(actor.hp)))+'"><i style="width:'+pct(actor.hp,actor.maxHp)+'%"></i></div>';
+const health=actor=>'<div class="tc-beast-hp-row"><span>生命</span><b>'+globalThis.QABattlePresentation.health(actor).text+'</b></div>'+globalThis.QABattlePresentation.healthMarkup(actor,{trackClass:'tc-beast-hp-track',kind:'enemy'});
 
 export class BeastInspector {
   constructor(root,{getState,getRenderer,getManuals,openDemo}){

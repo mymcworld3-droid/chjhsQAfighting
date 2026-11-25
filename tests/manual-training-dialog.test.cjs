@@ -4,7 +4,7 @@ const fs=require('node:fs'),vm=require('node:vm');
 const source=fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/manual-training-page.js'),'utf8');
 function fixture(){
   const context=vm.createContext({
-    globalThis:{QAManuals:{REALMS:[],BY_SKILL:{},totalExpForLevel:()=>0}},window:{},
+    getMainUser:()=>({uid:'u1'}),globalThis:{QARewardPresentation:{celebrateEvent:()=>true},QAManuals:{REALMS:[],BY_SKILL:{},totalExpForLevel:()=>0}},window:{},
     renderManualHero:state=>({bookId:state.library.find(x=>x.owned)?.id||'',html:'<section class="manual-hero">training details</section>'}),
     renderManualExpedition:()=>'<aside>expedition</aside>',nextManualExpedition:()=>null,
     filterOwnedManuals:state=>state.library.filter(x=>x.owned),
