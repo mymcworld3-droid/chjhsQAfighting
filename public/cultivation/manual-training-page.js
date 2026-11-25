@@ -434,7 +434,9 @@ async function mutate(url,body){
   if(busy)return;
   const uid=getMainUser()?.uid;if(!uid)return;
   const upgrading=url.endsWith('/upgrade');
-  ++sequence;busy=true;paint(body.skillId?'正在升級招式…':upgrading?'正在升級武器…':'正在保存武器裝備…',{kind:'pending'});
+  ++sequence;busy=true;
+  const pendingText=body.skillId?'正在升級招式…':upgrading?'正在升級武器…':'';
+  paint(pendingText,pendingText?{kind:'pending'}:{});
   let message='',successful=false,reward=null;
   const equippedSlot=pickerSlot;
   try{
