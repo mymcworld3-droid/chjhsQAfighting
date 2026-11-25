@@ -1,3 +1,4 @@
+import {stoneCostMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import { createVocabularyPronunciation } from './daily-vocabulary-pronunciation.mjs';
 
 const page = document.getElementById('page-daily-vocabulary');
@@ -184,11 +185,11 @@ function rewardMarkup(lesson) {
   if (status === 'claimed') {
     const reward = progress.rewardHistory[lesson.date].reward;
     return `<div class="dv-reward is-granted" role="status"><strong>今日獎勵已領取</strong>
-      <div class="dv-reward-amounts"><span><b>+${reward.gold}</b> 靈石</span><span><b>+${reward.cultivation}</b> 修為</span></div></div>`;
+      <div class="dv-reward-amounts"><span>${stoneCostMarkup('+'+reward.gold)}</span><span><b>+${reward.cultivation}</b> 修為</span></div></div>`;
   }
   const message = rewardErrors[lesson.date] || '正在領取今日獎勵…';
   return `<div class="dv-reward ${rewardErrors[lesson.date] ? 'is-waiting' : 'is-syncing'}" role="status"><strong>今日獎勵</strong>
-    <span>${rules.DAILY_REWARD.gold} 靈石 · ${rules.DAILY_REWARD.cultivation} 修為</span>
+    <span>${stoneCostMarkup(rules.DAILY_REWARD.gold)} · ${rules.DAILY_REWARD.cultivation} 修為</span>
     <p>${escapeHtml(message)}</p>
     ${rewardErrors[lesson.date] ? button('retry-reward', '重新領取', { style: 'dv-quiet' }) : ''}</div>`;
 }
