@@ -81,38 +81,6 @@
 #manual-training-root .manual-weapon-art.manual-weapon-art--body-dragon{background-image:url('/assets/weapons/body-dragon-hd.webp')!important}
 #manual-training-root .manual-weapon-art.manual-weapon-art--body-tiger{background-image:url('/assets/weapons/body-tiger-hd.webp')!important}
 
-/* Native modal stays above the game stage and keeps the collection in place. */
-#manual-training-root .manual-training-dialog{
-  position:fixed;inset:0;margin:auto;padding:0;
-  width:min(960px,calc(100% - 28px));max-width:calc(100% - 28px);
-  max-height:90vh;max-height:90dvh;
-  border:1px solid #a9956b;border-radius:16px;
-  background:#14251e;color:#ede5cf;
-  box-shadow:0 20px 70px #0009;overflow:hidden;
-}
-#manual-training-root .manual-training-dialog::backdrop{background:#070f0bd1}
-#manual-training-root .manual-training-dialog-header{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;
-  padding:14px 18px;border-bottom:1px solid #a9956b66;background:#1c2e24;
-}
-#manual-training-root .manual-training-dialog-header strong{min-width:0;font-size:17px;overflow-wrap:anywhere}
-#manual-training-root .manual-training-dialog-header button{
-  flex:none;padding:8px 12px;border:1px solid #a9956b88;border-radius:8px;
-  background:#263c30;color:#f0deb1;font:inherit;cursor:pointer;
-}
-#manual-training-root .manual-training-dialog-body{
-  max-height:calc(90vh - 76px);max-height:calc(90dvh - 76px);
-  overflow-y:auto;overscroll-behavior:contain;padding:16px;
-}
-#manual-training-root .manual-training-dialog .manual-hero{margin:0 0 14px}
-#manual-training-root .manual-training-dialog .manual-hero-brand{display:none}
-#manual-training-root .manual-training-dialog button:focus-visible{outline:2px solid #e5cb8e;outline-offset:3px}
-@media(max-width:600px){
-  #manual-training-root .manual-training-dialog{width:calc(100% - 16px);max-width:calc(100% - 16px);border-radius:12px}
-  #manual-training-root .manual-training-dialog-header{padding:10px 12px}
-  #manual-training-root .manual-training-dialog-header strong{font-size:15px}
-  #manual-training-root .manual-training-dialog-body{padding:10px}
-}
 
 #manual-training-root .is-tier-golden{color:#f3d286;border-color:#c9a95d;background:#4a3b1c}
 

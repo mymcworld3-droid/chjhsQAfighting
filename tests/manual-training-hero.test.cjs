@@ -168,3 +168,29 @@ test('Lv14 shows one uncluttered level, and never offers paid upgrading or extra
   assert.match(html,/style="width:100\.00%"/);
   assert.match(html,/Lv.10 後需以武器技能擊殺靈獸累積 EXP/);
 });
+
+test('weapon mastery and skill details share one exclusive slot below skills',()=>{
+  const book=makeBook();
+  book.skills[0].upgrade={targetLevel:2,gold:20};
+  const state={library:[book],school:'body',gold:100,weaponIds:[book.id]};
+  const drawSkill=id=>render(state,book.id,{...helpers,selectedSkillId:id,moveIdOf:x=>x}).html;
+  const initial=drawSkill(null);
+  assert.match(initial,/data-manual-detail-mode="mastery"><div class="manual-hero-details">/);
+  assert(initial.indexOf('manual-hero-path-grid')<initial.indexOf('修煉熟練度'));
+  assert.equal((initial.match(/修煉熟練度/g)||[]).length,1);
+  assert.doesNotMatch(initial,/class="manual-focus-skill /);
+  assert.match(initial,/data-manual-upgrade="body-rock"/);
+  assert.doesNotMatch(initial,/aria-expanded="true"/);
+  const skill=drawSkill('first');
+  assert.match(skill,/data-manual-detail-mode="skill"><section class="manual-focus-skill /);
+  assert.doesNotMatch(skill,/修煉熟練度|data-manual-upgrade=/);
+  assert.match(skill,/data-skill-upgrade="first"/);
+  assert.match(skill,/data-manual-close-skill/);
+  assert.match(skill,/data-manual-jump-skill="first" aria-expanded="true"/);
+  const locked=drawSkill('second');
+  assert.match(locked,/data-manual-detail-mode="skill"/);
+  assert.match(locked,/data-manual-skill="second"/);
+  assert.doesNotMatch(locked,/修煉熟練度|data-skill-upgrade=/);
+  assert.equal(drawSkill(null),initial);
+  assert.equal(drawSkill('stale-id'),initial);
+});

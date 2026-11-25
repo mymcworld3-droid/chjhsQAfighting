@@ -23,8 +23,8 @@ async function main(){
   });
   register(app,{resolve:()=>({db}),verify:async()=> 'u1'});
   app.get('/test',(_,res)=>res.type('html').send(
-    '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">'+
-    '<link rel="stylesheet" href="/styles/home-wireframe.css"><link id="scene-art-shell-style" rel="stylesheet" href="/styles/scene-art-shell.css"></head><body><div id="nav-grid"></div><main id="page-training" class="active-page"></main>'+
+    '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head>'+
+    '<body><div id="nav-grid"></div><main id="page-training" class="active-page"></main>'+
     '<script type="module" src="/cultivation/manual-training-page.js"></script></body></html>'
   ));
   app.use(express.static(path.join(__dirname,'../public')));
@@ -49,6 +49,14 @@ async function main(){
     await page.locator('.manual-weapon-grid').waitFor();
     assert.equal(await page.locator('[data-manual-slot]').count(),2);
     assert.equal(await library.locator('article[data-manual-book]').count(),2);
+    const card=library.locator('[data-manual-book="sword-wind"] .manual-native-card');
+    assert.equal(await card.getAttribute('data-armory-equipped'),'true');
+    assert.equal(await card.locator('.manual-armory-worn').count(),1);
+    assert.equal(await card.locator('.manual-armory-exp').count(),1);
+    assert.equal(await library.locator('[data-manual-book="body-rock"] .manual-armory-worn').count(),0);
+    await page.emulateMedia({reducedMotion:'reduce'});
+    assert.equal(await card.locator('.manual-armory-sheen').evaluate(node=>getComputedStyle(node).animationName),'none');
+    await page.emulateMedia({reducedMotion:'no-preference'});
     assert.equal(await page.locator('.manual-library-heading h3').innerText().then(x=>x.includes('武器收藏')),true);
     const order=await library.evaluate(node=>
       !!(node.compareDocumentPosition(document.querySelector('.manual-hero'))&Node.DOCUMENT_POSITION_FOLLOWING));
@@ -69,23 +77,91 @@ async function main(){
       assert.match(image.headers()['content-type']||'',/webp/);
       assert((await image.body()).length>100_000,'HD weapon art must be the actual full-size file');
     }
-    assert.equal(await page.locator('[data-manual-training-dialog]').isVisible(),false);
+    assert.equal(await page.locator('[data-manual-training-screen]').isVisible(),false);
     await library.locator('[data-manual-book="sword-wind"] .manual-library-choice').click();
-    await page.locator('[data-manual-training-dialog]').waitFor();
+    await page.locator('[data-manual-training-screen]').waitFor();
+    assert.equal(await page.locator('[data-manual-training-screen]').evaluate(node=>node.tagName),'SECTION');
+    assert.equal(await library.isVisible(),false);
+    assert.equal(await page.locator('.manual-weapons').isVisible(),false);
+    assert.equal(await page.locator('dialog[open]').count(),0);
+    const assertFullscreen=async()=>{
+      const detail=await page.locator('[data-manual-training-screen]').evaluate(node=>{
+        const box=node.getBoundingClientRect(),style=getComputedStyle(node);
+        return {x:box.x,y:box.y,width:box.width,height:box.height,viewportWidth:innerWidth,viewportHeight:innerHeight,radius:style.borderRadius,position:style.position,bodyOverflow:getComputedStyle(node.querySelector('.manual-training-screen-body')).overflowY};
+      });
+      assert(Math.abs(detail.x)<=1&&Math.abs(detail.y)<=1,'detail must begin at the viewport origin');
+      assert(Math.abs(detail.width-detail.viewportWidth)<=1&&Math.abs(detail.height-detail.viewportHeight)<=1,'detail fills the entire game viewport');
+      assert.equal(detail.radius,'0px');assert.equal(detail.position,'fixed');assert.equal(detail.bodyOverflow,'auto');
+      for(const selector of ['.manual-native-skills-panel','.manual-shared-detail > :first-child','.manual-hero-step']){
+        const radius=await page.locator(selector).first().evaluate(node=>parseFloat(getComputedStyle(node).borderTopLeftRadius));
+        assert(radius>0,selector+' retains rounded corners');
+      }
+    };
+    await assertFullscreen();
+    const palette=await page.locator('#manual-training-root').evaluate(root=>{
+      const style=getComputedStyle(root),bg=getComputedStyle(root.querySelector('.manual-training-screen-header')).backgroundColor;
+      const body=getComputedStyle(document.body);
+      return {paper:style.getPropertyValue('--mt-text').trim(),homePaper:body.getPropertyValue('--review-paper').trim()||body.getPropertyValue('--xq-paper').trim()||'#eee5d2',header:bg,action:style.getPropertyValue('--mt-action').trim()};
+    });
+    assert.equal(palette.paper,palette.homePaper);
+    assert.equal(palette.header,'rgb(23, 23, 20)');
+    assert.equal(palette.action,'#bda371');
+    assert.equal(await page.locator('.manual-ritual-seal').count(),1);
+    assert.equal(await page.locator('.manual-ritual-wheel').evaluate(node=>getComputedStyle(node).animationName),'manual-ritual-spin');
+    await page.emulateMedia({reducedMotion:'reduce'});
+    assert.equal(await page.locator('.manual-ritual-wheel').evaluate(node=>getComputedStyle(node).animationName),'none');
+    await page.emulateMedia({reducedMotion:'no-preference'});
+    await page.setViewportSize({width:1180,height:820});
+    await assertFullscreen();
+    await page.setViewportSize({width:393,height:852});
+    await assertFullscreen();
+    const slot=page.locator('.manual-shared-detail');
+    const mastery=async()=>{
+      assert.equal(await slot.getAttribute('data-manual-detail-mode'),'mastery');
+      assert.equal(await slot.locator('.manual-hero-mastery').count(),1);
+      assert.equal(await page.locator('.manual-focus-skill').count(),0);
+    };
+    await mastery();
+    await page.locator('[data-manual-browse-weapon="next"]').click();
+    await mastery();
+    await page.locator('[data-manual-jump-skill="rock-fist"]').click();
+    await page.locator('.manual-focus-skill[data-manual-skill="rock-fist"]').waitFor();
+    await page.locator('[data-manual-browse-weapon="prev"]').click();
+    await mastery();
+    for(const size of [{width:1180,height:820},{width:393,height:852}]){
+      await page.setViewportSize(size);
+      const position=()=>slot.evaluate(node=>{
+        const r=node.getBoundingClientRect(),scroller=node.closest('.manual-training-screen-body');
+        return {x:r.x,y:r.y+scroller.scrollTop,width:r.width};
+      });
+      const before=await position();
+      await page.locator('[data-manual-jump-skill="wind-slash"]').click();
+      await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
+      assert.equal(await slot.getAttribute('data-manual-detail-mode'),'skill');
+      assert.equal(await page.locator('.manual-hero-mastery').count(),0);
+      const after=await position();
+      for(const key of ['x','y','width'])assert(Math.abs(before[key]-after[key])<=2,'shared detail '+key+' must not move');
+      await page.locator('[data-manual-close-skill]').click();
+      await mastery();
+      await page.locator('[data-manual-jump-skill="wind-slash"]').click();
+      await page.locator('[data-manual-jump-skill="wind-slash"]').click();
+      await mastery();
+    }
     await page.locator('[data-manual-jump-skill="wind-slash"]').click();
-    await page.locator('.manual-focus-skill[data-manual-skill="wind-slash"]').waitFor();
-    assert.equal(await page.locator('.manual-focus-skill').count(),1);
     await page.keyboard.press('Escape');
-    assert.equal(await page.locator('.manual-focus-skill').count(),0);
+    await mastery();
     await page.keyboard.press('Escape');
-    assert.equal(await page.locator('[data-manual-training-dialog]').isVisible(),false);
+    assert.equal(await page.locator('[data-manual-training-screen]').isVisible(),false);
+    assert.equal(await library.isVisible(),true);
     // Equipping a weapon changes one slot only; it does not change its XP.
     await page.locator('[data-manual-pick-slot="1"]').click();
     await page.locator('[data-manual-picker]').waitFor();
+    assert.equal(await page.locator('[data-manual-weapon-dialog]').evaluate(node=>node.open),true);
     assert.equal(await page.locator('[data-manual-pick-weapon="sword-wind"]').isDisabled(),true);
     await page.locator('[data-manual-pick-weapon="body-rock"]').click();
     await page.waitForFunction(()=>document.querySelector('[data-manual-status]')?.textContent==='武器裝備已儲存。');
     assert.equal(await page.locator('[data-manual-slot="1"] .manual-weapon-slot-info strong').innerText(),'玄嶽圖騰');
+    assert.equal(await page.locator('[data-manual-status]').evaluate(node=>getComputedStyle(node).position),'fixed');
     const equipped=db.records.get(service.MANUALS+'/u1');
     assert.deepEqual(equipped.weaponIds,['sword-wind','body-rock']);
     assert.equal(equipped.books['body-rock'].exp,40);
@@ -106,12 +182,13 @@ async function main(){
     await library.locator('[data-manual-book="sword-wind"] .manual-library-choice').click();
     await page.evaluate(()=>{window.__art=[...document.querySelectorAll('.manual-weapon-art')];});
     await page.locator('[data-manual-upgrade="sword-wind"]').click();
-    await page.waitForFunction(()=>document.querySelector('[data-manual-status]')?.textContent?.includes('已升級'));
+    await page.waitForFunction(()=>document.querySelector('[data-manual-dialog-status]')?.textContent?.includes('已升級'));
     const visualStable=await page.evaluate(()=>window.__art.every(node=>node.isConnected));
     assert.equal(visualStable,true,'weapon image nodes should not blink after upgrade');
-    assert.equal(await page.locator('[data-manual-training-dialog] [data-manual-celebration-dismiss]').count(),1);
+    assert.equal(await page.locator('[data-manual-celebration-host] [data-manual-celebration-dismiss]').count(),1);
     await page.locator('[data-manual-celebration-dismiss]').click();
-    await page.keyboard.press('Escape');
+    await page.locator('[data-manual-close-training]').click();
+    assert.equal(await library.isVisible(),true);
     // The second technique appears automatically at weapon Lv.5 without a player-realm requirement.
     db.records.get('users/u1').stats.totalScore=0;
     db.records.get(service.MANUALS+'/u1').books['body-rock'].exp=280;
@@ -125,135 +202,28 @@ async function main(){
       const sizes=await page.locator(selector).evaluate(node=>({scroll:node.scrollWidth,client:node.clientWidth}));
       assert(sizes.scroll<=sizes.client+3,selector+' must fit mobile width: '+JSON.stringify(sizes));
     }
+    // Realistic viewport budget: keep both primary sections above the fixed navigation.
+    for(const [width,height,budget] of [[393,680,530],[393,852,702],[1180,820,670],[844,390,250]]){
+      await page.setViewportSize({width,height});
+      const geometry=await page.evaluate(()=>{
+        const library=document.querySelector('.manual-library').getBoundingClientRect();
+        const equipment=document.querySelector('.manual-weapons').getBoundingClientRect();
+        return {span:Math.max(library.bottom,equipment.bottom)-Math.min(library.top,equipment.top),
+          rows:[...document.querySelectorAll('.manual-weapon-slot')].map(slot=>{
+            const picker=slot.querySelector('.manual-weapon-slot-picker').getBoundingClientRect();
+            const skills=slot.querySelector('.manual-weapon-skill-list').getBoundingClientRect();
+            return Math.min(picker.bottom,skills.bottom)>Math.max(picker.top,skills.top);
+          })};
+      });
+      assert(geometry.span<=budget,'compact collection and both slots fit height budget '+width+'x'+height+': '+geometry.span);
+      assert(geometry.rows.every(Boolean),'equipment and skills share the same row');
+    }
     await page.setViewportSize({width:1180,height:820});
+    const outer=await page.locator('#page-training').evaluate(node=>{const s=getComputedStyle(node);return {background:s.backgroundColor,image:s.backgroundImage,shadow:s.boxShadow,radius:s.borderRadius,maxWidth:s.maxWidth};});
+    assert.deepEqual(outer,{background:'rgba(0, 0, 0, 0)',image:'none',shadow:'none',radius:'0px',maxWidth:'none'});
     const columns=await page.locator('.manual-weapon-grid').evaluate(node=>
       getComputedStyle(node).gridTemplateColumns.split(' ').length);
-    assert.equal(columns,1,'the two weapons are stacked horizontal equipment rows');
-    for(const viewport of [
-      {width:1180,height:820},{width:768,height:1024},
-      {width:393,height:852},{width:852,height:393}
-    ]){
-      await page.setViewportSize(viewport);
-      const cardGeometry=await page.locator('.manual-art-card').evaluateAll(cards=>cards.map(card=>{
-        const rect=card.getBoundingClientRect();
-        const art=card.querySelector('.manual-art-card-picture .manual-weapon-art');
-        return {width:rect.width,height:rect.height,backgroundSize:getComputedStyle(art).backgroundSize};
-      }));
-      assert(cardGeometry.length>0,'weapon collection is rendered');
-      assert(cardGeometry.every(card=>card.width>0&&Math.abs(card.height-card.width*1501/1047)<2),
-        'weapon cards keep the same portrait ratio in '+JSON.stringify(viewport)+': '+JSON.stringify(cardGeometry));
-      assert(cardGeometry.every(card=>card.backgroundSize==='contain'),
-        'weapon art must fit without cropping in '+JSON.stringify(viewport));
-      const portrait=viewport.height>viewport.width;
-      const orientation=portrait?'portrait':'landscape';
-      for(const [selector,name] of [['.manual-library','collection'],['.manual-weapons','equipment']]){
-        const image=await page.locator(selector).evaluate(node=>getComputedStyle(node,'::before').backgroundImage);
-        assert(image.includes(name+'-'+orientation+'.webp'),name+' must use its own '+orientation+' panel');
-      }
-      const rowArt=await page.locator('[data-manual-slot="0"]').evaluate(node=>{
-        const css=getComputedStyle(node);return css.backgroundImage+' '+css.borderImageSource;
-      });
-      assert(rowArt.includes('equipment-row-'+orientation+'.webp'));
-      const sockets=await page.locator('.manual-weapon-skill-picture').evaluateAll(nodes=>
-        nodes.map(node=>({width:node.getBoundingClientRect().width,height:node.getBoundingClientRect().height})));
-      assert(sockets.every(size=>size.width>25&&Math.abs(size.width-size.height)<1),
-        'skill sockets must stay circular in '+JSON.stringify(viewport));
-      for(const selector of ['.manual-library','.manual-weapons']){
-        const fit=await page.locator(selector).evaluate(node=>node.scrollWidth<=node.clientWidth+2);
-        assert(fit,selector+' must fit '+JSON.stringify(viewport));
-      }
-    }
-    // Extra vertical stage space belongs to the collection panel, not the cards.
-    await page.setViewportSize({width:768,height:1250});
-    const shelfHeight=await library.evaluate(node=>node.getBoundingClientRect().height);
-    const fixedCardHeight=await library.locator('.manual-art-card').first().evaluate(node=>node.getBoundingClientRect().height);
-    await page.setViewportSize({width:768,height:1650});
-    const expanded=await library.evaluate(node=>({
-      height:node.getBoundingClientRect().height,
-      equipmentBottom:document.querySelector('.manual-weapons').getBoundingClientRect().bottom,
-      dockTop:document.querySelector('.manual-art-navigation').getBoundingClientRect().top
-    }));
-    assert(expanded.height>shelfHeight+250,'taller stages expand the collection panel');
-    assert(Math.abs(await library.locator('.manual-art-card').first().evaluate(node=>node.getBoundingClientRect().height)-fixedCardHeight)<1,
-      'vertical growth never stretches weapon cards');
-    assert(Math.abs(expanded.dockTop-expanded.equipmentBottom-8)<3,
-      'equipment ends immediately above the dock: '+JSON.stringify(expanded));
-    await page.setViewportSize({width:852,height:393});
-    // Fill the owned collection through the real server projection so the
-    // carousel is tested with overflow, rather than a synthetic DOM fixture.
-    for(const id of ['sword-flight','sword-sky','body-dragon','body-tiger']){
-      db.records.get(service.MANUALS+'/u1').books[id]={exp:280};
-    }
-    await page.locator('[data-manual-refresh]').click();
-    await page.waitForFunction(()=>document.querySelectorAll('[data-manual-book]').length===6);
-    const track=page.locator('.manual-book-grid');
-    const collection=await track.evaluate(node=>({
-      width:node.clientWidth,scroll:node.scrollWidth,
-      tops:[...node.querySelectorAll('[data-manual-book]')].map(card=>card.getBoundingClientRect().top)
-    }));
-    assert(collection.scroll>collection.width,'owned weapons overflow horizontally instead of shrinking');
-    assert(collection.tops.every(top=>Math.abs(top-collection.tops[0])<1),'weapons stay on one row');
-    for(let i=0;i<4;i++)await track.press('ArrowRight');
-    await page.waitForFunction(()=>document.querySelector('.manual-book-grid').scrollLeft>0);
-    await page.locator('[data-manual-collection-filter="body"]').click();
-    assert.equal(await track.evaluate(node=>node.scrollLeft),0,'changing school returns to the start of the collection');
-    await page.locator('[data-manual-collection-filter="all"]').click();
-    // A smaller collection must never stretch cards to fill its shelf.
-    for(const viewport of [{width:393,height:852},{width:1180,height:820},{width:1440,height:900}]){
-      await page.setViewportSize(viewport);
-      const expectedWidth=viewport.width>viewport.height?200:160;
-      for(const filter of ['all','sword','body']){
-        await page.locator('[data-manual-collection-filter="'+filter+'"]').click();
-        const sizes=await track.locator('.manual-art-card').evaluateAll(nodes=>nodes.map(node=>node.getBoundingClientRect().width));
-        assert(sizes.length>0&&sizes.every(width=>Math.abs(width-expectedWidth)<1),
-          'card width is independent of collection count and shelf width: '+JSON.stringify({viewport,filter,sizes}));
-      }
-    }
-    await page.setViewportSize({width:852,height:393});
-    await page.locator('[data-manual-collection-filter="all"]').click();
-    // Same order for collection and modal, including realm ties and equipped priority.
-    const expectedOrder=['body-rock','sword-wind','sword-sky','body-dragon','sword-flight','body-tiger'];
-    const visibleIds=()=>track.locator('[data-manual-book]').evaluateAll(nodes=>nodes.map(node=>node.dataset.manualBook));
-    assert.deepEqual(await visibleIds(),expectedOrder);
-    const currentWeapon=()=>page.locator('.manual-training-dialog .manual-hero-details h3').textContent();
-    const expectedNames=['玄嶽圖騰','流風靈劍','八方天劍','龍象圖騰','御靈飛劍','伏虎圖騰'];
-    await track.locator('[data-manual-book="body-rock"] button').click();
-    assert.equal(await currentWeapon(),expectedNames[0]);
-    for(const name of [...expectedNames.slice(1),expectedNames[0]]){
-      await page.locator('[data-manual-switch-weapon="1"]').click();
-      assert.equal(await currentWeapon(),name);
-    }
-    await page.locator('[data-manual-switch-weapon="-1"]').click();
-    assert.equal(await currentWeapon(),expectedNames.at(-1));
-    await page.locator('[data-manual-close-training]').click();
-    await page.locator('[data-manual-collection-filter="sword"]').click();
-    assert.deepEqual(await visibleIds(),['sword-wind','sword-sky','sword-flight']);
-    await track.locator('[data-manual-book="sword-wind"] button').click();
-    await page.locator('[data-manual-switch-weapon="-1"]').click();
-    assert.equal(await currentWeapon(),'御靈飛劍');
-    await page.locator('[data-manual-switch-weapon="1"]').click();
-    assert.equal(await currentWeapon(),'流風靈劍');
-    await page.locator('[data-manual-close-training]').click();
-    await page.locator('[data-manual-collection-filter="all"]').click();
-    const aligned=await page.locator('.manual-art-card').evaluateAll(cards=>cards.every(card=>{
-      const rect=card.getBoundingClientRect();
-      const labels=[...card.querySelectorAll('.manual-art-card-name,.manual-art-card-school,.manual-art-card-level')];
-      const boxes=labels.map(node=>node.getBoundingClientRect());
-      return boxes.every(box=>Math.abs(box.x+box.width/2-rect.x-rect.width/2)<1)&&
-        boxes[0].bottom<=boxes[1].top&&boxes[1].bottom<=boxes[2].top;
-    }));
-    assert(aligned,'names, school labels and levels share a center without overlapping');
-    // Content scrolls over the single title in the background; the dock remains fixed.
-    const beforeScroll=await page.locator('.manual-art-navigation').boundingBox();
-    await page.locator('[data-manual-refresh]').press('PageDown');
-    await page.waitForFunction(()=>document.querySelector('#page-training').scrollTop>0);
-    const afterScroll=await page.locator('.manual-art-navigation').boundingBox();
-    assert.equal(afterScroll.y,beforeScroll.y,'the bottom navigation must remain fixed');
-    const masthead=await page.locator('.manual-art-masthead').evaluate(node=>({
-      position:getComputedStyle(node).position,background:getComputedStyle(node).backgroundImage
-    }));
-    assert.notEqual(masthead.position,'sticky');
-    assert.equal(masthead.background,'none','scrolling must never repeat the 修行 background title');
+    assert.equal(columns,1);
     // Returning from battle always fetches fresh authoritative weapon XP.
     const refreshed=page.waitForResponse(res=>res.url().endsWith('/api/tactical/manuals')
       &&res.request().method()==='GET');

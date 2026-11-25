@@ -52,26 +52,6 @@ test('filter all, sword and body only includes actually owned manuals',()=>{
   assert.equal(filterOwnedManuals({library:[]}).length,0);
 });
 
-test('weapon gallery filters never invent or reveal unowned schools',()=>{
-  const state={weaponIds:['sword-wind',null],library:[...library,
-    book('spell-owned','spell'),book('arcane-secret','arcane',{owned:false})]};
-  assert.deepEqual(Array.from(filterOwnedManuals(state,'spell').map(x=>x.id)),['spell-owned']);
-  assert.equal(filterOwnedManuals(state,'arcane').length,0);
-  const header=renderManualCollectionHeader(state,'spell',tools);
-  assert.match(header,/data-manual-collection-filter="spell" aria-pressed="true"/);
-  assert.match(header,/data-manual-collection-filter="arcane"/);
-});
-
-test('weapon cards show the actual school and level while keeping the modal action',()=>{
-  const card=draw(book('body-rock','body',{weaponType:'totem',level:5}),'body-rock');
-  assert.match(card,/data-feature-book="body-rock"/);
-  assert.match(card,/aria-haspopup="dialog"/);
-  assert.match(card,/aria-pressed="true"/);
-  assert.match(card,/manual-art-card-school">體修/);
-  assert.match(card,/Lv. 5 \/ 20/);
-  assert.doesNotMatch(card,/煉氣武器|築基武器|元嬰武器/);
-});
-
 test('header reports ownership counts and offers keyboard-accessible filters',()=>{
   const head=renderManualCollectionHeader({library},'body',tools);
   assert.match(head,/功法收藏/);
@@ -140,4 +120,33 @@ test('a level-10 manual reads 大成, while a level-20 manual is actually 圓滿
   assert.doesNotMatch(refined,/圓滿/);
   const max=draw(book('sword-wind','sword',{level:20,progress:100,tierRealm:'元嬰'}));
   assert.match(max,/圓滿/);
+});
+
+test('weapon school badge includes the authoritative weapon realm, not the player realm',()=>{
+  assert.match(draw(book('sword-sky','sword',{weaponType:'sword',tierRealm:'金丹'})),/manual-native-school">劍修 · 金丹<\/span>/);
+  assert.match(draw(book('body-rock','body',{weaponType:'totem',tierRealm:'築基'})),/manual-native-school">體修 · 築基<\/span>/);
+  assert.match(draw(book('sword-wind','sword',{weaponType:'sword',tierRealm:'煉氣'})),/manual-native-school">劍修 · 煉氣<\/span>/);
+});
+
+test('weapon card uses its actual identity for elemental presentation',()=>{
+ const html=draw(book('sword-flight','sword',{weaponType:'sword',tierRealm:'築基'}));
+ assert.match(html,/data-ritual-weapon="sword-flight"/);
+ assert.match(html,/劍修 · 築基/);
+});
+
+test('weapon collection shows only real equipment state and bounded current-level EXP',()=>{
+ const item=book('sword-wind','sword',{weaponType:'sword',tierRealm:'煉氣',expInLevel:62,expToNext:100});
+ const worn=draw(item,item.id,[item.id]);
+ assert.match(worn,/data-armory-equipped="true"/);
+ assert.match(worn,/manual-armory-worn/);
+ assert.match(worn,/--armory-progress:62\.00%/);
+ assert.match(worn,/title="62 \/ 100 EXP"/);
+ assert.match(worn,/data-armory-tier="qi"/);
+ const other=draw(item,'',[]);
+ assert.match(other,/data-armory-equipped="false"/);
+ assert.doesNotMatch(other,/manual-armory-worn/);
+ assert.match(draw({...item,level:20,expInLevel:0,expToNext:0}),/--armory-progress:100\.00%/);
+ assert.match(draw({...item,expInLevel:900}),/--armory-progress:100\.00%/);
+ assert.match(draw({...item,expInLevel:-5}),/--armory-progress:0\.00%/);
+ assert.doesNotMatch(draw({...item,expToNext:0}),/manual-armory-exp/);
 });

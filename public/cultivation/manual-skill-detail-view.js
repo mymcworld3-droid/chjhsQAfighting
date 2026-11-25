@@ -31,7 +31,7 @@ export function renderManualSkillDetail(book,skillId,{esc,skillArt,descriptionWi
   return `<section class="manual-focus-skill ${locked?'is-locked':'is-learned'}"
     data-manual-skill="${esc(skill.id)}" aria-label="${esc(skill.name)}招式詳細資料">
     <div class="manual-focus-skill-head">
-      <span class="manual-focus-skill-title">招式詳情 · 第 ${book.skills.indexOf(skill)+1} 招</span>
+      <span class="manual-focus-skill-title">${weaponMode?'技能簡介':'招式詳情 · 第 '+(book.skills.indexOf(skill)+1)+' 招'}</span>
       <button type="button" data-manual-close-skill aria-label="關閉招式詳細資料">
         <i class="fa-solid fa-xmark" aria-hidden="true"></i> 收起
       </button>
