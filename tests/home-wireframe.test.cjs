@@ -50,17 +50,11 @@ test('the four-point Learning shortcut opens the full-width list of learning fea
   assert.match(read('public/styles/learning-page.css'),/\.learning-feature\s*\{[^}]*width: 100%;/);
 });
 
-test('three rectangular shortcuts are grouped into a single fixed floating rail per side',()=>{
-  assert.match(css,/\.home-wireframe-rail\{[\s\S]*?position:fixed!important/);
-  assert.match(css,/top:50%;transform:translateY\(-50%\)/);
-  assert.match(css,/\.home-wireframe-rail\.is-left/);
-  assert.match(css,/\.home-wireframe-rail\.is-right/);
-  assert.match(css,/\.home-wireframe-shortcut\+\.home-wireframe-shortcut\{/);
-  assert.match(css,/border-top:1px solid/);
-  assert.match(css,/z-index:45/);
-  assert.match(css,/max-height:calc\(100dvh - 160px\)/);
-  assert.doesNotMatch(css,/clip-path:polygon/);
-  assert.match(css,/@media\(max-width:850px\)/);
+test('shortcut columns are in the page grid instead of viewport-fixed overlays',()=>{
+  assert.match(css,/\.home-wireframe-rail\{[^}]*position:relative!important/);
+  assert.doesNotMatch(css,/position:fixed!important/);
+  assert.match(css,/\.home-wireframe-rail\.is-left\{grid-area:left\}/);
+  assert.match(css,/\.home-wireframe-rail\.is-right\{grid-area:right\}/);
   assert.match(css,/visibility:hidden!important;pointer-events:none!important/);
 });
 
@@ -123,40 +117,34 @@ test('daily task, JSON/AI bank, and original battle systems stay mounted',()=>{
   assert.doesNotMatch(js,/runTransaction|\.update\(/);
 });
 
-test('iPad landscape does not place the trial CTA below the whole daily card and scene',()=>{
-  const desktop=css.slice(css.indexOf('body.ui-cleanup #page-home>.home-layout,'));
-  const head=desktop.slice(0,desktop.indexOf('body.ui-cleanup #page-home>.home-layout>.sect-actions'));
-  assert.match(head,/"left realm emblem right"/);
-  assert.match(head,/"left daily practice right"/);
-  assert.match(head,/"left records \. right"/);
-  assert.doesNotMatch(head,/"left daily emblem right"|"left records practice right"/);
-  assert.match(css,/grid-area:emblem/);
-  assert.match(css,/grid-area:practice!important/);
-  assert.match(css,/grid-area:daily/);
-  // The bottom navigation is fixed; the page must leave a safe scroll area.
-  assert.match(css,/padding-bottom:calc\(100px \+ env\(safe-area-inset-bottom,0px\)\)!important/);
-  assert.match(css,/@media \(min-width:851px\) and \(max-height:760px\)/);
-  // Preserve the existing verified CTA and its click handler.
+test('landscape uses realm, central scene and CTA, and two right shortcut columns',()=>{
+  const landscape=css.slice(css.indexOf('@media (orientation:landscape){'));
+  assert.match(landscape,/"realm emblem left right"/);
+  assert.match(landscape,/"\. practice \. \."/);
+  assert.match(landscape,/"daily records records records"/);
+  assert.match(landscape,/width:min\(100%,460px,52dvh\)!important/);
+  assert.match(landscape,/flex-direction:column;align-items:center;text-align:center/);
+  assert.match(landscape,/@media \(orientation:landscape\) and \(max-height:460px\)/);
   assert.equal((html.match(/id="btn-home-start"/g)||[]).length,1);
   assert.match(html,/id="btn-home-start"[^>]+onclick="startQuizFlow\(\)"/);
+  assert.match(html,/id="btn-home-free-quiz"[^>]+onclick="startFreeQuizFlow\(\)"/);
 });
 
 test('portrait side panels are anchored in the circle row instead of covering the entire viewport',()=>{
   const portrait=css.slice(css.lastIndexOf('@media (orientation: portrait)'));
   assert.match(portrait,/"left emblem right"/);
-  assert.match(portrait,/"\. practice \."/);
+  assert.match(portrait,/"practice practice practice"/);
   assert.match(portrait,/"realm realm realm"/);
   assert.match(portrait,/"daily daily daily"/);
   assert.match(portrait,/position:relative!important/);
   assert.match(portrait,/transform:none!important/);
   assert.match(portrait,/top:auto!important/);
-  assert.match(portrait,/grid-row:2!important/);
   assert.match(portrait,/grid-area:left!important/);
   assert.match(portrait,/grid-area:right!important/);
   assert.match(portrait,/width:100%!important/);
   assert.match(portrait,/@media \(orientation:portrait\) and \(max-width:390px\)/);
-  assert.match(css,/position:fixed!important;top:50%;transform:translateY\(-50%\)/);
+  assert.doesNotMatch(css,/position:fixed!important/);
   // Buttons stay inside home-layout; no DOM hoisting into document.body.
   assert.doesNotMatch(js,/document\.body\.appendChild\(homeLeftRail\)|home-rails-portal|syncPortraitRails/);
-  assert.match(html,/home-wireframe\.css\?v=20261115-learning-shortcut/);
+  assert.match(html,/home-wireframe\.css\?v=20261125-responsive-lobby-v1/);
 });

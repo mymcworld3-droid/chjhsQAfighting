@@ -5,16 +5,14 @@ body.ui-cleanup #page-home>.xianxia-page-heading{display:none!important}
 body.ui-cleanup #page-home>.home-layout,
 body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
   display:grid!important;
-  grid-template-columns:74px minmax(265px,1.05fr) minmax(300px,1fr) 74px!important;
-  /* The scene and realm card occupy only the first row.  Keep the trial
-     button in row 2 alongside today's task, never after their combined height. */
+  grid-template-columns:minmax(0,1.04fr) minmax(0,1.65fr) repeat(2,minmax(0,.32fr))!important;
   grid-template-areas:
-    "left realm emblem right"
-    "left daily practice right"
-    "left records . right"!important;
-  grid-template-rows:minmax(0,auto) auto auto!important;
-  column-gap:clamp(12px,2.3vw,36px)!important;
-  row-gap:clamp(10px,1.6vh,18px)!important;
+    "realm emblem left right"
+    ". practice . ."
+    "daily records records records"!important;
+  grid-template-rows:auto auto auto!important;
+  column-gap:clamp(8px,1.8vw,26px)!important;
+  row-gap:clamp(6px,1.2dvh,12px)!important;
   padding:0!important;
   align-items:start!important;
 }
@@ -39,10 +37,10 @@ body.ui-cleanup #page-home #xiuxian-panel .xiuxian-row{margin-top:6px!important}
 body.ui-cleanup #page-home #xiuxian-panel .xiuxian-bar{margin-top:8px!important}
 body.ui-cleanup #page-home #xiuxian-panel .xiuxian-row:has(#xiuxian-meditation-streak){display:none!important}
 
-/* Left and right "diamonds" were icon placeholders: buttons stay rectangular. */
+/* Landscape shortcuts occupy two adjacent grid columns to the right of the scene. */
 .home-wireframe-rail{
   display:flex;flex-direction:column;justify-content:center;align-items:stretch;
-  gap:14px;min-height:330px;align-self:stretch;min-width:0;
+  gap:12px;min-height:0;align-self:center;min-width:0;
 }
 .home-wireframe-rail.is-left{grid-area:left}
 .home-wireframe-rail.is-right{grid-area:right}
@@ -68,11 +66,11 @@ body.ui-cleanup #page-home #xiuxian-panel .xiuxian-row:has(#xiuxian-meditation-s
 /* Large circle: a cultivation emblem, not an ecological render. */
 .home-realm-emblem{
   grid-area:emblem;display:flex;align-items:center;justify-content:center;
-  flex-direction:column;min-width:0;min-height:340px;align-self:stretch;gap:14px;
+  flex-direction:column;min-width:0;min-height:0;align-self:center;gap:8px;
 }
 .home-realm-disc{
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
-  width:min(100%,272px);aspect-ratio:1;border-radius:50%;
+  width:min(100%,430px,54dvh);aspect-ratio:1;border-radius:50%;
   background:radial-gradient(circle at 43% 37%,rgba(206,180,121,.18),rgba(37,43,37,.84) 48%,#1b211e 74%);
   border:2px solid #ba9f70;box-shadow:inset 0 0 0 9px rgba(188,157,97,.06),0 18px 35px #0005;
   color:#e1c996;position:relative;
@@ -96,7 +94,7 @@ body.ui-cleanup #page-home .home-practice .xiuxian-quick-actions{
   display:flex!important;flex-direction:column;gap:10px!important;
 }
 body.ui-cleanup #page-home .home-practice #btn-home-start{
-  width:100%;min-height:112px!important;justify-content:center!important;
+  width:100%;min-height:72px!important;justify-content:center!important;
   background:#bda371!important;border:1px solid #e3c990!important;
   border-radius:12px!important;color:#202620!important;box-shadow:none!important;
 }
@@ -202,38 +200,16 @@ body.ui-cleanup #page-home .home-records{grid-area:records!important;align-self:
 }
 
 
-/* Three shortcuts on either side are one fixed, grouped rectangle. */
+/* Both rails remain inside the page grid, including on short landscape screens. */
 body.ui-cleanup #page-home .home-wireframe-rail{
-  position:fixed!important;top:50%;transform:translateY(-50%);
-  z-index:45;display:flex!important;flex-direction:column;gap:0!important;
-  width:clamp(56px,6.3vw,84px)!important;min-height:0!important;
-  height:auto;max-height:calc(100dvh - 160px);
-  padding:5px 3px!important;overflow:visible;
-  border:1px solid rgba(214,186,132,.34);
-  border-radius:14px;background:rgba(25,31,27,.96);
-  box-shadow:0 18px 38px rgba(0,0,0,.35);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-}
-body.ui-cleanup #page-home .home-wireframe-rail.is-left{
-  left:max(7px,env(safe-area-inset-left));right:auto;
-}
-body.ui-cleanup #page-home .home-wireframe-rail.is-right{
-  right:max(7px,env(safe-area-inset-right));left:auto;
+  position:relative!important;top:auto;left:auto;right:auto;transform:none!important;
+  display:flex!important;flex-direction:column;gap:clamp(6px,1.6dvh,12px)!important;
+  width:100%!important;min-height:0!important;max-height:none;
+  padding:0!important;margin:0!important;align-self:center!important;
 }
 body.ui-cleanup #page-home .home-wireframe-shortcut{
-  flex:1 1 auto;min-height:clamp(52px,12dvh,82px);
-  padding:8px 2px!important;margin:0!important;gap:5px!important;
-  border:0!important;border-radius:8px!important;
-  background:transparent!important;box-shadow:none!important;
-  transform:none!important;
-}
-body.ui-cleanup #page-home .home-wireframe-shortcut+.home-wireframe-shortcut{
-  border-top:1px solid rgba(207,177,124,.21)!important;
-  border-radius:0!important;
-}
-body.ui-cleanup #page-home .home-wireframe-shortcut:hover,
-body.ui-cleanup #page-home .home-wireframe-shortcut:focus-visible{
-  background:rgba(207,177,124,.14)!important;
+  min-height:clamp(48px,12dvh,86px);
+  padding:6px 2px!important;margin:0!important;gap:5px!important;
 }
 body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
   visibility:hidden!important;pointer-events:none!important;
@@ -285,28 +261,92 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
   .home-realm-disc .home-ecology-name{font-size:clamp(10px,3vw,14px)}
 }
 
-/* Short landscape Safari viewports keep the trial CTA above the bottom nav.
-   For taller screens, the normal 272px scene circle is unchanged. */
-@media (min-width:851px) and (max-height:760px){
-  body.ui-cleanup #page-home>.home-layout{
-    row-gap:8px!important;
+/* Wide composition follows the concept: profile | scene + trial | six shortcuts.
+   Size the scene by available viewport height so the main CTA stays in view. */
+@media (orientation:landscape){
+  body.ui-cleanup #page-home{
+    padding-top:clamp(4px,2dvh,18px)!important;
+    padding-bottom:12px!important;
   }
+  body.ui-cleanup #page-home>.home-layout,
+  body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
+    grid-template-columns:minmax(0,1.04fr) minmax(0,1.65fr) repeat(2,minmax(0,.32fr))!important;
+    grid-template-areas:
+      "realm emblem left right"
+      ". practice . ."
+      "daily records records records"!important;
+    grid-template-rows:auto auto auto!important;
+    column-gap:clamp(8px,1.8vw,26px)!important;
+    row-gap:clamp(4px,1.2dvh,12px)!important;
+    align-items:start!important;
+  }
+  body.ui-cleanup #page-home #xiuxian-panel{
+    align-self:center!important;
+    min-height:0!important;
+    padding:clamp(10px,2dvh,24px) clamp(10px,1.8vw,24px)!important;
+  }
+  body.ui-cleanup #page-home #xiuxian-panel .xiuxian-identity{
+    flex-direction:column;align-items:center;text-align:center;
+    gap:8px!important;margin:0 0 12px!important;
+  }
+  body.ui-cleanup #page-home #xiuxian-panel #xiuxian-avatar-slot{
+    width:clamp(44px,10dvh,82px);height:clamp(44px,10dvh,82px);flex:none;
+  }
+  body.ui-cleanup #page-home #xiuxian-panel .xiuxian-kicker,
+  body.ui-cleanup #page-home #xiuxian-panel .xiuxian-invocation{display:none!important}
+  body.ui-cleanup #page-home #xiuxian-panel .xiuxian-realm{font-size:clamp(20px,3.7dvh,34px)!important}
+  body.ui-cleanup #page-home #xiuxian-panel .xiuxian-row{gap:4px;flex-wrap:wrap}
+  body.ui-cleanup #page-home #xiuxian-panel #xiuxian-score{font-size:clamp(15px,2.8dvh,25px)}
+  body.ui-cleanup #page-home #xiuxian-panel .xiuxian-label,
+  body.ui-cleanup #page-home #xiuxian-panel #xiuxian-next{font-size:clamp(9px,1.6dvh,12px)}
   body.ui-cleanup #page-home .home-realm-emblem{
-    min-height:260px;
-    gap:7px;
+    min-height:0!important;gap:clamp(3px,1dvh,8px)!important;
+    align-self:center!important;padding:0!important;
   }
   body.ui-cleanup #page-home .home-realm-disc{
-    width:min(100%,220px);
+    width:min(100%,460px,52dvh)!important;
   }
+  body.ui-cleanup #page-home .home-practice{
+    width:min(100%,440px)!important;justify-self:center!important;
+  }
+  body.ui-cleanup #page-home .home-practice .xiuxian-quick-actions{gap:4px!important}
   body.ui-cleanup #page-home .home-practice #btn-home-start{
-    min-height:85px!important;
+    min-height:clamp(42px,10dvh,82px)!important;
+    padding:5px 8px!important;
   }
+  body.ui-cleanup #page-home .home-practice #btn-home-start .font-sci{
+    font-size:clamp(16px,3.2dvh,28px)!important;
+  }
+  body.ui-cleanup #page-home .home-practice #btn-home-start .font-mono{display:none!important}
+  body.ui-cleanup #page-home .home-wireframe-rail{
+    align-self:center!important;width:100%!important;padding:0!important;
+    gap:clamp(5px,1.4dvh,12px)!important;
+  }
+  body.ui-cleanup #page-home .home-wireframe-shortcut{
+    min-height:clamp(44px,11dvh,86px)!important;
+    font-size:clamp(9px,1.7dvh,12px);
+  }
+  body.ui-cleanup #page-home .home-daily-progress,
+  body.ui-cleanup #page-home .home-records{align-self:start;margin-top:8px!important}
+  body.ui-cleanup #page-home .home-daily-progress:has(>#quest-spotlight-slot[hidden]){display:none!important}
+  body.ui-cleanup #page-home .home-daily-progress .quest-spotlight{min-height:0;padding:10px 12px!important;gap:6px!important}
+  body.ui-cleanup #page-home .home-daily-progress .quest-spotlight-title{font-size:15px!important}
+  body.ui-cleanup #page-home .home-records>summary{padding-block:10px}
+}
+@media (orientation:landscape) and (max-height:460px){
+  body.ui-cleanup #page-home .home-realm-disc{width:min(100%,48dvh)!important}
+  body.ui-cleanup #page-home #xiuxian-panel .xiuxian-identity{margin-bottom:5px!important;gap:3px!important}
+  body.ui-cleanup #page-home #xiuxian-panel #xiuxian-avatar-slot{width:36px;height:36px}
+  body.ui-cleanup #page-home #xiuxian-panel .xiuxian-sub{margin-top:2px}
+  body.ui-cleanup #page-home #xiuxian-panel .xiuxian-row{margin-top:3px!important}
+  body.ui-cleanup #page-home #xiuxian-panel .xiuxian-bar{margin-top:4px!important}
+  body.ui-cleanup #page-home .home-wireframe-shortcut{min-height:40px!important;gap:3px!important}
+  body.ui-cleanup #page-home .home-wireframe-shortcut :is(i,.home-learning-star){font-size:17px}
+  body.ui-cleanup #page-home .home-practice #btn-home-start{min-height:40px!important}
 }
 
-/* Portrait: the three shortcuts on each side belong to the trial-image ROW.
-   They remain grouped in one panel, but no longer pin to the viewport and
-   consequently cannot overlay the realm card, trial CTA or daily progress.
-   Landscape continues using the viewport-fixed side panels above. */
+/* Portrait keeps the compact realm panel above the scene; the shortcut columns
+   flank the scene and the two trial entries sit together directly below it. */
 @media (orientation: portrait) {
   body.ui-cleanup #page-home > .home-layout,
   body.ui-cleanup #page-home > .home-layout:has(>#quest-spotlight-slot[hidden]) {
@@ -314,7 +354,7 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
     grid-template-areas:
       "realm realm realm"
       "left emblem right"
-      ". practice ."
+      "practice practice practice"
       "daily daily daily"
       "records records records"!important;
     grid-template-rows:auto auto auto auto auto!important;
@@ -329,15 +369,13 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
     top:auto!important;
     bottom:auto!important;
     transform:none!important;
-    grid-row:2!important;
-    grid-column:auto!important;
-    align-self:center!important;
+     align-self:center!important;
     justify-self:stretch!important;
     width:100%!important;
     height:auto!important;
     max-height:none!important;
     min-height:0!important;
-    padding:4px 2px!important;
+    padding:0!important;
     margin:0!important;
     z-index:2;
   }
@@ -358,15 +396,20 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
     gap:8px!important;
   }
   body.ui-cleanup #page-home .home-realm-disc {
-    width:min(100%,360px)!important;
+    width:min(100%,360px,43dvh)!important;
   }
   body.ui-cleanup #page-home .home-practice {
     grid-area:practice!important;
     align-self:start!important;
+    justify-self:center!important;
+    width:min(76%,350px)!important;
   }
   body.ui-cleanup #page-home .home-daily-progress {
     grid-area:daily!important;
   }
+  body.ui-cleanup #page-home .home-daily-progress:has(>#quest-spotlight-slot[hidden]){display:none!important}
+  body.ui-cleanup #page-home .home-practice #btn-home-start{min-height:clamp(54px,10dvh,78px)!important}
+  body.ui-cleanup #page-home .home-practice .xiuxian-quick-actions{gap:5px!important}
 }
 @media (orientation:portrait) and (max-width:390px) {
   body.ui-cleanup #page-home > .home-layout,
