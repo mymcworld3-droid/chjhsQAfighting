@@ -103,15 +103,16 @@ test('a blocked knockback does not cancel a windup, while an ordinary beast also
  const hp=next.actors[0].hp;next=R.apply(next,'u1',{type:'end'},NOW);
  assert.equal(next.actors[0].hp,hp);
 });
-test('dormant deepest lord cannot move, attack or be killed before all guards fall',()=>{
- let s=R.create({id:'sleep',players:[hero()],trial:{seed:'sleep',weaponDungeon:{difficulty:0}},now:NOW});
- Object.assign(s.actors[0],{x:6,y:3,stamina:10});const hp=s.actors[1].hp;
+test('deepest lord is vulnerable and active even when all guards remain',()=>{
+ let s=R.create({id:'awake',players:[hero()],trial:{seed:'awake',weaponDungeon:{difficulty:0}},now:NOW});
+ Object.assign(s.actors[0],{x:6,y:3,stamina:10});
+ const hp=s.actors[1].hp,guards=s.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length;
+ R.prepareIntents(s);assert.notEqual(s.actors[1].intent.kind,'wait');
  s=R.apply(s,'u1',{type:'manual',skillId:'rock-fist',x:6,y:2},NOW);
- assert.equal(s.actors[1].hp,hp);assert.equal(s.actors[1].intent.kind,'wait');
- s=R.apply(s,'u1',{type:'end'},NOW);assert.equal(s.actors[1].y,1);assert.equal(s.actors[1].intent.kind,'wait');
- for(const a of s.actors.slice(2))a.hp=0;
- R.prepareIntents(s);assert.equal(s.actors[1].intent.kind,'attack');
+ assert(s.actors[1].hp<hp);
+ assert.equal(s.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length,guards);
 });
+
 test('totem hits receive exactly 15% extra damage only in the weapon dungeon; sword damage is unchanged',()=>{
  for(const [tracking,skill,expected]of [[true,'rock-fist',276],[false,'rock-fist',240],[true,'wind-slash',230]]){
    const s=scene({tracking,skills:[skill],enemy:{x:7,y:4},player:{x:6,y:4}}),hp=s.actors[1].hp;
@@ -156,7 +157,9 @@ test('server victory unlocks exactly the next difficulty once and never advances
  const db=database();own(db);
  const ordinary=await API.start(db,'u1',{mode:'pve'},NOW),campaign=structuredClone(db.records.get(API.PLAYERS+'/u1').trial);
  const s=await API.start(db,'u1',input(),NOW),raw=db.records.get(API.ROOMS+'/'+s.id);
- for(const a of raw.actors.slice(2))a.hp=0;
+ // Guards stay alive: killing only the lord is sufficient for progression.
+ const guardCount=raw.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length;
+ assert(guardCount>=8);
  Object.assign(raw.actors[0],{x:6,y:3,stamina:10,answered:1,correct:1});raw.actors[1].hp=1;
  R.prepareIntents(raw);
  const command={roomId:s.id,type:'manual',skillId:'rock-fist',x:6,y:2,revision:raw.revision,requestId:'victory-cast-001'};
@@ -170,6 +173,34 @@ test('server victory unlocks exactly the next difficulty once and never advances
  assert.equal((await API.state(db,'u1',NOW,'pve')).id,ordinary.id);
  assert((await API.start(db,'u1',input('now-unlocked-room',1),NOW)).weaponDungeon.difficulty===1);
 });
+test('lord defeat immediately settles weapon dungeon, unlocks next difficulty and awards drop with guards alive and no answer',async()=>{
+ const db=database();own(db);
+ const started=await API.start(db,'u1',input('boss-only-completion-01'),NOW);
+ const raw=db.records.get(API.ROOMS+'/'+started.id);
+ raw.blocks=[];
+ Object.assign(raw.actors[0],{x:6,y:3,stamina:10,answered:0,correct:0});
+ raw.actors.find(a=>a.weaponDungeonLord).hp=1;
+ const guardsAlive=raw.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length;
+ assert(guardsAlive>=8);
+ R.prepareIntents(raw);
+ const action={roomId:started.id,type:'manual',skillId:'rock-fist',x:6,y:2,
+   revision:raw.revision,requestId:'boss-only-final-blow'};
+ const settled=await API.command(db,'u1',action,NOW);
+ assert.equal(settled.status,'finished');
+ assert.equal(settled.winner,'player');
+ assert.equal(settled.finishReason,'objective');
+ assert.equal(settled.objective.completed,true);
+ assert.equal(settled.actors.find(a=>a.weaponDungeonLord).hp,0);
+ assert.equal(settled.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length,guardsAlive);
+ assert.equal(settled.actors[0].answered,0);
+ assert.equal(settled.weaponDungeonResult.cleared,true);
+ const progress=await API.weaponDungeonState(db,'u1',NOW);
+ assert.equal(progress.unlocked,1);
+ assert.equal(progress.clears[0],1);
+ const replay=await API.command(db,'u1',action,NOW);
+ assert.deepEqual(replay.weaponDungeonResult,settled.weaponDungeonResult);
+ assert.equal((await API.weaponDungeonState(db,'u1',NOW)).clears[0],1);
+});
 test('all six difficulties unlock through actual winning commands and repeat settlement never adds a clear',async()=>{
  const db=database();own(db);
  for(let difficulty=0;difficulty<6;difficulty++){
@@ -177,7 +208,9 @@ test('all six difficulties unlock through actual winning commands and repeat set
    if(difficulty<5)await assert.rejects(API.start(db,'u1',input('skip-tier-00'+difficulty,difficulty+1),now),/前一個難度/);
    const s=await API.start(db,'u1',input('clear-tier-00'+difficulty,difficulty),now);
    const raw=db.records.get(API.ROOMS+'/'+s.id);
-   for(const a of raw.actors.slice(2))a.hp=0;
+   // Guards stay alive: killing only the lord is sufficient for progression.
+ const guardCount=raw.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length;
+ assert(guardCount>=8);
    Object.assign(raw.actors[0],{x:6,y:3,stamina:10,answered:1,correct:1});raw.actors[1].hp=1;R.prepareIntents(raw);
    const command={roomId:s.id,type:'manual',skillId:'rock-fist',x:6,y:2,revision:raw.revision,requestId:'tier-win-000'+difficulty};
    const result=await API.command(db,'u1',command,now);
