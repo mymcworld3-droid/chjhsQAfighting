@@ -61,7 +61,7 @@ async function enter(difficulty){
   if(!d||!canEnter(d,tier))return;
   const account=getMainUser()?.uid,token=++serial;loading=true;paint('正在進入秘境…');
   try{
-    const battle=await import('./tactical-combat.js');
+    const battle=await import('./tactical-combat.js?v=20261125-weapon-lord-cleared-v1');
     if(serial!==token||getMainUser()?.uid!==account)return;
     loading=false;dialog.close();
     await battle.openTacticalCombat('weapon-dungeon',{dungeonId:d.id,difficulty});
