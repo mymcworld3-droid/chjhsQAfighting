@@ -399,3 +399,30 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
 #manual-training-root .manual-library .manual-art-card-picture .manual-weapon-art{
   background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;
 }
+
+/* The shelf, not its fixed-size cards, absorbs unused vertical space.
+   The workspace fills the stage above the fixed dock; on short screens
+   it grows naturally and the page remains vertically scrollable. */
+#page-training.manual-training-active.active-page #manual-training-root{
+  display:flex;flex-direction:column;box-sizing:border-box;min-height:100%;
+  padding-bottom:calc(var(--scene-dock-height,130px) + 8px + env(safe-area-inset-bottom))!important;
+}
+#manual-training-root .manual-art-masthead{flex:0 0 auto}
+#manual-training-root .manual-art-workspace{
+  display:flex;flex-direction:column;flex:1 0 auto;min-height:0;
+}
+#manual-training-root .manual-art-workspace>.manual-library{
+  display:flex;flex-direction:column;flex:1 0 auto;
+}
+#manual-training-root .manual-library-heading{flex:0 0 auto}
+#manual-training-root .manual-library .manual-book-grid{
+  flex:1 0 auto;min-height:calc(var(--weapon-card-height) + 32px);
+  align-items:center!important;
+}
+#manual-training-root .manual-library .manual-book-grid>.manual-book{
+  align-self:center!important;
+}
+#manual-training-root .manual-art-workspace>.manual-weapons{
+  flex:0 0 auto;margin-bottom:0;
+}
+#manual-training-root>.manual-celebration-host:empty{display:none}
