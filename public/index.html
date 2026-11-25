@@ -643,6 +643,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <link rel="stylesheet" href="styles/interface-cleanup-pages.css?v=20261125-u12-visual-tokens-v1">
     <link rel="stylesheet" href="styles/home-wireframe.css?v=20261125-landscape-wide-portrait-legacy-v7">
     <link rel="stylesheet" href="styles/learning-page.css?v=20261115-vocabulary-starry-button-space">
+    <link rel="stylesheet" href="styles/scene-art-shell.css?v=20261125-u01-u02-v1">
     <style id="debug-top-layer-style">
       /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
       #btn-show-debug{
@@ -664,7 +665,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <header class="app-corner-header fixed top-0 left-0 w-full z-40">
         <h1 class="xianxia-brand">
             <button id="brand-home" type="button" class="xianxia-brand-home" onclick="returnToImmortalHome()" aria-label="青雲問道，返回宗門" title="返回宗門">
-                <span class="app-brand-wordmark" lang="zh-Hant">青雲問道</span>
+                <picture class="qy-brand-art" aria-hidden="true"><source media="(orientation: portrait)" srcset="assets/interface/brand-portrait.webp"><img src="assets/interface/brand-landscape.webp" alt="" decoding="async"></picture><span class="app-brand-wordmark" lang="zh-Hant">青雲問道</span>
             </button>
         </h1>
 
@@ -874,7 +875,7 @@ body.xianxia-theme main:has(#page-training.active-page),
 
         <section id="page-learning" class="page-section hidden" aria-labelledby="learning-page-title">
             <header class="learning-heading">
-                <button type="button" class="learning-back" onclick="switchToPage('page-home')" aria-label="返回宗門">
+                <button type="button" class="learning-back" data-qy-nav-action="back" onclick="switchToPage('page-home')" aria-label="返回宗門">
                     <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> 宗門
                 </button>
                 <h2 id="learning-page-title">學習</h2>
@@ -895,7 +896,7 @@ body.xianxia-theme main:has(#page-training.active-page),
         <section id="page-daily-vocabulary" class="page-section hidden" aria-labelledby="daily-vocabulary-title">
             <div class="dv-shell">
                 <header class="dv-header">
-                    <button type="button" class="learning-back" data-dv-back aria-label="回到學習">
+                    <button type="button" class="learning-back" data-qy-nav-action="back" data-dv-back aria-label="回到學習">
                         <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> <span data-dv-back-label>回到學習</span>
                     </button>
                     <div>
@@ -1384,7 +1385,7 @@ body.xianxia-theme main:has(#page-training.active-page),
 
     </main>
 
-    <nav id="bottom-nav" class="fixed bottom-0 z-50 hidden">
+    <nav id="bottom-nav" class="fixed bottom-0 z-50 hidden scene-art-dock" aria-label="主要導覽">
         <div class="glass-capsule h-18 px-2 flex items-center justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 backdrop-blur-xl bg-slate-900/90 mx-auto">
             
             <div class="grid w-full h-full items-center" id="nav-grid">

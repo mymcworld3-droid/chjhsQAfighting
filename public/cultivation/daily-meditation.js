@@ -170,7 +170,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     ensureStyle();if(node('daily-meditation-overlay'))return;
     const overlay=document.createElement('div');overlay.id='daily-meditation-overlay';overlay.className='dm-overlay';
     overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','閉關共修');
-    overlay.innerHTML='<section class="dm-card"><header class="dm-top"><div><div class="dm-eyebrow">每日五題素養 · 同門共修</div><div class="dm-heading">聚星閉關</div></div><div class="dm-top-actions"><button class="dm-action dm-action-secondary" id="dm-refresh" type="button">重新同步</button><button type="button" class="dm-close" id="dm-close" aria-label="關閉">×</button></div></header><div class="dm-body"><div id="dm-content"></div><p id="dm-status" class="dm-status" role="status" aria-live="polite"></p></div></section>';
+    overlay.innerHTML='<section class="dm-card"><header class="dm-top"><div><div class="dm-eyebrow">每日五題素養 · 同門共修</div><div class="dm-heading">聚星閉關</div></div><div class="dm-top-actions"><button class="dm-action dm-action-secondary" id="dm-refresh" type="button">重新同步</button><button type="button" class="dm-close" id="dm-close" data-qy-nav-action="close" aria-label="關閉">×</button></div></header><div class="dm-body"><div id="dm-content"></div><p id="dm-status" class="dm-status" role="status" aria-live="polite"></p></div></section>';
     document.body.appendChild(overlay);node('dm-close').onclick=close;
     node('dm-refresh').onclick=()=>void task(async()=>{pauseClock();await refresh({render:true,force:true});});
     overlay.addEventListener('keydown',event=>{

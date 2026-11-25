@@ -333,7 +333,7 @@ function ensure(){
   }
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261115-field-ink';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
-  root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" class="tc-loadout-toggle" data-loadout-toggle aria-expanded="false" hidden>配置</button><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
+  root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" class="tc-loadout-toggle" data-loadout-toggle aria-expanded="false" hidden>配置</button><button type="button" data-close data-qy-nav-action="collapse" aria-label="收起戰場">收起</button></div></header>
     <div class="tc-loadout-popover" data-loadout-menu role="group" aria-label="戰場功法配置" hidden></div>
     <div class="tc-notice" data-notice role="status" hidden></div><div class="tc-manual-xp-host" data-manual-xp-host role="status" aria-live="polite" aria-atomic="true"></div><div class="tc-main" data-main role="region" aria-label="戰場內容"></div><div class="tc-modal" data-modal hidden></div>`;
   document.body.append(root);

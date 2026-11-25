@@ -177,7 +177,7 @@ function markup(){
   const owned=current.library?.some(book=>book.owned);
   const training=owned?`<section id="manual-training-screen" class="manual-training-screen" data-manual-training-screen aria-labelledby="manual-training-screen-title" ${trainingDialogOpen?'':'hidden'}>
     <header class="manual-training-screen-header">
-      <button type="button" data-manual-close-training aria-label="返回武器收藏"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i> 返回</button>
+      <button type="button" data-manual-close-training data-qy-nav-action="back" aria-label="返回武器收藏"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i> 返回</button>
       <h2 id="manual-training-screen-title">${esc(current.library.find(book=>book.id===featuredBookId)?.name||'武器')} · 武器修煉</h2>
       <span class="manual-training-screen-spacer" aria-hidden="true"></span>
     </header>
