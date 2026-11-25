@@ -134,6 +134,16 @@ async function main(){
       {width:393,height:852},{width:852,height:393}
     ]){
       await page.setViewportSize(viewport);
+      const cardGeometry=await page.locator('.manual-art-card').evaluateAll(cards=>cards.map(card=>{
+        const rect=card.getBoundingClientRect();
+        const art=card.querySelector('.manual-art-card-picture .manual-weapon-art');
+        return {width:rect.width,height:rect.height,backgroundSize:getComputedStyle(art).backgroundSize};
+      }));
+      assert(cardGeometry.length>0,'weapon collection is rendered');
+      assert(cardGeometry.every(card=>card.width>0&&Math.abs(card.height-card.width*1501/1047)<2),
+        'weapon cards keep the same portrait ratio in '+JSON.stringify(viewport)+': '+JSON.stringify(cardGeometry));
+      assert(cardGeometry.every(card=>card.backgroundSize==='contain'),
+        'weapon art must fit without cropping in '+JSON.stringify(viewport));
       const portrait=viewport.height>viewport.width;
       const orientation=portrait?'portrait':'landscape';
       for(const [selector,name] of [['.manual-library','collection'],['.manual-weapons','equipment']]){
