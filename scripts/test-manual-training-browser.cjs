@@ -182,6 +182,19 @@ async function main(){
     await page.locator('[data-manual-collection-filter="body"]').click();
     assert.equal(await track.evaluate(node=>node.scrollLeft),0,'changing school returns to the start of the collection');
     await page.locator('[data-manual-collection-filter="all"]').click();
+    // A smaller collection must never stretch cards to fill its shelf.
+    for(const viewport of [{width:393,height:852},{width:1180,height:820},{width:1440,height:900}]){
+      await page.setViewportSize(viewport);
+      const expectedWidth=viewport.width>viewport.height?200:160;
+      for(const filter of ['all','sword','body']){
+        await page.locator('[data-manual-collection-filter="'+filter+'"]').click();
+        const sizes=await track.locator('.manual-art-card').evaluateAll(nodes=>nodes.map(node=>node.getBoundingClientRect().width));
+        assert(sizes.length>0&&sizes.every(width=>Math.abs(width-expectedWidth)<1),
+          'card width is independent of collection count and shelf width: '+JSON.stringify({viewport,filter,sizes}));
+      }
+    }
+    await page.setViewportSize({width:852,height:393});
+    await page.locator('[data-manual-collection-filter="all"]').click();
     // Same order for collection and modal, including realm ties and equipped priority.
     const expectedOrder=['body-rock','sword-wind','sword-sky','body-dragon','sword-flight','body-tiger'];
     const visibleIds=()=>track.locator('[data-manual-book]').evaluateAll(nodes=>nodes.map(node=>node.dataset.manualBook));
