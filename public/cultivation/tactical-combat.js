@@ -1,15 +1,15 @@
 import './manual-rules.js?v=20261118-gold-cap10-v1';
-import './weapon-dungeon-rules.js';
+import './weapon-dungeon-rules.js?v=20261125-weapon-lord-unprotected-v1';
 import './contextual-asset-preloader.js';
 import {skillArt,bookArt} from './manual-art.js';
 import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-recap.js';
 import {manualXpDelta,renderManualXpToast} from './tactical-manual-xp-feedback.js';
 import {manualRoomExp,battleBreakthroughEstimate,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
 import './flying-sword-path.js?v=20261120-sword-movement-v1';
-import './tactical-rules.js?v=20261120-guided-first-stage-v1';
+import './tactical-rules.js?v=20261125-weapon-lord-unprotected-v1';
 import './tactical-seal-targeting.js?v=20261119-seal-target-v1';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261120-guided-first-stage-v2';
-import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
+import './tactical-impact-presentation.js?v=20261125-weapon-lord-unprotected-v1';
 import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-pve-v4';
 import {BeastInspector} from './tactical-beast-inspector.js?v=20261118-phase4-focus-v1';
 import {SealInspector} from './tactical-seal-inspector.js?v=20261119-seal-inspector-v2';
@@ -1175,7 +1175,7 @@ function updateBossHud(){
   node.dataset.phase=String(boss.phase);
   node.dataset.bossKind=boss.kind;
   node.querySelector('[data-boss-name]').textContent=boss.name;
-  node.querySelector('[data-boss-phase]').textContent=state.weaponDungeon?(boss.dormant?'守衛庇護':'領主甦醒'):boss.phase===2?'第二階段':'第一階段';
+  node.querySelector('[data-boss-phase]').textContent=state.weaponDungeon?'領主交戰':boss.phase===2?'第二階段':'第一階段';
   node.querySelector('[data-boss-intent]').textContent=boss.intent;
   node.querySelector('[data-boss-number]').textContent=Math.ceil(boss.hp)+' / '+Math.ceil(boss.maxHp);
   const meter=node.querySelector('[data-boss-health]');
@@ -1187,7 +1187,7 @@ function showBossBanner(kind,name){
   const node=$('[data-boss-announcement]');
   if(!node||!state||state.mode!=='pve')return;
   hideBossBanner();node.dataset.kind=kind;
-  const title=state.weaponDungeon?'石域領主甦醒':kind==='phase'?'靈壓暴漲 · 第二階段':'鎮關靈獸現身';
+  const title=state.weaponDungeon?'石域領主現身':kind==='phase'?'靈壓暴漲 · 第二階段':'鎮關靈獸現身';
   const subtitle=state.weaponDungeon?'追蹤落石已啟動，可退出射程或擊退打斷':kind==='phase'?'攻擊形態已改變，留意地面的紅色預告格':'觀察首領攻擊意圖，避開危險範圍';
   node.innerHTML='<small>'+esc(title)+'</small><strong>'+esc(name)+'</strong><span>'+esc(subtitle)+'</span>';
   // Reinsert only the passive announcement; none of the battle controls move.
@@ -1198,7 +1198,7 @@ function showBossBanner(kind,name){
 function maybeAnnounceBoss(){
   if(modalOpen||state?.mode!=='pve'||state?.status!=='active'||state.newEnemies?.length)return;
   const boss=CombatImpact.bossStatus(state);
-  if(!boss||!boss.alive||boss.dormant)return;
+  if(!boss||!boss.alive)return;
   if(bossTransitionPending?.roomId===state.id){
     const pending=bossTransitionPending;bossTransitionPending=null;
     bossIntroSeenRoom=state.id;
@@ -1229,7 +1229,6 @@ function paint({preserveModal=false}={}){
   objectiveNode.hidden=!objective;
   if(objective){
     const living=state.actors.filter(a=>a.bot&&a.hp>0).length;
-    const guards=state.weaponDungeon?state.actors.filter(a=>a.bot&&a.hp>0&&!a.weaponDungeonLord).length:0;
     const tracking=state.weaponDungeon?state.actors.filter(a=>a.bot&&a.hp>0&&a.intent?.tracking&&a.intent.kind==='attack'&&a.intent.cells?.some(p=>p.x===me.x&&p.y===me.y)).length:0;
     const label=state.trial?.variant?.includes('breakthrough')?'突圍運送':objective.item?'尋物運送':'運送';
     // Keep the battlefield objective summary in sync with the server's seal metadata.
@@ -1238,7 +1237,7 @@ function paint({preserveModal=false}={}){
     const text=objective.type==='transport'?(objective.carrying?`${label} · 將靈物送至交付點`:`${label} · 先取得靈物`):
       objective.type==='defense'?`鎮守 · ${objective.completedRounds} / ${objective.rounds} 回合 · 靈陣 ${objective.hp} / ${objective.maxHp}`:
       objective.type==='sealing'?`封印 · ${objective.points.filter(p=>p.activated).length} / ${objective.points.length} 陣眼${state.trial?.layoutVersion===4?' · 攻擊陣眼'+(sealEffects?' · '+sealEffects:''):''}`:
-      objective.type==='boss'?'首領 · 擊敗大型靈獸':state.weaponDungeon?`${state.weaponDungeon.name} · ${guards?'破陣：剩餘 '+guards+' 名守衛':living?'領主決戰':'秘境已征服'} · ${tracking?'危險：'+tracking+' 道追蹤落石':'圖騰 +'+Math.round(((state.weaponDungeon.totemDamageMultiplier??1.15)-1)*100)+'%'}`:`討伐 · 剩餘 ${living} 隻靈獸`;
+      objective.type==='boss'?'首領 · 擊敗大型靈獸':state.weaponDungeon?`${state.weaponDungeon.name} · ${living?'剩餘 '+living+' 隻靈獸（含領主）':'秘境已征服'} · ${tracking?'危險：'+tracking+' 道追蹤落石':'圖騰 +'+Math.round(((state.weaponDungeon.totemDamageMultiplier??1.15)-1)*100)+'%'}`:`討伐 · 剩餘 ${living} 隻靈獸`;
     objectiveNode.textContent=objective.completed&&!me.answered?'目標完成 · 請先作答一題':text;
   }
   $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.bot?`<small>${Manuals.realmForStage(a.level).name}境 · 功法 +${Manuals.expForBeast(a.level)} EXP</small>`:''}${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');

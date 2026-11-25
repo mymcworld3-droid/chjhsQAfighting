@@ -207,14 +207,12 @@
       attackText:'蓄勢落點會追蹤修士移動；退出射程可避開，成功擊退靈獸則會打斷蓄勢。',
       moveText:'每回合最多移動一格，不會突進、跳躍或擊退。',tip:'紅框會隨你調整；請退出射程，或以擊退打斷蓄勢。'};
   }
-  const lordSleeping=(s,m)=>m.weaponDungeonLord&&s.actors.some(a=>a.bot&&a.uid!==m.uid&&alive(a));
   function trackingCells(s,m,hero){
     const profile=monsterProfileFor(m),range=profile.attack.range;
     if(Math.min(...footprint(m).map(p=>dist(p,hero)))>range)return [];
     return area(s,hero,profile.attack.radius);
   }
   function trackingIntent(s,m,hero,armed=false){
-    if(lordSleeping(s,m))return {version:2,kind:'wait',cells:[],origin:point(m),target:point(hero),text:'沉眠：清除守衛後領主才會甦醒'};
     const cells=trackingCells(s,m,hero),ready=cells.some(p=>key(p)===key(hero));
     return {version:2,kind:ready||armed?'attack':'advance',cells,origin:point(m),target:point(hero),shape:'blast',
       power:1,tracking:true,slow:false,push:0,text:ready?'下次：'+monsterProfileFor(m).attackName+'（追蹤，請退出射程）':armed?'已離開射程，本次落石無法命中':'下次：重步 1 格'};
@@ -683,9 +681,6 @@
   }
   function damage(s,source,target,raw,opts={}){
     if(!alive(source)||!alive(target))return 0;
-    if(lordSleeping(s,target)){
-      log(s,'守衛石陣庇護領主：請先清除其他靈獸','guard',{actor:target.uid});return 0;
-    }
     const manual=manuals()?.BY_BOOK?.[opts.manualId||manuals()?.BY_SKILL?.[opts.skill]?.manualId];
     if(s.weaponDungeon&&!source.bot&&target.bot&&manual?.weaponType==='totem')raw*=s.weaponDungeon.totemDamageMultiplier??1.15;
     const active=s.trial?.layoutVersion===4&&s.objective?.type==='sealing'?s.objective.points.filter(p=>!p.activated):[];
@@ -742,7 +737,7 @@
     return dy?{x:0,y:Math.sign(dy)}:null;
   }
   function push(s,a,target,steps,direction=pushDirection(a,target)){
-    if(!direction||target.boss&&!target.trackingAttack||lordSleeping(s,target))return;
+    if(!direction||target.boss&&!target.trackingAttack)return;
     const route=[point(target)],{x:dx,y:dy}=direction;
     for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(!canOccupy(s,target,p))break;target.x=p.x;target.y=p.y;route.push(point(target));}
     motion(s,target,route,'push',target.name+'被擊退');
@@ -1246,7 +1241,8 @@
     }
   }
   function monsterTurn(s,m,hero){
-    const intent=m.trackingAttack&&m.intent?.kind==='attack'?trackingIntent(s,m,hero,true):m.intent;
+    const intent=m.trackingAttack&&m.intent?.kind==='attack'?trackingIntent(s,m,hero,true):
+      m.weaponDungeonLord&&m.intent?.kind==='wait'?trackingIntent(s,m,hero):m.intent;
     if(intent?.kind==='defense-attack'){
       if(intent.origin&&key(intent.origin)!==key(m))return;
       const p=intent.target,o=s.objective;

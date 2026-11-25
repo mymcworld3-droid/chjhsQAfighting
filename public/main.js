@@ -166,6 +166,8 @@ async function loadXiuxianFeaturesSafely() {
         modulePath === './cultivation/battle-mode-v2.js'
       ) {
         loadedModule = await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
+      } else if (modulePath === './cultivation/tactical-combat.js') {
+        loadedModule = await import(`${modulePath}?v=20261125-weapon-lord-unprotected-v1`);
       } else if (modulePath === './cultivation/manual-training-page.js') {
         loadedModule = await import(`${modulePath}?v=20261125-main-integrated-training-v1`);
       } else {
