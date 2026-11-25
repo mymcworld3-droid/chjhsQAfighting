@@ -86,3 +86,16 @@
 
 #manual-training-root .is-tier-ascended{color:#e6d9ac;border-color:#b7a86b;background:#303e2d}
 #manual-training-root .manual-hero-weapon-copies{display:block;color:#bac9af;font-size:11px;line-height:1.8}
+
+/* A multiplayer gear lock must offer an explicit way out; never auto-leave a run. */
+#manual-training-root .manual-dungeon-equipment-lock{
+  margin:12px auto 18px;padding:14px 16px;max-width:920px;
+  border:1px solid #d0ac61;border-radius:12px;
+  background:#16291fe8;color:#f5e9ce;text-shadow:none;
+}
+#manual-training-root .manual-dungeon-equipment-lock p{margin:0 0 10px;line-height:1.55;font-size:14px}
+#manual-training-root .manual-dungeon-equipment-lock button{
+  padding:10px 14px;min-height:42px;border:1px solid #e5c481;border-radius:8px;
+  color:#17231b;background:#e6c783;font-weight:700;
+}
+#manual-training-root .manual-dungeon-equipment-lock button:focus-visible{outline:2px solid #fff}
