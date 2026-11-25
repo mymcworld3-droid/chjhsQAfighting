@@ -46,7 +46,7 @@ test('weapon swap is immediate and never enters the page-wide busy/save popup',a
  assert.equal(h.read().busy,false);
  assert.deepEqual(h.read().ids,['sword-wind','body-rock']);
  assert.equal(h.requests.length,1);
- assert.deepEqual(h.requests[0].body,{index:1,weaponId:'body-rock'});
+ assert.deepEqual(JSON.parse(JSON.stringify(h.requests[0].body)),{index:1,weaponId:'body-rock'});
  assert(h.paints.every(args=>!String(args[0]||'').includes('保存')));
  h.requests[0].resolve(state(['sword-wind','body-rock']));
  await settle();
@@ -64,7 +64,7 @@ test('rapid changes serialize server writes while keeping the latest selection o
  h.requests[0].resolve(state(['sword-wind','body-rock']));await settle();
  assert.equal(h.requests.length,2);
  assert.deepEqual(h.read().ids,['sword-wind','body-dragon']);
- assert.deepEqual(h.requests[1].body,{index:1,weaponId:'body-dragon'});
+ assert.deepEqual(JSON.parse(JSON.stringify(h.requests[1].body)),{index:1,weaponId:'body-dragon'});
  h.requests[1].resolve(state(['sword-wind','body-dragon']));await settle();
  assert.deepEqual(h.read().ids,['sword-wind','body-dragon']);
  assert.equal(h.read().busy,false);
@@ -99,7 +99,6 @@ test('account switching invalidates old saves rather than changing the new accou
 
 test('armory fill height is stable when the main container scrolls',()=>{
  const h=fixture();
- const main={clientHeight:700,scrollTop:50,getBoundingClientRect:()=>({top:0})};
  h.evaluate("window.layoutMain={clientHeight:700,scrollTop:50,getBoundingClientRect:()=>({top:0})};");
  h.evaluate(`window.getComputedStyle=node=>({paddingBottom:node===window.layoutMain?'80px':'0px'});
  window.measurements={};window.topPosition=200;
