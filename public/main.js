@@ -165,7 +165,7 @@ async function loadXiuxianFeaturesSafely() {
       ) {
         loadedModule = await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
       } else if (modulePath === './cultivation/manual-training-page.js') {
-        loadedModule = await import(`${modulePath}?v=20261125-shared-order-v12`);
+        loadedModule = await import(`${modulePath}?v=20261125-dungeon-gear-recovery-v2`);
       } else {
         loadedModule = await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
       }
