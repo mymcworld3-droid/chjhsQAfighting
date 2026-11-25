@@ -1,9 +1,10 @@
+import {stoneCostMarkup} from './spirit-stone-ui.js?v=20261125-stone-price-art-v1';
 // Phase 1 of the stamina cultivation redesign: a read-only visual
 // projection of the existing, server-authoritative manual and skill data.
 // Selecting a book here changes only the current view, not the learned school.
 import {manualVisualState,manualSkillVisualState,renderManualVisualMilestones} from './manual-visual-progression.js';
 import {manualAnticipation} from './manual-anticipation.js';
-import {renderManualSkillDetail} from './manual-skill-detail-view.js?v=20261125-native-main-cultivation-v1';
+import {renderManualSkillDetail} from './manual-skill-detail-view.js?v=20261125-stone-price-art-v1';
 
 export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt, label, totalExpForLevel, selectedSkillId=null, descriptionWithDamage=()=>'', moveIdOf=()=>null, equipped=[], attack=200 }) {
   const weaponMode=Array.isArray(state?.weaponIds);
@@ -86,10 +87,9 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
   const needGold=upgrade&&Number(state.gold||0)<Number(upgrade.gold||0);
   const action=upgrade
     ?`<button type="button" class="manual-hero-upgrade" data-manual-upgrade="${esc(book.id)}"
-      ${needGold?'disabled title="靈石不足"':''}>
+      ${needGold?'disabled':''} title="升至 Lv. ${fmt(upgrade.targetLevel)}，消耗 ${fmt(upgrade.gold)} 靈石${needGold?'（靈石不足）':''}">
       <i class="fa-solid fa-arrow-up-right-dots" aria-hidden="true"></i>
-      ${needGold?'靈石不足 · ':''}升至 Lv. ${fmt(upgrade.targetLevel)}
-      <span>${fmt(upgrade.gold)} 靈石</span></button>`
+      ${needGold?'靈石不足 · ':''}升級 ${stoneCostMarkup(upgrade.gold)}</button>`
     :maxed?'':`<span class="manual-hero-max-level">Lv.10 後需以武器技能擊殺靈獸累積 EXP</span>`;
 
   const carousel=weaponMode?`<div class="manual-native-carousel">
