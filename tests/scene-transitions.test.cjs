@@ -6,6 +6,7 @@ const vm = require('node:vm');
 function harness() {
   const layers = [], animations = [], timers = new Map();
   let reduced = false, timerId = 0;
+  const events = {};
   function classes() {
     const set = new Set();
     return { add: name => set.add(name), remove: name => set.delete(name), contains: name => set.has(name) };
@@ -27,7 +28,7 @@ function harness() {
   const nav = new Element('bottom-nav'), body = { classList: classes(), appendChild: layer => layers.push(layer) };
   const context = {
     window: {}, Element, innerWidth: 1200, innerHeight: 900,
-    document: { hidden: false, querySelector: () => ({ getBoundingClientRect: () => ({ top: 800, height: 72 }) }), getElementById: () => nav, createElement: () => new Element(), body },
+    document: { hidden: false, activeElement:null, addEventListener:(name,fn)=>events[name]=fn, querySelector: () => ({ getBoundingClientRect: () => ({ top: 800, height: 72 }) }), getElementById: () => nav, createElement: () => new Element(), body },
     getComputedStyle: () => ({ transform: 'none' }),
     matchMedia: () => ({ matches: reduced }),
     setTimeout: fn => { timers.set(++timerId, fn); return timerId; },
@@ -36,7 +37,7 @@ function harness() {
   vm.createContext(context);
   const source = fs.readFileSync(require.resolve('../public/cultivation/scene-transitions.js'), 'utf8').replace(/export /g, '');
   vm.runInContext(source, context);
-  return { direction: context.sceneDirection, begin: context.window.beginSceneTransition, layers, animations, target: new Element(), nav, body, reduce: () => { reduced = true; }, timers };
+  return { edit:()=>{context.document.activeElement={matches:()=>true};events.focusin();}, stopEditing:()=>{context.document.activeElement=null;}, hide:()=>{context.document.hidden=true;events.visibilitychange();}, direction: context.sceneDirection, begin: context.window.beginSceneTransition, layers, animations, target: new Element(), nav, body, reduce: () => { reduced = true; }, timers };
 }
 
 test('animate the real destination across its width without cloning a page or stylesheet', () => {
@@ -149,4 +150,16 @@ test('the training navigation uses an ordinary in-document slide', () => {
   assert.equal(h.animations[0].target, h.target);
   assert.equal(h.animations[0].options.duration, 480);
   assert.equal(h.body.classList.contains('scene-page-sliding'), true);
+});
+
+test('typing cancels transforms and prevents another transition until focus leaves',()=>{
+ const h=harness();h.begin(null,h.target)();h.edit();
+ assert.ok(h.animations.every(a=>a.canceled));assert.equal(h.timers.size,0);
+ h.begin(null,h.target)();assert.equal(h.animations.length,2);
+ h.stopEditing();h.begin(null,h.target)();assert.equal(h.animations.length,4);
+ h.hide();assert.ok(h.animations.every(a=>a.canceled));
+});
+test('gameplay is ordered between training and store',()=>{
+ const h=harness();assert.equal(h.direction({id:'page-training'},{id:'page-gameplay'}),1);
+ assert.equal(h.direction({id:'page-store'},{id:'page-gameplay'}),-1);
 });

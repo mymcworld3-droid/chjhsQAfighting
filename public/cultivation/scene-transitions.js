@@ -23,7 +23,7 @@ export function sceneTheme(pageId) {
 export function sceneDirection(from, to, scope = 'page') {
   if (scope.endsWith('-close') || to?.id === 'page-home') return -1;
   const groups = [
-    ['page-home', 'page-training', 'page-store', 'page-rank', 'page-social', 'page-settings'],
+    ['page-home', 'page-training', 'page-gameplay', 'page-store', 'page-rank', 'page-social', 'page-settings'],
     ['cs-stage-0', 'cs-stage-1', 'cs-stage-2'],
     ['section-friends', 'section-chat'],
     ['ss-picker', 'ss-cart'],
@@ -37,9 +37,13 @@ export function sceneDirection(from, to, scope = 'page') {
   return 1;
 }
 
+// Never move a focused editor with a scene transform; keep the existing stage/keyboard guards.
+const editing = () => !!document.activeElement?.matches?.('textarea,input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]):not([type=range]):not([type=hidden]),[contenteditable=true]');
+function cancelScenes(){[...running.values()].forEach(cleanup=>cleanup());}
 // Animate the real content. Never clone trees or stylesheets during navigation.
 export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', force = false, direction = sceneDirection(from, to, scope)) {
   const noop = () => {};
+  if(editing()){cancelScenes();return noop;}
   // The training cloud curtain owns this navigation. Starting a second page
   // or tab slide underneath it makes the reveal appear to jump.
   if (document.body.classList.contains('training-cloud-navigating')) {
@@ -77,6 +81,7 @@ export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', 
 
   return () => {
     if (disposed || started) return;
+    if(editing()||matchMedia('(prefers-reduced-motion: reduce)').matches||document.hidden){cleanup();return;}
     started = true;
     target = to;
     // Content may have been removed by a cancelled modal or a newer navigation.
@@ -122,3 +127,6 @@ export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', 
 }
 
 window.beginSceneTransition = beginSceneTransition;
+document.addEventListener?.('focusin',()=>{if(editing())cancelScenes();});
+document.addEventListener?.('visibilitychange',()=>{if(document.hidden)cancelScenes();});
+matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change',event=>{if(event.matches)cancelScenes();});

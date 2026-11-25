@@ -4,7 +4,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
 
 (function () {
   'use strict';
-  let snapshot = null, account = '', tab = 'path', busy = false, dirty = true, timer = null, revision = 0, applyingReward = false;
+  let snapshot = null, account = '', tab = 'path', busy = false, dirty = true, timer = null, revision = 0, applyingReward = false, loadError = '';
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const visible = () => $('page-home')?.classList.contains('active-page');
@@ -116,7 +116,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       <div class="quest-card-heading"><h4>${esc(q.title)}</h4><span>${q.claimed ? '已完成' : q.claimable ? '待領獎' : '進行中'}</span></div>
       <p>${esc(q.description)}</p>
       <div class="quest-progress-label"><span>${q.locked ? `需 ${q.minScore} 修為 · 先繼續問道修行` : '任務進度'}</span><b>${q.current} / ${q.target}</b></div>
-      <div class="quest-progress" role="progressbar" aria-label="${esc(q.title)}" aria-valuemin="0" aria-valuemax="${q.target}" aria-valuenow="${q.current}"><i style="width:${Math.round(q.current / q.target * 100)}%"></i></div>
+      <div class="quest-progress" data-qy-progress="linear" role="progressbar" aria-label="${esc(q.title)}" aria-valuemin="0" aria-valuemax="${q.target}" aria-valuenow="${q.current}"><i style="width:${Math.round(q.current / q.target * 100)}%"></i></div>
       <div class="quest-reward"><i class="fa-solid fa-gift" aria-hidden="true"></i> ${globalThis.QARewardPresentation.renderStatus(q.claimed?'claimed':q.claimable?'pending':'obtainable')} ${rewardMarkup(q.reward)}</div>
       <button type="button" data-quest-id="${esc(q.id)}" data-quest-kind="${kind}" ${busy || q.claimed || q.locked ? 'disabled' : ''} class="quest-action ${q.claimable ? 'quest-claim' : ''}">${busy ? '正在同步…' : label}</button>
     </article>`;
@@ -133,7 +133,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     $('quest-content').setAttribute('aria-labelledby', 'quest-tab-' + tab);
     $('quest-refresh').disabled = busy;
     if (!snapshot) {
-      $('quest-content').innerHTML = '<p class="quest-empty">正在讀取修行任務…</p>';
+      $('quest-content').innerHTML = '<p class="quest-empty" data-qy-state="'+(busy?'loading':loadError?'error':'empty')+'">'+(busy?'正在讀取修行任務…':loadError?'任務同步未完成，請按「重新同步」重試。':'尚未同步修行任務，請按「重新同步」。')+'</p>';
       return;
     }
     $('quest-path-count').textContent = `${snapshot.pathCompleted ?? snapshot.pathIndex} / ${snapshot.pathTotal}`;
@@ -156,7 +156,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       '<div class="quest-commission-heading"><i class="fa-solid fa-calendar-check"></i><b>原有日常任務</b></div>' +
       snapshot.daily.map(q => card(q, 'daily')).join('')
       : tab === 'weekly' ? (snapshot.weekly||[]).map(q => card(q,'weekly')).join('')
-      : snapshot.path ? card(snapshot.path, 'path') : '<p class="quest-empty">仙道任務已全部完成。仙途無盡，日常修行仍可繼續。</p>';
+      : snapshot.path ? card(snapshot.path, 'path') : '<p class="quest-empty" data-qy-state="empty">仙道任務已全部完成。仙途無盡，日常修行仍可繼續。</p>';
     if (tab === 'path') content.innerHTML += (snapshot.pathTicketRewards || []).map(q => card(q, 'path')).join('');
   }
   async function request(path, body) {
@@ -174,14 +174,14 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   }
   function reconcileAccount() {
     const uid = getMainUser()?.uid || '';
-    if (uid !== account) { account = uid; snapshot = null; dirty = true; status(''); render(); }
+    if (uid !== account) { account = uid; snapshot = null; loadError = ''; dirty = true; status(''); render(); }
     return uid;
   }
   async function refresh(force = false) {
     const uid = reconcileAccount();
     if (!uid || busy || (!force && (!dirty || !visible()))) return;
     const startedRevision = revision;
-    busy = true; dirty = false; render();
+    busy = true; loadError = ''; dirty = false; render();
     try {
       const result = await request('/api/quests');
       if (getMainUser()?.uid !== uid) return;
@@ -189,7 +189,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       status('');
     } catch (e) {
       dirty = true;
-      if (getMainUser()?.uid === uid) status(`${e.message}，可按「重新同步」重試。`);
+      if (getMainUser()?.uid === uid) { loadError = e.message || '同步失敗'; status(`${e.message}，可按「重新同步」重試。`); }
     } finally {
       busy = false; reconcileAccount(); render();
       if ((revision !== startedRevision || getMainUser()?.uid !== uid) && visible()) invalidate();

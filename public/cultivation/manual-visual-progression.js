@@ -40,7 +40,7 @@ export function renderManualVisualMilestones(book,esc) {
       ${milestone?`<small>${n}</small>`:''}
     </span>`;
   }).join('');
-  return `<div class="manual-growth-marks" data-manual-growth-stage="${stage}" role="progressbar"
+  return `<div class="manual-growth-marks" data-qy-progress="milestone" data-manual-growth-stage="${stage}" role="progressbar"
       aria-label="${esc(book?.name||'功法')}三招修行里程碑：目前 Lv. ${level}。進度條僅涵蓋 Lv. 1 至 Lv. 10 的招式門檻，修煉可繼續提升；招式依武器熟練等級解鎖"
       aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(percentage)}">
       <span class="manual-growth-flow" aria-hidden="true">

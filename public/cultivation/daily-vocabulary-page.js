@@ -200,7 +200,7 @@ function pendingRewardsMarkup() {
   const failed = queue.find(item => rewardErrors[item.date]);
   return `<section class="dv-panel dv-reward" role="status">
     <strong>有 ${queue.length} 份單字獎勵待領取</strong>
-    <p>${failed ? escapeHtml(rewardErrors[failed.date]) : '正在同步獎勵…'}</p>
+    <p data-qy-state="${failed?'error':'syncing'}">${failed ? escapeHtml(rewardErrors[failed.date]) : '正在同步獎勵…'}</p>
     ${failed ? button('retry-reward', '重新領取', { style: 'dv-quiet' }) : ''}
   </section>`;
 }
@@ -381,7 +381,7 @@ function quizMarkup() {
         <p>字義提示　<strong>${escapeHtml(word.meaning)}</strong>${format === 'spelling' ? ` · ${word.id.length} 個字母` : ''}</p>`;
 
   return `${lead(title, `難度 · ${stepLabel(lesson.level)} · ${questionLabels[format]}`)}
-    <div class="dv-quiz-progress" role="progressbar" aria-label="作答進度" aria-valuemin="0"
+    <div class="dv-quiz-progress" data-qy-progress="segmented" role="progressbar" aria-label="作答進度" aria-valuemin="0"
       aria-valuemax="${rules.LESSON_SIZE}" aria-valuenow="${lesson.answers.length}">
       ${Array.from({ length: rules.LESSON_SIZE }, (_, step) => {
         const completed = lesson.answers[step];

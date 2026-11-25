@@ -1,0 +1,42 @@
+/* U09/U10/U11/U13. Keep existing track dimensions, semantic fills and scrolling owners. */
+html body.xianxia-theme [data-qy-progress="linear"]{
+  border-radius:999px;box-sizing:border-box;overflow:hidden;
+  background-color:var(--qy-inset)!important;
+}
+html body.xianxia-theme .quest-progress[data-qy-progress] > i,
+html body.xianxia-theme #xiuxian-progress,
+html body.xianxia-theme #progress-bar{
+  border-radius:inherit;background:linear-gradient(90deg,#537f67,var(--qy-jade))!important;
+  box-shadow:none!important;
+}
+html body.xianxia-theme [data-qy-progress="segmented"] > :is(i,span){
+  border-radius:var(--qy-radius-control);box-sizing:border-box;
+}
+/* Do not change the correctness / locked / cleared color of segmented tracks. */
+html body.xianxia-theme [data-qy-state]{
+  color:var(--qy-muted);font-size:var(--qy-small);line-height:1.65;
+  padding:8px 10px;border-inline-start:2px solid var(--qy-line);
+  overflow-wrap:anywhere;min-width:0;
+}
+html body.xianxia-theme [data-qy-state="error"]{
+  color:#f1bcb0;border-inline-start-color:#bc8479;
+}
+html body.xianxia-theme [data-qy-state="retry"]{border-inline-start-color:var(--qy-gold)}
+html body.xianxia-theme [data-qy-state]:is([data-qy-state="loading"],[data-qy-state="syncing"])::before{
+  content:"";display:inline-block;width:11px;height:11px;box-sizing:border-box;
+  margin-inline-end:7px;border-radius:50%;border:2px solid var(--qy-line);
+  border-top-color:var(--qy-gold);vertical-align:-1px;animation:qy-feedback-spin .9s linear infinite;
+}
+@keyframes qy-feedback-spin{to{transform:rotate(360deg)}}
+html body.xianxia-theme [data-qy-state][hidden]{display:none!important}
+html body.xianxia-theme :is(.wd-body,.dm-body,.cc-shell,.ss-picker-body,.ss-cart-body,.qy-confirm-dialog,.dt-modal-card){
+  scroll-padding-block-start:max(12px,env(safe-area-inset-top,0px));
+  scroll-padding-block-end:max(18px,env(safe-area-inset-bottom,0px));
+}
+html body.xianxia-theme :is(.wd-body,.dm-body,.ss-picker-body,.ss-cart-body,.qy-confirm-dialog){
+  overscroll-behavior:contain;
+}
+@media(prefers-reduced-motion:reduce){
+  html body.xianxia-theme [data-qy-progress] > *{transition:none!important}
+  html body.xianxia-theme [data-qy-state]::before{animation:none!important}
+}

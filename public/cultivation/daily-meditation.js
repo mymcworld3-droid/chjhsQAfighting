@@ -203,7 +203,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     const nextMilestone=state.milestones.find(step=>step.stars>state.stars);
     html+='<div class="dm-star-heading"><h3 class="dm-section-title">同門聚星</h3><span class="dm-star-total">★ <strong>'+state.stars+'</strong> / 15</span></div>';
     html+='<p class="dm-star-hint">'+(!state.completed?'完成自己的'+(personalTotal===5?'五題素養題':'三題閉關')+'後，即可點擊達標的星星領獎。':nextMilestone?'再集 '+(nextMilestone.stars-state.stars)+' 星，解鎖 '+nextMilestone.stars+' 星獎勵。':state.milestones.some(step=>step.claimable)?'共修進度已滿，點擊亮起的星星領取獎勵。':'今日共修獎勵已全數領取。')+'</p>';
-    html+='<div class="dm-star-journey"><div class="dm-star-track" role="progressbar" aria-label="同門共修星數" aria-valuemin="0" aria-valuemax="15" aria-valuenow="'+state.stars+'" aria-valuetext="已集 '+state.stars+' 星，最多十五顆"><div class="dm-star-fill" style="width:'+(state.stars/15*100)+'%"></div></div>';
+    html+='<div class="dm-star-journey"><div class="dm-star-track" data-qy-progress="linear" role="progressbar" aria-label="同門共修星數" aria-valuemin="0" aria-valuemax="15" aria-valuenow="'+state.stars+'" aria-valuetext="已集 '+state.stars+' 星，最多十五顆"><div class="dm-star-fill" style="width:'+(state.stars/15*100)+'%"></div></div>';
     html+='<div class="dm-milestones">'+state.milestones.map(step=>{
       const reached=state.stars>=step.stars;
       const status=step.claimed?'已領取':step.claimable?'點擊領取':reached?'待出關':'差 '+(step.stars-state.stars)+' 星';
@@ -235,7 +235,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     if(!session||!node('dm-content'))return;
     pauseClock();const q=session.question,total=session.total||QUESTION_TOTAL;
     if(!q){
-      setContent('<div class="dm-eyebrow">全服每日素養 · 第 '+(session.index+1)+' / '+total+' 題</div><p class="dm-note">'+(questionLoading?'正在讀取今日共用題目…':'今日閉關題庫正在準備中，稍後可重新同步並接續今日進度。')+'</p>'+(questionLoading?'':'<button type="button" class="dm-action" id="dm-prepare">重新讀取</button>'));
+      setContent('<div class="dm-eyebrow">全服每日素養 · 第 '+(session.index+1)+' / '+total+' 題</div><p class="dm-note" data-qy-state="'+(questionLoading?'loading':'preparing')+'">'+(questionLoading?'正在讀取今日共用題目…':'今日閉關題庫正在準備中，稍後可重新同步並接續今日進度。')+'</p>'+(questionLoading?'':'<button type="button" class="dm-action" id="dm-prepare">重新讀取</button>'));
       node('dm-prepare')?.addEventListener('click',()=>void task(prepareCurrentQuestion));return;
     }
     setContent('<div class="dm-eyebrow">'+esc(q.source)+' · '+(session.index+1)+' / '+total+' · 已得 '+session.correct+' 星</div><div class="dm-progress"><span style="width:'+Math.round(session.answered/total*100)+'%"></span></div><h3 class="dm-question" id="dm-question"></h3><div class="dm-options" id="dm-options"></div><div id="dm-feedback" class="dm-note"></div>');

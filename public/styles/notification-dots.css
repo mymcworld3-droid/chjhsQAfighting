@@ -15,3 +15,15 @@
 @media(prefers-reduced-motion:reduce) {
   :is(.sect-action-dot,.quest-tab-dot,.raid-ticket-dot,.nascent-upgrade-dot,.raid-global-ticket-dot,.refinery-ready-dot,.refinery-ready-pip,.alliance-chat-badge,#friend-request-badge) { animation:none!important; }
 }
+
+/* Counted badges preserve actual owner-provided text. Pure dots remain dots. */
+html body :is(.alliance-chat-badge,#friend-request-badge)[data-qy-badge="count"]{
+  display:inline-flex!important;align-items:center;justify-content:center;
+  width:auto!important;max-width:none!important;min-width:17px!important;
+  height:17px!important;min-height:17px!important;max-height:17px!important;
+  padding:0 4px!important;border-radius:999px!important;
+  font-size:10px!important;line-height:1!important;color:#fff!important;
+  font-weight:700;animation:none!important;box-shadow:0 0 0 1px #24170b;
+}
+html body :is(.alliance-chat-badge,#friend-request-badge)[data-qy-badge="count"][hidden]{display:none!important}
+.home-wireframe-alert:not([hidden]){background:#f13a34!important}
