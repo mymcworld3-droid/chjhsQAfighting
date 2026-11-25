@@ -5,8 +5,10 @@ const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
 const src=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-skill-detail-view.js'),'utf8');
-const render=vm.runInNewContext(src.replace('export function renderManualSkillDetail','function renderManualSkillDetail')+
-  '\nrenderManualSkillDetail',{});
+const resource=fs.readFileSync(path.join(__dirname,'../public/cultivation/spirit-stone-ui.js'),'utf8');
+const stoneCostMarkup=vm.runInNewContext(resource.replace(/^export /gm,'')+'\nstoneCostMarkup');
+const render=vm.runInNewContext(src.replace(/^import .*;\n/gm,'').replace('export function renderManualSkillDetail','function renderManualSkillDetail')+
+  '\nrenderManualSkillDetail',{stoneCostMarkup});
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[c]);

@@ -86,7 +86,7 @@ function generationHarness(candidates) {
   let handler,calls=0;const prompts=[];
   const source=fs.readFileSync(require.resolve('../server.js'),'utf8');
   const a=source.indexOf('async function generateQuiz('),b=source.indexOf("app.post('/api/generate-quiz',",a);
-  const context={aiQuestionBank:{enabled:false},questionQualityAnalytics:{recordGenerated:async()=>{}},playerRepository:{resolve:()=>({db:{}})},Knowledge,createQuizTaskPlan:require('../quiz-generation-tasks.cjs').createQuizTaskPlan,app:{post:(_,fn)=>handler=fn},FAST_QUIZ_MODES:MODES,
+  const context={QuizScopeExclusions:require('../quiz-scope-exclusions.cjs'),aiQuestionBank:{enabled:false},questionQualityAnalytics:{recordGenerated:async()=>{}},playerRepository:{resolve:()=>({db:{}})},Knowledge,createQuizTaskPlan:require('../quiz-generation-tasks.cjs').createQuizTaskPlan,app:{post:(_,fn)=>handler=fn},FAST_QUIZ_MODES:MODES,
     SUBJECT_SCHEMA:{數學:['原範圍']},SUBJECT_DETAILS:{},QUESTION_FORMS:['multi-step'],
     cleanQuestionText:x=>String(x),normalizeQuestionMeta:x=>x,getRandomItem:x=>x[0],
     qualityPolicy:()=>({cognitive:2,steps:2,instruction:'理解推理'}),chooseQuestionForm:()=> 'multi-step',

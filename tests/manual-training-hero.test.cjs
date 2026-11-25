@@ -10,8 +10,10 @@ const strip=s=>s.replace(/^import\s+.*;\s*$/gm,'')
   .replaceAll('export function ','function ');
 const auxiliary=['manual-visual-progression.js','manual-anticipation.js','manual-skill-detail-view.js']
   .map(name=>strip(fs.readFileSync(path.join(__dirname,'../public/cultivation',name),'utf8')));
+const resource=fs.readFileSync(path.join(__dirname,'../public/cultivation/spirit-stone-ui.js'),'utf8');
+const stoneCostMarkup=vm.runInNewContext(resource.replace(/^export /gm,'')+'\nstoneCostMarkup');
 const render=vm.runInNewContext([...auxiliary,strip(source),'renderManualHero'].join('\n'),
-  {}, {filename:'manual-hero-view.js'});
+  {stoneCostMarkup}, {filename:'manual-hero-view.js'});
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[c]);

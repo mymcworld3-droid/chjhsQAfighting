@@ -41,6 +41,8 @@ function setup(totalScore = 0) {
   let remoteUser = null;
   const context = vm.createContext({
     console, Math, Date, Number, WeakSet,
+    QAQuestionPresentation:require('../public/cultivation/question-presentation.js'),
+    ...vm.runInNewContext(read('spirit-stone-ui.js').replace(/^export /gm,'')+'\n({stoneCostMarkup,cultivationMarkup,formatResourceAmount})'),
     QANascentGrowth:globalThis.QANascentGrowth,QACombatCombo:globalThis.QACombatCombo,
     QASoulTalents:require('../public/cultivation/soul-talents.js'),
     document: {
