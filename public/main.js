@@ -67,7 +67,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/gameplay-page.js',
   './cultivation/weapon-dungeons-page.js',
   './cultivation/dungeon-lobby.js',
-  './cultivation/manual-training-page.js?v=20261125-shared-order-v12',
+  './cultivation/manual-training-page.js',
   './cultivation/home-wireframe.js',
   './cultivation/realm-breakthrough-feedback.js',
   './cultivation/cultivation-rank-sync.js',
@@ -164,6 +164,8 @@ async function loadXiuxianFeaturesSafely() {
         modulePath === './cultivation/battle-mode-v2.js'
       ) {
         loadedModule = await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
+      } else if (modulePath === './cultivation/manual-training-page.js') {
+        loadedModule = await import(`${modulePath}?v=20261125-shared-order-v12`);
       } else {
         loadedModule = await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
       }
