@@ -1,0 +1,10 @@
+/* Original stamina-battle spirit-stone bitmap used for all costs. */
+.game-stone-cost{display:inline-flex;align-items:center;justify-content:center;gap:.32em;white-space:nowrap;vertical-align:middle;font-variant-numeric:tabular-nums}
+.game-stone-cost>.game-stone-icon,.game-stone-icon{width:1.25em;height:1.25em;min-width:1.25em;max-width:1.25em;object-fit:contain;vertical-align:middle;flex:0 0 auto;filter:drop-shadow(0 1px 2px #0005)}
+.game-stone-amount{font:inherit;font-weight:750;letter-spacing:.01em}
+.game-stone-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+#home-spirit-stones .game-stone-icon{width:clamp(18px,1.6vw,23px);height:clamp(18px,1.6vw,23px);min-width:clamp(18px,1.6vw,23px);max-width:clamp(18px,1.6vw,23px)}
+#manual-training-root :is(.manual-upgrade,.manual-hero-upgrade) .game-stone-cost{font-size:inherit;color:inherit}
+#manual-training-root :is(.manual-upgrade,.manual-hero-upgrade) .game-stone-icon{width:1.3em;height:1.3em;min-width:1.3em;max-width:1.3em}
+#player-market .pm-card-foot .game-stone-cost{font-weight:800}
+#player-market .pm-card-foot button .game-stone-cost{margin-left:.35em}
