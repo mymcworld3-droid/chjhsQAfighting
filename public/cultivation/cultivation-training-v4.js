@@ -1,3 +1,4 @@
+import {stoneCostMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import {} from './golden-core-pity.js';
 import './golden-core-art.js';
 import {} from './soul-talents.js';
@@ -393,7 +394,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
           <h3 class="core-minimal-name">${type.name}</h3>
           <div class="core-minimal-grade">${clampGrade(core.grade)} 品</div>
 
-          <p class="core-gold-balance" aria-live="polite">現有靈石：<strong>${Growth.count(window.getCurrentUserData?.()?.stats?.gold).toLocaleString("zh-TW")}</strong></p>
+          <p class="core-gold-balance" aria-live="polite">現有靈石：<strong>${stoneCostMarkup(Growth.count(window.getCurrentUserData?.()?.stats?.gold))}</strong></p>
           <p class="ns-progress-caption" aria-live="polite">再洗髓 ${Pity.remaining(window.getCurrentUserData?.()?.[WASH_FIELD]?.count)} 次，必得三品以上金丹</p>
           <div class="core-wash-row">
             <button id="wash-golden-core" type="button" class="core-wash-btn" ${busy ? 'disabled' : ''}>
