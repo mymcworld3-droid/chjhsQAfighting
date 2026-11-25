@@ -16,7 +16,7 @@
     'mountain-armor':'鎮嶽玄甲','longevity-jade':'長生玉佩','treasure-pouch':'修煉物品'
   });
   const catalog=Object.freeze(Object.fromEntries(Object.entries(names).map(([id,name])=>
-    [id,Object.freeze({id,name,imageUrl:'/assets/items/'+id+(['cultivation','weapon-dungeon-ticket'].includes(id)?'.svg':'.webp')})])));
+    [id,Object.freeze({id,name,imageUrl:'/assets/items/'+id+'.webp'})])));
   const aliases=Object.freeze({fragments:'nascent-soul-essence',raidTickets:'raid-ticket',drawTickets:'draw-ticket',forgeFragments:'forge-fragment',
     'void-sword':'sword'});
   const forms=Object.freeze({劍:'sword',飛劍:'sword',刀:'sword',槍:'sword',斧:'axe',錘:'axe',戟:'axe',

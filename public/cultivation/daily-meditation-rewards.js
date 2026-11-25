@@ -24,7 +24,7 @@
   const icon = path => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+path+'"/></svg>';
   const rewardIcon=item=>item.key==='gold'
     ?'<img class="game-stone-icon" src="/assets/items/gold.webp" width="40" height="40" alt="" aria-hidden="true">'
-    :item.key==='cultivation'?'<img class="game-resource-icon" src="/assets/items/cultivation.svg" width="40" height="40" alt="" aria-hidden="true">':root.QAItemIcons?.markup(item.key,{size:40})||icon(item.path);
+    :item.key==='cultivation'?'<img class="game-resource-icon" src="/assets/items/cultivation.webp" width="40" height="40" alt="" aria-hidden="true">':root.QAItemIcons?.markup(item.key,{size:40})||icon(item.path);
   function ensureStyle() {
     if (document.getElementById('meditation-reward-style')) return;
     const style = document.createElement('link'); style.id = 'meditation-reward-style'; style.rel = 'stylesheet';

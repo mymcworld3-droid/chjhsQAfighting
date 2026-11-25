@@ -109,8 +109,8 @@ test('shared resource amounts have consistent signs, thousand separators and dis
  assert.equal(api.formatResourceAmount('＋1250'),'+1,250');
  assert.equal(api.formatResourceAmount(-1250),'−1,250');
  assert.equal(api.formatResourceAmount(undefined),'—');
- assert.match(api.cultivationMarkup('+20'),/cultivation\.svg.*>\+20<\/b>.*修為/);
- assert.match(api.weaponDungeonTicketMarkup(3,{max:5}),/weapon-dungeon-ticket\.svg.*>3 \/ 5<\/b>.*副本券/);
+ assert.match(api.cultivationMarkup('+20'),/cultivation\.webp.*>\+20<\/b>.*修為/);
+ assert.match(api.weaponDungeonTicketMarkup(3,{max:5}),/weapon-dungeon-ticket\.webp.*>3 \/ 5<\/b>.*副本券/);
  assert.doesNotMatch(api.weaponDungeonTicketMarkup(1),/raid-ticket|draw-ticket|gold\.webp/);
 });
 test('legacy conversion is not performed in arbitrary player text or excluded content',()=>{
@@ -120,4 +120,16 @@ test('legacy conversion is not performed in arbitrary player text or excluded co
   const node={nodeType:3,isConnected:true,nodeValue:'題目：30 金幣',parentElement:{closest},replaceWith(){assert.fail('must preserve content');}};
   assert.equal(runtime.decorateStoneContent(node),0);
  }
+});
+
+test('backup artwork is restored and the new dungeon ticket retains its own resource ID',()=>{
+ const icons=require('../public/cultivation/item-icons.js');
+ const itemPath=id=>path.join(__dirname,'../public/assets/items',id+'.webp');
+ assert.equal(icons.catalog.cultivation.imageUrl,'/assets/items/cultivation.webp');
+ assert.equal(icons.catalog['weapon-dungeon-ticket'].imageUrl,'/assets/items/weapon-dungeon-ticket.webp');
+ assert.equal(icons.catalog['weapon-dungeon-ticket'].name,'副本券');
+ assert.equal(icons.catalog['raid-ticket'].name,'團本入場券');
+ assert.notEqual(icons.url('weapon-dungeon-ticket'),icons.url('raidTickets'));
+ assert.deepEqual(fs.readFileSync(itemPath('weapon-dungeon-ticket')),fs.readFileSync(itemPath('raid-ticket')));
+ assert.equal(fs.readFileSync(itemPath('cultivation')).toString('ascii',8,12),'WEBP');
 });

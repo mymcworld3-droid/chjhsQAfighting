@@ -16,8 +16,8 @@ export const formatResourceAmount=value=>{
 };
 const resources=Object.freeze({
   gold:Object.freeze({name:'靈石',image:STONE_IMAGE}),
-  cultivation:Object.freeze({name:'修為',image:'/assets/items/cultivation.svg'}),
-  weaponDungeonTicket:Object.freeze({name:'副本券',image:'/assets/items/weapon-dungeon-ticket.svg'})
+  cultivation:Object.freeze({name:'修為',image:'/assets/items/cultivation.webp'}),
+  weaponDungeonTicket:Object.freeze({name:'副本券',image:'/assets/items/weapon-dungeon-ticket.webp'})
 });
 export function resourceIconMarkup(kind,{size=19}={}){
   if(!Object.hasOwn(resources,kind))return '';
