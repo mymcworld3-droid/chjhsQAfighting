@@ -234,3 +234,22 @@ test('spirit-stone readout formats actual signed-in stats, tracks changes, and c
   user=null;refresh();assert.equal(amount.textContent,'—');
   player={uid:'u2',stats:{}};user={uid:'u2'};refresh();assert.equal(amount.textContent,'—');
 });
+
+
+test('reference placement keeps four diamonds on the upper-right bar at desktop and tablet widths',()=>{
+  const wide=css.slice(css.indexOf('/* Four upper-right diamonds sit in one horizontal strip'));
+  assert.ok(wide.length>500);
+  assert.match(wide,/@media \(orientation:landscape\) and \(min-width:900px\)/);
+  assert.match(wide,/"stones stones stones stones"\s*"path rank quest store"\s*"\. \. \. \."\s*"wide wide wide wide"/);
+  assert.match(wide,/@media \(orientation:portrait\) and \(min-width:760px\)/);
+  assert.match(wide,/"realm path rank quest store"\s*"daily daily daily daily daily"/);
+  for(const action of ['path','rank','quest','store'])
+    assert.match(wide,new RegExp('\\[data-home-action="'+action+'"\\]\\{grid-area:'+action+'!important\\}'));
+  assert.match(wide,/\.home-shortcut-column>\.home-wireframe-rail\{\s*display:contents!important/);
+  assert.match(html,/id="btn-home-start"[^>]*onclick="startQuizFlow\(\)"/);
+  assert.ok(html.indexOf('id="home-trial-ecology-image"')<html.indexOf('id="btn-home-start"'),
+    'trial CTA stays directly after the scenic preview');
+  assert.match(css,/@media \(orientation:portrait\)\{[\s\S]*"realm left right"/,
+    'narrow portrait keeps the upper-right compact 2×2 diamonds');
+  assert.match(html,/id="home-spirit-stones-count"/);
+});
