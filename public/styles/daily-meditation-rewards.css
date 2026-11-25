@@ -29,3 +29,27 @@ body.meditation-reward-open{overflow:hidden!important}
 .mr-reward-icon>img{width:100%;height:100%;max-width:100%;object-fit:contain}
 @media(max-width:500px){.tc-trial-rewards .mr-reward-item{flex-basis:calc(50% - 4px)}}
 @media(orientation:landscape) and (max-height:540px){.tc-trial-rewards{padding-top:6px}.tc-trial-rewards .mr-reward-list--inline{margin:5px 0 0}.tc-trial-rewards .mr-reward-item{padding:7px 6px}.tc-trial-rewards .mr-reward-icon{width:30px;height:30px}.tc-trial-rewards .mr-reward-amount{margin-top:3px}}
+
+/* V2: one reward item structure, three presentation sizes. */
+.mr-reward-list--small{display:inline-flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:5px;margin:0;vertical-align:middle}
+.mr-reward-list--small .mr-reward-item{display:inline-flex;align-items:center;gap:.3em;flex:0 0 auto;min-width:0;padding:2px 5px;border-radius:6px;text-align:left}
+.mr-reward-list--small .mr-reward-icon{display:inline-grid;width:1.25em;height:1.25em;margin:0;flex:0 0 auto}
+.mr-reward-list--small .mr-reward-label,.mr-reward-list--small .mr-reward-amount{font-size:inherit;line-height:1.35;margin:0;text-shadow:none;white-space:nowrap}
+.mr-reward-list--small .mr-reward-detail{display:none}
+.mr-reward-list--general{gap:8px;margin:10px 0;flex-wrap:wrap}
+.mr-reward-list--general .mr-reward-item{flex:0 1 128px;min-width:0;padding:10px 7px;text-align:center}
+.mr-reward-list--general .mr-reward-icon{width:32px;height:32px;margin-bottom:5px}
+.mr-reward-list--general .mr-reward-amount{font-size:clamp(17px,3vw,23px)}
+.mr-reward-detail{display:block;font-size:.85em;color:#bfa272;overflow-wrap:anywhere}
+.mr-reward-item--weapon .mr-reward-icon{width:56px;height:56px}
+.dm-milestone-rewards{width:100%;min-width:0}
+.dm-milestone-rewards .mr-reward-list--general{display:grid;grid-template-columns:minmax(0,1fr);gap:3px;margin:5px 0}
+.dm-milestone-rewards .mr-reward-item{display:grid;grid-template-columns:15px minmax(0,1fr);align-items:center;column-gap:3px;padding:4px 2px;border-radius:6px;text-align:left;min-width:0}
+.dm-milestone-rewards .mr-reward-icon{grid-row:1/3;width:15px;height:15px;margin:0}
+.dm-milestone-rewards .mr-reward-label{font-size:clamp(9px,1.7vw,11px);line-height:1.2;overflow-wrap:anywhere}
+.dm-milestone-rewards .mr-reward-amount{font-size:12px;line-height:1.15;margin:0;text-shadow:none}
+.tc-solo-learning-reward .mr-reward-list--small{font-size:12px}
+.tc-solo-learning-reward .mr-reward-list--small .mr-reward-item{background:none;border:0;padding:0}
+.mr-reward-empty{font-size:13px}
+
+.mr-reward-list--small .mr-reward-icon{order:0}.mr-reward-list--small .mr-reward-amount{order:1}.mr-reward-list--small .mr-reward-label{order:2}

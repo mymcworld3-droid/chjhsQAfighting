@@ -60,7 +60,7 @@ test('amounts earned or spent in either word order become image followed by sign
   const parts=api.splitStoneText(label),money=parts?.find(part=>part.kind==='stone');
   assert.ok(money,label);
   assert.equal(money.value,expected,label);
-  assert.match(api.stoneCostMarkup(money.value),new RegExp('>'+expected.replace('-','−').replace(/[+*]/g,'\\expected.replace(/[+*]/g,'\\$&').replace('×','×')')+'<\\/b>'));
+  assert.ok(api.stoneCostMarkup(money.value).includes('>'+expected.replace('-','−')+'</b>'),label);
  }
  assert.equal(api.splitStoneText('靈石不足，請先完成任務'),null);
  assert.equal(api.splitStoneText('答案為 30 修為'),null);
@@ -76,7 +76,7 @@ test('reward and wallet surfaces use the original bitmap without changing earnin
  assert.match(vocab,/stoneCostMarkup\(rules\.DAILY_REWARD\.gold\)/);
  assert.match(meditation,/label==='個人靈石'/);
  assert.match(meditation,/stoneCostMarkup\(value\)/);
- assert.match(meditation,/if\(id==='gold'\)/);
+ assert.match(meditation,/QARewardPresentation\.renderList\(reward,\{variant:'general',preview:true\}\)/);
  assert.match(medal,/item\.key==='gold'/);
  assert.match(core,/stoneCostMarkup\(Growth\.count\(/);
  assert.match(draw,/stoneCostMarkup\(s\.balance\)/);

@@ -48,7 +48,7 @@ test('inline animation stays visual, skips stale or repeated receipts and respec
 test('trial settlement embeds the shared list without replacing navigation or dungeon settlement',()=>{
   const src=require('node:fs').readFileSync(require.resolve('../public/cultivation/tactical-combat.js'),'utf8');
   const result=src.slice(src.indexOf('function resultDialog(){'),src.indexOf('function leaveDialog(){'));
-  assert.match(result,/presentation\?\.renderList\(reward,\{inline:true\}\)/);
+  assert.match(result,/presentation\.renderSettlement\(settlementReward,/);
   assert.match(result,/presentation\.animateInline/);
   assert.match(result,/data-next-stage/);
   assert.match(result,/data-tutorial-collapse/);
@@ -56,4 +56,40 @@ test('trial settlement embeds the shared list without replacing navigation or du
   assert.match(result,/data-weapon-dungeon-retry/);
   assert.match(result,/data-exit/);
   assert.doesNotMatch(result,/data-mr-collect|QAMeditationRewardFeedback\?*\.show/);
+});
+
+test('three sizes share art and format, and preview never represents a credited reward',()=>{
+  const reward={gold:1250,cultivation:2,weaponDungeonTicket:1};
+  const full=Feedback.renderList(reward);
+  const general=Feedback.renderList(reward,{variant:'general',preview:true});
+  const small=Feedback.renderFeedback({cultivation:-2,gold:0});
+  assert.match(full,/mr-reward-list--full/);
+  assert.match(general,/mr-reward-list--general/);
+  assert.match(general,/可獲得的獎勵/);
+  assert.match(general,/>1,250<\/strong>/);
+  assert.doesNotMatch(general,/>\+1,250<\/strong>/);
+  assert.match(small,/mr-reward-list--small/);
+  assert.match(small,/>−2<\/strong>/);
+  assert.match(small,/>[+]0<\/strong>/);
+  assert.doesNotMatch(small,/<dialog|<button|<ul/);
+  assert.match(full,/weapon-dungeon-ticket\.webp/);
+  assert.doesNotMatch(full,/raid-ticket\.webp/);
+});
+test('weapon and mastery rows use existing weapon art and explicit server amounts',()=>{
+  const reward={weapon:{id:'sword-wind',name:'測試武器<&',tierRealm:'金丹',quantity:1},
+    weaponXp:[{id:'body-rock',name:'岩拳',earned:1234},{id:'../bad',name:'bad',earned:50}]};
+  const html=Feedback.renderList(reward);
+  assert.match(html,/\/assets\/weapons\/sword-wind-hd\.webp/);
+  assert.match(html,/\/assets\/weapons\/body-rock-hd\.webp/);
+  assert.match(html,/測試武器&lt;&amp;/);
+  assert.match(html,/\+1,234 EXP/);
+  assert.match(html,/武器熟練度/);
+  assert.doesNotMatch(html,/\.\.\/bad|測試武器<&/);
+  assert.equal(Feedback.entries({weapon:{id:'sword-wind',name:'未確認',quantity:0}}).length,0);
+});
+test('settlement distinguishes missing receipts and zero rewards without blocking navigation',()=>{
+  assert.match(Feedback.renderSettlement(null),/尚未確認入帳/);
+  assert.match(Feedback.renderSettlement({gold:0,cultivation:0}),/無額外獎勵/);
+  assert.match(Feedback.renderSettlement({cultivation:3}),/data-trial-reward-list/);
+  assert.doesNotMatch(Feedback.renderSettlement({gold:2}),/<dialog|<button|data-mr-collect/);
 });

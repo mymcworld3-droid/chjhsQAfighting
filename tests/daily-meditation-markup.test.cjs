@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 const Icons = require('../public/cultivation/item-icons.js');
+const Presentation = require('../public/cultivation/daily-meditation-rewards.js');
 const resourceCode = fs.readFileSync(require.resolve('../public/cultivation/spirit-stone-ui.js'),'utf8');
 const stoneCostMarkup=vm.runInNewContext(resourceCode.replace(/^export /gm,'')+'\nstoneCostMarkup');
 const source = fs.readFileSync(require.resolve('../public/cultivation/daily-meditation.js'), 'utf8').replace(/^import .*;\n/gm, '');
@@ -13,7 +14,7 @@ function dashboard(state, busy = false, icons = Icons) {
   const status = { textContent: '' };
   const window = { getCurrentUserData: () => null, addEventListener() {} };
   const context = {
-    window, stoneCostMarkup, QAItemIcons: icons, QADailyMeditationRules: {}, getMainUser: () => ({ uid: 'fixture' }),
+    window, stoneCostMarkup, QARewardPresentation: Presentation, QAItemIcons: icons, QADailyMeditationRules: {}, getMainUser: () => ({ uid: 'fixture' }),
     document: { getElementById: id => id === 'dm-content' ? content : id === 'dm-status' ? status : null, addEventListener() {} },
     setInterval() {},
     auditState: state, auditBusy: busy
@@ -51,7 +52,9 @@ test('icon rewards keep plain descriptions in checkpoint attributes and images i
     assert.match(button, / disabled>/);
   }
   assert.equal((html.match(/<img /g) || []).length, 9, 'each visible reward still has its item icon');
-  assert.match(html, /<p><span class="game-stone-cost"><img [^>]+><b class="game-stone-amount">200<\/b><span class="game-stone-sr-only"> 靈石<\/span><\/span><br><img [^>]+>團本券 ×1<br><img [^>]+>抽獎券 ×1<\/p>/);
+  assert.match(html, /dm-milestone-rewards.*mr-reward-list--general/);
+  assert.match(html, /raid-ticket\.webp[^>]*>.*團本入場券/);
+  assert.match(html, /draw-ticket\.webp[^>]*>.*本命法器抽獎券/);
 });
 
 test('ready, claimed, pending-personal and busy checkpoints retain their claim gates', () => {

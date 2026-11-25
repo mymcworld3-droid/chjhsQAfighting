@@ -1,4 +1,4 @@
-// Visual receipts only. All rewards are committed by the meditation API first.
+// Shared reward presentation only. Gameplay modules own all reward calculation and persistence.
 (function (root, factory) {
   const api = factory(root);
   if (typeof module === 'object' && module.exports) module.exports = api;
@@ -10,6 +10,7 @@
     ['gold', '靈石', 'm12 3 8 6-3 10H7L4 9l8-6Zm-8 6h16M7 19l5-16 5 16'],
     ['fragments', '元嬰碎精', 'm12 3 3 6 6 3-6 3-3 6-3-6-6-3 6-3 3-6Z'],
     ['raidTickets', '團本入場券', 'M3 6h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4V6Zm12 1v10'],
+    ['weaponDungeonTicket', '副本券', 'M3 6h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4V6Zm12 1v10'],
     ['drawTickets', '本命法器抽獎券', 'M3 6h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4V6Zm9 3 1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2Z']
   ];
   const seen = new Set();
@@ -17,22 +18,72 @@
   const inlineRuns = new WeakMap();
   let active = null;
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  function entries(reward = {}) {
-    return kinds.flatMap(([key, label, path]) => {
-      const amount = Math.floor(Number(reward[key]));
-      return Number.isFinite(amount) && amount > 0 ? [{ key, label, amount, path }] : [];
+  const itemArt=Object.freeze({
+    cultivation:'cultivation',gold:'gold',fragments:'nascent-soul-essence',
+    raidTickets:'raid-ticket',drawTickets:'draw-ticket',weaponDungeonTicket:'weapon-dungeon-ticket'
+  });
+  const weaponIds=new Set(['sword-wind','sword-flight','sword-sky','body-rock','body-dragon','body-tiger']);
+  const number=value=>{
+    if(typeof value!=='number'&&typeof value!=='string'||String(value).trim()==='')return null;
+    const n=Number(value);return Number.isFinite(n)?Math.trunc(n):null;
+  };
+  const rows=value=>Array.isArray(value)?value:value&&typeof value==='object'?[value]:[];
+  function entries(reward = {}, {feedback = false} = {}) {
+    reward=reward||{};
+    const result=kinds.flatMap(([key,label,path])=>{
+      if(!Object.hasOwn(reward,key))return [];
+      const amount=number(reward[key]);
+      return amount!==null&&(feedback||amount>0)?[{key,label,amount,path,image:'/assets/items/'+itemArt[key]+'.webp'}]:[];
     });
+    // The caller supplies already-authoritative drop / XP rows, not inventory balances.
+    for(const [key,field,suffix] of [['weapon','quantity',''],['weaponXp','earned',' EXP']]){
+      for(const row of rows(reward[key])){
+        if(!row||!weaponIds.has(row.id))continue;
+        const amount=number(row[field]);
+        if(amount===null||amount<=0)continue;
+        const name=String(row.name||'武器');
+        result.push({key,label:name,amount,suffix,detail:key==='weapon'?String(row.tierRealm||'武器'):'武器熟練度',
+          image:'/assets/weapons/'+row.id+'-hd.webp'});
+      }
+    }
+    // Legacy material IDs are displayed only when explicitly supplied; never convert them to tickets.
+    for(const [id,value] of Object.entries(reward.materials||{})){
+      const catalog=root.QAItemIcons?.catalog;
+      if(!catalog||!Object.hasOwn(catalog,id))continue;
+      const amount=number(value);
+      if(amount!==null&&amount>0)result.push({key:'material',label:catalog[id].name,amount,
+        path:'M12 3 21 12 12 21 3 12Z'});
+    }
+    return result;
   }
   const icon = path => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+path+'"/></svg>';
-  const rewardIcon=item=>item.key==='gold'
-    ?'<img class="game-stone-icon" src="/assets/items/gold.webp" width="40" height="40" alt="" aria-hidden="true">'
-    :item.key==='cultivation'?'<img class="game-resource-icon" src="/assets/items/cultivation.webp" width="40" height="40" alt="" aria-hidden="true">':root.QAItemIcons?.markup(item.key,{size:40})||icon(item.path);
-  // One card renderer for both the modal receipt and embedded battle results.
-  function renderList(reward, { animated = false, inline = false } = {}) {
-    const items = entries(reward);
-    if (!items.length) return '';
-    return '<ul class="mr-reward-list'+(inline?' mr-reward-list--inline':'')+(animated?'':' mr-reward-list--static')+'" aria-label="本次獲得的獎勵">'+items.map((item,i)=>
-      '<li class="mr-reward-item'+(item.key==='drawTickets'?' is-special':'')+'" style="--mr-delay:'+i*90+'ms" aria-label="'+esc(item.label)+' +'+item.amount.toLocaleString('zh-TW')+'"><span class="mr-reward-icon">'+rewardIcon(item)+'</span><span class="mr-reward-label">'+esc(item.label)+'</span><strong class="mr-reward-amount" aria-hidden="true">'+(animated?'+0':'+'+item.amount.toLocaleString('zh-TW'))+'</strong></li>').join('')+'</ul>';
+  const rewardIcon=item=>item.image
+    ?'<img class="'+(item.key==='gold'?'game-stone-icon':'game-resource-icon')+'" src="'+esc(item.image)+'" width="40" height="40" alt="" aria-hidden="true" decoding="async">'
+    :icon(item.path||'M12 3 21 12 12 21 3 12Z');
+  function amountText(item,{preview=false,value=item.amount}={}){
+    const sign=value<0?'−':preview?'':'+';
+    return sign+Math.abs(value).toLocaleString('zh-TW')+(item.suffix||'');
+  }
+  function renderItem(item,i,{small=false,preview=false,animated=false}={}){
+    const label=item.label+(item.detail?' · '+item.detail:'');
+    const amount=amountText(item,{preview,value:animated?0:item.amount});
+    const tag=small?'span':'li';
+    return '<'+tag+' class="mr-reward-item'+(item.key==='drawTickets'?' is-special':'')+(item.key==='weapon'?' mr-reward-item--weapon':'')+'" style="--mr-delay:'+i*90+'ms" aria-label="'+esc(label)+' '+esc(amountText(item,{preview}))+'"><span class="mr-reward-icon">'+rewardIcon(item)+'</span><span class="mr-reward-label">'+esc(item.label)+(item.detail?'<small class="mr-reward-detail">'+esc(item.detail)+'</small>':'')+'</span><strong class="mr-reward-amount" aria-hidden="true">'+esc(amount)+'</strong></'+tag+'>';
+  }
+  // Small feedback, general cards and full settlement share the same item renderer.
+  function renderList(reward, {animated=false,inline=false,variant='full',preview=false}={}){
+    const size=['small','general','full'].includes(variant)?variant:'full';
+    const small=size==='small',items=entries(reward,{feedback:small});
+    if(!items.length)return '';
+    const tag=small?'span':'ul';
+    const play=animated&&!small&&!preview;
+    return '<'+tag+' class="mr-reward-list'+(inline?' mr-reward-list--inline':'')+(play?'':' mr-reward-list--static')+' mr-reward-list--'+size+'" aria-label="'+(preview?'可獲得的獎勵':'本次獲得的獎勵')+'">'+items.map((item,i)=>renderItem(item,i,{small,preview,animated:play})).join('')+'</'+tag+'>';
+  }
+  function renderFeedback(reward){return renderList(reward,{variant:'small'});}
+  function renderSettlement(reward,{emptyText='本次無額外獎勵。',pendingText='獎勵尚未確認入帳。'}={}){
+    const cards=renderList(reward,{inline:true,variant:'full'});
+    if(!cards)return '<p class="mr-reward-empty" role="status">'+esc(reward==null?pendingText:emptyText)+'</p>';
+    return '<section class="tc-trial-rewards" data-trial-reward-list><h3>本次獲得</h3>'+cards+'</section>';
   }
   function ensureStyle() {
     if (document.getElementById('meditation-reward-style')) return;
@@ -40,7 +91,7 @@
     style.href = '/styles/daily-meditation-rewards.css'; document.head.appendChild(style);
   }
   function finishNumbers(receipt) {
-    receipt.elements.forEach((element, i) => { element.textContent = '+' + receipt.items[i].amount.toLocaleString('zh-TW'); });
+    receipt.elements.forEach((element, i) => { element.textContent = amountText(receipt.items[i]); });
   }
   // Number animation is presentation-only, shared by both settlement modes.
   function animateAmounts(receipt, isActive) {
@@ -52,7 +103,7 @@
       if (!isActive()) return;
       receipt.elements.forEach((element,i)=>{
         const t=Math.max(0,Math.min(1,(now-started-i*90)/850));
-        element.textContent='+'+Math.round(receipt.items[i].amount*(1-Math.pow(1-t,3))).toLocaleString('zh-TW');
+        element.textContent=amountText(receipt.items[i],{value:Math.round(receipt.items[i].amount*(1-Math.pow(1-t,3)))});
       });
       if (now-started < 850+(receipt.items.length-1)*90) receipt.frame=root.requestAnimationFrame(tick);
       else finishNumbers(receipt);
@@ -74,7 +125,7 @@
     const receipt={items,elements,reduced,frame:0};
     inlineRuns.set(host,receipt);
     list.classList.remove('mr-reward-list--static');
-    elements.forEach(element=>{element.textContent='+0';});
+    elements.forEach((element,i)=>{element.textContent=amountText(items[i],{value:0});});
     animateAmounts(receipt,()=>host.isConnected!==false&&options.isCurrent?.()!==false);
     return true;
   }
@@ -122,7 +173,7 @@
     ensureStyle(); clear();
     const overlay = document.createElement('dialog'); overlay.id='meditation-reward-receipt'; overlay.className='mr-reward-overlay';
     overlay.setAttribute('aria-labelledby','mr-reward-title'); overlay.setAttribute('aria-describedby','mr-reward-subtitle');
-    overlay.innerHTML = '<section class="mr-reward-panel"><header class="mr-reward-header"><div class="mr-reward-crest" aria-hidden="true">'+icon('m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z')+'</div><span class="mr-reward-kicker">'+esc(options.kicker||'閉關共修')+'</span><h2 id="mr-reward-title">'+esc(options.title||'獎勵入袋')+'</h2><p id="mr-reward-subtitle">'+esc(options.subtitle||'本次獲得')+'</p></header>'+renderList(options.reward,{animated:true})+'<footer class="mr-reward-footer">'+(options.note?'<p class="mr-reward-note">'+esc(options.note)+'</p>':'')+'<button type="button" data-mr-collect>收入囊中</button></footer></section>';
+    overlay.innerHTML = '<section class="mr-reward-panel"><header class="mr-reward-header"><div class="mr-reward-crest" aria-hidden="true">'+icon('m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z')+'</div><span class="mr-reward-kicker">'+esc(options.kicker||'閉關共修')+'</span><h2 id="mr-reward-title">'+esc(options.title||'獎勵入袋')+'</h2><p id="mr-reward-subtitle">'+esc(options.subtitle||'本次獲得')+'</p></header>'+renderList(options.reward,{animated:true,variant:'full'})+'<footer class="mr-reward-footer">'+(options.note?'<p class="mr-reward-note">'+esc(options.note)+'</p>':'')+'<button type="button" data-mr-collect>收入囊中</button></footer></section>';
     document.body.appendChild(overlay); document.body.classList.add('meditation-reward-open');
     const receipt = active = {overlay,items,elements:[...overlay.querySelectorAll('.mr-reward-amount')],reduced:root.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true,isCurrent:options.isCurrent||(()=>true),target:options.target,focusTarget:options.focusTarget,sound:options.sound!==false,soundKey:'meditation-reward:'+key,animations:[],frame:0,timer:0,collecting:false};
     overlay.querySelector('[data-mr-collect]').addEventListener('click',collect);
@@ -135,5 +186,5 @@
   }
   // Fetch the small stylesheet before a claim, so the first receipt cannot flash unstyled.
   if (typeof document === 'object' && document.head) ensureStyle();
-  return Object.freeze({entries,renderList,animateInline,show,clear});
+  return Object.freeze({entries,renderList,renderFeedback,renderSettlement,animateInline,show,clear});
 });
