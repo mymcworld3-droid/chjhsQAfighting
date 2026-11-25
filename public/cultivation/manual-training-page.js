@@ -7,10 +7,12 @@ import './contextual-asset-preloader.js';
 import {filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary} from './manual-library-view.js?v=20261125-shared-order-v12';
 import {detectManualCelebration,renderManualCelebration} from './manual-celebration.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
+import {reconnectDungeonRoom,leaveDungeonRoom} from './dungeon-room.js';
 
 const Catalog=globalThis.QAManuals;
 let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',selectedSkillId=null,pickerSlot=null,libraryFilter='all',celebrationTimer=null;
 let trainingDialogOpen=false,trainingDialogTrigger=null,pickerDialogTrigger=null;
+let blockedDungeonEquip=null;
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -219,6 +221,7 @@ function markup(){
     ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
       esc,bookArt,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
     })}
+    ${blockedDungeonEquip?'<div class="manual-dungeon-equipment-lock" role="alert"><p>你仍在進行中的多人副本隊伍，需先離開本次副本才能更換武器。離開不會結束其他隊員的探索。</p><button type="button" data-manual-leave-dungeon-for-gear>離開本次副本並完成剛才的換裝</button></div>':''}
     </div>
     ${owned?training:''}
     <div class="manual-status manual-scene-status" data-manual-status role="status" aria-live="polite"></div>
@@ -338,7 +341,7 @@ async function load({force=false}={}){
     if(token!==sequence||getMainUser()?.uid!==uid)return;
     const before=loadedFor===uid?current:null;
     const reward=detectManualCelebration(before,result,{kind:'sync'});
-    current=result;if(loadedFor!==uid){closeTrainingDialog({restoreFocus:false});selectedLoadout=result.activeLoadout||0;featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';}loadedFor=uid;
+    current=result;if(loadedFor!==uid){closeTrainingDialog({restoreFocus:false});selectedLoadout=result.activeLoadout||0;featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';blockedDungeonEquip=null;}loadedFor=uid;
     window.setCurrentTacticalManualState?.(result,uid);
     paint();
     // Only artwork for owned, currently browsable weapons is warmed;
@@ -367,6 +370,7 @@ async function mutate(url,body){
       bookId:body?.bookId,skillId:body?.skillId
     });
     current=next;loadedFor=uid;lastFetch=Date.now();successful=true;
+    if(Object.hasOwn(body||{},'weaponId'))blockedDungeonEquip=null;
     if(url.endsWith('/school')){featuredBookId='';selectedSkillId=null;pickerSlot=null;}
     if(url.endsWith('/loadout')&&Array.isArray(body?.skillIds))pickerSlot=null;
     window.setCurrentTacticalManualState?.(next,uid);
@@ -386,7 +390,11 @@ async function mutate(url,body){
         selectedLoadout===next.activeLoadout&&body.skillIds.every(id=>next.equipped.includes(id)))
         tutorialManualEvent('skill-equipped',{verified:true,skillIds:[...next.equipped]});
     }
-  }catch(error){message=error.message;}
+  }catch(error){
+    message=error.message;
+    if(Object.hasOwn(body||{},'weaponId')&&message.includes('多人副本進行中'))
+      blockedDungeonEquip={index:body.index,weaponId:body.weaponId};
+  }
   finally{
     busy=false;
     if(getMainUser()?.uid===uid){
@@ -403,6 +411,24 @@ async function mutate(url,body){
       }
     } else if(visible())void load({force:true});
   }
+}
+async function leaveDungeonAndRetryEquipment(){
+  if(busy||!blockedDungeonEquip)return;
+  const uid=getMainUser()?.uid;if(!uid)return;
+  const pending={...blockedDungeonEquip};
+  busy=true;paint('正在確認多人副本狀態…');
+  try{
+    const session=await reconnectDungeonRoom();
+    if(getMainUser()?.uid!==uid)return;
+    if(session.roomId&&session.room?.status==='assembled')
+      await leaveDungeonRoom(session.roomId);
+    if(getMainUser()?.uid!==uid)return;
+    blockedDungeonEquip=null;
+  }catch(error){
+    if(getMainUser()?.uid===uid)paint('離開副本失敗：'+error.message);
+    return;
+  }finally{busy=false;}
+  if(getMainUser()?.uid===uid)void mutate('/api/tactical/manuals/loadout',pending);
 }
 function ensureNav(){
   const parent=document.getElementById('nav-grid');
@@ -455,6 +481,9 @@ function boot(){
     }
     if(busy)return;
     const button=event.target.closest('button');if(!button)return;
+    if(button.hasAttribute('data-manual-leave-dungeon-for-gear')){
+      void leaveDungeonAndRetryEquipment();return;
+    }
     if(button.dataset.trainingPage){
       if(button.dataset.trainingPage!=='page-training'){
         closeTrainingDialog({restoreFocus:false});
