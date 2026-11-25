@@ -4,30 +4,60 @@ body.ui-cleanup {
   --quiet-line:rgba(210,185,137,.16);
   --quiet-accent-line:rgba(210,175,105,.44);
   --ui-panel-radius:12px;
-  --app-header-height:42px;
-  --app-header-space:calc(var(--app-header-height) + env(safe-area-inset-top,0px) + 6px);
+  --app-header-height:28px;
+  --app-header-space:calc(var(--app-header-height) + env(safe-area-inset-top,0px) + 3px);
 }
 body.ui-cleanup::before {
   background:linear-gradient(110deg,rgba(16,17,16,.94),rgba(22,22,18,.91)),var(--xq-scene-art) center/cover!important;
   filter:saturate(.35)!important;
 }
-/* Single-line global masthead. Match its actual height with main's reserved space. */
-body.ui-cleanup > header {
-  box-sizing:border-box;min-height:calc(var(--app-header-height) + env(safe-area-inset-top,0px));
-  height:calc(var(--app-header-height) + env(safe-area-inset-top,0px));
-  padding-block:calc(2px + env(safe-area-inset-top,0px)) 2px;
-  gap:12px;
-  background:rgba(21,21,18,.96)!important;box-shadow:none!important;
+/* Corner masthead: only the two small badges are painted or interactive.
+   The main scroller starts below their footprint, so content cannot pass behind them. */
+html body.ui-cleanup > header.app-corner-header {
+  box-sizing:border-box;min-height:0!important;height:0!important;
+  padding:0!important;border:0!important;background:transparent!important;
+  box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  pointer-events:none;overflow:visible;
 }
-body.ui-cleanup > header .xianxia-brand {font-size:16px;line-height:1.2;gap:7px;margin:0;flex:none;white-space:nowrap}
-body.ui-cleanup > header #brand-home {min-height:36px;gap:7px}
-body.ui-cleanup > header .xianxia-seal {width:23px;height:25px;font-size:16px;line-height:1;outline:none;border-color:#a78b53;border-radius:3px;color:#d0b579}
+html body.ui-cleanup > header.app-corner-header .xianxia-brand {
+  position:absolute;top:env(safe-area-inset-top,0px);left:env(safe-area-inset-left,0px);
+  margin:0;font-size:15px;line-height:1;white-space:nowrap;pointer-events:none;
+}
+html body.ui-cleanup > header.app-corner-header #brand-home {
+  box-sizing:border-box;position:relative;min-height:0;height:var(--app-header-height);
+  display:inline-flex;align-items:center;gap:4px;padding:0 13px 0 7px;
+  border:1px solid #a78b5388;border-top:0;border-left:0;border-radius:0 0 16px 0;
+  background:linear-gradient(115deg,#252820,#191a16);color:#e6d5ac;
+  box-shadow:inset 0 -1px #d0b57935;
+  font-family:var(--xq-serif,"Noto Serif TC",serif);font-weight:700;letter-spacing:.07em;
+  pointer-events:auto;
+}
+html body.ui-cleanup > header.app-corner-header #brand-home::after {
+  content:"";position:absolute;bottom:2px;left:0;right:10px;height:1px;
+  background:linear-gradient(90deg,#d0b57999,transparent);pointer-events:none;
+}
+html body.ui-cleanup > header.app-corner-header .xianxia-seal {
+  width:15px;height:17px;font-size:12px;line-height:1;outline:none;
+  border-color:#a78b5388;border-radius:2px;color:#d0b579;
+}
 body.ui-cleanup > header .xianxia-brand small {display:none}
-body.ui-cleanup > header > div {min-width:0;max-width:55%;gap:6px;justify-content:flex-end}
-body.ui-cleanup #user-info {background:transparent!important;border:0!important;color:#b9b19f!important;font-size:12px;font-weight:400;padding:2px 0}
-body.ui-cleanup > header #user-info {min-width:0;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;gap:5px;line-height:1.2;display:block}
+html body.ui-cleanup > header.app-corner-header > div {
+  position:absolute;top:env(safe-area-inset-top,0px);right:env(safe-area-inset-right,0px);
+  min-width:0;max-width:42%;height:var(--app-header-height);
+  display:flex;align-items:center;justify-content:flex-end;padding:0 7px;
+  pointer-events:none;
+}
+body.ui-cleanup #user-info {background:transparent!important;border:0!important;color:#b9b19f!important;font-size:11px;font-weight:400;padding:0}
+html body.ui-cleanup > header.app-corner-header #user-info {
+  min-width:0;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  line-height:1.2;display:block;box-shadow:none!important;
+}
 body.ui-cleanup > header #user-info i {margin-inline-end:3px}
-body.ui-cleanup > main {padding-top:var(--app-header-space);padding-bottom:84px}
+body.ui-cleanup > main {margin-top:var(--app-header-space);padding-top:0;padding-bottom:84px}
+html body.ui-cleanup:has(#page-training.active-page:not(.hidden) #manual-training-root.manual-detail-active)>main{margin-top:0}
+@media(orientation:portrait){
+ body.ui-cleanup:has(:is(#page-store,#page-rank,#page-social).active-page)>main{margin-top:0}
+}
 body.ui-cleanup #page-home {max-width:1112px;padding-inline:24px}
 body.ui-cleanup #page-home > .xianxia-page-heading {
   display:flex;align-items:center;margin:0 0 22px;padding:0;border:0!important;background:transparent!important;
@@ -140,11 +170,10 @@ body.ui-cleanup #page-store>.sticky {border-radius:8px;background:#23221c!import
 body.ui-cleanup #page-settings>.glass-panel {border-color:var(--quiet-line)!important}
 body.ui-cleanup #page-training .training-subtabs-v3 {box-shadow:none!important}
 @media(max-width:700px) {
-  body.ui-cleanup {--app-header-height:40px}
-  body.ui-cleanup>header {padding-inline:max(10px,env(safe-area-inset-left,0px)) max(10px,env(safe-area-inset-right,0px))}
-  body.ui-cleanup > header .xianxia-brand {font-size:15px;gap:6px}
-  body.ui-cleanup > header .xianxia-seal {width:21px;height:23px;font-size:15px}
-  body.ui-cleanup #user-info {font-size:11px}
+  body.ui-cleanup {--app-header-height:26px}
+  html body.ui-cleanup > header.app-corner-header .xianxia-brand {font-size:14px}
+  html body.ui-cleanup > header.app-corner-header #brand-home {padding-right:10px}
+  body.ui-cleanup #user-info {font-size:10px}
   body.ui-cleanup>main {padding-bottom:80px}
   body.ui-cleanup #page-home {padding-inline:16px}
   body.ui-cleanup #page-home>.xianxia-page-heading {display:none}
