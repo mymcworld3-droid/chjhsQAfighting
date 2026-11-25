@@ -90,20 +90,25 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
   order:2;flex:none;align-self:center;min-height:36px;margin-left:auto;padding:6px 9px;
   background:#003f4a;color:#ffe4a7;border:1px solid #bd9e60;font-size:14px;
 }
-#manual-training-root .manual-book-grid{
+#manual-training-root .manual-library .manual-book-grid{
+  --weapon-card-width:160px;
   display:grid;grid-template-columns:none;grid-template-rows:auto;grid-auto-flow:column;
-  grid-auto-columns:clamp(160px,18cqw,220px);gap:clamp(10px,1.2cqw,16px);align-items:start;
+  grid-auto-columns:var(--weapon-card-width);justify-content:start;justify-items:start;
+  gap:12px;align-items:start;align-content:start;box-sizing:border-box;
   width:100%;min-width:0;padding:10px 10px 14px;
   overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
   scroll-snap-type:x proximity;scroll-padding-inline:10px;
   scrollbar-width:thin;scrollbar-color:#d8b86c #003b49;
 }
 #manual-training-root .manual-book-grid:focus-visible{outline:2px solid #fff1b8;outline-offset:2px}
-#manual-training-root .manual-book-grid:has(>.manual-empty){display:block}
+#manual-training-root .manual-library .manual-book-grid:has(>.manual-empty){display:block}
 #manual-training-root .manual-book-grid::-webkit-scrollbar{height:6px}
 #manual-training-root .manual-book-grid::-webkit-scrollbar-track{background:#003b49;border-radius:6px}
 #manual-training-root .manual-book-grid::-webkit-scrollbar-thumb{background:#d8b86c;border-radius:6px}
-#manual-training-root .manual-book-grid>.manual-book{scroll-snap-align:start;scroll-margin-inline:10px;align-self:start;min-width:0}
+#manual-training-root .manual-library .manual-book-grid>.manual-book{
+  scroll-snap-align:start;scroll-margin-inline:10px;align-self:start;justify-self:start;
+  width:var(--weapon-card-width);min-width:0;max-width:var(--weapon-card-width);box-sizing:border-box;
+}
 #manual-training-root .manual-book{
   background:none;border:0;border-radius:15px;overflow:visible;box-shadow:none;
 }
@@ -343,7 +348,7 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
    height rather than flattening the cards to fit the viewport. */
 @media (orientation:landscape){
   #manual-training-root .manual-library .manual-book-grid{
-    grid-auto-columns:clamp(160px, calc((100cqw - 104px) / 5.5), 240px);
+    --weapon-card-width:200px;
     grid-template-rows:auto;align-items:start;box-sizing:border-box;
     padding-block:12px 18px;
   }
