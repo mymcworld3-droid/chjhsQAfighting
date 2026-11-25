@@ -9,8 +9,8 @@ test('original stamina spirit-stone artwork is reused on the main branch',()=>{
  const html=read('public/index.html');
  assert.match(html,/src="\/assets\/items\/gold.webp"/);
  assert.match(helper,/STONE_IMAGE='\/assets\/items\/gold.webp'/);
- assert.match(html,/styles\/spirit-stone-ui\.css\?v=20261125-stone-price-art-v1/);
- assert.match(read('public/main.js'),/import '\.\/cultivation\/spirit-stone-ui\.js\?v=20261125-stone-price-art-v1'/);
+ assert.match(html,/styles\/spirit-stone-ui\.css\?v=20261125-stone-reward-icon-v2/);
+ assert.match(read('public/main.js'),/import '\.\/cultivation\/spirit-stone-ui\.js\?v=20261125-stone-reward-icon-v2'/);
 });
 test('skill and weapon upgrades show label, image, and live server-quoted gold amount',()=>{
  const skill=read('public/cultivation/manual-skill-detail-view.js');
@@ -45,8 +45,62 @@ test('all gold-bearing buttons can adopt icon without altering payment rules',()
  assert.match(read('public/cultivation/cultivation-training-v4.js'),/洗髓（100 靈石）/);
 });
 test('display-only decorator does not replace clickable buttons or handlers',()=>{
- assert.match(helper,/document\.createTreeWalker\(button,4\)/);
- assert.match(helper,/current\.replaceWith\(fragment\)/);
+ assert.match(helper,/document\.createTreeWalker\(root,4\)/);
+ assert.match(helper,/node\.replaceWith\(fragment\)/);
  assert.match(helper,/\.observe\(document\.body,\{subtree:true,childList:true,characterData:true\}\)/);
  assert.doesNotMatch(helper,/button\.outerHTML\s*=|button\.innerHTML\s*=/);
+});
+
+test('amounts earned or spent in either word order become image followed by signed amount',()=>{
+ for(const [label,expected] of [
+  ['靈石 +30','+30'],['+30 靈石','+30'],['已發放：+30 靈石','+30'],
+  ['獲得 30 靈石','30'],['現有靈石：5,602','5,602'],
+  ['靈石 -50','-50'],['靈石 ×3','×3'],['洗髓（100 靈石）','100']
+ ]){
+  const parts=api.splitStoneText(label),money=parts?.find(part=>part.kind==='stone');
+  assert.ok(money,label);
+  assert.equal(money.value,expected,label);
+  assert.match(api.stoneCostMarkup(money.value),new RegExp('>'+expected.replace(/[+*]/g,'\\$&').replace('×','×')+'<\\/b>'));
+ }
+ assert.equal(api.splitStoneText('靈石不足，請先完成任務'),null);
+ assert.equal(api.splitStoneText('答案為 30 修為'),null);
+ assert.match(api.stoneCostMarkup('+30'),/>\+30<\/b>/);
+});
+test('reward and wallet surfaces use the original bitmap without changing earnings',()=>{
+ const vocab=read('public/cultivation/daily-vocabulary-page.js');
+ const meditation=read('public/cultivation/daily-meditation.js');
+ const medal=read('public/cultivation/daily-meditation-rewards.js');
+ const core=read('public/cultivation/cultivation-training-v4.js');
+ const draw=read('public/cultivation/soulbound-draw.js');
+ assert.match(vocab,/stoneCostMarkup\('\+'\+reward\.gold\)/);
+ assert.match(vocab,/stoneCostMarkup\(rules\.DAILY_REWARD\.gold\)/);
+ assert.match(meditation,/label==='個人靈石'/);
+ assert.match(meditation,/game-stone-amount/);
+ assert.match(meditation,/if\(id==='gold'\)/);
+ assert.match(medal,/item\.key==='gold'/);
+ assert.match(core,/stoneCostMarkup\(Growth\.count\(/);
+ assert.match(draw,/stoneCostMarkup\(s\.balance\)/);
+ assert.match(helper,/const excluded=.*#page-quiz/);
+ assert.match(helper,/\.observe\(document\.body,\{subtree:true,childList:true,characterData:true\}\)/);
+});
+test('DOM replacement is text-only and places stone art before reward amount',()=>{
+ const inserted=[];
+ const document={
+  createDocumentFragment:()=>({children:[],append(...nodes){this.children.push(...nodes);}}),
+  createTextNode:value=>({nodeType:3,nodeValue:value}),
+  createElement:tag=>({
+   tagName:tag.toUpperCase(),className:'',children:[],
+   setAttribute(){},append(...nodes){this.children.push(...nodes);}
+  })
+ };
+ const runtime=vm.runInNewContext(helper.replace(/^export /gm,'')+'\n({decorateStoneContent})',{document});
+ const parent={closest:()=>null};
+ const textNode={nodeType:3,isConnected:true,nodeValue:'獎勵：靈石 +30',parentElement:parent,
+   replaceWith(fragment){inserted.push(...fragment.children);}};
+ assert.equal(runtime.decorateStoneContent(textNode),1);
+ const display=inserted.find(node=>node.className==='game-stone-cost');
+ assert.ok(display);
+ assert.equal(display.children[0].src,'/assets/items/gold.webp');
+ assert.equal(display.children[1].textContent,'+30');
+ assert.equal(display.children[2].textContent,' 靈石');
 });
