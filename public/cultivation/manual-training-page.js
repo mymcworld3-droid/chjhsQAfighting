@@ -89,7 +89,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-art-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261125-weapon-order-v10';
+    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261125-fixed-card-width-v11';
     document.head.append(link);
   }
   if(!document.getElementById('scene-art-shell-style')){
