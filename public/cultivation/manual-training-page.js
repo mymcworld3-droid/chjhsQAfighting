@@ -1,6 +1,6 @@
 import './manual-rules.js?v=20261125-native-main-cultivation-v1';
 import {bookArt,skillArt} from './manual-art.js';
-import {renderManualHero} from './manual-hero-view.js?v=20261125-native-main-cultivation-v1';
+import {renderManualHero} from './manual-hero-view.js?v=20261125-stone-price-art-v1';
 import {nextManualExpedition,renderManualExpedition} from './manual-expedition-guide.js';
 import {renderManualLoadout,selectSkillForSlot} from './manual-loadout-view.js';
 import './contextual-asset-preloader.js';
