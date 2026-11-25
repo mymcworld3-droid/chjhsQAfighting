@@ -130,22 +130,20 @@ test('landscape uses realm, central scene and CTA, and two right shortcut column
   assert.match(html,/id="btn-home-free-quiz"[^>]+onclick="startFreeQuizFlow\(\)"/);
 });
 
-test('portrait anchors all four diamonds at the upper right of the profile, not beside the trial scene',()=>{
-  const v6=css.slice(css.indexOf('/* v6: Screenshot-informed placement.'));
-  const portrait=v6.slice(v6.indexOf('@media (orientation:portrait){'));
-  assert.ok(v6.length>1000);
-  assert.match(portrait,/"stones stones stones"\s*"realm left right"\s*"daily daily daily"/);
-  assert.match(portrait,/"emblem emblem emblem"\s*"practice practice practice"\s*"wide wide wide"/);
-  assert.ok(portrait.indexOf('"realm left right"')<portrait.indexOf('"emblem emblem emblem"'),
-    'the command cluster must appear before the central trial scene');
-  assert.match(portrait,/\.home-profile-column\{\s*display:contents!important/);
-  assert.match(portrait,/\.home-shortcut-column>\.home-wireframe-rail\.is-left\{\s*grid-area:left!important/);
-  assert.match(portrait,/\.home-shortcut-column>\.home-wireframe-rail\.is-right\{\s*grid-area:right!important/);
-  assert.match(portrait,/\.home-practice\{\s*grid-area:practice!important/);
-  assert.match(portrait,/\.home-shortcut-column>\.home-wide-actions\{\s*grid-area:wide!important/);
-  assert.doesNotMatch(v6,/position:fixed!important/);
+test('portrait retains legacy full-width profile and three shortcuts on each side of the scene',()=>{
+  const v7=css.slice(css.indexOf('/* v7 FINAL orientation-specific overrides.'));
+  const portrait=v7.slice(v7.indexOf('@media (orientation:portrait){'),v7.indexOf('@media (orientation:landscape){'));
+  assert.ok(v7.length>1500);
+  assert.match(portrait,/"realm realm realm"\s*"left emblem right"\s*"practice practice practice"!important/);
+  assert.match(portrait,/\.home-profile-column\{\s*display:flex!important/);
+  assert.match(portrait,/\.home-shortcut-column>\.home-spirit-stones\{\s*display:none!important/);
+  assert.match(portrait,/\.home-shortcut-column>\.home-wireframe-rail\{\s*display:flex!important/);
+  assert.match(portrait,/\.home-shortcut--diamond::before\{\s*display:none!important/);
+  assert.match(portrait,/\.home-wireframe-shortcut,\s*body\.ui-cleanup #page-home \.home-shortcut-column>\.home-wireframe-rail\.is-right \.home-shortcut--wide\{/);
+  assert.match(portrait,/\.home-shortcut-column>\.home-wireframe-rail \.home-wireframe-shortcut:first-child\{\s*border-radius:12px 12px 0 0!important/);
+  assert.doesNotMatch(v7,/position:fixed!important/);
   assert.doesNotMatch(js,/document\.body\.appendChild\(homeLeftRail\)|home-rails-portal|syncPortraitRails/);
-  assert.match(html,/home-wireframe\.css\?v=20261125-upper-right-diamonds-v6/);
+  assert.match(html,/home-wireframe\.css\?v=20261125-landscape-wide-portrait-legacy-v7/);
 });
 
 test('daily progress, records and independent correction host follow realm in both orientations',()=>{
@@ -197,22 +195,23 @@ test('the four secondary homepage actions are diamonds and meditation/learning a
 });
 
 
-test('landscape groups currency first, a two-by-two diamond grid, and two daily wide actions',()=>{
+test('landscape has four utility diamonds and two full-width stacked learning and meditation buttons',()=>{
   assert.match(html,/<output id="home-spirit-stones"[^>]*aria-live="polite"/);
   assert.match(html,/<strong id="home-spirit-stones-count">—<\/strong>/);
-  assert.match(html,/class="home-wide-actions" role="group"/);
-  assert.match(css,/"stones stones"\s*"left right"\s*"\. \."\s*"wide wide"!important/);
-  assert.match(css,/grid-template-rows:repeat\(2,minmax\(0,1fr\)\)!important/);
+  assert.doesNotMatch(html,/class="home-wide-actions"/);
   const left=html.match(/<aside class="home-wireframe-rail is-left"[^>]*>([\s\S]*?)<\/aside>/)?.[1];
   const right=html.match(/<aside class="home-wireframe-rail is-right"[^>]*>([\s\S]*?)<\/aside>/)?.[1];
-  const wide=html.match(/<div class="home-wide-actions"[^>]*>([\s\S]*?)<\/div>/)?.[1];
-  assert.ok(left&&right&&wide);
-  assert.deepEqual([...left.matchAll(/data-home-action="([^"]+)"/g)].map(m=>m[1]),['path','rank']);
-  assert.deepEqual([...right.matchAll(/data-home-action="([^"]+)"/g)].map(m=>m[1]),['quest','store']);
-  assert.deepEqual([...wide.matchAll(/data-home-action="([^"]+)"/g)].map(m=>m[1]),['meditation','learning']);
-  assert.match(css,/"stones stones stones"\s*"realm left right"[\s\S]*"emblem emblem emblem"\s*"practice practice practice"\s*"wide wide wide"/);
-  assert.match(css,/#page-home \.home-shortcut-column>\.home-spirit-stones\{\s*grid-area:stones!important/);
-  assert.match(html,/home-wireframe\.css\?v=20261125-upper-right-diamonds-v6/);
+  assert.ok(left&&right);
+  assert.deepEqual([...left.matchAll(/data-home-action="([^"]+)"/g)].map(m=>m[1]),['path','rank','store']);
+  assert.deepEqual([...right.matchAll(/data-home-action="([^"]+)"/g)].map(m=>m[1]),['quest','meditation','learning']);
+  const v7=css.slice(css.indexOf('/* v7 FINAL orientation-specific overrides.'));
+  const landscape=v7.slice(v7.indexOf('@media (orientation:landscape){'));
+  assert.match(landscape,/"stones stones"\s*"path quest"\s*"rank store"\s*"\. \."\s*"meditation meditation"\s*"learning learning"/);
+  assert.match(landscape,/"stones stones stones stones"\s*"path rank quest store"\s*"\. \. \. \."\s*"meditation meditation meditation meditation"\s*"learning learning learning learning"/);
+  assert.match(landscape,/\.home-shortcut--wide\{\s*width:100%!important;\s*max-width:none!important/);
+  assert.match(landscape,/\.home-shortcut--wide\{[^}]*flex-direction:row!important/s);
+  assert.match(landscape,/\.home-shortcut-column>\.home-wireframe-rail\{\s*display:contents!important/);
+  assert.match(html,/home-wireframe\.css\?v=20261125-landscape-wide-portrait-legacy-v7/);
   assert.match(read('public/main.js'),/modulePath === '\.\/cultivation\/home-wireframe\.js'/);
 });
 
@@ -236,20 +235,16 @@ test('spirit-stone readout formats actual signed-in stats, tracks changes, and c
 });
 
 
-test('reference placement keeps four diamonds on the upper-right bar at desktop and tablet widths',()=>{
-  const wide=css.slice(css.indexOf('/* Four upper-right diamonds sit in one horizontal strip'));
-  assert.ok(wide.length>500);
-  assert.match(wide,/@media \(orientation:landscape\) and \(min-width:900px\)/);
-  assert.match(wide,/"stones stones stones stones"\s*"path rank quest store"\s*"\. \. \. \."\s*"wide wide wide wide"/);
-  assert.match(wide,/@media \(orientation:portrait\) and \(min-width:760px\)/);
-  assert.match(wide,/"realm path rank quest store"\s*"daily daily daily daily daily"/);
-  for(const action of ['path','rank','quest','store'])
-    assert.match(wide,new RegExp('\\[data-home-action="'+action+'"\\]\\{grid-area:'+action+'!important\\}'));
-  assert.match(wide,/\.home-shortcut-column>\.home-wireframe-rail\{\s*display:contents!important/);
+test('reference: landscape uses two wide rows, portrait exactly mirrors Safari screenshot',()=>{
+  const v7=css.slice(css.indexOf('/* v7 FINAL orientation-specific overrides.'));
+  assert.match(v7,/@media \(orientation:landscape\) and \(min-width:900px\)/);
+  assert.match(v7,/"path rank quest store"\s*"\. \. \. \."\s*"meditation meditation meditation meditation"\s*"learning learning learning learning"/);
+  assert.match(v7,/--home-wide-height:clamp\(62px,10dvh,92px\)/);
+  assert.match(v7,/grid-template-areas:[\s\S]*"realm realm realm"\s*"left emblem right"\s*"practice practice practice"!important/);
+  assert.match(v7,/\.home-profile-column\{\s*display:flex!important/);
+  assert.match(v7,/\.home-shortcut-column>\.home-wireframe-rail\.is-right\{\s*grid-area:right!important/);
   assert.match(html,/id="btn-home-start"[^>]*onclick="startQuizFlow\(\)"/);
-  assert.ok(html.indexOf('id="home-trial-ecology-image"')<html.indexOf('id="btn-home-start"'),
-    'trial CTA stays directly after the scenic preview');
-  assert.match(css,/@media \(orientation:portrait\)\{[\s\S]*"realm left right"/,
-    'narrow portrait keeps the upper-right compact 2×2 diamonds');
-  assert.match(html,/id="home-spirit-stones-count"/);
+  assert.ok(html.indexOf('id="home-trial-ecology-image"')<html.indexOf('id="btn-home-start"'));
+  assert.equal((html.match(/data-home-action="meditation"/g)||[]).length,1);
+  assert.equal((html.match(/data-home-action="learning"/g)||[]).length,1);
 });
