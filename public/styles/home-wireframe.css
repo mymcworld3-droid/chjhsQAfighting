@@ -524,3 +524,123 @@ body.ui-cleanup #page-home .home-shortcut-column{display:contents}
   body.ui-cleanup #page-home>.home-layout{--home-scene-size:min(460px,48dvh,40vw)}
   body.ui-cleanup #page-home .home-shortcut-column{min-height:132px}
 }
+
+
+/* Homepage shortcut shapes (main branch).
+   Decorative diamond borders belong to pseudo-elements so icons, text, and
+   notification indicators remain upright and all buttons stay real buttons. */
+body.ui-cleanup #page-home .home-shortcut-column .home-wireframe-shortcut{
+  position:relative;
+  isolation:isolate;
+  box-sizing:border-box;
+  flex:0 0 auto;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:5px 6px!important;
+  gap:5px!important;
+  text-align:center;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+body.ui-cleanup #page-home .home-shortcut-column .home-wireframe-shortcut>i,
+body.ui-cleanup #page-home .home-shortcut-column .home-wireframe-shortcut>span{
+  position:relative;
+  z-index:1;
+  pointer-events:none;
+}
+body.ui-cleanup #page-home .home-shortcut-column .home-wireframe-shortcut .home-wireframe-alert{
+  z-index:2;
+}
+body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--diamond{
+  width:var(--home-diamond-size,88px)!important;
+  height:var(--home-diamond-size,88px)!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:100%!important;
+  border:0!important;
+  border-radius:12px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  align-self:center!important;
+  justify-self:center!important;
+}
+body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--diamond::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:16%;
+  border:1px solid rgba(217,185,123,.55);
+  border-radius:8px;
+  background:linear-gradient(140deg,rgba(55,51,39,.9),rgba(29,30,25,.94));
+  box-shadow:0 4px 11px rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,226,162,.06);
+  transform:rotate(45deg);
+  pointer-events:none;
+  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--diamond:is(:hover,:focus-visible)::before{
+  border-color:#ead29b;
+  background:linear-gradient(140deg,rgba(96,80,52,.97),rgba(45,42,32,.97));
+  box-shadow:0 5px 16px rgba(0,0,0,.34),0 0 10px rgba(219,185,118,.18);
+}
+body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--diamond:focus-visible{
+  outline:2px solid #f3daaa;
+  outline-offset:2px;
+}
+body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--wide{
+  width:100%!important;
+  height:var(--home-wide-height,76px)!important;
+  min-height:0!important;
+  max-width:175px!important;
+  border:1px solid rgba(217,185,123,.63)!important;
+  border-radius:12px!important;
+  background:linear-gradient(135deg,rgba(72,60,41,.93),rgba(40,38,30,.96))!important;
+  box-shadow:inset 0 1px rgba(255,237,188,.14),0 5px 13px rgba(0,0,0,.21)!important;
+  align-self:center!important;
+  justify-self:center!important;
+}
+body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--wide:is(:hover,:focus-visible){
+  border-color:#f2d49b!important;
+  background:linear-gradient(135deg,rgba(110,90,55,.98),rgba(64,56,38,.98))!important;
+}
+body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--wide:focus-visible{
+  outline:2px solid #f3daaa;
+  outline-offset:3px;
+}
+@media (orientation:landscape){
+  body.ui-cleanup #page-home .home-shortcut-column{
+    --home-diamond-size:max(44px,min(98px,8vw,calc(var(--home-scene-size)/3 - 12px)));
+    --home-wide-height:max(44px,min(88px,9dvh,calc(var(--home-scene-size)/3 - 12px)));
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail{
+    justify-items:center!important;
+    align-items:center!important;
+  }
+}
+@media (orientation:portrait){
+  body.ui-cleanup #page-home .home-shortcut-column{
+    --home-diamond-size:clamp(44px,12vw,65px);
+    --home-wide-height:clamp(46px,6dvh,64px);
+  }
+  body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--diamond{
+    width:min(100%,var(--home-diamond-size))!important;
+    height:min(100cqw,var(--home-diamond-size))!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column .home-wireframe-rail.is-right .home-shortcut--wide{
+    width:clamp(74px,19vw,114px)!important;
+    max-width:none!important;
+    align-self:flex-end!important;
+    flex-shrink:0;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--wide{
+    font-size:clamp(9px,1.3vw,11px)!important;
+    gap:3px!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column .home-wireframe-shortcut :is(i,.home-learning-star){
+    font-size:clamp(15px,3.6vw,20px)!important;
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--diamond::before{
+    transition:none!important;
+  }
+}
