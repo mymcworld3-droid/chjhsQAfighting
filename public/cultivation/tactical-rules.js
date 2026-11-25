@@ -650,7 +650,13 @@
       if(!alive(hero)){s.status='finished';s.winner='monster';s.finishReason='hp';}
       else if(o.type==='defense'&&o.hp<=0){s.status='finished';s.winner='monster';s.finishReason='shrine';}
       else {
-        if(o.type==='transport'){
+        // Weapon dungeons end the instant their unique lord falls, even if
+        // guards remain alive or no quiz answer has been submitted. Other PvE
+        // objective types retain their original completion/answer rules.
+        if(s.weaponDungeon){
+          const lord=s.actors.find(a=>a.bot&&a.weaponDungeonLord);
+          o.completed=!!lord&&!alive(lord);
+        }else if(o.type==='transport'){
           if(!o.carrying&&o.item&&key(hero)===key(o.item)){
             o.item.collected=true;o.carrying=true;o.phase='delivery';log(s,'已取得靈物，前往交付點','objective');
           }
@@ -661,7 +667,10 @@
         }else if(o.type==='defense')o.completed=o.completedRounds>=o.rounds;
         else if(o.type==='boss')o.completed=!!s.actors.find(a=>a.uid===o.bossUid&&!alive(a));
         else if(o.type==='elimination')o.completed=!s.actors.some(a=>a.bot&&alive(a));
-        if(o.completed&&hero.answered>0){s.status='finished';s.winner=hero.team;s.finishReason='objective';}
+        if(o.completed&&(s.weaponDungeon||hero.answered>0)){
+          s.status='finished';s.winner=hero.team;s.finishReason='objective';
+          if(s.weaponDungeon)log(s,'石域領主已被擊敗，武器副本通關','objective');
+        }
         else if(o.completed&&!o.awaitingAnswer){o.awaitingAnswer=true;log(s,'目標已完成，請先完成一題作答','objective');}
       }
     }else if(teams.length<2){s.status='finished';s.winner=teams[0]||'draw';s.finishReason='hp';}
