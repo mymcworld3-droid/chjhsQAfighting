@@ -182,6 +182,30 @@ async function main(){
     await page.locator('[data-manual-collection-filter="body"]').click();
     assert.equal(await track.evaluate(node=>node.scrollLeft),0,'changing school returns to the start of the collection');
     await page.locator('[data-manual-collection-filter="all"]').click();
+    // Same order for collection and modal, including realm ties and equipped priority.
+    const expectedOrder=['body-rock','sword-wind','sword-sky','body-dragon','sword-flight','body-tiger'];
+    const visibleIds=()=>track.locator('[data-manual-book]').evaluateAll(nodes=>nodes.map(node=>node.dataset.manualBook));
+    assert.deepEqual(await visibleIds(),expectedOrder);
+    const currentWeapon=()=>page.locator('.manual-training-dialog .manual-hero-details h3').textContent();
+    const expectedNames=['玄嶽圖騰','流風靈劍','八方天劍','龍象圖騰','御靈飛劍','伏虎圖騰'];
+    await track.locator('[data-manual-book="body-rock"] button').click();
+    assert.equal(await currentWeapon(),expectedNames[0]);
+    for(const name of [...expectedNames.slice(1),expectedNames[0]]){
+      await page.locator('[data-manual-switch-weapon="1"]').click();
+      assert.equal(await currentWeapon(),name);
+    }
+    await page.locator('[data-manual-switch-weapon="-1"]').click();
+    assert.equal(await currentWeapon(),expectedNames.at(-1));
+    await page.locator('[data-manual-close-training]').click();
+    await page.locator('[data-manual-collection-filter="sword"]').click();
+    assert.deepEqual(await visibleIds(),['sword-wind','sword-sky','sword-flight']);
+    await track.locator('[data-manual-book="sword-wind"] button').click();
+    await page.locator('[data-manual-switch-weapon="-1"]').click();
+    assert.equal(await currentWeapon(),'御靈飛劍');
+    await page.locator('[data-manual-switch-weapon="1"]').click();
+    assert.equal(await currentWeapon(),'流風靈劍');
+    await page.locator('[data-manual-close-training]').click();
+    await page.locator('[data-manual-collection-filter="all"]').click();
     const aligned=await page.locator('.manual-art-card').evaluateAll(cards=>cards.every(card=>{
       const rect=card.getBoundingClientRect();
       const labels=[...card.querySelectorAll('.manual-art-card-name,.manual-art-card-school,.manual-art-card-level')];
