@@ -1016,9 +1016,8 @@ body.ui-cleanup #page-home .home-shortcut-column .home-wide-actions>.home-shortc
 
 
 /* v7 FINAL orientation-specific overrides.
-   Portrait intentionally retains the 2026-11-25 Safari layout: a full-width
-   cultivation panel, three plain rectangular buttons on each side of the
-   circular stage, then its original trial button. Only landscape changes. */
+   Portrait: full-width realm, scene and flanking shortcuts, trial/free quiz,
+   then daily progress, records and correction history. Landscape is unchanged. */
 @media (orientation:portrait){
   body.ui-cleanup #page-home>.home-layout,
   body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
@@ -1026,21 +1025,20 @@ body.ui-cleanup #page-home .home-shortcut-column .home-wide-actions>.home-shortc
     grid-template-areas:
       "realm realm realm"
       "left emblem right"
-      "practice practice practice"!important;
-    grid-template-rows:auto auto auto!important;
+      "practice practice practice"
+      "daily daily daily"
+      "records records records"
+      "learning learning learning"!important;
+    grid-template-rows:repeat(6,auto)!important;
     column-gap:clamp(5px,1.6vw,14px)!important;
     row-gap:clamp(10px,1.8vh,18px)!important;
     align-items:start!important;
   }
   body.ui-cleanup #page-home .home-profile-column{
-    display:flex!important;
-    flex-direction:column!important;
-    grid-area:realm!important;
-    gap:5px!important;
-    width:100%!important;
+    display:contents!important;
   }
   body.ui-cleanup #page-home .home-profile-column>#xiuxian-panel{
-    grid-area:auto!important;
+    grid-area:realm!important;
     padding:14px 18px!important;
     width:100%!important;
     min-width:0!important;
@@ -1055,9 +1053,25 @@ body.ui-cleanup #page-home .home-shortcut-column .home-wide-actions>.home-shortc
   body.ui-cleanup #page-home .home-profile-column>.home-daily-progress,
   body.ui-cleanup #page-home .home-profile-column>.home-records,
   body.ui-cleanup #page-home .home-profile-column>#home-learning-slot{
-    grid-area:auto!important;
     width:100%!important;
+    min-width:0!important;
     align-self:stretch!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column>.home-daily-progress{grid-area:daily!important}
+  body.ui-cleanup #page-home .home-profile-column>.home-records{grid-area:records!important}
+  body.ui-cleanup #page-home .home-profile-column>#home-learning-slot{grid-area:learning!important}
+  /* No extra empty track above records while the daily task is unavailable. */
+  body.ui-cleanup #page-home>.home-layout:has(.home-daily-progress>#quest-spotlight-slot[hidden]){
+    grid-template-areas:"realm realm realm" "left emblem right" "practice practice practice" "records records records" "learning learning learning"!important;
+    grid-template-rows:repeat(5,auto)!important;
+  }
+  body.ui-cleanup #page-home>.home-layout:has(#home-learning-slot:empty){
+    grid-template-areas:"realm realm realm" "left emblem right" "practice practice practice" "daily daily daily" "records records records"!important;
+    grid-template-rows:repeat(5,auto)!important;
+  }
+  body.ui-cleanup #page-home>.home-layout:has(.home-daily-progress>#quest-spotlight-slot[hidden]):has(#home-learning-slot:empty){
+    grid-template-areas:"realm realm realm" "left emblem right" "practice practice practice" "records records records"!important;
+    grid-template-rows:repeat(4,auto)!important;
   }
   body.ui-cleanup #page-home .home-shortcut-column{
     display:contents!important;

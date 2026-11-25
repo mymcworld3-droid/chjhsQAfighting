@@ -130,12 +130,18 @@ test('landscape uses realm, central scene and CTA, and two right shortcut column
   assert.match(html,/id="btn-home-free-quiz"[^>]+onclick="startFreeQuizFlow\(\)"/);
 });
 
-test('portrait retains legacy full-width profile and three shortcuts on each side of the scene',()=>{
+test('portrait keeps the full-width realm and places all learning records below the free quiz',()=>{
   const v7=css.slice(css.indexOf('/* v7 FINAL orientation-specific overrides.'));
   const portrait=v7.slice(v7.indexOf('@media (orientation:portrait){'),v7.indexOf('@media (orientation:landscape){'));
   assert.ok(v7.length>1500);
-  assert.match(portrait,/"realm realm realm"\s*"left emblem right"\s*"practice practice practice"!important/);
-  assert.match(portrait,/\.home-profile-column\{\s*display:flex!important/);
+  assert.match(portrait,/"realm realm realm"\s*"left emblem right"\s*"practice practice practice"\s*"daily daily daily"\s*"records records records"\s*"learning learning learning"!important/);
+  assert.match(portrait,/\.home-profile-column\{\s*display:contents!important/);
+  assert.match(portrait,/\.home-profile-column>#xiuxian-panel\{\s*grid-area:realm!important/);
+  for(const [selector,area] of [['.home-daily-progress','daily'],['.home-records','records'],['#home-learning-slot','learning']]){
+    assert.ok(portrait.includes('.home-profile-column>'+selector+'{grid-area:'+area+'!important}'));
+  }
+  assert.match(portrait,/:has\(#home-learning-slot:empty\)\{[^}]*grid-template-rows:repeat\(5,auto\)/);
+  assert.match(portrait,/:has\(\.home-daily-progress>#quest-spotlight-slot\[hidden\]\):has\(#home-learning-slot:empty\)\{[^}]*grid-template-rows:repeat\(4,auto\)/);
   assert.match(portrait,/\.home-shortcut-column>\.home-spirit-stones\{\s*display:none!important/);
   assert.match(portrait,/\.home-shortcut-column>\.home-wireframe-rail\{\s*display:flex!important/);
   assert.match(portrait,/\.home-shortcut--diamond::before\{\s*display:none!important/);
@@ -143,10 +149,10 @@ test('portrait retains legacy full-width profile and three shortcuts on each sid
   assert.match(portrait,/\.home-shortcut-column>\.home-wireframe-rail \.home-wireframe-shortcut:first-child\{\s*border-radius:12px 12px 0 0!important/);
   assert.doesNotMatch(v7,/position:fixed!important/);
   assert.doesNotMatch(js,/document\.body\.appendChild\(homeLeftRail\)|home-rails-portal|syncPortraitRails/);
-  assert.match(html,/home-wireframe\.css\?v=20261125-landscape-wide-portrait-legacy-v7/);
+  assert.match(html,/home-wireframe\.css\?v=20261125-portrait-progress-below-free-quiz-v8/);
 });
 
-test('daily progress, records and independent correction host follow realm in both orientations',()=>{
+test('daily progress, records and correction host preserve single instances and landscape profile order',()=>{
   const column=html.match(/<div class="home-profile-column">([\s\S]*?)<div id="home-learning-slot"><\/div>\s*<\/div>/)?.[1];
   assert.ok(column);
   assert.ok(column.indexOf('id="xiuxian-panel"')<column.indexOf('class="home-daily-progress"'));
@@ -211,7 +217,7 @@ test('landscape has four utility diamonds and two full-width stacked learning an
   assert.match(landscape,/\.home-shortcut--wide\{\s*width:100%!important;\s*max-width:none!important/);
   assert.match(landscape,/\.home-shortcut--wide\{[^}]*flex-direction:row!important/s);
   assert.match(landscape,/\.home-shortcut-column>\.home-wireframe-rail\{\s*display:contents!important/);
-  assert.match(html,/home-wireframe\.css\?v=20261125-landscape-wide-portrait-legacy-v7/);
+  assert.match(html,/home-wireframe\.css\?v=20261125-portrait-progress-below-free-quiz-v8/);
   assert.match(read('public/main.js'),/modulePath === '\.\/cultivation\/home-wireframe\.js'/);
 });
 
@@ -235,13 +241,13 @@ test('spirit-stone readout formats actual signed-in stats, tracks changes, and c
 });
 
 
-test('reference: landscape uses two wide rows, portrait exactly mirrors Safari screenshot',()=>{
+test('reference: landscape uses two wide rows, portrait retains scene and places progress below practice',()=>{
   const v7=css.slice(css.indexOf('/* v7 FINAL orientation-specific overrides.'));
   assert.match(v7,/@media \(orientation:landscape\) and \(min-width:900px\)/);
   assert.match(v7,/"path rank quest store"\s*"\. \. \. \."\s*"meditation meditation meditation meditation"\s*"learning learning learning learning"/);
   assert.match(v7,/--home-wide-height:clamp\(62px,10dvh,92px\)/);
-  assert.match(v7,/grid-template-areas:[\s\S]*"realm realm realm"\s*"left emblem right"\s*"practice practice practice"!important/);
-  assert.match(v7,/\.home-profile-column\{\s*display:flex!important/);
+  assert.match(v7,/grid-template-areas:[\s\S]*"realm realm realm"\s*"left emblem right"\s*"practice practice practice"\s*"daily daily daily"\s*"records records records"\s*"learning learning learning"!important/);
+  assert.match(v7,/\.home-profile-column\{\s*display:contents!important/);
   assert.match(v7,/\.home-shortcut-column>\.home-wireframe-rail\.is-right\{\s*grid-area:right!important/);
   assert.match(html,/id="btn-home-start"[^>]*onclick="startQuizFlow\(\)"/);
   assert.ok(html.indexOf('id="home-trial-ecology-image"')<html.indexOf('id="btn-home-start"'));
