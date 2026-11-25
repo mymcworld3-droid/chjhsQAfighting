@@ -16,9 +16,10 @@ const cut=(from,to)=>{
 };
 const sample=id=>({id,q:'第 '+id+' 題：下面哪個答案正確？',opts:['甲','乙','丙','丁'],subject:'國文',topic:'字義'});
 const display=x=>String(x);
-const sheet=new Function('rich','esc','pairChoices','state',
+const presentation=require('../public/cultivation/question-presentation.js');
+const sheet=new Function('rich','esc','pairChoices','state','globalThis',
   cut('function questionSheet(','function setQuizContext(')+'return questionSheet;'
-)(display,display,[-1,-1],{mode:'pve'});
+)(display,display,[-1,-1],{mode:'pve'},{QAQuestionPresentation:presentation});
 const layout=new Function('quizTools','questionSheet','pairQuestions','state','pairDisplayIndex','pairReviews',
   cut('function pairWhiteboardMarkup(){','async function submitPair(){')+'return pairLayout;'
 )(()=>'<section class="tc-question-tools"></section>',sheet,[sample('1'),sample('2')],{quizRound:0},0,[]);

@@ -647,6 +647,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <link rel="stylesheet" href="styles/shared-controls.css?v=20261125-u08-controls-v1">
     <link rel="stylesheet" href="styles/shared-dialogs.css?v=20261125-u09-dialogs-v1">
     <link rel="stylesheet" href="styles/shared-feedback.css?v=20261125-u10-feedback-v1">
+    <link rel="stylesheet" href="styles/question-presentation.css?v=20261125-q01-q02-v1">
     <style id="debug-top-layer-style">
       /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
       #btn-show-debug{
@@ -962,7 +963,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         </button>
                         </div>
                         <div class="text-6xl text-cyan-500/10 absolute -top-2 -left-2"><i class="fa-solid fa-quote-left"></i></div>
-                        <h3 class="text-lg font-bold leading-relaxed relative z-10 text-white" id="question-text">...</h3>
+                        <h3 class="text-lg font-bold leading-relaxed relative z-10 text-white" id="question-text" data-qy-stem>...</h3>
                         </div>
                         <section id="quiz-whiteboard-panel" class="quiz-whiteboard-panel hidden" role="dialog" aria-modal="true" aria-label="計算白板">
                         <button type="button" class="quiz-whiteboard-backdrop" onclick="toggleQuizWhiteboard(false)" aria-label="關閉計算白板"></button>
@@ -998,7 +999,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         
                         
                         
-                        <div id="options-container" class="space-y-3"></div>
+                        <div id="options-container" class="space-y-3" data-qy-options></div>
                         
                         <div id="feedback-section" class="hidden mt-6 glass-panel p-5 rounded-xl border border-white/10 animate-fade-in-up">
                         <div class="flex items-center gap-3 mb-3">
@@ -1537,7 +1538,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <script src="visual-viewport-guard.js?v=20261013-page-layout1"></script>
     <script src="answer-zoom-policy.js?v=20261007-answer-zoom2"></script>
     <script type="module" src="cultivation/in-app-select.js"></script>
-    <script type="module" src="main.js?v=20261125-u10-feedback-v1"></script>
+    <script type="module" src="main.js?v=20261125-q01-q02-v1"></script>
     <script type="module" src="cultivation/daily-vocabulary-page.js?v=20261125-stone-reward-icon-v2"></script>
 </body>
 </html>

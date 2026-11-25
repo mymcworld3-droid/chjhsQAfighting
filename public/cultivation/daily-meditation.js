@@ -1,3 +1,4 @@
+import './question-presentation.js';
 import {stoneCostMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import './daily-meditation-rules.js';
 import './daily-meditation-rewards.js';
@@ -23,7 +24,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     return id;
   }
   function notify(message) {const el=node('dm-status');if(el)el.textContent=message;else console.info('[閉關]',message);}
-  function setContent(html) {const el=node('dm-content');if(el){el.innerHTML=html;el.closest('.dm-body')?.scrollTo?.({top:0});}const status=node('dm-status');if(status)status.textContent='';}
+  function setContent(html) {const el=node('dm-content');if(el){window.quizMathClear?.(el);el.innerHTML=html;el.closest('.dm-body')?.scrollTo?.({top:0});}const status=node('dm-status');if(status)status.textContent='';}
   function summary(items) {
     return '<div class="dm-summary">'+items.map(([label,value,tone='gold'])=>{
       const isGold=label==='個人靈石';
@@ -228,7 +229,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
   }
   function typeset(callback) {
     const el=node('dm-content');
-    try{window.MathJax?.typesetClear?.([el]);Promise.resolve(window.MathJax?.typesetPromise?.([el])).catch(()=>{}).finally(callback);}
+    try{Promise.resolve(window.quizMathTypeset?window.quizMathTypeset(el):window.MathJax?.typesetPromise?.([el])).catch(()=>{}).finally(callback);}
     catch(_){callback();}
   }
   function renderQuestion() {
@@ -238,10 +239,10 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
       setContent('<div class="dm-eyebrow">全服每日素養 · 第 '+(session.index+1)+' / '+total+' 題</div><p class="dm-note" data-qy-state="'+(questionLoading?'loading':'preparing')+'">'+(questionLoading?'正在讀取今日共用題目…':'今日閉關題庫正在準備中，稍後可重新同步並接續今日進度。')+'</p>'+(questionLoading?'':'<button type="button" class="dm-action" id="dm-prepare">重新讀取</button>'));
       node('dm-prepare')?.addEventListener('click',()=>void task(prepareCurrentQuestion));return;
     }
-    setContent('<div class="dm-eyebrow">'+esc(q.source)+' · '+(session.index+1)+' / '+total+' · 已得 '+session.correct+' 星</div><div class="dm-progress"><span style="width:'+Math.round(session.answered/total*100)+'%"></span></div><h3 class="dm-question" id="dm-question"></h3><div class="dm-options" id="dm-options"></div><div id="dm-feedback" class="dm-note"></div>');
-    node('dm-question').textContent=q.q;
+    setContent('<div class="dm-eyebrow">'+esc(q.source)+' · '+(session.index+1)+' / '+total+' · 已得 '+session.correct+' 星</div><div class="dm-progress"><span style="width:'+Math.round(session.answered/total*100)+'%"></span></div><h3 class="dm-question" id="dm-question" data-qy-stem></h3><div class="dm-options" id="dm-options" data-qy-options></div><div id="dm-feedback" class="dm-note"></div>');
+    node('dm-question').innerHTML=globalThis.QAQuestionPresentation.stemMarkup(q.q,window.quizMathRichText||window.formatQuizRichText);
     q.opts.forEach((value,index)=>{const button=document.createElement('button');button.type='button';button.className='dm-option';
-      const mark=document.createElement('b');mark.textContent=String.fromCharCode(65+index);const text=document.createElement('span');text.textContent=value;button.append(mark,text);
+      button.dataset.qyOption='';button.innerHTML=globalThis.QAQuestionPresentation.optionMarkup(value,index,{rich:window.quizMathRichText||window.formatQuizRichText});
       button.disabled=session.questionAnswered;button.onclick=()=>void answer(index);node('dm-options').appendChild(button);
       if(session.questionAnswered&&index===session.feedback.correctIdx)button.classList.add('dm-correct');});
     if(session.questionAnswered){

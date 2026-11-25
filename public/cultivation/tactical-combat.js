@@ -1,3 +1,4 @@
+import './question-presentation.js';
 import './daily-meditation-rewards.js';
 import {stoneCostMarkup,cultivationMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import './manual-rules.js?v=20261118-gold-cap10-v1';
@@ -1914,9 +1915,8 @@ function questionSheet(q,review=null,index=0){
   const buttons=options.map((value,i)=>{
     const resultClass=review?(i===review.answerIndex?' bg-green-600 border-green-400 text-white':i===review.choice?' bg-red-600 border-red-400 text-white':''):'';
     const selected=!review&&pairChoices[index]===i;
-    return `<button type="button" class="w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2${resultClass}${selected?' is-picked':''}"  ${review?'disabled':`data-choice-for="${index}" data-choice="${i}" aria-pressed="${selected}"`}>
-      <span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+i)}</span>
-      <span class="flex-1 quiz-rich-option">${rich(value)}${review&&i===review.answerIndex?' ✓':''}</span>
+    return `<button type="button" data-qy-option class="w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2${resultClass}${selected?' is-picked':''}"  ${review?'disabled':`data-choice-for="${index}" data-choice="${i}" aria-pressed="${selected}"`}>
+      ${globalThis.QAQuestionPresentation.optionMarkup(value,i,{rich,correctMark:!!review&&i===review.answerIndex})}
     </button>`;
   }).join('');
   return `<article class="tc-pair-entry" data-pair-entry="${index}">
@@ -1926,9 +1926,9 @@ function questionSheet(q,review=null,index=0){
         <button type="button" class="quiz-whiteboard-toggle" data-pair-whiteboard-for="${index}" title="開啟計算白板" aria-label="第 ${index+1} 題計算白板"><i class="fa-solid fa-pen-to-square"></i><span>白板</span></button>
       </div>
       <div class="text-6xl text-cyan-500/10 absolute -top-2 -left-2"><i class="fa-solid fa-quote-left"></i></div>
-      <h3 class="text-lg font-bold leading-relaxed relative z-10 text-white tc-question" data-question-text="${index}">${rich(review?.q||q.q)}</h3>
+      <h3 class="text-lg font-bold leading-relaxed relative z-10 text-white tc-question" data-qy-stem data-question-text="${index}">${globalThis.QAQuestionPresentation.stemMarkup(review?.q||q.q,rich)}</h3>
     </div>
-    <div class="tc-options space-y-3" data-options-container="${index}">${buttons}</div>
+    <div class="tc-options space-y-3" data-qy-options data-options-container="${index}">${buttons}</div>
     ${review?`<div class="tc-feedback-section mt-6 glass-panel p-5 rounded-xl border border-white/10 animate-fade-in-up">
       <div class="flex items-center gap-3 mb-3">
         <div class="text-2xl"><i class="fa-solid ${review.correct?'fa-circle-check text-green-400':'fa-circle-xmark text-red-400'}"></i></div>

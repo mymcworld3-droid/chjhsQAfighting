@@ -1,3 +1,4 @@
+import './cultivation/question-presentation.js';
 import {stoneCostMarkup,cultivationMarkup,formatResourceAmount} from './cultivation/spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import { createStudyQuestionBridge } from './cultivation/study-question-bridge.js';
 import './cultivation/void-retraining-rules.js';
@@ -4419,7 +4420,7 @@ function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
     // 更換題目時先清理舊公式，避免 MathJax 快取殘留。
     const container = document.getElementById('options-container');
     window.quizMathClear?.([questionTextEl, container]);
-    const renderedQuestion = (window.quizMathRichText || formatQuizRichText)(data.q);
+    const renderedQuestion = globalThis.QAQuestionPresentation.stemMarkup(data.q, window.quizMathRichText || formatQuizRichText);
     questionTextEl.innerHTML = renderedQuestion;
     const whiteboardQuestionEl = document.getElementById('quiz-whiteboard-question');
     if (whiteboardQuestionEl) whiteboardQuestionEl.innerHTML = renderedQuestion;
@@ -4432,7 +4433,8 @@ function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
             const btn = document.createElement('button');
             btn.id = `option-btn-${idx}`;
             btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
-            btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1 quiz-rich-option">${(window.quizMathRichText || formatQuizRichText)(optText)}</span>`;
+            btn.type = "button"; btn.dataset.qyOption = "";
+            btn.innerHTML = globalThis.QAQuestionPresentation.optionMarkup(optText, idx, {rich:window.quizMathRichText || formatQuizRichText});
             btn.onclick = () => onAnswer ? onAnswer(idx) : handleAnswer(idx, data.ans, data.q, data.exp);
             container.appendChild(btn);
         });

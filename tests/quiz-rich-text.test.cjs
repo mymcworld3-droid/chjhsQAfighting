@@ -46,10 +46,10 @@ test('quiz rich-text formatter protects images and MathJax segments separately',
 });
 
 test('solo question, all four choices and explanation share the safe queued renderer', () => {
-  assert.ok(legacy.includes('const renderedQuestion = (window.quizMathRichText || formatQuizRichText)(data.q);'));
+  assert.ok(legacy.includes('QAQuestionPresentation.stemMarkup(data.q, window.quizMathRichText || formatQuizRichText)'));
   assert.ok(legacy.includes('questionTextEl.innerHTML = renderedQuestion;'));
   assert.ok(legacy.includes('quiz-rich-option'));
-  assert.ok(legacy.includes('(window.quizMathRichText || formatQuizRichText)(optText)'));
+  assert.ok(legacy.includes('QAQuestionPresentation.optionMarkup(optText, idx, {rich:window.quizMathRichText || formatQuizRichText})'));
   assert.ok(legacy.includes('window.quizMathSet(fbText, explanationText)'));
   assert.match(legacy, /function parseMarkdownImages\(text\) \{[\s\S]*return formatQuizRichText\(text\)/);
 });

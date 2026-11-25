@@ -1,0 +1,43 @@
+/* Q01/Q02: original scrollers, result colors and handlers remain owned by each mode. */
+html body.xianxia-theme :is([data-qy-stem],[data-qy-option-content]){
+  min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:normal;
+  text-align:start;white-space:normal;line-height:var(--qy-reading-line,1.8)!important;
+}
+html body.xianxia-theme [data-qy-stem]{font-size:var(--qy-question,19px)!important}
+html body.xianxia-theme [data-qy-option-content]{font-size:var(--qy-option,16px)!important;display:block}
+html body.xianxia-theme :is([data-qy-stem],[data-qy-option-content]) img{
+  display:block;max-width:100%!important;width:auto!important;height:auto!important;
+  max-height:none!important;object-fit:contain;margin-inline:auto;
+}
+html body.xianxia-theme :is([data-qy-stem],[data-qy-option-content]) .overflow-x-auto{
+  max-width:100%;overflow-x:auto!important;overscroll-behavior-x:contain;
+}
+html body.xianxia-theme :is([data-qy-stem],[data-qy-option-content]) table{
+  border-collapse:collapse;max-width:none;min-width:0;width:max-content;
+}
+html body.xianxia-theme :is([data-qy-stem],[data-qy-option-content]) td{
+  min-width:0;white-space:normal;overflow-wrap:normal;vertical-align:top;
+}
+html body.xianxia-theme :is([data-qy-stem],[data-qy-option-content]) :is(mjx-container[display="true"],.katex-display){
+  max-width:100%;overflow-x:auto;overflow-y:hidden;padding-block:2px;
+}
+html body.xianxia-theme :is(#page-quiz,#tactical-combat,#daily-meditation-overlay,#dongtian-overlay) [data-qy-options]{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-auto-rows:auto!important;align-content:start!important;gap:10px!important;
+  flex:0 0 auto;overflow:visible;
+}
+html body.xianxia-theme :is(#page-quiz,#tactical-combat,#daily-meditation-overlay,#dongtian-overlay) [data-qy-options]>[data-qy-option]{
+  display:grid!important;grid-template-columns:30px minmax(0,1fr)!important;align-items:start!important;
+  min-width:0;max-width:100%;height:auto!important;min-height:52px!important;
+  gap:12px!important;padding:12px 16px!important;text-align:start;white-space:normal;
+}
+html body.xianxia-theme :is(#page-quiz,#tactical-combat,#daily-meditation-overlay,#dongtian-overlay) [data-qy-option]>[data-qy-option-letter]{
+  box-sizing:border-box;display:grid!important;place-items:center;align-self:start;
+  width:30px!important;height:32px!important;min-width:30px;
+  background:#a5b58a12!important;color:#decb98!important;border:1px solid #a7ac7750!important;
+  border-radius:var(--qy-radius-control,8px)!important;font-size:13px!important;line-height:1!important;
+}
+html body.xianxia-theme [data-qy-option]>[data-qy-option-content]{width:auto!important;min-width:0;max-width:100%;height:auto!important}
+@media(max-width:700px),(orientation:landscape) and (max-height:540px){
+  html body.xianxia-theme :is(#page-quiz,#tactical-combat,#daily-meditation-overlay,#dongtian-overlay) [data-qy-options]>[data-qy-option]{padding:9px 12px!important;gap:9px!important}
+}
