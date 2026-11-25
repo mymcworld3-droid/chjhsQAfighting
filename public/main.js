@@ -1,7 +1,7 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
 import './main-legacy.js?v=20261124-hide-coop-v1';
-import './cultivation/spirit-stone-ui.js?v=20261125-stone-price-art-v1';
+import './cultivation/spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import './cultivation/dongtian-entry.js';
 // Sound is optional and cannot hold up authentication or gameplay readiness.
 void import('./game-audio.js').catch(error => console.warn('[Game audio] unavailable', error));
@@ -169,6 +169,8 @@ async function loadXiuxianFeaturesSafely() {
         loadedModule = await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
       } else if (modulePath === './cultivation/tactical-combat.js') {
         loadedModule = await import(`${modulePath}?v=20261125-weapon-lord-cleared-v1`);
+      } else if (modulePath === './cultivation/daily-meditation.js') {
+        loadedModule = await import(`${modulePath}?v=20261125-stone-reward-icon-v2`);
       } else if (modulePath === './cultivation/home-wireframe.js') {
         loadedModule = await import(`${modulePath}?v=20261125-home-stones-grid-v5`);
       } else if (modulePath === './cultivation/manual-training-page.js') {
