@@ -93,10 +93,36 @@ test('PvP waiting may change weapons, but an active duel and assembled dungeon f
   const dungeon=database();await API.chooseSchool(dungeon,'u1',{school:'sword'});
   const roomId='dungeon-weapon-test-001';
   dungeon.records.set('dungeonRoomMemberships/u1',{roomId});
-  dungeon.records.set('dungeonRooms/'+roomId,{status:'assembled',members:{u1:{}}});
+  dungeon.records.set('dungeonRooms/'+roomId,{mode:'dungeon',version:1,status:'assembled',expiresAtMs:Date.now()+3600000,members:{u1:{}}});
   await assert.rejects(API.updateLoadout(dungeon,'u1',{index:0,weaponId:null}),
     /多人副本進行中/);
   dungeon.records.get('dungeonRooms/'+roomId).status='waiting';
   const valid=await API.updateLoadout(dungeon,'u1',{index:0,weaponId:null});
   assert.deepEqual(valid.weaponIds,[null,null]);
+});
+
+test('expired, completed or stale dungeon memberships do not block weapon changes',async()=>{
+  const db=database();await API.chooseSchool(db,'u1',{school:'sword'});
+  const roomId='dungeon-stale-lock-001',key='dungeonRooms/'+roomId;
+  db.records.set('dungeonRoomMemberships/u1',{roomId});
+  const active={mode:'dungeon',version:1,status:'assembled',expiresAtMs:Date.now()+3600000,members:{u1:{},u2:{}}};
+  for(const room of [
+    {...active,expiresAtMs:Date.now()-1},
+    {...active,bossEncounter:{status:'defeated'}},
+    {...active,status:'closed'},
+    {...active,members:{u2:{}}},
+    {...active,expiresAtMs:undefined},
+    {...active,version:0},
+    null
+  ]){
+    if(room)db.records.set(key,room);else db.records.delete(key);
+    const result=await API.updateLoadout(db,'u1',{index:0,weaponId:null});
+    assert.deepEqual(result.weaponIds,[null,null]);
+    await API.updateLoadout(db,'u1',{index:0,weaponId:'sword-wind'});
+    assert.equal(db.records.get('dungeonRoomMemberships/u1').roomId,roomId,
+      'retain reward recovery records and never disband another player');
+  }
+  db.records.set(key,{...active,bossEncounter:{status:'fighting'}});
+  await assert.rejects(API.updateLoadout(db,'u1',{index:0,weaponId:null}),/多人副本進行中/);
+  assert.deepEqual((await API.manualsState(db,'u1')).weaponIds,['sword-wind',null]);
 });
