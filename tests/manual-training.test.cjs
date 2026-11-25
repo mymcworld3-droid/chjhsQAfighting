@@ -696,3 +696,8 @@ test('gold upgrades stop at Lv10, but PvE mastery XP still reaches Lv20',async()
   }
   assert.equal(bookRecord(db).books['sword-wind'].exp,4180);
 });
+
+test('weapon training hides the optional beast realm EXP reference', () => {
+  const source=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/cultivation/manual-training-page.js'),'utf8');
+  require('node:assert/strict').doesNotMatch(source, /<details class="manual-xp-reference"/);
+});

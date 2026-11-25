@@ -196,10 +196,6 @@ function markup(){
     ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
       esc,bookArt,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
     })}
-    <details class="manual-xp-reference"><summary>其他靈獸境界 EXP 對照</summary>
-      <div>${Catalog.REALMS.map(realm=>`<span>${esc(realm.name)}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
-      <p>只有以武器技能完成擊殺才能獲得熟練經驗；招式依武器 Lv.1／5／10 解鎖，不受修士境界限制。</p>
-    </details>
     <div class="manual-celebration-host" data-manual-celebration-host></div>`;
 
 }
