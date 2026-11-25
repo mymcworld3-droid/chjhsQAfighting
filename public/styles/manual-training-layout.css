@@ -835,7 +835,7 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
 /* Main-branch armory geometry. Keep the original CSS-drawn card artwork,
    while giving portrait and landscape the same physical width:height ratio. */
 #manual-training-root:not(.manual-detail-active){
-  --mt-fixed-card-width:clamp(91px,calc((100% - 30px)/6),164px);
+  --mt-fixed-card-width:clamp(91px,calc((100vw - 70px)/6),164px);
   --mt-fixed-card-height:calc(var(--mt-fixed-card-width) * 1.433619866);
   display:flex;
   flex-direction:column;
@@ -892,12 +892,12 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
 }
 @media(orientation:portrait){
   #manual-training-root:not(.manual-detail-active){
-    --mt-fixed-card-width:clamp(88px,calc((100% - 18px)/3),150px);
+    --mt-fixed-card-width:clamp(88px,calc((100vw - 48px)/3),150px);
   }
 }
 @media(orientation:portrait) and (min-width:650px){
   #manual-training-root:not(.manual-detail-active){
-    --mt-fixed-card-width:clamp(100px,calc((100% - 24px)/4),176px);
+    --mt-fixed-card-width:clamp(100px,calc((100vw - 60px)/4),176px);
   }
 }
 @media(orientation:portrait) and (min-height:780px) and (min-width:360px){
@@ -907,12 +907,12 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
 }
 @media(orientation:landscape) and (min-width:1000px){
   #manual-training-root:not(.manual-detail-active){
-    --mt-fixed-card-width:clamp(140px,calc((100% - 40px)/6),190px);
+    --mt-fixed-card-width:clamp(140px,calc((100vw - 70px)/6),190px);
   }
 }
 @media(orientation:landscape) and (max-height:520px) and (min-width:720px){
   #manual-training-root:not(.manual-detail-active):has(.manual-weapons){
-    --mt-fixed-card-width:clamp(82px,calc((100% - 18px)/3),124px);
+    --mt-fixed-card-width:clamp(82px,calc((50vw - 48px)/3),124px);
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
     align-items:stretch;
