@@ -23,7 +23,14 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
   }
   function notify(message) {const el=node('dm-status');if(el)el.textContent=message;else console.info('[閉關]',message);}
   function setContent(html) {const el=node('dm-content');if(el){el.innerHTML=html;el.closest('.dm-body')?.scrollTo?.({top:0});}const status=node('dm-status');if(status)status.textContent='';}
-  function summary(items) {return '<div class="dm-summary">'+items.map(([label,value,tone='gold'])=>'<div class="dm-stat dm-tone-'+esc(tone)+'"><small>'+esc(label)+'</small><strong>'+esc(value)+'</strong></div>').join('')+'</div>';}
+  function summary(items) {
+    return '<div class="dm-summary">'+items.map(([label,value,tone='gold'])=>{
+      const isGold=label==='個人靈石';
+      const image=isGold?'<img class="game-stone-icon" src="/assets/items/gold.webp" width="20" height="20" alt="" aria-hidden="true">':'';
+      const amount=isGold?'<span class="game-stone-cost">'+image+'<b class="game-stone-amount">'+esc(value)+'</b><span class="game-stone-sr-only"> 靈石</span></span>':esc(value);
+      return '<div class="dm-stat dm-tone-'+esc(tone)+'"><small>'+esc(label)+'</small><strong>'+amount+'</strong></div>';
+    }).join('')+'</div>';
+  }
   function duration(ms) {if(typeof ms!=='number')return '—';const seconds=Math.max(0,ms)/1000;return seconds<60?seconds.toFixed(1)+' 秒':Math.floor(seconds/60)+' 分 '+(seconds%60).toFixed(1)+' 秒';}
   function clockKey() {return clock?'meditation-time:'+clock.uid+':'+clock.id:'';}
   function pauseClock() {
@@ -183,7 +190,15 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     return parts;
   }
   function rewardMarkup(reward,compact=false) {
-    return rewardParts(reward,compact).map(([id,label])=>(globalThis.QAItemIcons?.markup(id,{size:18})||'')+esc(label)).join('<br>');
+    return rewardParts(reward,compact).map(([id,label])=>{
+      const icon=globalThis.QAItemIcons?.markup(id,{size:18})||'';
+      if(id==='gold'){
+        const art=icon||'<img class="game-stone-icon" src="/assets/items/gold.webp" width="18" height="18" alt="" aria-hidden="true">';
+        return '<span class="game-stone-cost">'+art+'<b class="game-stone-amount">'+esc(label.replace(/\s*靈石$/,''))+
+          '</b><span class="game-stone-sr-only"> 靈石</span></span>';
+      }
+      return icon+esc(label);
+    }).join('<br>');
   }
   function renderDashboard(clearStatus=true) {
     if(!state||!node('dm-content'))return;
