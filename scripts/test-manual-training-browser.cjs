@@ -90,6 +90,14 @@ async function main(){
       }
     };
     await assertFullscreen();
+    const palette=await page.locator('#manual-training-root').evaluate(root=>{
+      const style=getComputedStyle(root),bg=getComputedStyle(root.querySelector('.manual-training-screen-header')).backgroundColor;
+      const body=getComputedStyle(document.body);
+      return {paper:style.getPropertyValue('--mt-text').trim(),homePaper:body.getPropertyValue('--review-paper').trim()||body.getPropertyValue('--xq-paper').trim()||'#eee5d2',header:bg,action:style.getPropertyValue('--mt-action').trim()};
+    });
+    assert.equal(palette.paper,palette.homePaper);
+    assert.equal(palette.header,'rgb(23, 23, 20)');
+    assert.equal(palette.action,'#bda371');
     assert.equal(await page.locator('.manual-ritual-seal').count(),1);
     assert.equal(await page.locator('.manual-ritual-wheel').evaluate(node=>getComputedStyle(node).animationName),'manual-ritual-spin');
     await page.emulateMedia({reducedMotion:'reduce'});
