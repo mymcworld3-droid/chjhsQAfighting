@@ -119,10 +119,10 @@ test('daily task, JSON/AI bank, and original battle systems stay mounted',()=>{
 
 test('landscape uses realm, central scene and CTA, and two right shortcut columns',()=>{
   const landscape=css.slice(css.indexOf('@media (orientation:landscape){'));
-  assert.match(landscape,/"realm emblem left right"/);
+  assert.match(landscape,/"realm emblem shortcuts"/);
   assert.match(css,/\.home-trial-column\{\s*grid-area:emblem;display:flex/);
   assert.match(css,/\.home-profile-column\{\s*grid-area:realm;display:flex/);
-  assert.match(landscape,/width:min\(100%,460px,52dvh\)!important/);
+  assert.match(css,/--home-scene-size:min\(460px,52dvh,40vw\)/);
   assert.match(landscape,/flex-direction:column;align-items:center;text-align:center/);
   assert.match(landscape,/@media \(orientation:landscape\) and \(max-height:460px\)/);
   assert.equal((html.match(/id="btn-home-start"/g)||[]).length,1);
@@ -146,7 +146,7 @@ test('portrait side panels are anchored in the circle row instead of covering th
   assert.doesNotMatch(css,/position:fixed!important/);
   // Buttons stay inside home-layout; no DOM hoisting into document.body.
   assert.doesNotMatch(js,/document\.body\.appendChild\(homeLeftRail\)|home-rails-portal|syncPortraitRails/);
-  assert.match(html,/home-wireframe\.css\?v=20261125-profile-records-v2/);
+  assert.match(html,/home-wireframe\.css\?v=20261125-aligned-lobby-v3/);
 });
 
 test('daily progress, records and independent correction host follow realm in both orientations',()=>{
@@ -158,4 +158,15 @@ test('daily progress, records and independent correction host follow realm in bo
   assert.match(growth,/getElementById\('home-learning-slot'\)/);
   assert.match(growth,/host\.appendChild\(slot\)/);
   assert.match(css,/#home-learning-slot:empty\{display:none\}/);
+});
+
+test('landscape centerline uses equal side tracks and shared shortcut grid',()=>{
+  assert.match(css,/grid-template-columns:minmax\(0,1fr\) minmax\(0,1\.6fr\) minmax\(0,1fr\)!important/);
+  assert.match(css,/\.home-trial-column>\.home-practice\{\s*align-self:center!important;margin-inline:auto!important;\s*width:100%!important;max-width:var\(--home-scene-size\)/);
+  assert.match(css,/\.home-shortcut-column\{\s*grid-area:shortcuts;display:grid;\s*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(css,/\.home-shortcut-column>\.home-wireframe-rail\{\s*grid-area:auto!important;display:grid!important;\s*grid-template-rows:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(css,/\.home-shortcut-column\{display:contents\}/);
+  const rail=html.match(/<div class="home-shortcut-column">([\s\S]*?)<\/div>/)?.[1];
+  assert.ok(rail);
+  assert.equal((rail.match(/data-home-action="/g)||[]).length,6);
 });

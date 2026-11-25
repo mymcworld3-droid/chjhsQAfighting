@@ -5,9 +5,9 @@ body.ui-cleanup #page-home>.xianxia-page-heading{display:none!important}
 body.ui-cleanup #page-home>.home-layout,
 body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
   display:grid!important;
-  grid-template-columns:minmax(0,1.04fr) minmax(0,1.65fr) repeat(2,minmax(0,.32fr))!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) minmax(0,1fr)!important;
   grid-template-areas:
-    "realm emblem left right"!important;
+    "realm emblem shortcuts"!important;
   grid-template-rows:auto!important;
   column-gap:clamp(8px,1.8vw,26px)!important;
   row-gap:clamp(6px,1.2dvh,12px)!important;
@@ -261,14 +261,14 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
    Size the scene by available viewport height so the main CTA stays in view. */
 @media (orientation:landscape){
   body.ui-cleanup #page-home{
-    padding-top:clamp(4px,2dvh,18px)!important;
-    padding-bottom:12px!important;
+    padding-top:8px!important;
+    padding-bottom:8px!important;
   }
   body.ui-cleanup #page-home>.home-layout,
   body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
-    grid-template-columns:minmax(0,1.04fr) minmax(0,1.65fr) repeat(2,minmax(0,.32fr))!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) minmax(0,1fr)!important;
     grid-template-areas:
-      "realm emblem left right"!important;
+      "realm emblem shortcuts"!important;
     grid-template-rows:auto!important;
     column-gap:clamp(8px,1.8vw,26px)!important;
     row-gap:clamp(4px,1.2dvh,12px)!important;
@@ -298,10 +298,11 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
     align-self:center!important;padding:0!important;
   }
   body.ui-cleanup #page-home .home-realm-disc{
-    width:min(100%,460px,52dvh)!important;
+    width:100%!important;max-width:var(--home-scene-size);
   }
   body.ui-cleanup #page-home .home-practice{
-    width:min(100%,440px)!important;justify-self:center!important;
+    width:100%!important;max-width:var(--home-scene-size);
+    align-self:center!important;justify-self:center!important;
   }
   body.ui-cleanup #page-home .home-practice .xiuxian-quick-actions{gap:4px!important}
   body.ui-cleanup #page-home .home-practice #btn-home-start{
@@ -328,7 +329,7 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
   body.ui-cleanup #page-home .home-records>summary{padding-block:10px}
 }
 @media (orientation:landscape) and (max-height:460px){
-  body.ui-cleanup #page-home .home-realm-disc{width:min(100%,48dvh)!important}
+  body.ui-cleanup #page-home>.home-layout{--home-scene-size:min(460px,48dvh,40vw)}
   body.ui-cleanup #page-home #xiuxian-panel .xiuxian-identity{margin-bottom:5px!important;gap:3px!important}
   body.ui-cleanup #page-home #xiuxian-panel #xiuxian-avatar-slot{width:36px;height:36px}
   body.ui-cleanup #page-home #xiuxian-panel .xiuxian-sub{margin-top:2px}
@@ -457,7 +458,7 @@ body.ui-cleanup #page-home .home-trial-column>.home-realm-emblem{
 }
 @media (orientation:landscape){
   body.ui-cleanup #page-home .home-wireframe-rail{
-    align-self:start!important;margin-top:clamp(4px,4dvh,28px)!important;
+    align-self:stretch!important;margin-top:0!important;
   }
   body.ui-cleanup #page-home .home-profile-column .home-daily-progress .quest-spotlight{
     min-height:0;padding:9px 12px!important;
@@ -469,4 +470,57 @@ body.ui-cleanup #page-home .home-trial-column>.home-realm-emblem{
   body.ui-cleanup #page-home .home-profile-column .home-daily-progress .quest-spotlight{
     min-height:0;padding:8px 12px!important;gap:5px!important;
   }
+}
+
+/* Equal side tracks put the landscape scene on the viewport centerline.
+   The shortcut wrapper is transparent to the portrait grid. */
+body.ui-cleanup #page-home .home-shortcut-column{display:contents}
+@media (orientation:landscape){
+  body.ui-cleanup:has(#page-home.active-page)>main{
+    padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))!important;
+  }
+  body.ui-cleanup #page-home.active-page:not(.hidden){
+    min-height:100%;margin:0 auto;
+    display:flex;flex-direction:column;justify-content:center;
+  }
+  body.ui-cleanup #page-home>.home-layout{
+    --home-scene-size:min(460px,52dvh,40vw);
+    width:100%;align-items:start!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column,
+  body.ui-cleanup #page-home .home-trial-column,
+  body.ui-cleanup #page-home .home-shortcut-column{
+    align-self:start!important;min-width:0;
+  }
+  body.ui-cleanup #page-home .home-trial-column{
+    width:100%;align-items:center;gap:8px;
+  }
+  body.ui-cleanup #page-home .home-trial-column>.home-realm-emblem{
+    align-self:center!important;justify-content:flex-start;
+  }
+  body.ui-cleanup #page-home .home-trial-column>.home-practice{
+    align-self:center!important;margin-inline:auto!important;
+    width:100%!important;max-width:var(--home-scene-size);
+  }
+  body.ui-cleanup #page-home .home-shortcut-column{
+    grid-area:shortcuts;display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:clamp(6px,1.2vw,16px);
+    width:100%;height:var(--home-scene-size);
+    max-width:360px;justify-self:center;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail{
+    grid-area:auto!important;display:grid!important;
+    grid-template-rows:repeat(3,minmax(0,1fr));
+    gap:clamp(6px,1.4dvh,12px)!important;
+    align-self:stretch!important;height:100%;max-height:none;
+    width:100%!important;margin:0!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column .home-wireframe-shortcut{
+    min-height:0!important;height:100%;width:100%;
+  }
+}
+@media (orientation:landscape) and (max-height:460px){
+  body.ui-cleanup #page-home>.home-layout{--home-scene-size:min(460px,48dvh,40vw)}
+  body.ui-cleanup #page-home .home-shortcut-column{min-height:132px}
 }

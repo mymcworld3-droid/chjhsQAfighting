@@ -640,7 +640,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <link rel="stylesheet" href="styles/xianxia-quiet.css?v=20261016-portrait-hide-full-header1">
     <link rel="stylesheet" href="styles/interface-cleanup.css?v=20261125-masa-calligraphy-v7">
     <link rel="stylesheet" href="styles/interface-cleanup-pages.css?v=20261115-field-ink">
-    <link rel="stylesheet" href="styles/home-wireframe.css?v=20261125-profile-records-v2">
+    <link rel="stylesheet" href="styles/home-wireframe.css?v=20261125-aligned-lobby-v3">
     <link rel="stylesheet" href="styles/learning-page.css?v=20261115-vocabulary-starry-button-space">
     <style id="debug-top-layer-style">
       /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
@@ -793,11 +793,6 @@ body.xianxia-theme main:has(#page-training.active-page),
 
 
                 <!-- 依照玩家線框稿：菱形僅代表圖示，快捷按鈕沿用矩形造型。 -->
-                <aside class="home-wireframe-rail is-left" aria-label="左側快捷操作">
-                    <button class="home-wireframe-shortcut" type="button" data-home-action="path" aria-label="圖錄"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>圖錄</span></button>
-                    <button class="home-wireframe-shortcut" type="button" data-home-action="rank" aria-label="排行"><i class="fa-solid fa-ranking-star" aria-hidden="true"></i><span>排行</span></button>
-                    <button class="home-wireframe-shortcut" type="button" data-home-action="store" aria-label="商店"><i class="fa-solid fa-store" aria-hidden="true"></i><span>商店</span></button>
-                </aside>
                 <div class="home-trial-column">
                 <section id="home-realm-emblem" class="home-realm-emblem" aria-label="目前問道試煉場地生態">
                     <div class="home-realm-disc" data-ecology="bamboo">
@@ -824,11 +819,18 @@ body.xianxia-theme main:has(#page-training.active-page),
         </div>
                 </section>
                 </div>
+                <div class="home-shortcut-column">
+                <aside class="home-wireframe-rail is-left" aria-label="左側快捷操作">
+                    <button class="home-wireframe-shortcut" type="button" data-home-action="path" aria-label="圖錄"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>圖錄</span></button>
+                    <button class="home-wireframe-shortcut" type="button" data-home-action="rank" aria-label="排行"><i class="fa-solid fa-ranking-star" aria-hidden="true"></i><span>排行</span></button>
+                    <button class="home-wireframe-shortcut" type="button" data-home-action="store" aria-label="商店"><i class="fa-solid fa-store" aria-hidden="true"></i><span>商店</span></button>
+                </aside>
                 <aside class="home-wireframe-rail is-right" aria-label="右側每日活動">
                     <button class="home-wireframe-shortcut" type="button" data-home-action="quest" aria-label="任務"><i class="fa-solid fa-scroll" aria-hidden="true"></i><span>任務</span><b class="home-wireframe-alert" data-home-alert="quest" hidden aria-hidden="true"></b></button>
                     <button class="home-wireframe-shortcut" type="button" data-home-action="meditation" aria-label="閉關"><i class="fa-solid fa-yin-yang" aria-hidden="true"></i><span>閉關</span><b class="home-wireframe-alert" data-home-alert="meditation" hidden aria-hidden="true"></b></button>
                     <button class="home-wireframe-shortcut" type="button" data-home-action="learning" aria-label="學習"><span class="home-learning-star" aria-hidden="true">✦</span><span>學習</span></button>
                 </aside>
+                </div>
 
 
 
