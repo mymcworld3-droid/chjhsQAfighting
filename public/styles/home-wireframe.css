@@ -959,3 +959,57 @@ body.ui-cleanup #page-home .home-shortcut-column .home-wide-actions>.home-shortc
     font-size:clamp(15px,4vw,19px)!important;
   }
 }
+
+
+/* Four upper-right diamonds sit in one horizontal strip on wide screens,
+   matching the reference image. Narrow screens keep the compact 2×2 group. */
+@media (orientation:landscape) and (min-width:900px){
+  body.ui-cleanup #page-home .home-shortcut-column{
+    --home-diamond-size:clamp(42px,5.2vw,75px);
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-areas:
+      "stones stones stones stones"
+      "path rank quest store"
+      ". . . ."
+      "wide wide wide wide"!important;
+    grid-template-rows:auto max-content minmax(0,1fr) auto!important;
+    column-gap:clamp(3px,.6vw,10px)!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail{
+    display:contents!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wide-actions{
+    grid-area:wide!important;
+  }
+}
+@media (orientation:portrait) and (min-width:760px){
+  body.ui-cleanup #page-home>.home-layout,
+  body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
+    grid-template-columns:minmax(0,1fr) repeat(4,minmax(54px,78px))!important;
+    grid-template-areas:
+      "stones stones stones stones stones"
+      "realm path rank quest store"
+      "daily daily daily daily daily"
+      "records records records records records"
+      "learning learning learning learning learning"
+      "emblem emblem emblem emblem emblem"
+      "practice practice practice practice practice"
+      "wide wide wide wide wide"!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail{
+    display:contents!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--diamond{
+    width:clamp(54px,7.2vw,76px)!important;
+    height:clamp(54px,7.2vw,76px)!important;
+    justify-self:center!important;
+    align-self:start!important;
+  }
+}
+@media (orientation:landscape) and (min-width:900px),
+       (orientation:portrait) and (min-width:760px){
+  body.ui-cleanup #page-home .home-shortcut-column [data-home-action="path"]{grid-area:path!important}
+  body.ui-cleanup #page-home .home-shortcut-column [data-home-action="rank"]{grid-area:rank!important}
+  body.ui-cleanup #page-home .home-shortcut-column [data-home-action="quest"]{grid-area:quest!important}
+  body.ui-cleanup #page-home .home-shortcut-column [data-home-action="store"]{grid-area:store!important}
+}
