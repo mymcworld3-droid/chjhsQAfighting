@@ -87,7 +87,7 @@ function ensure(){
   if(!document.getElementById('manual-training-weapons-style')){
     const link=document.createElement('link');link.rel='stylesheet';
     link.id='manual-training-weapons-style';
-    link.href='/styles/manual-training-weapons.css?v=20261120-weapon-v1';
+    link.href='/styles/manual-training-weapons.css?v=20261125-dungeon-gear-recovery-v2';
     document.head.append(link);
   }
   if(!document.getElementById('manual-training-layout-style')){
