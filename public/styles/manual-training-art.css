@@ -375,3 +375,27 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
   #manual-training-root .manual-training-switch{grid-template-columns:32px minmax(0,1fr) 32px;gap:4px}
   #manual-training-root .manual-training-switch button{width:32px}
 }
+
+/* Explicit geometry avoids auto-height and grid stretching on Safari.
+   Both orientations share the exact original 1047:1501 card aspect ratio. */
+#manual-training-root .manual-library .manual-book-grid{
+  --weapon-card-height:calc(var(--weapon-card-width) * 1501 / 1047);
+  display:flex!important;flex-flow:row nowrap!important;align-items:flex-start!important;
+  justify-content:flex-start!important;gap:12px!important;overflow-x:auto!important;
+}
+#manual-training-root .manual-library .manual-book-grid:has(>.manual-empty){display:block!important}
+#manual-training-root .manual-library .manual-book-grid>.manual-book{
+  flex:0 0 var(--weapon-card-width)!important;width:var(--weapon-card-width)!important;
+  height:var(--weapon-card-height)!important;min-height:var(--weapon-card-height)!important;
+  max-height:var(--weapon-card-height)!important;min-width:var(--weapon-card-width)!important;
+  max-width:var(--weapon-card-width)!important;margin:0!important;padding:0!important;
+}
+#manual-training-root .manual-library .manual-book-grid>.manual-book>.manual-art-card.manual-library-choice{
+  display:block!important;width:var(--weapon-card-width)!important;height:var(--weapon-card-height)!important;
+  min-width:var(--weapon-card-width)!important;max-width:var(--weapon-card-width)!important;
+  min-height:var(--weapon-card-height)!important;max-height:var(--weapon-card-height)!important;
+  box-sizing:border-box!important;aspect-ratio:1047/1501!important;
+}
+#manual-training-root .manual-library .manual-art-card-picture .manual-weapon-art{
+  background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;
+}
