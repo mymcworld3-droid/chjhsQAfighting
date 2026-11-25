@@ -168,6 +168,8 @@ async function loadXiuxianFeaturesSafely() {
         loadedModule = await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
       } else if (modulePath === './cultivation/tactical-combat.js') {
         loadedModule = await import(`${modulePath}?v=20261125-weapon-lord-cleared-v1`);
+      } else if (modulePath === './cultivation/home-wireframe.js') {
+        loadedModule = await import(`${modulePath}?v=20261125-home-stones-grid-v5`);
       } else if (modulePath === './cultivation/manual-training-page.js') {
         loadedModule = await import(`${modulePath}?v=20261125-main-card-fill-async-gear-v2`);
       } else {
