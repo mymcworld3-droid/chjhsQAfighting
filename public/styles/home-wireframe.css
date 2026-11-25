@@ -803,3 +803,159 @@ body.ui-cleanup #page-home .home-shortcut-column .home-wide-actions>.home-shortc
     width:min(96%,330px);
   }
 }
+
+
+/* v6: Screenshot-informed placement.
+   Diamond utilities belong in the upper-right command cluster, beside the
+   character panel on portrait screens—not alongside the trial scene or
+   directly above the "問道試煉" CTA. Daily long buttons are a separate area. */
+@media (orientation:landscape){
+  body.ui-cleanup #page-home>.home-layout{
+    align-items:start!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column{
+    --home-diamond-size:clamp(42px,min(8vw,calc((var(--home-scene-size) - 100px)/2)),98px);
+    --home-wide-height:clamp(44px,9dvh,72px);
+    grid-template-areas:
+      "stones stones"
+      "left right"
+      ". ."
+      "wide wide"!important;
+    grid-template-rows:auto max-content minmax(0,1fr) auto!important;
+    align-content:stretch!important;
+    row-gap:clamp(4px,1dvh,10px)!important;
+    height:calc(var(--home-scene-size) + clamp(50px,10dvh,88px))!important;
+    align-self:start!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail{
+    height:auto!important;
+    min-height:0!important;
+    grid-template-rows:repeat(2,var(--home-diamond-size))!important;
+    justify-content:start!important;
+    align-content:start!important;
+    align-self:start!important;
+    gap:clamp(4px,1dvh,10px)!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wide-actions{
+    align-self:end!important;
+  }
+}
+@media (orientation:portrait){
+  /* Three-column top row: profile | four upper-right diamonds.
+     Supporting profile information and the scenic trial occupy later rows. */
+  body.ui-cleanup #page-home>.home-layout,
+  body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
+    grid-template-columns:
+      minmax(0,1fr) clamp(50px,15vw,90px) clamp(50px,15vw,90px)!important;
+    grid-template-areas:
+      "stones stones stones"
+      "realm left right"
+      "daily daily daily"
+      "records records records"
+      "learning learning learning"
+      "emblem emblem emblem"
+      "practice practice practice"
+      "wide wide wide"!important;
+    grid-template-rows:repeat(5,auto) auto auto auto!important;
+    column-gap:clamp(4px,1vw,12px)!important;
+    row-gap:clamp(7px,1.3dvh,14px)!important;
+    align-items:start!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column{
+    display:contents!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column>#xiuxian-panel{
+    grid-area:realm!important;
+    min-width:0!important;
+    width:100%!important;
+    max-width:none!important;
+    align-self:start!important;
+    padding:clamp(8px,2vw,13px)!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column #xiuxian-avatar-slot{
+    width:clamp(38px,8vw,55px)!important;
+    height:clamp(38px,8vw,55px)!important;
+    flex:0 0 clamp(38px,8vw,55px)!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column #xiuxian-panel .xiuxian-realm{
+    font-size:clamp(16px,3.7vw,24px)!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column #xiuxian-panel .xiuxian-row{
+    gap:4px;
+    flex-wrap:wrap;
+  }
+  body.ui-cleanup #page-home .home-profile-column #xiuxian-panel #xiuxian-score{
+    font-size:clamp(12px,2.7vw,19px)!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column>.home-daily-progress{
+    grid-area:daily!important;
+    width:100%!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column>.home-records{
+    grid-area:records!important;
+    width:100%!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column>#home-learning-slot{
+    grid-area:learning!important;
+    width:100%!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-spirit-stones{
+    grid-area:stones!important;
+    justify-self:end!important;
+    width:min(100%,400px)!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail{
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    align-self:start!important;
+    justify-self:stretch!important;
+    padding:0!important;
+    gap:clamp(7px,1.9dvh,14px)!important;
+    justify-content:flex-start!important;
+    align-items:center!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail.is-left{
+    grid-area:left!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wireframe-rail.is-right{
+    grid-area:right!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--diamond{
+    width:min(100%,var(--home-diamond-size))!important;
+    height:clamp(45px,12vw,67px)!important;
+    min-height:0!important;
+    padding:4px 2px!important;
+    font-size:clamp(9px,2.2vw,11px)!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column>.home-wide-actions{
+    grid-area:wide!important;
+    width:min(100%,440px)!important;
+    justify-self:center!important;
+    align-self:start!important;
+    margin-top:2px!important;
+  }
+  body.ui-cleanup #page-home .home-realm-emblem{
+    grid-area:emblem!important;
+  }
+  body.ui-cleanup #page-home .home-practice{
+    grid-area:practice!important;
+    margin-top:0!important;
+  }
+}
+@media (orientation:portrait) and (max-width:420px){
+  body.ui-cleanup #page-home .home-profile-column>#xiuxian-panel .xiuxian-identity{
+    flex-direction:row!important;
+    align-items:center!important;
+    text-align:left!important;
+    gap:7px!important;
+  }
+  body.ui-cleanup #page-home .home-profile-column>#xiuxian-panel .xiuxian-label,
+  body.ui-cleanup #page-home .home-profile-column>#xiuxian-panel #xiuxian-next{
+    font-size:clamp(9px,2.5vw,12px)!important;
+  }
+  body.ui-cleanup #page-home .home-shortcut-column .home-shortcut--diamond :is(i,.home-learning-star){
+    font-size:clamp(15px,4vw,19px)!important;
+  }
+}
