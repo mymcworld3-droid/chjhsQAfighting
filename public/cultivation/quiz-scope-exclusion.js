@@ -1,3 +1,4 @@
+import './question-presentation.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const $ = id => document.getElementById(id);
@@ -51,7 +52,7 @@ window.openQuizScopeExclusion = async (context = {}) => {
   }
   if (dialog) return;
   const root = document.createElement('dialog');
-  root.id = 'quiz-scope-exclusion-dialog';
+  root.id = 'quiz-scope-exclusion-dialog';root.setAttribute('data-qy-report-form','');
   root.setAttribute('aria-labelledby','quiz-scope-exclusion-title');
   root.style.cssText = 'width:min(540px,calc(100vw - 24px));max-height:85dvh;overflow:auto;z-index:22000;border:1px solid #8c784f;border-radius:16px;background:#131a22;color:#f0e5cd;padding:20px;box-sizing:border-box';
   const style = $('quiz-scope-exclusion-style') || document.createElement('style');
@@ -75,7 +76,7 @@ window.openQuizScopeExclusion = async (context = {}) => {
   label.textContent='不要再出哪一種類型？';
   label.htmlFor='quiz-scope-exclusion-text';
   const input=document.createElement('textarea');
-  input.id='quiz-scope-exclusion-text';input.maxLength=160;
+  input.id='quiz-scope-exclusion-text';input.setAttribute('data-qy-report-reason','');input.maxLength=160;
   input.placeholder='例如：此範圍不要再出三維向量內積的計算；二維向量內積仍可出題。';
   const status=document.createElement('p');
   status.setAttribute('role','status');status.style.fontSize='12px';
@@ -127,13 +128,13 @@ window.openQuizScopeExclusion = async (context = {}) => {
         try {
           const result=await request({action:'remove',unit,id:rule.id});
           if(!alive())return;
-          status.textContent='已取消這項排除規則。';
+          globalThis.QAQuestionPresentation.setLearningStatus(status,'success','已取消這項排除規則。');
           renderRules(result.rules);
           window.dispatchEvent(new CustomEvent('qa:scope-exclusions-updated',{detail:{state:result.state,quiz:origin,changed:true}}));
           if(battle)battleChanged=result.state;
           else if(window.isTrialQuestionSessionActive?.()&&current() &&
             $('feedback-section')?.classList.contains('hidden'))trialRefresh=true;
-        }catch(error){if(alive())status.textContent=error.message;}
+        }catch(error){if(alive())globalThis.QAQuestionPresentation.setLearningStatus(status,'error',error.message);}
         finally{if(remove.isConnected)remove.disabled=false;}
       };
       row.append(content,remove);existingRows.append(row);
@@ -142,30 +143,30 @@ window.openQuizScopeExclusion = async (context = {}) => {
   save.onclick=async()=>{
     const exclusion=text(input.value);
     if (exclusion.length<4) {
-      status.textContent='請具體描述禁止出現的考法，至少 4 個字。';
+      globalThis.QAQuestionPresentation.setLearningStatus(status,'error','請具體描述禁止出現的考法，至少 4 個字。');
       input.focus();return;
     }
     if(!alive() || !current()){
-      status.textContent='題目或登入帳號已變更，請關閉後重開。';return;
+      globalThis.QAQuestionPresentation.setLearningStatus(status,'error','題目或登入帳號已變更，請關閉後重開。');return;
     }
-    save.disabled=true;status.textContent='正在儲存這項範圍限制…';
+    save.disabled=true;globalThis.QAQuestionPresentation.setLearningStatus(status,'pending','正在儲存這項範圍限制…');
     try {
       const result=await request({action:'add',unit,text:exclusion});
       if(!alive())return;
       renderRules(result.rules);input.value='';
       const alreadyAnswered = battle ? !!context.answered :
         !$('feedback-section')?.classList.contains('hidden');
-      status.textContent = alreadyAnswered
+      globalThis.QAQuestionPresentation.setLearningStatus(status,'success',alreadyAnswered
         ? '已儲存；從下一題起套用，既有批改及戰場狀態不變。'
         : battle
           ? '已儲存；關閉後換一題，本題不計錯、不消耗體力。'
           : window.isTrialQuestionSessionActive?.()
             ? '已儲存；關閉後重新取題，本題不計錯、不影響戰場。'
-            : '已儲存；本題不計錯，將依新限制重新取題。';
+            : '已儲存；本題不計錯，將依新限制重新取題。');
       window.dispatchEvent(new CustomEvent('qa:scope-exclusions-updated',{detail:{state:result.state,quiz:origin,changed:true}}));
       if(battle)battleChanged=result.state;
       else if(window.isTrialQuestionSessionActive?.()&&!alreadyAnswered)trialRefresh=true;
-    }catch(error){if(alive())status.textContent=error.message;}
+    }catch(error){if(alive())globalThis.QAQuestionPresentation.setLearningStatus(status,'error',error.message);}
     finally{if(save.isConnected)save.disabled=false;}
   };
   root.showModal?.();
@@ -173,7 +174,7 @@ window.openQuizScopeExclusion = async (context = {}) => {
   try {
     const result=await request({action:'list',unit});
     if(alive())renderRules(result.rules);
-  }catch(error){if(alive())status.textContent='現有規則讀取失敗：'+error.message;}
+  }catch(error){if(alive())globalThis.QAQuestionPresentation.setLearningStatus(status,'error','現有規則讀取失敗：'+error.message);}
 };
 
 window.syncQuizScopeExclusionButton?.(window.currentActiveQuiz);

@@ -183,7 +183,7 @@ export const featureReady = (async () => {
             <div class="dt-generation-head"><span id="dt-progress-stage">準備生成</span><strong id="dt-progress-count"></strong></div>
             <div id="dt-progress-track" class="dt-generation-track" role="progressbar" aria-label="已生成題目" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="dt-progress-fill"></i></div>
           </div>
-          <div id="dt-generate-status" class="dt-library-note" style="margin-top:8px"></div>
+          <div id="dt-generate-status" role="status" aria-live="polite" class="dt-library-note" style="margin-top:8px"></div>
         </section>
         <section class="dt-library">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h4>我的洞天</h4><button type="button" id="dt-refresh" class="dt-repair" style="padding:6px 12px;border-radius:9px"><i class="fa-solid fa-rotate"></i> 重新整理</button></div>
@@ -379,7 +379,7 @@ export const featureReady = (async () => {
     setProgress('整理素材');
     button.disabled = true;
     button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在凝聚洞天…<small>先規劃題數，再逐題生成完整解析</small>';
-    status.textContent = state.files.length ? `正在整理 ${state.files.length} 張圖片與文字中的所有知識點…` : '正在整理文字中的所有知識點…';
+    globalThis.QAQuestionPresentation.setLearningStatus(status,'generating',state.files.length ? `正在整理 ${state.files.length} 張圖片與文字中的所有知識點…` : '正在整理文字中的所有知識點…');
     let responseStatus = null;
     let responseDiagnostics = null;
     try {
@@ -413,7 +413,7 @@ export const featureReady = (async () => {
           status.textContent = `已生成 ${event.completed} / ${event.total} 題。`;
         } else if (event.type === 'review') {
           setProgress('AI 正在複核全部題目', event.completed, event.total);
-          status.textContent = `已生成全部 ${event.total} 題，正在複核題目品質…`;
+          globalThis.QAQuestionPresentation.setLearningStatus(status,'reviewing',`已生成全部 ${event.total} 題，正在複核題目品質…`);
         }
       }).catch((error) => {
         if (error.httpStatus) responseStatus = error.httpStatus;
@@ -438,7 +438,7 @@ export const featureReady = (async () => {
       status.textContent = '題目已完成複核，正在將洞天存入 Firebase…';
       await saveGeneratedDongtian(payload.dongtian, state.files.length);
       setProgress('洞天建立完成', payload.dongtian.questionCount, payload.dongtian.questionCount);
-      status.textContent = `洞天「${payload.dongtian.name}」已凝成，共 ${payload.dongtian.questionCount} 題。`;
+      globalThis.QAQuestionPresentation.setLearningStatus(status,'success',`洞天「${payload.dongtian.name}」已凝成，共 ${payload.dongtian.questionCount} 題。`);
       document.getElementById('dt-source-text').value = '';
       state.files.forEach((item) => URL.revokeObjectURL(item.url));
       state.files = [];
@@ -786,7 +786,7 @@ export const featureReady = (async () => {
     const meter=document.querySelector('#dongtian-overlay .dt-progress');
     meter?.setAttribute('aria-valuenow',String(s.answers.length));
     const fill=meter?.querySelector('i');if(fill)fill.style.width=(100*s.answers.length/s.dongtian.questions.length)+'%';
-    slot.innerHTML = `<div class="dt-explain">${presentation.feedbackMarkup(deferred?{state:'answered',title:'作答已記錄，完成整份洞天後顯示答案與解析。'}:{state:isCorrect?'correct':'wrong',title:isCorrect?'答對 · 靈機相合':'答錯 · 參悟解析',explanation:q.exp,rich:window.quizMathRichText||escapeHtml})}</div><div class="dt-answer-actions"><button id="dt-report-question" class="dt-report-question" type="button"><i class="fa-solid fa-triangle-exclamation"></i> 問題回報</button><button id="dt-next" type="button" class="dt-next">${s.index + 1 >= s.dongtian.questions.length ? '完成洞天' : '前往下一境'}</button></div>`;
+    slot.innerHTML = `<div class="dt-explain">${presentation.feedbackMarkup(deferred?{state:'answered',title:'作答已記錄，完成整份洞天後顯示答案與解析。'}:{state:isCorrect?'correct':'wrong',title:isCorrect?'答對 · 靈機相合':'答錯 · 參悟解析',explanation:q.exp,rich:window.quizMathRichText||escapeHtml})}</div><div class="dt-answer-actions"><button id="dt-report-question" data-qy-tool="report" class="dt-report-question" type="button"><i class="fa-solid fa-triangle-exclamation"></i> 問題回報</button><button id="dt-next" type="button" class="dt-next">${s.index + 1 >= s.dongtian.questions.length ? '完成洞天' : '前往下一境'}</button></div>`;
     document.getElementById('dt-report-question').onclick = openQuestionReport;
     document.getElementById('dt-next').onclick = async () => {
       // A slow Firestore lookup must not allow two clicks to skip questions.
@@ -899,7 +899,7 @@ export const featureReady = (async () => {
     const modal = document.createElement('div');
     modal.id = 'dt-moderation-modal';
     modal.className = 'dt-modal';
-    modal.innerHTML = `<div class="dt-modal-card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:#fbbf24"></i> 回報洞天題目</h3><p class="dt-modal-note">請具體說明哪裡有錯。AI 會先審核，再由第二個獨立判定複核；只有兩次都確認為實質錯誤，洞天才會被封印。</p><div class="dt-modal-question"><strong>第 ${s.index + 1} 題</strong><br>${escapeHtml(q.q)}<br><br><span style="color:#86efac">目前標示答案：${escapeHtml(q.correct)}</span></div><textarea id="dt-report-reason" maxlength="1200" placeholder="例如：題目條件不足，A 與 C 都可能成立；或解析中的計算 3×4 寫成 15……"></textarea><div id="dt-report-status" class="dt-modal-note"></div><div class="dt-modal-actions"><button type="button" class="dt-modal-cancel">取消</button><button id="dt-report-submit" type="button" class="dt-modal-submit">交由 AI 審核</button></div></div>`;
+    modal.innerHTML = `<div class="dt-modal-card" data-qy-report-form><h3><i class="fa-solid fa-triangle-exclamation" style="color:#fbbf24"></i> 回報洞天題目</h3><p class="dt-modal-note">請具體說明哪裡有錯。AI 會先審核，再由第二個獨立判定複核；只有兩次都確認為實質錯誤，洞天才會被封印。</p><div class="dt-modal-question"><strong>第 ${s.index + 1} 題</strong><br>${escapeHtml(q.q)}<br><br><span style="color:#86efac">目前標示答案：${escapeHtml(q.correct)}</span></div><textarea id="dt-report-reason" data-qy-report-reason aria-label="問題描述" maxlength="1200" placeholder="例如：題目條件不足，A 與 C 都可能成立；或解析中的計算 3×4 寫成 15……"></textarea><div id="dt-report-status" role="status" aria-live="polite" class="dt-modal-note"></div><div class="dt-modal-actions"><button type="button" class="dt-modal-cancel">取消</button><button id="dt-report-submit" type="button" class="dt-modal-submit">交由 AI 審核</button></div></div>`;
     document.body.appendChild(modal);
     modal.querySelector('.dt-modal-cancel').onclick = removeModerationModal;
     modal.querySelector('#dt-report-submit').onclick = () => submitQuestionReport(modal, q, s.index);
@@ -919,7 +919,7 @@ export const featureReady = (async () => {
     state.moderationBusy = true;
     submit.disabled = true;
     submit.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 雙重 AI 審核中…';
-    status.textContent = '第一階段檢查題目本身；若疑似有誤，會再交由第二階段獨立複核。';
+    globalThis.QAQuestionPresentation.setLearningStatus(status,'reviewing','第一階段檢查題目本身；若疑似有誤，會再交由第二階段獨立複核。');
     const s = state.session;
     try {
       if (s.dongtian.teacherManaged) {
@@ -928,7 +928,7 @@ export const featureReady = (async () => {
         const result = await response.json();
         if (uid() !== reporter || state.session !== s) throw new Error('登入帳號或洞天已變更');
         if (!response.ok || !result.ok) throw new Error(result.error || '回報未完成');
-        status.textContent = result.duplicate ? '這題的回報已送交教師，請等候處理。' : '回報已送交教師，可繼續作答。'; submit.textContent = '已送交教師'; return;
+        globalThis.QAQuestionPresentation.setLearningStatus(status,'pending',result.duplicate ? '這題的回報已送交教師，請等候處理。' : '回報已送交教師，可繼續作答。'); submit.textContent = '已送交教師'; return;
       }
       const response = await fetch('/api/review-dongtian-question', {
         method: 'POST',
@@ -943,7 +943,7 @@ export const featureReady = (async () => {
       if (!response.ok) throw new Error(payload.error || `AI 審核失敗 (${response.status})`);
 
       if (!payload.confirmed) {
-        status.innerHTML = `<span style="color:#fcd34d">AI 未能確認題目有實質錯誤，因此洞天維持開放。</span><br>${escapeHtml(payload.verification?.summary || payload.review?.summary || '')}`;
+        globalThis.QAQuestionPresentation.setLearningStatus(status,'rejected','AI 未能確認題目有實質錯誤，因此洞天維持開放。\n'+(payload.verification?.summary || payload.review?.summary || ''));
         addDoc(collection(db, REPORT_COLLECTION), {
           dongtianId: s.dongtian.id,
           reporterUid: uid(),
@@ -963,7 +963,7 @@ export const featureReady = (async () => {
         return;
       }
 
-      status.textContent = '雙重 AI 審核皆確認有誤，正在封印洞天並通知主人修復…';
+      globalThis.QAQuestionPresentation.setLearningStatus(status,'confirmed','雙重 AI 審核皆確認有誤，正在封印洞天並通知主人修復…');
       const reportRef = doc(collection(db, REPORT_COLLECTION));
       const dataRef = doc(db, DATA_COLLECTION, s.dongtian.id);
       const indexRef = doc(db, INDEX_COLLECTION, s.dongtian.id);
@@ -1008,7 +1008,7 @@ export const featureReady = (async () => {
       await sealCurrentSession('AI 雙重審核已確認本題有誤。整座洞天已停止開放，等待洞天主人以修改提示詞修復。');
     } catch (error) {
       console.error('[Dongtian report]', error);
-      status.textContent = error.message || '題目回報失敗。';
+      globalThis.QAQuestionPresentation.setLearningStatus(status,'error',error.message || '題目回報失敗。');
       submit.disabled = false;
       submit.textContent = '重新送審';
     } finally {

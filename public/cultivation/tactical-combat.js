@@ -1891,8 +1891,8 @@ async function question(){
     }else void fetchPairFollowup(e,account,roomId,generation);
   }
   busy=true;notice('');
-  if(!existingFirst)showModal('<h2>正在取得第一題…</h2><p>題目已提前在背景請求，取得第一題後立即開放作答。</p><button type="button" data-dismiss>返回戰場</button>');
-  else showModal('<h2>題目已準備好</h2><p>正在開啟題目…</p>');
+  if(!existingFirst)showModal('<h2>正在取得第一題…</h2>'+globalThis.QAQuestionPresentation.learningStatusMarkup('preparing','題目已提前在背景請求，取得第一題後立即開放作答。')+'<button type="button" data-dismiss>返回戰場</button>');
+  else showModal('<h2>題目已準備好</h2>'+globalThis.QAQuestionPresentation.learningStatusMarkup('ready','正在開啟題目…'));
   try{
     let first=existingFirst||(await ready?.firstPromise);
     if(!first?.id)first=(await api('/api/generate-quiz',{quizMode:'tactical',roomId,batchSlot:0})).tacticalQuestion;
@@ -1903,7 +1903,7 @@ async function question(){
     if(modalOpen)paintQuestion();
   }catch(err){
     if(pairIsCurrent(e,account,roomId,generation))
-      showModal('<h2>第一題尚未就緒</h2><p>'+esc(err.message)+'</p><button type="button" data-quiz>重新準備第一題</button><button type="button" data-dismiss>返回戰場</button>');
+      showModal('<h2>第一題尚未就緒</h2>'+globalThis.QAQuestionPresentation.learningStatusMarkup('incomplete',err.message)+'<button type="button" data-quiz>重新準備第一題</button><button type="button" data-dismiss>返回戰場</button>');
   }finally{
     if(pairIsCurrent(e,account,roomId,generation)){
       busy=false;updateControls();schedule();
@@ -1923,7 +1923,7 @@ function questionSheet(q,review=null,index=0){
     <div class="glass-panel p-6 rounded-2xl mb-4 border-l-4 border-cyan-500 relative tc-question-sheet">
       <div class="quiz-card-tools absolute top-3 right-3 z-20 flex items-center gap-2">
         <span class="text-[10px] bg-slate-900/50 px-2 py-1 rounded border border-white/10 text-cyan-300 backdrop-blur-md tc-question-badge">${esc([q.subject,q.topic].filter(Boolean).join(' · ')||'問道試煉')} · 第 ${index+1} 題</span>
-        <button type="button" class="quiz-whiteboard-toggle" data-pair-whiteboard-for="${index}" title="開啟計算白板" aria-label="第 ${index+1} 題計算白板"><i class="fa-solid fa-pen-to-square"></i><span>白板</span></button>
+        <button type="button" class="quiz-whiteboard-toggle" data-pair-whiteboard-for="${index}" data-qy-tool="whiteboard" title="開啟計算白板" aria-label="第 ${index+1} 題計算白板"><i class="fa-solid fa-pen-to-square"></i><span>白板</span></button>
       </div>
       <div class="text-6xl text-cyan-500/10 absolute -top-2 -left-2"><i class="fa-solid fa-quote-left"></i></div>
       <h3 class="text-lg font-bold leading-relaxed relative z-10 text-white tc-question" data-qy-stem data-question-text="${index}">${globalThis.QAQuestionPresentation.stemMarkup(review?.q||q.q,rich)}</h3>
@@ -1950,8 +1950,8 @@ function questionSheet(q,review=null,index=0){
     </div>`:''}
     <div class="mt-8 flex gap-3 w-full quiz-footer-actions tc-question-footer">
       <button type="button" data-dismiss class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group"><i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i><span>返回戰場</span></button>
-      <button type="button" data-question-report-for="${index}" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-yellow-400 transition border border-transparent hover:border-yellow-500/20 rounded-lg group"><i class="fa-solid fa-bug group-hover:rotate-12 transition-transform"></i><span>題目有錯</span></button>
-      <button type="button" data-question-helper-for="${index}" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group"><i class="fa-solid fa-comments group-hover:-translate-y-0.5 transition-transform"></i><span>問道助手</span></button>
+      <button type="button" data-question-report-for="${index}" data-qy-tool="report" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-yellow-400 transition border border-transparent hover:border-yellow-500/20 rounded-lg group"><i class="fa-solid fa-bug group-hover:rotate-12 transition-transform"></i><span>題目有錯</span></button>
+      <button type="button" data-question-helper-for="${index}" data-qy-tool="helper" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group"><i class="fa-solid fa-comments group-hover:-translate-y-0.5 transition-transform"></i><span>問道助手</span></button>
     </div>
   </article>`;
 }
@@ -2017,8 +2017,8 @@ function setQuizContext(q,review=null){
 function quizTools(){
   if(state.mode!=='pve')return '';
   const message=(m)=>`<p class="quiz-helper-message ${m.role==='user'?'user':'assistant'}"><span class="quiz-helper-message-stack"><span class="quiz-helper-message-body">${m.role==='user'?esc(m.text):rich(m.text)}</span></span></p>`;
-  return `<section class="tc-question-tools" aria-label="題目協助"><div class="tc-tools-buttons"><button type="button" class="quiz-helper-launcher" data-helper-toggle aria-haspopup="dialog" aria-expanded="false" title="開啟問道助手"><i class="fa-solid fa-comments"></i><span class="quiz-helper-launcher-label">問道</span></button></div>
-    <div class="tc-tool-overlay tc-report-overlay" data-question-tool="report" data-report-panel hidden><section class="tc-report-box glass-panel" role="dialog" aria-modal="true" aria-labelledby="tc-report-title"><h3 id="tc-report-title"><i class="fa-solid fa-triangle-exclamation"></i> 回報題目錯誤</h3><p>請簡述題目問題 (例如: 答案錯誤、選項重複、錯字)，AI 將進行嚴格審查。</p><label class="sr-only" for="tc-report-reason">問題描述（至少六個字）</label><textarea id="tc-report-reason" data-report-reason maxlength="1200" rows="4" placeholder="請輸入問題描述..."></textarea><p data-report-status role="status" aria-live="polite"></p><div class="tc-report-actions"><button type="button" class="btn-cyber-ghost" data-tool-close>取消</button><button type="button" class="btn-cyber-primary" data-report-send>送出審查</button></div></section></div>
+  return `<section class="tc-question-tools" aria-label="題目協助"><div class="tc-tools-buttons"><button type="button" class="quiz-helper-launcher" data-helper-toggle data-qy-tool="helper" aria-haspopup="dialog" aria-expanded="false" title="開啟問道助手"><i class="fa-solid fa-comments"></i><span class="quiz-helper-launcher-label">問道</span></button></div>
+    <div class="tc-tool-overlay tc-report-overlay" data-question-tool="report" data-report-panel hidden><section class="tc-report-box glass-panel" data-qy-report-form role="dialog" aria-modal="true" aria-labelledby="tc-report-title"><h3 id="tc-report-title"><i class="fa-solid fa-triangle-exclamation"></i> 回報題目錯誤</h3><p>請簡述題目問題 (例如: 答案錯誤、選項重複、錯字)，AI 將進行嚴格審查。</p><label class="sr-only" for="tc-report-reason">問題描述（至少六個字）</label><textarea id="tc-report-reason" data-report-reason data-qy-report-reason maxlength="1200" rows="4" placeholder="請輸入問題描述..."></textarea><p data-report-status role="status" aria-live="polite"></p><div class="tc-report-actions"><button type="button" class="btn-cyber-ghost" data-tool-close>取消</button><button type="button" class="btn-cyber-primary" data-report-send>送出審查</button></div></section></div>
     <div class="tc-tool-overlay tc-helper-overlay" data-question-tool="helper" data-helper-panel hidden><section class="quiz-helper-panel" role="dialog" aria-modal="true" aria-labelledby="tc-helper-title"><header class="quiz-helper-header"><div class="quiz-helper-heading"><span class="quiz-helper-avatar"><i class="fa-solid fa-user-graduate"></i></span><div><strong id="tc-helper-title">問道助手</strong><small>一起核對、討論題目</small></div></div><button type="button" class="quiz-helper-collapse" data-tool-close aria-label="關閉問道助手">×</button></header><div class="quiz-helper-messages" data-helper-messages role="log" aria-label="問道助手對話">${quizContext.messages.map(message).join('')}</div><div class="quiz-helper-prompts" aria-label="快速提問"><button type="button" data-helper-preset="給我一個提示，但不要直接告訴我答案。">給我提示</button><button type="button" data-helper-preset="這題應該先從哪個觀念開始？">從哪開始</button><button type="button" data-helper-preset="可以把這題拆成幾個步驟嗎？">拆解步驟</button><button type="button" data-helper-preset="請檢查題目條件和選項是否一致，作答前不要透露答案。" data-helper-intent="check-question">檢查題目</button></div><div class="quiz-helper-compose"><textarea id="tc-helper-input" data-helper-input maxlength="600" rows="1" placeholder="輸入你對這題的疑問…" aria-label="輸入對題目的疑問"></textarea><button type="button" data-helper-send aria-label="送出問題"><i class="fa-solid fa-paper-plane"></i></button></div><div class="quiz-helper-status" data-helper-status role="status" aria-live="polite"></div></section></div></section>`;
 }
 function openQuestionTool(kind){
@@ -2085,8 +2085,8 @@ async function reportQuestion(helperReason=''){
   const ctx=quizContext,reason=String(helperReason||$('[data-report-reason]')?.value||'').trim().slice(0,1200);
   if(!ctx||ctx.reportBusy||state.mode!=='pve')return;
   openQuestionTool('report');
-  const status=$('[data-report-status]');if(reason.length<6){status.textContent='請至少用六個字具體指出題目錯誤。';return;}
-  ctx.reportBusy=true;$('[data-report-send]').disabled=true;status.textContent='正在獨立審核題目…';
+  const status=$('[data-report-status]');if(reason.length<6){globalThis.QAQuestionPresentation.setLearningStatus(status,'error','請至少用六個字具體指出題目錯誤。');return;}
+  ctx.reportBusy=true;$('[data-report-send]').disabled=true;globalThis.QAQuestionPresentation.setLearningStatus(status,'reviewing','正在獨立審核題目…');
   try{
     const result=(await api('/api/tactical/report-question',{
       roomId:ctx.roomId,questionId:ctx.id,reason,...soloSubmission(ctx.q)
@@ -2096,7 +2096,7 @@ async function reportQuestion(helperReason=''){
     if(!sameQuiz(ctx))return;
     const message=result.reason+(result.compensated?` 已補償 ${result.cultivationAdded} 修為。`:'')+
       (result.staminaRefunded>0?` 已返還 ${result.staminaRefunded} 體力。`:'');
-    status.textContent=message;
+    globalThis.QAQuestionPresentation.setLearningStatus(status,globalThis.QAQuestionPresentation.reportState(result.status),message);
     if(result.questionSkipped){
       if(ctx.q.soloQuiz)window.QASoloQuestionQueue?.consume(ctx.q.soloQuiz);
       pairGeneration++;pairQuestions=[];pairChoices=[];pairReviews=[];pairFollowupPromise=null;
@@ -2105,7 +2105,7 @@ async function reportQuestion(helperReason=''){
       return;
     }
     if(result.compensated&&!result.battle){const user=localUser();user.stats||={};if(result.goldAdded)user.stats.gold=result.newGold;user.stats.totalScore=result.newTotalScore;window.updateUIStats?.();window.refreshXiuxianLiveSync?.(result.newTotalScore);}
-  }catch(err){if(sameQuiz(ctx))status.textContent=err.message+'，可再次送出重試。';}
+  }catch(err){if(sameQuiz(ctx))globalThis.QAQuestionPresentation.setLearningStatus(status,'error',err.message+'，可再次送出重試。');}
   finally{ctx.reportBusy=false;if(sameQuiz(ctx)&&$('[data-report-send]'))$('[data-report-send]').disabled=false;}
 }
 function activatePairContext(index){

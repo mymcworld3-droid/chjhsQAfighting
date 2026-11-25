@@ -501,7 +501,7 @@ async function openPage() {
     rules = await loadTask;
   } catch (error) {
     console.warn('[Daily Vocabulary]', error);
-    if (isOpen()) slot.innerHTML = '<p class="dv-panel" role="status">字卡載入失敗，請重新整理後再試。</p>';
+    if (isOpen()) slot.innerHTML = '<div class="dv-panel">'+globalThis.QAQuestionPresentation.learningStatusMarkup('error','字卡載入失敗，請重新整理後再試。')+'</div>';
     return;
   }
   if (!isOpen() || window.getRealmUserUid?.() !== uid) return;
