@@ -4,27 +4,27 @@
    Scene art, item silhouettes, rarity, combat feedback and notification dots
    retain their own rules. Load after content-format.css. */
 body.xianxia-theme {
-  --ui-font: 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', system-ui, sans-serif;
+  --ui-font: var(--qy-font-body);
   --ui-serif: var(--xq-serif, 'Noto Serif TC', 'Songti TC', 'PMingLiU', serif);
-  --ui-control-radius: 8px;
-  --ui-card-radius: 10px;
-  --ui-panel-radius: 14px;
-  --xq-ink: #17140f;
-  --xq-surface: #242018;
-  --xq-paper: #eee4d0;
-  --xq-muted: #bcae94;
-  --xq-gold: #c7a35e;
-  --xq-jade: #d9b66d;
-  --xq-line: rgba(199,163,94,.24);
-  --glass-bg: rgba(32,28,21,.96);
-  --glass-border: rgba(199,163,94,.24);
+  --ui-control-radius: var(--qy-radius-control);
+  --ui-card-radius: var(--qy-radius-card);
+  --ui-panel-radius: var(--qy-radius-panel);
+  --xq-ink: var(--qy-ink);
+  --xq-surface: var(--qy-surface);
+  --xq-paper: var(--qy-paper);
+  --xq-muted: var(--qy-muted);
+  --xq-gold: var(--qy-gold);
+  --xq-jade: var(--qy-jade);
+  --xq-line: var(--qy-line);
+  --glass-bg: var(--qy-glass);
+  --glass-border: var(--qy-line);
   --xq-bright-gold: #dfbd79;
-  --xq-bright-jade: #d9b66d;
-  --xq-bright-ivory: #eee4d0;
-  --quiet-surface: #242018;
-  --quiet-inset: #1b1812;
-  --quiet-line: rgba(211,181,124,.2);
-  --quiet-accent-line: rgba(217,182,109,.55);
+  --xq-bright-jade: var(--qy-jade);
+  --xq-bright-ivory: var(--qy-paper);
+  --quiet-surface: var(--qy-surface);
+  --quiet-inset: var(--qy-inset);
+  --quiet-line: var(--qy-line);
+  --quiet-accent-line: var(--qy-accent-line);
   background: var(--xq-ink) !important;
   color: var(--xq-paper);
 }
@@ -41,7 +41,7 @@ body.xianxia-theme .page-section { background-image: none !important; }
 body.xianxia-theme > header,
 body.xianxia-theme .glass-strip,
 body.xianxia-theme #bottom-nav > .glass-capsule {
-  background: rgba(28,24,18,.97) !important;
+  background: var(--qy-inset) !important;
   border-color: var(--quiet-line) !important;
   box-shadow: 0 5px 18px rgba(0,0,0,.16) !important;
 }
@@ -70,7 +70,7 @@ body.xianxia-theme #page-store > .sticky h2 {
   letter-spacing: .035em;
 }
 body.xianxia-theme :is(h1,h2,h3,h4,.dm-heading,.xiuxian-title) {
-  font-family: var(--ui-serif) !important;
+  font-family: var(--ui-title-font) !important;
   text-shadow: none !important;
 }
 body.xianxia-theme :is(.xianxia-eyebrow,.xianxia-chapter) {

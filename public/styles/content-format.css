@@ -1,16 +1,52 @@
 /* Shared content roles. These rules change formatting, never scene geometry,
    state colors, navigation visibility, or the sizes of battlefield artwork. */
+:root {
+  /* U12: canonical sect palette. Semantic state and rarity colors stay local. */
+  --qy-ink: #14241e;
+  --qy-surface: #20332a;
+  --qy-inset: #192820;
+  --qy-jade: #a5cbb3;
+  --qy-gold: #d2b374;
+  --qy-paper: #f1e7d0;
+  --qy-muted: #b8c6b5;
+  --qy-line: rgba(210,179,116,.24);
+  --qy-accent-line: rgba(210,179,116,.55);
+  --qy-glass: rgba(27,43,34,.96);
+  --qy-space-1: 4px;
+  --qy-space-2: 8px;
+  --qy-space-3: 12px;
+  --qy-space-4: 16px;
+  --qy-space-5: 24px;
+  --qy-radius-control: 8px;
+  --qy-radius-card: 10px;
+  --qy-radius-panel: 14px;
+  --qy-font-body: 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', system-ui, sans-serif;
+  --qy-font-title: 'Kaiti TC', 'STKaiti', 'DFKai-SB', 'Noto Serif TC', 'Songti TC', serif;
+  --qy-font-number: system-ui, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --qy-font-code: ui-monospace, SFMono-Regular, Consolas, monospace;
+  --qy-title-page: clamp(22px,2.4vw,28px);
+  --qy-title-section: 18px;
+  --qy-title-item: 16px;
+  --qy-text: 14px;
+  --qy-small: 12px;
+  --qy-meta: 11px;
+  --qy-question: clamp(17px,1.6vw,23px);
+  --qy-option: clamp(15px,1.3vw,18px);
+  --qy-reading-line: 1.8;
+  --qy-action-height: 40px;
+}
 body.xianxia-theme {
-  --ui-font: var(--xq-serif, 'Noto Serif TC', 'Songti TC', 'PMingLiU', serif);
-  --ui-serif: var(--ui-font);
-  --ui-text: 14px;
-  --ui-small: 12px;
-  --ui-meta: 11px;
-  --ui-control-radius: 12px;
-  --ui-card-radius: 16px;
-  --ui-panel-radius: 20px;
+  --ui-font: var(--qy-font-body);
+  --ui-serif: var(--xq-serif, 'Noto Serif TC', 'Songti TC', serif);
+  --ui-title-font: var(--qy-font-title);
+  --ui-text: var(--qy-text);
+  --ui-small: var(--qy-small);
+  --ui-meta: var(--qy-meta);
+  --ui-control-radius: var(--qy-radius-control);
+  --ui-card-radius: var(--qy-radius-card);
+  --ui-panel-radius: var(--qy-radius-panel);
   --ui-image-radius: 8px;
-  --ui-action-height: 40px;
+  --ui-action-height: var(--qy-action-height);
   --ui-icon-size: 36px;
 }
 
@@ -21,7 +57,9 @@ body.xianxia-theme :not(:where(
   .fa,.fas,.far,.fab,.fal,.fad,.fat,
   .fa-solid,.fa-regular,.fa-brands,.fa-light,.fa-thin,.fa-duotone,
   mjx-container,mjx-container *,
-  .MathJax,.MathJax *,
+  .MathJax,.MathJax *, .MathJax_Display,.MathJax_Display *,
+  .quiz-math-fallback,.quiz-math-fallback *,
+  .cc-code,code,pre,pre *,
   .katex,.katex *,math,math *
 )) {
   font-family: var(--ui-font) !important;
@@ -181,17 +219,17 @@ body.xianxia-theme :is(.xianxia-page-heading h2,.bv2-head h2,.raid-heading h2),
 body.xianxia-theme :is(#page-rank,#page-settings,#page-history,#page-admin,#page-social) > h2,
 body.xianxia-theme #page-store > .sticky h2,
 body.xianxia-theme #scope-studio h2 {
-  font: 600 clamp(22px,2.4vw,28px)/1.35 var(--ui-serif) !important;
+  font: 600 var(--qy-title-page)/1.35 var(--ui-title-font) !important;
   letter-spacing: .06em;
 }
 body.xianxia-theme :is(.quest-heading h3,.pm-header h3,.uib-modal-head h3,
   .dt-modal-card h3,.dm-heading,.aam-head h3,.amm-head h3),
 body.xianxia-theme #scope-studio .ss-panel-head strong {
-  font: 700 18px/1.45 var(--ui-serif) !important;
+  font: 700 var(--qy-title-section)/1.45 var(--ui-title-font) !important;
 }
 body.xianxia-theme :is(.quest-card h4,.dt-create h4,.dt-library h4,.pm-compose h4,
   .xpp-section h3,.cs-stage-title h4) {
-  font: 700 16px/1.45 var(--ui-serif) !important;
+  font: 700 var(--qy-title-item)/1.45 var(--ui-font) !important;
 }
 
 /* Repeated content cards use the same corners. Fullscreen surfaces and scenic
@@ -247,7 +285,7 @@ body.xianxia-theme #bv2-question,
 body.xianxia-theme #page-raid .raid-question-shell > h2,
 body.xianxia-theme .dt-question h3,
 body.xianxia-theme .dm-question {
-  font-size: clamp(17px,1.6vw,23px) !important;
+  font-size: var(--qy-question) !important;
   line-height: 1.8 !important;
   overflow-wrap: anywhere;
 }
@@ -257,7 +295,7 @@ body.xianxia-theme .bv2-option b,
 body.xianxia-theme #page-raid .raid-option > b,
 body.xianxia-theme .dt-option-math,
 body.xianxia-theme .dm-option span {
-  font-size: clamp(15px,1.3vw,18px) !important;
+  font-size: var(--qy-option) !important;
   line-height: 1.65 !important;
   overflow-wrap: anywhere;
 }
@@ -297,4 +335,51 @@ body.xianxia-theme .uib-toolbar select {
     font-size: 12px !important;
     padding-inline: 4px;
   }
+}
+
+/* U12: active text roles, not art-backed headers or tactical control geometry.
+   No color override on answers, rarity, difficulty or math descendants. */
+body.xianxia-theme :is(.dv-shell,.cc-shell,.quest-panel,.xpp-dialog) {
+  color:var(--qy-paper);font-size:var(--ui-text);line-height:1.6;
+}
+body.xianxia-theme :is(.dv-view-heading h3,.dv-today-heading h3,.cc-toolbar h3,.cc-section-title h3,
+  .mr-reward-header h2,.tc-dialog h2,.dt-result h2,#weapon-dungeons-dialog h2,
+  #section-classes .cc-class-title h2) {
+  font-family:var(--ui-title-font) !important;
+  color:var(--qy-paper);
+  letter-spacing:.035em;
+}
+body.xianxia-theme :is(.dv-view-heading h3,.dv-today-heading h3,.cc-toolbar h3,.cc-section-title h3) {
+  font-size:var(--qy-title-section);line-height:1.4;
+}
+body.xianxia-theme :is(.dv-view-heading p,.dv-today-heading p,.cc-muted,.xpp-identity p,.quest-progress-label,.mr-reward-note) {
+  font-size:var(--ui-small);line-height:1.6;color:var(--qy-muted);
+  overflow-wrap:anywhere;
+}
+body.xianxia-theme :is(.game-resource-amount,.game-stone-amount,.mr-reward-amount,.manual-native-level,
+  .manual-armory-exp,.cc-stat,.cc-metric strong,.xpp-stats b,.xpp-power strong,.tc-result-stats b,
+  #xiuxian-score,.dv-today-score strong,.dm-summary b,.wd-tickets strong) {
+  font-family:var(--qy-font-number) !important;
+  font-variant-numeric:tabular-nums lining-nums;
+  letter-spacing:normal;
+}
+body.xianxia-theme :is(.cc-code,code,pre) {
+  font-family:var(--qy-font-code) !important;
+}
+body.xianxia-theme :is(.quest-card,.cc-card,.dv-panel,.mr-reward-item) {
+  border-color:var(--qy-line);
+}
+body.xianxia-theme :is(.quest-card-heading,.cc-toolbar,.dv-view-heading) {
+  gap:var(--qy-space-2);
+}
+body.xianxia-theme :is(.cc-question,.dt-question h3,#question-text,.tc-question,.dm-question,
+  .dt-explain,#feedback-text,.tc-feedback-text) {
+  font-family:var(--ui-font) !important;
+  line-height:var(--qy-reading-line) !important;
+  letter-spacing:normal;
+  overflow-wrap:anywhere;
+}
+/* Compact landscape keeps existing controls and artwork sizes. */
+@media (orientation:landscape) and (max-height:540px) {
+  body.xianxia-theme { --qy-title-page:22px;--qy-title-section:16px;--qy-space-3:8px;--qy-space-4:12px; }
 }

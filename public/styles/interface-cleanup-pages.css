@@ -1,8 +1,8 @@
 /* Secondary screens share the home review's restrained hierarchy. All rules
    are scoped to ui-cleanup; combat state colors and native layout locks remain. */
 body.ui-cleanup {
-  --review-paper:#eee5d2;--review-muted:#ada591;--review-line:rgba(210,185,137,.18);
-  --review-surface:#201f19;--review-inset:#191a16;--review-gold:#d2b374;
+  --review-paper:var(--qy-paper);--review-muted:var(--qy-muted);--review-line:var(--qy-line);
+  --review-surface:var(--qy-surface);--review-inset:var(--qy-inset);--review-gold:var(--qy-gold);
 }
 /* Page titles, tabs and content panels have distinct visual roles. */
 html body.ui-cleanup :is(#page-store,#page-rank,#page-social,#page-settings,#page-history,#page-admin) {
@@ -16,7 +16,7 @@ html body.ui-cleanup #page-social>.ui-social-heading {
 html body.ui-cleanup :is(#page-settings,#page-admin)>h2,
 html body.ui-cleanup #page-rank>h2 {min-height:0;margin:0 0 12px;padding:0 0 12px;border:0;text-shadow:none!important}
 html body.ui-cleanup :is(#page-store,#page-rank,#page-social,#page-settings,#page-history,#page-admin) h2 {
-  font:500 25px/1.4 var(--ui-serif)!important;color:var(--review-paper)!important;letter-spacing:.06em;
+  font:500 var(--qy-title-page)/1.4 var(--ui-title-font)!important;color:var(--review-paper)!important;letter-spacing:.06em;
 }
 html body.ui-cleanup :is(#page-store,#page-rank,#page-social,#page-settings,#page-history,#page-admin) h2>i {font-size:19px;color:#c3ab78!important}
 .ui-page-caption {margin:0 0 24px;color:var(--review-muted);font-size:12px;line-height:1.7}

@@ -9,9 +9,9 @@
   unicode-range:U+9752,U+96F2,U+554F,U+9053;
 }
 body.ui-cleanup {
-  --quiet-line:rgba(210,185,137,.16);
-  --quiet-accent-line:rgba(210,175,105,.44);
-  --ui-panel-radius:12px;
+  --quiet-line:var(--qy-line);
+  --quiet-accent-line:var(--qy-accent-line);
+  --ui-panel-radius:var(--qy-radius-panel);
   --app-header-height:34px;
   --app-header-space:calc(var(--app-header-height) + env(safe-area-inset-top,0px) + 3px);
 }
