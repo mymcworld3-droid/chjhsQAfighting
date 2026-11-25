@@ -9,6 +9,21 @@ let initialized=false,selectedUid='',loadedPreview=null,query=null,lastQueryAt=0
 
 function currentUid(){return getMainUser?.()?.uid||'';}
 function visible(){return $('page-home')?.classList.contains('active-page')===true;}
+const formatStones=new Intl.NumberFormat('zh-TW',{maximumFractionDigits:0});
+function refreshSpiritStones(){
+  const balance=$('home-spirit-stones-count'),host=$('home-spirit-stones');
+  if(!balance||!host)return;
+  // Read the same signed-in player stats used by the rest of the game.
+  // Never show a previous account's balance after switching users.
+  const uid=currentUid(),player=window.getCurrentUserData?.();
+  const raw=player?.stats?.gold;
+  const amount=uid&&(!player?.uid||player.uid===uid)&&raw!==null&&raw!==undefined&&String(raw).trim()!==''
+    ?Number(raw):NaN;
+  const valid=Number.isFinite(amount)&&amount>=0;
+  const label=valid?formatStones.format(Math.floor(amount)):'—';
+  if(balance.textContent!==label)balance.textContent=label;
+  host.dataset.balanceLoaded=valid?'true':'false';
+}
 function display(preview){
   if(!preview)return;
   loadedPreview=preview;
@@ -58,6 +73,7 @@ async function syncTrialState(){
   await query;
 }
 function update(){
+  refreshSpiritStones();
   refreshFromProgress();
   if(visible())void syncTrialState();
 }
@@ -108,6 +124,7 @@ function init(){
   observer.observe(root,{attributes:true,attributeFilter:['class']});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});
   window.addEventListener('pageshow',update);
+  window.addEventListener('focus',update);
   update();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
