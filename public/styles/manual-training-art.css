@@ -355,3 +355,18 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
   }
   #manual-training-root .manual-weapons .manual-weapon-grid{gap:clamp(10px,1.5cqh,18px)}
 }
+
+/* The modal follows the visible shelf, without widening the mobile header. */
+#manual-training-root .manual-training-switch{
+  display:grid;grid-template-columns:36px minmax(0,1fr) 36px;align-items:center;
+  gap:6px;flex:1;min-width:0;
+}
+#manual-training-root .manual-training-switch-title{display:grid;gap:2px;text-align:center;min-width:0}
+#manual-training-root .manual-training-switch-title small{font-size:12px;color:#ffe7a5;line-height:1.2}
+#manual-training-root .manual-training-switch button{width:36px;height:36px;padding:0;display:grid;place-items:center}
+#manual-training-root .manual-training-switch button:disabled{opacity:.35;cursor:default}
+@media(max-width:600px){
+  #manual-training-root .manual-training-dialog-header{gap:6px}
+  #manual-training-root .manual-training-switch{grid-template-columns:32px minmax(0,1fr) 32px;gap:4px}
+  #manual-training-root .manual-training-switch button{width:32px}
+}
