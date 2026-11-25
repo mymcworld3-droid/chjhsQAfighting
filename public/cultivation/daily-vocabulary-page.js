@@ -1,4 +1,4 @@
-import {stoneCostMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
+import {stoneCostMarkup,cultivationMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import { createVocabularyPronunciation } from './daily-vocabulary-pronunciation.mjs';
 
 const page = document.getElementById('page-daily-vocabulary');
@@ -185,11 +185,11 @@ function rewardMarkup(lesson) {
   if (status === 'claimed') {
     const reward = progress.rewardHistory[lesson.date].reward;
     return `<div class="dv-reward is-granted" role="status"><strong>今日獎勵已領取</strong>
-      <div class="dv-reward-amounts"><span>${stoneCostMarkup('+'+reward.gold)}</span><span><b>+${reward.cultivation}</b> 修為</span></div></div>`;
+      <div class="dv-reward-amounts"><span>${stoneCostMarkup('+'+reward.gold)}</span><span>${cultivationMarkup('+'+reward.cultivation,{showName:true})}</span></div></div>`;
   }
   const message = rewardErrors[lesson.date] || '正在領取今日獎勵…';
   return `<div class="dv-reward ${rewardErrors[lesson.date] ? 'is-waiting' : 'is-syncing'}" role="status"><strong>今日獎勵</strong>
-    <span>${stoneCostMarkup(rules.DAILY_REWARD.gold)} · ${rules.DAILY_REWARD.cultivation} 修為</span>
+    <span>${stoneCostMarkup(rules.DAILY_REWARD.gold)} · ${cultivationMarkup(rules.DAILY_REWARD.cultivation,{showName:true})}</span>
     <p>${escapeHtml(message)}</p>
     ${rewardErrors[lesson.date] ? button('retry-reward', '重新領取', { style: 'dv-quiet' }) : ''}</div>`;
 }
@@ -250,7 +250,7 @@ function homeMarkup(notice) {
     <section class="dv-panel dv-today">
       <div class="dv-today-heading">
         <div><h3 tabindex="-1" data-dv-focus>今日單字</h3><p>讀字卡回想意思，再用測驗檢查記住了多少。</p>
-          <p>完成測驗可獲得 ${rules.DAILY_REWARD.gold} 靈石 · ${rules.DAILY_REWARD.cultivation} 修為</p></div>
+          <p>完成測驗可獲得 ${stoneCostMarkup(rules.DAILY_REWARD.gold)} · ${cultivationMarkup(rules.DAILY_REWARD.cultivation,{showName:true})}</p></div>
         <div class="dv-today-score"><strong>${studied}</strong> / ${rules.LESSON_SIZE}<span>已看字卡</span></div>
       </div>
       <div class="dv-progress" aria-hidden="true">

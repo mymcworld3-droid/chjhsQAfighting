@@ -1,3 +1,4 @@
+import {stoneCostMarkup,cultivationMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import './quest-rules.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 
@@ -14,6 +15,14 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if (reward.cultivation) parts.push(`${reward.cultivation} 修為`);
     if (reward.drawTickets) parts.push(`本命法器抽獎券 ×${reward.drawTickets}`);
     Object.entries(reward.materials || {}).forEach(([id, count]) => parts.push(`${materialNames[id] || id} ×${count}`));
+    return parts.join(' · ');
+  }
+  function rewardMarkup(reward) {
+    const parts=[];
+    if(reward.gold)parts.push(stoneCostMarkup(reward.gold));
+    if(reward.cultivation)parts.push(cultivationMarkup(reward.cultivation,{showName:true}));
+    if(reward.drawTickets)parts.push(esc(`本命法器抽獎券 ×${reward.drawTickets}`));
+    Object.entries(reward.materials||{}).forEach(([id,count])=>parts.push(esc(`${materialNames[id]||id} ×${count}`)));
     return parts.join(' · ');
   }
   function status(message) {
@@ -102,7 +111,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       <p>${esc(q.description)}</p>
       <div class="quest-progress-label"><span>${q.locked ? `需 ${q.minScore} 修為 · 先繼續問道修行` : '任務進度'}</span><b>${q.current} / ${q.target}</b></div>
       <div class="quest-progress" role="progressbar" aria-label="${esc(q.title)}" aria-valuemin="0" aria-valuemax="${q.target}" aria-valuenow="${q.current}"><i style="width:${Math.round(q.current / q.target * 100)}%"></i></div>
-      <div class="quest-reward"><i class="fa-solid fa-gift" aria-hidden="true"></i> ${esc(rewardText(q.reward))}</div>
+      <div class="quest-reward"><i class="fa-solid fa-gift" aria-hidden="true"></i> ${rewardMarkup(q.reward)}</div>
       <button type="button" data-quest-id="${esc(q.id)}" data-quest-kind="${kind}" ${busy || q.claimed || q.locked ? 'disabled' : ''} class="quest-action ${q.claimable ? 'quest-claim' : ''}">${busy ? '正在同步…' : label}</button>
     </article>`;
   }

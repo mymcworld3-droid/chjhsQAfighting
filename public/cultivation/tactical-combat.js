@@ -1,3 +1,4 @@
+import {stoneCostMarkup,cultivationMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import './manual-rules.js?v=20261118-gold-cap10-v1';
 import './weapon-dungeon-rules.js?v=20261125-weapon-lord-cleared-v1';
 import './contextual-asset-preloader.js';
@@ -1555,7 +1556,7 @@ function resultDialog(){
       <p>${win?'已擊敗石域領主，副本通關；剩餘守衛不影響結算。':'副本券已消耗，可調整武器與走位後再次挑戰。'}</p>
       <div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div>
       ${win?`<p>${result?.unlocked>info.difficulty?'下一個難度已解鎖。':info.difficulty===5?'已完成最高難度。':''}</p>`:''}
-      <p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':''}</p>
+      <p>${reward?.gold?'獲得 '+stoneCostMarkup('+'+reward.gold)+' · '+cultivationMarkup('+'+reward.cultivation,{showName:true}):''}</p>
       ${drop?`<p class="tc-manual-loot">獲得 ${esc(drop.tierRealm)}武器：${esc(drop.name)}${drop.duplicate?'（同款數量已累計，保留最高等階）':''}</p>`:win?'<p>本次未掉落武器。</p>':''}
       ${manualRecap}<button type="button" class="tc-primary" data-weapon-dungeon-menu>返回武器副本</button>
       <button type="button" data-weapon-dungeon-retry>再次挑戰（消耗 1 張券）</button><button type="button" data-exit>收起</button>`);
@@ -1565,11 +1566,11 @@ function resultDialog(){
     const stage=state.trial?.stage||1,next=state.nextStage||stage+1;
     const guideCollapse=win&&stage===1&&tutorialStep()>=7&&tutorialStep()<=9
       ?'<button type="button" class="tc-primary" data-tutorial-collapse>收起戰場</button>':'';
-    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}</p>${manualRecap}${drop?'<p class="tc-manual-loot">獲得功法：《'+esc(drop.name)+'》！前往修煉查看。</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}${guideCollapse}<button type="button" class="${guideCollapse?'':'tc-primary'}" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
+    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+stoneCostMarkup('+'+reward.gold)+' · '+cultivationMarkup('+'+reward.cultivation,{showName:true}):'答題紀錄已保存。'}</p>${manualRecap}${drop?'<p class="tc-manual-loot">獲得功法：《'+esc(drop.name)+'》！前往修煉查看。</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}${guideCollapse}<button type="button" class="${guideCollapse?'':'tc-primary'}" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
     if(manualRecap)void refreshManualRecap();
     return;
   }
-  showModal(`<small>此戰已結算</small><h2>${draw?'平分秋色':win?'克敵制勝':'整裝再戰'}</h2><p>${state.finishReason==='timeout'?'連續兩次行動逾時，戰鬥結束。':state.finishReason==='forfeit'?'一方收法離場。':state.finishReason==='turn-limit'?'達到回合上限，以剩餘生命比例判定。':win?'你以走位與招式取得勝利。':'複習這次的攻擊範圍與體力分配，再次挑戰。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'本場沒有額外通關獎勵；答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-hub>返回演武司</button>`);
+  showModal(`<small>此戰已結算</small><h2>${draw?'平分秋色':win?'克敵制勝':'整裝再戰'}</h2><p>${state.finishReason==='timeout'?'連續兩次行動逾時，戰鬥結束。':state.finishReason==='forfeit'?'一方收法離場。':state.finishReason==='turn-limit'?'達到回合上限，以剩餘生命比例判定。':win?'你以走位與招式取得勝利。':'複習這次的攻擊範圍與體力分配，再次挑戰。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+stoneCostMarkup('+'+reward.gold)+' · '+cultivationMarkup('+'+reward.cultivation,{showName:true}):'本場沒有額外通關獎勵；答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-hub>返回演武司</button>`);
 }
 function leaveDialog(){
   if(state?.status==='finished')return state.mode==='pve'?resultDialog():renderHub();
@@ -1904,7 +1905,7 @@ function questionSheet(q,review=null,index=0){
         <div class="text-2xl"><i class="fa-solid ${review.correct?'fa-circle-check text-green-400':'fa-circle-xmark text-red-400'}"></i></div>
         <h3 class="text-lg font-bold font-sci ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'答對':'答錯'} · 體力 +${review.gain}</h3>
         ${state.mode==='pve'&&review.reward?`<div class="tc-solo-learning-reward">
-          <span>${review.reward.cultivation>=0?'+':''}${review.reward.cultivation} 修為</span>
+          <span>${cultivationMarkup((review.reward.cultivation>=0?'+':'')+review.reward.cultivation,{showName:true})}</span>
           ${review.reward.learning?`<small>${esc(review.reward.learning)}</small>`:''}
         </div>`:''}
       </div>

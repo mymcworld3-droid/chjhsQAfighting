@@ -4,7 +4,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
 const helper=read('public/cultivation/spirit-stone-ui.js');
 const api=vm.runInNewContext(helper.replace(/^export /gm,'')+
-  '\n({stoneCostMarkup,splitStoneText})');
+  '\n({stoneCostMarkup,splitStoneText,formatResourceAmount,cultivationMarkup,weaponDungeonTicketMarkup})');
 test('original stamina spirit-stone artwork is reused on the main branch',()=>{
  const html=read('public/index.html');
  assert.match(html,/src="\/assets\/items\/gold.webp"/);
@@ -60,7 +60,7 @@ test('amounts earned or spent in either word order become image followed by sign
   const parts=api.splitStoneText(label),money=parts?.find(part=>part.kind==='stone');
   assert.ok(money,label);
   assert.equal(money.value,expected,label);
-  assert.match(api.stoneCostMarkup(money.value),new RegExp('>'+expected.replace(/[+*]/g,'\\$&').replace('×','×')+'<\\/b>'));
+  assert.match(api.stoneCostMarkup(money.value),new RegExp('>'+expected.replace('-','−').replace(/[+*]/g,'\\expected.replace(/[+*]/g,'\\$&').replace('×','×')')+'<\\/b>'));
  }
  assert.equal(api.splitStoneText('靈石不足，請先完成任務'),null);
  assert.equal(api.splitStoneText('答案為 30 修為'),null);
@@ -75,7 +75,7 @@ test('reward and wallet surfaces use the original bitmap without changing earnin
  assert.match(vocab,/stoneCostMarkup\('\+'\+reward\.gold\)/);
  assert.match(vocab,/stoneCostMarkup\(rules\.DAILY_REWARD\.gold\)/);
  assert.match(meditation,/label==='個人靈石'/);
- assert.match(meditation,/game-stone-amount/);
+ assert.match(meditation,/stoneCostMarkup\(value\)/);
  assert.match(meditation,/if\(id==='gold'\)/);
  assert.match(medal,/item\.key==='gold'/);
  assert.match(core,/stoneCostMarkup\(Growth\.count\(/);
@@ -94,7 +94,7 @@ test('DOM replacement is text-only and places stone art before reward amount',()
   })
  };
  const runtime=vm.runInNewContext(helper.replace(/^export /gm,'')+'\n({decorateStoneContent})',{document});
- const parent={closest:()=>null};
+ const parent={closest:selector=>selector.includes('.quest-reward')?{}:null};
  const textNode={nodeType:3,isConnected:true,nodeValue:'獎勵：靈石 +30',parentElement:parent,
    replaceWith(fragment){inserted.push(...fragment.children);}};
  assert.equal(runtime.decorateStoneContent(textNode),1);
@@ -103,4 +103,21 @@ test('DOM replacement is text-only and places stone art before reward amount',()
  assert.equal(display.children[0].src,'/assets/items/gold.webp');
  assert.equal(display.children[1].textContent,'+30');
  assert.equal(display.children[2].textContent,' 靈石');
+});
+
+test('shared resource amounts have consistent signs, thousand separators and distinct accessible artwork',()=>{
+ assert.equal(api.formatResourceAmount('＋1250'),'+1,250');
+ assert.equal(api.formatResourceAmount(-1250),'−1,250');
+ assert.equal(api.formatResourceAmount(undefined),'—');
+ assert.match(api.cultivationMarkup('+20'),/cultivation\.svg.*>\+20<\/b>.*修為/);
+ assert.match(api.weaponDungeonTicketMarkup(3,{max:5}),/weapon-dungeon-ticket\.svg.*>3 \/ 5<\/b>.*副本券/);
+ assert.doesNotMatch(api.weaponDungeonTicketMarkup(1),/raid-ticket|draw-ticket|gold\.webp/);
+});
+test('legacy conversion is not performed in arbitrary player text or excluded content',()=>{
+ const document={};
+ const runtime=vm.runInNewContext(helper.replace(/^export /gm,'')+'\n({decorateStoneContent})',{document});
+ for(const closest of [()=>null,selector=>selector.includes('#chat-messages')||selector.includes('.quest-reward')?{}:null]){
+  const node={nodeType:3,isConnected:true,nodeValue:'題目：30 金幣',parentElement:{closest},replaceWith(){assert.fail('must preserve content');}};
+  assert.equal(runtime.decorateStoneContent(node),0);
+ }
 });

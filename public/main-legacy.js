@@ -1,3 +1,4 @@
+import {stoneCostMarkup,cultivationMarkup,formatResourceAmount} from './cultivation/spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import { createStudyQuestionBridge } from './cultivation/study-question-bridge.js';
 import './cultivation/void-retraining-rules.js';
 import {} from './cultivation/solo-learning-rules.js';
@@ -3351,8 +3352,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
         const reward = review.reward || {};
         const gain = Math.max(0, Number(reward.cultivation) || 0);
         const penalty = Math.max(0, -(Number(reward.cultivation) || 0));
-        if (isCorrect) fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2">+${Number(reward.gold) || 0}${globalThis.QAItemIcons?.markup('gold',{size:18})||' 靈石'} · +${gain} 修為</span>`;
-        else if (penalty) fbTitle.innerHTML += ` <span class="text-red-400 text-sm ml-2">-${penalty} 修為</span>`;
+        if (isCorrect) fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2">${stoneCostMarkup('+'+(Number(reward.gold)||0))} · ${cultivationMarkup('+'+gain,{showName:true})}</span>`;
+        else if (penalty) fbTitle.innerHTML += ` <span class="text-red-400 text-sm ml-2">${cultivationMarkup(-penalty,{showName:true})}</span>`;
         if (visual && gain) void visual.play({ gain, totalScore: currentUserData.stats.totalScore });
         else visual?.cancel();
         showCultivationFeedback({ gain, penalty, learningMessage: reward.learning }, isCorrect);
@@ -3404,10 +3405,10 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         
         scoreGain = window.QAAnswerGoldRules.perCorrect(scoreBeforeAnswer) + learningReward.gold;
-        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}${globalThis.QAItemIcons?.markup('gold',{size:18})||' 靈石'} · +${cultivationReward.gain} 修為</span>`;
+        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">${stoneCostMarkup('+'+scoreGain)} · ${cultivationMarkup('+'+cultivationReward.gain,{showName:true})}</span>`;
     } else {
         if (!cultivationReward.streakPreserved) stats.currentStreak = 0;
-        if (cultivationReward.penalty > 0) fbTitle.innerHTML += ` <span class="text-red-400 text-sm ml-2">-${cultivationReward.penalty} 修為</span>`;
+        if (cultivationReward.penalty > 0) fbTitle.innerHTML += ` <span class="text-red-400 text-sm ml-2">${cultivationMarkup(-cultivationReward.penalty,{showName:true})}</span>`;
     }
 
     const learningContext = learningRules?.context(quiz);
@@ -3492,7 +3493,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
                 if (quiz?.adaptive) refreshAdaptiveSoloStock(quiz.adaptive);
                 void window.QAAdaptiveLearning?.afterSaved(quiz);
                 updateUIStats();
-                if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">+${scoreGain}${globalThis.QAItemIcons?.markup('gold',{size:18})||' 靈石'} · +${cultivationReward.gain} 修為</span>`;
+                if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">${stoneCostMarkup('+'+scoreGain)} · ${cultivationMarkup('+'+cultivationReward.gain,{showName:true})}</span>`;
                 window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
             }).then(async () => {
                 await cultivationFeedback?.play({ gain: cultivationReward.gain, totalScore: stats.totalScore });
@@ -7425,7 +7426,7 @@ window.renderInventory = async (filterType = 'frame') => {
 
 window.loadStoreItems = async () => {
     const grid = document.getElementById('store-grid');
-    document.getElementById('store-user-points').innerText = currentUserData.stats.gold || 0;
+    document.getElementById('store-user-points').innerText = formatResourceAmount(currentUserData.stats.gold || 0);
     const resetAvatar = document.getElementById('store-avatar-reset');
     if (resetAvatar) resetAvatar.hidden = !currentUserData.equipped?.avatar;
     
@@ -7451,7 +7452,7 @@ window.loadStoreItems = async () => {
             } else if (isOwned) {
                 btnAction = `<button onclick="equipItem('${item.type}', '${pid}', '${item.value}')" class="w-full mt-auto bg-slate-600 hover:bg-slate-500 text-white text-xs py-2 rounded font-bold tracking-wider">${t('btn_equip')}</button>`;
             } else {
-                btnAction = `<button onclick="buyItem('${pid}', ${item.price})" class="w-full mt-auto bg-blue-600 hover:bg-blue-500 text-white text-xs py-2 rounded flex items-center justify-center gap-1 font-bold">${globalThis.QAItemIcons?.markup('gold',{size:18})||''} ${item.price}</button>`;
+                btnAction = `<button onclick="buyItem('${pid}', ${item.price})" class="w-full mt-auto bg-blue-600 hover:bg-blue-500 text-white text-xs py-2 rounded flex items-center justify-center gap-1 font-bold">${stoneCostMarkup(item.price)}</button>`;
             }
 
             const card = document.createElement('div');

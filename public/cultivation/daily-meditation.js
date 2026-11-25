@@ -1,3 +1,4 @@
+import {stoneCostMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import './daily-meditation-rules.js';
 import './daily-meditation-rewards.js';
 import './nascent-growth.js';
@@ -26,8 +27,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
   function summary(items) {
     return '<div class="dm-summary">'+items.map(([label,value,tone='gold'])=>{
       const isGold=label==='個人靈石';
-      const image=isGold?'<img class="game-stone-icon" src="/assets/items/gold.webp" width="20" height="20" alt="" aria-hidden="true">':'';
-      const amount=isGold?'<span class="game-stone-cost">'+image+'<b class="game-stone-amount">'+esc(value)+'</b><span class="game-stone-sr-only"> 靈石</span></span>':esc(value);
+      const amount=isGold?stoneCostMarkup(value):esc(value);
       return '<div class="dm-stat dm-tone-'+esc(tone)+'"><small>'+esc(label)+'</small><strong>'+amount+'</strong></div>';
     }).join('')+'</div>';
   }
@@ -192,11 +192,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
   function rewardMarkup(reward,compact=false) {
     return rewardParts(reward,compact).map(([id,label])=>{
       const icon=globalThis.QAItemIcons?.markup(id,{size:18})||'';
-      if(id==='gold'){
-        const art=icon||'<img class="game-stone-icon" src="/assets/items/gold.webp" width="18" height="18" alt="" aria-hidden="true">';
-        return '<span class="game-stone-cost">'+art+'<b class="game-stone-amount">'+esc(label.replace(/\s*靈石$/,''))+
-          '</b><span class="game-stone-sr-only"> 靈石</span></span>';
-      }
+      if(id==='gold')return stoneCostMarkup(label.replace(/\s*靈石$/,''));
       return icon+esc(label);
     }).join('<br>');
   }

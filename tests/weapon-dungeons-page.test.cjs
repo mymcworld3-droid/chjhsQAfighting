@@ -2,6 +2,8 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs'),vm=require('node:vm');
 const W=require('../public/cultivation/weapon-dungeon-rules.js');
+const resourceCode=fs.readFileSync(require.resolve('../public/cultivation/spirit-stone-ui.js'),'utf8');
+const weaponDungeonTicketMarkup=vm.runInNewContext(resourceCode.replace(/^export /gm,'')+'\nweaponDungeonTicketMarkup');
 const source=fs.readFileSync(require.resolve('../public/cultivation/weapon-dungeons-page.js'),'utf8');
 function harness(){
  const elements=new Map(),events=new Map(),entered=[],requests=[];let uid='u1';
@@ -20,11 +22,11 @@ function harness(){
    getElementById:id=>elements.get(id),createElement:tag=>new Element(tag),
    querySelector:selector=>selector==='#page-gameplay .gameplay-entries'?entries:null};
  const window={addEventListener:(type,handler)=>events.set(type,handler),showToast:()=>{}};
- const context=vm.createContext({document,window,getMainUser:()=>uid?{uid}:null,
+ const context=vm.createContext({document,window,weaponDungeonTicketMarkup,getMainUser:()=>uid?{uid}:null,
    authenticatedMainFetch:()=>new Promise(resolve=>requests.push(resolve)),
    loadBattle:async()=>({openTacticalCombat:async(...args)=>entered.push(args)})});
- vm.runInContext(source.replace(/^import .*;\n/,'').replaceAll('export ','')
-   .replace("import('./tactical-combat.js')",'loadBattle()'),context);
+ vm.runInContext(source.replace(/^import .*;\n/gm,'').replaceAll('export ','')
+   .replace("import('./tactical-combat.js?v=20261125-weapon-lord-cleared-v1')",'loadBattle()'),context);
  const dialog=()=>elements.get('weapon-dungeons-dialog');
  const state=extra=>{const p={tickets:3,unlocked:0,clears:[0,0,0,0,0,0],active:null,...extra};return {...p,dungeonId:W.ID,dungeons:W.catalog(p)};};
  const respond=(data=state(),index=0)=>requests[index]({ok:true,json:async()=>({ok:true,state:data})});
@@ -43,7 +45,7 @@ test('gameplay entry opens an authenticated modal with six difficulties, ticket 
  assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty=/);
  h.choose();h.back();assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty=/);h.choose();
  assert.equal((h.dialog().innerHTML.match(/data-wd-difficulty=/g)||[]).length,6);
- assert.match(h.dialog().innerHTML,/副本券 3 \/ 5/);
+ assert.match(h.dialog().innerHTML,/副本券 .*?>3 \/ 5<\/b>/);
  assert.match(h.dialog().innerHTML,/擊退則會打斷蓄勢/);
  assert.match(h.dialog().innerHTML,/data-wd-difficulty="1" disabled/);
  await h.click(1);assert.equal(h.entered.length,0,'a forged locked-difficulty click cannot enter');
@@ -62,9 +64,9 @@ test('late account responses and responses after closing cannot overwrite a new 
  assert.equal(h.dialog().open,false);
  const current=h.open();h.respond(h.state({tickets:5}),1);await current;
  h.respond(h.state({tickets:1}),0);await old;
- assert.match(h.dialog().innerHTML,/副本券 5 \/ 5/);
+ assert.match(h.dialog().innerHTML,/副本券 .*?>5 \/ 5<\/b>/);
  const closing=h.open();h.dialog().close();h.respond(h.state({tickets:2}),2);await closing;
- assert.equal(h.dialog().open,false);assert.doesNotMatch(h.dialog().innerHTML,/副本券 2 \/ 5/);
+ assert.equal(h.dialog().open,false);assert.doesNotMatch(h.dialog().innerHTML,/副本券 .*?>2 \/ 5<\/b>/);
 });
 
 test('catalog preserves per-dungeon progress and stone gates are deterministic',()=>{const p=W.progress({unlocked:1,clears:[2,0,0,0,0,0]});const d=W.catalog(p)[0];assert.equal(d.id,W.ID);assert.equal(d.clears[0],2);assert.equal(d.difficulties[1].locked,false);assert.equal(d.difficulties[2].locked,true);const map=W.layout('seed',0);assert.deepEqual(map,W.layout('seed',0));assert.equal(map.structure,'three-stone-gates');assert(map.blocks.length>75);});

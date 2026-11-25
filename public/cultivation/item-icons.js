@@ -7,7 +7,7 @@
   'use strict';
   const names=Object.freeze({
     gold:'靈石','raid-ticket':'團本入場券','draw-ticket':'本命法器抽獎券',
-    'forge-fragment':'煉器碎片','nascent-soul-essence':'元嬰碎精','revival-pill':'回魂聚靈丹',cultivation:'修為',
+    'forge-fragment':'煉器碎片','nascent-soul-essence':'元嬰碎精','revival-pill':'回魂聚靈丹',cultivation:'修為','weapon-dungeon-ticket':'副本券',
     'qi-spirit-iron':'玄鐵','foundation-refined-iron':'精煉玄鐵','golden-purple-iron':'紫金玄鐵',
     'qi-spirit-wood':'靈木','foundation-century-wood':'百年靈木','golden-lightning-wood':'雷擊木',
     'nascent-star-iron':'玄冥星鐵','nascent-soul-wood':'千載魂木',
@@ -16,7 +16,7 @@
     'mountain-armor':'鎮嶽玄甲','longevity-jade':'長生玉佩','treasure-pouch':'修煉物品'
   });
   const catalog=Object.freeze(Object.fromEntries(Object.entries(names).map(([id,name])=>
-    [id,Object.freeze({id,name,imageUrl:'/assets/items/'+id+'.webp'})])));
+    [id,Object.freeze({id,name,imageUrl:'/assets/items/'+id+(['cultivation','weapon-dungeon-ticket'].includes(id)?'.svg':'.webp')})])));
   const aliases=Object.freeze({fragments:'nascent-soul-essence',raidTickets:'raid-ticket',drawTickets:'draw-ticket',forgeFragments:'forge-fragment',
     'void-sword':'sword'});
   const forms=Object.freeze({劍:'sword',飛劍:'sword',刀:'sword',槍:'sword',斧:'axe',錘:'axe',戟:'axe',

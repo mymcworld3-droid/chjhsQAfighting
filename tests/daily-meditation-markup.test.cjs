@@ -4,6 +4,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 const Icons = require('../public/cultivation/item-icons.js');
+const resourceCode = fs.readFileSync(require.resolve('../public/cultivation/spirit-stone-ui.js'),'utf8');
+const stoneCostMarkup=vm.runInNewContext(resourceCode.replace(/^export /gm,'')+'\nstoneCostMarkup');
 const source = fs.readFileSync(require.resolve('../public/cultivation/daily-meditation.js'), 'utf8').replace(/^import .*;\n/gm, '');
 
 function dashboard(state, busy = false, icons = Icons) {
@@ -11,7 +13,7 @@ function dashboard(state, busy = false, icons = Icons) {
   const status = { textContent: '' };
   const window = { getCurrentUserData: () => null, addEventListener() {} };
   const context = {
-    window, QAItemIcons: icons, QADailyMeditationRules: {}, getMainUser: () => ({ uid: 'fixture' }),
+    window, stoneCostMarkup, QAItemIcons: icons, QADailyMeditationRules: {}, getMainUser: () => ({ uid: 'fixture' }),
     document: { getElementById: id => id === 'dm-content' ? content : id === 'dm-status' ? status : null, addEventListener() {} },
     setInterval() {},
     auditState: state, auditBusy: busy
