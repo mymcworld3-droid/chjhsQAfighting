@@ -1,5 +1,4 @@
-/* Independent header and dock, from the supplied portrait/landscape overlays.
-   Keep the two pages on the same geometry without stretching the brand. */
+/* Text header and plain navigation; preserve scene geometry. */
 :is(.home-art-scene,#manual-training-root){
   --scene-dock-height:clamp(70px,9.6vw,150px);
 }
@@ -7,13 +6,13 @@
   position:fixed;z-index:46;left:0;top:env(safe-area-inset-top);
   display:block;width:clamp(135px,20vw,350px);aspect-ratio:350/125;
   margin:0;padding:0;border:0;box-shadow:none;
-  background:url('../assets/interface/brand-landscape.webp') left top/contain no-repeat;
+  background:none;
 }
 :is(.home-art-scene,#manual-training-root) .scene-art-dock{
   position:fixed;z-index:45;left:50%;bottom:env(safe-area-inset-bottom);transform:translateX(-50%);
   width:100%;height:var(--scene-dock-height);min-height:0;
   margin:0;padding:clamp(22px,2.4vw,34px) 11% 0;
-  background:url('../assets/interface/dock-landscape.webp') center bottom/100% 100% no-repeat;
+  background:none;
 }
 :is(.home-art-scene,#manual-training-root) .scene-art-dock>div{
   display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;height:100%;
@@ -22,10 +21,10 @@
   :is(.home-art-scene,#manual-training-root){--scene-dock-height:110px}
   :is(.home-art-scene,#manual-training-root) .scene-art-brand{
     width:clamp(125px,32vw,320px);aspect-ratio:320/125;
-    background-image:url('../assets/interface/brand-portrait.webp');
+    background-image:none;
   }
   :is(.home-art-scene,#manual-training-root) .scene-art-dock{
-    padding:40px 3.5% 3px;background-image:url('../assets/interface/dock-portrait.webp');
+    padding:40px 3.5% 3px;background-image:none;
   }
 }
 @media(max-width:600px) and (orientation:portrait){
@@ -33,16 +32,14 @@
   :is(.home-art-scene,#manual-training-root) .scene-art-dock{padding:35px 4% 2px}
 }
 
-/* U01: the existing live global rail is the single source of navigation.
-   The existing portrait/landscape images keep their own aspect ratios. */
+/* U01: the existing live global rail is the single source of navigation. */
 html body.ui-cleanup #bottom-nav.scene-art-dock {
-  --qy-dock-art:url('../assets/interface/dock-landscape.webp');
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
 html body.ui-cleanup #bottom-nav.scene-art-dock>.glass-capsule {
   position:relative;isolation:isolate;
   background-color:var(--qy-ink,#14241e)!important;
-  background-image:var(--qy-dock-art)!important;
+  background-image:none!important;
   background-position:center bottom!important;
   background-repeat:no-repeat!important;
   background-size:contain!important;
@@ -62,15 +59,6 @@ html body.ui-cleanup #bottom-nav.scene-art-dock #nav-grid>button>span:not(.allia
   font-size:11px!important;line-height:1.2;
 }
 html body.ui-cleanup #bottom-nav.scene-art-dock #nav-grid>button:focus-visible {outline-offset:-3px}
-html body.ui-cleanup #brand-home .qy-brand-art {display:none;max-width:100%;height:100%;align-items:center}
-html body.ui-cleanup #brand-home .qy-brand-art img {display:block;height:100%;max-width:140px;width:auto;object-fit:contain}
-html body.ui-cleanup #brand-home[data-qy-art-ready] .qy-brand-art {display:flex}
-html body.ui-cleanup #brand-home[data-qy-art-ready]>.app-brand-wordmark {
-  position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;
-}
-@media(orientation:portrait){
-  html body.ui-cleanup #bottom-nav.scene-art-dock {--qy-dock-art:url('../assets/interface/dock-portrait.webp')}
-}
 @media(max-width:420px){
   html body.ui-cleanup #bottom-nav.scene-art-dock #nav-grid>button>span:not(.alliance-chat-badge){font-size:10px!important}
 }

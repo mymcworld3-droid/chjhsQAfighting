@@ -12,24 +12,18 @@
       else if(button.hasAttribute('aria-current'))button.removeAttribute('aria-current');
     }
   }
-  function bindBrand(brand){
-    const img=brand?.querySelector('.qy-brand-art img');
-    if(!img)return;
-    const sync=()=>brand.toggleAttribute('data-qy-art-ready',!!(img.complete&&img.naturalWidth>0));
-    img.addEventListener('load',sync);img.addEventListener('error',sync);sync();
-  }
   let initialized=false;
   function init(){
     const doc=root.document,grid=doc?.getElementById('nav-grid');
     if(!grid||initialized)return;
-    initialized=true;bindBrand(doc.getElementById('brand-home'));syncRail(grid);
+    initialized=true;syncRail(grid);
     if(typeof root.MutationObserver==='function'){
       new root.MutationObserver(()=>syncRail(grid)).observe(grid,{
         childList:true,subtree:true,attributes:true,attributeFilter:['class','hidden','aria-hidden','data-target']
       });
     }
   }
-  if(typeof module==='object'&&module.exports)module.exports={syncRail,bindBrand};
+  if(typeof module==='object'&&module.exports)module.exports={syncRail};
   if(root.document){
     if(root.document.readyState==='loading')root.document.addEventListener('DOMContentLoaded',init,{once:true});
     else init();

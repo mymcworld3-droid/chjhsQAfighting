@@ -2,7 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path');
 const read=p=>fs.readFileSync(path.join(__dirname,'..','public',p),'utf8');
-const {syncRail,bindBrand}=require('../public/cultivation/shared-navigation.js');
+const {syncRail}=require('../public/cultivation/shared-navigation.js');
 function button(active=false,hidden=false){
   const attrs=new Map(),classes=new Set(active?['active-nav-btn']:[]);
   return {tagName:'BUTTON',dataset:{target:'page-home'},hidden,classes,attrs,
@@ -20,22 +20,18 @@ test('live rail follows active and hidden states without replacing entries or ha
   assert.equal(grid.children.length,4);assert.equal(locked.onclick,click);assert.ok(locked.classes.has('nav-locked'));
   const later=button(true);grid.children.push(later);syncRail(grid);assert.equal(later.getAttribute('aria-current'),'page');
 });
-test('brand fallback survives image failure and orientation loads',()=>{
-  const events={},attrs=new Set(),img={complete:false,naturalWidth:0,addEventListener:(k,fn)=>events[k]=fn};
-  const brand={querySelector:()=>img,toggleAttribute:(k,yes)=>yes?attrs.add(k):attrs.delete(k)};
-  bindBrand(brand);assert.equal(attrs.size,0);
-  img.complete=true;img.naturalWidth=320;events.load();assert.ok(attrs.has('data-qy-art-ready'));
-  img.naturalWidth=0;events.error();assert.equal(attrs.size,0);
+test('brand uses the existing font wordmark without image loading',()=>{
+  const brand=read('index.html').match(/<button id="brand-home"[\s\S]*?<\/button>/)[0];
+  assert.match(brand,/<span class="app-brand-wordmark"[^>]*>青雲問道<\/span>/);
+  assert.doesNotMatch(brand,/<picture|<img|<source/);
+  assert.doesNotMatch(read('cultivation/shared-navigation.js'),/data-qy-art-ready/);
 });
-test('one global rail uses existing orientation artwork and preserves disabled features',()=>{
+test('one global rail has no image decoration and preserves disabled features',()=>{
   const index=read('index.html'),css=read('styles/scene-art-shell.css'),main=read('main.js');
   assert.equal((index.match(/id="bottom-nav"/g)||[]).length,1);
   assert.equal((index.match(/id="nav-grid"/g)||[]).length,1);
-  for(const asset of ['brand-landscape','brand-portrait','dock-landscape','dock-portrait']){
-    assert.ok(index.includes(asset+'.webp')||css.includes(asset+'.webp'));
-    assert.ok(fs.existsSync(path.join(__dirname,'..','public','assets','interface',asset+'.webp')));
-  }
-  assert.match(css,/background-size:contain!important/);assert.match(css,/@media\(orientation:portrait\)/);
+  assert.doesNotMatch(css,/assets\/interface\/(?:brand|dock)-|qy-dock-art|data-qy-art-ready/);
+  assert.match(css,/background-image:none!important/);
   assert.match(main,/import\('\.\/cultivation\/shared-navigation\.js'\)/);
   assert.match(main,/QA_COOP_DUNGEON_ENABLED = false/);assert.match(main,/QA_WEAPON_SYSTEM_ENABLED = false/);
   assert.match(index,/onclick="returnToImmortalHome\(\)"/);
