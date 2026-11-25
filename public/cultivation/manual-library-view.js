@@ -5,6 +5,16 @@ import {manualAnticipation} from './manual-anticipation.js';
 
 export function filterOwnedManuals(state, filter='all') {
   const owned=(state?.library||[]).filter(book=>book?.owned===true);
+  if(Array.isArray(state?.weaponIds)){
+    const equipped=new Set(state.weaponIds.filter(Boolean));
+    const realms=globalThis.QAManuals?.REALMS?.map(realm=>realm.name)
+      ||['煉氣','築基','金丹','元嬰','化神','煉虛','合體','渡劫','真仙'];
+    const realmRank=book=>realms.indexOf(book.tierRealm);
+    // Stable ties retain the original server catalog order; equipped slots are peers.
+    owned.sort((a,b)=>Number(equipped.has(b.id))-Number(equipped.has(a.id))
+      ||(Number(b.level)||0)-(Number(a.level)||0)
+      ||realmRank(b)-realmRank(a));
+  }
   return ['sword','body','spell','arcane'].includes(filter)
     ?owned.filter(book=>book.school===filter):owned;
 }
