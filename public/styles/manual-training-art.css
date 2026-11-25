@@ -91,8 +91,8 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
   background:#003f4a;color:#ffe4a7;border:1px solid #bd9e60;font-size:14px;
 }
 #manual-training-root .manual-book-grid{
-  display:grid;grid-template-columns:none;grid-template-rows:1fr;grid-auto-flow:column;
-  grid-auto-columns:clamp(160px,18cqw,220px);gap:clamp(10px,1.2cqw,16px);align-items:stretch;
+  display:grid;grid-template-columns:none;grid-template-rows:auto;grid-auto-flow:column;
+  grid-auto-columns:clamp(160px,18cqw,220px);gap:clamp(10px,1.2cqw,16px);align-items:start;
   width:100%;min-width:0;padding:10px 10px 14px;
   overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
   scroll-snap-type:x proximity;scroll-padding-inline:10px;
@@ -103,12 +103,12 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
 #manual-training-root .manual-book-grid::-webkit-scrollbar{height:6px}
 #manual-training-root .manual-book-grid::-webkit-scrollbar-track{background:#003b49;border-radius:6px}
 #manual-training-root .manual-book-grid::-webkit-scrollbar-thumb{background:#d8b86c;border-radius:6px}
-#manual-training-root .manual-book-grid>.manual-book{scroll-snap-align:start;scroll-margin-inline:10px}
+#manual-training-root .manual-book-grid>.manual-book{scroll-snap-align:start;scroll-margin-inline:10px;align-self:start;min-width:0}
 #manual-training-root .manual-book{
   background:none;border:0;border-radius:15px;overflow:visible;box-shadow:none;
 }
 #manual-training-root .manual-art-card.manual-library-choice{
-  position:relative;display:block;container-type:inline-size;aspect-ratio:1047/1501;min-height:0;width:100%;height:auto;
+  position:relative;display:block;container-type:inline-size;aspect-ratio:1047/1501!important;min-height:0!important;max-height:none!important;width:100%;height:auto!important;box-sizing:border-box;
   padding:0;border:0;background:url('../assets/training/art-ui/weapon-card.webp') center/100% 100% no-repeat;
   box-shadow:none;border-radius:15px;transition:filter .15s;
 }
@@ -121,6 +121,7 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
 }
 #manual-training-root .manual-art-card-picture .manual-weapon-art{
   width:100%;max-width:none;height:100%;aspect-ratio:auto;border:0;border-radius:0;box-shadow:none;background-color:transparent;
+  background-size:contain!important;background-position:center!important;
 }
 /* Text is centered inside the actual name, gold badge and level plaque areas.
    Size labels from their own card so a horizontal swipe never changes alignment. */
@@ -337,3 +338,20 @@ body:has(#page-training.manual-training-active.active-page)>main{padding:0!impor
   #manual-training-root .manual-weapon-slot-actions button{min-height:0;font-size:clamp(11px,1.9cqw,16px)}
 }
 @media(prefers-reduced-motion:reduce){#manual-training-root .manual-art-card{transition:none}}
+
+/* Landscape shares the portrait card artwork ratio. Let the shelf grow in
+   height rather than flattening the cards to fit the viewport. */
+@media (orientation:landscape){
+  #manual-training-root .manual-library .manual-book-grid{
+    grid-auto-columns:clamp(160px, calc((100cqw - 104px) / 5.5), 240px);
+    grid-template-rows:auto;align-items:start;box-sizing:border-box;
+    padding-block:12px 18px;
+  }
+  #manual-training-root .manual-library .manual-book-grid>.manual-book{
+    height:auto;min-height:0;max-height:none;align-self:start;
+  }
+  #manual-training-root .manual-library .manual-book-top.manual-library-choice.manual-art-card{
+    height:auto!important;aspect-ratio:1047/1501!important;min-height:0!important;max-height:none!important;
+  }
+  #manual-training-root .manual-weapons .manual-weapon-grid{gap:clamp(10px,1.5cqh,18px)}
+}
