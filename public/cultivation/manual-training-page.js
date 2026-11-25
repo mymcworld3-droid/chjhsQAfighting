@@ -89,7 +89,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-art-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261125-exact-card-geometry-v12';
+    link.id='manual-training-art-style';link.href='/styles/manual-training-art.css?v=20261125-fill-shelf-height-v13';
     document.head.append(link);
   }
   if(!document.getElementById('scene-art-shell-style')){
