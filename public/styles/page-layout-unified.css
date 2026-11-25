@@ -2,7 +2,7 @@
    battle overlays and the sign-in screen retain their own viewport geometry. */
 body.xianxia-theme main { min-width: 0; }
 body.xianxia-theme:has(#login-screen:not(.hidden)) main { padding-bottom: 0; }
-body.xianxia-theme #login-screen:not(.hidden) { min-height: calc(100dvh - 92px); }
+body.xianxia-theme #login-screen:not(.hidden) { min-height: calc(100dvh - var(--app-header-space,92px)); }
 body.xianxia-theme main > .page-section { box-sizing: border-box; min-width: 0; }
 body.xianxia-theme :is(#page-home,#page-store,#page-rank,#page-settings,#page-history,#page-admin) {
   width: min(100%, 1180px);

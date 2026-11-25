@@ -4,20 +4,30 @@ body.ui-cleanup {
   --quiet-line:rgba(210,185,137,.16);
   --quiet-accent-line:rgba(210,175,105,.44);
   --ui-panel-radius:12px;
+  --app-header-height:42px;
+  --app-header-space:calc(var(--app-header-height) + env(safe-area-inset-top,0px) + 6px);
 }
 body.ui-cleanup::before {
   background:linear-gradient(110deg,rgba(16,17,16,.94),rgba(22,22,18,.91)),var(--xq-scene-art) center/cover!important;
   filter:saturate(.35)!important;
 }
+/* Single-line global masthead. Match its actual height with main's reserved space. */
 body.ui-cleanup > header {
-  min-height:64px;padding-block:10px;
+  box-sizing:border-box;min-height:calc(var(--app-header-height) + env(safe-area-inset-top,0px));
+  height:calc(var(--app-header-height) + env(safe-area-inset-top,0px));
+  padding-block:calc(2px + env(safe-area-inset-top,0px)) 2px;
+  gap:12px;
   background:rgba(21,21,18,.96)!important;box-shadow:none!important;
 }
-body.ui-cleanup .xianxia-brand {font-size:18px;gap:10px}
-body.ui-cleanup .xianxia-seal {width:30px;height:34px;font-size:21px;outline:none;border-color:#a78b53;border-radius:3px;color:#d0b579}
-body.ui-cleanup .xianxia-brand small {font-size:8px;letter-spacing:.14em;color:#9f998b}
-body.ui-cleanup #user-info {background:transparent!important;border:0!important;color:#b9b19f!important;font-size:12px;font-weight:400;padding:4px 0}
-body.ui-cleanup > main {padding-top:84px;padding-bottom:84px}
+body.ui-cleanup > header .xianxia-brand {font-size:16px;line-height:1.2;gap:7px;margin:0;flex:none;white-space:nowrap}
+body.ui-cleanup > header #brand-home {min-height:36px;gap:7px}
+body.ui-cleanup > header .xianxia-seal {width:23px;height:25px;font-size:16px;line-height:1;outline:none;border-color:#a78b53;border-radius:3px;color:#d0b579}
+body.ui-cleanup > header .xianxia-brand small {display:none}
+body.ui-cleanup > header > div {min-width:0;max-width:55%;gap:6px;justify-content:flex-end}
+body.ui-cleanup #user-info {background:transparent!important;border:0!important;color:#b9b19f!important;font-size:12px;font-weight:400;padding:2px 0}
+body.ui-cleanup > header #user-info {min-width:0;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;gap:5px;line-height:1.2;display:block}
+body.ui-cleanup > header #user-info i {margin-inline-end:3px}
+body.ui-cleanup > main {padding-top:var(--app-header-space);padding-bottom:84px}
 body.ui-cleanup #page-home {max-width:1112px;padding-inline:24px}
 body.ui-cleanup #page-home > .xianxia-page-heading {
   display:flex;align-items:center;margin:0 0 22px;padding:0;border:0!important;background:transparent!important;
@@ -130,12 +140,12 @@ body.ui-cleanup #page-store>.sticky {border-radius:8px;background:#23221c!import
 body.ui-cleanup #page-settings>.glass-panel {border-color:var(--quiet-line)!important}
 body.ui-cleanup #page-training .training-subtabs-v3 {box-shadow:none!important}
 @media(max-width:700px) {
-  body.ui-cleanup>header {min-height:56px;padding:8px 16px}
-  body.ui-cleanup .xianxia-brand {font-size:16px}
-  body.ui-cleanup .xianxia-brand small {display:none}
-  body.ui-cleanup .xianxia-seal {width:27px;height:30px;font-size:19px}
-  body.ui-cleanup #user-info {font-size:10px;max-width:118px}
-  body.ui-cleanup>main {padding-top:72px;padding-bottom:80px}
+  body.ui-cleanup {--app-header-height:40px}
+  body.ui-cleanup>header {padding-inline:max(10px,env(safe-area-inset-left,0px)) max(10px,env(safe-area-inset-right,0px))}
+  body.ui-cleanup > header .xianxia-brand {font-size:15px;gap:6px}
+  body.ui-cleanup > header .xianxia-seal {width:21px;height:23px;font-size:15px}
+  body.ui-cleanup #user-info {font-size:11px}
+  body.ui-cleanup>main {padding-bottom:80px}
   body.ui-cleanup #page-home {padding-inline:16px}
   body.ui-cleanup #page-home>.xianxia-page-heading {display:none}
   body.ui-cleanup #page-home .xianxia-page-heading>div {gap:12px}
