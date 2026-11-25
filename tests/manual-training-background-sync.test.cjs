@@ -25,7 +25,7 @@ function fixture(){
    setCurrentTacticalManualState:(snapshot,user)=>serverUpdates.push({snapshot,user}),
    dispatchEvent:event=>events.push(event)
  };
- const context=vm.createContext({globalThis:{QAManuals:catalog},window,getMainUser:()=>uid,
+ const context=vm.createContext({globalThis:{QAManuals:catalog},window,getMainUser:()=>({uid}),
    CustomEvent:class{constructor(type,options){this.type=type;this.detail=options.detail;}}});
  vm.runInContext(source,context);
  const evaluate=script=>vm.runInContext(script,context);
