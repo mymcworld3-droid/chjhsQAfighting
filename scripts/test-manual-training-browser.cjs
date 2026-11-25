@@ -24,7 +24,9 @@ async function main(){
   register(app,{resolve:()=>({db}),verify:async()=> 'u1'});
   app.get('/test',(_,res)=>res.type('html').send(
     '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head>'+
-    '<body><div id="nav-grid"></div><main id="page-training" class="active-page"></main>'+
+    '<body style="margin:0;height:100dvh"><div id="nav-grid"></div>'+
+    '<main style="height:calc(100dvh - 64px);padding:0 0 84px;box-sizing:border-box;overflow-y:auto">'+
+    '<div id="page-training" class="active-page"></div></main>'+
     '<script type="module" src="/cultivation/manual-training-page.js"></script></body></html>'
   ));
   app.use(express.static(path.join(__dirname,'../public')));
@@ -158,9 +160,15 @@ async function main(){
     await page.locator('[data-manual-picker]').waitFor();
     assert.equal(await page.locator('[data-manual-weapon-dialog]').evaluate(node=>node.open),true);
     assert.equal(await page.locator('[data-manual-pick-weapon="sword-wind"]').isDisabled(),true);
+    const equippedSaved=page.waitForResponse(response=>
+      response.url().endsWith('/api/tactical/manuals/loadout')&&
+      response.request().method()==='POST');
     await page.locator('[data-manual-pick-weapon="body-rock"]').click();
-    await page.waitForFunction(()=>document.querySelector('[data-manual-status]')?.textContent==='武器裝備已儲存。');
     assert.equal(await page.locator('[data-manual-slot="1"] .manual-weapon-slot-info strong').innerText(),'玄嶽圖騰');
+    assert.equal(await page.locator('[data-manual-refresh]').isDisabled(),false);
+    assert.equal(await page.locator('[data-manual-pick-slot="0"]').isDisabled(),false);
+    assert.doesNotMatch(await page.locator('[data-manual-status]').innerText(),/正在保存|武器裝備已儲存/);
+    await equippedSaved;
     assert.equal(await page.locator('[data-manual-status]').evaluate(node=>getComputedStyle(node).position),'fixed');
     const equipped=db.records.get(service.MANUALS+'/u1');
     assert.deepEqual(equipped.weaponIds,['sword-wind','body-rock']);
@@ -171,12 +179,20 @@ async function main(){
     const record=db.records.get(service.MANUALS+'/u1');
     assert.deepEqual(record.equipped,['wind-slash','rock-fist']);
     // A normal solo player can remove and restore equipment without losing XP.
+    const removeSaved=page.waitForResponse(response=>
+      response.url().endsWith('/api/tactical/manuals/loadout')&&
+      response.request().method()==='POST');
     await page.locator('[data-manual-remove-weapon="1"]').click();
     await page.waitForFunction(()=>document.querySelector('[data-manual-slot="1"] .manual-weapon-slot-info strong')?.textContent==='尚未裝備武器');
+    await removeSaved;
     assert.equal(db.records.get(service.MANUALS+'/u1').books['body-rock'].exp,40);
     await page.locator('[data-manual-pick-slot="1"]').click();
+    const restoredSaved=page.waitForResponse(response=>
+      response.url().endsWith('/api/tactical/manuals/loadout')&&
+      response.request().method()==='POST');
     await page.locator('[data-manual-pick-weapon="body-rock"]').click();
     await page.waitForFunction(()=>document.querySelector('[data-manual-slot="1"] .manual-weapon-slot-info strong')?.textContent==='玄嶽圖騰');
+    await restoredSaved;
     assert.equal(await page.locator('[data-manual-slot="0"] .manual-weapon-skill').count(),3);
     // Upgrading the original sword keeps both weapon artwork nodes stable.
     await library.locator('[data-manual-book="sword-wind"] .manual-library-choice').click();
@@ -202,20 +218,29 @@ async function main(){
       const sizes=await page.locator(selector).evaluate(node=>({scroll:node.scrollWidth,client:node.clientWidth}));
       assert(sizes.scroll<=sizes.client+3,selector+' must fit mobile width: '+JSON.stringify(sizes));
     }
-    // Realistic viewport budget: keep both primary sections above the fixed navigation.
-    for(const [width,height,budget] of [[393,680,530],[393,852,702],[1180,820,670],[844,390,250]]){
+    // The main branch uses one exact card ratio in both orientations.
+    // Only the collection shelf grows to occupy unused vertical space.
+    for(const [width,height] of [[393,680],[393,852],[768,1100],[1180,820],[1440,900],[844,390]]){
       await page.setViewportSize({width,height});
+      await page.evaluate(()=>{document.querySelector('main').scrollTop=0;});
       const geometry=await page.evaluate(()=>{
-        const library=document.querySelector('.manual-library').getBoundingClientRect();
+        const main=document.querySelector('main');
+        const card=document.querySelector('.manual-native-card').getBoundingClientRect();
         const equipment=document.querySelector('.manual-weapons').getBoundingClientRect();
-        return {span:Math.max(library.bottom,equipment.bottom)-Math.min(library.top,equipment.top),
+        const library=document.querySelector('.manual-library').getBoundingClientRect();
+        const bottom=main.getBoundingClientRect().bottom-parseFloat(getComputedStyle(main).paddingBottom);
+        return {ratio:card.width/card.height,cardWidth:card.width,cardHeight:card.height,
+          gap:bottom-Math.max(equipment.bottom,library.bottom),
           rows:[...document.querySelectorAll('.manual-weapon-slot')].map(slot=>{
             const picker=slot.querySelector('.manual-weapon-slot-picker').getBoundingClientRect();
             const skills=slot.querySelector('.manual-weapon-skill-list').getBoundingClientRect();
             return Math.min(picker.bottom,skills.bottom)>Math.max(picker.top,skills.top);
           })};
       });
-      assert(geometry.span<=budget,'compact collection and both slots fit height budget '+width+'x'+height+': '+geometry.span);
+      assert(Math.abs(geometry.ratio-1047/1501)<.006,
+        'card aspect must match in portrait and landscape: '+width+'x'+height+': '+JSON.stringify(geometry));
+      assert(geometry.gap<16,
+        'collection leaves no empty space below: '+width+'x'+height+': '+geometry.gap);
       assert(geometry.rows.every(Boolean),'equipment and skills share the same row');
     }
     await page.setViewportSize({width:1180,height:820});
@@ -230,7 +255,7 @@ async function main(){
     await page.evaluate(()=>window.dispatchEvent(new CustomEvent('xiuxian:manual-battle-settled',{detail:{uid:'u1'}})));
     assert.equal((await refreshed).ok(),true);
     assert.deepEqual(errors,[]);
-    console.log('Two peer weapon slots, modal training, top-layer rewards, HD artwork, free equip/unequip, Lv.5 unlock and responsive layout verified.');
+    console.log('Native armory, consistent card ratios, full-height collection and nonblocking weapon saves verified.');
   }finally{
     if(browser)await browser.close();
     await new Promise(resolve=>server.close(resolve));
