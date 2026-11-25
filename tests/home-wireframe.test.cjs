@@ -130,23 +130,22 @@ test('landscape uses realm, central scene and CTA, and two right shortcut column
   assert.match(html,/id="btn-home-free-quiz"[^>]+onclick="startFreeQuizFlow\(\)"/);
 });
 
-test('portrait side panels are anchored in the circle row instead of covering the entire viewport',()=>{
-  const portrait=css.slice(css.lastIndexOf('@media (orientation: portrait)'));
-  assert.match(portrait,/"left emblem right"/);
-  assert.match(portrait,/"practice practice practice"/);
-  assert.match(portrait,/"realm realm realm"/);
-  assert.match(css,/@media \(orientation:portrait\)\{\s*body.ui-cleanup #page-home \.home-trial-column\{display:contents\}/);
-  assert.match(portrait,/position:relative!important/);
-  assert.match(portrait,/transform:none!important/);
-  assert.match(portrait,/top:auto!important/);
-  assert.match(portrait,/grid-area:left!important/);
-  assert.match(portrait,/grid-area:right!important/);
-  assert.match(portrait,/width:100%!important/);
-  assert.match(portrait,/@media \(orientation:portrait\) and \(max-width:390px\)/);
-  assert.doesNotMatch(css,/position:fixed!important/);
-  // Buttons stay inside home-layout; no DOM hoisting into document.body.
+test('portrait anchors all four diamonds at the upper right of the profile, not beside the trial scene',()=>{
+  const v6=css.slice(css.indexOf('/* v6: Screenshot-informed placement.'));
+  const portrait=v6.slice(v6.indexOf('@media (orientation:portrait){'));
+  assert.ok(v6.length>1000);
+  assert.match(portrait,/"stones stones stones"\s*"realm left right"\s*"daily daily daily"/);
+  assert.match(portrait,/"emblem emblem emblem"\s*"practice practice practice"\s*"wide wide wide"/);
+  assert.ok(portrait.indexOf('"realm left right"')<portrait.indexOf('"emblem emblem emblem"'),
+    'the command cluster must appear before the central trial scene');
+  assert.match(portrait,/\.home-profile-column\{\s*display:contents!important/);
+  assert.match(portrait,/\.home-shortcut-column>\.home-wireframe-rail\.is-left\{\s*grid-area:left!important/);
+  assert.match(portrait,/\.home-shortcut-column>\.home-wireframe-rail\.is-right\{\s*grid-area:right!important/);
+  assert.match(portrait,/\.home-practice\{\s*grid-area:practice!important/);
+  assert.match(portrait,/\.home-shortcut-column>\.home-wide-actions\{\s*grid-area:wide!important/);
+  assert.doesNotMatch(v6,/position:fixed!important/);
   assert.doesNotMatch(js,/document\.body\.appendChild\(homeLeftRail\)|home-rails-portal|syncPortraitRails/);
-  assert.match(html,/home-wireframe\.css\?v=20261125-home-diamond-wide-v4/);
+  assert.match(html,/home-wireframe\.css\?v=20261125-upper-right-diamonds-v6/);
 });
 
 test('daily progress, records and independent correction host follow realm in both orientations',()=>{
@@ -202,7 +201,7 @@ test('landscape groups currency first, a two-by-two diamond grid, and two daily 
   assert.match(html,/<output id="home-spirit-stones"[^>]*aria-live="polite"/);
   assert.match(html,/<strong id="home-spirit-stones-count">—<\/strong>/);
   assert.match(html,/class="home-wide-actions" role="group"/);
-  assert.match(css,/grid-template-areas:"stones stones" "left right" "wide wide"!important/);
+  assert.match(css,/"stones stones"\s*"left right"\s*"\. \."\s*"wide wide"!important/);
   assert.match(css,/grid-template-rows:repeat\(2,minmax\(0,1fr\)\)!important/);
   const left=html.match(/<aside class="home-wireframe-rail is-left"[^>]*>([\s\S]*?)<\/aside>/)?.[1];
   const right=html.match(/<aside class="home-wireframe-rail is-right"[^>]*>([\s\S]*?)<\/aside>/)?.[1];
@@ -211,9 +210,9 @@ test('landscape groups currency first, a two-by-two diamond grid, and two daily 
   assert.deepEqual([...left.matchAll(/data-home-action="([^"]+)"/g)].map(m=>m[1]),['path','rank']);
   assert.deepEqual([...right.matchAll(/data-home-action="([^"]+)"/g)].map(m=>m[1]),['quest','store']);
   assert.deepEqual([...wide.matchAll(/data-home-action="([^"]+)"/g)].map(m=>m[1]),['meditation','learning']);
-  assert.match(css,/"stones stones stones"\s*"left emblem right"\s*"wide wide wide"\s*"practice practice practice"/);
+  assert.match(css,/"stones stones stones"\s*"realm left right"[\s\S]*"emblem emblem emblem"\s*"practice practice practice"\s*"wide wide wide"/);
   assert.match(css,/#page-home \.home-shortcut-column>\.home-spirit-stones\{\s*grid-area:stones!important/);
-  assert.match(html,/home-wireframe\.css\?v=20261125-home-stones-grid-v5/);
+  assert.match(html,/home-wireframe\.css\?v=20261125-upper-right-diamonds-v6/);
   assert.match(read('public/main.js'),/modulePath === '\.\/cultivation\/home-wireframe\.js'/);
 });
 
