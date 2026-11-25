@@ -58,3 +58,44 @@ test('weapon dungeon guidance no longer demands clearing guards first',()=>{
   assert(!info.tactics.some(s=>s.includes('免疫傷害')||s.includes('沉眠')));
   assert.equal(info.totemDamageMultiplier,1.15);
 });
+
+test('defeating only the lord ends weapon dungeon immediately with guards still alive',()=>{
+  const s=make(['rock-fist']);
+  s.blocks=[];
+  Object.assign(s.actors[0],{x:6,y:3,stamina:10,answered:0,correct:0});
+  lord(s).hp=1;
+  R.prepareIntents(s);
+  const original=guards(s).length;
+  assert(original>=8);
+  const win=R.apply(s,'u1',{type:'manual',skillId:'rock-fist',x:6,y:2},NOW);
+  assert.equal(win.status,'finished');
+  assert.equal(win.winner,'player');
+  assert.equal(win.finishReason,'objective');
+  assert.equal(win.objective.completed,true);
+  assert.equal(guards(win).length,original);
+  assert.equal(win.actors[0].answered,0);
+  assert(win.events.some(event=>event.text.includes('領主已被擊敗')));
+});
+test('old weapon dungeon snapshots using elimination objective also end on lord defeat',()=>{
+  const s=make(['rock-fist']);
+  s.objective={type:'elimination',completed:false};
+  s.blocks=[];
+  Object.assign(s.actors[0],{x:6,y:3,stamina:10,answered:0});
+  lord(s).hp=1;
+  R.prepareIntents(s);
+  const win=R.apply(s,'u1',{type:'manual',skillId:'rock-fist',x:6,y:2},NOW);
+  assert.equal(win.status,'finished');
+  assert(guards(win).length>0);
+});
+test('ordinary elimination still requires all enemies and the regular answer gate',()=>{
+  const s=make(['rock-fist']);
+  s.weaponDungeon=null;
+  s.objective={type:'elimination',completed:false};
+  s.blocks=[];
+  Object.assign(s.actors[0],{x:6,y:3,stamina:10,answered:0});
+  lord(s).hp=1;
+  R.prepareIntents(s);
+  const after=R.apply(s,'u1',{type:'manual',skillId:'rock-fist',x:6,y:2},NOW);
+  assert.equal(after.status,'active');
+  assert.equal(after.objective.completed,false);
+});
