@@ -40,8 +40,7 @@
     <link id="soulbound-page-style" rel="stylesheet" href="styles/soulbound-draw.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Load only the four logo glyphs; the rest of the game keeps its existing font. -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yuji+Boku&amp;text=%E9%9D%92%E9%9B%B2%E5%95%8F%E9%81%93&amp;display=swap">
+    <link rel="preload" as="image" href="assets/qingyun-wordmark.svg">
 <!-- 🔥 新增 MathJax 設定檔，強制識別 $ 符號 -->
     <style id="golden-core-access-guard-style">
 /* The current 修行 page is governed by its normal page-section visibility.
@@ -638,7 +637,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <link rel="stylesheet" href="styles/page-layout-unified.css?v=20261125-compact-header-v1">
     <link rel="stylesheet" href="styles/content-format.css?v=20261005-xianxia-font1">
     <link rel="stylesheet" href="styles/xianxia-quiet.css?v=20261016-portrait-hide-full-header1">
-    <link rel="stylesheet" href="styles/interface-cleanup.css?v=20261125-brush-wordmark-v5">
+    <link rel="stylesheet" href="styles/interface-cleanup.css?v=20261125-fixed-wordmark-v6">
     <link rel="stylesheet" href="styles/interface-cleanup-pages.css?v=20261115-field-ink">
     <link rel="stylesheet" href="styles/home-wireframe.css?v=20261116-free-quiz-v1">
     <link rel="stylesheet" href="styles/learning-page.css?v=20261115-vocabulary-starry-button-space">
@@ -663,7 +662,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <header class="app-corner-header fixed top-0 left-0 w-full z-40">
         <h1 class="xianxia-brand">
             <button id="brand-home" type="button" class="xianxia-brand-home" onclick="returnToImmortalHome()" aria-label="青雲問道，返回宗門" title="返回宗門">
-                <span class="app-brand-wordmark"><span data-i18n="app_name">青雲問道</span></span>
+                <img class="app-brand-wordmark" src="assets/qingyun-wordmark.svg" alt="青雲問道" width="424" height="108" decoding="async" draggable="false">
             </button>
         </h1>
 

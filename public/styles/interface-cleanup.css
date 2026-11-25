@@ -30,21 +30,19 @@ html body.ui-cleanup > header.app-corner-header #brand-home {
   width:max-content;padding:0 12px 1px 10px;gap:0;
   border:0;border-radius:0;background:transparent!important;color:#f1dfb7;
   box-shadow:none!important;
-  font-family:"Yuji Boku","Kaiti TC","STKaiti","KaiTi","DFKai-SB",var(--xq-serif,serif);
-  font-size:26px;font-weight:400;letter-spacing:.045em;line-height:1.1;
-  font-synthesis:none;text-shadow:0 1px 2px #000b;
+  line-height:1;
   pointer-events:auto;
 }
 html body.ui-cleanup > header.app-corner-header #brand-home::after {content:none}
 html body.ui-cleanup > header.app-corner-header #brand-home > .app-brand-wordmark {
-  position:relative;display:block;white-space:nowrap;
+  display:block;flex:none;width:109px;height:auto;max-width:none;object-fit:contain;
 }
 /* No underline or ornament: the brush lettering itself is the mark. */
 html body.ui-cleanup > header.app-corner-header #brand-home:focus-visible {
   outline:1px solid #e7cd96;outline-offset:-2px;border-radius:3px;
 }
 @media(hover:hover) and (pointer:fine){
-  html body.ui-cleanup > header.app-corner-header #brand-home:hover {color:#fff0cb}
+  html body.ui-cleanup > header.app-corner-header #brand-home:hover > .app-brand-wordmark {filter:brightness(1.08)}
 }
 body.ui-cleanup > header .xianxia-brand small {display:none}
 html body.ui-cleanup > header.app-corner-header > div {
@@ -178,7 +176,8 @@ body.ui-cleanup #page-training .training-subtabs-v3 {box-shadow:none!important}
 @media(max-width:700px) {
   body.ui-cleanup {--app-header-height:31px}
   html body.ui-cleanup > header.app-corner-header .xianxia-brand {font-size:14px}
-  html body.ui-cleanup > header.app-corner-header #brand-home {font-size:23px;padding:0 10px 1px 8px}
+  html body.ui-cleanup > header.app-corner-header #brand-home {padding:0 10px 1px 8px}
+  html body.ui-cleanup > header.app-corner-header #brand-home > .app-brand-wordmark {width:96px}
   body.ui-cleanup #user-info {font-size:10px}
   body.ui-cleanup>main {padding-bottom:80px}
   body.ui-cleanup #page-home {padding-inline:16px}
