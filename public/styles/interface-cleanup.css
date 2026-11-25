@@ -1,5 +1,13 @@
 /* Review branch: a clear home hierarchy and one quiet shared navigation rail.
    Gameplay surfaces and their positioning keep their existing styles. */
+/* MasaFont (正風毛筆), SIL OFL 1.1, based on Kouzan Gyousho.
+   Only the four masthead characters use this face. */
+@font-face {
+  font-family:"Qingyun Masa";
+  src:url("https://cdn.jsdelivr.net/gh/max32002/masafont@2.1/webfont/MasaFont-Regular.woff2") format("woff2");
+  font-weight:400;font-style:normal;font-display:swap;
+  unicode-range:U+9752,U+96F2,U+554F,U+9053;
+}
 body.ui-cleanup {
   --quiet-line:rgba(210,185,137,.16);
   --quiet-accent-line:rgba(210,175,105,.44);
@@ -35,7 +43,10 @@ html body.ui-cleanup > header.app-corner-header #brand-home {
 }
 html body.ui-cleanup > header.app-corner-header #brand-home::after {content:none}
 html body.ui-cleanup > header.app-corner-header #brand-home > .app-brand-wordmark {
-  display:block;flex:none;width:109px;height:auto;max-width:none;object-fit:contain;
+  display:block;flex:none;white-space:nowrap;
+  font-family:"Qingyun Masa","Kaiti TC","STKaiti","DFKai-SB",serif!important;
+  font-size:26px;font-weight:400;line-height:1.12;letter-spacing:.04em;
+  color:#f1dfb7;text-shadow:none;font-synthesis:none;
 }
 /* No underline or ornament: the brush lettering itself is the mark. */
 html body.ui-cleanup > header.app-corner-header #brand-home:focus-visible {
@@ -177,7 +188,7 @@ body.ui-cleanup #page-training .training-subtabs-v3 {box-shadow:none!important}
   body.ui-cleanup {--app-header-height:31px}
   html body.ui-cleanup > header.app-corner-header .xianxia-brand {font-size:14px}
   html body.ui-cleanup > header.app-corner-header #brand-home {padding:0 10px 1px 8px}
-  html body.ui-cleanup > header.app-corner-header #brand-home > .app-brand-wordmark {width:96px}
+  html body.ui-cleanup > header.app-corner-header #brand-home > .app-brand-wordmark {font-size:23px}
   body.ui-cleanup #user-info {font-size:10px}
   body.ui-cleanup>main {padding-bottom:80px}
   body.ui-cleanup #page-home {padding-inline:16px}
