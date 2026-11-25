@@ -13,6 +13,8 @@ const META_CACHE = 'xiuxian-static-meta-v1';
 const ITEM_IMAGE_CACHE = 'xiuxian-item-images-v1';
 const ITEM_IMAGE_CACHE_MAX = 400;
 const KEY = '__xiuxian_asset_sha';
+const TRAINING_ASSET_REVISION = 'weapon-order-geometry-v12';
+const trainingAssets = new Set(['cultivation/manual-training-page.js','cultivation/manual-library-view.js','cultivation/manual-rules.js','styles/manual-training-art.css','main.js']);
 let currentManifest = null;
 let manifestCheck = null;
 const pendingAssets = new Map();
@@ -75,6 +77,7 @@ function cacheKey(path, version) {
   const key = new URL(path, SCOPE);
   key.search = '';
   key.searchParams.set(KEY, version);
+  if (trainingAssets.has(path)) key.searchParams.set('__training_revision', TRAINING_ASSET_REVISION);
   return key.href;
 }
 
@@ -210,7 +213,7 @@ self.addEventListener('fetch', event => {
     return;
   }
   event.respondWith((async () => {
-    const manifest = await loadManifest(false);
+    const manifest = await loadManifest(path === 'cultivation/manual-training-page.js');
     if (!manifest?.files?.[path]) return fetch(event.request);
     return serveStatic(event.request, path, manifest);
   })());

@@ -90,13 +90,25 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
       <span>${fmt(upgrade.gold)} 靈石</span></button>`
     :maxed?'':`<span class="manual-hero-max-level">Lv.10 後需以武器技能擊殺靈獸累積 EXP</span>`;
 
-  const carousel=weaponMode?`<div class="manual-native-carousel">
-    <button type="button" data-manual-browse-weapon="prev" aria-label="上一件武器" ${owned.length<2?'disabled':''}>‹</button>
-    <strong>${esc(book.name)}</strong>
-    <button type="button" data-manual-browse-weapon="next" aria-label="下一件武器" ${owned.length<2?'disabled':''}>›</button>
-    <span class="manual-native-dots" aria-label="第 ${owned.indexOf(book)+1} 件，共 ${owned.length} 件">${owned.map(item=>'<i class="'+(item.id===book.id?'is-current':'')+'"></i>').join('')}</span>
-  </div>`:'';
-  const masteryMarkup=`<div class="manual-hero-details">
+  return {
+    bookId:book.id,
+    html:`<section class="manual-hero manual-hero--${book.school} manual-hero--tier-${visual.stage} ${near?'manual-hero--approaching':''} ${anticipation?.status==='imminent'?'manual-hero--imminent':''}"
+      data-manual-visual-stage="${visual.stage}" data-manual-visual-level="${visual.level}"
+      aria-label="武器修煉焦點">
+      ${heading}
+      <div class="manual-hero-main">
+        <div class="manual-hero-art-stage">
+          <div class="manual-hero-art-halo" aria-hidden="true"></div>
+          <div class="manual-hero-qi-ring" aria-hidden="true">
+            <span class="manual-hero-qi-orbit"></span>
+            <span class="manual-hero-qi-seal"></span>
+          </div>
+          <span class="manual-hero-qi-spark manual-hero-qi-spark--one" aria-hidden="true"></span>
+          <span class="manual-hero-qi-spark manual-hero-qi-spark--two" aria-hidden="true"></span>
+          ${coverMarkup}
+          <span class="manual-hero-art-caption manual-hero-tier-badge is-tier-${tierClass}">${esc(book.tierRealm||'煉氣')}${weaponMode?'武器':'功法'}</span>
+        </div>
+        <div class="manual-hero-details">
           <div class="manual-hero-title-row">
             <div><span class="manual-hero-eyebrow">${weaponMode?'正在查看的武器':'正在查看的功法'}</span>
               <h3>${esc(book.name)}</h3></div>
@@ -119,46 +131,13 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
           <div class="manual-hero-actions">${action}
             ${upgrade?'<span class="manual-hero-tip">靈石只可升至 Lv.10；之後需戰鬥修煉</span>':''}
           </div>
-        </div>`;
-  const skillMarkup=renderManualSkillDetail(book,selectedSkillId,{esc,skillArt,descriptionWithDamage,attack,
-    gold:state.gold,equipped,moveIdOf,weaponIds:weaponMode?state.weaponIds:null});
-  return {
-    bookId:book.id,
-    html:`<section class="manual-hero${weaponMode?' manual-native-hero':''} manual-hero--${book.school} manual-hero--tier-${visual.stage} ${near?'manual-hero--approaching':''} ${anticipation?.status==='imminent'?'manual-hero--imminent':''}"
-      data-ritual-weapon="${esc(book.id)}" data-manual-visual-stage="${visual.stage}" data-manual-visual-level="${visual.level}"
-      aria-label="武器修煉焦點">
-      ${heading}
-      <div class="manual-hero-main">
-        <div class="manual-hero-art-stage">
-          <div class="manual-hero-art-halo" aria-hidden="true"></div>
-          <div class="manual-hero-qi-ring" aria-hidden="true">
-            <span class="manual-hero-qi-orbit"></span>
-            <span class="manual-hero-qi-seal"></span>
-          </div>
-          <span class="manual-hero-qi-spark manual-hero-qi-spark--one" aria-hidden="true"></span>
-          <span class="manual-hero-qi-spark manual-hero-qi-spark--two" aria-hidden="true"></span>
-          ${weaponMode?`<svg class="manual-ritual-seal" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
-            <circle cx="120" cy="120" r="116" class="manual-ritual-outline"/>
-            <circle cx="120" cy="120" r="108" class="manual-ritual-outline"/>
-            <g class="manual-ritual-wheel">
-              <circle cx="120" cy="120" r="112" class="manual-ritual-ticks" pathLength="360" stroke-dasharray="1 5"/>
-              <circle cx="120" cy="120" r="102" class="manual-ritual-orbit" stroke-dasharray="56 9 14 12"/>
-              ${Array.from({length:8},(_,i)=>`<path class="manual-ritual-jewel" d="M120 2 l4 6 -4 6 -4 -6 Z" transform="rotate(${i*45} 120 120)"/>`).join('')}
-            </g>
-            <path class="manual-ritual-cross" d="M120 0v14m0 212v14M0 120h14m212 0h14"/>
-          </svg><span class="manual-ritual-energy" aria-hidden="true"></span>`:''}
-          ${coverMarkup}
-          <span class="manual-hero-art-caption manual-hero-tier-badge is-tier-${tierClass}">${esc(book.tierRealm||'煉氣')}${weaponMode?'武器':'功法'}</span>
         </div>
-        ${carousel}
-        ${weaponMode?'':masteryMarkup}
       </div>
       <div class="manual-hero-path">
-        ${weaponMode?'<div class="manual-native-skills-panel">':''}
-        <div class="manual-hero-path-heading"><strong>${weaponMode?'武器技能（'+book.skills.filter(s=>s.unlocked).length+'/'+book.skills.length+'）':'三招修行路線'}</strong><small>點選招式查看詳細效果與強化選項</small></div>
+        <div class="manual-hero-path-heading"><strong>三招修行路線</strong><small>點選招式查看詳細效果與強化選項</small></div>
         <div class="manual-hero-path-grid">${steps}</div>
-        ${weaponMode?'</div>':''}
-        ${weaponMode?`<div class="manual-shared-detail" data-manual-detail-mode="${skillMarkup?'skill':'mastery'}">${skillMarkup||masteryMarkup}</div>`:skillMarkup}
+        ${renderManualSkillDetail(book,selectedSkillId,{esc,skillArt,descriptionWithDamage,attack,
+          gold:state.gold,equipped,moveIdOf,weaponIds:weaponMode?state.weaponIds:null})}
       </div>
     </section>`
   };

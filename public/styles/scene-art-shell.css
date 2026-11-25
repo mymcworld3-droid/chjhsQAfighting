@@ -1,0 +1,34 @@
+/* Independent header and dock, from the supplied portrait/landscape overlays.
+   Keep the two pages on the same geometry without stretching the brand. */
+:is(.home-art-scene,#manual-training-root){
+  --scene-dock-height:clamp(70px,9.6vw,150px);
+}
+:is(.home-art-scene,#manual-training-root) .scene-art-brand{
+  position:fixed;z-index:46;left:0;top:env(safe-area-inset-top);
+  display:block;width:clamp(135px,20vw,350px);aspect-ratio:350/125;
+  margin:0;padding:0;border:0;box-shadow:none;
+  background:url('../assets/interface/brand-landscape.webp') left top/contain no-repeat;
+}
+:is(.home-art-scene,#manual-training-root) .scene-art-dock{
+  position:fixed;z-index:45;left:50%;bottom:env(safe-area-inset-bottom);transform:translateX(-50%);
+  width:100%;height:var(--scene-dock-height);min-height:0;
+  margin:0;padding:clamp(22px,2.4vw,34px) 11% 0;
+  background:url('../assets/interface/dock-landscape.webp') center bottom/100% 100% no-repeat;
+}
+:is(.home-art-scene,#manual-training-root) .scene-art-dock>div{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;height:100%;
+}
+@media(orientation:portrait){
+  :is(.home-art-scene,#manual-training-root){--scene-dock-height:110px}
+  :is(.home-art-scene,#manual-training-root) .scene-art-brand{
+    width:clamp(125px,32vw,320px);aspect-ratio:320/125;
+    background-image:url('../assets/interface/brand-portrait.webp');
+  }
+  :is(.home-art-scene,#manual-training-root) .scene-art-dock{
+    padding:40px 3.5% 3px;background-image:url('../assets/interface/dock-portrait.webp');
+  }
+}
+@media(max-width:600px) and (orientation:portrait){
+  :is(.home-art-scene,#manual-training-root){--scene-dock-height:95px}
+  :is(.home-art-scene,#manual-training-root) .scene-art-dock{padding:35px 4% 2px}
+}

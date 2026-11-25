@@ -324,6 +324,18 @@
     return !!skill&&!!s.books[skill.manualId]
       &&levelForExp(s.books[skill.manualId].exp)>=skill.levelRequired;
   }
+  // Shared server/client ordering for the weapon shelf and training navigation.
+  // Compare each priority independently, not the equipped slot number or EXP.
+  function sortedOwnedWeapons(library,weaponIds){
+    const equipped=new Set((Array.isArray(weaponIds)?weaponIds:[]).filter(Boolean));
+    const realmRank=book=>REALMS.findIndex(realm=>realm.name===book.tierRealm);
+    return (Array.isArray(library)?library:[]).filter(book=>book?.owned===true)
+      .map((book,index)=>({book,index}))
+      .sort((a,b)=>Number(equipped.has(b.book.id))-Number(equipped.has(a.book.id))
+        ||(Number(b.book.level)||0)-(Number(a.book.level)||0)
+        ||realmRank(b.book)-realmRank(a.book)||a.index-b.index)
+      .map(row=>row.book);
+  }
   function publicState(raw,realmScore=0){
     const s=weaponize(raw),weaponIds=s.weaponIds,score=normalizedScore(realmScore);
     // Do not expose undiscovered scriptures to the cultivation UI.
@@ -342,5 +354,5 @@
     return Object.values(state.books).reduce((sum,row)=>sum+levelForExp(row.exp),0);
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_GOLD_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,weaponize,unlocked,manualAttackBonus,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_GOLD_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,weaponize,unlocked,manualAttackBonus,sortedOwnedWeapons,publicState,starterFor});
 });

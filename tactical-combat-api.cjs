@@ -216,7 +216,8 @@ function manualResponse(record,user,gold=Rules.num(user.stats?.gold)){
   // The existing PvE progression automatically determines the NEXT stage.
   // Reveal only this numeric stage, not room seeds or selectable difficulties.
   const trialStage=Math.max(1,Math.min(1000000,Rules.num(user.tacticalTrialV1?.stage)||1));
-  return {...Manuals.publicState(record,TrainingAccess.score(user)),gold,battleAttack,trialStage};
+  const state=Manuals.publicState(record,TrainingAccess.score(user));
+  return {...state,library:Manuals.sortedOwnedWeapons(state.library,state.weaponIds),gold,battleAttack,trialStage};
 }
 async function manualsState(db,uid){
   const [player,record]=await Promise.all([db.collection('users').doc(uid).get(),db.collection(MANUALS).doc(uid).get()]);

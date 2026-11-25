@@ -334,9 +334,9 @@ test('the original sword manuals retain their save slots while shared techniques
   assert.deepEqual(state.equipped,['wind-slash','wind-step','wind-thousand','sky-pierce','sky-cloud','sky-sever']);
   assert.deepEqual(Catalog.normalize(db.records.get(ref)).equipped,['wind-slash','wind-step','sky-sever']);
   assert.deepEqual(state.library.map(book=>[book.name,...book.skills.map(skill=>skill.name)]),[
+    ['八方天劍','流風斬','交叉劍斬','八方合劍'],
     ['流風靈劍','流風斬','突進橫斬','遠線破擊'],
-    ['御靈飛劍','流風斬','召劍','遠線破擊'],
-    ['八方天劍','流風斬','交叉劍斬','八方合劍']
+    ['御靈飛劍','流風斬','召劍','遠線破擊']
   ]);
   await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['wind-slash','sky-pierce']}),/相同招式/);
   await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['wind-thousand','flight-break']}),/相同招式/);
@@ -697,7 +697,14 @@ test('gold upgrades stop at Lv10, but PvE mastery XP still reaches Lv20',async()
   assert.equal(bookRecord(db).books['sword-wind'].exp,4180);
 });
 
-test('weapon training hides the optional beast realm EXP reference', () => {
-  const source=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/cultivation/manual-training-page.js'),'utf8');
-  require('node:assert/strict').doesNotMatch(source, /<details class="manual-xp-reference"/);
+test('weapon collection API uses equipped, level, then realm priority and re-sorts after unequip',async()=>{
+  const db=database();
+  const levels={'sword-wind':16,'sword-flight':10,'sword-sky':13,'body-rock':10,'body-dragon':18,'body-tiger':10};
+  const books=Object.fromEntries(Object.entries(levels).map(([id,level])=>[id,{exp:Catalog.totalExpForLevel(level)}]));
+  db.records.set(API.MANUALS+'/u1',{version:3,books,weaponIds:['body-rock','body-dragon']});
+  const state=await API.manualsState(db,'u1');
+  assert.deepEqual(state.library.map(book=>book.id),['body-dragon','body-rock','sword-wind','sword-sky','sword-flight','body-tiger']);
+  const next=await API.updateLoadout(db,'u1',{index:0,weaponId:null});
+  assert.deepEqual(next.library.map(book=>book.id),['body-dragon','sword-wind','sword-sky','sword-flight','body-tiger','body-rock']);
+  assert.deepEqual(Catalog.sortedOwnedWeapons(next.library,next.weaponIds).map(book=>book.id),next.library.map(book=>book.id));
 });

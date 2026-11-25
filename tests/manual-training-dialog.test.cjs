@@ -16,51 +16,63 @@ function fixture(){
   vm.runInContext("current={library:[{id:'sword-wind',name:'流風靈劍',owned:true,skills:[]}],loadouts:[],weaponIds:['sword-wind',null]}",context);
   return {context,run:code=>vm.runInContext(code,context)};
 }
-test('weapon details are a hidden page section, never a modal',()=>{
+test('owned weapon training appears only inside an initially closed dialog',()=>{
   const f=fixture(),html=f.run('markup()');
-  assert.match(html,/<section id="manual-training-screen"[^>]*hidden>/);
-  assert.match(html,/manual-hero/);assert.match(html,/expedition/);
-  assert.doesNotMatch(html,/<dialog id="manual-training/);
-  assert.match(html,/equipment/);
-  const active=f.run('trainingDialogOpen=true;markup()');
-  assert.doesNotMatch(active,/<section id="manual-training-screen"[^>]*hidden>/);
+  const dialog=html.match(/<dialog\b[\s\S]*?<\/dialog>/)?.[0];
+  assert(dialog);assert.match(dialog,/manual-hero/);assert.match(dialog,/expedition/);
+  assert.doesNotMatch(dialog,/\bopen(?:\s|=|>)/);
+  assert.doesNotMatch(html.replace(dialog,''),/manual-hero|expedition|manual-xp-reference/);
+  assert.match(html.replace(dialog,''),/equipment/);
 });
-test('opening replaces the collection, refresh does not reset scrolling, and return restores position and focus',()=>{
+test('opening is modal, data refresh keeps it open, and close restores collection focus',()=>{
   const f=fixture();
-  f.run(`let focused=0,active=false;
-    const page={scrollTop:180,scrollLeft:0},main={scrollTop:220,scrollLeft:0};
-    const screen={hidden:true,querySelector:()=>({focus(){}})};
-    root={parentElement:page,querySelector:selector=>selector==='[data-manual-training-screen]'?screen:null,querySelectorAll:()=>[],
-      closest:selector=>selector==='main'?main:page,
-      classList:{contains:()=>active,toggle(name,value){active=value;}}};
+  f.run(`let opened=0,closed=0,focused=0;
+    const dialog={open:false,showModal(){this.open=true;opened++;},close(){this.open=false;closed++;}};
+    root={querySelector:()=>dialog,closest:()=>({})};
     trainingDialogTrigger={isConnected:true,focus(){focused++;}};
-    trainingDialogOpen=true;syncTrainingDialog();`);
-  assert.equal(f.run('active'),true);assert.equal(f.run('screen.hidden'),false);
-  assert.equal(f.run('page.scrollTop'),0);assert.equal(f.run('main.scrollTop'),0);
-  f.run('main.scrollTop=42;syncTrainingDialog()');assert.equal(f.run('main.scrollTop'),42);
+    trainingDialogOpen=true;syncTrainingDialog();syncTrainingDialog();`);
+  assert.equal(f.run('opened'),1);
   f.run('closeTrainingDialog()');
-  assert.equal(f.run('active'),false);assert.equal(f.run('screen.hidden'),true);
-  assert.equal(f.run('page.scrollTop'),180);assert.equal(f.run('main.scrollTop'),220);
-  assert.equal(f.run('focused'),1);
-});
-test('departure clears detail state without focusing a hidden page',()=>{
-  const f=fixture();
-  f.run(`let active=false,focused=0;
-    const screen={hidden:true,querySelector:()=>null};
-    root={querySelector:selector=>selector==='[data-manual-training-screen]'?screen:null,querySelectorAll:()=>[],closest:()=>null,
-      classList:{contains:()=>active,toggle(name,value){active=value;}}};
-    trainingDialogTrigger={isConnected:true,focus(){focused++;}};
-    trainingDialogOpen=true;syncTrainingDialog();closeTrainingDialog({restoreFocus:false});`);
+  assert.equal(f.run('closed'),1);assert.equal(f.run('focused'),1);
   assert.equal(f.run('trainingDialogOpen'),false);
-  assert.equal(f.run('screen.hidden'),true);assert.equal(f.run('focused'),0);
 });
-test('reward overlay remains in the shared page layer',()=>{
+test('cancel and page departure dismiss the dialog without leaving it above other pages',()=>{
+  const f=fixture();
+  f.run(`let prevented=false;
+    const dialog={open:false,showModal(){this.open=true;},close(){this.open=false;}};
+    root={querySelector:()=>dialog,closest:()=>null};
+    trainingDialogOpen=true;syncTrainingDialog();dialog.oncancel({preventDefault(){prevented=true;}});`);
+  assert.equal(f.run('prevented'),true);assert.equal(f.run('dialog.open'),false);
+  f.run('trainingDialogOpen=true;syncTrainingDialog();closeTrainingDialog({restoreFocus:false});');
+  assert.equal(f.run('trainingDialogOpen'),false);
+});
+test('upgrade celebrations share the native training dialog top layer and return outside when it closes',()=>{
   const f=fixture();
   f.run(`
     setTimeout=()=>1;clearTimeout=()=>{};renderManualCelebration=()=>'<button>繼續修煉</button>';
     const host={parentElement:null,replaceChildren(){this.innerHTML='';}};
-    root={closest:()=>({}),append(node){node.parentElement=this;},querySelector:()=>host};
-    trainingDialogOpen=true;showManualCelebration({kind:'manual-upgrade'});`);
-  assert.equal(f.run('host.parentElement===root'),true);
+    const dialog={open:true,append(node){node.parentElement=this;}};
+    root={closest:()=>({}),append(node){node.parentElement=this;},querySelector(selector){
+      return selector==='[data-manual-celebration-host]'?host:dialog;
+    }};
+    showManualCelebration({kind:'manual-upgrade'});
+  `);
+  assert.equal(f.run('host.parentElement===dialog'),true);
   assert.match(f.run('host.innerHTML'),/繼續修煉/);
+  f.run("dialog.open=false;showManualCelebration({kind:'discovery'});");
+  assert.equal(f.run('host.parentElement===root'),true);
+});
+
+test('weapon picker opens once, closes without page movement, and restores its equipment button',()=>{
+  const f=fixture();
+  f.run(`
+    let opened=0,closed=0,focusOptions=null;
+    const picker={open:false,showModal(){this.open=true;opened++;},close(){this.open=false;closed++;}};
+    root={querySelector:()=>picker,closest:()=>({})};
+    pickerDialogTrigger={isConnected:true,focus(options){focusOptions=options;}};
+    pickerSlot=1;syncWeaponPicker();syncWeaponPicker();closeWeaponPicker();
+  `);
+  assert.equal(f.run('opened'),1);assert.equal(f.run('closed'),1);
+  assert.equal(f.run('pickerSlot'),null);
+  assert.equal(f.run('focusOptions.preventScroll'),true);
 });

@@ -101,25 +101,28 @@ test('PvP waiting may change weapons, but an active duel and assembled dungeon f
   assert.deepEqual(valid.weaponIds,[null,null]);
 });
 
-test('stale or completed multiplayer dungeon cannot permanently lock weapon equipment',async()=>{
+test('expired, completed or stale dungeon memberships do not block weapon changes',async()=>{
   const db=database();await API.chooseSchool(db,'u1',{school:'sword'});
-  const roomId='dungeon-ghost-member-001',key='dungeonRooms/'+roomId;
+  const roomId='dungeon-stale-lock-001',key='dungeonRooms/'+roomId;
   db.records.set('dungeonRoomMemberships/u1',{roomId});
-  const active={mode:'dungeon',version:1,status:'assembled',expiresAtMs:Date.now()+3600000,members:{u1:{}}};
-  const inactive=[
+  const active={mode:'dungeon',version:1,status:'assembled',expiresAtMs:Date.now()+3600000,members:{u1:{},u2:{}}};
+  for(const room of [
     {...active,expiresAtMs:Date.now()-1},
     {...active,bossEncounter:{status:'defeated'}},
-    {...active,status:'waiting'},
     {...active,status:'closed'},
-    {...active,members:{}},
+    {...active,members:{u2:{}}},
     {...active,expiresAtMs:undefined},
+    {...active,version:0},
     null
-  ];
-  for(const room of inactive){
+  ]){
     if(room)db.records.set(key,room);else db.records.delete(key);
-    assert.deepEqual((await API.updateLoadout(db,'u1',{index:0,weaponId:null})).weaponIds,[null,null]);
+    const result=await API.updateLoadout(db,'u1',{index:0,weaponId:null});
+    assert.deepEqual(result.weaponIds,[null,null]);
     await API.updateLoadout(db,'u1',{index:0,weaponId:'sword-wind'});
+    assert.equal(db.records.get('dungeonRoomMemberships/u1').roomId,roomId,
+      'retain reward recovery records and never disband another player');
   }
-  db.records.set(key,active);
+  db.records.set(key,{...active,bossEncounter:{status:'fighting'}});
   await assert.rejects(API.updateLoadout(db,'u1',{index:0,weaponId:null}),/多人副本進行中/);
+  assert.deepEqual((await API.manualsState(db,'u1')).weaponIds,['sword-wind',null]);
 });
