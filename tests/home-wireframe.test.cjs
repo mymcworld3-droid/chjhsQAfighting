@@ -196,3 +196,42 @@ test('the four secondary homepage actions are diamonds and meditation/learning a
   assert.match(css,/touch-action:manipulation/);
   assert.match(css,/prefers-reduced-motion:reduce/);
 });
+
+
+test('landscape groups currency first, a two-by-two diamond grid, and two daily wide actions',()=>{
+  assert.match(html,/<output id="home-spirit-stones"[^>]*aria-live="polite"/);
+  assert.match(html,/<strong id="home-spirit-stones-count">—<\/strong>/);
+  assert.match(html,/class="home-wide-actions" role="group"/);
+  assert.match(css,/grid-template-areas:"stones stones" "left right" "wide wide"!important/);
+  assert.match(css,/grid-template-rows:repeat\(2,minmax\(0,1fr\)\)!important/);
+  const left=html.match(/<aside class="home-wireframe-rail is-left"[^>]*>([\s\S]*?)<\/aside>/)?.[1];
+  const right=html.match(/<aside class="home-wireframe-rail is-right"[^>]*>([\s\S]*?)<\/aside>/)?.[1];
+  const wide=html.match(/<div class="home-wide-actions"[^>]*>([\s\S]*?)<\/div>/)?.[1];
+  assert.ok(left&&right&&wide);
+  assert.deepEqual([...left.matchAll(/data-home-action="([^"]+)"/g)].map(m=>m[1]),['path','rank']);
+  assert.deepEqual([...right.matchAll(/data-home-action="([^"]+)"/g)].map(m=>m[1]),['quest','store']);
+  assert.deepEqual([...wide.matchAll(/data-home-action="([^"]+)"/g)].map(m=>m[1]),['meditation','learning']);
+  assert.match(css,/"stones stones stones"\s*"left emblem right"\s*"wide wide wide"\s*"practice practice practice"/);
+  assert.match(css,/#page-home \.home-shortcut-column>\.home-spirit-stones\{\s*grid-area:stones!important/);
+  assert.match(html,/home-wireframe\.css\?v=20261125-home-stones-grid-v5/);
+  assert.match(read('public/main.js'),/modulePath === '\.\/cultivation\/home-wireframe\.js'/);
+});
+
+test('spirit-stone readout formats actual signed-in stats, tracks changes, and clears on account switch',()=>{
+  assert.match(js,/player\?\.stats\?\.gold/);
+  const amount={textContent:'—'},host={dataset:{}};
+  let player={uid:'u1',stats:{gold:5602}},user={uid:'u1'};
+  const document={readyState:'loading',addEventListener(){},
+    getElementById(id){return id==='home-spirit-stones-count'?amount:id==='home-spirit-stones'?host:null;}};
+  const context=vm.createContext({document,getMainUser:()=>user,
+    window:{getCurrentUserData:()=>player},globalThis:{QAHomeTrialEcology:{},QATactical:{}}});
+  vm.runInContext(js.replace(/^import .*$/gm,''),context);
+  const refresh=()=>vm.runInContext('refreshSpiritStones()',context);
+  refresh();assert.equal(amount.textContent,'5,602');assert.equal(host.dataset.balanceLoaded,'true');
+  player.stats.gold=0;refresh();assert.equal(amount.textContent,'0');
+  player.stats.gold=1234567;refresh();assert.equal(amount.textContent,'1,234,567');
+  user={uid:'u2'};refresh();assert.equal(amount.textContent,'—');assert.equal(host.dataset.balanceLoaded,'false');
+  player={uid:'u2',stats:{gold:84}};refresh();assert.equal(amount.textContent,'84');
+  user=null;refresh();assert.equal(amount.textContent,'—');
+  player={uid:'u2',stats:{}};user={uid:'u2'};refresh();assert.equal(amount.textContent,'—');
+});
