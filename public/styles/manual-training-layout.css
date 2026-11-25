@@ -831,3 +831,95 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
  #manual-training-root:not(.manual-detail-active) :is(.manual-native-card,.manual-native-card .manual-weapon-art,.manual-armory-exp::after,.manual-weapon-slot-actions button){transition:none!important;transform:none!important}
  #manual-training-root .manual-armory-sheen{animation:none!important;opacity:0}
 }
+
+/* Main-branch armory geometry. Keep the original CSS-drawn card artwork,
+   while giving portrait and landscape the same physical width:height ratio. */
+#manual-training-root:not(.manual-detail-active){
+  --mt-fixed-card-width:clamp(91px,calc((100% - 30px)/6),164px);
+  --mt-fixed-card-height:calc(var(--mt-fixed-card-width) * 1.433619866);
+  display:flex;
+  flex-direction:column;
+  min-height:var(--mt-fill-height,0px);
+}
+#manual-training-root:not(.manual-detail-active)>.manual-library{
+  display:flex;
+  flex-direction:column;
+  flex:1 0 auto;
+  min-height:0;
+}
+#manual-training-root:not(.manual-detail-active)>.manual-weapons{
+  flex:0 0 auto;
+  margin-bottom:0;
+}
+#manual-training-root:not(.manual-detail-active)>.manual-library .manual-library-heading{
+  flex:0 0 auto;
+}
+#manual-training-root:not(.manual-detail-active)>.manual-library .manual-book-grid{
+  display:grid;
+  flex:1 0 auto;
+  min-height:calc(var(--mt-fixed-card-height) + 14px);
+  grid-template-columns:none;
+  grid-template-rows:var(--mt-fixed-card-height);
+  grid-auto-rows:var(--mt-fixed-card-height);
+  grid-auto-columns:var(--mt-fixed-card-width);
+  grid-auto-flow:column;
+  align-content:center;
+  align-items:start;
+  justify-content:start;
+  overflow-x:auto;
+  overflow-y:hidden;
+}
+#manual-training-root:not(.manual-detail-active) .manual-book{
+  width:var(--mt-fixed-card-width);
+  height:var(--mt-fixed-card-height);
+  min-width:var(--mt-fixed-card-width);
+  max-width:var(--mt-fixed-card-width);
+  min-height:var(--mt-fixed-card-height);
+  max-height:var(--mt-fixed-card-height);
+  align-self:start;
+  justify-self:start;
+}
+#manual-training-root:not(.manual-detail-active) .manual-native-card.manual-library-choice{
+  display:grid;
+  width:100%;
+  height:100%;
+  min-height:0;
+  aspect-ratio:1047/1501;
+  box-sizing:border-box;
+}
+#manual-training-root:not(.manual-detail-active)>:is(.manual-toast:empty,.manual-celebration-host:empty){
+  display:none;
+}
+@media(orientation:portrait){
+  #manual-training-root:not(.manual-detail-active){
+    --mt-fixed-card-width:clamp(88px,calc((100% - 18px)/3),150px);
+  }
+}
+@media(orientation:portrait) and (min-width:650px){
+  #manual-training-root:not(.manual-detail-active){
+    --mt-fixed-card-width:clamp(100px,calc((100% - 24px)/4),176px);
+  }
+}
+@media(orientation:portrait) and (min-height:780px) and (min-width:360px){
+  #manual-training-root:not(.manual-detail-active)>.manual-library .manual-book-grid:has(>.manual-book:nth-child(4)){
+    grid-template-rows:repeat(2,var(--mt-fixed-card-height));
+  }
+}
+@media(orientation:landscape) and (min-width:1000px){
+  #manual-training-root:not(.manual-detail-active){
+    --mt-fixed-card-width:clamp(140px,calc((100% - 40px)/6),190px);
+  }
+}
+@media(orientation:landscape) and (max-height:520px) and (min-width:720px){
+  #manual-training-root:not(.manual-detail-active):has(.manual-weapons){
+    --mt-fixed-card-width:clamp(82px,calc((100% - 18px)/3),124px);
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    align-items:stretch;
+  }
+  #manual-training-root:not(.manual-detail-active)>.manual-library,
+  #manual-training-root:not(.manual-detail-active)>.manual-weapons{
+    margin-bottom:0;
+    height:100%;
+  }
+}
