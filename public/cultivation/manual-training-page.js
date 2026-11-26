@@ -96,7 +96,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-layout-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261126-qingyun-disc-v1';
+    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261126-transparent-weapons-v2';
     document.head.append(link);
   }
   return root;

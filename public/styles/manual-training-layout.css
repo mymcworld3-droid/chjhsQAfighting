@@ -935,15 +935,15 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
  pointer-events:none;user-select:none;object-fit:contain;
 }
 #manual-training-root .manual-native-hero .manual-ritual-disc{z-index:0;transform:none;animation:none}
-#manual-training-root .manual-native-hero .manual-ritual-seal{z-index:3;filter:none}
+#manual-training-root .manual-native-hero .manual-ritual-seal{z-index:1;filter:none}
 #manual-training-root .manual-native-hero .manual-ritual-wheel{
  display:block;width:100%;height:100%;object-fit:contain;transform-origin:50% 50%;
  animation:manual-ritual-spin 48s linear infinite;
 }
 #manual-training-root .manual-training-screen .manual-native-hero .manual-hero-cover{
- width:62%;height:auto;max-width:none;aspect-ratio:1;z-index:1;
+ width:62%;height:auto;max-width:none;aspect-ratio:1;z-index:2;
  background-size:contain!important;background-color:transparent;
- border-radius:50%;box-shadow:none;filter:drop-shadow(0 5px 7px #120c08aa);
+ border-radius:0;box-shadow:none;filter:drop-shadow(0 5px 7px #120c08aa);
  animation:none;transform:none;
 }
 #manual-training-root .manual-native-hero .manual-hero-art-caption{
