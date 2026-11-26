@@ -5,7 +5,7 @@
 規格： [new-weapons-v1.md](new-weapons-v1.md)
 盤點基準：`a3c4109a80822154521d6faf5747d8b03899358f`（Refresh static module versions for weapon balance update）。
 
-## 階段 0：部分完成，尚未驗收
+## 階段 0：完成（CI 基準已確認）
 
 - 已核對主分支武器目錄、平衡文件、戰鬥預覽、渲染與動畫入口、即時副本技能入口、武器掉落入口。
 - 已保存完整 V1 規格（提交 `3618fbf86aab364054b08f2734f01d1240a6d0ad`）。
@@ -43,7 +43,7 @@
 
 | 階段 | 狀態 |
 | --- | --- |
-| 0 專案盤點 | 部分完成：待測試基準及補充盤點 |
+| 0 專案盤點 | 完成：3106/3106 |
 | 1 共用技能預覽 | 未開始 |
 | 2 共用幾何與位移工具 | 未開始 |
 | 3 武器資料與特殊物件 | 未開始 |
@@ -62,3 +62,7 @@
 ## 2026-11-27 第二次盤點：CI 基準與過時預期修正
 
 已透過 main push 的 Actions REST 紀錄查到原盤點 SHA 的 [回歸測試](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45833068849)：3106 項，3103 通過、3 失敗，靜態版本檢查通過。三項均為既有合法武器倍率調整後的測試預期：四步連推碰撞 90→120（200×0.6）；突進橫斬首領 HP 3440→3520（4000−200×2.4）；翻摔首領 HP 3700→3400（4000−200×3）。修正對應三個預期，不改戰鬥規則、不移除命中次數或位移驗證。此提交的完整回歸仍須核對；第 0 階段尚待確認。
+
+## 第 0 階段最終驗收
+
+基準提交 `7e34a934b44cb0dcab7c7e91d2f4ca6e0ae0242a` 的 [GitHub Actions](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45913936579) 已完成：3106 項全部通過、0 失敗、0 跳過，module-versions 檢查亦通過；Pages 部署成功。先前記錄的未執行與失敗狀態為歷史紀錄，現以此提交為穩定開發基準。已補查武器修煉頁（manual-training-page.js）、動畫事件（tactical-animation.js 的 plan 按事件 ID/revision 建立時間軸，damage/move/cast）、即時副本前端（dungeon-map-view.js），後續須接入共用預覽規則。無法本地 checkout 不再阻礙基準確認，使用 CI 驗收。
