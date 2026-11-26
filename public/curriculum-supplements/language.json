@@ -19190,6 +19190,2712 @@
           ]
         }
       ]
+    },
+    {
+      "bookId": "hanlin-108-chinese-2",
+      "grade": "高中一年級",
+      "subject": "國文",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第二學期",
+      "bookLabel": "國文第2冊",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://website.hle.com.tw/market/sh/%E6%95%99%E5%AD%B8%E7%B0%A1%E4%BB%8B/111%E7%B0%A1%E4%BB%8B%E6%9C%AC%E5%B0%81%E9%9D%A2%E6%99%AE%E9%AB%98%E5%9C%8B%E6%96%87.pdf",
+          "type": "publisher-companion-index",
+          "provider": "翰林出版",
+          "accessedAt": "2026-11-26",
+          "section": "五冊選文表（印刷頁4–7）",
+          "reviewMethod": "structured-text",
+          "limitations": "111教學簡介的課本選文欄；原頁截圖無法取得，未核對115學年度修訂本。課名標點統一，合選篇目保留於同一課。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "翰林",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。依111官方教學簡介文字層的課本選文欄整理；沒有把補充教材文選欄混入正課。學年度及現行修訂版待核，PDF影像未取得。",
+      "units": [
+        {
+          "unit": "第1課 岳陽樓記",
+          "details": [
+            "第1課 岳陽樓記｜字詞、句法與語用",
+            "第1課 岳陽樓記｜文體與寫作手法",
+            "第1課 岳陽樓記｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第1課 岳陽樓記｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第1課 岳陽樓記｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "記敘抒情與議論、憂樂觀；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第1課 岳陽樓記｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "記敘抒情與議論、憂樂觀；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第2課 現代詩選（錯誤、愛的辯證（一題二式））",
+          "details": [
+            "第2課 現代詩選（錯誤、愛的辯證（一題二式））｜字詞、句法與語用",
+            "第2課 現代詩選（錯誤、愛的辯證（一題二式））｜文體與寫作手法",
+            "第2課 現代詩選（錯誤、愛的辯證（一題二式））｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第2課 現代詩選（錯誤、愛的辯證（一題二式））｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第2課 現代詩選（錯誤、愛的辯證（一題二式））｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "新詩意象、節奏、比較；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第2課 現代詩選（錯誤、愛的辯證（一題二式））｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "新詩意象、節奏、比較；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第3課 晚遊六橋待月記",
+          "details": [
+            "第3課 晚遊六橋待月記｜字詞、句法與語用",
+            "第3課 晚遊六橋待月記｜文體與寫作手法",
+            "第3課 晚遊六橋待月記｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第3課 晚遊六橋待月記｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第3課 晚遊六橋待月記｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "晚明小品與景物描寫；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第3課 晚遊六橋待月記｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "晚明小品與景物描寫；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第4課 青春並不消逝，只是遷徙",
+          "details": [
+            "第4課 青春並不消逝，只是遷徙｜字詞、句法與語用",
+            "第4課 青春並不消逝，只是遷徙｜文體與寫作手法",
+            "第4課 青春並不消逝，只是遷徙｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第4課 青春並不消逝，只是遷徙｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第4課 青春並不消逝，只是遷徙｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生命態度與散文；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第4課 青春並不消逝，只是遷徙｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生命態度與散文；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第5課 鹿港乘桴記",
+          "details": [
+            "第5課 鹿港乘桴記｜字詞、句法與語用",
+            "第5課 鹿港乘桴記｜文體與寫作手法",
+            "第5課 鹿港乘桴記｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第5課 鹿港乘桴記｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第5課 鹿港乘桴記｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣地方書寫與遊記；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第5課 鹿港乘桴記｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣地方書寫與遊記；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第6課 高尾山紀事",
+          "details": [
+            "第6課 高尾山紀事｜字詞、句法與語用",
+            "第6課 高尾山紀事｜文體與寫作手法",
+            "第6課 高尾山紀事｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第6課 高尾山紀事｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第6課 高尾山紀事｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日本文化信仰與生態觀察；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第6課 高尾山紀事｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日本文化信仰與生態觀察；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第7課 古詩選（詠史其一、宣州謝朓樓餞別校書叔雲）",
+          "details": [
+            "第7課 古詩選（詠史其一、宣州謝朓樓餞別校書叔雲）｜字詞、句法與語用",
+            "第7課 古詩選（詠史其一、宣州謝朓樓餞別校書叔雲）｜文體與寫作手法",
+            "第7課 古詩選（詠史其一、宣州謝朓樓餞別校書叔雲）｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第7課 古詩選（詠史其一、宣州謝朓樓餞別校書叔雲）｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第7課 古詩選（詠史其一、宣州謝朓樓餞別校書叔雲）｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詠史、古詩與抒情；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第7課 古詩選（詠史其一、宣州謝朓樓餞別校書叔雲）｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詠史、古詩與抒情；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第8課 一桿「稱仔」",
+          "details": [
+            "第8課 一桿「稱仔」｜字詞、句法與語用",
+            "第8課 一桿「稱仔」｜文體與寫作手法",
+            "第8課 一桿「稱仔」｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第8課 一桿「稱仔」｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第8課 一桿「稱仔」｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人物、敘事及社會批判；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第8課 一桿「稱仔」｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人物、敘事及社會批判；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第9課 出師表",
+          "details": [
+            "第9課 出師表｜字詞、句法與語用",
+            "第9課 出師表｜文體與寫作手法",
+            "第9課 出師表｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第9課 出師表｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第9課 出師表｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "表文、陳情與論述；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第9課 出師表｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "表文、陳情與論述；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第10課 雨神眷顧的平原",
+          "details": [
+            "第10課 雨神眷顧的平原｜字詞、句法與語用",
+            "第10課 雨神眷顧的平原｜文體與寫作手法",
+            "第10課 雨神眷顧的平原｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第10課 雨神眷顧的平原｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第10課 雨神眷顧的平原｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原鄉書寫與情感；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第10課 雨神眷顧的平原｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原鄉書寫與情感；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第11課 出走與回家",
+          "details": [
+            "第11課 出走與回家｜字詞、句法與語用",
+            "第11課 出走與回家｜文體與寫作手法",
+            "第11課 出走與回家｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第11課 出走與回家｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第11課 出走與回家｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "國際理解與生命經驗；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第11課 出走與回家｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "國際理解與生命經驗；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "文教 論語選：群己與處世、領導與管理",
+          "details": [
+            "文教 論語選：群己與處世、領導與管理｜字詞、句法與語用",
+            "文教 論語選：群己與處世、領導與管理｜文體與寫作手法",
+            "文教 論語選：群己與處世、領導與管理｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "文教 論語選：群己與處世、領導與管理｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "文教 論語選：群己與處世、領導與管理｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "儒家思想、人際倫理與治理；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "文教 論語選：群己與處世、領導與管理｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "儒家思想、人際倫理與治理；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "culture"
+        },
+        {
+          "unit": "自學 馬祖藍眼淚",
+          "details": [
+            "自學 馬祖藍眼淚｜字詞、句法與語用",
+            "自學 馬祖藍眼淚｜文體與寫作手法",
+            "自學 馬祖藍眼淚｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "自學 馬祖藍眼淚｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "自學 馬祖藍眼淚｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然景觀、地方文化與文本比較；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "自學 馬祖藍眼淚｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然景觀、地方文化與文本比較；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "self-study"
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-108-chinese-3",
+      "grade": "高中二年級",
+      "subject": "國文",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "國文第3冊",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://website.hle.com.tw/market/sh/%E6%95%99%E5%AD%B8%E7%B0%A1%E4%BB%8B/111%E7%B0%A1%E4%BB%8B%E6%9C%AC%E5%B0%81%E9%9D%A2%E6%99%AE%E9%AB%98%E5%9C%8B%E6%96%87.pdf",
+          "type": "publisher-companion-index",
+          "provider": "翰林出版",
+          "accessedAt": "2026-11-26",
+          "section": "五冊選文表（印刷頁4–7）",
+          "reviewMethod": "structured-text",
+          "limitations": "111教學簡介的課本選文欄；原頁截圖無法取得，未核對115學年度修訂本。課名標點統一，合選篇目保留於同一課。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "翰林",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。依111官方教學簡介文字層的課本選文欄整理；沒有把補充教材文選欄混入正課。學年度及現行修訂版待核，PDF影像未取得。",
+      "units": [
+        {
+          "unit": "第1課 燭之武退秦師",
+          "details": [
+            "第1課 燭之武退秦師｜字詞、句法與語用",
+            "第1課 燭之武退秦師｜文體與寫作手法",
+            "第1課 燭之武退秦師｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第1課 燭之武退秦師｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第1課 燭之武退秦師｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "左傳敘事、外交說辭及論證；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第1課 燭之武退秦師｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "左傳敘事、外交說辭及論證；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第2課 玉山去來",
+          "details": [
+            "第2課 玉山去來｜字詞、句法與語用",
+            "第2課 玉山去來｜文體與寫作手法",
+            "第2課 玉山去來｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第2課 玉山去來｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第2課 玉山去來｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然書寫、山岳與情感；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第2課 玉山去來｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然書寫、山岳與情感；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第3課 勞山道士",
+          "details": [
+            "第3課 勞山道士｜字詞、句法與語用",
+            "第3課 勞山道士｜文體與寫作手法",
+            "第3課 勞山道士｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第3課 勞山道士｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第3課 勞山道士｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "志怪小說、人物與寓意；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第3課 勞山道士｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "志怪小說、人物與寓意；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第4課 現代詩選（狼之獨步、雁）",
+          "details": [
+            "第4課 現代詩選（狼之獨步、雁）｜字詞、句法與語用",
+            "第4課 現代詩選（狼之獨步、雁）｜文體與寫作手法",
+            "第4課 現代詩選（狼之獨步、雁）｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第4課 現代詩選（狼之獨步、雁）｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第4課 現代詩選（狼之獨步、雁）｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "新詩、意象及比較；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第4課 現代詩選（狼之獨步、雁）｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "新詩、意象及比較；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第5課 先秦韻文選（詩經・蒹葭、楚辭・漁父）",
+          "details": [
+            "第5課 先秦韻文選（詩經・蒹葭、楚辭・漁父）｜字詞、句法與語用",
+            "第5課 先秦韻文選（詩經・蒹葭、楚辭・漁父）｜文體與寫作手法",
+            "第5課 先秦韻文選（詩經・蒹葭、楚辭・漁父）｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第5課 先秦韻文選（詩經・蒹葭、楚辭・漁父）｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第5課 先秦韻文選（詩經・蒹葭、楚辭・漁父）｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詩經楚辭、比興與象徵；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第5課 先秦韻文選（詩經・蒹葭、楚辭・漁父）｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詩經楚辭、比興與象徵；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第6課 赤壁賦",
+          "details": [
+            "第6課 赤壁賦｜字詞、句法與語用",
+            "第6課 赤壁賦｜文體與寫作手法",
+            "第6課 赤壁賦｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第6課 赤壁賦｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第6課 赤壁賦｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文賦、主客問答、情景理交融；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第6課 赤壁賦｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文賦、主客問答、情景理交融；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第7課 散戲",
+          "details": [
+            "第7課 散戲｜字詞、句法與語用",
+            "第7課 散戲｜文體與寫作手法",
+            "第7課 散戲｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第7課 散戲｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第7課 散戲｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人物、戲曲與地方文化；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第7課 散戲｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人物、戲曲與地方文化；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第8課 長照食堂",
+          "details": [
+            "第8課 長照食堂｜字詞、句法與語用",
+            "第8課 長照食堂｜文體與寫作手法",
+            "第8課 長照食堂｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第8課 長照食堂｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第8課 長照食堂｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "高齡、照護與敘事；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第8課 長照食堂｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "高齡、照護與敘事；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第9課 劉姥姥",
+          "details": [
+            "第9課 劉姥姥｜字詞、句法與語用",
+            "第9課 劉姥姥｜文體與寫作手法",
+            "第9課 劉姥姥｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第9課 劉姥姥｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第9課 劉姥姥｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說、人物對話與敘事；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第9課 劉姥姥｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說、人物對話與敘事；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第10課 映照你我的鏡",
+          "details": [
+            "第10課 映照你我的鏡｜字詞、句法與語用",
+            "第10課 映照你我的鏡｜文體與寫作手法",
+            "第10課 映照你我的鏡｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第10課 映照你我的鏡｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第10課 映照你我的鏡｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "移民工關懷、觀點與社會議題；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第10課 映照你我的鏡｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "移民工關懷、觀點與社會議題；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第11課 梵谷的向日葵",
+          "details": [
+            "第11課 梵谷的向日葵｜字詞、句法與語用",
+            "第11課 梵谷的向日葵｜文體與寫作手法",
+            "第11課 梵谷的向日葵｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第11課 梵谷的向日葵｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第11課 梵谷的向日葵｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "藝術評論與表達；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第11課 梵谷的向日葵｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "藝術評論與表達；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "文教 孟子選",
+          "details": [
+            "文教 孟子選｜字詞、句法與語用",
+            "文教 孟子選｜文體與寫作手法",
+            "文教 孟子選｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "文教 孟子選｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "文教 孟子選｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "孟子思想、倫理與論辯；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "文教 孟子選｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "孟子思想、倫理與論辯；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "culture"
+        },
+        {
+          "unit": "自學 廢墟裡的少年",
+          "details": [
+            "自學 廢墟裡的少年｜字詞、句法與語用",
+            "自學 廢墟裡的少年｜文體與寫作手法",
+            "自學 廢墟裡的少年｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "自學 廢墟裡的少年｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "自學 廢墟裡的少年｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "高風險家庭關懷、報導與社會議題；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "自學 廢墟裡的少年｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "高風險家庭關懷、報導與社會議題；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "self-study"
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-108-chinese-4",
+      "grade": "高中二年級",
+      "subject": "國文",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第二學期",
+      "bookLabel": "國文第4冊",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://website.hle.com.tw/market/sh/%E6%95%99%E5%AD%B8%E7%B0%A1%E4%BB%8B/111%E7%B0%A1%E4%BB%8B%E6%9C%AC%E5%B0%81%E9%9D%A2%E6%99%AE%E9%AB%98%E5%9C%8B%E6%96%87.pdf",
+          "type": "publisher-companion-index",
+          "provider": "翰林出版",
+          "accessedAt": "2026-11-26",
+          "section": "五冊選文表（印刷頁4–7）",
+          "reviewMethod": "structured-text",
+          "limitations": "111教學簡介的課本選文欄；原頁截圖無法取得，未核對115學年度修訂本。課名標點統一，合選篇目保留於同一課。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "翰林",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。依111官方教學簡介文字層的課本選文欄整理；沒有把補充教材文選欄混入正課。學年度及現行修訂版待核，PDF影像未取得。",
+      "units": [
+        {
+          "unit": "第1課 現代詩選（水之湄、孤獨）",
+          "details": [
+            "第1課 現代詩選（水之湄、孤獨）｜字詞、句法與語用",
+            "第1課 現代詩選（水之湄、孤獨）｜文體與寫作手法",
+            "第1課 現代詩選（水之湄、孤獨）｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第1課 現代詩選（水之湄、孤獨）｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第1課 現代詩選（水之湄、孤獨）｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "新詩意象與抒情比較；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第1課 現代詩選（水之湄、孤獨）｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "新詩意象與抒情比較；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第2課 唐宋詩選（石壕吏、寄黃幾復）",
+          "details": [
+            "第2課 唐宋詩選（石壕吏、寄黃幾復）｜字詞、句法與語用",
+            "第2課 唐宋詩選（石壕吏、寄黃幾復）｜文體與寫作手法",
+            "第2課 唐宋詩選（石壕吏、寄黃幾復）｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第2課 唐宋詩選（石壕吏、寄黃幾復）｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第2課 唐宋詩選（石壕吏、寄黃幾復）｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "敘事詩、抒情及詩體比較；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第2課 唐宋詩選（石壕吏、寄黃幾復）｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "敘事詩、抒情及詩體比較；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第3課 第九味",
+          "details": [
+            "第3課 第九味｜字詞、句法與語用",
+            "第3課 第九味｜文體與寫作手法",
+            "第3課 第九味｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第3課 第九味｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第3課 第九味｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食書寫與人生感懷；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第3課 第九味｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食書寫與人生感懷；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第4課 大同與小康",
+          "details": [
+            "第4課 大同與小康｜字詞、句法與語用",
+            "第4課 大同與小康｜文體與寫作手法",
+            "第4課 大同與小康｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第4課 大同與小康｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第4課 大同與小康｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "禮記、社會理想及政治倫理；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第4課 大同與小康｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "禮記、社會理想及政治倫理；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第5課 詞選（浪淘沙、破陣子・為陳同甫賦壯詞以寄之）",
+          "details": [
+            "第5課 詞選（浪淘沙、破陣子・為陳同甫賦壯詞以寄之）｜字詞、句法與語用",
+            "第5課 詞選（浪淘沙、破陣子・為陳同甫賦壯詞以寄之）｜文體與寫作手法",
+            "第5課 詞選（浪淘沙、破陣子・為陳同甫賦壯詞以寄之）｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第5課 詞選（浪淘沙、破陣子・為陳同甫賦壯詞以寄之）｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第5課 詞選（浪淘沙、破陣子・為陳同甫賦壯詞以寄之）｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詞體、情感與意象；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第5課 詞選（浪淘沙、破陣子・為陳同甫賦壯詞以寄之）｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詞體、情感與意象；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第6課 臺灣古典詩文選（離臺詩其一、畫菊自序）",
+          "details": [
+            "第6課 臺灣古典詩文選（離臺詩其一、畫菊自序）｜字詞、句法與語用",
+            "第6課 臺灣古典詩文選（離臺詩其一、畫菊自序）｜文體與寫作手法",
+            "第6課 臺灣古典詩文選（離臺詩其一、畫菊自序）｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第6課 臺灣古典詩文選（離臺詩其一、畫菊自序）｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第6課 臺灣古典詩文選（離臺詩其一、畫菊自序）｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣古典詩文與歷史文化；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第6課 臺灣古典詩文選（離臺詩其一、畫菊自序）｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣古典詩文與歷史文化；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第7課 戰士，乾杯！",
+          "details": [
+            "第7課 戰士，乾杯！｜字詞、句法與語用",
+            "第7課 戰士，乾杯！｜文體與寫作手法",
+            "第7課 戰士，乾杯！｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第7課 戰士，乾杯！｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第7課 戰士，乾杯！｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "族群議題及歷史省思；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第7課 戰士，乾杯！｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "族群議題及歷史省思；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第8課 七日讀",
+          "details": [
+            "第8課 七日讀｜字詞、句法與語用",
+            "第8課 七日讀｜文體與寫作手法",
+            "第8課 七日讀｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第8課 七日讀｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第8課 七日讀｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "族群省思、文化參照；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第8課 七日讀｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "族群省思、文化參照；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第9課 諫逐客書",
+          "details": [
+            "第9課 諫逐客書｜字詞、句法與語用",
+            "第9課 諫逐客書｜文體與寫作手法",
+            "第9課 諫逐客書｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第9課 諫逐客書｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第9課 諫逐客書｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "奏議文、譬喻與論證；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第9課 諫逐客書｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "奏議文、譬喻與論證；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第10課 愛與死與IG網紅",
+          "details": [
+            "第10課 愛與死與IG網紅｜字詞、句法與語用",
+            "第10課 愛與死與IG網紅｜文體與寫作手法",
+            "第10課 愛與死與IG網紅｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第10課 愛與死與IG網紅｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第10課 愛與死與IG網紅｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "資訊素養與人際互動；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第10課 愛與死與IG網紅｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "資訊素養與人際互動；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第11課 威尼斯商人",
+          "details": [
+            "第11課 威尼斯商人｜字詞、句法與語用",
+            "第11課 威尼斯商人｜文體與寫作手法",
+            "第11課 威尼斯商人｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第11課 威尼斯商人｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第11課 威尼斯商人｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戲劇、人物及倫理；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第11課 威尼斯商人｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戲劇、人物及倫理；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "文教 墨韓選讀：公輸、猛狗社鼠",
+          "details": [
+            "文教 墨韓選讀：公輸、猛狗社鼠｜字詞、句法與語用",
+            "文教 墨韓選讀：公輸、猛狗社鼠｜文體與寫作手法",
+            "文教 墨韓選讀：公輸、猛狗社鼠｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "文教 墨韓選讀：公輸、猛狗社鼠｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "文教 墨韓選讀：公輸、猛狗社鼠｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "墨家、法家及論證寓言；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "文教 墨韓選讀：公輸、猛狗社鼠｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "墨家、法家及論證寓言；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "culture"
+        },
+        {
+          "unit": "自學 在地的能源革命：德國能源村的故事",
+          "details": [
+            "自學 在地的能源革命：德國能源村的故事｜字詞、句法與語用",
+            "自學 在地的能源革命：德國能源村的故事｜文體與寫作手法",
+            "自學 在地的能源革命：德國能源村的故事｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "自學 在地的能源革命：德國能源村的故事｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "自學 在地的能源革命：德國能源村的故事｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "能源轉型與永續議題；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "自學 在地的能源革命：德國能源村的故事｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "能源轉型與永續議題；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "self-study"
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-108-chinese-5",
+      "grade": "高中三年級",
+      "subject": "國文",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "國文第5冊",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://website.hle.com.tw/market/sh/%E6%95%99%E5%AD%B8%E7%B0%A1%E4%BB%8B/111%E7%B0%A1%E4%BB%8B%E6%9C%AC%E5%B0%81%E9%9D%A2%E6%99%AE%E9%AB%98%E5%9C%8B%E6%96%87.pdf",
+          "type": "publisher-companion-index",
+          "provider": "翰林出版",
+          "accessedAt": "2026-11-26",
+          "section": "五冊選文表（印刷頁4–7）",
+          "reviewMethod": "structured-text",
+          "limitations": "111教學簡介的課本選文欄；原頁截圖無法取得，未核對115學年度修訂本。課名標點統一，合選篇目保留於同一課。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "翰林",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。依111官方教學簡介文字層的課本選文欄整理；沒有把補充教材文選欄混入正課。學年度及現行修訂版待核，PDF影像未取得。",
+      "units": [
+        {
+          "unit": "第1課 勸和論",
+          "details": [
+            "第1課 勸和論｜字詞、句法與語用",
+            "第1課 勸和論｜文體與寫作手法",
+            "第1課 勸和論｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第1課 勸和論｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第1課 勸和論｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "族群和解、臺灣歷史與論說；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第1課 勸和論｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "族群和解、臺灣歷史與論說；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第2課 永遠的尹雪豔",
+          "details": [
+            "第2課 永遠的尹雪豔｜字詞、句法與語用",
+            "第2課 永遠的尹雪豔｜文體與寫作手法",
+            "第2課 永遠的尹雪豔｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第2課 永遠的尹雪豔｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第2課 永遠的尹雪豔｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說敘事、人物刻畫與象徵；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第2課 永遠的尹雪豔｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說敘事、人物刻畫與象徵；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第3課 虬髯客傳",
+          "details": [
+            "第3課 虬髯客傳｜字詞、句法與語用",
+            "第3課 虬髯客傳｜文體與寫作手法",
+            "第3課 虬髯客傳｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第3課 虬髯客傳｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第3課 虬髯客傳｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "唐傳奇、人物與情節；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第3課 虬髯客傳｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "唐傳奇、人物與情節；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第4課 而未來在我面前破滅",
+          "details": [
+            "第4課 而未來在我面前破滅｜字詞、句法與語用",
+            "第4課 而未來在我面前破滅｜文體與寫作手法",
+            "第4課 而未來在我面前破滅｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第4課 而未來在我面前破滅｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第4課 而未來在我面前破滅｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生態、城市及價值反思；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第4課 而未來在我面前破滅｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生態、城市及價值反思；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第5課 曲選（大德歌秋、折桂令九日、牡丹亭・遊園）",
+          "details": [
+            "第5課 曲選（大德歌秋、折桂令九日、牡丹亭・遊園）｜字詞、句法與語用",
+            "第5課 曲選（大德歌秋、折桂令九日、牡丹亭・遊園）｜文體與寫作手法",
+            "第5課 曲選（大德歌秋、折桂令九日、牡丹亭・遊園）｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第5課 曲選（大德歌秋、折桂令九日、牡丹亭・遊園）｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第5課 曲選（大德歌秋、折桂令九日、牡丹亭・遊園）｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "散曲、劇曲、意象及比較；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第5課 曲選（大德歌秋、折桂令九日、牡丹亭・遊園）｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "散曲、劇曲、意象及比較；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第6課 雁門關外，蕭峯捨命退遼兵",
+          "details": [
+            "第6課 雁門關外，蕭峯捨命退遼兵｜字詞、句法與語用",
+            "第6課 雁門關外，蕭峯捨命退遼兵｜文體與寫作手法",
+            "第6課 雁門關外，蕭峯捨命退遼兵｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第6課 雁門關外，蕭峯捨命退遼兵｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第6課 雁門關外，蕭峯捨命退遼兵｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說、人物及選擇；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第6課 雁門關外，蕭峯捨命退遼兵｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說、人物及選擇；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第7課 鴻門宴",
+          "details": [
+            "第7課 鴻門宴｜字詞、句法與語用",
+            "第7課 鴻門宴｜文體與寫作手法",
+            "第7課 鴻門宴｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第7課 鴻門宴｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第7課 鴻門宴｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "史記敘事、對話與權力關係；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第7課 鴻門宴｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "史記敘事、對話與權力關係；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第8課 草莓與灰燼─加害者的日常",
+          "details": [
+            "第8課 草莓與灰燼─加害者的日常｜字詞、句法與語用",
+            "第8課 草莓與灰燼─加害者的日常｜文體與寫作手法",
+            "第8課 草莓與灰燼─加害者的日常｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第8課 草莓與灰燼─加害者的日常｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第8課 草莓與灰燼─加害者的日常｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "報導文學與歷史反思；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第8課 草莓與灰燼─加害者的日常｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "報導文學與歷史反思；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第9課 竹藪中",
+          "details": [
+            "第9課 竹藪中｜字詞、句法與語用",
+            "第9課 竹藪中｜文體與寫作手法",
+            "第9課 竹藪中｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第9課 竹藪中｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第9課 竹藪中｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說、多重觀點及真相；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第9課 竹藪中｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說、多重觀點及真相；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "第10課 現代詩選（小鎮、致雲林二首）",
+          "details": [
+            "第10課 現代詩選（小鎮、致雲林二首）｜字詞、句法與語用",
+            "第10課 現代詩選（小鎮、致雲林二首）｜文體與寫作手法",
+            "第10課 現代詩選（小鎮、致雲林二首）｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "第10課 現代詩選（小鎮、致雲林二首）｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第10課 現代詩選（小鎮、致雲林二首）｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地景、詩歌意象與情感；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "第10課 現代詩選（小鎮、致雲林二首）｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地景、詩歌意象與情感；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "lesson"
+        },
+        {
+          "unit": "文教 老莊選讀：江海所以能為百谷王、庖丁解牛",
+          "details": [
+            "文教 老莊選讀：江海所以能為百谷王、庖丁解牛｜字詞、句法與語用",
+            "文教 老莊選讀：江海所以能為百谷王、庖丁解牛｜文體與寫作手法",
+            "文教 老莊選讀：江海所以能為百谷王、庖丁解牛｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "文教 老莊選讀：江海所以能為百谷王、庖丁解牛｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "文教 老莊選讀：江海所以能為百谷王、庖丁解牛｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "道家思想、修養與寓言；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "文教 老莊選讀：江海所以能為百谷王、庖丁解牛｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "道家思想、修養與寓言；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "culture"
+        },
+        {
+          "unit": "自學 填海・彰化崙尾灣・被吃掉的海岸線",
+          "details": [
+            "自學 填海・彰化崙尾灣・被吃掉的海岸線｜字詞、句法與語用",
+            "自學 填海・彰化崙尾灣・被吃掉的海岸線｜文體與寫作手法",
+            "自學 填海・彰化崙尾灣・被吃掉的海岸線｜文學文化與情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "自學 填海・彰化崙尾灣・被吃掉的海岸線｜字詞、句法與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "依已核實的本文或題幹給出的材料考字詞形音義、句法與語境，不猜測課本注釋。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "自學 填海・彰化崙尾灣・被吃掉的海岸線｜文體與寫作手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "環境書寫、開發及保育；依必要材料考查文體、結構、修辭及表達。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            },
+            {
+              "name": "自學 填海・彰化崙尾灣・被吃掉的海岸線｜文學文化與情境應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "環境書寫、開發及保育；作者、出處、時代背景須核實，考查觀念比較與應用，不單純考閱讀理解。"
+              ],
+              "excludedContent": [
+                "未選課文及獨立考點",
+                "未提供或未核實的本文、注釋、作者細節",
+                "不得假造或重製完整現代課文"
+              ]
+            }
+          ],
+          "lessonType": "self-study"
+        }
+      ]
     }
   ]
 }
