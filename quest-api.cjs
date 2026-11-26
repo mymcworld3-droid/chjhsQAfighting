@@ -2,6 +2,7 @@
 const { playerRepository } = require('./server-repositories.cjs');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const rules = require('./public/cultivation/quest-rules.js');
+const WeaponDungeons = require('./public/cultivation/weapon-dungeon-rules.js');
 const error = (message, status = 409) => Object.assign(new Error(message), { status });
 
 // Claim state lives outside the client-written player document. The same
@@ -9,7 +10,8 @@ const error = (message, status = 409) => Object.assign(new Error(message), { sta
 async function questTransaction(db, uid, request = null, now = new Date()) {
   const date = rules.dateKey(now), userRef = db.collection('users').doc(uid),
     stateRef = db.collection('questStates').doc(uid),
-    enlightenmentRef = db.collection('enlightenmentTrialStates').doc(uid);
+    enlightenmentRef = db.collection('enlightenmentTrialStates').doc(uid),
+    dungeonRef = db.collection('tacticalBattlePlayers').doc(uid);
   return db.runTransaction(async tx => {
     const [userSnap, stateSnap, enlightenmentSnap] = await Promise.all([tx.get(userRef), tx.get(stateRef), tx.get(enlightenmentRef)]);
     if (!userSnap.exists) throw error('玩家資料不存在', 404);
@@ -32,7 +34,11 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       state.commissionIds = state.commissionIds.map(id => id === 'commission-raid' ? replacement : id);
       stateChanged = true;
     }
-    let awarded = false, reward = null;
+    let awarded = false, reward = null, dungeonProgress;
+    // Only path claims need the server-owned weapon dungeon wallet.
+    const dungeonSnap = request?.kind === 'path' ? await tx.get(dungeonRef) : null;
+    const dungeonPointer = dungeonSnap?.exists ? dungeonSnap.data() : {};
+    if (dungeonSnap) dungeonProgress = WeaponDungeons.progress(dungeonPointer.weaponDungeonV1, now.getTime());
     if (request) {
       if (!['path', 'daily', 'commission', 'weekly'].includes(request.kind)) throw error('任務類型無效', 400);
       if (['daily','commission'].includes(request.kind) && request.date !== date)
@@ -48,8 +54,8 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
         : request.kind === 'commission' ? state.commissionClaimed.includes(request.id)
         : request.kind === 'weekly' && state.weeklyKey === rules.weekKey(date)
           ? state.weeklyClaimed.includes(request.id) : state.dailyClaimed.includes(request.id);
-      const ticketOnly = request.kind === 'path' && duplicate && list[index].reward.drawTickets > 0 &&
-        (state.pathTicketAmounts[request.id] || 0) < list[index].reward.drawTickets;
+      const ticketOnly = request.kind === 'path' && duplicate && list[index].reward.weaponDungeonTicket > 0 &&
+        (state.pathTicketAmounts[request.id] || 0) < list[index].reward.weaponDungeonTicket;
       if (!duplicate || ticketOnly) {
         const snapshot = rules.view(user, state, date, verifiedTrial);
         const q = ticketOnly ? snapshot.pathTicketRewards.find(q => q.id === request.id)
@@ -64,10 +70,11 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
           'stats.totalScore': Math.max(0, Number(user.stats?.totalScore) || 0) + reward.cultivation
         };
         user.stats = { ...(user.stats || {}), gold: patch['stats.gold'], totalScore: patch['stats.totalScore'] };
-        if (reward.drawTickets) {
-          user.soulboundDrawTickets = Math.max(0, Math.floor(Number(user.soulboundDrawTickets) || 0)) + reward.drawTickets;
-          patch.soulboundDrawTickets = user.soulboundDrawTickets;
-          state.pathTicketAmounts[request.id] = (state.pathTicketAmounts[request.id] || 0) + reward.drawTickets;
+        if (reward.weaponDungeonTicket) {
+          dungeonProgress.tickets += reward.weaponDungeonTicket;
+          tx.set(dungeonRef, { ...dungeonPointer, weaponDungeonV1: dungeonProgress });
+          // Keep legacy paid amounts: previously issued draw tickets are not re-awarded.
+          state.pathTicketAmounts[request.id] = (state.pathTicketAmounts[request.id] || 0) + reward.weaponDungeonTicket;
         }
         for (const [id, amount] of Object.entries(reward.materials)) {
           const quantity = Math.max(0, Math.floor(Number(user.materialSystem?.inventory?.[id]) || 0)) + amount;
@@ -90,7 +97,7 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
     }
     if (stateChanged) tx.set(stateRef, state);
     return { ok: true, awarded, reward, quests: rules.view(user, state, date, verifiedTrial),
-      drawTickets: Math.max(0, Math.floor(Number(user.soulboundDrawTickets) || 0)),
+      ...(dungeonProgress ? { weaponDungeonTickets: dungeonProgress.tickets } : {}),
       balances: { gold: Math.max(0, Number(user.stats?.gold) || 0), totalScore: Math.max(0, Number(user.stats?.totalScore) || 0) },
       materials: Object.fromEntries(['raid-refine-key-ii', 'raid-refine-key-iii'].map(id => [id, Math.max(0, Number(user.materialSystem?.inventory?.[id]) || 0)])) };
   });

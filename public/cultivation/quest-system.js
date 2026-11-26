@@ -19,7 +19,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const parts = [];
     if (reward.gold) parts.push(`${reward.gold} 靈石`);
     if (reward.cultivation) parts.push(`${reward.cultivation} 修為`);
-    if (reward.drawTickets) parts.push(`本命法器抽獎券 ×${reward.drawTickets}`);
+    if (reward.weaponDungeonTicket) parts.push(`副本券 ×${reward.weaponDungeonTicket}`);
     Object.entries(reward.materials || {}).forEach(([id, count]) => parts.push(`${materialNames[id] || id} ×${count}`));
     return parts.join(' · ');
   }
@@ -80,10 +80,10 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const labels = { scope: '設定範圍', solo: '繼續問道', meditation: '開始閉關',
       enlightenment: '悟道試煉', battle: '前往鬥法', dongtian: '前往洞天',
       story: '觀看劇情' };
-    const action = ready ? (q.supplemental ? '補領抽獎券' : '領取獎勵') : labels[q?.destination] || '查看任務';
+    const action = ready ? (q.supplemental ? '補領副本券' : '領取獎勵') : labels[q?.destination] || '查看任務';
     const title = q?.title || (current?.date === window.XianxiaQuestRules.dateKey() ? '今日任務皆已完成' : busy ? '正在同步今日任務…' : '查看今日任務');
-    const reward = q ? [q.reward.drawTickets ? `抽獎券 ×${q.reward.drawTickets}` : '',
-      rewardText({ ...q.reward, drawTickets: 0 })].filter(Boolean).join(' · ') : '查看完整任務與獎勵';
+    const reward = q ? [q.reward.weaponDungeonTicket ? `副本券 ×${q.reward.weaponDungeonTicket}` : '',
+      rewardText({ ...q.reward, weaponDungeonTicket: 0 })].filter(Boolean).join(' · ') : '查看完整任務與獎勵';
     const progressLabel = { solo: '答對', score: '修為', battle: '鬥法', raid: '通關',
       meditation: '閉關', dongtian: '洞天', correction: '訂正', activity: '活動' }[q?.metric] || '進度';
     $('quest-spotlight-kind').textContent = ready ? '獎勵可領' : ({ path: '仙道任務', daily: '日常任務', commission: '宗門委託', weekly: '每週任務' }[item?.kind] || '修行任務');
@@ -118,7 +118,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     $('quest-open')?.setAttribute('aria-label', available ? '任務，有獎勵可領取' : '任務');
   }
   function card(q, kind) {
-    const label = q.claimed ? '已領取' : q.locked ? '尚未解鎖' : q.supplemental ? '補領抽獎券' : q.claimable ? '領取獎勵' : q.metric === 'story' ? '觀看劇情' : '前往修行';
+    const label = q.claimed ? '已領取' : q.locked ? '尚未解鎖' : q.supplemental ? '補領副本券' : q.claimable ? '領取獎勵' : q.metric === 'story' ? '觀看劇情' : '前往修行';
     return `<article class="quest-card ${kind === 'path' ? 'quest-path-card' : ''} ${q.claimable ? 'quest-ready' : ''} ${q.claimed ? 'quest-claimed' : ''}">
       <div class="quest-card-heading"><h4>${esc(q.title)}</h4>${globalThis.QACommunityPresentation.statusMarkup(q.claimed?'complete':q.claimable?'pending':'active',q.claimed?'已完成':q.claimable?'待領獎':'進行中')}</div>
       <p>${esc(q.description)}</p>
@@ -276,7 +276,6 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       if (getMainUser()?.uid !== uid) return;
       snapshot = result.quests;
       const data = window.getCurrentUserData?.();
-      if (data && result.drawTickets !== undefined) data.soulboundDrawTickets = result.drawTickets;
       if (data?.stats) {
         Object.assign(data.stats, result.balances);
         const rank = window.getXiuxianRealmIndex?.(data.stats.totalScore);

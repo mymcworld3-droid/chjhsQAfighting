@@ -14,9 +14,9 @@
   const day=now=>Math.floor((Number(now)+8*3600000)/86400000);
   function progress(raw,now=Date.now()){
     const today=day(now),previous=Number.isSafeInteger(raw?.grantDay)?raw.grantDay:today-1;
-    const saved=Math.max(0,Math.min(MAX_TICKETS,Math.trunc(Number(raw?.tickets)||0)));
+    const saved=Math.max(0,Math.trunc(Number(raw?.tickets)||0));
     const elapsed=Math.max(0,today-previous);
-    return {version:1,tickets:Math.min(MAX_TICKETS,saved+Math.min(2,elapsed)*DAILY_TICKETS),
+    return {version:1,tickets:Math.max(saved,Math.min(MAX_TICKETS,saved+Math.min(2,elapsed)*DAILY_TICKETS)),
       grantDay:Math.max(today,previous),unlocked:Math.max(0,Math.min(5,Math.trunc(Number(raw?.unlocked)||0))),
       clears:Array.from({length:6},(_,i)=>Math.max(0,Math.trunc(Number(raw?.clears?.[i])||0))),
       ...(raw?.byDungeon?{byDungeon:Object.fromEntries(CATALOG.filter(d=>d.id!==ID).map(d=>[d.id,progressFor(raw,d.id)]))}:{})};

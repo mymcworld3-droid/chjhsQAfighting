@@ -53,14 +53,14 @@
   const STORY_AFTER = {
     'path-qi-five': [storyQuest('qi-five-dongtian', '第二章 · 竹簡天尊', 5)]
   };
-  const PATH_DRAW_TICKETS = Object.freeze({
+  const PATH_DUNGEON_TICKETS = Object.freeze({
     'path-golden': 1, 'path-raid-one': 2, 'path-nascent': 3, 'path-raid-ten': 5, 'path-solo-hundred': 5
   });
   const PATH = [{ ...storyQuest('prologue-enter-sect', '第一章 · 問道靈根', 0),
     title: '完成第一章 · 問道靈根',
     description: '準備好後，點「前往」認識青雲宗並完整觀看第一章；登入與選擇性別不會自動播放。' },
     ...LEGACY_PATH.flatMap(q => [q, ...(STORY_AFTER[q.id] || [])])]
-    .map(q => ({ ...q, reward: { ...q.reward, drawTickets: PATH_DRAW_TICKETS[q.id] || 1 } }));
+    .map(q => ({ ...q, reward: { ...q.reward, weaponDungeonTicket: PATH_DUNGEON_TICKETS[q.id] || 1 } }));
   const DAILY = [
     quest('daily-solo-three', '溫故知新', '今日問道答對 3 題。', 'solo', 3, 40, 1, 'solo'),
     quest('daily-solo-ten', '勤學不輟', '今日問道答對 10 題。', 'solo', 10, 80, 1, 'solo'),
@@ -133,14 +133,14 @@
     // The first ticket rollout stored IDs only and paid exactly one per quest.
     // Preserve that amount even when the tickets have already been spent.
     const pathTicketAmounts = {};
-    for (const q of PATH.filter(q => q.reward.drawTickets && pathClaimed.includes(q.id))) {
+    for (const q of PATH.filter(q => q.reward.weaponDungeonTicket && pathClaimed.includes(q.id))) {
       const legacy = Array.isArray(raw?.pathTicketsClaimed) && raw.pathTicketsClaimed.includes(q.id) ? 1 : 0;
       const paid = Number(raw?.pathTicketAmounts?.[q.id]);
       const amount = Math.max(legacy, Number.isFinite(paid) ? number(paid) : 0);
       if (amount) pathTicketAmounts[q.id] = amount;
     }
-    const pathTicketsClaimed = PATH.filter(q => q.reward.drawTickets &&
-      (pathTicketAmounts[q.id] || 0) >= q.reward.drawTickets).map(q => q.id);
+    const pathTicketsClaimed = PATH.filter(q => q.reward.weaponDungeonTicket &&
+      (pathTicketAmounts[q.id] || 0) >= q.reward.weaponDungeonTicket).map(q => q.id);
     const next = PATH.findIndex(q => !pathClaimed.includes(q.id));
     return { version: 2, pathClaimed, pathTicketsClaimed, pathTicketAmounts, pathIndex: next < 0 ? PATH.length : next, dailyDate: date,
       dailyClaimed: raw?.dailyDate === date && Array.isArray(raw.dailyClaimed) ? raw.dailyClaimed.filter(id => DAILY.some(q => q.id === id)) : [],
@@ -188,11 +188,11 @@
       pathCompleted: state.pathClaimed.length, pathTotal: path.length,
       path: path[next] ?? null,
       pathRows: path.map((q,i)=>({...q,sequenceLocked:!q.claimed&&i!==next,claimable:q.claimable&&i===next})),
-      pathTicketRewards: PATH.filter(q => q.reward.drawTickets && state.pathClaimed.includes(q.id) &&
-        (state.pathTicketAmounts[q.id] || 0) < q.reward.drawTickets).map(q => ({ ...q, supplemental: true,
-          description: '已完成此仙道任務，可補領尚未領取的本命法器抽獎券。',
+      pathTicketRewards: PATH.filter(q => q.reward.weaponDungeonTicket && state.pathClaimed.includes(q.id) &&
+        (state.pathTicketAmounts[q.id] || 0) < q.reward.weaponDungeonTicket).map(q => ({ ...q, supplemental: true,
+          description: '已完成此仙道任務，可補領尚未領取的副本券。',
           current: 1, target: 1, complete: true, claimable: true, claimed: false, locked: false,
-          reward: { gold: 0, cultivation: 0, materials: {}, drawTickets: q.reward.drawTickets - (state.pathTicketAmounts[q.id] || 0) } })),
+          reward: { gold: 0, cultivation: 0, materials: {}, weaponDungeonTicket: q.reward.weaponDungeonTicket - (state.pathTicketAmounts[q.id] || 0) } })),
       weeklyKey:weekKey(date),weekStart:weekKey(date),
       weekly: WEEKLY.map(q => row(q,'weekly',state.weeklyClaimed.includes(q.id))).filter(available),
       daily: DAILY.map(q => row(q, 'daily', state.dailyClaimed.includes(q.id))).filter(available),

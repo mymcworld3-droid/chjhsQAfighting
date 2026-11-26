@@ -246,3 +246,13 @@ test('exclusive reward roll has exactly 30/20/50 outcomes, including duplicates,
  const drop=Rewards.roll(room,'u1',record,max=>max===100?30:0);assert.equal(drop,null);
  assert.ok(M.publicState(record).library.every(b=>b.tierRealm===M.BY_BOOK[b.id].tierRealm&&b.refinement===5));
 });
+
+
+test('earned weapon dungeon tickets survive daily refill above the cap',()=>{
+ const now=NOW, day=W.day(now);
+ const earned={tickets:12,grantDay:day,unlocked:2,clears:[1,1]};
+ assert.equal(W.progress(earned,now).tickets,12);
+ assert.equal(W.progress(earned,now+86400000).tickets,12);
+ assert.equal(W.progress({...earned,tickets:4},now+86400000).tickets,5);
+ assert.equal(W.progress(earned,now+86400000).unlocked,2);
+});

@@ -28,7 +28,7 @@ function fixture() {
     rollover: () => { day = '2026-10-19'; week = '2026-10-19'; } };
 }
 const quest = (id, current, target = 10, extra = {}) => ({ id, title: id, current, target,
-  metric: 'solo', destination: 'solo', reward: { gold: 120, drawTickets: 1 }, ...extra });
+  metric: 'solo', destination: 'solo', reward: { gold: 120, weaponDungeonTicket: 1 }, ...extra });
 
 test('home recommendation offers ready rewards across categories before unfinished objectives', () => {
   const { ctx, data } = fixture();
@@ -72,7 +72,7 @@ test('home rendering reuses data, shows tickets first and disables claims while 
   ctx.renderSpotlight();
   assert.equal(elements.get('quest-spotlight-title').textContent, '<任務>');
   assert.equal(elements.get('quest-spotlight-progress').textContent, '答對 8／10');
-  assert.equal(elements.get('quest-spotlight-reward').textContent, '抽獎券 ×1 · 120 靈石');
+  assert.equal(elements.get('quest-spotlight-reward').textContent, '副本券 ×1 · 120 靈石');
   assert.equal(elements.get('quest-spotlight-action').textContent, '繼續問道 →');
   data.daily[0].claimable = true; data.daily[0].current = 10;
   ctx.renderSpotlight();
@@ -88,7 +88,7 @@ test('the main progress card prioritizes genuine daily progress over path or wee
   const {ctx,data,elements}=fixture();
   data.path=quest('main-path',9,10,{claimable:true});
   data.weekly=[quest('weekly',45,50,{claimable:true})];
-  data.daily=[quest('daily-solo-ten',9,10,{reward:{gold:80,cultivation:1,drawTickets:0}})];
+  data.daily=[quest('daily-solo-ten',9,10,{reward:{gold:80,cultivation:1,weaponDungeonTicket:0}})];
   ctx.renderSpotlight();
   assert.equal(elements.get('quest-spotlight-title').textContent,'daily-solo-ten');
   assert.equal(elements.get('quest-spotlight-progress').textContent,'答對 9／10');

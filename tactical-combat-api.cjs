@@ -562,7 +562,7 @@ async function start(db,uid,selection={},now=Date.now()){
     }else if(prior?.status==='waiting')return snapshot(prior,uid);
     else{
       const retry=mode==='pve'&&!weapon&&prior?.trial?.seed===campaign.seed&&prior.trial.stage===campaign.stage&&prior.winner!=='player';
-      if(weapon&&dungeonProgress.tickets<1)throw error('武器副本券不足，每日補發 3 張，最多持有 5 張',403);
+      if(weapon&&dungeonProgress.tickets<1)throw error('武器副本券不足，每日補發 3 張至 5 張',403);
       const trial=weapon?{seed,stage:dungeonChoice.stage,layoutVersion:4,weaponDungeon:dungeonChoice}:
         {...campaign,layoutVersion:retry?(prior.trial.layoutVersion??1):4};
       s=attachScopes(Rules.create({id:newId,mode,map:retry&&trial.layoutVersion===0?prior.map:map,players:[a],trial:mode==='pve'?trial:null,now}),[a]);
