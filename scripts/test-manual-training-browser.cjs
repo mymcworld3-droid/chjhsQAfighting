@@ -109,6 +109,16 @@ async function main(){
     assert.equal(palette.header,'rgb(23, 23, 20)');
     assert.equal(palette.action,'#bda371');
     assert.equal(await page.locator('.manual-ritual-seal').count(),1);
+    const disc=page.locator('.manual-ritual-disc'),wheel=page.locator('.manual-ritual-wheel');
+    await disc.evaluate(img=>img.decode());
+    await wheel.evaluate(img=>img.decode());
+    assert.equal(await disc.evaluate(img=>img.naturalWidth),1280);
+    assert.equal(await wheel.evaluate(img=>img.naturalWidth),1280);
+    assert.equal(await disc.getAttribute('src'),'/assets/ui/qingyun_misty_brown_disc.png');
+    assert.equal(await wheel.getAttribute('src'),'/assets/ui/qingyun_gold_frame.png');
+    assert.equal(await disc.evaluate(node=>getComputedStyle(node).animationName),'none');
+    assert.equal(await page.locator('.manual-ritual-energy').count(),0);
+    assert.equal(await page.locator('.manual-hero-art-stage').evaluate(node=>getComputedStyle(node).backgroundImage),'none');
     assert.equal(await page.locator('.manual-ritual-wheel').evaluate(node=>getComputedStyle(node).animationName),'manual-ritual-spin');
     await page.emulateMedia({reducedMotion:'reduce'});
     assert.equal(await page.locator('.manual-ritual-wheel').evaluate(node=>getComputedStyle(node).animationName),'none');

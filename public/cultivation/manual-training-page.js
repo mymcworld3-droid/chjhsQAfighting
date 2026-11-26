@@ -2,7 +2,7 @@ import './weapon-presentation.js';
 import './daily-meditation-rewards.js';
 import './manual-rules.js?v=20261125-native-main-cultivation-v1';
 import {bookArt,skillArt} from './manual-art.js';
-import {renderManualHero} from './manual-hero-view.js?v=20261125-stone-price-art-v1';
+import {renderManualHero} from './manual-hero-view.js?v=20261126-qingyun-disc-v1';
 import {nextManualExpedition,renderManualExpedition} from './manual-expedition-guide.js';
 import {renderManualLoadout,selectSkillForSlot} from './manual-loadout-view.js';
 import './contextual-asset-preloader.js';
@@ -96,7 +96,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-layout-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261125-main-card-fill-async-gear-v2';
+    link.id='manual-training-layout-style';link.href='/styles/manual-training-layout.css?v=20261126-qingyun-disc-v1';
     document.head.append(link);
   }
   return root;

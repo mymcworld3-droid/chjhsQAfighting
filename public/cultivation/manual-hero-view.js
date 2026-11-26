@@ -133,23 +133,11 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
       ${heading}
       <div class="manual-hero-main">
         <div class="manual-hero-art-stage">
-          <div class="manual-hero-art-halo" aria-hidden="true"></div>
-          <div class="manual-hero-qi-ring" aria-hidden="true">
-            <span class="manual-hero-qi-orbit"></span>
-            <span class="manual-hero-qi-seal"></span>
-          </div>
+          ${weaponMode?`<img class="manual-ritual-disc" src="/assets/ui/qingyun_misty_brown_disc.png" width="1280" height="1280" alt="" aria-hidden="true" decoding="async" draggable="false">
+          <span class="manual-ritual-seal" aria-hidden="true"><img class="manual-ritual-wheel" src="/assets/ui/qingyun_gold_frame.png" width="1280" height="1280" alt="" decoding="async" draggable="false"></span>`:`<div class="manual-hero-art-halo" aria-hidden="true"></div>
+          <div class="manual-hero-qi-ring" aria-hidden="true"><span class="manual-hero-qi-orbit"></span><span class="manual-hero-qi-seal"></span></div>
           <span class="manual-hero-qi-spark manual-hero-qi-spark--one" aria-hidden="true"></span>
-          <span class="manual-hero-qi-spark manual-hero-qi-spark--two" aria-hidden="true"></span>
-          ${weaponMode?`<svg class="manual-ritual-seal" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
-            <circle cx="120" cy="120" r="116" class="manual-ritual-outline"/>
-            <circle cx="120" cy="120" r="108" class="manual-ritual-outline"/>
-            <g class="manual-ritual-wheel">
-              <circle cx="120" cy="120" r="112" class="manual-ritual-ticks" pathLength="360" stroke-dasharray="1 5"/>
-              <circle cx="120" cy="120" r="102" class="manual-ritual-orbit" stroke-dasharray="56 9 14 12"/>
-              ${Array.from({length:8},(_,i)=>`<path class="manual-ritual-jewel" d="M120 2 l4 6 -4 6 -4 -6 Z" transform="rotate(${i*45} 120 120)"/>`).join('')}
-            </g>
-            <path class="manual-ritual-cross" d="M120 0v14m0 212v14M0 120h14m212 0h14"/>
-          </svg><span class="manual-ritual-energy" aria-hidden="true"></span>`:''}
+          <span class="manual-hero-qi-spark manual-hero-qi-spark--two" aria-hidden="true"></span>`}
           ${coverMarkup}
           <span class="manual-hero-art-caption manual-hero-tier-badge is-tier-${tierClass}">${esc(book.tierRealm||'煉氣')}${weaponMode?'武器':'功法'}</span>
         </div>
