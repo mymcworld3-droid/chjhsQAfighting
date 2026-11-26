@@ -1,0 +1,5102 @@
+{
+  "schema": 1,
+  "subject": "歷史",
+  "books": [
+    {
+      "bookId": "longteng-114-history-1",
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第一學期",
+      "bookLabel": "第一冊（臺灣史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_history_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰一上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "臺灣的原住民族",
+          "details": [
+            "1-1 南島語族與臺灣原住民族",
+            "1-2 外力介入原住民社會"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 南島語族與臺灣原住民族",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南島語族、臺灣原住民族的族群形成與分布",
+                "部落組織、社會文化及歷史證據"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 外力介入原住民社會",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西、清治、日治及戰後的原住民族政策與互動",
+                "依節名辨識時期、抗爭、土地權利與文化復振"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "移民社會的形成",
+          "details": [
+            "2-1 早期臺灣的移民",
+            "2-2 清代臺灣的移民",
+            "2-3 日治、戰後臺灣的移民"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 早期臺灣的移民",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大航海時代的來臺移民、荷西與鄭氏時期的人群流動、開墾與移民成因"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 清代臺灣的移民",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "清代移民政策、渡臺限制、閩粵移民、開墾及移民社會形成"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-3 日治、戰後臺灣的移民",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治至戰後人口移動、日本人來臺、臺人赴海外、戰後移民及社會變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "帝國的邊陲",
+          "details": [
+            "3-1 傳統帝國的統治",
+            "3-2 西方現代國家統治體制的引進",
+            "3-3 臺灣自覺意識的追求"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 傳統帝國的統治",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西、鄭氏及清代治理的制度與地域變化",
+                "行政區劃、邊疆治理與地方社會"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 西方現代國家統治體制的引進",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治殖民統治體制、總督府、警察、戶籍、教育與現代國家治理",
+                "辨識制度與年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-3 臺灣自覺意識的追求",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "教育、語言、文化政策與臺灣主體意識的歷史形成",
+                "辨析時期、背景及史料"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "臺澎金馬一體化",
+          "details": [
+            "4-1 威權體制下的臺灣",
+            "4-2 邁向民主化之路",
+            "4-3 現代臺灣國際關係"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 威權體制下的臺灣",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後威權體制、戒嚴與政治控制",
+                "二二八事件、白色恐怖的背景及人權議題"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 邁向民主化之路",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後政治變遷、黨外運動、解嚴、民主化、人權與政治改革",
+                "事件時序及史料辨析"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-3 現代臺灣國際關係",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後國際局勢、臺澎金馬、冷戰外交與兩岸關係的歷史變遷",
+                "區分史實、法律文件與不同歷史主張"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "十六至十九世紀臺灣的經濟活動",
+          "details": [
+            "5-1 國際競逐與鄭氏治臺時期",
+            "5-2 清治時期農商經濟的發展"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 國際競逐與鄭氏治臺時期",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西與鄭氏時期貿易、商品、港口、農業開發及東亞海上貿易網絡"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 清治時期農商經濟的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "清治農業、土地制度、開港、茶糖樟腦等商貿活動與社會影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "二十世紀臺灣的經濟發展",
+          "details": [
+            "6-1 殖民地下臺灣的經濟發展與變遷",
+            "6-2 戰後計畫經濟到經濟自由化"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 殖民地下臺灣的經濟發展與變遷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治經濟政策、糖業、米作、土地調查、交通基礎建設與工業化",
+                "殖民地經濟特徵"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 戰後計畫經濟到經濟自由化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後土地改革、進口替代、出口導向、經濟自由化及產業轉型",
+                "政策背景與因果"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "文學、藝術發展與信仰",
+          "details": [
+            "7-1 文學發展演變",
+            "7-2 藝術發展的多樣化",
+            "7-3 禮天祀地崇諸神"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 文學發展演變",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣文學及藝術的歷史演變、代表性作品與文化背景",
+                "依節名限制時期及媒介"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "7-2 藝術發展的多樣化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣各時期文學、藝術、建築的發展與社會文化背景",
+                "依節名限縮"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "7-3 禮天祀地崇諸神",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原住民族祭儀、漢人民間信仰、外來宗教與地方祭祀",
+                "文化交流與信仰多樣性"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-history-1",
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "第一冊（臺灣史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_history_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "翰林一上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "臺灣的原住民族",
+          "details": [
+            "1-1 早期的住民們",
+            "1-2 原住民族與外來者的互動"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 早期的住民們",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南島語族、臺灣原住民族的族群形成與分布",
+                "部落組織、社會文化及歷史證據"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 原住民族與外來者的互動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西、清治、日治及戰後的原住民族政策與互動",
+                "依節名辨識時期、抗爭、土地權利與文化復振"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "多元族群的移民社會",
+          "details": [
+            "2-1 大航海到清治時期的移民",
+            "2-2 日治到戰後的移民"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 大航海到清治時期的移民",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大航海時期至清治的漢人移民、移民政策、開墾、聚落及族群互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 日治到戰後的移民",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治至戰後人口移動、日本人來臺、臺人赴海外、戰後移民及社會變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "帝國的邊陲",
+          "details": [
+            "3-1 清帝國的邊陲",
+            "3-2 日本殖民的現代化統治",
+            "3-3 日治時期的政治與社會運動"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 清帝國的邊陲",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西、鄭氏及清代治理的制度與地域變化",
+                "行政區劃、邊疆治理與地方社會"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 日本殖民的現代化統治",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治殖民統治體制、總督府、警察、戶籍、教育與現代國家治理",
+                "辨識制度與年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-3 日治時期的政治與社會運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治時期請願、自治運動、文化協會與社會運動",
+                "殖民地人民權利及不同運動訴求"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "臺澎金馬成為一體",
+          "details": [
+            "4-1 戰後臺灣的政治與社會運動",
+            "4-2 戰後臺灣的國際關係演變"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 戰後臺灣的政治與社會運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後政治變遷、黨外運動、解嚴、民主化、人權與政治改革",
+                "事件時序及史料辨析"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 戰後臺灣的國際關係演變",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後國際局勢、臺澎金馬、冷戰外交與兩岸關係的歷史變遷",
+                "區分史實、法律文件與不同歷史主張"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "經濟的多元發展",
+          "details": [
+            "5-1 大航海至清治時期的經濟發展",
+            "5-2 日治時期的殖民地式經濟",
+            "5-3 戰後的經濟發展"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 大航海至清治時期的經濟發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大航海至清代農商經濟、土地開發、港口、商品及開港前後的變化"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 日治時期的殖民地式經濟",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治經濟政策、糖業、米作、土地調查、交通基礎建設與工業化",
+                "殖民地經濟特徵"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-3 戰後的經濟發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後土地改革、進口替代、出口導向、經濟自由化及產業轉型",
+                "政策背景與因果"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "多元文化的形成",
+          "details": [
+            "6-1 多元信仰與祭祀活動",
+            "6-2 文學、藝術與建築的發展"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 多元信仰與祭祀活動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原住民族祭儀、漢人民間信仰、外來宗教與地方祭祀",
+                "文化交流與信仰多樣性"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 文學、藝術與建築的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣各時期文學、藝術、建築的發展與社會文化背景",
+                "依節名限縮"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-history-1",
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第一學期",
+      "bookLabel": "第一冊（臺灣史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_history_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "schoolYear": 114,
+          "publisherTable": "南一一上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "原住民族歷史、政策、挑戰與回應",
+          "details": [
+            "1-1 原住民族的定義與建構",
+            "1-2 原住民族政策的變遷"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 原住民族的定義與建構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南島語族、臺灣原住民族的族群形成與分布",
+                "部落組織、社會文化及歷史證據"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 原住民族政策的變遷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西、清治、日治及戰後的原住民族政策與互動",
+                "依節名辨識時期、抗爭、土地權利與文化復振"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "移民社會的形成與發展",
+          "details": [
+            "2-1 漢人移民社會的形成",
+            "2-2 日治時期臺人移民海外與日人移民來臺",
+            "2-3 戰後的人口移入"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 漢人移民社會的形成",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大航海時期至清治的漢人移民、移民政策、開墾、聚落及族群互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 日治時期臺人移民海外與日人移民來臺",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治時期日本人來臺、臺人赴海外、人口流動與殖民政策"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-3 戰後的人口移入",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後人口遷入、外省族群與其後新移民、移民成因與多元文化"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "從地方到中央",
+          "details": [
+            "3-1 統治體制變遷與現代國家的建立",
+            "3-2 國際局勢與主權歸屬"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 統治體制變遷與現代國家的建立",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣統治政權與行政體制的演變",
+                "地方到中央、現代國家治理及政策，限所選時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 國際局勢與主權歸屬",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後國際局勢、臺澎金馬、冷戰外交與兩岸關係的歷史變遷",
+                "區分史實、法律文件與不同歷史主張"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "追求自治與民主的軌跡",
+          "details": [
+            "4-1 殖民統治下的政治訴求",
+            "4-2 民主化與人權運動的追求",
+            "4-3 眾聲沸騰的社會運動"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 殖民統治下的政治訴求",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治時期請願、自治運動、文化協會與社會運動",
+                "殖民地人民權利及不同運動訴求"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 民主化與人權運動的追求",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後政治變遷、黨外運動、解嚴、民主化、人權與政治改革",
+                "事件時序及史料辨析"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-3 眾聲沸騰的社會運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後及解嚴前後的勞工、婦女、原住民族、環境等社會運動",
+                "訴求、背景與制度影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "經濟發展與土地開發",
+          "details": [
+            "5-1 早期到清治時期的經貿發展",
+            "5-2 日治時期的殖民地依存經濟",
+            "5-3 戰後土地改革與經貿發展"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 早期到清治時期的經貿發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大航海至清代農商經濟、土地開發、港口、商品及開港前後的變化"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 日治時期的殖民地依存經濟",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治經濟政策、糖業、米作、土地調查、交通基礎建設與工業化",
+                "殖民地經濟特徵"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-3 戰後土地改革與經貿發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後土地改革、進口替代、出口導向、經濟自由化及產業轉型",
+                "政策背景與因果"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "宗教發展與藝文活動",
+          "details": [
+            "6-1 多元信仰的源流",
+            "6-2 早期臺灣的藝文發展",
+            "6-3 戰後藝文的發展"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 多元信仰的源流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原住民族祭儀、漢人民間信仰、外來宗教與地方祭祀",
+                "文化交流與信仰多樣性"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 早期臺灣的藝文發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原住民族、漢人與日治以前的文學、工藝、建築和藝術",
+                "文化接觸與傳承"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-3 戰後藝文的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後臺灣文學、美術、語言政策與多元文化發展",
+                "依史料比較不同時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-history-1",
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第一學期",
+      "bookLabel": "第一冊（臺灣史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_history_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 4,
+          "schoolYear": 114,
+          "publisherTable": "三民一上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 4,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "臺灣最早的住民",
+          "details": [
+            "1-1 臺灣的原住民族",
+            "1-2 與他者互動下的原住民族"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 臺灣的原住民族",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南島語族、臺灣原住民族的族群形成與分布",
+                "部落組織、社會文化及歷史證據"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 與他者互動下的原住民族",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西、清治、日治及戰後的原住民族政策與互動",
+                "依節名辨識時期、抗爭、土地權利與文化復振"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "遷徙與移動的人們",
+          "details": [
+            "2-1 大航海～日治的遷徙與移動",
+            "2-2 戰後來臺的各方移民"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 大航海～日治的遷徙與移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西至日治的移民政策、人口流動與聚落形成，依題目年代辨識成因與影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 戰後來臺的各方移民",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後人口遷入、外省族群與其後新移民、移民成因與多元文化"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "統治體制的更迭",
+          "details": [
+            "3-1 帝國的邊陲地帶",
+            "3-2 邁向現代國家"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 帝國的邊陲地帶",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西、鄭氏及清代治理的制度與地域變化",
+                "行政區劃、邊疆治理與地方社會"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 邁向現代國家",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣統治政權與行政體制的演變",
+                "地方到中央、現代國家治理及政策，限所選時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "追求權益的聲音",
+          "details": [
+            "4-1 日治時期的政治、社會運動",
+            "4-2 戰後的政治、社會運動"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 日治時期的政治、社會運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治時期請願、自治運動、文化協會與社會運動",
+                "殖民地人民權利及不同運動訴求"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 戰後的政治、社會運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後政治變遷、黨外運動、解嚴、民主化、人權與政治改革",
+                "事件時序及史料辨析"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "拼經濟與求生存的人們",
+          "details": [
+            "5-1 大航海～清治的經濟",
+            "5-2 日治～戰後的經濟"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 大航海～清治的經濟",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大航海至清代農商經濟、土地開發、港口、商品及開港前後的變化"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 日治～戰後的經濟",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治至戰後的土地、農業、工業及商貿轉型",
+                "依節名區分殖民及戰後制度"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "多元文化的相遇與共存",
+          "details": [
+            "6-1 多元信仰與祭祀活動",
+            "6-2 文學與藝術"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 多元信仰與祭祀活動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原住民族祭儀、漢人民間信仰、外來宗教與地方祭祀",
+                "文化交流與信仰多樣性"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 文學與藝術",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣各時期文學、藝術、建築的發展與社會文化背景",
+                "依節名限縮"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "taiyu-114-history-1",
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "edition": "泰宇版",
+      "publisher": "泰宇",
+      "term": "第一學期",
+      "bookLabel": "第一冊（臺灣史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_history_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 5,
+          "schoolYear": 114,
+          "publisherTable": "泰宇一上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "泰宇",
+        "page": 5,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "原住民族的今昔",
+          "details": [
+            "1-1 從福爾摩沙人到原住民族",
+            "1-2 原住民族的處境與當代復興運動"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 從福爾摩沙人到原住民族",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南島語族、臺灣原住民族的族群形成與分布",
+                "部落組織、社會文化及歷史證據"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 原住民族的處境與當代復興運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西、清治、日治及戰後的原住民族政策與互動",
+                "依節名辨識時期、抗爭、土地權利與文化復振"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "日久他鄉成故鄉",
+          "details": [
+            "2-1 漢人落地生根開枝散葉",
+            "2-2 新移民新文化"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 漢人落地生根開枝散葉",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大航海時期至清治的漢人移民、移民政策、開墾、聚落及族群互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 新移民新文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治至戰後人口移動、日本人來臺、臺人赴海外、戰後移民及社會變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "從部落社會到現代國家",
+          "details": [
+            "3-1 從福爾摩沙到中華民國",
+            "3-2 國際局勢與臺灣地位",
+            "3-3 基礎建設、教育語言與集體意識的凝聚"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 從福爾摩沙到中華民國",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣統治政權與行政體制的演變",
+                "地方到中央、現代國家治理及政策，限所選時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 國際局勢與臺灣地位",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後國際局勢、臺澎金馬、冷戰外交與兩岸關係的歷史變遷",
+                "區分史實、法律文件與不同歷史主張"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-3 基礎建設、教育語言與集體意識的凝聚",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "教育、語言、文化政策與臺灣主體意識的歷史形成",
+                "辨析時期、背景及史料"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "從殖民體制到當家作主",
+          "details": [
+            "4-1 日本帝國下的政治社會運動",
+            "4-2 戰後臺灣追求民主的軌跡",
+            "4-3 解嚴前後臺灣的社會運動"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 日本帝國下的政治社會運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治時期請願、自治運動、文化協會與社會運動",
+                "殖民地人民權利及不同運動訴求"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 戰後臺灣追求民主的軌跡",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後政治變遷、黨外運動、解嚴、民主化、人權與政治改革",
+                "事件時序及史料辨析"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-3 解嚴前後臺灣的社會運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後及解嚴前後的勞工、婦女、原住民族、環境等社會運動",
+                "訴求、背景與制度影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "篳路藍縷到經濟奇蹟",
+          "details": [
+            "5-1 二十世紀以前農林商貿發展",
+            "5-2 二十世紀以後農林開發與商貿發展"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 二十世紀以前農林商貿發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大航海至清代農商經濟、土地開發、港口、商品及開港前後的變化"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 二十世紀以後農林開發與商貿發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治至戰後的土地、農業、工業及商貿轉型",
+                "依節名區分殖民及戰後制度"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "多元並陳的文化萬花筒",
+          "details": [
+            "6-1 原住民族的語言、宗教及文藝",
+            "6-2 不斷增添元素的臺灣文藝",
+            "6-3 漢人多元的宗教信仰"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 原住民族的語言、宗教及文藝",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原住民族語言、祭儀、信仰與文藝的多樣性、傳承與歷史變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 不斷增添元素的臺灣文藝",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣各時期文學、藝術、建築的發展與社會文化背景",
+                "依節名限縮"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-3 漢人多元的宗教信仰",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原住民族祭儀、漢人民間信仰、外來宗教與地方祭祀",
+                "文化交流與信仰多樣性"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "chwa-114-history-1",
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "edition": "全華版",
+      "publisher": "全華",
+      "term": "第一學期",
+      "bookLabel": "第一冊（臺灣史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_history_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 6,
+          "schoolYear": 114,
+          "publisherTable": "全華一上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "全華",
+        "page": 6,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "南島語族的相關族群",
+          "details": [
+            "1-1 同源異地的語族",
+            "1-2 生存空間的壓縮與反抗"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 同源異地的語族",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南島語族、臺灣原住民族的族群形成與分布",
+                "部落組織、社會文化及歷史證據"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 生存空間的壓縮與反抗",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西、清治、日治及戰後的原住民族政策與互動",
+                "依節名辨識時期、抗爭、土地權利與文化復振"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "移民社會的形成",
+          "details": [
+            "2-1 早期移民",
+            "2-2 戰後的移民浪潮"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 早期移民",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "荷西至日治的移民政策、人口流動與聚落形成，依題目年代辨識成因與影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 戰後的移民浪潮",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後人口遷入、外省族群與其後新移民、移民成因與多元文化"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "臺灣的經貿發展",
+          "details": [
+            "3-1 臺灣的商貿活動",
+            "3-2 臺灣的土地開發"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 臺灣的商貿活動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "各統治時期的貿易商品、港口、市場及經貿政策",
+                "比較時序與經濟結構"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 臺灣的土地開發",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "各時期土地開墾、土地權利、農業政策與土地改革",
+                "依史料判斷制度及影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "臺灣的多元文化",
+          "details": [
+            "4-1 原住民族的語言、信仰與祭儀",
+            "4-2 多元信仰"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 原住民族的語言、信仰與祭儀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原住民族語言、祭儀、信仰與文藝的多樣性、傳承與歷史變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 多元信仰",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原住民族祭儀、漢人民間信仰、外來宗教與地方祭祀",
+                "文化交流與信仰多樣性"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "傳統到現代文藝",
+          "details": [
+            "5-1 原住民族與漢人的文藝",
+            "5-2 日治時期的文藝發展",
+            "5-3 戰後的文藝發展"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 原住民族與漢人的文藝",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原住民族、漢人與日治以前的文學、工藝、建築和藝術",
+                "文化接觸與傳承"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 日治時期的文藝發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治時期文學、美術、教育與文化活動",
+                "作品、媒介及殖民時代背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-3 戰後的文藝發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後臺灣文學、美術、語言政策與多元文化發展",
+                "依史料比較不同時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "臺澎金馬如何成為一體",
+          "details": [
+            "6-1 從地方到中央",
+            "6-2 國際處境",
+            "6-3 基礎建設與教育"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 從地方到中央",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣統治政權與行政體制的演變",
+                "地方到中央、現代國家治理及政策，限所選時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 國際處境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後國際局勢、臺澎金馬、冷戰外交與兩岸關係的歷史變遷",
+                "區分史實、法律文件與不同歷史主張"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-3 基礎建設與教育",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "教育、語言、文化政策與臺灣主體意識的歷史形成",
+                "辨析時期、背景及史料"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "追求自治與民主的軌跡",
+          "details": [
+            "7-1 日治時期的政治與社會運動",
+            "7-2 戰後的人權情況與政治運動",
+            "7-3 社會運動的蓬勃發展"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 日治時期的政治與社會運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日治時期請願、自治運動、文化協會與社會運動",
+                "殖民地人民權利及不同運動訴求"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "7-2 戰後的人權情況與政治運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後政治變遷、黨外運動、解嚴、民主化、人權與政治改革",
+                "事件時序及史料辨析"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "7-3 社會運動的蓬勃發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後及解嚴前後的勞工、婦女、原住民族、環境等社會運動",
+                "訴求、背景與制度影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-114-history-2",
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第二學期",
+      "bookLabel": "第二冊（東亞史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-2_comparison_history_114.pdf?v=20260224",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰一下",
+          "reviewMethod": "page-and-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "page-and-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "傳統政治權威的形塑",
+          "details": [
+            "1-1 傳統政治權威的類型",
+            "1-2 國家的統治技術",
+            "1-3 東亞各國政治權威的建立"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 傳統政治權威的類型",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中國傳統政治權威、封建、郡縣、皇帝制度、儒家與正統觀念",
+                "朝代和制度比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 國家的統治技術",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戶籍、土地、賦稅、徭役、官僚與選官方式",
+                "國家治理及制度變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-3 東亞各國政治權威的建立",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日本、朝鮮、越南等傳統國家與中國的政治制度、文化交流與區域關係"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "國家統治與社會結構",
+          "details": [
+            "2-1 宗族、商業類型組織與國家的互動",
+            "2-2 宗教組織與國家的互動"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 宗族、商業類型組織與國家的互動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宗族、血緣、商業與互助組織",
+                "民間社會和國家治理的互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 宗教組織與國家的互動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "佛教、道教、民間宗教與宗教組織",
+                "國家政策、社會功能與互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代以前的人群移動與交流",
+          "details": [
+            "3-1 十四世紀以前的東亞人群移動",
+            "3-2 十四至十八世紀的東亞人群移動"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 十四世紀以前的東亞人群移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近代以前東亞人口遷徙、戰亂、商貿、宗教及技術文化傳播",
+                "依節名限制年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 十四至十八世紀的東亞人群移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宋元明清海上貿易、移民、海禁、海外華人及跨區域文化交流",
+                "依節名限制年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代以後的東亞人群移動及影響",
+          "details": [
+            "4-1 近代華人的移動",
+            "4-2 近代日本、朝鮮與臺灣的人群移動與影響"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 近代華人的移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近現代華人出洋、勞工移民、戰亂與海外社群",
+                "原因、路徑與文化影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 近代日本、朝鮮與臺灣的人群移動與影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近現代日本、朝鮮、臺灣人口移動、殖民與戰爭背景",
+                "依節名限制地區"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "邁向現代化的東亞",
+          "details": [
+            "5-1 中國的危機與轉變",
+            "5-2 日本的蛻變",
+            "5-3 朝鮮與越南的因應"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 中國的危機與轉變",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "晚清條約、洋務、變法、革命及國家轉型",
+                "改革背景、成果與限制"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 日本的蛻變",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "幕末開港、明治維新、近代國家建立及對外擴張",
+                "制度改革和影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-3 朝鮮與越南的因應",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "朝鮮與越南面對西方帝國主義、日本及法國的因應",
+                "改革與殖民背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代東亞局勢的發展",
+          "details": [
+            "6-1 第二次世界大戰的東亞局勢",
+            "6-2 共產主義在東亞的發展",
+            "6-3 區域統合與未來展望"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 第二次世界大戰的東亞局勢",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二十世紀東亞戰爭的歷史背景、殖民與戰時社會、戰後秩序",
+                "不延伸為軍事技術細節"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 共產主義在東亞的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "共產主義在中國、朝鮮、越南等地的發展與政權變遷",
+                "冷戰、革命及社會影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-3 區域統合與未來展望",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後東亞區域合作、經貿整合、國際組織與區域衝突的歷史背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-history-2",
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第二學期",
+      "bookLabel": "第二冊（東亞史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-2_comparison_history_114.pdf?v=20260224",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "翰林一下",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "國家的統治",
+          "details": [
+            "1-1 中國的傳統政治權威",
+            "1-2 國家的統治技術",
+            "1-3 東亞各地的政治權威"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 中國的傳統政治權威",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中國傳統政治權威、封建、郡縣、皇帝制度、儒家與正統觀念",
+                "朝代和制度比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 國家的統治技術",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戶籍、土地、賦稅、徭役、官僚與選官方式",
+                "國家治理及制度變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-3 東亞各地的政治權威",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日本、朝鮮、越南等傳統國家與中國的政治制度、文化交流與區域關係"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "社會與國家",
+          "details": [
+            "2-1 血緣性組織及其他社會組織",
+            "2-2 宗教組織"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 血緣性組織及其他社會組織",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "民間組織、宗族、行會、慈善與宗教組織，依節名比較功能及官方互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 宗教組織",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "佛教、道教、民間宗教與宗教組織",
+                "國家政策、社會功能與互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代以前東亞的人群移動",
+          "details": [
+            "3-1 13世紀以前的人群移動與交流",
+            "3-2 13世紀以後的人群移動與交流"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 13世紀以前的人群移動與交流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近代以前東亞人口遷徙、戰亂、商貿、宗教及技術文化傳播",
+                "依節名限制年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 13世紀以後的人群移動與交流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宋元明清海上貿易、移民、海禁、海外華人及跨區域文化交流",
+                "依節名限制年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代以後東亞的人群移動",
+          "details": [
+            "4-1 中國的人群移動",
+            "4-2 日本與朝鮮的人群移動"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 中國的人群移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近現代華人出洋、勞工移民、戰亂與海外社群",
+                "原因、路徑與文化影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 日本與朝鮮的人群移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近現代日本、朝鮮、臺灣人口移動、殖民與戰爭背景",
+                "依節名限制地區"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "傳統與現代的交會",
+          "details": [
+            "5-1 中國對西力東漸的因應",
+            "5-2 東亞諸國對西力衝擊的轉變"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 中國對西力東漸的因應",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "晚清條約、洋務、變法、革命及國家轉型",
+                "改革背景、成果與限制"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 東亞諸國對西力衝擊的轉變",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞各國面對帝國主義的改革、抵抗及近代國家形成",
+                "比較國家與制度"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "戰爭與和平",
+          "details": [
+            "6-1 戰火下的東亞人民",
+            "6-2 戰後共產主義在東亞的發展",
+            "6-3 東亞的區域統合與紛爭"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 戰火下的東亞人民",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二十世紀東亞戰爭的歷史背景、殖民與戰時社會、戰後秩序",
+                "不延伸為軍事技術細節"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 戰後共產主義在東亞的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "共產主義在中國、朝鮮、越南等地的發展與政權變遷",
+                "冷戰、革命及社會影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-3 東亞的區域統合與紛爭",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後東亞區域合作、經貿整合、國際組織與區域衝突的歷史背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-history-2",
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第二學期",
+      "bookLabel": "第二冊（東亞史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-2_comparison_history_114.pdf?v=20260224",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "schoolYear": 114,
+          "publisherTable": "南一一下",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "國家的統治",
+          "details": [
+            "1-1 傳統政治權威的類型",
+            "1-2 戶籍、土地或賦役與國家統治的關係",
+            "1-3 東亞各國傳統政權的發展"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 傳統政治權威的類型",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中國傳統政治權威、封建、郡縣、皇帝制度、儒家與正統觀念",
+                "朝代和制度比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 戶籍、土地或賦役與國家統治的關係",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戶籍、土地、賦稅、徭役、官僚與選官方式",
+                "國家治理及制度變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-3 東亞各國傳統政權的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日本、朝鮮、越南等傳統國家與中國的政治制度、文化交流與區域關係"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "社會組織",
+          "details": [
+            "2-1 宗教性的社會組織",
+            "2-2 血緣性及社會性的互助組織"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 宗教性的社會組織",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "佛教、道教、民間宗教與宗教組織",
+                "國家政策、社會功能與互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 血緣性及社會性的互助組織",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宗族、血緣、商業與互助組織",
+                "民間社會和國家治理的互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代以前中國人群移動與交流",
+          "details": [
+            "3-1 十三世紀以前人群移動與交流",
+            "3-2 十三至十九世紀人群移動與交流"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 十三世紀以前人群移動與交流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近代以前東亞人口遷徙、戰亂、商貿、宗教及技術文化傳播",
+                "依節名限制年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 十三至十九世紀人群移動與交流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宋元明清海上貿易、移民、海禁、海外華人及跨區域文化交流",
+                "依節名限制年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代以後東亞人群移動與交流",
+          "details": [
+            "4-1 中國的人群移動與交流",
+            "4-2 日本、朝鮮的人群移動"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 中國的人群移動與交流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近現代華人出洋、勞工移民、戰亂與海外社群",
+                "原因、路徑與文化影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 日本、朝鮮的人群移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近現代日本、朝鮮、臺灣人口移動、殖民與戰爭背景",
+                "依節名限制地區"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "傳統與現代的交會",
+          "details": [
+            "5-1 西方文化傳入東亞的影響",
+            "5-2 東亞國家對西方帝國主義的回應",
+            "5-3 民間社會與現代化的激盪"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 西方文化傳入東亞的影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西方文化、傳教、知識、通商及帝國主義對東亞的衝擊",
+                "依節名限制政策回應"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 東亞國家對西方帝國主義的回應",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞各國面對帝國主義的改革、抵抗及近代國家形成",
+                "比較國家與制度"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-3 民間社會與現代化的激盪",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞民間社會、新式教育、思想、改革與現代化",
+                "社會變遷與公共參與"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "戰爭與和平",
+          "details": [
+            "6-1 戰爭下的東亞",
+            "6-2 東亞共產政權的發展",
+            "6-3 東亞區域的合作與衝突"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 戰爭下的東亞",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二十世紀東亞戰爭的歷史背景、殖民與戰時社會、戰後秩序",
+                "不延伸為軍事技術細節"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 東亞共產政權的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "共產主義在中國、朝鮮、越南等地的發展與政權變遷",
+                "冷戰、革命及社會影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-3 東亞區域的合作與衝突",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後東亞區域合作、經貿整合、國際組織與區域衝突的歷史背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-history-2",
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第二學期",
+      "bookLabel": "第二冊（東亞史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-2_comparison_history_114.pdf?v=20260224",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 4,
+          "schoolYear": 114,
+          "publisherTable": "三民一下",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 4,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。 4-1「十世紀中葉後的華人移徙」依文字層保留，與章題近代以後的年代可能不一致；待頁面核對。",
+      "units": [
+        {
+          "unit": "國家的統治",
+          "details": [
+            "1-1 國家的建立與統治權威的由來",
+            "1-2 帝國的統治技術",
+            "1-3 東亞各國的統治權威與政策—日本、朝鮮與越南"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 國家的建立與統治權威的由來",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中國傳統政治權威、封建、郡縣、皇帝制度、儒家與正統觀念",
+                "朝代和制度比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 帝國的統治技術",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戶籍、土地、賦稅、徭役、官僚與選官方式",
+                "國家治理及制度變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-3 東亞各國的統治權威與政策—日本、朝鮮與越南",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日本、朝鮮、越南等傳統國家與中國的政治制度、文化交流與區域關係"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "社會的組織",
+          "details": [
+            "2-1 宗教組織與民間社會",
+            "2-2 形形色色的社會組織"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 宗教組織與民間社會",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "佛教、道教、民間宗教與宗教組織",
+                "國家政策、社會功能與互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 形形色色的社會組織",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "民間組織、宗族、行會、慈善與宗教組織，依節名比較功能及官方互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代以前中國與東亞的人群移動",
+          "details": [
+            "3-1 變動中的中國社會",
+            "3-2 十世紀以後海上貿易圈的擴大與交流"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 變動中的中國社會",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近代以前東亞人口遷徙、戰亂、商貿、宗教及技術文化傳播",
+                "依節名限制年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 十世紀以後海上貿易圈的擴大與交流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宋元明清海上貿易、移民、海禁、海外華人及跨區域文化交流",
+                "依節名限制年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代以後的東亞移民",
+          "details": [
+            "4-1 十世紀中葉後的華人移徙",
+            "4-2 日本、朝鮮的人群移動"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 十世紀中葉後的華人移徙",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "華人人群移動、移民社會及成因",
+                "章節年代待核，不以此節獨立生成具體世紀辨識題"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解",
+                "依未核對的節名推定起始世紀"
+              ]
+            },
+            {
+              "name": "4-2 日本、朝鮮的人群移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近現代日本、朝鮮、臺灣人口移動、殖民與戰爭背景",
+                "依節名限制地區"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "傳統與現代的交會",
+          "details": [
+            "5-1 東亞國家對西力衝擊的回應",
+            "5-2 現代東亞國家的形成"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 東亞國家對西力衝擊的回應",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞各國面對帝國主義的改革、抵抗及近代國家形成",
+                "比較國家與制度"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 現代東亞國家的形成",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞各國面對帝國主義的改革、抵抗及近代國家形成",
+                "比較國家與制度"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "戰爭與和平",
+          "details": [
+            "6-1 東亞與第二次世界大戰",
+            "6-2 共產主義在東亞的擴張",
+            "6-3 東亞與國際新局勢"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 東亞與第二次世界大戰",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二十世紀東亞戰爭的歷史背景、殖民與戰時社會、戰後秩序",
+                "不延伸為軍事技術細節"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 共產主義在東亞的擴張",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "共產主義在中國、朝鮮、越南等地的發展與政權變遷",
+                "冷戰、革命及社會影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-3 東亞與國際新局勢",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後東亞區域合作、經貿整合、國際組織與區域衝突的歷史背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "taiyu-114-history-2",
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "edition": "泰宇版",
+      "publisher": "泰宇",
+      "term": "第二學期",
+      "bookLabel": "第二冊（東亞史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-2_comparison_history_114.pdf?v=20260224",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 5,
+          "schoolYear": 114,
+          "publisherTable": "泰宇一下",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "泰宇",
+        "page": 5,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "國家的統治",
+          "details": [
+            "1-1 從封建到帝國",
+            "1-2 納稅服役與土地制度",
+            "1-3 東亞諸國的互動"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 從封建到帝國",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中國傳統政治權威、封建、郡縣、皇帝制度、儒家與正統觀念",
+                "朝代和制度比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 納稅服役與土地制度",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戶籍、土地、賦稅、徭役、官僚與選官方式",
+                "國家治理及制度變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-3 東亞諸國的互動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日本、朝鮮、越南等傳統國家與中國的政治制度、文化交流與區域關係"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "人民、民間組織與國家",
+          "details": [
+            "2-1 民間組織的型態",
+            "2-2 人民、民間組織與官方的互動"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 民間組織的型態",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "民間組織、宗族、行會、慈善與宗教組織，依節名比較功能及官方互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 人民、民間組織與官方的互動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "民間組織、宗族、行會、慈善與宗教組織，依節名比較功能及官方互動"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代以前的人群移動與交流",
+          "details": [
+            "3-1 秦漢到元末時期的東亞人群移動",
+            "3-2 明清時期的東亞人群移動"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 秦漢到元末時期的東亞人群移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近代以前東亞人口遷徙、戰亂、商貿、宗教及技術文化傳播",
+                "依節名限制年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 明清時期的東亞人群移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宋元明清海上貿易、移民、海禁、海外華人及跨區域文化交流",
+                "依節名限制年代"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代以後的人群移動與影響",
+          "details": [
+            "4-1 近代以後的東亞人群移動",
+            "4-2 近代以後東亞人群移動的影響"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 近代以後的東亞人群移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近代東亞移民與人口流動、勞工、戰爭與殖民",
+                "成因及區域影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 近代以後東亞人群移動的影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近代東亞移民與人口流動、勞工、戰爭與殖民",
+                "成因及區域影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "傳統與現代的交會",
+          "details": [
+            "5-1 西方文化傳入對東亞的影響",
+            "5-2 東亞各國對西方帝國主義的回應",
+            "5-3 民間社會與現代化的激盪"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 西方文化傳入對東亞的影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西方文化、傳教、知識、通商及帝國主義對東亞的衝擊",
+                "依節名限制政策回應"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 東亞各國對西方帝國主義的回應",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞各國面對帝國主義的改革、抵抗及近代國家形成",
+                "比較國家與制度"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-3 民間社會與現代化的激盪",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞民間社會、新式教育、思想、改革與現代化",
+                "社會變遷與公共參與"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "戰爭與和平",
+          "details": [
+            "6-1 東亞各國在二十世紀的戰爭經歷",
+            "6-2 東亞共產政權的發展與影響",
+            "6-3 東南亞區域合作與經貿統合"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 東亞各國在二十世紀的戰爭經歷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二十世紀東亞戰爭的歷史背景、殖民與戰時社會、戰後秩序",
+                "不延伸為軍事技術細節"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 東亞共產政權的發展與影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "共產主義在中國、朝鮮、越南等地的發展與政權變遷",
+                "冷戰、革命及社會影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-3 東南亞區域合作與經貿統合",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰後東亞區域合作、經貿整合、國際組織與區域衝突的歷史背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-114-history-3",
+      "grade": "高中二年級",
+      "subject": "歷史",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第一學期",
+      "bookLabel": "第三冊（世界史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-1_comparison_history_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰二上",
+          "reviewMethod": "page-and-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "page-and-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "古代文化與基督教傳統",
+          "details": [
+            "1-1 古代文化的遺產",
+            "1-2 中古基督教世界",
+            "1-3 文藝復興"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 古代文化的遺產",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "古希臘與羅馬的神話、哲學、城邦、法律及文化遺產",
+                "史料與思想背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 中古基督教世界",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基督教起源與傳播、羅馬帝國、教會與中古歐洲社會",
+                "政教關係"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-3 文藝復興",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文藝復興、人文主義、古典文化再發現、藝術與知識變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "個人、自由、理性",
+          "details": [
+            "2-1 從宗教改革到啟蒙運動",
+            "2-2 政治經濟變革與社會思潮",
+            "2-3 民主的持續發展與挑戰"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 從宗教改革到啟蒙運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宗教改革、反宗教改革、科學革命與啟蒙運動",
+                "代表思想、歷史背景、因果及比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 政治經濟變革與社會思潮",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "英美法政治變革、自由主義、民族主義、工業化與社會思潮",
+                "限節名所及"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-3 民主的持續發展與挑戰",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近代民主制度、革命、選舉權與人權的發展及挑戰",
+                "思想、制度與史料比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "伊斯蘭與世界",
+          "details": [
+            "3-1 伊斯蘭的建立與早期傳布",
+            "3-2 伊斯蘭體系的形成與擴張"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 伊斯蘭的建立與早期傳布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭創立、早期傳播、哈里發與宗教文化",
+                "歷史年代及地區"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 伊斯蘭體系的形成與擴張",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭世界形成與擴張、商貿、知識交流及與歐洲互動",
+                "依節名限制時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "西方與世界的交流",
+          "details": [
+            "4-1 海外探險與全球交流",
+            "4-2 十九世紀西方霸權與世界的互動"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 海外探險與全球交流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海外探險、航路、跨洋貿易、人口與物種交流及殖民的早期發展"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 十九世紀西方霸權與世界的互動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "十九世紀西方帝國主義、殖民經濟、亞洲非洲與世界的互動",
+                "史料與因果"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "世界大戰與冷戰局勢",
+          "details": [
+            "5-1 世界大戰與極權政治",
+            "5-2 冷戰局勢的形成與發展",
+            "5-3 政治社會運動與冷戰的結束"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 世界大戰與極權政治",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "兩次世界大戰的歷史成因、極權政治、戰爭影響及戰後秩序",
+                "不涉及攻擊操作細節"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 冷戰局勢的形成與發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美蘇冷戰的形成、陣營、國際關係、區域衝突與終結",
+                "事件時序與歷史背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-3 政治社會運動與冷戰的結束",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反戰、民權、婦女與政治社會運動",
+                "冷戰社會背景及制度影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "歷史、當代與未來",
+          "details": [
+            "6-1 反殖民運動：非西方世界的反西方",
+            "6-2 多元文化與全球化：西方對現代性的反思"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 反殖民運動：非西方世界的反西方",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反殖民、民族自決、獨立運動與戰後去殖民化",
+                "依節名比較地區及背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 多元文化與全球化：西方對現代性的反思",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "冷戰後全球化、跨國交流、多元文化、文化認同與全球化反思"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-history-3",
+      "grade": "高中二年級",
+      "subject": "歷史",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "第三冊（世界史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-1_comparison_history_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "翰林二上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "古代文化與基督教傳統",
+          "details": [
+            "1-1 古代文化的遺產",
+            "1-2 中古基督教世界",
+            "1-3 文藝復興"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 古代文化的遺產",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "古希臘與羅馬的神話、哲學、城邦、法律及文化遺產",
+                "史料與思想背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 中古基督教世界",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基督教起源與傳播、羅馬帝國、教會與中古歐洲社會",
+                "政教關係"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-3 文藝復興",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文藝復興、人文主義、古典文化再發現、藝術與知識變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "個人、自由、理性",
+          "details": [
+            "2-1 從宗教改革到啟蒙運動",
+            "2-2 政經變革與社會思潮",
+            "2-3 民主的持續發展"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 從宗教改革到啟蒙運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宗教改革、反宗教改革、科學革命與啟蒙運動",
+                "代表思想、歷史背景、因果及比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 政經變革與社會思潮",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "英美法政治變革、自由主義、民族主義、工業化與社會思潮",
+                "限節名所及"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-3 民主的持續發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近代民主制度、革命、選舉權與人權的發展及挑戰",
+                "思想、制度與史料比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "伊斯蘭與世界",
+          "details": [
+            "3-1 伊斯蘭文化的發展與擴張",
+            "3-2 伊斯蘭世界與西方的互動"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 伊斯蘭文化的發展與擴張",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭創立、早期傳播、哈里發與宗教文化",
+                "歷史年代及地區"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 伊斯蘭世界與西方的互動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭世界形成與擴張、商貿、知識交流及與歐洲互動",
+                "依節名限制時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "西方與世界",
+          "details": [
+            "4-1 歐洲與亞洲的交流",
+            "4-2 歐洲與非、美兩洲的交流",
+            "4-3 世界大戰與極權政治",
+            "4-4 反殖民運動與獨立建國"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 歐洲與亞洲的交流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲與亞洲跨洋貿易、殖民擴張、文化交流與區域回應"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 歐洲與非、美兩洲的交流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲與非洲、美洲交流、跨大西洋貿易、奴隸制度與殖民社會"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-3 世界大戰與極權政治",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "兩次世界大戰的歷史成因、極權政治、戰爭影響及戰後秩序",
+                "不涉及攻擊操作細節"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-4 反殖民運動與獨立建國",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反殖民、民族自決、獨立運動與戰後去殖民化",
+                "依節名比較地區及背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "冷戰期間的世界局勢",
+          "details": [
+            "5-1 冷戰期間的政治局勢",
+            "5-2 社會運動與反戰思潮",
+            "5-3 現代性與現代文化"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 冷戰期間的政治局勢",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美蘇冷戰的形成、陣營、國際關係、區域衝突與終結",
+                "事件時序與歷史背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 社會運動與反戰思潮",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反戰、民權、婦女與政治社會運動",
+                "冷戰社會背景及制度影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-3 現代性與現代文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "現代性、現代文化、工業社會與對西方中心觀點的反思",
+                "概念及史料比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "冷戰後的世界局勢",
+          "details": [
+            "6-1 1980年代後的西方與反西方",
+            "6-2 全球化與多元文化"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 1980年代後的西方與反西方",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西方與非西方世界的互動、反殖民、冷戰後政治及文化變遷",
+                "依節名限制時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 全球化與多元文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "冷戰後全球化、跨國交流、多元文化、文化認同與全球化反思"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-history-3",
+      "grade": "高中二年級",
+      "subject": "歷史",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第一學期",
+      "bookLabel": "第三冊（世界史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-1_comparison_history_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "schoolYear": 114,
+          "publisherTable": "南一二上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "神話、宗教與理性曙光",
+          "details": [
+            "1-1 眾神國度與人的世界",
+            "1-2 基督教的發展與傳布",
+            "1-3 理性曙光的再現"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 眾神國度與人的世界",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "古希臘與羅馬的神話、哲學、城邦、法律及文化遺產",
+                "史料與思想背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 基督教的發展與傳布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基督教起源與傳播、羅馬帝國、教會與中古歐洲社會",
+                "政教關係"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-3 理性曙光的再現",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文藝復興、人文主義、古典文化再發現、藝術與知識變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "近代歐美面貌的形塑",
+          "details": [
+            "2-1 理性與自由的力量",
+            "2-2 民主的內涵與建構",
+            "2-3 工業革命的發展與影響"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 理性與自由的力量",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宗教改革、反宗教改革、科學革命與啟蒙運動",
+                "代表思想、歷史背景、因果及比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 民主的內涵與建構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近代民主制度、革命、選舉權與人權的發展及挑戰",
+                "思想、制度與史料比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-3 工業革命的發展與影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "工業革命的技術與經濟背景、工廠制度、都市化、勞工與社會變化"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "伊斯蘭世界",
+          "details": [
+            "3-1 伊斯蘭世界的建立",
+            "3-2 伊斯蘭世界與西方的互動"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 伊斯蘭世界的建立",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭創立、早期傳播、哈里發與宗教文化",
+                "歷史年代及地區"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 伊斯蘭世界與西方的互動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭世界形成與擴張、商貿、知識交流及與歐洲互動",
+                "依節名限制時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "西方與近代世界",
+          "details": [
+            "4-1 跨洋交流與全球貿易的展開",
+            "4-2 歐洲殖民帝國的挑戰與擴張",
+            "4-3 世界大戰與反殖民"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 跨洋交流與全球貿易的展開",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海外探險、航路、跨洋貿易、人口與物種交流及殖民的早期發展"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 歐洲殖民帝國的挑戰與擴張",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "十九世紀西方帝國主義、殖民經濟、亞洲非洲與世界的互動",
+                "史料與因果"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-3 世界大戰與反殖民",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "兩次世界大戰的歷史成因、極權政治、戰爭影響及戰後秩序",
+                "不涉及攻擊操作細節",
+                "世界大戰與反殖民運動的關聯、民族自決與去殖民化"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "冷戰",
+          "details": [
+            "5-1 冷戰下的局勢",
+            "5-2 反戰與社會運動"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 冷戰下的局勢",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美蘇冷戰的形成、陣營、國際關係、區域衝突與終結",
+                "事件時序與歷史背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 反戰與社會運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反戰、民權、婦女與政治社會運動",
+                "冷戰社會背景及制度影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "全球化時代的來臨",
+          "details": [
+            "6-1 西方與現代性",
+            "6-2 全球化定義與反思"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 西方與現代性",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "現代性、現代文化、工業社會與對西方中心觀點的反思",
+                "概念及史料比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 全球化定義與反思",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "冷戰後全球化、跨國交流、多元文化、文化認同與全球化反思"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-history-3",
+      "grade": "高中二年級",
+      "subject": "歷史",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第一學期",
+      "bookLabel": "第三冊（世界史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-1_comparison_history_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 4,
+          "schoolYear": 114,
+          "publisherTable": "三民二上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 4,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "古代文化與基督教傳統",
+          "details": [
+            "1-1 古代神話與哲學",
+            "1-2 基督教與中古歐洲",
+            "1-3 復古與創新兼具的文藝復興"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 古代神話與哲學",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "古希臘與羅馬的神話、哲學、城邦、法律及文化遺產",
+                "史料與思想背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 基督教與中古歐洲",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基督教起源與傳播、羅馬帝國、教會與中古歐洲社會",
+                "政教關係"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-3 復古與創新兼具的文藝復興",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文藝復興、人文主義、古典文化再發現、藝術與知識變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "歐洲自由與民主的發展",
+          "details": [
+            "2-1 從宗教改革到啟蒙運動",
+            "2-2 十八、十九世紀政治與經濟的新思維"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 從宗教改革到啟蒙運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宗教改革、反宗教改革、科學革命與啟蒙運動",
+                "代表思想、歷史背景、因果及比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 十八、十九世紀政治與經濟的新思維",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "英美法政治變革、自由主義、民族主義、工業化與社會思潮",
+                "限節名所及"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "伊斯蘭與世界",
+          "details": [
+            "3-1 伊斯蘭文化的發展與擴張",
+            "3-2 伊斯蘭世界與西方的互動"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 伊斯蘭文化的發展與擴張",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭創立、早期傳播、哈里發與宗教文化",
+                "歷史年代及地區"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 伊斯蘭世界與西方的互動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭世界形成與擴張、商貿、知識交流及與歐洲互動",
+                "依節名限制時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "西方與世界",
+          "details": [
+            "4-1 近代歐洲的擴張",
+            "4-2 兩次世界大戰",
+            "4-3 政治運動與反殖民運動興起"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 近代歐洲的擴張",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "十九世紀西方帝國主義、殖民經濟、亞洲非洲與世界的互動",
+                "史料與因果"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 兩次世界大戰",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "兩次世界大戰的歷史成因、極權政治、戰爭影響及戰後秩序",
+                "不涉及攻擊操作細節"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-3 政治運動與反殖民運動興起",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反殖民、民族自決、獨立運動與戰後去殖民化",
+                "依節名比較地區及背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "冷戰期間的世界局勢",
+          "details": [
+            "5-1 冷戰時期的政治局勢",
+            "5-2 社會運動與反戰"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 冷戰時期的政治局勢",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美蘇冷戰的形成、陣營、國際關係、區域衝突與終結",
+                "事件時序與歷史背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 社會運動與反戰",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反戰、民權、婦女與政治社會運動",
+                "冷戰社會背景及制度影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "冷戰後的世界局勢",
+          "details": [
+            "6-1 現代性與現代文化",
+            "6-2 「西方」與「反西方」",
+            "6-3 全球化與多元文化"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 現代性與現代文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "現代性、現代文化、工業社會與對西方中心觀點的反思",
+                "概念及史料比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 「西方」與「反西方」",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西方與非西方世界的互動、反殖民、冷戰後政治及文化變遷",
+                "依節名限制時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-3 全球化與多元文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "冷戰後全球化、跨國交流、多元文化、文化認同與全球化反思"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "taiyu-114-history-3",
+      "grade": "高中二年級",
+      "subject": "歷史",
+      "edition": "泰宇版",
+      "publisher": "泰宇",
+      "term": "第一學期",
+      "bookLabel": "第三冊（世界史）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "social-crosswalk-transcription",
+      "scopeSelectionStatus": "social-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-1_comparison_history_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 5,
+          "schoolYear": 114,
+          "publisherTable": "泰宇二上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWRyJTA2JTdkJTA3JTE3bHAlN2VqJTBjJTE1eW0lMWN1JTA0JTBhJTFiZSUxYSUwNWIlN2UlMGIlMTd2eGp1JTBhJTdicCUxYyUxY3g%3D",
+          "type": "official-approved-book-list",
+          "provider": "國家教育研究院",
+          "schoolYear": 114,
+          "semester": 2,
+          "limitations": "核對出版社與冊次存在性，非章節來源"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "泰宇",
+        "page": 5,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照表左欄章節，原始檔雜湊未取得；細部觀念為編輯性出題提示，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "古代文化與基督教傳統",
+          "details": [
+            "1-1 古代文化的遺產",
+            "1-2 基督教世界的形成",
+            "1-3 文藝復興"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 古代文化的遺產",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "古希臘與羅馬的神話、哲學、城邦、法律及文化遺產",
+                "史料與思想背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-2 基督教世界的形成",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基督教起源與傳播、羅馬帝國、教會與中古歐洲社會",
+                "政教關係"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "1-3 文藝復興",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文藝復興、人文主義、古典文化再發現、藝術與知識變遷"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "個人自由理性的追尋",
+          "details": [
+            "2-1 從宗教改革到啟蒙運動",
+            "2-2 歐美民主政治的形塑",
+            "2-3 歐美經濟政治思潮的發展"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 從宗教改革到啟蒙運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宗教改革、反宗教改革、科學革命與啟蒙運動",
+                "代表思想、歷史背景、因果及比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-2 歐美民主政治的形塑",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "近代民主制度、革命、選舉權與人權的發展及挑戰",
+                "思想、制度與史料比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "2-3 歐美經濟政治思潮的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "英美法政治變革、自由主義、民族主義、工業化與社會思潮",
+                "限節名所及"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "伊斯蘭與世界",
+          "details": [
+            "3-1 伊斯蘭文化的發展與擴張",
+            "3-2 伊斯蘭世界與西方的互動"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 伊斯蘭文化的發展與擴張",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭創立、早期傳播、哈里發與宗教文化",
+                "歷史年代及地區"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "3-2 伊斯蘭世界與西方的互動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭世界形成與擴張、商貿、知識交流及與歐洲互動",
+                "依節名限制時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "西方與世界",
+          "details": [
+            "4-1 跨洋探險與全球交流",
+            "4-2 西方殖民帝國與世界的互動",
+            "4-3 兩次世界大戰",
+            "4-4 現代反殖民運動的發展"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 跨洋探險與全球交流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海外探險、航路、跨洋貿易、人口與物種交流及殖民的早期發展"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-2 西方殖民帝國與世界的互動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "十九世紀西方帝國主義、殖民經濟、亞洲非洲與世界的互動",
+                "史料與因果"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-3 兩次世界大戰",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "兩次世界大戰的歷史成因、極權政治、戰爭影響及戰後秩序",
+                "不涉及攻擊操作細節"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "4-4 現代反殖民運動的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反殖民、民族自決、獨立運動與戰後去殖民化",
+                "依節名比較地區及背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "冷戰及後冷戰時期的世界局勢",
+          "details": [
+            "5-1 美、蘇冷戰的形成與發展",
+            "5-2 政治社會運動與冷戰的終結"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 美、蘇冷戰的形成與發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美蘇冷戰的形成、陣營、國際關係、區域衝突與終結",
+                "事件時序與歷史背景"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "5-2 政治社會運動與冷戰的終結",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反戰、民權、婦女與政治社會運動",
+                "冷戰社會背景及制度影響"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "當代世界新局面",
+          "details": [
+            "6-1 現代性與現代文化",
+            "6-2 西方與反西方",
+            "6-3 全球化與多元文化"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 現代性與現代文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "現代性、現代文化、工業社會與對西方中心觀點的反思",
+                "概念及史料比較"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-2 西方與反西方",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西方與非西方世界的互動、反殖民、冷戰後政治及文化變遷",
+                "依節名限制時期"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            },
+            {
+              "name": "6-3 全球化與多元文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "冷戰後全球化、跨國交流、多元文化、文化認同與全球化反思"
+              ],
+              "excludedContent": [
+                "未選節次的獨立考點",
+                "超出節名年代或地區的事件",
+                "無來源的歷史主張及單純閱讀理解"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

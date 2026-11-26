@@ -32,6 +32,20 @@
         !!book.units?.length&&book.units.every(u=>u.details?.length>0&&new Set(u.details).size===u.details.length&&
           Array.isArray(u.concepts)&&u.concepts.length===u.details.length&&u.concepts.every((c,i)=>c.name===u.details[i]&&Array.isArray(c.allowedContent)&&c.allowedContent.length>0&&Array.isArray(c.excludedContent)));
     }
+    if(book.scopeSelectionStatus==='social-crosswalk-transcription'){
+      const e=book.scopeEvidence, pub=['龍騰','翰林','南一','三民','泰宇','全華'],page=pub.indexOf(book.publisher)+1;
+      const vol=book.grade==='高中一年級'?(book.term==='第一學期'?1:book.term==='第二學期'?2:0):book.grade==='高中二年級'&&book.term==='第一學期'?3:0;
+      const files=['10-1_comparison_history_114.pdf?v=20250901','10-2_comparison_history_114.pdf?v=20260224','11-1_comparison_history_114.pdf?v=20250901'];
+      const method=page===1&&vol>1?'page-and-text':'structured-text';
+      if(book.subject!=='歷史'||!vol||!page||(page===6&&vol!==1)||book.edition!==book.publisher+'版'||book.schoolYear!==114||
+        book.releaseStatus!=='blocked'||book.verificationStatus!==book.scopeSelectionStatus||book.courseType!=='required'||book.schedulePolicy!=='book-sequence'||
+        book.scopeDetailLevel!=='crosswalk-sections'||!/^\d{4}-\d{2}-\d{2}$/.test(book.verifiedAt||'')||
+        e?.kind!=='publisher-crosswalk-transcription'||e.publisher!==book.publisher||e.page!==page||e.schoolYear!==114||
+        e.columnPolicy!=='publisher-left-only'||e.reviewMethod!==method||e.rawFileHashStatus!=='unavailable')return false;
+      return !!book.sources?.some(s=>s.type==='third-party-curriculum-crosswalk'&&s.url==='https://www.go100.com.tw/file/108_comparison_table/senior/'+files[vol-1]&&s.page===page&&s.schoolYear===114&&s.publisherTable===book.publisher+['一上','一下','二上'][vol-1]&&s.reviewMethod===method)&&
+        !!book.units?.length&&book.units.every(u=>u.details?.length>0&&u.details.length<=24&&new Set(u.details).size===u.details.length&&
+          Array.isArray(u.concepts)&&u.concepts.length===u.details.length&&u.concepts.every((c,i)=>c.name===u.details[i]&&Array.isArray(c.allowedContent)&&c.allowedContent.length&&Array.isArray(c.excludedContent)));
+    }
     if(book.scopeSelectionStatus==='grade12-crosswalk-transcription'){
       const e=book.scopeEvidence, track=book.subject==='數學甲'?'甲':book.subject==='數學乙'?'乙':'';
       const variant=book.edition===book.publisher+'版（乙版）';
