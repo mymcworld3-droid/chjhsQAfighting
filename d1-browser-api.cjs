@@ -3,6 +3,7 @@ const {adminProject,PROJECT_IDS}=require('./firebase-admin-projects.cjs');
 const {getD1Store,Transaction,Query,Codec,validPath}=require('./d1-store.cjs');
 const {mayCommitDiscovery}=require('./refinery-discovery-commit.cjs');
 const {listed:publicDongtian}=require('./dongtian-access.cjs');
+const RealmGate=require('./realm-dungeon-gate.cjs');
 const fail=(message='無權存取這筆資料',status=403,code='permission-denied')=>Object.assign(Error(message),{status,code});
 const same=(a,b)=>JSON.stringify(Codec.encode(a??null))===JSON.stringify(Codec.encode(b??null));
 const changed=(a,b)=>[...new Set([...Object.keys(a||{}),...Object.keys(b||{})])].filter(k=>!same(a?.[k],b?.[k]));
@@ -70,6 +71,7 @@ function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
     if(id===uid) {
       if(after===null)return;
       if(after.uid!==undefined&&after.uid!==uid)throw fail();
+      if(!same(before?.stats?.realmDungeonGateV1,after.stats?.realmDungeonGateV1))throw fail('突破紀錄由伺服器管理');
       for(const field of ['isAdmin','roles','role','permissions','admin']) {
         if(!same(before?.[field],after[field]) && !(before===null&&field==='isAdmin'&&after[field]===false))throw fail();
       }
@@ -195,6 +197,14 @@ async function executeCommit(db,input,context) {
   }
   const preview=tx.preview();
   for(const op of tx.writes)authorizeWrite({role:db.role,path:op.ref.path,before:tx.reads.get(op.ref.path).data()??null,after:preview.get(op.ref.path),operation:op,context,tx,preview});
+  if(db.role==='A'&&!context.admin){
+    const path='users/'+context.uid,after=preview.get(path),before=tx.reads.get(path)?.data();
+    if(!before&&after?.stats&&RealmGate.needsRead({},after.stats.totalScore)){
+      const ref=db.doc(path),pointer=(await tx.get(db.doc('tacticalBattlePlayers/'+context.uid))).data();
+      const result=RealmGate.apply({},after.stats.totalScore,pointer);
+      tx.update(ref,{'stats.totalScore':result.score,'stats.rankLevel':Math.min(Number(after.stats.rankLevel)||0,8),...(result.state?{'stats.realmDungeonGateV1':result.state}:{})});
+    }
+  }
   await tx.commit();
 }
 function registerD1BrowserApi(app,{env=process.env,resolve=role=>adminProject(role),store=role=>getD1Store(role,env)}={}) {

@@ -46,12 +46,12 @@ const seedTickets = (db, tickets = 0) => db.docs.set(dungeonWallet, {weaponDunge
 const tickets = db => db.docs.get(dungeonWallet)?.weaponDungeonV1?.tickets;
 const ticketQuests = rules.PATH.filter(q=>q.reward.weaponDungeonTicket);
 const beforeQuest = id => ({ version: 2, pathClaimed: rules.PATH.slice(0, rules.PATH.findIndex(q => q.id === id)).map(q => q.id) });
-const withBattleProgress = db => db.docs.set(dungeonWallet,{trial:{best:10,stage:11},weaponDungeonV1:{tickets:0,grantDay:W.day(now.getTime()),clears:[1]}});
+const withBattleProgress = db => db.docs.set(dungeonWallet,{trial:{best:10,stage:11},weaponDungeonV1:{tickets:0,grantDay:W.day(now.getTime()),clears:[28]}});
 test('new path excludes retired activities and only selected milestones award dungeon tickets', () => {
-  assert.equal(rules.PATH.length,22);
+  assert.equal(rules.PATH.length,28);
   assert.ok(rules.PATH.every(q=>q.metric!=='raid'&&q.metric!=='dongtian'&&!Object.keys(q.reward.materials).length));
   assert.deepEqual(ticketQuests.map(q=>[q.id,q.reward.weaponDungeonTicket]),[
-    ['path-foundation',1],['path-golden',1],['path-weapon-dungeon-first',2],['path-nascent',2],['path-solo-hundred',2]
+    ['path-foundation',1],['path-weapon-dungeon-first',2],['path-golden',1],['path-nascent',2],['path-solo-hundred',2]
   ]);
   assert.equal(rules.PATH.filter(q=>q.metric==='story'&&q.reward.weaponDungeonTicket).length,0);
   assert.ok(rules.DAILY.every(q=>!q.reward.weaponDungeonTicket));
@@ -71,7 +71,7 @@ test('complete new chain grants eight tickets, retains existing draw tickets and
   }
   assert.equal(total,8);assert.equal(db.docs.get('users/u1').soulboundDrawTickets,7);
   const final=await questTransaction(db,'u1',null,now);
-  assert.equal(final.quests.path,null);assert.equal(final.quests.pathCompleted,22);
+  assert.equal(final.quests.path,null);assert.equal(final.quests.pathCompleted,28);
   assert.deepEqual(final.quests.pathTicketRewards,[]);
 });
 test('concurrent milestone claims award exactly once',async()=>{

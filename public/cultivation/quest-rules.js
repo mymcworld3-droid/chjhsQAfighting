@@ -55,12 +55,27 @@
   };
   // Legacy IDs remain in the migration catalog, never in the new active chain.
   const RETIRED_PATH = new Set(['path-raid-one','path-raid-three','path-raid-ten','path-duel-five','path-cave']);
+  // Lifetime successful weapon-dungeon clears, not attempts or ticket consumption.
+  const DUNGEON_GATES = Object.freeze([
+    {id:'path-weapon-dungeon-first',realm:'金丹',score:28,clears:1,before:'path-golden',gold:250},
+    {id:'path-gate-nascent',realm:'元嬰',score:68,clears:3,before:'path-nascent',gold:250},
+    {id:'path-gate-spirit',realm:'化神',score:188,clears:6,before:'path-spirit',gold:350},
+    {id:'path-gate-void',realm:'煉虛',score:428,clears:10,before:'path-void',gold:450},
+    {id:'path-gate-union',realm:'合體',score:788,clears:15,before:'path-union',gold:600},
+    {id:'path-gate-tribulation',realm:'渡劫',score:1268,clears:21,before:'path-mahayana',gold:800},
+    {id:'path-gate-half-immortal',realm:'半仙',score:1868,clears:28,before:'path-tribulation',gold:1000}
+  ].map(Object.freeze));
+  const dungeonGateQuest = g=>({...quest(g.id,g.clears===1?'初探秘境':g.realm+'歷劫',
+    '累計成功通關武器副本 '+g.clears+' 次，為突破'+g.realm+'的必要條件。',
+    'weaponDungeonClear',g.clears,g.gold,g.clears===1?1:0,'weaponDungeon'),
+    breakthroughRealm:g.realm});
+  function dungeonClearCount(pointer) {
+    const p=pointer?.weaponDungeonV1;
+    return [p,...Object.values(p?.byDungeon||{})].reduce((sum,d)=>sum+(Array.isArray(d?.clears)?d.clears.reduce((n,v)=>n+number(v),0):0),0);
+  }
   const PATH_AFTER = {
     'path-foundation': [quest('path-trial-first','初戰靈獸','成功通過問道試煉第 1 關。','trialStage',1,120,0,'trial')],
-    'path-golden': [
-      quest('path-trial-five','破境試煉','成功通過問道試煉第 5 關。','trialStage',5,220,1,'trial'),
-      quest('path-weapon-dungeon-first','初探秘境','首次通關任一武器副本難度。','weaponDungeonClear',1,250,1,'weaponDungeon')
-    ],
+    'path-golden': [quest('path-trial-five','破境試煉','成功通過問道試煉第 5 關。','trialStage',5,220,1,'trial')],
     'path-nascent': [quest('path-trial-ten','十關問道','成功通過問道試煉第 10 關。','trialStage',10,360,2,'trial')]
   };
   const PATH_DUNGEON_TICKETS = Object.freeze({
@@ -69,7 +84,7 @@
   const PATH = [{ ...storyQuest('prologue-enter-sect', '第一章 · 問道靈根', 0),
     title: '完成第一章 · 問道靈根',
     description: '準備好後，點「前往」認識青雲宗並完整觀看第一章；登入與選擇性別不會自動播放。' },
-    ...LEGACY_PATH.filter(q=>!RETIRED_PATH.has(q.id)).flatMap(q => [q, ...(STORY_AFTER[q.id] || []), ...(PATH_AFTER[q.id] || [])])]
+    ...LEGACY_PATH.filter(q=>!RETIRED_PATH.has(q.id)).flatMap(q => [...DUNGEON_GATES.filter(g=>g.before===q.id).map(dungeonGateQuest), q, ...(STORY_AFTER[q.id] || []), ...(PATH_AFTER[q.id] || [])])]
     .map(q => PATH_DUNGEON_TICKETS[q.id] ? ({ ...q, reward: { ...q.reward, weaponDungeonTicket: PATH_DUNGEON_TICKETS[q.id] } }) : q);
   const HISTORICAL_PATH_IDS = [...new Set([...PATH.map(q=>q.id), ...LEGACY_PATH.map(q=>q.id)])];
   const DAILY = [
@@ -165,7 +180,7 @@
   }
   function progressValue(q, user, p, kind, date, verifiedTrial = null, battleProgress = null) {
     if (kind === 'path' && q.metric === 'trialStage') return number(battleProgress?.trial?.best);
-    if (kind === 'path' && q.metric === 'weaponDungeonClear') return (battleProgress?.weaponDungeonV1?.clears || []).reduce((sum,n)=>sum+number(n),0);
+    if (kind === 'path' && q.metric === 'weaponDungeonClear') return dungeonClearCount(battleProgress);
     if (kind === 'weekly') {
       const c=p.weekly.counts;
       return q.metric === 'activity' ? c.meditation+c.battle : number(c[q.metric]);
@@ -212,5 +227,5 @@
       commissions:(state.commissionIds||[]).map(id=>COMMISSION_POOL.find(q=>q.id===id))
         .filter(Boolean).map(q=>row(q,'commission',state.commissionClaimed.includes(q.id))).filter(available) };
   }
-  return { PATH, LEGACY_PATH, DAILY, WEEKLY, COMMISSION_POOL, dailyCommissions, seedNumber, dateKey, weekKey, normalizeProgress, recordEvent, normalizeState, view };
+  return { PATH, LEGACY_PATH, DAILY, WEEKLY, COMMISSION_POOL, DUNGEON_GATES, dungeonClearCount, dailyCommissions, seedNumber, dateKey, weekKey, normalizeProgress, recordEvent, normalizeState, view };
 });

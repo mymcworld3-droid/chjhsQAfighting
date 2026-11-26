@@ -5,6 +5,7 @@ const Manuals=require('./public/cultivation/manual-rules.js');
 const AnswerBonus=require('./public/cultivation/answer-cultivation-bonus.js');
 const WeaponDungeons=require('./public/cultivation/weapon-dungeon-rules.js');
 const WeaponDungeonRewards=require('./weapon-dungeon-rewards.cjs');
+const RealmGate=require('./realm-dungeon-gate.cjs');
 const TrainingAccess=require('./public/cultivation/training-access-rules.js');
 const Knowledge=require('./public/cultivation/knowledge-points.js');
 const SoloLearning=require('./public/cultivation/solo-learning-rules.js');
@@ -435,6 +436,7 @@ async function settle(tx,db,s,userOverrides={}){
     s.rewarded.push(a.uid);s.rewards||={};s.rewards[a.uid]=reward||{gold:0,cultivation:0,win:s.winner===a.team};
     const patch={};
     const pointer=exists(pointers[i]),campaign=pointer?.trial;
+    let gatePointer=pointer,weaponCleared=false;
     const manualRef=db.collection(MANUALS).doc(a.uid);
     if(s.mode==='pve'&&s.trial?.layoutVersion>=3&&s.winner===a.team&&s.finishReason==='objective'&&['transport','sealing','defense'].includes(s.objective?.type)){
       const used=Object.keys(s.manualUsed?.[a.uid]||{}).filter(id=>Manuals.BY_BOOK[id]).slice(0,3);
@@ -457,12 +459,14 @@ async function settle(tx,db,s,userOverrides={}){
       const dungeon=WeaponDungeons.progress(pointer?.weaponDungeonV1,s.updatedAtMs);
       const index=s.weaponDungeon.difficulty;
       const clearedProgress=WeaponDungeons.recordClear(dungeon,s.weaponDungeon.id||WeaponDungeons.ID,index);
-      tx.set(db.collection(PLAYERS).doc(a.uid),{...pointer,weaponDungeonV1:dungeon});
+      gatePointer={...pointer,weaponDungeonV1:dungeon};weaponCleared=true;
+      tx.set(db.collection(PLAYERS).doc(a.uid),gatePointer);
       const drop=WeaponDungeonRewards.roll(s,a.uid,manuals);manualChanged=manualChanged||!!drop;
       s.weaponDungeonResult={cleared:true,difficulty:index,unlocked:clearedProgress.unlocked,tickets:dungeon.tickets,drop};
     }
     if(manualChanged)tx.set(manualRef,manuals);
-    if(reward){patch['stats.gold']=Rules.num(u.stats?.gold)+reward.gold;patch['stats.totalScore']=Rules.num(u.stats?.totalScore)+reward.cultivation;}
+    if(reward)patch['stats.gold']=Rules.num(u.stats?.gold)+reward.gold;
+    if(reward||weaponCleared)Object.assign(patch,RealmGate.patch(u.stats,Rules.num(u.stats?.totalScore)+(reward?.cultivation||0),gatePointer));
     if(reward&&s.mode==='pvp'){
       patch.questProgress=recordEvent(u.questProgress,'battle');
       patch['stats.battleMatches']=Rules.num(u.stats?.battleMatches)+1;
@@ -893,7 +897,9 @@ async function answer(db,uid,input,now=Date.now(),readReceipt=readSoloReceipt){
         answerBonus=AnswerBonus.award(stats.answerCultivationV1,cultivation,true,AnswerBonus.maxedWeapons(manual,Manuals));
         cultivation=answerBonus.gain;patch['stats.answerCultivationV1']=answerBonus.state;
       }
-      patch['stats.totalScore']=Math.max(0,previousScore+cultivation);
+      const desired=Math.max(0,previousScore+cultivation);
+      const gatePointer=RealmGate.needsRead(stats,desired)?exists(await tx.get(db.collection(PLAYERS).doc(uid))):null;
+      Object.assign(patch,RealmGate.patch(stats,desired,gatePointer));
       patch['stats.lastQuizAnswer']={
         question:String(q.q).normalize('NFC').replace(/\s+/g,' ').trim().slice(0,1500),
         isCorrect:correct,scoreBefore:previousScore,scoreAfter:patch['stats.totalScore'],
@@ -914,6 +920,7 @@ async function answer(db,uid,input,now=Date.now(),readReceipt=readSoloReceipt){
     s.reviewHistory[q.id].reward=s.reviews[uid].reward;
     const updates=s.status==='finished'?await settle(tx,db,s,{[uid]:patchedUser(user,patch)}):{};
     if(updates[uid]?.stats?.totalScore!==undefined)patch['stats.totalScore']=updates[uid].stats.totalScore;
+    if(updates[uid]?.stats?.realmDungeonGateV1)patch['stats.realmDungeonGateV1']=updates[uid].stats.realmDungeonGateV1;
     tx.update(userRef,patch);
     const point=Knowledge.label(q,q.subject);
     tx.set(logRef,{

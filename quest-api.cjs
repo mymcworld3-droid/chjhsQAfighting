@@ -3,6 +3,7 @@ const { playerRepository } = require('./server-repositories.cjs');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const rules = require('./public/cultivation/quest-rules.js');
 const WeaponDungeons = require('./public/cultivation/weapon-dungeon-rules.js');
+const RealmGate = require('./realm-dungeon-gate.cjs');
 const error = (message, status = 409) => Object.assign(new Error(message), { status });
 
 // Claim state lives outside the client-written player document. The same
@@ -76,9 +77,10 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
         reward = q.reward;
         const patch = {
           'stats.gold': Math.max(0, Number(user.stats?.gold) || 0) + reward.gold,
-          'stats.totalScore': Math.max(0, Number(user.stats?.totalScore) || 0) + reward.cultivation
+          ...RealmGate.patch(user.stats,Math.max(0, Number(user.stats?.totalScore) || 0) + reward.cultivation,dungeonPointer)
         };
-        user.stats = { ...(user.stats || {}), gold: patch['stats.gold'], totalScore: patch['stats.totalScore'] };
+        user.stats = { ...(user.stats || {}), gold: patch['stats.gold'], totalScore: patch['stats.totalScore'],
+          ...(patch['stats.realmDungeonGateV1']?{realmDungeonGateV1:patch['stats.realmDungeonGateV1']}:{}) };
         if (reward.weaponDungeonTicket) {
           dungeonProgress.tickets += reward.weaponDungeonTicket;
           tx.set(dungeonRef, { ...dungeonPointer, weaponDungeonV1: dungeonProgress });
@@ -105,7 +107,7 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       }
     }
     if (stateChanged) tx.set(stateRef, state);
-    return { ok: true, awarded, reward, quests: rules.view(user, state, date, verifiedTrial, dungeonPointer),
+    return { ok: true, awarded, reward, quests: {...rules.view(user, state, date, verifiedTrial, dungeonPointer),realmGate:RealmGate.status(user.stats,dungeonPointer)},
       ...(dungeonProgress ? { weaponDungeonTickets: dungeonProgress.tickets } : {}),
       balances: { gold: Math.max(0, Number(user.stats?.gold) || 0), totalScore: Math.max(0, Number(user.stats?.totalScore) || 0) },
       materials: Object.fromEntries(['raid-refine-key-ii', 'raid-refine-key-iii'].map(id => [id, Math.max(0, Number(user.materialSystem?.inventory?.[id]) || 0)])) };

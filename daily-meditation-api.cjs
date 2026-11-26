@@ -8,6 +8,7 @@ const {SETS,getDailySet,dailyPlan} = require('./daily-meditation-set.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
 const Growth = require('./public/cultivation/nascent-growth.js');
 const Quests = require('./public/cultivation/quest-rules.js');
+const RealmGate = require('./realm-dungeon-gate.cjs');
 const { accrueRaidTickets } = require('./raid-room-api.cjs').__test;
 const SESSIONS = 'meditationSessions', RESULTS = 'meditationDailyResults';
 const fail = (message, status = 409) => Object.assign(new Error(message), { status });
@@ -189,15 +190,17 @@ function createService({db,now=Date.now,random=Math.random,dailySets=getDailySet
       const record={lastDate:date,streak,totalDays:count(old.totalDays)+1,bestStreak:Math.max(streak,count(old.bestStreak)),
         lastResult:{correct,total,mode:c.session.version>=2?'literacy':'review',stars:correct,answerTimeMs,cultivation:reward.cultivation+soulCultivation,
           soulCultivation,gold:reward.gold,fragments,realm:reward.realm},updatedAt:new Date(now())};
+      const desired=score+record.lastResult.cultivation;
+      const gateSnap=RealmGate.needsRead(user.stats,desired)?await tx.get(db.collection('tacticalBattlePlayers').doc(uid)):null;
       const patch={dailyMeditation:record,questProgress:Quests.recordEvent(user.questProgress,'meditation',date),
-        'stats.totalScore':score+record.lastResult.cultivation,'stats.gold':count(user.stats?.gold)+reward.gold,...Growth.patch(growth)};
+        ...RealmGate.patch(user.stats,desired,gateSnap?.exists?gateSnap.data():null),'stats.gold':count(user.stats?.gold)+reward.gold,...Growth.patch(growth)};
       tx.update(c.refs.user,patch);
       const result={uid,date,completed:true,total,stars:correct,answerTimeMs,rewardScore:score,claimed:[],bestStars:correct,finishedAtMs:now()};
       tx.set(c.refs.result,result);
       tx.set(db.collection('exam_logs').doc('meditation_'+dayId(uid,date)),{uid,mode:'daily-meditation',topic:c.session.version>=2?'閉關素養題':'閉關錯題',
         question:'每日閉關 · '+correct+'/'+total,isCorrect:full,correctCount:correct,totalCount:total,
         dailyMeditationAnswers:answers,timestamp:new Date(now())});
-      user.dailyMeditation=record;user.stats ||= {};user.stats.totalScore=patch['stats.totalScore'];user.stats.gold=patch['stats.gold'];Growth.apply(user,growth);
+      user.dailyMeditation=record;user.stats ||= {};user.stats.totalScore=patch['stats.totalScore'];user.stats.gold=patch['stats.gold'];if(patch['stats.realmDungeonGateV1'])user.stats.realmDungeonGateV1=patch['stats.realmDungeonGateV1'];Growth.apply(user,growth);
       return {completed:true,awardedNow:true,record,economy:economy(user)};
     });
   }

@@ -99,7 +99,7 @@ test('zero-knowledge map never generates specialist task and optional Dongtian i
  const pool=rules.dailyCommissions(u,'u1',date);
  assert.ok(pool.every(q=>q.metric!=='enlightenment'));
  assert.equal(rules.DAILY.length,5);
- assert.equal(rules.PATH.length,22);
+ assert.equal(rules.PATH.length,28);
 });
 
 test('retired Dongtian commission is replaced without resetting the other receipt',async()=>{

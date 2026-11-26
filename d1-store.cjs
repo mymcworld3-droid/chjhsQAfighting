@@ -2,6 +2,7 @@
 const {randomUUID} = require('node:crypto');
 const Codec = require('./public/d1-codec.js');
 const {ReadBatcher} = require('./d1-read-batcher.cjs');
+const RealmGate = require('./realm-dungeon-gate.cjs');
 const conflict = () => Object.assign(new Error('資料已更新，請重試'),{code:'aborted'});
 function validPath(path,document=true) {
   if(typeof path!=='string' || path.length>1500 || path.split('/').some(x=>!x||x==='.'||x==='..') || path.split('/').length%2 !== (document?0:1)) throw Error('Invalid document/collection path');
@@ -162,6 +163,26 @@ class Transaction {
     for(const w of this.writes)if(w.ref.db!==this.db)throw Error('Cross-namespace write');
     await Promise.all([...new Map(this.writes.map(w=>[w.ref.path,w.ref])).values()].map(ref=>this.get(ref)));
     const prepared=this.preview();
+    // Guard all other score writers too (legacy quiz, corrections, optional activities).
+    // Explicit domain settlements already carry an authoritative changed gate receipt.
+    if(this.db.role==='A')for(const [path,data] of prepared){
+      if(!/^users\/[^/]+$/.test(path)||!data?.stats)continue;
+      const old=this.reads.get(path)?.data();
+      if(!old||old.isAdmin===true||!old.stats||data.stats.totalScore===undefined||
+         Number(old.stats.totalScore)===Number(data.stats.totalScore))continue;
+      if(JSON.stringify(old.stats.realmDungeonGateV1||null)!==JSON.stringify(data.stats.realmDungeonGateV1||null))continue;
+      const desired=data.stats.totalScore;
+      const pointerPath='tacticalBattlePlayers/'+path.slice(6);
+      const pointer=RealmGate.needsRead(old.stats,desired)?
+        (prepared.has(pointerPath)?prepared.get(pointerPath):(await this.get(this.db.doc(pointerPath))).data()):null;
+      const result=RealmGate.apply(old.stats,desired,pointer);
+      data.stats.totalScore=result.score;
+      if(result.state)data.stats.realmDungeonGateV1=result.state;
+      if(result.score<Number(desired)&&Number.isFinite(Number(data.stats.rankLevel))){
+        const thresholds=[0,1,2,3,4,5,6,16,22,28,68,188,428,788,1268,1868];
+        data.stats.rankLevel=Math.min(Number(data.stats.rankLevel),thresholds.findLastIndex(x=>x<=result.score));
+      }
+    }
     const guard=randomUUID(),role=this.db.role,now=Date.now();
     const docReads=JSON.stringify([...this.reads].map(([path,snap])=>({path,version:snap.version})));
     const collectionReads=JSON.stringify([...this.collections].map(([path,version])=>({path,version})));

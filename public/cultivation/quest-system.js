@@ -135,6 +135,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const group=groups.find(g=>g.id===selectedStage);
     const badge=(g,large=false)=>`<span class="path-emblem${large?' path-emblem-large':''}" aria-hidden="true">${window.getRealmIconMarkup(g.realmIcon)}</span>`;
     const supplemental=(s.pathTicketRewards||[]).map(q=>card(q,'path')).join('');
+    const gate=s.realmGate?.next;
+    const gateMarkup=gate?`<p class="path-unlock-empty">${gate.locked?'境界突破受限：':'下次突破：'}${esc(gate.realm)}需累計通關武器副本 ${gate.required} 次（${Math.min(s.realmGate.cleared,gate.required)} / ${gate.required}）${s.realmGate.reserve?' · 暫存修為 '+s.realmGate.reserve:''}</p>`:'';
     if(!group)return '<p class="quest-empty">仙道任務已全部完成。</p>'+supplemental;
     const state=g=>g.done?'done':g.id===activeId?'current':'future';
     const player=window.getCurrentUserData?.();
@@ -158,7 +160,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       <section class="path-stage-summary" aria-label="${esc(group.name)}階段">
         <div class="path-stage-aura" aria-hidden="true"></div>${badge(group,true)}
         <h2>${esc(group.name)}</h2><span class="path-stage-status is-${state(group)}">${group.done?'此階段已完成':group.id===activeId?'當前仙道階段':'後續仙道階段'}</span>
-        <div class="path-unlocks"><h3>此境界解鎖玩法</h3><div class="path-unlock-grid">${unlockMarkup}</div></div>
+        <div class="path-unlocks"><h3>此境界解鎖玩法</h3><div class="path-unlock-grid">${unlockMarkup}</div>${gateMarkup}</div>
       </section>
       <section class="path-stage-tasks" aria-label="階段任務"><header><h3>${esc(group.name)} · 修行任務</h3><small>${s.pathCompleted??s.pathIndex} / ${s.pathTotal} 全程進度</small></header>${rows}
         ${supplemental?'<h3 class="path-supplement-heading">可補領獎勵</h3>'+supplemental:''}
@@ -422,7 +424,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     render();
   }
   mount();
-  ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:enlightenment-updated', 'xiuxian:story-chapter-completed'].forEach(name => window.addEventListener(name, invalidate));
+  ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:enlightenment-updated', 'xiuxian:story-chapter-completed', 'xiuxian:tactical-trial-updated'].forEach(name => window.addEventListener(name, invalidate));
   window.addEventListener('material-system-updated', e => { if (!e.detail?.questReward) invalidate(); });
   window.addEventListener('xiuxian:stats-updated', e => { if (!applyingReward && e.detail?.source !== 'quest-reward') invalidate(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) invalidate(); });
