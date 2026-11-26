@@ -2,8 +2,8 @@ import './battle-presentation.js';
 import './manual-rules.js?v=20261116-loadout-presets-v1';
 import './flying-sword-path.js?v=20261120-sword-movement-v1';
 import './tactical-rules.js?v=20261120-guided-first-stage-v1';
-import './tactical-animation.js?v=20261116-stability-v1';
-import './tactical-skill-effects.js?v=20261116-long-line-afterglow-v1';
+import './tactical-animation.js?v=20261126-flying-sword-v1';
+import './tactical-skill-effects.js?v=20261126-flying-sword-v1';
 import './tactical-camera.js';
 import './tactical-ambience.js?v=20261118-pve-visual-v2';
 import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
@@ -435,11 +435,17 @@ export class TacticalRenderer{
     const c=this.ctx,cell=this.cell,x=this.ox+(p.x+.5)*cell,y=this.oy+(p.y+.28)*cell;
     c.save();
     c.translate(x,y);c.rotate(angle);c.globalAlpha=opacity;
-    c.strokeStyle=color;c.fillStyle=color;c.shadowBlur=cell*.12;c.shadowColor=color;
-    c.lineWidth=Math.max(1.5,cell*.032);c.beginPath();
-    c.moveTo(0,-cell*.23);c.lineTo(cell*.047,cell*.09);c.lineTo(-cell*.047,cell*.09);c.closePath();c.fill();
-    c.beginPath();c.moveTo(-cell*.09,cell*.1);c.lineTo(cell*.09,cell*.1);
-    c.moveTo(0,cell*.09);c.lineTo(0,cell*.2);c.stroke();
+    c.shadowBlur=cell*.13;c.shadowColor=color;
+    // Long, faceted blade with a bright cutting edge rather than a flat arrow.
+    c.fillStyle=color;c.beginPath();
+    c.moveTo(0,-cell*.34);c.lineTo(cell*.055,-cell*.18);c.lineTo(cell*.052,cell*.11);
+    c.lineTo(0,cell*.145);c.lineTo(-cell*.052,cell*.11);c.lineTo(-cell*.055,-cell*.18);c.closePath();c.fill();
+    c.fillStyle='#f5fffc';c.beginPath();c.moveTo(0,-cell*.34);c.lineTo(0,cell*.12);
+    c.lineTo(-cell*.041,cell*.085);c.lineTo(-cell*.042,-cell*.16);c.closePath();c.fill();
+    c.strokeStyle=color;c.lineWidth=Math.max(1.5,cell*.035);c.lineCap='round';c.beginPath();
+    c.moveTo(-cell*.105,cell*.115);c.lineTo(0,cell*.15);c.lineTo(cell*.105,cell*.115);
+    c.moveTo(0,cell*.15);c.lineTo(0,cell*.265);c.stroke();
+    c.fillStyle='#f5fffc';c.beginPath();c.arc(0,cell*.27,Math.max(1,cell*.025),0,Math.PI*2);c.fill();
     c.restore();
   }
   drawEffect(scene,p,above){
@@ -1063,15 +1069,10 @@ export class TacticalRenderer{
       const sword=a.flyingSword;
       const own=a.uid===this.uid;
       if(scene?.style==='flying-sword'&&scene.actor===a.uid){
-        const {origin,target}=scene;
-        const trail=Array.isArray(scene.path)&&scene.path.length>1?scene.path:[origin,target];
-        const index=Math.min(trail.length-2,Math.floor(progress*(trail.length-1)));
-        const fraction=Math.max(0,Math.min(1,progress*(trail.length-1)-index));
-        const first=trail[index],last=trail[index+1];
-        const moving=!!sword,position=moving?
-          {x:first.x+(last.x-first.x)*fraction,y:first.y+(last.y-first.y)*fraction}:target;
-        const angle=moving?Math.atan2(last.y-first.y,last.x-first.x)+Math.PI/2:Math.PI/5;
-        this.drawFlyingSword(position,own?'#d1efe1':'#f6c8a9',moving?1:Math.min(1,progress*3),angle);
+        const flight=A.flyingSwordPose(scene,progress);
+        const color=own?'#d1efe1':'#f6c8a9';
+        if(flight)this.drawFlyingSword(flight.position,color,1,flight.angle);
+        else if(scene.target)this.drawFlyingSword(scene.target,color,Math.min(1,progress*3));
       }else if(sword)this.drawFlyingSword(sword,own?'#d1efe1':'#f6c8a9');
     }
     if(scene){

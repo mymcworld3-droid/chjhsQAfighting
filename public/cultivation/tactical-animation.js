@@ -19,7 +19,33 @@
     if(move==='sky-cloud')return index===0?first:first+.32;
     return index===0?first:first+(1-first)*.54;
   }
+  // One flight clock for the blade and its wake. The path is authoritative;
+  // only the heading (not the position) is blended around grid corners.
+  function flyingSwordPose(scene,progress){
+    if(scene?.style!=='flying-sword'||!scene.before?.some(a=>a.uid===scene.actor&&a.flyingSword))return null;
+    const route=scene.path?.length>1?scene.path:[scene.origin,scene.target];
+    if(route.some(pt=>!pt||!Number.isFinite(pt.x)||!Number.isFinite(pt.y)))return null;
+    const steps=route.length-1,p=clamp(progress);
+    const q=clamp((p-.025)/.82),distance=smooth(q)*steps;
+    const at=d=>{
+      const t=Math.max(0,Math.min(steps,d)),i=Math.min(steps-1,Math.floor(t)),f=t-i;
+      return {x:route[i].x+(route[i+1].x-route[i].x)*f,y:route[i].y+(route[i+1].y-route[i].y)*f};
+    };
+    const position=at(distance),back=at(distance-.16),ahead=at(distance+.16);
+    let angle=Math.atan2(ahead.y-back.y,ahead.x-back.x)+Math.PI/2;
+    const rest=Math.PI/5,blend=(from,to,t)=>from+Math.atan2(Math.sin(to-from),Math.cos(to-from))*t;
+    if(p<.08)angle=blend(rest,angle,smooth(clamp(p/.08)));
+    if(p>.845)angle=blend(angle,rest,smooth(clamp((p-.845)/.155)));
+    const tail=Math.max(0,distance-(.45+1.05*Math.sin(Math.PI*q)));
+    const trail=[at(tail)];
+    for(let i=Math.floor(tail)+1;i<distance;i++)trail.push(at(i));
+    trail.push(position);
+    const wake=clamp(p/.09)*(1-clamp((p-.845)/.125));
+    return {position,angle,trail,wake,launch:1-clamp(p/.12),arrival:clamp((p-.845)/.155),arrived:p>=.845};
+  }
+  const swordFlightDuration=scene=>Math.min(640,230+45*Math.max(1,(scene.path?.length||2)-1));
   function duration(scene){
+    if(flyingSwordPose(scene,0))return swordFlightDuration(scene);
     if(scene.kind==='move'){
       if(scene.style==='dash'&&scene.visualSkill==='dragon-guard')return 200;
       if(scene.style==='teleport')return 360;
@@ -142,7 +168,7 @@
       if(!hits.size)continue;
       const separateHits=strikeImpacts.some(beat=>beat.length),move=moveFor(cast.skill);
       Object.assign(cast,{parallelImpact:true,impactStart:cast.impactStart??hitTime[move]??.4,
-        numbers,reflections,after:scenes[j-1].after,duration:cast.throwImpact?cast.duration:quickSwordCast(move)?500:separateHits?740:600,
+        numbers,reflections,after:scenes[j-1].after,duration:cast.throwImpact?cast.duration:flyingSwordPose(cast,0)?swordFlightDuration(cast):quickSwordCast(move)?500:separateHits?740:600,
         ...(separateHits?{strikeImpacts}:{})});
       scenes.splice(i+1,j-i-1);
     }
@@ -313,5 +339,5 @@
     }
     return actors;
   }
-  return Object.freeze({plan,sample,impactPulse,crossCutImpact,strikeTime,throwProgress});
+  return Object.freeze({plan,sample,impactPulse,crossCutImpact,strikeTime,throwProgress,flyingSwordPose});
 });

@@ -118,3 +118,21 @@ test('long battles keep event IDs unique and replay the latest multi-monster tur
   const legacy=structuredClone(s);legacy.events=[{id:'old:0',type:'move',actor:'u1',path:[{x:1,y:3},{x:2,y:3}],text:'舊版移動'}];legacy.revision=s.revision+1;
   assert.equal(timeline(s,legacy)[0].kind,'move','pre-animation move logs remain usable');
 });
+
+test('flying sword shares a fast, bounded path with its fading wake',()=>{
+  const route=[{x:1,y:1},{x:2,y:1},{x:2,y:2},{x:3,y:2}];
+  const scene={style:'flying-sword',actor:'hero',before:[{uid:'hero',flyingSword:route[0]}],path:route};
+  const original=JSON.stringify(scene);
+  assert.deepEqual(A.flyingSwordPose(scene,0).position,route[0]);
+  assert.deepEqual(A.flyingSwordPose(scene,.86).position,route.at(-1));
+  assert.equal(A.flyingSwordPose(scene,1).wake,0);
+  for(let i=0;i<=100;i++){
+    const pose=A.flyingSwordPose(scene,i/100);
+    const {x,y}=pose.position;
+    assert.ok((y===1&&x>=1&&x<=2)||(x===2&&y>=1&&y<=2)||(y===2&&x>=2&&x<=3));
+    assert.ok(Number.isFinite(pose.angle));
+    assert.deepEqual(pose.trail.at(-1),pose.position);
+  }
+  assert.equal(A.flyingSwordPose({...scene,before:[{uid:'hero'}]},.5),null);
+  assert.equal(JSON.stringify(scene),original);
+});

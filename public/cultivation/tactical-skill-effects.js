@@ -260,20 +260,32 @@
     }else if(move==='flight-summon'){
       const hadSword=!!scene.before?.find(a=>a.uid===scene.actor)?.flyingSword;
       if(hadSword){
-        const track=Array.isArray(scene.path)&&scene.path.length>1?
-          scene.path.map(center):[from,to];
-        const travel=phase(p,.05,.92)*(track.length-1);
-        const index=Math.min(track.length-2,Math.floor(travel));
-        const q=travel-index,tip=point(track[index],track[index+1],q);
-        glow(jade,.18);
-        for(let i=0;i<index;i++){
-          stroke(track[i],track[i+1],jade,.09,(1-p)*.65);
-          stroke(track[i],track[i+1],white,.025,(1-p)*.82);
+        const flight=animation().flyingSwordPose(scene,p);
+        if(flight){
+          // Use the blade's actual drawing height and committed path. A short,
+          // tapered wake follows the sword instead of lighting the entire route.
+          const at=pt=>({x:ox+(pt.x+.5)*size,y:oy+(pt.y+.28)*size});
+          const track=flight.trail.map(at),tip=at(flight.position),wake=flight.wake;
+          glow(jade,.20);
+          for(let i=1;i<track.length;i++){
+            const strength=wake*(.28+.72*i/(track.length-1));
+            stroke(track[i-1],track[i],jade,.18,strength*.24);
+            stroke(track[i-1],track[i],jade,.075,strength*.83);
+            stroke(track[i-1],track[i],white,.024,strength);
+          }
+          if(flight.launch>0)circle(at(scene.origin),.12+.18*(1-flight.launch),flight.launch*.55,jade,.023);
+          if(flight.arrived){
+            const q=flight.arrival,alpha=(1-q)*.8;
+            glow(white,.1);
+            circle(tip,.1+q*.28,alpha,jade,.025);
+            for(let i=0;i<4;i++){
+              const angle=flight.angle+i*Math.PI/2;
+              const inner=(.09+q*.16)*size,outer=inner+size*.11*(1-q);
+              stroke({x:tip.x+Math.cos(angle)*inner,y:tip.y+Math.sin(angle)*inner},
+                {x:tip.x+Math.cos(angle)*outer,y:tip.y+Math.sin(angle)*outer},white,.018,alpha);
+            }
+          }
         }
-        stroke(track[index],tip,jade,.12,(1-p)*.7);
-        stroke(track[index],tip,white,.036,(1-p)*.9);
-        circle(tip,.14,beat*.65,white,.025);
-        sparks(tip,8,jade,.38);
       }else{
         circle(to,.12+p*.5,beat,jade,.035);circle(to,.44-p*.18,beat*.8,white,.018);
         for(let i=0;i<6;i++){

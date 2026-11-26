@@ -13,7 +13,7 @@ import {manualRoomExp,battleBreakthroughEstimate,renderBattleBreakthroughEstimat
 import './flying-sword-path.js?v=20261120-sword-movement-v1';
 import './tactical-rules.js?v=20261125-weapon-lord-cleared-v1';
 import './tactical-seal-targeting.js?v=20261119-seal-target-v1';
-import {TacticalRenderer} from './tactical-renderer.js?v=20261120-guided-first-stage-v2';
+import {TacticalRenderer} from './tactical-renderer.js?v=20261126-flying-sword-v1';
 import './tactical-impact-presentation.js?v=20261125-weapon-lord-unprotected-v1';
 import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-pve-v4';
 import {BeastInspector} from './tactical-beast-inspector.js?v=20261118-phase4-focus-v1';
