@@ -720,9 +720,7 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
 #manual-training-root:not(.manual-detail-active) .manual-native-card[aria-pressed="true"]{
  border-color:#ffe0a0;box-shadow:0 0 9px #e5b65b80,inset 0 0 0 1px #fff0bd,inset 0 0 12px var(--qi-glow);
 }
-#manual-training-root .manual-native-card[aria-pressed="true"] .manual-armory-sheen{
- animation:manual-armory-sheen 7s ease-in-out infinite;
-}
+
 #manual-training-root .manual-armory-worn{
  position:absolute;top:5px;right:5px;z-index:3;display:inline-flex;align-items:center;gap:3px;
  max-width:calc(100% - 10px);padding:2px 5px;border:1px solid #a7ccb18c;border-radius:4px;
@@ -959,3 +957,71 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
 #manual-training-root .manual-native-card .qy-refinement-stars{font-size:clamp(10px,1.4vw,17px);margin-bottom:2px}
 #manual-training-root .manual-native-carousel .qy-refinement-stars{font-size:clamp(15px,2vw,24px);margin-bottom:3px}
 #manual-training-root .qy-refinement-star{font-style:normal;font-weight:900}
+
+/* Living weapon collection. Decorative layers only; no layout motion or artwork opacity changes. */
+#manual-training-root .manual-book:nth-child(2n){--armory-phase:-2.8s}
+#manual-training-root .manual-book:nth-child(3n){--armory-phase:-5.4s}
+#manual-training-root .manual-book:nth-child(4n){--armory-phase:-8.1s}
+#manual-training-root .manual-book:nth-child(5n){--armory-phase:-1.3s}
+#manual-training-root .manual-book:nth-child(6n){--armory-phase:-6.7s}
+#manual-training-root .manual-native-card .manual-armory-sheen{
+ animation:manual-armory-sheen 11s ease-in-out infinite;
+ animation-delay:var(--armory-phase,0s);
+}
+#manual-training-root .manual-native-card[aria-pressed="true"] .manual-armory-sheen{animation-duration:8s}
+#manual-training-root .manual-native-card-art::before{
+ content:"";position:absolute;inset:7%;z-index:0;pointer-events:none;
+ background:radial-gradient(ellipse at 50% 60%,var(--qi-glow,#c7a46b44),transparent 70%);
+ border-radius:50%;animation:qy-armory-aura 6.8s ease-in-out infinite;
+ animation-delay:var(--armory-phase,0s);
+}
+#manual-training-root .manual-native-card-art .manual-weapon-art{
+ position:relative;z-index:1;animation:qy-armory-hover 6.8s ease-in-out infinite;
+ animation-delay:var(--armory-phase,0s);
+}
+#manual-training-root .manual-native-card[data-armory-tier="golden"] .manual-armory-sheen{animation-duration:8.5s}
+#manual-training-root .manual-native-card[data-armory-tier="golden"] .manual-native-card-art::before{animation-duration:5.6s}
+#manual-training-root .manual-armory-exp::after{animation:qy-armory-flow 4.2s ease-in-out infinite;animation-delay:var(--armory-phase,0s)}
+#manual-training-root .manual-native-card .qy-refinement-star,
+#manual-training-root .manual-native-carousel .qy-refinement-star{
+ animation:qy-armory-star 5.5s ease-in-out infinite;
+ animation-delay:calc(var(--star-index,0) * -.5s + var(--armory-phase,0s));
+}
+#manual-training-root .manual-weapon-slot:nth-child(2){--armory-phase:-3s}
+#manual-training-root .manual-weapon-slot:has(.manual-weapon-art) .manual-weapon-slot-art::after{
+ animation:qy-armory-aura 7s ease-in-out infinite;animation-delay:var(--armory-phase,0s);
+}
+#manual-training-root .manual-weapon-slot:has(.manual-weapon-art) .manual-weapon-skill-list::before{
+ animation:qy-armory-current 5s ease-in-out infinite;animation-delay:var(--armory-phase,0s);
+}
+#manual-training-root .manual-weapon-skill.is-learned .manual-native-skill-icon,
+#manual-training-root .manual-native-hero .manual-hero-step.is-unlocked .manual-hero-node{
+ animation:qy-armory-skill 5.8s ease-in-out infinite;
+}
+#manual-training-root :is(.manual-weapon-skill,.manual-hero-step):nth-child(2) :is(.manual-native-skill-icon,.manual-hero-node){animation-delay:-1.9s}
+#manual-training-root :is(.manual-weapon-skill,.manual-hero-step):nth-child(3) :is(.manual-native-skill-icon,.manual-hero-node){animation-delay:-3.8s}
+#manual-training-root .manual-training-screen .manual-native-hero .manual-hero-art-stage::before{
+ content:"";position:absolute;inset:14%;border-radius:50%;z-index:1;pointer-events:none;
+ background:radial-gradient(ellipse,var(--qi-glow,#c9a36333),transparent 72%);
+ animation:qy-armory-aura 7s ease-in-out infinite;
+}
+#manual-training-root .manual-training-screen .manual-native-hero .manual-hero-cover{
+ animation:qy-weapon-hover 6s ease-in-out infinite;
+}
+#manual-training-root .manual-native-skills-panel::before{animation:qy-armory-star 5s ease-in-out infinite}
+@keyframes qy-armory-hover{0%,100%{translate:0 0}50%{translate:0 -2px}}
+@keyframes qy-weapon-hover{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@keyframes qy-armory-aura{0%,100%{opacity:.38}50%{opacity:.78}}
+@keyframes qy-armory-flow{0%,100%{filter:brightness(.94)}50%{filter:brightness(1.28)}}
+@keyframes qy-armory-star{0%,100%{filter:brightness(1)}50%{filter:brightness(1.3)}}
+@keyframes qy-armory-current{0%,100%{opacity:.35;transform:scaleX(.85)}50%{opacity:.82;transform:scaleX(1)}}
+@keyframes qy-armory-skill{0%,100%{filter:brightness(1)}50%{filter:brightness(1.11)}}
+@media(prefers-reduced-motion:reduce){
+ #manual-training-root :is(.manual-armory-sheen,.manual-native-card-art .manual-weapon-art,.manual-armory-exp,.qy-refinement-star,.manual-native-skill-icon,.manual-hero-node,.manual-training-screen .manual-native-hero .manual-hero-cover),
+ #manual-training-root .manual-native-card-art::before,
+ #manual-training-root .manual-armory-exp::after,
+ #manual-training-root .manual-weapon-slot-art::after,
+ #manual-training-root .manual-weapon-skill-list::before,
+ #manual-training-root .manual-training-screen .manual-native-hero .manual-hero-art-stage::before,
+ #manual-training-root .manual-native-skills-panel::before{animation:none!important;translate:none!important}
+}

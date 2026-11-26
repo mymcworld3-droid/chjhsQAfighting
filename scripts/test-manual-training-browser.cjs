@@ -56,8 +56,15 @@ async function main(){
     assert.equal(await card.locator('.manual-armory-worn').count(),1);
     assert.equal(await card.locator('.manual-armory-exp').count(),1);
     assert.equal(await library.locator('[data-manual-book="body-rock"] .manual-armory-worn').count(),0);
+    const cardAnimations=await library.locator('.manual-armory-sheen').evaluateAll(nodes=>nodes.map(n=>({name:getComputedStyle(n).animationName,delay:getComputedStyle(n).animationDelay})));
+    assert.equal(cardAnimations.length,2);
+    assert.ok(cardAnimations.every(a=>a.name==='manual-armory-sheen'),'unselected cards also animate');
+    assert.notEqual(cardAnimations[0].delay,cardAnimations[1].delay,'card sweeps are staggered');
+    assert.equal(await card.locator('.manual-weapon-art').evaluate(node=>getComputedStyle(node).animationName),'qy-armory-hover');
+    assert.equal(await page.locator('[data-manual-slot="0"] .manual-weapon-skill.is-learned .manual-native-skill-icon').evaluate(node=>getComputedStyle(node).animationName),'qy-armory-skill');
     await page.emulateMedia({reducedMotion:'reduce'});
     assert.equal(await card.locator('.manual-armory-sheen').evaluate(node=>getComputedStyle(node).animationName),'none');
+    assert.equal(await card.locator('.manual-weapon-art').evaluate(node=>getComputedStyle(node).animationName),'none');
     await page.emulateMedia({reducedMotion:'no-preference'});
     assert.equal(await page.locator('.manual-library-heading h3').innerText().then(x=>x.includes('武器收藏')),true);
     const order=await library.evaluate(node=>
@@ -120,8 +127,10 @@ async function main(){
     assert.equal(await page.locator('.manual-ritual-energy').count(),0);
     assert.equal(await page.locator('.manual-hero-art-stage').evaluate(node=>getComputedStyle(node).backgroundImage),'none');
     assert.equal(await page.locator('.manual-ritual-wheel').evaluate(node=>getComputedStyle(node).animationName),'manual-ritual-spin');
+    assert.equal(await page.locator('.manual-hero-cover').evaluate(node=>getComputedStyle(node).animationName),'qy-weapon-hover');
     await page.emulateMedia({reducedMotion:'reduce'});
     assert.equal(await page.locator('.manual-ritual-wheel').evaluate(node=>getComputedStyle(node).animationName),'none');
+    assert.equal(await page.locator('.manual-hero-cover').evaluate(node=>getComputedStyle(node).animationName),'none');
     await page.emulateMedia({reducedMotion:'no-preference'});
     await page.setViewportSize({width:1180,height:820});
     await assertFullscreen();
