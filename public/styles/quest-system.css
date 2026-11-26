@@ -170,3 +170,22 @@
 /* Identical SVG glyphs to the realm atlas, within the existing hexagonal frame. */
 #page-path .path-emblem>.realm-icon{width:68%;height:68%;font-size:inherit;vertical-align:0;pointer-events:none}
 #page-path .path-emblem-large>.realm-icon{width:72%;height:72%}
+
+/* Portrait: one native vertical scroller for the realm rail AND its detail.
+   Wide landscape retains the original three independent columns. */
+.path-stage-detail{display:contents}
+@media(orientation:portrait),(max-width:620px){
+ #page-path .path-journey{
+  grid-template-rows:auto;align-items:start;align-content:start;
+  overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;
+  scrollbar-width:thin;scrollbar-color:#b28c52 transparent;
+ }
+ #page-path .path-stage-rail{grid-column:1;grid-row:1;overflow:visible;align-self:start}
+ #page-path .path-stage-detail{
+  display:flex;flex-direction:column;gap:8px;grid-column:2;grid-row:1;
+  min-width:0;min-height:0;align-self:start;position:sticky;top:0;
+ }
+ #page-path .path-stage-summary{flex:none;overflow:visible;min-width:0}
+ #page-path .path-stage-tasks{overflow:visible;min-height:0;flex:none;padding-right:0;overscroll-behavior:auto}
+ #page-path .path-stage-tasks>header{position:static}
+}

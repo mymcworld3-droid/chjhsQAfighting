@@ -28,3 +28,13 @@ test('realm summary shows unlocks directly below the stage status without duplic
  assert.doesNotMatch(ui,/class="path-stage-progress"|階段目標|目標修為 \$\{group.target\}/);
  assert.match(ui,/class="path-stage-status[^\n]*\n\s*<div class="path-unlocks">/);
 });
+
+test('portrait uses one shared scroll area for the realm rail and detail while landscape retains three columns',()=>{
+ const css=read('public/styles/quest-system.css');
+ assert.match(ui,/class="path-stage-detail"/);
+ assert.match(css,/\.path-stage-detail\{display:contents\}/);
+ assert.match(css,/#page-path \.path-journey\{\s*grid-template-rows:auto;[^}]*overflow-y:auto/);
+ assert.match(css,/#page-path \.path-stage-rail\{grid-column:1;grid-row:1;overflow:visible/);
+ assert.match(css,/#page-path \.path-stage-tasks\{overflow:visible/);
+ assert.match(ui,/journey\.scrollTop=sharedScroll/);
+});
