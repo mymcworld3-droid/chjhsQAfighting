@@ -126,14 +126,15 @@
   const BY_SKILL=Object.freeze(Object.fromEntries(BOOKS.flatMap(book=>book.skills.map(skill=>[skill.id,skill]))));
   const skillLevel=raw=>Number.isInteger(raw)&&raw>=1&&raw<=MAX_SKILL_LEVEL?raw:1;
   const skillUpgradeQuote=level=>level<MAX_SKILL_LEVEL?{targetLevel:level+1,gold:200*level}:null;
-  const MAX_REFINEMENT=5;
+  const MAX_REFINEMENT=5, REFINEMENT_PERCENT=5;
   const refinement=raw=>Math.max(0,Math.min(MAX_REFINEMENT,Math.trunc(Number(raw)||0)));
   const copyCount=record=>Math.max(1,Object.values(record?.copies||{}).reduce((sum,n)=>sum+Math.max(0,Math.trunc(Number(n)||0)),0));
   const refinementFor=record=>record?Math.max(refinement(record.refinement),refinement(copyCount(record)-1)):0;
+  const refinementPercent=stars=>refinement(stars)*REFINEMENT_PERCENT;
   function skillAtLevel(skill,raw,stars=0){
     const level=skillLevel(raw),upgrades=level-1;
     if(skill.kind==='fist-focus')return {...skill,level,cost:skill.cost-upgrades};
-    const refine=refinement(stars),factor=1+refine/10;
+    const refine=refinement(stars),factor=1+refinementPercent(refine)/100;
     const scaled=power=>{const base=upgrades?power*(10+upgrades)/10:power;return refine?base*factor:base;};
     return {...skill,level,power:scaled(skill.power),
       ...(skill.centerPower!==undefined?{centerPower:scaled(skill.centerPower)}:{}),
@@ -359,5 +360,5 @@
     return Object.values(state.books).reduce((sum,row)=>sum+levelForExp(row.exp),0);
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_GOLD_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,MAX_REFINEMENT,refinement,refinementFor,copyCount,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,weaponize,unlocked,manualAttackBonus,sortedOwnedWeapons,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_GOLD_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,MAX_REFINEMENT,REFINEMENT_PERCENT,refinementPercent,refinement,refinementFor,copyCount,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,weaponize,unlocked,manualAttackBonus,sortedOwnedWeapons,publicState,starterFor});
 });

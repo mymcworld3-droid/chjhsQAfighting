@@ -18,7 +18,7 @@ export function detectManualCelebration(before,after,context={}) {
     };
   }
   const refined=currentBooks.find(book=>Number(book.refinement||0)>Number(oldBooks.get(book.id)?.refinement||0));
-  if(refined){const old=oldBooks.get(refined.id);return {kind:'refinement',school:refined.school,bookId:refined.id,name:refined.name,weaponType:refined.weaponType,refinement:refined.refinement,previousRefinement:old.refinement||0,heading:'武器精煉',kicker:'同款武器 · 靈紋共鳴',detail:'本武器傷害 +'+(refined.refinement*10)+'%',extra:''};}
+  if(refined){const old=oldBooks.get(refined.id);return {kind:'refinement',school:refined.school,bookId:refined.id,name:refined.name,weaponType:refined.weaponType,refinement:refined.refinement,previousRefinement:old.refinement||0,heading:'武器精煉',kicker:'同款武器 · 靈紋共鳴',detail:'本武器傷害 +'+(globalThis.QAManuals?.refinementPercent(refined.refinement)??refined.refinement*5)+'%',extra:''};}
   const upgrades=[],unlocks=[];
   for(const book of currentBooks){
     const old=oldBooks.get(book.id);

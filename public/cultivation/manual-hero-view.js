@@ -113,7 +113,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
               <span class="manual-hero-mastery-status">${progressLabel}</span>
             </div>
             <small class="manual-hero-attack-bonus">${weaponMode?'本武器':'本功法'}攻擊 +${fmt(ownAttack)} · 已獲${weaponMode?'武器':'功法'}合計 +${fmt(allAttack)}</small>
-            ${weaponMode&&book.refinement?`<small class="manual-hero-weapon-copies">精煉 ${book.refinement} 星 · 本武器傷害 +${book.refinement*10}%</small>`:''}
+            ${weaponMode&&book.refinement?`<small class="manual-hero-weapon-copies">精煉 ${book.refinement} 星 · 本武器傷害 +${globalThis.QAManuals?.refinementPercent(book.refinement)??book.refinement*5}%</small>`:''}
             ${weaponMode?globalThis.QAWeaponPresentation.masteryMarkup(book):''}
             ${growth}
             ${nextNote?`<small class="manual-hero-next-inline">${esc(nextNote)}</small>`:''}
