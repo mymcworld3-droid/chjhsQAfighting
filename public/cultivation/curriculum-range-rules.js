@@ -13,6 +13,25 @@
   function selectableBook(book) {
     if(!book)return false;
     if(book.legacyVisible || book.releaseStatus === 'released')return true;
+    // A separately labelled 114 school-year transcription is selectable for practice,
+    // not a raw-document-verified or officially released book. Keep grade 11 gates intact.
+    if(book.scopeSelectionStatus === 'source-reviewed-crosswalk'){
+      const e=book.scopeEvidence;
+      const subjects=['數學','物理','化學'], publishers=['龍騰','翰林','南一','泰宇','三民','全華'];
+      if(book.grade!=='高中一年級'||!subjects.includes(book.subject)||!publishers.includes(book.publisher)||
+        book.edition!==book.publisher+'版'||book.schoolYear!==114||book.releaseStatus!=='blocked'||
+        book.verificationStatus!=='source-reviewed-crosswalk'||!/^\d{4}-\d{2}-\d{2}$/.test(book.verifiedAt||'')||
+        e?.kind!=='publisher-crosswalk-transcription'||e.publisher!==book.publisher||e.schoolYear!==114||
+        e.columnPolicy!=='publisher-left-only'||e.rawFileHashStatus!=='unavailable'||
+        !['page-and-text','structured-text'].includes(e.reviewMethod)||!Number.isInteger(e.page)||e.page<1||e.page>6)return false;
+      const expectedFile=book.subject==='數學'?(book.term==='第一學期'?'10-1_comparison_math_114.pdf':book.term==='第二學期'?'10-2_comparison_math_114.pdf':''):
+        book.term==='必修'+book.subject?(book.subject==='物理'?'10-1_comparison_physical_114.pdf':'10-1_comparison_chemistry_114.pdf'):'';
+      const table=book.publisher+(book.subject==='數學'?'數學高一'+(book.term==='第一學期'?'上':'下'):'必修'+book.subject);
+      return !!expectedFile&&!!book.sources?.some(s=>s.type==='third-party-curriculum-crosswalk'&&s.schoolYear===114&&s.page===e.page&&
+        s.publisherTable===table&&s.reviewMethod===e.reviewMethod&&s.url==='https://www.go100.com.tw/file/108_comparison_table/senior/'+expectedFile+'?v=20250901')&&
+        !!book.units?.length&&book.units.every(u=>u.details?.length>0&&new Set(u.details).size===u.details.length&&
+          Array.isArray(u.concepts)&&u.concepts.length===u.details.length&&u.concepts.every((c,i)=>c.name===u.details[i]&&Array.isArray(c.allowedContent)&&c.allowedContent.length>0&&Array.isArray(c.excludedContent)));
+    }
     if(book.grade !== '高中二年級' || !['數學A','數學B','物理','化學'].includes(book.subject) ||
       !book.verifiedAt || !book.units?.length || !book.units.every(u=>u.details?.length > 0))return false;
     if(book.scopeSelectionStatus === 'verified-toc')return book.verificationStatus === 'verified-complete-toc' &&

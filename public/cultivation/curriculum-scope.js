@@ -69,6 +69,9 @@ const c=document.createElement('input');c.type='checkbox';c.className='cs-chapte
 c.indeterminate=!c.checked&&u.details.some((_,j)=>draft.has('t:'+i+':'+j));c.addEventListener('change',()=>setChapterSelection(i,c.checked));
 const termBadge=document.createElement('span');termBadge.className='cs-card-term';termBadge.textContent=u.term==='第一學期'?'上學期':u.term==='第二學期'?'下學期':u.term;
 const label=document.createElement('b');label.textContent=u.unit;summary.append(c,label,termBadge);group.append(summary);
+if(u.book?.scopeSelectionStatus==='source-reviewed-crosswalk'){
+ const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='114學年度課程對照 · 原檔待核';group.append(note);
+}
 if(u.book?.scopeSelectionStatus==='verified-crosswalk'){
  const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='課程對照資料 · '+u.book.schoolYear+'學年度';group.append(note);
 }
@@ -80,7 +83,13 @@ if(!indices.length){const empty=document.createElement('div');empty.className='c
 status(indices.length?'顯示 '+indices.length+' 章，點章名可選取整章。':'未找到符合的章節。');}
 async function loadCatalogue(g,s){
  const file='curriculum-data/'+encodeURIComponent(g)+'/'+encodeURIComponent(s)+'.json?v=20261126-curriculum-v3';
- if(!memo.has(file))memo.set(file,fetch('/'+file).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(file);throw e;}));
+ if(!memo.has(file))memo.set(file,fetch('/'+file).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).then(async base=>{
+   if(g!=='高中一年級'||!['數學','物理','化學'].includes(s))return base;
+   const supplementFile='curriculum-supplements/grade10.json?v=20261126-batch4';
+   if(!memo.has(supplementFile))memo.set(supplementFile,fetch('/'+supplementFile).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(supplementFile);throw e;}));
+   const supplemental=await memo.get(supplementFile);
+   return {...base,books:[...base.books,...supplemental.books.filter(b=>b.grade===g&&b.subject===s)]};
+ }).catch(e=>{memo.delete(file);throw e;}));
  return memo.get(file);
 }
 const editionKey=b=>b.schoolYear?b.edition+' · '+b.schoolYear+'學年度':b.edition;
@@ -94,6 +103,7 @@ function catalogOptions(){
   option.disabled=!available;
   if(!available)option.textContent+='（待開放）';
   else if(records.every(b=>b.verificationStatus==='unverified'))option.textContent+='（既有整理）';
+  else if(records.every(b=>b.scopeSelectionStatus==='source-reviewed-crosswalk'))option.textContent+='（課程對照・原檔待核）';
   else if(records.every(b=>b.scopeSelectionStatus==='verified-crosswalk'))option.textContent+='（課程對照）';
   else if(records.some(b=>b.scopeSelectionStatus==='verified-crosswalk'))option.textContent+='（含課程對照）';
   else if(records.every(b=>b.schoolYear==null)&&records.some(b=>b.scopeSelectionStatus==='verified-toc'))option.textContent+='（學年度未標示）';
