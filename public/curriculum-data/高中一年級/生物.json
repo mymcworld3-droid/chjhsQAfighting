@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中一年級",
+  "subject": "生物",
+  "books": [
+    {
+      "bookId": "book-904f5cabcd4f9a2b7126",
+      "subject": "生物",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "生命的特性與細胞",
+          "details": [
+            "生命現象與科學探究",
+            "細胞構造與功能",
+            "物質進出細胞"
+          ],
+          "concepts": [
+            {
+              "name": "生命現象與科學探究",
+              "conceptId": "legacy-80bfe1380c7c2fa9c40f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "細胞構造與功能",
+              "conceptId": "legacy-2c6b6abd219f6b7537bc",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "物質進出細胞",
+              "conceptId": "legacy-b69d03393e14e31129ca",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "生物體的能量",
+          "details": [
+            "酵素與代謝",
+            "光合作用與呼吸作用",
+            "能量流動"
+          ],
+          "concepts": [
+            {
+              "name": "酵素與代謝",
+              "conceptId": "legacy-a45d3ea22860930ff2b4",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "光合作用與呼吸作用",
+              "conceptId": "legacy-be40a6b52bcef4f2be7b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "能量流動",
+              "conceptId": "legacy-c62acef639dcf0993e5f",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "遺傳基礎",
+          "details": [
+            "DNA 與基因",
+            "細胞分裂",
+            "遺傳與性狀"
+          ],
+          "concepts": [
+            {
+              "name": "DNA 與基因",
+              "conceptId": "legacy-33b4c9617d085534fca7",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "細胞分裂",
+              "conceptId": "legacy-6631bafd27b3ffefb3a1",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "遺傳與性狀",
+              "conceptId": "legacy-d69c92fa62cf94d167bd",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f288435adef26be1a027",
+      "subject": "生物",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "生物多樣性與演化",
+          "details": [
+            "分類與親緣關係",
+            "天擇與演化",
+            "生物多樣性"
+          ],
+          "concepts": [
+            {
+              "name": "分類與親緣關係",
+              "conceptId": "legacy-1c9161ceff37571777fc",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "天擇與演化",
+              "conceptId": "legacy-b8f0ec105fd0d467d82c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "生物多樣性",
+              "conceptId": "legacy-2deffadc75af9887dc47",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "生態與環境",
+          "details": [
+            "族群、群集與生態系",
+            "食物網與能量流",
+            "人類活動與保育"
+          ],
+          "concepts": [
+            {
+              "name": "族群、群集與生態系",
+              "conceptId": "legacy-39e464e65f5a4fd90312",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "食物網與能量流",
+              "conceptId": "legacy-a8363481c4d621baae2a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "人類活動與保育",
+              "conceptId": "legacy-ea095d1189b1c1d42a39",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "人體與恆定",
+          "details": [
+            "神經與內分泌概念",
+            "循環、呼吸與排泄",
+            "內環境的穩定"
+          ],
+          "concepts": [
+            {
+              "name": "神經與內分泌概念",
+              "conceptId": "legacy-ff28ba5be2014c3387c1",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "循環、呼吸與排泄",
+              "conceptId": "legacy-fbacaecb3a299a249cc6",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "內環境的穩定",
+              "conceptId": "legacy-8db2a86d4ecbda9e2a23",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

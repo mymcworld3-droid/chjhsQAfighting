@@ -204,3 +204,6 @@ body:not(:has(#newbie-tutorial-layer)) #scope-studio:not(.fv-scope) .cs-stage-ti
 
 #scope-studio #comprehensive-source-container.hidden{display:none!important}
 #scope-studio #comprehensive-source-container{display:grid;gap:12px}
+
+#scope-studio .cs-catalog-controls{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin:0 0 14px}
+@media(max-width:450px){#scope-studio .cs-catalog-controls{grid-template-columns:1fr!important}}

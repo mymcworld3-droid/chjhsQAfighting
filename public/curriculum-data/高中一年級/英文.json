@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "高中一年級",
+  "subject": "英文",
+  "books": [
+    {
+      "bookId": "book-96b5d3767d0435c33401",
+      "subject": "英文",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "核心文法：句型與時態",
+          "details": [
+            "句子成分與詞性",
+            "現在式與過去式",
+            "完成式與進行式"
+          ],
+          "concepts": [
+            {
+              "name": "句子成分與詞性",
+              "conceptId": "legacy-0e1552f4f8b874af1ed8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "現在式與過去式",
+              "conceptId": "legacy-2a97fce8a15678ed4c3d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "完成式與進行式",
+              "conceptId": "legacy-22ce53013629f8b92fbc",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "詞彙與搭配",
+          "details": [
+            "高中基礎字彙",
+            "字首、字根與字尾",
+            "常用片語"
+          ],
+          "concepts": [
+            {
+              "name": "高中基礎字彙",
+              "conceptId": "legacy-802ebc6871f55885e884",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "字首、字根與字尾",
+              "conceptId": "legacy-3f739366f8af5fffdabe",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "常用片語",
+              "conceptId": "legacy-c8d23c3964ed49c40302",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "閱讀理解",
+          "details": [
+            "主旨與細節",
+            "推論與代名詞指涉",
+            "段落結構"
+          ],
+          "concepts": [
+            {
+              "name": "主旨與細節",
+              "conceptId": "legacy-2d6ef3548de2b3e6f513",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "推論與代名詞指涉",
+              "conceptId": "legacy-ab93fd5c023b8b109839",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "段落結構",
+              "conceptId": "legacy-10456afc3458b919888f",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "聽力與溝通",
+          "details": [
+            "生活情境聽力",
+            "情境對話",
+            "簡短敘述"
+          ],
+          "concepts": [
+            {
+              "name": "生活情境聽力",
+              "conceptId": "legacy-94a176fb436013528cb9",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "情境對話",
+              "conceptId": "legacy-ce32985e4256cdbec631",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "簡短敘述",
+              "conceptId": "legacy-8e698697d10176052ec7",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-c42d57a161af5d49be49",
+      "subject": "英文",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "核心文法：複句與連接",
+          "details": [
+            "名詞子句與形容詞子句",
+            "副詞子句",
+            "連接詞與轉折"
+          ],
+          "concepts": [
+            {
+              "name": "名詞子句與形容詞子句",
+              "conceptId": "legacy-b16fb096025d6435adb7",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "副詞子句",
+              "conceptId": "legacy-cca1911233076f9c44e1",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "連接詞與轉折",
+              "conceptId": "legacy-a56f9447f7475ea48839",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "克漏字與文意選填",
+          "details": [
+            "語法與語意線索",
+            "詞彙搭配",
+            "段落連貫"
+          ],
+          "concepts": [
+            {
+              "name": "語法與語意線索",
+              "conceptId": "legacy-ce9fb0612a60f1ca3aea",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "詞彙搭配",
+              "conceptId": "legacy-fd64c8452ac707f94f6a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "段落連貫",
+              "conceptId": "legacy-29070bf9c6f3a92a4975",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "寫作基礎",
+          "details": [
+            "主題句與支持句",
+            "句子合併",
+            "段落寫作"
+          ],
+          "concepts": [
+            {
+              "name": "主題句與支持句",
+              "conceptId": "legacy-f4998a1d73f9586e1efa",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "句子合併",
+              "conceptId": "legacy-29c1c7e2bca706f562e2",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "段落寫作",
+              "conceptId": "legacy-4ad5a33d98e0479919e5",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "跨領域閱讀",
+          "details": [
+            "科普與文化",
+            "圖表判讀",
+            "摘要"
+          ],
+          "concepts": [
+            {
+              "name": "科普與文化",
+              "conceptId": "legacy-e7b26d33c79c0fc18d6e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "圖表判讀",
+              "conceptId": "legacy-03d3ee8a95a7d4d48873",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "摘要",
+              "conceptId": "legacy-a414bb908dbfe4a57eed",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

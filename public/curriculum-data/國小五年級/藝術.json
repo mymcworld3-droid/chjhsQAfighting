@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "國小五年級",
+  "subject": "藝術",
+  "books": [
+    {
+      "bookId": "book-591ca3f5e14c69be4da3",
+      "subject": "藝術",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "視覺敘事",
+          "details": [
+            "版面與構圖",
+            "圖像故事",
+            "攝影初步"
+          ],
+          "concepts": [
+            {
+              "name": "版面與構圖",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "圖像故事",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "攝影初步",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "音樂欣賞",
+          "details": [
+            "節奏與和聲初步",
+            "音樂風格",
+            "樂器辨認"
+          ],
+          "concepts": [
+            {
+              "name": "節奏與和聲初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "音樂風格",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "樂器辨認",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "表演創作",
+          "details": [
+            "劇情與角色",
+            "舞台設計",
+            "團隊排練"
+          ],
+          "concepts": [
+            {
+              "name": "劇情與角色",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "舞台設計",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "團隊排練",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-8c225b1f39b9bbcc1674",
+      "subject": "藝術",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "藝術與文化",
+          "details": [
+            "傳統藝術",
+            "跨文化藝術",
+            "符號與意涵"
+          ],
+          "concepts": [
+            {
+              "name": "傳統藝術",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "跨文化藝術",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "符號與意涵",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "音樂創作",
+          "details": [
+            "簡單作曲",
+            "節奏編排",
+            "合作演出"
+          ],
+          "concepts": [
+            {
+              "name": "簡單作曲",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "節奏編排",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "合作演出",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "美術與設計",
+          "details": [
+            "視覺傳達",
+            "立體媒材",
+            "作品評析"
+          ],
+          "concepts": [
+            {
+              "name": "視覺傳達",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "立體媒材",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "作品評析",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

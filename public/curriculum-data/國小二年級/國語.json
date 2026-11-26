@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小二年級",
+  "subject": "國語",
+  "books": [
+    {
+      "bookId": "book-072864ab9450b55d107c",
+      "subject": "國語",
+      "grade": "國小二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "識字與詞語",
+          "details": [
+            "形近字與同音字",
+            "部首及造詞",
+            "詞語的語境"
+          ],
+          "concepts": [
+            {
+              "name": "形近字與同音字",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "部首及造詞",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "詞語的語境",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "句型與修辭",
+          "details": [
+            "完整句子",
+            "連接詞",
+            "簡單譬喻與擬人"
+          ],
+          "concepts": [
+            {
+              "name": "完整句子",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "連接詞",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡單譬喻與擬人",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "記敘文閱讀",
+          "details": [
+            "事件起因、經過、結果",
+            "段落大意",
+            "角色心情"
+          ],
+          "concepts": [
+            {
+              "name": "事件起因、經過、結果",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "段落大意",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "角色心情",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "口語與寫作",
+          "details": [
+            "重述故事",
+            "看圖寫話",
+            "標點使用"
+          ],
+          "concepts": [
+            {
+              "name": "重述故事",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "看圖寫話",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "標點使用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-3f96ed2517043bee49cb",
+      "subject": "國語",
+      "grade": "國小二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "詞彙與成語初步",
+          "details": [
+            "多義字與詞義",
+            "生活成語",
+            "詞語替換"
+          ],
+          "concepts": [
+            {
+              "name": "多義字與詞義",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活成語",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "詞語替換",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "閱讀與推論",
+          "details": [
+            "文章主旨",
+            "段落關係",
+            "簡單的因果推論"
+          ],
+          "concepts": [
+            {
+              "name": "文章主旨",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "段落關係",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡單的因果推論",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "詩歌與童話",
+          "details": [
+            "意象與情感",
+            "故事結構",
+            "朗讀節奏"
+          ],
+          "concepts": [
+            {
+              "name": "意象與情感",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "故事結構",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "朗讀節奏",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "段落寫作",
+          "details": [
+            "以事件組成段落",
+            "時間與空間順序",
+            "修訂語句"
+          ],
+          "concepts": [
+            {
+              "name": "以事件組成段落",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "時間與空間順序",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "修訂語句",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,616 @@
+{
+  "schema": 1,
+  "grade": "國中一年級",
+  "subject": "數學",
+  "books": [
+    {
+      "bookId": "book-a563569983becf6f00e6",
+      "subject": "數學",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：整數的運算",
+          "details": [
+            "1-1 正負數與絕對值",
+            "1-2 整數的加減法",
+            "1-3 整數的乘除與四則運算",
+            "1-4 指數記法與科學記號"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 正負數與絕對值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 整數的加減法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 整數的乘除與四則運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 指數記法與科學記號",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：分數的運算",
+          "details": [
+            "2-1 質因數分解與因數倍數",
+            "2-2 最大公因數與最小公倍數",
+            "2-3 分數的加減運算",
+            "2-4 分數的乘除與四則運算"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 質因數分解與因數倍數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 最大公因數與最小公倍數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 分數的加減運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 分數的乘除與四則運算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：一元一次方程式",
+          "details": [
+            "3-1 代數式的簡記與化簡",
+            "3-2 一元一次方程式的解法",
+            "3-3 一元一次方程式的應用問題"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 代數式的簡記與化簡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 一元一次方程式的解法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 一元一次方程式的應用問題",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-2e5f31bd2990ca226905",
+      "subject": "數學",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：整數的運算",
+          "details": [
+            "1-1 負數與數線",
+            "1-2 整數的加減",
+            "1-3 整數的乘除與四則運算",
+            "1-4 指數記法與科學記號"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 負數與數線",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 整數的加減",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 整數的乘除與四則運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 指數記法與科學記號",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：分數的運算",
+          "details": [
+            "2-1 因數與倍數",
+            "2-2 最大公因數與最小公倍數",
+            "2-3 分數的四則運算",
+            "2-4 指數律"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 因數與倍數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 最大公因數與最小公倍數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 分數的四則運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 指數律",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：一元一次方程式",
+          "details": [
+            "3-1 代數式的化簡",
+            "3-2 一元一次方程式",
+            "3-3 應用問題"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 代數式的化簡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 一元一次方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 應用問題",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-8804c5f24b39cce1ed52",
+      "subject": "數學",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：整數的運算",
+          "details": [
+            "1-1 正負數、數線與絕對值",
+            "1-2 整數的加減法",
+            "1-3 整數的乘除與四則混和運算",
+            "1-4 乘方與科學記號"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 正負數、數線與絕對值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 整數的加減法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 整數的乘除與四則混和運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 乘方與科學記號",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：分數的運算",
+          "details": [
+            "2-1 質因數分解",
+            "2-2 最大公因數與最小公倍數",
+            "2-3 分數的加減運算",
+            "2-4 分數的乘除與四則運算"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 質因數分解",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 最大公因數與最小公倍數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 分數的加減運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 分數的乘除與四則運算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：一元一次方程式",
+          "details": [
+            "3-1 代數式的化簡",
+            "3-2 一元一次方程式的解法",
+            "3-3 一元一次方程式的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 代數式的化簡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 一元一次方程式的解法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 一元一次方程式的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-a35a401183a728d86d5c",
+      "subject": "數學",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：二元一次聯立方程式",
+          "details": [
+            "1-1 二元一次方程式",
+            "1-2 二元一次聯立方程式",
+            "1-3 二元一次聯立方程式的應用問題"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 二元一次方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 二元一次聯立方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 二元一次聯立方程式的應用問題",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：直角坐標與二元一次方程式的圖形",
+          "details": [
+            "2-1 直角坐標平面",
+            "2-2 二元一次方程式的圖形"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 直角坐標平面",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 二元一次方程式的圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：比與比例式",
+          "details": [
+            "3-1 比與比例式",
+            "3-2 正比與反比"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 比與比例式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 正比與反比",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：一元一次不等式",
+          "details": [
+            "4-1 不等式的意義與圖形",
+            "4-2 一元一次不等式的解法與應用"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 不等式的意義與圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 一元一次不等式的解法與應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9132adf0d05a1d5f6a87",
+      "subject": "數學",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：二元一次聯立方程式",
+          "details": [
+            "1-1 二元一次方程式",
+            "1-2 解二元一次聯立方程式（代入與加減消去法）",
+            "1-3 二元一次聯立方程式的應用"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 二元一次方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 解二元一次聯立方程式（代入與加減消去法）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 二元一次聯立方程式的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：直角坐標與二元一次方程式的圖形",
+          "details": [
+            "2-1 直角坐標平面與象限",
+            "2-2 二元一次方程式的圖形（含直線方程式）"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 直角坐標平面與象限",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 二元一次方程式的圖形（含直線方程式）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：比例",
+          "details": [
+            "3-1 比與比例式",
+            "3-2 正比與反比的幾何與生活關係"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 比與比例式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 正比與反比的幾何與生活關係",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：一元一次不等式",
+          "details": [
+            "4-1 一元一次不等式與圖示",
+            "4-2 解一元一次不等式與應用問題"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 一元一次不等式與圖示",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 解一元一次不等式與應用問題",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-095c9a3aae5048dbf47a",
+      "subject": "數學",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：二元一次聯立方程式",
+          "details": [
+            "1-1 二元一次方程式的列式",
+            "1-2 二元一次聯立方程式的解法",
+            "1-3 二元一次聯立方程式的應用"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 二元一次方程式的列式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 二元一次聯立方程式的解法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 二元一次聯立方程式的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：直角坐標與二元一次方程式的圖形",
+          "details": [
+            "2-1 直角坐標平面",
+            "2-2 二元一次方程式的圖形"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 直角坐標平面",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 二元一次方程式的圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：比與比例式",
+          "details": [
+            "3-1 比與比例式",
+            "3-2 正比與反比的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 比與比例式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 正比與反比的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：一元一次不等式",
+          "details": [
+            "4-1 一元一次不等式的意義與圖示",
+            "4-2 一元一次不等式的解法與生活情境應用"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 一元一次不等式的意義與圖示",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 一元一次不等式的解法與生活情境應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

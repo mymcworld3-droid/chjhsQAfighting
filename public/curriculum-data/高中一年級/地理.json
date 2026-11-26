@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中一年級",
+  "subject": "地理",
+  "books": [
+    {
+      "bookId": "book-733a8b80790412222b43",
+      "subject": "地理",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "地理學方法",
+          "details": [
+            "地圖要素與比例尺",
+            "經緯度、時區",
+            "地理資訊系統與遙測"
+          ],
+          "concepts": [
+            {
+              "name": "地圖要素與比例尺",
+              "conceptId": "legacy-1d02914ef5ef813a42cf",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "經緯度、時區",
+              "conceptId": "legacy-54ce726d6f59f9784c89",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "地理資訊系統與遙測",
+              "conceptId": "legacy-81a7815b5d22083268a2",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "自然地理：地形與氣候",
+          "details": [
+            "板塊、地形與外營力",
+            "氣候系統",
+            "天氣與地圖判讀"
+          ],
+          "concepts": [
+            {
+              "name": "板塊、地形與外營力",
+              "conceptId": "legacy-f0b60a71ab175434df79",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "氣候系統",
+              "conceptId": "legacy-0064a288d284da1d16ab",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "天氣與地圖判讀",
+              "conceptId": "legacy-ed8f0cbfaefcfa32fb5b",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "自然資源與環境",
+          "details": [
+            "水資源",
+            "災害與調適",
+            "永續發展"
+          ],
+          "concepts": [
+            {
+              "name": "水資源",
+              "conceptId": "legacy-92665c53428300fd3f00",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "災害與調適",
+              "conceptId": "legacy-0c6a77a10527740f3c70",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "永續發展",
+              "conceptId": "legacy-252914dc5f0178f92769",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-41f02eb139ee0b1fa6db",
+      "subject": "地理",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "人口與聚落",
+          "details": [
+            "人口成長與遷移",
+            "都市化",
+            "城鄉發展"
+          ],
+          "concepts": [
+            {
+              "name": "人口成長與遷移",
+              "conceptId": "legacy-bc09953ffe2ab67f0300",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "都市化",
+              "conceptId": "legacy-9944ad05a2f84bfd7535",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "城鄉發展",
+              "conceptId": "legacy-f8623973dd62bc05fce6",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "產業與經濟",
+          "details": [
+            "農工商產業活動",
+            "全球分工",
+            "交通與資訊連結"
+          ],
+          "concepts": [
+            {
+              "name": "農工商產業活動",
+              "conceptId": "legacy-20d305bf97cc0d4faa8b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "全球分工",
+              "conceptId": "legacy-d9f4b87e0e1f17d74568",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "交通與資訊連結",
+              "conceptId": "legacy-0f3f68157347d4920ce5",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "區域地理方法",
+          "details": [
+            "區域特徵",
+            "比較分析",
+            "人地關係"
+          ],
+          "concepts": [
+            {
+              "name": "區域特徵",
+              "conceptId": "legacy-05a5193c11b50ed1c1d3",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "比較分析",
+              "conceptId": "legacy-f7e3da75e7263b7dc2a4",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "人地關係",
+              "conceptId": "legacy-4e59a105f6e7b5dc68fd",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

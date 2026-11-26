@@ -5,16 +5,19 @@ const {playerRepository}=require('./server-repositories.cjs');
 const {verifyMainIdentity}=require('./raid-question-ticket.cjs');
 const Rules=require('./public/cultivation/adaptive-learning-rules.js');
 const {QUESTION_FORMS}=require('./quiz-generation-tasks.cjs');
+const Catalog=require('./curriculum-catalog.cjs');
+const {curriculumMetadata}=require('./public/cultivation/curriculum-range-rules.js');
 const fail=(message,status=400)=>Object.assign(Error(message),{status});
 const clean=(value,max=100)=>String(value||'').trim().slice(0,max);
 const hash=value=>crypto.createHash('sha256').update(value).digest('hex');
 const labelKey=value=>clean(value).replace(/[\s的，。、：:（）()]/g,'');
-function selection(raw={}){return {path:clean(raw.path,240),detail:clean(raw.detail,120),sub_topics:[...new Set((Array.isArray(raw.sub_topics)?raw.sub_topics:[]).map(x=>clean(x,100)).filter(Boolean))].sort().slice(0,24)};}
+function selection(raw={}){return {path:clean(raw.path,240),detail:clean(raw.detail,120),sub_topics:[...new Set((Array.isArray(raw.sub_topics)?raw.sub_topics:[]).map(x=>clean(x,100)).filter(Boolean))].sort().slice(0,24),...(raw.curriculum!==undefined?{curriculum:curriculumMetadata(raw.curriculum)}:{})};}
 function scopeFor(unit,profile={}){
   const selected=selection(unit),parts=selected.path.split('/'),grade=parts[1]||'';
   const level=/^[七7](?:上|下|年級)/.test(grade)?'國中一年級':/^[八8](?:上|下|年級)/.test(grade)?'國中二年級':/^[九9](?:上|下|年級)/.test(grade)?'國中三年級':/^(國小|國中|高中)[一二三四五六]年級/.test(grade)?grade:clean(profile.educationLevel,32)||'國中一年級';
   const subject=clean(parts[0],40),topic=selected.detail||selected.path;
   if(!subject||!topic)throw fail('出題範圍不完整');
+  Catalog.validateScope(selected,subject,level);
   return {...selected,subject,level,topic,scopeId:hash(JSON.stringify([subject,level,selected])).slice(0,24)};
 }
 function vertical(scope){return scope.subject==='物理'&&/(鉛直|垂直).{0,8}圓(周|面)/.test(scope.topic);}
@@ -24,6 +27,19 @@ function seedConcepts(scope){
       {name:'由其他位置的已知條件求'+position+quantity,forms:['scenario-modeling','comparison','multi-step']}]
   })));
   return ['定義與適用條件','關係與直接應用','案例比較'].map(name=>({name,methods:[{name:scope.topic+'：'+name,forms:['direct-application','comparison','error-analysis']}]}));
+}
+function registryOutline(scope){
+  if(!scope.curriculum||!scope.sub_topics?.length)return null;
+  const concepts=Catalog.scopeConcepts({subject:scope.subject,level:scope.level,topic:scope.topic,scope});
+  if(!concepts.length||scope.sub_topics.some(name=>!concepts.some(c=>c.status==='scope-reviewed'&&[c.name,...c.aliases].includes(Catalog.sectionName(name)))))return null;
+  const methods={
+    'math-plane-vector-dot-product':['由二維坐標求內積','由內積與長度判斷夾角或垂直','用內積恆等式處理向量長度'],
+    'math-space-vector-dot-product':['由三維坐標求內積','由三維內積求夾角或正交條件','在完整條件下使用三維內積的幾何應用'],
+    'math-plane-vector-projection':['求平面向量的正射影向量','區分有號投影長與投影向量長度','由正交分解求垂直分量'],
+    'math-plane-cauchy-schwarz':['用二維柯西不等式建立上界','由固定線性條件建立平方和下界','驗證等號條件或構造反例']
+  };
+  if(concepts.some(c=>!methods[c.conceptId]))return null;
+  return {concepts:concepts.map(c=>({name:c.name,methods:methods[c.conceptId].map(name=>({name,forms:['direct-application','comparison','multi-step']}))}))};
 }
 function normalizePlan(raw,scope,source='ai'){
   const entries=Array.isArray(raw?.concepts)?raw.concepts:[];
@@ -58,6 +74,8 @@ function analysisPrompt(scope){return '你是台灣課綱習作編輯。分析�
 function createAdaptiveLearning({resolve=()=>playerRepository.resolve(),verify=verifyMainIdentity,generate=aiRouter.generateJSON,now=Date.now,logger=console}={}){
   const cache=new Map(),pending=new Map(),lessons=new Map();
   async function planFor(db,scope){
+    const registry=registryOutline(scope);
+    if(registry)return {...normalizePlan(registry,scope,'registry'),provisional:false};
     const key=scope.scopeId,known=cache.get(key);if(known&&known.until>now())return known.plan;
     if(pending.has(key))return pending.get(key);
     const work=(async()=>{
@@ -97,7 +115,7 @@ function createAdaptiveLearning({resolve=()=>playerRepository.resolve(),verify=v
     (c.decision.role==='challenge'?'挑戰題使用範圍內的新應用、表示方式或遷移情境；仍遵守指定難度與推理步數上限，不得藉挑戰之名超綱。':'以清楚、充分的條件考查核心觀念，依指定難度加入應用與推理，避免刻意設陷阱。')+
     (Rules.row(state.concepts[f.conceptId]).w>=2?'這是概念補給後的新情境練習。保持指定細觀念與考法，使用新的情境或表示方式，不能只替換舊題數字。':'')+
     (vertical(c.scope)?'最高點、水平位置、最低點與各點速率、張力各自分開。明示繩／桿／軌道及忽略阻力等適用條件。':'');}
-  function metadata(c,data){const f=c.plan.facets.find(x=>x.id===data.adaptive_facet_id);if(!f||data.adaptive_scope_id!==c.scope.scopeId)throw fail('範圍考法已失效');return {questionId:crypto.randomUUID(),scopeId:c.scope.scopeId,planVersion:c.plan.version,scope:selection(c.scope),subject:c.scope.subject,topic:c.scope.topic,conceptId:f.conceptId,facetId:f.id,concept:f.concept,method:f.name,difficulty:data.adaptive_difficulty,role:c.decision.role,policyVersion:Rules.POLICY.version,provisional:c.plan.provisional,
+  function metadata(c,data){const f=c.plan.facets.find(x=>x.id===data.adaptive_facet_id);if(!f||data.adaptive_scope_id!==c.scope.scopeId)throw fail('範圍考法已失效');const standard=Catalog.resolveConcept({subject:c.scope.subject,level:c.scope.level,name:f.concept});return {questionId:crypto.randomUUID(),scopeId:c.scope.scopeId,planVersion:c.plan.version,scope:selection(c.scope),subject:c.scope.subject,topic:c.scope.topic,conceptId:f.conceptId,...(standard?.status==='scope-reviewed'?{standardConceptId:standard.conceptId}:{}),facetId:f.id,concept:f.concept,method:f.name,difficulty:data.adaptive_difficulty,role:c.decision.role,policyVersion:Rules.POLICY.version,provisional:c.plan.provisional,
     outline:c.plan.concepts.map(x=>({id:x.id,name:x.name,methods:x.methods.map(m=>({id:m.id,name:m.name}))}))};}
   async function lesson(req){
     const c=await context(req),concept=c.plan.concepts.find(x=>x.id===req.body?.conceptId),state=Rules.scopeState(c.user.stats?.adaptiveLearningV1,c.scope.scopeId);
@@ -120,4 +138,4 @@ function register(app,options){
   });
   return api;
 }
-module.exports=register;module.exports.__test={selection,scopeFor,seedConcepts,normalizePlan,analysisPrompt,createAdaptiveLearning};
+module.exports=register;module.exports.__test={selection,scopeFor,seedConcepts,registryOutline,normalizePlan,analysisPrompt,createAdaptiveLearning};

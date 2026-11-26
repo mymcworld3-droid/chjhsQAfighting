@@ -1,0 +1,172 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "subject": "生物",
+  "books": [
+    {
+      "bookId": "book-28870cccc9fbcebff6f4",
+      "subject": "生物",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "選修生物Ⅲ：動物體的構造與功能",
+          "details": [
+            "動物組織",
+            "消化與呼吸",
+            "循環與排泄",
+            "神經與內分泌"
+          ],
+          "concepts": [
+            {
+              "name": "動物組織",
+              "conceptId": "legacy-10afcb2120965d8d11ea",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "消化與呼吸",
+              "conceptId": "legacy-4d20aacffedc660b8149",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "循環與排泄",
+              "conceptId": "legacy-3d213d95cfeea1e4c695",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "神經與內分泌",
+              "conceptId": "legacy-d8f634320318dedcd568",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "選修生物Ⅳ：生態、演化及生物多樣性",
+          "details": [
+            "族群與群集",
+            "演化機制",
+            "保育生物學"
+          ],
+          "concepts": [
+            {
+              "name": "族群與群集",
+              "conceptId": "legacy-7e2e71e40387abee7aa6",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "演化機制",
+              "conceptId": "legacy-061b3efa450536f9fc97",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "保育生物學",
+              "conceptId": "legacy-96f9e346e04050a48a3a",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-619e59478c5670e68486",
+      "subject": "生物",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "人體生理統整",
+          "details": [
+            "體內運輸與物質交換",
+            "神經、內分泌及免疫",
+            "恆定與調節"
+          ],
+          "concepts": [
+            {
+              "name": "體內運輸與物質交換",
+              "conceptId": "legacy-be414ede7d0240b70d3a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "神經、內分泌及免疫",
+              "conceptId": "legacy-e8aa87bc915da5bc0bdc",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "恆定與調節",
+              "conceptId": "legacy-904a5f47ca86bab133ec",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "遺傳與演化統整",
+          "details": [
+            "基因表現與調控",
+            "族群遺傳",
+            "分類與演化證據"
+          ],
+          "concepts": [
+            {
+              "name": "基因表現與調控",
+              "conceptId": "legacy-1f21d230275d9cea015d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "族群遺傳",
+              "conceptId": "legacy-9068f0d3d048f7332a3f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "分類與演化證據",
+              "conceptId": "legacy-51fa225160de98f60547",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "生物實驗與資料",
+          "details": [
+            "實驗設計",
+            "顯微與圖表判讀",
+            "生物科技及倫理"
+          ],
+          "concepts": [
+            {
+              "name": "實驗設計",
+              "conceptId": "legacy-0366e9d27d4264c955d2",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "顯微與圖表判讀",
+              "conceptId": "legacy-58eba97c709f436fcbe5",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "生物科技及倫理",
+              "conceptId": "legacy-25df73e83d582150987c",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

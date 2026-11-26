@@ -1,0 +1,640 @@
+{
+  "schema": 1,
+  "grade": "國中二年級",
+  "subject": "化學",
+  "books": [
+    {
+      "bookId": "book-a6bb2bde06c3bfe327aa",
+      "subject": "化學",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第2章：物質的世界",
+          "details": [
+            "2-1 物質的分類與三態性質",
+            "2-2 水溶液的性質、溶解度與百分濃度",
+            "2-3 常見氣體的製備與空氣成分（氧、氮、二氧化碳）"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 物質的分類與三態性質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 水溶液的性質、溶解度與百分濃度",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 常見氣體的製備與空氣成分（氧、氮、二氧化碳）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第6章：元素與化合物",
+          "details": [
+            "6-1 物質的結構、原子與分子模型",
+            "6-2 常見的元素、金屬與非金屬特性",
+            "6-3 元素週期表的歷史與族群分類"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 物質的結構、原子與分子模型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-2 常見的元素、金屬與非金屬特性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-3 元素週期表的歷史與族群分類",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-894874eeb697a7a7f059",
+      "subject": "化學",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第2章：物質的世界",
+          "details": [
+            "2-1 混合物與純物質的性質差異",
+            "2-2 溶液的溶解度與重量百分濃度計算",
+            "2-3 空氣的成分與常見氣體的製造實驗"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 混合物與純物質的性質差異",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 溶液的溶解度與重量百分濃度計算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 空氣的成分與常見氣體的製造實驗",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第6章：原子與元素週期表",
+          "details": [
+            "6-1 元素的分類與純化",
+            "6-2 原子結構與週期表規律性"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 元素的分類與純化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-2 原子結構與週期表規律性",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-211e4293f318fb265642",
+      "subject": "化學",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第2章：純物質與水溶液",
+          "details": [
+            "2-1 物質的物理變化與化學變化分類",
+            "2-2 水溶液飽和濃度與溶解曲線",
+            "2-3 探索空氣（氧氣與二氧化碳的製備與性質）"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 物質的物理變化與化學變化分類",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 水溶液飽和濃度與溶解曲線",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 探索空氣（氧氣與二氧化碳的製備與性質）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第6章：認識物質的微觀結構",
+          "details": [
+            "6-1 道耳吞原子說與現代原子模型",
+            "6-2 常見的金屬與非金屬元素週期表分布"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 道耳吞原子說與現代原子模型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-2 常見的金屬與非金屬元素週期表分布",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-50a42e4de689aebf25c6",
+      "subject": "化學",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：化學反應與質量守恆",
+          "details": [
+            "1-1 化學式與分子式的表示法",
+            "1-2 原子量、分子量與莫耳數（Mole）核心計算",
+            "1-3 化學反應式及其係數平衡",
+            "1-4 質量守恆定律與化學反應計量"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 化學式與分子式的表示法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 原子量、分子量與莫耳數（Mole）核心計算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 化學反應式及其係數平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 質量守恆定律與化學反應計量",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：氧化還原反應",
+          "details": [
+            "2-1 金屬與非金屬的氧化反應活性比較",
+            "2-2 氧化還原反應的定義與工業煉鐵高爐應用",
+            "2-3 常見的抗氧化劑與生活防腐"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 金屬與非金屬的氧化反應活性比較",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 氧化還原反應的定義與工業煉鐵高爐應用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 常見的抗氧化劑與生活防腐",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：酸、鹼、鹽類",
+          "details": [
+            "3-1 電解質的定義與阿瑞尼斯游離說",
+            "3-2 酸的性質、定義與常見的強弱酸",
+            "3-3 鹼的性質、定義與常見的強弱鹼",
+            "3-4 酸鹼溶液濃度與pH值計算",
+            "3-5 酸鹼中和反應（熱效應、鹽類與水的生成）"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 電解質的定義與阿瑞尼斯游離說",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 酸的性質、定義與常見的強弱酸",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 鹼的性質、定義與常見的強弱鹼",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 酸鹼溶液濃度與pH值計算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-5 酸鹼中和反應（熱效應、鹽類與水的生成）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：反應速率與化學平衡",
+          "details": [
+            "4-1 反應速率的定義與影響因素（濃度、表面積、溫度、催化劑）",
+            "4-2 化學可逆反應與動態化學平衡",
+            "4-3 影響化學平衡的因素與勒沙特列原理"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 反應速率的定義與影響因素（濃度、表面積、溫度、催化劑）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 化學可逆反應與動態化學平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 影響化學平衡的因素與勒沙特列原理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：有機化合物",
+          "details": [
+            "5-1 有機化合物與無機化合物的定性與區別",
+            "5-2 常見的烴類、醇類、酸類與酯化反應",
+            "5-3 高分子聚合物、天然與合成纖維、塑膠分類",
+            "5-4 生活中的有機物（肥皂皂化反應、去污原理、食品）"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 有機化合物與無機化合物的定性與區別",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 常見的烴類、醇類、酸類與酯化反應",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 高分子聚合物、天然與合成纖維、塑膠分類",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-4 生活中的有機物（肥皂皂化反應、去污原理、食品）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-cc2c521c159103f595a8",
+      "subject": "化學",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：化學反應與莫耳數",
+          "details": [
+            "1-1 化學式的書寫規則",
+            "1-2 莫耳數的定義與微觀質量轉換",
+            "1-3 質量守恆與反應式平衡"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 化學式的書寫規則",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 莫耳數的定義與微觀質量轉換",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 質量守恆與反應式平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：氧化還原與活性",
+          "details": [
+            "2-1 金屬活性比較試驗",
+            "2-2 氧化與還原的伴隨發生與工業應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 金屬活性比較試驗",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 氧化與還原的伴隨發生與工業應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：酸鹼鹽溶液",
+          "details": [
+            "3-1 電解質導電性與解離平衡",
+            "3-2 生活中常見的酸與鹼",
+            "3-3 水的解離、pH值與酸鹼指示劑變色範圍",
+            "3-4 酸鹼中和滴定與常見鹽類特性"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 電解質導電性與解離平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 生活中常見的酸與鹼",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 水的解離、pH值與酸鹼指示劑變色範圍",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 酸鹼中和滴定與常見鹽類特性",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：反應速率與平衡",
+          "details": [
+            "4-1 反應速率的控制變因與碰撞學說",
+            "4-2 動態化學平衡的移動條件與定性原理"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 反應速率的控制變因與碰撞學說",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 動態化學平衡的移動條件與定性原理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：生活中的碳氫化合物",
+          "details": [
+            "5-1 有機物的分類（碳氫氧氮）",
+            "5-2 酯化反應實驗與成品分析",
+            "5-3 聚合物與肥皂皂化去污實驗"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 有機物的分類（碳氫氧氮）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 酯化反應實驗與成品分析",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 聚合物與肥皂皂化去污實驗",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-ebbd441b79eec7a2d933",
+      "subject": "化學",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：化學計量與反應式",
+          "details": [
+            "1-1 化學式的種類與規則",
+            "1-2 莫耳（Mole）結構與粒子數、質量轉換",
+            "1-3 化學方程式平衡與反應守恆定律"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 化學式的種類與規則",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 莫耳（Mole）結構與粒子數、質量轉換",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 化學方程式平衡與反應守恆定律",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：元素活性與氧化還原",
+          "details": [
+            "2-1 金屬活性順序表建立",
+            "2-2 氧化還原與日常生活中的燃燒、防鏽應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 金屬活性順序表建立",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 氧化還原與日常生活中的燃燒、防鏽應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：水溶液中的酸鹼鹽離子",
+          "details": [
+            "3-1 電解質解離說與導電模型",
+            "3-2 酸的通性與常見酸液、鹼的通性與常見鹼液",
+            "3-3 水溶液酸鹼濃度與pH值",
+            "3-4 酸鹼中和反應生成物、鹽類的分類與製造"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 電解質解離說與導電模型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 酸的通性與常見酸液、鹼的通性與常見鹼液",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 水溶液酸鹼濃度與pH值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 酸鹼中和反應生成物、鹽類的分類與製造",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：化學反應速率與動態平衡",
+          "details": [
+            "4-1 反應速率的測量與顆粒大小、濃度、溫度影響",
+            "4-2 化學平衡的意義與勒沙特列法則應用"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 反應速率的測量與顆粒大小、濃度、溫度影響",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 化學平衡的意義與勒沙特列法則應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：有機化學世界",
+          "details": [
+            "5-1 有機化合物的構造特徵與分類",
+            "5-2 烴、醇、羧酸與酯化反應的實驗操作",
+            "5-3 天然與人造聚合物（橡膠、塑料、合成纖維）",
+            "5-4 肥皂與合成清潔劑的界面活性原理"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 有機化合物的構造特徵與分類",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 烴、醇、羧酸與酯化反應的實驗操作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 天然與人造聚合物（橡膠、塑料、合成纖維）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-4 肥皂與合成清潔劑的界面活性原理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

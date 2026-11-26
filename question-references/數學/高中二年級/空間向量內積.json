@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "self-20261126-space-dot-norm-identity",
+      "source": "自編參考題；依三維歐氏向量內積定義命題，非歷屆考題",
+      "design": "考查長度平方與內積的關係；干擾值對應漏掉交叉項、內積符號錯誤或誤用長度差。",
+      "question": {
+        "q": "空間向量 $\\vec u$、$\\vec v$ 滿足 $|\\vec u|=3$、$|\\vec v|=4$、$\\vec u\\cdot\\vec v=-2$。求 $|\\vec u+\\vec v|^2$。",
+        "correct": "$21$",
+        "wrong": [
+          "$25$",
+          "$29$",
+          "$9$"
+        ],
+        "exp": "平方長度為 $|\\vec u|^2+2\\vec u\\cdot\\vec v+|\\vec v|^2=9-4+16=21$。",
+        "subject": "數學",
+        "sub_topic": "空間向量內積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間向量內積",
+        "template_id": "space-dot-norm-identity",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261126-space-dot-angle-cosine",
+      "source": "自編參考題；依三維歐氏向量內積定義命題，非歷屆考題",
+      "design": "考查三維內積與夾角的關聯；干擾選項分別漏除長度、只除一個長度或將不同坐標誤判正交。",
+      "question": {
+        "q": "空間向量 $\\vec u=(1,1,0)$、$\\vec v=(1,0,1)$ 的夾角為 $\\theta$，則 $\\cos\\theta$ 為何？",
+        "correct": "$\\frac12$",
+        "wrong": [
+          "$1$",
+          "$\\frac{\\sqrt2}{2}$",
+          "$0$"
+        ],
+        "exp": "$\\vec u\\cdot\\vec v=1$，兩向量長度皆為 $\\sqrt2$，所以 $\\cos\\theta=1/(\\sqrt2\\sqrt2)=1/2$。",
+        "subject": "數學",
+        "sub_topic": "空間向量內積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間向量內積",
+        "template_id": "space-dot-angle-cosine",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "self-20261126-space-dot-work-scalar",
+      "source": "自編參考題；依三維歐氏向量內積定義命題，非歷屆考題",
+      "design": "以已提供公式的作功情境檢查位置差與內積；干擾選項對應力與終點直接內積、漏減起點或負號錯誤。",
+      "question": {
+        "q": "在三維直角坐標中，恆力 $\\vec F=(2,-1,3)$ 牛頓作用於物體。物體從 $A=(1,0,2)$ 公尺移至 $B=(3,1,2)$ 公尺。此力所做的功 $W=\\vec F\\cdot\\overrightarrow{AB}$ 為何？",
+        "correct": "$3$ 焦耳",
+        "wrong": [
+          "$11$ 焦耳",
+          "$6$ 焦耳",
+          "$5$ 焦耳"
+        ],
+        "exp": "先求位移 $\\overrightarrow{AB}=B-A=(2,1,0)$，故 $W=2\\times2+(-1)\\times1+3\\times0=3$ 焦耳。",
+        "subject": "數學",
+        "sub_topic": "空間向量內積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間向量內積",
+        "template_id": "space-dot-work-scalar",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

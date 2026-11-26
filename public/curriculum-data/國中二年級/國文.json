@@ -1,0 +1,451 @@
+{
+  "schema": 1,
+  "grade": "國中二年級",
+  "subject": "國文",
+  "books": [
+    {
+      "bookId": "book-7f5c8458d821e3c60bdd",
+      "subject": "國文",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：書信的世界",
+          "details": [
+            "課文：與宋元思書（吳均）—— 駢文體裁與山水描寫",
+            "語文常識一：應用文 —— 書信與便條（稱謂、提稱語、結尾敬語）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：與宋元思書（吳均）—— 駢文體裁與山水描寫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：應用文 —— 書信與便條（稱謂、提稱語、結尾敬語）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：理性的思維",
+          "details": [
+            "課文：鳥（梁實秋）—— 記敘兼旁白說明文的觀點",
+            "課文：生活中的科學（科普說明文選讀）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：鳥（梁實秋）—— 記敘兼旁白說明文的觀點",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：生活中的科學（科普說明文選讀）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：詠物與抒情",
+          "details": [
+            "課文：陋室銘（劉禹錫）—— 文言駢散結合與託物言志",
+            "課文：現代散文選（關於堅韌與生命價值的思考）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：陋室銘（劉禹錫）—— 文言駢散結合與託物言志",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：現代散文選（關於堅韌與生命價值的思考）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-5f307cc47cb14733ec79",
+      "subject": "國文",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：溝通的藝術",
+          "details": [
+            "課文：與宋元思書（吳均）—— 文言小品與富春江山水之美",
+            "語文常識一：應用文格式 —— 賀啟、便條與現代書信寫法"
+          ],
+          "concepts": [
+            {
+              "name": "課文：與宋元思書（吳均）—— 文言小品與富春江山水之美",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：應用文格式 —— 賀啟、便條與現代書信寫法",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：靈性的觀察",
+          "details": [
+            "課文：鳥（梁實秋）—— 刻畫精微、駢散交錯的散文典範",
+            "課文：陋室銘（劉禹錫）—— 駢文對仗與安貧樂道的精神"
+          ],
+          "concepts": [
+            {
+              "name": "課文：鳥（梁實秋）—— 刻畫精微、駢散交錯的散文典範",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：陋室銘（劉禹錫）—— 駢文對仗與安貧樂道的精神",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：生命的韌性",
+          "details": [
+            "課文：白話小說或現代散文（張曼娟、簡媜等名家選文）",
+            "課文：文言散文選讀"
+          ],
+          "concepts": [
+            {
+              "name": "課文：白話小說或現代散文（張曼娟、簡媜等名家選文）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：文言散文選讀",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-1f192fdcd1ffa6621df6",
+      "subject": "國文",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：應酬與社交",
+          "details": [
+            "課文：山水小品選（與宋元思書）—— 駢體文的音韻美與景物描寫",
+            "語文常識一：應用文應用 —— 書信的行款與信封寫法"
+          ],
+          "concepts": [
+            {
+              "name": "課文：山水小品選（與宋元思書）—— 駢體文的音韻美與景物描寫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：應用文應用 —— 書信的行款與信封寫法",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：詠物寄情",
+          "details": [
+            "課文：鳥（梁實秋）—— 透過對鳥的悲喜描寫反思自由",
+            "課文：陋室銘（劉禹錫）—— 駢儷句法與作者的高潔志趣"
+          ],
+          "concepts": [
+            {
+              "name": "課文：鳥（梁實秋）—— 透過對鳥的悲喜描寫反思自由",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：陋室銘（劉禹錫）—— 駢儷句法與作者的高潔志趣",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：生活智慧",
+          "details": [
+            "課文：白話散文（當代文學選讀）",
+            "課文：科學知性文本閱讀（說明文）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：白話散文（當代文學選讀）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：科學知性文本閱讀（說明文）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-022fced43b5c74272b47",
+      "subject": "國文",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：社會關懷",
+          "details": [
+            "課文：愛蓮說（周敦頤）—— 文言論說散文與君子人格比擬",
+            "語文常識一：應用文 —— 柬帖與題辭（便柬、婚喪喜慶用語）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：愛蓮說（周敦頤）—— 文言論說散文與君子人格比擬",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：應用文 —— 柬帖與題辭（便柬、婚喪喜慶用語）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：思辨與邏輯",
+          "details": [
+            "課文：謝天（陳之藩）—— 議論文的表率（功成不居與感恩）",
+            "課文：五柳先生傳（陶淵明）—— 隱逸詩人的自況與傳記體裁"
+          ],
+          "concepts": [
+            {
+              "name": "課文：謝天（陳之藩）—— 議論文的表率（功成不居與感恩）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：五柳先生傳（陶淵明）—— 隱逸詩人的自況與傳記體裁",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：歷史的迴響",
+          "details": [
+            "課文：史記選（鞭笞、或項羽本紀選）—— 紀傳體史書與敘事文學",
+            "課文：古體詩選（慈烏夜啼）—— 白居易的諷諭詩與孝道"
+          ],
+          "concepts": [
+            {
+              "name": "課文：史記選（鞭笞、或項羽本紀選）—— 紀傳體史書與敘事文學",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：古體詩選（慈烏夜啼）—— 白居易的諷諭詩與孝道",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-c59a2abe68baa6a16d35",
+      "subject": "國文",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：生命的風骨",
+          "details": [
+            "課文：愛蓮說（周敦頤）—— 蓮的意象與獨孤求敗的隱逸人格",
+            "語文常識一：應用文應用 —— 婚喪喜慶柬帖讀法與題辭判定"
+          ],
+          "concepts": [
+            {
+              "name": "課文：愛蓮說（周敦頤）—— 蓮的意象與獨孤求敗的隱逸人格",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：應用文應用 —— 婚喪喜慶柬帖讀法與題辭判定",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：感恩與反省",
+          "details": [
+            "課文：謝天（陳之藩）—— 得之於人者太多，出於己者太少",
+            "課文：五柳先生傳（陶淵明）—— 不慕榮利、率真自然的文言自傳"
+          ],
+          "concepts": [
+            {
+              "name": "課文：謝天（陳之藩）—— 得之於人者太多，出於己者太少",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：五柳先生傳（陶淵明）—— 不慕榮利、率真自然的文言自傳",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：敘事與史傳",
+          "details": [
+            "課文：古體詩選（慈烏夜啼）—— 藉烏進孝反襯人子的反哺之情",
+            "課文：史記選（張釋之執法）—— 法治精神與歷史敘事結構"
+          ],
+          "concepts": [
+            {
+              "name": "課文：古體詩選（慈烏夜啼）—— 藉烏進孝反襯人子的反哺之情",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：史記選（張釋之執法）—— 法治精神與歷史敘事結構",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f691c2b8d883af588ca7",
+      "subject": "國文",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：禮尚往來",
+          "details": [
+            "課文：愛蓮說（周敦頤）—— 運用襯托手法凸顯蓮之高潔",
+            "語文常識一：題辭分類與柬帖實務辨識"
+          ],
+          "concepts": [
+            {
+              "name": "課文：愛蓮說（周敦頤）—— 運用襯托手法凸顯蓮之高潔",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：題辭分類與柬帖實務辨識",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：生命的智慧",
+          "details": [
+            "課文：五柳先生傳（陶淵明）—— 性嗜酒、期在必醉的任真生活",
+            "課文：謝天（陳之藩）—— 理性思辨與抒情結合的經典"
+          ],
+          "concepts": [
+            {
+              "name": "課文：五柳先生傳（陶淵明）—— 性嗜酒、期在必醉的任真生活",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：謝天（陳之藩）—— 理性思辨與抒情結合的經典",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：法治與敘事",
+          "details": [
+            "課文：張釋之執法（司馬遷）—— 廷尉當是法、天子與天下公共的法治觀",
+            "課文：古典詩選（慈烏夜啼）—— 諷諭詩的結構分析"
+          ],
+          "concepts": [
+            {
+              "name": "課文：張釋之執法（司馬遷）—— 廷尉當是法、天子與天下公共的法治觀",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：古典詩選（慈烏夜啼）—— 諷諭詩的結構分析",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

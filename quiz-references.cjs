@@ -1,6 +1,8 @@
 'use strict';
 const path = require('node:path');
 const index = require('./question-references/index.json');
+const Catalog = require('./curriculum-catalog.cjs');
+const {exclusionIssue} = require('./quiz-scope-exclusions.cjs');
 const normalize = value => String(value || '').normalize('NFKC').replace(/\s+/g, '');
 const labels = value => {
   const text = String(value || '').replace('.json', '');
@@ -10,16 +12,32 @@ const labels = value => {
   return [...new Set([normalize(text), ...split(/[/／:：()（）]/), ...split(/[/／:：()（）,，、]/)])];
 };
 
-function quizReferences({ subject, level, topic, scope, facet, exclusions = [], referenceSeed = '' }) {
-  if (exclusions.length) return [];
+function excludedReference(reference, rules) {
+  if(exclusionIssue(reference.question,rules))return true;
+  const text=normalize([reference.question.q,reference.question.exp,reference.question.sub_topic].join(' '));
+  return rules.some(rule=>{
+    // Only extract explicit forbidden labels; unknown prose still reaches the independent reviewer.
+    const match=String(rule).match(/(?:不要(?:再)?(?:出|考)?|排除|禁止(?:出現)?)[「『“"\s]*([^，。；;」』”"]{2,40})/);
+    const label=normalize(match?.[1]).replace(/(?:相關)?(?:的)?(?:題型|題目|計算|內容)$/,'');
+    return label.length>=2&&text.includes(label);
+  });
+}
+function quizReferences({ subject, level, topic, scope, facet, exclusions = [], referenceSeed = '', difficulty, questionForm }) {
+  const book=Catalog.validateScope(scope,subject,level);
   if (!Object.hasOwn(index, subject) || !Object.hasOwn(index[subject], level)) return [];
   const concepts = index[subject][level];
-  const selected = [...labels(topic), ...labels(scope?.path), ...(scope?.sub_topics || []).map(normalize)];
+  const selected = scope?.sub_topics?.length ? scope.sub_topics.map(name=>normalize(book?Catalog.sectionName(name):name)) : [...labels(topic), ...labels(scope?.path)];
   // Labels are whitespace-normalized for matching. Curriculum keys may contain
   // spaces in terms such as "DNA 與基因" or "GIS 與空間資料".
   // Retain original filenames; never derive paths from normalized input.
   const normalizedConcepts = new Map(Object.entries(concepts).map(([label, filename]) => [normalize(label), filename]));
-  const findConcept = label => Object.hasOwn(concepts, label) ? concepts[label] : normalizedConcepts.get(normalize(label)) || null;
+  const findConcept = label => {
+    if(Object.hasOwn(concepts,label))return concepts[label];
+    const exact=normalizedConcepts.get(normalize(label));if(exact)return exact;
+    const standard=Catalog.resolveConcept({subject,level,name:label});
+    const file=standard?.references[0];
+    return file&&file.startsWith('question-references/'+subject+'/'+level+'/')?path.basename(file,'.json'):null;
+  };
   const selectedKeys = new Set(selected.map(findConcept).filter(Boolean));
   const facetKey = facet && findConcept(normalize(facet.concept));
   if (facet && !facetKey) return [];
@@ -32,15 +50,20 @@ function quizReferences({ subject, level, topic, scope, facet, exclusions = [], 
     const group = require(path.join(__dirname, 'question-references', subject, level, key + '.json'));
     if (!selectedKeys.has(key) && !group.units.some(unit => selected.includes(normalize(unit)))) continue;
     if (group.excludedConcepts.some(word => scopeText.some(value => value.includes(word)))) continue;
-    const pool = group.references;
+    const pool = group.references.filter(ref=>!excludedReference(ref,exclusions));
+    if(!pool.length)continue;
     let start = 0;
     if (referenceSeed && pool.length > 3) {
       const seed = String(referenceSeed) + ':' + subject + ':' + level + ':' + key;
       for (const ch of seed) start = (Math.imul(start, 33) + ch.codePointAt(0)) >>> 0;
       start %= pool.length;
     }
-    references.push(...Array.from({ length: Math.min(pool.length, 3 - references.length) },
-      (_, i) => pool[(start + i) % pool.length]));
+    const rotated=Array.from({length:pool.length},(_,i)=>pool[(start+i)%pool.length]);
+    const cognitive={easy:1,medium:2,hard:3}[difficulty];
+    const score=ref=>(questionForm&&ref.question.question_form!==questionForm?3:0)+
+      (cognitive?Math.abs(ref.question.cognitive_level-cognitive):0);
+    rotated.sort((a,b)=>score(a)-score(b));
+    references.push(...rotated.slice(0,3-references.length));
     if (references.length === 3) break;
   }
   return references;
@@ -57,4 +80,4 @@ function referencePrompt(references) {
     JSON.stringify(references.map(({ question, design }) => ({ question, design })));
 }
 
-module.exports = { quizReferences, referencePrompt };
+module.exports = { quizReferences, referencePrompt, excludedReference };

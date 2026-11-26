@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "國小三年級",
+  "subject": "本土語文",
+  "books": [
+    {
+      "bookId": "book-95dd551daebbf521c275",
+      "subject": "本土語文",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "生活詞語（依實際語別）",
+          "details": [
+            "自我介紹與家人稱謂",
+            "數字與時間",
+            "生活禮貌用語"
+          ],
+          "concepts": [
+            {
+              "name": "自我介紹與家人稱謂",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "數字與時間",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活禮貌用語",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "聆聽與口說",
+          "details": [
+            "辨識語音與聲調",
+            "簡短對話",
+            "生活情境聽力"
+          ],
+          "concepts": [
+            {
+              "name": "辨識語音與聲調",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡短對話",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活情境聽力",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "文化與習俗",
+          "details": [
+            "家庭文化",
+            "社區語言",
+            "節慶與傳統"
+          ],
+          "concepts": [
+            {
+              "name": "家庭文化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "社區語言",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "節慶與傳統",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9779d0801e50691f798a",
+      "subject": "本土語文",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "主題詞語（依實際語別）",
+          "details": [
+            "飲食、交通與地點",
+            "自然與環境",
+            "常用動作詞"
+          ],
+          "concepts": [
+            {
+              "name": "飲食、交通與地點",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "自然與環境",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "常用動作詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "短文與對話",
+          "details": [
+            "聽懂主題短文",
+            "口語敘事",
+            "生活情境問答"
+          ],
+          "concepts": [
+            {
+              "name": "聽懂主題短文",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "口語敘事",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活情境問答",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "文化理解與表達",
+          "details": [
+            "語言與身分",
+            "地方文化",
+            "跨世代訪談"
+          ],
+          "concepts": [
+            {
+              "name": "語言與身分",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "地方文化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "跨世代訪談",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

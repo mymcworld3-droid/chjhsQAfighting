@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "subject": "國文",
+  "books": [
+    {
+      "bookId": "book-008b5131479e4f009fcf",
+      "subject": "國文",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "高中國文整合閱讀",
+          "details": [
+            "古文閱讀統整",
+            "白話文比較",
+            "詩詞選讀與賞析"
+          ],
+          "concepts": [
+            {
+              "name": "古文閱讀統整",
+              "conceptId": "legacy-926111319007b4f6b864",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "白話文比較",
+              "conceptId": "legacy-637e9075820e725a725e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "詩詞選讀與賞析",
+              "conceptId": "legacy-32843a7aa7076c67ea66",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "國語文學測複習",
+          "details": [
+            "字音字形與詞語",
+            "國學及文化常識",
+            "混合題及圖表判讀"
+          ],
+          "concepts": [
+            {
+              "name": "字音字形與詞語",
+              "conceptId": "legacy-a155553ee6266a662385",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "國學及文化常識",
+              "conceptId": "legacy-529af929bfd0d4145b1f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "混合題及圖表判讀",
+              "conceptId": "legacy-3ed2ece5ba835e0b3c93",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "知性寫作",
+          "details": [
+            "資料整合與分析",
+            "議題論證",
+            "文章架構與修訂"
+          ],
+          "concepts": [
+            {
+              "name": "資料整合與分析",
+              "conceptId": "legacy-1d8b8bf6f0756126cc78",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "議題論證",
+              "conceptId": "legacy-fd4aafe7cc31aa8df4ae",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "文章架構與修訂",
+              "conceptId": "legacy-80205aea9013269f7867",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-bea825af1bc37164a424",
+      "subject": "國文",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "素養閱讀",
+          "details": [
+            "跨文本比較",
+            "資料與圖表分析",
+            "長篇綜合閱讀"
+          ],
+          "concepts": [
+            {
+              "name": "跨文本比較",
+              "conceptId": "legacy-346e6571c3ac4460eaef",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "資料與圖表分析",
+              "conceptId": "legacy-dff300a829fc42aa9d1a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "長篇綜合閱讀",
+              "conceptId": "legacy-2067106fdb0c99e79442",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "感性與創意寫作",
+          "details": [
+            "敘事與抒情",
+            "意象與細節",
+            "語言風格"
+          ],
+          "concepts": [
+            {
+              "name": "敘事與抒情",
+              "conceptId": "legacy-fed4d483e017b8fe623a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "意象與細節",
+              "conceptId": "legacy-6dac1c509e8c2818e682",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "語言風格",
+              "conceptId": "legacy-c7161655fe2b451b6c1e",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "國語文綜合複習",
+          "details": [
+            "古文、韻文與現代文",
+            "應用文",
+            "語文知識"
+          ],
+          "concepts": [
+            {
+              "name": "古文、韻文與現代文",
+              "conceptId": "legacy-30df3bec1e9103d9b67b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "應用文",
+              "conceptId": "legacy-de04d632ac8a5d4a22f6",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "語文知識",
+              "conceptId": "legacy-b9bc9ba1600fb054ba2f",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

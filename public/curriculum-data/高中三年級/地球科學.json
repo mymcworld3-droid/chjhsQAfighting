@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "subject": "地球科學",
+  "books": [
+    {
+      "bookId": "book-eef29b25d9966285a9e6",
+      "subject": "地球科學",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "地質與大氣統整",
+          "details": [
+            "板塊與地震",
+            "大氣動力",
+            "天氣預報與地質資料"
+          ],
+          "concepts": [
+            {
+              "name": "板塊與地震",
+              "conceptId": "legacy-eb721d8959d46f23b6f2",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "大氣動力",
+              "conceptId": "legacy-06d8c16fcc505d7bba88",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "天氣預報與地質資料",
+              "conceptId": "legacy-b7e0685d6b44a0a167bf",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "海洋與氣候",
+          "details": [
+            "海流與氣候變化",
+            "全球熱收支",
+            "氣候資料"
+          ],
+          "concepts": [
+            {
+              "name": "海流與氣候變化",
+              "conceptId": "legacy-3b2f36a20f4f66323a6e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "全球熱收支",
+              "conceptId": "legacy-7ca445cd80e050a1074c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "氣候資料",
+              "conceptId": "legacy-19b7b2fe2938f7a2670f",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-8522a732d78d6e47bf66",
+      "subject": "地球科學",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "天文與宇宙",
+          "details": [
+            "恆星生命史",
+            "星系與宇宙",
+            "觀測證據"
+          ],
+          "concepts": [
+            {
+              "name": "恆星生命史",
+              "conceptId": "legacy-89104eb5c5cb464af1cf",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "星系與宇宙",
+              "conceptId": "legacy-b03787af317b21d82de7",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "觀測證據",
+              "conceptId": "legacy-3882e08a5ff85d7b97f1",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "地球科學探究實作",
+          "details": [
+            "遙測與地圖",
+            "數據分析、趨勢",
+            "模型與不確定性"
+          ],
+          "concepts": [
+            {
+              "name": "遙測與地圖",
+              "conceptId": "legacy-dbcf24dd08e0f2460fc9",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "數據分析、趨勢",
+              "conceptId": "legacy-07bda0cd2729d05b857e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "模型與不確定性",
+              "conceptId": "legacy-3a648cedd2fea8a186fb",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

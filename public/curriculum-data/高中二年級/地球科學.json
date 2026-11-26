@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "grade": "高中二年級",
+  "subject": "地球科學",
+  "books": [
+    {
+      "bookId": "book-34f41c8c5471775a7f66",
+      "subject": "地球科學",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "選修地科：地質與環境",
+          "details": [
+            "地質構造與地史",
+            "地質資源",
+            "天然災害與防治"
+          ],
+          "concepts": [
+            {
+              "name": "地質構造與地史",
+              "conceptId": "legacy-bf839f12c0b9f7c3cc91",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "地質資源",
+              "conceptId": "legacy-ce4bebe9d6448e3998ec",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "天然災害與防治",
+              "conceptId": "legacy-04d2b80355bd34412aec",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "地球系統探究",
+          "details": [
+            "板塊構造與地震資料",
+            "岩石與礦物",
+            "地形分析"
+          ],
+          "concepts": [
+            {
+              "name": "板塊構造與地震資料",
+              "conceptId": "legacy-d8bdc6febb521c0606cf",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "岩石與礦物",
+              "conceptId": "legacy-c1f209ac6379df84f7d3",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "地形分析",
+              "conceptId": "legacy-7a838788a58eac474481",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-00f71e642baf90e55d27",
+      "subject": "地球科學",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "選修地科：大氣海洋",
+          "details": [
+            "大氣環流",
+            "海洋運動",
+            "氣候與天氣模型"
+          ],
+          "concepts": [
+            {
+              "name": "大氣環流",
+              "conceptId": "legacy-5298f077fe8b5b94cd58",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "海洋運動",
+              "conceptId": "legacy-4dd326d5783f125e254c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "氣候與天氣模型",
+              "conceptId": "legacy-b25fa3ace9c3a4bc0ffd",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "天文觀測",
+          "details": [
+            "天球坐標的概念",
+            "天體運動",
+            "宇宙演化"
+          ],
+          "concepts": [
+            {
+              "name": "天球坐標的概念",
+              "conceptId": "legacy-529a96deae4d9df2f834",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "天體運動",
+              "conceptId": "legacy-162d067d176aa91ecef2",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "宇宙演化",
+              "conceptId": "legacy-09b01e7996667cfc142b",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

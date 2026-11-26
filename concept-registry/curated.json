@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "concepts": [
+    {
+      "conceptId": "math-plane-vector-dot-product",
+      "name": "平面向量內積",
+      "subject": "數學",
+      "grades": [
+        "高中二年級"
+      ],
+      "status": "scope-reviewed",
+      "aliases": [
+        "向量內積",
+        "內積的定義",
+        "平面向量的內積",
+        "兩向量的內積"
+      ],
+      "prerequisites": [],
+      "prerequisiteNotes": "平面向量坐標、長度與三角比；先備觀念尚未建立永久 ID，不虛構映射。",
+      "allowedContent": [
+        "二維向量內積及雙線性運算",
+        "以內積判斷垂直、求長度與夾角"
+      ],
+      "excludedContent": [
+        "空間向量",
+        "三維",
+        "立體向量",
+        "外積",
+        "柯西不等式的極值證明"
+      ],
+      "references": [
+        "question-references/數學/高中二年級/平面向量內積.json"
+      ],
+      "legacyConceptIds": [
+        "plane-vector-dot-product",
+        "h2-向量內積"
+      ],
+      "curriculumMappings": [],
+      "scopeReviewStatus": "reviewed",
+      "reviewedAt": "2026-11-26",
+      "sourceIds": [
+        "lt-math-map"
+      ]
+    },
+    {
+      "conceptId": "math-space-vector-dot-product",
+      "name": "空間向量內積",
+      "subject": "數學",
+      "grades": [
+        "高中二年級"
+      ],
+      "status": "scope-reviewed",
+      "aliases": [
+        "空間向量的內積"
+      ],
+      "prerequisites": [
+        "math-plane-vector-dot-product"
+      ],
+      "allowedContent": [
+        "三維向量內積、長度、夾角及正交條件"
+      ],
+      "excludedContent": [
+        "外積",
+        "三階行列式",
+        "四維向量"
+      ],
+      "references": [
+        "question-references/數學/高中二年級/空間向量內積.json"
+      ],
+      "legacyConceptIds": [
+        "math-高中二年級-空間向量內積"
+      ],
+      "curriculumMappings": [],
+      "scopeReviewStatus": "reviewed",
+      "reviewedAt": "2026-11-26",
+      "sourceIds": [
+        "lt-math-map"
+      ]
+    },
+    {
+      "conceptId": "math-plane-vector-projection",
+      "name": "平面向量投影",
+      "subject": "數學",
+      "grades": [
+        "高中二年級"
+      ],
+      "status": "scope-reviewed",
+      "aliases": [
+        "正射影",
+        "平面向量的正射影",
+        "向量正射影"
+      ],
+      "prerequisites": [
+        "math-plane-vector-dot-product"
+      ],
+      "allowedContent": [
+        "平面向量投影的二維定義、幾何意義與應用"
+      ],
+      "excludedContent": [
+        "空間向量",
+        "三維",
+        "外積",
+        "高維不等式"
+      ],
+      "references": [
+        "question-references/數學/高中二年級/平面向量投影.json"
+      ],
+      "legacyConceptIds": [],
+      "curriculumMappings": [],
+      "scopeReviewStatus": "reviewed",
+      "reviewedAt": "2026-11-26",
+      "sourceIds": [
+        "lt-math-map"
+      ]
+    },
+    {
+      "conceptId": "math-plane-cauchy-schwarz",
+      "name": "平面柯西不等式",
+      "subject": "數學",
+      "grades": [
+        "高中二年級"
+      ],
+      "status": "scope-reviewed",
+      "aliases": [
+        "二維柯西不等式",
+        "平面柯西不等式"
+      ],
+      "prerequisites": [
+        "math-plane-vector-dot-product"
+      ],
+      "allowedContent": [
+        "平面柯西不等式的二維定義、幾何意義與應用"
+      ],
+      "excludedContent": [
+        "空間向量",
+        "三維",
+        "外積",
+        "高維不等式"
+      ],
+      "references": [
+        "question-references/數學/高中二年級/平面柯西不等式.json"
+      ],
+      "legacyConceptIds": [],
+      "curriculumMappings": [],
+      "scopeReviewStatus": "reviewed",
+      "reviewedAt": "2026-11-26",
+      "sourceIds": [
+        "lt-math-map"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小六年級",
+  "subject": "健康與體育",
+  "books": [
+    {
+      "bookId": "book-062382e78bb9d9c065a1",
+      "subject": "健康與體育",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "健康生活與自我照顧",
+          "details": [
+            "高年級飲食與營養",
+            "睡眠與衛生",
+            "身體成長"
+          ],
+          "concepts": [
+            {
+              "name": "高年級飲食與營養",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "睡眠與衛生",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "身體成長",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "安全與傷害預防",
+          "details": [
+            "交通與活動安全",
+            "預防意外",
+            "求助與應變"
+          ],
+          "concepts": [
+            {
+              "name": "交通與活動安全",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "預防意外",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "求助與應變",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "運動與體適能",
+          "details": [
+            "暖身與緩和",
+            "跑跳投基本動作",
+            "體力與協調"
+          ],
+          "concepts": [
+            {
+              "name": "暖身與緩和",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "跑跳投基本動作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "體力與協調",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "人際與心理健康",
+          "details": [
+            "情緒辨識",
+            "尊重差異",
+            "友善互動"
+          ],
+          "concepts": [
+            {
+              "name": "情緒辨識",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "尊重差異",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "友善互動",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-c5e83ec03e9c116983cc",
+      "subject": "健康與體育",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "健康促進",
+          "details": [
+            "均衡飲食",
+            "運動習慣",
+            "預防疾病"
+          ],
+          "concepts": [
+            {
+              "name": "均衡飲食",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "運動習慣",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "預防疾病",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "運動技能",
+          "details": [
+            "球類基本技巧",
+            "團隊合作",
+            "公平競爭"
+          ],
+          "concepts": [
+            {
+              "name": "球類基本技巧",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "團隊合作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公平競爭",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "身心健康與安全",
+          "details": [
+            "壓力調節",
+            "人際互動",
+            "安全與自我保護"
+          ],
+          "concepts": [
+            {
+              "name": "壓力調節",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "人際互動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "安全與自我保護",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "運動參與與規劃",
+          "details": [
+            "訂定運動目標",
+            "紀錄活動",
+            "反思調整"
+          ],
+          "concepts": [
+            {
+              "name": "訂定運動目標",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "紀錄活動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "反思調整",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,343 @@
+{
+  "schema": 1,
+  "grade": "國中一年級",
+  "subject": "歷史",
+  "books": [
+    {
+      "bookId": "book-2ccb4c164694b1b58cbf",
+      "subject": "歷史",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/歷史/history.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：史前時期與原住民族",
+          "details": [
+            "史前文化三階段",
+            "南島語族文化",
+            "原住民社會制度"
+          ],
+          "concepts": [
+            {
+              "name": "史前文化三階段",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "南島語族文化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "原住民社會制度",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：國際競逐與鄭氏時期",
+          "details": [
+            "大航海時代的臺灣",
+            "荷西殖民統治",
+            "鄭氏政權經營"
+          ],
+          "concepts": [
+            {
+              "name": "大航海時代的臺灣",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "荷西殖民統治",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "鄭氏政權經營",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：清領時期",
+          "details": [
+            "渡臺禁令與社會變遷",
+            "開港通商與現代化建設",
+            "民變與械鬥"
+          ],
+          "concepts": [
+            {
+              "name": "渡臺禁令與社會變遷",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "開港通商與現代化建設",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "民變與械鬥",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：日治時期",
+          "details": [
+            "殖民統治體制",
+            "現代化社會變革",
+            "政治與社會運動"
+          ],
+          "concepts": [
+            {
+              "name": "殖民統治體制",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "現代化社會變革",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "政治與社會運動",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第五單元：戰後臺灣",
+          "details": [
+            "威權體制與經濟發展",
+            "民主轉型",
+            "當代國際處境"
+          ],
+          "concepts": [
+            {
+              "name": "威權體制與經濟發展",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "民主轉型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "當代國際處境",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-2c86a839bd247988b7b2",
+      "subject": "歷史",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/歷史/history.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：史前臺灣",
+          "details": [
+            "臺灣史前文化與南島語族"
+          ],
+          "concepts": [
+            {
+              "name": "臺灣史前文化與南島語族",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：大航海時代",
+          "details": [
+            "荷蘭與西班牙的貿易與統治",
+            "鄭氏時期的南進策略"
+          ],
+          "concepts": [
+            {
+              "name": "荷蘭與西班牙的貿易與統治",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "鄭氏時期的南進策略",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：清朝治理",
+          "details": [
+            "清領前期的社會結構",
+            "清領後期的開港與現代化"
+          ],
+          "concepts": [
+            {
+              "name": "清領前期的社會結構",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "清領後期的開港與現代化",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：日本殖民",
+          "details": [
+            "殖民政府統治政策",
+            "皇民化運動與二戰影響"
+          ],
+          "concepts": [
+            {
+              "name": "殖民政府統治政策",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "皇民化運動與二戰影響",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第五單元：現代臺灣",
+          "details": [
+            "冷戰下的臺灣",
+            "政治與民主的軌跡"
+          ],
+          "concepts": [
+            {
+              "name": "冷戰下的臺灣",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "政治與民主的軌跡",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-bd0bb4e5fd07350428ea",
+      "subject": "歷史",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/歷史/history.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：臺灣與南島語族",
+          "details": [
+            "考古遺址與原住民傳統文化"
+          ],
+          "concepts": [
+            {
+              "name": "考古遺址與原住民傳統文化",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：東亞海權時代",
+          "details": [
+            "荷據、西據、鄭氏時期的政經發展"
+          ],
+          "concepts": [
+            {
+              "name": "荷據、西據、鄭氏時期的政經發展",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：清朝統治",
+          "details": [
+            "清朝移民社會與晚清轉型"
+          ],
+          "concepts": [
+            {
+              "name": "清朝移民社會與晚清轉型",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：日本統治",
+          "details": [
+            "殖民建設與抗日運動",
+            "二戰末期與臺灣"
+          ],
+          "concepts": [
+            {
+              "name": "殖民建設與抗日運動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "二戰末期與臺灣",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第五單元：當代臺灣",
+          "details": [
+            "戰後變遷與民主發展"
+          ],
+          "concepts": [
+            {
+              "name": "戰後變遷與民主發展",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

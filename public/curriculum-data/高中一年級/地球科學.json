@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中一年級",
+  "subject": "地球科學",
+  "books": [
+    {
+      "bookId": "book-fad594c19acbb5bed6dd",
+      "subject": "地球科學",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "地球系統",
+          "details": [
+            "地球圈層與交互作用",
+            "地球內部構造",
+            "板塊運動"
+          ],
+          "concepts": [
+            {
+              "name": "地球圈層與交互作用",
+              "conceptId": "legacy-02b6aaea033e73ed6963",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "地球內部構造",
+              "conceptId": "legacy-1693595b0132c570b94c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "板塊運動",
+              "conceptId": "legacy-5d89dcc360ec045bfe04",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "地質與地形",
+          "details": [
+            "岩石循環",
+            "地震與火山",
+            "地質時間與地層"
+          ],
+          "concepts": [
+            {
+              "name": "岩石循環",
+              "conceptId": "legacy-e7b485df2e55907c13c6",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "地震與火山",
+              "conceptId": "legacy-4b591eeb0da315a98677",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "地質時間與地層",
+              "conceptId": "legacy-bbdf11d9969794679902",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "海洋",
+          "details": [
+            "海水性質",
+            "海流與海洋環流",
+            "海氣交互作用"
+          ],
+          "concepts": [
+            {
+              "name": "海水性質",
+              "conceptId": "legacy-0e1d3970fa751a9fc054",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "海流與海洋環流",
+              "conceptId": "legacy-b6ff8cd3b8723cc3c73a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "海氣交互作用",
+              "conceptId": "legacy-1505295d43b48a74fe51",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9c7c69a497d443afbb7e",
+      "subject": "地球科學",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "大氣與天氣",
+          "details": [
+            "大氣結構與熱收支",
+            "氣壓、風與水循環",
+            "鋒面、颱風與天氣圖"
+          ],
+          "concepts": [
+            {
+              "name": "大氣結構與熱收支",
+              "conceptId": "legacy-6042038bd68e2bdfc70d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "氣壓、風與水循環",
+              "conceptId": "legacy-703c8a4e34c5775ecf68",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "鋒面、颱風與天氣圖",
+              "conceptId": "legacy-d31a064d9a9d7b40edb1",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "太空與天文",
+          "details": [
+            "日地月運動",
+            "恆星與星系",
+            "宇宙觀測"
+          ],
+          "concepts": [
+            {
+              "name": "日地月運動",
+              "conceptId": "legacy-452f1a24f336ecb8355e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "恆星與星系",
+              "conceptId": "legacy-87b31fed12d0aae48b2f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "宇宙觀測",
+              "conceptId": "legacy-7d2e8abe3194aedba6cb",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "全球環境變遷",
+          "details": [
+            "氣候變化證據",
+            "溫室效應",
+            "自然災害與永續"
+          ],
+          "concepts": [
+            {
+              "name": "氣候變化證據",
+              "conceptId": "legacy-abbe717dc30353298908",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "溫室效應",
+              "conceptId": "legacy-9355b732cbcf6f767cdf",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "自然災害與永續",
+              "conceptId": "legacy-91da7a9bb7f4d0e6a1df",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

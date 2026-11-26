@@ -1,0 +1,1277 @@
+{
+  "schema": 1,
+  "grade": "高中二年級",
+  "subject": "化學",
+  "books": [
+    {
+      "bookId": "book-745c0f3b80592e63a22c",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "選修化學Ⅰ：物質與能量",
+          "details": [
+            "物質狀態與粒子運動",
+            "熱化學與反應熱",
+            "能量轉換"
+          ],
+          "concepts": [
+            {
+              "name": "物質狀態與粒子運動",
+              "conceptId": "legacy-7e0ce4acdd1df04d6c3e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "熱化學與反應熱",
+              "conceptId": "legacy-8af699655f922cec58a7",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "能量轉換",
+              "conceptId": "legacy-42805c333a0f6f032e8f",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "選修化學Ⅱ：物質構造與反應速率",
+          "details": [
+            "原子軌域與鍵結模型",
+            "分子結構",
+            "反應速率與碰撞理論"
+          ],
+          "concepts": [
+            {
+              "name": "原子軌域與鍵結模型",
+              "conceptId": "legacy-44708e609fa8284fe603",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "分子結構",
+              "conceptId": "legacy-c83b72a70aede1954942",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "反應速率與碰撞理論",
+              "conceptId": "legacy-b4da21fea92e9de75333",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-78f04ef6d897e244681b",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "選修化學Ⅲ：化學反應與平衡一",
+          "details": [
+            "動態平衡與平衡常數",
+            "勒沙特列原理",
+            "酸鹼平衡"
+          ],
+          "concepts": [
+            {
+              "name": "動態平衡與平衡常數",
+              "conceptId": "legacy-7b2fb77c16d6c5d75056",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "勒沙特列原理",
+              "conceptId": "legacy-703f5d389236c6f066d1",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "酸鹼平衡",
+              "conceptId": "legacy-2fc80b2301a9b9855d88",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "選修化學Ⅳ：化學反應與平衡二",
+          "details": [
+            "溶解平衡",
+            "氧化還原與電化學",
+            "電池與電解"
+          ],
+          "concepts": [
+            {
+              "name": "溶解平衡",
+              "conceptId": "legacy-f4b98dfc076ec4576bd3",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "氧化還原與電化學",
+              "conceptId": "legacy-edd7f6b68c6a28d013b9",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "電池與電解",
+              "conceptId": "legacy-5d3eccd6a2f40a965975",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-115-chemistry-i",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "選修化學I",
+      "bookLabel": "選修化學I（全）",
+      "schoolYear": 115,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-defined",
+      "sourceFile": "curriculum-data/books/hanlin-115-chemistry-i.json",
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hce/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1LxLBTWbJZqn0lcw3sP4lr-nExEjDjKnl",
+          "type": "official-textbook-folder",
+          "title": "翰林選修生物I_課本(學用)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1xAqNG4qR1RXtCCZejdoCdtTPUuWN5jL4/view",
+          "type": "official-toc",
+          "title": "選修化學(Ⅰ)課本_01_編輯大意、目次(115f189322).pdf",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+      "units": [
+        {
+          "unit": "第1章：化學反應與能量",
+          "details": [
+            "1-1 化學反應的限量試劑與產率",
+            "1-2 各種能量形式的轉換",
+            "1-3 反應熱的特性與赫斯定律",
+            "1-4 莫耳燃燒熱與莫耳生成熱"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 化學反應的限量試劑與產率",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 各種能量形式的轉換",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 反應熱的特性與赫斯定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 莫耳燃燒熱與莫耳生成熱",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：氣體",
+          "details": [
+            "2-1 大氣的組成與氣體的通性",
+            "2-2 氣體定律",
+            "2-3 理想氣體",
+            "2-4 分 壓"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 大氣的組成與氣體的通性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 氣體定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 理想氣體",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 分 壓",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：溶液的性質",
+          "details": [
+            "3-1 物質的鑑定與溶液",
+            "3-2 蒸氣壓",
+            "3-3 溶液的沸點、凝固點及滲透壓",
+            "3-4 水溶液的依數性"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 物質的鑑定與溶液",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 蒸氣壓",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 溶液的沸點、凝固點及滲透壓",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 水溶液的依數性",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-115-chemistry-ii",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "選修化學II",
+      "bookLabel": "選修化學II（全）",
+      "schoolYear": 115,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-defined",
+      "sourceFile": "curriculum-data/books/hanlin-115-chemistry-ii.json",
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hce/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/19i2s_9WAyMN4SCw2vXSkzZbsD6AaoHKl",
+          "type": "official-textbook-folder",
+          "title": "翰林選修化學II_課本(學用)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1cYEjrFJ97jIFjcOJsAFvyDTlSTIYIlY9/view",
+          "type": "official-toc",
+          "title": "選修化學(Ⅱ)課本_01_編輯大意、目次(115f164111).pdf",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+      "units": [
+        {
+          "unit": "第1章：原子構造與性質",
+          "details": [
+            "1-1 光的性質",
+            "1-2 原子光譜與波耳的氫原子模型",
+            "1-3 原子軌域",
+            "1-4 電子組態",
+            "1-5 元素性質的週期性"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 光的性質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 原子光譜與波耳的氫原子模型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 原子軌域",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 電子組態",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-5 元素性質的週期性",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：物質的性質與化學鍵",
+          "details": [
+            "2-1 化學鍵的種類",
+            "2-2 單鍵與多鍵",
+            "2-3 混成軌域",
+            "2-4 價殼層電子對互斥理論與分子形狀",
+            "2-5 鍵極性與分子極性",
+            "2-6 分子間的作用力"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 化學鍵的種類",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 單鍵與多鍵",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 混成軌域",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 價殼層電子對互斥理論與分子形狀",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-5 鍵極性與分子極性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-6 分子間的作用力",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：化學反應速率",
+          "details": [
+            "3-1 反應速率",
+            "3-2 碰撞理論",
+            "3-3 影響反應速率的因素"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 反應速率",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 碰撞理論",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 影響反應速率的因素",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-115-chemistry-iii",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "選修化學III",
+      "bookLabel": "選修化學III（全）",
+      "schoolYear": 115,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-defined",
+      "sourceFile": "curriculum-data/books/hanlin-115-chemistry-iii.json",
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hce/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1E7OVtDis59oID2N6Q79FXDcvzgLKwRPE",
+          "type": "official-textbook-folder",
+          "title": "翰林選修化學III_課本(學用)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1XpYIxh0yrQOQeHITdZwBawhTuF8eBLj1/view",
+          "type": "official-toc",
+          "title": "選修化學(Ⅲ)課本_01_編輯大意、目次(115f232078).pdf",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+      "units": [
+        {
+          "unit": "第1章：化學平衡",
+          "details": [
+            "1-1 可逆化學反應與化學平衡",
+            "1-2 平衡常數與計算",
+            "1-3 勒沙特列原理"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 可逆化學反應與化學平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 平衡常數與計算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 勒沙特列原理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：沉澱反應與溶解平衡",
+          "details": [
+            "2-1 沉澱反應和離子的分離與確認",
+            "2-2 溶解平衡與溶度積的關係"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 沉澱反應和離子的分離與確認",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 溶解平衡與溶度積的關係",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：酸鹼反應",
+          "details": [
+            "3-1 酸與鹼的命名",
+            "3-2 布-洛酸鹼學說",
+            "3-3 酸鹼的解離平衡",
+            "3-4 鹽 類",
+            "3-5 緩衝溶液",
+            "3-6 酸鹼滴定與滴定曲線"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 酸與鹼的命名",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 布-洛酸鹼學說",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 酸鹼的解離平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 鹽 類",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-5 緩衝溶液",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-6 酸鹼滴定與滴定曲線",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-115-chemistry-iv",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "選修化學IV",
+      "bookLabel": "選修化學IV（全）",
+      "schoolYear": 115,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-defined",
+      "sourceFile": "curriculum-data/books/hanlin-115-chemistry-iv.json",
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hce/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1jbaBcEdKVhumuCNoGh1nHIrduNKTaVOi",
+          "type": "official-textbook-folder",
+          "title": "翰林選修化學IV_課本(學用)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/16f1ma6qiVYFGMGsOhyORh3d7U5qCUNxv/view",
+          "type": "official-toc",
+          "title": "選修化學(Ⅳ)課本_01_編輯大意、目次(115f164925).pdf",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+      "units": [
+        {
+          "unit": "第1章：氧化還原反應與電化學",
+          "details": [
+            "1-1 氧化數",
+            "1-2 氧化還原反應式的平衡",
+            "1-3 氧化還原滴定",
+            "1-4 電化電池與電池電壓",
+            "1-5 電解與電鍍"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 氧化數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 氧化還原反應式的平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 氧化還原滴定",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 電化電池與電池電壓",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-5 電解與電鍍",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：科學在生活中的應用",
+          "details": [
+            "2-1 常見非金屬",
+            "2-2 常見金屬與常見合金",
+            "2-3 先進材料"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 常見非金屬",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 常見金屬與常見合金",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 先進材料",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-115-chemistry-v",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "選修化學V",
+      "bookLabel": "選修化學V（全）",
+      "schoolYear": 115,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-defined",
+      "sourceFile": "curriculum-data/books/hanlin-115-chemistry-v.json",
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hce/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1mPR5QIDSeKAGCtsVFmfhDvSpxsC8TkQe",
+          "type": "official-textbook-folder",
+          "title": "翰林選修化學V_課本(學用)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1G5X7_qi1P_Ob-mnHib_CXopKcOTCI4IF/view",
+          "type": "official-toc",
+          "title": "選修化學(Ⅴ)課本_01_編輯大意、目次(115f166337).pdf",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+      "units": [
+        {
+          "unit": "第1章：有機化學",
+          "details": [
+            "1-1 有機化合物的結構與組成",
+            "1-2 官能基",
+            "1-3 烴",
+            "1-4 醇、醚及酚",
+            "1-5 醛、酮、羧酸及酯",
+            "1-6 胺與醯胺",
+            "1-7 聚合物與聚合反應",
+            "1-8 天然聚合物",
+            "1-9 人造聚合物"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 有機化合物的結構與組成",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 官能基",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 烴",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 醇、醚及酚",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-5 醛、酮、羧酸及酯",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-6 胺與醯胺",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-7 聚合物與聚合反應",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-8 天然聚合物",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-9 人造聚合物",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：環境化學",
+          "details": [
+            "2-1 科學、科技、社會及人文",
+            "2-2 科學模型的特性與演變",
+            "2-3 環境汙染與防治",
+            "2-4 資源與永續發展"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 科學、科技、社會及人文",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 科學模型的特性與演變",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 環境汙染與防治",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 資源與永續發展",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-108-chemistry-i",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "選修化學I",
+      "bookLabel": "選修化學I（全）",
+      "schoolYear": null,
+      "curriculumStandard": "108課綱",
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-defined",
+      "sourceFile": "curriculum-data/books/longteng-108-chemistry-i.json",
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9980",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。",
+      "units": [
+        {
+          "unit": "第1章：物質鑑定與化學反應",
+          "details": [
+            "1-1 物質的特性與鑑定",
+            "1-2 化學式的平衡與化學計量",
+            "1-3 反應熱的種類與性質"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 物質的特性與鑑定",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 化學式的平衡與化學計量",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 反應熱的種類與性質",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：氣體",
+          "details": [
+            "2-1 氣體性質",
+            "2-2 氣體定律",
+            "2-3 理想氣體方程式",
+            "2-4 氣體分壓"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 氣體性質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 氣體定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 理想氣體方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 氣體分壓",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：液態與溶液",
+          "details": [
+            "3-1 水的性質",
+            "3-2 溶液的蒸氣壓與拉午耳定律",
+            "3-3 溶液的性質"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 水的性質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 溶液的蒸氣壓與拉午耳定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 溶液的性質",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-108-chemistry-ii",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "選修化學II",
+      "bookLabel": "選修化學II（全）",
+      "schoolYear": null,
+      "curriculumStandard": "108課綱",
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-defined",
+      "sourceFile": "curriculum-data/books/longteng-108-chemistry-ii.json",
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9981",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。",
+      "units": [
+        {
+          "unit": "第1章：原子結構",
+          "details": [
+            "1-1 氫原子光譜",
+            "1-2 波耳氫原子模型",
+            "1-3 原子軌域",
+            "1-4 電子組態",
+            "1-5 元素性質的週期性"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 氫原子光譜",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 波耳氫原子模型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 原子軌域",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 電子組態",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-5 元素性質的週期性",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：化學鍵結",
+          "details": [
+            "2-1 化學鍵的種類",
+            "2-2 分子的形狀與鍵結",
+            "2-3 分子間的作用力"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 化學鍵的種類",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 分子的形狀與鍵結",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 分子間的作用力",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：化學反應速率",
+          "details": [
+            "3-1 反應速率定律",
+            "3-2 碰撞學說",
+            "3-3 影響反應速率的因素"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 反應速率定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 碰撞學說",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 影響反應速率的因素",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-108-chemistry-iii",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "選修化學III",
+      "bookLabel": "選修化學III（全）",
+      "schoolYear": null,
+      "curriculumStandard": "108課綱",
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-defined",
+      "sourceFile": "curriculum-data/books/longteng-108-chemistry-iii.json",
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10468",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。",
+      "units": [
+        {
+          "unit": "第1章：化學平衡",
+          "details": [
+            "1-1 化學平衡",
+            "1-2 平衡常數",
+            "1-3 勒沙特列原理"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 化學平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 平衡常數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 勒沙特列原理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：沉澱反應",
+          "details": [
+            "2-1 電解質與阿瑞尼斯的解離說",
+            "2-2 物質的沉澱反應",
+            "2-3 溶解平衡"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 電解質與阿瑞尼斯的解離說",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 物質的沉澱反應",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 溶解平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：酸與鹼",
+          "details": [
+            "3-1 酸鹼的定義",
+            "3-2 酸與鹼的分類和命名",
+            "3-3 水的解離",
+            "3-4 弱酸和弱鹼的解離",
+            "3-5 鹽類的種類、命名與酸鹼性",
+            "3-6 緩衝溶液",
+            "3-7 酸鹼滴定"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 酸鹼的定義",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 酸與鹼的分類和命名",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 水的解離",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 弱酸和弱鹼的解離",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-5 鹽類的種類、命名與酸鹼性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-6 緩衝溶液",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-7 酸鹼滴定",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ],
+      "activities": [
+        "實驗1 平衡常數的測定",
+        "實驗2 勒沙特列原理：二氧化氮雙聚反應",
+        "實驗3 酸鹼滴定"
+      ]
+    },
+    {
+      "bookId": "longteng-108-chemistry-iv",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "選修化學IV",
+      "bookLabel": "選修化學IV（全）",
+      "schoolYear": null,
+      "curriculumStandard": "108課綱",
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-defined",
+      "sourceFile": "curriculum-data/books/longteng-108-chemistry-iv.json",
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10283",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。",
+      "units": [
+        {
+          "unit": "第1章：氧化還原反應",
+          "details": [
+            "1-1 電子轉移和氧化還原反應",
+            "1-2 平衡氧化還原反應式",
+            "1-3 氧化還原滴定"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 電子轉移和氧化還原反應",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 平衡氧化還原反應式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 氧化還原滴定",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：電化學",
+          "details": [
+            "2-1 電池反應",
+            "2-2 電池電壓",
+            "2-3 常見的電池",
+            "2-4 電解與電鍍"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 電池反應",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 電池電壓",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 常見的電池",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 電解與電鍍",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：非金屬元素與金屬元素",
+          "details": [
+            "3-1 非金屬元素的性質與製備",
+            "3-2 鈉、鎂及鋁元素和化合物的性質與製備",
+            "3-3 過渡金屬及其化合物"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 非金屬元素的性質與製備",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 鈉、鎂及鋁元素和化合物的性質與製備",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 過渡金屬及其化合物",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-108-chemistry-v",
+      "subject": "化學",
+      "grade": "高中二年級",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "選修化學V",
+      "bookLabel": "選修化學V（全）",
+      "schoolYear": null,
+      "curriculumStandard": "108課綱",
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-partial",
+      "scopeSelectionStatus": "pending-toc",
+      "scopeDetailLevel": "official-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-defined",
+      "sourceFile": "curriculum-data/books/longteng-108-chemistry-v.json",
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10573",
+          "type": "official-product",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。",
+      "units": []
+    }
+  ]
+}

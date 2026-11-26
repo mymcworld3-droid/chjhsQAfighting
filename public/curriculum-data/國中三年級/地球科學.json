@@ -1,0 +1,445 @@
+{
+  "schema": 1,
+  "grade": "國中三年級",
+  "subject": "地球科學",
+  "books": [
+    {
+      "bookId": "book-4d43bd784293237cbb3d",
+      "subject": "地球科學",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第4章：變動的地球與太空（地科）",
+          "details": [
+            "4-1 地表的風化、侵蝕、搬運與沉積作用",
+            "4-2 地球內部構造、板塊構造學說與中洋脊、海溝",
+            "4-3 地震、火山、斷層與褶皺構造"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 地表的風化、侵蝕、搬運與沉積作用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 地球內部構造、板塊構造學說與中洋脊、海溝",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 地震、火山、斷層與褶皺構造",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：宇宙與天文（地科）",
+          "details": [
+            "5-1 地球的自轉與公轉（晝夜與四季形成）",
+            "5-2 月相變化、潮汐現象與日食、月食",
+            "5-3 太陽系、銀河系與宇宙膨脹起源說"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 地球的自轉與公轉（晝夜與四季形成）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 月相變化、潮汐現象與日食、月食",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 太陽系、銀河系與宇宙膨脹起源說",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-dc91dad6e5bee79f20c0",
+      "subject": "地球科學",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第4章：板塊構造與變動的地表",
+          "details": [
+            "4-1 水、風、冰川對地表的風化侵蝕侵蝕地貌",
+            "4-2 沉積岩、火成岩、變質岩三大岩石",
+            "4-3 大陸漂移到板塊學說演進",
+            "4-4 臺灣的板塊交界構造與構造運動特徵"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 水、風、冰川對地表的風化侵蝕侵蝕地貌",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 沉積岩、火成岩、變質岩三大岩石",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 大陸漂移到板塊學說演進",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-4 臺灣的板塊交界構造與構造運動特徵",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：浩瀚的宇宙天文",
+          "details": [
+            "5-1 天球概念與地球公轉造成的四季",
+            "5-2 月亮盈虧與日夜潮汐落差",
+            "5-3 太陽系行星家族與星星的明暗、宇宙結構"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 天球概念與地球公轉造成的四季",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 月亮盈虧與日夜潮汐落差",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 太陽系行星家族與星星的明暗、宇宙結構",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-5130b88ee414d1101c30",
+      "subject": "地球科學",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第4章：地球地質與板塊邊界變動",
+          "details": [
+            "4-1 外營力（風化、侵蝕、搬運、沉積）對地形的塑造",
+            "4-2 地殼岩石圈的組成與三大岩類特質",
+            "4-3 板塊邊界（擴張型、聚合型、錯動型）構造運動",
+            "4-4 地震波的傳播、震度與規模定義"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 外營力（風化、侵蝕、搬運、沉積）對地形的塑造",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 地殼岩石圈的組成與三大岩類特質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 板塊邊界（擴張型、聚合型、錯動型）構造運動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-4 地震波的傳播、震度與規模定義",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：太空與日、地、月的運行",
+          "details": [
+            "5-1 星空軌跡、自轉公轉與四季陽光直射點變化",
+            "5-2 月球軌道、月相圓缺、潮汐力引發的潮位變動",
+            "5-3 宇宙、恆星、星系、太陽系的層次架構"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 星空軌跡、自轉公轉與四季陽光直射點變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 月球軌道、月相圓缺、潮汐力引發的潮位變動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 宇宙、恆星、星系、太陽系的層次架構",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-1edc6e0c3058d3e79738",
+      "subject": "地球科學",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第3章：大氣與氣候變遷（地科）",
+          "details": [
+            "3-1 大氣的分層結構與垂直分布成分",
+            "3-2 飽和水氣、相對濕度、雲雨的形成",
+            "3-3 氣壓與風向、高低氣壓中心的天氣",
+            "3-4 氣團與鋒面（冷鋒、暖鋒、滯留鋒特徵）",
+            "3-5 臺灣常見的天氣變遷與災害（颱風、梅雨、寒害）"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 大氣的分層結構與垂直分布成分",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 飽和水氣、相對濕度、雲雨的形成",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 氣壓與風向、高低氣壓中心的天氣",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 氣團與鋒面（冷鋒、暖鋒、滯留鋒特徵）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-5 臺灣常見的天氣變遷與災害（颱風、梅雨、寒害）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：環境全球變遷與生態（地科）",
+          "details": [
+            "4-1 全球溫室效應、暖化與海平面上升問題",
+            "4-2 臭氧層破壞與紫外線防護",
+            "4-3 永續發展與地球資源的保護"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 全球溫室效應、暖化與海平面上升問題",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 臭氧層破壞與紫外線防護",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 永續發展與地球資源的保護",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-dcded09ef3d6732c46e6",
+      "subject": "地球科學",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第3章：大氣與天氣變幻",
+          "details": [
+            "3-1 大氣圈的垂直分層特徵",
+            "3-2 空氣中的水氣飽和與凝結天氣現象",
+            "3-3 高低氣壓與風的成因",
+            "3-4 影響臺灣的鋒面與颱風、豪雨災害"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 大氣圈的垂直分層特徵",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 空氣中的水氣飽和與凝結天氣現象",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 高低氣壓與風的成因",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 影響臺灣的鋒面與颱風、豪雨災害",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：全球環境變遷",
+          "details": [
+            "4-1 溫室氣體與近年全球暖化趨勢",
+            "4-2 臭氧空洞問題與蒙特婁議定書常識",
+            "4-3 人類生態足跡與地球永續"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 溫室氣體與近年全球暖化趨勢",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 臭氧空洞問題與蒙特婁議定書常識",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 人類生態足跡與地球永續",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-6adc05b298ba314bf9d0",
+      "subject": "地球科學",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第3章：變幻莫測的大氣與氣候",
+          "details": [
+            "3-1 垂直結構對大氣對流的影響",
+            "3-2 濕度測量、雲霧成因與空氣上升冷凝",
+            "3-3 氣壓梯度力與地面、高空風向偏轉",
+            "3-4 臺灣四季的天氣特徵（梅雨季節、夏秋颱風、冬季冷鋒寒潮）"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 垂直結構對大氣對流的影響",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 濕度測量、雲霧成因與空氣上升冷凝",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 氣壓梯度力與地面、高空風向偏轉",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 臺灣四季的天氣特徵（梅雨季節、夏秋颱風、冬季冷鋒寒潮）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：面對全球性環境變遷",
+          "details": [
+            "4-1 溫室效應加劇對海平面與沿海空間的影響",
+            "4-2 氟氯碳化物對大氣臭氧層的破壞路徑",
+            "4-3 聯合國永續發展指標與碳中和政策倡議"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 溫室效應加劇對海平面與沿海空間的影響",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 氟氯碳化物對大氣臭氧層的破壞路徑",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 聯合國永續發展指標與碳中和政策倡議",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

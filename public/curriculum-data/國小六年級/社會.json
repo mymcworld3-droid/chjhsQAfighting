@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小六年級",
+  "subject": "社會",
+  "books": [
+    {
+      "bookId": "book-59aeaa3b32e04f935aff",
+      "subject": "社會",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "世界地理與文化",
+          "details": [
+            "世界地圖與經緯度",
+            "各洲特色",
+            "文化差異"
+          ],
+          "concepts": [
+            {
+              "name": "世界地圖與經緯度",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "各洲特色",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文化差異",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "世界歷史脈絡",
+          "details": [
+            "文明發展",
+            "科技與交流",
+            "現代世界"
+          ],
+          "concepts": [
+            {
+              "name": "文明發展",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "科技與交流",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "現代世界",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "臺灣的國際連結",
+          "details": [
+            "區域合作",
+            "國際組織概念",
+            "貿易與移動"
+          ],
+          "concepts": [
+            {
+              "name": "區域合作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "國際組織概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "貿易與移動",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "全球公民",
+          "details": [
+            "人權與平等",
+            "多元文化",
+            "永續目標"
+          ],
+          "concepts": [
+            {
+              "name": "人權與平等",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "多元文化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "永續目標",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-72de348cb153af7caaa3",
+      "subject": "社會",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "環境與社會議題",
+          "details": [
+            "氣候變遷",
+            "資源與能源",
+            "公民行動"
+          ],
+          "concepts": [
+            {
+              "name": "氣候變遷",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "資源與能源",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公民行動",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "歷史地理統整",
+          "details": [
+            "臺灣與世界的時間脈絡",
+            "空間比較",
+            "史料與地圖"
+          ],
+          "concepts": [
+            {
+              "name": "臺灣與世界的時間脈絡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "空間比較",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "史料與地圖",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "民主與法治初步",
+          "details": [
+            "基本權利與責任",
+            "公共參與",
+            "多元討論"
+          ],
+          "concepts": [
+            {
+              "name": "基本權利與責任",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公共參與",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "多元討論",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "國中社會銜接",
+          "details": [
+            "地圖和圖表",
+            "歷史因果",
+            "公共議題與證據"
+          ],
+          "concepts": [
+            {
+              "name": "地圖和圖表",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "歷史因果",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公共議題與證據",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

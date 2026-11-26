@@ -1,0 +1,562 @@
+{
+  "schema": 1,
+  "grade": "國中一年級",
+  "subject": "國文",
+  "books": [
+    {
+      "bookId": "book-6d7d3d36c7c52fae4023",
+      "subject": "國文",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：生活萬花筒",
+          "details": [
+            "課文：雅量（宋晶宜）—— 學習包容與尊重個別差異",
+            "課文：那雙看不見的手（連加恩）—— 感恩與奉獻",
+            "語文常識一：語文基本常識（工具書使用、標點符號常識）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：雅量（宋晶宜）—— 學習包容與尊重個別差異",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：那雙看不見的手（連加恩）—— 感恩與奉獻",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：語文基本常識（工具書使用、標點符號常識）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：語文與修辭",
+          "details": [
+            "課文：詞與句的練習 —— 認識詞性與基本句型",
+            "課文：夏夜（楊喚）—— 兒童文學與現代詩意象賞析",
+            "語文常識二：文字的構造（六書：象形、指事、會意、形聲）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：詞與句的練習 —— 認識詞性與基本句型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：夏夜（楊喚）—— 兒童文學與現代詩意象賞析",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識二：文字的構造（六書：象形、指事、會意、形聲）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：閱讀與啟示",
+          "details": [
+            "課文：差不多先生傳（胡適）—— 諷刺散文與反省國民性",
+            "課文：師說選（韓愈）—— 文言文從師學習的重要性"
+          ],
+          "concepts": [
+            {
+              "name": "課文：差不多先生傳（胡適）—— 諷刺散文與反省國民性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：師說選（韓愈）—— 文言文從師學習的重要性",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：古韻今風",
+          "details": [
+            "課文：近體詩選（登鸛雀樓、黃鶴樓送孟浩然之廣陵）—— 絕句格律、平仄與對仗",
+            "課文：兒時記趣（沈復）—— 文言散文與觀察想像力"
+          ],
+          "concepts": [
+            {
+              "name": "課文：近體詩選（登鸛雀樓、黃鶴樓送孟浩然之廣陵）—— 絕句格律、平仄與對仗",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：兒時記趣（沈復）—— 文言散文與觀察想像力",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-b5af02d0fcd6e1087a74",
+      "subject": "國文",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：成長的藍圖",
+          "details": [
+            "課文：酸橘子（小民）—— 青少年成長與時機的拿捏",
+            "課文：做人處世的道理（聖經選讀/生活啟示）",
+            "語文常識一：字音字形與標點符號的正確運用"
+          ],
+          "concepts": [
+            {
+              "name": "課文：酸橘子（小民）—— 青少年成長與時機的拿捏",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：做人處世的道理（聖經選讀/生活啟示）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：字音字形與標點符號的正確運用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：大自然的樂章",
+          "details": [
+            "課文：生命的動能 —— 探索動植物的生命力",
+            "課文：風箏（白靈）—— 現代詩的空間感與象徵意義",
+            "語文常識二：字體演變與六書基礎（象形、指事）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：生命的動能 —— 探索動植物的生命力",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：風箏（白靈）—— 現代詩的空間感與象徵意義",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識二：字體演變與六書基礎（象形、指事）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：生活與哲思",
+          "details": [
+            "課文：雅量（宋晶宜）—— 異中求同與人際溝通",
+            "課文：寓言選（螳螂捕蟬、亡鈇意鄰）—— 先秦寓言的寓意與智慧"
+          ],
+          "concepts": [
+            {
+              "name": "課文：雅量（宋晶宜）—— 異中求同與人際溝通",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：寓言選（螳螂捕蟬、亡鈇意鄰）—— 先秦寓言的寓意與智慧",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：詩歌與歷史",
+          "details": [
+            "課文：唐詩選（江雪、楓橋夜泊）—— 絕句的押韻與意境描寫",
+            "課文：兒時記趣（沈復）—— 記敘文物外之趣的煉字技巧"
+          ],
+          "concepts": [
+            {
+              "name": "課文：唐詩選（江雪、楓橋夜泊）—— 絕句的押韻與意境描寫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：兒時記趣（沈復）—— 記敘文物外之趣的煉字技巧",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9582313926cf4bb3fd9b",
+      "subject": "國文",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：向生命致敬",
+          "details": [
+            "課文：負荷（吳晟）—— 現代詩中的甜蜜負擔與親情抒發",
+            "課文：生命的化妝（林清玄）—— 由表及裡的哲理思考",
+            "語文常識一：工具書的查閱與標點符號的使用"
+          ],
+          "concepts": [
+            {
+              "name": "課文：負荷（吳晟）—— 現代詩中的甜蜜負擔與親情抒發",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：生命的化妝（林清玄）—— 由表及裡的哲理思考",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：工具書的查閱與標點符號的使用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：生活與修養",
+          "details": [
+            "課文：雅量（宋晶宜）—— 尊重不同的審美觀與見解",
+            "課文：差不多先生傳（胡適）—— 用擬傳體諷刺馬虎的生活態度",
+            "語文常識二：六書基本法則（會意、形聲的辨識）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：雅量（宋晶宜）—— 尊重不同的審美觀與見解",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：差不多先生傳（胡適）—— 用擬傳體諷刺馬虎的生活態度",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識二：六書基本法則（會意、形聲的辨識）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：古典的丰采",
+          "details": [
+            "課文：古詩選（迢迢牽牛星）—— 五言古詩的節奏與抒情",
+            "課文：兒時記趣（沈復）—— 學習文言文倒裝與省略句型"
+          ],
+          "concepts": [
+            {
+              "name": "課文：古詩選（迢迢牽牛星）—— 五言古詩的節奏與抒情",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：兒時記趣（沈復）—— 學習文言文倒裝與省略句型",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：自然與心靈",
+          "details": [
+            "課文：生活札記選 —— 記錄生活點滴與感悟",
+            "課文：唐詩選（絕句二首）—— 絕句的平仄與對仗練習"
+          ],
+          "concepts": [
+            {
+              "name": "課文：生活札記選 —— 記錄生活點滴與感悟",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：唐詩選（絕句二首）—— 絕句的平仄與對仗練習",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-7e15c94db78a8477d60f",
+      "subject": "國文",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：情感的寄託",
+          "details": [
+            "課文：負荷（吳晟）—— 親情的深刻體會",
+            "課文：紙船印象（洪醒夫）—— 慈母的愛與童年回憶",
+            "語文常識一：常用修辭法（譬喻、擬人、誇張）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：負荷（吳晟）—— 親情的深刻體會",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：紙船印象（洪醒夫）—— 慈母的愛與童年回憶",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：常用修辭法（譬喻、擬人、誇張）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：自然與生態",
+          "details": [
+            "課文：墾丁十九首選（余光中）—— 臺灣本土情懷與現代詩描寫",
+            "課文：生活常識 —— 理性思維的訓練"
+          ],
+          "concepts": [
+            {
+              "name": "課文：墾丁十九首選（余光中）—— 臺灣本土情懷與現代詩描寫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：生活常識 —— 理性思維的訓練",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：智慧的啟迪",
+          "details": [
+            "課文：世說新語選（詠雪、期行）—— 魏晉筆記小說與人物言行",
+            "課文：木蘭詩（樂府詩）—— 古典敘事詩的結構與複沓修辭"
+          ],
+          "concepts": [
+            {
+              "name": "課文：世說新語選（詠雪、期行）—— 魏晉筆記小說與人物言行",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：木蘭詩（樂府詩）—— 古典敘事詩的結構與複沓修辭",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-1dd0e31e6ca3a7ee50a3",
+      "subject": "國文",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：溫馨的記憶",
+          "details": [
+            "課文：紙船印象（洪醒夫）—— 童年往事與溫暖母愛",
+            "課文：下雨天，真好（琦君）—— 抒情散文與懷舊情感",
+            "語文常識一：中文語法與基本詞性（動詞、名詞、形容詞）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：紙船印象（洪醒夫）—— 童年往事與溫暖母愛",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：下雨天，真好（琦君）—— 抒情散文與懷舊情感",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：中文語法與基本詞性（動詞、名詞、形容詞）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：社會的脈動",
+          "details": [
+            "課文：音樂家與職人（例如：謝坤山或其他名家傳記選）",
+            "課文：世說新語選（小時了了、雪夜訪戴）—— 魏晉風流與機智對答"
+          ],
+          "concepts": [
+            {
+              "name": "課文：音樂家與職人（例如：謝坤山或其他名家傳記選）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：世說新語選（小時了了、雪夜訪戴）—— 魏晉風流與機智對答",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：女中豪傑",
+          "details": [
+            "課文：木蘭詩（樂府詩）—— 北朝民歌的質樸與愛國孝親情懷",
+            "課文：白話文選（生活中的小哲理）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：木蘭詩（樂府詩）—— 北朝民歌的質樸與愛國孝親情懷",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：白話文選（生活中的小哲理）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-c2153766e14b23be9309",
+      "subject": "國文",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：童年的足跡",
+          "details": [
+            "課文：紙船印象（洪醒夫）—— 由樸實的紙船引出綿長母愛",
+            "課文：生活散文（名家選讀）",
+            "語文常識一：單句與複句的基礎語法概念"
+          ],
+          "concepts": [
+            {
+              "name": "課文：紙船印象（洪醒夫）—— 由樸實的紙船引出綿長母愛",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：生活散文（名家選讀）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：單句與複句的基礎語法概念",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：古典與機智",
+          "details": [
+            "課文：世說新語選（謝太傅篇、陳太丘篇）—— 古代兒童的聰慧與禮貌教育",
+            "課文：木蘭詩（樂府詩）—— 雙聲疊韻與排比修辭的應用"
+          ],
+          "concepts": [
+            {
+              "name": "課文：世說新語選（謝太傅篇、陳太丘篇）—— 古代兒童的聰慧與禮貌教育",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：木蘭詩（樂府詩）—— 雙聲疊韻與排比修辭的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：大自然的啟示",
+          "details": [
+            "課文：現代詩二首（有關動植物或自然的詠嘆）",
+            "課文：白話散文選讀 —— 培養環境美學"
+          ],
+          "concepts": [
+            {
+              "name": "課文：現代詩二首（有關動植物或自然的詠嘆）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：白話散文選讀 —— 培養環境美學",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

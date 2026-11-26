@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小五年級",
+  "subject": "自然科學",
+  "books": [
+    {
+      "bookId": "book-277bff989ee48e8e97ab",
+      "subject": "自然科學",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "太陽與天文",
+          "details": [
+            "太陽位置",
+            "日夜與四季",
+            "觀察與記錄"
+          ],
+          "concepts": [
+            {
+              "name": "太陽位置",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "日夜與四季",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "觀察與記錄",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "水溶液",
+          "details": [
+            "溶解與濃度初步",
+            "酸鹼性概念",
+            "檢測與安全"
+          ],
+          "concepts": [
+            {
+              "name": "溶解與濃度初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "酸鹼性概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "檢測與安全",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "植物的構造與功能",
+          "details": [
+            "根莖葉",
+            "開花結果",
+            "適應環境"
+          ],
+          "concepts": [
+            {
+              "name": "根莖葉",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "開花結果",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "適應環境",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "科學探究",
+          "details": [
+            "實驗控制",
+            "圖表判讀",
+            "推論"
+          ],
+          "concepts": [
+            {
+              "name": "實驗控制",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "圖表判讀",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "推論",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-cb66be94cb01a410fcef",
+      "subject": "自然科學",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "力與運動",
+          "details": [
+            "摩擦力",
+            "彈力與重力",
+            "生活中的力"
+          ],
+          "concepts": [
+            {
+              "name": "摩擦力",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "彈力與重力",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活中的力",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "空氣與燃燒",
+          "details": [
+            "氧氣與燃燒",
+            "安全與防火",
+            "物質變化"
+          ],
+          "concepts": [
+            {
+              "name": "氧氣與燃燒",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "安全與防火",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "物質變化",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生態系",
+          "details": [
+            "食物鏈與食物網",
+            "棲地",
+            "保育"
+          ],
+          "concepts": [
+            {
+              "name": "食物鏈與食物網",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "棲地",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "保育",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "地球環境",
+          "details": [
+            "地表變化",
+            "水循環",
+            "天然災害"
+          ],
+          "concepts": [
+            {
+              "name": "地表變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "水循環",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "天然災害",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

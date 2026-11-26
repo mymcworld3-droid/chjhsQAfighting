@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小五年級",
+  "subject": "社會",
+  "books": [
+    {
+      "bookId": "book-480bef2073e7c16d085d",
+      "subject": "社會",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "臺灣地理",
+          "details": [
+            "地形、氣候及河流",
+            "人口與聚落",
+            "產業與區域"
+          ],
+          "concepts": [
+            {
+              "name": "地形、氣候及河流",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "人口與聚落",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "產業與區域",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "臺灣早期歷史",
+          "details": [
+            "原住民族與史前文化",
+            "海洋交流",
+            "清代社會變遷"
+          ],
+          "concepts": [
+            {
+              "name": "原住民族與史前文化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "海洋交流",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "清代社會變遷",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "社會制度",
+          "details": [
+            "公共議題",
+            "法治與民主初步",
+            "公民責任"
+          ],
+          "concepts": [
+            {
+              "name": "公共議題",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "法治與民主初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公民責任",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "多元文化",
+          "details": [
+            "族群與語言",
+            "宗教與藝術",
+            "文化資產"
+          ],
+          "concepts": [
+            {
+              "name": "族群與語言",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "宗教與藝術",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文化資產",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-88601312fbffcf6f9f28",
+      "subject": "社會",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "臺灣近現代史",
+          "details": [
+            "日本統治與社會變化",
+            "戰後政治經濟",
+            "民主化"
+          ],
+          "concepts": [
+            {
+              "name": "日本統治與社會變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "戰後政治經濟",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "民主化",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "臺灣與世界",
+          "details": [
+            "貿易與國際交流",
+            "全球化",
+            "環境及人權"
+          ],
+          "concepts": [
+            {
+              "name": "貿易與國際交流",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "全球化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "環境及人權",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "經濟與消費",
+          "details": [
+            "生產與消費",
+            "理財與選擇",
+            "市場基礎"
+          ],
+          "concepts": [
+            {
+              "name": "生產與消費",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "理財與選擇",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "市場基礎",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "社會資料",
+          "details": [
+            "歷史照片與時間軸",
+            "地圖統計",
+            "證據與推論"
+          ],
+          "concepts": [
+            {
+              "name": "歷史照片與時間軸",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "地圖統計",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "證據與推論",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

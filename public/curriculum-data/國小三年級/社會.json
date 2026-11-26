@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小三年級",
+  "subject": "社會",
+  "books": [
+    {
+      "bookId": "book-b0a19a8501137c80a285",
+      "subject": "社會",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "我的家庭與學校",
+          "details": [
+            "家庭與學校中的角色",
+            "規範與責任",
+            "互相尊重"
+          ],
+          "concepts": [
+            {
+              "name": "家庭與學校中的角色",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "規範與責任",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "互相尊重",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "社區生活",
+          "details": [
+            "社區環境與地圖",
+            "服務與組織",
+            "公共空間"
+          ],
+          "concepts": [
+            {
+              "name": "社區環境與地圖",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "服務與組織",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公共空間",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "家鄉文化與節慶",
+          "details": [
+            "家鄉故事",
+            "不同文化習俗",
+            "文化尊重"
+          ],
+          "concepts": [
+            {
+              "name": "家鄉故事",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "不同文化習俗",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文化尊重",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "經濟生活",
+          "details": [
+            "需要與想要",
+            "消費與儲蓄",
+            "工作的意義"
+          ],
+          "concepts": [
+            {
+              "name": "需要與想要",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "消費與儲蓄",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "工作的意義",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-adcec7ffbf4a7fe572cf",
+      "subject": "社會",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "家鄉的自然環境",
+          "details": [
+            "地形與水域",
+            "氣候與生活",
+            "人與環境"
+          ],
+          "concepts": [
+            {
+              "name": "地形與水域",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "氣候與生活",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "人與環境",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "家鄉的人文",
+          "details": [
+            "人口與聚落",
+            "產業與交通",
+            "地方特色"
+          ],
+          "concepts": [
+            {
+              "name": "人口與聚落",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "產業與交通",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "地方特色",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "公共參與",
+          "details": [
+            "社區問題",
+            "討論與合作",
+            "家鄉行動"
+          ],
+          "concepts": [
+            {
+              "name": "社區問題",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "討論與合作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "家鄉行動",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "歷史時間",
+          "details": [
+            "時間軸",
+            "家鄉變遷",
+            "史料與照片"
+          ],
+          "concepts": [
+            {
+              "name": "時間軸",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "家鄉變遷",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "史料與照片",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

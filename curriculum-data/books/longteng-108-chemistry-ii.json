@@ -1,0 +1,117 @@
+{
+  "bookId": "longteng-108-chemistry-ii",
+  "subject": "化學",
+  "grade": "高中二年級",
+  "edition": "龍騰版",
+  "publisher": "龍騰",
+  "term": "選修化學II",
+  "bookLabel": "選修化學II（全）",
+  "schoolYear": null,
+  "curriculumStandard": "108課綱",
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/longteng-108-chemistry-ii.json",
+  "sources": [
+    {
+      "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9981",
+      "type": "official-product-toc",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。",
+  "units": [
+    {
+      "unit": "第1章：原子結構",
+      "details": [
+        "1-1 氫原子光譜",
+        "1-2 波耳氫原子模型",
+        "1-3 原子軌域",
+        "1-4 電子組態",
+        "1-5 元素性質的週期性"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 氫原子光譜",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 波耳氫原子模型",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 原子軌域",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 電子組態",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-5 元素性質的週期性",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：化學鍵結",
+      "details": [
+        "2-1 化學鍵的種類",
+        "2-2 分子的形狀與鍵結",
+        "2-3 分子間的作用力"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 化學鍵的種類",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 分子的形狀與鍵結",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 分子間的作用力",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：化學反應速率",
+      "details": [
+        "3-1 反應速率定律",
+        "3-2 碰撞學說",
+        "3-3 影響反應速率的因素"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 反應速率定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 碰撞學說",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 影響反應速率的因素",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

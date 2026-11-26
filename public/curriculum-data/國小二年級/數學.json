@@ -1,0 +1,459 @@
+{
+  "schema": 1,
+  "grade": "國小二年級",
+  "subject": "數學",
+  "books": [
+    {
+      "bookId": "book-5eb617db3903134afbff",
+      "subject": "數學",
+      "grade": "國小二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "200與300以內的數",
+          "details": [
+            "百十個位值",
+            "數序與比較",
+            "數的合成分解"
+          ],
+          "concepts": [
+            {
+              "name": "百十個位值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "數序與比較",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "數的合成分解",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "二位數的加減",
+          "details": [
+            "直式加法與減法",
+            "進退位",
+            "兩步驟應用"
+          ],
+          "concepts": [
+            {
+              "name": "直式加法與減法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "進退位",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "兩步驟應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "長度測量",
+          "details": [
+            "認識公分",
+            "直尺量長度",
+            "長度比較與加減"
+          ],
+          "concepts": [
+            {
+              "name": "認識公分",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "直尺量長度",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "長度比較與加減",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "乘法初步",
+          "details": [
+            "幾個一數",
+            "倍的意義",
+            "2、5、4、8乘法"
+          ],
+          "concepts": [
+            {
+              "name": "幾個一數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "倍的意義",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2、5、4、8乘法",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "時間與容量",
+          "details": [
+            "鐘面、時分",
+            "年、月、日",
+            "容量直接比較"
+          ],
+          "concepts": [
+            {
+              "name": "鐘面、時分",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "年、月、日",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "容量直接比較",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-49fa5b05e8bd49759546",
+      "subject": "數學",
+      "grade": "國小二年級",
+      "edition": "類南一版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：數到300",
+          "details": [
+            "數到300的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "數到300的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：二位數的加減",
+          "details": [
+            "二位數的加減的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "二位數的加減的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：幾公分",
+          "details": [
+            "幾公分的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "幾公分的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-35305cf7dfc98f23371f",
+      "subject": "數學",
+      "grade": "國小二年級",
+      "edition": "類翰林版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：200以內的數",
+          "details": [
+            "200以內的數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "200以內的數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：二位數的加減法",
+          "details": [
+            "二位數的加減法的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "二位數的加減法的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：認識公分",
+          "details": [
+            "認識公分的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "認識公分的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9ffc279fedd39d11d372",
+      "subject": "數學",
+      "grade": "國小二年級",
+      "edition": "類康軒版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：200以內的數",
+          "details": [
+            "200以內的數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "200以內的數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：二位數的直式加減",
+          "details": [
+            "二位數的直式加減的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "二位數的直式加減的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：量長度",
+          "details": [
+            "量長度的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "量長度的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-19e66c16a51719178e85",
+      "subject": "數學",
+      "grade": "國小二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "1000以內的數",
+          "details": [
+            "千百十個位值",
+            "1000以內比較",
+            "錢幣換算"
+          ],
+          "concepts": [
+            {
+              "name": "千百十個位值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1000以內比較",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "錢幣換算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "加減與兩步驟",
+          "details": [
+            "三位數加減",
+            "連加連減與加減混合",
+            "估算與應用"
+          ],
+          "concepts": [
+            {
+              "name": "三位數加減",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "連加連減與加減混合",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "估算與應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "乘法與除法初步",
+          "details": [
+            "乘法表熟練",
+            "分裝與平分",
+            "乘除關係"
+          ],
+          "concepts": [
+            {
+              "name": "乘法表熟練",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "分裝與平分",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "乘除關係",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "平面圖形與量",
+          "details": [
+            "正方形與長方形",
+            "面、邊與頂點",
+            "重量與容量比較"
+          ],
+          "concepts": [
+            {
+              "name": "正方形與長方形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "面、邊與頂點",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "重量與容量比較",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "分數初步",
+          "details": [
+            "平分概念",
+            "二分之一與四分之一",
+            "簡單單位分數"
+          ],
+          "concepts": [
+            {
+              "name": "平分概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "二分之一與四分之一",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡單單位分數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

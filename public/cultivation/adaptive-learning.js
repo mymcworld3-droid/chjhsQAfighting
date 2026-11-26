@@ -24,6 +24,7 @@ function enqueue(uid, meta, event) {
   const rows = read(uid);
   if (!rows.some(x => x.event.id === event.id)) rows.push({ meta: {
     scopeId: meta.scopeId, conceptId: meta.conceptId, facetId: meta.facetId,
+    ...(meta.standardConceptId?{standardConceptId:meta.standardConceptId}:{}),
     questionId: meta.questionId, role: meta.role, difficulty: meta.difficulty
   }, event });
   write(uid, rows.slice(-64));
@@ -79,7 +80,7 @@ function answer(quiz, correct, skipped) {
 }
 function scopeSelected(meta) {
   const settings = window.getCurrentUserData?.()?.gameSettings;
-  const key = x => JSON.stringify([x?.path || '', x?.detail || '', [...(x?.sub_topics || [])].sort()]);
+  const key = x => JSON.stringify([x?.path || '', x?.detail || '', [...(x?.sub_topics || [])].sort(), ...(x?.curriculum ? [window.CurriculumRangeRules.curriculumMetadata(x.curriculum)] : [])]);
   return settings?.sourceMode === 'focused' && settings.focusedUnits?.some(x => key(x) === key(meta.scope));
 }
 function currentState(meta) {

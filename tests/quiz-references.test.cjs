@@ -32,10 +32,16 @@ test('respects the current facet, grade, space-vectors scope and custom exclusio
   assert.equal(quizReferences({ ...target, topic: '平面向量', scope, facet: { concept:'內積的定義' } }).length, 3);
   for (const overrides of [
     { facet:{ concept:'向量加減' } }, { topic:'空間向量／向量內積' },
-    { level:'國中二年級' }, { exclusions:['不要出投影'] }, { topic:'平面向量' }
+    { level:'國中二年級' }, { topic:'平面向量' }
   ]) {
     assert.deepEqual(quizReferences({ ...target, ...overrides }), []);
   }
+});
+
+test('an exclusion keeps eligible same-concept references instead of disabling the bank', () => {
+  const refs=quizReferences({...target,exclusions:['不要出投影']});
+  assert.ok(refs.length>0);
+  assert.ok(refs.every(r=>!/(投影)/.test(r.question.q+r.question.exp)));
 });
 
 test('whitespace in curriculum acronyms never prevents exact index lookup', () => {

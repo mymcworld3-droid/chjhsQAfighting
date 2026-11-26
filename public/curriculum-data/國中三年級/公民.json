@@ -1,0 +1,229 @@
+{
+  "schema": 1,
+  "grade": "國中三年級",
+  "subject": "公民",
+  "books": [
+    {
+      "bookId": "book-8d6b925abb99e00e281d",
+      "subject": "公民",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：經濟學基本概念與選擇",
+          "details": [
+            "主題：資源稀少性、機會成本、欲望與選擇",
+            "細項：資源稀少性與經濟問題、機會成本的計算、欲望與資源的拉鋸、機會成本在生活決策的應用"
+          ],
+          "concepts": [
+            {
+              "name": "主題：資源稀少性、機會成本、欲望與選擇",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：資源稀少性與經濟問題、機會成本的計算、欲望與資源的拉鋸、機會成本在生活決策的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：供給、需求與市場價格",
+          "details": [
+            "主題：市場機制、需求法則、供給法則與供需均衡",
+            "細項：需求法則與需求曲線、供給法則與供給曲線、市場均衡價格的形成與變動、價格機能（一隻看不見的手）的運作"
+          ],
+          "concepts": [
+            {
+              "name": "主題：市場機制、需求法則、供給法則與供需均衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：需求法則與需求曲線、供給法則與供給曲線、市場均衡價格的形成與變動、價格機能（一隻看不見的手）的運作",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：企業經營與生產要素",
+          "details": [
+            "主題：生產與投入、企業社會責任",
+            "細項：四大生產要素（勞動、土地、資本、企業家精神）、生產成本與利潤極大化、企業競爭策略與永續經營、企業社會責任（CSR）"
+          ],
+          "concepts": [
+            {
+              "name": "主題：生產與投入、企業社會責任",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：四大生產要素（勞動、土地、資本、企業家精神）、生產成本與利潤極大化、企業競爭策略與永續經營、企業社會責任（CSR）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-62415e3a1f70a483d926",
+      "subject": "公民",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：稀少性與機會成本",
+          "details": [
+            "主題：經濟學核心、機會成本與比較利益",
+            "細項：什麼是稀少性、資源的最佳配置、機會成本計算公式、生活中的誘因如何引導選擇、工作分工與比較利益原理"
+          ],
+          "concepts": [
+            {
+              "name": "主題：經濟學核心、機會成本與比較利益",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：什麼是稀少性、資源的最佳配置、機會成本計算公式、生活中的誘因如何引導選擇、工作分工與比較利益原理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：市場的供需與價格",
+          "details": [
+            "主題：需求、供給與消費者、生產者行為",
+            "細項：買方的需求與賣方的供給、影響供需的非價格因素、市場價格的決定、市場短缺與過剩、消費者權益與消費者保護法規範"
+          ],
+          "concepts": [
+            {
+              "name": "主題：需求、供給與消費者、生產者行為",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：買方的需求與賣方的供給、影響供需的非價格因素、市場價格的決定、市場短缺與過剩、消費者權益與消費者保護法規範",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：生產與投資理財",
+          "details": [
+            "主題：生產要素組合、個人理財與風險",
+            "細項：生產要素的分工與取得、生產利潤與成本控制、理財工具的認識（股票、債券、基金）、投資風險與投資報酬率的關係"
+          ],
+          "concepts": [
+            {
+              "name": "主題：生產要素組合、個人理財與風險",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：生產要素的分工與取得、生產利潤與成本控制、理財工具的認識（股票、債券、基金）、投資風險與投資報酬率的關係",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-cbfda4f2c6515a5e736f",
+      "subject": "公民",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：經濟的世界與選擇",
+          "details": [
+            "主題：機會成本、誘因與資源配置",
+            "細項：稀少性促成經濟行為、機會成本的相對與絕對概念、正面誘因與負面誘因的政策設計、分工合作與比較利益法則"
+          ],
+          "concepts": [
+            {
+              "name": "主題：機會成本、誘因與資源配置",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：稀少性促成經濟行為、機會成本的相對與絕對概念、正面誘因與負面誘因的政策設計、分工合作與比較利益法則",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：看不見的手——市場機能",
+          "details": [
+            "主題：供需曲線、價格決定、市場效率",
+            "細項：需求量與需求的變動、供給量與供給的變動、供需均衡價格的達成、政府干預市場的後果（價格上限與下限）、消保法與消費者權益維護"
+          ],
+          "concepts": [
+            {
+              "name": "主題：供需曲線、價格決定、市場效率",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：需求量與需求的變動、供給量與供給的變動、供需均衡價格的達成、政府干預市場的後果（價格上限與下限）、消保法與消費者權益維護",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：創新的生產與金融理財",
+          "details": [
+            "主題：企業精神、理財策略與風險管理",
+            "細項：企業家精神與科技創新、生產要素的配置優化、個人理財規劃與分散風險原則、正確的消費與信用觀念"
+          ],
+          "concepts": [
+            {
+              "name": "主題：企業精神、理財策略與風險管理",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：企業家精神與科技創新、生產要素的配置優化、個人理財規劃與分散風險原則、正確的消費與信用觀念",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

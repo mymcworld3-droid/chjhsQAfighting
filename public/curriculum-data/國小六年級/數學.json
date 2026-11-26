@@ -1,0 +1,459 @@
+{
+  "schema": 1,
+  "grade": "國小六年級",
+  "subject": "數學",
+  "books": [
+    {
+      "bookId": "book-77a6c3dfcb8a89bbc476",
+      "subject": "數學",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "最大公因數與最小公倍數",
+          "details": [
+            "質因數分解初步",
+            "短除法",
+            "公因數與公倍數應用"
+          ],
+          "concepts": [
+            {
+              "name": "質因數分解初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "短除法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公因數與公倍數應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "分數除法",
+          "details": [
+            "分數除以整數",
+            "整數除以分數",
+            "分數除以分數"
+          ],
+          "concepts": [
+            {
+              "name": "分數除以整數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "整數除以分數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "分數除以分數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "小數除法",
+          "details": [
+            "小數除以小數",
+            "概數與商",
+            "直式應用"
+          ],
+          "concepts": [
+            {
+              "name": "小數除以小數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "概數與商",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "直式應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "比與比值",
+          "details": [
+            "比的意義與相等的比",
+            "比值",
+            "正比與比例應用"
+          ],
+          "concepts": [
+            {
+              "name": "比的意義與相等的比",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "比值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "正比與比例應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "圓與扇形",
+          "details": [
+            "圓周率與圓周長",
+            "圓面積",
+            "扇形弧長與面積"
+          ],
+          "concepts": [
+            {
+              "name": "圓周率與圓周長",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "圓面積",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "扇形弧長與面積",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-c8cb0d5283edcd6a8eae",
+      "subject": "數學",
+      "grade": "國小六年級",
+      "edition": "類南一版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：質因數分解和短除法",
+          "details": [
+            "質因數分解和短除法的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "質因數分解和短除法的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：分數的除法",
+          "details": [
+            "分數的除法的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "分數的除法的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：小數的除法",
+          "details": [
+            "小數的除法的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "小數的除法的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-55a06e292cb1cfcb7c4c",
+      "subject": "數學",
+      "grade": "國小六年級",
+      "edition": "類翰林版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：最大公因數與最小公倍數",
+          "details": [
+            "最大公因數與最小公倍數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "最大公因數與最小公倍數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：分數除法",
+          "details": [
+            "分數除法的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "分數除法的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：小數除法",
+          "details": [
+            "小數除法的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "小數除法的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-d4a2acca5a71cd87d3ea",
+      "subject": "數學",
+      "grade": "國小六年級",
+      "edition": "類康軒版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：最大公因數與最小公倍數",
+          "details": [
+            "最大公因數與最小公倍數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "最大公因數與最小公倍數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：分數除法",
+          "details": [
+            "分數除法的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "分數除法的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：數量關係",
+          "details": [
+            "數量關係的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "數量關係的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-4443d16cc2a8de4b161f",
+      "subject": "數學",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "縮圖與比例尺",
+          "details": [
+            "縮圖與放大圖",
+            "比例尺",
+            "相似概念初步"
+          ],
+          "concepts": [
+            {
+              "name": "縮圖與放大圖",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "比例尺",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "相似概念初步",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "速度與時間",
+          "details": [
+            "速度單位與換算",
+            "速率、時間與距離",
+            "平均速度"
+          ],
+          "concepts": [
+            {
+              "name": "速度單位與換算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "速率、時間與距離",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "平均速度",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "基準量與比較量",
+          "details": [
+            "百分率應用",
+            "基準量與比較量",
+            "連續折扣"
+          ],
+          "concepts": [
+            {
+              "name": "百分率應用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "基準量與比較量",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "連續折扣",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "表面積與體積",
+          "details": [
+            "柱體表面積",
+            "柱體體積",
+            "複合立體"
+          ],
+          "concepts": [
+            {
+              "name": "柱體表面積",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "柱體體積",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "複合立體",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "數量關係與統計",
+          "details": [
+            "正比與反比初步",
+            "圓形百分圖",
+            "統計圖與資料推論"
+          ],
+          "concepts": [
+            {
+              "name": "正比與反比初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "圓形百分圖",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "統計圖與資料推論",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

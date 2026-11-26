@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "國小三年級",
+  "subject": "綜合活動",
+  "books": [
+    {
+      "bookId": "book-fcdeeee8276f786e4759",
+      "subject": "綜合活動",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "自我認識",
+          "details": [
+            "個人興趣",
+            "學習習慣",
+            "表達感受"
+          ],
+          "concepts": [
+            {
+              "name": "個人興趣",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "學習習慣",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "表達感受",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "人際與合作",
+          "details": [
+            "尊重差異",
+            "團隊分工",
+            "衝突解決"
+          ],
+          "concepts": [
+            {
+              "name": "尊重差異",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "團隊分工",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "衝突解決",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生活技能",
+          "details": [
+            "時間管理",
+            "物品整理",
+            "自我照顧"
+          ],
+          "concepts": [
+            {
+              "name": "時間管理",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "物品整理",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "自我照顧",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-35c042588f87925c7783",
+      "subject": "綜合活動",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "家庭與生活",
+          "details": [
+            "家庭角色",
+            "生活責任",
+            "感恩與關懷"
+          ],
+          "concepts": [
+            {
+              "name": "家庭角色",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活責任",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "感恩與關懷",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "環境與服務",
+          "details": [
+            "校園環境",
+            "資源節約",
+            "服務學習"
+          ],
+          "concepts": [
+            {
+              "name": "校園環境",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "資源節約",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "服務學習",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "安全與應變",
+          "details": [
+            "生活風險",
+            "求助方式",
+            "簡單急救"
+          ],
+          "concepts": [
+            {
+              "name": "生活風險",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "求助方式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡單急救",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

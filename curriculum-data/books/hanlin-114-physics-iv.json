@@ -1,0 +1,138 @@
+{
+  "bookId": "hanlin-114-physics-iv",
+  "subject": "物理",
+  "grade": "高中二年級",
+  "edition": "翰林版",
+  "publisher": "翰林",
+  "term": "選修物理IV",
+  "bookLabel": "選修物理IV（全）",
+  "schoolYear": 114,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/hanlin-114-physics-iv.json",
+  "sources": [
+    {
+      "url": "https://sh.hle.com.tw/hph/",
+      "type": "official-portal"
+    },
+    {
+      "url": "https://drive.google.com/drive/folders/1ZybzpDrCdUfzic-yz0iZFKGixzvfwcdn",
+      "type": "official-textbook-folder",
+      "title": "01_114下高中選修物理(IV)_課本_PDF檔"
+    },
+    {
+      "url": "https://drive.google.com/file/d/1Wy86EJrv7nd2_b0gauq8zG4TX_heSDJd/view",
+      "type": "official-toc",
+      "title": "選修物理(Ⅳ)課本_01_編輯大意、目次.pdf",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+  "units": [
+    {
+      "unit": "第1章：靜電學",
+      "details": [
+        "1-1 庫侖定律",
+        "1-2 電場與電力線",
+        "1-3 電位能",
+        "1-4 電位與電位差"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 庫侖定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 電場與電力線",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 電位能",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 電位與電位差",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：電流的磁效應",
+      "details": [
+        "2-1 電生磁",
+        "2-2 載流導線的磁場",
+        "2-3 載流導線在磁場中所受的磁力",
+        "2-4 帶電質點在磁場中的運動"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 電生磁",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 載流導線的磁場",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 載流導線在磁場中所受的磁力",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 帶電質點在磁場中的運動",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：電磁感應",
+      "details": [
+        "3-1 電磁感應與應電流",
+        "3-2 冷次定律",
+        "3-3 法拉第電磁感應定律",
+        "3-4 電磁感應的應用",
+        "3-5 電磁波"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 電磁感應與應電流",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 冷次定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 法拉第電磁感應定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-4 電磁感應的應用",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-5 電磁波",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

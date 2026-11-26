@@ -1,0 +1,986 @@
+{
+  "schema": 1,
+  "grade": "國中一年級",
+  "subject": "生物",
+  "books": [
+    {
+      "bookId": "book-895cc0976739ade2c677",
+      "subject": "生物",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：開啟生物科學的大門",
+          "details": [
+            "1-1 生命的起源與生命的現象",
+            "1-2 生物生存的環境與生物圈",
+            "1-3 科學探究的方法與現代科學"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 生命的起源與生命的現象",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 生物生存的環境與生物圈",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 科學探究的方法與現代科學",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：生物體的結構",
+          "details": [
+            "2-1 細胞的構造、發現與細胞學說",
+            "2-2 物質進出細胞的方法（擴散與滲透）",
+            "2-3 生物體的組成層次（單細胞與多細胞）"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 細胞的構造、發現與細胞學說",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 物質進出細胞的方法（擴散與滲透）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 生物體的組成層次（單細胞與多細胞）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：生物體與能量",
+          "details": [
+            "3-1 食物中的養分與能量計算",
+            "3-2 酵素的特性、功能與實驗",
+            "3-3 植物的光合作用與葉綠體",
+            "3-4 動物如何獲得養分（攝食、消化與吸收）"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 食物中的養分與能量計算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 酵素的特性、功能與實驗",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 植物的光合作用與葉綠體",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 動物如何獲得養分（攝食、消化與吸收）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：生物體內的運輸作用",
+          "details": [
+            "4-1 植物體內物質的運輸（維管束：木質部與韌皮部）",
+            "4-2 人體的心臟、血管與血液成分",
+            "4-3 人體的血液循環與淋巴循環系統"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 植物體內物質的運輸（維管束：木質部與韌皮部）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 人體的心臟、血管與血液成分",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 人體的血液循環與淋巴循環系統",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：生物體的協調作用",
+          "details": [
+            "5-1 植物的感應（向性與局部感應）",
+            "5-2 動物的神經系統（大腦、小腦、腦幹與脊髓）",
+            "5-3 動物的行為與反射動作",
+            "5-4 生物體的內分泌系統與激素"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 植物的感應（向性與局部感應）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 動物的神經系統（大腦、小腦、腦幹與脊髓）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 動物的行為與反射動作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-4 生物體的內分泌系統與激素",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第6章：生物體的恆定性",
+          "details": [
+            "6-1 體溫的調節與恆定",
+            "6-2 呼吸與氣體的交換",
+            "6-3 水分的恆定與排出",
+            "6-4 血糖的調節與廢物的排泄"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 體溫的調節與恆定",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-2 呼吸與氣體的交換",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-3 水分的恆定與排出",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-4 血糖的調節與廢物的排泄",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-2cc8d512297d382a37ff",
+      "subject": "生物",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：生命的世界",
+          "details": [
+            "1-1 生命的起源、條件與生命現象",
+            "1-2 探究科學的方法",
+            "1-3 生物圈的範圍與環境生態"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 生命的起源、條件與生命現象",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 探究科學的方法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 生物圈的範圍與環境生態",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：生物體的結構",
+          "details": [
+            "2-1 顯微鏡的使用與細胞探究",
+            "2-2 細胞的構造與功能特徵",
+            "2-3 物質進出細胞的管道",
+            "2-4 生物體的組成層次與構造"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 顯微鏡的使用與細胞探究",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 細胞的構造與功能特徵",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 物質進出細胞的管道",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 生物體的組成層次與構造",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：生物體的營養",
+          "details": [
+            "3-1 食物中的養分與測定",
+            "3-2 酵素的作用與活性實驗",
+            "3-3 植物的光合作用反應歷程",
+            "3-4 動物的消化構造與吸收"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 食物中的養分與測定",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 酵素的作用與活性實驗",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 植物的光合作用反應歷程",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 動物的消化構造與吸收",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：生物體內的運輸作用",
+          "details": [
+            "4-1 植物的運輸構造維管束",
+            "4-2 人體循環系統的構造（心臟與血管）",
+            "4-3 人體的血液循環路徑與淋巴循環"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 植物的運輸構造維管束",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 人體循環系統的構造（心臟與血管）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 人體的血液循環路徑與淋巴循環",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：生物體的協調作用",
+          "details": [
+            "5-1 神經系統與訊息傳導",
+            "5-2 內分泌系統的調節作用",
+            "5-3 植物對環境的感應"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 神經系統與訊息傳導",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 內分泌系統的調節作用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 植物對環境的感應",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第6章：生物體的恆定",
+          "details": [
+            "6-1 呼吸與氣體濃度的恆定",
+            "6-2 血糖的調節與維持",
+            "6-3 排泄與水分、體溫的恆定"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 呼吸與氣體濃度的恆定",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-2 血糖的調節與維持",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-3 排泄與水分、體溫的恆定",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-012cc1659fbe47865816",
+      "subject": "生物",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：大自然與科學探究",
+          "details": [
+            "1-1 地球生命的誕生環境",
+            "1-2 生物圈的分布與極限",
+            "1-3 走入科學探究的步驟"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 地球生命的誕生環境",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 生物圈的分布與極限",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 走入科學探究的步驟",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：細胞與生物體組成",
+          "details": [
+            "2-1 細胞學說與細胞的發現",
+            "2-2 細胞的構造及功能",
+            "2-3 擴散作用與細胞孔道",
+            "2-4 生物體的結構層次分析"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 細胞學說與細胞的發現",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 細胞的構造及功能",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 擴散作用與細胞孔道",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 生物體的結構層次分析",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：養分與能量的獲取",
+          "details": [
+            "3-1 生物所需的養分與熱量",
+            "3-2 酵素在生物體內扮演的角色",
+            "3-3 植物與光合作用",
+            "3-4 動物的消化與攝食系統"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 生物所需的養分與熱量",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 酵素在生物體內扮演的角色",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 植物與光合作用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 動物的消化與攝食系統",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：生物體內物質的循環與運輸",
+          "details": [
+            "4-1 水分與養分在植物體內的流動",
+            "4-2 人體心血管系統的組成",
+            "4-3 體循環、肺循環與淋巴防禦"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 水分與養分在植物體內的流動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 人體心血管系統的組成",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 體循環、肺循環與淋巴防禦",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：訊息感應與協調",
+          "details": [
+            "5-1 神經元與中樞神經系統",
+            "5-2 內分泌腺體與身體激素",
+            "5-3 植物的趨性與向性"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 神經元與中樞神經系統",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 內分泌腺體與身體激素",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 植物的趨性與向性",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第6章：內環境的恆定",
+          "details": [
+            "6-1 體溫調控機制",
+            "6-2 血糖平衡與胰島素",
+            "6-3 水分調節與泌尿排泄系統"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 體溫調控機制",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-2 血糖平衡與胰島素",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-3 水分調節與泌尿排泄系統",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-5315a7b1097af7446737",
+      "subject": "生物",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：生物的繁殖",
+          "details": [
+            "1-1 細胞分裂與減數分裂",
+            "1-2 無性生殖的類型",
+            "1-3 有性生殖與受精胚胎發育"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 細胞分裂與減數分裂",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 無性生殖的類型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 有性生殖與受精胚胎發育",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：遺傳",
+          "details": [
+            "2-1 孟德爾的遺傳定律與棋盤方格",
+            "2-2 性別的遺傳與人類性染色體",
+            "2-3 突變與遺傳疾病",
+            "2-4 生物技術與基因轉殖的應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 孟德爾的遺傳定律與棋盤方格",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 性別的遺傳與人類性染色體",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 突變與遺傳疾病",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 生物技術與基因轉殖的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：演化與生物的分類",
+          "details": [
+            "3-1 化石與生物演化的證據",
+            "3-2 達爾文的天擇說與天擇機制",
+            "3-3 生物的命名（雙名法）與分類階層",
+            "3-4 病毒、原核生物與原生生物",
+            "3-5 真菌、植物與動物界"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 化石與生物演化的證據",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 達爾文的天擇說與天擇機制",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 生物的命名（雙名法）與分類階層",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 病毒、原核生物與原生生物",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-5 真菌、植物與動物界",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：生物與環境",
+          "details": [
+            "4-1 族群、群集與生態系結構",
+            "4-2 生態系中的能量流動與食物網",
+            "4-3 生態系中的物質循環（碳、氮循環）",
+            "4-4 地球上的主要生態系類型"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 族群、群集與生態系結構",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 生態系中的能量流動與食物網",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 生態系中的物質循環（碳、氮循環）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-4 地球上的主要生態系類型",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：永續環境與生態保育",
+          "details": [
+            "5-1 人口成長與環境破壞問題",
+            "5-2 生物多樣性的三個層次與維護",
+            "5-3 臺灣的保育行動與自然保護區"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 人口成長與環境破壞問題",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 生物多樣性的三個層次與維護",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 臺灣的保育行動與自然保護區",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-bfcc1d0be03fe9a2a6f4",
+      "subject": "生物",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：生殖",
+          "details": [
+            "1-1 染色體與細胞分裂、減數分裂",
+            "1-2 植物與動物的無性生殖",
+            "1-3 有性生殖、體內外受精與胎卵生"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 染色體與細胞分裂、減數分裂",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 植物與動物的無性生殖",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 有性生殖、體內外受精與胎卵生",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：遺傳與生物技術",
+          "details": [
+            "2-1 基因、性狀與顯隱性遺傳",
+            "2-2 人類的性別決定與伴性遺傳",
+            "2-3 突變與常見遺傳疾病",
+            "2-4 生物技術大未來"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 基因、性狀與顯隱性遺傳",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 人類的性別決定與伴性遺傳",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 突變與常見遺傳疾病",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 生物技術大未來",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：生命的演化與分類",
+          "details": [
+            "3-1 演化的觀念與化石證據",
+            "3-2 達爾文天擇與人擇的對比",
+            "3-3 生物分類階層與學名界定",
+            "3-4 五大界生物特徵巡禮"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 演化的觀念與化石證據",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 達爾文天擇與人擇的對比",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 生物分類階層與學名界定",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 五大界生物特徵巡禮",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：生態系與環境生態",
+          "details": [
+            "4-1 族群與群集（含捉放法、樣區法）",
+            "4-2 生物互動關係與食物鏈",
+            "4-3 物質循環與多樣的生態系",
+            "4-4 人類與環境的共生永續"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 族群與群集（含捉放法、樣區法）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 生物互動關係與食物鏈",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 物質循環與多樣的生態系",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-4 人類與環境的共生永續",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-b39a485cebcfce4288d9",
+      "subject": "生物",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：生命的延續",
+          "details": [
+            "1-1 細胞的生殖：染色體與分裂",
+            "1-2 各式各樣的無性生殖",
+            "1-3 有性生殖與多細胞世代交替"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 細胞的生殖：染色體與分裂",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 各式各樣的無性生殖",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 有性生殖與多細胞世代交替",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：遺傳密碼",
+          "details": [
+            "2-1 孟德爾遺傳法則與單性雜交",
+            "2-2 人類性別決定與染色體組合",
+            "2-3 突變發生的原因與遺傳病",
+            "2-4 生物技術引發的科技變革"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 孟德爾遺傳法則與單性雜交",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 人類性別決定與染色體組合",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 突變發生的原因與遺傳病",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 生物技術引發的科技變革",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：生物的變遷與分類",
+          "details": [
+            "3-1 演化學說與板塊漂移化石證物",
+            "3-2 汰弱留強的天擇環境機制",
+            "3-3 二分叉分類檢索表與雙名法",
+            "3-4 地球生物大觀園（五界分類）"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 演化學說與板塊漂移化石證物",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 汰弱留強的天擇環境機制",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 二分叉分類檢索表與雙名法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 地球生物大觀園（五界分類）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：人、生物與環境",
+          "details": [
+            "4-1 生物圈中的族群動態變化",
+            "4-2 生態系中的能量與食物網平衡",
+            "4-3 地球上各種特殊的生態環境",
+            "4-4 生物多樣性危機與綠色保育意識"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 生物圈中的族群動態變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 生態系中的能量與食物網平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 地球上各種特殊的生態環境",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-4 生物多樣性危機與綠色保育意識",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

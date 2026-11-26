@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小五年級",
+  "subject": "國語",
+  "books": [
+    {
+      "bookId": "book-e89a4c9edba0924d737f",
+      "subject": "國語",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "字詞與文化",
+          "details": [
+            "成語及典故",
+            "多義字與語境",
+            "詞語精準使用"
+          ],
+          "concepts": [
+            {
+              "name": "成語及典故",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "多義字與語境",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "詞語精準使用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "記敘與說明",
+          "details": [
+            "主旨與段落層次",
+            "文本結構",
+            "舉例與比較"
+          ],
+          "concepts": [
+            {
+              "name": "主旨與段落層次",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文本結構",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "舉例與比較",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "閱讀策略",
+          "details": [
+            "摘要、推論與提問",
+            "事實與觀點",
+            "圖文整合"
+          ],
+          "concepts": [
+            {
+              "name": "摘要、推論與提問",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "事實與觀點",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "圖文整合",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "作文",
+          "details": [
+            "記敘與抒情",
+            "說明性文章",
+            "選材與修辭"
+          ],
+          "concepts": [
+            {
+              "name": "記敘與抒情",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "說明性文章",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "選材與修辭",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-6ef5741f03df5e044a63",
+      "subject": "國語",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "文言文初步",
+          "details": [
+            "常見文言詞語",
+            "古今語意差異",
+            "短篇文言理解"
+          ],
+          "concepts": [
+            {
+              "name": "常見文言詞語",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "古今語意差異",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "短篇文言理解",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "議論與說明",
+          "details": [
+            "論點與論據",
+            "因果說明",
+            "說服性表達"
+          ],
+          "concepts": [
+            {
+              "name": "論點與論據",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "因果說明",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "說服性表達",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "跨文本閱讀",
+          "details": [
+            "主題比較",
+            "觀點差異",
+            "引用資訊"
+          ],
+          "concepts": [
+            {
+              "name": "主題比較",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "觀點差異",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "引用資訊",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "寫作與應用",
+          "details": [
+            "讀書心得",
+            "書信與報告",
+            "自我修訂"
+          ],
+          "concepts": [
+            {
+              "name": "讀書心得",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "書信與報告",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "自我修訂",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

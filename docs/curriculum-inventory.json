@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "baselineCommit": "fe6f0959f162d7126450d3dbd99eacad7e3a05df",
+  "baselineCommit": "dbe48646510f99ab53adee85ed0ad9d4a6e872e7",
   "schoolYearTarget": 115,
   "minimumQuestions": 5,
   "countingPolicy": "Exact NFKC/whitespace-normalized labels within the same curriculum subject/track and grade; reference lookup uses the existing canonical subject. No semantic merging. Structural candidates are not content-approved questions. Catalog records are not verified books.",
@@ -9,29 +9,29 @@
     "legacyUnstructuredFiles": 19,
     "catalogRecords": 324,
     "activeCatalogRecords": 209,
-    "verifiedCompleteBooks": 0,
+    "verifiedCompleteBooks": 24,
     "catalogsWithoutStructuredVerification": 324,
     "rawChapterOccurrences": 1120,
     "rawDetailOccurrences": 2869,
     "activeConcepts": 2021,
     "activeConceptsWithReferences": 577,
-    "activeConceptsWithFiveStructuralCandidates": 574,
+    "activeConceptsWithFiveStructuralCandidates": 577,
     "missingReferenceConcepts": 1444,
-    "additionalQuestionsNeeded": 7225,
-    "referenceFiles": 576,
-    "indexLabels": 583,
-    "indexedReferenceFiles": 576,
-    "referenceQuestions": 3313,
-    "structuralCandidateQuestions": 3311,
-    "referenceFilesWithFiveStructuralCandidates": 573,
-    "legacyConceptIds": 754,
+    "additionalQuestionsNeeded": 7220,
+    "referenceFiles": 578,
+    "indexLabels": 589,
+    "indexedReferenceFiles": 578,
+    "referenceQuestions": 3326,
+    "structuralCandidateQuestions": 3326,
+    "referenceFilesWithFiveStructuralCandidates": 578,
+    "legacyConceptIds": 756,
     "groupsWithMultipleLegacyConceptIds": 149,
-    "standardConcepts": 0,
+    "standardConcepts": 4,
     "independentlyContentReviewedQuestions": null,
     "emptyUiScopes": 7,
-    "structuralProblems": 1,
-    "questionsWithStructuralIssues": 2,
-    "repeatedStemsNeedingReview": 2
+    "structuralProblems": 0,
+    "questionsWithStructuralIssues": 0,
+    "repeatedStemsNeedingReview": 1
   },
   "byGradeSubject": [
     {
@@ -670,8 +670,8 @@
       "subject": "數學A",
       "concepts": 21,
       "withReferences": 21,
-      "withFiveStructuralCandidates": 20,
-      "additionalQuestionsNeeded": 3
+      "withFiveStructuralCandidates": 21,
+      "additionalQuestionsNeeded": 0
     },
     {
       "stage": "high-school",
@@ -688,8 +688,8 @@
       "subject": "數學甲",
       "concepts": 17,
       "withReferences": 17,
-      "withFiveStructuralCandidates": 15,
-      "additionalQuestionsNeeded": 2
+      "withFiveStructuralCandidates": 17,
+      "additionalQuestionsNeeded": 0
     },
     {
       "stage": "high-school",
@@ -19564,18 +19564,11 @@
       ],
       "exclusions": [],
       "questionCount": 5,
-      "structuralCandidateCount": 4,
+      "structuralCandidateCount": 5,
       "legacyConceptIds": [
         "math-高中三年級-圓錐曲線及其方程式"
       ],
-      "questions": [
-        {
-          "id": "math-ref-g3J-圓錐曲線及其方程式-2",
-          "issues": [
-            "duplicate-question"
-          ]
-        }
-      ]
+      "questions": []
     },
     {
       "file": "question-references/數學/高中三年級/多項式函數導數.json",
@@ -19827,18 +19820,11 @@
       ],
       "exclusions": [],
       "questionCount": 5,
-      "structuralCandidateCount": 4,
+      "structuralCandidateCount": 5,
       "legacyConceptIds": [
         "math-高中三年級-橢圓、雙曲線、拋物線的性質"
       ],
-      "questions": [
-        {
-          "id": "ref-20261119-b7-math3-conics-1",
-          "issues": [
-            "duplicate-question"
-          ]
-        }
-      ]
+      "questions": []
     },
     {
       "file": "question-references/數學/高中三年級/生活決策的量化分析.json",
@@ -20199,6 +20185,26 @@
       "questions": []
     },
     {
+      "file": "question-references/數學/高中二年級/平面向量投影.json",
+      "subject": "數學",
+      "grade": "高中二年級",
+      "name": "平面向量投影",
+      "units": [
+        "平面向量"
+      ],
+      "exclusions": [
+        "空間向量",
+        "三維",
+        "外積"
+      ],
+      "questionCount": 5,
+      "structuralCandidateCount": 5,
+      "legacyConceptIds": [
+        "math-plane-vector-projection"
+      ],
+      "questions": []
+    },
+    {
       "file": "question-references/數學/高中二年級/平面方程式.json",
       "subject": "數學",
       "grade": "高中二年級",
@@ -20211,6 +20217,26 @@
       "structuralCandidateCount": 5,
       "legacyConceptIds": [
         "math-高中二年級-平面方程式"
+      ],
+      "questions": []
+    },
+    {
+      "file": "question-references/數學/高中二年級/平面柯西不等式.json",
+      "subject": "數學",
+      "grade": "高中二年級",
+      "name": "平面柯西不等式",
+      "units": [
+        "平面向量"
+      ],
+      "exclusions": [
+        "空間向量",
+        "三維",
+        "外積"
+      ],
+      "questionCount": 5,
+      "structuralCandidateCount": 5,
+      "legacyConceptIds": [
+        "math-plane-cauchy-schwarz"
       ],
       "questions": []
     },
@@ -20431,8 +20457,8 @@
         "空間向量"
       ],
       "exclusions": [],
-      "questionCount": 2,
-      "structuralCandidateCount": 2,
+      "questionCount": 5,
+      "structuralCandidateCount": 5,
       "legacyConceptIds": [
         "math-高中二年級-空間向量內積"
       ],
@@ -50713,7 +50739,7 @@
       "questionCount": 6,
       "structuralCandidateCount": 6,
       "additionalQuestionsNeeded": 0,
-      "standardConceptId": null,
+      "standardConceptId": "math-plane-vector-dot-product",
       "occurrences": [
         {
           "catalog": 262,
@@ -50764,10 +50790,10 @@
       "grade": "高中二年級",
       "name": "空間向量內積",
       "referenceFile": "question-references/數學/高中二年級/空間向量內積.json",
-      "questionCount": 2,
-      "structuralCandidateCount": 2,
-      "additionalQuestionsNeeded": 3,
-      "standardConceptId": null,
+      "questionCount": 5,
+      "structuralCandidateCount": 5,
+      "additionalQuestionsNeeded": 0,
+      "standardConceptId": "math-space-vector-dot-product",
       "occurrences": [
         {
           "catalog": 263,
@@ -51467,8 +51493,8 @@
       "name": "圓錐曲線及其方程式",
       "referenceFile": "question-references/數學/高中三年級/圓錐曲線及其方程式.json",
       "questionCount": 5,
-      "structuralCandidateCount": 4,
-      "additionalQuestionsNeeded": 1,
+      "structuralCandidateCount": 5,
+      "additionalQuestionsNeeded": 0,
       "standardConceptId": null,
       "occurrences": [
         {
@@ -51485,8 +51511,8 @@
       "name": "橢圓、雙曲線、拋物線的性質",
       "referenceFile": "question-references/數學/高中三年級/橢圓、雙曲線、拋物線的性質.json",
       "questionCount": 5,
-      "structuralCandidateCount": 4,
-      "additionalQuestionsNeeded": 1,
+      "structuralCandidateCount": 5,
+      "additionalQuestionsNeeded": 0,
       "standardConceptId": null,
       "occurrences": [
         {
@@ -60804,6 +60830,48 @@
     },
     {
       "subject": "數學",
+      "grade": "高中二年級",
+      "name": "平面向量投影",
+      "file": "question-references/數學/高中二年級/平面向量投影.json",
+      "valid": true
+    },
+    {
+      "subject": "數學",
+      "grade": "高中二年級",
+      "name": "正射影",
+      "file": "question-references/數學/高中二年級/平面向量投影.json",
+      "valid": true
+    },
+    {
+      "subject": "數學",
+      "grade": "高中二年級",
+      "name": "平面向量的正射影",
+      "file": "question-references/數學/高中二年級/平面向量投影.json",
+      "valid": true
+    },
+    {
+      "subject": "數學",
+      "grade": "高中二年級",
+      "name": "向量正射影",
+      "file": "question-references/數學/高中二年級/平面向量投影.json",
+      "valid": true
+    },
+    {
+      "subject": "數學",
+      "grade": "高中二年級",
+      "name": "平面柯西不等式",
+      "file": "question-references/數學/高中二年級/平面柯西不等式.json",
+      "valid": true
+    },
+    {
+      "subject": "數學",
+      "grade": "高中二年級",
+      "name": "二維柯西不等式",
+      "file": "question-references/數學/高中二年級/平面柯西不等式.json",
+      "valid": true
+    },
+    {
+      "subject": "數學",
       "grade": "高中一年級",
       "name": "實數、數線與絕對值",
       "file": "question-references/數學/高中一年級/實數、數線與絕對值.json",
@@ -64583,25 +64651,8 @@
       "valid": true
     }
   ],
-  "problems": [
-    {
-      "type": "duplicate-question",
-      "value": "[\"拋物線y2=8x的焦點坐標為何?\",\"(2,0)\"]",
-      "files": [
-        "question-references/數學/高中三年級/圓錐曲線及其方程式.json",
-        "question-references/數學/高中三年級/橢圓、雙曲線、拋物線的性質.json"
-      ]
-    }
-  ],
+  "problems": [],
   "warnings": [
-    {
-      "type": "repeated-stem-needs-review",
-      "value": "拋物線y2=8x的焦點坐標為何?",
-      "files": [
-        "question-references/數學/高中三年級/圓錐曲線及其方程式.json",
-        "question-references/數學/高中三年級/橢圓、雙曲線、拋物線的性質.json"
-      ]
-    },
     {
       "type": "repeated-stem-needs-review",
       "value": "Choosethegrammaticallycorrectsentence.",

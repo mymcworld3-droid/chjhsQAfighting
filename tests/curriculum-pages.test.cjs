@@ -6,14 +6,15 @@ test('paginated curriculum module loads after data selector and fullscreen wrapp
   assert.ok(pos('scope-fullscreen')<pos('curriculum-pages'));
   assert.match(studio,/window\.resetCurriculumPages\?\.\(\)/);
 });
-test('three progressive pages go directly from subject to merged full-year chapters',()=>{
+test('three progressive pages retain chapter selection with visible edition and semester controls',()=>{
   assert.match(pages,/\['cs-grade','cs-subject'\]/);
   assert.match(pages,/\['選年級','選科目','選章節'\]/);
-  assert.doesNotMatch(pages,/cs-term|cs-version|cs-cards-3|cs-cards-4/);
+  assert.doesNotMatch(pages,/cs-cards-3|cs-cards-4/);
+  assert.match(pages,/cs-catalog-field/);
   assert.match(pages,/setPage\(Math\.min\(2,stage\+1\)\)/);
   assert.match(pages,/native\.dispatchEvent\(new Event\('change',\{bubbles:true\}\)\)/);
   assert.match(pages,/const last=\$\('cs-stage-2'\)/);
-  assert.match(pages,/last\.append\(search,tools,chapter,message\)/);
+  assert.match(pages,/last\.append\(catalogFields,search,tools,chapter,message\)/);
   assert.doesNotMatch(pages,/\$\('cs-add'\)|chapter,add/);
   assert.match(pages,/window\.openCurriculumPage=page/);
   assert.match(pages,/id="cs-prev" class="cs-back"/);
@@ -23,7 +24,7 @@ test('three progressive pages go directly from subject to merged full-year chapt
   assert.match(pages,/id="cs-cards-/);
   assert.match(pages,/\$\('ss-tab-cart'\)\?\.click\(\)/);
   assert.match(scope,/curriculum:options-ready/);
-  assert.match(scope,/function mergeYearUnits\(yearData\)/);
+  assert.match(scope,/async function loadCatalogue/);
   assert.match(scope,/AUTO_TERM='全學年'/);
   assert.match(scope,/function addChecked\(\)/);
   assert.match(scope,/setChapterSelection\(i,c\.checked\)/);

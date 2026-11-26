@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小三年級",
+  "subject": "國語",
+  "books": [
+    {
+      "bookId": "book-03e271106a3e959273be",
+      "subject": "國語",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "字音字形字義",
+          "details": [
+            "多音字",
+            "形近字",
+            "常見成語與語詞"
+          ],
+          "concepts": [
+            {
+              "name": "多音字",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "形近字",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "常見成語與語詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "文章結構",
+          "details": [
+            "段落大意",
+            "記敘順序",
+            "人物與環境描寫"
+          ],
+          "concepts": [
+            {
+              "name": "段落大意",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "記敘順序",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "人物與環境描寫",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "句型與修辭",
+          "details": [
+            "因果與轉折句",
+            "譬喻與擬人",
+            "擴寫與縮寫"
+          ],
+          "concepts": [
+            {
+              "name": "因果與轉折句",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "譬喻與擬人",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "擴寫與縮寫",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "口語與寫作",
+          "details": [
+            "抓重點摘要",
+            "生活記敘",
+            "書信基本格式"
+          ],
+          "concepts": [
+            {
+              "name": "抓重點摘要",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活記敘",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "書信基本格式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-22ce24afdfe172d57021",
+      "subject": "國語",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "閱讀理解",
+          "details": [
+            "找主旨",
+            "推論人物觀點",
+            "比較文章訊息"
+          ],
+          "concepts": [
+            {
+              "name": "找主旨",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "推論人物觀點",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "比較文章訊息",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "說明文入門",
+          "details": [
+            "分類與列舉",
+            "圖表配合文本",
+            "辨別事實與意見"
+          ],
+          "concepts": [
+            {
+              "name": "分類與列舉",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "圖表配合文本",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "辨別事實與意見",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "童詩與故事",
+          "details": [
+            "意象與節奏",
+            "寓意與價值",
+            "續寫故事"
+          ],
+          "concepts": [
+            {
+              "name": "意象與節奏",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "寓意與價值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "續寫故事",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "寫作練習",
+          "details": [
+            "敘事段落",
+            "景物描寫",
+            "自我檢查與修改"
+          ],
+          "concepts": [
+            {
+              "name": "敘事段落",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "景物描寫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "自我檢查與修改",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

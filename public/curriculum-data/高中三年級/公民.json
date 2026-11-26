@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "subject": "公民",
+  "books": [
+    {
+      "bookId": "book-52f6fc76039c60bc74d5",
+      "subject": "公民",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "選修公民：民主政治與治理",
+          "details": [
+            "民主理論",
+            "政府制度比較",
+            "公共政策評估"
+          ],
+          "concepts": [
+            {
+              "name": "民主理論",
+              "conceptId": "legacy-1f8de15471cb839768e3",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "政府制度比較",
+              "conceptId": "legacy-11a2ea833acff32ef9d1",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "公共政策評估",
+              "conceptId": "legacy-8119b7289e1213b38c2a",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "選修公民：法律與社會",
+          "details": [
+            "人權保障",
+            "法律推理",
+            "社會公平"
+          ],
+          "concepts": [
+            {
+              "name": "人權保障",
+              "conceptId": "legacy-65914ce54229699da873",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "法律推理",
+              "conceptId": "legacy-9a61642baaf0f5f23635",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "社會公平",
+              "conceptId": "legacy-e19b1571daaa78c9a0fb",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "選修公民：經濟與全球議題",
+          "details": [
+            "市場與政府",
+            "國際分工",
+            "環境及分配"
+          ],
+          "concepts": [
+            {
+              "name": "市場與政府",
+              "conceptId": "legacy-9e10a872168d15ce7c4d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "國際分工",
+              "conceptId": "legacy-03938d75b248b3b7fa92",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "環境及分配",
+              "conceptId": "legacy-583e94280f0de47f6398",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-1ac1f17c91f8433ae19f",
+      "subject": "公民",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "社會、政治與法律統整",
+          "details": [
+            "人權與民主",
+            "法治與治理",
+            "公共議題"
+          ],
+          "concepts": [
+            {
+              "name": "人權與民主",
+              "conceptId": "legacy-86c61cd641eec1603195",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "法治與治理",
+              "conceptId": "legacy-c451db9142b1d27cfe7f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "公共議題",
+              "conceptId": "legacy-6d85f5c85f4a8dc53c30",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "經濟統整",
+          "details": [
+            "市場供需",
+            "總體經濟",
+            "國際貿易與政策"
+          ],
+          "concepts": [
+            {
+              "name": "市場供需",
+              "conceptId": "legacy-82bdbc37c5dfec55ea26",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "總體經濟",
+              "conceptId": "legacy-9084a0cb0c0a050bc5a4",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "國際貿易與政策",
+              "conceptId": "legacy-5ea56823df9272dfb330",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "公民探究與實作",
+          "details": [
+            "資料與論點",
+            "不同公共立場",
+            "案例分析"
+          ],
+          "concepts": [
+            {
+              "name": "資料與論點",
+              "conceptId": "legacy-395d3451c4c5fabaadb9",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "不同公共立場",
+              "conceptId": "legacy-18a6f9760a3179c80bed",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "案例分析",
+              "conceptId": "legacy-5a703a826b46f4135d9c",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

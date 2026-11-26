@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "grade": "高中二年級",
+  "subject": "生物",
+  "books": [
+    {
+      "bookId": "book-9f5ca59c9c0079c4ce09",
+      "subject": "生物",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "選修生物Ⅰ：細胞與遺傳",
+          "details": [
+            "細胞膜與運輸",
+            "細胞週期及分裂",
+            "DNA 複製與基因表現"
+          ],
+          "concepts": [
+            {
+              "name": "細胞膜與運輸",
+              "conceptId": "legacy-08c3c59a86d640512278",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "細胞週期及分裂",
+              "conceptId": "legacy-ff5dda33a33c06b00535",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "DNA 複製與基因表現",
+              "conceptId": "legacy-7f27749b60e16ad80c2c",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "分子生物學",
+          "details": [
+            "轉錄、轉譯與突變",
+            "基因調控",
+            "生物技術原理"
+          ],
+          "concepts": [
+            {
+              "name": "轉錄、轉譯與突變",
+              "conceptId": "legacy-6befd84af354311920fe",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "基因調控",
+              "conceptId": "legacy-5fa8063ed4e54814cec2",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "生物技術原理",
+              "conceptId": "legacy-56f5f54a5ec3022e0ab8",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-fb7b843ef417bd7ddf98",
+      "subject": "生物",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "選修生物Ⅱ：生命的起源與植物體",
+          "details": [
+            "生命起源與演化",
+            "植物構造與運輸",
+            "植物的生殖與調節"
+          ],
+          "concepts": [
+            {
+              "name": "生命起源與演化",
+              "conceptId": "legacy-775099f784e4ab25f1e6",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "植物構造與運輸",
+              "conceptId": "legacy-ba088d6e936257de5905",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "植物的生殖與調節",
+              "conceptId": "legacy-99c6f733e2a82641cbf5",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "植物生理",
+          "details": [
+            "光合作用與呼吸",
+            "植物激素",
+            "逆境反應"
+          ],
+          "concepts": [
+            {
+              "name": "光合作用與呼吸",
+              "conceptId": "legacy-4d0dbcdebf63f52c87c3",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "植物激素",
+              "conceptId": "legacy-f7be719021f791f99ecc",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "逆境反應",
+              "conceptId": "legacy-e10a8a843f78ed01b519",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

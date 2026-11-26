@@ -1,0 +1,304 @@
+{
+  "schema": 1,
+  "grade": "國中二年級",
+  "subject": "地理",
+  "books": [
+    {
+      "bookId": "book-3023f343ef2152206376",
+      "subject": "地理",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/地理/geogrophy.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：中國的自然地理",
+          "details": [
+            "地勢地形",
+            "氣候特徵",
+            "水文分布"
+          ],
+          "concepts": [
+            {
+              "name": "地勢地形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "氣候特徵",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "水文分布",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：中國的人口與經濟",
+          "details": [
+            "人口分布與問題",
+            "工業與經濟改革"
+          ],
+          "concepts": [
+            {
+              "name": "人口分布與問題",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "工業與經濟改革",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：東亞、東南亞與南亞",
+          "details": [
+            "日韓區域整合",
+            "東協地緣經濟",
+            "印度與南亞文化"
+          ],
+          "concepts": [
+            {
+              "name": "日韓區域整合",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "東協地緣經濟",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "印度與南亞文化",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：西亞與北非、大洋洲",
+          "details": [
+            "乾旱氣候與石油",
+            "澳洲與紐西蘭"
+          ],
+          "concepts": [
+            {
+              "name": "乾旱氣候與石油",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "澳洲與紐西蘭",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f6121725a10e34bac029",
+      "subject": "地理",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/地理/geogrophy.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：中國地形與氣候",
+          "details": [
+            "階梯式地形",
+            "季風與氣候分區"
+          ],
+          "concepts": [
+            {
+              "name": "階梯式地形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "季風與氣候分區",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：中國人文與經濟",
+          "details": [
+            "人口政策與分布",
+            "改革開放與區域發展"
+          ],
+          "concepts": [
+            {
+              "name": "人口政策與分布",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "改革開放與區域發展",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：東亞至南亞區域",
+          "details": [
+            "日本韓國產業",
+            "東南亞文化",
+            "印度南亞經濟"
+          ],
+          "concepts": [
+            {
+              "name": "日本韓國產業",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "東南亞文化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "印度南亞經濟",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：西亞北非與大洋洲",
+          "details": [
+            "西亞石油與宗教",
+            "大洋洲特色"
+          ],
+          "concepts": [
+            {
+              "name": "西亞石油與宗教",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "大洋洲特色",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-26932b38cdd3520b73b5",
+      "subject": "地理",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/地理/geogrophy.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：中國地理環境",
+          "details": [
+            "自然環境",
+            "地理分區"
+          ],
+          "concepts": [
+            {
+              "name": "自然環境",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "地理分區",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：中國社會發展",
+          "details": [
+            "人口結構",
+            "現代經濟改革"
+          ],
+          "concepts": [
+            {
+              "name": "人口結構",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "現代經濟改革",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：東亞及東南亞",
+          "details": [
+            "東亞關係",
+            "東南亞東協"
+          ],
+          "concepts": [
+            {
+              "name": "東亞關係",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "東南亞東協",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：南亞、西亞及北非、大洋洲",
+          "details": [
+            "區域文化與經濟",
+            "區域地理"
+          ],
+          "concepts": [
+            {
+              "name": "區域文化與經濟",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "區域地理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

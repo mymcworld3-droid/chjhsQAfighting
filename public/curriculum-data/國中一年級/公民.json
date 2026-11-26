@@ -1,0 +1,451 @@
+{
+  "schema": 1,
+  "grade": "國中一年級",
+  "subject": "公民",
+  "books": [
+    {
+      "bookId": "book-d8f7b629c92a5ecd1f55",
+      "subject": "公民",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：我的成長與發展",
+          "details": [
+            "主題：自我與身心發展、青少年的心理調適、生命價值",
+            "細項：自我認同、探索自我尊嚴、多元性別的尊重、權利擴展與學習"
+          ],
+          "concepts": [
+            {
+              "name": "主題：自我與身心發展、青少年的心理調適、生命價值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：自我認同、探索自我尊嚴、多元性別的尊重、權利擴展與學習",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：人際關係與團體生活",
+          "details": [
+            "主題：同儕關係、學校生活與社會規範",
+            "細項：良好人際互動、同儕壓力與溝通、學校民主與學生自治、校園常規與自治生活"
+          ],
+          "concepts": [
+            {
+              "name": "主題：同儕關係、學校生活與社會規範",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：良好人際互動、同儕壓力與溝通、學校民主與學生自治、校園常規與自治生活",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：家庭的生活與互動",
+          "details": [
+            "主題：家庭的組成、家庭型態變遷、家庭衝突與解決",
+            "細項：血緣與姻親親屬關係、現代家庭的多樣化型態、家庭功能的變遷與消長、家庭內部的衝突調適與權益保障"
+          ],
+          "concepts": [
+            {
+              "name": "主題：家庭的組成、家庭型態變遷、家庭衝突與解決",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：血緣與姻親親屬關係、現代家庭的多樣化型態、家庭功能的變遷與消長、家庭內部的衝突調適與權益保障",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-23c7cd27059f400197d3",
+      "subject": "公民",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：自我發展與性別平等",
+          "details": [
+            "主題：認識自我、性別角色與尊重包容",
+            "細項：青少年身心發展特徵、建立自信與自我價值、性別刻板印象的打破、性別平等教育法與權益"
+          ],
+          "concepts": [
+            {
+              "name": "主題：認識自我、性別角色與尊重包容",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：青少年身心發展特徵、建立自信與自我價值、性別刻板印象的打破、性別平等教育法與權益",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：從家庭到學校",
+          "details": [
+            "主題：家庭組織與校園自治",
+            "細項：家庭的定義與核心/擴大/單親等類型、家庭功能（生育、經濟、教育、保護）、學生權利與校園生活自治、民主議事規則（會議規範基礎）"
+          ],
+          "concepts": [
+            {
+              "name": "主題：家庭組織與校園自治",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：家庭的定義與核心/擴大/單親等類型、家庭功能（生育、經濟、教育、保護）、學生權利與校園生活自治、民主議事規則（會議規範基礎）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：學校、團體與社會",
+          "details": [
+            "主題：社會團體、同儕互動與人際連結",
+            "細項：學生社團與社會團體的分類、志願團體與非志願團體、同儕團體對青少年的影響、人際衝突的化解"
+          ],
+          "concepts": [
+            {
+              "name": "主題：社會團體、同儕互動與人際連結",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：學生社團與社會團體的分類、志願團體與非志願團體、同儕團體對青少年的影響、人際衝突的化解",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-402a5997650774711b0e",
+      "subject": "公民",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：遇見全新的自己",
+          "details": [
+            "主題：自我追尋、性別平權與生命關懷",
+            "細項：青少年的自我概念與發展、尊重多元性別與身體自主權、生命的獨特性與關懷弱勢"
+          ],
+          "concepts": [
+            {
+              "name": "主題：自我追尋、性別平權與生命關懷",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：青少年的自我概念與發展、尊重多元性別與身體自主權、生命的獨特性與關懷弱勢",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：溫馨的避風港——家庭",
+          "details": [
+            "主題：家庭關係、現代家庭的挑戰與福祉",
+            "細項：親屬稱謂與法律定義、多元家庭型態的興起（如隔代、跨國婚姻）、少子化與高齡化對家庭的衝擊、家庭問題（家暴、長照）與求助管道"
+          ],
+          "concepts": [
+            {
+              "name": "主題：家庭關係、現代家庭的挑戰與福祉",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：親屬稱謂與法律定義、多元家庭型態的興起（如隔代、跨國婚姻）、少子化與高齡化對家庭的衝擊、家庭問題（家暴、長照）與求助管道",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：校園與社區的公共生活",
+          "details": [
+            "主題：班級自治、校園民主與社區營造",
+            "細項：班會與自治組織的運作、校園公共事務的參與、社區的定義與類型、社區意識與社區營造的公共價值"
+          ],
+          "concepts": [
+            {
+              "name": "主題：班級自治、校園民主與社區營造",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：班會與自治組織的運作、校園公共事務的參與、社區的定義與類型、社區意識與社區營造的公共價值",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-30b24bb3d886bf7607b6",
+      "subject": "公民",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：社會團體與社會參與",
+          "details": [
+            "主題：團體的內涵、社會與公共事務的參與",
+            "細項：社會團體的內涵與多元分類（職業團體、社會團體、政治團體）、志願結社的特徵、公民參與和公共事務、NGO與NPO的定義"
+          ],
+          "concepts": [
+            {
+              "name": "主題：團體的內涵、社會與公共事務的參與",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：社會團體的內涵與多元分類（職業團體、社會團體、政治團體）、志願結社的特徵、公民參與和公共事務、NGO與NPO的定義",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：文化與社會規範",
+          "details": [
+            "主題：文化多樣性、社會秩序的維護",
+            "細項：文化的定義與特性（普遍性、差異性、累積性）、文化多元與文化位階省思、多元文化共融、社會規範的四種類型（風俗、宗教、道德、法律）之互補性"
+          ],
+          "concepts": [
+            {
+              "name": "主題：文化多樣性、社會秩序的維護",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：文化的定義與特性（普遍性、差異性、累積性）、文化多元與文化位階省思、多元文化共融、社會規範的四種類型（風俗、宗教、道德、法律）之互補性",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：社會流動與社會福利",
+          "details": [
+            "主題：社會分層、弱勢關懷與國家福利制度",
+            "細項：社會分層的形成、社會流動性（垂直、水平流動）、社會弱勢族群、國家社會福利政策與社會救助、社會津貼"
+          ],
+          "concepts": [
+            {
+              "name": "主題：社會分層、弱勢關懷與國家福利制度",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：社會分層的形成、社會流動性（垂直、水平流動）、社會弱勢族群、國家社會福利政策與社會救助、社會津貼",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-4dc03ae8416312bf2b5c",
+      "subject": "公民",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：走入社會團體",
+          "details": [
+            "主題：社會組織與公民權利參與",
+            "細項：社會團體的形成原因與功能、職業團體與公共利益團體、公民參與的意義與管道、非政府組織（NGO）在公共事務的角色"
+          ],
+          "concepts": [
+            {
+              "name": "主題：社會組織與公民權利參與",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：社會團體的形成原因與功能、職業團體與公共利益團體、公民參與的意義與管道、非政府組織（NGO）在公共事務的角色",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：多元的文化社會",
+          "details": [
+            "主題：文化內涵、主流與次文化、文化平權",
+            "細項：文化的組成（器物、制度、理念）、主流文化與次文化的互動、文化偏見與歧視的消除、臺灣的多元文化（原住民、閩客、外省、新住民）"
+          ],
+          "concepts": [
+            {
+              "name": "主題：文化內涵、主流與次文化、文化平權",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：文化的組成（器物、制度、理念）、主流文化與次文化的互動、文化偏見與歧視的消除、臺灣的多元文化（原住民、閩客、外省、新住民）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：社會規範與權益保障",
+          "details": [
+            "主題：生活規範與社會公平公義",
+            "細項：風俗習慣、宗教信仰、道德觀念與法律的制裁力差異、社會不平等的成因、社會福利體制（社會保險、福利服務、國民年金）"
+          ],
+          "concepts": [
+            {
+              "name": "主題：生活規範與社會公平公義",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：風俗習慣、宗教信仰、道德觀念與法律的制裁力差異、社會不平等的成因、社會福利體制（社會保險、福利服務、國民年金）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-6497d92a169635442fdc",
+      "subject": "公民",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：群體生活與結社自由",
+          "details": [
+            "主題：志願結社、公民團體與公共事務",
+            "細項：憲法保障的結社自由、社會團體的功能、公民團體對政策的影響、現代公民應具備的素養（理性、包容、尊重法治）"
+          ],
+          "concepts": [
+            {
+              "name": "主題：志願結社、公民團體與公共事務",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：憲法保障的結社自由、社會團體的功能、公民團體對政策的影響、現代公民應具備的素養（理性、包容、尊重法治）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：生活中的規範與文化",
+          "details": [
+            "主題：社會秩序維持、跨文化溝通",
+            "細項：內在道德與外在法律規範的整合、文化衝擊與文化適應、全球化下的文化融合、文化資產的保存與平權"
+          ],
+          "concepts": [
+            {
+              "name": "主題：社會秩序維持、跨文化溝通",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：內在道德與外在法律規範的整合、文化衝擊與文化適應、全球化下的文化融合、文化資產的保存與平權",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：追求正義與公平的社會",
+          "details": [
+            "主題：社會公平、弱勢翻轉與福利國家",
+            "細項：社會分層與貧富差距、弱勢群體的法律保障、我國的社會福利體系（全民健保、勞保、社會救助法）"
+          ],
+          "concepts": [
+            {
+              "name": "主題：社會公平、弱勢翻轉與福利國家",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：社會分層與貧富差距、弱勢群體的法律保障、我國的社會福利體系（全民健保、勞保、社會救助法）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

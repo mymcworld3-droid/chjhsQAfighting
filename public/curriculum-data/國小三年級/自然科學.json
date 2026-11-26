@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小三年級",
+  "subject": "自然科學",
+  "books": [
+    {
+      "bookId": "book-4aefe3b5799aab0bcc8e",
+      "subject": "自然科學",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "植物與生長",
+          "details": [
+            "植物部位",
+            "種子發芽",
+            "環境條件與生長"
+          ],
+          "concepts": [
+            {
+              "name": "植物部位",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "種子發芽",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "環境條件與生長",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "物質與特性",
+          "details": [
+            "水與空氣",
+            "溶解與混合",
+            "觀察與分類"
+          ],
+          "concepts": [
+            {
+              "name": "水與空氣",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "溶解與混合",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "觀察與分類",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "力與運動",
+          "details": [
+            "推拉與移動",
+            "磁鐵基本特性",
+            "簡單實驗"
+          ],
+          "concepts": [
+            {
+              "name": "推拉與移動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "磁鐵基本特性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡單實驗",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "科學方法",
+          "details": [
+            "提出問題",
+            "公平測試",
+            "觀察記錄"
+          ],
+          "concepts": [
+            {
+              "name": "提出問題",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公平測試",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "觀察記錄",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-2436b8daa9335af6b204",
+      "subject": "自然科學",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "動物的生活",
+          "details": [
+            "動物構造與運動",
+            "食物與棲地",
+            "環境適應"
+          ],
+          "concepts": [
+            {
+              "name": "動物構造與運動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "食物與棲地",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "環境適應",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "水的變化",
+          "details": [
+            "蒸發與凝結",
+            "水循環概念",
+            "節約用水"
+          ],
+          "concepts": [
+            {
+              "name": "蒸發與凝結",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "水循環概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "節約用水",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "光與影",
+          "details": [
+            "光的直進",
+            "影子與光源",
+            "生活中的光"
+          ],
+          "concepts": [
+            {
+              "name": "光的直進",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "影子與光源",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活中的光",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "科學探究",
+          "details": [
+            "變因與測量",
+            "整理觀察",
+            "解釋結果"
+          ],
+          "concepts": [
+            {
+              "name": "變因與測量",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "整理觀察",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "解釋結果",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

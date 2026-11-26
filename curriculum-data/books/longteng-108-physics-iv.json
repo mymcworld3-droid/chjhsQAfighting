@@ -1,0 +1,116 @@
+{
+  "bookId": "longteng-108-physics-iv",
+  "subject": "物理",
+  "grade": "高中二年級",
+  "edition": "龍騰版",
+  "publisher": "龍騰",
+  "term": "選修物理IV",
+  "bookLabel": "選修物理IV（全）",
+  "schoolYear": null,
+  "curriculumStandard": "108課綱",
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/longteng-108-physics-iv.json",
+  "sources": [
+    {
+      "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10304",
+      "type": "official-product-toc",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。",
+  "units": [
+    {
+      "unit": "第1章：靜電學",
+      "details": [
+        "1-1 電荷與庫侖定律",
+        "1-2 電場與電力線",
+        "1-3 電位能與電位"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 電荷與庫侖定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 電場與電力線",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 電位能與電位",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：電流的磁效應",
+      "details": [
+        "2-1 電流與磁場",
+        "2-2 載流導線產生的磁場",
+        "2-3 載流導線所受的磁力",
+        "2-4 帶電質點在磁場中的運動"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 電流與磁場",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 載流導線產生的磁場",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 載流導線所受的磁力",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 帶電質點在磁場中的運動",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：電磁感應",
+      "details": [
+        "3-1 法拉第定律",
+        "3-2 電磁感應的應用",
+        "3-3 電磁波"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 法拉第定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 電磁感應的應用",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 電磁波",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ],
+  "activities": [
+    "實驗1：等位線與電場",
+    "實驗2：電流天平",
+    "實驗3：認識電磁波"
+  ]
+}

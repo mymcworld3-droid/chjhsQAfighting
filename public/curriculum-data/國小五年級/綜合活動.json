@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "國小五年級",
+  "subject": "綜合活動",
+  "books": [
+    {
+      "bookId": "book-3b2a33f19da6c0aba1b2",
+      "subject": "綜合活動",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "學習與生涯初探",
+          "details": [
+            "個人能力",
+            "興趣與目標",
+            "學習時間安排"
+          ],
+          "concepts": [
+            {
+              "name": "個人能力",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "興趣與目標",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "學習時間安排",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "團隊合作",
+          "details": [
+            "分工與討論",
+            "解決衝突",
+            "團隊反思"
+          ],
+          "concepts": [
+            {
+              "name": "分工與討論",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "解決衝突",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "團隊反思",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生活資源管理",
+          "details": [
+            "物品與金錢",
+            "安全與衛生",
+            "環境責任"
+          ],
+          "concepts": [
+            {
+              "name": "物品與金錢",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "安全與衛生",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "環境責任",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9ab5c61495182cea54dc",
+      "subject": "綜合活動",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "自我關懷",
+          "details": [
+            "壓力與情緒",
+            "休息與健康",
+            "人際界線"
+          ],
+          "concepts": [
+            {
+              "name": "壓力與情緒",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "休息與健康",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "人際界線",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "公共服務",
+          "details": [
+            "社會需求",
+            "社區關懷",
+            "規劃與執行"
+          ],
+          "concepts": [
+            {
+              "name": "社會需求",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "社區關懷",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "規劃與執行",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "環境行動",
+          "details": [
+            "永續生活",
+            "減廢",
+            "成果檢核"
+          ],
+          "concepts": [
+            {
+              "name": "永續生活",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "減廢",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "成果檢核",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

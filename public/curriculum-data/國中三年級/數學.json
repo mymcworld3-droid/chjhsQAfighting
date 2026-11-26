@@ -1,0 +1,493 @@
+{
+  "schema": 1,
+  "grade": "國中三年級",
+  "subject": "數學",
+  "books": [
+    {
+      "bookId": "book-b89c2dd0db8267bc77e2",
+      "subject": "數學",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：相似形",
+          "details": [
+            "1-1 比例線段與平行線截比例線段",
+            "1-2 相似多邊形與相似三角形判別",
+            "1-3 相似形的幾何量測與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 比例線段與平行線截比例線段",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 相似多邊形與相似三角形判別",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 相似形的幾何量測與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：圓形",
+          "details": [
+            "2-1 點、直線與圓的相對關係（切線）",
+            "2-2 圓心角、圓周角、弦切角與弧的度數"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 點、直線與圓的相對關係（切線）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 圓心角、圓周角、弦切角與弧的度數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：幾何推理與三角形的三心",
+          "details": [
+            "3-1 幾何推理與邏輯證明",
+            "3-2 三角形的外心（外接圓圓心）",
+            "3-3 三角形的內心（內切圓圓心）與重心（線段比例2:1）"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 幾何推理與邏輯證明",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 三角形的外心（外接圓圓心）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 三角形的內心（內切圓圓心）與重心（線段比例2:1）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-8a0355aeabea7d15feb2",
+      "subject": "數學",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：相似形",
+          "details": [
+            "1-1 比例線段及其幾何性質",
+            "1-2 相似三角形判別性質（AAA, SAS, SSS相似）",
+            "1-3 相似形的實際生活測量應用"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 比例線段及其幾何性質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 相似三角形判別性質（AAA, SAS, SSS相似）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 相似形的實際生活測量應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：圓形的幾何性質",
+          "details": [
+            "2-1 圓的弦、弦心距與切線性質",
+            "2-2 圓心角與圓周角的幾何角度關係"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 圓的弦、弦心距與切線性質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 圓心角與圓周角的幾何角度關係",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：幾何證明與三心",
+          "details": [
+            "3-1 推理證明（代數與幾何圖形證明）",
+            "3-2 三角形的三心（外心、內心、重心的定義與坐標與線段性質）"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 推理證明（代數與幾何圖形證明）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 三角形的三心（外心、內心、重心的定義與坐標與線段性質）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-1f652a8f2d5c00b04bf8",
+      "subject": "數學",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：相似形",
+          "details": [
+            "1-1 比例線段定理",
+            "1-2 相似三角形的幾何判別",
+            "1-3 相似三角形的延伸應用"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 比例線段定理",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 相似三角形的幾何判別",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 相似三角形的延伸應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：圓的性質",
+          "details": [
+            "2-1 點、線、圓的切點與弦心距關係",
+            "2-2 圓心角、圓周角與弧度幾何計算"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 點、線、圓的切點與弦心距關係",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 圓心角、圓周角與弧度幾何計算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：幾何推理與三角形的三心",
+          "details": [
+            "3-1 幾何推理證明的基礎步驟",
+            "3-2 三角形的外心與內心性質",
+            "3-3 三角形的重心與面積比例特徵"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 幾何推理證明的基礎步驟",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 三角形的外心與內心性質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 三角形的重心與面積比例特徵",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-cf18ec64948e76d22309",
+      "subject": "數學",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：二次函數",
+          "details": [
+            "1-1 二次函數的圖形與拋物線頂點移位",
+            "1-2 配方法求二次函數的最大值與最小值"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 二次函數的圖形與拋物線頂點移位",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 配方法求二次函數的最大值與最小值",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：統計與機率",
+          "details": [
+            "2-1 百分位數、四分位數與盒狀圖分析",
+            "2-2 機率的定義、古典機率與樹狀圖分析"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 百分位數、四分位數與盒狀圖分析",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 機率的定義、古典機率與樹狀圖分析",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：立體圖形",
+          "details": [
+            "3-1 直角柱、圓柱、角錐與圓錐的空間透視",
+            "3-2 立體圖形的表面積與體積計算"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 直角柱、圓柱、角錐與圓錐的空間透視",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 立體圖形的表面積與體積計算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9122b427f3b292900b9f",
+      "subject": "數學",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：二次函數",
+          "details": [
+            "1-1 二次函數的圖形特徵（開口、對稱軸、頂點）",
+            "1-2 二次函數的最大值與最小值應用（極值問題解法）"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 二次函數的圖形特徵（開口、對稱軸、頂點）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 二次函數的最大值與最小值應用（極值問題解法）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：統計與機率",
+          "details": [
+            "2-1 統計資料的整理：百分位數與四分位數",
+            "2-2 盒狀圖的判讀與解讀數據",
+            "2-3 機率的基本概念與生活情境樹狀圖"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 統計資料的整理：百分位數與四分位數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 盒狀圖的判讀與解讀數據",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 機率的基本概念與生活情境樹狀圖",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：立體幾何圖形",
+          "details": [
+            "3-1 角柱、圓柱、角錐與圓錐的展開圖與空間關係",
+            "3-2 立體圖形表面積與體積公式實務計算"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 角柱、圓柱、角錐與圓錐的展開圖與空間關係",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 立體圖形表面積與體積公式實務計算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-01c3c2c80416ac3521bd",
+      "subject": "數學",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/數學/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：二次函數",
+          "details": [
+            "1-1 二次函數的圖形性質與平移變化",
+            "1-2 配方法解二次函數的最大值與最小值應用"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 二次函數的圖形性質與平移變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 配方法解二次函數的最大值與最小值應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：統計與機率",
+          "details": [
+            "2-1 百分位數與四分位數資料處理",
+            "2-2 盒狀圖分析與資料分散度解讀",
+            "2-3 機率概念與樹狀圖計算"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 百分位數與四分位數資料處理",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 盒狀圖分析與資料分散度解讀",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 機率概念與樹狀圖計算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：立體圖形",
+          "details": [
+            "3-1 柱體與錐體的空間展開面",
+            "3-2 立體圖形的幾何表面積與體積公式"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 柱體與錐體的空間展開面",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 立體圖形的幾何表面積與體積公式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

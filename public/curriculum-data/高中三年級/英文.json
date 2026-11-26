@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "subject": "英文",
+  "books": [
+    {
+      "bookId": "book-c6df1c382dd253b9da2d",
+      "subject": "英文",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "學測英文閱讀",
+          "details": [
+            "主旨、細節與推論",
+            "篇章結構",
+            "混合題與長文閱讀"
+          ],
+          "concepts": [
+            {
+              "name": "主旨、細節與推論",
+              "conceptId": "legacy-a500a686ec3d422873cd",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "篇章結構",
+              "conceptId": "legacy-7ce2992b1e27cbf50327",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "混合題與長文閱讀",
+              "conceptId": "legacy-6bb5e04f30db134590be",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "學測英文語意",
+          "details": [
+            "字彙、搭配詞",
+            "綜合測驗",
+            "文意選填"
+          ],
+          "concepts": [
+            {
+              "name": "字彙、搭配詞",
+              "conceptId": "legacy-8fed8a3cc487724daad7",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "綜合測驗",
+              "conceptId": "legacy-f81e53d61a41bb1a08df",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "文意選填",
+              "conceptId": "legacy-52859ba2587413fcb91e",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "英文作文",
+          "details": [
+            "圖片與情境寫作",
+            "議題論述",
+            "寫作組織與文法修訂"
+          ],
+          "concepts": [
+            {
+              "name": "圖片與情境寫作",
+              "conceptId": "legacy-03d0bdf8618ac4aff78c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "議題論述",
+              "conceptId": "legacy-1d51e5e424a7d5fcedd3",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "寫作組織與文法修訂",
+              "conceptId": "legacy-51ec09bf844703d03135",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-c4fac7213468074107aa",
+      "subject": "英文",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "進階閱讀與語用",
+          "details": [
+            "論說與科普長文",
+            "語境與詞義推斷",
+            "跨篇比較"
+          ],
+          "concepts": [
+            {
+              "name": "論說與科普長文",
+              "conceptId": "legacy-985ca5fb71bce54ab44a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "語境與詞義推斷",
+              "conceptId": "legacy-3ff46c4420d74203ddb4",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "跨篇比較",
+              "conceptId": "legacy-945570597ff81f2b606c",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "進階寫作",
+          "details": [
+            "論證與反論證",
+            "摘要與改寫",
+            "實用文書"
+          ],
+          "concepts": [
+            {
+              "name": "論證與反論證",
+              "conceptId": "legacy-74d3a73e80bb62a759bd",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "摘要與改寫",
+              "conceptId": "legacy-a670fa48275ba99a9a6c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "實用文書",
+              "conceptId": "legacy-f257341768000ad30e5d",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "英文綜合複習",
+          "details": [
+            "詞彙、文法與句型",
+            "聽力練習",
+            "閱讀與寫作"
+          ],
+          "concepts": [
+            {
+              "name": "詞彙、文法與句型",
+              "conceptId": "legacy-1e61b2fb53021fa6af40",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "聽力練習",
+              "conceptId": "legacy-d5261134dada79375e7a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "閱讀與寫作",
+              "conceptId": "legacy-630e18c4cc92c2061d5a",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

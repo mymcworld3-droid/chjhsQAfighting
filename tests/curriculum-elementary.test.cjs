@@ -49,10 +49,10 @@ test('publisher-labelled math offerings are explicitly partial and have sources'
   }
   assert.ok(math.sources.some(s => s.includes('junyiacademy.org')));
 });
-test('elementary selector fetches elementary files, keeps actual subject and level in saved scope', () => {
-  assert.match(selector, /elementary_school_unit_name/);
+test('elementary selector loads its own grade/subject shard, keeps actual subject and level in saved scope', () => {
+  assert.match(selector, /loadCatalogue\(grade,subject\)/);
   assert.match(selector, /elementarySubjectList/);
-  assert.match(selector, /data\.subjects\?\.\[subject\]\?\.\[grade\]/);
+  assert.match(selector, /encodeURIComponent\(g\)/);
   assert.match(selector, /subject==='國語'\?'國文'/);
   assert.match(selector, /grade\.startsWith\('高中'\)\|\|grade\.startsWith\('國小'\)/);
   assert.match(quiz, /chosenGrade\.startsWith\('高中'\) \|\| chosenGrade\.startsWith\('國小'\)/);

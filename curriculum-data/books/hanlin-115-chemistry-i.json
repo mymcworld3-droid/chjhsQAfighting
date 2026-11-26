@@ -1,0 +1,132 @@
+{
+  "bookId": "hanlin-115-chemistry-i",
+  "subject": "化學",
+  "grade": "高中二年級",
+  "edition": "翰林版",
+  "publisher": "翰林",
+  "term": "選修化學I",
+  "bookLabel": "選修化學I（全）",
+  "schoolYear": 115,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/hanlin-115-chemistry-i.json",
+  "sources": [
+    {
+      "url": "https://sh.hle.com.tw/hce/",
+      "type": "official-portal"
+    },
+    {
+      "url": "https://drive.google.com/drive/folders/1LxLBTWbJZqn0lcw3sP4lr-nExEjDjKnl",
+      "type": "official-textbook-folder",
+      "title": "翰林選修生物I_課本(學用)"
+    },
+    {
+      "url": "https://drive.google.com/file/d/1xAqNG4qR1RXtCCZejdoCdtTPUuWN5jL4/view",
+      "type": "official-toc",
+      "title": "選修化學(Ⅰ)課本_01_編輯大意、目次(115f189322).pdf",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+  "units": [
+    {
+      "unit": "第1章：化學反應與能量",
+      "details": [
+        "1-1 化學反應的限量試劑與產率",
+        "1-2 各種能量形式的轉換",
+        "1-3 反應熱的特性與赫斯定律",
+        "1-4 莫耳燃燒熱與莫耳生成熱"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 化學反應的限量試劑與產率",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 各種能量形式的轉換",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 反應熱的特性與赫斯定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 莫耳燃燒熱與莫耳生成熱",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：氣體",
+      "details": [
+        "2-1 大氣的組成與氣體的通性",
+        "2-2 氣體定律",
+        "2-3 理想氣體",
+        "2-4 分 壓"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 大氣的組成與氣體的通性",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 氣體定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 理想氣體",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 分 壓",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：溶液的性質",
+      "details": [
+        "3-1 物質的鑑定與溶液",
+        "3-2 蒸氣壓",
+        "3-3 溶液的沸點、凝固點及滲透壓",
+        "3-4 水溶液的依數性"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 物質的鑑定與溶液",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 蒸氣壓",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 溶液的沸點、凝固點及滲透壓",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-4 水溶液的依數性",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

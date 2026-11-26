@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中一年級",
+  "subject": "歷史",
+  "books": [
+    {
+      "bookId": "book-1f32016d8b394ea373be",
+      "subject": "歷史",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "臺灣史：史前至近代",
+          "details": [
+            "史前文化與原住民族",
+            "大航海時代與鄭氏",
+            "清領社會與開港"
+          ],
+          "concepts": [
+            {
+              "name": "史前文化與原住民族",
+              "conceptId": "legacy-9c6e222adc45345d9f73",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "大航海時代與鄭氏",
+              "conceptId": "legacy-8cbd05f5790ca079b1c8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "清領社會與開港",
+              "conceptId": "legacy-0415b20376e572a3cd0c",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "臺灣史：近現代",
+          "details": [
+            "日本統治與社會變遷",
+            "戰後政治與經濟",
+            "民主化與社會文化"
+          ],
+          "concepts": [
+            {
+              "name": "日本統治與社會變遷",
+              "conceptId": "legacy-40c2d6b545640d11f59e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "戰後政治與經濟",
+              "conceptId": "legacy-587e48f3a8a74d1a623d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "民主化與社會文化",
+              "conceptId": "legacy-1a09a85b2431f704e312",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "歷史思考",
+          "details": [
+            "史料種類與判讀",
+            "時間脈絡",
+            "因果與多元觀點"
+          ],
+          "concepts": [
+            {
+              "name": "史料種類與判讀",
+              "conceptId": "legacy-2d0f7b92319943e1ed25",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "時間脈絡",
+              "conceptId": "legacy-57043477f9ff1a1c937d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "因果與多元觀點",
+              "conceptId": "legacy-60a324b5aa036a227558",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-4c77f36fad01a821ed90",
+      "subject": "歷史",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "東亞史：古代至中古",
+          "details": [
+            "東亞文明與交流",
+            "秦漢制度",
+            "隋唐社會與文化"
+          ],
+          "concepts": [
+            {
+              "name": "東亞文明與交流",
+              "conceptId": "legacy-5d055bb9df4eb015f011",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "秦漢制度",
+              "conceptId": "legacy-b5ef7f962370132aa688",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "隋唐社會與文化",
+              "conceptId": "legacy-3a54061bd1a4a2762158",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "東亞史：近世至現代",
+          "details": [
+            "宋元明清變遷",
+            "近代改革與衝突",
+            "現代東亞與區域交流"
+          ],
+          "concepts": [
+            {
+              "name": "宋元明清變遷",
+              "conceptId": "legacy-04c80db457713ac5b8af",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "近代改革與衝突",
+              "conceptId": "legacy-01d318ac068d5605c8f8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "現代東亞與區域交流",
+              "conceptId": "legacy-730fef1155fb710dc059",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "史料與圖表",
+          "details": [
+            "史料脈絡",
+            "比較與因果",
+            "時間軸與地圖"
+          ],
+          "concepts": [
+            {
+              "name": "史料脈絡",
+              "conceptId": "legacy-c32d139a6e8ff8e3bbd9",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "比較與因果",
+              "conceptId": "legacy-b807dae648cac4bdf179",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "時間軸與地圖",
+              "conceptId": "legacy-48b12d1fd72f0c9ccc28",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

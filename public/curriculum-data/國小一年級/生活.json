@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小一年級",
+  "subject": "生活",
+  "books": [
+    {
+      "bookId": "book-366f31a8ecd980b2a55d",
+      "subject": "生活",
+      "grade": "國小一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "認識自己與班級",
+          "details": [
+            "身體與感官",
+            "班級規範",
+            "友善互動"
+          ],
+          "concepts": [
+            {
+              "name": "身體與感官",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "班級規範",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "友善互動",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "校園與周遭環境",
+          "details": [
+            "認識校園空間",
+            "環境觀察",
+            "安全的行動"
+          ],
+          "concepts": [
+            {
+              "name": "認識校園空間",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "環境觀察",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "安全的行動",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "季節與自然",
+          "details": [
+            "天氣變化",
+            "植物與動物",
+            "觀察與記錄"
+          ],
+          "concepts": [
+            {
+              "name": "天氣變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "植物與動物",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "觀察與記錄",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "創作與表達",
+          "details": [
+            "顏色、聲音與節奏",
+            "生活中的創作",
+            "分享作品"
+          ],
+          "concepts": [
+            {
+              "name": "顏色、聲音與節奏",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活中的創作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "分享作品",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-ac9a834f956de7400c5b",
+      "subject": "生活",
+      "grade": "國小一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "我的家庭與社區",
+          "details": [
+            "家人與家庭生活",
+            "社區探索",
+            "公共場所禮儀"
+          ],
+          "concepts": [
+            {
+              "name": "家人與家庭生活",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "社區探索",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公共場所禮儀",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "水與光影",
+          "details": [
+            "水的特性",
+            "影子變化",
+            "簡單探究"
+          ],
+          "concepts": [
+            {
+              "name": "水的特性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "影子變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡單探究",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "日常生活與環境",
+          "details": [
+            "節約用水",
+            "分類回收",
+            "關懷生命"
+          ],
+          "concepts": [
+            {
+              "name": "節約用水",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "分類回收",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "關懷生命",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "合作與表達",
+          "details": [
+            "小組討論",
+            "製作與分享",
+            "解決生活問題"
+          ],
+          "concepts": [
+            {
+              "name": "小組討論",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "製作與分享",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "解決生活問題",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

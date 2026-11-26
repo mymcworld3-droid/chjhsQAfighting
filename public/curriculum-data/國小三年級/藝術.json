@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "國小三年級",
+  "subject": "藝術",
+  "books": [
+    {
+      "bookId": "book-88b5048753a7012cebdd",
+      "subject": "藝術",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "視覺藝術",
+          "details": [
+            "線條、色彩與形狀",
+            "平面創作",
+            "欣賞與分享"
+          ],
+          "concepts": [
+            {
+              "name": "線條、色彩與形狀",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "平面創作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "欣賞與分享",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "音樂",
+          "details": [
+            "節奏與拍號初步",
+            "唱歌與節拍",
+            "生活中的聲音"
+          ],
+          "concepts": [
+            {
+              "name": "節奏與拍號初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "唱歌與節拍",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活中的聲音",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "表演藝術",
+          "details": [
+            "角色模仿",
+            "肢體表達",
+            "合作表演"
+          ],
+          "concepts": [
+            {
+              "name": "角色模仿",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "肢體表達",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "合作表演",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-e4e3eba42014f01f07ce",
+      "subject": "藝術",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "造形與媒材",
+          "details": [
+            "紙材與拼貼",
+            "立體造形",
+            "創作安全"
+          ],
+          "concepts": [
+            {
+              "name": "紙材與拼貼",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "立體造形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "創作安全",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "音樂與節奏",
+          "details": [
+            "簡單旋律",
+            "聆賞與分辨樂器",
+            "合奏初步"
+          ],
+          "concepts": [
+            {
+              "name": "簡單旋律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "聆賞與分辨樂器",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "合奏初步",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "表演與故事",
+          "details": [
+            "情境表演",
+            "臺詞表達",
+            "故事創作"
+          ],
+          "concepts": [
+            {
+              "name": "情境表演",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "臺詞表達",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "故事創作",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

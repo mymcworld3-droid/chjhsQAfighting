@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "subject": "物理",
+  "books": [
+    {
+      "bookId": "book-d17ed5a28b8aaea38f89",
+      "subject": "物理",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "選修物理Ⅳ：電磁現象一複習",
+          "details": [
+            "電場與電位應用",
+            "電流電阻與電路",
+            "磁場"
+          ],
+          "concepts": [
+            {
+              "name": "電場與電位應用",
+              "conceptId": "legacy-9ab37023ea7c841fefbc",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "電流電阻與電路",
+              "conceptId": "legacy-c03becab05766666745f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "磁場",
+              "conceptId": "legacy-4e61812a64f6dc716d04",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "選修物理Ⅴ：電磁現象二",
+          "details": [
+            "電磁感應與感應電動勢",
+            "交流電與電磁波",
+            "電磁應用"
+          ],
+          "concepts": [
+            {
+              "name": "電磁感應與感應電動勢",
+              "conceptId": "legacy-8c1f44d5b6f6fdda314f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "交流電與電磁波",
+              "conceptId": "legacy-00313afafba9b154877b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "電磁應用",
+              "conceptId": "legacy-76c05a632ef59e2f7588",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "選修物理：近代物理",
+          "details": [
+            "光電效應與物質波",
+            "原子、原子核與量子概念",
+            "物理學發展"
+          ],
+          "concepts": [
+            {
+              "name": "光電效應與物質波",
+              "conceptId": "legacy-43745d2419d5909eecd0",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "原子、原子核與量子概念",
+              "conceptId": "legacy-a47606511510a2080223",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "物理學發展",
+              "conceptId": "legacy-7c2f3b1130fdfc3219c0",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-12f69689c60270af8ee3",
+      "subject": "物理",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "力學統整",
+          "details": [
+            "運動圖表",
+            "動量、能量與受力綜合",
+            "科學建模"
+          ],
+          "concepts": [
+            {
+              "name": "運動圖表",
+              "conceptId": "legacy-f94e823e15e0b8e39afa",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "動量、能量與受力綜合",
+              "conceptId": "legacy-801f10a138a3a85e1f3f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "科學建模",
+              "conceptId": "legacy-72b136101cbaf164fc53",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "電磁與光學統整",
+          "details": [
+            "電路與電磁感應",
+            "波動、干涉與光學",
+            "跨單元題目"
+          ],
+          "concepts": [
+            {
+              "name": "電路與電磁感應",
+              "conceptId": "legacy-19f40ad8b532c38b711e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "波動、干涉與光學",
+              "conceptId": "legacy-b15f1e3a4d497a68d807",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "跨單元題目",
+              "conceptId": "legacy-59c8066f942e7f39f867",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "實驗與數據",
+          "details": [
+            "誤差與圖形斜率",
+            "實驗設計",
+            "綜合應用"
+          ],
+          "concepts": [
+            {
+              "name": "誤差與圖形斜率",
+              "conceptId": "legacy-4121e3ee1fac547b09fe",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "實驗設計",
+              "conceptId": "legacy-d66dbf69ddbc2fc30fdf",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "綜合應用",
+              "conceptId": "legacy-3e613f0821a15c92be44",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

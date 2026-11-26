@@ -110,6 +110,6 @@ test('chapter/topic picks survive rerenders, auto-sync to the cart and remain li
   assert.match(selector,/setTopicSelection\(i,j,box\.checked\)/);
   assert.match(selector,/selectedUnits\(\).*24|list\.length>=24/s);
   assert.match(selector,/focusedUnits|sub_topics/);
-  assert.match(selector,/elementary_school_unit_name/);
-  assert.match(selector,/high_school_unit_name/);
+  assert.match(selector,/loadCatalogue\(grade,subject\)/);
+  assert.match(selector,/curriculum-data/);
 });

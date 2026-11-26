@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中一年級",
+  "subject": "化學",
+  "books": [
+    {
+      "bookId": "book-730127ba0b0498efb8e1",
+      "subject": "化學",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "物質組成與分類",
+          "details": [
+            "元素、化合物與混合物",
+            "純物質與分離",
+            "物質的微觀粒子"
+          ],
+          "concepts": [
+            {
+              "name": "元素、化合物與混合物",
+              "conceptId": "legacy-a5e6f737957592374f5a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "純物質與分離",
+              "conceptId": "legacy-ea48633237031b4a8bbf",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "物質的微觀粒子",
+              "conceptId": "legacy-c113350962fa1d62db31",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "原子結構與週期表",
+          "details": [
+            "原子與同位素",
+            "電子排列的概念",
+            "週期性與元素性質"
+          ],
+          "concepts": [
+            {
+              "name": "原子與同位素",
+              "conceptId": "legacy-48c8d3f8615609e8bc01",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "電子排列的概念",
+              "conceptId": "legacy-42e01612e334289555bc",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "週期性與元素性質",
+              "conceptId": "legacy-f2114387d5b7d56bbde1",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "化學鍵與物質性質",
+          "details": [
+            "離子鍵、共價鍵與金屬鍵",
+            "分子與晶體",
+            "物質性質"
+          ],
+          "concepts": [
+            {
+              "name": "離子鍵、共價鍵與金屬鍵",
+              "conceptId": "legacy-32c990a76f3b885c2291",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "分子與晶體",
+              "conceptId": "legacy-9e9acf05326a2874f29c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "物質性質",
+              "conceptId": "legacy-e887d72c90cfc2b42231",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9470cad53b7113cf79c6",
+      "subject": "化學",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "化學反應",
+          "details": [
+            "化學式與反應式",
+            "質量守恆",
+            "莫耳與反應計量"
+          ],
+          "concepts": [
+            {
+              "name": "化學式與反應式",
+              "conceptId": "legacy-be058757cd2763e75e19",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "質量守恆",
+              "conceptId": "legacy-51a9dea2a9a9c77f87ac",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "莫耳與反應計量",
+              "conceptId": "legacy-ff91eda656361937717f",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "溶液與酸鹼",
+          "details": [
+            "濃度、溶解與沉澱",
+            "酸、鹼與中和",
+            "生活中的化學"
+          ],
+          "concepts": [
+            {
+              "name": "濃度、溶解與沉澱",
+              "conceptId": "legacy-2c0859d46735e7bba9e0",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "酸、鹼與中和",
+              "conceptId": "legacy-e2bd9c15c758c9b3963b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "生活中的化學",
+              "conceptId": "legacy-7b63418f4b7e37df3456",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "化學與永續",
+          "details": [
+            "能源、資源與環境",
+            "化學實驗安全",
+            "綠色化學概念"
+          ],
+          "concepts": [
+            {
+              "name": "能源、資源與環境",
+              "conceptId": "legacy-9954e92696fcb6ce2c3a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "化學實驗安全",
+              "conceptId": "legacy-6dc33254dc5e899e09e3",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "綠色化學概念",
+              "conceptId": "legacy-7000ddc6396132cfbcab",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

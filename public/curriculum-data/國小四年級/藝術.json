@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "國小四年級",
+  "subject": "藝術",
+  "books": [
+    {
+      "bookId": "book-086681633af12d80140e",
+      "subject": "藝術",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "視覺與設計",
+          "details": [
+            "色彩對比",
+            "圖案與構圖",
+            "作品欣賞"
+          ],
+          "concepts": [
+            {
+              "name": "色彩對比",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "圖案與構圖",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "作品欣賞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "音樂表現",
+          "details": [
+            "拍子與音階",
+            "唱奏與節奏",
+            "聆聽辨識"
+          ],
+          "concepts": [
+            {
+              "name": "拍子與音階",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "唱奏與節奏",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "聆聽辨識",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "表演與溝通",
+          "details": [
+            "舞台空間",
+            "角色與情緒",
+            "團隊合作"
+          ],
+          "concepts": [
+            {
+              "name": "舞台空間",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "角色與情緒",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "團隊合作",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-1ab41799a92d8d0c60bb",
+      "subject": "藝術",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "生活中的美",
+          "details": [
+            "公共藝術",
+            "媒材與形式",
+            "觀察與描繪"
+          ],
+          "concepts": [
+            {
+              "name": "公共藝術",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "媒材與形式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "觀察與描繪",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "音樂與文化",
+          "details": [
+            "臺灣與世界音樂",
+            "節奏與旋律",
+            "音樂情感"
+          ],
+          "concepts": [
+            {
+              "name": "臺灣與世界音樂",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "節奏與旋律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "音樂情感",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "戲劇與舞蹈",
+          "details": [
+            "動作與節奏",
+            "角色塑造",
+            "作品發表"
+          ],
+          "concepts": [
+            {
+              "name": "動作與節奏",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "角色塑造",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "作品發表",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

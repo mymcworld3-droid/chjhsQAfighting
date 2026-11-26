@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "subject": "地理",
+  "books": [
+    {
+      "bookId": "book-2829f9872301636ad898",
+      "subject": "地理",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "選修地理：空間資訊科技",
+          "details": [
+            "GIS 與空間資料",
+            "遙測與地理分析",
+            "地圖製作與表達"
+          ],
+          "concepts": [
+            {
+              "name": "GIS 與空間資料",
+              "conceptId": "legacy-81fc80a89f705d26b142",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "遙測與地理分析",
+              "conceptId": "legacy-ff8f6848fb0d12ba9249",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "地圖製作與表達",
+              "conceptId": "legacy-825bb3b9452f117e7e14",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "選修地理：社會環境議題",
+          "details": [
+            "氣候變遷",
+            "全球化與不均衡發展",
+            "城鄉與永續"
+          ],
+          "concepts": [
+            {
+              "name": "氣候變遷",
+              "conceptId": "legacy-54fa33aec44b4020a92f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "全球化與不均衡發展",
+              "conceptId": "legacy-a96d8a1fe1947b96db4e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "城鄉與永續",
+              "conceptId": "legacy-8616704a828ff2ac7ea9",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "區域探究",
+          "details": [
+            "環境議題",
+            "資料蒐集",
+            "地理報告"
+          ],
+          "concepts": [
+            {
+              "name": "環境議題",
+              "conceptId": "legacy-be85f5192757fe3227d2",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "資料蒐集",
+              "conceptId": "legacy-8782e090d221e7165e8a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "地理報告",
+              "conceptId": "legacy-144d1292d3acbd86a110",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-8d327b566f87bd425c39",
+      "subject": "地理",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "自然與人文地理統整",
+          "details": [
+            "地形與氣候",
+            "人口、聚落與產業",
+            "區域互動"
+          ],
+          "concepts": [
+            {
+              "name": "地形與氣候",
+              "conceptId": "legacy-cc46cc1674c96b6265f7",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "人口、聚落與產業",
+              "conceptId": "legacy-cc28ed00b62283258632",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "區域互動",
+              "conceptId": "legacy-2b8b632ea5e9104d41e5",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "空間資料判讀",
+          "details": [
+            "主題圖與統計圖",
+            "GIS 概念",
+            "多資料整合"
+          ],
+          "concepts": [
+            {
+              "name": "主題圖與統計圖",
+              "conceptId": "legacy-300e33738e92c47c52d9",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "GIS 概念",
+              "conceptId": "legacy-4bbddf735ea30d2e3c5e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "多資料整合",
+              "conceptId": "legacy-eaa352484981e853be44",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "全球與臺灣議題",
+          "details": [
+            "氣候與資源",
+            "區域差異",
+            "永續發展"
+          ],
+          "concepts": [
+            {
+              "name": "氣候與資源",
+              "conceptId": "legacy-1766181f8f2b2b741258",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "區域差異",
+              "conceptId": "legacy-4fb894d8ca89d4b50586",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "永續發展",
+              "conceptId": "legacy-2c35da8c480c197227ae",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

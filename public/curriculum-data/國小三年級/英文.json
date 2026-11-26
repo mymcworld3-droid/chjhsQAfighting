@@ -1,0 +1,247 @@
+{
+  "schema": 1,
+  "grade": "國小三年級",
+  "subject": "英文",
+  "books": [
+    {
+      "bookId": "book-566cb61f19a4d2a0a5b2",
+      "subject": "英文",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "英文字母與發音",
+          "details": [
+            "26個字母名稱及大小寫",
+            "字母與代表單字",
+            "簡單字母拼讀"
+          ],
+          "concepts": [
+            {
+              "name": "26個字母名稱及大小寫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "字母與代表單字",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡單字母拼讀",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "基本詞彙",
+          "details": [
+            "數字與顏色",
+            "文具與教室",
+            "生活常用名詞"
+          ],
+          "concepts": [
+            {
+              "name": "數字與顏色",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文具與教室",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活常用名詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "簡單句型",
+          "details": [
+            "打招呼與自我介紹",
+            "This is...與What is...",
+            "Yes/No回答"
+          ],
+          "concepts": [
+            {
+              "name": "打招呼與自我介紹",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "This is...與What is...",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "Yes/No回答",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "聽說練習",
+          "details": [
+            "聽辨單字",
+            "簡單指令",
+            "簡短對話"
+          ],
+          "concepts": [
+            {
+              "name": "聽辨單字",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡單指令",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡短對話",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-e5185ed20af66f6e4a2c",
+      "subject": "英文",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "自然發音入門",
+          "details": [
+            "短母音",
+            "CVC單字",
+            "拼讀練習"
+          ],
+          "concepts": [
+            {
+              "name": "短母音",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "CVC單字",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "拼讀練習",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生活詞彙",
+          "details": [
+            "家庭與人物",
+            "動物",
+            "食物與飲料"
+          ],
+          "concepts": [
+            {
+              "name": "家庭與人物",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "動物",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "食物與飲料",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "基本句型",
+          "details": [
+            "I like...",
+            "Do you...",
+            "What is your...",
+            "問答練習"
+          ],
+          "concepts": [
+            {
+              "name": "I like...",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "Do you...",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "What is your...",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "問答練習",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "閱讀與寫作入門",
+          "details": [
+            "辨識簡單句子",
+            "填寫單字",
+            "簡短圖文"
+          ],
+          "concepts": [
+            {
+              "name": "辨識簡單句子",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "填寫單字",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡短圖文",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

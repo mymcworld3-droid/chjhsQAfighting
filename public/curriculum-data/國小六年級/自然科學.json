@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小六年級",
+  "subject": "自然科學",
+  "books": [
+    {
+      "bookId": "book-a1bb08b01b29588a22a1",
+      "subject": "自然科學",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "地球與太空",
+          "details": [
+            "太陽系",
+            "月相與天體運動",
+            "天文觀察"
+          ],
+          "concepts": [
+            {
+              "name": "太陽系",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "月相與天體運動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "天文觀察",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "物質與變化",
+          "details": [
+            "物質性質",
+            "溶解、沉澱及變化",
+            "實驗安全"
+          ],
+          "concepts": [
+            {
+              "name": "物質性質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "溶解、沉澱及變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "實驗安全",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生命科學",
+          "details": [
+            "細胞與生物特徵初步",
+            "生物適應",
+            "分類"
+          ],
+          "concepts": [
+            {
+              "name": "細胞與生物特徵初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生物適應",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "分類",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "能源與電",
+          "details": [
+            "電與磁",
+            "能源轉換",
+            "節能"
+          ],
+          "concepts": [
+            {
+              "name": "電與磁",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "能源轉換",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "節能",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-4444a4f2eb0e07324e33",
+      "subject": "自然科學",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "地表與環境",
+          "details": [
+            "岩石與土壤",
+            "侵蝕與堆積",
+            "環境永續"
+          ],
+          "concepts": [
+            {
+              "name": "岩石與土壤",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "侵蝕與堆積",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "環境永續",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生物與生態",
+          "details": [
+            "生物多樣性",
+            "族群及食物網",
+            "生態保育"
+          ],
+          "concepts": [
+            {
+              "name": "生物多樣性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "族群及食物網",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生態保育",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "力、運動與能量",
+          "details": [
+            "力的作用",
+            "簡單機械",
+            "能量轉換"
+          ],
+          "concepts": [
+            {
+              "name": "力的作用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡單機械",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "能量轉換",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "國中自然銜接",
+          "details": [
+            "觀察與假設",
+            "實驗與變因",
+            "數據與圖表"
+          ],
+          "concepts": [
+            {
+              "name": "觀察與假設",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "實驗與變因",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "數據與圖表",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

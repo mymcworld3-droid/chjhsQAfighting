@@ -64,17 +64,17 @@
     },
     {
       "id": "ref-20261119-b7-math3-conics-1",
-      "source": "高中課程概念自編參考題（非歷屆原題）",
-      "design": "明確限制、有效推導、緊扣觀念且不超出原概念範圍",
+      "source": "自編參考題；取代與另一題庫重複的拋物線焦點題",
+      "design": "由橢圓焦點距離和及焦距求短軸，考查定義與參數關係；干擾選項對應混淆半軸、焦距及長短軸。",
       "question": {
-        "q": "拋物線y²=8x的焦點坐標為何？",
-        "correct": "(2,0)",
+        "q": "一橢圓上每點到兩焦點的距離和為 $10$，兩焦點的距離為 $6$。求此橢圓的短軸長。",
+        "correct": "$8$",
         "wrong": [
-          "(4,0)",
-          "(0,2)",
-          "(−2,0)"
+          "$4$",
+          "$6$",
+          "$10$"
         ],
-        "exp": "與標準式y²=4px比較得4p=8，所以p=2；焦點為(p,0)=(2,0)。",
+        "exp": "由定義 $2a=10$，故 $a=5$；由 $2c=6$ 得 $c=3$。因此 $b=\\sqrt{a^2-c^2}=4$，短軸長為 $2b=8$。",
         "subject": "數學",
         "sub_topic": "橢圓、雙曲線、拋物線的性質",
         "knowledge_points": [
@@ -85,10 +85,10 @@
           }
         ],
         "concept_id": "math-高中三年級-橢圓、雙曲線、拋物線的性質",
-        "template_id": "ref-20261119-b7-math3-conics-1",
+        "template_id": "ellipse-focal-sum-to-minor-axis",
         "question_form": "single-choice",
         "cognitive_level": 2,
-        "reasoning_steps": 2
+        "reasoning_steps": 3
       }
     },
     {

@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "高中二年級",
+  "subject": "英文",
+  "books": [
+    {
+      "bookId": "book-007a50ff15b5be7e2f9a",
+      "subject": "英文",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "文法：非限定動詞",
+          "details": [
+            "動名詞與不定詞",
+            "分詞與分詞構句",
+            "使役與感官動詞"
+          ],
+          "concepts": [
+            {
+              "name": "動名詞與不定詞",
+              "conceptId": "legacy-64ed1be0dfd40e106e49",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "分詞與分詞構句",
+              "conceptId": "legacy-686319fc1e768384116d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "使役與感官動詞",
+              "conceptId": "legacy-0cd30da62cca9caa1af9",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "閱讀策略",
+          "details": [
+            "文章組織",
+            "語境推理",
+            "篇章結構"
+          ],
+          "concepts": [
+            {
+              "name": "文章組織",
+              "conceptId": "legacy-8c362dec7469d5030dc8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "語境推理",
+              "conceptId": "legacy-f5599d18c64acb2f56e8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "篇章結構",
+              "conceptId": "legacy-d5a7ab56fe4cc1ece09b",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "字彙與語用",
+          "details": [
+            "多義字與搭配詞",
+            "學術字彙初階",
+            "句意辨析"
+          ],
+          "concepts": [
+            {
+              "name": "多義字與搭配詞",
+              "conceptId": "legacy-38836910754cd6e3ba8d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "學術字彙初階",
+              "conceptId": "legacy-c7cc79aa04c20013b53a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "句意辨析",
+              "conceptId": "legacy-29af84aec92a0353bdbb",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "英語表達",
+          "details": [
+            "論述段落",
+            "比較與對照",
+            "意見表達"
+          ],
+          "concepts": [
+            {
+              "name": "論述段落",
+              "conceptId": "legacy-eef0715abef3f1cb5b8d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "比較與對照",
+              "conceptId": "legacy-91f634a275219ee751d0",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "意見表達",
+              "conceptId": "legacy-7787d62cc8b5263502f3",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-48ccdc72217e11942461",
+      "subject": "英文",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "文法：語氣與進階結構",
+          "details": [
+            "假設語氣",
+            "倒裝與強調",
+            "被動語態進階"
+          ],
+          "concepts": [
+            {
+              "name": "假設語氣",
+              "conceptId": "legacy-3dc5704bf29458e7c27f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "倒裝與強調",
+              "conceptId": "legacy-364ebaff3fdbd59c4f97",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "被動語態進階",
+              "conceptId": "legacy-f4b539ef6b8f664fb3cb",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "長篇閱讀",
+          "details": [
+            "科普、社會議題與人文",
+            "推論與作者態度",
+            "跨段落比較"
+          ],
+          "concepts": [
+            {
+              "name": "科普、社會議題與人文",
+              "conceptId": "legacy-87ec0c9ba2d5af82faaa",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "推論與作者態度",
+              "conceptId": "legacy-469d11e245b862dc6264",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "跨段落比較",
+              "conceptId": "legacy-af0b309d8a4be5de3a56",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "篇章與綜合測驗",
+          "details": [
+            "文意選填",
+            "篇章結構",
+            "克漏字"
+          ],
+          "concepts": [
+            {
+              "name": "文意選填",
+              "conceptId": "legacy-403e88bcac28517ea6b6",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "篇章結構",
+              "conceptId": "legacy-d5a7ab56fe4cc1ece09b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "克漏字",
+              "conceptId": "legacy-8cf0c8bbe4594f7af259",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "寫作與翻譯",
+          "details": [
+            "中譯英",
+            "圖表寫作",
+            "連貫與修訂"
+          ],
+          "concepts": [
+            {
+              "name": "中譯英",
+              "conceptId": "legacy-8fab49f626e73a404884",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "圖表寫作",
+              "conceptId": "legacy-e0569f243c92f01102d2",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "連貫與修訂",
+              "conceptId": "legacy-386f1e14dbf56cfbb71c",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

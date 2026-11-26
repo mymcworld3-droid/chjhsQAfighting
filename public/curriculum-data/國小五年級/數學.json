@@ -1,0 +1,459 @@
+{
+  "schema": 1,
+  "grade": "國小五年級",
+  "subject": "數學",
+  "books": [
+    {
+      "bookId": "book-0b06f8c55d096cde16d9",
+      "subject": "數學",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "因數、倍數與數的運算",
+          "details": [
+            "因數與倍數",
+            "公因數與公倍數",
+            "整數四則應用"
+          ],
+          "concepts": [
+            {
+              "name": "因數與倍數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公因數與公倍數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "整數四則應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "異分母分數",
+          "details": [
+            "擴分與約分",
+            "通分比較",
+            "異分母加減"
+          ],
+          "concepts": [
+            {
+              "name": "擴分與約分",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "通分比較",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "異分母加減",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "多位小數",
+          "details": [
+            "小數位值",
+            "小數加減",
+            "小數比較"
+          ],
+          "concepts": [
+            {
+              "name": "小數位值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "小數加減",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "小數比較",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "平面圖形",
+          "details": [
+            "三角形內角和",
+            "四邊形性質",
+            "線對稱"
+          ],
+          "concepts": [
+            {
+              "name": "三角形內角和",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "四邊形性質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "線對稱",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "面積與圖表",
+          "details": [
+            "平行四邊形與三角形面積",
+            "梯形面積",
+            "長條圖與折線圖"
+          ],
+          "concepts": [
+            {
+              "name": "平行四邊形與三角形面積",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "梯形面積",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "長條圖與折線圖",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-050282905c1312217269",
+      "subject": "數學",
+      "grade": "國小五年級",
+      "edition": "類南一版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：長條圖和折線圖",
+          "details": [
+            "長條圖和折線圖的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "長條圖和折線圖的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：因數和倍數",
+          "details": [
+            "因數和倍數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "因數和倍數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：多邊形",
+          "details": [
+            "多邊形的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "多邊形的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-d0a2de83b6edab6003c4",
+      "subject": "數學",
+      "grade": "國小五年級",
+      "edition": "類翰林版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：折線圖",
+          "details": [
+            "折線圖的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "折線圖的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：倍數與因數",
+          "details": [
+            "倍數與因數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "倍數與因數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：平面圖形",
+          "details": [
+            "平面圖形的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "平面圖形的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-dcfb48756dbd2d1c4578",
+      "subject": "數學",
+      "grade": "國小五年級",
+      "edition": "類康軒版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：多位小數與加減",
+          "details": [
+            "多位小數與加減的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "多位小數與加減的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：因數與公因數",
+          "details": [
+            "因數與公因數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "因數與公因數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：倍數與公倍數",
+          "details": [
+            "倍數與公倍數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "倍數與公倍數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-ecd77dacd99b8c85d3e0",
+      "subject": "數學",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "分數的乘除初步",
+          "details": [
+            "分數乘整數",
+            "整數乘分數",
+            "整數相除的分數表示"
+          ],
+          "concepts": [
+            {
+              "name": "分數乘整數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "整數乘分數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "整數相除的分數表示",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "小數乘除",
+          "details": [
+            "小數乘法",
+            "小數除以整數",
+            "直式及應用"
+          ],
+          "concepts": [
+            {
+              "name": "小數乘法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "小數除以整數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "直式及應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "體積與容積",
+          "details": [
+            "長方體、正方體體積",
+            "立方公分與立方公尺",
+            "公升與毫升"
+          ],
+          "concepts": [
+            {
+              "name": "長方體、正方體體積",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "立方公分與立方公尺",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公升與毫升",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "比率與百分率",
+          "details": [
+            "比率與百分率意義",
+            "折扣與成數",
+            "生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "比率與百分率意義",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "折扣與成數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "時間與幾何",
+          "details": [
+            "時間乘除",
+            "扇形概念",
+            "柱體與錐體"
+          ],
+          "concepts": [
+            {
+              "name": "時間乘除",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "扇形概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "柱體與錐體",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

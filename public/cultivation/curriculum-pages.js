@@ -1,4 +1,4 @@
-// 研修所三步選課：年級 → 科目 → 全學年章節；學期與版本由資料層自動整合。
+// 研修所三步選課：年級 → 科目 → 教材章節；章節頁可選教材版本與冊次。
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
@@ -97,13 +97,15 @@
     if(!native||!search||!tools||!chapter||!message)return false;
     root=document.createElement('section');root.id='cs-pages';root.className='cs-pages';root.dataset.step='0';
     root.innerHTML='<div class="cs-page-navigation"><button type="button" id="cs-prev" class="cs-back">← 返回設定</button></div>'+
-      names.map((name,i)=>'<section class="cs-stage" id="cs-stage-'+i+'" '+(i?'hidden':'')+' aria-label="'+name+'"><div class="cs-stage-title"><small>STEP 0'+(i+1)+'</small><h4>'+(['選擇你的年級','想練習哪一科？','勾選全學年章節與考點'][i])+'</h4><p>'+(['每個年級都可獨立安排，不必受個人資料的預設學制限制。','選完科目就直接進入章節；上下學期已合併，不再另外選版本。','上、下學期章節會一起顯示並標示原學期；可勾選整章或個別考點。'][i])+'</p></div><div id="cs-cards-'+i+'" class="cs-choice-grid"></div>'+(i===0?customRangeMarkup:'')+'</section>').join('')+
+      names.map((name,i)=>'<section class="cs-stage" id="cs-stage-'+i+'" '+(i?'hidden':'')+' aria-label="'+name+'"><div class="cs-stage-title"><small>STEP 0'+(i+1)+'</small><h4>'+(['選擇你的年級','想練習哪一科？','選擇教材、章節與考點'][i])+'</h4><p>'+(['每個年級都可獨立安排，不必受個人資料的預設學制限制。','選科目後，可選教材版本及冊次，也可沿用全學年整理。','先確認版本與學期，再勾選整章或個別考點；待開放版本不會混入題目。'][i])+'</p></div><div id="cs-cards-'+i+'" class="cs-choice-grid"></div>'+(i===0?customRangeMarkup:'')+'</section>').join('')+
       '<div class="cs-page-actions"><button type="button" id="cs-next">下一步　→</button></div>';
     base.insertBefore(root,note||base.firstChild);
     // 保留原始 select 與事件處理器，僅從可見區域隱藏。
     native.classList.add('cs-native-fields');root.append(native);
     const last=$('cs-stage-2');
-    last.append(search,tools,chapter,message);
+    const catalogFields=document.createElement('div');catalogFields.className='cs-fields cs-catalog-controls';
+    for(const field of base.querySelectorAll('.cs-catalog-field'))catalogFields.append(field);
+    last.append(catalogFields,search,tools,chapter,message);
     const smallNote=base.lastElementChild;
     if(smallNote?.classList.contains('cs-note'))last.append(smallNote);
     $('cs-prev').addEventListener('click',()=>{

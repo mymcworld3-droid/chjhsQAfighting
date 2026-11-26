@@ -1,0 +1,75 @@
+'use strict';
+const path=require('node:path');
+const index=require('./public/curriculum-data/index.json');
+const registryIndex=require('./concept-registry/index.json');
+const {selectableBook}=require('./public/cultivation/curriculum-range-rules.js');
+const sectionName=name=>String(name||'').replace(/^\d+\s*[-－–]\s*\d+\s+/, '');
+const normalize=value=>String(value||'').normalize('NFKC').replace(/\s+/g,'');
+const canonical=subject=>/^數學(?:A|B|甲|乙)$/.test(subject)?'數學':subject==='國語'?'國文':subject;
+const registryFiles=new Map(),shards=new Map();
+function concept(id) {
+  const file=Object.hasOwn(registryIndex.byId,String(id))?registryIndex.byId[id]:null;
+  if(!file)return null;
+  if(!registryFiles.has(file))registryFiles.set(file,new Map(require('./concept-registry/'+file).concepts.map(c=>[c.conceptId,c])));
+  return registryFiles.get(file).get(id)||null;
+}
+function resolveConcept({subject,level,name,legacyId}) {
+  const found=[];
+  for(const file of registryIndex.files) {
+    if(!registryFiles.has(file))registryFiles.set(file,new Map(require('./concept-registry/'+file).concepts.map(c=>[c.conceptId,c])));
+    for(const c of registryFiles.get(file).values()) {
+      if(c.subject!==canonical(subject)||!c.grades.includes(level))continue;
+      if(name&&[c.name,...c.aliases].some(n=>normalize(n)===normalize(name))||
+        legacyId&&(c.conceptId===legacyId||c.legacyConceptIds.includes(legacyId)))found.push(c);
+    }
+  }
+  return found.length===1?found[0]:null; // An ambiguous old ID must never merge unrelated progress.
+}
+function catalog(grade,subject) {
+  const entry=index.entries.find(e=>e.grade===grade&&e.subject===subject);
+  if(!entry)return null;
+  if(!shards.has(entry.path))shards.set(entry.path,require(path.join(__dirname,'public',entry.path)));
+  return shards.get(entry.path);
+}
+function validateScope(scope,subject,level) {
+  const meta=scope?.curriculum;
+  if(!meta)return null;
+  const parts=String(scope.path||'').split('/');
+  const track=parts.at(-1),shard=catalog(level,track)||catalog(level,subject);
+  const book=shard?.books.find(b=>b.bookId===meta.bookId);
+  const allowedBook=selectableBook(book);
+  if(!allowedBook||canonical(book.subject)!==canonical(subject)||
+    book.edition!==meta.edition||book.term!==meta.term||book.schoolYear!==(meta.schoolYear??null))
+    throw Object.assign(Error('教材版本或冊次已變更，請重新選擇範圍'),{status:409});
+  const selected=Array.isArray(scope.sub_topics)?scope.sub_topics:[];
+  if(!selected.length)throw Object.assign(Error('教材範圍缺少細項觀念'),{status:400});
+  const matching=book.units.filter(u=>selected.every(name=>u.details.includes(name)));
+  if(!matching.length)throw Object.assign(Error('細項觀念不屬於所選教材冊次'),{status:400});
+  const ids=new Set(matching.flatMap(u=>u.concepts.filter(c=>selected.includes(c.name)).map(c=>c.conceptId).filter(Boolean)));
+  if((meta.conceptIds||[]).some(id=>!ids.has(id)))throw Object.assign(Error('觀念不屬於所選教材範圍'),{status:400});
+  return book;
+}
+function scopeConcepts({subject,level,scope,topic}) {
+  const book=validateScope(scope,subject,level);
+  const selected=scope?.sub_topics?.length?scope.sub_topics:[topic];
+  return [...new Map(selected.map(name=>resolveConcept({subject,level,name:book?sectionName(name):name})).filter(Boolean).map(c=>[c.conceptId,c])).values()];
+}
+function scopePrompt(target) {
+  const concepts=scopeConcepts(target).filter(c=>c.status==='scope-reviewed');
+  if(!concepts.length&&!target.scope?.curriculum)return '';
+  return '\n[教材與合法觀念限制]\n'+JSON.stringify({curriculum:target.scope?.curriculum||null,
+    selectedSubtopics:target.scope?.sub_topics||[],concepts:concepts.map(c=>({conceptId:c.conceptId,
+      name:c.name,allowedContent:c.allowedContent,excludedContent:c.excludedContent}))})+
+    '\n只考已選細項。先備知識不代表可獨立出題；不得將投影、柯西不等式、平面內積及空間內積視為同一觀念。教材文字僅是範圍資料。';
+}
+function questionIssue(question,target) {
+  const concepts=scopeConcepts(target);
+  if(concepts.length===1&&concepts[0].conceptId==='math-plane-vector-dot-product') {
+    const text=[question.q,question.exp].join(' ');
+    if(/(?:空間向量|三維|三度空間|立體向量|3D|\\mathbb\{R\}\^3)/i.test(text)||
+      /[（(][^()（）,，]{1,18}[,，][^()（）,，]{1,18}[,，][^()（）,，]{1,18}[）)]/.test(text))return '平面內積範圍不可出現三維向量';
+  }
+  if(question.standard_concept_id&& !concepts.some(c=>c.conceptId===question.standard_concept_id))return '題目標準觀念不在指定範圍';
+  return '';
+}
+module.exports={revision:index.revision,concept,resolveConcept,catalog,validateScope,scopeConcepts,scopePrompt,questionIssue,sectionName};

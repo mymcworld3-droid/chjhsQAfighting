@@ -1,0 +1,144 @@
+{
+  "bookId": "hanlin-115-chemistry-ii",
+  "subject": "化學",
+  "grade": "高中二年級",
+  "edition": "翰林版",
+  "publisher": "翰林",
+  "term": "選修化學II",
+  "bookLabel": "選修化學II（全）",
+  "schoolYear": 115,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/hanlin-115-chemistry-ii.json",
+  "sources": [
+    {
+      "url": "https://sh.hle.com.tw/hce/",
+      "type": "official-portal"
+    },
+    {
+      "url": "https://drive.google.com/drive/folders/19i2s_9WAyMN4SCw2vXSkzZbsD6AaoHKl",
+      "type": "official-textbook-folder",
+      "title": "翰林選修化學II_課本(學用)"
+    },
+    {
+      "url": "https://drive.google.com/file/d/1cYEjrFJ97jIFjcOJsAFvyDTlSTIYIlY9/view",
+      "type": "official-toc",
+      "title": "選修化學(Ⅱ)課本_01_編輯大意、目次(115f164111).pdf",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+  "units": [
+    {
+      "unit": "第1章：原子構造與性質",
+      "details": [
+        "1-1 光的性質",
+        "1-2 原子光譜與波耳的氫原子模型",
+        "1-3 原子軌域",
+        "1-4 電子組態",
+        "1-5 元素性質的週期性"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 光的性質",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 原子光譜與波耳的氫原子模型",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 原子軌域",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 電子組態",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-5 元素性質的週期性",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：物質的性質與化學鍵",
+      "details": [
+        "2-1 化學鍵的種類",
+        "2-2 單鍵與多鍵",
+        "2-3 混成軌域",
+        "2-4 價殼層電子對互斥理論與分子形狀",
+        "2-5 鍵極性與分子極性",
+        "2-6 分子間的作用力"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 化學鍵的種類",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 單鍵與多鍵",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 混成軌域",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 價殼層電子對互斥理論與分子形狀",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-5 鍵極性與分子極性",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-6 分子間的作用力",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：化學反應速率",
+      "details": [
+        "3-1 反應速率",
+        "3-2 碰撞理論",
+        "3-3 影響反應速率的因素"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 反應速率",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 碰撞理論",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 影響反應速率的因素",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

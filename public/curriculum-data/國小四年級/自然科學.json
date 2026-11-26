@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小四年級",
+  "subject": "自然科學",
+  "books": [
+    {
+      "bookId": "book-08a8ae2a94995216723b",
+      "subject": "自然科學",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "聲音與振動",
+          "details": [
+            "聲音來源",
+            "傳播與音調",
+            "生活中的聲音"
+          ],
+          "concepts": [
+            {
+              "name": "聲音來源",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "傳播與音調",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活中的聲音",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "水生生物與環境",
+          "details": [
+            "水域生態",
+            "生物特徵",
+            "生物與環境互動"
+          ],
+          "concepts": [
+            {
+              "name": "水域生態",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生物特徵",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生物與環境互動",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "物質變化",
+          "details": [
+            "加熱與冷卻",
+            "溶解與分離",
+            "觀察變化"
+          ],
+          "concepts": [
+            {
+              "name": "加熱與冷卻",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "溶解與分離",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "觀察變化",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "測量與實驗",
+          "details": [
+            "工具使用",
+            "數據記錄",
+            "安全守則"
+          ],
+          "concepts": [
+            {
+              "name": "工具使用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "數據記錄",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "安全守則",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-2e9fd81c187295f3a19c",
+      "subject": "自然科學",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "電路與導電",
+          "details": [
+            "電路元件",
+            "串聯與並聯初步",
+            "導體與絕緣體"
+          ],
+          "concepts": [
+            {
+              "name": "電路元件",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "串聯與並聯初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "導體與絕緣體",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "天氣與氣候",
+          "details": [
+            "氣象觀測",
+            "雲與降水",
+            "天氣圖初步"
+          ],
+          "concepts": [
+            {
+              "name": "氣象觀測",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "雲與降水",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "天氣圖初步",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "昆蟲與生命",
+          "details": [
+            "昆蟲構造",
+            "生命週期",
+            "棲地保護"
+          ],
+          "concepts": [
+            {
+              "name": "昆蟲構造",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生命週期",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "棲地保護",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生態觀察",
+          "details": [
+            "食物鏈",
+            "生物多樣性",
+            "環境問題"
+          ],
+          "concepts": [
+            {
+              "name": "食物鏈",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生物多樣性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "環境問題",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

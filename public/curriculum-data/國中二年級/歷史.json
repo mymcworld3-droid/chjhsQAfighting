@@ -1,0 +1,286 @@
+{
+  "schema": 1,
+  "grade": "國中二年級",
+  "subject": "歷史",
+  "books": [
+    {
+      "bookId": "book-53dc95cd53af8be9c875",
+      "subject": "歷史",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/歷史/history.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：古代文明",
+          "details": [
+            "先秦思想",
+            "秦漢帝國"
+          ],
+          "concepts": [
+            {
+              "name": "先秦思想",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "秦漢帝國",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：中古時期",
+          "details": [
+            "魏晉南北朝民族融合",
+            "隋唐盛世與文化"
+          ],
+          "concepts": [
+            {
+              "name": "魏晉南北朝民族融合",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "隋唐盛世與文化",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：近世與近代",
+          "details": [
+            "宋元經濟變革",
+            "明清集權與庶民文化",
+            "晚清變局"
+          ],
+          "concepts": [
+            {
+              "name": "宋元經濟變革",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "明清集權與庶民文化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "晚清變局",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：現代變革",
+          "details": [
+            "辛亥革命與民國初期",
+            "國共內戰與中共建政"
+          ],
+          "concepts": [
+            {
+              "name": "辛亥革命與民國初期",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "國共內戰與中共建政",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-fa2781cc5c6cd8e47b2d",
+      "subject": "歷史",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/歷史/history.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：帝國建立",
+          "details": [
+            "秦漢大一統",
+            "魏晉風流與民族遷移"
+          ],
+          "concepts": [
+            {
+              "name": "秦漢大一統",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "魏晉風流與民族遷移",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：盛世與變革",
+          "details": [
+            "隋唐科舉與國際交流",
+            "宋元經濟繁榮"
+          ],
+          "concepts": [
+            {
+              "name": "隋唐科舉與國際交流",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "宋元經濟繁榮",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：明清社會",
+          "details": [
+            "明清政治運作",
+            "晚清條約體制"
+          ],
+          "concepts": [
+            {
+              "name": "明清政治運作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "晚清條約體制",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：現代化之路",
+          "details": [
+            "中華民國與當代中國"
+          ],
+          "concepts": [
+            {
+              "name": "中華民國與當代中國",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-94d8e64b7b714210532d",
+      "subject": "歷史",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/歷史/history.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：先秦與秦漢",
+          "details": [
+            "思想流派",
+            "制度建立"
+          ],
+          "concepts": [
+            {
+              "name": "思想流派",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "制度建立",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：隋唐與民族",
+          "details": [
+            "胡漢融合",
+            "隋唐文明"
+          ],
+          "concepts": [
+            {
+              "name": "胡漢融合",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "隋唐文明",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：宋元明清",
+          "details": [
+            "庶民社會",
+            "清末衝擊"
+          ],
+          "concepts": [
+            {
+              "name": "庶民社會",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "清末衝擊",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：現代中國",
+          "details": [
+            "民國興衰",
+            "改革開放"
+          ],
+          "concepts": [
+            {
+              "name": "民國興衰",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "改革開放",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小六年級",
+  "subject": "英文",
+  "books": [
+    {
+      "bookId": "book-479926e02040c9bd1e11",
+      "subject": "英文",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "核心字彙與自然發音",
+          "details": [
+            "常用字與詞組",
+            "拼字與發音",
+            "語境推字義"
+          ],
+          "concepts": [
+            {
+              "name": "常用字與詞組",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "拼字與發音",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語境推字義",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "時態與句型",
+          "details": [
+            "現在式與過去式",
+            "未來表達初步",
+            "比較級與最高級"
+          ],
+          "concepts": [
+            {
+              "name": "現在式與過去式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "未來表達初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "比較級與最高級",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "實用情境",
+          "details": [
+            "路線與地點",
+            "時間安排",
+            "購物與旅遊"
+          ],
+          "concepts": [
+            {
+              "name": "路線與地點",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "時間安排",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "購物與旅遊",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "閱讀策略",
+          "details": [
+            "主旨、細節與推論",
+            "文本結構",
+            "圖表閱讀"
+          ],
+          "concepts": [
+            {
+              "name": "主旨、細節與推論",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文本結構",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "圖表閱讀",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-515593c4eb7066c4542b",
+      "subject": "英文",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "國小英文統整",
+          "details": [
+            "字彙與片語",
+            "常用時態",
+            "助動詞與疑問句"
+          ],
+          "concepts": [
+            {
+              "name": "字彙與片語",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "常用時態",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "助動詞與疑問句",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "國中英文銜接",
+          "details": [
+            "詞性與句構",
+            "形容詞與副詞",
+            "連接詞初步"
+          ],
+          "concepts": [
+            {
+              "name": "詞性與句構",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "形容詞與副詞",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "連接詞初步",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "閱讀與寫作",
+          "details": [
+            "短文主旨",
+            "情境理解",
+            "簡短段落"
+          ],
+          "concepts": [
+            {
+              "name": "短文主旨",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "情境理解",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡短段落",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "聽說應用",
+          "details": [
+            "生活對話",
+            "口頭簡報初步",
+            "訊息理解"
+          ],
+          "concepts": [
+            {
+              "name": "生活對話",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "口頭簡報初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "訊息理解",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

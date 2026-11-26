@@ -1,0 +1,560 @@
+{
+  "schema": 1,
+  "grade": "高中一年級",
+  "subject": "數學",
+  "books": [
+    {
+      "bookId": "book-bef228dedbd4ee976561",
+      "subject": "數學",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "數與式",
+          "details": [
+            "實數、數線與絕對值",
+            "根式與有理化",
+            "式的運算、代數恆等式"
+          ],
+          "concepts": [
+            {
+              "name": "實數、數線與絕對值",
+              "conceptId": "legacy-2a10a9c8157ccd83b9d6",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "根式與有理化",
+              "conceptId": "legacy-bea6ac4aeaab089357cb",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "式的運算、代數恆等式",
+              "conceptId": "legacy-f4a1259c5fa161e04a76",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "指數與常用對數",
+          "details": [
+            "整數與分數指數",
+            "指數律",
+            "常用對數、科學記號"
+          ],
+          "concepts": [
+            {
+              "name": "整數與分數指數",
+              "conceptId": "legacy-c84a7b03c4ebfa54ef9f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "指數律",
+              "conceptId": "legacy-6c4ba75879563afce063",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "常用對數、科學記號",
+              "conceptId": "legacy-c65c31ff4b8104a99975",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "多項式函數",
+          "details": [
+            "多項式四則與因式定理",
+            "餘式定理",
+            "函數圖形、一次與二次函數",
+            "多項式不等式"
+          ],
+          "concepts": [
+            {
+              "name": "多項式四則與因式定理",
+              "conceptId": "legacy-3d1f330b0aae23560d41",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "餘式定理",
+              "conceptId": "legacy-6cddf65724d4fe95ecb1",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "函數圖形、一次與二次函數",
+              "conceptId": "legacy-bbdaef5ba992525e3a46",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "多項式不等式",
+              "conceptId": "legacy-0aab60fc2fecadb92dc1",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "直線與圓",
+          "details": [
+            "直線方程式、斜率與距離",
+            "二元一次不等式與線性規劃",
+            "圓方程式、點線圓位置關係"
+          ],
+          "concepts": [
+            {
+              "name": "直線方程式、斜率與距離",
+              "conceptId": "legacy-9c51e739ce0116dce17a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "二元一次不等式與線性規劃",
+              "conceptId": "legacy-07c8c137cb9ceb538d69",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "圓方程式、點線圓位置關係",
+              "conceptId": "legacy-cd5ad028b6d6c63a10fa",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-3c1cf152f26176ad7878",
+      "subject": "數學",
+      "grade": "高中一年級",
+      "edition": "翰林版（108課綱初版）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一章：數與式",
+          "details": [
+            "1-1 數與數線",
+            "1-2 式的運算"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 數與數線",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 式的運算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二章：指數、對數",
+          "details": [
+            "2-1 指數",
+            "2-2 常用對數"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 指數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 常用對數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三章：多項式函數",
+          "details": [
+            "3-1 多項式的運算與應用",
+            "3-2 簡單多項式函數及其圖形",
+            "3-3 多項式函數的圖形與多項式不等式"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 多項式的運算與應用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 簡單多項式函數及其圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 多項式函數的圖形與多項式不等式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四章：直線與圓",
+          "details": [
+            "4-1 直線方程式及其圖形",
+            "4-2 線性規劃",
+            "4-3 圓與直線的關係"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 直線方程式及其圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 線性規劃",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 圓與直線的關係",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-ccf6a3f7cc5de659cec5",
+      "subject": "數學",
+      "grade": "高中一年級",
+      "edition": "三民版（108課綱初版）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一章：數與式",
+          "details": [
+            "1-1 實數",
+            "1-2 絕對值",
+            "1-3 式的運算",
+            "1-4 指數與對數"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 實數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 絕對值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 式的運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 指數與對數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二章：圓與直線",
+          "details": [
+            "2-1 直線方程式",
+            "2-2 二元一次方程式與不等式",
+            "2-3 圓與直線關係"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 直線方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 二元一次方程式與不等式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 圓與直線關係",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三章：多項式函數",
+          "details": [
+            "3-1 多項式及其運算",
+            "3-2 簡單多項式函數及圖形",
+            "3-3 多項式不等式"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 多項式及其運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 簡單多項式函數及圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 多項式不等式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f057d6aa8342fb147068",
+      "subject": "數學",
+      "grade": "高中一年級",
+      "edition": "泰宇版（108課綱初版）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一章：數與式",
+          "details": [
+            "1-1 實數",
+            "1-2 指數與常用對數",
+            "1-3 式子的運算"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 實數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 指數與常用對數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 式子的運算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二章：圓與直線",
+          "details": [
+            "2-1 直線方程式",
+            "2-2 點與直線、直線與直線的關係",
+            "2-3 圓的方程式",
+            "2-4 點、直線與圓的關係"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 直線方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 點與直線、直線與直線的關係",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 圓的方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 點、直線與圓的關係",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三章：多項式函數",
+          "details": [
+            "3-1 多項式",
+            "3-2 一次與二次函數圖形的平移",
+            "3-3 三次函數",
+            "3-4 多項式不等式"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 多項式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 一次與二次函數圖形的平移",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 三次函數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 多項式不等式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-1c39ca4fca6b121a22ff",
+      "subject": "數學",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "數列與級數",
+          "details": [
+            "等差與等比數列",
+            "遞迴關係",
+            "等差與等比級數、求和"
+          ],
+          "concepts": [
+            {
+              "name": "等差與等比數列",
+              "conceptId": "legacy-d9dea28516af8c28cc6f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "遞迴關係",
+              "conceptId": "legacy-27be5228da0ad2b2da4f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "等差與等比級數、求和",
+              "conceptId": "legacy-301fc84ee340eb9f560f",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "排列組合",
+          "details": [
+            "基本計數原理",
+            "排列與組合",
+            "重複排列、分組與計數"
+          ],
+          "concepts": [
+            {
+              "name": "基本計數原理",
+              "conceptId": "legacy-0b6b4d8d5c32e81fad41",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "排列與組合",
+              "conceptId": "legacy-a312b9c33ce680299d2b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "重複排列、分組與計數",
+              "conceptId": "legacy-f6d83624bf9465409d66",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "機率與資料分析",
+          "details": [
+            "樣本空間與事件",
+            "古典機率",
+            "期望值",
+            "一維與二維資料、相關性"
+          ],
+          "concepts": [
+            {
+              "name": "樣本空間與事件",
+              "conceptId": "legacy-ddfa461a5b7998b74773",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "古典機率",
+              "conceptId": "legacy-8decea1c1bee31f9e390",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "期望值",
+              "conceptId": "legacy-f1d69cec779adf180bce",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "一維與二維資料、相關性",
+              "conceptId": "legacy-5749e3b56aa73ece9e09",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "三角比",
+          "details": [
+            "直角三角形三角比",
+            "廣義角與極坐標",
+            "正弦定理與餘弦定理、面積"
+          ],
+          "concepts": [
+            {
+              "name": "直角三角形三角比",
+              "conceptId": "legacy-db40ccda1ef48e89a2bc",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "廣義角與極坐標",
+              "conceptId": "legacy-e0571f35a73592e36ddf",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "正弦定理與餘弦定理、面積",
+              "conceptId": "legacy-5ff0645aaaf42b451367",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

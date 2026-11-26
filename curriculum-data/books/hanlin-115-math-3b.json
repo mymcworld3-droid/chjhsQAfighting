@@ -1,0 +1,102 @@
+{
+  "bookId": "hanlin-115-math-3b",
+  "subject": "數學B",
+  "grade": "高中二年級",
+  "edition": "翰林版",
+  "publisher": "翰林",
+  "term": "第一學期",
+  "bookLabel": "第3B冊",
+  "schoolYear": 115,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "sourceFile": "curriculum-data/books/hanlin-115-math-3b.json",
+  "sources": [
+    {
+      "url": "https://sh.hle.com.tw/hma/",
+      "type": "official-portal"
+    },
+    {
+      "url": "https://drive.google.com/file/d/1tDU7jWY2ICvo6wA4S3cYn-Qd1hUHA59K/view",
+      "type": "official-toc",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "已核對完整章節目次；各節細項、學習深度、標準觀念映射及五題內容審核尚未全部完成。不得以目次查證代替正式開放。",
+  "units": [
+    {
+      "unit": "正弦函數與週期性現象",
+      "details": [
+        "1-1 弧度量",
+        "1-2 週期性數學模型"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 弧度量",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 週期性數學模型",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "按比例成長模型",
+      "details": [
+        "2-1 指數函數及其圖形",
+        "2-2 對數",
+        "2-3 對數函數及其圖形"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 指數函數及其圖形",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 對數",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 對數函數及其圖形",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "平面向量與應用",
+      "details": [
+        "3-1 平面向量的表示法",
+        "3-2 平面向量的內積",
+        "3-3 平面上的比例"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 平面向量的表示法",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 平面向量的內積",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 平面上的比例",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ],
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "courseType": "required-track",
+  "schedulePolicy": "book-sequence"
+}

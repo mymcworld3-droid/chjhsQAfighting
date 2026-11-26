@@ -1,0 +1,1395 @@
+{
+  "schema": 1,
+  "grade": "國中一年級",
+  "subject": "英文",
+  "books": [
+    {
+      "bookId": "book-95f4145e06bd934e9dd9",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: Hello, Everyone! 身分與問候",
+          "details": [
+            "主題：自我介紹、數字與國家",
+            "文法：Be動詞現在式肯定/否定/疑問句與簡答",
+            "單字：人稱代名詞、數字1-100、國家名稱"
+          ],
+          "concepts": [
+            {
+              "name": "主題：自我介紹、數字與國家",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：Be動詞現在式肯定/否定/疑問句與簡答",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：人稱代名詞、數字1-100、國家名稱",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: Who's That? 家族成員與人事物描述",
+          "details": [
+            "主題：家庭成員、外貌與特質描述",
+            "文法：指示代名詞(This/That/These/Those)、所有格用法",
+            "單字：家庭、外貌形容詞(tall, short, thin, cute)"
+          ],
+          "concepts": [
+            {
+              "name": "主題：家庭成員、外貌與特質描述",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：指示代名詞(This/That/These/Those)、所有格用法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：家庭、外貌形容詞(tall, short, thin, cute)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: What Time Is It? 時間與日常作息",
+          "details": [
+            "主題：時間、星期與學校生活",
+            "文法：現在進行式 (Subject + be + V-ing)、祈使句",
+            "單字：時間單位、星期、日常動詞片語(get up, brush teeth)"
+          ],
+          "concepts": [
+            {
+              "name": "主題：時間、星期與學校生活",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：現在進行式 (Subject + be + V-ing)、祈使句",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：時間單位、星期、日常動詞片語(get up, brush teeth)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-b9d157137dc594970aca",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: Welcome to Taiwan! 歡迎與身分",
+          "details": [
+            "主題：校園新朋友、自我介紹",
+            "文法：Be動詞與名詞單複數變形",
+            "單字：職業(student, teacher, doctor)、日常問候語"
+          ],
+          "concepts": [
+            {
+              "name": "主題：校園新朋友、自我介紹",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：Be動詞與名詞單複數變形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：職業(student, teacher, doctor)、日常問候語",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: This Is My Family 我的家庭與環境",
+          "details": [
+            "主題：家庭樹、房間構造與物品位置",
+            "文法：地方介系詞(in, on, under, next to)、There is/are 句型",
+            "單字：家具(desk, chair, bed)、客廳、臥室等空間"
+          ],
+          "concepts": [
+            {
+              "name": "主題：家庭樹、房間構造與物品位置",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：地方介系詞(in, on, under, next to)、There is/are 句型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：家具(desk, chair, bed)、客廳、臥室等空間",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: What Are You Doing? 動態行為",
+          "details": [
+            "主題：客廳活動、派對情境",
+            "文法：現在進行式、連接詞 And / But 的基本應用",
+            "單字：動作動詞(sing, dance, read, watch TV)"
+          ],
+          "concepts": [
+            {
+              "name": "主題：客廳活動、派對情境",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：現在進行式、連接詞 And / But 的基本應用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：動作動詞(sing, dance, read, watch TV)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-ec7d329c7ca2e3c9eb75",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: Nice to Meet You 認識新朋友",
+          "details": [
+            "主題：自我介紹與班級招呼",
+            "文fa：主格代名詞與所有格(I, my, you, your)問答",
+            "單字：常見姓名、數字、基礎形容詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：自我介紹與班級招呼",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文fa：主格代名詞與所有格(I, my, you, your)問答",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：常見姓名、數字、基礎形容詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: Is This Your Dog? 寵物與家人描述",
+          "details": [
+            "主題：寵物、家庭構造",
+            "文法：Yes/No 疑問句的 Be 動詞結構、Wh-問句(Who/What)",
+            "單字：動物、常見物品、家庭成員"
+          ],
+          "concepts": [
+            {
+              "name": "主題：寵物、家庭構造",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：Yes/No 疑問句的 Be 動詞結構、Wh-問句(Who/What)",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：動物、常見物品、家庭成員",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: Please Don't Run! 規則與當前動作",
+          "details": [
+            "主題：公共場所規則、校園常規",
+            "文法：祈使句否定式(Don't V)、現在進行式問答",
+            "單字：校園場所、公共標誌動詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：公共場所規則、校園常規",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：祈使句否定式(Don't V)、現在進行式問答",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：校園場所、公共標誌動詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-320f50b156ca89213d52",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: How Much Is It? 食物與消費",
+          "details": [
+            "主題：餐廳點餐、夜市小吃、詢問價格",
+            "文法：可數與不可數名詞、How much/many 問句",
+            "單字：食物與飲料、金錢與貨幣表達"
+          ],
+          "concepts": [
+            {
+              "name": "主題：餐廳點餐、夜市小吃、詢問價格",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：可數與不可數名詞、How much/many 問句",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：食物與飲料、金錢與貨幣表達",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: What Do You Do in Your Free Time? 興趣與生活規律",
+          "details": [
+            "主題：休閒愛好、運動與時間頻率",
+            "文法：現在簡單式(一般動詞與第三人稱單數動詞形)、頻率副詞",
+            "單字：休閒活動(play basketball, watch movies)、頻率形容詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：休閒愛好、運動與時間頻率",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：現在簡單式(一般動詞與第三人稱單數動詞形)、頻率副詞",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：休閒活動(play basketball, watch movies)、頻率形容詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: What's the Weather Like? 天氣與能力",
+          "details": [
+            "主題：四季天氣、世界主要城市氣候、天賦能力",
+            "文法：助動詞 can 的用法、天氣句型(It is...)與(We have...)",
+            "單字：天氣形容詞(sunny, cloudy, snowy)、才藝動詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：四季天氣、世界主要城市氣候、天賦能力",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：助動詞 can 的用法、天氣句型(It is...)與(We have...)",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：天氣形容詞(sunny, cloudy, snowy)、才藝動詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f8a27c1171ffd7ec3c95",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: Do You Want Many Fruit? 水果與購物數量",
+          "details": [
+            "主題：水果攤購物、量詞搭配",
+            "文法：可數不可數、some, any, long, much/many的限制",
+            "單字：水果類、食物包裝量詞(a glass of, a box of)"
+          ],
+          "concepts": [
+            {
+              "name": "主題：水果攤購物、量詞搭配",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：可數不可數、some, any, long, much/many的限制",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：水果類、食物包裝量詞(a glass of, a box of)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: He Always Plays Baseballs 規律與喜好",
+          "details": [
+            "主題：運動習慣、週末生活",
+            "文法：現在簡單式與助動詞 Do/Does、頻率副詞與 How often 問句",
+            "單字：運動項目(baseball, tennis, soccer)"
+          ],
+          "concepts": [
+            {
+              "name": "主題：運動習慣、週末生活",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：現在簡單式與助動詞 Do/Does、頻率副詞與 How often 問句",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：運動項目(baseball, tennis, soccer)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: I Can Swim! 能耐與大自然節慶",
+          "details": [
+            "主題：動物特殊能力、季節與月份活動",
+            "文法：助動詞 Can 问答、序數與特定日期的介系詞 on",
+            "單字：月份、日期、四季、自然氣候"
+          ],
+          "concepts": [
+            {
+              "name": "主題：動物特殊能力、季節與月份活動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：助動詞 Can 问答、序數與特定日期的介系詞 on",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：月份、日期、四季、自然氣候",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-48613714c0f08de78ef1",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: How Many Apples Do You Need? 超市購物",
+          "details": [
+            "主題：食材準備、廚房與購物",
+            "文法：容器詞與計量單位、How much / How many 核心區別",
+            "單字：日常食物、蔬菜、容器量詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：食材準備、廚房與購物",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：容器詞與計量單位、How much / How many 核心區別",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：日常食物、蔬菜、容器量詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: What Does She Do on Weekends? 週末生活",
+          "details": [
+            "主題：職業、週末例行公事",
+            "文法：現在簡單式的一般動詞問答、第三人稱單數動詞變化",
+            "單字：生活習慣動詞、頻率副詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：職業、週末例行公事",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：現在簡單式的一般動詞問答、第三人稱單數動詞變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：生活習慣動詞、頻率副詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: When Is Your Birthday? 生日與氣候",
+          "details": [
+            "主題：生日派對、序數日期、氣候描寫",
+            "文法：月份與日期的寫法與讀法、天氣詢問句",
+            "單字：十二個月份、序數1st-31st、天氣與季節"
+          ],
+          "concepts": [
+            {
+              "name": "主題：生日派對、序數日期、氣候描寫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：月份與日期的寫法與讀法、天氣詢問句",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：十二個月份、序數1st-31st、天氣與季節",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-77c6f17ff20bb956a517",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "核心語法",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "核心語法：Be動詞現在式",
+          "details": [
+            "Be動詞現在式"
+          ],
+          "concepts": [
+            {
+              "name": "Be動詞現在式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：人稱代名詞所有格",
+          "details": [
+            "人稱代名詞所有格"
+          ],
+          "concepts": [
+            {
+              "name": "人稱代名詞所有格",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：指示代名詞",
+          "details": [
+            "指示代名詞"
+          ],
+          "concepts": [
+            {
+              "name": "指示代名詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：現在進行式",
+          "details": [
+            "現在進行式"
+          ],
+          "concepts": [
+            {
+              "name": "現在進行式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：祈使句",
+          "details": [
+            "祈使句"
+          ],
+          "concepts": [
+            {
+              "name": "祈使句",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f724039ad628861ed5d4",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "翰林版（情境主題整理）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Welcome to Taiwan",
+          "details": [
+            "Welcome to Taiwan"
+          ],
+          "concepts": [
+            {
+              "name": "Welcome to Taiwan",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：My Family",
+          "details": [
+            "My Family"
+          ],
+          "concepts": [
+            {
+              "name": "My Family",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Daily Routines",
+          "details": [
+            "Daily Routines"
+          ],
+          "concepts": [
+            {
+              "name": "Daily Routines",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-c2b8b29cc42d684771bb",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "自動整合情境：翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Welcome to Taiwan",
+          "details": [
+            "Welcome to Taiwan"
+          ],
+          "concepts": [
+            {
+              "name": "Welcome to Taiwan",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：My Family",
+          "details": [
+            "My Family"
+          ],
+          "concepts": [
+            {
+              "name": "My Family",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Daily Routines",
+          "details": [
+            "Daily Routines"
+          ],
+          "concepts": [
+            {
+              "name": "Daily Routines",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-debae08b566b7043d0cf",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "康軒版（情境主題整理）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Greetings & Self-intro",
+          "details": [
+            "Greetings & Self-intro"
+          ],
+          "concepts": [
+            {
+              "name": "Greetings & Self-intro",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：My Home & Room",
+          "details": [
+            "My Home & Room"
+          ],
+          "concepts": [
+            {
+              "name": "My Home & Room",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Hobbies",
+          "details": [
+            "Hobbies"
+          ],
+          "concepts": [
+            {
+              "name": "Hobbies",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-72c491d77da8aa2f4f4d",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "自動整合情境：康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Greetings & Self-intro",
+          "details": [
+            "Greetings & Self-intro"
+          ],
+          "concepts": [
+            {
+              "name": "Greetings & Self-intro",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：My Home & Room",
+          "details": [
+            "My Home & Room"
+          ],
+          "concepts": [
+            {
+              "name": "My Home & Room",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Hobbies",
+          "details": [
+            "Hobbies"
+          ],
+          "concepts": [
+            {
+              "name": "Hobbies",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-5e1999f6796904110194",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "南一版（情境主題整理）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Meeting New Friends",
+          "details": [
+            "Meeting New Friends"
+          ],
+          "concepts": [
+            {
+              "name": "Meeting New Friends",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Pets & Family",
+          "details": [
+            "Pets & Family"
+          ],
+          "concepts": [
+            {
+              "name": "Pets & Family",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：School Rules",
+          "details": [
+            "School Rules"
+          ],
+          "concepts": [
+            {
+              "name": "School Rules",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-ca0a75ef9e6b6f2a555d",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "自動整合情境：南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Meeting New Friends",
+          "details": [
+            "Meeting New Friends"
+          ],
+          "concepts": [
+            {
+              "name": "Meeting New Friends",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Pets & Family",
+          "details": [
+            "Pets & Family"
+          ],
+          "concepts": [
+            {
+              "name": "Pets & Family",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：School Rules",
+          "details": [
+            "School Rules"
+          ],
+          "concepts": [
+            {
+              "name": "School Rules",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-5883622211b912b7faf4",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "核心語法",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "核心語法：可數與不可數名詞",
+          "details": [
+            "可數與不可數名詞"
+          ],
+          "concepts": [
+            {
+              "name": "可數與不可數名詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：數量詞",
+          "details": [
+            "數量詞"
+          ],
+          "concepts": [
+            {
+              "name": "數量詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：現在簡單式(第三人稱單數)",
+          "details": [
+            "現在簡單式(第三人稱單數)"
+          ],
+          "concepts": [
+            {
+              "name": "現在簡單式(第三人稱單數)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：頻率副詞",
+          "details": [
+            "頻率副詞"
+          ],
+          "concepts": [
+            {
+              "name": "頻率副詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：助動詞 Can",
+          "details": [
+            "助動詞 Can"
+          ],
+          "concepts": [
+            {
+              "name": "助動詞 Can",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-d4611b5bffe9cf4b9677",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "翰林版（情境主題整理）",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Shopping & Food",
+          "details": [
+            "Shopping & Food"
+          ],
+          "concepts": [
+            {
+              "name": "Shopping & Food",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Free Time & Sports",
+          "details": [
+            "Free Time & Sports"
+          ],
+          "concepts": [
+            {
+              "name": "Free Time & Sports",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Weather & Seasons",
+          "details": [
+            "Weather & Seasons"
+          ],
+          "concepts": [
+            {
+              "name": "Weather & Seasons",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-ba5c2d80062f02eed985",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "自動整合情境：翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Shopping & Food",
+          "details": [
+            "Shopping & Food"
+          ],
+          "concepts": [
+            {
+              "name": "Shopping & Food",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Free Time & Sports",
+          "details": [
+            "Free Time & Sports"
+          ],
+          "concepts": [
+            {
+              "name": "Free Time & Sports",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Weather & Seasons",
+          "details": [
+            "Weather & Seasons"
+          ],
+          "concepts": [
+            {
+              "name": "Weather & Seasons",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-d3bc729cd18e7406f081",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "康軒版（情境主題整理）",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Fruit & Markets",
+          "details": [
+            "Fruit & Markets"
+          ],
+          "concepts": [
+            {
+              "name": "Fruit & Markets",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Weekend Habits",
+          "details": [
+            "Weekend Habits"
+          ],
+          "concepts": [
+            {
+              "name": "Weekend Habits",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Abilities & Festivals",
+          "details": [
+            "Abilities & Festivals"
+          ],
+          "concepts": [
+            {
+              "name": "Abilities & Festivals",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-18041d2038378e68f21d",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "自動整合情境：康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Fruit & Markets",
+          "details": [
+            "Fruit & Markets"
+          ],
+          "concepts": [
+            {
+              "name": "Fruit & Markets",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Weekend Habits",
+          "details": [
+            "Weekend Habits"
+          ],
+          "concepts": [
+            {
+              "name": "Weekend Habits",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Abilities & Festivals",
+          "details": [
+            "Abilities & Festivals"
+          ],
+          "concepts": [
+            {
+              "name": "Abilities & Festivals",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-7ba90cf1f2eaddbadca8",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "南一版（情境主題整理）",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Supermarket & Cooking",
+          "details": [
+            "Supermarket & Cooking"
+          ],
+          "concepts": [
+            {
+              "name": "Supermarket & Cooking",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Occupations",
+          "details": [
+            "Occupations"
+          ],
+          "concepts": [
+            {
+              "name": "Occupations",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Birthdays & Weather",
+          "details": [
+            "Birthdays & Weather"
+          ],
+          "concepts": [
+            {
+              "name": "Birthdays & Weather",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-a64afe383cebf671f5bd",
+      "subject": "英文",
+      "grade": "國中一年級",
+      "edition": "自動整合情境：南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Supermarket & Cooking",
+          "details": [
+            "Supermarket & Cooking"
+          ],
+          "concepts": [
+            {
+              "name": "Supermarket & Cooking",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Occupations",
+          "details": [
+            "Occupations"
+          ],
+          "concepts": [
+            {
+              "name": "Occupations",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Birthdays & Weather",
+          "details": [
+            "Birthdays & Weather"
+          ],
+          "concepts": [
+            {
+              "name": "Birthdays & Weather",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

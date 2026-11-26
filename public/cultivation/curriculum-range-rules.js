@@ -9,7 +9,26 @@
   const SCHEMA = 'qingyun-study-scopes';
   const subjects = new Set(['國文','國語','英文','數學','數學A','數學B','數學甲','數學乙','生物','物理','化學','地球科學','歷史','地理','公民','自然','自然科學','社會','生活','藝術','健康與體育','本土語文','綜合活動','綜合']);
   const brackets = new Map([['(',')'],['（','）'],['[',']'],['【','】'],['{','}'],['〔','〕'],['「','」'],['『','』'],['“','”'],['"','"']]);
-  const key = u => JSON.stringify([u.path, u.detail || '', Array.isArray(u.sub_topics) ? u.sub_topics : []]);
+  // Verified publisher contents may be selected without certifying every reference question.
+  function selectableBook(book) {
+    return !!book && (book.legacyVisible || book.releaseStatus === 'released' ||
+      book.scopeSelectionStatus === 'verified-toc' && book.verificationStatus === 'verified-complete-toc' &&
+      book.grade === '高中二年級' && ['數學A','數學B','物理','化學'].includes(book.subject) &&
+      !!book.verifiedAt && book.sources?.some(s=>['official-toc','official-product-toc'].includes(s.type)) &&
+      book.units?.length > 0 && book.units.every(u=>u.details?.length > 0));
+  }
+  function curriculumMetadata(raw) {
+    if(raw===undefined)return undefined;
+    if(!raw||typeof raw!=='object'||Array.isArray(raw)||
+      !['bookId','edition','term'].every(k=>typeof raw[k]==='string'&&raw[k].length>0&&raw[k].length<=100)||
+      raw.schoolYear!=null&&(!Number.isInteger(raw.schoolYear)||raw.schoolYear<100||raw.schoolYear>200)||
+      !Array.isArray(raw.conceptIds)||raw.conceptIds.length>24||raw.conceptIds.some(id=>typeof id!=='string'||!/^[-a-zA-Z0-9\u3400-\u9fff_]{1,100}$/.test(id)))
+      throw Error('教材版本或觀念資料格式有誤。');
+    return {bookId:raw.bookId,edition:raw.edition,term:raw.term,schoolYear:raw.schoolYear??null,
+      conceptIds:[...new Set(raw.conceptIds)].sort()};
+  }
+  const key = u => JSON.stringify([u.path, u.detail || '', Array.isArray(u.sub_topics) ? u.sub_topics : [],
+    ...(u.curriculum?[curriculumMetadata(u.curriculum)]:[])]);
 
   function splitChapters(value) {
     const parts = [], stack = [];
@@ -93,14 +112,15 @@
         unit.detail !== undefined && (typeof unit.detail !== 'string' || unit.detail.length > 200) ||
         unit.sub_topics !== undefined && (!Array.isArray(unit.sub_topics) || unit.sub_topics.length > 24 ||
         unit.sub_topics.some(v => typeof v !== 'string' || v.length > 200))) throw Error('清單中有無法辨識的範圍，請重新複製完整分享內容。');
-      return { path:unit.path.trim(), detail:(unit.detail || '').trim(), sub_topics:(unit.sub_topics || []).map(v => v.trim()) };
+      return { path:unit.path.trim(), detail:(unit.detail || '').trim(), sub_topics:(unit.sub_topics || []).map(v => v.trim()),
+        ...(unit.curriculum!==undefined?{curriculum:curriculumMetadata(unit.curriculum)}:{}) };
     });
   }
 
   function shareSelection(list) {
     try {
       const units = validateUnits(list);
-      const code = JSON.stringify({ schema:SCHEMA, version:1, units });
+      const code = JSON.stringify({ schema:SCHEMA, version:units.some(u=>u.curriculum)?2:1, units });
       const lines = units.map((u,i) => (i + 1) + '. ' + u.path.replace(/\//g,'／') + '：' + (u.detail || '全部'));
       const text = '青雲問道｜已選修習清單（' + units.length + ' 項）\n' + lines.join('\n') + '\n\n在課程研修所的「匯入清單」貼上以下內容。\n分享碼：\n' + code;
       if (text.length > MAX_SHARE) throw Error('清單內容太長，請減少範圍後再分享。');
@@ -115,7 +135,8 @@
       // Accept either just the code or the full human-readable shared message.
       const marker = '分享碼：\n', start = text.lastIndexOf(marker);
       const data = JSON.parse(start < 0 ? text : text.slice(start + marker.length));
-      if (!data || typeof data !== 'object' || Array.isArray(data) || data.schema !== SCHEMA || data.version !== 1) throw Error('這不是支援的青雲問道清單分享碼。');
+      if (!data || typeof data !== 'object' || Array.isArray(data) || data.schema !== SCHEMA ||
+        ![1,2].includes(data.version)||data.version===2&&(!Array.isArray(data.units)||!data.units.some(u=>u?.curriculum))) throw Error('這不是支援的青雲問道清單分享碼。');
       const units = validateUnits(data.units);
       return organizeSelection(units);
     } catch (error) { return { ok:false, message:error instanceof SyntaxError ? '分享碼不完整或格式有誤，請重新複製。' : error.message }; }
@@ -148,6 +169,6 @@
     return parsed.ok ? { ...parsed, title:title.title } : parsed;
   }
 
-  return { parseChapters, mergeSelection, organizeSelection, shareSelection, readSharedSelection,
+  return { parseChapters, mergeSelection, organizeSelection, shareSelection, readSharedSelection, curriculumMetadata, selectableBook,
     validateShareTitle, createChatShare, readChatShare };
 });

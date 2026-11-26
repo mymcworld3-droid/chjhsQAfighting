@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中一年級",
+  "subject": "物理",
+  "books": [
+    {
+      "bookId": "book-32133bd79d11405df275",
+      "subject": "物理",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "物理量與測量",
+          "details": [
+            "國際單位制與量綱",
+            "測量誤差與有效數字",
+            "科學探究與實驗"
+          ],
+          "concepts": [
+            {
+              "name": "國際單位制與量綱",
+              "conceptId": "legacy-4baff397d4b40b32f952",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "測量誤差與有效數字",
+              "conceptId": "legacy-8697d1856faed63f6c6b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "科學探究與實驗",
+              "conceptId": "legacy-5889ee489786751aa82d",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "運動與力",
+          "details": [
+            "位置、速度與加速度",
+            "牛頓運動定律",
+            "重力與生活中的力"
+          ],
+          "concepts": [
+            {
+              "name": "位置、速度與加速度",
+              "conceptId": "legacy-defbf2c62dcee4d091a7",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "牛頓運動定律",
+              "conceptId": "legacy-c973c2d89abd7e1d6b88",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "重力與生活中的力",
+              "conceptId": "legacy-e264b2fb327117ffd503",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "能量與熱",
+          "details": [
+            "功與能量轉換",
+            "能量守恆",
+            "溫度、熱與熱傳遞"
+          ],
+          "concepts": [
+            {
+              "name": "功與能量轉換",
+              "conceptId": "legacy-ab2b99f43cd02f7f2fa8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "能量守恆",
+              "conceptId": "legacy-aeb8c9c750cfb408d6aa",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "溫度、熱與熱傳遞",
+              "conceptId": "legacy-0ecd0bf641ab8d28a7bd",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-35cc71986de13a40a373",
+      "subject": "物理",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "波動與光",
+          "details": [
+            "振幅、週期、頻率與波速",
+            "反射、折射與干涉概念",
+            "光學現象"
+          ],
+          "concepts": [
+            {
+              "name": "振幅、週期、頻率與波速",
+              "conceptId": "legacy-487226c353035184ffa1",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "反射、折射與干涉概念",
+              "conceptId": "legacy-8173af14f1146465797b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "光學現象",
+              "conceptId": "legacy-47da6f43bac2304d6418",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "電與磁",
+          "details": [
+            "電荷、電場與電路",
+            "磁場與電磁現象",
+            "生活中的電磁應用"
+          ],
+          "concepts": [
+            {
+              "name": "電荷、電場與電路",
+              "conceptId": "legacy-9cfcee67bc3e9afe2b41",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "磁場與電磁現象",
+              "conceptId": "legacy-740bd01a2f7a27285a4d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "生活中的電磁應用",
+              "conceptId": "legacy-3f85d3d6e0c1c8e21df6",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "物理探究",
+          "details": [
+            "建立假設與變因控制",
+            "圖表分析、科學模型",
+            "測量與誤差"
+          ],
+          "concepts": [
+            {
+              "name": "建立假設與變因控制",
+              "conceptId": "legacy-06edf591a59e758d59af",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "圖表分析、科學模型",
+              "conceptId": "legacy-c754a9e6b74bbf602f9a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "測量與誤差",
+              "conceptId": "legacy-f7deda168e684b5bdc05",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

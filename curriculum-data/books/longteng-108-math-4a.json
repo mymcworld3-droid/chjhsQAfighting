@@ -1,0 +1,29 @@
+{
+  "bookId": "longteng-108-math-4a",
+  "subject": "數學A",
+  "grade": "高中二年級",
+  "edition": "龍騰版",
+  "publisher": "龍騰",
+  "term": "第二學期",
+  "bookLabel": "第4A冊",
+  "schoolYear": null,
+  "curriculumStandard": "108課綱",
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-partial",
+  "scopeSelectionStatus": "pending-toc",
+  "scopeDetailLevel": "official-units",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "required-track",
+  "schedulePolicy": "book-sequence",
+  "sourceFile": "curriculum-data/books/longteng-108-math-4a.json",
+  "sources": [
+    {
+      "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10526",
+      "type": "official-product",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。",
+  "units": []
+}

@@ -1,0 +1,133 @@
+{
+  "bookId": "hanlin-114-math-4a",
+  "subject": "數學A",
+  "grade": "高中二年級",
+  "edition": "翰林版",
+  "publisher": "翰林",
+  "term": "第二學期",
+  "bookLabel": "第4A冊",
+  "schoolYear": 114,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "required-track",
+  "schedulePolicy": "book-sequence",
+  "sourceFile": "curriculum-data/books/hanlin-114-math-4a.json",
+  "sources": [
+    {
+      "url": "https://sh.hle.com.tw/hma/",
+      "type": "official-portal"
+    },
+    {
+      "url": "https://drive.google.com/drive/folders/1Vww-hRr12kkPK6s2qYj5J-gafHwS3CD0",
+      "type": "official-textbook-folder",
+      "title": "114下高中數學4A課本"
+    },
+    {
+      "url": "https://drive.google.com/file/d/132OIIdvVvQbOngWF5DE6rcFxJ2NZLgPe/view",
+      "type": "official-toc",
+      "title": "數學(4)A課本_01_編輯大意、目次.pdf",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+  "units": [
+    {
+      "unit": "第1章：空間向量",
+      "details": [
+        "1-1 空間概念",
+        "1-2 空間向量的坐標表示法",
+        "1-3 空間向量的內積",
+        "1-4 外積、體積與行列式"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 空間概念",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 空間向量的坐標表示法",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 空間向量的內積",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 外積、體積與行列式",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：空間中的平面與直線",
+      "details": [
+        "2-1 平面方程式",
+        "2-2 空間直線方程式"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 平面方程式",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 空間直線方程式",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：機率",
+      "details": [
+        "3-1 條件機率與獨立事件",
+        "3-2 貝氏定理"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 條件機率與獨立事件",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 貝氏定理",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第4章：矩陣",
+      "details": [
+        "4-1 高斯消去法與矩陣",
+        "4-2 矩陣的運算",
+        "4-3 矩陣的應用"
+      ],
+      "concepts": [
+        {
+          "name": "4-1 高斯消去法與矩陣",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "4-2 矩陣的運算",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "4-3 矩陣的應用",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

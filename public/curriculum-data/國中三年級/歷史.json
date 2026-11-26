@@ -1,0 +1,286 @@
+{
+  "schema": 1,
+  "grade": "國中三年級",
+  "subject": "歷史",
+  "books": [
+    {
+      "bookId": "book-4f336351e65af458935f",
+      "subject": "歷史",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/歷史/history.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：文明起源與古代經典",
+          "details": [
+            "大河文明",
+            "希臘羅馬"
+          ],
+          "concepts": [
+            {
+              "name": "大河文明",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "希臘羅馬",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：歐洲中世紀",
+          "details": [
+            "基督教文化",
+            "十字軍與文藝復興"
+          ],
+          "concepts": [
+            {
+              "name": "基督教文化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "十字軍與文藝復興",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：近世與民主革命",
+          "details": [
+            "大航海與宗教改革",
+            "啟蒙與美法革命"
+          ],
+          "concepts": [
+            {
+              "name": "大航海與宗教改革",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "啟蒙與美法革命",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：現代衝突與全球化",
+          "details": [
+            "兩次大戰",
+            "冷戰與當代世界"
+          ],
+          "concepts": [
+            {
+              "name": "兩次大戰",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "冷戰與當代世界",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-e296b288d30c9d11d7fe",
+      "subject": "歷史",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/歷史/history.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：古典世界",
+          "details": [
+            "古文明發展",
+            "古典希臘羅馬"
+          ],
+          "concepts": [
+            {
+              "name": "古文明發展",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "古典希臘羅馬",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：中古歐洲",
+          "details": [
+            "宗教影響",
+            "封建與城市變遷"
+          ],
+          "concepts": [
+            {
+              "name": "宗教影響",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "封建與城市變遷",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：近代變革",
+          "details": [
+            "理性思維與政治革命",
+            "工業革命"
+          ],
+          "concepts": [
+            {
+              "name": "理性思維與政治革命",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "工業革命",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：二十世紀大變動",
+          "details": [
+            "全球大戰",
+            "戰後國際體系"
+          ],
+          "concepts": [
+            {
+              "name": "全球大戰",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "戰後國際體系",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-95775379c8667b893017",
+      "subject": "歷史",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/歷史/history.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：古文明開端",
+          "details": [
+            "人類起源",
+            "地中海文明"
+          ],
+          "concepts": [
+            {
+              "name": "人類起源",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "地中海文明",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：封建與宗教",
+          "details": [
+            "歐洲中古社會",
+            "文藝復興"
+          ],
+          "concepts": [
+            {
+              "name": "歐洲中古社會",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文藝復興",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：工業化與革命",
+          "details": [
+            "民主思潮",
+            "帝國主義"
+          ],
+          "concepts": [
+            {
+              "name": "民主思潮",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "帝國主義",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：現代世界的形成",
+          "details": [
+            "兩次大戰",
+            "當代國際局勢"
+          ],
+          "concepts": [
+            {
+              "name": "兩次大戰",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "當代國際局勢",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

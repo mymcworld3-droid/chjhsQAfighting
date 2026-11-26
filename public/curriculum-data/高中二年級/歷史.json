@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中二年級",
+  "subject": "歷史",
+  "books": [
+    {
+      "bookId": "book-c4883ef3ebaa8790b79f",
+      "subject": "歷史",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "世界史：古代與中世紀",
+          "details": [
+            "古代文明及交流",
+            "宗教與社會",
+            "歐亞非區域連結"
+          ],
+          "concepts": [
+            {
+              "name": "古代文明及交流",
+              "conceptId": "legacy-d5596fd65bc2bba5a46b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "宗教與社會",
+              "conceptId": "legacy-49f8299a5a41cf041c92",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "歐亞非區域連結",
+              "conceptId": "legacy-72bc5296d91a8f69faa9",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "世界史：近代",
+          "details": [
+            "文藝復興與宗教改革",
+            "科學革命與啟蒙",
+            "工業革命與帝國主義"
+          ],
+          "concepts": [
+            {
+              "name": "文藝復興與宗教改革",
+              "conceptId": "legacy-dc9b96e5a97dd1a13497",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "科學革命與啟蒙",
+              "conceptId": "legacy-f03d66405e9e4ebb3dce",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "工業革命與帝國主義",
+              "conceptId": "legacy-f289bc30cd9891cbbcda",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "歷史探究",
+          "details": [
+            "原始與二手史料",
+            "時代觀點",
+            "史學論證"
+          ],
+          "concepts": [
+            {
+              "name": "原始與二手史料",
+              "conceptId": "legacy-3f6f7473eea237712db8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "時代觀點",
+              "conceptId": "legacy-72a0c66b43c366e9f922",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "史學論證",
+              "conceptId": "legacy-0131faf9a1843ee11501",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-0d47c9047ad9ff87013c",
+      "subject": "歷史",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "世界史：近現代",
+          "details": [
+            "民族國家與民主思潮",
+            "兩次世界大戰",
+            "冷戰、全球化與當代世界"
+          ],
+          "concepts": [
+            {
+              "name": "民族國家與民主思潮",
+              "conceptId": "legacy-2787c5e0193c1d75d548",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "兩次世界大戰",
+              "conceptId": "legacy-e5eeef0cf346b41b7952",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "冷戰、全球化與當代世界",
+              "conceptId": "legacy-cc5de300a5e22297096b",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "臺灣東亞世界比較",
+          "details": [
+            "帝國與殖民",
+            "現代化的不同路徑",
+            "政經社會互動"
+          ],
+          "concepts": [
+            {
+              "name": "帝國與殖民",
+              "conceptId": "legacy-a8c95387b77d43c82498",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "現代化的不同路徑",
+              "conceptId": "legacy-f059c0decfb105977d6c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "政經社會互動",
+              "conceptId": "legacy-870572e1f4cd4605e1b9",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "跨主題史料",
+          "details": [
+            "海報、照片與統計",
+            "多元歷史觀點",
+            "史料可信度"
+          ],
+          "concepts": [
+            {
+              "name": "海報、照片與統計",
+              "conceptId": "legacy-470d6948b5d1bd501851",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "多元歷史觀點",
+              "conceptId": "legacy-64271d646339fe6fe490",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "史料可信度",
+              "conceptId": "legacy-37bb50004fb5ce25c165",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

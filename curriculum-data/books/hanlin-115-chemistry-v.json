@@ -1,0 +1,131 @@
+{
+  "bookId": "hanlin-115-chemistry-v",
+  "subject": "化學",
+  "grade": "高中二年級",
+  "edition": "翰林版",
+  "publisher": "翰林",
+  "term": "選修化學V",
+  "bookLabel": "選修化學V（全）",
+  "schoolYear": 115,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/hanlin-115-chemistry-v.json",
+  "sources": [
+    {
+      "url": "https://sh.hle.com.tw/hce/",
+      "type": "official-portal"
+    },
+    {
+      "url": "https://drive.google.com/drive/folders/1mPR5QIDSeKAGCtsVFmfhDvSpxsC8TkQe",
+      "type": "official-textbook-folder",
+      "title": "翰林選修化學V_課本(學用)"
+    },
+    {
+      "url": "https://drive.google.com/file/d/1G5X7_qi1P_Ob-mnHib_CXopKcOTCI4IF/view",
+      "type": "official-toc",
+      "title": "選修化學(Ⅴ)課本_01_編輯大意、目次(115f166337).pdf",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+  "units": [
+    {
+      "unit": "第1章：有機化學",
+      "details": [
+        "1-1 有機化合物的結構與組成",
+        "1-2 官能基",
+        "1-3 烴",
+        "1-4 醇、醚及酚",
+        "1-5 醛、酮、羧酸及酯",
+        "1-6 胺與醯胺",
+        "1-7 聚合物與聚合反應",
+        "1-8 天然聚合物",
+        "1-9 人造聚合物"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 有機化合物的結構與組成",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 官能基",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 烴",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 醇、醚及酚",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-5 醛、酮、羧酸及酯",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-6 胺與醯胺",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-7 聚合物與聚合反應",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-8 天然聚合物",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-9 人造聚合物",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：環境化學",
+      "details": [
+        "2-1 科學、科技、社會及人文",
+        "2-2 科學模型的特性與演變",
+        "2-3 環境汙染與防治",
+        "2-4 資源與永續發展"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 科學、科技、社會及人文",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 科學模型的特性與演變",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 環境汙染與防治",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 資源與永續發展",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

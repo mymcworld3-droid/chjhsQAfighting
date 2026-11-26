@@ -1,0 +1,394 @@
+{
+  "schema": 1,
+  "grade": "國中三年級",
+  "subject": "國文",
+  "books": [
+    {
+      "bookId": "book-d724b820674b04354ed2",
+      "subject": "國文",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：詞曲雙璧",
+          "details": [
+            "課文：詞選（水調歌頭、醜奴兒書博山道中壁）—— 詞調與長短句特性",
+            "課文：元曲選（天淨沙秋思、沉醉東風漁父詞）—— 散曲、曲牌與小令常識"
+          ],
+          "concepts": [
+            {
+              "name": "課文：詞選（水調歌頭、醜奴兒書博山道中壁）—— 詞調與長短句特性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：元曲選（天淨沙秋思、沉醉東風漁父詞）—— 散曲、曲牌與小令常識",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：山水與哲理",
+          "details": [
+            "課文：始得西山宴遊記（柳宗元）—— 唐代山水遊記與心境轉折",
+            "課文：麥帥為子祈禱文（麥克阿瑟）—— 翻譯文學與期望教育"
+          ],
+          "concepts": [
+            {
+              "name": "課文：始得西山宴遊記（柳宗元）—— 唐代山水遊記與心境轉折",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：麥帥為子祈禱文（麥克阿瑟）—— 翻譯文學與期望教育",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：小說的殿堂",
+          "details": [
+            "課文：空城計（羅貫中）—— 古典章回小說與人物刻畫（諸葛亮、司馬懿）",
+            "課文：聊齋志異選（勞山道士）—— 文言短篇志怪小說與寓意"
+          ],
+          "concepts": [
+            {
+              "name": "課文：空城計（羅貫中）—— 古典章回小說與人物刻畫（諸葛亮、司馬懿）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：聊齋志異選（勞山道士）—— 文言短篇志怪小說與寓意",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-83b6413886990ffba10a",
+      "subject": "國文",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：長短句的迴響",
+          "details": [
+            "課文：詞選（南鄉子、醜奴兒）—— 宋詞的派別（豪放與婉約）與格律",
+            "課文：元曲選（天淨沙、賣花聲）—— 襯字、曲牌與散曲的通俗美"
+          ],
+          "concepts": [
+            {
+              "name": "課文：詞選（南鄉子、醜奴兒）—— 宋詞的派別（豪放與婉約）與格律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：元曲選（天淨沙、賣花聲）—— 襯字、曲牌與散曲的通俗美",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：遊記與至理",
+          "details": [
+            "課文：始得西山宴遊記（柳宗元）—— 永州八記之首，心與物化的永州體悟",
+            "課文：麥帥為子祈禱文（麥克阿瑟）—— 翻譯文本，剛毅與溫柔的融合"
+          ],
+          "concepts": [
+            {
+              "name": "課文：始得西山宴遊記（柳宗元）—— 永州八記之首，心與物化的永州體悟",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：麥帥為子祈禱文（麥克阿瑟）—— 翻譯文本，剛毅與溫柔的融合",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：計謀與志怪",
+          "details": [
+            "課文：三國演義選（空城計）—— 章回小說的鋪墊與戰爭描寫",
+            "課文：聊齋志異選（勞山道士）—— 警惕好逸惡勞、投機取巧的文言寓言"
+          ],
+          "concepts": [
+            {
+              "name": "課文：三國演義選（空城計）—— 章回小說的鋪墊與戰爭描寫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：聊齋志異選（勞山道士）—— 警惕好逸惡勞、投機取巧的文言寓言",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-3f882358781e5ab6590e",
+      "subject": "國文",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：詩餘與詞曲",
+          "details": [
+            "課文：詞選（醜奴兒、水調歌頭）—— 體會詞人年少不識愁滋味到歷盡滄桑",
+            "課文：元曲選（天淨沙秋思等）—— 襯字與意象重疊的技巧"
+          ],
+          "concepts": [
+            {
+              "name": "課文：詞選（醜奴兒、水調歌頭）—— 體會詞人年少不識愁滋味到歷盡滄桑",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：元曲選（天淨沙秋思等）—— 襯字與意象重疊的技巧",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：心靈的釋放",
+          "details": [
+            "課文：始得西山宴遊記（柳宗元）—— 覺居是州之狹、始指異源的解脫",
+            "課文：麥帥為子祈禱文 —— 跨文化文學結構與內省"
+          ],
+          "concepts": [
+            {
+              "name": "課文：始得西山宴遊記（柳宗元）—— 覺居是州之狹、始指異源的解脫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：麥帥為子祈禱文 —— 跨文化文學結構與內省",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：經典小說選",
+          "details": [
+            "課文：空城計（三國演義）—— 虛虛實實、心理戰的精采演繹",
+            "課文：古典小說選讀（聊齋或儒林外史選段）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：空城計（三國演義）—— 虛虛實實、心理戰的精采演繹",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "課文：古典小說選讀（聊齋或儒林外史選段）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-5cc405ff6a8a68136bd1",
+      "subject": "國文",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：當代視野與生涯規劃",
+          "details": [
+            "課文：生於憂患死於安樂（孟子）—— 論證與排比句法（苦其心志、勞其筋骨）",
+            "語文常識一：自傳與履歷寫作（現代職場與多元入學自傳撰寫）"
+          ],
+          "concepts": [
+            {
+              "name": "課文：生於憂患死於安樂（孟子）—— 論證與排比句法（苦其心志、勞其筋骨）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：自傳與履歷寫作（現代職場與多元入學自傳撰寫）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：跨領域會考總複習",
+          "details": [
+            "非連續性文本（圖表、說明書、統計資料）解題策略",
+            "國中文言十四篇經典核心文法與句型融會貫通"
+          ],
+          "concepts": [
+            {
+              "name": "非連續性文本（圖表、說明書、統計資料）解題策略",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "國中文言十四篇經典核心文法與句型融會貫通",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-5bb71fd9b16b02e2c2f8",
+      "subject": "國文",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：逆境中的淬鍊",
+          "details": [
+            "課文：生於憂患死於安樂（孟子）—— 舉例論證（舜發於畎畝之中）與理性思辨",
+            "語文常識一：生涯應用的自傳與現代自薦文書寫"
+          ],
+          "concepts": [
+            {
+              "name": "課文：生於憂患死於安樂（孟子）—— 舉例論證（舜發於畎畝之中）與理性思辨",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：生涯應用的自傳與現代自薦文書寫",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：閱讀素養衝刺",
+          "details": [
+            "跨學科文本與生活情境題型演練",
+            "白話文理解、現代詩文判讀與文言文長文閱讀技巧"
+          ],
+          "concepts": [
+            {
+              "name": "跨學科文本與生活情境題型演練",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "白話文理解、現代詩文判讀與文言文長文閱讀技巧",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9b2f3b171f1c72ae0217",
+      "subject": "國文",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：憂患與磨練",
+          "details": [
+            "課文：生於憂患死於安樂（孟子）—— 人恆過，然後能改；困於心，衡於慮，而後作",
+            "語文常識一：自傳寫作要領與履歷表結構設計"
+          ],
+          "concepts": [
+            {
+              "name": "課文：生於憂患死於安樂（孟子）—— 人恆過，然後能改；困於心，衡於慮，而後作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語文常識一：自傳寫作要領與履歷表結構設計",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：會考統整複習",
+          "details": [
+            "文言文與古典詩詞格律大統整",
+            "新課綱非連續性圖表文本跨領域解題模型"
+          ],
+          "concepts": [
+            {
+              "name": "文言文與古典詩詞格律大統整",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "新課綱非連續性圖表文本跨領域解題模型",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

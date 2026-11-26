@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "subject": "化學",
+  "books": [
+    {
+      "bookId": "book-e8421172f8aa51b922da",
+      "subject": "化學",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "化學平衡與電化學",
+          "details": [
+            "酸鹼滴定與緩衝液",
+            "溶解度積",
+            "電化學與電池"
+          ],
+          "concepts": [
+            {
+              "name": "酸鹼滴定與緩衝液",
+              "conceptId": "legacy-2c1530e051d157c2faed",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "溶解度積",
+              "conceptId": "legacy-2da03026eae5c509b355",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "電化學與電池",
+              "conceptId": "legacy-85832ba6e542b1c85085",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "有機化學",
+          "details": [
+            "官能基與異構物",
+            "碳氫化合物",
+            "醇、酸、酯與聚合物"
+          ],
+          "concepts": [
+            {
+              "name": "官能基與異構物",
+              "conceptId": "legacy-332135fb06ef934cc06c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "碳氫化合物",
+              "conceptId": "legacy-f5475ae346df2948f3bd",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "醇、酸、酯與聚合物",
+              "conceptId": "legacy-ff692a59604c42b6bada",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "反應計量與實驗",
+          "details": [
+            "莫耳與濃度換算",
+            "氧化還原配平",
+            "實驗數據分析"
+          ],
+          "concepts": [
+            {
+              "name": "莫耳與濃度換算",
+              "conceptId": "legacy-b82ca6c05b43fdd20762",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "氧化還原配平",
+              "conceptId": "legacy-7db1010b0bddd96d8aac",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "實驗數據分析",
+              "conceptId": "legacy-aedb852e2d61f970329d",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-d3f74905b59bb6ca002d",
+      "subject": "化學",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "化學跨單元統整",
+          "details": [
+            "原子結構與物質性質",
+            "反應速率與平衡",
+            "反應能量與電化學"
+          ],
+          "concepts": [
+            {
+              "name": "原子結構與物質性質",
+              "conceptId": "legacy-6847ea837ac67463417a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "反應速率與平衡",
+              "conceptId": "legacy-63e3272f541286bdf96b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "反應能量與電化學",
+              "conceptId": "legacy-fb916c00e037b2ef5680",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "有機與生活化學",
+          "details": [
+            "有機反應",
+            "材料與藥物",
+            "環境中的化學"
+          ],
+          "concepts": [
+            {
+              "name": "有機反應",
+              "conceptId": "legacy-a49396175a320e4b71a4",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "材料與藥物",
+              "conceptId": "legacy-4149b51896b772e2a2ea",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "環境中的化學",
+              "conceptId": "legacy-9c9b3472736af9755164",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "實驗設計與分析",
+          "details": [
+            "安全與變因控制",
+            "滴定與圖表",
+            "誤差、結果推論"
+          ],
+          "concepts": [
+            {
+              "name": "安全與變因控制",
+              "conceptId": "legacy-fc3160ceea750852045d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "滴定與圖表",
+              "conceptId": "legacy-3ad0af9b763839226445",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "誤差、結果推論",
+              "conceptId": "legacy-99d694b28d2ff250adf6",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

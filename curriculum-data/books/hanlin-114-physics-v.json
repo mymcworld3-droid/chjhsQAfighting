@@ -1,0 +1,156 @@
+{
+  "bookId": "hanlin-114-physics-v",
+  "subject": "物理",
+  "grade": "高中二年級",
+  "edition": "翰林版",
+  "publisher": "翰林",
+  "term": "選修物理V",
+  "bookLabel": "選修物理V（全）",
+  "schoolYear": 114,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/hanlin-114-physics-v.json",
+  "sources": [
+    {
+      "url": "https://sh.hle.com.tw/hph/",
+      "type": "official-portal"
+    },
+    {
+      "url": "https://drive.google.com/drive/folders/1Qn8LmSNpBWpY1gZiEg1ZcsjC22r1-0CN",
+      "type": "official-textbook-folder",
+      "title": "01_114下高中選修物理(V)_課本_PDF檔"
+    },
+    {
+      "url": "https://drive.google.com/file/d/1c2L8Nyf6x7PKXQnCOYrOhQtWFePXyEb-/view",
+      "type": "official-toc",
+      "title": "選修物理(Ⅴ)課本_01_編輯大意、目次.pdf",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+  "units": [
+    {
+      "unit": "第1章：電流與電路",
+      "details": [
+        "1-1 電動勢與電流",
+        "1-2 歐姆定律與電阻",
+        "1-3 電阻的串聯與並聯",
+        "1-4 電路中之電荷守恆(電量守恆)與能量守恆",
+        "1-5 電功率與電流的熱效應"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 電動勢與電流",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 歐姆定律與電阻",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 電阻的串聯與並聯",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 電路中之電荷守恆(電量守恆)與能量守恆",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-5 電功率與電流的熱效應",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：近代物理的重大發現",
+      "details": [
+        "2-1 電子的發現",
+        "2-2 密立坎油滴實驗",
+        "2-3 X 射線",
+        "2-4 黑體輻射─能量的不連續性",
+        "2-5 光電效應─輻射的粒子性"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 電子的發現",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 密立坎油滴實驗",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 X 射線",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 黑體輻射─能量的不連續性",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-5 光電效應─輻射的粒子性",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：原子結構與原子核",
+      "details": [
+        "3-1 拉塞福原子模型與原子光譜",
+        "3-2 波耳的氫原子模型",
+        "3-3 物質波與波粒二象性",
+        "3-4 原子核的組成",
+        "3-5 原子核衰變",
+        "3-6 交互作用與守恆律"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 拉塞福原子模型與原子光譜",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 波耳的氫原子模型",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 物質波與波粒二象性",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-4 原子核的組成",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-5 原子核衰變",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-6 交互作用與守恆律",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

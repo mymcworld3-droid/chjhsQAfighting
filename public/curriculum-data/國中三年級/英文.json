@@ -1,0 +1,1203 @@
+{
+  "schema": 1,
+  "grade": "國中三年級",
+  "subject": "英文",
+  "books": [
+    {
+      "bookId": "book-3659d6781b3c08650959",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: Have You Ever Been to America? 經驗與現在完成式",
+          "details": [
+            "主題：國外旅遊經驗、人生清單完成度",
+            "文法：現在完成式 (have/has + P.P.)、since 與 for 的時間表達",
+            "單字：不規則過去分詞、經驗副詞(ever, never, already, yet)"
+          ],
+          "concepts": [
+            {
+              "name": "主題：國外旅遊經驗、人生清單完成度",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：現在完成式 (have/has + P.P.)、since 與 for 的時間表達",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：不規則過去分詞、經驗副詞(ever, never, already, yet)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: The World Is Changed by Technology 被動與使役",
+          "details": [
+            "主題：環境污染、人工智慧與科技生活、做家事",
+            "文法：被動語態 (be + P.P.)、使役動詞 (make/have/let + O + V)",
+            "單字：環保單字(recycle, waste)、使役與家事動詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：環境污染、人工智慧與科技生活、做家事",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：被動語態 (be + P.P.)、使役動詞 (make/have/let + O + V)",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：環保單字(recycle, waste)、使役與家事動詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: I Wonder Who He Is 間接問句與子句",
+          "details": [
+            "主題：同儕關係、網路交友安全、新聞真假辨識",
+            "文法：名詞子句（that引導）、間接問句（疑問詞引導之子句）",
+            "單字：社群網路字彙、情緒形容詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：同儕關係、網路交友安全、新聞真假辨識",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：名詞子句（that引導）、間接問句（疑問詞引導之子句）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：社群網路字彙、情緒形容詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-2dc446abd2002dc506d9",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: I Have Lived Here for Ten Years 完成式的時間軸",
+          "details": [
+            "主題：搬家經驗、生活歷史回顧",
+            "文法：現在完成式肯定/否定/疑問、have been/gone to差別",
+            "單字：動詞三態變化表（完成式專用）"
+          ],
+          "concepts": [
+            {
+              "name": "主題：搬家經驗、生活歷史回顧",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：現在完成式肯定/否定/疑問、have been/gone to差別",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：動詞三態變化表（完成式專用）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: Trash Should Be Recycled 被動式與環保",
+          "details": [
+            "主題：減塑生活、綠色能源、指派任務",
+            "文法：含助動詞的被動態、使役動詞後接主動與被動的變化",
+            "單字：綠色環保字彙、家事與任務動詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：減塑生活、綠色能源、指派任務",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：含助動詞的被動態、使役動詞後接主動與被動的變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：綠色環保字彙、家事與任務動詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: Do You Know That She Is a Singer? 訊息傳播與子句",
+          "details": [
+            "主題：流行文化、八卦與新聞、疑惑表達",
+            "文法：that引導之名詞子句當受格、if/whether引導的間接問句",
+            "單字：媒體、新聞、溝通動詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：流行文化、八卦與新聞、疑惑表達",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：that引導之名詞子句當受格、if/whether引導的間接問句",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：媒體、新聞、溝通動詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-43a9091ed4c91266b61e",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: She Has Already Finished Homework 動作的完成",
+          "details": [
+            "主題：日常目標達成、成長紀錄",
+            "文法：現在完成式核心語態、since與for引導的時間段落",
+            "單字：進階副詞、過去分詞進階形"
+          ],
+          "concepts": [
+            {
+              "name": "主題：日常目標達成、成長紀錄",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：現在完成式核心語態、since與for引導的時間段落",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：進階副詞、過去分詞進階形",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: English Is Spoken Everywhere 被動語態的日常",
+          "details": [
+            "主題：國際語言、世界工廠、使役命令",
+            "文法：現在與過去被動語態、使役動詞與受格補語的搭配",
+            "單字：國際地理、製造與環保詞彙"
+          ],
+          "concepts": [
+            {
+              "name": "主題：國際語言、世界工廠、使役命令",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：現在與過去被動語態、使役動詞與受格補語的搭配",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：國際地理、製造與環保詞彙",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: I Don't Know If It Will Rain 明天會怎樣",
+          "details": [
+            "主題：氣象預測、同儕社交煩惱",
+            "文法：that名詞子句、wh-間接問句語序倒裝（疑問詞+主詞+動詞）",
+            "單字：內心感受形容詞、社交行為動詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：氣象預測、同儕社交煩惱",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：that名詞子句、wh-間接問句語序倒裝（疑問詞+主詞+動詞）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：內心感受形容詞、社交行為動詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-10df200cd5cef30f581f",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: The Man Who Is Talking to Teacher 關係代名詞與修飾",
+          "details": [
+            "主題：人物特寫、職涯志向、複雜事件描述",
+            "文法：關係代名詞（主格/受格/所有格）引導的形容詞子句",
+            "單字：職涯、特徵形容詞、關代限定與非限定用法字彙"
+          ],
+          "concepts": [
+            {
+              "name": "主題：人物特寫、職涯志向、複雜事件描述",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：關係代名詞（主格/受格/所有格）引導的形容詞子句",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：職涯、特徵形容詞、關代限定與非限定用法字彙",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: Comprehensive Review 會考衝刺與閱讀策略",
+          "details": [
+            "主題：多元文本閱讀、跨學科閱讀、生活素養題探討",
+            "文法：國中三年文法大統整（時態比較、子句合併）",
+            "單字：會考1200-2000字核心單字與片語複習"
+          ],
+          "concepts": [
+            {
+              "name": "主題：多元文本閱讀、跨學科閱讀、生活素養題探討",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：國中三年文法大統整（時態比較、子句合併）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：會考1200-2000字核心單字與片語複習",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-95fb84bac9b716e980a2",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: The House Which Has a Red Roof 關係代名詞與空間",
+          "details": [
+            "主題：社區環境、理想住宅、人物傳記",
+            "文法：關代主格與受格(who, which, that)的省略規則與限定",
+            "單字：建築、環境、形容詞子句核心修飾詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：社區環境、理想住宅、人物傳記",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：關代主格與受格(who, which, that)的省略規則與限定",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：建築、環境、形容詞子句核心修飾詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: Final Countdown 會考閱讀大解密",
+          "details": [
+            "主題：閱讀策略（資訊搜尋、主旨判斷、上下文推論）",
+            "文法：全冊文法架構總複習與克漏字實戰",
+            "單字：歷屆試題高頻單字與綜合測驗核心字彙"
+          ],
+          "concepts": [
+            {
+              "name": "主題：閱讀策略（資訊搜尋、主旨判斷、上下文推論）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：全冊文法架構總複習與克漏字實戰",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：歷屆試題高頻單字與綜合測驗核心字彙",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-284536b42187d348d6be",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: The Teacher Whose Car Is Red 關係代名詞所有格",
+          "details": [
+            "主題：人物描寫進階、社會現象討論",
+            "文法：關係代名詞所有格(whose)、關代that的特殊強制用法",
+            "單字：人格特質進階字彙、複雜修飾語"
+          ],
+          "concepts": [
+            {
+              "name": "主題：人物描寫進階、社會現象討論",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：關係代名詞所有格(whose)、關代that的特殊強制用法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：人格特質進階字彙、複雜修飾語",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: Success Is Ahead 會考綜合統整",
+          "details": [
+            "主題：長文閱讀、雙篇圖表對比題型演練",
+            "文法：三大子句（名詞、副詞、形容詞子句）綜合大對決與總複習",
+            "單字：核心單字與重要片語最後衝刺複習"
+          ],
+          "concepts": [
+            {
+              "name": "主題：長文閱讀、雙篇圖表對比題型演練",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：三大子句（名詞、副詞、形容詞子句）綜合大對決與總複習",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：核心單字與重要片語最後衝刺複習",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-e7c548e354289ec59df5",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "核心語法",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "核心語法：現在完成式",
+          "details": [
+            "現在完成式"
+          ],
+          "concepts": [
+            {
+              "name": "現在完成式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：被動語態",
+          "details": [
+            "被動語態"
+          ],
+          "concepts": [
+            {
+              "name": "被動語態",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：使役動詞",
+          "details": [
+            "使役動詞"
+          ],
+          "concepts": [
+            {
+              "name": "使役動詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：名詞子句/間接問句",
+          "details": [
+            "名詞子句/間接問句"
+          ],
+          "concepts": [
+            {
+              "name": "名詞子句/間接問句",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-084cd9766686f7c73d09",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "翰林版（情境主題整理）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Travel Experiences",
+          "details": [
+            "Travel Experiences"
+          ],
+          "concepts": [
+            {
+              "name": "Travel Experiences",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Tech & Environment",
+          "details": [
+            "Tech & Environment"
+          ],
+          "concepts": [
+            {
+              "name": "Tech & Environment",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Social Media & Communication",
+          "details": [
+            "Social Media & Communication"
+          ],
+          "concepts": [
+            {
+              "name": "Social Media & Communication",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9683c23eed39d8461e5c",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "自動整合情境：翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Travel Experiences",
+          "details": [
+            "Travel Experiences"
+          ],
+          "concepts": [
+            {
+              "name": "Travel Experiences",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Tech & Environment",
+          "details": [
+            "Tech & Environment"
+          ],
+          "concepts": [
+            {
+              "name": "Tech & Environment",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Social Media & Communication",
+          "details": [
+            "Social Media & Communication"
+          ],
+          "concepts": [
+            {
+              "name": "Social Media & Communication",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-2cc18849459b1a6bf847",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "康軒版（情境主題整理）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Moving to New Places",
+          "details": [
+            "Moving to New Places"
+          ],
+          "concepts": [
+            {
+              "name": "Moving to New Places",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Green Living",
+          "details": [
+            "Green Living"
+          ],
+          "concepts": [
+            {
+              "name": "Green Living",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Pop Culture & News",
+          "details": [
+            "Pop Culture & News"
+          ],
+          "concepts": [
+            {
+              "name": "Pop Culture & News",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-e0e1f37f04be220a880a",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "自動整合情境：康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Moving to New Places",
+          "details": [
+            "Moving to New Places"
+          ],
+          "concepts": [
+            {
+              "name": "Moving to New Places",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Green Living",
+          "details": [
+            "Green Living"
+          ],
+          "concepts": [
+            {
+              "name": "Green Living",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Pop Culture & News",
+          "details": [
+            "Pop Culture & News"
+          ],
+          "concepts": [
+            {
+              "name": "Pop Culture & News",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f18bdc1b094848c3b0ee",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "南一版（情境主題整理）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Personal Achievements",
+          "details": [
+            "Personal Achievements"
+          ],
+          "concepts": [
+            {
+              "name": "Personal Achievements",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Global Industry",
+          "details": [
+            "Global Industry"
+          ],
+          "concepts": [
+            {
+              "name": "Global Industry",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Social Pressure",
+          "details": [
+            "Social Pressure"
+          ],
+          "concepts": [
+            {
+              "name": "Social Pressure",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-ef76d53dcc525cb75f55",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "自動整合情境：南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Personal Achievements",
+          "details": [
+            "Personal Achievements"
+          ],
+          "concepts": [
+            {
+              "name": "Personal Achievements",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Global Industry",
+          "details": [
+            "Global Industry"
+          ],
+          "concepts": [
+            {
+              "name": "Global Industry",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Social Pressure",
+          "details": [
+            "Social Pressure"
+          ],
+          "concepts": [
+            {
+              "name": "Social Pressure",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-0fbbcac26caf6b4f00db",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "核心語法",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "核心語法：關係代名詞(形容詞子句)",
+          "details": [
+            "關係代名詞(形容詞子句)"
+          ],
+          "concepts": [
+            {
+              "name": "關係代名詞(形容詞子句)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：進階閱讀策略",
+          "details": [
+            "進階閱讀策略"
+          ],
+          "concepts": [
+            {
+              "name": "進階閱讀策略",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：綜合文法複習",
+          "details": [
+            "綜合文法複習"
+          ],
+          "concepts": [
+            {
+              "name": "綜合文法複習",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-1bed1a459a989151f97b",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "翰林版（情境主題整理）",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Career Planning",
+          "details": [
+            "Career Planning"
+          ],
+          "concepts": [
+            {
+              "name": "Career Planning",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Review & Reading Strategies",
+          "details": [
+            "Review & Reading Strategies"
+          ],
+          "concepts": [
+            {
+              "name": "Review & Reading Strategies",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-73128a5317ea5fbc6186",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "自動整合情境：翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Career Planning",
+          "details": [
+            "Career Planning"
+          ],
+          "concepts": [
+            {
+              "name": "Career Planning",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Review & Reading Strategies",
+          "details": [
+            "Review & Reading Strategies"
+          ],
+          "concepts": [
+            {
+              "name": "Review & Reading Strategies",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f2ba5227e14a95feefc7",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "康軒版（情境主題整理）",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Ideal Housing",
+          "details": [
+            "Ideal Housing"
+          ],
+          "concepts": [
+            {
+              "name": "Ideal Housing",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Final Exam Prep",
+          "details": [
+            "Final Exam Prep"
+          ],
+          "concepts": [
+            {
+              "name": "Final Exam Prep",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-46f358b2ba47d3932d64",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "自動整合情境：康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Ideal Housing",
+          "details": [
+            "Ideal Housing"
+          ],
+          "concepts": [
+            {
+              "name": "Ideal Housing",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Final Exam Prep",
+          "details": [
+            "Final Exam Prep"
+          ],
+          "concepts": [
+            {
+              "name": "Final Exam Prep",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-45c132c5390289f32a17",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "南一版（情境主題整理）",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Advanced Character Description",
+          "details": [
+            "Advanced Character Description"
+          ],
+          "concepts": [
+            {
+              "name": "Advanced Character Description",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Overall Review",
+          "details": [
+            "Overall Review"
+          ],
+          "concepts": [
+            {
+              "name": "Overall Review",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-d8666dba55f710e319be",
+      "subject": "英文",
+      "grade": "國中三年級",
+      "edition": "自動整合情境：南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Advanced Character Description",
+          "details": [
+            "Advanced Character Description"
+          ],
+          "concepts": [
+            {
+              "name": "Advanced Character Description",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Overall Review",
+          "details": [
+            "Overall Review"
+          ],
+          "concepts": [
+            {
+              "name": "Overall Review",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

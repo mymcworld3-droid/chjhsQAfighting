@@ -1,0 +1,459 @@
+{
+  "schema": 1,
+  "grade": "國小三年級",
+  "subject": "數學",
+  "books": [
+    {
+      "bookId": "book-6dc6a79dd5b44ca8098b",
+      "subject": "數學",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "10000以內的數",
+          "details": [
+            "千位與位值換算",
+            "比較、數線與估算",
+            "四位數讀寫"
+          ],
+          "concepts": [
+            {
+              "name": "千位與位值換算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "比較、數線與估算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "四位數讀寫",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "四位數加減",
+          "details": [
+            "加減直式與驗算",
+            "進退位",
+            "生活解題"
+          ],
+          "concepts": [
+            {
+              "name": "加減直式與驗算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "進退位",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活解題",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "乘法",
+          "details": [
+            "二三位數乘一位數",
+            "乘法直式",
+            "乘法應用"
+          ],
+          "concepts": [
+            {
+              "name": "二三位數乘一位數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "乘法直式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "乘法應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "長度與重量",
+          "details": [
+            "毫米與公分",
+            "公斤與公克",
+            "測量與估算"
+          ],
+          "concepts": [
+            {
+              "name": "毫米與公分",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公斤與公克",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "測量與估算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "幾何與分數",
+          "details": [
+            "角與基本圖形",
+            "分數的意義",
+            "同分母簡單比較"
+          ],
+          "concepts": [
+            {
+              "name": "角與基本圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "分數的意義",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "同分母簡單比較",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-d52970dbe6615e375136",
+      "subject": "數學",
+      "grade": "國小三年級",
+      "edition": "類南一版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：數到10000",
+          "details": [
+            "數到10000的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "數到10000的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：四位數的加減",
+          "details": [
+            "四位數的加減的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "四位數的加減的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：乘法",
+          "details": [
+            "乘法的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "乘法的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-4b30737e4a3d21d5b4fb",
+      "subject": "數學",
+      "grade": "國小三年級",
+      "edition": "類翰林版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：10000以內的數",
+          "details": [
+            "10000以內的數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "10000以內的數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：10000以內的加減",
+          "details": [
+            "10000以內的加減的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "10000以內的加減的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：毫米與數線",
+          "details": [
+            "毫米與數線的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "毫米與數線的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-57c036432e05734fbc4b",
+      "subject": "數學",
+      "grade": "國小三年級",
+      "edition": "類康軒版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：10000以內的數",
+          "details": [
+            "10000以內的數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "10000以內的數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：四位數的加減",
+          "details": [
+            "四位數的加減的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "四位數的加減的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：毫米",
+          "details": [
+            "毫米的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "毫米的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-36c43173bf5a783ddee2",
+      "subject": "數學",
+      "grade": "國小三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "除法",
+          "details": [
+            "分裝與平分",
+            "除法直式",
+            "餘數與驗算"
+          ],
+          "concepts": [
+            {
+              "name": "分裝與平分",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "除法直式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "餘數與驗算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "分數的加減",
+          "details": [
+            "同分母分數加法",
+            "同分母分數減法",
+            "分數與整數"
+          ],
+          "concepts": [
+            {
+              "name": "同分母分數加法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "同分母分數減法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "分數與整數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "小數初步",
+          "details": [
+            "一位小數與位值",
+            "小數比較",
+            "一位小數加減"
+          ],
+          "concepts": [
+            {
+              "name": "一位小數與位值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "小數比較",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "一位小數加減",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "時間與面積",
+          "details": [
+            "時分秒換算",
+            "面積直觀與平方公分",
+            "長方形面積"
+          ],
+          "concepts": [
+            {
+              "name": "時分秒換算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "面積直觀與平方公分",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "長方形面積",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "規律與資料",
+          "details": [
+            "圖形與數字規律",
+            "表格與長條圖",
+            "解讀資料"
+          ],
+          "concepts": [
+            {
+              "name": "圖形與數字規律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "表格與長條圖",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "解讀資料",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

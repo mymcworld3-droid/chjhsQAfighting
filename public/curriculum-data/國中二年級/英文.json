@@ -1,0 +1,1369 @@
+{
+  "schema": 1,
+  "grade": "國中二年級",
+  "subject": "英文",
+  "books": [
+    {
+      "bookId": "book-43cb7bd5a7f5c4d26e58",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: What Did You Do Last Summer? 過去的回憶",
+          "details": [
+            "主題：暑假活動、探訪親友、過去事件",
+            "文法：過去簡單式（規則與不規則動詞過去式形態、過去時間副詞）",
+            "單字：假期活動、過去時間副詞(yesterday, ago)"
+          ],
+          "concepts": [
+            {
+              "name": "主題：暑假活動、探訪親友、過去事件",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：過去簡單式（規則與不規則動詞過去式形態、過去時間副詞）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：假期活動、過去時間副詞(yesterday, ago)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: When I Saw Him, He Was Running. 旅遊與正在發生的過去",
+          "details": [
+            "主題：交通工具、問路與指引、旅遊驚魂記",
+            "文法：過去進行式、連接詞 when/while 引導的時間子句",
+            "單字：地標、交通工具(MRT, train, ship)、路徑名詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：交通工具、問路與指引、旅遊驚魂記",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：過去進行式、連接詞 when/while 引導的時間子句",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：地標、交通工具(MRT, train, ship)、路徑名詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: Show Me Your New Clothes 購物與授與動詞",
+          "details": [
+            "主題：買衣服、常見疾病與醫院看病",
+            "文法：授與動詞 (give/buy/send/show + O1 + O2) 及其介系詞(to/for)轉換",
+            "單字：衣物、身體部位、症狀名詞(headache, cold)"
+          ],
+          "concepts": [
+            {
+              "name": "主題：買衣服、常見疾病與醫院看病",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：授與動詞 (give/buy/send/show + O1 + O2) 及其介系詞(to/for)轉換",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：衣物、身體部位、症狀名詞(headache, cold)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-ba5bb17d0a7a110d487c",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: I Visited My Grandparents 過去式與童年",
+          "details": [
+            "主題：鄉村生活、過去回憶",
+            "文法：規則動詞過去式、不規則動詞過去式核心表",
+            "單字：過去活動短語、時間副詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：鄉村生活、過去回憶",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：規則動詞過去式、不規則動詞過去式核心表",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：過去活動短語、時間副詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: Taking the MRT 交通工具與特殊時點動作",
+          "details": [
+            "主題：大眾運輸、台北觀光",
+            "文法：搭乘交通工具的兩種說法(by / take)、過去進行式",
+            "單字：交通動詞、公共地標、旅遊用詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：大眾運輸、台北觀光",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：搭乘交通工具的兩種說法(by / take)、過去進行式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：交通動詞、公共地標、旅遊用詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: Buy a Present for Her 節日送禮與病痛",
+          "details": [
+            "主題：禮品挑選、生病就醫",
+            "文法：授與動詞加雙受詞結構、情態助動詞 should/must 的義務用法",
+            "單字：精美禮品、看醫生相關名詞字彙"
+          ],
+          "concepts": [
+            {
+              "name": "主題：禮品挑選、生病就醫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：授與動詞加雙受詞結構、情態助動詞 should/must 的義務用法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：精美禮品、看醫生相關名詞字彙",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-de75eec5b822e293e553",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: We Had a Great Time Last Night 昨天的事",
+          "details": [
+            "主題：夜市體驗、過去回顧",
+            "文法：過去簡單式與不規則動詞變化、時間連接詞 Before / After / When",
+            "單字：生活娛樂動詞、過去副詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：夜市體驗、過去回顧",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：過去簡單式與不規則動詞變化、時間連接詞 Before / After / When",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：生活娛樂動詞、過去副詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: How Can We Get to the Museum? 問路與交通",
+          "details": [
+            "主題：城市地圖、問路指南",
+            "文法：搭乘交通工具的介系詞用法、過去進行式基礎",
+            "單字：方向(turn left/right, go straight)、博物館等站名"
+          ],
+          "concepts": [
+            {
+              "name": "主題：城市地圖、問路指南",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：搭乘交通工具的介系詞用法、過去進行式基礎",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：方向(turn left/right, go straight)、博物館等站名",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: Pass Me the Salt 廚房互助與健康",
+          "details": [
+            "主題：餐桌對話、感冒請假",
+            "文法：授與動詞句型(V + 物 + to/for + 人)、感冒與症狀句型",
+            "單字：調味料、身體感官不適詞彙"
+          ],
+          "concepts": [
+            {
+              "name": "主題：餐桌對話、感冒請假",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：授與動詞句型(V + 物 + to/for + 人)、感冒與症狀句型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：調味料、身體感官不適詞彙",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-db978b68c76766b38af2",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: What Will You Be in the Future? 未來計畫",
+          "details": [
+            "主題：未來職涯想望、科技發展、週末野餐規畫",
+            "文法：未來式 (will / be going to) 及其時間副詞",
+            "單字：職業(engineer, pilot, writer)、未來時間(tomorrow, next week)"
+          ],
+          "concepts": [
+            {
+              "name": "主題：未來職涯想望、科技發展、週末野餐規畫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：未來式 (will / be going to) 及其時間副詞",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：職業(engineer, pilot, writer)、未來時間(tomorrow, next week)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: Nature Is Cleaner Than Cities 人事物比較",
+          "details": [
+            "主題：城鄉對比、大自然奧秘、產品挑選比較",
+            "文法：形容詞與副詞的比較級、最高級句型與不規則變化",
+            "單字：形容詞與副詞之高級形態、環境單字"
+          ],
+          "concepts": [
+            {
+              "name": "主題：城鄉對比、大自然奧秘、產品挑選比較",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：形容詞與副詞的比較級、最高級句型與不規則變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：形容詞與副詞之高級形態、環境單字",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: You Look Great! 感官與動詞組合",
+          "details": [
+            "主題：感官體驗、心理感受、喜好與承諾",
+            "文法：連綴動詞、感官動詞(see/hear/watch + O + V/V-ing)",
+            "單字：感官形容詞、後接不定詞或動名詞之常見動詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：感官體驗、心理感受、喜好與承諾",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：連綴動詞、感官動詞(see/hear/watch + O + V/V-ing)",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：感官形容詞、後接不定詞或動名詞之常見動詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-db06bb5f080a38b86a3b",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: I Will Go Camping Tomorrow 未來活動",
+          "details": [
+            "主題：營隊活動、生涯探索",
+            "文法：未來式雙結構will/be going to的抉擇與副詞搭配",
+            "單字：戶外活動名詞、新興職業名稱"
+          ],
+          "concepts": [
+            {
+              "name": "主題：營隊活動、生涯探索",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：未來式雙結構will/be going to的抉擇與副詞搭配",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：戶外活動名詞、新興職業名稱",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: The Blue Whale Is the Biggest Animal 萬物之最",
+          "details": [
+            "主題：生物金氏紀錄、地球地理特徵之最",
+            "文法：單音節/多音節形容詞比較級最高級公式、不規則形",
+            "單字：地理名詞(mountain, river, ocean)、特級形容詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：生物金氏紀錄、地球地理特徵之最",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：單音節/多音節形容詞比較級最高級公式、不規則形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：地理名詞(mountain, river, ocean)、特級形容詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: I Hear Someone Singing 感官動詞應用",
+          "details": [
+            "主題：音樂會、五感體驗、青少年心理",
+            "文法：感官動詞配原形/Ving、連綴動詞加形容詞或 like N",
+            "單字：音樂、藝術、感覺形容詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：音樂會、五感體驗、青少年心理",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：感官動詞配原形/Ving、連綴動詞加形容詞或 like N",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：音樂、藝術、感覺形容詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-de8ce5e97a6a8069357c",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/國文/chinese.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "Unit 1: They Are Going to Visit the Zoo 未來的約定",
+          "details": [
+            "主題：氣候預測、旅遊計畫",
+            "文法：未來式 will 與 be going to 句型轉換與問答",
+            "單字：旅遊計畫詞彙、未來時間片語"
+          ],
+          "concepts": [
+            {
+              "name": "主題：氣候預測、旅遊計畫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：未來式 will 與 be going to 句型轉換與問答",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：旅遊計畫詞彙、未來時間片語",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2: Who Is Faster, the Horse or the Zebra? 比較的世界",
+          "details": [
+            "主題：動物科普、成績比較",
+            "文法：比較級/最高級基本與進階句型(The + 最高級 + 範圍)",
+            "單字：動物名詞、長音節形容詞的變化"
+          ],
+          "concepts": [
+            {
+              "name": "主題：動物科普、成績比較",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：比較級/最高級基本與進階句型(The + 最高級 + 範圍)",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：動物名詞、長音節形容詞的變化",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3: The Soup Tastes Delicious 連綴感官動詞",
+          "details": [
+            "主題：烹飪比賽、五感觀察",
+            "文法：連綴動詞與感官動詞之核心句型與動詞變化限制",
+            "單字：食物風味形容詞、知覺動詞"
+          ],
+          "concepts": [
+            {
+              "name": "主題：烹飪比賽、五感觀察",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文法：連綴動詞與感官動詞之核心句型與動詞變化限制",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "單字：食物風味形容詞、知覺動詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-718ff7df7e0c4809d4f7",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "核心語法",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "核心語法：過去簡單式(Be & V)",
+          "details": [
+            "過去簡單式(Be & V)"
+          ],
+          "concepts": [
+            {
+              "name": "過去簡單式(Be & V)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：過去進行式",
+          "details": [
+            "過去進行式"
+          ],
+          "concepts": [
+            {
+              "name": "過去進行式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：授與動詞",
+          "details": [
+            "授與動詞"
+          ],
+          "concepts": [
+            {
+              "name": "授與動詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：助動詞 Have to/Must/Should",
+          "details": [
+            "助動詞 Have to/Must/Should"
+          ],
+          "concepts": [
+            {
+              "name": "助動詞 Have to/Must/Should",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-4862acf27d39f92e1afc",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "翰林版（情境主題整理）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Summer Vacation",
+          "details": [
+            "Summer Vacation"
+          ],
+          "concepts": [
+            {
+              "name": "Summer Vacation",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Travel & Directions",
+          "details": [
+            "Travel & Directions"
+          ],
+          "concepts": [
+            {
+              "name": "Travel & Directions",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Health & Illness",
+          "details": [
+            "Health & Illness"
+          ],
+          "concepts": [
+            {
+              "name": "Health & Illness",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-26433bfe2490ce9d1e18",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "自動整合情境：翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Summer Vacation",
+          "details": [
+            "Summer Vacation"
+          ],
+          "concepts": [
+            {
+              "name": "Summer Vacation",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Travel & Directions",
+          "details": [
+            "Travel & Directions"
+          ],
+          "concepts": [
+            {
+              "name": "Travel & Directions",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Health & Illness",
+          "details": [
+            "Health & Illness"
+          ],
+          "concepts": [
+            {
+              "name": "Health & Illness",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-0c5ddc52770cfdb28812",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "康軒版（情境主題整理）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Childhood Memories",
+          "details": [
+            "Childhood Memories"
+          ],
+          "concepts": [
+            {
+              "name": "Childhood Memories",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Public Transportation",
+          "details": [
+            "Public Transportation"
+          ],
+          "concepts": [
+            {
+              "name": "Public Transportation",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Medical Care",
+          "details": [
+            "Medical Care"
+          ],
+          "concepts": [
+            {
+              "name": "Medical Care",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-11151b4024d81dea1560",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "自動整合情境：康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Childhood Memories",
+          "details": [
+            "Childhood Memories"
+          ],
+          "concepts": [
+            {
+              "name": "Childhood Memories",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Public Transportation",
+          "details": [
+            "Public Transportation"
+          ],
+          "concepts": [
+            {
+              "name": "Public Transportation",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Medical Care",
+          "details": [
+            "Medical Care"
+          ],
+          "concepts": [
+            {
+              "name": "Medical Care",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9be784fd9f0f4cac4fcd",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "南一版（情境主題整理）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Night Market Experiences",
+          "details": [
+            "Night Market Experiences"
+          ],
+          "concepts": [
+            {
+              "name": "Night Market Experiences",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：City Maps & Directions",
+          "details": [
+            "City Maps & Directions"
+          ],
+          "concepts": [
+            {
+              "name": "City Maps & Directions",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Dining Table Manners",
+          "details": [
+            "Dining Table Manners"
+          ],
+          "concepts": [
+            {
+              "name": "Dining Table Manners",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-b40bffda31d2a8369e7b",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "自動整合情境：南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Night Market Experiences",
+          "details": [
+            "Night Market Experiences"
+          ],
+          "concepts": [
+            {
+              "name": "Night Market Experiences",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：City Maps & Directions",
+          "details": [
+            "City Maps & Directions"
+          ],
+          "concepts": [
+            {
+              "name": "City Maps & Directions",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Dining Table Manners",
+          "details": [
+            "Dining Table Manners"
+          ],
+          "concepts": [
+            {
+              "name": "Dining Table Manners",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-6b1feafa13c915ff22ab",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "核心語法",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "核心語法：未來式(Will/Be going to)",
+          "details": [
+            "未來式(Will/Be going to)"
+          ],
+          "concepts": [
+            {
+              "name": "未來式(Will/Be going to)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：比較級與最高級",
+          "details": [
+            "比較級與最高級"
+          ],
+          "concepts": [
+            {
+              "name": "比較級與最高級",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：連綴動詞",
+          "details": [
+            "連綴動詞"
+          ],
+          "concepts": [
+            {
+              "name": "連綴動詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "核心語法：感官動詞(V/V-ing)",
+          "details": [
+            "感官動詞(V/V-ing)"
+          ],
+          "concepts": [
+            {
+              "name": "感官動詞(V/V-ing)",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-8810fa502e963eaff6a2",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "翰林版（情境主題整理）",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Future Career",
+          "details": [
+            "Future Career"
+          ],
+          "concepts": [
+            {
+              "name": "Future Career",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Comparison of Life",
+          "details": [
+            "Comparison of Life"
+          ],
+          "concepts": [
+            {
+              "name": "Comparison of Life",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Sensory Experiences",
+          "details": [
+            "Sensory Experiences"
+          ],
+          "concepts": [
+            {
+              "name": "Sensory Experiences",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-c2a4d8f3e83348b99e91",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "自動整合情境：翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Future Career",
+          "details": [
+            "Future Career"
+          ],
+          "concepts": [
+            {
+              "name": "Future Career",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Comparison of Life",
+          "details": [
+            "Comparison of Life"
+          ],
+          "concepts": [
+            {
+              "name": "Comparison of Life",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Sensory Experiences",
+          "details": [
+            "Sensory Experiences"
+          ],
+          "concepts": [
+            {
+              "name": "Sensory Experiences",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-a84915930399675c3f54",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "康軒版（情境主題整理）",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Future Plans & Tech",
+          "details": [
+            "Future Plans & Tech"
+          ],
+          "concepts": [
+            {
+              "name": "Future Plans & Tech",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Nature & World Records",
+          "details": [
+            "Nature & World Records"
+          ],
+          "concepts": [
+            {
+              "name": "Nature & World Records",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Music & Feelings",
+          "details": [
+            "Music & Feelings"
+          ],
+          "concepts": [
+            {
+              "name": "Music & Feelings",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-5848a62bc22a65578ea1",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "自動整合情境：康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Future Plans & Tech",
+          "details": [
+            "Future Plans & Tech"
+          ],
+          "concepts": [
+            {
+              "name": "Future Plans & Tech",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Nature & World Records",
+          "details": [
+            "Nature & World Records"
+          ],
+          "concepts": [
+            {
+              "name": "Nature & World Records",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Music & Feelings",
+          "details": [
+            "Music & Feelings"
+          ],
+          "concepts": [
+            {
+              "name": "Music & Feelings",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-fd15cd3f76fbfc06809b",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "南一版（情境主題整理）",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Weather Forecasts",
+          "details": [
+            "Weather Forecasts"
+          ],
+          "concepts": [
+            {
+              "name": "Weather Forecasts",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Animal Comparison",
+          "details": [
+            "Animal Comparison"
+          ],
+          "concepts": [
+            {
+              "name": "Animal Comparison",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Cooking Contests",
+          "details": [
+            "Cooking Contests"
+          ],
+          "concepts": [
+            {
+              "name": "Cooking Contests",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f71b7b28faced364b012",
+      "subject": "英文",
+      "grade": "國中二年級",
+      "edition": "自動整合情境：南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/英文/english.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "情境主題：Weather Forecasts",
+          "details": [
+            "Weather Forecasts"
+          ],
+          "concepts": [
+            {
+              "name": "Weather Forecasts",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Animal Comparison",
+          "details": [
+            "Animal Comparison"
+          ],
+          "concepts": [
+            {
+              "name": "Animal Comparison",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境主題：Cooking Contests",
+          "details": [
+            "Cooking Contests"
+          ],
+          "concepts": [
+            {
+              "name": "Cooking Contests",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

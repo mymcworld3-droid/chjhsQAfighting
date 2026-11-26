@@ -10,7 +10,9 @@ function createSparePool({ttlMs=8*60*1000,maxScopes=350,maxPerScope=4,similar=()
     if (!fields || !fields.owner || !fields.subject || !fields.topic) return '';
     return crypto.createHash('sha256').update(JSON.stringify([
       fields.owner,fields.mode||'solo',fields.subject,fields.level,
-      fields.topic,fields.difficulty,String(fields.rank??''),fields.knowledge||''
+      fields.topic,fields.difficulty,String(fields.rank??''),fields.knowledge||'',
+      ...(fields.curriculumRevision?[fields.curriculumRevision]:[]),
+      ...(fields.curriculum?[fields.curriculum]:[])
     ])).digest('hex');
   }
   function tidy() {

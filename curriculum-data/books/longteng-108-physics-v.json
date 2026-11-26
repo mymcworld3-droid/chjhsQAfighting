@@ -1,0 +1,29 @@
+{
+  "bookId": "longteng-108-physics-v",
+  "subject": "物理",
+  "grade": "高中二年級",
+  "edition": "龍騰版",
+  "publisher": "龍騰",
+  "term": "選修物理V",
+  "bookLabel": "選修物理V（全）",
+  "schoolYear": null,
+  "curriculumStandard": "108課綱",
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-partial",
+  "scopeSelectionStatus": "pending-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/longteng-108-physics-v.json",
+  "sources": [
+    {
+      "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10571",
+      "type": "official-product",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。",
+  "units": []
+}

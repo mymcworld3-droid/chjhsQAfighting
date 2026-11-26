@@ -45,7 +45,16 @@
     // Bound history without copying full questions or AI outlines into the profile.
     const scopes={...(raw?.scopes||{}),[meta.scopeId]:s};
     for(const key of Object.keys(scopes).sort((a,b)=>(scopes[b].updatedAt||0)-(scopes[a].updatedAt||0)).slice(24))delete scopes[key];
-    return {version:1,scopes};
+    // Supplemental cross-edition observations; existing scope/facet keys retain their meaning.
+    // Never infer a mapping for untagged legacy answers or count helped answers as independent.
+    let standards=raw?.standards;
+    const standardId=String(meta.standardConceptId||'');
+    if(/^[a-z][a-z0-9-]{4,99}$/.test(standardId)&&typeof event.correct==='boolean'&&!event.skipped&&event.kind!=='lesson'){
+      standards={...(standards||{})};const previous=standards[standardId]||{},seen=Array.isArray(previous.seen)?previous.seen:[];
+      if(!seen.includes(id))standards[standardId]={...update(previous,event.correct,Math.min(3,count(event.help)),now,meta.difficulty),seen:[...seen,id].slice(-128)};
+      for(const key of Object.keys(standards).sort((a,b)=>(standards[b].lastAt||0)-(standards[a].lastAt||0)).slice(256))delete standards[key];
+    }
+    return {version:1,scopes,...(standards?{standards}: {})};
   }
   function status(input){const r=row(input);return !r.n?'待診斷':r.u<POLICY.stableMinimum?'持續診斷':(r.uc+2)/(r.u+4)<.6?'優先補強':(r.uc+2)/(r.u+4)<.78?'持續鞏固':'表現穩定';}
   function needsLesson(state,conceptId){const r=row(state?.concepts?.[conceptId]);return r.w>=POLICY.lessonWrongStreak&&r.n-r.taughtThrough>=POLICY.lessonWrongStreak;}

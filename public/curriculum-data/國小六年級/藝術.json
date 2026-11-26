@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "國小六年級",
+  "subject": "藝術",
+  "books": [
+    {
+      "bookId": "book-d7bef0a812b816024057",
+      "subject": "藝術",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "視覺與公共藝術",
+          "details": [
+            "公共藝術與空間",
+            "創意設計",
+            "藝術倫理"
+          ],
+          "concepts": [
+            {
+              "name": "公共藝術與空間",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "創意設計",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "藝術倫理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "音樂與文化",
+          "details": [
+            "多元樂種",
+            "藝術與時代",
+            "作品分析"
+          ],
+          "concepts": [
+            {
+              "name": "多元樂種",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "藝術與時代",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "作品分析",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "表演整合",
+          "details": [
+            "舞蹈與戲劇",
+            "劇本構思",
+            "成果展演"
+          ],
+          "concepts": [
+            {
+              "name": "舞蹈與戲劇",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "劇本構思",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "成果展演",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-a4e0b41d960e891ab69e",
+      "subject": "藝術",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "藝術與生活",
+          "details": [
+            "跨領域創作",
+            "創作目的",
+            "觀眾溝通"
+          ],
+          "concepts": [
+            {
+              "name": "跨領域創作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "創作目的",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "觀眾溝通",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "視覺與音樂統整",
+          "details": [
+            "視覺語言",
+            "節奏與旋律",
+            "比較不同風格"
+          ],
+          "concepts": [
+            {
+              "name": "視覺語言",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "節奏與旋律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "比較不同風格",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "國中藝術銜接",
+          "details": [
+            "作品欣賞與分析",
+            "媒材安全",
+            "合作與發表"
+          ],
+          "concepts": [
+            {
+              "name": "作品欣賞與分析",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "媒材安全",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "合作與發表",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

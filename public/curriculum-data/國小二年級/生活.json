@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小二年級",
+  "subject": "生活",
+  "books": [
+    {
+      "bookId": "book-d36fee992f96aab5d4eb",
+      "subject": "生活",
+      "grade": "國小二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "成長與生活",
+          "details": [
+            "自我照顧",
+            "時間安排",
+            "尊重差異"
+          ],
+          "concepts": [
+            {
+              "name": "自我照顧",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "時間安排",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "尊重差異",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "自然探索",
+          "details": [
+            "植物的生長",
+            "天氣與季節",
+            "觀察記錄"
+          ],
+          "concepts": [
+            {
+              "name": "植物的生長",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "天氣與季節",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "觀察記錄",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "社區與生活",
+          "details": [
+            "交通安全",
+            "服務與工作",
+            "節慶文化"
+          ],
+          "concepts": [
+            {
+              "name": "交通安全",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "服務與工作",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "節慶文化",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "設計與創作",
+          "details": [
+            "材料與工具",
+            "音樂與肢體",
+            "合作完成作品"
+          ],
+          "concepts": [
+            {
+              "name": "材料與工具",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "音樂與肢體",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "合作完成作品",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9c2d2c14cfcc1e0fdf82",
+      "subject": "生活",
+      "grade": "國小二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "環境與資源",
+          "details": [
+            "水、電與資源利用",
+            "垃圾減量",
+            "保護環境"
+          ],
+          "concepts": [
+            {
+              "name": "水、電與資源利用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "垃圾減量",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "保護環境",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生活中的科學",
+          "details": [
+            "聲音與光影",
+            "簡單機械與工具",
+            "提出問題並驗證"
+          ],
+          "concepts": [
+            {
+              "name": "聲音與光影",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡單機械與工具",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "提出問題並驗證",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生活文化",
+          "details": [
+            "家鄉特色",
+            "多元文化與節慶",
+            "關懷社區"
+          ],
+          "concepts": [
+            {
+              "name": "家鄉特色",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "多元文化與節慶",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "關懷社區",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "團隊合作",
+          "details": [
+            "角色分工",
+            "解決衝突",
+            "發表與反思"
+          ],
+          "concepts": [
+            {
+              "name": "角色分工",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "解決衝突",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "發表與反思",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

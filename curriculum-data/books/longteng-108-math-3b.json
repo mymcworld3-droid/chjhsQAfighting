@@ -1,0 +1,121 @@
+{
+  "bookId": "longteng-108-math-3b",
+  "subject": "數學B",
+  "grade": "高中二年級",
+  "edition": "龍騰版",
+  "publisher": "龍騰",
+  "term": "第一學期",
+  "bookLabel": "第3B冊",
+  "schoolYear": null,
+  "curriculumStandard": "108課綱",
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-units",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "required-track",
+  "schedulePolicy": "book-sequence",
+  "sourceFile": "curriculum-data/books/longteng-108-math-3b.json",
+  "sources": [
+    {
+      "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9972",
+      "type": "official-product-toc",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。",
+  "units": [
+    {
+      "unit": "單元1 弧度量",
+      "details": [
+        "弧度量"
+      ],
+      "concepts": [
+        {
+          "name": "弧度量",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元2 週期性數學模型",
+      "details": [
+        "週期性數學模型"
+      ],
+      "concepts": [
+        {
+          "name": "週期性數學模型",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元3 指數函數",
+      "details": [
+        "指數函數"
+      ],
+      "concepts": [
+        {
+          "name": "指數函數",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元4 對數",
+      "details": [
+        "對數"
+      ],
+      "concepts": [
+        {
+          "name": "對數",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元5 對數函數",
+      "details": [
+        "對數函數"
+      ],
+      "concepts": [
+        {
+          "name": "對數函數",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元6 平面向量",
+      "details": [
+        "平面向量"
+      ],
+      "concepts": [
+        {
+          "name": "平面向量",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元7 平面向量的運算",
+      "details": [
+        "平面向量的運算"
+      ],
+      "concepts": [
+        {
+          "name": "平面向量的運算",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

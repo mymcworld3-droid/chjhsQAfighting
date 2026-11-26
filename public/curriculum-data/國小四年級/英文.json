@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小四年級",
+  "subject": "英文",
+  "books": [
+    {
+      "bookId": "book-085844b88c76f6efa7fa",
+      "subject": "英文",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "自然發音",
+          "details": [
+            "長短母音",
+            "子音組合",
+            "常見拼字規則"
+          ],
+          "concepts": [
+            {
+              "name": "長短母音",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "子音組合",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "常見拼字規則",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生活單字",
+          "details": [
+            "時間與星期",
+            "天氣",
+            "日常活動"
+          ],
+          "concepts": [
+            {
+              "name": "時間與星期",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "天氣",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "日常活動",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "句型與對話",
+          "details": [
+            "What time...",
+            "Where is...",
+            "現在簡單式"
+          ],
+          "concepts": [
+            {
+              "name": "What time...",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "Where is...",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "現在簡單式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "閱讀策略",
+          "details": [
+            "讀懂簡短對話",
+            "找關鍵字",
+            "圖文比對"
+          ],
+          "concepts": [
+            {
+              "name": "讀懂簡短對話",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "找關鍵字",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "圖文比對",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-c9f1be15ab0451aaf0d2",
+      "subject": "英文",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "自然發音與詞彙",
+          "details": [
+            "長母音組合",
+            "複合子音",
+            "基礎片語"
+          ],
+          "concepts": [
+            {
+              "name": "長母音組合",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "複合子音",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "基礎片語",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "情境英語",
+          "details": [
+            "場所與交通",
+            "衣著與季節",
+            "興趣"
+          ],
+          "concepts": [
+            {
+              "name": "場所與交通",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "衣著與季節",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "興趣",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "句型練習",
+          "details": [
+            "現在進行式初步",
+            "Can you...",
+            "介系詞位置"
+          ],
+          "concepts": [
+            {
+              "name": "現在進行式初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "Can you...",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "介系詞位置",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "簡短閱讀與書寫",
+          "details": [
+            "主旨與細節",
+            "日常留言",
+            "簡易句子串接"
+          ],
+          "concepts": [
+            {
+              "name": "主旨與細節",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "日常留言",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡易句子串接",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "schema": 1,
+  "notes": "結構檢查、作者自查及範圍審核不能冒充獨立內容審核。正式審核需記錄 referenceId、questionHash（整個參考題 JSON 的 SHA-256）、reviewer、reviewedAt、method=independent-content-review 與 status。",
+  "reviews": []
+}

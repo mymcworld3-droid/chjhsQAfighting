@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小四年級",
+  "subject": "社會",
+  "books": [
+    {
+      "bookId": "book-875cc2d3c588240a663c",
+      "subject": "社會",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "臺灣的位置與環境",
+          "details": [
+            "方位與地圖",
+            "臺灣的位置",
+            "地形與氣候"
+          ],
+          "concepts": [
+            {
+              "name": "方位與地圖",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "臺灣的位置",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "地形與氣候",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "臺灣的生活與文化",
+          "details": [
+            "族群與文化",
+            "節慶與信仰",
+            "文化保存"
+          ],
+          "concepts": [
+            {
+              "name": "族群與文化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "節慶與信仰",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文化保存",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "臺灣的產業與交通",
+          "details": [
+            "農業與工業",
+            "服務業",
+            "運輸與生活"
+          ],
+          "concepts": [
+            {
+              "name": "農業與工業",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "服務業",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "運輸與生活",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "公共生活",
+          "details": [
+            "權利與責任",
+            "地方公共事務",
+            "民主參與初步"
+          ],
+          "concepts": [
+            {
+              "name": "權利與責任",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "地方公共事務",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "民主參與初步",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-0f9762bc6f0a2fd02163",
+      "subject": "社會",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "臺灣的歷史與變遷",
+          "details": [
+            "史前與早期住民",
+            "大航海時代",
+            "近代生活變遷"
+          ],
+          "concepts": [
+            {
+              "name": "史前與早期住民",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "大航海時代",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "近代生活變遷",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "家鄉與臺灣",
+          "details": [
+            "區域特色",
+            "人口遷移",
+            "自然災害與調適"
+          ],
+          "concepts": [
+            {
+              "name": "區域特色",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "人口遷移",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "自然災害與調適",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "消費與環境",
+          "details": [
+            "消費者責任",
+            "資源利用",
+            "永續生活"
+          ],
+          "concepts": [
+            {
+              "name": "消費者責任",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "資源利用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "永續生活",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "社會探究",
+          "details": [
+            "資料與地圖",
+            "多元觀點",
+            "提出解決方案"
+          ],
+          "concepts": [
+            {
+              "name": "資料與地圖",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "多元觀點",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "提出解決方案",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

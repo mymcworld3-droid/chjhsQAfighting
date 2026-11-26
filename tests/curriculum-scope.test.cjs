@@ -48,19 +48,17 @@ test('checking curriculum ranges updates the selected list immediately without a
   assert.doesNotMatch(script, /項待加入/);
 });
 
-test('semester and edition choices are automatic and both semesters feed one chapter list', () => {
-  assert.match(script, /const AUTO_TERM='全學年',AUTO_EDITION='自動整合'/);
-  assert.match(script, /id="cs-term" hidden aria-hidden="true"/);
-  assert.match(script, /id="cs-edition" hidden aria-hidden="true"/);
-  assert.match(script, /function mergeYearUnits\(yearData\)/);
-  assert.match(script, /\['第一學期','第二學期'/);
-  assert.match(script, /semester\['108課綱複習版'\]/);
-  assert.match(script, /versions\.includes\('翰林版'\)\?'翰林版':versions\[0\]/);
-  assert.doesNotMatch(script, /el\('cs-term'\)\.onchange/);
-  assert.doesNotMatch(script, /el\('cs-edition'\)\.onchange/);
-  assert.match(script, /termBadge\.textContent=u\.term==='第一學期'\?'上學期'/);
-  assert.match(script, /\[canonicalSubject\(\),grade,AUTO_TERM,subject\]\.join\('\/'\)/);
-  assert.match(script, /\[subject,year\+'年級全學年'\]\.join\('\/'\)/);
+test('semester and edition controls use lazy grade/subject shards and preserve full-year defaults', () => {
+  assert.match(script, /id="cs-term"/);
+  assert.match(script, /id="cs-edition"/);
+  assert.doesNotMatch(script, /id="cs-(?:term|edition)" hidden/);
+  assert.match(script, /el\('cs-term'\)\.onchange/);
+  assert.match(script, /el\('cs-edition'\)\.onchange/);
+  assert.match(script, /async function loadCatalogue/);
+  assert.match(script, /records\.some\(selectableBook\)/);
+  assert.match(script, /CurriculumRangeRules\.selectableBook/);
+  assert.match(script, /option\.disabled=!available/);
+  assert.match(script, /term===AUTO_TERM\|\|b\.term===term/);
 });
 
 test('verified Kang Hsuan first-semester grade-seven math includes 2-4 exponent rules', () => {

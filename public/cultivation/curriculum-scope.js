@@ -1,10 +1,9 @@
-// 教材範圍選擇器；年級 → 科目 → 全學年章節，保持原有 focusedUnits 儲存格式。
+// 教材範圍選擇器；版本／冊次按年級科目延遲載入，保留舊 focusedUnits。
 import './curriculum-range-rules.js';
 (function(){
 'use strict';
 const files={國文:'國文/chinese.json',英文:'英文/english.json',數學:'數學/math.json',生物:'生物理化/science.json',物理:'生物理化/science.json',化學:'生物理化/science.json',地球科學:'生物理化/science.json',歷史:'歷史/history.json',地理:'地理/geogrophy.json',公民:'公民/civics.json'};
 const grades=['國小一年級','國小二年級','國小三年級','國小四年級','國小五年級','國小六年級','國中一年級','國中二年級','國中三年級','高中一年級','高中二年級','高中三年級'];
-const highCore=new Set(['數學','數學A','數學B','數學甲','數學乙','物理','化學','生物','地球科學']);
 const highSubjectList=g=>{
  const math=g==='高中一年級'?['數學']:g==='高中二年級'?['數學A','數學B']:['數學甲','數學乙'];
  return ['國文','英文',...math,'物理','化學','生物','地球科學','歷史','地理','公民'];
@@ -14,38 +13,42 @@ const elementarySubjectList=g=>{
  return lower?['國語','數學','生活','健康與體育','本土語文']:
  ['國語','英文','數學','自然科學','社會','藝術','綜合活動','健康與體育','本土語文'];
 };
-const elementaryFile=s=>s==='數學'?'math.json':['國語','生活','社會','自然科學'].includes(s)?'core.json':'other.json';
-const subjectOptions=g=>g.startsWith('國小')?elementarySubjectList(g):g.startsWith('高中')?highSubjectList(g):Object.keys(files);
-const sourcePath=(sub,g)=>g.startsWith('國小')?'elementary_school_unit_name/'+elementaryFile(sub)
- :g.startsWith('高中')?'high_school_unit_name/'+(highCore.has(sub)?'core.json':'humanities.json')
- :'middle_school_unit_name/'+files[sub];
+const subjectOptions=g=>g.startsWith('國小')?elementarySubjectList(g):g.startsWith('高中')?highSubjectList(g):Object.keys(files).filter(s=>!['生物','物理','化學','地球科學'].includes(s)||(g==='國中一年級'?s==='生物':g==='國中二年級'?['物理','化學'].includes(s):['物理','地球科學'].includes(s)));
 const el=id=>document.getElementById(id), memo=new Map();
 const AUTO_TERM='全學年',AUTO_EDITION='自動整合';
 let grade='國中一年級',subject='數學',term=AUTO_TERM,edition=AUTO_EDITION,units=[],serial=0;
-let termFilter='all';
+let termFilter='all',catalogue=null;
 const draft=new Set();
 function updateDraft(){const n=el('cs-draft-count');if(n)n.textContent=String(draft.size);window.dispatchEvent(new CustomEvent('curriculum:scope-draft-change',{detail:{count:draft.size}}));}
 function choices(id,options,selected,placeholder){const node=el(id);node.replaceChildren();const blank=document.createElement('option');blank.value='';blank.textContent=placeholder;node.append(blank);options.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;node.append(o);});node.value=options.includes(selected)?selected:(options[0]||'');node.disabled=!options.length;return node.value;}
 function status(s){el('cs-message').textContent=s;el('solo-unit-hint').textContent=s;}
 function init(){const parent=el('solo-unit-selectors-container');if(!parent)return false;if(el('cs-scope'))return true;
 const css=document.createElement('style');css.textContent='.cs-scope{display:grid;gap:9px;color:#e4d2af;font-size:12px}.cs-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cs-scope select,.cs-scope input:not([type=checkbox]){width:100%;min-width:0;min-height:38px;padding:7px;border:1px solid #76613d;border-radius:8px;background:#15120e;color:#eee0c0}.cs-scope button{padding:7px 10px;border:1px solid #8a7046;border-radius:8px;background:#2e2415;color:#f0d69e}.cs-scope button:disabled{opacity:.4}.cs-units{max-height:360px;overflow:auto;display:grid;gap:7px}.cs-unit{padding:9px;border:1px solid #695535;border-radius:9px}.cs-unit summary{display:flex;align-items:center;gap:8px;cursor:pointer}.cs-unit summary b{flex:1}.cs-card-term{flex:0 0 auto;padding:2px 6px;border:1px solid rgba(201,164,83,.42);border-radius:999px;color:#d9bd7e;font-size:9px;font-weight:800}.cs-unit label{display:flex;gap:8px;padding:6px 0;font-size:11px}.cs-unit input{flex:0 0 16px;accent-color:#c9a453}.cs-note{font-size:10px;color:#b8a987;line-height:1.6}@media(max-width:450px){.cs-fields{grid-template-columns:1fr}.cs-units{max-height:280px}}';document.head.append(css);
-parent.innerHTML='<div class="cs-scope" id="cs-scope"><p class="cs-note">選擇年級與科目後，直接顯示合併上下學期的章節與考點。版本不再另外選擇；有 108 課綱複習整理時會優先採用。</p><div class="cs-fields"><label>年級<select id="cs-grade"></select></label><label>科目<select id="cs-subject"></select></label><select id="cs-term" hidden aria-hidden="true"></select><select id="cs-edition" hidden aria-hidden="true"></select></div><label class="cs-search-field">搜尋章名或考點<input id="cs-search" placeholder="例如：方程式" maxlength="60"></label><div class="cs-tools"><span class="cs-tools-caption">全學年課程章節 <span id="cs-draft-count">0</span> 項已勾選</span><div class="cs-tools-actions"><button type="button" id="cs-all">全選目前章節</button><button type="button" id="cs-clear">清除勾選</button></div></div><div id="cs-units" class="cs-units"></div><p id="cs-message" role="status" class="cs-note"></p><p class="cs-note">上下學期已合併；章節旁仍會標示上／下學期，方便辨識原本冊次。</p></div>';
+parent.innerHTML='<div class="cs-scope" id="cs-scope"><p class="cs-note">選擇年級與科目後，可依教材版本及學期篩選章節，或沿用全學年整理。</p><div class="cs-fields"><label>年級<select id="cs-grade"></select></label><label>科目<select id="cs-subject"></select></label><label class="cs-catalog-field">教材版本<select id="cs-edition"></select></label><label class="cs-catalog-field">學期／冊次<select id="cs-term"></select></label></div><label class="cs-search-field">搜尋章名或考點<input id="cs-search" placeholder="例如：方程式" maxlength="60"></label><div class="cs-tools"><span class="cs-tools-caption">全學年課程章節 <span id="cs-draft-count">0</span> 項已勾選</span><div class="cs-tools-actions"><button type="button" id="cs-all">全選目前章節</button><button type="button" id="cs-clear">清除勾選</button></div></div><div id="cs-units" class="cs-units"></div><p id="cs-message" role="status" class="cs-note"></p><p class="cs-note">複習整理保留原有範圍；尚未完成查證及參考題審核的正式版本會標示為待開放。</p></div>';
 choices('cs-grade',grades,grade,'選年級');subject=choices('cs-subject',subjectOptions(grade),subject,'選科目');
 el('cs-grade').onchange=e=>{grade=e.target.value;subject=subjectOptions(grade).includes(subject)?subject:subjectOptions(grade)[0];term=AUTO_TERM;edition=AUTO_EDITION;resetFilters();void render();};
 el('cs-subject').onchange=e=>{subject=e.target.value;term=AUTO_TERM;edition=AUTO_EDITION;resetFilters();void render();};
+el('cs-edition').onchange=e=>{edition=e.target.value;term=AUTO_TERM;resetFilters();void render();};
+el('cs-term').onchange=e=>{term=e.target.value;resetFilters();void render();};
 el('cs-search').oninput=()=>display();
 el('cs-all').onclick=selectAllCurrentChapters;
 el('cs-clear').onclick=clearCurrentSelection;
 el('cs-all').textContent='選取畫面章節';el('cs-clear').textContent='清除此科';
 el('cs-search').placeholder='輸入章名或關鍵字';
 return true;}
-async function load(){const file=sourcePath(subject,grade);if(!memo.has(file))memo.set(file,fetch('/'+file.split('/').map(encodeURIComponent).join('/')).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(file);throw e;}));return memo.get(file);}
 function canonicalSubject(){return /^數學(?:A|B|甲|乙)$/.test(subject)?'數學':subject==='國語'?'國文':subject;}
-function currentPath(){const year=['七','八','九'][grades.indexOf(grade)-6];return (grade.startsWith('高中')||grade.startsWith('國小'))?[canonicalSubject(),grade,AUTO_TERM,subject].join('/'):[subject,year+'年級全學年'].join('/');}
+function currentPath(){const year=['七','八','九'][grades.indexOf(grade)-6];
+ if(edition!==AUTO_EDITION||term!==AUTO_TERM)return [canonicalSubject(),grade,term,edition,subject].join('/');
+ return (grade.startsWith('高中')||grade.startsWith('國小'))?[canonicalSubject(),grade,AUTO_TERM,subject].join('/'):[subject,year+'年級全學年'].join('/');}
 function detailFor(u){return (u?.term?u.term+' · ':'')+(u?.unit||'');}
-function chapterItem(i){const u=units[i];return u?{path:currentPath(),detail:detailFor(u),sub_topics:u.details.slice(0,8)}:null;}
-function topicItem(i,j){const u=units[i],topic=u?.details?.[j];return u&&topic?{path:currentPath(),detail:(detailFor(u)+'－'+topic).slice(0,100),sub_topics:[topic]}:null;}
-function itemKey(item){return JSON.stringify([item?.path||'',item?.detail||'',Array.isArray(item?.sub_topics)?item.sub_topics:[]]);}
+function metadataFor(u,topics){
+ if(!u.book||edition===AUTO_EDITION&&term===AUTO_TERM)return {};
+ return {curriculum:{bookId:u.book.bookId,edition:u.book.edition,term:u.book.term,schoolYear:u.book.schoolYear,
+ conceptIds:[...new Set(u.concepts.filter(c=>topics.includes(c.name)).map(c=>c.conceptId).filter(Boolean))].slice(0,24)}};
+}
+function chapterItem(i){const u=units[i];return u?{path:currentPath(),detail:detailFor(u),sub_topics:u.details.slice(0,24),...metadataFor(u,u.details)}:null;}
+function topicItem(i,j){const u=units[i],topic=u?.details?.[j];return u&&topic?{path:currentPath(),detail:(detailFor(u)+'－'+topic).slice(0,100),sub_topics:[topic],...metadataFor(u,[topic])}:null;}
+function itemKey(item){return JSON.stringify([item?.path||'',item?.detail||'',Array.isArray(item?.sub_topics)?item.sub_topics:[],...(item?.curriculum?[window.CurriculumRangeRules.curriculumMetadata(item.curriculum)]:[])]);}
 function selectedUnits(){if(!Array.isArray(window.soloSelectedUnits))window.soloSelectedUnits=[];window.soloSelectedUnits=window.soloSelectedUnits.filter(u=>String(u?.path||'').split('/')[0]!=='資訊科技');return window.soloSelectedUnits;}
 function syncDraftFromSelection(){draft.clear();const keys=new Set(selectedUnits().map(itemKey));units.forEach((u,i)=>{const chapter=chapterItem(i);if(chapter&&keys.has(itemKey(chapter))){draft.add('c:'+i);return;}u.details.forEach((_,j)=>{const topic=topicItem(i,j);if(topic&&keys.has(itemKey(topic)))draft.add('t:'+i+':'+j);});});updateDraft();}
 function applyVisibleSelectionState(){syncDraftFromSelection();el('cs-units')?.querySelectorAll('.cs-chapter').forEach(box=>{const i=box.dataset.i;box.checked=draft.has('c:'+i);box.indeterminate=!box.checked&&units[i]?.details.some((_,j)=>draft.has('t:'+i+':'+j));});el('cs-units')?.querySelectorAll('.cs-topic').forEach(box=>{const i=box.dataset.i,j=box.dataset.j,chapterSelected=draft.has('c:'+i);box.checked=chapterSelected||draft.has('t:'+i+':'+j);box.disabled=chapterSelected;});}
@@ -72,52 +75,42 @@ const name=document.createElement('span');name.textContent=t;row.append(box,name
 el('cs-all').disabled=!indices.length;updateDraft();
 if(!indices.length){const empty=document.createElement('div');empty.className='cs-search-empty';const text=document.createElement('p');text.textContent=units.length?'沒有符合的章節，試試其他關鍵字或學期。':'這個科目尚無章節目錄，可自行輸入範圍。';const button=document.createElement('button');button.type='button';button.textContent='自行輸入範圍';button.onclick=()=>window.openCustomCurriculumRange?.(el('cs-search').value.trim());empty.append(text,button);host.append(empty);}
 status(indices.length?'顯示 '+indices.length+' 章，點章名可選取整章。':'未找到符合的章節。');}
-function normalizeUnitList(list,semesterName){
- const source=Array.isArray(list)?list:[];
- return source.map(u=>typeof u==='string'?{unit:u,details:[],term:semesterName}:{unit:u.unit||u.name||u.title||'',details:Array.isArray(u.details||u.sub_topics)?u.details||u.sub_topics:[],term:semesterName}).filter(u=>u.unit);
+async function loadCatalogue(g,s){
+ const file='curriculum-data/'+encodeURIComponent(g)+'/'+encodeURIComponent(s)+'.json?v=20261126-curriculum-v2';
+ if(!memo.has(file))memo.set(file,fetch('/'+file).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(file);throw e;}));
+ return memo.get(file);
 }
-function scienceSemesterFilter(list,semesterName){
- if(!grade.startsWith('國中')||files[subject]!=='生物理化/science.json')return list;
- const stage=grades.indexOf(grade)-6,first=semesterName==='第一學期';
- let allowed=[];
- if(stage===0&&subject==='生物')allowed=list.map((_,i)=>i);
- if(stage===1&&subject==='物理')allowed=first?[0,2,3,4]:[5];
- if(stage===1&&subject==='化學')allowed=first?[1,5]:[0,1,2,3,4];
- if(stage===2&&subject==='物理')allowed=first?[0,1,2]:[0,1];
- if(stage===2&&subject==='地球科學')allowed=first?[3,4]:[2,3];
- return list.filter((_,i)=>allowed.includes(i));
-}
-function semesterUnits(semester,semesterName){
- if(!semester||typeof semester!=='object')return[];
- if(Array.isArray(semester['108課綱複習版']))return normalizeUnitList(semester['108課綱複習版'],semesterName);
- if(Array.isArray(semester['核心語法'])){
-  const grammar=semester['核心語法'].map(s=>({unit:'核心語法：'+s,details:[s],term:semesterName}));
-  const seen=new Set(),themes=[];
-  Object.values(semester['各版本情境主題']||{}).forEach(list=>(Array.isArray(list)?list:[]).forEach(s=>{const key=String(s).trim();if(!key||seen.has(key))return;seen.add(key);themes.push({unit:'情境主題：'+key,details:[key],term:semesterName});}));
-  return [...grammar,...themes];
+const editionKey=b=>b.schoolYear?b.edition+' · '+b.schoolYear+'學年度':b.edition;
+const selectableBook=window.CurriculumRangeRules.selectableBook;
+function catalogOptions(){
+ const node=el('cs-edition'),books=catalogue?.books||[],versions=[...new Set(books.map(editionKey))];
+ edition=choices('cs-edition',[AUTO_EDITION,...versions],edition,'選版本');
+ for(const option of node.options){
+  if(!option.value||option.value===AUTO_EDITION)continue;
+  const records=books.filter(b=>editionKey(b)===option.value),available=records.some(selectableBook);
+  option.disabled=!available;
+  if(!available)option.textContent+='（待開放）';
+  else if(records.every(b=>b.verificationStatus==='unverified'))option.textContent+='（既有整理）';
+  else if(records.every(b=>b.schoolYear==null)&&records.some(b=>b.scopeSelectionStatus==='verified-toc'))option.textContent+='（學年度未標示）';
  }
- const versions=Object.keys(semester).filter(k=>Array.isArray(semester[k]));
- const preferred=versions.includes('翰林版')?'翰林版':versions[0];
- return scienceSemesterFilter(normalizeUnitList(semester[preferred]||[],semesterName),semesterName);
+ if(node.selectedOptions[0]?.disabled){edition=AUTO_EDITION;node.value=edition;}
+ const available=books.filter(b=>(edition===AUTO_EDITION?b.legacyVisible:editionKey(b)===edition)&&selectableBook(b));
+ term=choices('cs-term',[AUTO_TERM,...new Set(available.map(b=>b.term))],term,'選學期／冊次');
+ for(const option of el('cs-term').options){
+  if(option.value===AUTO_TERM&&edition!==AUTO_EDITION)option.textContent='全部冊次（自行勾選）';
+  else {const book=available.find(b=>b.term===option.value);if(book?.bookLabel)option.textContent=book.term+' · '+book.bookLabel;}
+ }
+ return available;
 }
-function mergeYearUnits(yearData){
- const semesterNames=['第一學期','第二學期',...Object.keys(yearData||{}).filter(k=>!['第一學期','第二學期'].includes(k))];
- return semesterNames.flatMap(name=>semesterUnits(yearData?.[name],name));
-}
-async function render(){if(!init())return;const n=++serial;draft.clear();el('cs-grade').value=grade;subject=choices('cs-subject',subjectOptions(grade),subject,'選科目');term=choices('cs-term',[AUTO_TERM],AUTO_TERM,'全學年');edition=choices('cs-edition',[AUTO_EDITION],AUTO_EDITION,'自動整合');units=[];el('cs-units').replaceChildren();el('cs-units').setAttribute('aria-busy','true');el('cs-all').disabled=true;
-if(!grade.startsWith('國中')&&!grade.startsWith('高中')&&!grade.startsWith('國小')){display();status('這個年級目前請到綜合練習加入自訂主題。');return;}
-status('正在載入全學年章節…');try{const data=await load();if(n!==serial)return;
-let yearData;
-if(grade.startsWith('高中')||grade.startsWith('國小')){
- yearData=data.subjects?.[subject]?.[grade]||{};
-}else{
- const course=Object.values(data)[0],base=course[subject]||course['自然科學']||{};
- const year=['七','八','九'][grades.indexOf(grade)-6],key=Object.keys(base).find(k=>k.startsWith(year+'年級'));
- yearData=base[key]||{};
-}
-units=mergeYearUnits(yearData).filter(u=>u.unit);el('cs-units').setAttribute('aria-busy','false');display();
-window.dispatchEvent(new CustomEvent('curriculum:options-ready',{detail:{grade,subject,term:AUTO_TERM,edition:AUTO_EDITION,available:units.length}}));
-}catch(e){if(n!==serial)return;el('cs-units').setAttribute('aria-busy','false');display();status('章節讀取失敗，請切換科目重試，或自行輸入範圍。');window.dispatchEvent(new CustomEvent('curriculum:options-ready',{detail:{grade,subject,term:AUTO_TERM,edition:AUTO_EDITION,available:0,error:true}}));console.error('[Curriculum]',e);}}
+async function render(){if(!init())return;const n=++serial;draft.clear();el('cs-grade').value=grade;subject=choices('cs-subject',subjectOptions(grade),subject,'選科目');units=[];el('cs-units').replaceChildren();el('cs-units').setAttribute('aria-busy','true');el('cs-all').disabled=true;el('cs-edition').disabled=true;el('cs-term').disabled=true;
+ status('正在載入教材章節…');try{
+ const loaded=await loadCatalogue(grade,subject);if(n!==serial)return;catalogue=loaded;
+ const available=catalogOptions();
+ units=available.filter(b=>term===AUTO_TERM||b.term===term).flatMap(book=>book.units.map(u=>({...u,term:book.term,book})));
+ // Legacy English grammar/themes are multiple catalog records; each remains an outline.
+ el('cs-units').setAttribute('aria-busy','false');display();
+ window.dispatchEvent(new CustomEvent('curriculum:options-ready',{detail:{grade,subject,term,edition,available:units.length}}));
+ }catch(e){if(n!==serial)return;catalogue=null;el('cs-units').setAttribute('aria-busy','false');display();status('章節讀取失敗，請切換科目重試，或自行輸入範圍。');window.dispatchEvent(new CustomEvent('curriculum:options-ready',{detail:{grade,subject,term,edition,available:0,error:true}}));console.error('[Curriculum]',e);}}
 function addList(items){const existing=selectedUnits(),keys=new Set(existing.map(itemKey));let added=0;
 for(const item of items){const k=itemKey(item);if(keys.has(k))continue;if(existing.length>=24)break;existing.push(item);keys.add(k);added++;}
 window.soloSelectedUnits=existing;notifySelectionList();status(added?'已加入 '+added+' 個範圍，請按「儲存出題範圍」。':'已存在，或達 24 個上限。');applyVisibleSelectionState();}
@@ -158,7 +151,7 @@ window.restoreCurriculumContext=()=>{
  grade=fromSelection||(grades.includes(profile)?profile:aliases[profile])||grade;
  const available=subjectOptions(grade),savedSubject=[...parts].reverse().find(p=>available.includes(p))||(parts[0]==='國文'&&grade.startsWith('國小')?'國語':parts[0]);
  subject=available.includes(savedSubject)?savedSubject:available.includes(subject)?subject:available[0];
- resetFilters();void render();
+ edition=saved?.curriculum?.schoolYear?saved.curriculum.edition+' · '+saved.curriculum.schoolYear+'學年度':saved?.curriculum?.edition||AUTO_EDITION;term=saved?.curriculum?.term||AUTO_TERM;resetFilters();void render();
 };
 window.addCurrentUnitToSelection=addChecked;window.renderSelectedUnitsList=showList;
 window.addCustomCurriculumRange=addFocusedCustom;

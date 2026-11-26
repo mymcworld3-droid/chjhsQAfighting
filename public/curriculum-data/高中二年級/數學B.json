@@ -1,0 +1,533 @@
+{
+  "schema": 1,
+  "grade": "高中二年級",
+  "subject": "數學B",
+  "books": [
+    {
+      "bookId": "book-1cb64997d428e8ba7ae4",
+      "subject": "數學B",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "週期性數學模型",
+          "details": [
+            "弧度量與三角函數圖形",
+            "正弦、餘弦週期現象",
+            "週期模型的實際應用"
+          ],
+          "concepts": [
+            {
+              "name": "弧度量與三角函數圖形",
+              "conceptId": "legacy-b1b220cb7bc5e38d74f5",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "正弦、餘弦週期現象",
+              "conceptId": "legacy-ed132af6dd75ecb57fa2",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "週期模型的實際應用",
+              "conceptId": "legacy-097636b7d346a5de919e",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "按比例成長模型",
+          "details": [
+            "指數函數",
+            "對數與對數函數",
+            "等比變化與實際模型"
+          ],
+          "concepts": [
+            {
+              "name": "指數函數",
+              "conceptId": "legacy-f5b1ffaf83728f6b953d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "對數與對數函數",
+              "conceptId": "legacy-2e689ad204146d581acd",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "等比變化與實際模型",
+              "conceptId": "legacy-2d307f953790f6834ad1",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "平面向量與比例",
+          "details": [
+            "平面向量表示與內積",
+            "平面上比例與坐標",
+            "向量在生活情境的應用"
+          ],
+          "concepts": [
+            {
+              "name": "平面向量表示與內積",
+              "conceptId": "math-plane-vector-dot-product",
+              "status": "scope-reviewed"
+            },
+            {
+              "name": "平面上比例與坐標",
+              "conceptId": "legacy-d261aad6d526d2916a84",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "向量在生活情境的應用",
+              "conceptId": "legacy-8901bd651c7849bab330",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9ba066c80dc7f8dfbb7c",
+      "subject": "數學B",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "空間概念與幾何應用",
+          "details": [
+            "空間坐標、向量與圖形",
+            "立體幾何與空間位置"
+          ],
+          "concepts": [
+            {
+              "name": "空間坐標、向量與圖形",
+              "conceptId": "legacy-02b3107f68005a535d26",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "立體幾何與空間位置",
+              "conceptId": "legacy-9d433e0366a1e1891175",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "矩陣與資料表示",
+          "details": [
+            "矩陣加法、乘法",
+            "矩陣表達資料與轉移模型"
+          ],
+          "concepts": [
+            {
+              "name": "矩陣加法、乘法",
+              "conceptId": "legacy-b8c261f4ae6f0fd12a53",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "矩陣表達資料與轉移模型",
+              "conceptId": "legacy-6124bbe55dc9a0255246",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "機率與統計應用",
+          "details": [
+            "條件機率與事件獨立",
+            "常態分布與標準化",
+            "資料解讀、推論與情境問題"
+          ],
+          "concepts": [
+            {
+              "name": "條件機率與事件獨立",
+              "conceptId": "legacy-aa1ded6ca57fd23098ff",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "常態分布與標準化",
+              "conceptId": "legacy-401e811236e14df0ca2a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "資料解讀、推論與情境問題",
+              "conceptId": "legacy-edb181a7faae73e51bb1",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-math-4b",
+      "subject": "數學B",
+      "grade": "高中二年級",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第二學期",
+      "bookLabel": "第4B冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "curriculum-data/books/hanlin-114-math-4b.json",
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hma/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1-VjWQd0LaaFfuXyvndHrV-6OYseepZLL",
+          "type": "official-textbook-folder",
+          "title": "114下高中數學4B課本"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1YvQQj02icCJNEPyar_eyRQIJLPmRRCDl/view",
+          "type": "official-toc",
+          "title": "數學(4)B課本_01_編輯大意、目次.pdf",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+      "units": [
+        {
+          "unit": "第1章：空間概念與空間坐標系",
+          "details": [
+            "1-1 空間概念",
+            "1-2 空間坐標系",
+            "1-3 圓錐曲線的認識與應用"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 空間概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 空間坐標系",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 圓錐曲線的認識與應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：機率",
+          "details": [
+            "2-1 條件機率與獨立事件",
+            "2-2 貝氏定理"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 條件機率與獨立事件",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 貝氏定理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：矩陣與資料表格",
+          "details": [
+            "3-1 矩陣的定義與運算",
+            "3-2 乘法反方陣與矩陣的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 矩陣的定義與運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 乘法反方陣與矩陣的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-115-math-3b",
+      "subject": "數學B",
+      "grade": "高中二年級",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "第3B冊",
+      "schoolYear": 115,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "sourceFile": "curriculum-data/books/hanlin-115-math-3b.json",
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hma/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1tDU7jWY2ICvo6wA4S3cYn-Qd1hUHA59K/view",
+          "type": "official-toc",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "已核對完整章節目次；各節細項、學習深度、標準觀念映射及五題內容審核尚未全部完成。不得以目次查證代替正式開放。",
+      "units": [
+        {
+          "unit": "正弦函數與週期性現象",
+          "details": [
+            "1-1 弧度量",
+            "1-2 週期性數學模型"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 弧度量",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 週期性數學模型",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "按比例成長模型",
+          "details": [
+            "2-1 指數函數及其圖形",
+            "2-2 對數",
+            "2-3 對數函數及其圖形"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 指數函數及其圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 對數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 對數函數及其圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "平面向量與應用",
+          "details": [
+            "3-1 平面向量的表示法",
+            "3-2 平面向量的內積",
+            "3-3 平面上的比例"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 平面向量的表示法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 平面向量的內積",
+              "conceptId": "math-plane-vector-dot-product",
+              "status": "scope-reviewed"
+            },
+            {
+              "name": "3-3 平面上的比例",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ],
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-sections",
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence"
+    },
+    {
+      "bookId": "longteng-108-math-3b",
+      "subject": "數學B",
+      "grade": "高中二年級",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第一學期",
+      "bookLabel": "第3B冊",
+      "schoolYear": null,
+      "curriculumStandard": "108課綱",
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeSelectionStatus": "verified-toc",
+      "scopeDetailLevel": "official-units",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "curriculum-data/books/longteng-108-math-3b.json",
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9972",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。",
+      "units": [
+        {
+          "unit": "單元1 弧度量",
+          "details": [
+            "弧度量"
+          ],
+          "concepts": [
+            {
+              "name": "弧度量",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元2 週期性數學模型",
+          "details": [
+            "週期性數學模型"
+          ],
+          "concepts": [
+            {
+              "name": "週期性數學模型",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元3 指數函數",
+          "details": [
+            "指數函數"
+          ],
+          "concepts": [
+            {
+              "name": "指數函數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元4 對數",
+          "details": [
+            "對數"
+          ],
+          "concepts": [
+            {
+              "name": "對數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元5 對數函數",
+          "details": [
+            "對數函數"
+          ],
+          "concepts": [
+            {
+              "name": "對數函數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元6 平面向量",
+          "details": [
+            "平面向量"
+          ],
+          "concepts": [
+            {
+              "name": "平面向量",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元7 平面向量的運算",
+          "details": [
+            "平面向量的運算"
+          ],
+          "concepts": [
+            {
+              "name": "平面向量的運算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-108-math-4b",
+      "subject": "數學B",
+      "grade": "高中二年級",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第二學期",
+      "bookLabel": "第4B冊",
+      "schoolYear": null,
+      "curriculumStandard": "108課綱",
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-partial",
+      "scopeSelectionStatus": "pending-toc",
+      "scopeDetailLevel": "official-units",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "curriculum-data/books/longteng-108-math-4b.json",
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10529",
+          "type": "official-product",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。",
+      "units": []
+    }
+  ]
+}

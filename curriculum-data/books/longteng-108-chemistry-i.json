@@ -1,0 +1,111 @@
+{
+  "bookId": "longteng-108-chemistry-i",
+  "subject": "化學",
+  "grade": "高中二年級",
+  "edition": "龍騰版",
+  "publisher": "龍騰",
+  "term": "選修化學I",
+  "bookLabel": "選修化學I（全）",
+  "schoolYear": null,
+  "curriculumStandard": "108課綱",
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/longteng-108-chemistry-i.json",
+  "sources": [
+    {
+      "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9980",
+      "type": "official-product-toc",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。",
+  "units": [
+    {
+      "unit": "第1章：物質鑑定與化學反應",
+      "details": [
+        "1-1 物質的特性與鑑定",
+        "1-2 化學式的平衡與化學計量",
+        "1-3 反應熱的種類與性質"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 物質的特性與鑑定",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 化學式的平衡與化學計量",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 反應熱的種類與性質",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：氣體",
+      "details": [
+        "2-1 氣體性質",
+        "2-2 氣體定律",
+        "2-3 理想氣體方程式",
+        "2-4 氣體分壓"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 氣體性質",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 氣體定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 理想氣體方程式",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 氣體分壓",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：液態與溶液",
+      "details": [
+        "3-1 水的性質",
+        "3-2 溶液的蒸氣壓與拉午耳定律",
+        "3-3 溶液的性質"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 水的性質",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 溶液的蒸氣壓與拉午耳定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 溶液的性質",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

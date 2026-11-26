@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小四年級",
+  "subject": "國語",
+  "books": [
+    {
+      "bookId": "book-b63e9225f33af0a5b17b",
+      "subject": "國語",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "語文知識",
+          "details": [
+            "同音字與多義字",
+            "詞語及成語運用",
+            "修辭辨識"
+          ],
+          "concepts": [
+            {
+              "name": "同音字與多義字",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "詞語及成語運用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "修辭辨識",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "記敘與抒情",
+          "details": [
+            "人物描寫",
+            "事件與情緒變化",
+            "段落安排"
+          ],
+          "concepts": [
+            {
+              "name": "人物描寫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "事件與情緒變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "段落安排",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "說明文閱讀",
+          "details": [
+            "主要概念",
+            "舉例與分類",
+            "表格及圖像訊息"
+          ],
+          "concepts": [
+            {
+              "name": "主要概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "舉例與分類",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "表格及圖像訊息",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "寫作與口語",
+          "details": [
+            "提綱與分段",
+            "說明事物",
+            "有條理表達"
+          ],
+          "concepts": [
+            {
+              "name": "提綱與分段",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "說明事物",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "有條理表達",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-ed95aabcc30520da7906",
+      "subject": "國語",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "閱讀策略",
+          "details": [
+            "推論與提問",
+            "跨段落訊息",
+            "比較不同文本"
+          ],
+          "concepts": [
+            {
+              "name": "推論與提問",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "跨段落訊息",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "比較不同文本",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "文體與修辭",
+          "details": [
+            "童詩、散文與故事",
+            "譬喻、擬人與排比",
+            "作者立場"
+          ],
+          "concepts": [
+            {
+              "name": "童詩、散文與故事",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "譬喻、擬人與排比",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "作者立場",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "應用語文",
+          "details": [
+            "書信與日記",
+            "簡單報告",
+            "資料摘錄"
+          ],
+          "concepts": [
+            {
+              "name": "書信與日記",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡單報告",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "資料摘錄",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "寫作技巧",
+          "details": [
+            "開頭結尾",
+            "文章連貫",
+            "語句修訂"
+          ],
+          "concepts": [
+            {
+              "name": "開頭結尾",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文章連貫",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語句修訂",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "bookId": "hanlin-115-chemistry-iv",
+  "subject": "化學",
+  "grade": "高中二年級",
+  "edition": "翰林版",
+  "publisher": "翰林",
+  "term": "選修化學IV",
+  "bookLabel": "選修化學IV（全）",
+  "schoolYear": 115,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/hanlin-115-chemistry-iv.json",
+  "sources": [
+    {
+      "url": "https://sh.hle.com.tw/hce/",
+      "type": "official-portal"
+    },
+    {
+      "url": "https://drive.google.com/drive/folders/1jbaBcEdKVhumuCNoGh1nHIrduNKTaVOi",
+      "type": "official-textbook-folder",
+      "title": "翰林選修化學IV_課本(學用)"
+    },
+    {
+      "url": "https://drive.google.com/file/d/16f1ma6qiVYFGMGsOhyORh3d7U5qCUNxv/view",
+      "type": "official-toc",
+      "title": "選修化學(Ⅳ)課本_01_編輯大意、目次(115f164925).pdf",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+  "units": [
+    {
+      "unit": "第1章：氧化還原反應與電化學",
+      "details": [
+        "1-1 氧化數",
+        "1-2 氧化還原反應式的平衡",
+        "1-3 氧化還原滴定",
+        "1-4 電化電池與電池電壓",
+        "1-5 電解與電鍍"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 氧化數",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 氧化還原反應式的平衡",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 氧化還原滴定",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 電化電池與電池電壓",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-5 電解與電鍍",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：科學在生活中的應用",
+      "details": [
+        "2-1 常見非金屬",
+        "2-2 常見金屬與常見合金",
+        "2-3 先進材料"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 常見非金屬",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 常見金屬與常見合金",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 先進材料",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

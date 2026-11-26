@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小五年級",
+  "subject": "英文",
+  "books": [
+    {
+      "bookId": "book-81bf9f7a04324e3b7665",
+      "subject": "英文",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "拼字與字彙",
+          "details": [
+            "拼讀與重音初步",
+            "常用詞彙",
+            "同義詞與反義詞初步"
+          ],
+          "concepts": [
+            {
+              "name": "拼讀與重音初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "常用詞彙",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "同義詞與反義詞初步",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "日常生活英語",
+          "details": [
+            "學校活動",
+            "工作與職業",
+            "購物與價格"
+          ],
+          "concepts": [
+            {
+              "name": "學校活動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "工作與職業",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "購物與價格",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "語法與問答",
+          "details": [
+            "第三人稱單數",
+            "助動詞do/does",
+            "頻率副詞"
+          ],
+          "concepts": [
+            {
+              "name": "第三人稱單數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "助動詞do/does",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "頻率副詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "閱讀理解",
+          "details": [
+            "找主旨",
+            "人物與事件",
+            "情境推論"
+          ],
+          "concepts": [
+            {
+              "name": "找主旨",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "人物與事件",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "情境推論",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-778f6da92aefe7cd7c8b",
+      "subject": "英文",
+      "grade": "國小五年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "英文句型",
+          "details": [
+            "過去簡單式初步",
+            "疑問詞問答",
+            "可數與不可數名詞"
+          ],
+          "concepts": [
+            {
+              "name": "過去簡單式初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "疑問詞問答",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "可數與不可數名詞",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "主題詞彙",
+          "details": [
+            "旅行與交通",
+            "健康與飲食",
+            "休閒活動"
+          ],
+          "concepts": [
+            {
+              "name": "旅行與交通",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "健康與飲食",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "休閒活動",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "閱讀與寫作",
+          "details": [
+            "段落順序",
+            "對話填空",
+            "短文寫作"
+          ],
+          "concepts": [
+            {
+              "name": "段落順序",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "對話填空",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "短文寫作",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "聽力與口語",
+          "details": [
+            "訊息辨識",
+            "情境問答",
+            "簡短描述"
+          ],
+          "concepts": [
+            {
+              "name": "訊息辨識",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "情境問答",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "簡短描述",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

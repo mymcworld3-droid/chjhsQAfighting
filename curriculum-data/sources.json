@@ -1,0 +1,368 @@
+{
+  "schema": 1,
+  "schoolYearTarget": 115,
+  "sources": [
+    {
+      "id": "hanlin-114-math-4a",
+      "publisher": "翰林",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hma/",
+        "https://drive.google.com/drive/folders/1Vww-hRr12kkPK6s2qYj5J-gafHwS3CD0",
+        "https://drive.google.com/file/d/132OIIdvVvQbOngWF5DE6rcFxJ2NZLgPe/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "hanlin-114-math-4b",
+      "publisher": "翰林",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hma/",
+        "https://drive.google.com/drive/folders/1-VjWQd0LaaFfuXyvndHrV-6OYseepZLL",
+        "https://drive.google.com/file/d/1YvQQj02icCJNEPyar_eyRQIJLPmRRCDl/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "hanlin-114-physics-ii",
+      "publisher": "翰林",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hph/",
+        "https://drive.google.com/drive/folders/1TkJWl9DGKdyZWO-ntDDf67t0Ui-iy6_D",
+        "https://drive.google.com/file/d/14EQWH_fEaONTKXvZxTWsy00R_OpBULGL/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "hanlin-114-physics-iv",
+      "publisher": "翰林",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hph/",
+        "https://drive.google.com/drive/folders/1ZybzpDrCdUfzic-yz0iZFKGixzvfwcdn",
+        "https://drive.google.com/file/d/1Wy86EJrv7nd2_b0gauq8zG4TX_heSDJd/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "hanlin-114-physics-v",
+      "publisher": "翰林",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hph/",
+        "https://drive.google.com/drive/folders/1Qn8LmSNpBWpY1gZiEg1ZcsjC22r1-0CN",
+        "https://drive.google.com/file/d/1c2L8Nyf6x7PKXQnCOYrOhQtWFePXyEb-/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "hanlin-115-chemistry-i",
+      "publisher": "翰林",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hce/",
+        "https://drive.google.com/drive/folders/1LxLBTWbJZqn0lcw3sP4lr-nExEjDjKnl",
+        "https://drive.google.com/file/d/1xAqNG4qR1RXtCCZejdoCdtTPUuWN5jL4/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "hanlin-115-chemistry-ii",
+      "publisher": "翰林",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hce/",
+        "https://drive.google.com/drive/folders/19i2s_9WAyMN4SCw2vXSkzZbsD6AaoHKl",
+        "https://drive.google.com/file/d/1cYEjrFJ97jIFjcOJsAFvyDTlSTIYIlY9/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "hanlin-115-chemistry-iii",
+      "publisher": "翰林",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hce/",
+        "https://drive.google.com/drive/folders/1E7OVtDis59oID2N6Q79FXDcvzgLKwRPE",
+        "https://drive.google.com/file/d/1XpYIxh0yrQOQeHITdZwBawhTuF8eBLj1/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "hanlin-115-chemistry-iv",
+      "publisher": "翰林",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hce/",
+        "https://drive.google.com/drive/folders/1jbaBcEdKVhumuCNoGh1nHIrduNKTaVOi",
+        "https://drive.google.com/file/d/16f1ma6qiVYFGMGsOhyORh3d7U5qCUNxv/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "hanlin-115-chemistry-v",
+      "publisher": "翰林",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hce/",
+        "https://drive.google.com/drive/folders/1mPR5QIDSeKAGCtsVFmfhDvSpxsC8TkQe",
+        "https://drive.google.com/file/d/1G5X7_qi1P_Ob-mnHib_CXopKcOTCI4IF/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "hanlin-115-math-3a",
+      "publisher": "翰林",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hma/",
+        "https://drive.google.com/file/d/16Tm93A7eHCDGgObzmW2AQZ2qywLi20qU/view"
+      ],
+      "limitations": "已核對完整章節目次；各節細項、學習深度、標準觀念映射及五題內容審核尚未全部完成。不得以目次查證代替正式開放。"
+    },
+    {
+      "id": "hanlin-115-math-3b",
+      "publisher": "翰林",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hma/",
+        "https://drive.google.com/file/d/1tDU7jWY2ICvo6wA4S3cYn-Qd1hUHA59K/view"
+      ],
+      "limitations": "已核對完整章節目次；各節細項、學習深度、標準觀念映射及五題內容審核尚未全部完成。不得以目次查證代替正式開放。"
+    },
+    {
+      "id": "hanlin-115-physics-i",
+      "publisher": "翰林",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hph/",
+        "https://drive.google.com/drive/folders/1Ev5kcHo661Tx-hubUoIYULNiyH8ZRO7-",
+        "https://drive.google.com/file/d/1iSXSA3Md4XPeqinvkvErN4cMEcxpHqBs/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "hanlin-115-physics-iii",
+      "publisher": "翰林",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://sh.hle.com.tw/hph/",
+        "https://drive.google.com/drive/folders/1lmV6ZwD-bDxme48QJ7VticNQVU77OLZR",
+        "https://drive.google.com/file/d/1-rVq2-MM0IkRwoRl55tf2Wh041f6KWZP/view"
+      ],
+      "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
+    },
+    {
+      "id": "longteng-108-chemistry-i",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9980"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+    },
+    {
+      "id": "longteng-108-chemistry-ii",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9981"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+    },
+    {
+      "id": "longteng-108-chemistry-iii",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10468"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+    },
+    {
+      "id": "longteng-108-chemistry-iv",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10283"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+    },
+    {
+      "id": "longteng-108-chemistry-v",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-partial",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10573"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+    },
+    {
+      "id": "longteng-108-math-3a",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-units",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9978"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。"
+    },
+    {
+      "id": "longteng-108-math-3b",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-units",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9972"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。"
+    },
+    {
+      "id": "longteng-108-math-4a",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-partial",
+      "scopeDetailLevel": "official-units",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10526"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。"
+    },
+    {
+      "id": "longteng-108-math-4b",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-partial",
+      "scopeDetailLevel": "official-units",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10529"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。"
+    },
+    {
+      "id": "longteng-108-physics-i",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9970"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+    },
+    {
+      "id": "longteng-108-physics-ii",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9989"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+    },
+    {
+      "id": "longteng-108-physics-iii",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10114"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+    },
+    {
+      "id": "longteng-108-physics-iv",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-toc",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10304"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+    },
+    {
+      "id": "longteng-108-physics-v",
+      "publisher": "龍騰",
+      "schoolYear": null,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-partial",
+      "scopeDetailLevel": "official-sections",
+      "urls": [
+        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10571"
+      ],
+      "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+    }
+  ]
+}

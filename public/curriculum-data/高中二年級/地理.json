@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中二年級",
+  "subject": "地理",
+  "books": [
+    {
+      "bookId": "book-901077cc0f24e90e9ddb",
+      "subject": "地理",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "臺灣地理",
+          "details": [
+            "臺灣自然環境",
+            "人口、都市與產業",
+            "區域發展與環境議題"
+          ],
+          "concepts": [
+            {
+              "name": "臺灣自然環境",
+              "conceptId": "legacy-f74b7d95ba407b8f0e4b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "人口、都市與產業",
+              "conceptId": "legacy-1ea67115c7c58f92d228",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "區域發展與環境議題",
+              "conceptId": "legacy-d0b76eaec02d8e988cdc",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "東亞區域",
+          "details": [
+            "東北亞與東南亞",
+            "人地關係",
+            "人口、產業與區域整合"
+          ],
+          "concepts": [
+            {
+              "name": "東北亞與東南亞",
+              "conceptId": "legacy-fb9d9cfbfe021ddfa38c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "人地關係",
+              "conceptId": "legacy-49448a69931917b0bef4",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "人口、產業與區域整合",
+              "conceptId": "legacy-bac510e93be90fb34428",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "區域資料",
+          "details": [
+            "地圖與統計圖",
+            "空間分析",
+            "區域比較"
+          ],
+          "concepts": [
+            {
+              "name": "地圖與統計圖",
+              "conceptId": "legacy-e086f2c0a3a4bba7b4e1",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "空間分析",
+              "conceptId": "legacy-dada4cef0042f6d3a2e4",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "區域比較",
+              "conceptId": "legacy-16fa9b2808eb3081fe23",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-19252e0bd487191f8a9c",
+      "subject": "地理",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "南亞與西亞、北非",
+          "details": [
+            "自然環境與文化",
+            "水資源與能源",
+            "區域衝突與發展"
+          ],
+          "concepts": [
+            {
+              "name": "自然環境與文化",
+              "conceptId": "legacy-5890820429f86adce1bd",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "水資源與能源",
+              "conceptId": "legacy-b96f52753198bf5a6dba",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "區域衝突與發展",
+              "conceptId": "legacy-6d7fbb5e14e8544092f8",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "歐洲、美洲與大洋洲",
+          "details": [
+            "自然環境",
+            "人口及產業",
+            "全球經濟與都市"
+          ],
+          "concepts": [
+            {
+              "name": "自然環境",
+              "conceptId": "legacy-42bf17dd064035928e32",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "人口及產業",
+              "conceptId": "legacy-a776115e20745952bfe4",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "全球經濟與都市",
+              "conceptId": "legacy-d6e0b947ad02da39f522",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "撒哈拉以南非洲",
+          "details": [
+            "自然與人口",
+            "發展議題",
+            "國際連結"
+          ],
+          "concepts": [
+            {
+              "name": "自然與人口",
+              "conceptId": "legacy-1898fdd44b5911b67a23",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "發展議題",
+              "conceptId": "legacy-143f280e431e66f7728c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "國際連結",
+              "conceptId": "legacy-479173fe130afc5008a2",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

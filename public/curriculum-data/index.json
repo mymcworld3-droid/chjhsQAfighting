@@ -1,0 +1,714 @@
+{
+  "schema": 1,
+  "revision": "fa858010203d93922c28",
+  "schoolYearTarget": 115,
+  "entries": [
+    {
+      "grade": "國小一年級",
+      "subject": "國語",
+      "path": "curriculum-data/國小一年級/國語.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小二年級",
+      "subject": "國語",
+      "path": "curriculum-data/國小二年級/國語.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小三年級",
+      "subject": "國語",
+      "path": "curriculum-data/國小三年級/國語.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小四年級",
+      "subject": "國語",
+      "path": "curriculum-data/國小四年級/國語.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小五年級",
+      "subject": "國語",
+      "path": "curriculum-data/國小五年級/國語.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小六年級",
+      "subject": "國語",
+      "path": "curriculum-data/國小六年級/國語.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小一年級",
+      "subject": "生活",
+      "path": "curriculum-data/國小一年級/生活.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小二年級",
+      "subject": "生活",
+      "path": "curriculum-data/國小二年級/生活.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小三年級",
+      "subject": "社會",
+      "path": "curriculum-data/國小三年級/社會.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小四年級",
+      "subject": "社會",
+      "path": "curriculum-data/國小四年級/社會.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小五年級",
+      "subject": "社會",
+      "path": "curriculum-data/國小五年級/社會.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小六年級",
+      "subject": "社會",
+      "path": "curriculum-data/國小六年級/社會.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小三年級",
+      "subject": "自然科學",
+      "path": "curriculum-data/國小三年級/自然科學.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小四年級",
+      "subject": "自然科學",
+      "path": "curriculum-data/國小四年級/自然科學.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小五年級",
+      "subject": "自然科學",
+      "path": "curriculum-data/國小五年級/自然科學.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小六年級",
+      "subject": "自然科學",
+      "path": "curriculum-data/國小六年級/自然科學.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小一年級",
+      "subject": "數學",
+      "path": "curriculum-data/國小一年級/數學.json",
+      "books": 5,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小二年級",
+      "subject": "數學",
+      "path": "curriculum-data/國小二年級/數學.json",
+      "books": 5,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小三年級",
+      "subject": "數學",
+      "path": "curriculum-data/國小三年級/數學.json",
+      "books": 5,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小四年級",
+      "subject": "數學",
+      "path": "curriculum-data/國小四年級/數學.json",
+      "books": 5,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小五年級",
+      "subject": "數學",
+      "path": "curriculum-data/國小五年級/數學.json",
+      "books": 5,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小六年級",
+      "subject": "數學",
+      "path": "curriculum-data/國小六年級/數學.json",
+      "books": 5,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小三年級",
+      "subject": "英文",
+      "path": "curriculum-data/國小三年級/英文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小四年級",
+      "subject": "英文",
+      "path": "curriculum-data/國小四年級/英文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小五年級",
+      "subject": "英文",
+      "path": "curriculum-data/國小五年級/英文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小六年級",
+      "subject": "英文",
+      "path": "curriculum-data/國小六年級/英文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小三年級",
+      "subject": "藝術",
+      "path": "curriculum-data/國小三年級/藝術.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小四年級",
+      "subject": "藝術",
+      "path": "curriculum-data/國小四年級/藝術.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小五年級",
+      "subject": "藝術",
+      "path": "curriculum-data/國小五年級/藝術.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小六年級",
+      "subject": "藝術",
+      "path": "curriculum-data/國小六年級/藝術.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小三年級",
+      "subject": "綜合活動",
+      "path": "curriculum-data/國小三年級/綜合活動.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小四年級",
+      "subject": "綜合活動",
+      "path": "curriculum-data/國小四年級/綜合活動.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小五年級",
+      "subject": "綜合活動",
+      "path": "curriculum-data/國小五年級/綜合活動.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小六年級",
+      "subject": "綜合活動",
+      "path": "curriculum-data/國小六年級/綜合活動.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小一年級",
+      "subject": "健康與體育",
+      "path": "curriculum-data/國小一年級/健康與體育.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小二年級",
+      "subject": "健康與體育",
+      "path": "curriculum-data/國小二年級/健康與體育.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小三年級",
+      "subject": "健康與體育",
+      "path": "curriculum-data/國小三年級/健康與體育.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小四年級",
+      "subject": "健康與體育",
+      "path": "curriculum-data/國小四年級/健康與體育.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小五年級",
+      "subject": "健康與體育",
+      "path": "curriculum-data/國小五年級/健康與體育.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小六年級",
+      "subject": "健康與體育",
+      "path": "curriculum-data/國小六年級/健康與體育.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小一年級",
+      "subject": "本土語文",
+      "path": "curriculum-data/國小一年級/本土語文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小二年級",
+      "subject": "本土語文",
+      "path": "curriculum-data/國小二年級/本土語文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小三年級",
+      "subject": "本土語文",
+      "path": "curriculum-data/國小三年級/本土語文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小四年級",
+      "subject": "本土語文",
+      "path": "curriculum-data/國小四年級/本土語文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小五年級",
+      "subject": "本土語文",
+      "path": "curriculum-data/國小五年級/本土語文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國小六年級",
+      "subject": "本土語文",
+      "path": "curriculum-data/國小六年級/本土語文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中一年級",
+      "subject": "公民",
+      "path": "curriculum-data/國中一年級/公民.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中二年級",
+      "subject": "公民",
+      "path": "curriculum-data/國中二年級/公民.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中三年級",
+      "subject": "公民",
+      "path": "curriculum-data/國中三年級/公民.json",
+      "books": 3,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中一年級",
+      "subject": "國文",
+      "path": "curriculum-data/國中一年級/國文.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中二年級",
+      "subject": "國文",
+      "path": "curriculum-data/國中二年級/國文.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中三年級",
+      "subject": "國文",
+      "path": "curriculum-data/國中三年級/國文.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中一年級",
+      "subject": "英文",
+      "path": "curriculum-data/國中一年級/英文.json",
+      "books": 20,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中二年級",
+      "subject": "英文",
+      "path": "curriculum-data/國中二年級/英文.json",
+      "books": 20,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中三年級",
+      "subject": "英文",
+      "path": "curriculum-data/國中三年級/英文.json",
+      "books": 20,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中一年級",
+      "subject": "地理",
+      "path": "curriculum-data/國中一年級/地理.json",
+      "books": 3,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中二年級",
+      "subject": "地理",
+      "path": "curriculum-data/國中二年級/地理.json",
+      "books": 3,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中三年級",
+      "subject": "地理",
+      "path": "curriculum-data/國中三年級/地理.json",
+      "books": 3,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中一年級",
+      "subject": "數學",
+      "path": "curriculum-data/國中一年級/數學.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中二年級",
+      "subject": "數學",
+      "path": "curriculum-data/國中二年級/數學.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中三年級",
+      "subject": "數學",
+      "path": "curriculum-data/國中三年級/數學.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中一年級",
+      "subject": "歷史",
+      "path": "curriculum-data/國中一年級/歷史.json",
+      "books": 3,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中二年級",
+      "subject": "歷史",
+      "path": "curriculum-data/國中二年級/歷史.json",
+      "books": 3,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中三年級",
+      "subject": "歷史",
+      "path": "curriculum-data/國中三年級/歷史.json",
+      "books": 3,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中一年級",
+      "subject": "生物",
+      "path": "curriculum-data/國中一年級/生物.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中二年級",
+      "subject": "物理",
+      "path": "curriculum-data/國中二年級/物理.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中二年級",
+      "subject": "化學",
+      "path": "curriculum-data/國中二年級/化學.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中三年級",
+      "subject": "物理",
+      "path": "curriculum-data/國中三年級/物理.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "國中三年級",
+      "subject": "地球科學",
+      "path": "curriculum-data/國中三年級/地球科學.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中一年級",
+      "subject": "數學",
+      "path": "curriculum-data/高中一年級/數學.json",
+      "books": 5,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中二年級",
+      "subject": "數學A",
+      "path": "curriculum-data/高中二年級/數學A.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中二年級",
+      "subject": "數學B",
+      "path": "curriculum-data/高中二年級/數學B.json",
+      "books": 6,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "path": "curriculum-data/高中三年級/數學甲.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "path": "curriculum-data/高中三年級/數學乙.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中一年級",
+      "subject": "物理",
+      "path": "curriculum-data/高中一年級/物理.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中二年級",
+      "subject": "物理",
+      "path": "curriculum-data/高中二年級/物理.json",
+      "books": 12,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中三年級",
+      "subject": "物理",
+      "path": "curriculum-data/高中三年級/物理.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中一年級",
+      "subject": "化學",
+      "path": "curriculum-data/高中一年級/化學.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中二年級",
+      "subject": "化學",
+      "path": "curriculum-data/高中二年級/化學.json",
+      "books": 12,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中三年級",
+      "subject": "化學",
+      "path": "curriculum-data/高中三年級/化學.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中一年級",
+      "subject": "生物",
+      "path": "curriculum-data/高中一年級/生物.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中二年級",
+      "subject": "生物",
+      "path": "curriculum-data/高中二年級/生物.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中三年級",
+      "subject": "生物",
+      "path": "curriculum-data/高中三年級/生物.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中一年級",
+      "subject": "地球科學",
+      "path": "curriculum-data/高中一年級/地球科學.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中二年級",
+      "subject": "地球科學",
+      "path": "curriculum-data/高中二年級/地球科學.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中三年級",
+      "subject": "地球科學",
+      "path": "curriculum-data/高中三年級/地球科學.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中一年級",
+      "subject": "國文",
+      "path": "curriculum-data/高中一年級/國文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中二年級",
+      "subject": "國文",
+      "path": "curriculum-data/高中二年級/國文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中三年級",
+      "subject": "國文",
+      "path": "curriculum-data/高中三年級/國文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中一年級",
+      "subject": "英文",
+      "path": "curriculum-data/高中一年級/英文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中二年級",
+      "subject": "英文",
+      "path": "curriculum-data/高中二年級/英文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中三年級",
+      "subject": "英文",
+      "path": "curriculum-data/高中三年級/英文.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中一年級",
+      "subject": "歷史",
+      "path": "curriculum-data/高中一年級/歷史.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中二年級",
+      "subject": "歷史",
+      "path": "curriculum-data/高中二年級/歷史.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中三年級",
+      "subject": "歷史",
+      "path": "curriculum-data/高中三年級/歷史.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中一年級",
+      "subject": "地理",
+      "path": "curriculum-data/高中一年級/地理.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中二年級",
+      "subject": "地理",
+      "path": "curriculum-data/高中二年級/地理.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中三年級",
+      "subject": "地理",
+      "path": "curriculum-data/高中三年級/地理.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中一年級",
+      "subject": "公民",
+      "path": "curriculum-data/高中一年級/公民.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中二年級",
+      "subject": "公民",
+      "path": "curriculum-data/高中二年級/公民.json",
+      "books": 2,
+      "legacyVisible": true
+    },
+    {
+      "grade": "高中三年級",
+      "subject": "公民",
+      "path": "curriculum-data/高中三年級/公民.json",
+      "books": 2,
+      "legacyVisible": true
+    }
+  ]
+}

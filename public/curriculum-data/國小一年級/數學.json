@@ -1,0 +1,459 @@
+{
+  "schema": 1,
+  "grade": "國小一年級",
+  "subject": "數學",
+  "books": [
+    {
+      "bookId": "book-42e310bbb1803e37c1a5",
+      "subject": "數學",
+      "grade": "國小一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "10以內的數",
+          "details": [
+            "數到10、讀寫與順序",
+            "一一對應、比較多少",
+            "0及數的分解"
+          ],
+          "concepts": [
+            {
+              "name": "數到10、讀寫與順序",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "一一對應、比較多少",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "0及數的分解",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "分與合",
+          "details": [
+            "10以內數量的合成",
+            "10以內數量的分解",
+            "用圖形表示數量"
+          ],
+          "concepts": [
+            {
+              "name": "10以內數量的合成",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "10以內數量的分解",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "用圖形表示數量",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "10以內的加減",
+          "details": [
+            "加法意義與加法算式",
+            "減法意義與減法算式",
+            "加減生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "加法意義與加法算式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "減法意義與減法算式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "加減生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "形狀與長度",
+          "details": [
+            "認識平面圖形與立體物件",
+            "直接比較長短",
+            "位置與順序"
+          ],
+          "concepts": [
+            {
+              "name": "認識平面圖形與立體物件",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "直接比較長短",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "位置與順序",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "20以內的數",
+          "details": [
+            "認識11到20",
+            "數的順序與大小",
+            "十與一的合成"
+          ],
+          "concepts": [
+            {
+              "name": "認識11到20",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "數的順序與大小",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "十與一的合成",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-c6a4e14ac07b20c378f1",
+      "subject": "數學",
+      "grade": "國小一年級",
+      "edition": "類南一版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：數到10",
+          "details": [
+            "數到10的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "數到10的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：比長短",
+          "details": [
+            "比長短的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "比長短的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：分與合",
+          "details": [
+            "分與合的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "分與合的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-8ee3f2755d8a32d2be60",
+      "subject": "數學",
+      "grade": "國小一年級",
+      "edition": "類翰林版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：10以內的數",
+          "details": [
+            "10以內的數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "10以內的數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：比長短",
+          "details": [
+            "比長短的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "比長短的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：順序與多少",
+          "details": [
+            "順序與多少的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "順序與多少的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-37ac1927e43f0c644f3b",
+      "subject": "數學",
+      "grade": "國小一年級",
+      "edition": "類康軒版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：10以內的數",
+          "details": [
+            "10以內的數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "10以內的數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：比長短",
+          "details": [
+            "比長短的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "比長短的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：排順序、比多少",
+          "details": [
+            "排順序、比多少的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "排順序、比多少的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-1414168b0b138470defd",
+      "subject": "數學",
+      "grade": "國小一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "100以內的數",
+          "details": [
+            "十位與個位",
+            "數序、比較與數線",
+            "2個一數、5個一數、10個一數"
+          ],
+          "concepts": [
+            {
+              "name": "十位與個位",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "數序、比較與數線",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2個一數、5個一數、10個一數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "18以內的加減",
+          "details": [
+            "進位加法",
+            "退位減法",
+            "加減關係與應用"
+          ],
+          "concepts": [
+            {
+              "name": "進位加法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "退位減法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "加減關係與應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "認識錢幣",
+          "details": [
+            "1元、5元、10元、50元",
+            "數錢與簡單付款",
+            "換錢"
+          ],
+          "concepts": [
+            {
+              "name": "1元、5元、10元、50元",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "數錢與簡單付款",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "換錢",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "時間與圖形",
+          "details": [
+            "整點、半點與時刻順序",
+            "平面圖形分類",
+            "圖形拼組"
+          ],
+          "concepts": [
+            {
+              "name": "整點、半點與時刻順序",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "平面圖形分類",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "圖形拼組",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "長度與統計",
+          "details": [
+            "間接比較長短",
+            "公分初步",
+            "分類與整理資料"
+          ],
+          "concepts": [
+            {
+              "name": "間接比較長短",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公分初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "分類與整理資料",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

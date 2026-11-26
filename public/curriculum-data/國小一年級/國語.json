@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小一年級",
+  "subject": "國語",
+  "books": [
+    {
+      "bookId": "book-9384d34ffddf6b54d052",
+      "subject": "國語",
+      "grade": "國小一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "注音符號",
+          "details": [
+            "聲母、韻母與介音",
+            "四聲與拼讀",
+            "注音書寫與聲調辨別"
+          ],
+          "concepts": [
+            {
+              "name": "聲母、韻母與介音",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "四聲與拼讀",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "注音書寫與聲調辨別",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "識字與寫字",
+          "details": [
+            "常用字字形及筆順",
+            "字詞配對",
+            "詞語的意思"
+          ],
+          "concepts": [
+            {
+              "name": "常用字字形及筆順",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "字詞配對",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "詞語的意思",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "短句與閱讀",
+          "details": [
+            "讀懂短句",
+            "人事時地物",
+            "生活故事的順序"
+          ],
+          "concepts": [
+            {
+              "name": "讀懂短句",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "人事時地物",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活故事的順序",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "表達與溝通",
+          "details": [
+            "專心聆聽",
+            "完整說一句話",
+            "描述日常經驗"
+          ],
+          "concepts": [
+            {
+              "name": "專心聆聽",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "完整說一句話",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "描述日常經驗",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f0236512b7f508b5fc8c",
+      "subject": "國語",
+      "grade": "國小一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "常用字詞",
+          "details": [
+            "字音、字形與字義",
+            "部首與簡單造詞",
+            "辨認相似字"
+          ],
+          "concepts": [
+            {
+              "name": "字音、字形與字義",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "部首與簡單造詞",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "辨認相似字",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "句子練習",
+          "details": [
+            "標點符號",
+            "擴寫簡單句",
+            "排列句子順序"
+          ],
+          "concepts": [
+            {
+              "name": "標點符號",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "擴寫簡單句",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "排列句子順序",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "故事閱讀",
+          "details": [
+            "角色與事件",
+            "找出文章重點",
+            "預測故事發展"
+          ],
+          "concepts": [
+            {
+              "name": "角色與事件",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "找出文章重點",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "預測故事發展",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生活表達",
+          "details": [
+            "寫短句與小短文",
+            "描述人物與心情",
+            "分享閱讀心得"
+          ],
+          "concepts": [
+            {
+              "name": "寫短句與小短文",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "描述人物與心情",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "分享閱讀心得",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "高中二年級",
+  "subject": "國文",
+  "books": [
+    {
+      "bookId": "book-796c2ade69d0dc65342e",
+      "subject": "國文",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "唐宋古文與議論",
+          "details": [
+            "文章論點與論據",
+            "篇章結構",
+            "修辭與文史背景"
+          ],
+          "concepts": [
+            {
+              "name": "文章論點與論據",
+              "conceptId": "legacy-32ee4b4e7da895a15e40",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "篇章結構",
+              "conceptId": "legacy-c6f02b58a38afed0591c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "修辭與文史背景",
+              "conceptId": "legacy-b90533fac3cde4e8501b",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "唐宋詩詞",
+          "details": [
+            "意象、典故與詩風",
+            "詞牌與語言特色",
+            "跨文本比較"
+          ],
+          "concepts": [
+            {
+              "name": "意象、典故與詩風",
+              "conceptId": "legacy-0f38fc24c337fc773c0c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "詞牌與語言特色",
+              "conceptId": "legacy-18aa2ab1a4e33dae28e5",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "跨文本比較",
+              "conceptId": "legacy-292bfcf83619bfb1a718",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "現代文本",
+          "details": [
+            "非連續文本",
+            "媒體識讀",
+            "比較閱讀"
+          ],
+          "concepts": [
+            {
+              "name": "非連續文本",
+              "conceptId": "legacy-a0c948ce801c536d625f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "媒體識讀",
+              "conceptId": "legacy-b97ab77503faa0bb6c20",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "比較閱讀",
+              "conceptId": "legacy-cecdb79ff0e5970d6205",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "語文應用",
+          "details": [
+            "應用文與書信",
+            "語意與語用",
+            "重點摘要"
+          ],
+          "concepts": [
+            {
+              "name": "應用文與書信",
+              "conceptId": "legacy-f47cedefb2b68cdd44ad",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "語意與語用",
+              "conceptId": "legacy-993731c1cb988a9c825c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "重點摘要",
+              "conceptId": "legacy-ac4f408fe00025cf8f12",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-afdf179e6dea8d088537",
+      "subject": "國文",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "明清文學與小說",
+          "details": [
+            "小說敘事結構",
+            "人物與象徵",
+            "古文與筆記"
+          ],
+          "concepts": [
+            {
+              "name": "小說敘事結構",
+              "conceptId": "legacy-67144dac8533025741d0",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "人物與象徵",
+              "conceptId": "legacy-6287d7010791441282ed",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "古文與筆記",
+              "conceptId": "legacy-5db4789b71998a5350d1",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "臺灣文學",
+          "details": [
+            "臺灣現代文學",
+            "鄉土與時代背景",
+            "多元書寫視角"
+          ],
+          "concepts": [
+            {
+              "name": "臺灣現代文學",
+              "conceptId": "legacy-adb1f4b282f06b210bf6",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "鄉土與時代背景",
+              "conceptId": "legacy-8f8cda14d46ccc60295f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "多元書寫視角",
+              "conceptId": "legacy-a3c00921322214aa0613",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "跨文本整合",
+          "details": [
+            "古今文本議題比較",
+            "證據擷取與論證",
+            "長文閱讀"
+          ],
+          "concepts": [
+            {
+              "name": "古今文本議題比較",
+              "conceptId": "legacy-6cb97e39e5fa94e3b44d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "證據擷取與論證",
+              "conceptId": "legacy-58902a11a92677b78d0f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "長文閱讀",
+              "conceptId": "legacy-888a29d501c2e80e499d",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "議論寫作",
+          "details": [
+            "審題立意",
+            "論證架構",
+            "文句推敲"
+          ],
+          "concepts": [
+            {
+              "name": "審題立意",
+              "conceptId": "legacy-df736b8d7becbe9dff22",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "論證架構",
+              "conceptId": "legacy-44de933709dae4c3c448",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "文句推敲",
+              "conceptId": "legacy-f26f4d3a0b5d078b9c81",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

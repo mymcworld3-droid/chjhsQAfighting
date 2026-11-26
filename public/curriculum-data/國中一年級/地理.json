@@ -1,0 +1,427 @@
+{
+  "schema": 1,
+  "grade": "國中一年級",
+  "subject": "地理",
+  "books": [
+    {
+      "bookId": "book-17743c64b5845567e0ac",
+      "subject": "地理",
+      "grade": "國中一年級",
+      "edition": "翰林版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/地理/geogrophy.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：臺灣的位置與地圖",
+          "details": [
+            "經緯度與時區",
+            "地圖判讀與地理資訊系統(GIS)",
+            "臺灣地理位置特色"
+          ],
+          "concepts": [
+            {
+              "name": "經緯度與時區",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "地圖判讀與地理資訊系統(GIS)",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "臺灣地理位置特色",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：臺灣的地形與海岸",
+          "details": [
+            "五大地形特徵",
+            "地形與板塊關係",
+            "四種海岸類型與離島"
+          ],
+          "concepts": [
+            {
+              "name": "五大地形特徵",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "地形與板塊關係",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "四種海岸類型與離島",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：臺灣的氣候與水文",
+          "details": [
+            "影響氣候因素",
+            "雨量分布與季節性",
+            "河川特性與水資源管理"
+          ],
+          "concepts": [
+            {
+              "name": "影響氣候因素",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "雨量分布與季節性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "河川特性與水資源管理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：臺灣的人口與社會",
+          "details": [
+            "人口成長與結構",
+            "少子化與高齡化",
+            "都市化與城鄉發展"
+          ],
+          "concepts": [
+            {
+              "name": "人口成長與結構",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "少子化與高齡化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "都市化與城鄉發展",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第五單元：臺灣的產業活動",
+          "details": [
+            "農業發展與轉型",
+            "工業區分布與科學園區",
+            "服務業與觀光發展"
+          ],
+          "concepts": [
+            {
+              "name": "農業發展與轉型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "工業區分布與科學園區",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "服務業與觀光發展",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-4544c58be6eaa759d5e4",
+      "subject": "地理",
+      "grade": "國中一年級",
+      "edition": "康軒版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/地理/geogrophy.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：認識臺灣",
+          "details": [
+            "經緯度與位置",
+            "地圖要素與GIS",
+            "臺灣的空間定位"
+          ],
+          "concepts": [
+            {
+              "name": "經緯度與位置",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "地圖要素與GIS",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "臺灣的空間定位",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：臺灣的地形",
+          "details": [
+            "山地與平原地形",
+            "海岸線變遷",
+            "板塊運動與斷層"
+          ],
+          "concepts": [
+            {
+              "name": "山地與平原地形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "海岸線變遷",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "板塊運動與斷層",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：臺灣的氣候水文",
+          "details": [
+            "氣候類型分佈",
+            "河川與水資源利用",
+            "環境議題"
+          ],
+          "concepts": [
+            {
+              "name": "氣候類型分佈",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "河川與水資源利用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "環境議題",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：臺灣的人口與聚落",
+          "details": [
+            "人口分布與社會現象",
+            "人口轉型與社會問題",
+            "聚落演進"
+          ],
+          "concepts": [
+            {
+              "name": "人口分布與社會現象",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "人口轉型與社會問題",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "聚落演進",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第五單元：臺灣的產業",
+          "details": [
+            "傳統農業到精緻農業",
+            "工業轉型",
+            "服務業與科技創新"
+          ],
+          "concepts": [
+            {
+              "name": "傳統農業到精緻農業",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "工業轉型",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "服務業與科技創新",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-ec44c4b568886504487e",
+      "subject": "地理",
+      "grade": "國中一年級",
+      "edition": "南一版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/地理/geogrophy.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：地圖與空間定位",
+          "details": [
+            "地圖要素",
+            "坐標與時區",
+            "GIS應用"
+          ],
+          "concepts": [
+            {
+              "name": "地圖要素",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "坐標與時區",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "GIS應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：地形環境",
+          "details": [
+            "地形分類",
+            "海岸類型與離島",
+            "板塊構造"
+          ],
+          "concepts": [
+            {
+              "name": "地形分類",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "海岸類型與離島",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "板塊構造",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：氣候與水文",
+          "details": [
+            "氣候要素",
+            "水資源空間分布",
+            "防洪與用水"
+          ],
+          "concepts": [
+            {
+              "name": "氣候要素",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "水資源空間分布",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "防洪與用水",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：人口與都市",
+          "details": [
+            "人口結構",
+            "都市化與城鄉差距",
+            "社會變遷"
+          ],
+          "concepts": [
+            {
+              "name": "人口結構",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "都市化與城鄉差距",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "社會變遷",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第五單元：產業轉型",
+          "details": [
+            "初級、次級產業",
+            "第三級產業與全球競爭"
+          ],
+          "concepts": [
+            {
+              "name": "初級、次級產業",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "第三級產業與全球競爭",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

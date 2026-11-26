@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "國小四年級",
+  "subject": "綜合活動",
+  "books": [
+    {
+      "bookId": "book-9a77728320d7ebaddd4f",
+      "subject": "綜合活動",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "自我探索",
+          "details": [
+            "優勢與興趣",
+            "學習策略",
+            "情緒調節"
+          ],
+          "concepts": [
+            {
+              "name": "優勢與興趣",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "學習策略",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "情緒調節",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "合作與溝通",
+          "details": [
+            "傾聽與表達",
+            "團隊任務",
+            "尊重差異"
+          ],
+          "concepts": [
+            {
+              "name": "傾聽與表達",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "團隊任務",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "尊重差異",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "生活實踐",
+          "details": [
+            "個人整潔",
+            "家務與責任",
+            "安全行動"
+          ],
+          "concepts": [
+            {
+              "name": "個人整潔",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "家務與責任",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "安全行動",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f7beca6773168b7aaeda",
+      "subject": "綜合活動",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "社會參與",
+          "details": [
+            "社區探索",
+            "志工與服務",
+            "公共責任"
+          ],
+          "concepts": [
+            {
+              "name": "社區探索",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "志工與服務",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "公共責任",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "環境永續",
+          "details": [
+            "能源與資源",
+            "綠色生活",
+            "生活行動方案"
+          ],
+          "concepts": [
+            {
+              "name": "能源與資源",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "綠色生活",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "生活行動方案",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "自我保護",
+          "details": [
+            "網路安全",
+            "霸凌防治",
+            "求助資源"
+          ],
+          "concepts": [
+            {
+              "name": "網路安全",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "霸凌防治",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "求助資源",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

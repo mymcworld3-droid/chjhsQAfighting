@@ -178,6 +178,16 @@ function buildInventory(root = ROOT, options = {}) {
     });
   }
   const activeConcepts = [...concepts.values()];
+  const curatedFile=path.join(root,'concept-registry/curated.json');
+  const curated=fs.existsSync(curatedFile)?readJSON(root,'concept-registry/curated.json').concepts:[];
+  for(const item of activeConcepts){
+    const matches=curated.filter(c=>c.subject===item.referenceSubject&&c.grades.includes(item.grade)&&
+      [c.name,...c.aliases].some(name=>normalize(name)===normalize(item.name)));
+    if(matches.length===1)item.standardConceptId=matches[0].conceptId;
+  }
+  const booksDirectory=path.join(root,'curriculum-data/books');
+  const verifiedBooks=fs.existsSync(booksDirectory)?fs.readdirSync(booksDirectory).filter(f=>f.endsWith('.json'))
+    .map(f=>readJSON(root,'curriculum-data/books/'+f)).filter(b=>b.verificationStatus==='verified-complete-toc'):[];
   const emptyUiScopes = ['國中一年級','國中二年級','國中三年級'].flatMap(grade =>
     ['國文','英文','數學','生物','物理','化學','地球科學','歷史','地理','公民']
       .filter(subject=>!activeConcepts.some(c=>c.grade===grade && c.subject===subject)).map(subject=>({grade,subject})));
@@ -195,7 +205,7 @@ function buildInventory(root = ROOT, options = {}) {
     curriculumFiles:sources.length, legacyUnstructuredFiles:legacyFiles.length,
     catalogRecords:catalogs.length, activeCatalogRecords:catalogs.filter(c=>c.active).length,
     // No structured year/book/source/verification metadata exists in the legacy data.
-    verifiedCompleteBooks:0, catalogsWithoutStructuredVerification:catalogs.length,
+    verifiedCompleteBooks:verifiedBooks.length, catalogsWithoutStructuredVerification:catalogs.length,
     rawChapterOccurrences:catalogs.reduce((n,c)=>n+c.units.length,0),
     rawDetailOccurrences:catalogs.reduce((n,c)=>n+c.units.reduce((sum,u)=>sum+u.details.length,0),0),
     activeConcepts:activeConcepts.length, activeConceptsWithReferences:activeConcepts.filter(c=>c.referenceFile).length,
@@ -207,7 +217,7 @@ function buildInventory(root = ROOT, options = {}) {
     structuralCandidateQuestions:groups.reduce((n,g)=>n+g.structuralCandidateCount,0),
     referenceFilesWithFiveStructuralCandidates:groups.filter(g=>g.structuralCandidateCount>=MINIMUM).length,
     legacyConceptIds:conceptIds.size, groupsWithMultipleLegacyConceptIds:groups.filter(g=>g.legacyConceptIds.length>1).length,
-    standardConcepts:0, independentlyContentReviewedQuestions:null,
+    standardConcepts:curated.length, independentlyContentReviewedQuestions:null,
     emptyUiScopes:emptyUiScopes.length,
     structuralProblems:problems.length, questionsWithStructuralIssues:groups.reduce((n,g)=>n+g.questions.length,0),
     repeatedStemsNeedingReview:warnings.length
@@ -222,7 +232,7 @@ const cell = value => String(value ?? '—').replace(/\|/g,'\\|').replace(/[\r\n
 function markdown(report) {
   const s=report.summary;
   const lines = ['# 教材與參考題盤點（第 1 階段）','',
-    `基準提交：\`${report.baselineCommit}\`。教材查證目標為 115 學年度；本報告沒有新增教材查證。`, '',
+    `基準提交：\`${report.baselineCommit}\`。教材查證目標為 115 學年度；本報告盤點既有目錄，正式版本的查證與開放資格另見 curriculum-coverage。`, '',
     '本報告由 `npm run audit:curriculum` 產生。完整章節、細項、版本、索引及待補清單見同名 JSON；只在開發端掃描，不參與遊戲請求。', '',
     '「結構候選題」僅通過欄位、四個不同選項、ID／題幹與正解去重等程式檢查，尚未證明答案、教材深度、干擾選項或命題多樣性合格；不可當作正式開放資格。相同題幹但不同正解（例如英文選正確句）另列人工複核，不逕認定重複題。', '',
     '| 指標 | 數量 |','| --- | ---: |',
@@ -251,7 +261,7 @@ function markdown(report) {
     '| 年級 | 科目 | 學期 | 版本／整理 | 章 | 細項 | 目前採用 | 資料性質 |','| --- | --- | --- | --- | ---: | ---: | --- | --- |',
     ...report.catalogs.map(c=>`| ${[c.grade,c.subject,c.term,c.edition,c.units.length,c.units.reduce((n,u)=>n+u.details.length,0),c.active?'是':'否',c.verificationStatus].map(cell).join(' | ')} |`), '',
     '## 結構與映射待處理', '',
-    '- `concepts[].standardConceptId` 全為 null；名稱去重鍵只供盤點，不是永久觀念 ID。不得拿它覆蓋學習紀錄。',
+    '- `concepts[].standardConceptId` 只填入已確認且精確符合名稱／年級的標準觀念；未查證者保留 null。不得拿候選鍵覆蓋學習紀錄。',
     '- `concepts[].occurrences` 保留章節及目錄來源；`additionalQuestionsNeeded` 可產生逐觀念待補清單。',
     '- `referenceGroups[].legacyConceptIds` 保留舊值；多個舊 ID 需要第 2 階段判斷，不自動合併。',
     '- 未找到精確同名題庫不代表語意上一定沒有題目；編號節名、主題／細項長字串、跨數學分流的差異須人工對照。',

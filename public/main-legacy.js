@@ -147,7 +147,8 @@ function soloQuestionScope() {
         ? activeUnits.map((unit) => ({
             path: String(unit?.path || ''),
             detail: String(unit?.detail || ''),
-            topics: Array.isArray(unit?.sub_topics) ? unit.sub_topics.map(String).sort() : []
+            topics: Array.isArray(unit?.sub_topics) ? unit.sub_topics.map(String).sort() : [],
+            ...(unit?.curriculum ? {curriculum:window.CurriculumRangeRules.curriculumMetadata(unit.curriculum)} : {})
         })).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)))
         : [];
     return JSON.stringify({
@@ -3049,7 +3050,7 @@ async function fetchOneQuestion(preferredUnit) {
         // 高中保留數學 A/B/甲/乙；國小保留國語、生活等學科與上下學期。
         // subject 欄位沿用既有 API 的主科目，指定主題明確註記真正選定的科目。
         if ((chosenGrade.startsWith('高中') || chosenGrade.startsWith('國小')) && parts.length >= 4) {
-            const studyTrack = String(parts[3] || subject).slice(0, 16);
+            const studyTrack = String((randomUnit.curriculum ? parts.at(-1) : parts[3]) || subject).slice(0, 16);
             const termName = String(parts[2] || '').slice(0, 20);
             targetTopic = `${chosenGrade}／${termName}／${studyTrack}：${targetTopic}`;
         }

@@ -5,6 +5,16 @@ on:
     branches: [main, stamina-battle]
     paths:
       - 'question-references/**'
+      - 'concept-registry/**'
+      - 'curriculum-data/**'
+      - 'public/curriculum-data/**'
+      - 'curriculum-catalog.cjs'
+      - 'adaptive-learning-api.cjs'
+      - 'public/cultivation/curriculum-range-rules.js'
+      - 'quiz-references.cjs'
+      - 'scripts/build-curriculum-catalog.cjs'
+      - 'scripts/audit-curriculum-coverage.cjs'
+      - 'tests/curriculum-catalog.test.cjs'
       - 'public/high_school_unit_name/**'
       - 'public/elementary_school_unit_name/**'
       - 'public/middle_school_unit_name/**'
@@ -20,6 +30,16 @@ on:
     branches: [main]
     paths:
       - 'question-references/**'
+      - 'concept-registry/**'
+      - 'curriculum-data/**'
+      - 'public/curriculum-data/**'
+      - 'curriculum-catalog.cjs'
+      - 'adaptive-learning-api.cjs'
+      - 'public/cultivation/curriculum-range-rules.js'
+      - 'quiz-references.cjs'
+      - 'scripts/build-curriculum-catalog.cjs'
+      - 'scripts/audit-curriculum-coverage.cjs'
+      - 'tests/curriculum-catalog.test.cjs'
       - 'public/high_school_unit_name/**'
       - 'public/elementary_school_unit_name/**'
       - 'public/middle_school_unit_name/**'
@@ -45,3 +65,8 @@ jobs:
         run: node --test tests/quiz-reference-curriculum.test.cjs tests/quiz-reference-core-coverage.test.cjs tests/retired-it-scope.test.cjs tests/curriculum-inventory.test.cjs
       - name: Check reproducible curriculum inventory (existing gaps remain reported)
         run: node scripts/audit-curriculum-inventory.cjs --check
+      - name: Check registry, release gates and generated catalog freshness
+        run: |
+          node scripts/build-curriculum-catalog.cjs --check
+          node scripts/audit-curriculum-coverage.cjs --check
+          node --test tests/curriculum-catalog.test.cjs tests/quiz-references.test.cjs

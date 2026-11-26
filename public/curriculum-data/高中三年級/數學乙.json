@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "subject": "數學乙",
+  "books": [
+    {
+      "bookId": "book-67b6d2428d87a008636f",
+      "subject": "數學乙",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "極限與變化率",
+          "details": [
+            "數列及函數極限的概念",
+            "平均變化率與瞬時變化率",
+            "以圖形理解連續性"
+          ],
+          "concepts": [
+            {
+              "name": "數列及函數極限的概念",
+              "conceptId": "legacy-3cd5c7ae2ec29f4f2c63",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "平均變化率與瞬時變化率",
+              "conceptId": "legacy-a37f9bfc7d1c81e52217",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "以圖形理解連續性",
+              "conceptId": "legacy-3116ff18e0c566f4cd50",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "微分及其應用",
+          "details": [
+            "多項式函數導數",
+            "函數增減與極值",
+            "經濟與生活情境最佳化"
+          ],
+          "concepts": [
+            {
+              "name": "多項式函數導數",
+              "conceptId": "legacy-aea10bb6b38d09d54050",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "函數增減與極值",
+              "conceptId": "legacy-df6e5368d188e5138df8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "經濟與生活情境最佳化",
+              "conceptId": "legacy-490b9e7a5069eaf7de66",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "機率與統計建模",
+          "details": [
+            "隨機變數與期望值",
+            "常態分布",
+            "資料解讀"
+          ],
+          "concepts": [
+            {
+              "name": "隨機變數與期望值",
+              "conceptId": "legacy-8101b3d7c2a62131b247",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "常態分布",
+              "conceptId": "legacy-0ede12fcad78edbfb251",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "資料解讀",
+              "conceptId": "legacy-5326c4717294f6ca1bad",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-9f1335a06d959b7a593b",
+      "subject": "數學乙",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "積分與面積",
+          "details": [
+            "面積累積的概念",
+            "多項式函數積分",
+            "情境中的面積與總量"
+          ],
+          "concepts": [
+            {
+              "name": "面積累積的概念",
+              "conceptId": "legacy-65b8e5c0bfbde49405ce",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "多項式函數積分",
+              "conceptId": "legacy-0292bbd4e6f71b39dd21",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "情境中的面積與總量",
+              "conceptId": "legacy-0fb015163f81c1972429",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "數學模型",
+          "details": [
+            "函數模型與參數",
+            "成長模型",
+            "跨單元資料應用"
+          ],
+          "concepts": [
+            {
+              "name": "函數模型與參數",
+              "conceptId": "legacy-4f27f4eb4e4910c0da6f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "成長模型",
+              "conceptId": "legacy-0027ea86b7529f174079",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "跨單元資料應用",
+              "conceptId": "legacy-7dde58df71a4cf8bf394",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "統計推論與資料分析",
+          "details": [
+            "抽樣與統計圖表",
+            "數據變異與推論",
+            "生活決策的量化分析"
+          ],
+          "concepts": [
+            {
+              "name": "抽樣與統計圖表",
+              "conceptId": "legacy-bdbc25af4a6cb21ca679",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "數據變異與推論",
+              "conceptId": "legacy-5ebe0a6b0f9eb89d7a8f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "生活決策的量化分析",
+              "conceptId": "legacy-69e4c4d468c852d159e0",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

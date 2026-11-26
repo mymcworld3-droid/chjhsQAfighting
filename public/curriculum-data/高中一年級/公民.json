@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中一年級",
+  "subject": "公民",
+  "books": [
+    {
+      "bookId": "book-5ade0cfb61adc2a94ffb",
+      "subject": "公民",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "自我與社會",
+          "details": [
+            "自我認同與社會角色",
+            "社會規範與文化",
+            "家庭、學校與社會互動"
+          ],
+          "concepts": [
+            {
+              "name": "自我認同與社會角色",
+              "conceptId": "legacy-17f14418c437d4c6597e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "社會規範與文化",
+              "conceptId": "legacy-2890dd66a1105c353c02",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "家庭、學校與社會互動",
+              "conceptId": "legacy-ff674a5a4e6083fdb3a5",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "社會中的多元與平等",
+          "details": [
+            "性別平等",
+            "文化差異與多元尊重",
+            "社會階層與不平等"
+          ],
+          "concepts": [
+            {
+              "name": "性別平等",
+              "conceptId": "legacy-18dd3c1a892c152ffee6",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "文化差異與多元尊重",
+              "conceptId": "legacy-23911a41b71b3d3c0831",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "社會階層與不平等",
+              "conceptId": "legacy-7e09ddaa94f3cc40e5b0",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "公共參與",
+          "details": [
+            "社會團體",
+            "公民社會",
+            "公共事務與媒體"
+          ],
+          "concepts": [
+            {
+              "name": "社會團體",
+              "conceptId": "legacy-a19ac7dee0db82c8847c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "公民社會",
+              "conceptId": "legacy-a3adb0cc49052bd2b4ec",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "公共事務與媒體",
+              "conceptId": "legacy-a59adc99a6fc6295d784",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-343c4aed861dec93cd99",
+      "subject": "公民",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "政治與民主",
+          "details": [
+            "民主政治與憲政",
+            "政府組織與權力分立",
+            "政黨與選舉制度"
+          ],
+          "concepts": [
+            {
+              "name": "民主政治與憲政",
+              "conceptId": "legacy-c9e3d4f884533ac82aa8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "政府組織與權力分立",
+              "conceptId": "legacy-80888e5d08ef9a7b8af8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "政黨與選舉制度",
+              "conceptId": "legacy-0098e9bd919f3ccb9758",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "權利與責任",
+          "details": [
+            "基本人權",
+            "公民參與",
+            "法治與公共利益"
+          ],
+          "concepts": [
+            {
+              "name": "基本人權",
+              "conceptId": "legacy-1440a987fcfba4e5b6db",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "公民參與",
+              "conceptId": "legacy-62fecb4f4bcc319cb498",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "法治與公共利益",
+              "conceptId": "legacy-2c95ef5131dfe1c01625",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "媒體識讀",
+          "details": [
+            "資訊與假訊息",
+            "公共議題分析",
+            "多元觀點"
+          ],
+          "concepts": [
+            {
+              "name": "資訊與假訊息",
+              "conceptId": "legacy-562b0a911f112a3f3f76",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "公共議題分析",
+              "conceptId": "legacy-9ea1fa1258e568a780d5",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "多元觀點",
+              "conceptId": "legacy-9d9c60d91aa9a056e999",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

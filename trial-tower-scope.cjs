@@ -3,6 +3,7 @@
 const crypto=require('node:crypto'),fs=require('node:fs/promises'),path=require('node:path');
 const Learning=require('./public/cultivation/adaptive-learning-rules.js');
 const Exclusions=require('./quiz-scope-exclusions.cjs');
+const {curriculumMetadata}=require('./public/cultivation/curriculum-range-rules.js');
 const SUBJECTS=new Set(['國文','國語','英文','數學','數學A','數學B','數學甲','數學乙','生物','物理','化學','地球科學','歷史','地理','公民','自然','自然科學','社會','生活','藝術','健康與體育','本土語文','綜合活動','綜合']);
 const RANDOM_SUBJECTS=['國文','英文','數學','公民','歷史','地理','物理','化學','生物'];
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
@@ -10,7 +11,7 @@ const clean=(v,n=240)=>String(v||'').trim().slice(0,n);
 function snapshot(user={}){
  const settings=user.gameSettings||{},profile=user.profile||{},mode=['focused','bank'].includes(settings.sourceMode)?settings.sourceMode:'random';
  const level=clean(profile.educationLevel,40)||'國中一年級';
- const units=mode==='focused'?(Array.isArray(settings.focusedUnits)?settings.focusedUnits:[]).map(u=>({path:clean(u?.path).replaceAll('\\','/'),detail:clean(u?.detail,200),sub_topics:(Array.isArray(u?.sub_topics)?u.sub_topics:[]).map(v=>clean(v,200)).filter(Boolean).slice(0,24)})):[];
+ const units=mode==='focused'?(Array.isArray(settings.focusedUnits)?settings.focusedUnits:[]).map(u=>({path:clean(u?.path).replaceAll('\\','/'),detail:clean(u?.detail,200),sub_topics:(Array.isArray(u?.sub_topics)?u.sub_topics:[]).map(v=>clean(v,200)).filter(Boolean).slice(0,24),...(u?.curriculum!==undefined?{curriculum:curriculumMetadata(u.curriculum)}:{})})):[];
  if(mode==='focused'&&(!units.length||units.length>24||units.some(u=>!SUBJECTS.has(u.path.split('/')[0]))))throw fail('請先儲存有效的修習範圍');
  const source=mode==='bank'?clean(settings.source):'';
  if(mode==='bank'&&(!source||source==='ai'))throw fail('請先選擇並儲存題庫');
@@ -41,7 +42,7 @@ function pick(scope,user={},index=0){
   :/^(國小|國中|高中)[一二三四五六]年級/.test(chosenGrade)?chosenGrade:scope.level;
  let specificTopic=unit.detail||unit.path.replace('.json','');
  if(unit.sub_topics.length)specificTopic+=` (核心考點細項：${unit.sub_topics.join('、')})`;
- if((chosenGrade.startsWith('高中')||chosenGrade.startsWith('國小'))&&parts.length>=4)specificTopic=`${chosenGrade}／${parts[2].slice(0,20)}／${(parts[3]||subject).slice(0,16)}：${specificTopic}`;
+ if((chosenGrade.startsWith('高中')||chosenGrade.startsWith('國小'))&&parts.length>=4)specificTopic=`${chosenGrade}／${parts[2].slice(0,20)}／${((unit.curriculum?parts.at(-1):parts[3])||subject).slice(0,16)}：${specificTopic}`;
  difficulty=Learning.generalDifficulty(user.stats,subject);
  return {subject,level,difficulty,specificTopic:specificTopic.slice(0,240),adaptiveScope:unit};
 }

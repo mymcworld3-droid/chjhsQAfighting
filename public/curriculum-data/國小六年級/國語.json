@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "國小六年級",
+  "subject": "國語",
+  "books": [
+    {
+      "bookId": "book-ca82fd864c195908f20d",
+      "subject": "國語",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "閱讀理解統整",
+          "details": [
+            "文章主旨",
+            "段落組織",
+            "推論與觀點"
+          ],
+          "concepts": [
+            {
+              "name": "文章主旨",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "段落組織",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "推論與觀點",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "古典與現代文本",
+          "details": [
+            "簡易文言",
+            "詩詞與現代詩",
+            "修辭及意象"
+          ],
+          "concepts": [
+            {
+              "name": "簡易文言",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "詩詞與現代詩",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "修辭及意象",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "非連續文本",
+          "details": [
+            "表格與圖表",
+            "資訊整合",
+            "辨識事實與意見"
+          ],
+          "concepts": [
+            {
+              "name": "表格與圖表",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "資訊整合",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "辨識事實與意見",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "寫作與表達",
+          "details": [
+            "敘事、說明與議論",
+            "寫作大綱",
+            "口頭報告"
+          ],
+          "concepts": [
+            {
+              "name": "敘事、說明與議論",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "寫作大綱",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "口頭報告",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-4d0b41e48a8fd14fae26",
+      "subject": "國語",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "國小語文總複習",
+          "details": [
+            "字音字形字義",
+            "成語與修辭",
+            "標點及句型"
+          ],
+          "concepts": [
+            {
+              "name": "字音字形字義",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "成語與修辭",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "標點及句型",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "長篇閱讀",
+          "details": [
+            "跨段落推論",
+            "比較閱讀",
+            "文本證據"
+          ],
+          "concepts": [
+            {
+              "name": "跨段落推論",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "比較閱讀",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "文本證據",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "文言閱讀準備",
+          "details": [
+            "常見文言詞義",
+            "語譯初步",
+            "古典詩文理解"
+          ],
+          "concepts": [
+            {
+              "name": "常見文言詞義",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "語譯初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "古典詩文理解",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "寫作與國中銜接",
+          "details": [
+            "論點與例證",
+            "議論段落",
+            "摘要與修訂"
+          ],
+          "concepts": [
+            {
+              "name": "論點與例證",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "議論段落",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "摘要與修訂",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

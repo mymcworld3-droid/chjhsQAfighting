@@ -1,0 +1,459 @@
+{
+  "schema": 1,
+  "grade": "國小四年級",
+  "subject": "數學",
+  "books": [
+    {
+      "bookId": "book-b79e2d5ea430eb0926a5",
+      "subject": "數學",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "一億以內的數",
+          "details": [
+            "萬與億的位值",
+            "大數讀寫與比較",
+            "十進位表示"
+          ],
+          "concepts": [
+            {
+              "name": "萬與億的位值",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "大數讀寫與比較",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "十進位表示",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "整數乘除",
+          "details": [
+            "多位數乘法",
+            "多位數除法",
+            "四則運算應用"
+          ],
+          "concepts": [
+            {
+              "name": "多位數乘法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "多位數除法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "四則運算應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "角度",
+          "details": [
+            "角度與量角器",
+            "銳角鈍角與平角",
+            "角度加減"
+          ],
+          "concepts": [
+            {
+              "name": "角度與量角器",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "銳角鈍角與平角",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "角度加減",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "分數與小數",
+          "details": [
+            "真分數、假分數與帶分數",
+            "二位小數",
+            "數的比較"
+          ],
+          "concepts": [
+            {
+              "name": "真分數、假分數與帶分數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "二位小數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "數的比較",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "長度面積與統計",
+          "details": [
+            "公里與公尺",
+            "長方形、正方形面積",
+            "折線圖"
+          ],
+          "concepts": [
+            {
+              "name": "公里與公尺",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "長方形、正方形面積",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "折線圖",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-2d9d4ea1a8abed84bc38",
+      "subject": "數學",
+      "grade": "國小四年級",
+      "edition": "類南一版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：一億以內的數",
+          "details": [
+            "一億以內的數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "一億以內的數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：乘法",
+          "details": [
+            "乘法的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "乘法的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：角度",
+          "details": [
+            "角度的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "角度的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-7d5f1b1c29f1141db04b",
+      "subject": "數學",
+      "grade": "國小四年級",
+      "edition": "類翰林版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：一億以內的數",
+          "details": [
+            "一億以內的數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "一億以內的數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：乘法",
+          "details": [
+            "乘法的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "乘法的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：角度",
+          "details": [
+            "角度的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "角度的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-814246c1f4bddddf485f",
+      "subject": "數學",
+      "grade": "國小四年級",
+      "edition": "類康軒版（目錄節錄）",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "third-party-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1單元：一億以內的數",
+          "details": [
+            "一億以內的數的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "一億以內的數的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2單元：整數的乘法",
+          "details": [
+            "整數的乘法的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "整數的乘法的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3單元：角度",
+          "details": [
+            "角度的概念、計算與生活應用"
+          ],
+          "concepts": [
+            {
+              "name": "角度的概念、計算與生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-3bd64206bda4166f82cd",
+      "subject": "數學",
+      "grade": "國小四年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/math.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "大數與概數",
+          "details": [
+            "四捨五入與概數",
+            "估算",
+            "大數應用"
+          ],
+          "concepts": [
+            {
+              "name": "四捨五入與概數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "估算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "大數應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "小數四則初步",
+          "details": [
+            "小數加減",
+            "小數乘整數",
+            "小數生活情境"
+          ],
+          "concepts": [
+            {
+              "name": "小數加減",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "小數乘整數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "小數生活情境",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "分數運算",
+          "details": [
+            "同分母加減",
+            "分數與整數倍",
+            "等值分數"
+          ],
+          "concepts": [
+            {
+              "name": "同分母加減",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "分數與整數倍",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "等值分數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "幾何與周長面積",
+          "details": [
+            "垂直、平行",
+            "周長與面積計算",
+            "複合圖形"
+          ],
+          "concepts": [
+            {
+              "name": "垂直、平行",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "周長與面積計算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "複合圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "時間、體積與資料",
+          "details": [
+            "時間的計算",
+            "立方公分初步",
+            "資料圖表判讀"
+          ],
+          "concepts": [
+            {
+              "name": "時間的計算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "立方公分初步",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "資料圖表判讀",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

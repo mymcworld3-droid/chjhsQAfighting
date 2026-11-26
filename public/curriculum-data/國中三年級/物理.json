@@ -1,0 +1,526 @@
+{
+  "schema": 1,
+  "grade": "國中三年級",
+  "subject": "物理",
+  "books": [
+    {
+      "bookId": "book-e38dbda5e089802590d5",
+      "subject": "物理",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：直線運動（理化）",
+          "details": [
+            "1-1 位置、路徑長與位移的定義與區別",
+            "1-2 平均速率、平均速度與瞬時速度（圖形：x-t、v-t）",
+            "1-3 加速度與等加速度運動公式"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 位置、路徑長與位移的定義與區別",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 平均速率、平均速度與瞬時速度（圖形：x-t、v-t）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 加速度與等加速度運動公式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：牛頓運動定律與萬有引力（理化）",
+          "details": [
+            "2-1 牛頓第一運動定律（慣性定律與生活現象）",
+            "2-2 牛頓第二運動定律（F = ma 公式與應用）",
+            "2-3 牛頓第三運動定律（作用力與反作用力）",
+            "2-4 圓周運動與萬有引力、重力場"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 牛頓第一運動定律（慣性定律與生活現象）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 牛頓第二運動定律（F = ma 公式與應用）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 牛頓第三運動定律（作用力與反作用力）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 圓周運動與萬有引力、重力場",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：功與能、簡單機械（理化）",
+          "details": [
+            "3-1 功與功率的定義與計算（W = Fs）",
+            "3-2 動能、位能與力學能守恆定律",
+            "3-3 槓桿原理與靜力矩平衡",
+            "3-4 輪軸、滑輪、斜面與螺旋等簡單機械"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 功與功率的定義與計算（W = Fs）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 動能、位能與力學能守恆定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 槓桿原理與靜力矩平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 輪軸、滑輪、斜面與螺旋等簡單機械",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-3f93079e3b7f061a41d0",
+      "subject": "物理",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：直線運動",
+          "details": [
+            "1-1 位置與位移空間幾何",
+            "1-2 速度與速率的時間圖判讀",
+            "1-3 等加速度運動三大公式規律"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 位置與位移空間幾何",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 速度與速率的時間圖判讀",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 等加速度運動三大公式規律",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：力與運動定律",
+          "details": [
+            "2-1 慣性與牛頓第一運動定律",
+            "2-2 力的作用效應與牛頓第二運動定律",
+            "2-3 反作用力與牛頓第三運動定律",
+            "2-4 向心力與萬有引力基礎"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 慣性與牛頓第一運動定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 力的作用效應與牛頓第二運動定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 反作用力與牛頓第三運動定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 向心力與萬有引力基礎",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：功、能與機械",
+          "details": [
+            "3-1 物理學中功與功率的定義",
+            "3-2 動能與位能的轉換（力學能守恆）",
+            "3-3 槓桿原理、力矩平衡與簡單機械組合"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 物理學中功與功率的定義",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 動能與位能的轉換（力學能守恆）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 槓桿原理、力矩平衡與簡單機械組合",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-d82f04adf4513013ee33",
+      "subject": "物理",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：物體的運動",
+          "details": [
+            "1-1 位置與運動軌跡的描述（位移）",
+            "1-2 速度與加速度的時間函數曲線與作圖",
+            "1-3 等加速度直線運動分析"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 位置與運動軌跡的描述（位移）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 速度與加速度的時間函數曲線與作圖",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 等加速度直線運動分析",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：力矩平衡與運動定律",
+          "details": [
+            "2-1 牛頓第一運動定律的慣性行為",
+            "2-2 力、質量與加速度的關係（牛頓第二定律）",
+            "2-3 作用力與反作用力定律（牛頓第三定律）",
+            "2-4 曲線軌跡、向心力與天體萬有引力"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 牛頓第一運動定律的慣性行為",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 力、質量與加速度的關係（牛頓第二定律）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 作用力與反作用力定律（牛頓第三定律）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 曲線軌跡、向心力與天體萬有引力",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：能量、功與簡單機械結構",
+          "details": [
+            "3-1 功、能與功率的能量物理守恆",
+            "3-2 動能與重力/彈性位能平衡",
+            "3-3 力矩、轉動平衡與槓桿、滑輪、斜面機械效率"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 功、能與功率的能量物理守恆",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 動能與重力/彈性位能平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 力矩、轉動平衡與槓桿、滑輪、斜面機械效率",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-349141b23532dffe3550",
+      "subject": "物理",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：基本電路與靜電（理化）",
+          "details": [
+            "1-1 摩擦起電、感應起電與庫侖定律",
+            "1-2 電流與電壓的定義、測量與串並聯關係",
+            "1-3 電阻的定義、歐姆定律與電阻串並聯"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 摩擦起電、感應起電與庫侖定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 電流與電壓的定義、測量與串並聯關係",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 電阻的定義、歐姆定律與電阻串並聯",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：電流的效應（理化）",
+          "details": [
+            "2-1 電流的熱效應（電功、電功率與電費計算）",
+            "2-2 電池與電能（直流電、交流電與家庭用電安全）",
+            "2-3 磁場、磁力線與常見磁鐵",
+            "2-4 電流的磁效應（厄斯特實驗、長直導線、螺線管、右手定則）",
+            "2-5 電流在磁場中所受的力與電動機（馬達）原理",
+            "2-6 電磁感應與發電機、變壓器（冷次定律、法拉第定律）"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 電流的熱效應（電功、電功率與電費計算）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 電池與電能（直流電、交流電與家庭用電安全）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 磁場、磁力線與常見磁鐵",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 電流的磁效應（厄斯特實驗、長直導線、螺線管、右手定則）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-5 電流在磁場中所受的力與電動機（馬達）原理",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-6 電磁感應與發電機、變壓器（冷次定律、法拉第定律）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-b34adc186142041fc533",
+      "subject": "物理",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：電學基礎",
+          "details": [
+            "1-1 靜電庫侖力與電場概念",
+            "1-2 電阻與歐姆定律電路實驗"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 靜電庫侖力與電場概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 電阻與歐姆定律電路實驗",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：電流的熱效應與磁效應",
+          "details": [
+            "2-1 電能、電功率與安全用電常識",
+            "2-2 電流產生的磁效應與安培右手定則應用",
+            "2-3 磁場對電流的作用力（電動機）",
+            "2-4 電磁感應應用與變壓器、發電機"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 電能、電功率與安全用電常識",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 電流產生的磁效應與安培右手定則應用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 磁場對電流的作用力（電動機）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 電磁感應應用與變壓器、發電機",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-f9620583de80cf851502",
+      "subject": "物理",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：靜電與基本電路規律",
+          "details": [
+            "1-1 靜電力的成因與導體、絕緣體起電",
+            "1-2 電路中電流、電壓及電阻的歐姆定律關係"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 靜電力的成因與導體、絕緣體起電",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 電路中電流、電壓及電阻的歐姆定律關係",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第2章：電流效應與電磁感應",
+          "details": [
+            "2-1 電能轉換熱能與焦耳定律、電力計費",
+            "2-2 電流周圍的磁場分布（電磁鐵）",
+            "2-3 通電導線在磁場中的受力（載流導線受力規律）",
+            "2-4 發電機、冷次定律與變壓器電磁感應原理"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 電能轉換熱能與焦耳定律、電力計費",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 電流周圍的磁場分布（電磁鐵）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 通電導線在磁場中的受力（載流導線受力規律）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 發電機、冷次定律與變壓器電磁感應原理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

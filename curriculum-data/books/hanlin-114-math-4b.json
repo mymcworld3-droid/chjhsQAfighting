@@ -1,0 +1,102 @@
+{
+  "bookId": "hanlin-114-math-4b",
+  "subject": "數學B",
+  "grade": "高中二年級",
+  "edition": "翰林版",
+  "publisher": "翰林",
+  "term": "第二學期",
+  "bookLabel": "第4B冊",
+  "schoolYear": 114,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "required-track",
+  "schedulePolicy": "book-sequence",
+  "sourceFile": "curriculum-data/books/hanlin-114-math-4b.json",
+  "sources": [
+    {
+      "url": "https://sh.hle.com.tw/hma/",
+      "type": "official-portal"
+    },
+    {
+      "url": "https://drive.google.com/drive/folders/1-VjWQd0LaaFfuXyvndHrV-6OYseepZLL",
+      "type": "official-textbook-folder",
+      "title": "114下高中數學4B課本"
+    },
+    {
+      "url": "https://drive.google.com/file/d/1YvQQj02icCJNEPyar_eyRQIJLPmRRCDl/view",
+      "type": "official-toc",
+      "title": "數學(4)B課本_01_編輯大意、目次.pdf",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+  "units": [
+    {
+      "unit": "第1章：空間概念與空間坐標系",
+      "details": [
+        "1-1 空間概念",
+        "1-2 空間坐標系",
+        "1-3 圓錐曲線的認識與應用"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 空間概念",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 空間坐標系",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 圓錐曲線的認識與應用",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：機率",
+      "details": [
+        "2-1 條件機率與獨立事件",
+        "2-2 貝氏定理"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 條件機率與獨立事件",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 貝氏定理",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：矩陣與資料表格",
+      "details": [
+        "3-1 矩陣的定義與運算",
+        "3-2 乘法反方陣與矩陣的應用"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 矩陣的定義與運算",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 乘法反方陣與矩陣的應用",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

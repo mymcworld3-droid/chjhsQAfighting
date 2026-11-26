@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "grade": "高中一年級",
+  "subject": "國文",
+  "books": [
+    {
+      "bookId": "book-fdfc9df7563648324a29",
+      "subject": "國文",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "現代散文與小說",
+          "details": [
+            "敘事觀點、人物與情節",
+            "主旨、段落結構、語氣",
+            "象徵、意象與修辭"
+          ],
+          "concepts": [
+            {
+              "name": "敘事觀點、人物與情節",
+              "conceptId": "legacy-a35d8dca9a1b98cf424f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "主旨、段落結構、語氣",
+              "conceptId": "legacy-c104dc95f586760f3642",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "象徵、意象與修辭",
+              "conceptId": "legacy-dfda3268f6931eaa8d51",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "文言文閱讀基礎",
+          "details": [
+            "實詞、虛詞與常見句型",
+            "古今詞義比較",
+            "文言語譯與文化背景"
+          ],
+          "concepts": [
+            {
+              "name": "實詞、虛詞與常見句型",
+              "conceptId": "legacy-3128372ad26c6db94d10",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "古今詞義比較",
+              "conceptId": "legacy-8574151c3d7dd7b275b7",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "文言語譯與文化背景",
+              "conceptId": "legacy-c1963073254158200d11",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "古典韻文",
+          "details": [
+            "古詩與近體詩基本格律",
+            "意象與情感",
+            "韻腳、對仗與詩意理解"
+          ],
+          "concepts": [
+            {
+              "name": "古詩與近體詩基本格律",
+              "conceptId": "legacy-57a049f5c8d933905599",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "意象與情感",
+              "conceptId": "legacy-0674e5ed62a184c39962",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "韻腳、對仗與詩意理解",
+              "conceptId": "legacy-49490d5d1bd70147f831",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "語文知識",
+          "details": [
+            "字音字形字義",
+            "成語與語境",
+            "標點與修辭"
+          ],
+          "concepts": [
+            {
+              "name": "字音字形字義",
+              "conceptId": "legacy-6ef532a2631bfab42724",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "成語與語境",
+              "conceptId": "legacy-ac8162a45b5b7fbf8038",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "標點與修辭",
+              "conceptId": "legacy-2ac09ffcfdffbfd3da78",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-14a24bc57f45de812f88",
+      "subject": "國文",
+      "grade": "高中一年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "先秦與兩漢文本",
+          "details": [
+            "諸子思想及寓言",
+            "史傳敘事",
+            "文言語法與論證"
+          ],
+          "concepts": [
+            {
+              "name": "諸子思想及寓言",
+              "conceptId": "legacy-bddd13d6a974d297c37c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "史傳敘事",
+              "conceptId": "legacy-3f87dc0ffb7160e03339",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "文言語法與論證",
+              "conceptId": "legacy-50c62c40ccefce2287ed",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "古典詩詞",
+          "details": [
+            "詩歌意象",
+            "詞的形式與情感",
+            "作者、時代與文化背景"
+          ],
+          "concepts": [
+            {
+              "name": "詩歌意象",
+              "conceptId": "legacy-5bcf174dc3f17f834292",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "詞的形式與情感",
+              "conceptId": "legacy-800bd5f62bcf8000535e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "作者、時代與文化背景",
+              "conceptId": "legacy-4bcfaf72b96e9e538d4b",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "現代文學閱讀",
+          "details": [
+            "現代詩",
+            "短篇小說",
+            "文本結構與敘事技巧"
+          ],
+          "concepts": [
+            {
+              "name": "現代詩",
+              "conceptId": "legacy-e7a790dd2f9798f3224e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "短篇小說",
+              "conceptId": "legacy-51530d50c9ae31437dd7",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "文本結構與敘事技巧",
+              "conceptId": "legacy-153be671ac0b17addc34",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "寫作與表達",
+          "details": [
+            "記敘與描寫",
+            "論說與舉例",
+            "文章安排與修訂"
+          ],
+          "concepts": [
+            {
+              "name": "記敘與描寫",
+              "conceptId": "legacy-12192a837a41f94588c8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "論說與舉例",
+              "conceptId": "legacy-c0ca1a13811b1150816a",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "文章安排與修訂",
+              "conceptId": "legacy-8b66c380093966b749ea",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

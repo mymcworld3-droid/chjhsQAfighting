@@ -1,0 +1,163 @@
+{
+  "bookId": "hanlin-115-physics-iii",
+  "subject": "物理",
+  "grade": "高中二年級",
+  "edition": "翰林版",
+  "publisher": "翰林",
+  "term": "選修物理III",
+  "bookLabel": "選修物理III（全）",
+  "schoolYear": 115,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/hanlin-115-physics-iii.json",
+  "sources": [
+    {
+      "url": "https://sh.hle.com.tw/hph/",
+      "type": "official-portal"
+    },
+    {
+      "url": "https://drive.google.com/drive/folders/1lmV6ZwD-bDxme48QJ7VticNQVU77OLZR",
+      "type": "official-textbook-folder",
+      "title": "01_115上高中選修物理(III)_課本_PDF檔"
+    },
+    {
+      "url": "https://drive.google.com/file/d/1-rVq2-MM0IkRwoRl55tf2Wh041f6KWZP/view",
+      "type": "official-toc",
+      "title": "選修物理(Ⅲ)課本_01_編輯大意、目次.pdf",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。",
+  "units": [
+    {
+      "unit": "第1章：波動",
+      "details": [
+        "1-1 波的傳播",
+        "1-2 振動與週期波",
+        "1-3 繩波的反射與透射",
+        "1-4 波的疊加原理",
+        "1-5 駐 波",
+        "1-6 惠更斯原理",
+        "1-7 水 波"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 波的傳播",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 振動與週期波",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 繩波的反射與透射",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 波的疊加原理",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-5 駐 波",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-6 惠更斯原理",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-7 水 波",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：聲波",
+      "details": [
+        "2-1 聲波的傳播",
+        "2-2 空氣柱的駐波",
+        "2-3 共振與共鳴"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 聲波的傳播",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 空氣柱的駐波",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 共振與共鳴",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：光的折射及其應用",
+      "details": [
+        "3-1 光的折射與司乃耳定律",
+        "3-2 光的全反射",
+        "3-3 光的色散與彩虹成因",
+        "3-4 薄透鏡成像與應用"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 光的折射與司乃耳定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 光的全反射",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 光的色散與彩虹成因",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-4 薄透鏡成像與應用",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第4章：光的干涉與繞射",
+      "details": [
+        "4-1 光的干涉",
+        "4-2 光的繞射"
+      ],
+      "concepts": [
+        {
+          "name": "4-1 光的干涉",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "4-2 光的繞射",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

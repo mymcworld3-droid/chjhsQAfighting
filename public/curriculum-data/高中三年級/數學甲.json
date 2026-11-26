@@ -1,0 +1,185 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "subject": "數學甲",
+  "books": [
+    {
+      "bookId": "book-b4a2c4f0489fed7391d0",
+      "subject": "數學甲",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "極限與連續",
+          "details": [
+            "數列極限",
+            "函數極限",
+            "連續函數與極限運算"
+          ],
+          "concepts": [
+            {
+              "name": "數列極限",
+              "conceptId": "legacy-c1cef24747a956682279",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "函數極限",
+              "conceptId": "legacy-4d6f4d643628b3363db4",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "連續函數與極限運算",
+              "conceptId": "legacy-33baeb2c81f7e6f460f6",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "微分",
+          "details": [
+            "導數定義與微分法則",
+            "切線與變化率",
+            "函數增減、極值與微分應用"
+          ],
+          "concepts": [
+            {
+              "name": "導數定義與微分法則",
+              "conceptId": "legacy-3a82d849971749cd3770",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "切線與變化率",
+              "conceptId": "legacy-58d349bed4c6444e812c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "函數增減、極值與微分應用",
+              "conceptId": "legacy-4e1ca188221437b471b3",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "多項式與複數",
+          "details": [
+            "複數平面",
+            "複數四則運算",
+            "多項式方程式與根的性質"
+          ],
+          "concepts": [
+            {
+              "name": "複數平面",
+              "conceptId": "legacy-62e5075e4791bcc10594",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "複數四則運算",
+              "conceptId": "legacy-d7659383e406578a9656",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "多項式方程式與根的性質",
+              "conceptId": "legacy-401be94e1b716b476532",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-4cd99bb7c22a9beb4083",
+      "subject": "數學甲",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/core.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "積分",
+          "details": [
+            "反導函數",
+            "定積分與面積",
+            "微積分基本定理與應用"
+          ],
+          "concepts": [
+            {
+              "name": "反導函數",
+              "conceptId": "legacy-570a00c4305d1aee647c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "定積分與面積",
+              "conceptId": "legacy-41cd019584fd0843e4ac",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "微積分基本定理與應用",
+              "conceptId": "legacy-243aa26b057da7fa4bab",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "解析幾何",
+          "details": [
+            "圓錐曲線及其方程式",
+            "橢圓、雙曲線、拋物線的性質"
+          ],
+          "concepts": [
+            {
+              "name": "圓錐曲線及其方程式",
+              "conceptId": "legacy-c44b896939628336d6f9",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "橢圓、雙曲線、拋物線的性質",
+              "conceptId": "legacy-3cba13a61194db7fc322",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "機率與統計進階",
+          "details": [
+            "離散型隨機變數",
+            "機率分布與期望值",
+            "統計資料分析"
+          ],
+          "concepts": [
+            {
+              "name": "離散型隨機變數",
+              "conceptId": "legacy-fbdbb1e95d4d02633c5b",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "機率分布與期望值",
+              "conceptId": "legacy-50a2037dcb1adbd7089d",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "統計資料分析",
+              "conceptId": "legacy-0d4d9db3253155d7715d",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

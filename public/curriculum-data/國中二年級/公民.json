@@ -1,0 +1,451 @@
+{
+  "schema": 1,
+  "grade": "國中二年級",
+  "subject": "公民",
+  "books": [
+    {
+      "bookId": "book-419dcdd527500d5ef037",
+      "subject": "公民",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：國家與民主政治",
+          "details": [
+            "主題：國家的形成、民主政治體制與公民權利",
+            "細項：國家的四個核心要素（人民、土地、政府、主權）、國家認同、民主政治的基本原則（人民主權、法治、保障人權）、政黨政治功能、政黨輪替、利益團體與公共利益博弈"
+          ],
+          "concepts": [
+            {
+              "name": "主題：國家的形成、民主政治體制與公民權利",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：國家的四個核心要素（人民、土地、政府、主權）、國家認同、民主政治的基本原則（人民主權、法治、保障人權）、政黨政治功能、政黨輪替、利益團體與公共利益博弈",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：政府的組織與功能",
+          "details": [
+            "主題：中央政府、憲政體制、地方自治",
+            "細項：權力分立核心原則（三權與五權分立）、中央政府五院職權配置與互動（總統、行政、立法、司法、考試、監察）、地方政府的自治權限與財政分配"
+          ],
+          "concepts": [
+            {
+              "name": "主題：中央政府、憲政體制、地方自治",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：權力分立核心原則（三權與五權分立）、中央政府五院職權配置與互動（總統、行政、立法、司法、考試、監察）、地方政府的自治權限與財政分配",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：法律的基本概念",
+          "details": [
+            "主題：法律的位階、法治社會、人權保障",
+            "細項：法律與國家機關的關係、法律的位階關係（憲法、法律、命令）、法治國原則、法律的制定與修改程序"
+          ],
+          "concepts": [
+            {
+              "name": "主題：法律的位階、法治社會、人權保障",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：法律與國家機關的關係、法律的位階關係（憲法、法律、命令）、法治國原則、法律的制定與修改程序",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-8d269f507a3d04febdc9",
+      "subject": "公民",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：民主國家與政黨",
+          "details": [
+            "主題：國家的目的、民主體制、現代政黨政治",
+            "細項：國家的起源說與功能（維持秩序、促進福利）、民主政治的核心精神、我國的政黨制度（多黨制）與政黨功能（組閣、監督）、政黨與利益團體的區別"
+          ],
+          "concepts": [
+            {
+              "name": "主題：國家的目的、民主體制、現代政黨政治",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：國家的起源說與功能（維持秩序、促進福利）、民主政治的核心精神、我國的政黨制度（多黨制）與政黨功能（組閣、監督）、政黨與利益團體的區別",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：我國的政府組織與運作",
+          "details": [
+            "主題：五院職權、地方自治與財政",
+            "細項：總統的職權（彈劾、解散、發布戒嚴與緊急命令）、行政院與立法院的互動（質詢、覆議、不信任案）、司法院與監察院的獨立性、地方自治體系（地方行政機關、地方立法機關）與中央地方分權"
+          ],
+          "concepts": [
+            {
+              "name": "主題：五院職權、地方自治與財政",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：總統的職權（彈劾、解散、發布戒嚴與緊急命令）、行政院與立法院的互動（質詢、覆議、不信任案）、司法院與監察院的獨立性、地方自治體系（地方行政機關、地方立法機關）與中央地方分權",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：生活與法律規範",
+          "details": [
+            "主題：法律的性質與憲法精神",
+            "細項：法律與社會規範的強制力比較、法律的層級與位階（修憲與立法的嚴格度比較）、憲法保障人民的基本權利（平等權、自由權、受益權、參政權）與義務"
+          ],
+          "concepts": [
+            {
+              "name": "主題：法律的性質與憲法精神",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：法律與社會規範的強制力比較、法律的層級與位階（修憲與立法的嚴格度比較）、憲法保障人民的基本權利（平等權、自由權、受益權、參政權）與義務",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-e1e00ac62aac2c17c1c3",
+      "subject": "公民",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：遇見民主與國家",
+          "details": [
+            "主題：國家主權、民主價值、政黨政治",
+            "細項：國家的組成要素與主權對外獨立、內閣制與總統制的核心概念、我國的民主憲政發展、政黨的競爭與理性監督、選舉與政治參與"
+          ],
+          "concepts": [
+            {
+              "name": "主題：國家主權、民主價值、政黨政治",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：國家的組成要素與主權對外獨立、內閣制與總統制的核心概念、我國的民主憲政發展、政黨的競爭與理性監督、選舉與政治參與",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：看見政府的運作",
+          "details": [
+            "主題：中央與地方權力結構",
+            "細項：權力制衡（Checks and Balances）的運作、行政院、立法院、司法院、考試院、監察院之首長產生與核心職權、地方政府開源與財政健全、均權原則"
+          ],
+          "concepts": [
+            {
+              "name": "主題：中央與地方權力結構",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：權力制衡（Checks and Balances）的運作、行政院、立法院、司法院、考試院、監察院之首長產生與核心職權、地方政府開源與財政健全、均權原則",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：法治社會的法律基石",
+          "details": [
+            "主題：法治精神、憲法至上與人權維護",
+            "細項：法治與人治的對比、憲法做為根本大法的位階、人民基本權利的四大型態及限制（憲法第23條：比例原則）"
+          ],
+          "concepts": [
+            {
+              "name": "主題：法治精神、憲法至上與人權維護",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：法治與人治的對比、憲法做為根本大法的位階、人民基本權利的四大型態及限制（憲法第23條：比例原則）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-fe0f1e1a8039eee0df8e",
+      "subject": "公民",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：權利與義務的基本法律",
+          "details": [
+            "主題：民法與刑法的生活應用",
+            "細項：民法基本原則、契約自由與責任、限制行為能力與完全行為能力、刑法犯罪構成要件與罪刑法定主義、阻卻違法事由（正當防衛、緊急避難）、刑罰的種類（主刑與從刑）"
+          ],
+          "concepts": [
+            {
+              "name": "主題：民法與刑法的生活應用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：民法基本原則、契約自由與責任、限制行為能力與完全行為能力、刑法犯罪構成要件與罪刑法定主義、阻卻違法事由（正當防衛、緊急避難）、刑罰的種類（主刑與從刑）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：行政法規與青少年保護",
+          "details": [
+            "主題：行政處分、少年犯罪預防與特殊法律",
+            "細項：行政法與行政處分、少年事件處理法（少年保護事件與刑事案件分流）、少年行為防制、兒童及少年福利與權益保障法、校園霸凌防制與性別平等原則"
+          ],
+          "concepts": [
+            {
+              "name": "主題：行政處分、少年犯罪預防與特殊法律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：行政法與行政處分、少年事件處理法（少年保護事件與刑事案件分流）、少年行為防制、兒童及少年福利與權益保障法、校園霸凌防制與性別平等原則",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：權利的法律救濟途徑",
+          "details": [
+            "主題：訴訟、民事與刑事糾紛解決、行政救濟",
+            "細項：和解、調解、仲裁等非訴訟管道、民事訴訟與刑事訴訟（公訴與自訴）、行政救濟程序（訴願與行政訴訟）、法治社會建構與冤獄救濟"
+          ],
+          "concepts": [
+            {
+              "name": "主題：訴訟、民事與刑事糾紛解決、行政救濟",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：和解、調解、仲裁等非訴訟管道、民事訴訟與刑事訴訟（公訴與自訴）、行政救濟程序（訴願與行政訴訟）、法治社會建構與冤獄救濟",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-72bbf6fcc5b7bbab36e2",
+      "subject": "公民",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：民法與生活債務",
+          "details": [
+            "主題：民事法律關係與行為能力",
+            "細項：民法的行為能力年齡劃分、契約的成立與效應、侵權行為與損害賠償責任、婚姻與繼承的基本法律常識"
+          ],
+          "concepts": [
+            {
+              "name": "主題：民事法律關係與行為能力",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：民法的行為能力年齡劃分、契約的成立與效應、侵權行為與損害賠償責任、婚姻與繼承的基本法律常識",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：刑法與犯罪防治",
+          "details": [
+            "主題：刑事責任、處罰與預防",
+            "細項：罪刑法定原則、犯罪要件（故意與過失、違法性）、責任能力與年齡關係、刑罰的目的（應報、預防）與主刑/副刑分類"
+          ],
+          "concepts": [
+            {
+              "name": "主題：刑事責任、處罰與預防",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：罪刑法定原則、犯罪要件（故意與過失、違法性）、責任能力與年齡關係、刑罰的目的（應報、預防）與主刑/副刑分類",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：行政法與權利救濟",
+          "details": [
+            "主題：國家行政行為、少年法制與訴訟管道",
+            "細項：常見生活行政法規（如交通、環保）、行政處分與國家賠償、少年事件處理法的保護處分、民事/刑事/行政訴訟三大流程、調解委員會功能"
+          ],
+          "concepts": [
+            {
+              "name": "主題：國家行政行為、少年法制與訴訟管道",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：常見生活行政法規（如交通、環保）、行政處分與國家賠償、少年事件處理法的保護處分、民事/刑事/行政訴訟三大流程、調解委員會功能",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-140bf4ed3d416921bee2",
+      "subject": "公民",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/公民/civics.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：生活中的民事與刑事規範",
+          "details": [
+            "主題：契約法律、犯罪成立與刑罰",
+            "細項：民法保護私法自治、誠實信用原則、犯罪構成要件、阻卻違法與超法規阻卻違法、責任能力（年齡與精神狀態對刑責之影響）"
+          ],
+          "concepts": [
+            {
+              "name": "主題：契約法律、犯罪成立與刑罰",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：民法保護私法自治、誠實信用原則、犯罪構成要件、阻卻違法與超法規阻卻違法、責任能力（年齡與精神狀態對刑責之影響）",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：行政管制與少年的法律責任",
+          "details": [
+            "主題：行政救濟、少年事件處置",
+            "細項：行政法規範國家公權力、訴願與行政訴訟、少年事件處理法修正核心（曝險少年、少年保護處分）、兒少權益保障法規"
+          ],
+          "concepts": [
+            {
+              "name": "主題：行政救濟、少年事件處置",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：行政法規範國家公權力、訴願與行政訴訟、少年事件處理法修正核心（曝險少年、少年保護處分）、兒少權益保障法規",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：維護權益的法律救濟",
+          "details": [
+            "主題：糾紛調解、司法訴訟實務",
+            "細項：訴訟外紛爭解決機制（ADR）的推廣、刑事公訴由檢察官提起、自訴由被害人提起、法庭組織與各司職人員（法官、檢察官、律師）、審判獨立精神"
+          ],
+          "concepts": [
+            {
+              "name": "主題：糾紛調解、司法訴訟實務",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "細項：訴訟外紛爭解決機制（ADR）的推廣、刑事公訴由檢察官提起、自訴由被害人提起、法庭組織與各司職人員（法官、檢察官、律師）、審判獨立精神",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

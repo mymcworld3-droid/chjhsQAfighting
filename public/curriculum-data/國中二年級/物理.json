@@ -1,0 +1,508 @@
+{
+  "schema": 1,
+  "grade": "國中二年級",
+  "subject": "物理",
+  "books": [
+    {
+      "bookId": "book-08bf278badac63cc550d",
+      "subject": "物理",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：進入理化的世界與測量",
+          "details": [
+            "1-1 長度、體積與質量的測量",
+            "1-2 物質的密度計算與天平使用",
+            "1-3 測量的誤差與有效數字"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 長度、體積與質量的測量",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 物質的密度計算與天平使用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 測量的誤差與有效數字",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：波動與聲音",
+          "details": [
+            "3-1 波動的產生、種類與傳播特性",
+            "3-2 聲音的產生與傳播速度",
+            "3-3 聲波的反射、折射與回聲應用",
+            "3-4 聲音的三要素與噪音防治"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 波動的產生、種類與傳播特性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 聲音的產生與傳播速度",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 聲波的反射、折射與回聲應用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 聲音的三要素與噪音防治",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：光的世界",
+          "details": [
+            "4-1 光的傳播、光速與光影形成",
+            "4-2 光的反射與平面鏡成像定律",
+            "4-3 光的折射與透鏡成像（凸透鏡、凹透鏡實驗）",
+            "4-4 光的色散、顏色、三原色與光學儀器"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 光的傳播、光速與光影形成",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 光的反射與平面鏡成像定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 光的折射與透鏡成像（凸透鏡、凹透鏡實驗）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-4 光的色散、顏色、三原色與光學儀器",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：溫度與熱量",
+          "details": [
+            "5-1 溫度與溫度計的基本原理",
+            "5-2 熱量與比熱的物理計算式（H = mst）",
+            "5-3 熱的傳播方式（傳導、對流、輻射）與熱效應"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 溫度與溫度計的基本原理",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 熱量與比熱的物理計算式（H = mst）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 熱的傳播方式（傳導、對流、輻射）與熱效應",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-2607509b397f60455a03",
+      "subject": "物理",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：科學探究與基礎測量",
+          "details": [
+            "1-1 測量工具的使用與長度體積計算",
+            "1-2 質量與物質的密度特性"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 測量工具的使用與長度體積計算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 質量與物質的密度特性",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：波與聲音",
+          "details": [
+            "3-1 力學波與非力學波（波長、頻率、波速關係）",
+            "3-2 聲音的傳播與回聲幾何計算",
+            "3-3 樂音三要素與噪音定義"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 力學波與非力學波（波長、頻率、波速關係）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 聲音的傳播與回聲幾何計算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 樂音三要素與噪音定義",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：光學",
+          "details": [
+            "4-1 光的直線傳播與針孔成像",
+            "4-2 面鏡反射與折射定律",
+            "4-3 透鏡成像規律（成像作圖法）",
+            "4-4 視覺與色光三原色"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 光的直線傳播與針孔成像",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 面鏡反射與折射定律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 透鏡成像規律（成像作圖法）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-4 視覺與色光三原色",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：熱學",
+          "details": [
+            "5-1 熱量、比熱與溫度關係變化",
+            "5-2 熱的傳播機制與防熱設計"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 熱量、比熱與溫度關係變化",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 熱的傳播機制與防熱設計",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-4b75bffe38fa2a1d857b",
+      "subject": "物理",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第1章：理化實驗與基本測量",
+          "details": [
+            "1-1 實驗室安全、器材與基本量測",
+            "1-2 質量的秤量與密度物理公式"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 實驗室安全、器材與基本量測",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 質量的秤量與密度物理公式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第3章：波動與聲學",
+          "details": [
+            "3-1 波動的特性（振幅、頻率、週期）",
+            "3-2 聲波的傳播、傳聲介質與響度、音調、音色",
+            "3-3 回聲、超聲波與吸音材料"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 波動的特性（振幅、頻率、週期）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 聲波的傳播、傳聲介質與響度、音調、音色",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 回聲、超聲波與吸音材料",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第4章：光學現象",
+          "details": [
+            "4-1 光的反射定律與鏡面成相",
+            "4-2 折射原理、實深與虛深、透鏡折射規律",
+            "4-3 光的色散現象、光學色光吸收與反射"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 光的反射定律與鏡面成相",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 折射原理、實深與虛深、透鏡折射規律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 光的色散現象、光學色光吸收與反射",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第5章：熱與熱量",
+          "details": [
+            "5-1 溫標與熱平衡概念",
+            "5-2 熱量與物質的比熱計算式",
+            "5-3 保溫與散熱傳播方式分析"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 溫標與熱平衡概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-2 熱量與物質的比熱計算式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "5-3 保溫與散熱傳播方式分析",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-c9a25a15717ed326ab27",
+      "subject": "物理",
+      "grade": "國中二年級",
+      "edition": "翰林版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第6章：力與壓力",
+          "details": [
+            "6-1 力的概念、種類與測量（虎克定律與彈簧平衡）",
+            "6-2 同一直線上的合力與靜力平衡",
+            "6-3 摩擦力的種類、最大靜摩擦力與影響因素",
+            "6-4 固體壓力、液體壓力與大氣壓力（托里切利實驗）",
+            "6-5 浮力的物理定義與阿基米德浮力原理"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 力的概念、種類與測量（虎克定律與彈簧平衡）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-2 同一直線上的合力與靜力平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-3 摩擦力的種類、最大靜摩擦力與影響因素",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-4 固體壓力、液體壓力與大氣壓力（托里切利實驗）",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-5 浮力的物理定義與阿基米德浮力原理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-98f9c8426729d3091c31",
+      "subject": "物理",
+      "grade": "國中二年級",
+      "edition": "康軒版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第6章：力學與壓力學",
+          "details": [
+            "6-1 力的平衡與形變規律",
+            "6-2 摩擦力變因分析",
+            "6-3 液體與氣體壓力的幾何傳遞",
+            "6-4 沉體與浮體的浮力計量"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 力的平衡與形變規律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-2 摩擦力變因分析",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-3 液體與氣體壓力的幾何傳遞",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-4 沉體與浮體的浮力計量",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-67f150cf978b5813afb2",
+      "subject": "物理",
+      "grade": "國中二年級",
+      "edition": "南一版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/生物理化/science.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第6章：力與運動物理平衡",
+          "details": [
+            "6-1 力的測量與靜力合成平衡",
+            "6-2 接觸面的摩擦力特性",
+            "6-3 流體壓力（水壓與大氣壓）的傳播規律",
+            "6-4 浮力公式與阿基米德浮力平衡計算"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 力的測量與靜力合成平衡",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-2 接觸面的摩擦力特性",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-3 流體壓力（水壓與大氣壓）的傳播規律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "6-4 浮力公式與阿基米德浮力平衡計算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

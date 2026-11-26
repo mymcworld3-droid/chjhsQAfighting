@@ -1,12 +1,14 @@
 'use strict';
 const crypto = require('node:crypto');
+const {curriculumMetadata}=require('./public/cultivation/curriculum-range-rules.js');
 
 const MAX_RULES = 16;
 const normalizeUnit = raw => ({
   path: String(raw?.path || '').trim().slice(0, 240),
   detail: String(raw?.detail || '').trim().slice(0, 120),
   sub_topics: [...new Set((Array.isArray(raw?.sub_topics) ? raw.sub_topics : [])
-    .map(value => String(value || '').trim().slice(0, 100)).filter(Boolean))].sort().slice(0, 24)
+    .map(value => String(value || '').trim().slice(0, 100)).filter(Boolean))].sort().slice(0, 24),
+  ...(raw?.curriculum!==undefined?{curriculum:curriculumMetadata(raw.curriculum)}:{})
 });
 const unitKey = unit => JSON.stringify(normalizeUnit(unit));
 function scopeKey(user) {

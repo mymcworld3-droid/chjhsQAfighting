@@ -1,0 +1,111 @@
+{
+  "bookId": "longteng-108-chemistry-iv",
+  "subject": "化學",
+  "grade": "高中二年級",
+  "edition": "龍騰版",
+  "publisher": "龍騰",
+  "term": "選修化學IV",
+  "bookLabel": "選修化學IV（全）",
+  "schoolYear": null,
+  "curriculumStandard": "108課綱",
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/longteng-108-chemistry-iv.json",
+  "sources": [
+    {
+      "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10283",
+      "type": "official-product-toc",
+      "accessedAt": "2026-11-26"
+    }
+  ],
+  "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。",
+  "units": [
+    {
+      "unit": "第1章：氧化還原反應",
+      "details": [
+        "1-1 電子轉移和氧化還原反應",
+        "1-2 平衡氧化還原反應式",
+        "1-3 氧化還原滴定"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 電子轉移和氧化還原反應",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 平衡氧化還原反應式",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 氧化還原滴定",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：電化學",
+      "details": [
+        "2-1 電池反應",
+        "2-2 電池電壓",
+        "2-3 常見的電池",
+        "2-4 電解與電鍍"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 電池反應",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 電池電壓",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 常見的電池",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 電解與電鍍",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：非金屬元素與金屬元素",
+      "details": [
+        "3-1 非金屬元素的性質與製備",
+        "3-2 鈉、鎂及鋁元素和化合物的性質與製備",
+        "3-3 過渡金屬及其化合物"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 非金屬元素的性質與製備",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 鈉、鎂及鋁元素和化合物的性質與製備",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 過渡金屬及其化合物",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

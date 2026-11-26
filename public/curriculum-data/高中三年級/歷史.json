@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "subject": "歷史",
+  "books": [
+    {
+      "bookId": "book-99394414a996c09b02ee",
+      "subject": "歷史",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "選修歷史：族群性別與國家",
+          "details": [
+            "族群互動與認同",
+            "性別與社會變遷",
+            "國家與治理"
+          ],
+          "concepts": [
+            {
+              "name": "族群互動與認同",
+              "conceptId": "legacy-c3f91d9bfe6b9c692e52",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "性別與社會變遷",
+              "conceptId": "legacy-0e02916cbe81aaa9ce82",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "國家與治理",
+              "conceptId": "legacy-a0e95fd8429585d7b5ad",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "選修歷史：科技環境與藝術",
+          "details": [
+            "科技與生活",
+            "環境變遷",
+            "藝術及社會文化"
+          ],
+          "concepts": [
+            {
+              "name": "科技與生活",
+              "conceptId": "legacy-3a4ce51d1653d8e501f8",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "環境變遷",
+              "conceptId": "legacy-995f2cfa122af69fbea9",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "藝術及社會文化",
+              "conceptId": "legacy-698e6a3e32665a7b4f66",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "歷史專題",
+          "details": [
+            "問題意識",
+            "史料整理",
+            "書寫與論證"
+          ],
+          "concepts": [
+            {
+              "name": "問題意識",
+              "conceptId": "legacy-aeb87ee8d2636df0bae6",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "史料整理",
+              "conceptId": "legacy-12891169055e0866e758",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "書寫與論證",
+              "conceptId": "legacy-16cfd165c235d9a4cd93",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-e3865afcb4f1fc38053f",
+      "subject": "歷史",
+      "grade": "高中三年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "臺灣史與東亞史統整",
+          "details": [
+            "歷史分期",
+            "文化交流",
+            "制度與社會變遷"
+          ],
+          "concepts": [
+            {
+              "name": "歷史分期",
+              "conceptId": "legacy-fe7cfaf9962b81ed7348",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "文化交流",
+              "conceptId": "legacy-8587e86c75db765b9a04",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "制度與社會變遷",
+              "conceptId": "legacy-4ab162bb97c9f24a1373",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "世界史統整",
+          "details": [
+            "全球互動",
+            "現代化與戰爭",
+            "冷戰及當代議題"
+          ],
+          "concepts": [
+            {
+              "name": "全球互動",
+              "conceptId": "legacy-5f5cd0b670c61550beb9",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "現代化與戰爭",
+              "conceptId": "legacy-06e3b11ff494a4fdbd8e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "冷戰及當代議題",
+              "conceptId": "legacy-f7b44fb27710bd7c781a",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "歷史探究實作",
+          "details": [
+            "史料交互查核",
+            "概念比較",
+            "歷史敘事與推論"
+          ],
+          "concepts": [
+            {
+              "name": "史料交互查核",
+              "conceptId": "legacy-6d334b344ea8acb21597",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "概念比較",
+              "conceptId": "legacy-ed886fcfcf604502f57c",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "歷史敘事與推論",
+              "conceptId": "legacy-80c804928272f4dbde83",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

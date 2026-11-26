@@ -1,0 +1,280 @@
+{
+  "schema": 1,
+  "grade": "國中三年級",
+  "subject": "地理",
+  "books": [
+    {
+      "bookId": "book-5aedb15c2edca56f2bc9",
+      "subject": "地理",
+      "grade": "國中三年級",
+      "edition": "翰林版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/middle_school_unit_name/地理/geogrophy.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：歐洲與俄羅斯",
+          "details": [
+            "歐洲自然特徵",
+            "歐盟區域整合",
+            "俄羅斯資源與環境"
+          ],
+          "concepts": [
+            {
+              "name": "歐洲自然特徵",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "歐盟區域整合",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "俄羅斯資源與環境",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：美洲地理",
+          "details": [
+            "北美工業與科技",
+            "中南美洲地貌與產業"
+          ],
+          "concepts": [
+            {
+              "name": "北美工業與科技",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "中南美洲地貌與產業",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：非洲與極地",
+          "details": [
+            "非洲發展與資源",
+            "極地環境保育"
+          ],
+          "concepts": [
+            {
+              "name": "非洲發展與資源",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "極地環境保育",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：全球化議題",
+          "details": [
+            "區域結盟",
+            "全球氣候變遷"
+          ],
+          "concepts": [
+            {
+              "name": "區域結盟",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "全球氣候變遷",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-544e13ea12e8daa32571",
+      "subject": "地理",
+      "grade": "國中三年級",
+      "edition": "康軒版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/地理/geogrophy.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：歐洲",
+          "details": [
+            "地貌與產業",
+            "歐盟整合"
+          ],
+          "concepts": [
+            {
+              "name": "地貌與產業",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "歐盟整合",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：俄羅斯與美洲",
+          "details": [
+            "俄羅斯空間",
+            "美洲發展"
+          ],
+          "concepts": [
+            {
+              "name": "俄羅斯空間",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "美洲發展",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：非洲與極地",
+          "details": [
+            "非洲挑戰",
+            "兩極議題"
+          ],
+          "concepts": [
+            {
+              "name": "非洲挑戰",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "兩極議題",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：全球化與永續",
+          "details": [
+            "貿易與環境議題"
+          ],
+          "concepts": [
+            {
+              "name": "貿易與環境議題",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-2ed94248a15ba73790d0",
+      "subject": "地理",
+      "grade": "國中三年級",
+      "edition": "南一版",
+      "term": "全學年",
+      "bookLabel": "全學年",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "unverified",
+      "releaseStatus": "legacy",
+      "legacyVisible": false,
+      "sourceFile": "public/middle_school_unit_name/地理/geogrophy.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "第一單元：歐洲與俄羅斯",
+          "details": [
+            "區域分析",
+            "區域結盟"
+          ],
+          "concepts": [
+            {
+              "name": "區域分析",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "區域結盟",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二單元：美洲區域",
+          "details": [
+            "北美與南美區域比較"
+          ],
+          "concepts": [
+            {
+              "name": "北美與南美區域比較",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三單元：非洲與兩極",
+          "details": [
+            "非洲地理與開發",
+            "兩極科研"
+          ],
+          "concepts": [
+            {
+              "name": "非洲地理與開發",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "兩極科研",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四單元：全球議題",
+          "details": [
+            "全球化影響",
+            "永續發展"
+          ],
+          "concepts": [
+            {
+              "name": "全球化影響",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "永續發展",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

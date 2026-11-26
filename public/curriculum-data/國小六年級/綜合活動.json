@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "國小六年級",
+  "subject": "綜合活動",
+  "books": [
+    {
+      "bookId": "book-96f70146e1898ab1b37c",
+      "subject": "綜合活動",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "自我發展",
+          "details": [
+            "興趣與能力",
+            "自我表達",
+            "國中生活規劃"
+          ],
+          "concepts": [
+            {
+              "name": "興趣與能力",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "自我表達",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "國中生活規劃",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "關係與合作",
+          "details": [
+            "有效溝通",
+            "人際尊重",
+            "衝突處理"
+          ],
+          "concepts": [
+            {
+              "name": "有效溝通",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "人際尊重",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "衝突處理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "公民行動",
+          "details": [
+            "志願服務",
+            "社區議題",
+            "環境規劃"
+          ],
+          "concepts": [
+            {
+              "name": "志願服務",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "社區議題",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "環境規劃",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-452e517ef7cc33103be4",
+      "subject": "綜合活動",
+      "grade": "國小六年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/elementary_school_unit_name/other.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "學習策略與銜接",
+          "details": [
+            "自主學習",
+            "時間管理",
+            "反思與調整"
+          ],
+          "concepts": [
+            {
+              "name": "自主學習",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "時間管理",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "反思與調整",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "風險與安全",
+          "details": [
+            "網路素養",
+            "自我保護",
+            "求助及應變"
+          ],
+          "concepts": [
+            {
+              "name": "網路素養",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "自我保護",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "求助及應變",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "服務與永續",
+          "details": [
+            "規劃活動",
+            "合作執行",
+            "成果與反思"
+          ],
+          "concepts": [
+            {
+              "name": "規劃活動",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "合作執行",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "成果與反思",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

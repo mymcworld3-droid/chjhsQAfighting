@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "grade": "高中二年級",
+  "subject": "公民",
+  "books": [
+    {
+      "bookId": "book-f3cb57c8583b6815801d",
+      "subject": "公民",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第一學期",
+      "bookLabel": "第一學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "法律與權利",
+          "details": [
+            "法律的制定與適用",
+            "民法、刑法與行政法基本概念",
+            "權利救濟"
+          ],
+          "concepts": [
+            {
+              "name": "法律的制定與適用",
+              "conceptId": "legacy-208da04300c9e38b8c10",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "民法、刑法與行政法基本概念",
+              "conceptId": "legacy-d3163bc4baa455d100af",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "權利救濟",
+              "conceptId": "legacy-4a319fb468ebce4a2652",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "政治參與與治理",
+          "details": [
+            "民主參與形式",
+            "地方自治",
+            "政策形成與監督"
+          ],
+          "concepts": [
+            {
+              "name": "民主參與形式",
+              "conceptId": "legacy-981d27a3ffd32da671f0",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "地方自治",
+              "conceptId": "legacy-b35c07d1c7436052605e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "政策形成與監督",
+              "conceptId": "legacy-e750c3b7d85b29135ffa",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "公共議題",
+          "details": [
+            "公平與正義",
+            "政治及法律案例",
+            "論證與資料"
+          ],
+          "concepts": [
+            {
+              "name": "公平與正義",
+              "conceptId": "legacy-acad10198ad0f8bf6d93",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "政治及法律案例",
+              "conceptId": "legacy-1b2adf5b98352827c31f",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "論證與資料",
+              "conceptId": "legacy-30f1266309e7c414180d",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "book-be17f6e5221ea70a3fa6",
+      "subject": "公民",
+      "grade": "高中二年級",
+      "edition": "108課綱複習版",
+      "term": "第二學期",
+      "bookLabel": "第二學期",
+      "schoolYear": null,
+      "verifiedAt": null,
+      "verificationStatus": "review-outline",
+      "releaseStatus": "legacy",
+      "legacyVisible": true,
+      "sourceFile": "public/high_school_unit_name/humanities.json",
+      "sources": [],
+      "units": [
+        {
+          "unit": "經濟基本概念",
+          "details": [
+            "需求、供給與市場價格",
+            "機會成本與誘因",
+            "市場失靈"
+          ],
+          "concepts": [
+            {
+              "name": "需求、供給與市場價格",
+              "conceptId": "legacy-2a01eca067ef27beed8e",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "機會成本與誘因",
+              "conceptId": "legacy-5f08be7aa10d871a41a2",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "市場失靈",
+              "conceptId": "legacy-40deacea7f58256bef80",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "總體經濟與政策",
+          "details": [
+            "國民所得與物價",
+            "失業與經濟成長",
+            "財政及貨幣政策"
+          ],
+          "concepts": [
+            {
+              "name": "國民所得與物價",
+              "conceptId": "legacy-7d8b343c2c37c42afbf9",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "失業與經濟成長",
+              "conceptId": "legacy-91dcae214d7fa63df174",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "財政及貨幣政策",
+              "conceptId": "legacy-d15432a7fdb6a1cf41bb",
+              "status": "legacy-candidate"
+            }
+          ]
+        },
+        {
+          "unit": "全球經濟",
+          "details": [
+            "國際貿易",
+            "匯率",
+            "全球化與永續"
+          ],
+          "concepts": [
+            {
+              "name": "國際貿易",
+              "conceptId": "legacy-4107548dd9d0d4547a86",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "匯率",
+              "conceptId": "legacy-b00ce70ae45bd47f05c4",
+              "status": "legacy-candidate"
+            },
+            {
+              "name": "全球化與永續",
+              "conceptId": "legacy-cbdd6688e8076767b844",
+              "status": "legacy-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
