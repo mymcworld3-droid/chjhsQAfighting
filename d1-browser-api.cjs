@@ -57,6 +57,9 @@ function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
   const {uid,admin,decoded}=context;
   const [col,id,...nested]=path.split('/');
   if(nested.length)throw fail();
+  // Market suspension applies to every browser write, including old clients and admins.
+  // Reject the whole atomic commit so no buyer debit or escrow movement is applied.
+  if(col==='marketListings')throw fail('玩家交易市集暫停開放');
   if(admin)return; // role was read from the authoritative profile BEFORE the transaction.
   if(role==='A'&&col==='gameConfig'&&['artifactCatalogV1','materialCatalogV1'].includes(id)) {
     if(mayCommitDiscovery({tx,preview,uid}))return;

@@ -43,6 +43,8 @@ window.QA_WEAPON_SYSTEM_ENABLED = false;
 window.QA_MANUAL_TRAINING_ONLY = true;
 // Temporarily hide cooperative dungeons without removing their code or saved rooms.
 window.QA_COOP_DUNGEON_ENABLED = false;
+// Player trading is suspended; retain listings and code for a future reopening.
+window.QA_PLAYER_MARKET_ENABLED = false;
 // Retired cultivation and equipment systems must not activate.
 window.QA_LEGACY_CULTIVATION_DISABLED = true;
 const XIUXIAN_FEATURE_MODULES = [
@@ -113,6 +115,7 @@ const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
 let xiuxianMarketLoad = null;
 function loadPlayerMarketSafely() {
+  if (window.QA_PLAYER_MARKET_ENABLED !== true) return Promise.resolve(false);
   if (!xiuxianMarketLoad) {
     xiuxianMarketLoad = import('./cultivation/player-marketplace.js?v=20261125-stone-price-art-v1')
       .catch((error) => {
@@ -128,6 +131,7 @@ function loadPlayerMarketSafely() {
   return xiuxianMarketLoad;
 }
 const queueMarketOpen = (view = 'all') => {
+  if (window.QA_PLAYER_MARKET_ENABLED !== true) return false;
   // 即使市集模組尚在載入，也先切進坊市並顯示市集容器，
   // 避免玩家按下入口後看起來毫無反應。
   window.switchToPage?.('page-store');

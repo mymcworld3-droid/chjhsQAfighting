@@ -11,6 +11,7 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
 // 市集文件只代表可成交的委託；每次交割均重新讀取買賣雙方玩家文件。
 (function () {
   'use strict';
+  if (window.QA_PLAYER_MARKET_ENABLED !== true) return;
   const COLLECTION = 'marketListings';
   const MAX_PRICE = 1_000_000_000;
   const MAX_QUANTITY = 999;
@@ -142,6 +143,7 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
   }
 
   async function createListing() {
+    if (window.QA_PLAYER_MARKET_ENABLED !== true) return;
     if (busy || !user()) return;
     const seller = user();
     const type = sellType;
@@ -210,6 +212,7 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
   }
 
   async function buyListing(listingId) {
+    if (window.QA_PLAYER_MARKET_ENABLED !== true) return;
     if (busy || !user()) return;
     const buyer = user();
     busy = true;
@@ -272,6 +275,7 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
   }
 
   async function cancelListing(listingId) {
+    if (window.QA_PLAYER_MARKET_ENABLED !== true) return;
     if (busy || !user()) return;
     const seller = user();
     busy = true;

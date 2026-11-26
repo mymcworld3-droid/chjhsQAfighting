@@ -355,3 +355,7 @@ html body.ui-cleanup #page-training #training-tab-content .core-equip-btn.equipp
 html body.ui-cleanup #soulbound-page .sb-header>div {display:none}
 html body.ui-cleanup #soulbound-page .sb-header {justify-content:flex-end;padding:0;margin:0;border:0;min-height:40px}
 html body.ui-cleanup #soulbound-page #soulbound-refresh {min-height:36px;padding:5px 12px;font-size:11px;background:transparent;border-color:var(--review-line)}
+
+/* Suspended player marketplace: never reserve space or expose cached entry markup. */
+#page-store #player-market-switch[hidden],#page-store #player-market[hidden],#page-store #pm-market-load-state[hidden]{display:none!important}
+#page-store .sticky .game-stone-icon{width:22px;height:22px;object-fit:contain;flex-shrink:0}

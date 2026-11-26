@@ -385,7 +385,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       <summary><span class="refinery-recipe-book-heading"><i class="fa-solid fa-scroll"></i><strong>配方圖鑑</strong><small>煉器配方</small></span><span class="refinery-recipe-summary-count">首發 ${owned.length} · 已學會 ${licensed.length} · 登錄 ${known.length}</span><i class="fa-solid fa-chevron-down refinery-recipe-book-chevron"></i></summary>
       <div class="refinery-recipe-book-content">
         <p class="refinery-recipe-guide"><i class="fa-solid fa-circle-info"></i><span>配方是製作指南，不是煉器許可證。沒有配方也能自由投入素材嘗試煉製；首發者永久保有發現紀錄，購買配方後可查看具體素材與數量。</span></p>
-        <div class="refinery-recipe-toolbar"><span><i class="fa-solid fa-layer-group"></i> 已收錄 ${known.length} 張法寶配方</span><button type="button" class="refinery-clear refinery-recipe-market" data-refinery-open-market><i class="fa-solid fa-scale-balanced"></i> 前往交易市集</button></div>
+        <div class="refinery-recipe-toolbar"><span><i class="fa-solid fa-layer-group"></i> 已收錄 ${known.length} 張法寶配方</span>${window.QA_PLAYER_MARKET_ENABLED===true?'<button type="button" class="refinery-clear refinery-recipe-market" data-refinery-open-market><i class="fa-solid fa-scale-balanced"></i> 前往交易市集</button>':''}</div>
         <div class="refinery-recipe-grid">${cards || '<div class="refinery-recipe-empty"><i class="fa-solid fa-book-open"></i><strong>尚無已登錄的配方</strong><p>投入 2～8 個素材，開爐探索第一張配方。</p></div>'}</div>
       </div>
     </details>`;
