@@ -2,6 +2,7 @@
 const crypto=require('node:crypto');
 const Rules=require('./public/cultivation/tactical-rules.js');
 const Manuals=require('./public/cultivation/manual-rules.js');
+const AnswerBonus=require('./public/cultivation/answer-cultivation-bonus.js');
 const WeaponDungeons=require('./public/cultivation/weapon-dungeon-rules.js');
 const WeaponDungeonRewards=require('./weapon-dungeon-rewards.cjs');
 const TrainingAccess=require('./public/cultivation/training-access-rules.js');
@@ -875,7 +876,7 @@ async function answer(db,uid,input,now=Date.now(),readReceipt=readSoloReceipt){
         });
     }
     const previousScore=Rules.num(stats.totalScore);
-    let cultivation=0;
+    let cultivation=0, answerBonus=null;
     if(s.mode==='pve'){
       patch['stats.soloLearningV1']=learningReward.progress;
       // Main progression awards +1 before 金丹, +2 from 金丹 onward;
@@ -883,6 +884,11 @@ async function answer(db,uid,input,now=Date.now(),readReceipt=readSoloReceipt){
       // Existing server-authoritative battle tally remains separate.
       cultivation=correct?(previousScore>=28?2:1)+Growth.cultivation(user,'solo')+learningReward.gain
         :previousScore>=28?-1:0;
+      if(correct){
+        const manual=exists(await tx.get(db.collection(MANUALS).doc(uid)));
+        answerBonus=AnswerBonus.award(stats.answerCultivationV1,cultivation,true,AnswerBonus.maxedWeapons(manual,Manuals));
+        cultivation=answerBonus.gain;patch['stats.answerCultivationV1']=answerBonus.state;
+      }
       patch['stats.totalScore']=Math.max(0,previousScore+cultivation);
       patch['stats.lastQuizAnswer']={
         question:String(q.q).normalize('NFC').replace(/\s+/g,' ').trim().slice(0,1500),
@@ -899,7 +905,7 @@ async function answer(db,uid,input,now=Date.now(),readReceipt=readSoloReceipt){
     // Return actual wallet/progression gains so the same answer review can
     // show them without trusting a client-supplied reward calculation.
     s.reviews[uid].reward={
-      cultivation, gold:0, learning:learningReward.message||''
+      cultivation, gold:0, learning:[learningReward.message,AnswerBonus.message(answerBonus)].filter(Boolean).join('；'), ...(answerBonus?{answerBonus}:{})
     };
     s.reviewHistory[q.id].reward=s.reviews[uid].reward;
     const updates=s.status==='finished'?await settle(tx,db,s,{[uid]:patchedUser(user,patch)}):{};

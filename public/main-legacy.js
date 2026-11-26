@@ -28,6 +28,7 @@ import {
 } from "./data-store.js";
 
 import { applyCultivationReward, showCultivationFeedback } from './cultivation-rules.js';
+import './cultivation/answer-cultivation-bonus.js';
 import { soulCultivationBonusForPlayer } from './cultivation/nascent-soul-rules.js';
 import { beginSoloCultivationFeedback } from './cultivation/solo-cultivation-feedback.js';
 
@@ -2261,7 +2262,7 @@ function updateUIStats() {
         }
     }
     
-    document.getElementById('display-score').innerText = stats.totalScore;
+    document.getElementById('display-score').innerText = Math.floor(Number(stats.totalScore)||0);
 
     // 面板與主題輪詢都使用同一份 currentUserData，避免短暫更新後跳回舊值。
     window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
@@ -3376,6 +3377,12 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
     }
 
     let stats = currentUserData.stats;
+    const bonusUid=auth.currentUser?.uid;
+    let masteryState=window.getCurrentTacticalManualState?.();
+    if(isCorrect&&!masteryState&&window.refreshCurrentTacticalManualState)
+      masteryState=await window.refreshCurrentTacticalManualState();
+    if(auth.currentUser?.uid!==bonusUid||currentUserData?.stats!==stats)return;
+    const masteryCount=globalThis.QAAnswerCultivationBonus?.maxedWeapons(masteryState,globalThis.QAManuals)||0;
     let scoreGain = 0;
     if (quiz) quiz.answerSelectedIndex = userIdx;
     const learningRules = window.QASoloLearningRules || globalThis.QASoloLearningRules;
@@ -3472,18 +3479,23 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
                 const verifiedGold = isCorrect ? window.QAAnswerGoldRules.perCorrect(remote.stats?.totalScore) + verifiedLearning.gold : 0;
                 const learningDelta = verifiedLearning.gain - learningReward.gain +
                     (verifiedLearning.recovery ? 0 : -recoveryCoreGain);
+                const answerBonus = isCorrect ? globalThis.QAAnswerCultivationBonus?.award(remote.stats?.answerCultivationV1,Math.max(0,cultivationDelta+learningDelta),true,typeof masteryCount==='number'?masteryCount:0) : null;
                 const savedStats = { ...stats,
+                    ...(remote.stats?.answerCultivationV1?{answerCultivationV1:remote.stats.answerCultivationV1}:{}),
+                    ...(answerBonus?{answerCultivationV1:answerBonus.state}:{}),
                     ...(remote.stats?.trialTowerStudyAnswersV1?{trialTowerStudyAnswersV1:towerReceipts}:{}),
                     ...(quiz?.mode==='trial-tower'?{trialTowerStudyAnswersV1:[...towerReceipts,quiz.id].slice(-64)}:{}),
                     ...(remote.stats?.adaptiveLearningV1 ? {adaptiveLearningV1:remote.stats.adaptiveLearningV1} : {}),
                     ...(adaptiveRows.length ? {adaptiveLearningV1:window.QAAdaptiveLearning.merge(remote.stats?.adaptiveLearningV1, adaptiveRows)} : {}),
                     ...(verifiedLearning.progress ? {soloLearningV1:verifiedLearning.progress} : {}),
                     gold: Math.max(0, Number(remote.stats?.gold) || 0) + verifiedGold,
-                    totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta + learningDelta),
+                    totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + (answerBonus?answerBonus.gain:cultivationDelta + learningDelta)),
                     knowledgePointMapV1: window.QAKnowledgePoints.record(remote.stats?.knowledgePointMapV1 || {}, quiz, isCorrect)
                 };
                 if (!remote.stats?.adaptiveLearningV1 && !adaptiveRows.length) delete savedStats.adaptiveLearningV1;
-                cultivationReward.gain = Math.max(0,cultivationDelta + learningDelta);
+                cultivationReward.gain = answerBonus?answerBonus.gain:Math.max(0,cultivationDelta + learningDelta);
+                cultivationReward.answerBonusMessage=globalThis.QAAnswerCultivationBonus?.message(answerBonus)||'';
+                if(savedStats.lastQuizAnswer){savedStats.lastQuizAnswer={...savedStats.lastQuizAnswer,scoreBefore:Math.max(0,Number(remote.stats?.totalScore)||0),scoreAfter:savedStats.totalScore,penalty:Math.max(0,(Number(remote.stats?.totalScore)||0)-savedStats.totalScore)};}
                 scoreGain = verifiedGold;
                 cultivationReward.learningGain = verifiedLearning.gain;
                 cultivationReward.learningMessage = verifiedLearning.message || '';

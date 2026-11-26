@@ -122,6 +122,7 @@ export function showCultivationFeedback(reward, isCorrect) {
     if (reward.goldenCoreMessage) extras.push(reward.goldenCoreMessage);
     if (reward.artifactMessage) extras.push(reward.artifactMessage);
     if (reward.learningMessage) extras.push(reward.learningMessage);
+    if (reward.answerBonusMessage) extras.push(reward.answerBonusMessage);
     showToast(`悟道成功！修為 +${reward.gain}${extras.length ? `，${extras.join('；')}` : ''}`);
     return;
   }

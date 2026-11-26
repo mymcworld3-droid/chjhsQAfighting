@@ -1225,3 +1225,5 @@ body.ui-cleanup #page-home .home-shortcut-column .home-wide-actions>.home-shortc
     height:max(var(--home-scene-size),calc(55px + var(--home-diamond-size) + 2 * var(--home-wide-height)))!important;
   }
 }
+
+.home-answer-bonus{font-size:11px;line-height:1.4;color:#bfa979;text-align:center;margin:2px 0 5px;overflow-wrap:anywhere}.home-answer-bonus[hidden]{display:none!important}.home-answer-bonus.is-awake{color:#f3d28a;text-shadow:0 0 8px #d8b15d44}

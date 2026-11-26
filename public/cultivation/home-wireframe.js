@@ -1,5 +1,7 @@
 import './tactical-rules.js';
 import './home-trial-ecology.js';
+import './answer-cultivation-bonus.js';
+import './manual-rules.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 
 const $=id=>document.getElementById(id);
@@ -72,7 +74,19 @@ async function syncTrialState(){
   })().finally(()=>{query=null;});
   await query;
 }
+function renderAnswerBonus(){
+  const node=$('home-answer-bonus'),rules=globalThis.QAAnswerCultivationBonus;
+  if(!node||!rules)return;
+  const uid=currentUid(),player=window.getCurrentUserData?.();
+  node.hidden=!uid||!player||(player.uid&&player.uid!==uid);
+  if(node.hidden)return;
+  const state=rules.normalize(player.stats?.answerCultivationV1),manual=window.getCurrentTacticalManualState?.();
+  const percent=rules.maxedWeapons(manual,globalThis.QAManuals)*10;
+  node.textContent=(manual?'武器精通 +'+percent+'%':'武器精通同步中')+' · '+(state.remaining?'頓悟 +100% · 剩餘 '+state.remaining+' 題':'悟道值 '+state.progress+' / 10');
+  node.classList.toggle('is-awake',!!state.remaining);
+}
 function update(){
+  renderAnswerBonus();
   refreshSpiritStones();
   refreshFromProgress();
   if(visible())void syncTrialState();
@@ -110,7 +124,7 @@ function init(){
     const button=event.target.closest?.('[data-home-action]');
     if(button&&root.contains(button))activate(button.dataset.homeAction);
   });
-  for(const name of ['xiuxian:user-data-ready','xiuxian:user-ready','xiuxian:stats-updated'])
+  for(const name of ['xiuxian:user-data-ready','xiuxian:user-ready','xiuxian:stats-updated','xiuxian:tactical-power-updated','xiuxian:quest-progress-updated'])
     window.addEventListener(name,update);
   window.addEventListener('xiuxian:tactical-trial-updated',event=>{
     if(!currentUid()||event.detail?.uid!==currentUid())return;

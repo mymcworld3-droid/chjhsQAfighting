@@ -9,6 +9,8 @@ const Adaptive=require('./public/cultivation/adaptive-learning-rules.js');
 const Knowledge=require('./public/cultivation/knowledge-points.js');
 const Solo=require('./public/cultivation/solo-learning-rules.js');
 const Growth=require('./public/cultivation/nascent-growth.js');
+const Manuals=require('./public/cultivation/manual-rules.js');
+const AnswerBonus=require('./public/cultivation/answer-cultivation-bonus.js');
 const LearningCorrection=require('./dungeon-learning-correction.cjs');
 const {recordEvent}=require('./public/cultivation/quest-rules.js');
 const {FieldValue}=require('./storage-values.cjs');
@@ -217,8 +219,14 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
         id:q.adaptive.questionId||q.id,correct,skipped:false,help,at:now
       });
     const beforeScore=countOf(stats.totalScore);
-    const cultivation=correct?(beforeScore>=28?2:1)+Growth.cultivation(user,'solo')+learningReward.gain:
+    let cultivation=correct?(beforeScore>=28?2:1)+Growth.cultivation(user,'solo')+learningReward.gain:
       beforeScore>=28?-1:0;
+    let answerBonus=null;
+    if(correct){
+      const manualSnap=await tx.get(dbA.collection('tacticalManuals').doc(uid));
+      answerBonus=AnswerBonus.award(stats.answerCultivationV1,cultivation,true,AnswerBonus.maxedWeapons(manualSnap.exists?manualSnap.data():null,Manuals));
+      cultivation=answerBonus.gain;patch['stats.answerCultivationV1']=answerBonus.state;
+    }
     patch['stats.totalScore']=Math.max(0,beforeScore+cultivation);
     patch['stats.lastQuizAnswer']={
       question:String(q.q).normalize('NFC').replace(/\s+/g,' ').trim().slice(0,1500),
@@ -237,7 +245,7 @@ async function answer(dbA,dbC,uid,input,now=Date.now()){
       subject:q.subject,topic:q.topic,learningTopic:q.learningTopic,
       difficulty:q.difficulty,adaptive:q.adaptive||null,meta:q.meta||{},
       reward:{
-        cultivation,gold:0,learning:learningReward.message||''
+        cultivation,gold:0,learning:[learningReward.message,AnswerBonus.message(answerBonus)].filter(Boolean).join('；'),...(answerBonus?{answerBonus}:{})
       }};
     s.answered=index+1;
     const qs={...(s.questions||{})};delete qs[index];s.questions=qs;
