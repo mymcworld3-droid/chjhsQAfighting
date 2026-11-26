@@ -187,6 +187,7 @@
     return { date, pathIndex: next < 0 ? path.length : next,
       pathCompleted: state.pathClaimed.length, pathTotal: path.length,
       path: path[next] ?? null,
+      pathRows: path.map((q,i)=>({...q,sequenceLocked:!q.claimed&&i!==next,claimable:q.claimable&&i===next})),
       pathTicketRewards: PATH.filter(q => q.reward.drawTickets && state.pathClaimed.includes(q.id) &&
         (state.pathTicketAmounts[q.id] || 0) < q.reward.drawTickets).map(q => ({ ...q, supplemental: true,
           description: '已完成此仙道任務，可補領尚未領取的本命法器抽獎券。',

@@ -64,3 +64,69 @@
 /* Independent 仙道 / daily-weekly entry views share the same task controller. */
 .quest-panel .quest-tabs > button[hidden], .quest-panel .quest-atlas-open[hidden] { display:none!important; }
 .quest-panel .quest-atlas-open { display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:40px;margin:8px 0 12px;border:1px solid var(--qy-line,#75613b);border-radius:8px;background:transparent;color:var(--qy-paper,#e4d5b4);font-size:13px;cursor:pointer; }
+
+/* 仙道：境界軌跡、徽章展示、任務卷軸。日常與每週不受影響。 */
+.quest-dialog.quest-dialog-path{width:min(1120px,100%);height:min(760px,100dvh);overflow:hidden}
+.quest-dialog-path .quest-panel{padding:clamp(10px,2vw,22px);border:1px solid #b99b64;border-radius:0;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 35% 48%,#7b512f45,transparent 50%),linear-gradient(135deg,#32271e,#1b1915 62%,#30241b)}
+.quest-dialog-path .quest-panel::before,.quest-dialog-path .quest-panel::after{display:none}
+.quest-dialog-path .quest-heading{border-bottom:1px solid #c7a66b55;padding-bottom:8px}
+.quest-dialog-path .quest-heading h3{font-size:clamp(20px,3vw,30px);letter-spacing:.13em}
+.quest-dialog-path .quest-tabs{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);margin:0}
+.quest-dialog-path .quest-scroll{display:flex;flex-direction:column;overflow:hidden;padding:0;scrollbar-gutter:auto}
+.quest-dialog-path .quest-atlas-open{flex:none;align-self:flex-end;width:auto;min-height:28px;margin:5px 0;padding:4px 10px;border-color:#b99b6466;color:#e2c690}
+.quest-dialog-path .quest-note{flex:none;margin:0 0 5px;font-size:11px;color:#bcab8d}
+.quest-dialog-path .quest-path-layout{flex:1;min-height:0;display:flex;flex-direction:column}
+.path-journey{display:grid;grid-template-columns:clamp(68px,11%,112px) minmax(0, .8fr) minmax(0,1.4fr);gap:clamp(8px,1.6vw,20px);min-height:0;flex:1;overflow:hidden}
+.path-stage-rail{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;overflow:auto;scrollbar-width:thin;scrollbar-color:#9c7845 transparent;padding:9px 5px;overscroll-behavior:contain}
+.path-stage-node{position:relative;display:grid;justify-items:center;gap:3px;flex:none;width:100%;min-height:70px;padding:3px 0;border:0;background:none;color:#c9b393;font-size:12px;font-weight:750;cursor:pointer}
+.path-stage-node:not(:last-child)::after{content:"";position:absolute;top:calc(100% - 2px);left:calc(50% - 1px);height:14px;width:2px;background:#8c744a;pointer-events:none}
+.path-stage-node.is-done:not(:last-child)::after{background:#dbba73}
+.path-emblem{display:grid;place-items:center;position:relative;isolation:isolate;width:44px;aspect-ratio:1;color:#dfc187;background:linear-gradient(150deg,#c7a56a,#5f472e 48%,#ae874a);clip-path:polygon(50% 0,94% 24%,94% 76%,50% 100%,6% 76%,6% 24%);font-size:20px}
+.path-emblem::before{content:"";position:absolute;inset:3px;z-index:-1;background:radial-gradient(circle,#5a4630,#221a14 80%);clip-path:inherit}
+.path-stage-node.is-future .path-emblem{filter:saturate(.35);opacity:.75}
+.path-stage-node[aria-pressed=true]{color:#ffe1a1;background:radial-gradient(ellipse,#bfa06225,transparent 70%);outline:1px solid #e3bb7355;border-radius:10px}
+.path-stage-node[aria-pressed=true] .path-emblem{filter:drop-shadow(0 0 6px #e3bc72);opacity:1}
+.path-stage-node.is-done .path-emblem{color:#ffdf96}
+.path-stage-summary{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:9px;min-width:0;overflow:hidden;text-align:center;padding:8px}
+.path-stage-aura{position:absolute;z-index:-1;width:min(94%,290px);aspect-ratio:1;border:1px solid #dbb47344;border-radius:50%;background:repeating-conic-gradient(from 0deg,#c9a3681c 0deg 2deg,transparent 2deg 45deg);box-shadow:0 0 45px #c3995a18,inset 0 0 25px #c3995a18;top:8%;pointer-events:none;animation:path-aura-turn 60s linear infinite}
+.path-emblem-large{width:min(68%,160px);font-size:clamp(40px,6vw,76px);filter:drop-shadow(0 0 12px #e5b76c66);flex:none}
+.path-emblem-large::before{inset:7px}
+.path-stage-summary h2{font-family:"Noto Serif TC",serif;font-size:clamp(24px,4vw,40px);letter-spacing:.1em;margin:0;color:#f5d594;text-shadow:0 2px 6px #000}
+.path-stage-status{font-size:12px;color:#d9c09a}.path-stage-status.is-current{color:#ffe19e}
+.path-stage-progress{display:grid;justify-items:center;gap:5px;width:min(100%,220px);padding:12px 10px;border:1px solid #c6a46966;border-radius:12px;background:#1b1713c9;color:#e5d1ac}
+.path-stage-progress strong{font-size:22px;color:#f4d596}.path-stage-progress small{font-size:11px}
+.path-task-track{width:100%;height:4px;background:#6d543b33;border-radius:8px;overflow:hidden;display:block}.path-task-track i{display:block;height:100%;background:linear-gradient(90deg,#a37a3b,#e4ba70);border-radius:inherit}
+.path-stage-tasks{min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#b28c52 transparent;display:flex;flex-direction:column;gap:7px;padding:0 4px 5px 0}
+.path-stage-tasks>header{position:sticky;top:0;z-index:3;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;background:#272019;padding:5px 4px;color:#d8c09a}
+.path-stage-tasks h3{font-size:14px;color:#efd19a;margin:0}.path-stage-tasks header small{font-size:10px}
+.path-task{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:8px 10px;border:1px solid #b99c65;border-radius:12px;background:linear-gradient(125deg,#e8d9bc,#cabb9f);color:#3c2b20;box-shadow:0 2px 5px #0004;flex:none}
+.path-task h4{font-size:14px;line-height:1.3;margin:0;color:#39291d}.path-task p{font-size:11px;line-height:1.4;margin:3px 0;color:#67533f;overflow-wrap:anywhere}
+.path-task-progress{display:flex;gap:6px;align-items:center}.path-task-progress small{font-size:10px;white-space:nowrap;color:#5c4936}
+.path-task-rewards{margin-top:4px;color:#4c3827}.path-task-rewards .mr-reward-list{display:flex;flex-wrap:wrap;gap:3px;margin:0}
+.path-task-rewards .mr-reward-item{min-width:0;max-width:100%;padding:3px 5px;font-size:10px;gap:3px}
+.path-task-rewards .mr-reward-icon{width:22px;height:22px}
+.path-task-action{border:1px solid #a08761;border-radius:8px;padding:8px 6px;min-width:65px;max-width:100px;background:#5d4630;color:#fff1d3;font-size:11px;font-weight:750;cursor:pointer}
+.path-task-action.is-claim{background:linear-gradient(#c9a568,#967039);border-color:#765226;color:#26190c}
+.path-task.is-done .path-task-action{border:2px double #766b58;background:transparent;color:#625846;transform:rotate(-5deg);opacity:.85}
+.path-task.is-locked .path-task-action{background:transparent;color:#665b4c;opacity:.7}
+.path-supplement-heading{padding:7px 0}
+.quest-dialog-path #quest-status{flex:none;margin:4px 0}.quest-dialog-path #quest-reward-receipt{max-height:22%;overflow:auto;flex:none}
+@keyframes path-aura-turn{to{transform:rotate(360deg)}}
+@media(orientation:portrait),(max-width:620px){
+ .quest-dialog.quest-dialog-path{width:100%;height:100dvh}
+ .path-journey{grid-template-columns:62px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:8px}
+ .path-stage-rail{grid-column:1;grid-row:1/3}
+ .path-stage-summary{grid-column:2;grid-row:1;display:grid;grid-template-columns:64px minmax(0,1fr);gap:4px 8px;text-align:left;justify-items:start;padding:4px 8px}
+ .path-stage-aura{display:none}.path-emblem-large{width:64px;font-size:31px;grid-row:1/4}
+ .path-stage-summary h2{font-size:22px}.path-stage-status{font-size:10px}
+ .path-stage-progress{display:flex;flex-wrap:wrap;align-items:center;gap:3px 6px;width:100%;padding:4px 7px}
+ .path-stage-progress strong{font-size:14px}.path-stage-progress small{font-size:10px}.path-stage-progress .path-task-track{width:100%}
+ .path-stage-tasks{grid-column:2;grid-row:2}.path-task{padding:7px 6px;gap:5px}.path-task-action{min-width:54px;font-size:10px}
+ .path-stage-node{min-height:62px;font-size:10px}.path-emblem:not(.path-emblem-large){width:37px;font-size:17px}
+}
+@media(orientation:landscape) and (max-height:500px){
+ .quest-dialog-path .quest-panel{padding:8px 12px}.quest-dialog-path .quest-heading{padding-bottom:4px}.quest-dialog-path .quest-heading small{display:none}
+ .path-stage-summary{gap:5px}.path-stage-progress{padding:6px}.path-emblem-large{width:min(60%,105px)}.path-stage-summary h2{font-size:25px}
+ .path-stage-node{min-height:56px;gap:1px}.path-emblem:not(.path-emblem-large){width:34px;font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){.path-stage-aura{animation:none}}

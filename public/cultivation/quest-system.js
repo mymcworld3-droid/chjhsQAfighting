@@ -2,11 +2,13 @@ import './weapon-presentation.js';
 import './community-presentation.js';
 import './daily-meditation-rewards.js';
 import './quest-rules.js';
+import './quest-path-journey.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 
 (function () {
   'use strict';
   let snapshot = null, account = '', tab = 'daily', busy = false, dirty = true, timer = null, revision = 0, applyingReward = false, loadError = '';
+  let selectedStage = null, previousActiveStage = null;
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const visible = () => $('page-home')?.classList.contains('active-page');
@@ -124,6 +126,36 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       <button type="button" data-quest-id="${esc(q.id)}" data-quest-kind="${kind}" ${busy || q.claimed || q.locked ? 'disabled' : ''} class="quest-action ${q.claimable ? 'quest-claim' : ''}">${busy ? '正在同步…' : label}</button>
     </article>`;
   }
+  function pathMarkup(s) {
+    const {groups,activeId}=globalThis.QAPathJourney.journey(s,window.XianxiaQuestRules.PATH);
+    if(!groups.some(g=>g.id===selectedStage)||selectedStage===previousActiveStage) selectedStage=activeId;
+    previousActiveStage=activeId;
+    const group=groups.find(g=>g.id===selectedStage);
+    const badge=(g,large=false)=>`<span class="path-emblem${large?' path-emblem-large':''}" aria-hidden="true"><i class="fa-solid fa-${g.icon}"></i></span>`;
+    const supplemental=(s.pathTicketRewards||[]).map(q=>card(q,'path')).join('');
+    if(!group)return '<p class="quest-empty">仙道任務已全部完成。</p>'+supplemental;
+    const state=g=>g.done?'done':g.id===activeId?'current':'future';
+    const rail=[...groups].reverse().map(g=>`<button type="button" class="path-stage-node is-${state(g)}" data-path-stage="${esc(g.id)}" aria-pressed="${g.id===selectedStage}" aria-label="${esc(g.name)}，${g.claimed}/${g.rows.length} 項已領取">${badge(g)}<span>${esc(g.name)}</span></button>`).join('');
+    const rows=group.rows.map(q=>{
+      const locked=q.locked||q.sequenceLocked;
+      const label=q.claimed?'已領取':locked?'尚未開啟':q.claimable?'領取獎勵':q.metric==='story'?'觀看劇情':'前往修行';
+      const progress=Math.min(100,Math.max(0,Math.round(Number(q.current)/Math.max(1,Number(q.target))*100)));
+      return `<article class="path-task${q.claimed?' is-done':q.claimable?' is-ready':locked?' is-locked':''}">
+        <div class="path-task-copy"><h4>${esc(q.title)}</h4><p>${esc(q.description)}</p>
+        <div class="path-task-progress"><span class="path-task-track" role="progressbar" aria-label="${esc(q.title)}" aria-valuemin="0" aria-valuemax="${q.target}" aria-valuenow="${q.current}"><i style="width:${progress}%"></i></span><small>${q.current} / ${q.target}</small></div>
+        <div class="path-task-rewards">${rewardMarkup(q.reward)}</div></div>
+        <button class="path-task-action${q.claimable?' is-claim':''}" type="button" data-quest-kind="path" data-quest-id="${esc(q.id)}" ${busy||q.claimed||locked?'disabled':''}>${q.claimed?'<i class="fa-solid fa-check" aria-hidden="true"></i> ':locked?'<i class="fa-solid fa-lock" aria-hidden="true"></i> ':''}${label}</button></article>`;
+    }).join('');
+    return `<div class="path-journey"><nav class="path-stage-rail" aria-label="仙道境界進程">${rail}</nav>
+      <section class="path-stage-summary" aria-label="${esc(group.name)}階段">
+        <div class="path-stage-aura" aria-hidden="true"></div>${badge(group,true)}
+        <h2>${esc(group.name)}</h2><span class="path-stage-status is-${state(group)}">${group.done?'此階段已完成':group.id===activeId?'當前仙道階段':'後續仙道階段'}</span>
+        <div class="path-stage-progress"><small>階段目標</small><strong>${group.claimed} / ${group.rows.length}</strong><span class="path-task-track"><i style="width:${group.claimed/group.rows.length*100}%"></i></span><small>目標修為 ${group.target}</small></div>
+      </section>
+      <section class="path-stage-tasks" aria-label="階段任務"><header><h3>${esc(group.name)} · 修行任務</h3><small>${s.pathCompleted??s.pathIndex} / ${s.pathTotal} 全程進度</small></header>${rows}
+        ${supplemental?'<h3 class="path-supplement-heading">可補領獎勵</h3>'+supplemental:''}
+      </section></div>`;
+  }
   function render() {
     syncQuestIndicator();
     renderSpotlight();
@@ -135,6 +167,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     });
     $('quest-content').setAttribute('aria-labelledby', 'quest-tab-' + tab);
     $('quest-refresh').disabled = busy;
+    $('quest-content').classList.toggle('quest-path-layout',tab === 'path');
     if (!snapshot) {
       $('quest-content').innerHTML = '<p class="quest-empty" data-qy-state="'+(busy?'loading':loadError?'error':'empty')+'">'+(busy?'正在讀取修行任務…':loadError?'任務同步未完成，請按「重新同步」重試。':'尚未同步修行任務，請按「重新同步」。')+'</p>';
       return;
@@ -147,20 +180,29 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     $('quest-weekly-count').textContent = weeklyReadyCount ? `${weeklyReadyCount} 項待領`
       : `${weekly.filter(q=>q.claimed).length} / ${weekly.length}`;
     $('quest-note').textContent = tab === 'path'
-      ? '仙道任務依序開啟，領獎後接續下一項。觀看劇情請親自點擊，完整看完並儲存後即可領獎；已有紀錄也計入。'
+      ? '仙道任務依序開啟，領獎後接續下一項。'
       : tab === 'weekly'
         ? `本週 ${snapshot.weeklyKey} 起（台灣時間週一 00:00 重置）· 7 天累積，不需要天天登入。請於週末前領取已完成獎勵。`
         : `今日 ${snapshot.date} · 原有日常任務與隨機宗門委託；台灣時間每日 00:00 重置。`;
     const content = $('quest-content');
     content.classList.toggle('quest-daily-grid', tab === 'daily' || tab === 'weekly');
-    content.innerHTML = tab === 'daily' ?
+    const oldRail=content.querySelector('.path-stage-rail'),oldTasks=content.querySelector('.path-stage-tasks');
+    const oldSelected=selectedStage,railScroll=oldRail?.scrollTop,taskScroll=oldTasks?.scrollTop;
+    content.innerHTML = tab === 'path' ? pathMarkup(snapshot) : tab === 'daily' ?
       '<div class="quest-commission-heading"><i class="fa-solid fa-scroll"></i><b>今日宗門委託</b><small>每日隨機兩項 · 額外獎勵 · 不影響原日常</small></div>' +
       (snapshot.commissions||[]).map(q => card(q,'commission')).join('') +
       '<div class="quest-commission-heading"><i class="fa-solid fa-calendar-check"></i><b>原有日常任務</b></div>' +
       snapshot.daily.map(q => card(q, 'daily')).join('')
       : tab === 'weekly' ? (snapshot.weekly||[]).map(q => card(q,'weekly')).join('')
-      : snapshot.path ? card(snapshot.path, 'path') : '<p class="quest-empty" data-qy-state="empty">仙道任務已全部完成。仙途無盡，日常修行仍可繼續。</p>';
-    if (tab === 'path') content.innerHTML += (snapshot.pathTicketRewards || []).map(q => card(q, 'path')).join('');
+      : '';
+    if(tab==='path'){
+      const rail=content.querySelector('.path-stage-rail'),tasks=content.querySelector('.path-stage-tasks');
+      if(rail){
+        if(railScroll!=null&&oldSelected===selectedStage)rail.scrollTop=railScroll;
+        else {const node=rail.querySelector('[aria-pressed="true"]');if(node)rail.scrollTop=node.offsetTop-rail.offsetTop-(rail.clientHeight-node.offsetHeight)/2;}
+      }
+      if(tasks&&oldSelected===selectedStage&&taskScroll!=null)tasks.scrollTop=taskScroll;
+    }
   }
   async function request(path, body) {
     const controller = new AbortController();
@@ -177,7 +219,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   }
   function reconcileAccount() {
     const uid = getMainUser()?.uid || '';
-    if (uid !== account) { account = uid; snapshot = null; loadError = ''; dirty = true; status(''); render(); }
+    if (uid !== account) { account = uid; snapshot = null; selectedStage=null; previousActiveStage=null; loadError = ''; dirty = true; status(''); render(); }
     return uid;
   }
   async function refresh(force = false) {
@@ -265,7 +307,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if ($('quest-panel')) return;
     const entry = $('quest-open');
     if (!entry) return;
-    const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css'; document.head.append(link);
+    const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css?v=20261126-path-journey'; document.head.append(link);
     const dialog = document.createElement('dialog'); dialog.id = 'quest-dialog'; dialog.className = 'quest-dialog'; dialog.setAttribute('role', 'dialog'); dialog.setAttribute('aria-modal', 'true'); dialog.setAttribute('aria-labelledby', 'quest-title');
     const panel = document.createElement('section'); panel.id = 'quest-panel'; panel.className = 'quest-panel'; panel.setAttribute('aria-label', '修行任務');
     panel.innerHTML = `<header class="quest-heading"><div><small id="quest-heading-kicker">宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
@@ -283,6 +325,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     function openView(mode) {
       pathMode = mode === 'path';
       tab = pathMode ? 'path' : 'daily';
+      dialog.classList.toggle('quest-dialog-path',pathMode);
+      selectedStage=null;previousActiveStage=null;
       $('quest-title').textContent = pathMode ? '仙道' : '修行任務';
       $('quest-heading-kicker').textContent = pathMode ? '仙途修行' : '宗門手札';
       panel.setAttribute('aria-label', pathMode ? '仙道任務' : '修行任務');
@@ -326,6 +370,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     });
     $('quest-refresh').addEventListener('click', () => { void refresh(true); });
     $('quest-content').addEventListener('click', e => {
+      const stage=e.target.closest('[data-path-stage]');
+      if(stage&&tab==='path'&&snapshot){selectedStage=stage.dataset.pathStage;render();$('quest-content').querySelector('[data-path-stage][aria-pressed="true"]')?.focus({preventScroll:true});return;}
       const b = e.target.closest('[data-quest-id]');
       if (!b || b.disabled || busy || !snapshot) return;
       const kind = b.dataset.questKind;
