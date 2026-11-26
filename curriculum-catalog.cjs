@@ -22,7 +22,7 @@ const guideByKey=new Map(sectionGuide.rows.flatMap(row=>row.labels.map(label=>[g
 function sectionGuidance(target) {
   const book=validateScope(target.scope,target.subject,target.level);
   if(!book||!book.publisher)return [];
-  if(['source-reviewed-crosswalk','elective-crosswalk-transcription','publisher-chapter-outline','publisher-companion-science','grade12-crosswalk-transcription','social-crosswalk-transcription','geography-crosswalk-transcription','civics-crosswalk-transcription','elective-social-crosswalk-transcription','publisher-language-outline','language-index-v2','nani-companion-index'].includes(book.scopeSelectionStatus))return book.units.flatMap(u=>u.concepts.filter(c=>target.scope.sub_topics.includes(c.name)).map(c=>({section:c.name,allowedContent:c.allowedContent,excludedContent:c.excludedContent})));
+  if(['source-reviewed-crosswalk','elective-crosswalk-transcription','publisher-chapter-outline','publisher-companion-science','grade12-crosswalk-transcription','social-crosswalk-transcription','geography-crosswalk-transcription','civics-crosswalk-transcription','historical-civics-crosswalk','elective-social-crosswalk-transcription','publisher-language-outline','language-index-v2','nani-companion-index'].includes(book.scopeSelectionStatus))return book.units.flatMap(u=>u.concepts.filter(c=>target.scope.sub_topics.includes(c.name)).map(c=>({section:c.name,allowedContent:c.allowedContent,excludedContent:c.excludedContent})));
   if(book.grade!==sectionGuide.grade)return [];
   return (target.scope.sub_topics||[]).flatMap(name=>{
     const row=guideByKey.get(guideKey(book.subject,book.term,name));

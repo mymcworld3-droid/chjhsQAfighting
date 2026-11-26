@@ -32,6 +32,16 @@
         !!book.units?.length&&book.units.every(u=>u.details?.length>0&&new Set(u.details).size===u.details.length&&
           Array.isArray(u.concepts)&&u.concepts.length===u.details.length&&u.concepts.every((c,i)=>c.name===u.details[i]&&Array.isArray(c.allowedContent)&&c.allowedContent.length>0&&Array.isArray(c.excludedContent)));
     }
+    if(book.scopeSelectionStatus==='historical-civics-crosswalk'){
+      const entries={"longteng-108-civics-2-historical":{"publisher":"龍騰","titles":[["第1章 政府的體制與運作","1-1 民主國家常見的政府體制","1-2 我國的中央政府體制","1-3 中央與地方權限劃分"],["第2章 民意、媒體與民主治理","2-1 民主治理與實踐","2-2 民主治理的課責","2-3 媒體與公共意見","2-4 媒體近用與媒體再現"],["第3章 民主社會的政治參與","3-1 選舉與政治參與","3-2 非選舉的政治參與"],["第4章 社會安全與勞動參與","4-1 社會安全制度的發展","4-2 我國的發展現況與難題","4-3 勞動參與及社會永續","4-4 我國勞動參與的保障"],["第5章 公平正義與多元文化","5-1 公平正義的追求","5-2 合理的差別待遇","5-3 多元觀點與文化衝突"],["第6章 所得、貿易與經濟福利","6-1 國家經濟的衡量指標","6-2 國民所得帳各指標的解讀","6-3 貿易自由化","6-4 世界貿易組織"],["第7章 科技、永續與全球關連","7-1 全球化下的國家治理","7-2 資訊科技發展的影響","7-3 生物醫學科技發展的影響","7-4 全球化與永續發展"]]},"hanlin-108-civics-2-historical":{"publisher":"翰林","titles":[["第1章 法治的建構與意涵","1-1 法治意涵與法律制定","1-2 法治的落實與學生自治"],["第2章 民主國家的人權保障","2-1 人權保障的理念與內容","2-2 基本權利的保障與限制","2-3 法如何保障與限制人民的集會結社自由"],["第3章 國家行政與公共利益","3-1 人民的生活如何受到行政法的影響","3-2 正當行政程序的功能與原則","3-3 行政救濟"],["第4章 資源分配的考量與國家角色","4-1 社會資源有限，我們該如何分配？","4-2 誘因的驅動可以改變人們的行為"],["第5章 人的身份與權利關係","5-1 權利主體與權利能力","5-2 權利客體與所有權的性質","5-3 身份關係的權益保障"],["第6章 犯罪與責任追究","6-1 犯罪的意義與構成","6-2 犯罪追訴與處罰的程序保障","6-3 青少年非行的處理方式"]]}};
+      const a=Object.hasOwn(entries,book.bookId)?entries[book.bookId]:null,e=book.scopeEvidence;
+      return !!a&&book.publisher===a.publisher&&book.edition===a.publisher+'版'&&book.subject==='公民'&&book.grade==='高中一年級'&&book.term==='第二學期'&&book.schoolYear===null&&
+        book.releaseStatus==='blocked'&&book.verificationStatus===book.scopeSelectionStatus&&book.scopeDetailLevel==='historical-crosswalk-sections'&&book.courseType==='required'&&book.schedulePolicy==='book-sequence'&&
+        e?.kind==='historical-publisher-crosswalk'&&e.publisher===a.publisher&&e.schoolYear===null&&e.columnPolicy==='publisher-left-only'&&e.reviewMethod==='structured-text'&&e.rawFileHashStatus==='unavailable'&&
+        !!book.sources?.some(s=>s.url==='https://www.go100.com.tw/file/108_comparison_table/senior/comparison_civics-2.pdf'&&s.type==='third-party-curriculum-crosswalk'&&s.publisherTable===a.publisher+' 公民第二冊'&&s.reviewMethod==='structured-text')&&
+        Array.isArray(book.units)&&JSON.stringify(book.units.map(u=>[u.unit,...(u.details||[])]))===JSON.stringify(a.titles)&&
+        book.units.every(u=>u.details.length<=24&&u.concepts?.length===u.details.length&&u.concepts.every((c,i)=>c.name===u.details[i]&&Array.isArray(c.allowedContent)&&c.allowedContent.length&&Array.isArray(c.excludedContent)));
+    }
     if(book.scopeSelectionStatus==='civics-crosswalk-transcription'){
       const e=book.scopeEvidence,vol=book.grade==='高中一年級'?(book.term==='第一學期'?1:book.term==='第二學期'?2:0):book.grade==='高中二年級'&&book.term==='第一學期'?3:0;
       const sources=["10-1_comparison_civics_114.pdf?v=20250901","10-2_comparison_civics_114.pdf?v=20260224","11-1_comparison_civics_114.pdf?v=20250901"];

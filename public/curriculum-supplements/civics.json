@@ -5640,6 +5640,735 @@
           ]
         }
       ]
+    },
+    {
+      "bookId": "longteng-108-civics-2-historical",
+      "grade": "高中一年級",
+      "subject": "公民",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第二學期",
+      "bookLabel": "公民與社會第二冊（早期課程對照）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "historical-civics-crosswalk",
+      "scopeSelectionStatus": "historical-civics-crosswalk",
+      "scopeDetailLevel": "historical-crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/comparison_civics-2.pdf",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "publisherTable": "龍騰 公民第二冊",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "historical-publisher-crosswalk",
+        "publisher": "龍騰",
+        "schoolYear": null,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "早期108課綱課程對照，年份與原始教材版次未標示；僅取出版社左欄，PDF影像取得失敗，未取得原檔雜湊。不得視為115學年度官方目次。細部提示為編輯性整理。",
+      "units": [
+        {
+          "unit": "第1章 政府的體制與運作",
+          "details": [
+            "1-1 民主國家常見的政府體制",
+            "1-2 我國的中央政府體制",
+            "1-3 中央與地方權限劃分"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 民主國家常見的政府體制",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "內閣制、總統制及混合制；行政與立法權的關係及政治責任"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "1-2 我國的中央政府體制",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "總統、行政院、立法院與其他中央機關的基本職權及制衡"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "1-3 中央與地方權限劃分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中央與地方自治的分工；單一制及聯邦制的基本比較"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 民意、媒體與民主治理",
+          "details": [
+            "2-1 民主治理與實踐",
+            "2-2 民主治理的課責",
+            "2-3 媒體與公共意見",
+            "2-4 媒體近用與媒體再現"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 民主治理與實踐",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "公共參與、政策協商、公私協力與治理的基本意義"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "2-2 民主治理的課責",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "資訊公開、監督、政治責任與政府回應"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "2-3 媒體與公共意見",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "媒體角色、公共意見形成、消息來源與媒體識讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "2-4 媒體近用與媒體再現",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "媒體近用權、再現的選擇性、刻板印象及媒體多元性"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 民主社會的政治參與",
+          "details": [
+            "3-1 選舉與政治參與",
+            "3-2 非選舉的政治參與"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 選舉與政治參與",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "選舉的民主意義、代表性、選制原理及政治參與"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "3-2 非選舉的政治參與",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "公民倡議、社會運動、請願、結社及其他合法公共參與"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 社會安全與勞動參與",
+          "details": [
+            "4-1 社會安全制度的發展",
+            "4-2 我國的發展現況與難題",
+            "4-3 勞動參與及社會永續",
+            "4-4 我國勞動參與的保障"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 社會安全制度的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "社會保險、社會救助與社會福利的功能及形成背景"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "4-2 我國的發展現況與難題",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "社會安全制度的涵蓋範圍、資源分配及財務永續問題"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "4-3 勞動參與及社會永續",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "市場勞動與家務勞動、勞動參與及社會發展"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "4-4 我國勞動參與的保障",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "勞動條件、勞動安全、勞工組織與勞動權保障"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 公平正義與多元文化",
+          "details": [
+            "5-1 公平正義的追求",
+            "5-2 合理的差別待遇",
+            "5-3 多元觀點與文化衝突"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 公平正義的追求",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "分配、程序與匡正正義的基本概念及生活案例"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "5-2 合理的差別待遇",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "形式平等、實質平等、合理差別待遇及積極平權"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "5-3 多元觀點與文化衝突",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文化多元性、族群認同、文化相對觀及文化衝突的協商"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 所得、貿易與經濟福利",
+          "details": [
+            "6-1 國家經濟的衡量指標",
+            "6-2 國民所得帳各指標的解讀",
+            "6-3 貿易自由化",
+            "6-4 世界貿易組織"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 國家經濟的衡量指標",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "GDP、GNI及國民所得的基本意義、用途與限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "6-2 國民所得帳各指標的解讀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "名目與實質產出、人均所得及所得分配的基本判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "6-3 貿易自由化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "比較利益、分工、貿易障礙與自由貿易的利弊"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "6-4 世界貿易組織",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "WTO的基本宗旨、多邊貿易規則與爭端解決概念"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 科技、永續與全球關連",
+          "details": [
+            "7-1 全球化下的國家治理",
+            "7-2 資訊科技發展的影響",
+            "7-3 生物醫學科技發展的影響",
+            "7-4 全球化與永續發展"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 全球化下的國家治理",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "跨境經濟與社會問題、國際合作及國家治理挑戰"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "7-2 資訊科技發展的影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數位落差、資訊隱私、網路公共生活與科技對社會的影響；不考程式設計"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "7-3 生物醫學科技發展的影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生醫科技的倫理、權利、隱私與社會影響；不考醫學專業技術"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "7-4 全球化與永續發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "環境、經濟及社會永續、全球合作與世代正義"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-108-civics-2-historical",
+      "grade": "高中一年級",
+      "subject": "公民",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第二學期",
+      "bookLabel": "公民與社會第二冊（早期課程對照）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "historical-civics-crosswalk",
+      "scopeSelectionStatus": "historical-civics-crosswalk",
+      "scopeDetailLevel": "historical-crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/comparison_civics-2.pdf",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "publisherTable": "翰林 公民第二冊",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "historical-publisher-crosswalk",
+        "publisher": "翰林",
+        "schoolYear": null,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "早期108課綱課程對照，年份與原始教材版次未標示；僅取出版社左欄，PDF影像取得失敗，未取得原檔雜湊。不得視為115學年度官方目次。細部提示為編輯性整理。第2-3節文字層末字截斷，依語義補為「自由」，未核實原圖。",
+      "units": [
+        {
+          "unit": "第1章 法治的建構與意涵",
+          "details": [
+            "1-1 法治意涵與法律制定",
+            "1-2 法治的落實與學生自治"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 法治意涵與法律制定",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "法治國、法律位階、立法正當性及依法行使公權力"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "1-2 法治的落實與學生自治",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "校園規範、學生自治、參與程序及權利保障"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 民主國家的人權保障",
+          "details": [
+            "2-1 人權保障的理念與內容",
+            "2-2 基本權利的保障與限制",
+            "2-3 法如何保障與限制人民的集會結社自由"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 人權保障的理念與內容",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基本人權、憲法保障、人權發展及國家保護義務"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "2-2 基本權利的保障與限制",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基本權利、法律保留、比例原則及權利衝突"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "2-3 法如何保障與限制人民的集會結社自由",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "集會與結社自由的保障、限制目的及合比例性"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 國家行政與公共利益",
+          "details": [
+            "3-1 人民的生活如何受到行政法的影響",
+            "3-2 正當行政程序的功能與原則",
+            "3-3 行政救濟"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 人民的生活如何受到行政法的影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "行政行為、依法行政及公權力與個人權益關係"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "3-2 正當行政程序的功能與原則",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "程序公平、陳述意見、資訊公開及行政決定的正當性"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "3-3 行政救濟",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "訴願、行政訴訟與國家賠償之功能及基本區別"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 資源分配的考量與國家角色",
+          "details": [
+            "4-1 社會資源有限，我們該如何分配？",
+            "4-2 誘因的驅動可以改變人們的行為"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 社會資源有限，我們該如何分配？",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "稀少性、機會成本、資源分配、公平與效率"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "4-2 誘因的驅動可以改變人們的行為",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "金錢與非金錢誘因、政策誘因及行為反應"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 人的身份與權利關係",
+          "details": [
+            "5-1 權利主體與權利能力",
+            "5-2 權利客體與所有權的性質",
+            "5-3 身份關係的權益保障"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 權利主體與權利能力",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然人、法人、權利能力與行為能力的基本區別"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "5-2 權利客體與所有權的性質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "物權客體、所有權的基本權能及限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "5-3 身份關係的權益保障",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "親屬、婚姻與家庭身分關係及權益保障"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 犯罪與責任追究",
+          "details": [
+            "6-1 犯罪的意義與構成",
+            "6-2 犯罪追訴與處罰的程序保障",
+            "6-3 青少年非行的處理方式"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 犯罪的意義與構成",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "罪刑法定、構成要件該當性、違法性及有責性"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "6-2 犯罪追訴與處罰的程序保障",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "偵查、起訴與審判的基本區分、無罪推定及程序保障"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            },
+            {
+              "name": "6-3 青少年非行的處理方式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "少年事件處理的保護與輔導原則及與成人刑事程序的差異"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "未核實的現行法條、法定年齡、期限、比例及即時政治事件",
+                "大學法律或經濟學進階理論"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
