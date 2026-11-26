@@ -32,6 +32,31 @@
         !!book.units?.length&&book.units.every(u=>u.details?.length>0&&new Set(u.details).size===u.details.length&&
           Array.isArray(u.concepts)&&u.concepts.length===u.details.length&&u.concepts.every((c,i)=>c.name===u.details[i]&&Array.isArray(c.allowedContent)&&c.allowedContent.length>0&&Array.isArray(c.excludedContent)));
     }
+    if(['elective-crosswalk-transcription','publisher-chapter-outline'].includes(book.scopeSelectionStatus)){
+      const e=book.scopeEvidence, grades=['高中二年級','高中三年級'];
+      if(!grades.includes(book.grade)||JSON.stringify(book.eligibleGrades)!==JSON.stringify(grades)||
+        book.edition!==book.publisher+'版'||book.releaseStatus!=='blocked'||book.verificationStatus!==book.scopeSelectionStatus||
+        !/^\d{4}-\d{2}-\d{2}$/.test(book.verifiedAt||'')||book.courseType!=='elective'||book.schedulePolicy!=='school-scheduled'||
+        !book.units?.length||!book.units.every(u=>u.details?.length>0&&u.details.length<=24&&new Set(u.details).size===u.details.length&&
+          Array.isArray(u.concepts)&&u.concepts.length===u.details.length&&u.concepts.every((c,i)=>c.name===u.details[i]&&Array.isArray(c.allowedContent)&&c.allowedContent.length&&Array.isArray(c.excludedContent))))return false;
+      if(book.scopeSelectionStatus==='publisher-chapter-outline'){
+        const titles={'選修地球科學－地質與環境':['9853','組成地球的物質','地球的起源與演變','地表與地殼變動','天然災害與防治','永續發展與資源的利用'],
+          '選修地球科學－大氣、海洋及天文':['9854','宇宙與天體','地球與太空','天氣與氣候變化','海水的運動','氣候變遷之影響與調適']};
+        const match=titles[book.term];
+        return !!match&&book.subject==='地球科學'&&book.publisher==='泰宇'&&book.schoolYear===null&&
+          e?.kind==='publisher-chapter-index'&&e.publisher===book.publisher&&e.sectionPolicy==='editorial-concepts'&&e.schoolYear===null&&
+          book.scopeDetailLevel==='publisher-chapters-editorial-concepts'&&JSON.stringify(book.units.map(u=>u.unit))===JSON.stringify(match.slice(1))&&
+          !!book.sources?.some(s=>s.type==='official-chapter-index'&&s.url==='https://digitaiyucoo.com/AR/ebook0111/'+match[0]+'.html');
+      }
+      const publishers=['龍騰','翰林','南一','泰宇','三民','全華'];
+      const urls=['11-1_comparison_elective_biologic_I_114.pdf?v=20250901','11-2_comparison_elective_biologic_II_114.pdf?v=20260224','12-1_comparison_elective_biologic_III_114.pdf?v=20250901','12-2_comparison_elective_biologic_IV_112.pdf?v=20240301'];
+      const romans=['I','II','III','IV'], idx=romans.findIndex(r=>book.term==='選修生物'+r),page=publishers.indexOf(book.publisher)+1;
+      if(book.subject!=='生物'||idx<0||page<1||book.schoolYear!==(idx===3?112:114)||book.scopeDetailLevel!=='crosswalk-sections'||
+        e?.kind!=='publisher-crosswalk-transcription'||e.publisher!==book.publisher||e.schoolYear!==book.schoolYear||e.page!==page||
+        e.columnPolicy!=='publisher-left-only'||e.reviewMethod!=='structured-text'||e.rawFileHashStatus!=='unavailable')return false;
+      return !!book.sources?.some(s=>s.type==='third-party-curriculum-crosswalk'&&s.schoolYear===book.schoolYear&&s.page===page&&
+        s.publisherTable===book.publisher+'選修生物('+romans[idx]+')'&&s.reviewMethod==='structured-text'&&s.url==='https://www.go100.com.tw/file/108_comparison_table/senior/'+urls[idx]);
+    }
     if(book.grade !== '高中二年級' || !['數學A','數學B','物理','化學'].includes(book.subject) ||
       !book.verifiedAt || !book.units?.length || !book.units.every(u=>u.details?.length > 0))return false;
     if(book.scopeSelectionStatus === 'verified-toc')return book.verificationStatus === 'verified-complete-toc' &&
