@@ -1,0 +1,2562 @@
+{
+  "schema": 1,
+  "subject": "國文",
+  "books": [
+    {
+      "bookId": "nani-108-chinese-1",
+      "grade": "高中一年級",
+      "subject": "國文",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第一學期",
+      "bookLabel": "國文第1冊（評量目次）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "nani-companion-index",
+      "scopeSelectionStatus": "nani-companion-index",
+      "scopeDetailLevel": "companion-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "public/curriculum-supplements/nani-chinese.json",
+      "sources": [
+        {
+          "url": "https://www.efficient.com.tw/?product_id=11153&route=product%2Fproduct",
+          "type": "retailer-publisher-companion-index",
+          "provider": "效果升學書局",
+          "publisher": "南一",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-search-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-companion-lesson-index",
+        "publisher": "南一",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "retailer-publisher-companion-index"
+      },
+      "limitations": "依南一版月考好試多公開評量目次整理；不是官方節名或115學年度正式課本目次。未取得文化教材或其他未列選文。",
+      "units": [
+        {
+          "unit": "第1課 桃花源記",
+          "lessonType": "main",
+          "details": [
+            "第1課 桃花源記｜文體與背景",
+            "第1課 桃花源記｜內容與觀點",
+            "第1課 桃花源記｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第1課 桃花源記｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "陶淵明、記體及理想世界"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第1課 桃花源記｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "漁人入桃源、離開與尋訪的敘事層次"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第1課 桃花源記｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言詞義、虛實對照及結尾意涵"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2課 爸爸的花兒落了",
+          "lessonType": "main",
+          "details": [
+            "第2課 爸爸的花兒落了｜文體與背景",
+            "第2課 爸爸的花兒落了｜內容與觀點",
+            "第2課 爸爸的花兒落了｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第2課 爸爸的花兒落了｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "林海音、成長小說與回憶敘事"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第2課 爸爸的花兒落了｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "父女關係、畢業與成長責任"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第2課 爸爸的花兒落了｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "花的意象、插敘及含蓄結尾"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3課 師說",
+          "lessonType": "main",
+          "details": [
+            "第3課 師說｜文體與背景",
+            "第3課 師說｜內容與觀點",
+            "第3課 師說｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第3課 師說｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "韓愈、說體與古文運動"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第3課 師說｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "從師原則、師道衰落與正反對比"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第3課 師說｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言句法、論證方式及師生關係"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4課 旅遊紀聞",
+          "lessonType": "main",
+          "details": [
+            "第4課 旅遊紀聞｜文體與背景",
+            "第4課 旅遊紀聞｜內容與觀點",
+            "第4課 旅遊紀聞｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第4課 旅遊紀聞｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "遊記中的觀察者視角"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第4課 旅遊紀聞｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "旅遊見聞、文化差異及敘事層次"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第4課 旅遊紀聞｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "景物描寫、語詞與觀點辨析"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5課 項脊軒志",
+          "lessonType": "main",
+          "details": [
+            "第5課 項脊軒志｜文體與背景",
+            "第5課 項脊軒志｜內容與觀點",
+            "第5課 項脊軒志｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第5課 項脊軒志｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歸有光、志體散文與家庭回憶"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第5課 項脊軒志｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "項脊軒空間變遷及親情書寫"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第5課 項脊軒志｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言字句、細節描寫與借物抒情"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6課 夏之絕句",
+          "lessonType": "main",
+          "details": [
+            "第6課 夏之絕句｜文體與背景",
+            "第6課 夏之絕句｜內容與觀點",
+            "第6課 夏之絕句｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第6課 夏之絕句｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "簡媜、現代抒情散文"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第6課 夏之絕句｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "夏日感官經驗、自然景物與情感"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第6課 夏之絕句｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "聽覺意象、譬喻及文字節奏"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7課 晚遊六橋待月記",
+          "lessonType": "main",
+          "details": [
+            "第7課 晚遊六橋待月記｜文體與背景",
+            "第7課 晚遊六橋待月記｜內容與觀點",
+            "第7課 晚遊六橋待月記｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第7課 晚遊六橋待月記｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "袁宏道、晚明小品及性靈"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第7課 晚遊六橋待月記｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "遊覽時間、景物與審美觀點"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第7課 晚遊六橋待月記｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言詞義、動靜描寫及對照"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第8課 梧桐樹",
+          "lessonType": "main",
+          "details": [
+            "第8課 梧桐樹｜文體與背景",
+            "第8課 梧桐樹｜內容與觀點",
+            "第8課 梧桐樹｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第8課 梧桐樹｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "篇章中的景物與觀察視角"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第8課 梧桐樹｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "梧桐樹意象、情感及主旨"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第8課 梧桐樹｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "描寫方式、語詞與段落作用"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第9課 一桿稱仔",
+          "lessonType": "main",
+          "details": [
+            "第9課 一桿稱仔｜文體與背景",
+            "第9課 一桿稱仔｜內容與觀點",
+            "第9課 一桿稱仔｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第9課 一桿稱仔｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "賴和、日治臺灣文學與小說"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第9課 一桿稱仔｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人物處境、權力不對等與事件因果"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第9課 一桿稱仔｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "稱仔象徵、敘事視角與反諷"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第10課 詩經選",
+          "lessonType": "main",
+          "details": [
+            "第10課 詩經選｜文體與背景",
+            "第10課 詩經選｜內容與觀點",
+            "第10課 詩經選｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第10課 詩經選｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詩經體例、風雅頌與賦比興"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第10課 詩經選｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "重章疊句、意象及情感表現"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第10課 詩經選｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "古典詩歌字義、節奏與章法；以所選篇為限"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第11課 新詩選",
+          "lessonType": "main",
+          "details": [
+            "第11課 新詩選｜文體與背景",
+            "第11課 新詩選｜內容與觀點",
+            "第11課 新詩選｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第11課 新詩選｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "現代詩的自由形式與語言"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第11課 新詩選｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詩中意象、抒情視角與主旨"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第11課 新詩選｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "分行、象徵與修辭；以所選篇為限"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "自學 世說新語選",
+          "lessonType": "self-study",
+          "details": [
+            "自學 世說新語選｜文體與背景",
+            "自學 世說新語選｜內容與觀點",
+            "自學 世說新語選｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "自學 世說新語選｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "志人小說及魏晉人物風度"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "自學 世說新語選｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人物言行、情境及性格推論"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "自學 世說新語選｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言語詞與簡潔敘事；以所選篇為限"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-108-chinese-2",
+      "grade": "高中一年級",
+      "subject": "國文",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第二學期",
+      "bookLabel": "國文第2冊（評量目次）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "nani-companion-index",
+      "scopeSelectionStatus": "nani-companion-index",
+      "scopeDetailLevel": "companion-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "public/curriculum-supplements/nani-chinese.json",
+      "sources": [
+        {
+          "url": "https://www.efficient.com.tw/?product_id=11429&route=product%2Fproduct",
+          "type": "retailer-publisher-companion-index",
+          "provider": "效果升學書局",
+          "publisher": "南一",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-search-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-companion-lesson-index",
+        "publisher": "南一",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "retailer-publisher-companion-index"
+      },
+      "limitations": "依南一版月考好試多公開評量目次整理；不是官方節名或115學年度正式課本目次。保留原頁左忠毅公軼事寫法；未將評量回次當作正式課本課次。",
+      "units": [
+        {
+          "unit": "第1回 做田",
+          "lessonType": "main",
+          "details": [
+            "第1回 做田｜文體與背景",
+            "第1回 做田｜內容與觀點",
+            "第1回 做田｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第1回 做田｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "農事經驗與地方生活"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第1回 做田｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "勞動、家庭與生活價值"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第1回 做田｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "敘事細節、語言特色與主旨"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2回 出師表",
+          "lessonType": "main",
+          "details": [
+            "第2回 出師表｜文體與背景",
+            "第2回 出師表｜內容與觀點",
+            "第2回 出師表｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第2回 出師表｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "諸葛亮、表體與三國背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第2回 出師表｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "治國建議、忠誠與出師目的"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第2回 出師表｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言用法、論述層次與情理交融"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3回 髻",
+          "lessonType": "main",
+          "details": [
+            "第3回 髻｜文體與背景",
+            "第3回 髻｜內容與觀點",
+            "第3回 髻｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第3回 髻｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "琦君、回憶散文與家庭書寫"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第3回 髻｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "髮髻意象、人物關係及情感轉折"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第3回 髻｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "今昔對比、細節與含蓄抒情"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4回 左忠毅公軼事",
+          "lessonType": "main",
+          "details": [
+            "第4回 左忠毅公軼事｜文體與背景",
+            "第4回 左忠毅公軼事｜內容與觀點",
+            "第4回 左忠毅公軼事｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第4回 左忠毅公軼事｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "方苞、史傳散文與明末背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第4回 左忠毅公軼事｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "左光斗與史可法的師生情誼及人物節操"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第4回 左忠毅公軼事｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "敘事剪裁、人物對話與文言詞義"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5回 散戲",
+          "lessonType": "main",
+          "details": [
+            "第5回 散戲｜文體與背景",
+            "第5回 散戲｜內容與觀點",
+            "第5回 散戲｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第5回 散戲｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戲班與表演文化"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第5回 散戲｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人物處境、傳統藝術的變遷"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第5回 散戲｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說情節、敘事視角與象徵"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6回 勞山道士",
+          "lessonType": "main",
+          "details": [
+            "第6回 勞山道士｜文體與背景",
+            "第6回 勞山道士｜內容與觀點",
+            "第6回 勞山道士｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第6回 勞山道士｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "蒲松齡、聊齋志異與志怪敘事"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第6回 勞山道士｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "求道、學藝及失敗的因果"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第6回 勞山道士｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言字句、諷刺與人物性格"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7回 八通關種種",
+          "lessonType": "main",
+          "details": [
+            "第7回 八通關種種｜文體與背景",
+            "第7回 八通關種種｜內容與觀點",
+            "第7回 八通關種種｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第7回 八通關種種｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣山地地景與旅行書寫"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第7回 八通關種種｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "觀察內容、歷史記憶與環境"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第7回 八通關種種｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "景物描寫、篇章組織與用詞"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第8回 飛魚季",
+          "lessonType": "main",
+          "details": [
+            "第8回 飛魚季｜文體與背景",
+            "第8回 飛魚季｜內容與觀點",
+            "第8回 飛魚季｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第8回 飛魚季｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飛魚文化、海洋生活及季節"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第8回 飛魚季｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文化規範、環境觀與生活經驗"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第8回 飛魚季｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "敘述視角、文本證據與用詞"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第9回 漁父",
+          "lessonType": "main",
+          "details": [
+            "第9回 漁父｜文體與背景",
+            "第9回 漁父｜內容與觀點",
+            "第9回 漁父｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第9回 漁父｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "楚辭及屈原形象"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第9回 漁父｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "屈原與漁父的價值對話"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第9回 漁父｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言字句、比喻與人物對照"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第10回 樂府古詩選",
+          "lessonType": "main",
+          "details": [
+            "第10回 樂府古詩選｜文體與背景",
+            "第10回 樂府古詩選｜內容與觀點",
+            "第10回 樂府古詩選｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第10回 樂府古詩選｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "樂府與古詩的形式及背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第10回 樂府古詩選｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詩中情境、人物與情感"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第10回 樂府古詩選｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "敘事抒情、語詞與修辭；以所選篇為限"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第11回 容忍與自由",
+          "lessonType": "main",
+          "details": [
+            "第11回 容忍與自由｜文體與背景",
+            "第11回 容忍與自由｜內容與觀點",
+            "第11回 容忍與自由｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第11回 容忍與自由｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "胡適、論說文與思想自由"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第11回 容忍與自由｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "容忍與自由的關係、觀點及例證"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第11回 容忍與自由｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "論證結構、反思與語詞辨析"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "自學 陽羨書生",
+          "lessonType": "self-study",
+          "details": [
+            "自學 陽羨書生｜文體與背景",
+            "自學 陽羨書生｜內容與觀點",
+            "自學 陽羨書生｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "自學 陽羨書生｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "志怪小說及奇幻敘事"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "自學 陽羨書生｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "故事中的變化、情節層次與人物"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "自學 陽羨書生｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言語詞、敘事嵌套與想像"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-108-chinese-3",
+      "grade": "高中二年級",
+      "subject": "國文",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第一學期",
+      "bookLabel": "國文第3冊（評量目次）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "nani-companion-index",
+      "scopeSelectionStatus": "nani-companion-index",
+      "scopeDetailLevel": "companion-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "public/curriculum-supplements/nani-chinese.json",
+      "sources": [
+        {
+          "url": "https://www.efficient.com.tw/?product_id=11796&route=product%2Fproduct",
+          "type": "retailer-publisher-companion-index",
+          "provider": "效果升學書局",
+          "publisher": "南一",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-search-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-companion-lesson-index",
+        "publisher": "南一",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "retailer-publisher-companion-index"
+      },
+      "limitations": "依南一版月考好試多公開評量目次整理；不是官方節名或115學年度正式課本目次。原頁虯鬆客傳依通行篇名正規化為虯髯客傳；未具篇名的自學回不加入。",
+      "units": [
+        {
+          "unit": "第1回 雅舍",
+          "lessonType": "main",
+          "details": [
+            "第1回 雅舍｜文體與背景",
+            "第1回 雅舍｜內容與觀點",
+            "第1回 雅舍｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第1回 雅舍｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "梁實秋、現代散文與生活觀察"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第1回 雅舍｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "居住環境、生活態度與主旨"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第1回 雅舍｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "幽默、自嘲、對照及描寫"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2回 醉翁亭記",
+          "lessonType": "main",
+          "details": [
+            "第2回 醉翁亭記｜文體與背景",
+            "第2回 醉翁亭記｜內容與觀點",
+            "第2回 醉翁亭記｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第2回 醉翁亭記｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐陽脩、記體與貶謫背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第2回 醉翁亭記｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "山水、宴遊、與民同樂及層次"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第2回 醉翁亭記｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言虛詞、句式與情景交融"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3回 岳陽樓記",
+          "lessonType": "main",
+          "details": [
+            "第3回 岳陽樓記｜文體與背景",
+            "第3回 岳陽樓記｜內容與觀點",
+            "第3回 岳陽樓記｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第3回 岳陽樓記｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "范仲淹、記體與寫作背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第3回 岳陽樓記｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "陰晴景象、遷客騷人及古仁人之心"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第3回 岳陽樓記｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言句法、對比及議論抒情"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4回 空山靈雨選（暗途、生）",
+          "lessonType": "main",
+          "details": [
+            "第4回 空山靈雨選（暗途、生）｜文體與背景",
+            "第4回 空山靈雨選（暗途、生）｜內容與觀點",
+            "第4回 空山靈雨選（暗途、生）｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第4回 空山靈雨選（暗途、生）｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "許地山、散文小品"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第4回 空山靈雨選（暗途、生）｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "兩篇文本中的人生觀察、意象及主旨"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第4回 空山靈雨選（暗途、生）｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "象徵、譬喻與篇章比較"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5回 荒野發聲",
+          "lessonType": "main",
+          "details": [
+            "第5回 荒野發聲｜文體與背景",
+            "第5回 荒野發聲｜內容與觀點",
+            "第5回 荒野發聲｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第5回 荒野發聲｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然書寫及環境議題"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第5回 荒野發聲｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文本觀察、環境關懷與觀點"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第5回 荒野發聲｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "描述與議論、語詞及文本證據"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6回 赤壁賦",
+          "lessonType": "main",
+          "details": [
+            "第6回 赤壁賦｜文體與背景",
+            "第6回 赤壁賦｜內容與觀點",
+            "第6回 赤壁賦｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第6回 赤壁賦｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "蘇軾、賦體與黃州背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第6回 赤壁賦｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "主客問答、水月與變不變的人生觀"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第6回 赤壁賦｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言字句、聲景描寫與情理轉折"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7回 虯髯客傳",
+          "lessonType": "main",
+          "details": [
+            "第7回 虯髯客傳｜文體與背景",
+            "第7回 虯髯客傳｜內容與觀點",
+            "第7回 虯髯客傳｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第7回 虯髯客傳｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "唐代傳奇與歷史背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第7回 虯髯客傳｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "虯髯客、李靖與紅拂的人物關係"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第7回 虯髯客傳｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言字句、情節伏筆及人物塑造"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第8回 漂鳥集選四首",
+          "lessonType": "main",
+          "details": [
+            "第8回 漂鳥集選四首｜文體與背景",
+            "第8回 漂鳥集選四首｜內容與觀點",
+            "第8回 漂鳥集選四首｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第8回 漂鳥集選四首｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "泰戈爾、短詩與哲理"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第8回 漂鳥集選四首｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "意象、自然觀察與人生體悟"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第8回 漂鳥集選四首｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "譬喻、象徵及短詩比較"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第9回 畫菊自序",
+          "lessonType": "main",
+          "details": [
+            "第9回 畫菊自序｜文體與背景",
+            "第9回 畫菊自序｜內容與觀點",
+            "第9回 畫菊自序｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第9回 畫菊自序｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "張李德和、臺灣古典文學及序體"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第9回 畫菊自序｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "畫菊、品格與自我寄託"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第9回 畫菊自序｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言語詞、意象及托物言志"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第10回 唐宋詩選（旅夜書懷、泊船瓜洲）",
+          "lessonType": "main",
+          "details": [
+            "第10回 唐宋詩選（旅夜書懷、泊船瓜洲）｜文體與背景",
+            "第10回 唐宋詩選（旅夜書懷、泊船瓜洲）｜內容與觀點",
+            "第10回 唐宋詩選（旅夜書懷、泊船瓜洲）｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第10回 唐宋詩選（旅夜書懷、泊船瓜洲）｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "杜甫與王安石、律詩與絕句"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第10回 唐宋詩選（旅夜書懷、泊船瓜洲）｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "旅夜景象、思鄉及詩人情感"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第10回 唐宋詩選（旅夜書懷、泊船瓜洲）｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "對仗、煉字、意象及詩歌比較"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第11回 新詩選（鹽、水手刀）",
+          "lessonType": "main",
+          "details": [
+            "第11回 新詩選（鹽、水手刀）｜文體與背景",
+            "第11回 新詩選（鹽、水手刀）｜內容與觀點",
+            "第11回 新詩選（鹽、水手刀）｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第11回 新詩選（鹽、水手刀）｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "現代詩形式及題材"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第11回 新詩選（鹽、水手刀）｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詩中物象、抒情主體與主旨"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第11回 新詩選（鹽、水手刀）｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "象徵、分行、語言節奏及比較"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第12回 孔乙己",
+          "lessonType": "main",
+          "details": [
+            "第12回 孔乙己｜文體與背景",
+            "第12回 孔乙己｜內容與觀點",
+            "第12回 孔乙己｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第12回 孔乙己｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "魯迅、現代小說與科舉背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第12回 孔乙己｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人物形象、社會冷漠及悲劇"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第12回 孔乙己｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "第一人稱觀察、反諷與細節描寫"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-108-chinese-4",
+      "grade": "高中二年級",
+      "subject": "國文",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第二學期",
+      "bookLabel": "國文第4冊（評量目次）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "nani-companion-index",
+      "scopeSelectionStatus": "nani-companion-index",
+      "scopeDetailLevel": "companion-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "public/curriculum-supplements/nani-chinese.json",
+      "sources": [
+        {
+          "url": "https://www.efficient.com.tw/?product_id=12073&route=product%2Fproduct",
+          "type": "retailer-publisher-companion-index",
+          "provider": "效果升學書局",
+          "publisher": "南一",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-search-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-companion-lesson-index",
+        "publisher": "南一",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "retailer-publisher-companion-index"
+      },
+      "limitations": "依南一版月考好試多公開評量目次整理；不是官方節名或115學年度正式課本目次。保留原頁林冲夜奔字形；未將評量回次當作正式課本課次。",
+      "units": [
+        {
+          "unit": "第1回 黃昏裡的祭典",
+          "lessonType": "main",
+          "details": [
+            "第1回 黃昏裡的祭典｜文體與背景",
+            "第1回 黃昏裡的祭典｜內容與觀點",
+            "第1回 黃昏裡的祭典｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第1回 黃昏裡的祭典｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "孫大川、原住民族文學與文化書寫"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第1回 黃昏裡的祭典｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "祭典、族群認同與文化變遷"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第1回 黃昏裡的祭典｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "敘事觀點、象徵及語言特色"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2回 燭之武退秦師",
+          "lessonType": "main",
+          "details": [
+            "第2回 燭之武退秦師｜文體與背景",
+            "第2回 燭之武退秦師｜內容與觀點",
+            "第2回 燭之武退秦師｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第2回 燭之武退秦師｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "左傳、編年史及秦晉鄭情勢"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第2回 燭之武退秦師｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "燭之武說服秦伯的利益分析"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第2回 燭之武退秦師｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言詞義、外交辭令及論證次序"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3回 子非魚安知魚之樂",
+          "lessonType": "main",
+          "details": [
+            "第3回 子非魚安知魚之樂｜文體與背景",
+            "第3回 子非魚安知魚之樂｜內容與觀點",
+            "第3回 子非魚安知魚之樂｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第3回 子非魚安知魚之樂｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "朱光潛、哲思與論說"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第3回 子非魚安知魚之樂｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "他人理解、審美及觀點辨析"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第3回 子非魚安知魚之樂｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "對話式論證、譬喻與概念關係"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4回 諫逐客書",
+          "lessonType": "main",
+          "details": [
+            "第4回 諫逐客書｜文體與背景",
+            "第4回 諫逐客書｜內容與觀點",
+            "第4回 諫逐客書｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第4回 諫逐客書｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "李斯、奏疏及秦國逐客背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第4回 諫逐客書｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "用客歷史、利害論證與納才觀"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第4回 諫逐客書｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "鋪陳、排比、對照及文言字句"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5回 馮諼客孟嘗君",
+          "lessonType": "main",
+          "details": [
+            "第5回 馮諼客孟嘗君｜文體與背景",
+            "第5回 馮諼客孟嘗君｜內容與觀點",
+            "第5回 馮諼客孟嘗君｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第5回 馮諼客孟嘗君｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "戰國策、策士與養士背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第5回 馮諼客孟嘗君｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "彈鋏、收債、市義及狡兔三窟"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第5回 馮諼客孟嘗君｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言語詞、情節照應與人物塑造"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6回 我的四個假想敵",
+          "lessonType": "main",
+          "details": [
+            "第6回 我的四個假想敵｜文體與背景",
+            "第6回 我的四個假想敵｜內容與觀點",
+            "第6回 我的四個假想敵｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第6回 我的四個假想敵｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "家庭書寫及現代散文"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第6回 我的四個假想敵｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "父親與女兒的關係、親情與成長"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第6回 我的四個假想敵｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "幽默、誇飾及敘事口吻"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7回 鴻門宴",
+          "lessonType": "main",
+          "details": [
+            "第7回 鴻門宴｜文體與背景",
+            "第7回 鴻門宴｜內容與觀點",
+            "第7回 鴻門宴｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第7回 鴻門宴｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "司馬遷、史記與楚漢相爭"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第7回 鴻門宴｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宴前、宴中、宴後情節與人物決策"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第7回 鴻門宴｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言詞義、人物對比、伏筆及敘事張力"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第8回 魚",
+          "lessonType": "main",
+          "details": [
+            "第8回 魚｜文體與背景",
+            "第8回 魚｜內容與觀點",
+            "第8回 魚｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第8回 魚｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "黃春明、臺灣現代小說"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第8回 魚｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人物生活處境與事件因果"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第8回 魚｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "敘事視角、象徵及細節描寫"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第9回 翡冷翠在下雨",
+          "lessonType": "main",
+          "details": [
+            "第9回 翡冷翠在下雨｜文體與背景",
+            "第9回 翡冷翠在下雨｜內容與觀點",
+            "第9回 翡冷翠在下雨｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第9回 翡冷翠在下雨｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "林文月、遊記與抒情散文"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第9回 翡冷翠在下雨｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "異地景物、文化感受及情緒"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第9回 翡冷翠在下雨｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "感官描寫、情景交融及語言"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第10回 詞曲選（破陣子、落梅風）",
+          "lessonType": "main",
+          "details": [
+            "第10回 詞曲選（破陣子、落梅風）｜文體與背景",
+            "第10回 詞曲選（破陣子、落梅風）｜內容與觀點",
+            "第10回 詞曲選（破陣子、落梅風）｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第10回 詞曲選（破陣子、落梅風）｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "宋詞與元曲的形式及特色"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第10回 詞曲選（破陣子、落梅風）｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "意象、情感、情境及所選作品主旨"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第10回 詞曲選（破陣子、落梅風）｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詞牌曲牌、節奏、用典與修辭"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第11回 勸和論",
+          "lessonType": "main",
+          "details": [
+            "第11回 勸和論｜文體與背景",
+            "第11回 勸和論｜內容與觀點",
+            "第11回 勸和論｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "第11回 勸和論｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "鄭用錫、清代臺灣與械鬥背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第11回 勸和論｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "勸和立場、利害分析與群體關係"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "第11回 勸和論｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文言字句、論證及情理交融"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "自學 林冲夜奔",
+          "lessonType": "self-study",
+          "details": [
+            "自學 林冲夜奔｜文體與背景",
+            "自學 林冲夜奔｜內容與觀點",
+            "自學 林冲夜奔｜語文與表現手法"
+          ],
+          "concepts": [
+            {
+              "name": "自學 林冲夜奔｜文體與背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "水滸故事及戲曲表演背景"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "自學 林冲夜奔｜內容與觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "林冲處境、情節與人物情緒"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            },
+            {
+              "name": "自學 林冲夜奔｜語文與表現手法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲詞、戲曲語言與人物塑造"
+              ],
+              "excludedContent": [
+                "其他未選課文的獨立考點",
+                "未核實的課本注釋、逐字原文、指定作者資料或子篇名",
+                "超出高中範圍的專門文學史考證"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

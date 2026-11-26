@@ -94,33 +94,33 @@
       "subject": "國文",
       "publisher": "南一",
       "volume": 1,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "nani-108-chinese-1",
+      "status": "companion-index-year-unconfirmed",
+      "source": "https://www.efficient.com.tw/?product_id=11153&route=product%2Fproduct"
     },
     {
       "subject": "國文",
       "publisher": "南一",
       "volume": 2,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "nani-108-chinese-2",
+      "status": "companion-index-year-unconfirmed",
+      "source": "https://www.efficient.com.tw/?product_id=11429&route=product%2Fproduct"
     },
     {
       "subject": "國文",
       "publisher": "南一",
       "volume": 3,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "nani-108-chinese-3",
+      "status": "partial-companion-index-year-unconfirmed",
+      "source": "https://www.efficient.com.tw/?product_id=11796&route=product%2Fproduct"
     },
     {
       "subject": "國文",
       "publisher": "南一",
       "volume": 4,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "nani-108-chinese-4",
+      "status": "companion-index-year-unconfirmed",
+      "source": "https://www.efficient.com.tw/?product_id=12073&route=product%2Fproduct"
     },
     {
       "subject": "國文",

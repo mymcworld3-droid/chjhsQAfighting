@@ -69,6 +69,9 @@ const c=document.createElement('input');c.type='checkbox';c.className='cs-chapte
 c.indeterminate=!c.checked&&u.details.some((_,j)=>draft.has('t:'+i+':'+j));c.addEventListener('change',()=>setChapterSelection(i,c.checked));
 const termBadge=document.createElement('span');termBadge.className='cs-card-term';termBadge.textContent=u.term==='第一學期'?'上學期':u.term==='第二學期'?'下學期':u.term;
 const label=document.createElement('b');label.textContent=u.unit;summary.append(c,label,termBadge);group.append(summary);
+if(u.book?.scopeSelectionStatus==='nani-companion-index'){
+ const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='南一評量目次 · 整理考點 · 正式課本待核';group.append(note);
+}
 if(['publisher-language-outline','language-index-v2'].includes(u.book?.scopeSelectionStatus)){
  const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='出版社公開目次 · 細項為整理考點 · 學年度未標示';group.append(note);
 }
@@ -119,7 +122,13 @@ async function loadCatalogue(g,s){
    const supplementFile=required?'curriculum-supplements/grade10.json?v=20261126-batch5':seniorMath?'curriculum-supplements/grade12-math.json?v=20261126-batch7':social?'curriculum-supplements/history.json?v=20261126-batch8a':geography?'curriculum-supplements/geography.json?v=20261126-batch8b':civics?'curriculum-supplements/civics.json?v=20261126-batch8c':electiveSocial?'curriculum-supplements/elective-social.json?v=20261126-batch8d':language?'curriculum-supplements/language.json?v=20261126-batch9f':'curriculum-supplements/elective-science.json?v=20261126-batch10';
    if(!memo.has(supplementFile))memo.set(supplementFile,fetch('/'+supplementFile).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(supplementFile);throw e;}));
    const supplemental=await memo.get(supplementFile);
-   return {...base,books:[...base.books,...supplemental.books.filter(b=>b.subject===s&&(required||seniorMath||social||geography||civics||electiveSocial||language?b.grade===g:b.eligibleGrades?.includes(g))).map(b=>({...b,grade:g}))]};
+   let additional=[];
+   if(language&&s==='國文'&&g!=='高中三年級'){
+     const p='curriculum-supplements/nani-chinese.json?v=20261126-batch11';
+     if(!memo.has(p))memo.set(p,fetch('/'+p).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(p);throw e;}));
+     additional=(await memo.get(p)).books.filter(b=>b.grade===g&&b.subject===s);
+   }
+   return {...base,books:[...base.books,...additional,...supplemental.books.filter(b=>b.subject===s&&(required||seniorMath||social||geography||civics||electiveSocial||language?b.grade===g:b.eligibleGrades?.includes(g))).map(b=>({...b,grade:g}))]};
  }).catch(e=>{memo.delete(file);throw e;}));
  return memo.get(file);
 }
@@ -142,6 +151,7 @@ function catalogOptions(){
   else if(records.every(b=>b.scopeSelectionStatus==='source-reviewed-crosswalk'))option.textContent+='（課程對照・原檔待核）';
   else if(records.every(b=>b.scopeSelectionStatus==='verified-crosswalk'))option.textContent+='（課程對照）';
   else if(records.some(b=>b.scopeSelectionStatus==='verified-crosswalk'))option.textContent+='（含課程對照）';
+  else if(records.every(b=>b.scopeSelectionStatus==='nani-companion-index'))option.textContent+='（評量目次・整理考點）';
   else if(records.every(b=>['publisher-language-outline','language-index-v2'].includes(b.scopeSelectionStatus)))option.textContent+='（公開目次・整理考點）';
   else if(records.every(b=>b.schoolYear==null)&&records.some(b=>b.scopeSelectionStatus==='verified-toc'))option.textContent+='（學年度未標示）';
  }

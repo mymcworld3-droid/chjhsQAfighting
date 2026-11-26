@@ -16,12 +16,13 @@ const geographySupplement=require('./public/curriculum-supplements/geography.jso
 const civicsSupplement=require('./public/curriculum-supplements/civics.json');
 const electiveSocialSupplement=require('./public/curriculum-supplements/elective-social.json');
 const languageSupplement=require('./public/curriculum-supplements/language.json');
+const naniChinese=require('./public/curriculum-supplements/nani-chinese.json');
 const guideKey=(subject,term,name)=>JSON.stringify([subject,term,normalize(sectionName(name))]);
 const guideByKey=new Map(sectionGuide.rows.flatMap(row=>row.labels.map(label=>[guideKey(row.subject,row.term,label),row])));
 function sectionGuidance(target) {
   const book=validateScope(target.scope,target.subject,target.level);
   if(!book||!book.publisher)return [];
-  if(['source-reviewed-crosswalk','elective-crosswalk-transcription','publisher-chapter-outline','publisher-companion-science','grade12-crosswalk-transcription','social-crosswalk-transcription','geography-crosswalk-transcription','civics-crosswalk-transcription','elective-social-crosswalk-transcription','publisher-language-outline','language-index-v2'].includes(book.scopeSelectionStatus))return book.units.flatMap(u=>u.concepts.filter(c=>target.scope.sub_topics.includes(c.name)).map(c=>({section:c.name,allowedContent:c.allowedContent,excludedContent:c.excludedContent})));
+  if(['source-reviewed-crosswalk','elective-crosswalk-transcription','publisher-chapter-outline','publisher-companion-science','grade12-crosswalk-transcription','social-crosswalk-transcription','geography-crosswalk-transcription','civics-crosswalk-transcription','elective-social-crosswalk-transcription','publisher-language-outline','language-index-v2','nani-companion-index'].includes(book.scopeSelectionStatus))return book.units.flatMap(u=>u.concepts.filter(c=>target.scope.sub_topics.includes(c.name)).map(c=>({section:c.name,allowedContent:c.allowedContent,excludedContent:c.excludedContent})));
   if(book.grade!==sectionGuide.grade)return [];
   return (target.scope.sub_topics||[]).flatMap(name=>{
     const row=guideByKey.get(guideKey(book.subject,book.term,name));
@@ -51,7 +52,7 @@ function catalog(grade,subject) {
   if(!entry)return null;
   if(!shards.has(entry.path)){
     const base=require(path.join(__dirname,'public',entry.path));
-    const extra=[...grade10Supplement.books.filter(b=>b.grade===grade&&b.subject===subject),...electiveScience.books.filter(b=>b.subject===subject&&b.eligibleGrades.includes(grade)).map(b=>({...b,grade})),...grade12Math.books.filter(b=>b.grade===grade&&b.subject===subject),...historySupplement.books.filter(b=>b.grade===grade&&b.subject===subject),...geographySupplement.books.filter(b=>b.grade===grade&&b.subject===subject),...civicsSupplement.books.filter(b=>b.grade===grade&&b.subject===subject),...electiveSocialSupplement.books.filter(b=>b.grade===grade&&b.subject===subject),...languageSupplement.books.filter(b=>b.grade===grade&&b.subject===subject)];
+    const extra=[...grade10Supplement.books.filter(b=>b.grade===grade&&b.subject===subject),...electiveScience.books.filter(b=>b.subject===subject&&b.eligibleGrades.includes(grade)).map(b=>({...b,grade})),...grade12Math.books.filter(b=>b.grade===grade&&b.subject===subject),...historySupplement.books.filter(b=>b.grade===grade&&b.subject===subject),...geographySupplement.books.filter(b=>b.grade===grade&&b.subject===subject),...civicsSupplement.books.filter(b=>b.grade===grade&&b.subject===subject),...electiveSocialSupplement.books.filter(b=>b.grade===grade&&b.subject===subject),...languageSupplement.books.filter(b=>b.grade===grade&&b.subject===subject),...naniChinese.books.filter(b=>b.grade===grade&&b.subject===subject)];
     // Elective physics and chemistry are school-scheduled, not grade-11-only.
     const shared=grade==='高中三年級'&&['物理','化學'].includes(subject)?
       (catalog('高中二年級',subject)?.books||[]).filter(b=>b.publisher&&b.courseType==='elective'&&b.schedulePolicy==='school-defined'&&selectableBook(b)):[];
@@ -102,4 +103,4 @@ function questionIssue(question,target) {
   if(question.standard_concept_id&& !concepts.some(c=>c.conceptId===question.standard_concept_id))return '題目標準觀念不在指定範圍';
   return '';
 }
-module.exports={revision:require('node:crypto').createHash('sha256').update(index.revision).update(JSON.stringify(sectionGuide)).update(JSON.stringify(grade10Supplement)).update(JSON.stringify(electiveScience)).update(JSON.stringify(grade12Math)).update(JSON.stringify(historySupplement)).update(JSON.stringify(geographySupplement)).update(JSON.stringify(civicsSupplement)).update(JSON.stringify(electiveSocialSupplement)).update(JSON.stringify(languageSupplement)).digest('hex').slice(0,20),sectionGuidance,concept,resolveConcept,catalog,validateScope,scopeConcepts,scopePrompt,questionIssue,sectionName};
+module.exports={revision:require('node:crypto').createHash('sha256').update(index.revision).update(JSON.stringify(sectionGuide)).update(JSON.stringify(grade10Supplement)).update(JSON.stringify(electiveScience)).update(JSON.stringify(grade12Math)).update(JSON.stringify(historySupplement)).update(JSON.stringify(geographySupplement)).update(JSON.stringify(civicsSupplement)).update(JSON.stringify(electiveSocialSupplement)).update(JSON.stringify(languageSupplement)).update(JSON.stringify(naniChinese)).digest('hex').slice(0,20),sectionGuidance,concept,resolveConcept,catalog,validateScope,scopeConcepts,scopePrompt,questionIssue,sectionName};
