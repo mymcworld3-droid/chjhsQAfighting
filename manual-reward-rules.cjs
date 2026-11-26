@@ -1,12 +1,13 @@
 'use strict';
-// One drop policy for 問道試煉 and real-time cooperative dungeons.
+// Ordinary trials only drop native 煉氣 weapons; cooperative dungeons keep their own legacy pool.
 // Called only after a server-verified win, in the same A transaction as the
 // reward receipt. The returned state must be saved even when a roll misses.
 const crypto=require('node:crypto');
 const Manuals=require('./public/cultivation/manual-rules.js');
 function roll(s,uid,raw,randomInt=crypto.randomInt){
   const state=raw?.version===2?raw:Manuals.normalize(raw);
-  const available=Manuals.BOOKS.filter(book=>!state.books[book.id]);
+  const ordinaryTrial=s?.mode==='pve'&&!!s.trial&&!s.weaponDungeon;
+  const available=Manuals.BOOKS.filter(book=>!state.books[book.id]&&(!ordinaryTrial||book.tierRealm==='煉氣'));
   if(!available.length)return {state,changed:false,drop:null};
   // A first-stage beginner without any scripture must have a real, usable
   // skill to equip at the end of onboarding. Grant exactly one starter book

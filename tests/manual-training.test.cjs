@@ -315,6 +315,7 @@ test('trial clear awards a fresh manual with zero EXP, once, in the same transac
   assert.equal(complete.status,'finished');
   const drop=complete.manualDrops?.u1;
   assert.ok(drop?.id&&drop?.name);
+  assert.equal(drop.id,'sword-wind','the only missing 煉氣 weapon after the body starter');
   assert.equal(bookRecord(db).books[drop.id].exp,0);
   const count=Object.keys(bookRecord(db).books).length;
   const replay=await API.command(db,'u1',request,now);
