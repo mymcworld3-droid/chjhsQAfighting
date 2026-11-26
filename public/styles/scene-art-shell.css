@@ -38,7 +38,7 @@ html body.ui-cleanup #bottom-nav.scene-art-dock {
 }
 html body.ui-cleanup #bottom-nav.scene-art-dock>.glass-capsule {
   position:relative;isolation:isolate;
-  background-color:var(--qy-ink,#14241e)!important;
+  background-color:var(--qy-ink,#17140f)!important;
   background-image:none!important;
   background-position:center bottom!important;
   background-repeat:no-repeat!important;
@@ -52,7 +52,7 @@ html body.ui-cleanup #bottom-nav.scene-art-dock #nav-grid>button:not([hidden]):n
   color:var(--qy-paper)!important;text-shadow:0 1px 3px #102018,0 1px 4px #102018;
 }
 html body.ui-cleanup #bottom-nav.scene-art-dock #nav-grid>button.active-nav-btn {
-  color:#ffe1a0!important;background:#14241e80!important;
+  color:#ffe1a0!important;background:var(--qy-inset)!important;
   box-shadow:inset 0 -2px var(--qy-gold)!important;
 }
 html body.ui-cleanup #bottom-nav.scene-art-dock #nav-grid>button>span:not(.alliance-chat-badge) {

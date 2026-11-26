@@ -36,7 +36,7 @@
 #weapon-dungeons-dialog>header{background:linear-gradient(105deg,#30463a,#14251e)}
 #weapon-dungeons-dialog h2{letter-spacing:.12em}
 #weapon-dungeons-dialog .wd-body{max-height:calc(94dvh - 86px)}
-#weapon-dungeons-dialog .wd-tickets{padding:12px 15px;border:1px solid #baa27266;border-radius:10px;background:#20332a}
+#weapon-dungeons-dialog .wd-tickets{padding:12px 15px;border:1px solid #baa27266;border-radius:10px;background:var(--qy-surface,#242018)}
 #weapon-dungeons-dialog .wd-tickets>span{text-align:right;line-height:1.5}
 #weapon-dungeons-dialog .wd-ticket-pips,#weapon-dungeons-dialog .wd-progress-track{display:flex;gap:5px;margin-top:7px}
 #weapon-dungeons-dialog .wd-ticket-pips i,#weapon-dungeons-dialog .wd-progress-track i{height:6px;width:18px;border:1px solid #b6a47966;border-radius:2px;background:#0d1b15}
