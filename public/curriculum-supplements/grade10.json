@@ -6413,6 +6413,3652 @@
           ]
         }
       ]
+    },
+    {
+      "bookId": "longteng-114-biology-required",
+      "grade": "高中一年級",
+      "subject": "生物",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "必修生物",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_biologic_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰必修生物",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "細胞的構造與功能",
+          "details": [
+            "1-1 細胞的構造",
+            "1-2 細胞及能量",
+            "1-3 細胞週期與細胞分裂"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 細胞的構造",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原核與真核細胞及動植物細胞的基本差異",
+                "細胞膜、細胞核、細胞器的構造與功能",
+                "細胞構造與物質交換的基本關係"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-2 細胞及能量",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "ATP 與細胞能量轉換",
+                "光合作用、細胞呼吸的反應物、產物及場所",
+                "酵素與代謝的基本概念"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-3 細胞週期與細胞分裂",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "細胞週期、有絲分裂與染色體變化",
+                "細胞分裂對生長與修復的意義",
+                "減數分裂及染色體數目變化僅限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "生殖與遺傳",
+          "details": [
+            "2-1 性狀的遺傳",
+            "2-2 遺傳物質",
+            "2-3 遺傳工程及其應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 性狀的遺傳",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因、等位基因、基因型與表現型",
+                "孟德爾分離律與獨立分配律",
+                "基本單因子、雙因子遺傳及依節次涵蓋的不完全顯性、共顯性"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-2 遺傳物質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "DNA、RNA 的組成與差異",
+                "DNA 複製及基因與蛋白質關係",
+                "轉錄、轉譯的基本流程與遺傳密碼"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-3 遺傳工程及其應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因轉殖與重組 DNA 的基本原理",
+                "載體、限制酶及連接酶的功能概念",
+                "基因工程應用、效益與倫理"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "演化與多樣的生物",
+          "details": [
+            "3-1 生物的演化",
+            "3-2 演化證據與生物分類"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 生物的演化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "演化理論的發展與天擇",
+                "族群中遺傳變異、適應及差異繁殖",
+                "化石、同源構造等證據依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "3-2 演化證據與生物分類",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生物分類、學名與親緣關係",
+                "形態、化石及分子證據",
+                "基本演化樹與共同祖先"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-biology-required",
+      "grade": "高中一年級",
+      "subject": "生物",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "必修生物",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_biologic_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "翰林必修生物",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "page-and-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "page-and-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "細胞的構造與功能",
+          "details": [
+            "1-1 細胞學說的發展歷程",
+            "1-2 細胞的構造與功能",
+            "1-3 細胞與能量",
+            "1-4 細胞分裂"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 細胞學說的發展歷程",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "細胞學說的要點與發展證據",
+                "顯微鏡觀察與細胞為生命基本單位"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-2 細胞的構造與功能",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原核與真核細胞及動植物細胞的基本差異",
+                "細胞膜、細胞核、細胞器的構造與功能",
+                "細胞構造與物質交換的基本關係"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-3 細胞與能量",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "ATP 與細胞能量轉換",
+                "光合作用、細胞呼吸的反應物、產物及場所",
+                "酵素與代謝的基本概念"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-4 細胞分裂",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "細胞週期、有絲分裂與染色體變化",
+                "細胞分裂對生長與修復的意義",
+                "減數分裂及染色體數目變化僅限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "遺傳",
+          "details": [
+            "2-1 遺傳法則",
+            "2-2 遺傳的染色體學說之發展歷程",
+            "2-3 遺傳物質",
+            "2-4 基因轉殖及其應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 遺傳法則",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因、等位基因、基因型與表現型",
+                "孟德爾分離律與獨立分配律",
+                "基本單因子、雙因子遺傳及依節次涵蓋的不完全顯性、共顯性"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-2 遺傳的染色體學說之發展歷程",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "染色體與基因的關係",
+                "染色體遺傳學說的基本證據",
+                "性聯遺傳及性染色體僅限節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-3 遺傳物質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "DNA、RNA 的組成與差異",
+                "DNA 複製及基因與蛋白質關係",
+                "轉錄、轉譯的基本流程與遺傳密碼"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-4 基因轉殖及其應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因轉殖與重組 DNA 的基本原理",
+                "載體、限制酶及連接酶的功能概念",
+                "基因工程應用、效益與倫理"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "演化",
+          "details": [
+            "3-1 演化觀念的發展",
+            "3-2 演化觀念對生物分類系統的影響"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 演化觀念的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "演化理論的發展與天擇",
+                "族群中遺傳變異、適應及差異繁殖",
+                "化石、同源構造等證據依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "3-2 演化觀念對生物分類系統的影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生物分類、學名與親緣關係",
+                "形態、化石及分子證據",
+                "基本演化樹與共同祖先"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-biology-required",
+      "grade": "高中一年級",
+      "subject": "生物",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "必修生物",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_biologic_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "schoolYear": 114,
+          "publisherTable": "南一必修生物",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "page-and-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "page-and-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "細胞",
+          "details": [
+            "1-1 細胞學說",
+            "1-2 細胞的構造",
+            "1-3 細胞活動的能量",
+            "1-4 細胞的分裂與分化"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 細胞學說",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "細胞學說的要點與發展證據",
+                "顯微鏡觀察與細胞為生命基本單位"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-2 細胞的構造",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原核與真核細胞及動植物細胞的基本差異",
+                "細胞膜、細胞核、細胞器的構造與功能",
+                "細胞構造與物質交換的基本關係"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-3 細胞活動的能量",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "ATP 與細胞能量轉換",
+                "光合作用、細胞呼吸的反應物、產物及場所",
+                "酵素與代謝的基本概念"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-4 細胞的分裂與分化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "細胞分裂、細胞分化與組織形成",
+                "有絲分裂與染色體數目維持",
+                "不同細胞的基因表現與功能差異"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "遺傳",
+          "details": [
+            "2-1 孟德爾遺傳法則及延伸",
+            "2-2 遺傳的染色體學說",
+            "2-3 分子遺傳學的中心法則",
+            "2-4 基因轉殖技術及其應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 孟德爾遺傳法則及延伸",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因、等位基因、基因型與表現型",
+                "孟德爾分離律與獨立分配律",
+                "基本單因子、雙因子遺傳及依節次涵蓋的不完全顯性、共顯性"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-2 遺傳的染色體學說",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "染色體與基因的關係",
+                "染色體遺傳學說的基本證據",
+                "性聯遺傳及性染色體僅限節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-3 分子遺傳學的中心法則",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "DNA 複製、轉錄及轉譯的基本流程",
+                "核酸與蛋白質的關係、密碼子",
+                "基因表現及突變的基本影響"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-4 基因轉殖技術及其應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因轉殖與重組 DNA 的基本原理",
+                "載體、限制酶及連接酶的功能概念",
+                "基因工程應用、效益與倫理"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "演化",
+          "details": [
+            "3-1 生物的演化",
+            "3-2 演化證據與分類系統"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 生物的演化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "演化理論的發展與天擇",
+                "族群中遺傳變異、適應及差異繁殖",
+                "化石、同源構造等證據依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "3-2 演化證據與分類系統",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生物分類、學名與親緣關係",
+                "形態、化石及分子證據",
+                "基本演化樹與共同祖先"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "taiyu-114-biology-required",
+      "grade": "高中一年級",
+      "subject": "生物",
+      "edition": "泰宇版",
+      "publisher": "泰宇",
+      "term": "必修生物",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_biologic_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 4,
+          "schoolYear": 114,
+          "publisherTable": "泰宇必修生物",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "泰宇",
+        "page": 4,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "細胞的構造與功能",
+          "details": [
+            "1-1 細胞學說的發展",
+            "1-2 細胞的構造與功能",
+            "1-3 細胞與能量",
+            "1-4 細胞分裂"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 細胞學說的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "細胞學說的要點與發展證據",
+                "顯微鏡觀察與細胞為生命基本單位"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-2 細胞的構造與功能",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原核與真核細胞及動植物細胞的基本差異",
+                "細胞膜、細胞核、細胞器的構造與功能",
+                "細胞構造與物質交換的基本關係"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-3 細胞與能量",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "ATP 與細胞能量轉換",
+                "光合作用、細胞呼吸的反應物、產物及場所",
+                "酵素與代謝的基本概念"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-4 細胞分裂",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "細胞週期、有絲分裂與染色體變化",
+                "細胞分裂對生長與修復的意義",
+                "減數分裂及染色體數目變化僅限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "生殖與遺傳",
+          "details": [
+            "2-1 性狀的遺傳",
+            "2-2 染色體與遺傳",
+            "2-3 遺傳物質",
+            "2-4 遺傳變異與環境因子影響性狀的表現",
+            "2-5 遺傳工程技術及其應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 性狀的遺傳",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因、等位基因、基因型與表現型",
+                "孟德爾分離律與獨立分配律",
+                "基本單因子、雙因子遺傳及依節次涵蓋的不完全顯性、共顯性"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-2 染色體與遺傳",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "染色體與基因的關係",
+                "染色體遺傳學說的基本證據",
+                "性聯遺傳及性染色體僅限節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-3 遺傳物質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "DNA、RNA 的組成與差異",
+                "DNA 複製及基因與蛋白質關係",
+                "轉錄、轉譯的基本流程與遺傳密碼"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-4 遺傳變異與環境因子影響性狀的表現",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "遺傳變異、突變與重組的基本概念",
+                "基因型與環境對表現型的影響",
+                "遺傳與非遺傳性狀的區別"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-5 遺傳工程技術及其應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因轉殖與重組 DNA 的基本原理",
+                "載體、限制酶及連接酶的功能概念",
+                "基因工程應用、效益與倫理"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "演化與生物多樣性",
+          "details": [
+            "3-1 演化理論的發展",
+            "3-2 分類與演化"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 演化理論的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "演化理論的發展與天擇",
+                "族群中遺傳變異、適應及差異繁殖",
+                "化石、同源構造等證據依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "3-2 分類與演化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生物分類、學名與親緣關係",
+                "形態、化石及分子證據",
+                "基本演化樹與共同祖先"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-biology-required",
+      "grade": "高中一年級",
+      "subject": "生物",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "必修生物",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_biologic_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 5,
+          "schoolYear": 114,
+          "publisherTable": "三民必修生物",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 5,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "細胞的構造與功能",
+          "details": [
+            "1-1 細胞學說的發展",
+            "1-2 細胞的構造",
+            "1-3 細胞的能量",
+            "1-4 細胞的生長與有絲分裂"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 細胞學說的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "細胞學說的要點與發展證據",
+                "顯微鏡觀察與細胞為生命基本單位"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-2 細胞的構造",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原核與真核細胞及動植物細胞的基本差異",
+                "細胞膜、細胞核、細胞器的構造與功能",
+                "細胞構造與物質交換的基本關係"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-3 細胞的能量",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "ATP 與細胞能量轉換",
+                "光合作用、細胞呼吸的反應物、產物及場所",
+                "酵素與代謝的基本概念"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-4 細胞的生長與有絲分裂",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "細胞週期與有絲分裂各期",
+                "染色體複製、分離及子細胞染色體數目"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "生殖與遺傳",
+          "details": [
+            "2-1 生物的生殖與減數分裂",
+            "2-2 孟德爾的遺傳法則",
+            "2-3 遺傳的染色體學說與性染色體",
+            "2-4 基因與分子遺傳學的中心法則",
+            "2-5 基因轉殖技術的應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 生物的生殖與減數分裂",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "有性與無性生殖",
+                "減數分裂、配子形成及染色體數目",
+                "互換與獨立分配造成的變異"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "2-2 孟德爾的遺傳法則",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因、等位基因、基因型與表現型",
+                "孟德爾分離律與獨立分配律",
+                "基本單因子、雙因子遺傳及依節次涵蓋的不完全顯性、共顯性"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-3 遺傳的染色體學說與性染色體",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "性染色體與性別決定",
+                "染色體遺傳學說與性聯遺傳",
+                "基本家系與遺傳機率"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-4 基因與分子遺傳學的中心法則",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "DNA 複製、轉錄及轉譯的基本流程",
+                "核酸與蛋白質的關係、密碼子",
+                "基因表現及突變的基本影響"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-5 基因轉殖技術的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因轉殖與重組 DNA 的基本原理",
+                "載體、限制酶及連接酶的功能概念",
+                "基因工程應用、效益與倫理"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "生物的演化",
+          "details": [
+            "3-1 演化概念的發展",
+            "3-2 生物的分類系統",
+            "3-3 人類、環境與生物多樣性"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 演化概念的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "演化理論的發展與天擇",
+                "族群中遺傳變異、適應及差異繁殖",
+                "化石、同源構造等證據依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "3-2 生物的分類系統",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生物分類、學名與親緣關係",
+                "形態、化石及分子證據",
+                "基本演化樹與共同祖先"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "3-3 人類、環境與生物多樣性",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "遺傳、物種及生態系多樣性",
+                "人類活動、環境變遷與生物多樣性",
+                "保育與永續的基本概念"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "chwa-114-biology-required",
+      "grade": "高中一年級",
+      "subject": "生物",
+      "edition": "全華版",
+      "publisher": "全華",
+      "term": "必修生物",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_biologic_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 6,
+          "schoolYear": 114,
+          "publisherTable": "全華必修生物",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "全華",
+        "page": 6,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "生物的構造與功能",
+          "details": [
+            "1-1 細胞的構造與功能",
+            "1-2 能量的型態與流動",
+            "1-3 真核細胞的細胞分裂"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 細胞的構造與功能",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "原核與真核細胞及動植物細胞的基本差異",
+                "細胞膜、細胞核、細胞器的構造與功能",
+                "細胞構造與物質交換的基本關係"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-2 能量的型態與流動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "ATP 與細胞能量轉換",
+                "光合作用、細胞呼吸的反應物、產物及場所",
+                "酵素與代謝的基本概念"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            },
+            {
+              "name": "1-3 真核細胞的細胞分裂",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "細胞週期、有絲分裂與染色體變化",
+                "細胞分裂對生長與修復的意義",
+                "減數分裂及染色體數目變化僅限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階代謝途徑與分子調控",
+                "人體器官系統的獨立考點"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "遺傳",
+          "details": [
+            "2-1 性狀的遺傳",
+            "2-2 遺傳物質",
+            "2-3 基因轉殖技術及其應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 性狀的遺傳",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因、等位基因、基因型與表現型",
+                "孟德爾分離律與獨立分配律",
+                "基本單因子、雙因子遺傳及依節次涵蓋的不完全顯性、共顯性"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-2 遺傳物質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "DNA、RNA 的組成與差異",
+                "DNA 複製及基因與蛋白質關係",
+                "轉錄、轉譯的基本流程與遺傳密碼"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "2-3 基因轉殖技術及其應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "基因轉殖與重組 DNA 的基本原理",
+                "載體、限制酶及連接酶的功能概念",
+                "基因工程應用、效益與倫理"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "演化",
+          "details": [
+            "3-1 演化學說的發展",
+            "3-2 生物的分類與親緣關係的重建",
+            "3-3 生物多樣性"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 演化學說的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "演化理論的發展與天擇",
+                "族群中遺傳變異、適應及差異繁殖",
+                "化石、同源構造等證據依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "3-2 生物的分類與親緣關係的重建",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生物分類、學名與親緣關係",
+                "形態、化石及分子證據",
+                "基本演化樹與共同祖先"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            },
+            {
+              "name": "3-3 生物多樣性",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "遺傳、物種及生態系多樣性",
+                "人類活動、環境變遷與生物多樣性",
+                "保育與永續的基本概念"
+              ],
+              "excludedContent": [
+                "選修生物的進階分子調控、族群遺傳數學或實驗技術細節"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-114-earth-science-required",
+      "grade": "高中一年級",
+      "subject": "地球科學",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "必修地球科學",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_geoscience_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰必修地科",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "地球的歷史",
+          "details": [
+            "1-1 地球的起源",
+            "1-2 大氣與海洋的演變",
+            "1-3 探索地球的歷史"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 地球的起源",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太陽系星雲形成與地球聚積",
+                "地球早期分化與形成的基本證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "1-2 大氣與海洋的演變",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "早期地球大氣、火山逸氣與海洋形成",
+                "氧氣增加及地球環境演變"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "1-3 探索地球的歷史",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "岩層相對年代、化石及地質時間",
+                "放射性定年基本原理與地球歷史證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "固體地球的結構與組成",
+          "details": [
+            "2-1 地震波與地球內部分層",
+            "2-2 地表與地殼的變動",
+            "2-3 地震災害"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 地震波與地球內部分層",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地殼、地函、地核及岩石圈",
+                "P 波、S 波傳播與地球內部構造證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-2 地表與地殼的變動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大陸漂移、海底擴張與板塊運動",
+                "張裂、聚合及錯動邊界與地質現象"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-3 地震災害",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "斷層、震源、震央及地震波",
+                "規模與震度差異",
+                "地震災害與防災概念"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "大氣",
+          "details": [
+            "3-1 大氣的溫壓垂直結構",
+            "3-2 大氣中的水氣變化",
+            "3-3 大氣的運動",
+            "3-4 天氣圖判讀",
+            "3-5 氣象災害－颱風"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 大氣的溫壓垂直結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大氣成分、氣壓與溫度的垂直分布",
+                "對流層、平流層等大氣分層與特徵"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-2 大氣中的水氣變化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "水氣、飽和、露點及相對溼度",
+                "凝結、雲與降水及水循環的基本過程"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-3 大氣的運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣壓梯度、科氏力與風向",
+                "地表摩擦、海陸風及大氣水平運動"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-4 天氣圖判讀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地面天氣圖、等壓線及鋒面",
+                "高低壓系統與觀測資料判讀",
+                "依節名涵蓋的基本天氣變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-5 氣象災害－颱風",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "熱帶氣旋形成條件、結構與基本移動",
+                "颱風風雨、暴潮及防災依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "海洋",
+          "details": [
+            "4-1 海洋的結構",
+            "4-2 海水的運動",
+            "4-3 大氣與海洋的交互作用"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 海洋的結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海水溫度、鹽度與密度",
+                "海水垂直分層及溫鹽分布"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-2 海水的運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "波浪、潮汐與洋流的成因及基本差異",
+                "海水運動與觀測圖表判讀"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-3 大氣與海洋的交互作用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海氣熱量、水氣及動量交換",
+                "洋流與氣候、聖嬰與反聖嬰的基本關係"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "地球與天空",
+          "details": [
+            "5-1 從太空看地球",
+            "5-2 從地球看太空",
+            "5-3 宇宙"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 從太空看地球",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太陽系天體與地球所處位置",
+                "地球形成與適居環境的基本關聯"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-2 從地球看太空",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "天球、方位、高度角與星空視運動",
+                "日、月、星位置隨時間的變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-3 宇宙",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "星系與宇宙大尺度結構",
+                "宇宙膨脹、紅移及大霹靂基本證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "氣候變遷之影響與調適",
+          "details": [
+            "6-1 多重時間尺度的氣候變遷",
+            "6-2 氣候變遷造成的環境影響",
+            "6-3 人類活動與近期氣候變化",
+            "6-4 因應氣候變遷"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 多重時間尺度的氣候變遷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地質歷史上的氣候變化與不同時間尺度",
+                "冰芯、沉積物及化石等氣候代用資料"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-2 氣候變遷造成的環境影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候變遷對海平面、水文、生態及極端天氣的影響",
+                "氣候資料趨勢與影響判讀"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-3 人類活動與近期氣候變化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "溫室效應、人為溫室氣體及全球暖化",
+                "氣溫與二氧化碳等觀測資料判讀"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-4 因應氣候變遷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候調適與減緩的區別",
+                "防災、節能、減碳及風險管理的基本應用"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "永續發展與資源的利用",
+          "details": [
+            "7-1 永續發展",
+            "7-2 節用資源與合理開發"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 永續發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "永續發展的環境、社會與經濟面向",
+                "資源使用、環境影響與永續策略"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "7-2 節用資源與合理開發",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "可再生與不可再生資源",
+                "資源開發、利用效率及環境代價",
+                "循環利用與合理開發"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-earth-science-required",
+      "grade": "高中一年級",
+      "subject": "地球科學",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "必修地球科學",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_geoscience_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "翰林必修地科",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "地球的故事",
+          "details": [
+            "1-1 地球的起源",
+            "1-2 探究地球歷史"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 地球的起源",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太陽系星雲形成與地球聚積",
+                "地球早期分化與形成的基本證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "1-2 探究地球歷史",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "岩層相對年代、化石及地質時間",
+                "放射性定年基本原理與地球歷史證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "從地球看宇宙",
+          "details": [
+            "2-1 地球外的太空",
+            "2-2 從地球看星空",
+            "2-3 恆星亮度與顏色",
+            "2-4 膨脹的宇宙"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 地球外的太空",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太陽系、恆星、星系的尺度與組成",
+                "天體位置與基本宇宙尺度"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-2 從地球看星空",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "天球、方位、高度角與星空視運動",
+                "日、月、星位置隨時間的變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-3 恆星亮度與顏色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "恆星視亮度與本質亮度、顏色與表面溫度",
+                "光譜及恆星基本觀測"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-4 膨脹的宇宙",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "星系與宇宙大尺度結構",
+                "宇宙膨脹、紅移及大霹靂基本證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "千變萬化的大氣",
+          "details": [
+            "3-1 大氣的結構",
+            "3-2 多變的天氣",
+            "3-3 氣象觀測與分析",
+            "3-4 颱風災害"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 大氣的結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大氣成分、氣壓與溫度的垂直分布",
+                "對流層、平流層等大氣分層與特徵"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-2 多變的天氣",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地面天氣圖、等壓線及鋒面",
+                "高低壓系統與觀測資料判讀",
+                "依節名涵蓋的基本天氣變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-3 氣象觀測與分析",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地面天氣圖、等壓線及鋒面",
+                "高低壓系統與觀測資料判讀",
+                "依節名涵蓋的基本天氣變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-4 颱風災害",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "熱帶氣旋形成條件、結構與基本移動",
+                "颱風風雨、暴潮及防災依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "深藍的脈動",
+          "details": [
+            "4-1 海洋的結構",
+            "4-2 海水的運動",
+            "4-3 海洋與氣候"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 海洋的結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海水溫度、鹽度與密度",
+                "海水垂直分層及溫鹽分布"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-2 海水的運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "波浪、潮汐與洋流的成因及基本差異",
+                "海水運動與觀測圖表判讀"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-3 海洋與氣候",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海氣熱量、水氣及動量交換",
+                "洋流與氣候、聖嬰與反聖嬰的基本關係"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "體驗大地的撼動",
+          "details": [
+            "5-1 固體地球的結構",
+            "5-2 地表與地殼的變動",
+            "5-3 臺灣的板塊構造",
+            "5-4 地震災害與防治"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 固體地球的結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地殼、地函、地核及岩石圈",
+                "P 波、S 波傳播與地球內部構造證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-2 地表與地殼的變動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大陸漂移、海底擴張與板塊運動",
+                "張裂、聚合及錯動邊界與地質現象"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-3 臺灣的板塊構造",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣周圍歐亞板塊與菲律賓海板塊",
+                "板塊聚合、隱沒、碰撞及地震分布"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-4 地震災害與防治",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "斷層、震源、震央及地震波",
+                "規模與震度差異",
+                "地震災害與防災概念"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "鑑古知今談永續",
+          "details": [
+            "6-1 氣候變遷的影響",
+            "6-2 永續發展與氣候變遷的調適"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 氣候變遷的影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候變遷對海平面、水文、生態及極端天氣的影響",
+                "氣候資料趨勢與影響判讀"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-2 永續發展與氣候變遷的調適",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候調適與減緩的區別",
+                "防災、節能、減碳及風險管理的基本應用"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-earth-science-required",
+      "grade": "高中一年級",
+      "subject": "地球科學",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "必修地球科學",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_geoscience_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "schoolYear": 114,
+          "publisherTable": "南一必修地科",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "朗朗乾坤的天地",
+          "details": [
+            "1-1 地球的起源與演變",
+            "1-2 開啟地球歷史的鑰匙"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 地球的起源與演變",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地球形成、內部分化與早期環境演變",
+                "地球歷史的基本時間尺度與證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "1-2 開啟地球歷史的鑰匙",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "岩層相對年代、化石及地質時間",
+                "放射性定年基本原理與地球歷史證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "浩瀚無垠的宇宙",
+          "details": [
+            "2-1 追星逐日",
+            "2-2 以管窺天",
+            "2-3 太陽系與適居帶",
+            "2-4 宇宙的結構與起源"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 追星逐日",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "天球、方位、高度角與星空視運動",
+                "日、月、星位置隨時間的變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-2 以管窺天",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "電磁波段、望遠鏡及天文觀測",
+                "星光、光譜與天體資訊"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-3 太陽系與適居帶",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太陽系行星特性及天體分類",
+                "適居帶、液態水及生命環境條件"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-4 宇宙的結構與起源",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "星系與宇宙大尺度結構",
+                "宇宙膨脹、紅移及大霹靂基本證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "山川壯麗的大地",
+          "details": [
+            "3-1 地球的結構與組成",
+            "3-2 板塊運動",
+            "3-3 臺灣的板塊運動"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 地球的結構與組成",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地殼、地函、地核及岩石圈",
+                "P 波、S 波傳播與地球內部構造證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-2 板塊運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大陸漂移、海底擴張與板塊運動",
+                "張裂、聚合及錯動邊界與地質現象"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-3 臺灣的板塊運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣周圍歐亞板塊與菲律賓海板塊",
+                "板塊聚合、隱沒、碰撞及地震分布"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "風起雲湧的大氣",
+          "details": [
+            "4-1 大氣的垂直結構",
+            "4-2 水循環與天氣變化",
+            "4-3 大氣的水平運動",
+            "4-4 判讀天氣圖"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 大氣的垂直結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大氣成分、氣壓與溫度的垂直分布",
+                "對流層、平流層等大氣分層與特徵"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-2 水循環與天氣變化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "水氣、飽和、露點及相對溼度",
+                "凝結、雲與降水及水循環的基本過程"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-3 大氣的水平運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣壓梯度、科氏力與風向",
+                "地表摩擦、海陸風及大氣水平運動"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-4 判讀天氣圖",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地面天氣圖、等壓線及鋒面",
+                "高低壓系統與觀測資料判讀",
+                "依節名涵蓋的基本天氣變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "深邃迷人的海洋",
+          "details": [
+            "5-1 海水的成分與垂直結構",
+            "5-2 海水的運動",
+            "5-3 臺灣周圍的海況"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 海水的成分與垂直結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海水溫度、鹽度與密度",
+                "海水垂直分層及溫鹽分布"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-2 海水的運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "波浪、潮汐與洋流的成因及基本差異",
+                "海水運動與觀測圖表判讀"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-3 臺灣周圍的海況",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣周圍洋流、黑潮與季節性海況",
+                "海水溫度、流向與地形影響"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "危機四伏的大自然",
+          "details": [
+            "6-1 颱風的生成與結構",
+            "6-2 颱風路徑與風雨變化",
+            "6-3 聖嬰現象",
+            "6-4 斷層活動與地震災害"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 颱風的生成與結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "熱帶氣旋形成條件、結構與基本移動",
+                "颱風風雨、暴潮及防災依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-2 颱風路徑與風雨變化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "颱風路徑、風向與風雨分布",
+                "地形及移動方向對降雨的影響"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-3 聖嬰現象",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "熱帶太平洋信風、海溫及湧升流",
+                "聖嬰與反聖嬰的海氣變化及氣候影響"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-4 斷層活動與地震災害",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "斷層、震源、震央及地震波",
+                "規模與震度差異",
+                "地震災害與防災概念"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "氣候變遷與永續發展",
+          "details": [
+            "7-1 從地球歷史看氣候變遷",
+            "7-2 近代的氣候變化",
+            "7-3 永續發展的重要性"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 從地球歷史看氣候變遷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地質歷史上的氣候變化與不同時間尺度",
+                "冰芯、沉積物及化石等氣候代用資料"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "7-2 近代的氣候變化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "溫室效應、人為溫室氣體及全球暖化",
+                "氣溫與二氧化碳等觀測資料判讀"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "7-3 永續發展的重要性",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "永續發展的環境、社會與經濟面向",
+                "資源使用、環境影響與永續策略"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "taiyu-114-earth-science-required",
+      "grade": "高中一年級",
+      "subject": "地球科學",
+      "edition": "泰宇版",
+      "publisher": "泰宇",
+      "term": "必修地球科學",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_geoscience_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 4,
+          "schoolYear": 114,
+          "publisherTable": "泰宇必修地科",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "泰宇",
+        "page": 4,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "地球的歷史",
+          "details": [
+            "1-1 地球的起源與演變",
+            "1-2 探索地球的歷史"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 地球的起源與演變",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地球形成、內部分化與早期環境演變",
+                "地球歷史的基本時間尺度與證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "1-2 探索地球的歷史",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "岩層相對年代、化石及地質時間",
+                "放射性定年基本原理與地球歷史證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "天體與宇宙",
+          "details": [
+            "2-1 宇宙",
+            "2-2 天文觀測",
+            "2-3 天體運行"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 宇宙",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "星系與宇宙大尺度結構",
+                "宇宙膨脹、紅移及大霹靂基本證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-2 天文觀測",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "電磁波段、望遠鏡及天文觀測",
+                "星光、光譜與天體資訊"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-3 天體運行",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "天球、方位、高度角與星空視運動",
+                "日、月、星位置隨時間的變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "變動的固體地球",
+          "details": [
+            "3-1 固體地球的結構",
+            "3-2 固體地球的變動－板塊運動",
+            "3-3 臺灣的板塊運動"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 固體地球的結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地殼、地函、地核及岩石圈",
+                "P 波、S 波傳播與地球內部構造證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-2 固體地球的變動－板塊運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大陸漂移、海底擴張與板塊運動",
+                "張裂、聚合及錯動邊界與地質現象"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-3 臺灣的板塊運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣周圍歐亞板塊與菲律賓海板塊",
+                "板塊聚合、隱沒、碰撞及地震分布"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "變動的大氣",
+          "details": [
+            "4-1 大氣的結構",
+            "4-2 大氣中的水氣變化",
+            "4-3 大氣的運動",
+            "4-4 天氣現象與地面天氣圖"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 大氣的結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大氣成分、氣壓與溫度的垂直分布",
+                "對流層、平流層等大氣分層與特徵"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-2 大氣中的水氣變化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "水氣、飽和、露點及相對溼度",
+                "凝結、雲與降水及水循環的基本過程"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-3 大氣的運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣壓梯度、科氏力與風向",
+                "地表摩擦、海陸風及大氣水平運動"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-4 天氣現象與地面天氣圖",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地面天氣圖、等壓線及鋒面",
+                "高低壓系統與觀測資料判讀",
+                "依節名涵蓋的基本天氣變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "變動的海洋",
+          "details": [
+            "5-1 海洋的組成與結構",
+            "5-2 波浪",
+            "5-3 海流",
+            "5-4 潮汐",
+            "5-5 大氣與海洋的交互作用"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 海洋的組成與結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海水溫度、鹽度與密度",
+                "海水垂直分層及溫鹽分布"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-2 波浪",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "風浪、湧浪與波浪基本特徵",
+                "波浪對海岸侵蝕及堆積依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-3 海流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "風驅表層洋流與密度環流",
+                "洋流方向、溫度及海洋熱量輸送"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-4 潮汐",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日月引潮力、大潮小潮與潮汐週期",
+                "潮位及潮流的觀測"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-5 大氣與海洋的交互作用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海氣熱量、水氣及動量交換",
+                "洋流與氣候、聖嬰與反聖嬰的基本關係"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "天然災害",
+          "details": [
+            "6-1 颱風",
+            "6-2 地震"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 颱風",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "熱帶氣旋形成條件、結構與基本移動",
+                "颱風風雨、暴潮及防災依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-2 地震",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "斷層、震源、震央及地震波",
+                "規模與震度差異",
+                "地震災害與防災概念"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "全球氣候變遷",
+          "details": [
+            "7-1 影響氣候變化的原因",
+            "7-2 地球的氣候變遷",
+            "7-3 因應氣候變遷的調適方法"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 影響氣候變化的原因",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太陽輻射、軌道變化、火山及溫室氣體",
+                "自然與人為氣候驅動因素"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "7-2 地球的氣候變遷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地質歷史上的氣候變化與不同時間尺度",
+                "冰芯、沉積物及化石等氣候代用資料"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "7-3 因應氣候變遷的調適方法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候調適與減緩的區別",
+                "防災、節能、減碳及風險管理的基本應用"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "永續發展的資源利用",
+          "details": [
+            "8-1 地球的資源",
+            "8-2 認識地球環境有助於永續發展"
+          ],
+          "concepts": [
+            {
+              "name": "8-1 地球的資源",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "可再生與不可再生資源",
+                "資源開發、利用效率及環境代價",
+                "循環利用與合理開發"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "8-2 認識地球環境有助於永續發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "永續發展的環境、社會與經濟面向",
+                "資源使用、環境影響與永續策略"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-earth-science-required",
+      "grade": "高中一年級",
+      "subject": "地球科學",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "必修地球科學",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_geoscience_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 5,
+          "schoolYear": 114,
+          "publisherTable": "三民必修地科",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 5,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "獨特的地球",
+          "details": [
+            "1-1 地球和太空有什麼關係",
+            "1-2 地球從誕生到現在"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 地球和太空有什麼關係",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太陽系天體與地球所處位置",
+                "地球形成與適居環境的基本關聯"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "1-2 地球從誕生到現在",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地球形成、內部分化與早期環境演變",
+                "地球歷史的基本時間尺度與證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "斗轉星移",
+          "details": [
+            "2-1 星星的運動有何規律性",
+            "2-2 地球的晝夜與季節變化是如何形成的"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 星星的運動有何規律性",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "天球、方位、高度角與星空視運動",
+                "日、月、星位置隨時間的變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-2 地球的晝夜與季節變化是如何形成的",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地球自轉、公轉及地軸傾斜",
+                "晝夜長度、太陽高度與季節變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "宇宙與天體",
+          "details": [
+            "3-1 星光透露出哪些訊息",
+            "3-2 宇宙正在膨脹嗎"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 星光透露出哪些訊息",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "恆星視亮度與本質亮度、顏色與表面溫度",
+                "光譜及恆星基本觀測"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-2 宇宙正在膨脹嗎",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "星系與宇宙大尺度結構",
+                "宇宙膨脹、紅移及大霹靂基本證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "固體地球",
+          "details": [
+            "4-1 如何看穿地球內部",
+            "4-2 板塊構造學說是怎麼來的",
+            "4-3 板塊邊界有哪些類型與特徵",
+            "4-4 臺灣附近的板塊構造為何"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 如何看穿地球內部",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地殼、地函、地核及岩石圈",
+                "P 波、S 波傳播與地球內部構造證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-2 板塊構造學說是怎麼來的",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大陸漂移與海底擴張證據",
+                "海底磁條帶與板塊構造學說建立"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-3 板塊邊界有哪些類型與特徵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "張裂、聚合與錯動型板塊邊界",
+                "地震、火山、山脈及海溝的分布"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-4 臺灣附近的板塊構造為何",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣周圍歐亞板塊與菲律賓海板塊",
+                "板塊聚合、隱沒、碰撞及地震分布"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "天氣變化",
+          "details": [
+            "5-1 大氣的溫度和壓力隨高度如何變化",
+            "5-2 空氣中有多少水氣",
+            "5-3 風從哪裡來",
+            "5-4 如何看懂天氣圖"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 大氣的溫度和壓力隨高度如何變化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大氣成分、氣壓與溫度的垂直分布",
+                "對流層、平流層等大氣分層與特徵"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-2 空氣中有多少水氣",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "水氣、飽和、露點及相對溼度",
+                "凝結、雲與降水及水循環的基本過程"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-3 風從哪裡來",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣壓梯度、科氏力與風向",
+                "地表摩擦、海陸風及大氣水平運動"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-4 如何看懂天氣圖",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地面天氣圖、等壓線及鋒面",
+                "高低壓系統與觀測資料判讀",
+                "依節名涵蓋的基本天氣變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "海洋的變動",
+          "details": [
+            "6-1 海水的溫度與鹽度如何分布",
+            "6-2 海水的運動有哪些形式",
+            "6-3 海洋在地球系統內扮演了什麼角色"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 海水的溫度與鹽度如何分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海水溫度、鹽度與密度",
+                "海水垂直分層及溫鹽分布"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-2 海水的運動有哪些形式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "波浪、潮汐與洋流的成因及基本差異",
+                "海水運動與觀測圖表判讀"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-3 海洋在地球系統內扮演了什麼角色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海氣熱量、水氣及動量交換",
+                "洋流與氣候、聖嬰與反聖嬰的基本關係"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "天然災害與防治",
+          "details": [
+            "7-1 如何面對颱風災害",
+            "7-2 如何面對地震災害"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 如何面對颱風災害",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "熱帶氣旋形成條件、結構與基本移動",
+                "颱風風雨、暴潮及防災依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "7-2 如何面對地震災害",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "斷層、震源、震央及地震波",
+                "規模與震度差異",
+                "地震災害與防災概念"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "氣候變遷與調適",
+          "details": [
+            "8-1 氣候如何變遷",
+            "8-2 冰期消長對自然環境與生物的影響是什麼",
+            "8-3 人類如何面對氣候變遷"
+          ],
+          "concepts": [
+            {
+              "name": "8-1 氣候如何變遷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地質歷史上的氣候變化與不同時間尺度",
+                "冰芯、沉積物及化石等氣候代用資料"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "8-2 冰期消長對自然環境與生物的影響是什麼",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "冰期與間冰期的變動",
+                "冰量、海平面、氣候與生物分布的基本關係"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "8-3 人類如何面對氣候變遷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候調適與減緩的區別",
+                "防災、節能、減碳及風險管理的基本應用"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "地球資源與永續發展",
+          "details": [
+            "9-1 地球資源利用的困境為何",
+            "9-2 解決地球資源利用的行動策略為何"
+          ],
+          "concepts": [
+            {
+              "name": "9-1 地球資源利用的困境為何",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "可再生與不可再生資源",
+                "資源開發、利用效率及環境代價",
+                "循環利用與合理開發"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "9-2 解決地球資源利用的行動策略為何",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "永續發展的環境、社會與經濟面向",
+                "資源使用、環境影響與永續策略"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "chwa-114-earth-science-required",
+      "grade": "高中一年級",
+      "subject": "地球科學",
+      "edition": "全華版",
+      "publisher": "全華",
+      "term": "必修地球科學",
+      "bookLabel": "全一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "source-reviewed-crosswalk",
+      "scopeSelectionStatus": "source-reviewed-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/grade10.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_geoscience_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 6,
+          "schoolYear": 114,
+          "publisherTable": "全華必修地科",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "全華",
+        "page": 6,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度第三方對照表左欄；原始PDF雜湊未取得。文字表格核對與可視頁面核對分開標記。細部提示為編輯性整理，必須以實際選取節名限制，非官方逐觀念目次或獨立題目審核。",
+      "units": [
+        {
+          "unit": "探索地球",
+          "details": [
+            "1-1 太陽系的起源",
+            "1-2 地球演化",
+            "1-3 孕育生命的地球",
+            "1-4 研究地球歷史的方法"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 太陽系的起源",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太陽系星雲形成與地球聚積",
+                "地球早期分化與形成的基本證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "1-2 地球演化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地球形成、內部分化與早期環境演變",
+                "地球歷史的基本時間尺度與證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "1-3 孕育生命的地球",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "適居條件、液態水與大氣",
+                "生命與地球環境共同演變的基本概念"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "1-4 研究地球歷史的方法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "岩層相對年代、化石及地質時間",
+                "放射性定年基本原理與地球歷史證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "地球結構與地震",
+          "details": [
+            "2-1 地球內部的結構與組成物質",
+            "2-2 板塊構造理論",
+            "2-3 地震災害"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 地球內部的結構與組成物質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地殼、地函、地核及岩石圈",
+                "P 波、S 波傳播與地球內部構造證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-2 板塊構造理論",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大陸漂移、海底擴張與板塊運動",
+                "張裂、聚合及錯動邊界與地質現象"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "2-3 地震災害",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "斷層、震源、震央及地震波",
+                "規模與震度差異",
+                "地震災害與防災概念"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "天氣的變化",
+          "details": [
+            "3-1 大氣的特性",
+            "3-2 大氣的運動",
+            "3-3 天氣圖與天氣系統",
+            "3-4 颱風與災害"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 大氣的特性",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大氣成分、氣壓與溫度的垂直分布",
+                "對流層、平流層等大氣分層與特徵"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-2 大氣的運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣壓梯度、科氏力與風向",
+                "地表摩擦、海陸風及大氣水平運動"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-3 天氣圖與天氣系統",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地面天氣圖、等壓線及鋒面",
+                "高低壓系統與觀測資料判讀",
+                "依節名涵蓋的基本天氣變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "3-4 颱風與災害",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "熱帶氣旋形成條件、結構與基本移動",
+                "颱風風雨、暴潮及防災依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "海水的運動",
+          "details": [
+            "4-1 波浪與海岸地形",
+            "4-2 潮汐與潮流",
+            "4-3 洋流",
+            "4-4 大氣與海洋的交互作用"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 波浪與海岸地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "風浪、湧浪與波浪基本特徵",
+                "波浪對海岸侵蝕及堆積依節次涵蓋"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-2 潮汐與潮流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日月引潮力、大潮小潮與潮汐週期",
+                "潮位及潮流的觀測"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-3 洋流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "風驅表層洋流與密度環流",
+                "洋流方向、溫度及海洋熱量輸送"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "4-4 大氣與海洋的交互作用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海氣熱量、水氣及動量交換",
+                "洋流與氣候、聖嬰與反聖嬰的基本關係"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "宇宙與天體",
+          "details": [
+            "5-1 不同尺度的天體",
+            "5-2 膨脹中的宇宙",
+            "5-3 恆星的亮度與顏色",
+            "5-4 不同波段的天文觀測",
+            "5-5 天體運動"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 不同尺度的天體",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太陽系、恆星、星系的尺度與組成",
+                "天體位置與基本宇宙尺度"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-2 膨脹中的宇宙",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "星系與宇宙大尺度結構",
+                "宇宙膨脹、紅移及大霹靂基本證據"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-3 恆星的亮度與顏色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "恆星視亮度與本質亮度、顏色與表面溫度",
+                "光譜及恆星基本觀測"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-4 不同波段的天文觀測",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "電磁波段、望遠鏡及天文觀測",
+                "星光、光譜與天體資訊"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "5-5 天體運動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "天球、方位、高度角與星空視運動",
+                "日、月、星位置隨時間的變化"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "氣候變遷",
+          "details": [
+            "6-1 地球歷史上的氣候變化",
+            "6-2 全球暖化",
+            "6-3 氣候調適"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 地球歷史上的氣候變化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地質歷史上的氣候變化與不同時間尺度",
+                "冰芯、沉積物及化石等氣候代用資料"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-2 全球暖化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "溫室效應、人為溫室氣體及全球暖化",
+                "氣溫與二氧化碳等觀測資料判讀"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "6-3 氣候調適",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候調適與減緩的區別",
+                "防災、節能、減碳及風險管理的基本應用"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "資源利用與永續發展",
+          "details": [
+            "7-1 永續發展",
+            "7-2 多面向的永續發展",
+            "7-3 資源利用",
+            "7-4 永續資源與環境"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 永續發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "永續發展的環境、社會與經濟面向",
+                "資源使用、環境影響與永續策略"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "7-2 多面向的永續發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "永續發展的環境、社會與經濟面向",
+                "資源使用、環境影響與永續策略"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "7-3 資源利用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "可再生與不可再生資源",
+                "資源開發、利用效率及環境代價",
+                "循環利用與合理開發"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            },
+            {
+              "name": "7-4 永續資源與環境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "可再生與不可再生資源",
+                "資源開發、利用效率及環境代價",
+                "循環利用與合理開發"
+              ],
+              "excludedContent": [
+                "選修地球科學的進階定量模型及大學專業推導"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

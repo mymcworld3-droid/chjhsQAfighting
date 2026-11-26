@@ -84,8 +84,8 @@ status(indices.length?'顯示 '+indices.length+' 章，點章名可選取整章�
 async function loadCatalogue(g,s){
  const file='curriculum-data/'+encodeURIComponent(g)+'/'+encodeURIComponent(s)+'.json?v=20261126-curriculum-v3';
  if(!memo.has(file))memo.set(file,fetch('/'+file).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).then(async base=>{
-   if(g!=='高中一年級'||!['數學','物理','化學'].includes(s))return base;
-   const supplementFile='curriculum-supplements/grade10.json?v=20261126-batch4';
+   if(g!=='高中一年級'||!['數學','物理','化學','生物','地球科學'].includes(s))return base;
+   const supplementFile='curriculum-supplements/grade10.json?v=20261126-batch5';
    if(!memo.has(supplementFile))memo.set(supplementFile,fetch('/'+supplementFile).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(supplementFile);throw e;}));
    const supplemental=await memo.get(supplementFile);
    return {...base,books:[...base.books,...supplemental.books.filter(b=>b.grade===g&&b.subject===s)]};

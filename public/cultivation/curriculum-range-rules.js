@@ -17,7 +17,7 @@
     // not a raw-document-verified or officially released book. Keep grade 11 gates intact.
     if(book.scopeSelectionStatus === 'source-reviewed-crosswalk'){
       const e=book.scopeEvidence;
-      const subjects=['數學','物理','化學'], publishers=['龍騰','翰林','南一','泰宇','三民','全華'];
+      const subjects=['數學','物理','化學','生物','地球科學'], publishers=['龍騰','翰林','南一','泰宇','三民','全華'];
       if(book.grade!=='高中一年級'||!subjects.includes(book.subject)||!publishers.includes(book.publisher)||
         book.edition!==book.publisher+'版'||book.schoolYear!==114||book.releaseStatus!=='blocked'||
         book.verificationStatus!=='source-reviewed-crosswalk'||!/^\d{4}-\d{2}-\d{2}$/.test(book.verifiedAt||'')||
@@ -25,8 +25,8 @@
         e.columnPolicy!=='publisher-left-only'||e.rawFileHashStatus!=='unavailable'||
         !['page-and-text','structured-text'].includes(e.reviewMethod)||!Number.isInteger(e.page)||e.page<1||e.page>6)return false;
       const expectedFile=book.subject==='數學'?(book.term==='第一學期'?'10-1_comparison_math_114.pdf':book.term==='第二學期'?'10-2_comparison_math_114.pdf':''):
-        book.term==='必修'+book.subject?(book.subject==='物理'?'10-1_comparison_physical_114.pdf':'10-1_comparison_chemistry_114.pdf'):'';
-      const table=book.publisher+(book.subject==='數學'?'數學高一'+(book.term==='第一學期'?'上':'下'):'必修'+book.subject);
+        book.term==='必修'+book.subject?({'物理':'10-1_comparison_physical_114.pdf','化學':'10-1_comparison_chemistry_114.pdf','生物':'10-1_comparison_biologic_114.pdf','地球科學':'10-1_comparison_geoscience_114.pdf'}[book.subject]||''):'';
+      const table=book.publisher+(book.subject==='數學'?'數學高一'+(book.term==='第一學期'?'上':'下'):'必修'+(book.subject==='地球科學'?'地科':book.subject));
       return !!expectedFile&&!!book.sources?.some(s=>s.type==='third-party-curriculum-crosswalk'&&s.schoolYear===114&&s.page===e.page&&
         s.publisherTable===table&&s.reviewMethod===e.reviewMethod&&s.url==='https://www.go100.com.tw/file/108_comparison_table/senior/'+expectedFile+'?v=20250901')&&
         !!book.units?.length&&book.units.every(u=>u.details?.length>0&&new Set(u.details).size===u.details.length&&
