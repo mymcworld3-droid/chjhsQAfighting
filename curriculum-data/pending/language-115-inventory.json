@@ -1,0 +1,374 @@
+{
+  "schema": 1,
+  "schoolYear": 115,
+  "semester": 1,
+  "source": {
+    "url": "https://textbooks.naer.edu.tw/DownLoadFile.aspx?ASParam=TUZIRSs3NSUyNjglMjQlN2QlMWR1JTBiJTdiJTBmJTYwbiUwNyU3ZWZ4JTEyJTA1bSUxY3dyJTA5JTFiZSUxZnYlMTElN2V6ZnUlMDUlMTglMDN2JTBjJTAzZyUxOCUwNQ%3D%3D",
+    "page": 2,
+    "reviewMethod": "page-and-text",
+    "accessedAt": "2026-11-26"
+  },
+  "description": "核定出版社與冊次清單，僅確認目標存在，不代表已有115學年目次。三民乙版不可合併原版。",
+  "expected": [
+    {
+      "subject": "國文",
+      "publisher": "三民",
+      "volume": 1,
+      "bookId": "sanmin-108-chinese-1",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/015587466"
+    },
+    {
+      "subject": "國文",
+      "publisher": "三民",
+      "volume": 2,
+      "bookId": "sanmin-108-chinese-2",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/011470635"
+    },
+    {
+      "subject": "國文",
+      "publisher": "三民",
+      "volume": 3,
+      "bookId": "sanmin-108-chinese-3",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/011987798"
+    },
+    {
+      "subject": "國文",
+      "publisher": "三民",
+      "volume": 4,
+      "bookId": "sanmin-108-chinese-4",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/012920708"
+    },
+    {
+      "subject": "國文",
+      "publisher": "三民",
+      "volume": 5,
+      "bookId": "sanmin-108-chinese-5",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/013493054"
+    },
+    {
+      "subject": "國文",
+      "publisher": "奇異果",
+      "volume": 1,
+      "bookId": "kiwi-108-chinese-1",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.titsia.com.tw/products-book/30"
+    },
+    {
+      "subject": "國文",
+      "publisher": "奇異果",
+      "volume": 2,
+      "bookId": "kiwi-108-chinese-2",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.titsia.com.tw/products-book/75"
+    },
+    {
+      "subject": "國文",
+      "publisher": "奇異果",
+      "volume": 3,
+      "bookId": "kiwi-108-chinese-3",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.titsia.com.tw/products-book/84"
+    },
+    {
+      "subject": "國文",
+      "publisher": "奇異果",
+      "volume": 4,
+      "bookId": "kiwi-108-chinese-4",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.titsia.com.tw/products-book/91"
+    },
+    {
+      "subject": "國文",
+      "publisher": "奇異果",
+      "volume": 5,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "國文",
+      "publisher": "南一",
+      "volume": 1,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "國文",
+      "publisher": "南一",
+      "volume": 2,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "國文",
+      "publisher": "南一",
+      "volume": 3,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "國文",
+      "publisher": "南一",
+      "volume": 4,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "國文",
+      "publisher": "南一",
+      "volume": 5,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "國文",
+      "publisher": "翰林",
+      "volume": 1,
+      "bookId": "hanlin-108-chinese-1",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://resource.hle.com.tw/Books/BooksResource/%E9%AB%98%E4%B8%AD%E5%9C%8B%E6%96%87%281%29%E3%80%90%E6%B7%B7%E5%90%88%E8%A9%A6%E9%A1%8C%E9%9B%86%E3%80%91%28111f467228%29.pdf"
+    },
+    {
+      "subject": "國文",
+      "publisher": "翰林",
+      "volume": 2,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "國文",
+      "publisher": "翰林",
+      "volume": 3,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "國文",
+      "publisher": "翰林",
+      "volume": 4,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "國文",
+      "publisher": "翰林",
+      "volume": 5,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "國文",
+      "publisher": "龍騰",
+      "volume": 1,
+      "bookId": "longteng-108-chinese-1",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=9716"
+    },
+    {
+      "subject": "國文",
+      "publisher": "龍騰",
+      "volume": 2,
+      "bookId": "longteng-108-chinese-2",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=9817"
+    },
+    {
+      "subject": "國文",
+      "publisher": "龍騰",
+      "volume": 3,
+      "bookId": "longteng-108-chinese-3",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=9982"
+    },
+    {
+      "subject": "國文",
+      "publisher": "龍騰",
+      "volume": 4,
+      "bookId": "longteng-108-chinese-4",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=10093"
+    },
+    {
+      "subject": "國文",
+      "publisher": "龍騰",
+      "volume": 5,
+      "bookId": "longteng-108-chinese-5",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=10293"
+    },
+    {
+      "subject": "英文",
+      "publisher": "三民",
+      "volume": 1,
+      "bookId": "sanmin-108-english-1",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/009636573"
+    },
+    {
+      "subject": "英文",
+      "publisher": "三民",
+      "volume": 2,
+      "bookId": "sanmin-108-english-2",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/007588882"
+    },
+    {
+      "subject": "英文",
+      "publisher": "三民",
+      "volume": 3,
+      "bookId": "sanmin-108-english-3",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/010608379"
+    },
+    {
+      "subject": "英文",
+      "publisher": "三民",
+      "volume": 4,
+      "bookId": "sanmin-108-english-4",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/013675432"
+    },
+    {
+      "subject": "英文",
+      "publisher": "三民",
+      "volume": 5,
+      "bookId": "sanmin-108-english-5",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/013368570"
+    },
+    {
+      "subject": "英文",
+      "publisher": "三民（乙版）",
+      "volume": 1,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "英文",
+      "publisher": "三民（乙版）",
+      "volume": 2,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "英文",
+      "publisher": "三民（乙版）",
+      "volume": 3,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "英文",
+      "publisher": "三民（乙版）",
+      "volume": 4,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "英文",
+      "publisher": "三民（乙版）",
+      "volume": 5,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "英文",
+      "publisher": "翰林",
+      "volume": 1,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "英文",
+      "publisher": "翰林",
+      "volume": 2,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "英文",
+      "publisher": "翰林",
+      "volume": 3,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "英文",
+      "publisher": "翰林",
+      "volume": 4,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "英文",
+      "publisher": "翰林",
+      "volume": 5,
+      "bookId": null,
+      "status": "missing-index",
+      "source": null
+    },
+    {
+      "subject": "英文",
+      "publisher": "龍騰",
+      "volume": 1,
+      "bookId": "longteng-108-english-1",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=9796"
+    },
+    {
+      "subject": "英文",
+      "publisher": "龍騰",
+      "volume": 2,
+      "bookId": "longteng-108-english-2",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=9823"
+    },
+    {
+      "subject": "英文",
+      "publisher": "龍騰",
+      "volume": 3,
+      "bookId": "longteng-108-english-3",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=10012"
+    },
+    {
+      "subject": "英文",
+      "publisher": "龍騰",
+      "volume": 4,
+      "bookId": "longteng-108-english-4",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=10107"
+    },
+    {
+      "subject": "英文",
+      "publisher": "龍騰",
+      "volume": 5,
+      "bookId": "longteng-108-english-5",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=10313"
+    }
+  ]
+}
