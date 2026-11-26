@@ -28,14 +28,14 @@ test('multi-hit skills hit a boss once per sweep and ordinary knockback cannot d
   Object.assign(s.actors[1],{x:4,y:2});
   s=R.apply(s,'u',{type:'manual',skillId:'wind-step',x:3,y:3},now);
   assert.equal(s.events.filter(e=>e.type==='damage'&&e.target===s.actors[1].uid).length,2);
-  assert.equal(s.actors[1].hp,3440);
+  assert.equal(s.actors[1].hp,3520); // 200 × 1.2 × 2 strikes
 });
 test('throw deals damage to a boss without moving its four-cell footprint',()=>{
   let s=scene();Object.assign(s.actors[0],{manualSkills:['tiger-throw'],trainingAccessScore:68});
   const position={x:s.actors[1].x,y:s.actors[1].y};
   s=R.apply(s,'u',{type:'manual',skillId:'tiger-throw',x:2,y:2},now);
   assert.deepEqual({x:s.actors[1].x,y:s.actors[1].y},position);
-  assert.equal(s.actors[1].hp,3700);
+  assert.equal(s.actors[1].hp,3400); // 200 × 3.0, one throw
 });
 test('v4 bosses warn with distinct shapes and the warning survives player movement',()=>{
   const cases=[

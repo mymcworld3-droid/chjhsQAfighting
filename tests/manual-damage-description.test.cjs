@@ -20,7 +20,7 @@ test('repeated hits use explicit number of strikes and individual damage, not a 
   assert.match(desc('wind-step',426,5),/造成 2 次 716 的傷害（戰場攻擊力 426 × 每擊倍率 1.68/);
   assert.match(desc('tiger-step'),/造成 2 次 320 的傷害/);
   assert.match(desc('dragon-guard'),/最多造成 4 次 240 的傷害/);
-  assert.match(desc('dragon-guard'),/額外造成 90 撞擊傷害/);
+  assert.match(desc('dragon-guard'),/額外造成 120 撞擊傷害/);
   assert.equal(Q.BY_SKILL['dragon-guard'].cost,4);
   assert.match(desc('sky-cloud'),/一般劍氣每擊造成 360 傷害；中心交點最多造成 2 次 400 的傷害/);
   assert.match(desc('sky-sever'),/一般劍氣每擊造成 400 傷害；中心交點最多造成 8 次 150 的傷害/);
