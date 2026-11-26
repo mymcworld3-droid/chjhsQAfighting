@@ -13,8 +13,8 @@ function positionGameplayNav(){
     button.dataset.target='page-gameplay';
     button.className='nav-btn gameplay-nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all';
     button.innerHTML='<div class="relative p-1"><i class="fa-solid fa-dice-d20 text-lg" aria-hidden="true"></i></div>'+
-      '<span class="text-[10px] mt-1">玩法</span>';
-    button.setAttribute('aria-label','前往玩法');
+      '<span class="text-[10px] mt-1">歷練</span>';
+    button.setAttribute('aria-label','前往歷練');
     button.addEventListener('click',()=>window.switchToPage?.('page-gameplay'));
   }
   const training=nav.querySelector('#nav-training');

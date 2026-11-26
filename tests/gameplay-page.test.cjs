@@ -6,7 +6,8 @@ const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
 test('gameplay page contains one target for the existing cooperative dungeon',()=>{
   const html=read('public/index.html');
   assert.match(html,/<section id="page-gameplay" class="page-section hidden/);
-  assert.match(html,/class="gameplay-entries" aria-label="選擇遊戲玩法"/);
+  assert.match(html,/class="gameplay-entries" aria-label="選擇歷練項目"/);
+  assert.match(html,/id="gameplay-page-title">歷練<\/h2>/);
   assert.match(html,/styles\/gameplay-page\.css/);
   const lobby=read('public/cultivation/dungeon-lobby.js');
   assert.match(lobby,/querySelector\('#page-gameplay \.gameplay-entries'\)/);
@@ -55,7 +56,8 @@ test('navigation mounts after 修煉, stays unique and follows a replacement tra
   assert.ok(gameplay);
   assert.deepEqual(nav.children.map(n=>n.id),['nav-home','nav-training','nav-gameplay','nav-settings']);
   assert.equal(gameplay.dataset.target,'page-gameplay');
-  assert.ok(gameplay.innerHTML.includes('玩法'));
+  assert.ok(gameplay.innerHTML.includes('歷練'));
+  assert.equal(gameplay['aria-label'],'前往歷練');
   gameplay.listeners.click();assert.equal(opened,'page-gameplay');
   // Simulate a realm transition that removes and recreates training.
   nav.children.splice(nav.children.indexOf(training),1);training.parent=null;
