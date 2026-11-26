@@ -45,7 +45,7 @@ test('gameplay entry opens an authenticated modal with six difficulties, ticket 
  assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty=/);
  h.choose();h.back();assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty=/);h.choose();
  assert.equal((h.dialog().innerHTML.match(/data-wd-difficulty=/g)||[]).length,6);
- assert.match(h.dialog().innerHTML,/副本券 .*?>3 \/ 5<\/b>/);
+ assert.match(h.dialog().innerHTML,/副本券 .*?>3<\/b>/);
  assert.match(h.dialog().innerHTML,/擊退則會打斷蓄勢/);
  assert.match(h.dialog().innerHTML,/data-wd-difficulty="1"[^>]* disabled/);
  await h.click(1);assert.equal(h.entered.length,0,'a forged locked-difficulty click cannot enter');
@@ -64,9 +64,15 @@ test('late account responses and responses after closing cannot overwrite a new 
  assert.equal(h.dialog().open,false);
  const current=h.open();h.respond(h.state({tickets:5}),1);await current;
  h.respond(h.state({tickets:1}),0);await old;
- assert.match(h.dialog().innerHTML,/副本券 .*?>5 \/ 5<\/b>/);
+ assert.match(h.dialog().innerHTML,/副本券 .*?>5<\/b>/);
  const closing=h.open();h.dialog().close();h.respond(h.state({tickets:2}),2);await closing;
- assert.equal(h.dialog().open,false);assert.doesNotMatch(h.dialog().innerHTML,/副本券 .*?>2 \/ 5<\/b>/);
+ assert.equal(h.dialog().open,false);assert.doesNotMatch(h.dialog().innerHTML,/副本券 .*?>2<\/b>/);
 });
 
 test('catalog preserves per-dungeon progress and stone gates are deterministic',()=>{const p=W.progress({unlocked:1,clears:[2,0,0,0,0,0]});const d=W.catalog(p)[0];assert.equal(d.id,W.ID);assert.equal(d.clears[0],2);assert.equal(d.difficulties[1].locked,false);assert.equal(d.difficulties[2].locked,true);const map=W.layout('seed',0);assert.deepEqual(map,W.layout('seed',0));assert.equal(map.structure,'three-stone-gates');assert(map.blocks.length>75);});
+
+test('earned dungeon ticket balances above daily refill cap remain visible',async()=>{
+ const h=harness(),opening=h.open();h.respond(h.state({tickets:8}));await opening;
+ assert.match(h.dialog().innerHTML,/副本券 .*?>8<\/b>/);
+ assert.match(h.dialog().innerHTML,/補發上限 5 張/);
+});
