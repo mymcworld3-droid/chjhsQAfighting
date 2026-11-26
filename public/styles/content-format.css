@@ -1,17 +1,18 @@
 /* Shared content roles. These rules change formatting, never scene geometry,
    state colors, navigation visibility, or the sizes of battlefield artwork. */
 :root {
-  /* U12: canonical sect palette. Semantic state and rarity colors stay local. */
+  /* U12: ink-green canvas, near-black cards and warm gold, matching the
+     preferred original palette. State and rarity colors stay local. */
   --qy-ink: #14241e;
-  --qy-surface: #20332a;
-  --qy-inset: #192820;
-  --qy-jade: #a5cbb3;
+  --qy-surface: #0c0d0b;
+  --qy-inset: #1b1812;
+  --qy-jade: #d9b66d;
   --qy-gold: #d2b374;
-  --qy-paper: #f1e7d0;
-  --qy-muted: #b8c6b5;
-  --qy-line: rgba(210,179,116,.24);
-  --qy-accent-line: rgba(210,179,116,.55);
-  --qy-glass: rgba(27,43,34,.96);
+  --qy-paper: #eee5d2;
+  --qy-muted: #ada591;
+  --qy-line: rgba(210,185,137,.18);
+  --qy-accent-line: rgba(217,182,109,.55);
+  --qy-glass: rgba(12,13,11,.96);
   --qy-space-1: 4px;
   --qy-space-2: 8px;
   --qy-space-3: 12px;
