@@ -27,3 +27,10 @@ test('stage unlock labels match active gates and permanent access without invent
  assert.equal(J.unlocks('path-mahayana',{score:1268})[0].unlocked,true);
  assert.deepEqual(J.unlocks('path-golden',{score:1000}),[]);
 });
+
+test('every journey emblem uses the canonical atlas realm glyph',()=>{
+ const s=R.view({stats:{totalScore:3000,totalCorrect:100}}, {}, '2026-11-26');
+ const j=J.journey(s,R.PATH);
+ assert.deepEqual(j.groups.map(g=>g.realmIcon),['煉氣','築基','金丹','元嬰','化神','煉虛','合體','渡劫','半仙','真仙']);
+ assert.equal(j.groups.at(-1).name,'仙道精進');
+});

@@ -3,6 +3,7 @@ import './community-presentation.js';
 import './daily-meditation-rewards.js';
 import './quest-rules.js';
 import './quest-path-journey.js';
+import './realm-icons.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 
 (function () {
@@ -132,7 +133,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if(!groups.some(g=>g.id===selectedStage)||selectedStage===previousActiveStage) selectedStage=activeId;
     previousActiveStage=activeId;
     const group=groups.find(g=>g.id===selectedStage);
-    const badge=(g,large=false)=>`<span class="path-emblem${large?' path-emblem-large':''}" aria-hidden="true"><i class="fa-solid fa-${g.icon}"></i></span>`;
+    const badge=(g,large=false)=>`<span class="path-emblem${large?' path-emblem-large':''}" aria-hidden="true">${window.getRealmIconMarkup(g.realmIcon)}</span>`;
     const supplemental=(s.pathTicketRewards||[]).map(q=>card(q,'path')).join('');
     if(!group)return '<p class="quest-empty">仙道任務已全部完成。</p>'+supplemental;
     const state=g=>g.done?'done':g.id===activeId?'current':'future';
@@ -313,7 +314,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if ($('quest-panel')) return;
     const entry = $('quest-open');
     if (!entry) return;
-    const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css?v=20261126-path-unlocks-only'; document.head.append(link);
+    const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css?v=20261126-path-realm-glyphs'; document.head.append(link);
     const dialog = document.createElement('dialog'); dialog.id = 'quest-dialog'; dialog.className = 'quest-dialog'; dialog.setAttribute('role', 'dialog'); dialog.setAttribute('aria-modal', 'true'); dialog.setAttribute('aria-labelledby', 'quest-title');
     const panel = document.createElement('section'); panel.id = 'quest-panel'; panel.className = 'quest-panel'; panel.setAttribute('aria-label', '修行任務');
     panel.innerHTML = `<header class="quest-heading"><div><small id="quest-heading-kicker">宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
