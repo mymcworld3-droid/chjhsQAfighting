@@ -6,12 +6,12 @@
   "publisher": "龍騰",
   "term": "第二學期",
   "bookLabel": "第4B冊",
-  "schoolYear": null,
+  "schoolYear": 114,
   "curriculumStandard": "108課綱",
   "verifiedAt": "2026-11-26",
-  "verificationStatus": "verified-partial",
-  "scopeSelectionStatus": "pending-toc",
-  "scopeDetailLevel": "official-units",
+  "verificationStatus": "verified-complete-crosswalk",
+  "scopeSelectionStatus": "verified-crosswalk",
+  "scopeDetailLevel": "crosswalk-units",
   "releaseStatus": "blocked",
   "legacyVisible": false,
   "courseType": "required-track",
@@ -22,8 +22,141 @@
       "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10529",
       "type": "official-product",
       "accessedAt": "2026-11-26"
+    },
+    {
+      "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+      "type": "third-party-curriculum-crosswalk",
+      "provider": "三貝德／升學王",
+      "accessedAt": "2026-11-26",
+      "page": 1,
+      "publisherTable": "龍騰數學 高二下(B版)",
+      "schoolYear": 114,
+      "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+    },
+    {
+      "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+      "type": "third-party-curriculum-crosswalk",
+      "provider": "三貝德／升學王",
+      "accessedAt": "2026-11-26",
+      "page": 1,
+      "publisherTable": "龍騰數學 高二下(B版)",
+      "schoolYear": 114,
+      "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
     }
   ],
-  "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。",
-  "units": []
+  "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+  "units": [
+    {
+      "unit": "單元一 空間概念",
+      "details": [
+        "空間概念"
+      ],
+      "concepts": [
+        {
+          "name": "空間概念",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元二 空間坐標系",
+      "details": [
+        "空間坐標系"
+      ],
+      "concepts": [
+        {
+          "name": "空間坐標系",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元三 平面上的比例",
+      "details": [
+        "平面上的比例"
+      ],
+      "concepts": [
+        {
+          "name": "平面上的比例",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元四 條件機率",
+      "details": [
+        "條件機率"
+      ],
+      "concepts": [
+        {
+          "name": "條件機率",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元五 貝氏定理",
+      "details": [
+        "貝氏定理"
+      ],
+      "concepts": [
+        {
+          "name": "貝氏定理",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元六 矩陣的運算",
+      "details": [
+        "矩陣的運算"
+      ],
+      "concepts": [
+        {
+          "name": "矩陣的運算",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元七 矩陣的應用",
+      "details": [
+        "矩陣的應用"
+      ],
+      "concepts": [
+        {
+          "name": "矩陣的應用",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "單元八 圓錐曲線",
+      "details": [
+        "圓錐曲線"
+      ],
+      "concepts": [
+        {
+          "name": "圓錐曲線",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ],
+  "scopeEvidence": {
+    "kind": "publisher-crosswalk",
+    "provider": "三貝德／升學王",
+    "publisher": "龍騰",
+    "page": 1,
+    "columnPolicy": "publisher-left-only",
+    "schoolYear": 114
+  }
 }

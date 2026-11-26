@@ -1,7 +1,382 @@
 {
   "schema": 1,
   "schoolYearTarget": 115,
+  "scopeOnly": true,
   "sources": [
+    {
+      "id": "chwa-114-chemistry-ii",
+      "publisher": "全華",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_chemistry_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修化學(II)",
+          "schoolYear": 114,
+          "documentSha256": "591623141019e00214182f59563ad6ae3166bca66ac3e0b0c1c1ff01cf31b2c2"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_chemistry_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修化學(II)",
+          "schoolYear": 114,
+          "documentSha256": "591623141019e00214182f59563ad6ae3166bca66ac3e0b0c1c1ff01cf31b2c2"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-114-chemistry-iv",
+      "publisher": "全華",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_chemistry_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "全華選修化學(IV)",
+          "schoolYear": 114,
+          "documentSha256": "19a4be6bb038e2470fee8c2a99f6b1dc1febe29b34406ebc318211605d987617"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_chemistry_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "全華選修化學(IV)",
+          "schoolYear": 114,
+          "documentSha256": "19a4be6bb038e2470fee8c2a99f6b1dc1febe29b34406ebc318211605d987617"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-114-math-4a",
+      "publisher": "全華",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-114-math-4b",
+      "publisher": "全華",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華數學 高二下 (B版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華數學 高二下 (B版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-114-physics-ii",
+      "publisher": "全華",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_physical_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修物理(II)",
+          "schoolYear": 114,
+          "documentSha256": "6d49f365e28e1892ca7a5dbbdc6dd1aad162450b6d64e96b27d89446a1c109f6"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_physical_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修物理(II)",
+          "schoolYear": 114,
+          "documentSha256": "6d49f365e28e1892ca7a5dbbdc6dd1aad162450b6d64e96b27d89446a1c109f6"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-114-physics-iv",
+      "publisher": "全華",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_physical_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修物理(IV)",
+          "schoolYear": 114,
+          "documentSha256": "e2f79271bd29a38392995661f5803481ae384e86e6000fa9656f5ea9fea4a983"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_physical_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修物理(IV)",
+          "schoolYear": 114,
+          "documentSha256": "e2f79271bd29a38392995661f5803481ae384e86e6000fa9656f5ea9fea4a983"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-115-chemistry-i",
+      "publisher": "全華",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28I%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修化學(I)",
+          "schoolYear": 115,
+          "documentSha256": "43789a21e155da137542756487c6ce3e6893f86f9a36832e8899751918293ad4"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-115-chemistry-iii",
+      "publisher": "全華",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修化學(III)",
+          "schoolYear": 115,
+          "documentSha256": "79c783dc589b17219e9bc16c669d1092b4da125dedb0bdb75f4d43d1d76621b4"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修化學(III)",
+          "schoolYear": 115,
+          "documentSha256": "79c783dc589b17219e9bc16c669d1092b4da125dedb0bdb75f4d43d1d76621b4"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-115-chemistry-v",
+      "publisher": "全華",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修化學(V)",
+          "schoolYear": 115,
+          "documentSha256": "072932824af6356237312cb00132eec7759785b3821cdcba31d390312f7217f7"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修化學(V)",
+          "schoolYear": 115,
+          "documentSha256": "072932824af6356237312cb00132eec7759785b3821cdcba31d390312f7217f7"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-115-math-3a",
+      "publisher": "全華",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華數學 高二上 (A版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-115-math-3b",
+      "publisher": "全華",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華數學 高二上 (B版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-115-physics-i",
+      "publisher": "全華",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28I%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修物理(I)",
+          "schoolYear": 115,
+          "documentSha256": "29a30deb7a804c86cdd19fb3a773009aad6e2633b01ef97f96d399eaee38f1dc"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-115-physics-iii",
+      "publisher": "全華",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修物理(III)",
+          "schoolYear": 115,
+          "documentSha256": "9c82175013e9ebbb89cf6d30e656a4900e6b0dc4cf9d42287f50155792ebbc4a"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "chwa-115-physics-v",
+      "publisher": "全華",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華選修物理(V)",
+          "schoolYear": 115,
+          "documentSha256": "b1326e02c777e70edf4cbe067c15695f1149b8adf32622c50be32643a38c67e4"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
     {
       "id": "hanlin-114-math-4a",
       "publisher": "翰林",
@@ -9,10 +384,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hma/",
-        "https://drive.google.com/drive/folders/1Vww-hRr12kkPK6s2qYj5J-gafHwS3CD0",
-        "https://drive.google.com/file/d/132OIIdvVvQbOngWF5DE6rcFxJ2NZLgPe/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hma/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1Vww-hRr12kkPK6s2qYj5J-gafHwS3CD0",
+          "type": "official-textbook-folder",
+          "title": "114下高中數學4A課本"
+        },
+        {
+          "url": "https://drive.google.com/file/d/132OIIdvVvQbOngWF5DE6rcFxJ2NZLgPe/view",
+          "type": "official-toc",
+          "title": "數學(4)A課本_01_編輯大意、目次.pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -23,10 +410,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hma/",
-        "https://drive.google.com/drive/folders/1-VjWQd0LaaFfuXyvndHrV-6OYseepZLL",
-        "https://drive.google.com/file/d/1YvQQj02icCJNEPyar_eyRQIJLPmRRCDl/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hma/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1-VjWQd0LaaFfuXyvndHrV-6OYseepZLL",
+          "type": "official-textbook-folder",
+          "title": "114下高中數學4B課本"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1YvQQj02icCJNEPyar_eyRQIJLPmRRCDl/view",
+          "type": "official-toc",
+          "title": "數學(4)B課本_01_編輯大意、目次.pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -37,10 +436,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hph/",
-        "https://drive.google.com/drive/folders/1TkJWl9DGKdyZWO-ntDDf67t0Ui-iy6_D",
-        "https://drive.google.com/file/d/14EQWH_fEaONTKXvZxTWsy00R_OpBULGL/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hph/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1TkJWl9DGKdyZWO-ntDDf67t0Ui-iy6_D",
+          "type": "official-textbook-folder",
+          "title": "01_114下高中選修物理(II)_課本_PDF檔"
+        },
+        {
+          "url": "https://drive.google.com/file/d/14EQWH_fEaONTKXvZxTWsy00R_OpBULGL/view",
+          "type": "official-toc",
+          "title": "選修物理(Ⅱ)課本_01_編輯大意、目次.pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -51,10 +462,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hph/",
-        "https://drive.google.com/drive/folders/1ZybzpDrCdUfzic-yz0iZFKGixzvfwcdn",
-        "https://drive.google.com/file/d/1Wy86EJrv7nd2_b0gauq8zG4TX_heSDJd/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hph/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1ZybzpDrCdUfzic-yz0iZFKGixzvfwcdn",
+          "type": "official-textbook-folder",
+          "title": "01_114下高中選修物理(IV)_課本_PDF檔"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1Wy86EJrv7nd2_b0gauq8zG4TX_heSDJd/view",
+          "type": "official-toc",
+          "title": "選修物理(Ⅳ)課本_01_編輯大意、目次.pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -65,10 +488,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hph/",
-        "https://drive.google.com/drive/folders/1Qn8LmSNpBWpY1gZiEg1ZcsjC22r1-0CN",
-        "https://drive.google.com/file/d/1c2L8Nyf6x7PKXQnCOYrOhQtWFePXyEb-/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hph/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1Qn8LmSNpBWpY1gZiEg1ZcsjC22r1-0CN",
+          "type": "official-textbook-folder",
+          "title": "01_114下高中選修物理(V)_課本_PDF檔"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1c2L8Nyf6x7PKXQnCOYrOhQtWFePXyEb-/view",
+          "type": "official-toc",
+          "title": "選修物理(Ⅴ)課本_01_編輯大意、目次.pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -79,10 +514,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hce/",
-        "https://drive.google.com/drive/folders/1LxLBTWbJZqn0lcw3sP4lr-nExEjDjKnl",
-        "https://drive.google.com/file/d/1xAqNG4qR1RXtCCZejdoCdtTPUuWN5jL4/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hce/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1LxLBTWbJZqn0lcw3sP4lr-nExEjDjKnl",
+          "type": "official-textbook-folder",
+          "title": "翰林選修生物I_課本(學用)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1xAqNG4qR1RXtCCZejdoCdtTPUuWN5jL4/view",
+          "type": "official-toc",
+          "title": "選修化學(Ⅰ)課本_01_編輯大意、目次(115f189322).pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -93,10 +540,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hce/",
-        "https://drive.google.com/drive/folders/19i2s_9WAyMN4SCw2vXSkzZbsD6AaoHKl",
-        "https://drive.google.com/file/d/1cYEjrFJ97jIFjcOJsAFvyDTlSTIYIlY9/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hce/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/19i2s_9WAyMN4SCw2vXSkzZbsD6AaoHKl",
+          "type": "official-textbook-folder",
+          "title": "翰林選修化學II_課本(學用)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1cYEjrFJ97jIFjcOJsAFvyDTlSTIYIlY9/view",
+          "type": "official-toc",
+          "title": "選修化學(Ⅱ)課本_01_編輯大意、目次(115f164111).pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -107,10 +566,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hce/",
-        "https://drive.google.com/drive/folders/1E7OVtDis59oID2N6Q79FXDcvzgLKwRPE",
-        "https://drive.google.com/file/d/1XpYIxh0yrQOQeHITdZwBawhTuF8eBLj1/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hce/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1E7OVtDis59oID2N6Q79FXDcvzgLKwRPE",
+          "type": "official-textbook-folder",
+          "title": "翰林選修化學III_課本(學用)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1XpYIxh0yrQOQeHITdZwBawhTuF8eBLj1/view",
+          "type": "official-toc",
+          "title": "選修化學(Ⅲ)課本_01_編輯大意、目次(115f232078).pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -121,10 +592,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hce/",
-        "https://drive.google.com/drive/folders/1jbaBcEdKVhumuCNoGh1nHIrduNKTaVOi",
-        "https://drive.google.com/file/d/16f1ma6qiVYFGMGsOhyORh3d7U5qCUNxv/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hce/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1jbaBcEdKVhumuCNoGh1nHIrduNKTaVOi",
+          "type": "official-textbook-folder",
+          "title": "翰林選修化學IV_課本(學用)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/16f1ma6qiVYFGMGsOhyORh3d7U5qCUNxv/view",
+          "type": "official-toc",
+          "title": "選修化學(Ⅳ)課本_01_編輯大意、目次(115f164925).pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -135,10 +618,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hce/",
-        "https://drive.google.com/drive/folders/1mPR5QIDSeKAGCtsVFmfhDvSpxsC8TkQe",
-        "https://drive.google.com/file/d/1G5X7_qi1P_Ob-mnHib_CXopKcOTCI4IF/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hce/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1mPR5QIDSeKAGCtsVFmfhDvSpxsC8TkQe",
+          "type": "official-textbook-folder",
+          "title": "翰林選修化學V_課本(學用)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1G5X7_qi1P_Ob-mnHib_CXopKcOTCI4IF/view",
+          "type": "official-toc",
+          "title": "選修化學(Ⅴ)課本_01_編輯大意、目次(115f166337).pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -149,9 +644,16 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hma/",
-        "https://drive.google.com/file/d/16Tm93A7eHCDGgObzmW2AQZ2qywLi20qU/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hma/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/file/d/16Tm93A7eHCDGgObzmW2AQZ2qywLi20qU/view",
+          "type": "official-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "已核對完整章節目次；各節細項、學習深度、標準觀念映射及五題內容審核尚未全部完成。不得以目次查證代替正式開放。"
     },
@@ -162,9 +664,16 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hma/",
-        "https://drive.google.com/file/d/1tDU7jWY2ICvo6wA4S3cYn-Qd1hUHA59K/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hma/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1tDU7jWY2ICvo6wA4S3cYn-Qd1hUHA59K/view",
+          "type": "official-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "已核對完整章節目次；各節細項、學習深度、標準觀念映射及五題內容審核尚未全部完成。不得以目次查證代替正式開放。"
     },
@@ -175,10 +684,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hph/",
-        "https://drive.google.com/drive/folders/1Ev5kcHo661Tx-hubUoIYULNiyH8ZRO7-",
-        "https://drive.google.com/file/d/1iSXSA3Md4XPeqinvkvErN4cMEcxpHqBs/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hph/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1Ev5kcHo661Tx-hubUoIYULNiyH8ZRO7-",
+          "type": "official-textbook-folder",
+          "title": "01_115上高中選修物理(I)_課本_PDF檔"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1iSXSA3Md4XPeqinvkvErN4cMEcxpHqBs/view",
+          "type": "official-toc",
+          "title": "選修物理(Ⅰ)課本_01_編輯大意、目次.pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -189,10 +710,22 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://sh.hle.com.tw/hph/",
-        "https://drive.google.com/drive/folders/1lmV6ZwD-bDxme48QJ7VticNQVU77OLZR",
-        "https://drive.google.com/file/d/1-rVq2-MM0IkRwoRl55tf2Wh041f6KWZP/view"
+      "sources": [
+        {
+          "url": "https://sh.hle.com.tw/hph/",
+          "type": "official-portal"
+        },
+        {
+          "url": "https://drive.google.com/drive/folders/1lmV6ZwD-bDxme48QJ7VticNQVU77OLZR",
+          "type": "official-textbook-folder",
+          "title": "01_115上高中選修物理(III)_課本_PDF檔"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1-rVq2-MM0IkRwoRl55tf2Wh041f6KWZP/view",
+          "type": "official-toc",
+          "title": "選修物理(Ⅲ)課本_01_編輯大意、目次.pdf",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "本輪依使用者縮小範圍先完成高二教材分版與章節；目次節名不等於全部題型已完成獨立內容審核。選修冊次由各校排課決定，不強制綁定同一學期。"
     },
@@ -203,8 +736,12 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9980"
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9980",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
     },
@@ -215,8 +752,12 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9981"
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9981",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
     },
@@ -227,8 +768,12 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10468"
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10468",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
     },
@@ -239,22 +784,50 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10283"
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10283",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
     },
     {
       "id": "longteng-108-chemistry-v",
       "publisher": "龍騰",
-      "schoolYear": null,
+      "schoolYear": 115,
       "accessedAt": "2026-11-26",
-      "verificationStatus": "verified-partial",
-      "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10573"
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10573",
+          "type": "official-product",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 1,
+          "publisherTable": "龍騰選修化學(V)",
+          "schoolYear": 115,
+          "documentSha256": "072932824af6356237312cb00132eec7759785b3821cdcba31d390312f7217f7"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 1,
+          "publisherTable": "龍騰選修化學(V)",
+          "schoolYear": 115,
+          "documentSha256": "072932824af6356237312cb00132eec7759785b3821cdcba31d390312f7217f7"
+        }
       ],
-      "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
     },
     {
       "id": "longteng-108-math-3a",
@@ -263,8 +836,12 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-units",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9978"
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9978",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。"
     },
@@ -275,34 +852,86 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-units",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9972"
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9972",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。"
     },
     {
       "id": "longteng-108-math-4a",
       "publisher": "龍騰",
-      "schoolYear": null,
+      "schoolYear": 114,
       "accessedAt": "2026-11-26",
-      "verificationStatus": "verified-partial",
-      "scopeDetailLevel": "official-units",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10526"
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-units",
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10526",
+          "type": "official-product",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 1,
+          "publisherTable": "龍騰數學 高二下(A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 1,
+          "publisherTable": "龍騰數學 高二下(A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        }
       ],
-      "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。"
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
     },
     {
       "id": "longteng-108-math-4b",
       "publisher": "龍騰",
-      "schoolYear": null,
+      "schoolYear": 114,
       "accessedAt": "2026-11-26",
-      "verificationStatus": "verified-partial",
-      "scopeDetailLevel": "official-units",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10529"
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-units",
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10529",
+          "type": "official-product",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 1,
+          "publisherTable": "龍騰數學 高二下(B版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 1,
+          "publisherTable": "龍騰數學 高二下(B版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        }
       ],
-      "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。"
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
     },
     {
       "id": "longteng-108-physics-i",
@@ -311,8 +940,12 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9970"
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9970",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
     },
@@ -323,8 +956,12 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9989"
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9989",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
     },
@@ -335,8 +972,12 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10114"
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10114",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
     },
@@ -347,22 +988,1325 @@
       "accessedAt": "2026-11-26",
       "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10304"
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10304",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        }
       ],
       "limitations": "官方頁面未標示學年度，保留為未知；已核對官方公開目次層級，未以其他出版社或參考書補造細項。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
     },
     {
       "id": "longteng-108-physics-v",
       "publisher": "龍騰",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10571",
+          "type": "official-product",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 1,
+          "publisherTable": "龍騰選修物理(V)",
+          "schoolYear": 115,
+          "documentSha256": "b1326e02c777e70edf4cbe067c15695f1149b8adf32622c50be32643a38c67e4"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-114-chemistry-ii",
+      "publisher": "南一",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_chemistry_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修化學(II)",
+          "schoolYear": 114,
+          "documentSha256": "591623141019e00214182f59563ad6ae3166bca66ac3e0b0c1c1ff01cf31b2c2"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_chemistry_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修化學(II)",
+          "schoolYear": 114,
+          "documentSha256": "591623141019e00214182f59563ad6ae3166bca66ac3e0b0c1c1ff01cf31b2c2"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-114-chemistry-iv",
+      "publisher": "南一",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_chemistry_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "南一選修化學(IV)",
+          "schoolYear": 114,
+          "documentSha256": "19a4be6bb038e2470fee8c2a99f6b1dc1febe29b34406ebc318211605d987617"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_chemistry_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "南一選修化學(IV)",
+          "schoolYear": 114,
+          "documentSha256": "19a4be6bb038e2470fee8c2a99f6b1dc1febe29b34406ebc318211605d987617"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-114-math-4a",
+      "publisher": "南一",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "南一數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "南一數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-114-math-4b",
+      "publisher": "南一",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "南一數學 高二下 (B版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "南一數學 高二下 (B版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-114-physics-ii",
+      "publisher": "南一",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_physical_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修物理(II)",
+          "schoolYear": 114,
+          "documentSha256": "6d49f365e28e1892ca7a5dbbdc6dd1aad162450b6d64e96b27d89446a1c109f6"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_physical_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修物理(II)",
+          "schoolYear": 114,
+          "documentSha256": "6d49f365e28e1892ca7a5dbbdc6dd1aad162450b6d64e96b27d89446a1c109f6"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-114-physics-iv",
+      "publisher": "南一",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_physical_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修物理(IV)",
+          "schoolYear": 114,
+          "documentSha256": "e2f79271bd29a38392995661f5803481ae384e86e6000fa9656f5ea9fea4a983"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_physical_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修物理(IV)",
+          "schoolYear": 114,
+          "documentSha256": "e2f79271bd29a38392995661f5803481ae384e86e6000fa9656f5ea9fea4a983"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-115-chemistry-i",
+      "publisher": "南一",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28I%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修化學(I)",
+          "schoolYear": 115,
+          "documentSha256": "43789a21e155da137542756487c6ce3e6893f86f9a36832e8899751918293ad4"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-115-chemistry-iii",
+      "publisher": "南一",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修化學(III)",
+          "schoolYear": 115,
+          "documentSha256": "79c783dc589b17219e9bc16c669d1092b4da125dedb0bdb75f4d43d1d76621b4"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修化學(III)",
+          "schoolYear": 115,
+          "documentSha256": "79c783dc589b17219e9bc16c669d1092b4da125dedb0bdb75f4d43d1d76621b4"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-115-chemistry-v",
+      "publisher": "南一",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修化學(V)",
+          "schoolYear": 115,
+          "documentSha256": "072932824af6356237312cb00132eec7759785b3821cdcba31d390312f7217f7"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修化學(V)",
+          "schoolYear": 115,
+          "documentSha256": "072932824af6356237312cb00132eec7759785b3821cdcba31d390312f7217f7"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-115-math-3a",
+      "publisher": "南一",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "南一數學 高二上 (A版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-115-math-3b",
+      "publisher": "南一",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "南一數學 高二上 (B版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-115-physics-i",
+      "publisher": "南一",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28I%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修物理(I)",
+          "schoolYear": 115,
+          "documentSha256": "29a30deb7a804c86cdd19fb3a773009aad6e2633b01ef97f96d399eaee38f1dc"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-115-physics-iii",
+      "publisher": "南一",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修物理(III)",
+          "schoolYear": 115,
+          "documentSha256": "9c82175013e9ebbb89cf6d30e656a4900e6b0dc4cf9d42287f50155792ebbc4a"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修物理(III)",
+          "schoolYear": 115,
+          "documentSha256": "9c82175013e9ebbb89cf6d30e656a4900e6b0dc4cf9d42287f50155792ebbc4a"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "nani-115-physics-v",
+      "publisher": "南一",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "南一選修物理(V)",
+          "schoolYear": 115,
+          "documentSha256": "b1326e02c777e70edf4cbe067c15695f1149b8adf32622c50be32643a38c67e4"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-114-chemistry-ii",
+      "publisher": "三民",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_chemistry_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修化學(II)",
+          "schoolYear": 114,
+          "documentSha256": "591623141019e00214182f59563ad6ae3166bca66ac3e0b0c1c1ff01cf31b2c2"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_chemistry_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修化學(II)",
+          "schoolYear": 114,
+          "documentSha256": "591623141019e00214182f59563ad6ae3166bca66ac3e0b0c1c1ff01cf31b2c2"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-114-chemistry-iv",
+      "publisher": "三民",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_chemistry_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "三民選修化學(IV)",
+          "schoolYear": 114,
+          "documentSha256": "19a4be6bb038e2470fee8c2a99f6b1dc1febe29b34406ebc318211605d987617"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_chemistry_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 3,
+          "publisherTable": "三民選修化學(IV)",
+          "schoolYear": 114,
+          "documentSha256": "19a4be6bb038e2470fee8c2a99f6b1dc1febe29b34406ebc318211605d987617"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-114-math-4a",
+      "publisher": "三民",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "三民數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "三民數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-114-math-4b",
+      "publisher": "三民",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "三民數學 高二下 (B版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "三民數學 高二下 (B版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-114-physics-ii",
+      "publisher": "三民",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_physical_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修物理(II)",
+          "schoolYear": 114,
+          "documentSha256": "6d49f365e28e1892ca7a5dbbdc6dd1aad162450b6d64e96b27d89446a1c109f6"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_physical_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修物理(II)",
+          "schoolYear": 114,
+          "documentSha256": "6d49f365e28e1892ca7a5dbbdc6dd1aad162450b6d64e96b27d89446a1c109f6"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-114-physics-iv",
+      "publisher": "三民",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_physical_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修物理(IV)",
+          "schoolYear": 114,
+          "documentSha256": "e2f79271bd29a38392995661f5803481ae384e86e6000fa9656f5ea9fea4a983"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_physical_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修物理(IV)",
+          "schoolYear": 114,
+          "documentSha256": "e2f79271bd29a38392995661f5803481ae384e86e6000fa9656f5ea9fea4a983"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-115-chemistry-i",
+      "publisher": "三民",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28I%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修化學(I)",
+          "schoolYear": 115,
+          "documentSha256": "43789a21e155da137542756487c6ce3e6893f86f9a36832e8899751918293ad4"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-115-chemistry-iii",
+      "publisher": "三民",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修化學(III)",
+          "schoolYear": 115,
+          "documentSha256": "79c783dc589b17219e9bc16c669d1092b4da125dedb0bdb75f4d43d1d76621b4"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修化學(III)",
+          "schoolYear": 115,
+          "documentSha256": "79c783dc589b17219e9bc16c669d1092b4da125dedb0bdb75f4d43d1d76621b4"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-115-chemistry-v",
+      "publisher": "三民",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修化學(V)",
+          "schoolYear": 115,
+          "documentSha256": "072932824af6356237312cb00132eec7759785b3821cdcba31d390312f7217f7"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修化學(V)",
+          "schoolYear": 115,
+          "documentSha256": "072932824af6356237312cb00132eec7759785b3821cdcba31d390312f7217f7"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-115-math-3a",
+      "publisher": "三民",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "三民數學 高二上 (A版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-115-math-3b",
+      "publisher": "三民",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "三民數學 高二上 (B版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-115-physics-i",
+      "publisher": "三民",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28I%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修物理(I)",
+          "schoolYear": 115,
+          "documentSha256": "29a30deb7a804c86cdd19fb3a773009aad6e2633b01ef97f96d399eaee38f1dc"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-115-physics-iii",
+      "publisher": "三民",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修物理(III)",
+          "schoolYear": 115,
+          "documentSha256": "9c82175013e9ebbb89cf6d30e656a4900e6b0dc4cf9d42287f50155792ebbc4a"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "sanmin-115-physics-v",
+      "publisher": "三民",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "三民選修物理(V)",
+          "schoolYear": 115,
+          "documentSha256": "b1326e02c777e70edf4cbe067c15695f1149b8adf32622c50be32643a38c67e4"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-108-chemistry-i",
+      "publisher": "泰宇",
       "schoolYear": null,
       "accessedAt": "2026-11-26",
-      "verificationStatus": "verified-partial",
+      "verificationStatus": "verified-complete-toc",
       "scopeDetailLevel": "official-sections",
-      "urls": [
-        "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10571"
+      "sources": [
+        {
+          "url": "https://www.taiyucoo.com.tw/%E7%94%A2%E5%93%81%E7%B8%BD%E8%A6%BD/%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%EF%BC%88%E2%85%A0%EF%BC%89",
+          "type": "official-product-toc",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28I%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修化學(I)",
+          "schoolYear": 115,
+          "documentSha256": "43789a21e155da137542756487c6ce3e6893f86f9a36832e8899751918293ad4"
+        }
       ],
-      "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。選修冊次由學校排課決定。"
+      "limitations": "完整章節來自泰宇官方課本產品頁；該頁未標示學年度，不將另一對照表的年份套為官方目次版本。保留對照來源備查。"
+    },
+    {
+      "id": "taiyu-114-chemistry-ii",
+      "publisher": "泰宇",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_chemistry_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修化學(II)",
+          "schoolYear": 114,
+          "documentSha256": "591623141019e00214182f59563ad6ae3166bca66ac3e0b0c1c1ff01cf31b2c2"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_chemistry_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修化學(II)",
+          "schoolYear": 114,
+          "documentSha256": "591623141019e00214182f59563ad6ae3166bca66ac3e0b0c1c1ff01cf31b2c2"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-114-chemistry-iv",
+      "publisher": "泰宇",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_chemistry_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "泰宇選修化學(IV)",
+          "schoolYear": 114,
+          "documentSha256": "19a4be6bb038e2470fee8c2a99f6b1dc1febe29b34406ebc318211605d987617"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_chemistry_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "泰宇選修化學(IV)",
+          "schoolYear": 114,
+          "documentSha256": "19a4be6bb038e2470fee8c2a99f6b1dc1febe29b34406ebc318211605d987617"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-114-math-4a",
+      "publisher": "泰宇",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "泰宇數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "泰宇數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-114-math-4b",
+      "publisher": "泰宇",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "泰宇數學 高二下 (B版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "泰宇數學 高二下 (B版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-114-physics-ii",
+      "publisher": "泰宇",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_physical_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修物理(II)",
+          "schoolYear": 114,
+          "documentSha256": "6d49f365e28e1892ca7a5dbbdc6dd1aad162450b6d64e96b27d89446a1c109f6"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_physical_II_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修物理(II)",
+          "schoolYear": 114,
+          "documentSha256": "6d49f365e28e1892ca7a5dbbdc6dd1aad162450b6d64e96b27d89446a1c109f6"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-114-physics-iv",
+      "publisher": "泰宇",
+      "schoolYear": 114,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_physical_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修物理(IV)",
+          "schoolYear": 114,
+          "documentSha256": "e2f79271bd29a38392995661f5803481ae384e86e6000fa9656f5ea9fea4a983"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_physical_IV_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修物理(IV)",
+          "schoolYear": 114,
+          "documentSha256": "e2f79271bd29a38392995661f5803481ae384e86e6000fa9656f5ea9fea4a983"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-115-chemistry-iii",
+      "publisher": "泰宇",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修化學(III)",
+          "schoolYear": 115,
+          "documentSha256": "79c783dc589b17219e9bc16c669d1092b4da125dedb0bdb75f4d43d1d76621b4"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修化學(III)",
+          "schoolYear": 115,
+          "documentSha256": "79c783dc589b17219e9bc16c669d1092b4da125dedb0bdb75f4d43d1d76621b4"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-115-chemistry-v",
+      "publisher": "泰宇",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修化學(V)",
+          "schoolYear": 115,
+          "documentSha256": "072932824af6356237312cb00132eec7759785b3821cdcba31d390312f7217f7"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修化學(V)",
+          "schoolYear": 115,
+          "documentSha256": "072932824af6356237312cb00132eec7759785b3821cdcba31d390312f7217f7"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-115-math-3a",
+      "publisher": "泰宇",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "泰宇數學 高二上 (A版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-115-math-3b",
+      "publisher": "泰宇",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "泰宇數學 高二上 (B版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-115-physics-i",
+      "publisher": "泰宇",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28I%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修物理(I)",
+          "schoolYear": 115,
+          "documentSha256": "29a30deb7a804c86cdd19fb3a773009aad6e2633b01ef97f96d399eaee38f1dc"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-115-physics-iii",
+      "publisher": "泰宇",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修物理(III)",
+          "schoolYear": 115,
+          "documentSha256": "9c82175013e9ebbb89cf6d30e656a4900e6b0dc4cf9d42287f50155792ebbc4a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28III%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修物理(III)",
+          "schoolYear": 115,
+          "documentSha256": "9c82175013e9ebbb89cf6d30e656a4900e6b0dc4cf9d42287f50155792ebbc4a"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
+    },
+    {
+      "id": "taiyu-115-physics-v",
+      "publisher": "泰宇",
+      "schoolYear": 115,
+      "accessedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28V%29.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "泰宇選修物理(V)",
+          "schoolYear": 115,
+          "documentSha256": "b1326e02c777e70edf4cbe067c15695f1149b8adf32622c50be32643a38c67e4"
+        }
+      ],
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。"
     }
   ]
 }

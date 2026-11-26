@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "grade": "高中二年級",
+  "publishers": [
+    "翰林",
+    "龍騰",
+    "南一",
+    "泰宇",
+    "三民",
+    "全華"
+  ],
+  "books": [
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "bookLabel": "第3A冊"
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "bookLabel": "第3B冊"
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "bookLabel": "第4A冊"
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "bookLabel": "第4B冊"
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "bookLabel": "選修物理I（全）"
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "bookLabel": "選修物理II（全）"
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "bookLabel": "選修物理III（全）"
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "bookLabel": "選修物理IV（全）"
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "bookLabel": "選修物理V（全）"
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "bookLabel": "選修化學I（全）"
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "bookLabel": "選修化學II（全）"
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "bookLabel": "選修化學III（全）"
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "bookLabel": "選修化學IV（全）"
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "bookLabel": "選修化學V（全）"
+    }
+  ],
+  "basis": "六家出版社的十四冊均已在公開原始目次或逐版課程對照表中確認；選修冊次由學校自行排課。",
+  "source": "https://www.go100.com.tw/108_comparison_table.php"
+}

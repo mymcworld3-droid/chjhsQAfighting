@@ -1,0 +1,128 @@
+{
+  "bookId": "taiyu-108-chemistry-i",
+  "subject": "化學",
+  "grade": "高中二年級",
+  "edition": "泰宇版",
+  "publisher": "泰宇",
+  "term": "選修化學I",
+  "bookLabel": "選修化學I（全）",
+  "schoolYear": null,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-toc",
+  "scopeSelectionStatus": "verified-toc",
+  "scopeDetailLevel": "official-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/taiyu-108-chemistry-i.json",
+  "sources": [
+    {
+      "url": "https://www.taiyucoo.com.tw/%E7%94%A2%E5%93%81%E7%B8%BD%E8%A6%BD/%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%EF%BC%88%E2%85%A0%EF%BC%89",
+      "type": "official-product-toc",
+      "accessedAt": "2026-11-26"
+    },
+    {
+      "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E5%8C%96%E5%AD%B8%28I%29.pdf?v=20260828",
+      "type": "third-party-curriculum-crosswalk",
+      "provider": "三貝德／升學王",
+      "accessedAt": "2026-11-26",
+      "page": 4,
+      "publisherTable": "泰宇選修化學(I)",
+      "schoolYear": 115,
+      "documentSha256": "43789a21e155da137542756487c6ce3e6893f86f9a36832e8899751918293ad4"
+    }
+  ],
+  "scopeEvidence": {
+    "kind": "publisher-crosswalk",
+    "provider": "三貝德／升學王",
+    "publisher": "泰宇",
+    "page": 4,
+    "columnPolicy": "publisher-left-only",
+    "schoolYear": 115
+  },
+  "limitations": "完整章節來自泰宇官方課本產品頁；該頁未標示學年度，不將另一對照表的年份套為官方目次版本。保留對照來源備查。",
+  "units": [
+    {
+      "unit": "第1章：化學計量與反應熱",
+      "details": [
+        "1-1 化學反應式的平衡及應用",
+        "1-2 化學反應中的能量變化"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 化學反應式的平衡及應用",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 化學反應中的能量變化",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第2章：氣體",
+      "details": [
+        "2-1 氣體的性質",
+        "2-2 氣體的基本定律",
+        "2-3 理想氣體",
+        "2-4 氣體的分壓"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 氣體的性質",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 氣體的基本定律",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 理想氣體",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 氣體的分壓",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第3章：溶液的性質",
+      "details": [
+        "3-1 物質的狀態",
+        "3-2 溶液中的溶解特性",
+        "3-3 物質的蒸氣壓",
+        "3-4 溶液的依數性質"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 物質的狀態",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 溶液中的溶解特性",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 物質的蒸氣壓",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-4 溶液的依數性質",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

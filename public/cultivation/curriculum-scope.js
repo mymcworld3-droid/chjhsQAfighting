@@ -69,6 +69,9 @@ const c=document.createElement('input');c.type='checkbox';c.className='cs-chapte
 c.indeterminate=!c.checked&&u.details.some((_,j)=>draft.has('t:'+i+':'+j));c.addEventListener('change',()=>setChapterSelection(i,c.checked));
 const termBadge=document.createElement('span');termBadge.className='cs-card-term';termBadge.textContent=u.term==='第一學期'?'上學期':u.term==='第二學期'?'下學期':u.term;
 const label=document.createElement('b');label.textContent=u.unit;summary.append(c,label,termBadge);group.append(summary);
+if(u.book?.scopeSelectionStatus==='verified-crosswalk'){
+ const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='課程對照資料 · '+u.book.schoolYear+'學年度';group.append(note);
+}
 const topics=document.createElement('details');topics.className='cs-topic-picker';const hint=document.createElement('summary');hint.textContent='只練部分考點（'+u.details.length+'）';topics.append(hint);
 u.details.forEach((t,j)=>{const row=document.createElement('label'),box=document.createElement('input'),chapterSelected=draft.has('c:'+i);box.type='checkbox';box.className='cs-topic';box.dataset.i=i;box.dataset.j=j;box.checked=chapterSelected||draft.has('t:'+i+':'+j);box.disabled=chapterSelected;box.addEventListener('change',()=>setTopicSelection(i,j,box.checked));
 const name=document.createElement('span');name.textContent=t;row.append(box,name);topics.append(row);});if(u.details.length)group.append(topics);host.append(group);});
@@ -76,7 +79,7 @@ el('cs-all').disabled=!indices.length;updateDraft();
 if(!indices.length){const empty=document.createElement('div');empty.className='cs-search-empty';const text=document.createElement('p');text.textContent=units.length?'沒有符合的章節，試試其他關鍵字或學期。':'這個科目尚無章節目錄，可自行輸入範圍。';const button=document.createElement('button');button.type='button';button.textContent='自行輸入範圍';button.onclick=()=>window.openCustomCurriculumRange?.(el('cs-search').value.trim());empty.append(text,button);host.append(empty);}
 status(indices.length?'顯示 '+indices.length+' 章，點章名可選取整章。':'未找到符合的章節。');}
 async function loadCatalogue(g,s){
- const file='curriculum-data/'+encodeURIComponent(g)+'/'+encodeURIComponent(s)+'.json?v=20261126-curriculum-v2';
+ const file='curriculum-data/'+encodeURIComponent(g)+'/'+encodeURIComponent(s)+'.json?v=20261126-curriculum-v3';
  if(!memo.has(file))memo.set(file,fetch('/'+file).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(file);throw e;}));
  return memo.get(file);
 }
@@ -91,6 +94,8 @@ function catalogOptions(){
   option.disabled=!available;
   if(!available)option.textContent+='（待開放）';
   else if(records.every(b=>b.verificationStatus==='unverified'))option.textContent+='（既有整理）';
+  else if(records.every(b=>b.scopeSelectionStatus==='verified-crosswalk'))option.textContent+='（課程對照）';
+  else if(records.some(b=>b.scopeSelectionStatus==='verified-crosswalk'))option.textContent+='（含課程對照）';
   else if(records.every(b=>b.schoolYear==null)&&records.some(b=>b.scopeSelectionStatus==='verified-toc'))option.textContent+='（學年度未標示）';
  }
  if(node.selectedOptions[0]?.disabled){edition=AUTO_EDITION;node.value=edition;}

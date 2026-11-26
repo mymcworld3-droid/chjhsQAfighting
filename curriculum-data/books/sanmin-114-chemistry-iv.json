@@ -1,0 +1,120 @@
+{
+  "bookId": "sanmin-114-chemistry-iv",
+  "subject": "化學",
+  "grade": "高中二年級",
+  "edition": "三民版",
+  "publisher": "三民",
+  "term": "選修化學IV",
+  "bookLabel": "選修化學IV（全）",
+  "schoolYear": 114,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-crosswalk",
+  "scopeSelectionStatus": "verified-crosswalk",
+  "scopeDetailLevel": "crosswalk-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/sanmin-114-chemistry-iv.json",
+  "sources": [
+    {
+      "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_chemistry_IV_114.pdf?v=20260828",
+      "type": "third-party-curriculum-crosswalk",
+      "provider": "三貝德／升學王",
+      "accessedAt": "2026-11-26",
+      "page": 3,
+      "publisherTable": "三民選修化學(IV)",
+      "schoolYear": 114,
+      "documentSha256": "19a4be6bb038e2470fee8c2a99f6b1dc1febe29b34406ebc318211605d987617"
+    },
+    {
+      "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_chemistry_IV_114.pdf?v=20260828",
+      "type": "third-party-curriculum-crosswalk",
+      "provider": "三貝德／升學王",
+      "accessedAt": "2026-11-26",
+      "page": 3,
+      "publisherTable": "三民選修化學(IV)",
+      "schoolYear": 114,
+      "documentSha256": "19a4be6bb038e2470fee8c2a99f6b1dc1febe29b34406ebc318211605d987617"
+    }
+  ],
+  "scopeEvidence": {
+    "kind": "publisher-crosswalk",
+    "provider": "三貝德／升學王",
+    "publisher": "三民",
+    "page": 3,
+    "columnPolicy": "publisher-left-only",
+    "schoolYear": 114
+  },
+  "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+  "units": [
+    {
+      "unit": "第一章氧化還原反應",
+      "details": [
+        "1-1 氧化還原反應的基本原理",
+        "1-2 氧化還原滴定",
+        "1-3 電化電池",
+        "1-4 常見的電池",
+        "1-5 電解與電鍍"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 氧化還原反應的基本原理",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 氧化還原滴定",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 電化電池",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 常見的電池",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-5 電解與電鍍",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第二章化學在生活中的應用",
+      "details": [
+        "2-1 非金屬元素與其化合物",
+        "2-2 金屬元素與其化合物",
+        "2-3 配位化合物",
+        "2-4 先進材料"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 非金屬元素與其化合物",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 金屬元素與其化合物",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 配位化合物",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 先進材料",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

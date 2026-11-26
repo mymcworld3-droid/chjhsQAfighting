@@ -11,11 +11,20 @@
   const brackets = new Map([['(',')'],['（','）'],['[',']'],['【','】'],['{','}'],['〔','〕'],['「','」'],['『','』'],['“','”'],['"','"']]);
   // Verified publisher contents may be selected without certifying every reference question.
   function selectableBook(book) {
-    return !!book && (book.legacyVisible || book.releaseStatus === 'released' ||
-      book.scopeSelectionStatus === 'verified-toc' && book.verificationStatus === 'verified-complete-toc' &&
-      book.grade === '高中二年級' && ['數學A','數學B','物理','化學'].includes(book.subject) &&
-      !!book.verifiedAt && book.sources?.some(s=>['official-toc','official-product-toc'].includes(s.type)) &&
-      book.units?.length > 0 && book.units.every(u=>u.details?.length > 0));
+    if(!book)return false;
+    if(book.legacyVisible || book.releaseStatus === 'released')return true;
+    if(book.grade !== '高中二年級' || !['數學A','數學B','物理','化學'].includes(book.subject) ||
+      !book.verifiedAt || !book.units?.length || !book.units.every(u=>u.details?.length > 0))return false;
+    if(book.scopeSelectionStatus === 'verified-toc')return book.verificationStatus === 'verified-complete-toc' &&
+      !!book.sources?.some(s=>['official-toc','official-product-toc'].includes(s.type));
+    const evidence=book.scopeEvidence;
+    return book.scopeSelectionStatus === 'verified-crosswalk' && book.verificationStatus === 'verified-complete-crosswalk' &&
+      evidence?.kind === 'publisher-crosswalk' && evidence.publisher === book.publisher &&
+      evidence.columnPolicy === 'publisher-left-only' && evidence.schoolYear === book.schoolYear &&
+      Number.isInteger(book.schoolYear) && !!book.sources?.some(s=>s.type === 'third-party-curriculum-crosswalk' &&
+        /^https:\/\/www\.go100\.com\.tw\/file\/108_(?:comparison_table|version_compare)\/senior\//.test(s.url) &&
+        s.schoolYear === book.schoolYear && s.page === evidence.page && Number.isInteger(s.page) && s.page > 0 &&
+        String(s.publisherTable||'').startsWith(book.publisher) && /^[0-9a-f]{64}$/.test(s.documentSha256||''));
   }
   function curriculumMetadata(raw) {
     if(raw===undefined)return undefined;

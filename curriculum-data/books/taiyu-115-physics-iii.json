@@ -1,0 +1,169 @@
+{
+  "bookId": "taiyu-115-physics-iii",
+  "subject": "物理",
+  "grade": "高中二年級",
+  "edition": "泰宇版",
+  "publisher": "泰宇",
+  "term": "選修物理III",
+  "bookLabel": "選修物理III（全）",
+  "schoolYear": 115,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-crosswalk",
+  "scopeSelectionStatus": "verified-crosswalk",
+  "scopeDetailLevel": "crosswalk-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/taiyu-115-physics-iii.json",
+  "sources": [
+    {
+      "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28III%29.pdf?v=20260828",
+      "type": "third-party-curriculum-crosswalk",
+      "provider": "三貝德／升學王",
+      "accessedAt": "2026-11-26",
+      "page": 4,
+      "publisherTable": "泰宇選修物理(III)",
+      "schoolYear": 115,
+      "documentSha256": "9c82175013e9ebbb89cf6d30e656a4900e6b0dc4cf9d42287f50155792ebbc4a"
+    },
+    {
+      "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%B8%89%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E9%81%B8%E4%BF%AE%E7%89%A9%E7%90%86%28III%29.pdf?v=20260828",
+      "type": "third-party-curriculum-crosswalk",
+      "provider": "三貝德／升學王",
+      "accessedAt": "2026-11-26",
+      "page": 4,
+      "publisherTable": "泰宇選修物理(III)",
+      "schoolYear": 115,
+      "documentSha256": "9c82175013e9ebbb89cf6d30e656a4900e6b0dc4cf9d42287f50155792ebbc4a"
+    }
+  ],
+  "scopeEvidence": {
+    "kind": "publisher-crosswalk",
+    "provider": "三貝德／升學王",
+    "publisher": "泰宇",
+    "page": 4,
+    "columnPolicy": "publisher-left-only",
+    "schoolYear": 115
+  },
+  "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+  "units": [
+    {
+      "unit": "第一章波與聲音",
+      "details": [
+        "1-1 波的性質與傳播",
+        "1-2 週期波",
+        "1-3 波的反射與透射",
+        "1-4 波的疊加與干涉",
+        "1-5 駐波",
+        "1-6 基音與泛音",
+        "1-7 聲音的共鳴",
+        "1-8 惠更斯原理",
+        "1-9 水波的干涉與繞射"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 波的性質與傳播",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 週期波",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 波的反射與透射",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 波的疊加與干涉",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-5 駐波",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-6 基音與泛音",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-7 聲音的共鳴",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-8 惠更斯原理",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-9 水波的干涉與繞射",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第二章幾何光學",
+      "details": [
+        "2-1 光的反射",
+        "2-2 光的折射",
+        "2-3 全反射與應用",
+        "2-4 薄透鏡成像"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 光的反射",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 光的折射",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 全反射與應用",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 薄透鏡成像",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第三章物理光學",
+      "details": [
+        "3-1 光的波動說",
+        "3-2 光的雙狹縫干涉",
+        "3-3 光的單狹縫繞射"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 光的波動說",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 光的雙狹縫干涉",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 光的單狹縫繞射",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

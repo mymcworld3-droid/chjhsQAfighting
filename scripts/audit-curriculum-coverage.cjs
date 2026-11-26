@@ -55,17 +55,24 @@ function audit(root=ROOT) {
       }
       if(!b.units.length||b.units.some(u=>!u.details.length))gaps.push('缺少章節細項');
       if(b.releaseStatus==='released'&&gaps.length)errors.push('ineligible-released-book:'+b.bookId);
-      if(b.scopeSelectionStatus==='verified-toc'&&!selectableBook(b))errors.push('ineligible-scope-book:'+b.bookId);
+      if(['verified-toc','verified-crosswalk'].includes(b.scopeSelectionStatus)&&!selectableBook(b))errors.push('ineligible-scope-book:'+b.bookId);
       for(const u of b.units){
         if(new Set(u.details).size!==u.details.length)errors.push('duplicate-book-section:'+b.bookId+':'+u.unit);
         if(JSON.stringify(u.concepts.map(c=>c.name))!==JSON.stringify(u.details))errors.push('section-map-mismatch:'+b.bookId+':'+u.unit);
       }
-      books.push({bookId:b.bookId,grade:b.grade,subject:b.subject,edition:b.edition,schoolYear:b.schoolYear,
+      books.push({bookId:b.bookId,grade:b.grade,subject:b.subject,edition:b.edition,publisher:b.publisher||null,term:b.term,schoolYear:b.schoolYear,
         bookLabel:b.bookLabel,scopeSelectionStatus:b.scopeSelectionStatus||'legacy',
-        verificationStatus:b.verificationStatus,releaseStatus:b.releaseStatus,gaps});
+        scopeSelectable:selectableBook(b),verificationStatus:b.verificationStatus,releaseStatus:b.releaseStatus,gaps});
     }
   }
   for(const problem of inv.problems)errors.push('reference-structure:'+JSON.stringify(problem));
+  const expected=read(root,'curriculum-data/grade11-coverage-targets.json');
+  const grade11Coverage=expected.publishers.flatMap(publisher=>expected.books.map(target=>{
+    const matches=books.filter(b=>b.grade===expected.grade&&b.publisher===publisher&&b.subject===target.subject&&b.term===target.term&&b.scopeSelectable);
+    return {publisher,...target,bookIds:matches.map(b=>b.bookId),covered:matches.length>0};
+  }));
+  const missingGrade11Books=grade11Coverage.filter(b=>!b.covered);
+  for(const b of missingGrade11Books)errors.push('missing-grade11-scope:'+b.publisher+':'+b.subject+':'+b.term);
   return {schema:1,revision:index.revision,minimumReferences:5,summary:{
     registryConcepts:concepts.length,scopeReviewedConcepts:concepts.filter(c=>c.status==='scope-reviewed').length,
     legacyCandidates:concepts.filter(c=>c.status==='legacy-candidate').length,
@@ -73,10 +80,13 @@ function audit(root=ROOT) {
     independentlyReviewedQuestions:rows.reduce((n,r)=>n+r.independentlyReviewed,0),
     verifiedCompleteTocs:books.filter(b=>b.verificationStatus==='verified-complete-toc').length,
     verifiedSelectableTocs:books.filter(b=>b.scopeSelectionStatus==='verified-toc').length,
+    verifiedSelectableCrosswalks:books.filter(b=>b.scopeSelectionStatus==='verified-crosswalk').length,
+    expectedGrade11Books:grade11Coverage.length,coveredGrade11Books:grade11Coverage.filter(b=>b.covered).length,
+    missingGrade11Books:missingGrade11Books.length,
     releasedBooks:books.filter(b=>b.releaseStatus==='released').length,
     unmappedVisibleDetails:inv.summary.missingReferenceConcepts,
     minimumAdditionalStructuralQuestions:inv.summary.additionalQuestionsNeeded,
-    errors:errors.length},concepts:rows,books,missingDetails:inv.concepts.filter(c=>!c.referenceFile),errors};
+    errors:errors.length},concepts:rows,books,grade11Coverage,missingGrade11Books,missingDetails:inv.concepts.filter(c=>!c.referenceFile),errors};
 }
 function main(){
   const report=audit(),outputs={
@@ -84,8 +94,11 @@ function main(){
     'docs/curriculum-coverage.md':['# 教材正式開放與觀念覆蓋率','',
       '由 `npm run audit:curriculum-coverage` 產生。結構候選、範圍審核與獨立內容審核分開計算。', '',
       '| 指標 | 數量 |','| --- | ---: |',...Object.entries(report.summary).map(([k,v])=>`| ${k} | ${v} |`),'',
-      '可選的官方目次以 verifiedSelectableTocs 計數；這不代表整冊參考題內容資格已完成。尚未取得正式內容資格的教材保留缺漏清單，正式合格題覆蓋率目前不可計算。', '',
-      '## 待補教材', '',...report.books.filter(b=>b.verificationStatus==='verified-complete-toc').map(b=>
+      '可選的官方目次與課程對照分別以 verifiedSelectableTocs、verifiedSelectableCrosswalks 計數；對照資料不冒稱出版社原始目次。依使用者本輪指示，只補範圍，不補題或進行逐題審核。原整冊題庫內容資格另列缺漏，正式合格題覆蓋率目前不可計算。', '',
+      '## 高二三科出版社與冊次覆蓋', '',
+      '| 出版社 | 可選冊次 | 目標冊次 |', '| --- | ---: | ---: |',
+      ...[...new Set(report.grade11Coverage.map(b=>b.publisher))].map(p=>`| ${p} | ${report.grade11Coverage.filter(b=>b.publisher===p&&b.covered).length} | ${report.grade11Coverage.filter(b=>b.publisher===p).length} |`),'',
+      '## 原計畫題庫內容資格缺漏（本輪不補題）', '',...report.books.filter(b=>['verified-toc','verified-crosswalk'].includes(b.scopeSelectionStatus)).map(b=>
         `- ${b.grade}／${b.subject}／${b.edition}／${b.bookLabel}／${b.schoolYear??'學年度未標示'}：${b.gaps.join('；')}`),'',
       '逐年級、科目、出版社、冊次與逐觀念缺漏見同名 JSON。審核紀錄必須綁定題目內容雜湊；修改答案後，舊審核不再計數。',''].join('\n')};
   for(const [file,content] of Object.entries(outputs)) {

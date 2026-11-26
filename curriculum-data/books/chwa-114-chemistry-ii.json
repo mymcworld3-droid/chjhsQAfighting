@@ -1,0 +1,151 @@
+{
+  "bookId": "chwa-114-chemistry-ii",
+  "subject": "化學",
+  "grade": "高中二年級",
+  "edition": "全華版",
+  "publisher": "全華",
+  "term": "選修化學II",
+  "bookLabel": "選修化學II（全）",
+  "schoolYear": 114,
+  "verifiedAt": "2026-11-26",
+  "verificationStatus": "verified-complete-crosswalk",
+  "scopeSelectionStatus": "verified-crosswalk",
+  "scopeDetailLevel": "crosswalk-sections",
+  "releaseStatus": "blocked",
+  "legacyVisible": false,
+  "courseType": "elective",
+  "schedulePolicy": "school-defined",
+  "sourceFile": "curriculum-data/books/chwa-114-chemistry-ii.json",
+  "sources": [
+    {
+      "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_chemistry_II_114.pdf?v=20260828",
+      "type": "third-party-curriculum-crosswalk",
+      "provider": "三貝德／升學王",
+      "accessedAt": "2026-11-26",
+      "page": 6,
+      "publisherTable": "全華選修化學(II)",
+      "schoolYear": 114,
+      "documentSha256": "591623141019e00214182f59563ad6ae3166bca66ac3e0b0c1c1ff01cf31b2c2"
+    },
+    {
+      "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_chemistry_II_114.pdf?v=20260828",
+      "type": "third-party-curriculum-crosswalk",
+      "provider": "三貝德／升學王",
+      "accessedAt": "2026-11-26",
+      "page": 6,
+      "publisherTable": "全華選修化學(II)",
+      "schoolYear": 114,
+      "documentSha256": "591623141019e00214182f59563ad6ae3166bca66ac3e0b0c1c1ff01cf31b2c2"
+    }
+  ],
+  "scopeEvidence": {
+    "kind": "publisher-crosswalk",
+    "provider": "三貝德／升學王",
+    "publisher": "全華",
+    "page": 6,
+    "columnPolicy": "publisher-left-only",
+    "schoolYear": 114
+  },
+  "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+  "units": [
+    {
+      "unit": "第一章原子結構",
+      "details": [
+        "1-1 原子結構與模型",
+        "1-2 原子軌域",
+        "1-3 電子組態",
+        "1-4 週期表與元素週期性"
+      ],
+      "concepts": [
+        {
+          "name": "1-1 原子結構與模型",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-2 原子軌域",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-3 電子組態",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "1-4 週期表與元素週期性",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第二章物質的結構與性質",
+      "details": [
+        "2-1 共價鍵─分子物質",
+        "2-2 分子形狀、價鍵理論與混成軌域",
+        "2-3 分子間作用力",
+        "2-4 共價鍵─共價網狀固體",
+        "2-5 離子鍵與離子晶體",
+        "2-6 金屬鍵與金屬晶體"
+      ],
+      "concepts": [
+        {
+          "name": "2-1 共價鍵─分子物質",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-2 分子形狀、價鍵理論與混成軌域",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-3 分子間作用力",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-4 共價鍵─共價網狀固體",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-5 離子鍵與離子晶體",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "2-6 金屬鍵與金屬晶體",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    },
+    {
+      "unit": "第三章化學反應速率",
+      "details": [
+        "3-1 反應速率",
+        "3-2 碰撞學說與活化能",
+        "3-3 影響反應速率的因素"
+      ],
+      "concepts": [
+        {
+          "name": "3-1 反應速率",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-2 碰撞學說與活化能",
+          "conceptId": null,
+          "status": "unmapped"
+        },
+        {
+          "name": "3-3 影響反應速率的因素",
+          "conceptId": null,
+          "status": "unmapped"
+        }
+      ]
+    }
+  ]
+}

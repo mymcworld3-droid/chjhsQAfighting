@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "baselineCommit": "dbe48646510f99ab53adee85ed0ad9d4a6e872e7",
+  "baselineCommit": "531fd844baca83b35bfb403ba7cc32d103362eff",
   "schoolYearTarget": 115,
   "minimumQuestions": 5,
   "countingPolicy": "Exact NFKC/whitespace-normalized labels within the same curriculum subject/track and grade; reference lookup uses the existing canonical subject. No semantic merging. Structural candidates are not content-approved questions. Catalog records are not verified books.",
@@ -9,7 +9,7 @@
     "legacyUnstructuredFiles": 19,
     "catalogRecords": 324,
     "activeCatalogRecords": 209,
-    "verifiedCompleteBooks": 24,
+    "verifiedCompleteBooks": 25,
     "catalogsWithoutStructuredVerification": 324,
     "rawChapterOccurrences": 1120,
     "rawDetailOccurrences": 2869,

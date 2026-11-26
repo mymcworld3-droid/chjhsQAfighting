@@ -21,8 +21,8 @@ test('standard aliases preserve plane/space distinction and grade boundaries',()
   assert.equal(C.resolveConcept({...base,legacyId:'h2-向量內積'}).conceptId,'math-plane-vector-dot-product');
 });
 test('official 115 math 3A and 3B retain distinct contents without certifying reference coverage',()=>{
-  const a=C.catalog('高中二年級','數學A').books.find(b=>b.schoolYear===115);
-  const b=C.catalog('高中二年級','數學B').books.find(b=>b.schoolYear===115);
+  const a=C.catalog('高中二年級','數學A').books.find(b=>b.bookId==='hanlin-115-math-3a');
+  const b=C.catalog('高中二年級','數學B').books.find(b=>b.bookId==='hanlin-115-math-3b');
   assert.equal(a.verificationStatus,'verified-complete-toc');assert.equal(a.units.length,3);
   assert.ok(a.units[0].details.includes('1-4 正餘弦函數的疊合'));
   assert.ok(b.units[0].details.includes('1-2 週期性數學模型'));
@@ -85,10 +85,11 @@ test('reference selection honors form/difficulty without mutating cached groups'
   const refs=quizReferences({...base,topic:'平面向量內積',questionForm:'single-choice',difficulty:'medium'});
   assert.equal(refs[0].question.question_form,'single-choice');assert.equal(JSON.stringify(file),before);
 });
-test('grade eleven publisher scopes round-trip every sourced section and never activate missing contents',()=>{
+test('all six grade eleven publishers round-trip every sourced section without falsely certifying original contents',()=>{
   const books=['數學A','數學B','物理','化學'].flatMap(subject=>C.catalog('高中二年級',subject).books).filter(b=>b.publisher);
-  assert.equal(books.length,28);
-  assert.equal(books.filter(R.selectableBook).length,24);
+  assert.equal(books.length,84);
+  assert.equal(books.filter(R.selectableBook).length,84);
+  for(const publisher of ['翰林','龍騰','南一','泰宇','三民','全華'])assert.equal(books.filter(b=>b.publisher===publisher).length,14,publisher);
   for(const book of books){
     if(!R.selectableBook(book)){
       assert.equal(book.verificationStatus,'verified-partial');assert.equal(book.units.length,0);continue;
@@ -106,7 +107,7 @@ test('grade eleven publisher scopes round-trip every sourced section and never a
   for(const b of books.filter(b=>b.courseType==='elective')){
     assert.equal(b.schedulePolicy,'school-defined');assert.match(b.term,/^選修(?:物理|化學)[IV]+$/);
   }
-  assert.ok(books.filter(b=>b.publisher==='龍騰').every(b=>b.schoolYear===null));
+  assert.ok(books.filter(b=>b.publisher==='龍騰'&&b.scopeSelectionStatus==='verified-toc').every(b=>b.schoolYear===null));
   assert.equal(books.find(b=>b.bookId==='hanlin-114-math-4a').schoolYear,114);
   assert.ok(!R.selectableBook({...books.find(R.selectableBook),verificationStatus:'verified-partial'}));
 });
@@ -123,12 +124,43 @@ test('only validated numbered publisher sections use exact same-concept referenc
   assert.deepEqual(quizReferences({...base,topic:'平面向量',scope:{...scope,curriculum:undefined}}),[]);
   assert.throws(()=>quizReferences({...base,scope:{...scope,sub_topics:['1-3 空間向量的內積']}}));
 });
+test('Nani has all fourteen books with the publishers own section numbering and A/B depth',()=>{
+  const get=id=>['數學A','數學B','物理','化學'].flatMap(s=>C.catalog('高中二年級',s).books).find(b=>b.bookId===id);
+  const a=get('nani-115-math-3a'),b=get('nani-115-math-3b');
+  assert.deepEqual(a.units[0].details,['1-1 弧度量','1-2 三角函數的圖形','1-3 三角的和角與差角公式','1-4 正餘弦函數的疊合']);
+  assert.deepEqual(b.units[1].details,['2-1 對數','2-2 指數與對數函數']);
+  assert.ok(get('nani-114-math-4a').units[0].details.includes('1-3 空間向量的內積'));
+  const b4=get('nani-114-math-4b');assert.match(b4.units[1].unit,/矩陣與資料表格/);
+  assert.ok(!b4.units.flatMap(u=>u.details).some(n=>/空間向量的內積|圓錐截痕/.test(n)),'right-hand comparison cells must not become Nani sections');
+  assert.ok(get('nani-115-physics-i').units[5].details.includes('6-3 行星與衛星運動'));
+  assert.equal(get('nani-114-physics-ii').units[1].details[0],'2-1 質點系的質心運動');
+  assert.ok(get('nani-115-chemistry-i').units[2].details.includes('3-2 物質的鑑定'));
+  assert.deepEqual(get('nani-114-chemistry-ii').units[2].details,['3-1 碰撞學說','3-2 反應速率定律','3-3 影響反應速率的因素']);
+});
+test('crosswalk selection requires attributed left-column evidence and never becomes an original official TOC',()=>{
+  const book=C.catalog('高中二年級','數學A').books.find(b=>b.bookId==='nani-115-math-3a');
+  assert.equal(R.selectableBook(book),true);assert.equal(book.releaseStatus,'blocked');
+  assert.equal(book.verificationStatus,'verified-complete-crosswalk');
+  assert.ok(!book.sources.some(s=>s.type==='official-toc'||s.type==='official-product-toc'));
+  for(const patch of [
+    {scopeEvidence:undefined},{scopeEvidence:{...book.scopeEvidence,publisher:'翰林'}},
+    {scopeEvidence:{...book.scopeEvidence,columnPolicy:'both-columns'}},
+    {schoolYear:114},{sources:book.sources.filter(s=>s.type!=='third-party-curriculum-crosswalk')},
+    {sources:book.sources.map(s=>({...s,documentSha256:'unverified'}))},
+    {scopeSelectionStatus:'verified-toc'}
+  ])assert.equal(R.selectableBook({...book,...patch}),false);
+  const source=fs.readFileSync(path.join(root,'public/cultivation/curriculum-scope.js'),'utf8');
+  assert.match(source,/課程對照資料/);assert.match(source,/（課程對照）/);
+});
 test('all generated shards and registry files reproduce exactly and no ineligible book is released',()=>{
   const outputs=require('../scripts/build-curriculum-catalog.cjs').build(root);
   for(const [file,text]of outputs)assert.equal(fs.readFileSync(path.join(root,file),'utf8'),text,file);
   const report=require('../scripts/audit-curriculum-coverage.cjs').audit(root);
-  assert.deepEqual(report.errors,[]);assert.equal(report.summary.verifiedCompleteTocs,24);
-  assert.equal(report.summary.verifiedSelectableTocs,24);
+  assert.deepEqual(report.errors,[]);assert.equal(report.summary.verifiedCompleteTocs,25);
+  assert.equal(report.summary.verifiedSelectableTocs,25);
+  assert.equal(report.summary.verifiedSelectableCrosswalks,59);
+  assert.equal(report.summary.coveredGrade11Books,84);assert.equal(report.summary.expectedGrade11Books,84);
+  assert.deepEqual(report.missingGrade11Books,[]);
   assert.equal(report.summary.scopeReviewedConcepts,4);assert.equal(report.summary.releasedBooks,0);
   assert.equal(report.summary.independentlyReviewedQuestions,0);
   assert.equal(report.summary.referenceQuestions,report.summary.structuralCandidateQuestions);

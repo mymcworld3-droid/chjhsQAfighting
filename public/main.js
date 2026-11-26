@@ -1,6 +1,6 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
-import './main-legacy.js?v=20261126-curriculum-v2';
+import './main-legacy.js?v=20261126-curriculum-v3';
 import './cultivation/spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import './cultivation/dongtian-entry.js';
 // Presentation only: the existing route handlers retain ownership.
@@ -109,7 +109,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261126-curriculum-v2';
+const XIUXIAN_FEATURE_BUILD = '20261126-curriculum-v3';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
@@ -177,7 +177,7 @@ async function loadXiuxianFeaturesSafely() {
       ) {
         loadedModule = await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
       } else if (modulePath === './cultivation/tactical-combat.js') {
-        loadedModule = await import(`${modulePath}?v=20261126-curriculum-v2`);
+        loadedModule = await import(`${modulePath}?v=20261126-curriculum-v3`);
       } else if (modulePath === './cultivation/daily-meditation.js') {
         loadedModule = await import(`${modulePath}?v=20261125-stone-reward-icon-v2`);
       } else if (modulePath === './cultivation/home-wireframe.js') {

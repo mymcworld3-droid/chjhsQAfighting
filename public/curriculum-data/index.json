@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "revision": "fa858010203d93922c28",
+  "revision": "87fb3e0f71ce1e5bf2c4",
   "schoolYearTarget": 115,
   "entries": [
     {
@@ -497,14 +497,14 @@
       "grade": "高中二年級",
       "subject": "數學A",
       "path": "curriculum-data/高中二年級/數學A.json",
-      "books": 6,
+      "books": 14,
       "legacyVisible": true
     },
     {
       "grade": "高中二年級",
       "subject": "數學B",
       "path": "curriculum-data/高中二年級/數學B.json",
-      "books": 6,
+      "books": 14,
       "legacyVisible": true
     },
     {
@@ -532,7 +532,7 @@
       "grade": "高中二年級",
       "subject": "物理",
       "path": "curriculum-data/高中二年級/物理.json",
-      "books": 12,
+      "books": 32,
       "legacyVisible": true
     },
     {
@@ -553,7 +553,7 @@
       "grade": "高中二年級",
       "subject": "化學",
       "path": "curriculum-data/高中二年級/化學.json",
-      "books": 12,
+      "books": 32,
       "legacyVisible": true
     },
     {

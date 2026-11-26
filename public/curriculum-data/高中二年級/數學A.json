@@ -213,6 +213,281 @@
       ]
     },
     {
+      "bookId": "chwa-114-math-4a",
+      "subject": "數學A",
+      "grade": "高中二年級",
+      "edition": "全華版",
+      "publisher": "全華",
+      "term": "第二學期",
+      "bookLabel": "第4A冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeSelectionStatus": "verified-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "curriculum-data/books/chwa-114-math-4a.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk",
+        "provider": "三貝德／升學王",
+        "publisher": "全華",
+        "page": 6,
+        "columnPolicy": "publisher-left-only",
+        "schoolYear": 114
+      },
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+      "units": [
+        {
+          "unit": "第一章空間向量",
+          "details": [
+            "1-1 空間概念",
+            "1-2 空間坐標系",
+            "1-3 空間向量的內積、外積"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 空間概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 空間坐標系",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 空間向量的內積、外積",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二章空間中的平面與直線",
+          "details": [
+            "2-1 平面方程式",
+            "2-2 空間中直線的方程式",
+            "2-3 點線面間的距離與三平面間的關係"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 平面方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 空間中直線的方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 點線面間的距離與三平面間的關係",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三章矩陣",
+          "details": [
+            "3-1 矩陣與一次聯立方程式",
+            "3-2 二階方陣、反方陣與轉移矩陣",
+            "3-3 二階方陣與線性變換",
+            "3-4 高斯消去法與矩陣"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 矩陣與一次聯立方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 二階方陣、反方陣與轉移矩陣",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 二階方陣與線性變換",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-4 高斯消去法與矩陣",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四章機率II",
+          "details": [
+            "4-1 條件機率與獨立事件",
+            "4-2 貝氏定理與主觀機率、客觀機率"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 條件機率與獨立事件",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 貝氏定理與主觀機率、客觀機率",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "chwa-115-math-3a",
+      "subject": "數學A",
+      "grade": "高中二年級",
+      "edition": "全華版",
+      "publisher": "全華",
+      "term": "第一學期",
+      "bookLabel": "第3A冊",
+      "schoolYear": 115,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeSelectionStatus": "verified-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "curriculum-data/books/chwa-115-math-3a.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 6,
+          "publisherTable": "全華數學 高二上 (A版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk",
+        "provider": "三貝德／升學王",
+        "publisher": "全華",
+        "page": 6,
+        "columnPolicy": "publisher-left-only",
+        "schoolYear": 115
+      },
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+      "units": [
+        {
+          "unit": "第一章三角函數",
+          "details": [
+            "1-1 三角函數的性質",
+            "1-2 三角函數的圖形及性質",
+            "1-3 差角公式與正餘弦函數的疊合"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 三角函數的性質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 三角函數的圖形及性質",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 差角公式與正餘弦函數的疊合",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二章",
+          "details": [
+            "2-1 指數與指數函數及其圖形",
+            "2-2 對數",
+            "2-3 對數函數及其圖形",
+            "2-4 指數函數與對數函數的應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 指數與指數函數及其圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 對數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 對數函數及其圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-4 指數函數與對數函數的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三章平面向量",
+          "details": [
+            "3-1 平面向量",
+            "3-2 平面向量的內積",
+            "3-3 平面向量的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 平面向量",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 平面向量的內積",
+              "conceptId": "math-plane-vector-dot-product",
+              "status": "scope-reviewed"
+            },
+            {
+              "name": "3-3 平面向量的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "bookId": "hanlin-114-math-4a",
       "subject": "數學A",
       "grade": "高中二年級",
@@ -627,12 +902,12 @@
       "publisher": "龍騰",
       "term": "第二學期",
       "bookLabel": "第4A冊",
-      "schoolYear": null,
+      "schoolYear": 114,
       "curriculumStandard": "108課綱",
       "verifiedAt": "2026-11-26",
-      "verificationStatus": "verified-partial",
-      "scopeSelectionStatus": "pending-toc",
-      "scopeDetailLevel": "official-units",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeSelectionStatus": "verified-crosswalk",
+      "scopeDetailLevel": "crosswalk-units",
       "releaseStatus": "blocked",
       "legacyVisible": false,
       "courseType": "required-track",
@@ -643,10 +918,1000 @@
           "url": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10526",
           "type": "official-product",
           "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 1,
+          "publisherTable": "龍騰數學 高二下(A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 1,
+          "publisherTable": "龍騰數學 高二下(A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
         }
       ],
-      "limitations": "官方頁面未標示學年度，保留為未知；官方產品頁只有書籍資料，沒有完整目次，本冊暫不可選。參考題獨立內容審核另行記錄。",
-      "units": []
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+      "units": [
+        {
+          "unit": "單元一 空間概念",
+          "details": [
+            "空間概念"
+          ],
+          "concepts": [
+            {
+              "name": "空間概念",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元二 空間向量的坐標表示法",
+          "details": [
+            "空間向量的坐標表示法"
+          ],
+          "concepts": [
+            {
+              "name": "空間向量的坐標表示法",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元三 空間向量的運算",
+          "details": [
+            "空間向量的運算"
+          ],
+          "concepts": [
+            {
+              "name": "空間向量的運算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元四 三階行列式",
+          "details": [
+            "三階行列式"
+          ],
+          "concepts": [
+            {
+              "name": "三階行列式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元五 空間中的平面",
+          "details": [
+            "空間中的平面"
+          ],
+          "concepts": [
+            {
+              "name": "空間中的平面",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元六 空間中的直線",
+          "details": [
+            "空間中的直線"
+          ],
+          "concepts": [
+            {
+              "name": "空間中的直線",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元七 條件機率與貝氏定理",
+          "details": [
+            "條件機率與貝氏定理"
+          ],
+          "concepts": [
+            {
+              "name": "條件機率與貝氏定理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元八 三元一次聯立方程式",
+          "details": [
+            "三元一次聯立方程式"
+          ],
+          "concepts": [
+            {
+              "name": "三元一次聯立方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元九 矩陣的運算",
+          "details": [
+            "矩陣的運算"
+          ],
+          "concepts": [
+            {
+              "name": "矩陣的運算",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "單元十 矩陣的應用",
+          "details": [
+            "矩陣的應用"
+          ],
+          "concepts": [
+            {
+              "name": "矩陣的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk",
+        "provider": "三貝德／升學王",
+        "publisher": "龍騰",
+        "page": 1,
+        "columnPolicy": "publisher-left-only",
+        "schoolYear": 114
+      }
+    },
+    {
+      "bookId": "nani-114-math-4a",
+      "subject": "數學A",
+      "grade": "高中二年級",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第二學期",
+      "bookLabel": "第4A冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeSelectionStatus": "verified-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "curriculum-data/books/nani-114-math-4a.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "南一數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "南一數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk",
+        "provider": "三貝德／升學王",
+        "publisher": "南一",
+        "page": 2,
+        "columnPolicy": "publisher-left-only",
+        "schoolYear": 114
+      },
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+      "units": [
+        {
+          "unit": "第一章空間向量",
+          "details": [
+            "1-1 空間概念",
+            "1-2 空間向量的坐標表示法",
+            "1-3 空間向量的內積",
+            "1-4 外積、體積與行列式"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 空間概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 空間向量的坐標表示法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 空間向量的內積",
+              "conceptId": "math-space-vector-dot-product",
+              "status": "scope-reviewed"
+            },
+            {
+              "name": "1-4 外積、體積與行列式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二章空間中的平面與直線",
+          "details": [
+            "2-1 平面方程式",
+            "2-2 空間中的直線"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 平面方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 空間中的直線",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三章條件機率與貝氏定理",
+          "details": [
+            "3-1 條件機率與獨立事件",
+            "3-2 貝氏定理與主觀、客觀機率"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 條件機率與獨立事件",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 貝氏定理與主觀、客觀機率",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四章矩陣",
+          "details": [
+            "4-1 三元一次方程組",
+            "4-2 矩陣的運算",
+            "4-3 矩陣的應用"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 三元一次方程組",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 矩陣的運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 矩陣的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-115-math-3a",
+      "subject": "數學A",
+      "grade": "高中二年級",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第一學期",
+      "bookLabel": "第3A冊",
+      "schoolYear": 115,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeSelectionStatus": "verified-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "curriculum-data/books/nani-115-math-3a.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 2,
+          "publisherTable": "南一數學 高二上 (A版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        },
+        {
+          "url": "https://shop.nani1953.com.tw/collections/%E6%95%99%E7%A7%91%E6%9B%B8%E8%AA%B2%E6%9C%AC%E9%AB%98%E4%BA%8C",
+          "type": "official-product-catalog",
+          "accessedAt": "2026-11-26",
+          "limitations": "只確認南一高二出版品資訊，不用此頁證明完整目次。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk",
+        "provider": "三貝德／升學王",
+        "publisher": "南一",
+        "page": 2,
+        "columnPolicy": "publisher-left-only",
+        "schoolYear": 115
+      },
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+      "units": [
+        {
+          "unit": "第一章三角函數",
+          "details": [
+            "1-1 弧度量",
+            "1-2 三角函數的圖形",
+            "1-3 三角的和角與差角公式",
+            "1-4 正餘弦函數的疊合"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 弧度量",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 三角函數的圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 三角的和角與差角公式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 正餘弦函數的疊合",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二章指數與對數函數",
+          "details": [
+            "2-1 指數函數",
+            "2-2 對數與對數律",
+            "2-3 對數函數"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 指數函數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 對數與對數律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 對數函數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三章平面向量",
+          "details": [
+            "3-1 平面向量的運算",
+            "3-2 平面向量的內積",
+            "3-3 平面向量的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 平面向量的運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 平面向量的內積",
+              "conceptId": "math-plane-vector-dot-product",
+              "status": "scope-reviewed"
+            },
+            {
+              "name": "3-3 平面向量的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-math-4a",
+      "subject": "數學A",
+      "grade": "高中二年級",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第二學期",
+      "bookLabel": "第4A冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeSelectionStatus": "verified-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "curriculum-data/books/sanmin-114-math-4a.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "三民數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "三民數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk",
+        "provider": "三貝德／升學王",
+        "publisher": "三民",
+        "page": 4,
+        "columnPolicy": "publisher-left-only",
+        "schoolYear": 114
+      },
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+      "units": [
+        {
+          "unit": "第一章空間向量",
+          "details": [
+            "1-1 空間概念",
+            "1-2 空間向量的坐標表示法",
+            "1-3 空間向量的內積",
+            "1-4 外積與行列式"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 空間概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 空間向量的坐標表示法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 空間向量的內積",
+              "conceptId": "math-space-vector-dot-product",
+              "status": "scope-reviewed"
+            },
+            {
+              "name": "1-4 外積與行列式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二章空間中的平面",
+          "details": [
+            "2-1 空間中的平面方程式",
+            "2-2 空間中的直線方程式",
+            "2-3 三元一次方程組"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 空間中的平面方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 空間中的直線方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 三元一次方程組",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三章矩陣",
+          "details": [
+            "3-1 線性方程組與矩陣",
+            "3-2 矩陣的運算",
+            "3-3 矩陣的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 線性方程組與矩陣",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 矩陣的運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 矩陣的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四章條件機率與貝氏定理",
+          "details": [
+            "4-1 條件機率與獨立事件",
+            "4-2 貝氏定理"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 條件機率與獨立事件",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 貝氏定理",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-115-math-3a",
+      "subject": "數學A",
+      "grade": "高中二年級",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第一學期",
+      "bookLabel": "第3A冊",
+      "schoolYear": 115,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeSelectionStatus": "verified-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "curriculum-data/books/sanmin-115-math-3a.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 4,
+          "publisherTable": "三民數學 高二上 (A版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk",
+        "provider": "三貝德／升學王",
+        "publisher": "三民",
+        "page": 4,
+        "columnPolicy": "publisher-left-only",
+        "schoolYear": 115
+      },
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+      "units": [
+        {
+          "unit": "第一章三角函數",
+          "details": [
+            "1-1 弧度量",
+            "1-2 三角函數的圖形及其應用",
+            "1-3 三角的和角與差角公式",
+            "1-4 正餘弦的疊合"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 弧度量",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 三角函數的圖形及其應用",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 三角的和角與差角公式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 正餘弦的疊合",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二章指數函數與對數函數",
+          "details": [
+            "2-1 指數函數",
+            "2-2 對數律",
+            "2-3 對數函數"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 指數函數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 對數律",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 對數函數",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三章平面向量",
+          "details": [
+            "3-1 平面向量的表示法",
+            "3-2 平面向量的內積",
+            "3-3 面積與二階行列式"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 平面向量的表示法",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 平面向量的內積",
+              "conceptId": "math-plane-vector-dot-product",
+              "status": "scope-reviewed"
+            },
+            {
+              "name": "3-3 面積與二階行列式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "taiyu-114-math-4a",
+      "subject": "數學A",
+      "grade": "高中二年級",
+      "edition": "泰宇版",
+      "publisher": "泰宇",
+      "term": "第二學期",
+      "bookLabel": "第4A冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeSelectionStatus": "verified-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "curriculum-data/books/taiyu-114-math-4a.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "泰宇數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        },
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_math_114.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "泰宇數學 高二下 (A版)",
+          "schoolYear": 114,
+          "documentSha256": "95498a51d03e3d9a7ed0c41e29398a3ce4653984951d5aee77a85bfa5f18187a"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk",
+        "provider": "三貝德／升學王",
+        "publisher": "泰宇",
+        "page": 5,
+        "columnPolicy": "publisher-left-only",
+        "schoolYear": 114
+      },
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+      "units": [
+        {
+          "unit": "第一章空間向量",
+          "details": [
+            "1-1 空間概念",
+            "1-2 空間向量的坐標表示法與內積",
+            "1-3 空間向量的外積與三階行列式"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 空間概念",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 空間向量的坐標表示法與內積",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 空間向量的外積與三階行列式",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二章空間中的平面與直線",
+          "details": [
+            "2-1 平面方程式",
+            "2-2 空間中的直線"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 平面方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 空間中的直線",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三章條件機率",
+          "details": [
+            "3-1 機率",
+            "3-2 條件機率與貝氏定理",
+            "3-3 獨立事件"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 機率",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 條件機率與貝氏定理",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-3 獨立事件",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第四章矩陣",
+          "details": [
+            "4-1 矩陣與一次聯立方程式",
+            "4-2 矩陣及其運算",
+            "4-3 矩陣的應用:轉移矩陣與平面上的線性變換"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 矩陣與一次聯立方程式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-2 矩陣及其運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "4-3 矩陣的應用:轉移矩陣與平面上的線性變換",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "taiyu-115-math-3a",
+      "subject": "數學A",
+      "grade": "高中二年級",
+      "edition": "泰宇版",
+      "publisher": "泰宇",
+      "term": "第一學期",
+      "bookLabel": "第3A冊",
+      "schoolYear": 115,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "verified-complete-crosswalk",
+      "scopeSelectionStatus": "verified-crosswalk",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required-track",
+      "schedulePolicy": "book-sequence",
+      "sourceFile": "curriculum-data/books/taiyu-115-math-3a.json",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_version_compare/senior/108%E8%AA%B2%E7%B6%B1%E9%AB%98%E4%BA%8C%E4%B8%8A%E7%89%88%E6%9C%AC%E5%B0%8D%E7%85%A7%E8%A1%A8_%E6%95%B8%E5%AD%B8.pdf?v=20260828",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "accessedAt": "2026-11-26",
+          "page": 5,
+          "publisherTable": "泰宇數學 高二上 (A版)",
+          "schoolYear": 115,
+          "documentSha256": "e1492b4c6f88f7c879d8ea9d41329434c1520ab6381476da7bc2a3c597471058"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk",
+        "provider": "三貝德／升學王",
+        "publisher": "泰宇",
+        "page": 5,
+        "columnPolicy": "publisher-left-only",
+        "schoolYear": 115
+      },
+      "limitations": "依升學王公開的完整出版社課程對照表整理，非出版社原始目次。僅採該出版社左欄章節，未混入三貝德右欄。學年度依來源標示；選修冊次由學校自行安排。本輪依使用者指示不補題、不進行逐題審核。",
+      "units": [
+        {
+          "unit": "第一章三角函數",
+          "details": [
+            "1-1 弧度量與三角函數",
+            "1-2 三角的和差角公式",
+            "1-3 三角函數的圖形",
+            "1-4 正餘弦的疊合"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 弧度量與三角函數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-2 三角的和差角公式",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-3 三角函數的圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "1-4 正餘弦的疊合",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第二章指數與對數",
+          "details": [
+            "2-1 對數",
+            "2-2 指數與對數函數圖形",
+            "2-3 指數與對數的應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 對數",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-2 指數與對數函數圖形",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "2-3 指數與對數的應用",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        },
+        {
+          "unit": "第三章平面向量",
+          "details": [
+            "3-1 向量的基本運算",
+            "3-2 平面向量的內積",
+            "3-3 行列式與面積"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 向量的基本運算",
+              "conceptId": null,
+              "status": "unmapped"
+            },
+            {
+              "name": "3-2 平面向量的內積",
+              "conceptId": "math-plane-vector-dot-product",
+              "status": "scope-reviewed"
+            },
+            {
+              "name": "3-3 行列式與面積",
+              "conceptId": null,
+              "status": "unmapped"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
