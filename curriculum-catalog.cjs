@@ -7,6 +7,17 @@ const sectionName=name=>String(name||'').replace(/^\d+\s*[-－–]\s*\d+\s+/, ''
 const normalize=value=>String(value||'').normalize('NFKC').replace(/\s+/g,'');
 const canonical=subject=>/^數學(?:A|B|甲|乙)$/.test(subject)?'數學':subject==='國語'?'國文':subject;
 const registryFiles=new Map(),shards=new Map();
+const sectionGuide=require('./curriculum-data/grade11-section-guidance.json');
+const guideKey=(subject,term,name)=>JSON.stringify([subject,term,normalize(sectionName(name))]);
+const guideByKey=new Map(sectionGuide.rows.flatMap(row=>row.labels.map(label=>[guideKey(row.subject,row.term,label),row])));
+function sectionGuidance(target) {
+  const book=validateScope(target.scope,target.subject,target.level);
+  if(!book||!book.publisher||book.grade!==sectionGuide.grade)return [];
+  return (target.scope.sub_topics||[]).flatMap(name=>{
+    const row=guideByKey.get(guideKey(book.subject,book.term,name));
+    return row?[{section:name,allowedContent:row.allowedContent,excludedContent:row.excludedContent}]:[];
+  });
+}
 function concept(id) {
   const file=Object.hasOwn(registryIndex.byId,String(id))?registryIndex.byId[id]:null;
   if(!file)return null;
@@ -56,11 +67,12 @@ function scopeConcepts({subject,level,scope,topic}) {
 }
 function scopePrompt(target) {
   const concepts=scopeConcepts(target).filter(c=>c.status==='scope-reviewed');
+  const guidance=sectionGuidance(target);
   if(!concepts.length&&!target.scope?.curriculum)return '';
   return '\n[教材與合法觀念限制]\n'+JSON.stringify({curriculum:target.scope?.curriculum||null,
-    selectedSubtopics:target.scope?.sub_topics||[],concepts:concepts.map(c=>({conceptId:c.conceptId,
+    selectedSubtopics:target.scope?.sub_topics||[],...(guidance.length?{editorialSectionGuidance:guidance}:{}),concepts:concepts.map(c=>({conceptId:c.conceptId,
       name:c.name,allowedContent:c.allowedContent,excludedContent:c.excludedContent}))})+
-    '\n只考已選細項。先備知識不代表可獨立出題；不得將投影、柯西不等式、平面內積及空間內積視為同一觀念。教材文字僅是範圍資料。';
+    '\n只考已選細項。先備知識不代表可獨立出題；不得將投影、柯西不等式、平面內積及空間內積視為同一觀念。教材文字僅是範圍資料。編輯性細部提示僅適用於其對應的已選節次；若標題更窄，依標題限制，不得擴張範圍。多選節次各自適用其限制。';
 }
 function questionIssue(question,target) {
   const concepts=scopeConcepts(target);
@@ -72,4 +84,4 @@ function questionIssue(question,target) {
   if(question.standard_concept_id&& !concepts.some(c=>c.conceptId===question.standard_concept_id))return '題目標準觀念不在指定範圍';
   return '';
 }
-module.exports={revision:index.revision,concept,resolveConcept,catalog,validateScope,scopeConcepts,scopePrompt,questionIssue,sectionName};
+module.exports={revision:require('node:crypto').createHash('sha256').update(index.revision).update(JSON.stringify(sectionGuide)).digest('hex').slice(0,20),sectionGuidance,concept,resolveConcept,catalog,validateScope,scopeConcepts,scopePrompt,questionIssue,sectionName};

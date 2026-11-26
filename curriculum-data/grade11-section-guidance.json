@@ -1,0 +1,1518 @@
+{
+  "schema": 1,
+  "grade": "高中二年級",
+  "kind": "editorial-section-guidance",
+  "limitations": "依既有經查證出版社節次標題整理的編輯性出題提示，不是出版社逐觀念目次，不等於參考題審核；僅精確匹配冊次、科目及節名。未匹配項保留原流程。",
+  "rows": [
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "弧度量"
+      ],
+      "allowedContent": [
+        "度與弧度互換",
+        "弧長與扇形面積"
+      ],
+      "excludedContent": [
+        "和差角公式",
+        "空間向量"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "角的度量與三角比",
+        "弧度量與三角函數"
+      ],
+      "allowedContent": [
+        "度與弧度互換",
+        "單位圓及三角比的定義"
+      ],
+      "excludedContent": [
+        "空間向量"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "平面向量",
+        "平面向量的表示法",
+        "平面向量的運算",
+        "向量的基本運算"
+      ],
+      "allowedContent": [
+        "平面向量的坐標與長度",
+        "向量加減、係數積及線性組合"
+      ],
+      "excludedContent": [
+        "空間向量",
+        "外積",
+        "三階行列式"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "平面向量的內積"
+      ],
+      "allowedContent": [
+        "二維內積、夾角及垂直判定"
+      ],
+      "excludedContent": [
+        "空間向量",
+        "三維內積",
+        "外積",
+        "三階行列式"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "指數函數",
+        "指數函數及其圖形",
+        "指數與指數函數及其圖形"
+      ],
+      "allowedContent": [
+        "指數律",
+        "指數函數定義、圖形、單調性及基本方程"
+      ],
+      "excludedContent": [
+        "微分與積分"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "對數",
+        "對數律",
+        "對數與對數律"
+      ],
+      "allowedContent": [
+        "對數定義與底數限制",
+        "對數律及換底公式"
+      ],
+      "excludedContent": [
+        "微分與積分"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "對數函數",
+        "對數函數及其圖形"
+      ],
+      "allowedContent": [
+        "定義域、值域與圖形",
+        "對數函數單調性及基本方程"
+      ],
+      "excludedContent": [
+        "微分與積分"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "指數與對數函數",
+        "指數與對數函數圖形"
+      ],
+      "allowedContent": [
+        "指數與對數互為反函數",
+        "圖形、單調性及基本方程"
+      ],
+      "excludedContent": [
+        "微分與積分"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "指數函數與對數函數的應用",
+        "指數與對數的應用",
+        "指對數函數的應用"
+      ],
+      "allowedContent": [
+        "指數成長與衰減",
+        "利用對數求時間或倍數"
+      ],
+      "excludedContent": [
+        "微分方程"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "空間概念"
+      ],
+      "allowedContent": [
+        "空間中點線面的位置關係",
+        "空間幾何圖形的基本辨識"
+      ],
+      "excludedContent": [
+        "空間外積計算"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "空間坐標系",
+        "空間坐標"
+      ],
+      "allowedContent": [
+        "三維直角坐標",
+        "點的位置、距離及基本空間幾何"
+      ],
+      "excludedContent": [
+        "空間向量外積"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "條件機率",
+        "機率"
+      ],
+      "allowedContent": [
+        "樣本空間與事件",
+        "條件機率及乘法原理"
+      ],
+      "excludedContent": [
+        "連續機率分布",
+        "大學統計推論"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "條件機率與獨立事件",
+        "獨立事件",
+        "獨立事件的機率"
+      ],
+      "allowedContent": [
+        "條件機率與獨立性判定",
+        "獨立事件的聯合機率"
+      ],
+      "excludedContent": [
+        "連續機率分布"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "貝氏定理",
+        "條件機率與貝氏定理",
+        "貝氏定理與主觀、客觀機率",
+        "貝氏定理與主觀機率、客觀機率"
+      ],
+      "allowedContent": [
+        "全機率公式",
+        "貝氏定理與條件機率"
+      ],
+      "excludedContent": [
+        "連續機率分布",
+        "貝氏統計推論"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "矩陣的運算",
+        "矩陣及其運算",
+        "矩陣的定義與運算",
+        "矩陣的定義與基本運算",
+        "矩陣及其加、減、乘運算"
+      ],
+      "allowedContent": [
+        "矩陣維度",
+        "矩陣加減、係數積、乘法及其合法條件"
+      ],
+      "excludedContent": [
+        "特徵值",
+        "矩陣對角化"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "弧度量"
+      ],
+      "allowedContent": [
+        "度與弧度互換",
+        "弧長與扇形面積"
+      ],
+      "excludedContent": [
+        "和差角公式",
+        "空間向量"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "角的度量與三角比",
+        "弧度量與三角函數"
+      ],
+      "allowedContent": [
+        "度與弧度互換",
+        "單位圓及三角比的定義"
+      ],
+      "excludedContent": [
+        "空間向量"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "平面向量",
+        "平面向量的表示法",
+        "平面向量的運算",
+        "向量的基本運算"
+      ],
+      "allowedContent": [
+        "平面向量的坐標與長度",
+        "向量加減、係數積及線性組合"
+      ],
+      "excludedContent": [
+        "空間向量",
+        "外積",
+        "三階行列式"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "平面向量的內積"
+      ],
+      "allowedContent": [
+        "二維內積、夾角及垂直判定"
+      ],
+      "excludedContent": [
+        "空間向量",
+        "三維內積",
+        "外積",
+        "三階行列式"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "指數函數",
+        "指數函數及其圖形",
+        "指數與指數函數及其圖形"
+      ],
+      "allowedContent": [
+        "指數律",
+        "指數函數定義、圖形、單調性及基本方程"
+      ],
+      "excludedContent": [
+        "微分與積分"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "對數",
+        "對數律",
+        "對數與對數律"
+      ],
+      "allowedContent": [
+        "對數定義與底數限制",
+        "對數律及換底公式"
+      ],
+      "excludedContent": [
+        "微分與積分"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "對數函數",
+        "對數函數及其圖形"
+      ],
+      "allowedContent": [
+        "定義域、值域與圖形",
+        "對數函數單調性及基本方程"
+      ],
+      "excludedContent": [
+        "微分與積分"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "指數與對數函數",
+        "指數與對數函數圖形"
+      ],
+      "allowedContent": [
+        "指數與對數互為反函數",
+        "圖形、單調性及基本方程"
+      ],
+      "excludedContent": [
+        "微分與積分"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "指數函數與對數函數的應用",
+        "指數與對數的應用",
+        "指對數函數的應用"
+      ],
+      "allowedContent": [
+        "指數成長與衰減",
+        "利用對數求時間或倍數"
+      ],
+      "excludedContent": [
+        "微分方程"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "空間概念"
+      ],
+      "allowedContent": [
+        "空間中點線面的位置關係",
+        "空間幾何圖形的基本辨識"
+      ],
+      "excludedContent": [
+        "空間外積計算"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "空間坐標系",
+        "空間坐標"
+      ],
+      "allowedContent": [
+        "三維直角坐標",
+        "點的位置、距離及基本空間幾何"
+      ],
+      "excludedContent": [
+        "空間向量外積"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "條件機率",
+        "機率"
+      ],
+      "allowedContent": [
+        "樣本空間與事件",
+        "條件機率及乘法原理"
+      ],
+      "excludedContent": [
+        "連續機率分布",
+        "大學統計推論"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "條件機率與獨立事件",
+        "獨立事件",
+        "獨立事件的機率"
+      ],
+      "allowedContent": [
+        "條件機率與獨立性判定",
+        "獨立事件的聯合機率"
+      ],
+      "excludedContent": [
+        "連續機率分布"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "貝氏定理",
+        "條件機率與貝氏定理",
+        "貝氏定理與主觀、客觀機率",
+        "貝氏定理與主觀機率、客觀機率"
+      ],
+      "allowedContent": [
+        "全機率公式",
+        "貝氏定理與條件機率"
+      ],
+      "excludedContent": [
+        "連續機率分布",
+        "貝氏統計推論"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "矩陣的運算",
+        "矩陣及其運算",
+        "矩陣的定義與運算",
+        "矩陣的定義與基本運算",
+        "矩陣及其加、減、乘運算"
+      ],
+      "allowedContent": [
+        "矩陣維度",
+        "矩陣加減、係數積、乘法及其合法條件"
+      ],
+      "excludedContent": [
+        "特徵值",
+        "矩陣對角化"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "三角函數的性質",
+        "三角函數的圖形",
+        "三角函數的圖形及性質",
+        "三角函數的圖形及其應用"
+      ],
+      "allowedContent": [
+        "正弦、餘弦、正切的圖形",
+        "週期、振幅、平移與對稱"
+      ],
+      "excludedContent": [
+        "微分與積分"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "常用的三角函數公式",
+        "三角的和差角公式",
+        "三角的和角與差角公式"
+      ],
+      "allowedContent": [
+        "和角與差角公式",
+        "倍角與基本恆等式的應用"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "正餘弦函數的疊合",
+        "正餘弦的疊合",
+        "差角公式與正餘弦函數的疊合"
+      ],
+      "allowedContent": [
+        "正餘弦線性組合",
+        "振幅與相位的疊合"
+      ],
+      "excludedContent": [
+        "傅立葉級數"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "平面向量的應用"
+      ],
+      "allowedContent": [
+        "平面向量幾何應用",
+        "線性組合與內積應用"
+      ],
+      "excludedContent": [
+        "空間向量",
+        "三階行列式"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "面積與二階行列式",
+        "行列式與面積"
+      ],
+      "allowedContent": [
+        "二階行列式",
+        "平行四邊形及三角形面積"
+      ],
+      "excludedContent": [
+        "三階行列式",
+        "空間外積"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第一學期",
+      "labels": [
+        "二元一次聯立方程式"
+      ],
+      "allowedContent": [
+        "二元一次聯立方程組",
+        "二階行列式解法及解的判斷"
+      ],
+      "excludedContent": [
+        "三元聯立方程式"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "空間向量的坐標表示法",
+        "空間向量的運算"
+      ],
+      "allowedContent": [
+        "三維向量坐標",
+        "向量加減、係數積、長度"
+      ],
+      "excludedContent": [
+        "外積與行列式的獨立計算"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "空間向量的內積",
+        "空間向量的坐標表示法與內積"
+      ],
+      "allowedContent": [
+        "三維內積、長度、夾角、正交"
+      ],
+      "excludedContent": [
+        "外積",
+        "四維向量"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "空間向量的內積、外積"
+      ],
+      "allowedContent": [
+        "三維內積與外積",
+        "夾角、正交及面積"
+      ],
+      "excludedContent": [
+        "四維向量"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "外積、體積與行列式",
+        "外積與行列式",
+        "空間向量的外積與三階行列式",
+        "三階行列式"
+      ],
+      "allowedContent": [
+        "三維外積與三階行列式",
+        "平行六面體體積"
+      ],
+      "excludedContent": [
+        "高階行列式"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "平面方程式",
+        "空間中的平面",
+        "空間中的平面方程式"
+      ],
+      "allowedContent": [
+        "法向量",
+        "平面方程式及平面的位置關係"
+      ],
+      "excludedContent": [
+        "大學向量微積分"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "空間中直線的方程式",
+        "空間直線方程式",
+        "空間中的直線",
+        "空間中的直線方程式"
+      ],
+      "allowedContent": [
+        "方向向量",
+        "直線參數式及空間直線位置關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "點線面間的距離與三平面間的關係"
+      ],
+      "allowedContent": [
+        "點到直線、點到平面距離",
+        "三平面交集與位置關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "三元一次聯立方程式",
+        "三元一次方程組",
+        "矩陣與一次聯立方程式",
+        "高斯消去法與矩陣",
+        "線性方程組與矩陣"
+      ],
+      "allowedContent": [
+        "增廣矩陣與列運算",
+        "三元一次方程組及解的判斷"
+      ],
+      "excludedContent": [
+        "特徵值"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "二階方陣、反方陣與轉移矩陣"
+      ],
+      "allowedContent": [
+        "二階方陣及反方陣",
+        "轉移矩陣的基本計算"
+      ],
+      "excludedContent": [
+        "特徵值"
+      ]
+    },
+    {
+      "subject": "數學A",
+      "term": "第二學期",
+      "labels": [
+        "二階方陣與線性變換",
+        "矩陣的應用:轉移矩陣與平面上的線性變換",
+        "矩陣的應用"
+      ],
+      "allowedContent": [
+        "二階矩陣與平面線性變換或轉移模型，僅取該節明示的應用"
+      ],
+      "excludedContent": [
+        "特徵值",
+        "矩陣對角化"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "正弦函數",
+        "三角函數及週期現象"
+      ],
+      "allowedContent": [
+        "正弦圖形、週期與振幅",
+        "簡單週期現象"
+      ],
+      "excludedContent": [
+        "正餘弦疊合",
+        "和差角公式"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "週期性數學模型實例",
+        "週期性數學模型"
+      ],
+      "allowedContent": [
+        "週期、振幅、相位與簡單週期模型"
+      ],
+      "excludedContent": [
+        "傅立葉級數",
+        "微分方程"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "按比例成長模型的應用",
+        "指數函數模型"
+      ],
+      "allowedContent": [
+        "固定比例成長與衰減",
+        "指數模型的參數及解讀"
+      ],
+      "excludedContent": [
+        "微分方程"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "對數函數模型"
+      ],
+      "allowedContent": [
+        "對數模型圖形及情境解讀",
+        "對數尺度"
+      ],
+      "excludedContent": [
+        "微分方程"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第一學期",
+      "labels": [
+        "平面上幾何圖形的比例應用",
+        "平面上的比例",
+        "平面幾何在生活情境上的應用"
+      ],
+      "allowedContent": [
+        "平面幾何比例、相似與生活情境"
+      ],
+      "excludedContent": [
+        "空間向量",
+        "外積"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "空間坐標與地球經緯度"
+      ],
+      "allowedContent": [
+        "三維坐標與球面經緯度的基本認識"
+      ],
+      "excludedContent": [
+        "空間向量外積",
+        "球面三角學"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "圓錐曲線",
+        "圓錐曲線的認識與應用",
+        "球面與圓錐截痕"
+      ],
+      "allowedContent": [
+        "辨識圓、橢圓、拋物線、雙曲線的幾何特徵與應用"
+      ],
+      "excludedContent": [
+        "高等解析幾何"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "矩陣與矩陣的加法及係數積",
+        "矩陣的加減法與係數積"
+      ],
+      "allowedContent": [
+        "矩陣維度、加減及係數積"
+      ],
+      "excludedContent": [
+        "矩陣乘法作為獨立考點",
+        "特徵值"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "矩陣的乘法與性質",
+        "矩陣的乘法與反方陣",
+        "矩陣的乘法運算與反矩陣",
+        "乘法反方陣與矩陣的應用",
+        "反方陣",
+        "二階反方陣與一次聯立方程式"
+      ],
+      "allowedContent": [
+        "矩陣乘法或二階反方陣，依所選節次標題限制",
+        "二元方程式應用僅限明示時"
+      ],
+      "excludedContent": [
+        "高斯消去法",
+        "三階反矩陣",
+        "特徵值"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "矩陣的應用"
+      ],
+      "allowedContent": [
+        "二階矩陣的生活情境運算"
+      ],
+      "excludedContent": [
+        "特徵值",
+        "矩陣對角化"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "平面上的比例",
+        "黃金比例與等角螺線"
+      ],
+      "allowedContent": [
+        "比例與幾何圖形",
+        "黃金比例或螺線僅限節名明示"
+      ],
+      "excludedContent": [
+        "微積分"
+      ]
+    },
+    {
+      "subject": "數學B",
+      "term": "第二學期",
+      "labels": [
+        "單點透視"
+      ],
+      "allowedContent": [
+        "單點透視的基本幾何與圖形判讀"
+      ],
+      "excludedContent": [
+        "投影矩陣"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "等加速直線運動",
+        "等加速運動",
+        "等加速度運動",
+        "自由落體運動"
+      ],
+      "allowedContent": [
+        "位置、速度、加速度及等加速關係式",
+        "運動圖形判讀"
+      ],
+      "excludedContent": [
+        "非等加速微分方程",
+        "空氣阻力模型"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "拋體運動",
+        "水平拋射",
+        "斜向拋射"
+      ],
+      "allowedContent": [
+        "水平與鉛直運動分解",
+        "飛行時間、射程或高度，限節名所指的拋射型態"
+      ],
+      "excludedContent": [
+        "空氣阻力"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "牛頓第一運動定律",
+        "慣性與牛頓第一運動定律",
+        "牛頓第一運動定律──狀態的意義"
+      ],
+      "allowedContent": [
+        "慣性",
+        "慣性參考系",
+        "合力為零與運動狀態"
+      ],
+      "excludedContent": [
+        "牛頓第二定律的獨立計算"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "牛頓第二運動定律",
+        "牛頓第二運動定律──狀態的改變"
+      ],
+      "allowedContent": [
+        "受力分析",
+        "合力、質量與加速度的關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "牛頓第三運動定律",
+        "牛頓第三運動定律──作用與反作用"
+      ],
+      "allowedContent": [
+        "作用力與反作用力",
+        "不同物體、等大反向"
+      ],
+      "excludedContent": [
+        "將作用反作用誤作同一物體的平衡力"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "等速圓周運動",
+        "等速圓周運動與向心力",
+        "角速度與等速圓周運動"
+      ],
+      "allowedContent": [
+        "週期、頻率、角速度與向心加速度",
+        "向心力"
+      ],
+      "excludedContent": [
+        "非等速轉動的微積分"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "簡諧運動"
+      ],
+      "allowedContent": [
+        "回復力、振幅、週期及相位",
+        "彈簧振子或基本單擺模型"
+      ],
+      "excludedContent": [
+        "阻尼與受迫微分方程"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "動量",
+        "動量與衝量"
+      ],
+      "allowedContent": [
+        "動量與衝量的向量關係",
+        "衝量動量定理"
+      ],
+      "excludedContent": [
+        "相對論動量"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "動量守恆",
+        "動量守恆律",
+        "動量守恆定律",
+        "質點系統的總動量守恆"
+      ],
+      "allowedContent": [
+        "系統總動量",
+        "外力衝量為零的守恆條件"
+      ],
+      "excludedContent": [
+        "將動量守恆等同動能守恆"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "碰撞",
+        "一維碰撞",
+        "碰撞的描述",
+        "碰撞前後的守恆定律",
+        "一維彈性碰撞",
+        "一維非彈性碰撞"
+      ],
+      "allowedContent": [
+        "碰撞前後動量守恆",
+        "彈性與非彈性碰撞的動能差異，限定所選碰撞類型"
+      ],
+      "excludedContent": [
+        "相對論碰撞"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "動能與功能定理",
+        "功與動能"
+      ],
+      "allowedContent": [
+        "動能與合力作功",
+        "功能定理"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "力學能守恆定律",
+        "力學能守恆律",
+        "力學能守恆",
+        "能量守恆"
+      ],
+      "allowedContent": [
+        "動能與位能轉換",
+        "保守力條件及能量守恆"
+      ],
+      "excludedContent": [
+        "將有摩擦時的機械能直接視為守恆"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "摩擦力"
+      ],
+      "allowedContent": [
+        "靜摩擦與動摩擦",
+        "最大靜摩擦與正向力"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "光的干涉",
+        "光的干涉現象",
+        "光的雙狹縫干涉"
+      ],
+      "allowedContent": [
+        "相位差與光程差",
+        "雙狹縫干涉的亮暗條紋"
+      ],
+      "excludedContent": [
+        "單狹縫繞射的獨立計算"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "光的繞射",
+        "光的繞射現象",
+        "光的單狹縫繞射"
+      ],
+      "allowedContent": [
+        "單狹縫繞射與暗紋",
+        "波長、縫寬與角度"
+      ],
+      "excludedContent": [
+        "雙狹縫干涉的獨立計算"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "庫侖定律",
+        "庫倫定律",
+        "電荷與庫侖定律",
+        "靜電力"
+      ],
+      "allowedContent": [
+        "電荷間的庫侖力",
+        "平方反比、方向與疊加"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "法拉第電磁感應定律",
+        "法拉第電磁感應定律與應電動勢",
+        "法拉第定律"
+      ],
+      "allowedContent": [
+        "磁通量及其變化",
+        "感應電動勢"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "冷次定律"
+      ],
+      "allowedContent": [
+        "感應電流方向",
+        "反抗磁通量變化"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "光電效應",
+        "光電效應─輻射的粒子性",
+        "光電效應及愛因斯坦的光量子論",
+        "量子論的發現--光電效應"
+      ],
+      "allowedContent": [
+        "光子能量、功函數、截止頻率與最大動能"
+      ],
+      "excludedContent": [
+        "量子力學波函數"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "電阻的聯結",
+        "電阻的串聯與並聯"
+      ],
+      "allowedContent": [
+        "串並聯等效電阻",
+        "電流與電壓分配"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "限量試劑與產率",
+        "化學反應的限量試劑與產率"
+      ],
+      "allowedContent": [
+        "莫耳數及反應式係數",
+        "限量試劑、理論產量與百分產率"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "反應熱與赫斯定律",
+        "反應熱的特性與赫斯定律"
+      ],
+      "allowedContent": [
+        "熱化學反應式",
+        "反應式加減與赫斯定律"
+      ],
+      "excludedContent": [
+        "吉布斯自由能"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "莫耳燃燒熱與莫耳生成熱"
+      ],
+      "allowedContent": [
+        "標準生成熱與燃燒熱的定義",
+        "反應焓計算"
+      ],
+      "excludedContent": [
+        "平衡常數與自由能"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "理想氣體方程式",
+        "理想氣體",
+        "理想氣體方程式、理想氣體與真實氣體"
+      ],
+      "allowedContent": [
+        "PV=nRT",
+        "壓力、體積、溫度與莫耳數"
+      ],
+      "excludedContent": [
+        "凡得瓦方程式數值計算"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "氣體分壓",
+        "氣體的分壓",
+        "分 壓",
+        "道耳頓分壓定律"
+      ],
+      "allowedContent": [
+        "道耳頓分壓定律",
+        "莫耳分率與總壓"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "反應速率",
+        "化學反應速率與表示法"
+      ],
+      "allowedContent": [
+        "平均與瞬時反應速率的意義",
+        "濃度時間圖",
+        "反應式係數與各物質速率"
+      ],
+      "excludedContent": [
+        "平衡常數",
+        "積分速率律"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "反應速率定律",
+        "反應速率與反應速率定律式"
+      ],
+      "allowedContent": [
+        "速率式、反應級數及速率常數",
+        "初速法"
+      ],
+      "excludedContent": [
+        "反應係數直接等同反應級數",
+        "大學積分速率律"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "碰撞學說",
+        "碰撞理論",
+        "碰撞學說與活化能",
+        "碰撞學說及反應能量圖"
+      ],
+      "allowedContent": [
+        "有效碰撞、活化能",
+        "反應能量圖"
+      ],
+      "excludedContent": [
+        "化學平衡常數計算"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "影響反應速率的因素",
+        "影響反應速率的因素及常見的催化反應"
+      ],
+      "allowedContent": [
+        "濃度、溫度、接觸面積與催化劑",
+        "速率改變原因"
+      ],
+      "excludedContent": [
+        "催化劑改變平衡常數"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "平衡常數",
+        "平衡常數與計算",
+        "平衡常數與平衡常數表示式"
+      ],
+      "allowedContent": [
+        "Kc、Kp 的表示與計算",
+        "純固體與純液體不列入一般平衡式"
+      ],
+      "excludedContent": [
+        "速率常數",
+        "活度係數的進階計算"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "影響化學平衡的因素",
+        "勒沙特列原理",
+        "平衡移動與勒沙特列原理",
+        "平衡的移動"
+      ],
+      "allowedContent": [
+        "濃度、壓力、溫度變化的平衡移動",
+        "催化劑不改變平衡位置"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "溶解平衡",
+        "溶解平衡與溶度積的關係",
+        "溶解度平衡與溶度積",
+        "溶解度平衡"
+      ],
+      "allowedContent": [
+        "Ksp、離子積、沉澱判斷與溶解度"
+      ],
+      "excludedContent": [
+        "配位平衡的高等聯立計算"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "緩衝溶液"
+      ],
+      "allowedContent": [
+        "弱酸共軛鹼或弱鹼共軛酸",
+        "緩衝作用及酸鹼度"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "酸鹼滴定",
+        "酸鹼滴定與滴定曲線"
+      ],
+      "allowedContent": [
+        "酸鹼計量、當量點與終點",
+        "滴定曲線及指示劑"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "氧化數",
+        "氧化數及其應用"
+      ],
+      "allowedContent": [
+        "氧化數判定",
+        "氧化與還原的電子轉移"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "氧化還原反應式的平衡",
+        "平衡氧化還原反應式"
+      ],
+      "allowedContent": [
+        "電子守恆",
+        "酸性或鹼性條件的反應式平衡"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "電解",
+        "電解與電鍍"
+      ],
+      "allowedContent": [
+        "電解池陰陽極、電子轉移",
+        "電量與產物量"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "烷烴",
+        "飽和烴",
+        "飽和烴-烷"
+      ],
+      "allowedContent": [
+        "飽和烴結構、命名與同分異構",
+        "基本反應"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "烯烴",
+        "炔烴",
+        "不飽和烴",
+        "不飽和烴-烯與炔"
+      ],
+      "allowedContent": [
+        "不飽和鍵、命名與加成反應，僅限所選類型"
+      ],
+      "excludedContent": [
+        "進階有機反應機構"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "羧酸類、酯類",
+        "羧酸和酯",
+        "有機酸與酯",
+        "酸與脂"
+      ],
+      "allowedContent": [
+        "羧酸與酯官能基",
+        "基本酯化與水解"
+      ],
+      "excludedContent": [
+        "進階有機反應機構"
+      ]
+    }
+  ]
+}
