@@ -1513,6 +1513,2193 @@
       "excludedContent": [
         "進階有機反應機構"
       ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "測量與不確定度",
+        "簡介不確定度",
+        "不確定度的簡要處理",
+        "測量的不確定性",
+        "不確定度評估",
+        "不確定度",
+        "不確定度的評估"
+      ],
+      "allowedContent": [
+        "測量值與不確定度的表示",
+        "儀器刻度、重複測量、平均值與合理有效位數"
+      ],
+      "excludedContent": [
+        "大學統計信賴區間"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "不確定度與有效數字"
+      ],
+      "allowedContent": [
+        "有效數字的判讀、運算及取位",
+        "測量值與不確定度位數一致"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "不確定度的組合"
+      ],
+      "allowedContent": [
+        "獨立測量量的組合不確定度",
+        "加減乘除的基本不確定度傳播"
+      ],
+      "excludedContent": [
+        "多變量共變異數矩陣"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "物理量的因次",
+        "因次與因次分析"
+      ],
+      "allowedContent": [
+        "基本物理量、SI 單位與因次",
+        "檢查等式的因次一致性"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "直線運動",
+        "運動學簡介"
+      ],
+      "allowedContent": [
+        "位置與時間、位移、速度、加速度的定義",
+        "一維運動圖形"
+      ],
+      "excludedContent": [
+        "拋體運動"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "位置、路徑長與位移",
+        "物體的位置與位移",
+        "位移與路徑長",
+        "位置向量與位移",
+        "位置、位移與路徑長"
+      ],
+      "allowedContent": [
+        "位置、路徑長與位移的區別",
+        "坐標與位移方向"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "速度與速率"
+      ],
+      "allowedContent": [
+        "平均速度與平均速率",
+        "瞬時速度及方向",
+        "路程與位移的不同"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "加速度",
+        "速度的變化與加速度",
+        "速度與加速度"
+      ],
+      "allowedContent": [
+        "平均加速度及速度變化",
+        "速度、加速度正負號的物理意義"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "物體運動圖",
+        "物體運動狀態對時間的關係圖"
+      ],
+      "allowedContent": [
+        "位置時間圖、速度時間圖、加速度時間圖",
+        "斜率及面積的運動意義"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "相對運動"
+      ],
+      "allowedContent": [
+        "參考系與相對位置",
+        "相對速度的向量加減"
+      ],
+      "excludedContent": [
+        "相對論"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "平面向量的概念與性質",
+        "向量的意義、分解與合成",
+        "平面向量"
+      ],
+      "allowedContent": [
+        "平面向量大小與方向",
+        "向量加減、分量及合成"
+      ],
+      "excludedContent": [
+        "空間外積"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "平面運動的位移、速度與加速度",
+        "平面運動的描述",
+        "平面運動的速度與加速度"
+      ],
+      "allowedContent": [
+        "平面位置、速度及加速度向量",
+        "分量描述與運動方向"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "力的性質",
+        "力的向量性質",
+        "力的測量與性質",
+        "力與交互作用"
+      ],
+      "allowedContent": [
+        "力的大小、方向與作用點",
+        "接觸力及非接觸力",
+        "力的向量合成"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "力的量度與虎克定律"
+      ],
+      "allowedContent": [
+        "彈簧測力計",
+        "彈性限度內的力與伸長量關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "萬有引力定律"
+      ],
+      "allowedContent": [
+        "兩質點間的萬有引力",
+        "平方反比及質量關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "地球表面的重力與重力加速度",
+        "地球表面的重力",
+        "地表的重力與重力加速度",
+        "重力與重力加速度"
+      ],
+      "allowedContent": [
+        "重量、質量與重力加速度",
+        "重力隨距離變化的基本關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "行星與人造衛星",
+        "行星與人造衛星的運動",
+        "行星與衛星運動"
+      ],
+      "allowedContent": [
+        "萬有引力提供向心力",
+        "圓軌道速率、週期與軌道半徑"
+      ],
+      "excludedContent": [
+        "橢圓軌道微分方程"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理I",
+      "labels": [
+        "克卜勒定律與萬有引力定律",
+        "克卜勒行星運動定律與萬有引力定律"
+      ],
+      "allowedContent": [
+        "克卜勒三定律",
+        "行星軌道與週期關係",
+        "萬有引力和行星運動的關聯"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "質心運動",
+        "系統質心運動",
+        "質點系的質心運動",
+        "質心運動與系統總動量"
+      ],
+      "allowedContent": [
+        "質心位置與速度",
+        "總動量與質心運動",
+        "合外力與質心加速度"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "力矩",
+        "力與力矩"
+      ],
+      "allowedContent": [
+        "力矩、力臂、轉動方向",
+        "合力矩及作用點"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "力矩與角動量",
+        "質點的角動量與角動量守恆",
+        "角動量"
+      ],
+      "allowedContent": [
+        "質點角動量與力矩的基本關係",
+        "合外力矩為零時角動量守恆，僅限節名所及"
+      ],
+      "excludedContent": [
+        "剛體轉動慣量的進階積分"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "靜力平衡",
+        "靜力平衡的應用",
+        "靜力平衡與應用",
+        "靜力學及應用實例"
+      ],
+      "allowedContent": [
+        "合力與合力矩為零",
+        "支點、張力、正向力及平衡條件"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "生活中常見的力"
+      ],
+      "allowedContent": [
+        "重力、張力、正向力、摩擦力及彈力的辨識",
+        "受力圖"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "功與功率"
+      ],
+      "allowedContent": [
+        "定力作功及正負功",
+        "平均功率與能量轉移"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "定力所作的功"
+      ],
+      "allowedContent": [
+        "力在位移方向的分量",
+        "定力作功與正負號"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "變力所作的功"
+      ],
+      "allowedContent": [
+        "力與位移圖形下的有號面積",
+        "分段變力的作功"
+      ],
+      "excludedContent": [
+        "需高等積分技巧的題目"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "功 率"
+      ],
+      "allowedContent": [
+        "單位時間作功",
+        "力、速度與瞬時功率"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "位能",
+        "保守力與位能"
+      ],
+      "allowedContent": [
+        "保守力作功與位能改變",
+        "位能零點及位能差"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "地表附近的重力位能與力學能",
+        "力學能守恆：地表附近的重力位能"
+      ],
+      "allowedContent": [
+        "近地表重力位能 mgh",
+        "動能與重力位能轉換"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "彈性位能與力學能",
+        "力學能守恆：彈性位能"
+      ],
+      "allowedContent": [
+        "彈簧彈性位能",
+        "彈性位能與動能轉換"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "重力位能的一般表示式與力學能",
+        "力學能守恆：重力位能的一般形式",
+        "重力位能的一般表示式"
+      ],
+      "allowedContent": [
+        "萬有引力位能 -GMm/r",
+        "距離與位能差",
+        "力學能應用限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "絕對溫度及理想氣體狀態方程式",
+        "絕對溫度與理想氣體方程式",
+        "理想氣體狀態方程式",
+        "理想氣體方程式",
+        "絕對溫度、理想氣體狀態方程式"
+      ],
+      "allowedContent": [
+        "絕對溫標與攝氏溫標換算",
+        "理想氣體狀態方程式及變數關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "氣體動力論",
+        "氣體運動論"
+      ],
+      "allowedContent": [
+        "氣體分子運動的理想假設",
+        "壓力與分子碰撞",
+        "溫度與平均平移動能"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理II",
+      "labels": [
+        "氣體分子的速率分布"
+      ],
+      "allowedContent": [
+        "分子速率分布圖形",
+        "溫度對速率分布及平均速率的影響"
+      ],
+      "excludedContent": [
+        "統計力學分布函數的積分推導"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "波的傳播",
+        "波動的性質",
+        "波的基本性質",
+        "波的性質與傳播"
+      ],
+      "allowedContent": [
+        "波源與介質",
+        "橫波、縱波",
+        "波速、頻率與波長的關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "週期波",
+        "振動與週期波",
+        "振動與波"
+      ],
+      "allowedContent": [
+        "振幅、週期、頻率及波長",
+        "波形圖與振動圖判讀"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "繩波的反射和透射",
+        "繩波的反射與透射",
+        "波的反射與透射"
+      ],
+      "allowedContent": [
+        "固定端與自由端反射",
+        "介面反射、透射及相位關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "波的疊加原理",
+        "波的疊加與干涉"
+      ],
+      "allowedContent": [
+        "位移疊加",
+        "建設性與破壞性干涉限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "惠更斯原理"
+      ],
+      "allowedContent": [
+        "次波源與波前",
+        "利用波前解釋傳播、反射或折射"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "駐波",
+        "波的疊加原理與駐波"
+      ],
+      "allowedContent": [
+        "反向行進波疊加",
+        "波節、波腹與相鄰間距",
+        "邊界條件"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "聲音的共鳴",
+        "共振與共鳴",
+        "聲音的共振"
+      ],
+      "allowedContent": [
+        "自然頻率、外力頻率與共振",
+        "聲音共鳴現象"
+      ],
+      "excludedContent": [
+        "受迫振動微分方程"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "聲波的傳播"
+      ],
+      "allowedContent": [
+        "聲波的縱波特性",
+        "頻率、音調、波速及傳播介質"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "聲波的駐波",
+        "空氣柱的駐波",
+        "空腔中的聲音"
+      ],
+      "allowedContent": [
+        "開管、閉管的波節波腹",
+        "共鳴波長與頻率"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "基音與泛音"
+      ],
+      "allowedContent": [
+        "基頻、諧波與泛音",
+        "頻率倍數與邊界條件"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "水波",
+        "水波的現象"
+      ],
+      "allowedContent": [
+        "水面波的波前與傳播",
+        "反射、折射、干涉或繞射現象限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "水波的干涉",
+        "水波的干涉與繞射"
+      ],
+      "allowedContent": [
+        "相干水波與路徑差",
+        "節線、腹線及波的繞射限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "光的波動說",
+        "光的物理現象"
+      ],
+      "allowedContent": [
+        "以波動觀點解釋光的傳播及可觀察現象",
+        "波長、頻率與光速"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "光的反射"
+      ],
+      "allowedContent": [
+        "入射角與反射角",
+        "平面鏡反射及光路"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "折射現象",
+        "光的折射",
+        "光的折射與司乃耳定律",
+        "光的反射與折射"
+      ],
+      "allowedContent": [
+        "折射率、入射角與折射角",
+        "司乃耳定律",
+        "反射定律限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "光的全反射",
+        "全反射",
+        "全反射與應用",
+        "折射現象及全反射"
+      ],
+      "allowedContent": [
+        "高折射率介質往低折射率介質",
+        "臨界角與全反射條件",
+        "光纖等基本應用"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "色散現象與全反射",
+        "光的色散與彩虹成因"
+      ],
+      "allowedContent": [
+        "折射率隨波長變化",
+        "色散及彩虹的成因",
+        "全反射限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理III",
+      "labels": [
+        "透鏡原理",
+        "薄透鏡成像與應用",
+        "透鏡的原理及應用",
+        "薄透鏡",
+        "薄透鏡成像"
+      ],
+      "allowedContent": [
+        "凸透鏡與凹透鏡",
+        "焦距、物距、像距與放大率",
+        "實像虛像及光路"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "電場與電力線"
+      ],
+      "allowedContent": [
+        "電場強度與試驗電荷",
+        "點電荷電場、電力線及疊加"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "電位能"
+      ],
+      "allowedContent": [
+        "靜電力作功與電位能差",
+        "點電荷系統的電位能"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "電位與電位差",
+        "電位能、電位與電位差",
+        "電位能與電位",
+        "電位能、電位、電位差"
+      ],
+      "allowedContent": [
+        "單位電荷的電位能",
+        "電位與電位差",
+        "電場作功與電位能變化限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "磁極與磁場"
+      ],
+      "allowedContent": [
+        "磁極間作用、磁力線與磁場方向",
+        "磁場基本性質"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "電流磁效應",
+        "電生磁",
+        "電流與磁場",
+        "電流的磁效應",
+        "載流導線的磁場",
+        "載流導線產生的磁場"
+      ],
+      "allowedContent": [
+        "電流產生磁場",
+        "右手定則",
+        "直導線、線圈的磁場限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "載流導線在磁場中所受的力及其應用",
+        "載流導線在磁場中所受的磁力",
+        "載流導線所受的磁力",
+        "載流導線在磁場中的受力及其應用",
+        "磁場中的載流導線",
+        "載流導線在磁場中所受的力"
+      ],
+      "allowedContent": [
+        "載流導線受磁力大小與方向",
+        "電流、磁場、導線長度及夾角",
+        "基本馬達應用"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "帶電質點在均勻磁場中的運動及其應用",
+        "帶電質點在磁場中的運動",
+        "磁場中的帶電質點",
+        "帶電質點在磁場中運動時所受的力"
+      ],
+      "allowedContent": [
+        "洛侖茲磁力方向及大小",
+        "均勻磁場中圓周運動半徑及週期"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "電磁感應與應電流",
+        "電磁感應實驗"
+      ],
+      "allowedContent": [
+        "磁通量改變與感應電流",
+        "感應實驗現象及變因"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "電磁感應的應用",
+        "電磁感應現象的應用"
+      ],
+      "allowedContent": [
+        "利用磁通量改變產生電動勢的生活裝置",
+        "感應方向及能量轉換"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "發電機與交流電",
+        "發電機、交流電與變壓器"
+      ],
+      "allowedContent": [
+        "旋轉線圈的電磁感應",
+        "交流電週期與能量轉換",
+        "變壓器限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "變壓器",
+        "變壓器與電磁感應的應用"
+      ],
+      "allowedContent": [
+        "互感與交流電",
+        "理想變壓器匝數、電壓及電流關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "電場變動所產生的磁效應"
+      ],
+      "allowedContent": [
+        "變動電場與磁場的關聯",
+        "電磁場相互作用的基本概念"
+      ],
+      "excludedContent": [
+        "馬克士威方程組微分形式"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理IV",
+      "labels": [
+        "電磁波",
+        "電磁波與光",
+        "電磁波與光速"
+      ],
+      "allowedContent": [
+        "電磁波的電場磁場方向、光速、頻率及波長",
+        "電磁波譜"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "電動勢",
+        "電動勢與電流"
+      ],
+      "allowedContent": [
+        "電源提供的能量與單位電荷",
+        "電動勢、端電壓與電流的基本關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "電阻與電阻率"
+      ],
+      "allowedContent": [
+        "電阻率、導線長度及截面積與電阻",
+        "材料與溫度影響"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "歐姆定律與電阻",
+        "電阻與歐姆定律",
+        "電動勢、電阻與歐姆定律"
+      ],
+      "allowedContent": [
+        "電流與電壓關係",
+        "電阻及歐姆性元件",
+        "電動勢限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "電路中之電荷守恆(電量守恆)與能量守恆",
+        "電路分析",
+        "電路中的電量守恆與能量守恆"
+      ],
+      "allowedContent": [
+        "節點電流守恆",
+        "迴路電位變化總和",
+        "基本直流電路"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "電流熱效應與電功率",
+        "電功率與電流的熱效應",
+        "電功率",
+        "電流的熱效應",
+        "電流的熱效應及電功率",
+        "電功率及電流的熱效應"
+      ],
+      "allowedContent": [
+        "電功率與電能",
+        "焦耳熱及電流、電阻、時間的關係，限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "電子的發現",
+        "密立坎油滴實驗"
+      ],
+      "allowedContent": [
+        "陰極射線或油滴實驗的觀察與推論",
+        "電子電荷與基本電量限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "X射線"
+      ],
+      "allowedContent": [
+        "X 射線產生、波長與穿透性",
+        "基本應用及安全概念"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "量子論的發現",
+        "量子現象的發現",
+        "黑體輻射─能量的不連續性",
+        "黑體輻射",
+        "量子論的發現--黑體輻射"
+      ],
+      "allowedContent": [
+        "黑體輻射現象",
+        "能量量子化與 E=hf",
+        "經典理論的限制"
+      ],
+      "excludedContent": [
+        "普朗克分布公式的積分推導"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "原子結構",
+        "原子模型",
+        "拉塞福的原子模型",
+        "拉塞福原子模型與原子光譜",
+        "原子光譜與拉塞福原子模型"
+      ],
+      "allowedContent": [
+        "原子模型及散射實驗證據",
+        "原子核與電子",
+        "光譜限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "波耳的氫原子模型",
+        "波耳氫原子模型",
+        "氫原子光譜與波耳的氫原子模型"
+      ],
+      "allowedContent": [
+        "氫原子離散能階",
+        "躍遷與光子能量",
+        "發射及吸收光譜"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "氫原子光譜"
+      ],
+      "allowedContent": [
+        "離散譜線與能階差",
+        "光子頻率與波長"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "物質波",
+        "物質波與波粒二象性"
+      ],
+      "allowedContent": [
+        "德布羅意波長與動量",
+        "電子繞射與波粒二象性"
+      ],
+      "excludedContent": [
+        "薛丁格方程"
+      ]
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "原子核",
+        "原子核的組成",
+        "原子核的組成與穩定性",
+        "原子核與守恆律"
+      ],
+      "allowedContent": [
+        "質子、中子、核種及質量數",
+        "核穩定性或核反應守恆限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "原子核衰變",
+        "原子核的衰變與放射性"
+      ],
+      "allowedContent": [
+        "α、β、γ 衰變的基本性質",
+        "核反應式與半衰期"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "物理",
+      "term": "選修物理V",
+      "labels": [
+        "物理學上的守恆律",
+        "交互作用與守恆律",
+        "無所不在的守恆律",
+        "守恆定律的普適性",
+        "守恆律"
+      ],
+      "allowedContent": [
+        "辨識能量、動量、電荷等守恆量",
+        "依情境判定守恆條件"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "化學計量",
+        "化學反應與化學計量",
+        "化學式的平衡與化學計量"
+      ],
+      "allowedContent": [
+        "莫耳、粒子數與質量換算",
+        "反應式係數與各物質量關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "化學反應式的平衡",
+        "化學反應式的平衡法則",
+        "化學反應式的平衡及應用"
+      ],
+      "allowedContent": [
+        "原子數守恆與反應係數",
+        "配平化學反應式",
+        "計量應用限節名所及"
+      ],
+      "excludedContent": [
+        "氧化還原半反應法的進階題"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "反應中的能量變化",
+        "化學反應中的能量變化",
+        "反應熱的種類與性質",
+        "反應熱與影響變因"
+      ],
+      "allowedContent": [
+        "吸熱放熱、反應焓正負",
+        "熱化學反應式",
+        "反應熱隨狀態及物質量改變"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "各種能量形式的轉換"
+      ],
+      "allowedContent": [
+        "化學能、熱能、電能等能量轉換",
+        "能量守恆及轉換效率概念"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "氣體的性質",
+        "氣體性質",
+        "氣體的特性",
+        "大氣的組成與氣體的通性"
+      ],
+      "allowedContent": [
+        "氣體可壓縮性、擴散及分子運動",
+        "壓力與溫度等狀態量",
+        "大氣組成限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "氣體的定律",
+        "氣體定律",
+        "氣體的基本定律"
+      ],
+      "allowedContent": [
+        "波以耳、查理及亞佛加厥等基本氣體定律",
+        "定量關係及圖形判讀"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "理想氣體與真實氣體"
+      ],
+      "allowedContent": [
+        "理想氣體假設",
+        "真實氣體分子作用與體積",
+        "高溫低壓近似"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "物質的分離與鑑定"
+      ],
+      "allowedContent": [
+        "利用物理性質分離物質",
+        "過濾、蒸餾、萃取或層析等基本方法",
+        "鑑定依性質或實驗現象"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "物質的鑑定與溶液",
+        "物質的特性與鑑定",
+        "物質的鑑定",
+        "物質的鑑定方法"
+      ],
+      "allowedContent": [
+        "純物質及混合物的性質",
+        "物理與化學性質及基本鑑定實驗"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "溶液的濃度與溶解度"
+      ],
+      "allowedContent": [
+        "質量百分濃度、莫耳濃度及基本換算",
+        "飽和與不飽和、溶解度"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "溶解度",
+        "固體與氣體的溶解度",
+        "溶液中的溶解特性"
+      ],
+      "allowedContent": [
+        "溶解度與飽和條件",
+        "溫度、壓力及溶質溶劑性質的影響"
+      ],
+      "excludedContent": [
+        "溶度積平衡計算"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "水的性質"
+      ],
+      "allowedContent": [
+        "水分子極性及氫鍵",
+        "水的沸點、表面張力、密度等性質"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "物質的狀態"
+      ],
+      "allowedContent": [
+        "固液氣三態、分子間距與運動",
+        "相變化及能量"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "水的相變化、蒸氣壓與相對溼度",
+        "相變化與蒸氣壓",
+        "蒸氣壓",
+        "物質的蒸氣壓"
+      ],
+      "allowedContent": [
+        "液氣動態平衡及飽和蒸氣壓",
+        "溫度影響",
+        "相對溼度限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "溶液的蒸氣壓與拉午耳定律",
+        "拉午耳定律"
+      ],
+      "allowedContent": [
+        "理想溶液中蒸氣壓與莫耳分率關係",
+        "非揮發性溶質降低蒸氣壓"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學I",
+      "labels": [
+        "溶液的性質",
+        "溶液的沸點、凝固點及滲透壓",
+        "水溶液的依數性",
+        "依數性質",
+        "溶液的依數性質"
+      ],
+      "allowedContent": [
+        "依數性與溶質粒子數關係",
+        "蒸氣壓下降、沸點上升、凝固點下降、滲透壓限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "光的性質"
+      ],
+      "allowedContent": [
+        "波長、頻率、光速及光子能量",
+        "電磁波譜基本關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "原子結構與模型",
+        "原子結構與氫原子光譜"
+      ],
+      "allowedContent": [
+        "原子核、電子及原子模型的演變",
+        "離散能階與光譜限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "氫原子光譜",
+        "原子光譜與波耳的氫原子模型",
+        "波耳氫原子模型",
+        "波耳氫原子模型與氫原子能階"
+      ],
+      "allowedContent": [
+        "氫原子能階與電子躍遷",
+        "吸收、發射光譜及光子能量"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "原子軌域"
+      ],
+      "allowedContent": [
+        "主能階、次能階及軌域的基本意義",
+        "s、p 等軌域的形狀與容納電子數"
+      ],
+      "excludedContent": [
+        "薛丁格方程推導"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "電子組態"
+      ],
+      "allowedContent": [
+        "遞建原理、包立不相容原理及洪德定則",
+        "原子及常見離子電子組態"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "週期表與元素週期性",
+        "元素性質的週期性",
+        "元素在週期表的週期性變化",
+        "原子性質與週期性"
+      ],
+      "allowedContent": [
+        "週期與族",
+        "原子半徑、游離能、電負度等週期趨勢"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "化學鍵的種類",
+        "化學鍵的種類與特性"
+      ],
+      "allowedContent": [
+        "離子鍵、共價鍵及金屬鍵",
+        "鍵結與物質性質的關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "共價鍵─分子物質",
+        "共價鍵"
+      ],
+      "allowedContent": [
+        "共用電子對與路易斯結構",
+        "共價鍵及分子物質基本特性"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "共價鍵─共價網狀固體"
+      ],
+      "allowedContent": [
+        "共價網狀固體的結構與性質",
+        "金剛石、石墨及二氧化矽等典型例子"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "離子鍵與離子晶體",
+        "離子鍵與金屬鍵"
+      ],
+      "allowedContent": [
+        "離子鍵、晶格及離子化合物的特性",
+        "金屬鍵限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "金屬鍵與金屬晶體"
+      ],
+      "allowedContent": [
+        "金屬鍵及自由電子模型",
+        "金屬導電、延展性及晶體性質"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "單鍵與多鍵"
+      ],
+      "allowedContent": [
+        "單、雙、三鍵的共用電子對",
+        "鍵長、鍵能與鍵級關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "價鍵理論"
+      ],
+      "allowedContent": [
+        "原子軌域重疊形成共價鍵",
+        "σ、π 鍵的基本概念"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "混成軌域",
+        "混成軌域理論"
+      ],
+      "allowedContent": [
+        "sp、sp2、sp3 混成及相應幾何構型",
+        "σ、π 鍵的關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "價殼層電子對互斥理論與分子形狀",
+        "價殼層電子對互斥理論",
+        "價殼層電子對互斥模型",
+        "分子的形狀與鍵結",
+        "分子形狀、價鍵理論與混成軌域"
+      ],
+      "allowedContent": [
+        "路易斯結構與電子域",
+        "分子形狀及孤電子對影響",
+        "混成與價鍵理論僅限節名明示"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "鍵極性與分子極性",
+        "鍵與分子的極性",
+        "分子極性"
+      ],
+      "allowedContent": [
+        "電負度差與鍵偶極",
+        "分子幾何及偶極的向量合成"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "分子間作用力",
+        "分子間的作用力",
+        "分子極性與分子間作用力"
+      ],
+      "allowedContent": [
+        "倫敦分散力、偶極作用及氫鍵",
+        "分子間作用力與沸點等性質",
+        "分子極性限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學II",
+      "labels": [
+        "化學反應的模型"
+      ],
+      "allowedContent": [
+        "有效碰撞及能量障礙",
+        "利用微觀模型解釋反應進行，不超出所選節次"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "可逆反應與化學平衡",
+        "可逆化學反應與化學平衡",
+        "化學平衡",
+        "化學平衡及其特性",
+        "化學平衡與平衡常數"
+      ],
+      "allowedContent": [
+        "正逆反應與動態平衡",
+        "平衡時反應速率相等、濃度不一定相等",
+        "平衡常數限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "沉澱反應",
+        "沉澱反應和離子的分離與確認",
+        "物質的沉澱反應"
+      ],
+      "allowedContent": [
+        "溶解性規則",
+        "沉澱生成及淨離子反應式",
+        "離子鑑定與分離限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "酸鹼理論",
+        "酸鹼的定義",
+        "酸鹼學說",
+        "布-洛酸鹼學說",
+        "布-洛酸鹼理論"
+      ],
+      "allowedContent": [
+        "酸鹼的基本定義",
+        "質子轉移與共軛酸鹼對",
+        "所選學說明示的內容"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "電解質與阿瑞尼斯的解離說"
+      ],
+      "allowedContent": [
+        "電解質及非電解質",
+        "水溶液中的解離與導電",
+        "阿瑞尼斯酸鹼定義"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "酸與鹼的命名",
+        "酸與鹼的分類和命名"
+      ],
+      "allowedContent": [
+        "常見酸鹼名稱、化學式及分類",
+        "強弱與一元多元的區分限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "水的自身離子化與離子積常數",
+        "水的解離",
+        "水的離子積常數"
+      ],
+      "allowedContent": [
+        "水的自解離",
+        "Kw 與氫、氫氧根離子濃度關係",
+        "溫度影響"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "酸鹼平衡",
+        "酸鹼的解離平衡",
+        "弱酸和弱鹼的解離",
+        "酸與鹼的解離",
+        "弱酸弱鹼的解離平衡"
+      ],
+      "allowedContent": [
+        "酸鹼解離常數 Ka、Kb",
+        "強弱酸鹼的解離及平衡濃度",
+        "基本 pH 計算"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "溶液的酸鹼度"
+      ],
+      "allowedContent": [
+        "pH、pOH 與離子濃度",
+        "酸性中性鹼性判讀"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學III",
+      "labels": [
+        "鹽的種類與命名",
+        "鹽 類",
+        "鹽類的種類、命名與酸鹼性",
+        "鹽",
+        "鹽的命名與水解"
+      ],
+      "allowedContent": [
+        "鹽的離子組成及命名",
+        "正鹽、酸式鹽等分類",
+        "鹽類水解及酸鹼性限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "電子轉移和氧化還原反應",
+        "氧化還原反應的基本原理"
+      ],
+      "allowedContent": [
+        "氧化與還原、電子轉移",
+        "氧化劑及還原劑",
+        "氧化數變化"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "氧化還原滴定"
+      ],
+      "allowedContent": [
+        "氧化還原反應的電子計量",
+        "滴定當量與濃度換算",
+        "終點判斷"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "電池電位",
+        "電池電壓"
+      ],
+      "allowedContent": [
+        "標準還原電位",
+        "陰陽極電位與電池電壓",
+        "反應自發性基本判斷"
+      ],
+      "excludedContent": [
+        "能斯特方程式進階計算"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "電化電池與電池電壓",
+        "電池反應",
+        "電池",
+        "電化電池"
+      ],
+      "allowedContent": [
+        "電池氧化還原反應",
+        "陽極、陰極、電子流向與鹽橋",
+        "電位計算限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "常見的電池"
+      ],
+      "allowedContent": [
+        "常見一次電池、二次電池或燃料電池的原理及特性"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "非金屬元素及其常見的化合物",
+        "常見非金屬",
+        "非金屬元素的性質與製備",
+        "非金屬元素及其化合物",
+        "非金屬元素與其化合物",
+        "非金屬元素"
+      ],
+      "allowedContent": [
+        "常見非金屬元素與化合物的結構、性質及用途",
+        "製備限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "主族金屬元素及其常見的化合物",
+        "主族金屬元素",
+        "鈉、鎂及鋁元素和化合物的性質與製備",
+        "金屬元素及其化合物",
+        "金屬元素與其化合物"
+      ],
+      "allowedContent": [
+        "主族金屬反應性及常見化合物",
+        "鈉、鎂、鋁等性質、製備與用途，限所選元素"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "過渡金屬元素",
+        "過渡金屬及其化合物"
+      ],
+      "allowedContent": [
+        "過渡金屬的常見氧化態、顏色及催化性質",
+        "常見化合物"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "常見金屬與常見合金"
+      ],
+      "allowedContent": [
+        "金屬與合金組成、性質及用途",
+        "材料選擇的基本關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "配位化合物"
+      ],
+      "allowedContent": [
+        "中心金屬離子、配位基及配位數",
+        "基本配位結構與命名"
+      ],
+      "excludedContent": [
+        "晶場分裂能的進階計算"
+      ]
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "生活化學"
+      ],
+      "allowedContent": [
+        "日常化學物質的性質與用途",
+        "依生活情境理解反應及安全"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "先進材料"
+      ],
+      "allowedContent": [
+        "材料結構、性質與用途的關係",
+        "常見先進材料的化學特性"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學IV",
+      "labels": [
+        "奈米科技"
+      ],
+      "allowedContent": [
+        "奈米尺度、表面積與尺寸效應",
+        "奈米材料基本應用"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "有機化合物的組成與結構",
+        "有機化合物的結構與組成",
+        "有機化合物的組成",
+        "有機化合物的組成與分析"
+      ],
+      "allowedContent": [
+        "有機物常見元素",
+        "分子式、結構式與碳的鍵結",
+        "組成分析限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "官能基"
+      ],
+      "allowedContent": [
+        "官能基的結構辨識",
+        "官能基與有機化合物的分類、性質關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "烴及其分類",
+        "烴",
+        "烴與有機鹵化物"
+      ],
+      "allowedContent": [
+        "烷烴、烯烴、炔烴、芳香烴的基本分類",
+        "結構與命名",
+        "有機鹵化物限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "環烷烴"
+      ],
+      "allowedContent": [
+        "環烷烴的分子式與結構",
+        "命名及基本異構"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "芳香烴"
+      ],
+      "allowedContent": [
+        "苯環結構及芳香烴分類",
+        "苯及簡單衍生物的基本性質"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "鹵烴",
+        "有機鹵化物"
+      ],
+      "allowedContent": [
+        "碳鹵鍵及鹵烴命名",
+        "基本性質與用途"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "醇類、酚類及醚類",
+        "醇、醚及酚",
+        "醇、酚、醚",
+        "醇、酚和醚"
+      ],
+      "allowedContent": [
+        "羥基及醚鍵的辨識",
+        "醇、酚、醚的結構、性質與命名"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "醛類、酮類",
+        "醛和酮",
+        "醛與酮",
+        "醛、酮、羧酸及酯"
+      ],
+      "allowedContent": [
+        "羰基結構、醛酮的辨識與基本性質",
+        "羧酸、酯及其反應限節名所及"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "胺類、醯胺類",
+        "胺與醯胺",
+        "胺與和胺",
+        "胺和醯胺"
+      ],
+      "allowedContent": [
+        "胺基與醯胺基的結構",
+        "胺與醯胺的辨識、命名及基本性質"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "有機聚合物的分類與性質",
+        "聚合物",
+        "聚合物的分類與性質",
+        "常見聚合物的分類與性質"
+      ],
+      "allowedContent": [
+        "單體、重複單元及聚合物",
+        "聚合物結構、分類與物理性質"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "聚合方式",
+        "聚合物與聚合反應",
+        "常見聚合物的結構與製備"
+      ],
+      "allowedContent": [
+        "加成與縮合聚合的基本原理",
+        "單體及重複單元辨認"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "人造聚合物",
+        "人工合成聚合物",
+        "塑膠與橡膠"
+      ],
+      "allowedContent": [
+        "常見合成高分子、塑膠與橡膠的結構及用途",
+        "材料性質與回收"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "天然聚合物",
+        "生物體中的大分子",
+        "生物體中的有機聚合物"
+      ],
+      "allowedContent": [
+        "蛋白質、多醣及核酸等天然高分子的基本組成",
+        "單體與鍵結關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "科學發展史",
+        "化學發展史"
+      ],
+      "allowedContent": [
+        "化學重要發現與實驗證據",
+        "科學概念如何隨證據修正"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "科學、科技、社會及人文",
+        "化學與化工的未來發展"
+      ],
+      "allowedContent": [
+        "化學科技對社會、環境及生活的影響",
+        "以具體化學原理評估應用"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "科學模型的特性與演變",
+        "模型與理論的建立"
+      ],
+      "allowedContent": [
+        "模型的假設、證據與限制",
+        "理論與實驗的關係"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "環境汙染與防治",
+        "環境污染與防治",
+        "我們居住的環境"
+      ],
+      "allowedContent": [
+        "空氣、水與土壤污染的化學成因",
+        "污染物性質及防治原理"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "環境檢測"
+      ],
+      "allowedContent": [
+        "常見環境指標及檢測的化學原理",
+        "數據與污染來源判讀"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "資源與永續發展",
+        "永續發展",
+        "能源與化學永續發展",
+        "新興能源"
+      ],
+      "allowedContent": [
+        "資源利用、能源轉換及永續化學",
+        "依題意評估環境影響"
+      ],
+      "excludedContent": []
+    },
+    {
+      "subject": "化學",
+      "term": "選修化學V",
+      "labels": [
+        "先進材料"
+      ],
+      "allowedContent": [
+        "材料結構、性質與用途",
+        "高分子與新興材料的基本化學特性"
+      ],
+      "excludedContent": []
     }
   ]
 }
