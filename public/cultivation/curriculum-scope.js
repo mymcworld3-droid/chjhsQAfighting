@@ -72,7 +72,7 @@ const label=document.createElement('b');label.textContent=u.unit;summary.append(
 if(u.book?.scopeSelectionStatus==='publisher-chapter-outline'){
  const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='出版社章名 · 細項為整理觀念 · 學年度未標示';group.append(note);
 }
-if(['social-crosswalk-transcription','geography-crosswalk-transcription','civics-crosswalk-transcription'].includes(u.book?.scopeSelectionStatus)){
+if(['social-crosswalk-transcription','geography-crosswalk-transcription','civics-crosswalk-transcription','elective-social-crosswalk-transcription'].includes(u.book?.scopeSelectionStatus)){
  const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='114學年度課程對照 · 原檔待核';group.append(note);
 }
 if(u.book?.scopeSelectionStatus==='grade12-crosswalk-transcription'){
@@ -102,11 +102,12 @@ async function loadCatalogue(g,s){
    const social=['高中一年級','高中二年級'].includes(g)&&s==='歷史';
    const geography=['高中一年級','高中二年級'].includes(g)&&s==='地理';
    const civics=['高中一年級','高中二年級'].includes(g)&&s==='公民';
-   if(!required&&!elective&&!seniorMath&&!social&&!geography&&!civics)return base;
-   const supplementFile=required?'curriculum-supplements/grade10.json?v=20261126-batch5':seniorMath?'curriculum-supplements/grade12-math.json?v=20261126-batch7':social?'curriculum-supplements/history.json?v=20261126-batch8a':geography?'curriculum-supplements/geography.json?v=20261126-batch8b':civics?'curriculum-supplements/civics.json?v=20261126-batch8c':'curriculum-supplements/elective-science.json?v=20261126-batch6';
+   const electiveSocial=g==='高中三年級'&&['歷史','地理','公民'].includes(s);
+   if(!required&&!elective&&!seniorMath&&!social&&!geography&&!civics&&!electiveSocial)return base;
+   const supplementFile=required?'curriculum-supplements/grade10.json?v=20261126-batch5':seniorMath?'curriculum-supplements/grade12-math.json?v=20261126-batch7':social?'curriculum-supplements/history.json?v=20261126-batch8a':geography?'curriculum-supplements/geography.json?v=20261126-batch8b':civics?'curriculum-supplements/civics.json?v=20261126-batch8c':electiveSocial?'curriculum-supplements/elective-social.json?v=20261126-batch8d':'curriculum-supplements/elective-science.json?v=20261126-batch6';
    if(!memo.has(supplementFile))memo.set(supplementFile,fetch('/'+supplementFile).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(supplementFile);throw e;}));
    const supplemental=await memo.get(supplementFile);
-   return {...base,books:[...base.books,...supplemental.books.filter(b=>b.subject===s&&(required||seniorMath||social||geography||civics?b.grade===g:b.eligibleGrades?.includes(g))).map(b=>({...b,grade:g}))]};
+   return {...base,books:[...base.books,...supplemental.books.filter(b=>b.subject===s&&(required||seniorMath||social||geography||civics||electiveSocial?b.grade===g:b.eligibleGrades?.includes(g))).map(b=>({...b,grade:g}))]};
  }).catch(e=>{memo.delete(file);throw e;}));
  return memo.get(file);
 }
@@ -122,7 +123,7 @@ function catalogOptions(){
   if(!available)option.textContent+='（待開放）';
   else if(records.every(b=>b.verificationStatus==='unverified'))option.textContent+='（既有整理）';
   else if(records.every(b=>b.scopeSelectionStatus==='publisher-chapter-outline'))option.textContent+='（章名・整理觀念）';
-  else if(records.every(b=>['social-crosswalk-transcription','geography-crosswalk-transcription','civics-crosswalk-transcription'].includes(b.scopeSelectionStatus)))option.textContent+='（課程對照・原檔待核）';
+  else if(records.every(b=>['social-crosswalk-transcription','geography-crosswalk-transcription','civics-crosswalk-transcription','elective-social-crosswalk-transcription'].includes(b.scopeSelectionStatus)))option.textContent+='（課程對照・原檔待核）';
   else if(records.every(b=>b.scopeSelectionStatus==='grade12-crosswalk-transcription'))option.textContent+='（課程對照・原檔待核）';
   else if(records.every(b=>b.scopeSelectionStatus==='elective-crosswalk-transcription'))option.textContent+='（課程對照・原檔待核）';
   else if(records.every(b=>b.scopeSelectionStatus==='source-reviewed-crosswalk'))option.textContent+='（課程對照・原檔待核）';
