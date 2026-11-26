@@ -21896,6 +21896,2531 @@
           "lessonType": "self-study"
         }
       ]
+    },
+    {
+      "bookId": "hanlin-108-english-1",
+      "grade": "高中一年級",
+      "subject": "英文",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "英文第1冊（早期合作教材）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_1_1_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 1
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_1_2_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 2
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_1_3_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 3
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_1_4_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 4
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_1_5_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 5
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_1_6_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 6
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_1_7_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 7
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_1_8_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 8
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_1_9_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 9
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "翰林",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。依2019–2021希平方與翰林合作課程標題，未核對115學年度課本。已核對9個Reading課名，未取得第10課；不推定有無其他單元。",
+      "units": [
+        {
+          "unit": "Lesson 1 Building a Better Relationship",
+          "details": [
+            "Lesson 1 Building a Better Relationship｜主題字彙與搭配",
+            "Lesson 1 Building a Better Relationship｜文法與句型應用",
+            "Lesson 1 Building a Better Relationship｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 1 Building a Better Relationship｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人際關係；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 1 Building a Better Relationship｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人際關係；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 1 Building a Better Relationship｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人際關係；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 2 Pandora’s Box",
+          "details": [
+            "Lesson 2 Pandora’s Box｜主題字彙與搭配",
+            "Lesson 2 Pandora’s Box｜文法與句型應用",
+            "Lesson 2 Pandora’s Box｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 2 Pandora’s Box｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "神話、抉擇與後果；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 2 Pandora’s Box｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "神話、抉擇與後果；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 2 Pandora’s Box｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "神話、抉擇與後果；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 3 Fun Food Facts",
+          "details": [
+            "Lesson 3 Fun Food Facts｜主題字彙與搭配",
+            "Lesson 3 Fun Food Facts｜文法與句型應用",
+            "Lesson 3 Fun Food Facts｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 3 Fun Food Facts｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與生活；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 3 Fun Food Facts｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與生活；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 3 Fun Food Facts｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與生活；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 4 Love Never Really Says Goodbye",
+          "details": [
+            "Lesson 4 Love Never Really Says Goodbye｜主題字彙與搭配",
+            "Lesson 4 Love Never Really Says Goodbye｜文法與句型應用",
+            "Lesson 4 Love Never Really Says Goodbye｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 4 Love Never Really Says Goodbye｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "情感與離別；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 4 Love Never Really Says Goodbye｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "情感與離別；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 4 Love Never Really Says Goodbye｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "情感與離別；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 5 There’s Nothing Ordinary about a Vending Machine!",
+          "details": [
+            "Lesson 5 There’s Nothing Ordinary about a Vending Machine!｜主題字彙與搭配",
+            "Lesson 5 There’s Nothing Ordinary about a Vending Machine!｜文法與句型應用",
+            "Lesson 5 There’s Nothing Ordinary about a Vending Machine!｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 5 There’s Nothing Ordinary about a Vending Machine!｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "販賣機與生活科技；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 5 There’s Nothing Ordinary about a Vending Machine!｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "販賣機與生活科技；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 5 There’s Nothing Ordinary about a Vending Machine!｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "販賣機與生活科技；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 6 Getting Rid of Trolls",
+          "details": [
+            "Lesson 6 Getting Rid of Trolls｜主題字彙與搭配",
+            "Lesson 6 Getting Rid of Trolls｜文法與句型應用",
+            "Lesson 6 Getting Rid of Trolls｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 6 Getting Rid of Trolls｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "網路互動與文明；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 6 Getting Rid of Trolls｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "網路互動與文明；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 6 Getting Rid of Trolls｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "網路互動與文明；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 7 How Light from a Bottle Can Change the World",
+          "details": [
+            "Lesson 7 How Light from a Bottle Can Change the World｜主題字彙與搭配",
+            "Lesson 7 How Light from a Bottle Can Change the World｜文法與句型應用",
+            "Lesson 7 How Light from a Bottle Can Change the World｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 7 How Light from a Bottle Can Change the World｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "照明、創新與生活；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 7 How Light from a Bottle Can Change the World｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "照明、創新與生活；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 7 How Light from a Bottle Can Change the World｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "照明、創新與生活；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 8 A Life Without Limits",
+          "details": [
+            "Lesson 8 A Life Without Limits｜主題字彙與搭配",
+            "Lesson 8 A Life Without Limits｜文法與句型應用",
+            "Lesson 8 A Life Without Limits｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 8 A Life Without Limits｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人生挑戰；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 8 A Life Without Limits｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人生挑戰；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 8 A Life Without Limits｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人生挑戰；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 9 The Little Prince",
+          "details": [
+            "Lesson 9 The Little Prince｜主題字彙與搭配",
+            "Lesson 9 The Little Prince｜文法與句型應用",
+            "Lesson 9 The Little Prince｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 9 The Little Prince｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學與人際；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 9 The Little Prince｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學與人際；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 9 The Little Prince｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學與人際；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-108-english-2",
+      "grade": "高中一年級",
+      "subject": "英文",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第二學期",
+      "bookLabel": "英文第2冊（早期合作教材）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_2_1_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 1
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_2_2_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 2
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_2_3_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 3
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_2_4_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 4
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_2_5_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 5
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_2_6_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 6
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_2_7_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 7
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_2_8_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 8
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/10_2_9_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 9
+        },
+        {
+          "url": "https://www.hopenglish.com/category/10-grade",
+          "type": "conflicting-later-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "limitations": "2020分類頁課次不同，不混入2019 Reading序列。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "翰林",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。依2019–2021希平方與翰林合作課程標題，未核對115學年度課本。2019 Reading系列為九課；2020影片分類另列第5課A Midsummer Night’s Dream且後續課次移動，兩套不混用。",
+      "units": [
+        {
+          "unit": "Lesson 1 When in Rome, Eat Like a Roman",
+          "details": [
+            "Lesson 1 When in Rome, Eat Like a Roman｜主題字彙與搭配",
+            "Lesson 1 When in Rome, Eat Like a Roman｜文法與句型應用",
+            "Lesson 1 When in Rome, Eat Like a Roman｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 1 When in Rome, Eat Like a Roman｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與文化；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 1 When in Rome, Eat Like a Roman｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與文化；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 1 When in Rome, Eat Like a Roman｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與文化；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 2 The Power of the Priming Effect",
+          "details": [
+            "Lesson 2 The Power of the Priming Effect｜主題字彙與搭配",
+            "Lesson 2 The Power of the Priming Effect｜文法與句型應用",
+            "Lesson 2 The Power of the Priming Effect｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 2 The Power of the Priming Effect｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "心理與行為；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 2 The Power of the Priming Effect｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "心理與行為；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 2 The Power of the Priming Effect｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "心理與行為；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 3 Pictures in Poetry",
+          "details": [
+            "Lesson 3 Pictures in Poetry｜主題字彙與搭配",
+            "Lesson 3 Pictures in Poetry｜文法與句型應用",
+            "Lesson 3 Pictures in Poetry｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 3 Pictures in Poetry｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詩歌與意象；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 3 Pictures in Poetry｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詩歌與意象；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 3 Pictures in Poetry｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "詩歌與意象；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 4 Skin Problems: Exposing the Myths",
+          "details": [
+            "Lesson 4 Skin Problems: Exposing the Myths｜主題字彙與搭配",
+            "Lesson 4 Skin Problems: Exposing the Myths｜文法與句型應用",
+            "Lesson 4 Skin Problems: Exposing the Myths｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 4 Skin Problems: Exposing the Myths｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "皮膚健康與辨識迷思；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 4 Skin Problems: Exposing the Myths｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "皮膚健康與辨識迷思；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 4 Skin Problems: Exposing the Myths｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "皮膚健康與辨識迷思；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 5 Listen Your Stress Away",
+          "details": [
+            "Lesson 5 Listen Your Stress Away｜主題字彙與搭配",
+            "Lesson 5 Listen Your Stress Away｜文法與句型應用",
+            "Lesson 5 Listen Your Stress Away｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 5 Listen Your Stress Away｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "壓力與音樂；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 5 Listen Your Stress Away｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "壓力與音樂；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 5 Listen Your Stress Away｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "壓力與音樂；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 6 A Voice for All Girls",
+          "details": [
+            "Lesson 6 A Voice for All Girls｜主題字彙與搭配",
+            "Lesson 6 A Voice for All Girls｜文法與句型應用",
+            "Lesson 6 A Voice for All Girls｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 6 A Voice for All Girls｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "性別平等與教育；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 6 A Voice for All Girls｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "性別平等與教育；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 6 A Voice for All Girls｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "性別平等與教育；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 7 Music from the Trash Mountain",
+          "details": [
+            "Lesson 7 Music from the Trash Mountain｜主題字彙與搭配",
+            "Lesson 7 Music from the Trash Mountain｜文法與句型應用",
+            "Lesson 7 Music from the Trash Mountain｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 7 Music from the Trash Mountain｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "音樂與資源再利用；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 7 Music from the Trash Mountain｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "音樂與資源再利用；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 7 Music from the Trash Mountain｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "音樂與資源再利用；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 8 The Ultimate Runner",
+          "details": [
+            "Lesson 8 The Ultimate Runner｜主題字彙與搭配",
+            "Lesson 8 The Ultimate Runner｜文法與句型應用",
+            "Lesson 8 The Ultimate Runner｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 8 The Ultimate Runner｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "運動與毅力；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 8 The Ultimate Runner｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "運動與毅力；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 8 The Ultimate Runner｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "運動與毅力；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 9 Printing a New World",
+          "details": [
+            "Lesson 9 Printing a New World｜主題字彙與搭配",
+            "Lesson 9 Printing a New World｜文法與句型應用",
+            "Lesson 9 Printing a New World｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 9 Printing a New World｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "印刷科技與創新；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 9 Printing a New World｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "印刷科技與創新；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 9 Printing a New World｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "印刷科技與創新；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-108-english-3",
+      "grade": "高中二年級",
+      "subject": "英文",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "英文第3冊（早期合作教材）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_1_1_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 1
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_1_2_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 2
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_1_3_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 3
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_1_4_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 4
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_1_5_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 5
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_1_6_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 6
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_1_7_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 7
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_1_8_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 8
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_1_9_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 9
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_1_10_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 10
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "翰林",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。依2019–2021希平方與翰林合作課程標題，未核對115學年度課本。逐課Reading標題核對十課；未核對後續修訂。",
+      "units": [
+        {
+          "unit": "Lesson 1 Don't Skip Your Sleep",
+          "details": [
+            "Lesson 1 Don't Skip Your Sleep｜主題字彙與搭配",
+            "Lesson 1 Don't Skip Your Sleep｜文法與句型應用",
+            "Lesson 1 Don't Skip Your Sleep｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 1 Don't Skip Your Sleep｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "睡眠與健康；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 1 Don't Skip Your Sleep｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "睡眠與健康；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 1 Don't Skip Your Sleep｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "睡眠與健康；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 2 The Man at the Front of the Class",
+          "details": [
+            "Lesson 2 The Man at the Front of the Class｜主題字彙與搭配",
+            "Lesson 2 The Man at the Front of the Class｜文法與句型應用",
+            "Lesson 2 The Man at the Front of the Class｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 2 The Man at the Front of the Class｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "教育與人物；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 2 The Man at the Front of the Class｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "教育與人物；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 2 The Man at the Front of the Class｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "教育與人物；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 3 A Journey through Time",
+          "details": [
+            "Lesson 3 A Journey through Time｜主題字彙與搭配",
+            "Lesson 3 A Journey through Time｜文法與句型應用",
+            "Lesson 3 A Journey through Time｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 3 A Journey through Time｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "時間與歷史；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 3 A Journey through Time｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "時間與歷史；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 3 A Journey through Time｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "時間與歷史；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 4 The Nightingale and the Rose",
+          "details": [
+            "Lesson 4 The Nightingale and the Rose｜主題字彙與搭配",
+            "Lesson 4 The Nightingale and the Rose｜文法與句型應用",
+            "Lesson 4 The Nightingale and the Rose｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 4 The Nightingale and the Rose｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學與情感；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 4 The Nightingale and the Rose｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學與情感；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 4 The Nightingale and the Rose｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學與情感；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 5 Write for Rights",
+          "details": [
+            "Lesson 5 Write for Rights｜主題字彙與搭配",
+            "Lesson 5 Write for Rights｜文法與句型應用",
+            "Lesson 5 Write for Rights｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 5 Write for Rights｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人權與公共表達；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 5 Write for Rights｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人權與公共表達；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 5 Write for Rights｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人權與公共表達；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 6 A Cultural Highlight of Taiwan",
+          "details": [
+            "Lesson 6 A Cultural Highlight of Taiwan｜主題字彙與搭配",
+            "Lesson 6 A Cultural Highlight of Taiwan｜文法與句型應用",
+            "Lesson 6 A Cultural Highlight of Taiwan｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 6 A Cultural Highlight of Taiwan｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣文化；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 6 A Cultural Highlight of Taiwan｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣文化；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 6 A Cultural Highlight of Taiwan｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣文化；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 7 The Price of Captivity",
+          "details": [
+            "Lesson 7 The Price of Captivity｜主題字彙與搭配",
+            "Lesson 7 The Price of Captivity｜文法與句型應用",
+            "Lesson 7 The Price of Captivity｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 7 The Price of Captivity｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "動物與圈養；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 7 The Price of Captivity｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "動物與圈養；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 7 The Price of Captivity｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "動物與圈養；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 8 When Less Means More",
+          "details": [
+            "Lesson 8 When Less Means More｜主題字彙與搭配",
+            "Lesson 8 When Less Means More｜文法與句型應用",
+            "Lesson 8 When Less Means More｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 8 When Less Means More｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "簡約與生活；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 8 When Less Means More｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "簡約與生活；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 8 When Less Means More｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "簡約與生活；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 9 Seven New Year’s Eves",
+          "details": [
+            "Lesson 9 Seven New Year’s Eves｜主題字彙與搭配",
+            "Lesson 9 Seven New Year’s Eves｜文法與句型應用",
+            "Lesson 9 Seven New Year’s Eves｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 9 Seven New Year’s Eves｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "新年文化；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 9 Seven New Year’s Eves｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "新年文化；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 9 Seven New Year’s Eves｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "新年文化；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 10 Miles to Go before You Drink",
+          "details": [
+            "Lesson 10 Miles to Go before You Drink｜主題字彙與搭配",
+            "Lesson 10 Miles to Go before You Drink｜文法與句型應用",
+            "Lesson 10 Miles to Go before You Drink｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 10 Miles to Go before You Drink｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲水與資源；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 10 Miles to Go before You Drink｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲水與資源；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 10 Miles to Go before You Drink｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲水與資源；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-108-english-4",
+      "grade": "高中二年級",
+      "subject": "英文",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第二學期",
+      "bookLabel": "英文第4冊（早期合作教材）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_2_1_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 1
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/11_2_2_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 2
+        },
+        {
+          "url": "https://www.hopenglish.com/category/11-grade",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "lessons": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "翰林",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。依2019–2021希平方與翰林合作課程標題，未核對115學年度課本。前兩課Reading與2021年高二分類頁其餘八課；未核對後續修訂。",
+      "units": [
+        {
+          "unit": "Lesson 1 Are You Proactive or Reactive?",
+          "details": [
+            "Lesson 1 Are You Proactive or Reactive?｜主題字彙與搭配",
+            "Lesson 1 Are You Proactive or Reactive?｜文法與句型應用",
+            "Lesson 1 Are You Proactive or Reactive?｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 1 Are You Proactive or Reactive?｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "主動性與生活選擇；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 1 Are You Proactive or Reactive?｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "主動性與生活選擇；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 1 Are You Proactive or Reactive?｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "主動性與生活選擇；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 2 The Art and Science of Origami",
+          "details": [
+            "Lesson 2 The Art and Science of Origami｜主題字彙與搭配",
+            "Lesson 2 The Art and Science of Origami｜文法與句型應用",
+            "Lesson 2 The Art and Science of Origami｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 2 The Art and Science of Origami｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "摺紙、藝術與科學；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 2 The Art and Science of Origami｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "摺紙、藝術與科學；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 2 The Art and Science of Origami｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "摺紙、藝術與科學；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 3 The Defeat of Alikakay—the Wicked Giant",
+          "details": [
+            "Lesson 3 The Defeat of Alikakay—the Wicked Giant｜主題字彙與搭配",
+            "Lesson 3 The Defeat of Alikakay—the Wicked Giant｜文法與句型應用",
+            "Lesson 3 The Defeat of Alikakay—the Wicked Giant｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 3 The Defeat of Alikakay—the Wicked Giant｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "傳說與敘事；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 3 The Defeat of Alikakay—the Wicked Giant｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "傳說與敘事；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 3 The Defeat of Alikakay—the Wicked Giant｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "傳說與敘事；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 4 Food Philosopher André Chiang",
+          "details": [
+            "Lesson 4 Food Philosopher André Chiang｜主題字彙與搭配",
+            "Lesson 4 Food Philosopher André Chiang｜文法與句型應用",
+            "Lesson 4 Food Philosopher André Chiang｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 4 Food Philosopher André Chiang｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與創意；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 4 Food Philosopher André Chiang｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與創意；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 4 Food Philosopher André Chiang｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與創意；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 5 Into the Woods",
+          "details": [
+            "Lesson 5 Into the Woods｜主題字彙與搭配",
+            "Lesson 5 Into the Woods｜文法與句型應用",
+            "Lesson 5 Into the Woods｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 5 Into the Woods｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "森林與文學情境；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 5 Into the Woods｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "森林與文學情境；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 5 Into the Woods｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "森林與文學情境；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 6 An Ocean of Plastic",
+          "details": [
+            "Lesson 6 An Ocean of Plastic｜主題字彙與搭配",
+            "Lesson 6 An Ocean of Plastic｜文法與句型應用",
+            "Lesson 6 An Ocean of Plastic｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 6 An Ocean of Plastic｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海洋塑膠污染；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 6 An Ocean of Plastic｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海洋塑膠污染；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 6 An Ocean of Plastic｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海洋塑膠污染；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 7 Saving the Louvre",
+          "details": [
+            "Lesson 7 Saving the Louvre｜主題字彙與搭配",
+            "Lesson 7 Saving the Louvre｜文法與句型應用",
+            "Lesson 7 Saving the Louvre｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 7 Saving the Louvre｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "藝術保存；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 7 Saving the Louvre｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "藝術保存；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 7 Saving the Louvre｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "藝術保存；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 8 YouTube Your Way to Fame",
+          "details": [
+            "Lesson 8 YouTube Your Way to Fame｜主題字彙與搭配",
+            "Lesson 8 YouTube Your Way to Fame｜文法與句型應用",
+            "Lesson 8 YouTube Your Way to Fame｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 8 YouTube Your Way to Fame｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數位媒體與創作；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 8 YouTube Your Way to Fame｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數位媒體與創作；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 8 YouTube Your Way to Fame｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數位媒體與創作；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 9 The Land of Fire and Ice",
+          "details": [
+            "Lesson 9 The Land of Fire and Ice｜主題字彙與搭配",
+            "Lesson 9 The Land of Fire and Ice｜文法與句型應用",
+            "Lesson 9 The Land of Fire and Ice｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 9 The Land of Fire and Ice｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然地理與環境；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 9 The Land of Fire and Ice｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然地理與環境；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 9 The Land of Fire and Ice｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然地理與環境；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 10 The Last Day",
+          "details": [
+            "Lesson 10 The Last Day｜主題字彙與搭配",
+            "Lesson 10 The Last Day｜文法與句型應用",
+            "Lesson 10 The Last Day｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 10 The Last Day｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人生與時間；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 10 The Last Day｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人生與時間；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 10 The Last Day｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人生與時間；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-108-english-5",
+      "grade": "高中三年級",
+      "subject": "英文",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "英文第5冊（早期合作教材）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.hopenglish.com/hanlin/12_1_1_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 1
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/12_1_2_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 2
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/12_1_3_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 3
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/12_1_4_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 4
+        },
+        {
+          "url": "https://www.hopenglish.com/hanlin/12_1_5_reading",
+          "type": "publisher-companion-index",
+          "provider": "希平方 × 翰林",
+          "accessedAt": "2026-11-26",
+          "lesson": 5
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "翰林",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。依2019–2021希平方與翰林合作課程標題，未核對115學年度課本。已確認五課；第六課未取得可靠標題，保留缺漏。",
+      "units": [
+        {
+          "unit": "Lesson 1 The Secret Language of Food",
+          "details": [
+            "Lesson 1 The Secret Language of Food｜主題字彙與搭配",
+            "Lesson 1 The Secret Language of Food｜文法與句型應用",
+            "Lesson 1 The Secret Language of Food｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 1 The Secret Language of Food｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與語言；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 1 The Secret Language of Food｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與語言；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 1 The Secret Language of Food｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與語言；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 2 Turning Wounds into Wisdom",
+          "details": [
+            "Lesson 2 Turning Wounds into Wisdom｜主題字彙與搭配",
+            "Lesson 2 Turning Wounds into Wisdom｜文法與句型應用",
+            "Lesson 2 Turning Wounds into Wisdom｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 2 Turning Wounds into Wisdom｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "挫折與成長；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 2 Turning Wounds into Wisdom｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "挫折與成長；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 2 Turning Wounds into Wisdom｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "挫折與成長；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 3 The Lottery",
+          "details": [
+            "Lesson 3 The Lottery｜主題字彙與搭配",
+            "Lesson 3 The Lottery｜文法與句型應用",
+            "Lesson 3 The Lottery｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 3 The Lottery｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說、傳統與社會反思；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 3 The Lottery｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說、傳統與社會反思；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 3 The Lottery｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "小說、傳統與社會反思；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 4 Making Teenage Dreams Come True",
+          "details": [
+            "Lesson 4 Making Teenage Dreams Come True｜主題字彙與搭配",
+            "Lesson 4 Making Teenage Dreams Come True｜文法與句型應用",
+            "Lesson 4 Making Teenage Dreams Come True｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 4 Making Teenage Dreams Come True｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "青少年與夢想；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 4 Making Teenage Dreams Come True｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "青少年與夢想；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 4 Making Teenage Dreams Come True｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "青少年與夢想；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Lesson 5 Circles of Resilience",
+          "details": [
+            "Lesson 5 Circles of Resilience｜主題字彙與搭配",
+            "Lesson 5 Circles of Resilience｜文法與句型應用",
+            "Lesson 5 Circles of Resilience｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Lesson 5 Circles of Resilience｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "韌性與支持；自編高中程度語境練習詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 5 Circles of Resilience｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "韌性與支持；以原創例句練習高中句法，不冒充指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            },
+            {
+              "name": "Lesson 5 Circles of Resilience｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "韌性與支持；自編具明確答案的翻譯及情境語用題。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、指定單字及文法",
+                "不得假造或重製完整課文，不以純閱讀理解代替語言觀念"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

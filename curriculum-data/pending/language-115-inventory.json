@@ -294,41 +294,41 @@
       "subject": "英文",
       "publisher": "翰林",
       "volume": 1,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "hanlin-108-english-1",
+      "status": "partial-index-year-unconfirmed",
+      "source": "https://www.hopenglish.com/hanlin/10_1_1_reading"
     },
     {
       "subject": "英文",
       "publisher": "翰林",
       "volume": 2,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "hanlin-108-english-2",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.hopenglish.com/hanlin/10_2_1_reading"
     },
     {
       "subject": "英文",
       "publisher": "翰林",
       "volume": 3,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "hanlin-108-english-3",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.hopenglish.com/hanlin/11_1_1_reading"
     },
     {
       "subject": "英文",
       "publisher": "翰林",
       "volume": 4,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "hanlin-108-english-4",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.hopenglish.com/hanlin/11_2_1_reading"
     },
     {
       "subject": "英文",
       "publisher": "翰林",
       "volume": 5,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "hanlin-108-english-5",
+      "status": "partial-index-year-unconfirmed",
+      "source": "https://www.hopenglish.com/hanlin/12_1_1_reading"
     },
     {
       "subject": "英文",
