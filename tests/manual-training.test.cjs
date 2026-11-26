@@ -171,7 +171,7 @@ test('resumed trials retain their skill snapshot and ignore a forged skill level
   room.actors=[room.actors[0],lowBeast('target',2,3,500)];
   const attack=await API.command(db,'u1',{roomId:resumed.id,revision:resumed.revision,
     requestId:'upgraded-skill-test-01',type:'manual',skillId:id,skillLevel:5,x:2,y:3},now);
-  assert.equal(attack.actors[1].hp,270);
+  assert.equal(attack.actors[1].hp,260);
   assert.equal(attack.actors[0].stamina,8);
 });
 
@@ -373,7 +373,7 @@ test('flying sword persists, crosses enemies on its own path and can be used twi
   const moved=castSword(summoned,skill,7,4);
   assert.deepEqual(moved.actors[0].flyingSword,{x:7,y:4});
   assert.equal(moved.actors[0].stamina,4);
-  assert.deepEqual(moved.actors.slice(1).map(a=>a.hp),[390,390]);
+  assert.deepEqual(moved.actors.slice(1).map(a=>a.hp),[260,260]);
   assert.throws(()=>castSword(moved,skill,6,4),/兩次/);
   const scenes=require('../public/cultivation/tactical-animation.js').plan(summoned,moved,'u1');
   assert.deepEqual(scenes[0].origin,{x:3,y:4});
@@ -393,16 +393,16 @@ test('dash cleave previews a clear landing and strikes the next row in two hits'
   hero.manualSkillLevels={[skill]:5};
   const upgraded=castSword(battle,skill,5,4);
   assert.equal(upgraded.actors[0].stamina,0);
-  assert.equal(upgraded.actors[1].hp,108);
+  assert.equal(upgraded.actors[1].hp,164);
   assert.deepEqual([after.actors[0].x,after.actors[0].y,after.actors[0].stamina],[5,4,0]);
-  assert.deepEqual(after.actors.slice(1).map(a=>a.hp),[220,220,500]);
-  assert.deepEqual(after.events.filter(e=>e.type==='damage'&&e.target==='center').map(e=>e.damage),[140,140]);
+  assert.deepEqual(after.actors.slice(1).map(a=>a.hp),[260,260,500]);
+  assert.deepEqual(after.events.filter(e=>e.type==='damage'&&e.target==='center').map(e=>e.damage),[120,120]);
   assert.equal(after.events.find(e=>e.animation?.style==='dash').path.length,5);
 });
 
 test('sword arrays draw nine and twenty-one cells and resolve the center in multiple hits',()=>{
-  for(const [skill,size,hits,centerHP] of [['sky-cloud',9,2,340],['sky-sever',21,8,260]]){
-    const battle=swordBattle(skill,[lowBeast('center',4,4,500),lowBeast('diagonal',6,6,500)]);
+  for(const [skill,size,hits,centerHP] of [['sky-cloud',9,2,600],['sky-sever',21,8,400]]){
+    const battle=swordBattle(skill,[lowBeast('center',4,4,1000),lowBeast('diagonal',6,6,500)]);
     const technique=Catalog.BY_SKILL[skill],center={x:4,y:4};
     assert.equal(R.skillCells(battle,battle.actors[0],technique,center).length,size);
     const after=castSword(battle,skill,center.x,center.y);
@@ -411,7 +411,7 @@ test('sword arrays draw nine and twenty-one cells and resolve the center in mult
     assert.equal(after.events.filter(e=>e.type==='damage'&&e.target==='diagonal').length,1);
     const scenes=require('../public/cultivation/tactical-animation.js').plan(battle,after,'u1');
     const centerNumbers=scenes.find(scene=>scene.numbers.some(number=>number.uid==='center')).numbers.find(number=>number.uid==='center');
-    assert.deepEqual([centerNumbers.damage,centerNumbers.hits],[500-centerHP,hits]);
+    assert.deepEqual([centerNumbers.damage,centerNumbers.hits],[1000-centerHP,hits]);
     battle.blocks=[{x:5,y:5}];
     assert(!R.skillCells(battle,battle.actors[0],technique,center).some(p=>p.x===6&&p.y===6));
   }
@@ -423,7 +423,7 @@ test('far break reaches beyond four cells and pushes survivors farthest first up
       lowBeast('near',3,4,500),lowBeast('far',8,4,500),lowBeast('other-row',9,3,500)]);
     battle.blocks=blocks;
     const after=castSword(battle,skill,edge,4);
-    assert.deepEqual(after.actors.slice(1).map(a=>[a.x,a.hp]),[[edge-1,350],[edge,350],[9,500]]);
+    assert.deepEqual(after.actors.slice(1).map(a=>[a.x,a.hp]),[[edge-1,300],[edge,300],[9,500]]);
     assert.deepEqual(after.events.filter(e=>e.animation?.style==='push').map(e=>e.actor),['far','near']);
   }
 });
@@ -441,9 +441,9 @@ test('throw damages enemies at their rear landing tiles and leaves blocked lanes
   assert.deepEqual(result.actors.map(a=>[a.x,a.y]),[[4,4],[5,3],[3,4],[5,5],[3,5]]);
   assert.equal(result.actors[2].intent.kind,'stagger');
   assert.equal(result.actors[0].stamina,6);
-  assert.deepEqual(result.actors.slice(1).map(a=>a.hp),[500,350,500,500]);
+  assert.deepEqual(result.actors.slice(1).map(a=>a.hp),[500,200,500,500]);
   assert.deepEqual(result.events.filter(e=>e.skill===id&&e.type==='damage').map(e=>[e.target,e.damage,e.x,e.y]),
-    [['center',150,3,4]]);
+    [['center',300,3,4]]);
 });
 
 test('fist advances stop against a wall or an enemy that cannot be pushed',()=>{
@@ -458,7 +458,7 @@ test('fist advances stop against a wall or an enemy that cannot be pushed',()=>{
     const result=castSword(battle,id,2,4);
     assert.equal(result.actors[0].x,1);
     assert.equal(result.actors[1].x,2);
-    assert.equal(result.actors[1].hp,390,'blocked push deals both a 65-point strike and a 45-point collision');
+    assert.equal(result.actors[1].hp,320,'blocked push deals both a 120-point strike and a 60-point collision');
     assert.equal(result.events.filter(e=>e.type==='damage'&&e.target==='front').length,2);
   }
 });
@@ -473,7 +473,7 @@ test('four-step fist rechecks enemies and terrain after each step',()=>{
   assert.equal(preview.path.length,5);
   assert.equal(result.actors[0].attacks,1);
   assert.equal(result.actors[0].stamina,6);
-  assert.deepEqual(result.actors.slice(1).map(a=>a.hp),[240,240]);
+  assert.deepEqual(result.actors.slice(1).map(a=>a.hp),[20,20]);
   assert.equal(result.events.filter(e=>e.type==='cast'&&e.skill===id).length,4);
 });
 
@@ -481,13 +481,13 @@ test('T-shaped fists and the double strike match their preview and directional p
   const dash='rock-quake',battle=swordBattle(dash,[lowBeast('m',6,5,500)]);
   assert.deepEqual(R.skillCells(battle,battle.actors[0],Catalog.BY_SKILL[dash],{x:4,y:4}),
     [{x:5,y:4},{x:6,y:3},{x:6,y:4},{x:6,y:5}]);
-  assert.equal(castSword(battle,dash,4,4).actors[1].hp,385);
+  assert.equal(castSword(battle,dash,4,4).actors[1].hp,320);
   const sweep='rock-break',pushing=swordBattle(sweep,[lowBeast('center',2,4,500),lowBeast('side',3,5,500)]);
   const pushed=castSword(pushing,sweep,2,4);
   assert.deepEqual(pushed.actors.slice(1).map(a=>[a.x,a.y]),[[5,4],[6,5]]);
   const step='tiger-step',two=swordBattle(step,[lowBeast('side',4,3,500)]);
   const result=castSword(two,step,3,4);
-  assert.equal(result.actors[1].hp,350);
+  assert.equal(result.actors[1].hp,180);
   assert.equal(result.events.filter(e=>e.type==='damage'&&e.target==='side').length,2);
 });
 
@@ -527,7 +527,7 @@ test('scripture skill damage previews use the same trusted PvE attack as the ser
   assert.equal(manual.battleAttack,expected);
   assert.match(Catalog.descriptionWithDamage(manual.battleAttack,
     Catalog.skillAtLevel(Catalog.BY_SKILL['wind-step'],5)),
-    /造成 2 次 835 的傷害（戰場攻擊力 426 × 每擊倍率 1\.96/);
+    /造成 2 次 716 的傷害（戰場攻擊力 426 × 每擊倍率 1\.68/);
 });
 
 test('four-step chain writes only serializable combat events and survives server retries',async()=>{

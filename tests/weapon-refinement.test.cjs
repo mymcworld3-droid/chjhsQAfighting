@@ -17,13 +17,13 @@ test('only achieved stars rendered and newly gained stars marked',()=>{
  const s=W.refinementStars({refinement:3},{previous:2});assert.equal((s.match(/★/g)||[]).length,3);assert.equal((s.match(/is-new/g)||[]).length,1);
 });
 test('refinement buffs only that weapon damage and preserves focus cost',()=>{
- const s=M.BY_SKILL['wind-slash'];assert.equal(M.singleHitDamage(200,M.skillAtLevel(s,1,2)).damage,253);
- assert.equal(M.singleHitDamage(200,M.skillAtLevel(s,1)).damage,230);
+ const s=M.BY_SKILL['wind-slash'];assert.equal(M.singleHitDamage(200,M.skillAtLevel(s,1,2)).damage,264);
+ assert.equal(M.singleHitDamage(200,M.skillAtLevel(s,1)).damage,240);
  assert.equal(M.skillAtLevel(M.BY_SKILL['dragon-roar'],1,5).cost,7);
 });
 test('each star grants five percent, capped at 25 percent',()=>{
  assert.equal(M.REFINEMENT_PERCENT,5);
  for(let i=0;i<=5;i++)assert.equal(M.refinementPercent(i),i*5);
  assert.equal(M.refinementPercent(9),25);
- assert.equal(M.singleHitDamage(200,M.skillAtLevel(M.BY_SKILL['wind-slash'],1,5)).damage,288);
+ assert.equal(M.singleHitDamage(200,M.skillAtLevel(M.BY_SKILL['wind-slash'],1,5)).damage,300);
 });

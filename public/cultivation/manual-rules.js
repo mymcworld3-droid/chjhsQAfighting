@@ -71,54 +71,54 @@
         levelRequired:[1,5,10][index]})))
   });
   // Each book keeps its own unlock and EXP source even for a shared move.
-  const shared=(move,id)=>({...move,id,moveId:move.id});
-  const straight=technique('wind-slash','流風斬',2,3,'line',1.15,'選擇一個方向，斬擊前方直線三格。');
-  const breakLine=technique('wind-thousand','遠線破擊',4,null,'line',1.5,
+  const shared=(move,id,power)=>({...move,id,moveId:move.id,power});
+  const straight=technique('wind-slash','流風斬',2,3,'line',1.2,'選擇一個方向，斬擊前方直線三格。');
+  const breakLine=technique('wind-thousand','遠線破擊',4,null,'line',2,
     '劍氣沿直線延伸至石障或邊界。命中後將存活敵人推至最遠的可落腳格。',{unlimited:true,pushToEdge:true});
-  const straightFist=technique('rock-fist','直拳',2,2,'line',1.2,'攻擊前方直線兩格。');
+  const straightFist=technique('rock-fist','直拳',2,2,'line',1.3,'攻擊前方直線兩格。');
   const BOOKS=Object.freeze([
     book('sword-wind','流風靈劍','sword','以身法切入，再以劍氣逼退敵人。',[
       straight,
-      technique('wind-step','突進橫斬',4,4,'dash-cleave',2.8,
+      technique('wind-step','突進橫斬',4,4,'dash-cleave',2.4,
         '沿直線突進最多四格，再揮出三格寬的劍氣兩次。',{hits:2}),
       breakLine
     ]),
     book('sword-flight','御靈飛劍','sword','御使飛劍，控制敵人的站位。',[
-      shared(straight,'flight-slash'),
-      technique('flight-summon','召劍',3,2,'flying-sword',1.1,
-        '在自身曼哈頓距離兩格內的空地召劍。場上已有飛劍時，飛劍沿優先經過靈獸的最短路徑回到所選位置，沿途造成傷害。另可在移動選項中以每兩格一體力移動飛劍。',
-        {travel:4,cooldown:0}),
-      shared(breakLine,'flight-break')
+      shared(straight,'flight-slash',1.5),
+      technique('flight-summon','召劍',3,2,'flying-sword',2.4,
+        '在自身曼哈頓距離兩格內的空地召劍。場上已有飛劍時，飛劍沿優先經過靈獸的最短路徑回到所選位置，沿途造成傷害。另可在移動選項中以每兩格一體力移動飛劍（移動傷害低於召劍回擊）。',
+        {travel:4,cooldown:0,movePower:.85}),
+      shared(breakLine,'flight-break',2.8)
     ],'築基'),
     // Preserve the former 青霄劍典 book and slot IDs in existing saves.
     book('sword-sky','八方天劍','sword','以多路劍氣交擊一點，兼及周圍敵人。',[
-      shared(straight,'sky-pierce'),
-      technique('sky-cloud','交叉劍斬',4,3,'sword-array',1.1,
+      shared(straight,'sky-pierce',1.9),
+      technique('sky-cloud','交叉劍斬',4,3,'sword-array',1.8,
         '選擇三格內的中心，揮出兩道交叉劍氣，各從中心向兩端延伸兩格。中心最多命中兩次。',
-        {diagonal:2,centerPower:1.6}),
-      technique('sky-sever','八方合劍',6,4,'sword-array',1.25,
+        {diagonal:2,centerPower:4}),
+      technique('sky-sever','八方合劍',6,4,'sword-array',2,
         '選擇四格內的中心。正向各延伸三格、斜向各延伸兩格，八路劍氣向中心匯聚。',
-        {orthogonal:3,diagonal:2,centerPower:2.4})
+        {orthogonal:3,diagonal:2,centerPower:6})
     ],'金丹'),
     book('body-rock','玄嶽圖騰','body','突進破陣，將敵人擊退。',[
       straightFist,
-      technique('rock-quake','突進震拳',3,3,'dash-cleave',1.15,
+      technique('rock-quake','突進震拳',3,3,'dash-cleave',1.8,
         '直線突進最多三格，再攻擊落點前方的 T 形四格。',{tShape:true}),
-      technique('rock-break','崩山拳',3,2,'fist-sweep',1.25,
+      technique('rock-break','崩山拳',3,2,'fist-sweep',1.95,
         '攻擊前方 T 形四格，將命中的敵人沿出拳方向擊退最多三格。',{tShape:true,push:3})
     ]),
     book('body-dragon','龍象圖騰','body','連步逼退對手，蓄勢後連續出拳。',[
-      shared(straightFist,'dragon-strike'),
-      technique('dragon-guard','四步連推',4,1,'fist-chain',.65,
-        '最多四段。每段攻擊前方一排並將敵人推退一格，再前進一格。敵人無法被推退時追加撞擊傷害；前路受阻則停止。',{steps:4,collisionPower:.45}),
+      shared(straightFist,'dragon-strike',2),
+      technique('dragon-guard','四步連推',4,1,'fist-chain',1.2,
+        '最多四段。每段攻擊前方一排並將敵人推退一格，再前進一格。敵人無法被推退時追加撞擊傷害；前路受阻則停止。',{steps:4,collisionPower:.6}),
       technique('dragon-roar','蓄勢',7,0,'fist-focus',0,
         '立即結束回合。接下來自己的兩個回合各可出手三次，其他拳法體力消耗減半並向上取整。',{cooldown:3})
     ],'金丹'),
     book('body-tiger','伏虎圖騰','body','以步法貼近敵人，借力改變敵人的站位。',[
-      shared(straightFist,'tiger-fist'),
-      technique('tiger-step','踏步連拳',4,2,'dash-cleave',1.5,
+      shared(straightFist,'tiger-fist',1.6),
+      technique('tiger-step','踏步連拳',4,2,'dash-cleave',3.2,
         '直線踏步最多兩格，再攻擊落點前方橫排三格兩次。',{hits:2}),
-      technique('tiger-throw','翻摔',4,1,'fist-throw',1.5,
+      technique('tiger-throw','翻摔',4,1,'fist-throw',3,
         '將身前橫排三格內的敵人摔到身後的對應格，落地時造成傷害。若對應落點有障礙或被占用，該目標留在原地。')
     ],'築基')
   ]);
@@ -133,12 +133,13 @@
   const refinementPercent=stars=>refinement(stars)*REFINEMENT_PERCENT;
   function skillAtLevel(skill,raw,stars=0){
     const level=skillLevel(raw),upgrades=level-1;
-    if(skill.kind==='fist-focus')return {...skill,level,cost:skill.cost-upgrades};
+    if(skill.kind==='fist-focus')return {...skill,level,cost:Math.max(5,skill.cost-Math.ceil(upgrades/2))};
     const refine=refinement(stars),factor=1+refinementPercent(refine)/100;
     const scaled=power=>{const base=upgrades?power*(10+upgrades)/10:power;return refine?base*factor:base;};
     return {...skill,level,power:scaled(skill.power),
       ...(skill.centerPower!==undefined?{centerPower:scaled(skill.centerPower)}:{}),
-      ...(skill.collisionPower!==undefined&&refine?{collisionPower:skill.collisionPower*factor}:{})};
+      ...(skill.collisionPower!==undefined?{collisionPower:scaled(skill.collisionPower)}:{}),
+      ...(skill.movePower!==undefined?{movePower:scaled(skill.movePower)}:{})};
   }
   // The tactical engine rounds EACH strike before applying shields, guard
   // or remaining HP. This preview intentionally describes raw per-hit damage,
@@ -220,7 +221,7 @@
       const described=description.replace('穿過敵人時造成傷害',
         '穿過敵人時每次造成 '+amount+' 傷害').replace('沿途造成傷害',
         '沿途每次造成 '+amount+' 傷害');
-      return described+(options.flyingSwordReady===true?'':options.flyingSwordReady===false
+      return described+'一般飛劍移動每名靈獸造成 '+fmt(Math.round(attack*(skill.movePower||0)))+' 傷害。'+(options.flyingSwordReady===true?'':options.flyingSwordReady===false
         ?'本次召劍不造成傷害。':'首次召劍不造成傷害。');
     }
     if(suffix.startsWith('造成 ')){

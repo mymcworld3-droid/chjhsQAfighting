@@ -22,7 +22,9 @@
   const WEIGHTS=Object.freeze([1,.4,.2]);
   function estimateMove(attack,skill){
     const cost=clamp(finite(skill.cost,2),2,10);
-    const damage=clamp(finite(skill.power),0,5)*2/cost;
+    const total=skill.kind==='fist-chain'?finite(skill.power)*Math.min(3,finite(skill.steps,4)):
+      skill.kind==='sword-array'?finite(skill.centerPower,skill.power):finite(skill.power);
+    const damage=clamp(total,0,6)*2/cost;
     const reach=clamp(skill.unlimited?4:finite(skill.range),0,4)*.025;
     const utility=(UTILITIES[skill.kind]||0)
       +(skill.tShape?.04:0)+(skill.pushToEdge?.12:0)

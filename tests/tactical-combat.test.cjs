@@ -534,7 +534,7 @@ test('sword-array effects can be persisted and replayed, then an old room can co
   const s=battle('pve',{players:[hero('u1',{manualSkills:['sky-cloud','sky-sever','dragon-guard'],trainingAccessScore:68})]});
   s.width=15;s.height=9;s.blocks=[];
   Object.assign(s.actors[0],{x:4,y:4,stamina:10});
-  Object.assign(s.actors[1],{x:5,y:4,hp:900,maxHp:900});
+  Object.assign(s.actors[1],{x:5,y:4,hp:1500,maxHp:1500});
   // Firestore permits arrays inside maps, but rejects direct nested arrays.
   function verifyStorage(value,parentIsArray=false){
     if(Array.isArray(value)){
@@ -562,7 +562,7 @@ test('sword-array effects can be persisted and replayed, then an old room can co
   const replay=await api.command(db,'u1',request,fixed);
   assert.equal(next.actors[0].stamina,2);
   assert.equal(next.actors[0].x,8);
-  assert.equal(next.actors[1].hp,380);
+  assert.equal(next.actors[1].hp,540);
   assert.equal(replay.revision,next.revision);
   assert.deepEqual(replay.actors,next.actors);
   const oldCast=next.events.find(event=>event.skill==='sky-cloud').animation;

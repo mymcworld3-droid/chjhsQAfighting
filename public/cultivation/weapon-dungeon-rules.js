@@ -61,11 +61,11 @@
     else if(h%3===1){stone(3,14);stone(9,15);}
     else {stone(1,10);stone(11,9);}
     const enemies=[{x:5,y:1,species:8,name:'尖峰石域領主',boss:true,bossKind:'rock',weaponDungeonLord:true,
-      trackingAttack:true,hpFactor:10+index*2,attackFactor:1.35+index*.15,moveSteps:1,level:definition.stage}];
+      trackingAttack:true,hpFactor:7+index*1.2,attackFactor:1+index*.12,moveSteps:1,level:definition.stage}];
     for(let row=0;row<4;row++)for(const x of [4,8])enemies.push({x,y:15-row*3,species:row%2?9:8,
-      name:row%2?'尖峰石靈':'重甲巖獸',trackingAttack:true,hpFactor:1.9+index*.3,attackFactor:.75+index*.12,moveSteps:1,level:definition.stage});
+      name:row%2?'尖峰石靈':'重甲巖獸',trackingAttack:true,hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
     for(let i=0;i<index;i++)enemies.push({x:i%2?10:2,y:6+i*2,species:8,name:'石域守衛',trackingAttack:true,
-      hpFactor:1.9+index*.3,attackFactor:.75+index*.12,moveSteps:1,level:definition.stage});
+      hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
     const occupied=new Set(enemies.flatMap(a=>Array.from({length:a.boss?4:1},(_,i)=>(a.x+(a.boss?i%2:0))+','+(a.y+(a.boss?Math.floor(i/2):0)))));
     const safeBlocks=blocks.filter(p=>!occupied.has(p.x+','+p.y));
     return {id:'peak-stone',map:'peak-stone',seed,stage:definition.stage,layoutVersion:4,title:NAME+' · '+definition.realm,

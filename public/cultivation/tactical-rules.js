@@ -596,7 +596,7 @@
     }
     if(layout){
       for(const [i,m]of layout.enemies.entries())s.actors.push(actor({...m,uid:'monster-'+i,bot:true,team:'monster',
-        atk:Math.round(enemyScaleAttack*m.attackFactor),maxHp:Math.round(trialMonsterHp(m.level,m.species,enemyScaleAttack*m.hpFactor)*(m.boss?1.7:1))},{x:m.x,y:m.y}));
+        atk:Math.round(enemyScaleAttack*m.attackFactor),maxHp:Math.max(1,Math.round(s.weaponDungeon?enemyScaleAttack*m.hpFactor:trialMonsterHp(m.level,m.species,enemyScaleAttack*m.hpFactor)*(m.boss?1.7:1)))},{x:m.x,y:m.y}));
     }else if(mode==='pve'){
       const count=m.id==='courtyard'?1:m.id==='bamboo'?2:3;
       for(let i=0;i<count;i++){
@@ -987,7 +987,8 @@
     }
     if(sk.kind==='flying-sword'){
       a.flyingSword=point(p);
-      a.flyingSwordPower=sk.power;
+      a.flyingSwordPower=sk.movePower;
+      a.flyingSwordBalanceVersion=2;
       a.flyingSwordManualId=sk.manualId;
     }
     const origin=sk.kind==='flying-sword'?route[0]:point(a);
@@ -1420,7 +1421,7 @@
           changes:[appearance(a)]}});
       strikeSeals(s,cells);
       for(const target of hits){
-        if(alive(target))damage(s,a,target,a.atk*(a.flyingSwordPower||1.1),{
+        if(alive(target))damage(s,a,target,a.atk*(a.flyingSwordBalanceVersion===2?a.flyingSwordPower:(a.flyingSwordPower||1.1)*(.85/1.1)),{
           skill:'flight-summon',manualId:a.flyingSwordManualId||'sword-flight'});
       }
     }else if(command.type==='move'){

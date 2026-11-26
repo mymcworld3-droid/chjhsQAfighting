@@ -114,7 +114,7 @@ test('deepest lord is vulnerable and active even when all guards remain',()=>{
 });
 
 test('totem hits receive exactly 15% extra damage only in the weapon dungeon; sword damage is unchanged',()=>{
- for(const [tracking,skill,expected]of [[true,'rock-fist',276],[false,'rock-fist',240],[true,'wind-slash',230]]){
+ for(const [tracking,skill,expected]of [[true,'rock-fist',299],[false,'rock-fist',260],[true,'wind-slash',240]]){
    const s=scene({tracking,skills:[skill],enemy:{x:7,y:4},player:{x:6,y:4}}),hp=s.actors[1].hp;
    const next=R.apply(s,'u1',{type:'manual',skillId:skill,x:7,y:4},NOW);
    assert.equal(hp-next.actors[1].hp,expected);

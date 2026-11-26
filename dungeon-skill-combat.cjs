@@ -288,14 +288,14 @@ function castSkill(room,uid,map,raw,{skillId,target,seq,moveSword=false}={}){
       if(!swordSteps)throw fail('飛劍找不到通往目標的最短路徑',409);
       flightPath=swordPath.map(p=>({...p}));
       cells=flightPath.slice(1);
-      const power=moveSword?(member.flyingSwordPower||sk.power):sk.power;
+      const power=moveSword?(member.flyingSwordBalanceVersion===2?member.flyingSwordPower:sk.movePower):sk.power;
       for(const e of targets(cells))apply(e,power);
     }else{
       if(moveSword)throw fail('飛劍尚未召喚',409);
       flightPath=[{...origin},{...target}];
     }
     player.flyingSword={...target};
-    if(!moveSword)player.flyingSwordPower=sk.power;
+    if(!moveSword){player.flyingSwordPower=sk.movePower;player.flyingSwordBalanceVersion=2;}
   }else if(sk.kind==='dash-cleave'){
     const path=rayTo(map,origin,target,sk.range);
     if(!path||path.some(p=>occupied(p,enemies)||present(members,p)))

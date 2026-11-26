@@ -109,14 +109,14 @@ test('throw damage resolves with the committed landing in one animation',()=>{
   const scenes=A.plan(before,after,'hero'),cast=scenes.find(s=>s.kind==='cast');
   assert(cast.throwImpact);assert(cast.parallelImpact);
   assert(!scenes.some(s=>(s.kind==='move'&&s.style==='throw')||s.kind==='damage'));
-  assert.deepEqual(cast.numbers,[{uid:before.actors[1].uid,damage:150,absorbed:0}]);
+  assert.deepEqual(cast.numbers,[{uid:before.actors[1].uid,damage:300,absorbed:0}]);
   for(const motion of cast.moves){
     assert.equal(motion.timing,'manual-throw');
     const targetAt=p=>A.sample(cast,p).find(a=>a.uid===motion.uid);
     assert(targetAt(.5).lift>0);assert.equal(targetAt(.5).hp,3000);
     const landed=targetAt(cast.impactStart);
     assert.equal(landed.x,motion.path.at(-1).x);assert.equal(landed.y,motion.path.at(-1).y);
-    assert(landed.lift<1e-9);assert.equal(targetAt(1).hp,2850);
+    assert(landed.lift<1e-9);assert.equal(targetAt(1).hp,2700);
     assert(targetAt(.82).hp<3000);
   }
   assert(A.impactPulse(cast,.82)>0);
@@ -355,11 +355,11 @@ test('a three-cell cleave shows two full-width sweeps and resolves damage separa
   const after=R.apply(before,'hero',{type:'manual',skillId:'wind-step',x:6,y:4},now);
   const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
   assert.deepEqual(after.events.filter(e=>e.type==='damage').map(e=>e.animation.strike),[0,0,1,1]);
-  assert.deepEqual(cast.strikeImpacts.map(beat=>beat.map(n=>n.damage)),[[140,140],[140,140]]);
+  assert.deepEqual(cast.strikeImpacts.map(beat=>beat.map(n=>n.damage)),[[120,120],[120,120]]);
   const hp=p=>A.sample(cast,p).find(a=>a.uid==='monster-0').hp;
   assert.equal(hp(.2),3000);
-  assert.equal(hp(.51),2860);
-  assert.equal(hp(.93),2720);
+  assert.equal(hp(.51),2880);
+  assert.equal(hp(.93),2760);
   for(let strike=0;strike<2;strike++){
     const c=context();
     Effects.draw(c,cast,A.strikeTime(cast,strike),{cell:48,ox:0,oy:0,width:12,height:9},true);
@@ -377,7 +377,7 @@ test('crossed sword cuts sweep in sequence and leave trails that fade together',
     [{x:5,y:2},{x:7,y:4},{x:9,y:6}],
     [{x:5,y:6},{x:7,y:4},{x:9,y:2}]
   ]);
-  assert.deepEqual(cast.strikeImpacts.map(beat=>beat.map(n=>n.damage)),[[80],[80]]);
+  assert.deepEqual(cast.strikeImpacts.map(beat=>beat.map(n=>n.damage)),[[200],[200]]);
   const starts=p=>{
     const c=context(),lines=[];
     c.stroke=()=>{
@@ -491,7 +491,7 @@ test('damage numbers appear at impact on top of the manual animation',()=>{
     assert(!early.calls.some(call=>call[0]==='fillText'));
     const number=later.calls.find(call=>call[0]==='fillText'&&call[1].startsWith('−'));
     assert(number,skill);
-    if(skill==='tiger-throw')assert.deepEqual(number.slice(0,3),['fillText','−150',168]);
+    if(skill==='tiger-throw')assert.deepEqual(number.slice(0,3),['fillText','−300',168]);
   }
 });
 
