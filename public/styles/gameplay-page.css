@@ -87,12 +87,12 @@
   }
   #page-gameplay .gameplay-atlas-node{
     position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    width:min(100%,420px);height:100%;min-height:0;max-height:clamp(180px,62vh,560px);
+    width:min(100%,300px);height:100%;min-height:0;max-height:clamp(160px,57vh,365px);
     padding:0 4px 4px;border:0;background:transparent;color:#f9e6b7;cursor:pointer;
     font-family:inherit;gap:0;
   }
   #page-gameplay .gameplay-atlas-node img{
-    display:block;width:100%;height:clamp(105px,calc(100dvh - 238px),475px);
+    display:block;width:100%;height:clamp(105px,calc(100dvh - 238px),275px);
     max-width:100%;object-fit:contain;object-position:center bottom;
     filter:drop-shadow(0 12px 12px #111b1b8c);
     transition:transform .2s ease,filter .2s ease;pointer-events:none;
@@ -101,13 +101,16 @@
     transform:translateY(-3px);filter:drop-shadow(0 0 12px #efd7a569) drop-shadow(0 12px 12px #111b1b8c);
   }
   #page-gameplay .gameplay-atlas-name{
-    z-index:1;margin-top:-14px;display:flex;align-items:center;justify-content:center;gap:clamp(6px,1vw,12px);
-    min-height:32px;padding:6px clamp(12px,2vw,25px);border:1px solid #d9ba80;
-    background:linear-gradient(105deg,#3c3626,#211e17);box-shadow:0 4px 12px #0c120ec9,inset 0 1px #e5c89133;
-    color:#f8dda0;border-radius:5px;font:700 clamp(16px,3.3vh,25px)/1.2 "Noto Serif TC",serif;
-    letter-spacing:.09em;white-space:nowrap;
+    z-index:1;margin-top:-8px;display:grid;place-items:center;
+    width:min(100%,290px);aspect-ratio:1325/236;min-height:0;flex:none;
+    box-sizing:border-box;padding:0 30% 0 20%;border:0;
+    background:url('/assets/dungeons/dungeon-button.png') center/100% 100% no-repeat;
+    color:#f8e3b8;font:700 clamp(13px,2.8vh,20px)/1.15 "Noto Serif TC",serif;
+    text-shadow:0 1px 3px #0b1119;letter-spacing:.08em;white-space:nowrap;
   }
-  #page-gameplay .gameplay-atlas-name i{font-size:.7em;color:#d9b778}
+  #page-gameplay .gameplay-atlas-name>span{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+  #page-gameplay .gameplay-atlas-node:hover .gameplay-atlas-name,
+  #page-gameplay .gameplay-atlas-node:focus-visible .gameplay-atlas-name{filter:brightness(1.12)}
   #page-gameplay .gameplay-atlas-node>small{color:#f2e3c4;text-shadow:0 2px 6px #081110;font-size:clamp(10px,1.8vh,13px);margin-top:7px}
   #page-gameplay .gameplay-atlas-hint{justify-self:end;color:#e3d8bd;text-shadow:0 2px 6px #10160e;font-size:clamp(10px,1.8vh,13px);margin:0}
   #page-gameplay .gameplay-atlas-node:focus-visible{outline:2px solid #f1d29a;outline-offset:2px;border-radius:8px}
@@ -116,7 +119,7 @@
 @media(orientation:landscape) and (max-height:420px){
   #page-gameplay .gameplay-shell[data-atlas-ready="true"]{padding-block:8px;min-height:clamp(176px,calc(100dvh - 124px),280px);row-gap:8px}
   #page-gameplay .gameplay-atlas-node img{height:clamp(85px,calc(100dvh - 198px),225px)}
-  #page-gameplay .gameplay-atlas-name{min-height:28px;margin-top:-10px;padding-block:4px}
+  #page-gameplay .gameplay-atlas-name{width:min(100%,230px);margin-top:-6px}
   #page-gameplay .gameplay-atlas-node>small{margin-top:4px}
 }
 @media(prefers-reduced-motion:reduce){#page-gameplay .gameplay-atlas-node img{transition:none}#page-gameplay .gameplay-atlas-node:hover img{transform:none}}

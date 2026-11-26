@@ -82,6 +82,9 @@ test('landscape page shows weapon category and authentic map destination without
  assert.ok(atlas);assert.equal(h.shell.dataset.atlasReady,'true');
  assert.match(atlas.innerHTML,/data-atlas-dungeon="peak-stone"/);
  assert.match(atlas.innerHTML,/尖峰石域/);assert.doesNotMatch(atlas.innerHTML,/data-atlas-coop/);
+ assert.match(atlas.innerHTML,/src="\/assets\/dungeons\/peak-stone\.png"/);
+ assert.match(atlas.innerHTML,/<span class="gameplay-atlas-name"><span>尖峰石域<\/span><\/span>/);
+ assert.doesNotMatch(atlas.innerHTML,/fa-chevron-right/);
  h.elements.get('gameplay-weapon-dungeon-entry').handlers.click();
  assert.equal(h.requests.length,0,'category only changes the right pane');
  atlas.handlers.click({target:{closest:s=>s==='[data-atlas-dungeon]'?{dataset:{atlasDungeon:W.ID}}:null}});
@@ -95,4 +98,15 @@ test('portrait launcher and external callers still open the original catalog',as
  const opening=h.open();h.respond();await opening;
  assert.match(h.dialog().innerHTML,/data-wd-dungeon="peak-stone"/);
  assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty=/);
+});
+
+test('dungeon map art and universal solid plaque are separate original PNG files',()=>{
+ const path=require('node:path');
+ for(const name of ['peak-stone.png','dungeon-button.png']){
+  const bytes=fs.readFileSync(path.join(__dirname,'../public/assets/dungeons',name));
+  assert.equal(bytes.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
+  assert.equal(bytes[25],6,'RGBA PNG with alpha');
+ }
+ const css=fs.readFileSync(path.join(__dirname,'../public/styles/gameplay-page.css'),'utf8');
+ assert.match(css,/url\('\/assets\/dungeons\/dungeon-button\.png'\)/);
 });

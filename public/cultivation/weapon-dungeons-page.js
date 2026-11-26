@@ -88,16 +88,16 @@ export async function openWeaponDungeons(dungeonId=null){
 // dungeon's detail dialog is opened. The portrait launcher stays unchanged.
 const landscape=()=>window.matchMedia?.('(orientation: landscape)')?.matches===true;
 let atlas=null,atlasCategory='weapon';
-const atlasArt={ 'peak-stone':'/assets/training/layers/landscape-island-secret.webp' };
+const atlasArt={ 'peak-stone':'/assets/dungeons/peak-stone.png' };
 function atlasMarkup(category){
   if(category==='coop'&&window.QA_COOP_DUNGEON_ENABLED===true){
-    return `<div class="gameplay-atlas-heading"><h3>合作副本</h3></div><div class="gameplay-atlas-sites"><button type="button" class="gameplay-atlas-node" data-atlas-coop><img src="/assets/training/layers/landscape-island-secret.webp" alt="" draggable="false"><span class="gameplay-atlas-name"><i class="fa-solid fa-people-group" aria-hidden="true"></i> 合作秘境</span><small>組隊挑戰</small></button></div>`;
+    return `<div class="gameplay-atlas-heading"><h3>合作副本</h3></div><div class="gameplay-atlas-sites"><button type="button" class="gameplay-atlas-node" data-atlas-coop><img src="/assets/training/layers/landscape-island-secret.webp" alt="" draggable="false"><span class="gameplay-atlas-name"><span>合作秘境</span></span><small>組隊挑戰</small></button></div>`;
   }
   const entries=globalThis.QAWeaponDungeons?.CATALOG||[];
   return `<div class="gameplay-atlas-heading"><h3>武器副本</h3><span>${entries.length} 座秘境開放</span></div>
     <div class="gameplay-atlas-sites">${entries.map(d=>`<button type="button" class="gameplay-atlas-node" data-atlas-dungeon="${esc(d.id)}" aria-label="選擇${esc(d.name)}">
       <img src="${atlasArt[d.id]||'/assets/training/layers/landscape-island-secret.webp'}" alt="" draggable="false">
-      <span class="gameplay-atlas-name"><i class="fa-solid fa-mountain" aria-hidden="true"></i>${esc(d.name)}<i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
+      <span class="gameplay-atlas-name"><span>${esc(d.name)}</span></span>
       <small>${esc(d.subtitle)}</small></button>`).join('')}</div>
     <p class="gameplay-atlas-hint"><i class="fa-solid fa-compass" aria-hidden="true"></i> 選擇秘境，查看可挑戰的境界</p>`;
 }
