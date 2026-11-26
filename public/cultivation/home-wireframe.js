@@ -81,7 +81,7 @@ function renderAnswerBonus(){
   node.hidden=!uid||!player||(player.uid&&player.uid!==uid);
   if(node.hidden)return;
   const state=rules.normalize(player.stats?.answerCultivationV1),manual=window.getCurrentTacticalManualState?.();
-  const percent=rules.maxedWeapons(manual,globalThis.QAManuals)*10;
+  const percent=rules.maxedWeapons(manual,globalThis.QAManuals)*rules.PER_WEAPON;
   node.textContent=(manual?'武器精通 +'+percent+'%':'武器精通同步中')+' · '+(state.remaining?'頓悟 +100% · 剩餘 '+state.remaining+' 題':'悟道值 '+state.progress+' / 10');
   node.classList.toggle('is-awake',!!state.remaining);
 }

@@ -117,7 +117,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
             ${weaponMode?globalThis.QAWeaponPresentation.masteryMarkup(book):''}
             ${growth}
             ${nextNote?`<small class="manual-hero-next-inline">${esc(nextNote)}</small>`:''}
-            <small class="manual-hero-mastery-footnote">Lv.1、5、10 領悟招式；${visual.level>=20?'已啟用：永久修為 +10%':'Lv.20 永久修為 +10%'}</small>
+            <small class="manual-hero-mastery-footnote">Lv.1、5、10 領悟招式；${visual.level>=20?'已啟用：永久修為 +30%':'Lv.20 永久修為 +30%'}</small>
           </div>
           <div class="manual-hero-actions">${action}
             ${upgrade?'<span class="manual-hero-tip">靈石只可升至 Lv.10；之後需戰鬥修煉</span>':''}

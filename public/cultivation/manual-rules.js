@@ -345,7 +345,7 @@
         owned:true,...levelInfo,upgrade:upgradeQuote(levelInfo.exp),skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level,score,s.skillLevels[skill.id]))};
     });
     return {...s,weaponIds,realmScore:score,realmName:realmForScore(score).name,
-      attackBonus:manualAttackBonus(s),cultivationBonusPercent:library.filter(book=>book.level>=MAX_LEVEL).length*10,maxManualLevel:MAX_LEVEL,library};
+      attackBonus:manualAttackBonus(s),cultivationBonusPercent:library.filter(book=>book.level>=MAX_LEVEL).length*30,maxManualLevel:MAX_LEVEL,library};
   }
   // Sum all owned manuscript levels, including a Lv.1 manuscript (+1).
   // This is derived from the owned books; never increment the saved user attack.

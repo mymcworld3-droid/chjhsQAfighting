@@ -1,7 +1,7 @@
 // Account-wide answer cultivation bonuses; private integer hundredths, whole-point rewards.
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.QAAnswerCultivationBonus=api;})(globalThis,()=>{
   'use strict';
-  const COUNT=10,DURATION=3,PER_WEAPON=10;
+  const COUNT=10,DURATION=3,PER_WEAPON=30;
   const int=(v,max)=>Number.isFinite(Number(v))?Math.max(0,Math.min(max,Math.floor(Number(v)))):0;
   function normalize(raw){
     const remaining=int(raw?.remaining,DURATION);
