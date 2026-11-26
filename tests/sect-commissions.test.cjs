@@ -33,7 +33,7 @@ test('same day and uid generate identical two commissions without locking beginn
  assert.ok(x.every(q=>user().stats.totalScore>=q.minScore));
  const beginner=user();beginner.stats.totalScore=0;beginner.stats.knowledgeMap={};
  const tasks=rules.dailyCommissions(beginner,'u1',date);
- assert.ok(tasks.every(q=>['solo','meditation','dongtian'].includes(q.metric)));
+ assert.ok(tasks.every(q=>['solo','meditation'].includes(q.metric)));
  assert.ok(tasks.every(q=>q.reward.drawTickets==null));
 });
 test('assignment is stored once, cannot claim unassigned mission or claim assigned mission twice',async()=>{
@@ -94,10 +94,25 @@ test('specialist commission credits server-authenticated enlightenment completio
  const replay=await questTransaction(db,'u1',{kind:'commission',id:'commission-enlightenment',date},today);
  assert.equal(replay.awarded,false);
 });
-test('zero-knowledge map never generates specialist task and legacy six dailies remain untouched',()=>{
+test('zero-knowledge map never generates specialist task and optional Dongtian is excluded from quest catalogs',()=>{
  const u=user();u.stats.knowledgeMap={};
  const pool=rules.dailyCommissions(u,'u1',date);
  assert.ok(pool.every(q=>q.metric!=='enlightenment'));
- assert.equal(rules.DAILY.length,6);
- assert.equal(rules.PATH.length,23);
+ assert.equal(rules.DAILY.length,5);
+ assert.equal(rules.PATH.length,22);
+});
+
+test('retired Dongtian commission is replaced without resetting the other receipt',async()=>{
+ const first='commission-solo-four', retired='commission-dongtian';
+ for(const wasPaid of [false,true]){
+  const saved={commissionDate:date,commissionIds:[first,retired],commissionClaimed:wasPaid?[first,retired]:[first]};
+  const db=fake(user(),saved), v=await questTransaction(db,'u1',null,today);
+  assert.equal(v.quests.commissions.length,2);
+  assert.equal(v.quests.commissions[0].id,first);
+  assert.equal(v.quests.commissions[0].claimed,true);
+  assert.notEqual(v.quests.commissions[1].metric,'dongtian');
+  assert.equal(v.quests.commissions[1].claimed,wasPaid);
+  await assert.rejects(questTransaction(db,'u1',{kind:'commission',id:retired,date},today),/找不到/);
+  assert.equal((await questTransaction(db,'u1',{kind:'commission',id:first,date},today)).awarded,false);
+ }
 });

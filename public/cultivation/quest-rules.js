@@ -54,7 +54,7 @@
     'path-qi-five': [storyQuest('qi-five-dongtian', '第二章 · 竹簡天尊', 5)]
   };
   // Legacy IDs remain in the migration catalog, never in the new active chain.
-  const RETIRED_PATH = new Set(['path-raid-one','path-raid-three','path-raid-ten','path-duel-five']);
+  const RETIRED_PATH = new Set(['path-raid-one','path-raid-three','path-raid-ten','path-duel-five','path-cave']);
   const PATH_AFTER = {
     'path-foundation': [quest('path-trial-first','初戰靈獸','成功通過問道試煉第 1 關。','trialStage',1,120,0,'trial')],
     'path-golden': [
@@ -77,7 +77,6 @@
     quest('daily-solo-ten', '勤學不輟', '今日問道答對 10 題。', 'solo', 10, 80, 1, 'solo'),
     quest('daily-meditation', '靜心閉關', '今日完成每日閉關。', 'meditation', 1, 30, 0, 'meditation'),
     quest('daily-battle', '論道切磋', '今日完成 1 場正式鬥法，勝負皆計。', 'battle', 1, 80, 0, 'battle', 6),
-    quest('daily-dongtian', '洞天探幽', '今日完成 1 次洞天答題並結算。', 'dongtian', 1, 60, 0, 'dongtian'),
     quest('daily-raid', '同門協力', '今日成功通關團本 1 次。', 'raid', 1, 100, 1, 'raid', 6, { 'raid-refine-key-ii': 1 })
   ];
 
@@ -88,7 +87,6 @@
     quest('commission-solo-six', '今日誦經・六問', '今日問道答對 6 題。', 'solo', 6, 75, 0, 'solo'),
     quest('commission-solo-eight', '今日誦經・八問', '今日問道答對 8 題。', 'solo', 8, 100, 0, 'solo'),
     quest('commission-meditation', '宗門靜修令', '今日完成一次閉關，無須全對。', 'meditation', 1, 65, 0, 'meditation'),
-    quest('commission-dongtian', '洞天巡訪令', '今日完成一次洞天答題並結算。', 'dongtian', 1, 85, 0, 'dongtian'),
     quest('commission-battle', '演武短箋', '今日完成一場正式鬥法，勝負皆可。', 'battle', 1, 100, 0, 'battle', 6),
     quest('commission-raid', '師門援戰令', '今日通關一次清霜秘境，任何難度均可。', 'raid', 1, 120, 0, 'raid', 6),
     quest('commission-enlightenment', '弱項研修令', '今日完成一次悟道試煉，依能力圖譜的弱項單元補強。', 'enlightenment', 1, 90, 0, 'enlightenment')
@@ -116,7 +114,7 @@
     quest('week-solo-20','七日問道・勤習','本週累積問道答對 20 題，任意時間完成。','solo',20,140,1,'solo'),
     quest('week-solo-50','七日問道・精進','本週累積問道答對 50 題。','solo',50,230,2,'solo'),
     quest('week-correction-2','溫故研習','本週累積訂正並答對 2 題。','correction',2,100,0,'solo'),
-    quest('week-activity-2','百藝兼修','本週累積完成 2 次閉關、洞天或鬥法活動，不須每日連續。','activity',2,125,0,'meditation'),
+    quest('week-activity-2','百藝兼修','本週累積完成 2 次閉關或鬥法活動，不須每日連續。','activity',2,125,0,'meditation'),
     quest('week-raid-1','同門共進','本週通關團本 1 次，任意難度。','raid',1,130,0,'raid',6)
   ]);
   const METRICS = ['solo', 'meditation', 'battle', 'dongtian', 'raid', 'correction'];
@@ -170,7 +168,7 @@
     if (kind === 'path' && q.metric === 'weaponDungeonClear') return (battleProgress?.weaponDungeonV1?.clears || []).reduce((sum,n)=>sum+number(n),0);
     if (kind === 'weekly') {
       const c=p.weekly.counts;
-      return q.metric === 'activity' ? c.meditation+c.dongtian+c.battle+c.raid : number(c[q.metric]);
+      return q.metric === 'activity' ? c.meditation+c.battle : number(c[q.metric]);
     }
     if (q.metric === 'enlightenment')
       return verifiedTrial?.day===date && verifiedTrial.status==='completed' ? 1 : 0;

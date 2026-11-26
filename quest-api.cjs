@@ -22,10 +22,20 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
     let stateChanged = false;
     // Mint today's assignments once on the server; a new realm or ability score
     // cannot reshuffle missions halfway through the day.
-    if (state.commissionDate !== date || state.commissionIds.length !== 2) {
+    if (state.commissionDate !== date) {
       state.commissionDate = date;
       state.commissionIds = rules.dailyCommissions(user, uid, date).map(q=>q.id);
       state.commissionClaimed = [];
+      stateChanged = true;
+    } else if (state.commissionIds.length !== 2) {
+      // Replace only the retired slot, preserving the other assignment and its receipt.
+      const assigned = rules.dailyCommissions(user, uid, date);
+      const old = state.commissionIds.map(id=>rules.COMMISSION_POOL.find(q=>q.id===id));
+      const first = old.find(q=>q.metric==='solo') || assigned[0];
+      const second = old.find(q=>q.metric!=='solo') || assigned[1];
+      state.commissionIds = [first.id, second.id];
+      if (rawState.commissionClaimed?.includes('commission-dongtian') && !old.some(q=>q.metric!=='solo'))
+        state.commissionClaimed.push(second.id);
       stateChanged = true;
     } else if (state.commissionIds.includes('commission-raid') &&
         !state.commissionClaimed.includes('commission-raid') &&

@@ -55,7 +55,7 @@ test('week starts with no retroactive credit from old lifetime statistics',()=>{
  const view=rules.view(u,{},day);
  assert.equal(view.weekly.length,4);
  assert.ok(view.weekly.every(q=>q.current===0&&q.claimable===false));
- assert.equal(view.daily.length,5);
+ assert.equal(view.daily.length,4);
  assert.equal(view.commissions.length,0);
 });
 test('seven-day progress enables low-pressure 20 questions, corrections and cross-mode activity',()=>{
@@ -65,6 +65,9 @@ test('seven-day progress enables low-pressure 20 questions, corrections and cros
  for(let i=0;i<2;i++)p=rules.recordEvent(p,'correction','2026-10-14');
  p=rules.recordEvent(p,'meditation','2026-10-15');
  p=rules.recordEvent(p,'dongtian','2026-10-16');
+ u.questProgress=p;
+ assert.equal(rules.view(u,{},day).weekly.find(q=>q.id==='week-activity-2').current,1);
+ p=rules.recordEvent(p,'battle','2026-10-16');
  u.questProgress=p;
  const v=rules.view(u,{},day);
  for(const id of ['week-solo-20','week-correction-2','week-activity-2'])
