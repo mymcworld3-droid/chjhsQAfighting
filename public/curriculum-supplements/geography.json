@@ -1,0 +1,4671 @@
+{
+  "schema": 1,
+  "subject": "地理",
+  "books": [
+    {
+      "bookId": "longteng-114-geography-1",
+      "grade": "高中一年級",
+      "subject": "地理",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第一學期",
+      "bookLabel": "地理第一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_geography_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰 地理一上",
+          "reviewMethod": "page-and-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "page-and-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。",
+      "units": [
+        {
+          "unit": "第1章 為什麼要學地理",
+          "details": [
+            "1-1 地理學的研究內涵",
+            "1-2 地理學的研究方法"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 地理學的研究內涵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "空間、區域與人地關係；地理學觀點及尺度"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 地理學的研究方法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地理研究問題、資料蒐集、分類、分析與呈現；田野調查及圖表判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 地圖",
+          "details": [
+            "2-1 地圖的本質與要素",
+            "2-2 地圖投影",
+            "2-3 地圖的種類"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 地圖的本質與要素",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地圖要素、比例尺、方向、圖例、距離與地圖判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 地圖投影",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "圓柱、圓錐、方位等投影與變形；等積、等角等性質及適用範圍"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-3 地圖的種類",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "普通地圖、主題地圖、等高線與統計地圖；選擇適合圖種、量測及判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 地理資訊",
+          "details": [
+            "3-1 地理資訊的組成",
+            "3-2 地理資訊系統的功能"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 地理資訊的組成",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "空間與屬性資料、向量與網格資料；資料來源與品質"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 地理資訊系統的功能",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "圖層、套疊、環域、空間查詢與 GIS 應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 地形系統",
+          "details": [
+            "4-1 地形系統與營力",
+            "4-2 流水、冰河塑造的地形與辨識",
+            "4-3 風、波浪塑造的地形與辨識"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 地形系統與營力",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "內營力與外營力、地形作用及地形系統的相互關聯"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 流水、冰河塑造的地形與辨識",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "河流及冰河的侵蝕搬運堆積及典型地形；辨識地形證據"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-3 風、波浪塑造的地形與辨識",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "風、波浪等營力形成的典型地形及圖像判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 氣候系統",
+          "details": [
+            "5-1 氣候要素",
+            "5-2 大氣環流與洋流系統",
+            "5-3 氣候類型與自然景觀帶(一)",
+            "5-4 氣候類型與自然景觀帶(二)"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 氣候要素",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣溫、降水、氣壓、濕度等氣候要素；影響氣候的緯度、海拔與海陸位置"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 大氣環流與洋流系統",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大氣環流、風帶與洋流系統；季風及氣候影響"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-3 氣候類型與自然景觀帶(一)",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "熱帶、溫帶、季風氣候及相應自然景觀；降水季節與氣溫特徵"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-4 氣候類型與自然景觀帶(二)",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "寒帶、乾燥、高地氣候及相應自然景觀；土壤與植被關聯"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-geography-1",
+      "grade": "高中一年級",
+      "subject": "地理",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "地理第一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_geography_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "翰林 地理一上",
+          "reviewMethod": "page-and-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "page-and-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。",
+      "units": [
+        {
+          "unit": "第1章 認識地理",
+          "details": [
+            "1-1 地理是什麼？",
+            "1-2 如何進行地理研究？"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 地理是什麼？",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "空間、區域與人地關係；地理學觀點及尺度"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 如何進行地理研究？",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地理研究問題、資料蒐集、分類、分析與呈現；田野調查及圖表判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 地圖類別與使用",
+          "details": [
+            "2-1 地圖的本質與要素",
+            "2-2 地圖種類與使用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 地圖的本質與要素",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地圖要素、比例尺、方向、圖例、距離與地圖判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 地圖種類與使用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "普通地圖、主題地圖、等高線與統計地圖；選擇適合圖種、量測及判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 坐標網格與地圖投影",
+          "details": [
+            "3-1 地球坐標-經緯線網格",
+            "3-2 地圖投影"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 地球坐標-經緯線網格",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "經緯度、座標定位、時區與地球網格"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 地圖投影",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "圓柱、圓錐、方位等投影與變形；等積、等角等性質及適用範圍"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 地理資訊",
+          "details": [
+            "4-1 地理資訊組成與特性",
+            "4-2 地理資訊系統功能與應用"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 地理資訊組成與特性",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "空間與屬性資料、向量與網格資料；資料來源與品質"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 地理資訊系統功能與應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "圖層、套疊、環域、空間查詢與 GIS 應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 營力與地形系統",
+          "details": [
+            "5-1 地形營力",
+            "5-2 火山地形",
+            "5-3 石灰岩地形"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 地形營力",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "內營力與外營力、地形作用及地形系統的相互關聯"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 火山地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "火山地形、岩漿性質、噴發與火山地形判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-3 石灰岩地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "石灰岩溶蝕、洞穴、鐘乳石、石筍及喀斯特地形"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 水與風形塑的地形系統",
+          "details": [
+            "6-1 河流地形",
+            "6-2 海岸地形",
+            "6-3 冰河地形",
+            "6-4 風成地形"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 河流地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "河流上中下游侵蝕與堆積、曲流、沖積扇、河階與三角洲"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-2 海岸地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "波浪、海流與潮汐作用；海蝕崖、海蝕平台、沙洲及海岸堆積"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-3 冰河地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "冰河侵蝕與堆積；U形谷、冰斗、冰磧及峽灣"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-4 風成地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "風蝕與風積、沙丘、黃土及風成地形判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 氣候概述",
+          "details": [
+            "7-1 氣候要素",
+            "7-2 天氣系統"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 氣候要素",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣溫、降水、氣壓、濕度等氣候要素；影響氣候的緯度、海拔與海陸位置"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-2 天氣系統",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "高低氣壓、氣團、鋒面與天氣變化；天氣圖及等壓線判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第8章 氣候類型與自然景觀的形成",
+          "details": [
+            "8-1 大氣環流",
+            "8-2 氣候與自然景觀帶"
+          ],
+          "concepts": [
+            {
+              "name": "8-1 大氣環流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "全球大氣環流、行星風系、季風及氣壓帶移動；限所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "8-2 氣候與自然景觀帶",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候類型及自然景觀帶的分布、氣候圖、植被與土壤關聯"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-geography-1",
+      "grade": "高中一年級",
+      "subject": "地理",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第一學期",
+      "bookLabel": "地理第一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_geography_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "schoolYear": 114,
+          "publisherTable": "南一 地理一上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。",
+      "units": [
+        {
+          "unit": "第1章 地理學的觀點與研究方法",
+          "details": [
+            "1-1 地理學的內涵",
+            "1-2 資料的蒐集、整理、分析與展示"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 地理學的內涵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "空間、區域與人地關係；地理學觀點及尺度"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 資料的蒐集、整理、分析與展示",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地理研究問題、資料蒐集、分類、分析與呈現；田野調查及圖表判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 地圖",
+          "details": [
+            "2-1 地圖的本質與要素",
+            "2-2 地理網線與投影",
+            "2-3 地圖種類及其用途"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 地圖的本質與要素",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地圖要素、比例尺、方向、圖例、距離與地圖判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 地理網線與投影",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "圓柱、圓錐、方位等投影與變形；等積、等角等性質及適用範圍"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-3 地圖種類及其用途",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "普通地圖、主題地圖、等高線與統計地圖；選擇適合圖種、量測及判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 地理資訊",
+          "details": [
+            "3-1 地理資訊的意義與結構",
+            "3-2 地理資訊系統的功能"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 地理資訊的意義與結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "空間與屬性資料、向量與網格資料；資料來源與品質"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 地理資訊系統的功能",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "圖層、套疊、環域、空間查詢與 GIS 應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 地形營力",
+          "details": [
+            "4-1 內營力",
+            "4-2 外營力"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 內營力",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "板塊運動、褶皺、斷層、火山活動及內營力形成的地形"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 外營力",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "風化、侵蝕、搬運、堆積；外營力與地形形成"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 地形系統",
+          "details": [
+            "5-1 河流地形",
+            "5-2 海岸地形",
+            "5-3 岩溶地形",
+            "5-4 冰河地形",
+            "5-5 風成地形"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 河流地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "河流上中下游侵蝕與堆積、曲流、沖積扇、河階與三角洲"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 海岸地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "波浪、海流與潮汐作用；海蝕崖、海蝕平台、沙洲及海岸堆積"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-3 岩溶地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "石灰岩溶蝕、洞穴、鐘乳石、石筍及喀斯特地形"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-4 冰河地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "冰河侵蝕與堆積；U形谷、冰斗、冰磧及峽灣"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-5 風成地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "風蝕與風積、沙丘、黃土及風成地形判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 氣候概說",
+          "details": [
+            "6-1 氣候要素",
+            "6-2 大氣環流與洋流"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 氣候要素",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣溫、降水、氣壓、濕度等氣候要素；影響氣候的緯度、海拔與海陸位置"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-2 大氣環流與洋流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大氣環流、風帶與洋流系統；季風及氣候影響"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 氣候類型與自然景觀帶",
+          "details": [
+            "7-1 全球空間尺度的氣候類型與自然景觀帶",
+            "7-2 區域空間尺度的氣候類型與自然景觀帶",
+            "7-3 氣候與自然景觀帶的空間分布"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 全球空間尺度的氣候類型與自然景觀帶",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候類型及自然景觀帶的分布、氣候圖、植被與土壤關聯"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-2 區域空間尺度的氣候類型與自然景觀帶",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候類型及自然景觀帶的分布、氣候圖、植被與土壤關聯"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-3 氣候與自然景觀帶的空間分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候類型及自然景觀帶的分布、氣候圖、植被與土壤關聯"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-geography-1",
+      "grade": "高中一年級",
+      "subject": "地理",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第一學期",
+      "bookLabel": "地理第一冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-1_comparison_geography_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 4,
+          "schoolYear": 114,
+          "publisherTable": "三民 地理一上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 4,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。7-1文字層缺節名，未自行補名；7-2對齊仍待原檔確認。",
+      "units": [
+        {
+          "unit": "第1章 地理學研究觀點與研究方法",
+          "details": [
+            "1-1 地理學的傳統觀點",
+            "1-2 地理學的研究方法"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 地理學的傳統觀點",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "空間、區域與人地關係；地理學觀點及尺度"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 地理學的研究方法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地理研究問題、資料蒐集、分類、分析與呈現；田野調查及圖表判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 地圖概論",
+          "details": [
+            "2-1 地圖本質與要素",
+            "2-2 地圖投影",
+            "2-3 地圖的種類"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 地圖本質與要素",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地圖要素、比例尺、方向、圖例、距離與地圖判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 地圖投影",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "圓柱、圓錐、方位等投影與變形；等積、等角等性質及適用範圍"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-3 地圖的種類",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "普通地圖、主題地圖、等高線與統計地圖；選擇適合圖種、量測及判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 地理資訊與地理資訊系統",
+          "details": [
+            "3-1 地理資訊",
+            "3-2 地理資訊系統的組成與架構",
+            "3-3 地理資訊系統的功能",
+            "3-4 地理資訊系統的發展與應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 地理資訊",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "空間與屬性資料、向量與網格資料；資料來源與品質"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 地理資訊系統的組成與架構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "空間與屬性資料、向量與網格資料；資料來源與品質"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-3 地理資訊系統的功能",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "圖層、套疊、環域、空間查詢與 GIS 應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-4 地理資訊系統的發展與應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "圖層、套疊、環域、空間查詢與 GIS 應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 地形系統與作用",
+          "details": [
+            "4-1 地形系統",
+            "4-2 地形作用"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 地形系統",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "內營力與外營力、地形作用及地形系統的相互關聯"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 地形作用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "內營力與外營力、地形作用及地形系統的相互關聯"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 地形與人類生活－河流與海岸地形",
+          "details": [
+            "5-1 河流地形",
+            "5-2 海岸地形"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 河流地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "河流上中下游侵蝕與堆積、曲流、沖積扇、河階與三角洲"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 海岸地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "波浪、海流與潮汐作用；海蝕崖、海蝕平台、沙洲及海岸堆積"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 地形與人類生活－火山、冰河、風成與石灰岩地形",
+          "details": [
+            "6-1 火山地形",
+            "6-2 冰河地形",
+            "6-3 風成地形",
+            "6-4 石灰岩地形"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 火山地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "火山地形、岩漿性質、噴發與火山地形判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-2 冰河地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "冰河侵蝕與堆積；U形谷、冰斗、冰磧及峽灣"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-3 風成地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "風蝕與風積、沙丘、黃土及風成地形判讀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-4 石灰岩地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "石灰岩溶蝕、洞穴、鐘乳石、石筍及喀斯特地形"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 氣候概說",
+          "details": [
+            "7-2 天氣與氣候",
+            "7-3 大氣環流與風系",
+            "7-4 洋流系統"
+          ],
+          "concepts": [
+            {
+              "name": "7-2 天氣與氣候",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣溫、降水、氣壓、濕度等氣候要素；影響氣候的緯度、海拔與海陸位置"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-3 大氣環流與風系",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "全球大氣環流、行星風系、季風及氣壓帶移動；限所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-4 洋流系統",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "洋流成因、冷暖流及對沿岸氣候的影響"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第8章 氣候類型與自然景觀帶",
+          "details": [
+            "8-1 自然景觀帶的組成",
+            "8-2 氣候與自然景觀帶的分布與特色"
+          ],
+          "concepts": [
+            {
+              "name": "8-1 自然景觀帶的組成",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然景觀的氣候、植被與土壤組成及相互影響"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "8-2 氣候與自然景觀帶的分布與特色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣候類型及自然景觀帶的分布、氣候圖、植被與土壤關聯"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-114-geography-2",
+      "grade": "高中一年級",
+      "subject": "地理",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第二學期",
+      "bookLabel": "地理第二冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-2_comparison_geography_114.pdf?v=20260224",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰 地理一下",
+          "reviewMethod": "page-and-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "page-and-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。來源第6、7章同名，保留並加章號區分，不擅改原章名。",
+      "units": [
+        {
+          "unit": "第1章 人口",
+          "details": [
+            "1-1 人口成長與人口轉型",
+            "1-2 人口分布與人口遷移"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 人口成長與人口轉型",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然增加、出生死亡率、人口轉型、年齡結構與人口金字塔"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 人口分布與人口遷移",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人口分布、人口密度、遷移推拉力、人口移動及環境限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 聚落、交通與區域",
+          "details": [
+            "2-1 聚落系統",
+            "2-2 交通與聚落系統",
+            "2-3 中地體系"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 聚落系統",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "聚落成因、形態、規模與聚落系統"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 交通與聚落系統",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "運輸路線、可及性、距離成本與交通對聚落及區域的影響"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-3 中地體系",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中地、服務範圍、門檻人口、商品服務等級與中地體系"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 都市",
+          "details": [
+            "3-1 都市化與都市成長",
+            "3-2 都市內部空間結構",
+            "3-3 都市發展的問題"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 都市化與都市成長",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市化、都市成長、郊區化與城鄉關係"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 都市內部空間結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市土地利用、地租、都市內部空間結構及模型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-3 都市發展的問題",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市交通、住宅、環境與社會問題；都市發展因應"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 產業",
+          "details": [
+            "4-1 產業活動",
+            "4-2 農業的區位選擇與經營特徵",
+            "4-3 製造業的區位選擇與經營特徵",
+            "4-4 第三級產業的區位選擇與經營特徵"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 產業活動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "第一、第二、第三級產業分類及生產活動、區位因素"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 農業的區位選擇與經營特徵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "農業型態、自然人文區位因素、經營與集約度"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-3 製造業的區位選擇與經營特徵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "工業區位、原料、勞力、市場、運輸成本、產業群聚"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-4 第三級產業的區位選擇與經營特徵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "服務業區位、消費市場、交通、商業服務範圍"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 世界體系",
+          "details": [
+            "5-1 世界體系的形成背景",
+            "5-2 世界體系結構：核心－半邊陲－邊陲",
+            "5-3 核心邊陲的關係：擴散或反吸"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 世界體系的形成背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "世界體系形成、區域發展不均、核心半邊陲邊陲及相互依存"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 世界體系結構：核心－半邊陲－邊陲",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "核心、半邊陲與邊陲的經濟關係；擴散、反吸及區域不平等"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-3 核心邊陲的關係：擴散或反吸",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "核心、半邊陲與邊陲的經濟關係；擴散、反吸及區域不平等"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 世界舞臺中的臺灣",
+          "details": [
+            "6-1 臺灣自然環境的特殊性",
+            "6-2 臺灣的多元族群",
+            "6-3 移民文化兼容並蓄"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 臺灣自然環境的特殊性",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣位置、地形、氣候、自然資源、環境與災害特色"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-2 臺灣的多元族群",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣原住民族、移民社會、人口分布與多元文化景觀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-3 移民文化兼容並蓄",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣原住民族、移民社會、人口分布與多元文化景觀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 世界舞臺中的臺灣",
+          "details": [
+            "7-1 東亞文化圈形成的環境背景",
+            "7-2 經濟崛起與轉型的歷程",
+            "7-3 人口與環境問題"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 東亞文化圈形成的環境背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞文化圈的季風、地形、農業與文化交流背景"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-2 經濟崛起與轉型的歷程",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞經濟崛起、工業化、產業轉型與區域合作"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-3 人口與環境問題",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞人口結構、都市化、資源與環境問題"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-geography-2",
+      "grade": "高中一年級",
+      "subject": "地理",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第二學期",
+      "bookLabel": "地理第二冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-2_comparison_geography_114.pdf?v=20260224",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "翰林 地理一下",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。",
+      "units": [
+        {
+          "unit": "第1章 人口與環境負載力",
+          "details": [
+            "1-1 人口成長與人口轉型",
+            "1-2 人口分布與人口移動"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 人口成長與人口轉型",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然增加、出生死亡率、人口轉型、年齡結構與人口金字塔"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 人口分布與人口移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人口分布、人口密度、遷移推拉力、人口移動及環境限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 聚落、交通與中地",
+          "details": [
+            "2-1 聚落系統",
+            "2-2 交通運輸與聚落",
+            "2-3 中地體系"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 聚落系統",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "聚落成因、形態、規模與聚落系統"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 交通運輸與聚落",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "運輸路線、可及性、距離成本與交通對聚落及區域的影響"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-3 中地體系",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中地、服務範圍、門檻人口、商品服務等級與中地體系"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 都市與城鄉關係",
+          "details": [
+            "3-1 都市發展",
+            "3-2 都市結構"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 都市發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市化、都市成長、郊區化與城鄉關係"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 都市結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市土地利用、地租、都市內部空間結構及模型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 產業活動(一)",
+          "details": [
+            "4-1 第一級產業",
+            "4-2 第二級產業"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 第一級產業",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "農業型態、自然人文區位因素、經營與集約度"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 第二級產業",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "工業區位、原料、勞力、市場、運輸成本、產業群聚"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 產業活動(二)",
+          "details": [
+            "5-1 第三級產業",
+            "5-2 資訊革命與知識經濟"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 第三級產業",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "服務業區位、消費市場、交通、商業服務範圍"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 資訊革命與知識經濟",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "資訊化、知識經濟、技術創新與產業空間變化"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 世界體系",
+          "details": [
+            "6-1 區域互賴和不平等交換",
+            "6-2 核心與邊陲"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 區域互賴和不平等交換",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "區域互賴、不平等交換、區域整合與發展差異"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-2 核心與邊陲",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "核心、半邊陲與邊陲的經濟關係；擴散、反吸及區域不平等"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 臺灣與世界",
+          "details": [
+            "7-1 自然環境的特色",
+            "7-2 多元文化社會",
+            "7-3 臺灣經濟發展歷程"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 自然環境的特色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣位置、地形、氣候、自然資源、環境與災害特色"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-2 多元文化社會",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣原住民族、移民社會、人口分布與多元文化景觀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-3 臺灣經濟發展歷程",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣產業發展、經濟轉型、區位與國際分工"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第8章 東亞文化圈的形成與發展",
+          "details": [
+            "8-1 東亞文化圈的形成",
+            "8-2 經濟崛起與轉型",
+            "8-3 人口與環境問題"
+          ],
+          "concepts": [
+            {
+              "name": "8-1 東亞文化圈的形成",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞文化圈的季風、地形、農業與文化交流背景"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "8-2 經濟崛起與轉型",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞經濟崛起、工業化、產業轉型與區域合作"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "8-3 人口與環境問題",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞人口結構、都市化、資源與環境問題"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-geography-2",
+      "grade": "高中一年級",
+      "subject": "地理",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第二學期",
+      "bookLabel": "地理第二冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-2_comparison_geography_114.pdf?v=20260224",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "schoolYear": 114,
+          "publisherTable": "南一 地理一下",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。",
+      "units": [
+        {
+          "unit": "第1章 人口與環境負載力",
+          "details": [
+            "1-1 人口成長與人口轉型",
+            "1-2 人口分布與人口移動"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 人口成長與人口轉型",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然增加、出生死亡率、人口轉型、年齡結構與人口金字塔"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 人口分布與人口移動",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人口分布、人口密度、遷移推拉力、人口移動及環境限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 聚落、流通路線與區域",
+          "details": [
+            "2-1 傳統聚落發展",
+            "2-2 交通運輸與聚落系統變遷",
+            "2-3 中地體系"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 傳統聚落發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "聚落成因、形態、規模與聚落系統"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 交通運輸與聚落系統變遷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "運輸路線、可及性、距離成本與交通對聚落及區域的影響"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-3 中地體系",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中地、服務範圍、門檻人口、商品服務等級與中地體系"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 都市系統與城鄉關係",
+          "details": [
+            "3-1 都市成長與都市化",
+            "3-2 都市地價與土地利用",
+            "3-3 都市內部空間結構"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 都市成長與都市化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市化、都市成長、郊區化與城鄉關係"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 都市地價與土地利用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市土地利用、地租、都市內部空間結構及模型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-3 都市內部空間結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市土地利用、地租、都市內部空間結構及模型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 產業活動(一) 生產系統與區位選擇",
+          "details": [
+            "4-1 初級原料產業",
+            "4-2 加工製造產業"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 初級原料產業",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "農業型態、自然人文區位因素、經營與集約度"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 加工製造產業",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "工業區位、原料、勞力、市場、運輸成本、產業群聚"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 產業活動(二) 服務產業與知識經濟",
+          "details": [
+            "5-1 服務產業",
+            "5-2 資訊化社會與知識經濟"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 服務產業",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "服務業區位、消費市場、交通、商業服務範圍"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 資訊化社會與知識經濟",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "資訊化、知識經濟、技術創新與產業空間變化"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 世界體系",
+          "details": [
+            "6-1 世界體系的形成",
+            "6-2 世界體系與區域發展"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 世界體系的形成",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "世界體系形成、區域發展不均、核心半邊陲邊陲及相互依存"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-2 世界體系與區域發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "核心、半邊陲與邊陲的經濟關係；擴散、反吸及區域不平等"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 什麼是臺灣獨特的魅力",
+          "details": [
+            "7-1 臺灣為何擁有多樣的自然環境",
+            "7-2 臺灣多元的文化與社會如何形成"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 臺灣為何擁有多樣的自然環境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣位置、地形、氣候、自然資源、環境與災害特色"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-2 臺灣多元的文化與社會如何形成",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣原住民族、移民社會、人口分布與多元文化景觀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第8章 東亞文化圈內的競爭與合作面臨哪些挑戰",
+          "details": [
+            "8-1 東亞文化圈的形成背景是什麼",
+            "8-2 現代東亞經濟的轉型歷程為何",
+            "8-3 東亞面對哪些人口與環境問題"
+          ],
+          "concepts": [
+            {
+              "name": "8-1 東亞文化圈的形成背景是什麼",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞文化圈的季風、地形、農業與文化交流背景"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "8-2 現代東亞經濟的轉型歷程為何",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞經濟崛起、工業化、產業轉型與區域合作"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "8-3 東亞面對哪些人口與環境問題",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞人口結構、都市化、資源與環境問題"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-geography-2",
+      "grade": "高中一年級",
+      "subject": "地理",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第二學期",
+      "bookLabel": "地理第二冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/10-2_comparison_geography_114.pdf?v=20260224",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 4,
+          "schoolYear": 114,
+          "publisherTable": "三民 地理一下",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 4,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。",
+      "units": [
+        {
+          "unit": "第1章 人口與環境負載力",
+          "details": [
+            "1-1 人口成長與人口轉型",
+            "1-2 人口移動與人口分布"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 人口成長與人口轉型",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然增加、出生死亡率、人口轉型、年齡結構與人口金字塔"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 人口移動與人口分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人口分布、人口密度、遷移推拉力、人口移動及環境限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 交通、聚落與區域",
+          "details": [
+            "2-1 運輸與交通",
+            "2-2 聚落系統",
+            "2-3 中地體系"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 運輸與交通",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "運輸路線、可及性、距離成本與交通對聚落及區域的影響"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 聚落系統",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "聚落成因、形態、規模與聚落系統"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-3 中地體系",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中地、服務範圍、門檻人口、商品服務等級與中地體系"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 都市系統與城鄉關係",
+          "details": [
+            "3-1 都市的發展",
+            "3-2 都市土地利用",
+            "3-3 都市內部空間結構"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 都市的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市化、都市成長、郊區化與城鄉關係"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 都市土地利用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市土地利用、地租、都市內部空間結構及模型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-3 都市內部空間結構",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市土地利用、地租、都市內部空間結構及模型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 產業活動",
+          "details": [
+            "4-1 第一級產業",
+            "4-2 第二級產業",
+            "4-3 第三級產業",
+            "4-4 資訊革命與知識經濟產業"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 第一級產業",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "農業型態、自然人文區位因素、經營與集約度"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 第二級產業",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "工業區位、原料、勞力、市場、運輸成本、產業群聚"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-3 第三級產業",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "服務業區位、消費市場、交通、商業服務範圍"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-4 資訊革命與知識經濟產業",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "資訊化、知識經濟、技術創新與產業空間變化"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 世界體系",
+          "details": [
+            "5-1 區域互賴與不平等交換",
+            "5-2 區域發展與區域整合"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 區域互賴與不平等交換",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "區域互賴、不平等交換、區域整合與發展差異"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 區域發展與區域整合",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "核心、半邊陲與邊陲的經濟關係；擴散、反吸及區域不平等"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 臺灣與世界",
+          "details": [
+            "6-1 臺灣的自然環境",
+            "6-2 臺灣的原住民族與南島語族",
+            "6-3 臺灣的移民社會與多元文化"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 臺灣的自然環境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣位置、地形、氣候、自然資源、環境與災害特色"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-2 臺灣的原住民族與南島語族",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣原住民族、移民社會、人口分布與多元文化景觀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-3 臺灣的移民社會與多元文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣原住民族、移民社會、人口分布與多元文化景觀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 東亞文化圈",
+          "details": [
+            "7-1 東亞文化圈的環境文化特色",
+            "7-2 東亞的經濟崛起與轉型歷程",
+            "7-3 人口與環境問題"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 東亞文化圈的環境文化特色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞文化圈的季風、地形、農業與文化交流背景"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-2 東亞的經濟崛起與轉型歷程",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞經濟崛起、工業化、產業轉型與區域合作"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-3 人口與環境問題",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東亞人口結構、都市化、資源與環境問題"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-114-geography-3",
+      "grade": "高中二年級",
+      "subject": "地理",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第一學期",
+      "bookLabel": "地理第三冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-1_comparison_geography_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰 地理二上",
+          "reviewMethod": "page-and-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "page-and-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。",
+      "units": [
+        {
+          "unit": "第1章 東西文化的接觸與區域發展－東南亞",
+          "details": [
+            "1-1 過渡性的環境背景",
+            "1-2 多元的文化景觀",
+            "1-3 經濟發展與轉型"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 過渡性的環境背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞季風、熱帶氣候、島陸區位與海陸交通；自然環境與文化接觸"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 多元的文化景觀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞宗教、民族、移民與多元文化景觀；地域差異"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-3 經濟發展與轉型",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞產業、出口加工、跨國投資與東協區域合作"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 從孤立到樞紐－澳紐",
+          "details": [
+            "2-1 位置孤立的澳紐",
+            "2-2 族群與移民社會的發展",
+            "2-3 產業發展與地緣樞紐"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 位置孤立的澳紐",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳洲、紐西蘭的地緣位置、自然環境、氣候與生物地理"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 族群與移民社會的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳紐原住民族、移民社會及多元文化"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-3 產業發展與地緣樞紐",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳紐農牧、礦業、服務業、貿易及區域樞紐"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 伊斯蘭世界的形成與發展－西亞北非",
+          "details": [
+            "3-1 乾燥而單調的自然環境",
+            "3-2 伊斯蘭文化的特徵",
+            "3-3 風雲詭譎的伊斯蘭世界"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 乾燥而單調的自然環境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西亞北非的乾燥氣候、水資源、地形及生活適應"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 伊斯蘭文化的特徵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭世界宗教文化、生活景觀與區域多樣性"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-3 風雲詭譎的伊斯蘭世界",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西亞北非水、石油等資源分布、區域經濟與資源衝突背景"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 歐洲文明的發展與擴散",
+          "details": [
+            "4-1 文明發展與環境的關係",
+            "4-2 歐洲的崛起與擴張",
+            "4-3 區域整合的契機與挑戰"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 文明發展與環境的關係",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲地形、氣候、海岸線及自然環境與人文發展"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 歐洲的崛起與擴張",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲工業化、海外交流、產業發展與經濟地理"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-3 區域整合的契機與挑戰",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲區域整合、歐盟、區域合作及發展挑戰"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 超級強國的興起與挑戰－美國",
+          "details": [
+            "5-1 美國的環境背景",
+            "5-2 移民社會的文化特色",
+            "5-3 產業發展與都市文明"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 美國的環境背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國自然環境、地形、氣候、資源及人口經濟區位"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 移民社會的文化特色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國移民、族群、文化多樣性與區域社會"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-3 產業發展與都市文明",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國農工服務業、科技產業、都市體系與經濟發展"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 南方區域的發展與挑戰－中南美洲",
+          "details": [
+            "6-1 南方區域的自然環境背景",
+            "6-2 列強入侵與政治發展",
+            "6-3 殖民地式經濟的發展"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 南方區域的自然環境背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中南美洲的自然環境與資源"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-2 列強入侵與政治發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中南美洲的殖民歷史、族群、文化景觀與社會變遷"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-3 殖民地式經濟的發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中南美洲的殖民地式經濟、商品出口、發展限制與產業轉型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 全球化",
+          "details": [
+            "7-1 全球各地發展條件的差異",
+            "7-2 交通革新與全球化",
+            "7-3 經濟地理空間重組"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 全球各地發展條件的差異",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "全球化、區域發展條件差異與不均衡"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-2 交通革新與全球化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "交通通訊革新、跨國流動、全球城市網絡與全球化"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-3 經濟地理空間重組",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "跨國企業、全球生產網絡、經濟地理空間重組及國際分工"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第A章 東西文化的接觸與區域發展－南亞",
+          "details": [
+            "A-1 東西文化接觸的環境背景",
+            "A-2 多元的文化景觀",
+            "A-3 經濟發展與轉型"
+          ],
+          "concepts": [
+            {
+              "name": "A-1 東西文化接觸的環境背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南亞季風、地形、自然環境及文化接觸的區位背景"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "A-2 多元的文化景觀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南亞宗教、民族、語言與多元文化景觀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "A-3 經濟發展與轉型",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南亞經濟發展、印度產業轉型、服務業與跨國投資"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第B章 南方區域的發展與挑戰－漠南非洲",
+          "details": [
+            "B-1 南方區域的自然環境背景",
+            "B-2 列強入侵與政治發展",
+            "B-3 殖民地式經濟發展"
+          ],
+          "concepts": [
+            {
+              "name": "B-1 南方區域的自然環境背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "漠南非洲的自然環境與資源"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "B-2 列強入侵與政治發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "漠南非洲的殖民歷史、族群、文化景觀與社會變遷"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "B-3 殖民地式經濟發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "漠南非洲的殖民地式經濟、商品出口、發展限制與產業轉型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-geography-3",
+      "grade": "高中二年級",
+      "subject": "地理",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "地理第三冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-1_comparison_geography_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "翰林 地理二上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。",
+      "units": [
+        {
+          "unit": "第1章 東西文化的接觸與區域發展－東南亞",
+          "details": [
+            "1-1 東西文化接觸的環境背景",
+            "1-2 多元的文化景觀",
+            "1-3 經濟發展與轉型"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 東西文化接觸的環境背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞季風、熱帶氣候、島陸區位與海陸交通；自然環境與文化接觸"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 多元的文化景觀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞宗教、民族、移民與多元文化景觀；地域差異"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-3 經濟發展與轉型",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞產業、出口加工、跨國投資與東協區域合作"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 從孤立到樞紐－以澳、紐為例",
+          "details": [
+            "2-1 大洋洲的地緣位置與自然環境",
+            "2-2 多元文化社會",
+            "2-3 產業發展與地緣樞紐"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 大洋洲的地緣位置與自然環境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳洲、紐西蘭的地緣位置、自然環境、氣候與生物地理"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 多元文化社會",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳紐原住民族、移民社會及多元文化"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-3 產業發展與地緣樞紐",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳紐農牧、礦業、服務業、貿易及區域樞紐"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 伊斯蘭世界的形成與發展",
+          "details": [
+            "3-1 乾燥的大地",
+            "3-2 伊斯蘭文化異同",
+            "3-3 資源紛爭與衝突"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 乾燥的大地",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西亞北非的乾燥氣候、水資源、地形及生活適應"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 伊斯蘭文化異同",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭世界宗教文化、生活景觀與區域多樣性"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-3 資源紛爭與衝突",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西亞北非水、石油等資源分布、區域經濟與資源衝突背景"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 歐洲文明的發展與擴散",
+          "details": [
+            "4-1 歐洲的自然環境",
+            "4-2 歐洲文明與經濟發展",
+            "4-3 歐盟的區域競爭與合作"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 歐洲的自然環境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲地形、氣候、海岸線及自然環境與人文發展"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 歐洲文明與經濟發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲工業化、海外交流、產業發展與經濟地理"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-3 歐盟的區域競爭與合作",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲區域整合、歐盟、區域合作及發展挑戰"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 超級強國的興起與挑戰－美國",
+          "details": [
+            "5-1 環境背景",
+            "5-2 多元族群共同塑造的文化特色",
+            "5-3 產業發展與都市文明"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 環境背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國自然環境、地形、氣候、資源及人口經濟區位"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 多元族群共同塑造的文化特色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國移民、族群、文化多樣性與區域社會"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-3 產業發展與都市文明",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國農工服務業、科技產業、都市體系與經濟發展"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 南方區域的發展與挑戰",
+          "details": [
+            "6-1 南方區域的環境背景",
+            "6-2 列強入侵與殖民影響",
+            "6-3 殖民地式經濟與發展"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 南方區域的環境背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "所選章名涵蓋的南方區域的自然環境與資源"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-2 列強入侵與殖民影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "所選章名涵蓋的南方區域的殖民歷史、族群、文化景觀與社會變遷"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-3 殖民地式經濟與發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "所選章名涵蓋的南方區域的殖民地式經濟、商品出口、發展限制與產業轉型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 全球化",
+          "details": [
+            "7-1 全球化的意義與發展",
+            "7-2 經濟地理空間重組",
+            "7-3 世界都市"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 全球化的意義與發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "全球化、區域發展條件差異與不均衡"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-2 經濟地理空間重組",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "跨國企業、全球生產網絡、經濟地理空間重組及國際分工"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-3 世界都市",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "世界都市的功能、網絡、金融與資訊服務"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-geography-3",
+      "grade": "高中二年級",
+      "subject": "地理",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第一學期",
+      "bookLabel": "地理第三冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-1_comparison_geography_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "additionalPages": [
+            4
+          ],
+          "schoolYear": 114,
+          "publisherTable": "南一 地理二上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。",
+      "units": [
+        {
+          "unit": "第1章 文化接觸下的東南亞區域如何發展",
+          "details": [
+            "1-1 形塑東南亞成為文化接觸帶的因素為何",
+            "1-2 東南亞的多元文化景觀有何特色",
+            "1-3 東南亞各國的經濟發展有何異同"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 形塑東南亞成為文化接觸帶的因素為何",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞季風、熱帶氣候、島陸區位與海陸交通；自然環境與文化接觸"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 東南亞的多元文化景觀有何特色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞宗教、民族、移民與多元文化景觀；地域差異"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-3 東南亞各國的經濟發展有何異同",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞產業、出口加工、跨國投資與東協區域合作"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 紐澳如何從孤立走向樞紐",
+          "details": [
+            "2-1 孤立的紐澳有何環境特色",
+            "2-2 「誰」形塑了紐澳的社會發展",
+            "2-3 澳紐走向樞紐的發展契機"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 孤立的紐澳有何環境特色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳洲、紐西蘭的地緣位置、自然環境、氣候與生物地理"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 「誰」形塑了紐澳的社會發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳紐原住民族、移民社會及多元文化"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-3 澳紐走向樞紐的發展契機",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳紐農牧、礦業、服務業、貿易及區域樞紐"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 伊斯蘭世界如何形成與發展",
+          "details": [
+            "3-1 伊斯蘭世界的生活舞臺有何特質",
+            "3-2 伊斯蘭世界有哪些獨特的風土民情及文化",
+            "3-3 為何沙漠難以分享資源"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 伊斯蘭世界的生活舞臺有何特質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西亞北非的乾燥氣候、水資源、地形及生活適應"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 伊斯蘭世界有哪些獨特的風土民情及文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭世界宗教文化、生活景觀與區域多樣性"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-3 為何沙漠難以分享資源",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西亞北非水、石油等資源分布、區域經濟與資源衝突背景"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 歐洲如何跨洋越陸的發展與擴張",
+          "details": [
+            "4-1 自然環境如何催生歐洲文明的興起",
+            "4-2 海外發展與工業革命之間的關聯性為何",
+            "4-3 歐洲為何走向整合"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 自然環境如何催生歐洲文明的興起",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲地形、氣候、海岸線及自然環境與人文發展"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 海外發展與工業革命之間的關聯性為何",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲工業化、海外交流、產業發展與經濟地理"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-3 歐洲為何走向整合",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲區域整合、歐盟、區域合作及發展挑戰"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 美國如何面對未來挑戰",
+          "details": [
+            "5-1 地理環境如何催生美國夢",
+            "5-2 當代各級產業發達的原因與隱憂為何",
+            "5-3 美國都市文明興盛的背景及特徵為何"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 地理環境如何催生美國夢",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國自然環境、地形、氣候、資源及人口經濟區位"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 當代各級產業發達的原因與隱憂為何",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國農工服務業、科技產業、都市體系與經濟發展"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-3 美國都市文明興盛的背景及特徵為何",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國都市化、都市文明、郊區化與都市空間特色"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 南方區域如何面對挑戰－中南美洲",
+          "details": [
+            "6-1 自然環境背景",
+            "6-2 殖民下的社會與文化",
+            "6-3 經濟的發展與挑戰"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 自然環境背景",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中南美洲的自然環境與資源"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-2 殖民下的社會與文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中南美洲的殖民歷史、族群、文化景觀與社會變遷"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-3 經濟的發展與挑戰",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中南美洲的殖民地式經濟、商品出口、發展限制與產業轉型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 全球化是世界經濟發展的良方嗎",
+          "details": [
+            "7-1 世界各地發展為何產生差異",
+            "7-2 全球化下的世界經濟如何轉變",
+            "7-3 世界經濟發展有哪些重要角色"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 世界各地發展為何產生差異",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "全球化、區域發展條件差異與不均衡"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-2 全球化下的世界經濟如何轉變",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "跨國企業、全球生產網絡、經濟地理空間重組及國際分工"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-3 世界經濟發展有哪些重要角色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "世界都市的功能、網絡、金融與資訊服務"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第A章 文化接觸下的南亞區域如何發展",
+          "details": [
+            "A-1 哪些環境條件造就南亞成為文化接觸區",
+            "A-2 南亞的多元文化景觀有何特色",
+            "A-3 印度有什麼魅力吸引全球投資目光"
+          ],
+          "concepts": [
+            {
+              "name": "A-1 哪些環境條件造就南亞成為文化接觸區",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南亞季風、地形、自然環境及文化接觸的區位背景"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "A-2 南亞的多元文化景觀有何特色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南亞宗教、民族、語言與多元文化景觀"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "A-3 印度有什麼魅力吸引全球投資目光",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "南亞經濟發展、印度產業轉型、服務業與跨國投資"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第B章 南方區域如何面對挑戰－漠南非洲",
+          "details": [
+            "B-1 自然與文化景觀",
+            "B-2 殖民下的社會與文化",
+            "B-3 經濟的發展與挑戰"
+          ],
+          "concepts": [
+            {
+              "name": "B-1 自然與文化景觀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "漠南非洲的自然環境與資源"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "B-2 殖民下的社會與文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "漠南非洲的殖民歷史、族群、文化景觀與社會變遷"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "B-3 經濟的發展與挑戰",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "漠南非洲的殖民地式經濟、商品出口、發展限制與產業轉型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-geography-3",
+      "grade": "高中二年級",
+      "subject": "地理",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第一學期",
+      "bookLabel": "地理第三冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "geography-crosswalk-transcription",
+      "scopeSelectionStatus": "geography-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/11-1_comparison_geography_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 5,
+          "schoolYear": 114,
+          "publisherTable": "三民 地理二上",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 5,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable"
+      },
+      "limitations": "114學年度課程對照左欄；未取得原檔雜湊，細部觀念為編輯性整理。",
+      "units": [
+        {
+          "unit": "第1章 東西文化的接觸與區域發展－東南亞",
+          "details": [
+            "1-1 自然環境的特色與影響",
+            "1-2 多元文化發展與景觀",
+            "1-3 經濟發展特色與區域結盟"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 自然環境的特色與影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞季風、熱帶氣候、島陸區位與海陸交通；自然環境與文化接觸"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-2 多元文化發展與景觀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞宗教、民族、移民與多元文化景觀；地域差異"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "1-3 經濟發展特色與區域結盟",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "東南亞產業、出口加工、跨國投資與東協區域合作"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第2章 從孤立到樞紐－以澳紐為例",
+          "details": [
+            "2-1 孤立的位置與自然環境",
+            "2-2 多元的民族與文化發展",
+            "2-3 發達的產業與地緣樞紐"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 孤立的位置與自然環境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳洲、紐西蘭的地緣位置、自然環境、氣候與生物地理"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-2 多元的民族與文化發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳紐原住民族、移民社會及多元文化"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "2-3 發達的產業與地緣樞紐",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "澳紐農牧、礦業、服務業、貿易及區域樞紐"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第3章 伊斯蘭世界的形成與發展－西亞、北非",
+          "details": [
+            "3-1 自然環境的特色",
+            "3-2 伊斯蘭文化的特色與衝突",
+            "3-3 紛擾的資源爭奪"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 自然環境的特色",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西亞北非的乾燥氣候、水資源、地形及生活適應"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-2 伊斯蘭文化的特色與衝突",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "伊斯蘭世界宗教文化、生活景觀與區域多樣性"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "3-3 紛擾的資源爭奪",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "西亞北非水、石油等資源分布、區域經濟與資源衝突背景"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第4章 歐洲文明的發展與擴散",
+          "details": [
+            "4-1 歐洲發展的自然基礎",
+            "4-2 工業革命與海外發展",
+            "4-3 區域結盟與挑戰"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 歐洲發展的自然基礎",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲地形、氣候、海岸線及自然環境與人文發展"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-2 工業革命與海外發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲工業化、海外交流、產業發展與經濟地理"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "4-3 區域結盟與挑戰",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "歐洲區域整合、歐盟、區域合作及發展挑戰"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第5章 美國的興起與挑戰",
+          "details": [
+            "5-1 優越的自然環境",
+            "5-2 多元的族群與文化",
+            "5-3 美國的經濟發展",
+            "5-4 都市文明的特徵"
+          ],
+          "concepts": [
+            {
+              "name": "5-1 優越的自然環境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國自然環境、地形、氣候、資源及人口經濟區位"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-2 多元的族群與文化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國移民、族群、文化多樣性與區域社會"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-3 美國的經濟發展",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國農工服務業、科技產業、都市體系與經濟發展"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "5-4 都市文明的特徵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "美國都市化、都市文明、郊區化與都市空間特色"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第6章 中南美洲的發展與挑戰",
+          "details": [
+            "6-1 南方區域中的中南美洲",
+            "6-2 中南美洲的自然環境",
+            "6-3 列強殖民帶來的影響與困境",
+            "6-4 經濟發展過程與困境"
+          ],
+          "concepts": [
+            {
+              "name": "6-1 南方區域中的中南美洲",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中南美洲的自然環境與資源"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-2 中南美洲的自然環境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中南美洲的自然環境與資源"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-3 列強殖民帶來的影響與困境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中南美洲的殖民歷史、族群、文化景觀與社會變遷"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "6-4 經濟發展過程與困境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "中南美洲的殖民地式經濟、商品出口、發展限制與產業轉型"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "第7章 全球化",
+          "details": [
+            "7-1 發展條件的空間差異",
+            "7-2 交通革新與全球化",
+            "7-3 經濟地理空間重組",
+            "7-4 全球化與世界都市"
+          ],
+          "concepts": [
+            {
+              "name": "7-1 發展條件的空間差異",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "全球化、區域發展條件差異與不均衡"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-2 交通革新與全球化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "交通通訊革新、跨國流動、全球城市網絡與全球化"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-3 經濟地理空間重組",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "跨國企業、全球生產網絡、經濟地理空間重組及國際分工"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            },
+            {
+              "name": "7-4 全球化與世界都市",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "世界都市的功能、網絡、金融與資訊服務"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學專業地理模型與進階 GIS 操作",
+                "未經核實的即時統計或國際事件"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
