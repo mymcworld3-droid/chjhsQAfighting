@@ -232,3 +232,24 @@
   #tactical-combat .tc-seal-guide{font-size:11px;max-width:78%;padding:9px}
   #tactical-combat .tc-seal-target-hint{max-width:76%;font-size:10px}
 }
+
+/* Equipment confirmation is an overlay, not part of the map's flex layout. */
+#tactical-combat .tc-top{position:relative;z-index:6}
+#tactical-combat .tc-weapon-toast{
+  position:absolute;top:calc(100% + 9px);right:12px;z-index:8;
+  width:max-content;max-width:calc(100% - 24px);
+  padding:7px 13px;border:1px solid #b9a57466;border-radius:8px;
+  background:rgba(28,34,28,.96);color:#e8dfc5;
+  box-shadow:0 4px 14px #0005;pointer-events:none;
+  font-size:13px;line-height:1.4;letter-spacing:.035em;
+  animation:tc-weapon-toast 1.9s ease both;
+}
+#tactical-combat .tc-weapon-toast::before{content:"✓";color:#b9d9b5;margin-right:7px}
+@keyframes tc-weapon-toast{
+  0%{opacity:0;transform:translateY(-4px)}
+  10%,80%{opacity:1;transform:translateY(0)}
+  100%{opacity:0;transform:translateY(-2px)}
+}
+@media(prefers-reduced-motion:reduce){
+  #tactical-combat .tc-weapon-toast{animation:none}
+}

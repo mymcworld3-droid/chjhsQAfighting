@@ -122,6 +122,19 @@ async function api(path,body,signal){
 }
 function valid(e,account){return opened&&e===epoch&&account===getMainUser()?.uid;}
 function notice(text){globalThis.QABattlePresentation.notice($('[data-notice]'),text);}
+let weaponToastTimer=null;
+function clearWeaponToast(){
+  clearTimeout(weaponToastTimer);weaponToastTimer=null;
+  const toast=$('[data-weapon-toast]');
+  if(toast){toast.hidden=true;toast.textContent='';}
+}
+function showWeaponToast(text){
+  clearWeaponToast();
+  const toast=$('[data-weapon-toast]');if(!toast)return;
+  void toast.offsetWidth;
+  toast.textContent=text;toast.hidden=false;
+  weaponToastTimer=setTimeout(clearWeaponToast,1900);
+}
 function tutorialStep(){
   return mode==='pve'&&state?.trial?.stage===1
     ? (window.firstAnswerGuideStep?.(uid)??-1) : -1;
@@ -244,7 +257,7 @@ async function editBattleWeapon(slot,weaponId){
     const live=await api('/api/tactical/state?mode='+battleChannel);
     if(valid(session,account)&&state?.id===roomId&&live.state)
       accept(live.state,++op);
-    if(valid(session,account))notice(weaponId?'武器已裝備，可立即選用三招':'武器已卸下');
+    if(valid(session,account)&&state?.id===roomId){notice('');showWeaponToast(weaponId?'武器已裝備':'武器已卸下');}
   }catch(error){if(valid(session,account))notice(error.message||'武器更新失敗');}
   finally{busy=false;if(valid(session,account)){renderBattleLoadouts();updateControls();}}
 }
@@ -294,7 +307,7 @@ function syncPvpSkillTabs(){
 function ensure(){
   if(!document.getElementById('manual-training-celebration-style')){const link=document.createElement('link');link.id='manual-training-celebration-style';link.rel='stylesheet';link.href='/styles/manual-training-celebration.css?v=20261126-refinement-v1';document.head.append(link);}
   if(root){keyboardGuard||=installTacticalKeyboardGuard(root);return;}
-  if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css?v=20261116-live-loadouts-v1';document.head.append(link);}
+  if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css?v=20261126-weapon-toast-v1';document.head.append(link);}
   if(!document.getElementById('tactical-manual-recap-style')){
     const link=document.createElement('link');link.id='tactical-manual-recap-style';link.rel='stylesheet';
     link.href='/styles/tactical-manual-recap.css?v=20261118-battle-exp-v1';document.head.append(link);
@@ -337,7 +350,7 @@ function ensure(){
   }
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261115-field-ink';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
-  root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" class="tc-loadout-toggle" data-loadout-toggle aria-expanded="false" hidden>配置</button><button type="button" data-close data-qy-nav-action="collapse" aria-label="收起戰場">收起</button></div></header>
+  root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" class="tc-loadout-toggle" data-loadout-toggle aria-expanded="false" hidden>配置</button><button type="button" data-close data-qy-nav-action="collapse" aria-label="收起戰場">收起</button></div><div class="tc-weapon-toast" data-weapon-toast role="status" aria-live="polite" aria-atomic="true" hidden></div></header>
     <div class="tc-loadout-popover" data-loadout-menu role="group" aria-label="戰場功法配置" hidden></div>
     <div class="tc-notice" data-notice role="status" hidden></div><div class="tc-manual-xp-host" data-manual-xp-host role="status" aria-live="polite" aria-atomic="true"></div><div class="tc-main" data-main role="region" aria-label="戰場內容"></div><div class="tc-modal" data-modal hidden></div>`;
   document.body.append(root);
@@ -2372,6 +2385,7 @@ async function open(nextMode='pve',options={}){
 }
 function close(){
   if(!root)return;
+  clearWeaponToast();
   warmedCombatAudioRoomId='';
   const completedFirstStage=mode==='pve'&&state?.trial?.stage===1&&state.status==='finished'&&
     state.winner==='player'&&tutorialStep()===9;

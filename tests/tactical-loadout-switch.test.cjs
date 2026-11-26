@@ -121,3 +121,26 @@ test('client does not gate the PvE right ring on a legacy manualWeaponMode flag'
   assert.match(src,/function currentWeaponIds\(hero\)/);
   assert.match(src,/rightWheel='two-weapons-v4'/);
 });
+
+test('equipment confirmation floats, replaces its timer and clears on closing',()=>{
+  const src=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
+  const style=fs.readFileSync(path.join(__dirname,'../public/styles/tactical-combat.css'),'utf8');
+
+  const node={hidden:true,textContent:'',offsetWidth:0};
+  const timers=new Map();let serial=0;
+  const code=src.slice(src.indexOf('let weaponToastTimer='),src.indexOf('function tutorialStep()'));
+  const toast=new Function('$','setTimeout','clearTimeout',code+';return {showWeaponToast,clearWeaponToast};')(
+    ()=>node,(fn,ms)=>{assert.equal(ms,1900);timers.set(++serial,fn);return serial;},id=>timers.delete(id));
+  toast.showWeaponToast('武器已裝備');
+  assert.equal(node.hidden,false);assert.equal(node.textContent,'武器已裝備');
+  toast.showWeaponToast('武器已卸下');
+  assert.equal(timers.size,1);assert.equal(node.textContent,'武器已卸下');
+  [...timers.values()][0]();
+  assert.equal(node.hidden,true);assert.equal(node.textContent,'');assert.equal(timers.size,0);
+  toast.showWeaponToast('武器已裝備');toast.clearWeaponToast();
+  assert.equal(node.hidden,true);assert.equal(timers.size,0);
+  assert.match(src,/function close\(\)\{\s*if\(!root\)return;\s*clearWeaponToast\(\)/);
+  assert.match(style,/\.tc-weapon-toast\s*\{\s*position:absolute/);
+  assert.match(style,/pointer-events:none/);
+  assert.doesNotMatch(src,/武器已裝備，可立即選用三招/);
+});

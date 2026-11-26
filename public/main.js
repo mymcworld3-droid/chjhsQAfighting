@@ -177,7 +177,7 @@ async function loadXiuxianFeaturesSafely() {
       ) {
         loadedModule = await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
       } else if (modulePath === './cultivation/tactical-combat.js') {
-        loadedModule = await import(`${modulePath}?v=20261126-flying-sword-v1`);
+        loadedModule = await import(`${modulePath}?v=20261126-weapon-toast-v1`);
       } else if (modulePath === './cultivation/daily-meditation.js') {
         loadedModule = await import(`${modulePath}?v=20261125-stone-reward-icon-v2`);
       } else if (modulePath === './cultivation/home-wireframe.js') {
