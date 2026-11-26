@@ -72,8 +72,11 @@ const label=document.createElement('b');label.textContent=u.unit;summary.append(
 if(u.book?.scopeSelectionStatus==='historical-civics-crosswalk'){
  const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='早期課程對照 · 學年度與原檔待核';group.append(note);
 }
+if(u.book?.scopeSelectionStatus==='nani-filename-index'){
+ const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='第三方課名搜尋索引 · 整理考點 · 正式課本待核';group.append(note);
+}
 if(u.book?.scopeSelectionStatus==='nani-companion-index'){
- const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='南一評量目次 · 整理考點 · 正式課本待核';group.append(note);
+ const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent=u.book.bookId==='nani-108-chinese-3'&&u.unit.startsWith('自學')?'第三方課名搜尋索引 · 正式課本待核':'南一評量目次 · 整理考點 · 正式課本待核';group.append(note);
 }
 if(['publisher-language-outline','language-index-v2'].includes(u.book?.scopeSelectionStatus)){
  const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='出版社公開目次 · 細項為整理考點 · 學年度未標示';group.append(note);
@@ -126,8 +129,8 @@ async function loadCatalogue(g,s){
    if(!memo.has(supplementFile))memo.set(supplementFile,fetch('/'+supplementFile).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(supplementFile);throw e;}));
    const supplemental=await memo.get(supplementFile);
    let additional=[];
-   if(language&&s==='國文'&&g!=='高中三年級'){
-     const p='curriculum-supplements/nani-chinese.json?v=20261126-batch11';
+   if(language&&s==='國文'){
+     const p='curriculum-supplements/nani-chinese.json?v=20261126-batch13';
      if(!memo.has(p))memo.set(p,fetch('/'+p).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(p);throw e;}));
      additional=(await memo.get(p)).books.filter(b=>b.grade===g&&b.subject===s);
    }
@@ -155,6 +158,7 @@ function catalogOptions(){
   else if(records.every(b=>b.scopeSelectionStatus==='verified-crosswalk'))option.textContent+='（課程對照）';
   else if(records.some(b=>b.scopeSelectionStatus==='verified-crosswalk'))option.textContent+='（含課程對照）';
   else if(records.every(b=>b.scopeSelectionStatus==='historical-civics-crosswalk'))option.textContent+='（早期課程對照・年份未標示）';
+  else if(records.every(b=>b.scopeSelectionStatus==='nani-filename-index'))option.textContent+='（第三方課名索引・正式版待核）';
   else if(records.every(b=>b.scopeSelectionStatus==='nani-companion-index'))option.textContent+='（評量目次・整理考點）';
   else if(records.every(b=>['publisher-language-outline','language-index-v2'].includes(b.scopeSelectionStatus)))option.textContent+='（公開目次・整理考點）';
   else if(records.every(b=>b.schoolYear==null)&&records.some(b=>b.scopeSelectionStatus==='verified-toc'))option.textContent+='（學年度未標示）';

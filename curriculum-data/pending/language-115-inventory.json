@@ -111,7 +111,7 @@
       "publisher": "南一",
       "volume": 3,
       "bookId": "nani-108-chinese-3",
-      "status": "partial-companion-index-year-unconfirmed",
+      "status": "companion-plus-filename-index-year-unconfirmed",
       "source": "https://www.efficient.com.tw/?product_id=11796&route=product%2Fproduct"
     },
     {
@@ -126,9 +126,9 @@
       "subject": "國文",
       "publisher": "南一",
       "volume": 5,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "nani-108-chinese-5",
+      "status": "filename-index-year-unconfirmed",
+      "source": "https://40.oeoe.to/products/146/XXC12014"
     },
     {
       "subject": "國文",
