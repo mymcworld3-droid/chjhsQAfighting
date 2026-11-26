@@ -1,10 +1,10 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const C=require('../curriculum-catalog.cjs'),R=require('../public/cultivation/curriculum-range-rules.js'),D=require('../public/curriculum-supplements/civics.json');
-function scope(b,u,name){return {path:'高中/'+b.grade+'/'+b.subject,detail:u.unit,sub_topics:[name],curriculum:{bookId:b.bookId,edition:b.edition,term:b.term,schoolYear:b.schoolYear,conceptIds:[]}}}
+function scope(b,u,name){return {path:[b.subject,b.grade,b.term,b.edition+' · '+b.schoolYear+'學年度',b.subject].join('/'),detail:u.unit,sub_topics:[name],curriculum:{bookId:b.bookId,edition:b.edition,term:b.term,schoolYear:b.schoolYear,conceptIds:[]}}}
 test('16 source-labelled civics books distinguish edition and semester',()=>{
  assert.equal(D.books.length,16);assert.equal(new Set(D.books.map(b=>b.bookId)).size,16);
  for(const [grade,n] of [['高中一年級',10],['高中二年級',6],['高中三年級',0]])assert.equal(C.catalog(grade,'公民').books.filter(b=>b.scopeSelectionStatus==='civics-crosswalk-transcription'&&R.selectableBook(b)).length,n);
- for(const b of D.books){assert.ok(R.selectableBook(b));assert.equal(b.releaseStatus,'blocked');for(const u of b.units)for(const name of u.details){const s=scope(b,u,name),t={subject:b.subject,level:b.grade,scope:s};assert.equal(C.validateScope(s,b.subject,b.grade).bookId,b.bookId);assert.equal(C.sectionGuidance(t).length,1);assert.match(C.scopePrompt(t),/editorialSectionGuidance/);const share=R.shareSelection([s]);assert.ok(share.ok);assert.deepEqual(R.readSharedSelection(share.code).units,[s]);assert.throws(()=>C.validateScope({...s,sub_topics:['不存在的細項']},b.subject,b.grade));}}
+ for(const b of D.books){assert.ok(R.selectableBook(b));assert.equal(b.releaseStatus,'blocked');for(const u of b.units)for(const name of u.details){const s=scope(b,u,name),t={subject:b.subject,level:b.grade,scope:s};assert.equal(C.validateScope(s,b.subject,b.grade).bookId,b.bookId);assert.equal(C.sectionGuidance(t).length,1);assert.match(C.scopePrompt(t),/editorialSectionGuidance/);const share=R.shareSelection([s]);assert.ok(share.ok,share.message);assert.deepEqual(R.readSharedSelection(share.code).units,[s]);assert.throws(()=>C.validateScope({...s,sub_topics:['不存在的細項']},b.subject,b.grade));}}
 });
 test('edition variants and multi-page evidence cannot be conflated',()=>{
  const find=id=>D.books.find(b=>b.bookId===id);
