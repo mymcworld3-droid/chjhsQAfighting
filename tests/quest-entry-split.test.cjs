@@ -23,3 +23,8 @@ test('仙道 uses a dedicated page route, while normal tasks retain their dialog
  assert.match(ui,/pathPage\?\.append\(panel\)/);
  assert.match(ui,/此境界解鎖玩法/);
 });
+
+test('realm summary shows unlocks directly below the stage status without duplicate stage-goal card',()=>{
+ assert.doesNotMatch(ui,/class="path-stage-progress"|階段目標|目標修為 \$\{group.target\}/);
+ assert.match(ui,/class="path-stage-status[^\n]*\n\s*<div class="path-unlocks">/);
+});

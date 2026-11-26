@@ -156,7 +156,6 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       <section class="path-stage-summary" aria-label="${esc(group.name)}階段">
         <div class="path-stage-aura" aria-hidden="true"></div>${badge(group,true)}
         <h2>${esc(group.name)}</h2><span class="path-stage-status is-${state(group)}">${group.done?'此階段已完成':group.id===activeId?'當前仙道階段':'後續仙道階段'}</span>
-        <div class="path-stage-progress"><small>階段目標</small><strong>${group.claimed} / ${group.rows.length}</strong><span class="path-task-track"><i style="width:${group.claimed/group.rows.length*100}%"></i></span><small>目標修為 ${group.target}</small></div>
         <div class="path-unlocks"><h3>此境界解鎖玩法</h3><div class="path-unlock-grid">${unlockMarkup}</div></div>
       </section>
       <section class="path-stage-tasks" aria-label="階段任務"><header><h3>${esc(group.name)} · 修行任務</h3><small>${s.pathCompleted??s.pathIndex} / ${s.pathTotal} 全程進度</small></header>${rows}
@@ -314,7 +313,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if ($('quest-panel')) return;
     const entry = $('quest-open');
     if (!entry) return;
-    const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css?v=20261126-path-fullscreen'; document.head.append(link);
+    const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css?v=20261126-path-unlocks-only'; document.head.append(link);
     const dialog = document.createElement('dialog'); dialog.id = 'quest-dialog'; dialog.className = 'quest-dialog'; dialog.setAttribute('role', 'dialog'); dialog.setAttribute('aria-modal', 'true'); dialog.setAttribute('aria-labelledby', 'quest-title');
     const panel = document.createElement('section'); panel.id = 'quest-panel'; panel.className = 'quest-panel'; panel.setAttribute('aria-label', '修行任務');
     panel.innerHTML = `<header class="quest-heading"><div><small id="quest-heading-kicker">宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
