@@ -23,3 +23,100 @@
   #page-gameplay .gameplay-shell{padding-top:16px;gap:14px}
   #nav-gameplay i{font-size:17px}
 }
+
+/* Landscape expedition atlas: category rail + actual world destinations, not a
+   second modal just to choose a dungeon. Portrait retains the original list. */
+#page-gameplay .gameplay-atlas{display:none}
+@media(orientation:landscape){
+  #page-gameplay.gameplay-page:has(.gameplay-shell[data-atlas-ready="true"]){
+    width:100%;max-width:none;padding:0 clamp(10px,2vw,28px) 8px!important;
+    overflow-x:hidden;
+  }
+  #page-gameplay .gameplay-shell[data-atlas-ready="true"]{
+    position:relative;isolation:isolate;
+    width:100%;max-width:none;
+    min-height:clamp(220px,calc(100dvh - 155px),820px);
+    padding:clamp(10px,2.5vh,22px) clamp(10px,2vw,28px);
+    box-sizing:border-box;
+    display:grid;grid-template-columns:clamp(122px,20%,238px) minmax(0,1fr);
+    grid-template-rows:auto minmax(0,1fr);
+    grid-template-areas:"heading atlas" "categories atlas";
+    column-gap:clamp(10px,2.4vw,36px);row-gap:clamp(10px,3vh,25px);
+    align-items:stretch;align-content:start;
+    background:
+      linear-gradient(90deg,#181b19e6 0%,#25282187 23%,#34362b19 54%,#1c252322 100%),
+      linear-gradient(0deg,#1c231df2 0%,transparent 30%,#20241d35 100%),
+      url('/assets/scenes/mountains-landscape-ai.webp') center 55%/cover no-repeat;
+    border:0;border-radius:0;
+  }
+  #page-gameplay .gameplay-shell[data-atlas-ready="true"] .gameplay-heading{
+    grid-area:heading;border:0;padding:0;align-self:start;
+    text-shadow:0 2px 8px #0d120e;
+  }
+  #page-gameplay .gameplay-heading small{color:#e2d2ac;font-size:clamp(10px,1.5vh,13px);margin-bottom:3px}
+  #page-gameplay .gameplay-heading h2{font-size:clamp(24px,4.5vh,38px);color:#f3e3bf}
+  #page-gameplay .gameplay-entries{grid-area:categories;align-content:start;gap:clamp(7px,1.5vh,12px)}
+  #page-gameplay .gameplay-entries>button{
+    width:100%;min-height:clamp(40px,9vh,64px);padding:8px clamp(7px,1.4vw,16px);
+    display:flex;align-items:center;gap:clamp(6px,1vw,12px);
+    border:1px solid #c8ae7455;border-radius:8px;
+    color:#e4d8be;background:linear-gradient(90deg,#282821e8,#323429a1);
+    box-shadow:none;cursor:pointer;text-align:left;
+  }
+  #page-gameplay .gameplay-entries>button>span{flex:1;min-width:0}
+  #page-gameplay .gameplay-entries>button strong{font-size:clamp(13px,2.2vh,18px);white-space:nowrap}
+  #page-gameplay .gameplay-entries>button small{display:none}
+  #page-gameplay .gameplay-entries>button>i:first-child{font-size:clamp(15px,2.8vh,23px);color:#cfb47b}
+  #page-gameplay .gameplay-entries>button>i:last-child{font-size:10px;color:inherit}
+  #page-gameplay .gameplay-entries>button[aria-pressed="true"]{
+    background:linear-gradient(115deg,#f0d9a0,#c6a46a);
+    border-color:#f6dfaa;color:#3c2b18;box-shadow:0 3px 12px #18130e55,inset 0 1px #fff2cb;
+  }
+  #page-gameplay .gameplay-entries>button[aria-pressed="true"]>i{color:#654b25}
+  #page-gameplay .gameplay-atlas{
+    grid-area:atlas;min-width:0;min-height:0;position:relative;
+    display:grid;grid-template-rows:auto minmax(0,1fr) auto;align-content:stretch;
+    padding:0 clamp(4px,1vw,14px);gap:4px;
+  }
+  #page-gameplay .gameplay-atlas-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;text-shadow:0 2px 8px #131914}
+  #page-gameplay .gameplay-atlas-heading h3{font:700 clamp(16px,3vh,24px)/1.4 "Noto Serif TC",serif;color:#f4e3bb;letter-spacing:.12em;margin:0}
+  #page-gameplay .gameplay-atlas-heading>span{color:#e7dcc2;font-size:clamp(10px,1.8vh,13px);white-space:nowrap}
+  #page-gameplay .gameplay-atlas-sites{
+    min-height:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));
+    align-items:center;justify-items:center;gap:clamp(6px,1.5vw,24px);
+  }
+  #page-gameplay .gameplay-atlas-node{
+    position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    width:min(100%,420px);height:100%;min-height:0;max-height:clamp(180px,62vh,560px);
+    padding:0 4px 4px;border:0;background:transparent;color:#f9e6b7;cursor:pointer;
+    font-family:inherit;gap:0;
+  }
+  #page-gameplay .gameplay-atlas-node img{
+    display:block;width:100%;height:clamp(105px,calc(100dvh - 238px),475px);
+    max-width:100%;object-fit:contain;object-position:center bottom;
+    filter:drop-shadow(0 12px 12px #111b1b8c);
+    transition:transform .2s ease,filter .2s ease;pointer-events:none;
+  }
+  #page-gameplay .gameplay-atlas-node:hover img,#page-gameplay .gameplay-atlas-node:focus-visible img{
+    transform:translateY(-3px);filter:drop-shadow(0 0 12px #efd7a569) drop-shadow(0 12px 12px #111b1b8c);
+  }
+  #page-gameplay .gameplay-atlas-name{
+    z-index:1;margin-top:-14px;display:flex;align-items:center;justify-content:center;gap:clamp(6px,1vw,12px);
+    min-height:32px;padding:6px clamp(12px,2vw,25px);border:1px solid #d9ba80;
+    background:linear-gradient(105deg,#3c3626,#211e17);box-shadow:0 4px 12px #0c120ec9,inset 0 1px #e5c89133;
+    color:#f8dda0;border-radius:5px;font:700 clamp(16px,3.3vh,25px)/1.2 "Noto Serif TC",serif;
+    letter-spacing:.09em;white-space:nowrap;
+  }
+  #page-gameplay .gameplay-atlas-name i{font-size:.7em;color:#d9b778}
+  #page-gameplay .gameplay-atlas-node>small{color:#f2e3c4;text-shadow:0 2px 6px #081110;font-size:clamp(10px,1.8vh,13px);margin-top:7px}
+  #page-gameplay .gameplay-atlas-hint{justify-self:end;color:#e3d8bd;text-shadow:0 2px 6px #10160e;font-size:clamp(10px,1.8vh,13px);margin:0}
+  #page-gameplay .gameplay-atlas-node:focus-visible{outline:2px solid #f1d29a;outline-offset:2px;border-radius:8px}
+  #page-gameplay .gameplay-atlas-hint i{margin-right:5px;color:#e7ce99}
+}
+@media(orientation:landscape) and (max-height:420px){
+  #page-gameplay .gameplay-shell[data-atlas-ready="true"]{padding-block:8px;min-height:clamp(176px,calc(100dvh - 124px),280px);row-gap:8px}
+  #page-gameplay .gameplay-atlas-node img{height:clamp(85px,calc(100dvh - 198px),225px)}
+  #page-gameplay .gameplay-atlas-name{min-height:28px;margin-top:-10px;padding-block:4px}
+  #page-gameplay .gameplay-atlas-node>small{margin-top:4px}
+}
+@media(prefers-reduced-motion:reduce){#page-gameplay .gameplay-atlas-node img{transition:none}#page-gameplay .gameplay-atlas-node:hover img{transform:none}}

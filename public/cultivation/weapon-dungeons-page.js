@@ -1,4 +1,5 @@
 import './weapon-presentation.js';
+import './weapon-dungeon-rules.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {weaponDungeonTicketMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 let dialog=null,data=null,loading=false,serial=0,trigger=null,selectedId=null;
@@ -71,7 +72,7 @@ async function enter(difficulty){
   }catch(error){if(serial===token&&getMainUser()?.uid===account){loading=false;paint(error.message||'副本暫時無法開啟');if(!dialog.open)dialog.showModal();}}
   finally{if(serial===token)loading=false;}
 }
-export async function openWeaponDungeons(){
+export async function openWeaponDungeons(dungeonId=null){
   const account=getMainUser()?.uid;
   if(!account){window.showToast?.('請先登入後挑戰武器副本');return;}
   ensure();trigger=document.activeElement;data=null;selectedId=null;loading=true;paint('正在同步副本券與秘境進度…');
@@ -80,15 +81,72 @@ export async function openWeaponDungeons(){
     const response=await authenticatedMainFetch('/api/tactical/weapon-dungeons'),result=await response.json();
     if(serial!==token||getMainUser()?.uid!==account)return;
     if(!response.ok||!result.ok)throw Error(result.error||'副本資料同步失敗');
-    data=result.state;loading=false;paint();
+    data=result.state;selectedId=typeof dungeonId==='string'&&catalog().some(d=>d.id===dungeonId)?dungeonId:null;loading=false;paint();
   }catch(error){if(serial===token){loading=false;paint(error.message||'副本資料同步失敗');}}
+}
+// Landscape: the page itself is the category/catalog screen. Only the selected
+// dungeon's detail dialog is opened. The portrait launcher stays unchanged.
+const landscape=()=>window.matchMedia?.('(orientation: landscape)')?.matches===true;
+let atlas=null,atlasCategory='weapon';
+const atlasArt={ 'peak-stone':'/assets/training/layers/landscape-island-secret.webp' };
+function atlasMarkup(category){
+  if(category==='coop'&&window.QA_COOP_DUNGEON_ENABLED===true){
+    return `<div class="gameplay-atlas-heading"><h3>合作副本</h3></div><div class="gameplay-atlas-sites"><button type="button" class="gameplay-atlas-node" data-atlas-coop><img src="/assets/training/layers/landscape-island-secret.webp" alt="" draggable="false"><span class="gameplay-atlas-name"><i class="fa-solid fa-people-group" aria-hidden="true"></i> 合作秘境</span><small>組隊挑戰</small></button></div>`;
+  }
+  const entries=globalThis.QAWeaponDungeons?.CATALOG||[];
+  return `<div class="gameplay-atlas-heading"><h3>武器副本</h3><span>${entries.length} 座秘境開放</span></div>
+    <div class="gameplay-atlas-sites">${entries.map(d=>`<button type="button" class="gameplay-atlas-node" data-atlas-dungeon="${esc(d.id)}" aria-label="選擇${esc(d.name)}">
+      <img src="${atlasArt[d.id]||'/assets/training/layers/landscape-island-secret.webp'}" alt="" draggable="false">
+      <span class="gameplay-atlas-name"><i class="fa-solid fa-mountain" aria-hidden="true"></i>${esc(d.name)}<i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
+      <small>${esc(d.subtitle)}</small></button>`).join('')}</div>
+    <p class="gameplay-atlas-hint"><i class="fa-solid fa-compass" aria-hidden="true"></i> 選擇秘境，查看可挑戰的境界</p>`;
+}
+function selectCategory(category='weapon'){
+  atlasCategory=category==='coop'&&window.QA_COOP_DUNGEON_ENABLED===true?'coop':'weapon';
+  if(!atlas)return;
+  atlas.innerHTML=atlasMarkup(atlasCategory);
+  for(const [id,key] of [['gameplay-weapon-dungeon-entry','weapon'],['gameplay-dungeon-entry','coop']]){
+    const button=document.getElementById(id);
+    if(landscape())button?.setAttribute('aria-pressed',String(key===atlasCategory));
+    else button?.removeAttribute?.('aria-pressed');
+  }
+}
+function mountAtlas(target){
+  const shell=document.querySelector('#page-gameplay .gameplay-shell');
+  if(!shell||atlas)return;
+  atlas=document.createElement('section');atlas.id='gameplay-dungeon-atlas';atlas.className='gameplay-atlas';
+  atlas.setAttribute('aria-label','副本選擇');shell.append(atlas);shell.dataset.atlasReady='true';
+  atlas.addEventListener('click',event=>{
+    if(!landscape())return;
+    const node=event.target.closest('[data-atlas-dungeon]');
+    if(node){void openWeaponDungeons(node.dataset.atlasDungeon);return;}
+    if(event.target.closest('[data-atlas-coop]')&&window.QA_COOP_DUNGEON_ENABLED===true)void window.openDungeonLobby?.();
+  });
+  // Preserve the inactive cooperative mode and its existing portrait launcher.
+  target.addEventListener('click',event=>{
+    if(!landscape()||window.QA_COOP_DUNGEON_ENABLED!==true||!event.target.closest('#gameplay-dungeon-entry'))return;
+    event.preventDefault();event.stopImmediatePropagation();selectCategory('coop');
+  },true);
+  const media=window.matchMedia?.('(orientation: landscape)');
+  media?.addEventListener?.('change',()=>selectCategory('weapon'));
+  const page=document.getElementById('page-gameplay');
+  let active=page?.classList.contains('active-page');
+  if(page&&typeof MutationObserver==='function'){
+    new MutationObserver(()=>{
+      const next=page.classList.contains('active-page');
+      if(next&&!active)selectCategory('weapon');
+      active=next;
+    }).observe(page,{attributes:true,attributeFilter:['class']});
+  }
+  selectCategory('weapon');
 }
 function mount(){
   const target=document.querySelector('#page-gameplay .gameplay-entries');
   if(!target||document.getElementById('gameplay-weapon-dungeon-entry'))return;
   const button=document.createElement('button');button.type='button';button.id='gameplay-weapon-dungeon-entry';button.className='gameplay-dungeon-entry';
   button.innerHTML='<i class="fa-solid fa-mountain" aria-hidden="true"></i><span><strong>武器副本</strong><small>單人秘境 · 武器掉落 · 六階挑戰</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i>';
-  button.addEventListener('click',()=>void openWeaponDungeons());target.append(button);
+  button.addEventListener('click',()=>{if(landscape()&&atlas)selectCategory('weapon');else void openWeaponDungeons();});target.append(button);
+  mountAtlas(target);
 }
 window.openWeaponDungeons=openWeaponDungeons;
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
