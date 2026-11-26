@@ -84,7 +84,7 @@ function forward(id){
 }
 function activate(action){
   switch(action){
-    case 'path':return forward('xiuxian-path');
+    case 'path':return window.openCultivationPathQuests ? window.openCultivationPathQuests() : window.showToast?.('仙道暫時無法開啟，請稍後重試。');
     case 'quest':return forward('quest-open');
     case 'meditation':return forward('xiuxian-meditate');
     case 'learning':return window.switchToPage?.('page-learning');

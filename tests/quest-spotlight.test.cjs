@@ -68,13 +68,13 @@ test('rollover and account changes cannot expose expired rewards or another play
 
 test('home rendering reuses data, shows tickets first and disables claims while existing requests run', () => {
   const { ctx, data, elements } = fixture();
-  data.path = quest('<任務>', 8);
+  data.daily = [quest('<任務>', 8)];
   ctx.renderSpotlight();
   assert.equal(elements.get('quest-spotlight-title').textContent, '<任務>');
   assert.equal(elements.get('quest-spotlight-progress').textContent, '答對 8／10');
   assert.equal(elements.get('quest-spotlight-reward').textContent, '抽獎券 ×1 · 120 靈石');
   assert.equal(elements.get('quest-spotlight-action').textContent, '繼續問道 →');
-  data.path.claimable = true; data.path.current = 10;
+  data.daily[0].claimable = true; data.daily[0].current = 10;
   ctx.renderSpotlight();
   assert.equal(elements.get('quest-spotlight-action').textContent, '領取獎勵 →');
   assert.ok(elements.get('quest-spotlight').classes.has('quest-spotlight-ready'));
@@ -94,6 +94,15 @@ test('the main progress card prioritizes genuine daily progress over path or wee
   assert.equal(elements.get('quest-spotlight-progress').textContent,'答對 9／10');
   assert.equal(elements.get('quest-spotlight-reward').textContent,'80 靈石 · 1 修為');
   data.daily[0].claimed=true;
+  ctx.renderSpotlight();
+  assert.equal(elements.get('quest-spotlight-title').textContent,'今日任務皆已完成');
+});
+
+test('home daily shortcut never substitutes a path or weekly mission when daily rows are missing', () => {
+  const {ctx,data,elements}=fixture();
+  data.path=quest('path',10,10,{claimable:true});
+  data.weekly=[quest('weekly',10,10,{claimable:true})];
+  assert.equal(ctx.recommendedDailyQuest(),null);
   ctx.renderSpotlight();
   assert.equal(elements.get('quest-spotlight-title').textContent,'今日任務皆已完成');
 });

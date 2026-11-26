@@ -6,7 +6,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
 
 (function () {
   'use strict';
-  let snapshot = null, account = '', tab = 'path', busy = false, dirty = true, timer = null, revision = 0, applyingReward = false, loadError = '';
+  let snapshot = null, account = '', tab = 'daily', busy = false, dirty = true, timer = null, revision = 0, applyingReward = false, loadError = '';
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const visible = () => $('page-home')?.classList.contains('active-page');
@@ -53,7 +53,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const ratio = q => Math.min(1, Math.max(0, Number(q.current) || 0) / Math.max(1, Number(q.target) || 1));
     return candidates.sort((a, b) => ratio(b.q) - ratio(a.q))[0] || null;
   }
-  // 主頁左側只呈現今日實際任務；仙道、每週任務仍保留在原任務視窗。
+  // 主頁左側只呈現今日實際任務；仙道由獨立入口開啟。
   function recommendedDailyQuest() {
     if (!snapshot || account !== getMainUser()?.uid ||
         snapshot.date !== window.XianxiaQuestRules.dateKey()) return null;
@@ -61,8 +61,6 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       ...(snapshot.daily || []).map(q => ({ q, kind: 'daily' })),
       ...(snapshot.commissions || []).map(q => ({ q, kind: 'commission' }))
     ];
-    // 舊資料尚未初始化日常任務時，維持原有的可用入口。
-    if (!rows.length) return recommendedQuest();
     const available = rows.filter(({q}) => q && !q.claimed && !q.locked);
     return available.find(({q}) => q.claimable) ||
       available.sort((a,b) => Math.min(1,Number(b.q.current||0)/Math.max(1,Number(b.q.target||1))) -
@@ -102,8 +100,11 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       [...current.daily,...(current.commissions||[])].some(ready);
     const weeklyReady = !!current && current.weeklyKey === window.XianxiaQuestRules.weekKey()
       && (current.weekly||[]).some(ready);
-    const available = pathReady || dailyReady || weeklyReady;
+    const available = dailyReady || weeklyReady;
     if ($('quest-ready-dot')) $('quest-ready-dot').hidden = !available;
+    if ($('home-path-ready-dot')) $('home-path-ready-dot').hidden = !pathReady;
+    document.querySelector?.('[data-home-action="path"]')?.setAttribute('aria-label', pathReady ? '仙道，有獎勵可領取' : '仙道');
+    document.querySelector?.('[data-home-action="quest"]')?.setAttribute('aria-label', available ? '任務，有獎勵可領取' : '任務');
     for (const [key, pending] of [['path', pathReady], ['daily', dailyReady], ['weekly', weeklyReady]]) {
       if ($('quest-' + key + '-dot')) $('quest-' + key + '-dot').hidden = !pending;
       const button = $('quest-tab-' + key);
@@ -267,14 +268,38 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css'; document.head.append(link);
     const dialog = document.createElement('dialog'); dialog.id = 'quest-dialog'; dialog.className = 'quest-dialog'; dialog.setAttribute('role', 'dialog'); dialog.setAttribute('aria-modal', 'true'); dialog.setAttribute('aria-labelledby', 'quest-title');
     const panel = document.createElement('section'); panel.id = 'quest-panel'; panel.className = 'quest-panel'; panel.setAttribute('aria-label', '修行任務');
-    panel.innerHTML = `<header class="quest-heading"><div><small>宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
-      <div class="quest-tabs" role="tablist" aria-label="任務類別"><button id="quest-tab-path" type="button" role="tab" aria-controls="quest-content" aria-selected="true">仙道 <span id="quest-path-count"></span><span id="quest-path-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-daily" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">日常 <span id="quest-daily-count"></span><span id="quest-daily-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-weekly" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">每週 <span id="quest-weekly-count"></span><span id="quest-weekly-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button></div>
-      <div class="quest-scroll" tabindex="0" role="region" aria-label="任務清單，可捲動"><p id="quest-note" class="quest-note"></p><div id="quest-content" role="tabpanel" aria-labelledby="quest-tab-path"></div><p id="quest-status" role="status" aria-live="polite"></p><div id="quest-reward-receipt" hidden></div></div>`;
+    panel.innerHTML = `<header class="quest-heading"><div><small id="quest-heading-kicker">宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
+      <div class="quest-tabs" role="tablist" aria-label="任務類別"><button id="quest-tab-path" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1" hidden>仙道 <span id="quest-path-count"></span><span id="quest-path-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-daily" type="button" role="tab" aria-controls="quest-content" aria-selected="true">日常 <span id="quest-daily-count"></span><span id="quest-daily-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-weekly" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">每週 <span id="quest-weekly-count"></span><span id="quest-weekly-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button></div>
+      <div class="quest-scroll" tabindex="0" role="region" aria-label="任務清單，可捲動"><button type="button" id="quest-atlas-open" class="quest-atlas-open" hidden><i class="fa-solid fa-book-open" aria-hidden="true"></i> 境界圖錄</button><p id="quest-note" class="quest-note"></p><div id="quest-content" role="tabpanel" aria-labelledby="quest-tab-daily"></div><p id="quest-status" role="status" aria-live="polite"></p><div id="quest-reward-receipt" hidden></div></div>`;
     dialog.append(panel); document.body.append(dialog);
-    entry.addEventListener('click', () => {
+    const pathEntry = document.querySelector('[data-home-action="path"]');
+    const taskEntry = document.querySelector('[data-home-action="quest"]');
+    let pathMode = false;
+    function updateExpanded() {
+      entry.setAttribute('aria-expanded', String(dialog.open && !pathMode));
+      taskEntry?.setAttribute('aria-expanded', String(dialog.open && !pathMode));
+      pathEntry?.setAttribute('aria-expanded', String(dialog.open && pathMode));
+    }
+    function openView(mode) {
+      pathMode = mode === 'path';
+      tab = pathMode ? 'path' : 'daily';
+      $('quest-title').textContent = pathMode ? '仙道' : '修行任務';
+      $('quest-heading-kicker').textContent = pathMode ? '仙途修行' : '宗門手札';
+      panel.setAttribute('aria-label', pathMode ? '仙道任務' : '修行任務');
+      $('quest-tab-path').hidden = !pathMode;
+      $('quest-tab-daily').hidden = pathMode;
+      $('quest-tab-weekly').hidden = pathMode;
+      $('quest-atlas-open').hidden = !pathMode;
       if (!dialog.open) dialog.showModal();
-      entry.setAttribute('aria-expanded', 'true');
-      reconcileAccount(); void refresh();
+      updateExpanded();
+      panel.querySelector('.quest-scroll').scrollTop = 0;
+      reconcileAccount(); render(); void refresh(true);
+    }
+    entry.addEventListener('click', () => openView('tasks'));
+    window.openCultivationPathQuests = () => openView('path');
+    $('quest-atlas-open').addEventListener('click', () => {
+      dialog.close();
+      $('xiuxian-path')?.click();
     });
     $('quest-spotlight')?.addEventListener('click', () => {
       if (busy || !reconcileAccount()) return;
@@ -285,17 +310,18 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       else go(item.q.destination, item.q);
     });
     $('quest-close').addEventListener('click', () => dialog.close());
-    dialog.addEventListener('close', () => entry.setAttribute('aria-expanded', String(dialog.open)));
+    dialog.addEventListener('close', updateExpanded);
     dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
     const selectTab = key => {
+      if (pathMode ? key !== 'path' : key === 'path') return;
       tab = key; render(); panel.querySelector('.quest-scroll').scrollTop = 0; void refresh();
     };
     ['path', 'daily', 'weekly'].forEach(key => $('quest-tab-' + key).addEventListener('click', () => selectTab(key)));
     panel.querySelector('.quest-tabs').addEventListener('keydown', e => {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
-      const tabs=['path','daily','weekly'],index=tabs.indexOf(tab);
+      const tabs=pathMode?['path']:['daily','weekly'],index=tabs.indexOf(tab);
       e.preventDefault(); selectTab(e.key === 'Home' ? tabs[0] : e.key === 'End' ? tabs.at(-1)
-        : tabs[(index+(e.key==='ArrowRight'?1:2))%3]);
+        : tabs[(index+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length]);
       $('quest-tab-' + tab).focus();
     });
     $('quest-refresh').addEventListener('click', () => { void refresh(true); });

@@ -60,3 +60,7 @@
 .quest-commission-heading{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 2px 5px;margin-top:4px;border-bottom:1px solid rgba(221,194,124,.19);color:#e4c889}
 .quest-commission-heading b{font-size:13px;letter-spacing:.09em}.quest-commission-heading small{color:#a59a7d;font-size:10px}
 .quest-card [data-quest-kind="commission"]{border-color:rgba(221,194,124,.46)}
+
+/* Independent 仙道 / daily-weekly entry views share the same task controller. */
+.quest-panel .quest-tabs > button[hidden], .quest-panel .quest-atlas-open[hidden] { display:none!important; }
+.quest-panel .quest-atlas-open { display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:40px;margin:8px 0 12px;border:1px solid var(--qy-line,#75613b);border-radius:8px;background:transparent;color:var(--qy-paper,#e4d5b4);font-size:13px;cursor:pointer; }
