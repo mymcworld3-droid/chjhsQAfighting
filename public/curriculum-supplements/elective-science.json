@@ -7500,6 +7500,910 @@
           ]
         }
       ]
+    },
+    {
+      "bookId": "common-108-elective-earth-geology",
+      "grade": "高中二年級",
+      "eligibleGrades": [
+        "高中二年級",
+        "高中三年級"
+      ],
+      "subject": "地球科學",
+      "publisher": null,
+      "edition": "108課綱通用（非出版社）",
+      "term": "選修地球科學－地質與環境",
+      "bookLabel": "地質與環境",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "school-curriculum-earth-outline",
+      "scopeSelectionStatus": "school-curriculum-earth-outline",
+      "scopeDetailLevel": "curriculum-themes-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-scheduled",
+      "sources": [
+        {
+          "url": "https://sites.google.com/gs.cgsh.tc.edu.tw/deeps/%E9%A6%96%E9%A0%81/%E5%9C%B0%E7%90%83%E7%A7%91%E5%AD%B8",
+          "type": "school-published-curriculum",
+          "provider": "臺中市立中港高中",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "school-curriculum-themes",
+        "sectionPolicy": "editorial-concepts",
+        "schoolYear": null
+      },
+      "limitations": "依學校公開部定加深加廣選修課程整理，非出版社目次。細項名稱及出題限制為編輯性整理；不計入出版社冊次覆蓋。",
+      "units": [
+        {
+          "unit": "組成地球的物質",
+          "details": [
+            "火成岩的形成與組織",
+            "沉積岩與沉積環境",
+            "變質岩與變質作用",
+            "礦物性質與鑑定",
+            "常見造岩礦物",
+            "岩石與建築材料",
+            "鑽探與地球物理探勘"
+          ],
+          "concepts": [
+            {
+              "name": "火成岩的形成與組織",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "岩漿成分、冷卻快慢與晶粒大小"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "沉積岩與沉積環境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "沉積物成分、粒徑與沉積條件"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "變質岩與變質作用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "母岩、變質程度與岩石組織"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "礦物性質與鑑定",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "硬度、解理、條痕、光澤與成分"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "常見造岩礦物",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "常見礦物辨識及岩石組成"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "岩石與建築材料",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "岩石性質及建材用途"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "鑽探與地球物理探勘",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "鑽孔與地球物理資料的用途"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "地球的起源與演變",
+          "details": [
+            "地球起源觀念的演進",
+            "地球分層及大氣海洋演化",
+            "地球的形狀與尺度"
+          ],
+          "concepts": [
+            {
+              "name": "地球起源觀念的演進",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "早期假說與現代科學證據"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "地球分層及大氣海洋演化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "物質分異、冷卻、釋氣與海洋形成"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "地球的形狀與尺度",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "影長、地平線與衛星觀測證據"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "地層與化石",
+          "details": [
+            "化石與地層環境",
+            "地質年代的證據與限制"
+          ],
+          "concepts": [
+            {
+              "name": "化石與地層環境",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "標準化石、指相化石及年代與環境推論"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "地質年代的證據與限制",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "相對定年與同位素定年用途及限制"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "地表與地殼的變動",
+          "details": [
+            "地殼均衡與垂直升降",
+            "斷層、褶皺與節理",
+            "野外調查與地質圖",
+            "臺灣地體構造",
+            "地殼運動的監測",
+            "遙測與地表變遷",
+            "海底與陸地地形"
+          ],
+          "concepts": [
+            {
+              "name": "地殼均衡與垂直升降",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "浮力均衡及負載變化"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "斷層、褶皺與節理",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "構造辨識與基本受力關係"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "野外調查與地質圖",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "岩層分布、產狀及剖面判讀"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "臺灣地體構造",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "板塊交界及觀測證據"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "地殼運動的監測",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "位移與地震資料判讀"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "遙測與地表變遷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "不同時期影像比較"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "海底與陸地地形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "測深與地形圖的尺度比較"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "天然災害與防治",
+          "details": [
+            "山崩與土石流成因",
+            "水土保持與減災",
+            "地質敏感區調查"
+          ],
+          "concepts": [
+            {
+              "name": "山崩與土石流成因",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "坡度、降雨及岩土條件"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "水土保持與減災",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "植生、排水與侵蝕控制"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "地質敏感區調查",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "野外勘查、遙測與鑽探用途"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "永續發展與資源的利用",
+          "details": [
+            "水資源分布與供需",
+            "水資源永續管理",
+            "化石燃料與碳循環",
+            "新興能源與選擇",
+            "永續發展的三個面向"
+          ],
+          "concepts": [
+            {
+              "name": "水資源分布與供需",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "降雨、蓄水及用水限制"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "水資源永續管理",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "節水、集水區與生態保護"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "化石燃料與碳循環",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "有限資源及燃燒排放"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "新興能源與選擇",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "能源特性、限制與環境影響"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "永續發展的三個面向",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "社會、經濟、環境的取捨"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "common-108-elective-earth-atmosphere",
+      "grade": "高中二年級",
+      "eligibleGrades": [
+        "高中二年級",
+        "高中三年級"
+      ],
+      "subject": "地球科學",
+      "publisher": null,
+      "edition": "108課綱通用（非出版社）",
+      "term": "選修地球科學－大氣、海洋及天文",
+      "bookLabel": "大氣、海洋及天文",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "school-curriculum-earth-outline",
+      "scopeSelectionStatus": "school-curriculum-earth-outline",
+      "scopeDetailLevel": "curriculum-themes-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-scheduled",
+      "sources": [
+        {
+          "url": "https://sites.google.com/gs.cgsh.tc.edu.tw/deeps/%E9%A6%96%E9%A0%81/%E5%9C%B0%E7%90%83%E7%A7%91%E5%AD%B8",
+          "type": "school-published-curriculum",
+          "provider": "臺中市立中港高中",
+          "accessedAt": "2026-11-26",
+          "reviewMethod": "structured-text"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "school-curriculum-themes",
+        "sectionPolicy": "editorial-concepts",
+        "schoolYear": null
+      },
+      "limitations": "依學校公開部定加深加廣選修課程整理，非出版社目次。細項名稱及出題限制為編輯性整理；不計入出版社冊次覆蓋。",
+      "units": [
+        {
+          "unit": "宇宙與天體",
+          "details": [
+            "恆星光譜",
+            "天文望遠鏡",
+            "地面天文觀測的限制",
+            "光行時間與星空",
+            "星色、星等與恆星演化",
+            "天體距離與宇宙尺度"
+          ],
+          "concepts": [
+            {
+              "name": "恆星光譜",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "吸收光譜、元素及恆星性質"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "天文望遠鏡",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "光學與電波望遠鏡用途"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "地面天文觀測的限制",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "光害、天候與大氣吸收"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "光行時間與星空",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "距離、光年及觀測到的過去"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "星色、星等與恆星演化",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "星色溫度、星等亮度及赫羅圖"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "天體距離與宇宙尺度",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "視差與距離測量的基本用途"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "地球與太空",
+          "details": [
+            "天文學說與天體運行",
+            "天體運行與曆法"
+          ],
+          "concepts": [
+            {
+              "name": "天文學說與天體運行",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地心說、日心說與視運動"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "天體運行與曆法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日月年與自轉、公轉的關係"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "天氣與氣候變化",
+          "details": [
+            "水的相變與能量傳遞",
+            "大氣穩定度",
+            "垂直運動、雲與降水",
+            "海陸地形與局部天氣",
+            "氣象預報的應用",
+            "氣象觀測方法",
+            "天氣資料與系統判讀"
+          ],
+          "concepts": [
+            {
+              "name": "水的相變與能量傳遞",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "相變吸放熱"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "大氣穩定度",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "垂直溫度與氣塊浮力"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "垂直運動、雲與降水",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣塊冷卻凝結及降水"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "海陸地形與局部天氣",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海陸風與地形抬升"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "氣象預報的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "日常生活與產業的預報判讀"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "氣象觀測方法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地面站、探空、衛星及雷達"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "天氣資料與系統判讀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "溫度、降水、風與衛星圖"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "海水的運動",
+          "details": [
+            "溫鹽環流與氣候",
+            "臺灣附近海流",
+            "潮汐資料判讀",
+            "湧升流與生產力",
+            "海洋觀測與遙測"
+          ],
+          "concepts": [
+            {
+              "name": "溫鹽環流與氣候",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "溫鹽、密度及深層熱量輸送"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "臺灣附近海流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "黑潮等區域海流影響"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "潮汐資料判讀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "全日潮、半日潮與混合潮"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "湧升流與生產力",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "營養鹽輸送與浮游生物"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "海洋觀測與遙測",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "溫鹽、流速及衛星資料"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "晝夜與季節",
+          "details": [
+            "緯度、季節與晝夜長短",
+            "節氣與太陽位置"
+          ],
+          "concepts": [
+            {
+              "name": "緯度、季節與晝夜長短",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地軸傾斜、公轉及日照時長"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "節氣與太陽位置",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二十四節氣與太陽黃經"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "氣候變遷之影響與調適",
+          "details": [
+            "氣候模式與變遷歸因",
+            "氣候推估的不確定性",
+            "區域氣候衝擊",
+            "氣候調適與減災"
+          ],
+          "concepts": [
+            {
+              "name": "氣候模式與變遷歸因",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然及人為驅動的模式比較"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "氣候推估的不確定性",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "排放情境、模型差異及自然變異"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "區域氣候衝擊",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "不同區域的氣候影響"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            },
+            {
+              "name": "氣候調適與減災",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "減緩、調適及風險管理"
+              ],
+              "excludedContent": [
+                "其他未選觀念的獨立考點",
+                "大學地球科學、流體力學或專業探勘進階推導",
+                "未附資料的即時觀測或精確地方數值"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

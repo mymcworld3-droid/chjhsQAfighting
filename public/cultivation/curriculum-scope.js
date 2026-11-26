@@ -81,6 +81,9 @@ if(u.book?.scopeSelectionStatus==='nani-companion-index'){
 if(['publisher-language-outline','language-index-v2'].includes(u.book?.scopeSelectionStatus)){
  const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='出版社公開目次 · 細項為整理考點 · 學年度未標示';group.append(note);
 }
+if(u.book?.scopeSelectionStatus==='school-curriculum-earth-outline'){
+ const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='部定課程通用觀念 · 非出版社正式章節';group.append(note);
+}
 if(u.book?.scopeSelectionStatus==='publisher-companion-science'){
  const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='出版社講義目次 · 細項為整理觀念 · 非正式課本';group.append(note);
 }
@@ -125,7 +128,7 @@ async function loadCatalogue(g,s){
    const electiveSocial=g==='高中三年級'&&['歷史','地理','公民'].includes(s);
    const language=['高中一年級','高中二年級','高中三年級'].includes(g)&&['國文','英文'].includes(s);
    if(!required&&!elective&&!seniorMath&&!social&&!geography&&!civics&&!electiveSocial&&!language)return base;
-   const supplementFile=required?'curriculum-supplements/grade10.json?v=20261126-batch5':seniorMath?'curriculum-supplements/grade12-math.json?v=20261126-batch7':social?'curriculum-supplements/history.json?v=20261126-batch8a':geography?'curriculum-supplements/geography.json?v=20261126-batch8b':civics?'curriculum-supplements/civics.json?v=20261126-batch12':electiveSocial?'curriculum-supplements/elective-social.json?v=20261126-batch8d':language?'curriculum-supplements/language.json?v=20261126-batch9f':'curriculum-supplements/elective-science.json?v=20261126-batch10';
+   const supplementFile=required?'curriculum-supplements/grade10.json?v=20261126-batch5':seniorMath?'curriculum-supplements/grade12-math.json?v=20261126-batch7':social?'curriculum-supplements/history.json?v=20261126-batch8a':geography?'curriculum-supplements/geography.json?v=20261126-batch8b':civics?'curriculum-supplements/civics.json?v=20261126-batch12':electiveSocial?'curriculum-supplements/elective-social.json?v=20261126-batch8d':language?'curriculum-supplements/language.json?v=20261126-batch9f':'curriculum-supplements/elective-science.json?v=20261126-batch14';
    if(!memo.has(supplementFile))memo.set(supplementFile,fetch('/'+supplementFile).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(supplementFile);throw e;}));
    const supplemental=await memo.get(supplementFile);
    let additional=[];
@@ -149,6 +152,7 @@ function catalogOptions(){
   option.disabled=!available;
   if(!available)option.textContent+='（待開放）';
   else if(records.every(b=>b.verificationStatus==='unverified'))option.textContent+='（既有整理）';
+  else if(records.every(b=>b.scopeSelectionStatus==='school-curriculum-earth-outline'))option.textContent+='（學校公開課程・整理觀念）';
   else if(records.every(b=>b.scopeSelectionStatus==='publisher-companion-science'))option.textContent+='（講義・整理觀念）';
   else if(records.every(b=>b.scopeSelectionStatus==='publisher-chapter-outline'))option.textContent+='（章名・整理觀念）';
   else if(records.every(b=>['social-crosswalk-transcription','geography-crosswalk-transcription','civics-crosswalk-transcription','elective-social-crosswalk-transcription'].includes(b.scopeSelectionStatus)))option.textContent+='（課程對照・原檔待核）';

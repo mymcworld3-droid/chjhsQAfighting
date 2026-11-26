@@ -3,7 +3,7 @@ const C=require('../curriculum-catalog.cjs'),R=require('../public/cultivation/cu
 const data=require('../public/curriculum-supplements/elective-science.json');
 function target(b,u,name){return {subject:b.subject,level:b.grade,scope:{path:[b.subject,b.grade,b.term,b.edition,b.subject].join('/'),detail:u.unit,sub_topics:[name],curriculum:{bookId:b.bookId,edition:b.edition,term:b.term,schoolYear:b.schoolYear,conceptIds:[]}}};}
 test('24 elective biology books and two publisher chapter outlines are selectable in both grades',()=>{
- assert.equal(data.books.length,28);assert.equal(new Set(data.books.map(b=>b.bookId)).size,28);
+ assert.equal(data.books.length,30);assert.equal(new Set(data.books.map(b=>b.bookId)).size,30);
  for(const grade of data.eligibleGrades){
   const bio=C.catalog(grade,'生物').books.filter(b=>b.scopeSelectionStatus==='elective-crosswalk-transcription');
   const earth=C.catalog(grade,'地球科學').books.filter(b=>b.scopeSelectionStatus==='publisher-chapter-outline');
@@ -44,3 +44,5 @@ test('school-scheduled physics and chemistry books are selectable in grade 12 wi
   assert.equal(C.catalog('高中一年級',subject).books.filter(b=>b.courseType==='elective').length,0);
  }
 });
+
+test('common elective earth courses retain source themes without claiming publisher editions',()=>{for(const grade of data.eligibleGrades){const books=C.catalog(grade,'地球科學').books.filter(b=>b.scopeSelectionStatus==='school-curriculum-earth-outline');assert.equal(books.length,2);assert.deepEqual(books.map(b=>b.units.length),[6,6]);assert.deepEqual(books.map(b=>b.units.flatMap(u=>u.details).length),[27,26]);for(const b of books){assert.ok(R.selectableBook(b));assert.equal(b.publisher,null);assert.ok(!R.selectableBook({...b,publisher:'全華'}));assert.ok(!R.selectableBook({...b,sources:[]}));assert.ok(!R.selectableBook({...b,units:b.units.slice(1)}));for(const u of b.units)for(const name of u.details){const t=target(b,u,name);assert.equal(C.validateScope(t.scope,t.subject,t.level).bookId,b.bookId);assert.equal(C.sectionGuidance(t).length,1);assert.match(C.scopePrompt(t),/editorialSectionGuidance/);const s=R.shareSelection([t.scope]);assert.ok(s.ok);assert.deepEqual(R.readSharedSelection(s.code).units,[t.scope]);assert.throws(()=>C.validateScope({...t.scope,sub_topics:['未選觀念']},t.subject,t.level));}}}assert.equal(C.catalog('高中一年級','地球科學').books.filter(b=>b.scopeSelectionStatus==='school-curriculum-earth-outline').length,0);});
