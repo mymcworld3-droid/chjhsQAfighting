@@ -71,7 +71,7 @@
 .quest-dialog-path .quest-panel::before,.quest-dialog-path .quest-panel::after{display:none}
 .quest-dialog-path .quest-heading{border-bottom:1px solid #c7a66b55;padding-bottom:8px}
 .quest-dialog-path .quest-heading h3{font-size:clamp(20px,3vw,30px);letter-spacing:.13em}
-.quest-dialog-path .quest-tabs{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);margin:0}
+.quest-dialog-path .quest-tabs{display:none!important}
 .quest-dialog-path .quest-scroll{display:flex;flex-direction:column;overflow:hidden;padding:0;scrollbar-gutter:auto}
 .quest-dialog-path .quest-atlas-open{flex:none;align-self:flex-end;width:auto;min-height:28px;margin:5px 0;padding:4px 10px;border-color:#b99b6466;color:#e2c690}
 .quest-dialog-path .quest-note{flex:none;margin:0 0 5px;font-size:11px;color:#bcab8d}
@@ -189,3 +189,13 @@
  #page-path .path-stage-tasks{overflow:visible;min-height:0;flex:none;padding-right:0;overscroll-behavior:auto}
  #page-path .path-stage-tasks>header{position:static}
 }
+
+/* Single compact header row for the full-screen cultivation path only. */
+#page-path .quest-heading{flex-wrap:nowrap;align-items:center;gap:8px}
+#page-path .quest-heading>div:first-child{flex:none;white-space:nowrap}
+#page-path #quest-heading-kicker{display:none}
+#page-path #quest-title{margin:0;white-space:nowrap}
+#page-path .quest-heading-actions{flex:none;flex-wrap:nowrap;gap:6px}
+#page-path .quest-heading .quest-atlas-open{align-self:center;width:auto;min-height:36px;margin:0;padding:6px 9px;white-space:nowrap;font-size:12px;gap:5px}
+#page-path #quest-refresh{min-height:36px;white-space:nowrap}
+@media(max-width:420px){#page-path .quest-heading{gap:4px}#page-path .quest-heading-actions{gap:4px}#page-path .quest-heading .quest-atlas-open,#page-path #quest-refresh{padding:5px 6px;font-size:11px;min-height:32px}#page-path .quest-heading #quest-close{min-width:30px;min-height:32px}#page-path #quest-title{font-size:20px}}

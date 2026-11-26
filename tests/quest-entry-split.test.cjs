@@ -38,3 +38,11 @@ test('portrait uses one shared scroll area for the realm rail and detail while l
  assert.match(css,/#page-path \.path-stage-tasks\{overflow:visible/);
  assert.match(ui,/journey\.scrollTop=sharedScroll/);
 });
+
+test('path title, atlas and refresh share one heading row without a stray tab count',()=>{
+ assert.match(ui,/<div class="quest-heading-actions"><button[^>]*id="quest-atlas-open"[^\n]*id="quest-refresh"[^\n]*<\/header>/);
+ assert.doesNotMatch(ui,/<div class="quest-scroll"[^>]*><button[^>]*id="quest-atlas-open"/);
+ const css=read('public/styles/quest-system.css');
+ assert.match(css,/\.quest-dialog-path \.quest-tabs\{display:none!important\}/);
+ assert.match(css,/#page-path \.quest-heading\{flex-wrap:nowrap/);
+});

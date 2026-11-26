@@ -173,7 +173,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       button.setAttribute('aria-selected', String(tab === key));
       button.tabIndex = tab === key ? 0 : -1;
     });
-    $('quest-content').setAttribute('aria-labelledby', 'quest-tab-' + tab);
+    $('quest-content').setAttribute('aria-labelledby', tab === 'path' ? 'quest-title' : 'quest-tab-' + tab);
     $('quest-refresh').disabled = busy;
     $('quest-content').classList.toggle('quest-path-layout',tab === 'path');
     if (!snapshot) {
@@ -326,12 +326,12 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if ($('quest-panel')) return;
     const entry = $('quest-open');
     if (!entry) return;
-    const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css?v=20261126-path-shared-scroll'; document.head.append(link);
+    const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css?v=20261126-path-single-heading'; document.head.append(link);
     const dialog = document.createElement('dialog'); dialog.id = 'quest-dialog'; dialog.className = 'quest-dialog'; dialog.setAttribute('role', 'dialog'); dialog.setAttribute('aria-modal', 'true'); dialog.setAttribute('aria-labelledby', 'quest-title');
     const panel = document.createElement('section'); panel.id = 'quest-panel'; panel.className = 'quest-panel'; panel.setAttribute('aria-label', '修行任務');
-    panel.innerHTML = `<header class="quest-heading"><div><small id="quest-heading-kicker">宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
+    panel.innerHTML = `<header class="quest-heading"><div><small id="quest-heading-kicker">宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-atlas-open" class="quest-atlas-open" hidden><i class="fa-solid fa-book-open" aria-hidden="true"></i> 境界圖錄</button><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
       <div class="quest-tabs" role="tablist" aria-label="任務類別"><button id="quest-tab-path" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1" hidden>仙道 <span id="quest-path-count"></span><span id="quest-path-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-daily" type="button" role="tab" aria-controls="quest-content" aria-selected="true">日常 <span id="quest-daily-count"></span><span id="quest-daily-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-weekly" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">每週 <span id="quest-weekly-count"></span><span id="quest-weekly-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button></div>
-      <div class="quest-scroll" tabindex="0" role="region" aria-label="任務清單，可捲動"><button type="button" id="quest-atlas-open" class="quest-atlas-open" hidden><i class="fa-solid fa-book-open" aria-hidden="true"></i> 境界圖錄</button><p id="quest-note" class="quest-note"></p><div id="quest-content" role="tabpanel" aria-labelledby="quest-tab-daily"></div><p id="quest-status" role="status" aria-live="polite"></p><div id="quest-reward-receipt" hidden></div></div>`;
+      <div class="quest-scroll" tabindex="0" role="region" aria-label="任務清單，可捲動"><p id="quest-note" class="quest-note"></p><div id="quest-content" role="tabpanel" aria-labelledby="quest-tab-daily"></div><p id="quest-status" role="status" aria-live="polite"></p><div id="quest-reward-receipt" hidden></div></div>`;
     dialog.append(panel); document.body.append(dialog);
     const pathEntry = document.querySelector('[data-home-action="path"]');
     const taskEntry = document.querySelector('[data-home-action="quest"]');
