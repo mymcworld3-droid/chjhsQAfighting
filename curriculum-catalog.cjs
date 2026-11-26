@@ -16,7 +16,6 @@ const geographySupplement=require('./public/curriculum-supplements/geography.jso
 const civicsSupplement=require('./public/curriculum-supplements/civics.json');
 const electiveSocialSupplement=require('./public/curriculum-supplements/elective-social.json');
 const languageSupplement=require('./public/curriculum-supplements/language.json');
-const languageSupplement=require('./public/curriculum-supplements/language.json');
 const guideKey=(subject,term,name)=>JSON.stringify([subject,term,normalize(sectionName(name))]);
 const guideByKey=new Map(sectionGuide.rows.flatMap(row=>row.labels.map(label=>[guideKey(row.subject,row.term,label),row])));
 function sectionGuidance(target) {

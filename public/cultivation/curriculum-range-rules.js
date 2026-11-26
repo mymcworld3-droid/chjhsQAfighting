@@ -13,18 +13,6 @@
   function selectableBook(book) {
     if(!book)return false;
     if(book.legacyVisible || book.releaseStatus === 'released')return true;
-    if(book.scopeSelectionStatus==='language-publisher-toc'){
-      const e=book.scopeEvidence, approved={"國文|高中一年級|第一學期":{"url":"https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=9716","volume":1,"count":12},"國文|高中一年級|第二學期":{"url":"https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=9817","volume":2,"count":12},"國文|高中二年級|第一學期":{"url":"https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=9982","volume":3,"count":12},"國文|高中二年級|第二學期":{"url":"https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=10093","volume":4,"count":12},"國文|高中三年級|第一學期":{"url":"https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=10293","volume":5,"count":10},"英文|高中一年級|第一學期":{"url":"https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=9722&SbjSubjectDesc=%E8%8B%B1%E6%96%87&SourceType=Subject","volume":1,"count":12}};
-      const a=approved[[book.subject,book.grade,book.term].join('|')];
-      return !!a&&book.publisher==='龍騰'&&book.edition==='龍騰版'&&book.schoolYear===null&&book.releaseStatus==='blocked'&&
-        book.verificationStatus===book.scopeSelectionStatus&&book.scopeDetailLevel==='publisher-lessons-editorial-concepts'&&
-        book.courseType==='required'&&book.schedulePolicy==='book-sequence'&&/^\d{4}-\d{2}-\d{2}$/.test(book.verifiedAt||'')&&
-        e?.kind==='publisher-lesson-index'&&e.publisher===book.publisher&&e.volume===a.volume&&e.schoolYear===null&&e.sectionPolicy==='editorial-concepts'&&
-        !!book.sources?.some(s=>s.type==='official-product-toc'&&s.url===a.url)&&book.units?.length===a.count&&
-        new Set(book.units.map(u=>u.unit)).size===a.count&&book.units.every(u=>u.details?.length===3&&new Set(u.details).size===3&&
-          u.concepts?.length===3&&u.concepts.every((c,i)=>c.name===u.details[i]&&c.name.startsWith(u.unit+'｜')&&Array.isArray(c.allowedContent)&&c.allowedContent.length&&Array.isArray(c.excludedContent)));
-    }
-
     // A separately labelled 114 school-year transcription is selectable for practice,
     // not a raw-document-verified or officially released book. Keep grade 11 gates intact.
     if(book.scopeSelectionStatus === 'source-reviewed-crosswalk'){
