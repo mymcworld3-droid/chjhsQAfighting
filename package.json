@@ -19,7 +19,8 @@
     "build:curriculum": "node scripts/build-curriculum-catalog.cjs",
     "check:curriculum-catalog": "node scripts/build-curriculum-catalog.cjs --check",
     "audit:curriculum-coverage": "node scripts/audit-curriculum-coverage.cjs",
-    "check:curriculum-coverage": "node scripts/audit-curriculum-coverage.cjs --check"
+    "check:curriculum-coverage": "node scripts/audit-curriculum-coverage.cjs --check",
+    "audit:high-school-publishers": "node scripts/audit-high-school-publisher-coverage.cjs"
   },
   "keywords": [],
   "author": "",
