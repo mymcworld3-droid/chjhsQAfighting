@@ -254,41 +254,41 @@
       "subject": "英文",
       "publisher": "三民（乙版）",
       "volume": 1,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "sanmin-108-english-1-edition-b",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.tcsb.com.tw/product/9786264381567?locale=zh_TW"
     },
     {
       "subject": "英文",
       "publisher": "三民（乙版）",
       "volume": 2,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "sanmin-108-english-2-edition-b",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/015144437"
     },
     {
       "subject": "英文",
       "publisher": "三民（乙版）",
       "volume": 3,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "sanmin-108-english-3-edition-b",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.tcsb.com.tw/product/4711289883739"
     },
     {
       "subject": "英文",
       "publisher": "三民（乙版）",
       "volume": 4,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "sanmin-108-english-4-edition-b",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/013930686"
     },
     {
       "subject": "英文",
       "publisher": "三民（乙版）",
       "volume": 5,
-      "bookId": null,
-      "status": "missing-index",
-      "source": null
+      "bookId": "sanmin-108-english-5-edition-b",
+      "status": "indexed-year-unconfirmed",
+      "source": "https://www.sanmin.com.tw/product/index/014516968"
     },
     {
       "subject": "英文",

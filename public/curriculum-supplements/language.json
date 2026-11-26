@@ -16344,6 +16344,2852 @@
           ]
         }
       ]
+    },
+    {
+      "bookId": "sanmin-108-english-1-edition-b",
+      "grade": "高中一年級",
+      "subject": "英文",
+      "edition": "三民版（乙版）",
+      "publisher": "三民",
+      "term": "第一學期",
+      "bookLabel": "英文第1冊（乙版）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.tcsb.com.tw/product/9786264381567?locale=zh_TW",
+          "type": "publisher-companion-index",
+          "provider": "三民書局",
+          "accessedAt": "2026-11-26",
+          "limitations": "2026年修訂二版配套自修公開目次，含三個複習單元。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "三民",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。2026年修訂二版配套自修公開目次，含三個複習單元。課本學年度未確認。",
+      "units": [
+        {
+          "unit": "Unit 1 Mission Possible: Fight Study Monsters",
+          "details": [
+            "Unit 1 Mission Possible: Fight Study Monsters｜主題字彙與搭配",
+            "Unit 1 Mission Possible: Fight Study Monsters｜文法與句型應用",
+            "Unit 1 Mission Possible: Fight Study Monsters｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 1 Mission Possible: Fight Study Monsters｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "學習方法與習慣；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 1 Mission Possible: Fight Study Monsters｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "學習方法與習慣；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 1 Mission Possible: Fight Study Monsters｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "學習方法與習慣；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2 I See You, Taiwan",
+          "details": [
+            "Unit 2 I See You, Taiwan｜主題字彙與搭配",
+            "Unit 2 I See You, Taiwan｜文法與句型應用",
+            "Unit 2 I See You, Taiwan｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 2 I See You, Taiwan｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣與文化；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 2 I See You, Taiwan｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣與文化；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 2 I See You, Taiwan｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣與文化；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3 Clicks, Crumbs, and Consequences",
+          "details": [
+            "Unit 3 Clicks, Crumbs, and Consequences｜主題字彙與搭配",
+            "Unit 3 Clicks, Crumbs, and Consequences｜文法與句型應用",
+            "Unit 3 Clicks, Crumbs, and Consequences｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 3 Clicks, Crumbs, and Consequences｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "網路行為與影響；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 3 Clicks, Crumbs, and Consequences｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "網路行為與影響；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 3 Clicks, Crumbs, and Consequences｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "網路行為與影響；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 1 The Other Side of Social Media",
+          "details": [
+            "Review 1 The Other Side of Social Media｜主題字彙與搭配",
+            "Review 1 The Other Side of Social Media｜文法與句型應用",
+            "Review 1 The Other Side of Social Media｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 1 The Other Side of Social Media｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "社群媒體的影響；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 1 The Other Side of Social Media｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "社群媒體的影響；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 1 The Other Side of Social Media｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "社群媒體的影響；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 4 The Sugar Feast and More: Welcome to Eid al-Fitr",
+          "details": [
+            "Unit 4 The Sugar Feast and More: Welcome to Eid al-Fitr｜主題字彙與搭配",
+            "Unit 4 The Sugar Feast and More: Welcome to Eid al-Fitr｜文法與句型應用",
+            "Unit 4 The Sugar Feast and More: Welcome to Eid al-Fitr｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 4 The Sugar Feast and More: Welcome to Eid al-Fitr｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "節慶與文化；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 4 The Sugar Feast and More: Welcome to Eid al-Fitr｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "節慶與文化；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 4 The Sugar Feast and More: Welcome to Eid al-Fitr｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "節慶與文化；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 5 Creative Traffic Signals Around the World",
+          "details": [
+            "Unit 5 Creative Traffic Signals Around the World｜主題字彙與搭配",
+            "Unit 5 Creative Traffic Signals Around the World｜文法與句型應用",
+            "Unit 5 Creative Traffic Signals Around the World｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 5 Creative Traffic Signals Around the World｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "交通安全與創意；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 5 Creative Traffic Signals Around the World｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "交通安全與創意；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 5 Creative Traffic Signals Around the World｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "交通安全與創意；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 6 Reaching for Space",
+          "details": [
+            "Unit 6 Reaching for Space｜主題字彙與搭配",
+            "Unit 6 Reaching for Space｜文法與句型應用",
+            "Unit 6 Reaching for Space｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 6 Reaching for Space｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太空探索；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 6 Reaching for Space｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太空探索；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 6 Reaching for Space｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "太空探索；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 2 The Chinese Marie Curie",
+          "details": [
+            "Review 2 The Chinese Marie Curie｜主題字彙與搭配",
+            "Review 2 The Chinese Marie Curie｜文法與句型應用",
+            "Review 2 The Chinese Marie Curie｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 2 The Chinese Marie Curie｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "科學人物與研究；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 2 The Chinese Marie Curie｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "科學人物與研究；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 2 The Chinese Marie Curie｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "科學人物與研究；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 7 A Christmas Carol",
+          "details": [
+            "Unit 7 A Christmas Carol｜主題字彙與搭配",
+            "Unit 7 A Christmas Carol｜文法與句型應用",
+            "Unit 7 A Christmas Carol｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 7 A Christmas Carol｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學、人物與節慶；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 7 A Christmas Carol｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學、人物與節慶；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 7 A Christmas Carol｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學、人物與節慶；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 8 Brew a Better Life for Coffee Farmers",
+          "details": [
+            "Unit 8 Brew a Better Life for Coffee Farmers｜主題字彙與搭配",
+            "Unit 8 Brew a Better Life for Coffee Farmers｜文法與句型應用",
+            "Unit 8 Brew a Better Life for Coffee Farmers｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 8 Brew a Better Life for Coffee Farmers｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "咖啡與公平貿易；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 8 Brew a Better Life for Coffee Farmers｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "咖啡與公平貿易；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 8 Brew a Better Life for Coffee Farmers｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "咖啡與公平貿易；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 9 I Owe You a Big Apology",
+          "details": [
+            "Unit 9 I Owe You a Big Apology｜主題字彙與搭配",
+            "Unit 9 I Owe You a Big Apology｜文法與句型應用",
+            "Unit 9 I Owe You a Big Apology｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 9 I Owe You a Big Apology｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "道歉與人際溝通；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 9 I Owe You a Big Apology｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "道歉與人際溝通；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 9 I Owe You a Big Apology｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "道歉與人際溝通；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 3 Our Green Actions Help Keep the Earth Alive",
+          "details": [
+            "Review 3 Our Green Actions Help Keep the Earth Alive｜主題字彙與搭配",
+            "Review 3 Our Green Actions Help Keep the Earth Alive｜文法與句型應用",
+            "Review 3 Our Green Actions Help Keep the Earth Alive｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 3 Our Green Actions Help Keep the Earth Alive｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "環保與永續；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 3 Our Green Actions Help Keep the Earth Alive｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "環保與永續；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 3 Our Green Actions Help Keep the Earth Alive｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "環保與永續；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-108-english-2-edition-b",
+      "grade": "高中一年級",
+      "subject": "英文",
+      "edition": "三民版（乙版）",
+      "publisher": "三民",
+      "term": "第二學期",
+      "bookLabel": "英文第2冊（乙版）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.sanmin.com.tw/product/index/015144437",
+          "type": "publisher-companion-index",
+          "provider": "三民書局",
+          "accessedAt": "2026-11-26",
+          "limitations": "出版社自修公開目次列九個主課，另以WORD UP相應課程目錄交叉核對；未見Review課名，不擅自補入。"
+        },
+        {
+          "url": "https://shop.wordup.com.tw/en/product/1304",
+          "type": "companion-course-index",
+          "provider": "WORD UP"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "三民",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。出版社自修公開目次列九個主課，另以WORD UP相應課程目錄交叉核對；未見Review課名，不擅自補入。課本學年度未確認。",
+      "units": [
+        {
+          "unit": "Unit 1 Reviving the Dream in Dust",
+          "details": [
+            "Unit 1 Reviving the Dream in Dust｜主題字彙與搭配",
+            "Unit 1 Reviving the Dream in Dust｜文法與句型應用",
+            "Unit 1 Reviving the Dream in Dust｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 1 Reviving the Dream in Dust｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "交通、保存與再利用；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 1 Reviving the Dream in Dust｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "交通、保存與再利用；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 1 Reviving the Dream in Dust｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "交通、保存與再利用；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2 Listen Before Talking Your Way Through Conflict",
+          "details": [
+            "Unit 2 Listen Before Talking Your Way Through Conflict｜主題字彙與搭配",
+            "Unit 2 Listen Before Talking Your Way Through Conflict｜文法與句型應用",
+            "Unit 2 Listen Before Talking Your Way Through Conflict｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 2 Listen Before Talking Your Way Through Conflict｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "衝突與溝通；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 2 Listen Before Talking Your Way Through Conflict｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "衝突與溝通；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 2 Listen Before Talking Your Way Through Conflict｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "衝突與溝通；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3 Beyond the Graves: Two Unexpected Cemeteries",
+          "details": [
+            "Unit 3 Beyond the Graves: Two Unexpected Cemeteries｜主題字彙與搭配",
+            "Unit 3 Beyond the Graves: Two Unexpected Cemeteries｜文法與句型應用",
+            "Unit 3 Beyond the Graves: Two Unexpected Cemeteries｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 3 Beyond the Graves: Two Unexpected Cemeteries｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "墓園與文化；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 3 Beyond the Graves: Two Unexpected Cemeteries｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "墓園與文化；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 3 Beyond the Graves: Two Unexpected Cemeteries｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "墓園與文化；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 4 Stand Tall and Grow Strong with Resilience",
+          "details": [
+            "Unit 4 Stand Tall and Grow Strong with Resilience｜主題字彙與搭配",
+            "Unit 4 Stand Tall and Grow Strong with Resilience｜文法與句型應用",
+            "Unit 4 Stand Tall and Grow Strong with Resilience｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 4 Stand Tall and Grow Strong with Resilience｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "挫折與韌性；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 4 Stand Tall and Grow Strong with Resilience｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "挫折與韌性；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 4 Stand Tall and Grow Strong with Resilience｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "挫折與韌性；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 5 Truth Be Told",
+          "details": [
+            "Unit 5 Truth Be Told｜主題字彙與搭配",
+            "Unit 5 Truth Be Told｜文法與句型應用",
+            "Unit 5 Truth Be Told｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 5 Truth Be Told｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "真相、資訊與判斷；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 5 Truth Be Told｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "真相、資訊與判斷；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 5 Truth Be Told｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "真相、資訊與判斷；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 6 Decisions Are Never Black-and-White",
+          "details": [
+            "Unit 6 Decisions Are Never Black-and-White｜主題字彙與搭配",
+            "Unit 6 Decisions Are Never Black-and-White｜文法與句型應用",
+            "Unit 6 Decisions Are Never Black-and-White｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 6 Decisions Are Never Black-and-White｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "抉擇與倫理；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 6 Decisions Are Never Black-and-White｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "抉擇與倫理；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 6 Decisions Are Never Black-and-White｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "抉擇與倫理；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 7 The Career Path to Becoming a “Speech Doctor”",
+          "details": [
+            "Unit 7 The Career Path to Becoming a “Speech Doctor”｜主題字彙與搭配",
+            "Unit 7 The Career Path to Becoming a “Speech Doctor”｜文法與句型應用",
+            "Unit 7 The Career Path to Becoming a “Speech Doctor”｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 7 The Career Path to Becoming a “Speech Doctor”｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "職涯與語言治療；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 7 The Career Path to Becoming a “Speech Doctor”｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "職涯與語言治療；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 7 The Career Path to Becoming a “Speech Doctor”｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "職涯與語言治療；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 8 Freeing Morocco’s Tree-Climbing Goats",
+          "details": [
+            "Unit 8 Freeing Morocco’s Tree-Climbing Goats｜主題字彙與搭配",
+            "Unit 8 Freeing Morocco’s Tree-Climbing Goats｜文法與句型應用",
+            "Unit 8 Freeing Morocco’s Tree-Climbing Goats｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 8 Freeing Morocco’s Tree-Climbing Goats｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "動物與觀光；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 8 Freeing Morocco’s Tree-Climbing Goats｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "動物與觀光；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 8 Freeing Morocco’s Tree-Climbing Goats｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "動物與觀光；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 9 The Sky’s the Limit for Vertical Farming",
+          "details": [
+            "Unit 9 The Sky’s the Limit for Vertical Farming｜主題字彙與搭配",
+            "Unit 9 The Sky’s the Limit for Vertical Farming｜文法與句型應用",
+            "Unit 9 The Sky’s the Limit for Vertical Farming｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 9 The Sky’s the Limit for Vertical Farming｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "垂直農業與科技；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 9 The Sky’s the Limit for Vertical Farming｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "垂直農業與科技；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 9 The Sky’s the Limit for Vertical Farming｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "垂直農業與科技；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-108-english-3-edition-b",
+      "grade": "高中二年級",
+      "subject": "英文",
+      "edition": "三民版（乙版）",
+      "publisher": "三民",
+      "term": "第一學期",
+      "bookLabel": "英文第3冊（乙版）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.tcsb.com.tw/product/4711289883739",
+          "type": "publisher-companion-index",
+          "provider": "三民書局",
+          "accessedAt": "2026-11-26",
+          "limitations": "2024年出版的對應乙版自修公開目次，含三個複習單元。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "三民",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。2024年出版的對應乙版自修公開目次，含三個複習單元。課本學年度未確認。",
+      "units": [
+        {
+          "unit": "Unit 1 City Planning: Building a Better Future",
+          "details": [
+            "Unit 1 City Planning: Building a Better Future｜主題字彙與搭配",
+            "Unit 1 City Planning: Building a Better Future｜文法與句型應用",
+            "Unit 1 City Planning: Building a Better Future｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 1 City Planning: Building a Better Future｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市規劃；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 1 City Planning: Building a Better Future｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市規劃；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 1 City Planning: Building a Better Future｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "都市規劃；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2 Embracing the Power of AI",
+          "details": [
+            "Unit 2 Embracing the Power of AI｜主題字彙與搭配",
+            "Unit 2 Embracing the Power of AI｜文法與句型應用",
+            "Unit 2 Embracing the Power of AI｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 2 Embracing the Power of AI｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人工智慧與生活；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 2 Embracing the Power of AI｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人工智慧與生活；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 2 Embracing the Power of AI｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人工智慧與生活；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3 Standing Up for What Is Right",
+          "details": [
+            "Unit 3 Standing Up for What Is Right｜主題字彙與搭配",
+            "Unit 3 Standing Up for What Is Right｜文法與句型應用",
+            "Unit 3 Standing Up for What Is Right｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 3 Standing Up for What Is Right｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "正義與行動；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 3 Standing Up for What Is Right｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "正義與行動；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 3 Standing Up for What Is Right｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "正義與行動；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 1 Our Aging World",
+          "details": [
+            "Review 1 Our Aging World｜主題字彙與搭配",
+            "Review 1 Our Aging World｜文法與句型應用",
+            "Review 1 Our Aging World｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 1 Our Aging World｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人口高齡化；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 1 Our Aging World｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人口高齡化；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 1 Our Aging World｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人口高齡化；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 4 A Journey of Redemption",
+          "details": [
+            "Unit 4 A Journey of Redemption｜主題字彙與搭配",
+            "Unit 4 A Journey of Redemption｜文法與句型應用",
+            "Unit 4 A Journey of Redemption｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 4 A Journey of Redemption｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "改過與人生；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 4 A Journey of Redemption｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "改過與人生；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 4 A Journey of Redemption｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "改過與人生；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 5 Closing the STEM Gap",
+          "details": [
+            "Unit 5 Closing the STEM Gap｜主題字彙與搭配",
+            "Unit 5 Closing the STEM Gap｜文法與句型應用",
+            "Unit 5 Closing the STEM Gap｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 5 Closing the STEM Gap｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "科學教育與平等；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 5 Closing the STEM Gap｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "科學教育與平等；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 5 Closing the STEM Gap｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "科學教育與平等；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 6 The True Face of a Favela: My Time in Rocinha",
+          "details": [
+            "Unit 6 The True Face of a Favela: My Time in Rocinha｜主題字彙與搭配",
+            "Unit 6 The True Face of a Favela: My Time in Rocinha｜文法與句型應用",
+            "Unit 6 The True Face of a Favela: My Time in Rocinha｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 6 The True Face of a Favela: My Time in Rocinha｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "城市社群與文化；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 6 The True Face of a Favela: My Time in Rocinha｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "城市社群與文化；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 6 The True Face of a Favela: My Time in Rocinha｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "城市社群與文化；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 2 Live on Surprise!",
+          "details": [
+            "Review 2 Live on Surprise!｜主題字彙與搭配",
+            "Review 2 Live on Surprise!｜文法與句型應用",
+            "Review 2 Live on Surprise!｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 2 Live on Surprise!｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生活體驗；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 2 Live on Surprise!｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生活體驗；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 2 Live on Surprise!｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "生活體驗；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 7 History Repeats: Lessons from Pandemics",
+          "details": [
+            "Unit 7 History Repeats: Lessons from Pandemics｜主題字彙與搭配",
+            "Unit 7 History Repeats: Lessons from Pandemics｜文法與句型應用",
+            "Unit 7 History Repeats: Lessons from Pandemics｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 7 History Repeats: Lessons from Pandemics｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "疫情、歷史與公共衛生；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 7 History Repeats: Lessons from Pandemics｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "疫情、歷史與公共衛生；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 7 History Repeats: Lessons from Pandemics｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "疫情、歷史與公共衛生；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 8 Sore No More",
+          "details": [
+            "Unit 8 Sore No More｜主題字彙與搭配",
+            "Unit 8 Sore No More｜文法與句型應用",
+            "Unit 8 Sore No More｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 8 Sore No More｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "健康與身體感受；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 8 Sore No More｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "健康與身體感受；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 8 Sore No More｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "健康與身體感受；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 9 Calligraphy in Motion",
+          "details": [
+            "Unit 9 Calligraphy in Motion｜主題字彙與搭配",
+            "Unit 9 Calligraphy in Motion｜文法與句型應用",
+            "Unit 9 Calligraphy in Motion｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 9 Calligraphy in Motion｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "書法與藝術；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 9 Calligraphy in Motion｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "書法與藝術；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 9 Calligraphy in Motion｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "書法與藝術；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 3 Discovering How Cultures Mix at Haneda Airport",
+          "details": [
+            "Review 3 Discovering How Cultures Mix at Haneda Airport｜主題字彙與搭配",
+            "Review 3 Discovering How Cultures Mix at Haneda Airport｜文法與句型應用",
+            "Review 3 Discovering How Cultures Mix at Haneda Airport｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 3 Discovering How Cultures Mix at Haneda Airport｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "跨文化交流；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 3 Discovering How Cultures Mix at Haneda Airport｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "跨文化交流；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 3 Discovering How Cultures Mix at Haneda Airport｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "跨文化交流；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-108-english-4-edition-b",
+      "grade": "高中二年級",
+      "subject": "英文",
+      "edition": "三民版（乙版）",
+      "publisher": "三民",
+      "term": "第二學期",
+      "bookLabel": "英文第4冊（乙版）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.sanmin.com.tw/product/index/013930686",
+          "type": "publisher-companion-index",
+          "provider": "三民書局",
+          "accessedAt": "2026-11-26",
+          "limitations": "2025年初版自修公開目次；產品頁已標示有新版，未宣稱目前最新修訂版。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "三民",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。2025年初版自修公開目次；產品頁已標示有新版，未宣稱目前最新修訂版。課本學年度未確認。",
+      "units": [
+        {
+          "unit": "Unit 1 Crafting Taiwan’s Future: A Journey Through Changing Industries",
+          "details": [
+            "Unit 1 Crafting Taiwan’s Future: A Journey Through Changing Industries｜主題字彙與搭配",
+            "Unit 1 Crafting Taiwan’s Future: A Journey Through Changing Industries｜文法與句型應用",
+            "Unit 1 Crafting Taiwan’s Future: A Journey Through Changing Industries｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 1 Crafting Taiwan’s Future: A Journey Through Changing Industries｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣產業變遷；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 1 Crafting Taiwan’s Future: A Journey Through Changing Industries｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣產業變遷；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 1 Crafting Taiwan’s Future: A Journey Through Changing Industries｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣產業變遷；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2 Human Stories at the Human Library",
+          "details": [
+            "Unit 2 Human Stories at the Human Library｜主題字彙與搭配",
+            "Unit 2 Human Stories at the Human Library｜文法與句型應用",
+            "Unit 2 Human Stories at the Human Library｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 2 Human Stories at the Human Library｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人際交流與多元文化；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 2 Human Stories at the Human Library｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人際交流與多元文化；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 2 Human Stories at the Human Library｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人際交流與多元文化；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3 From Judgment to Reflection",
+          "details": [
+            "Unit 3 From Judgment to Reflection｜主題字彙與搭配",
+            "Unit 3 From Judgment to Reflection｜文法與句型應用",
+            "Unit 3 From Judgment to Reflection｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 3 From Judgment to Reflection｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反思與理解；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 3 From Judgment to Reflection｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反思與理解；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 3 From Judgment to Reflection｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "反思與理解；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 1 Auggie’s World: Where Kindness Shines Bright",
+          "details": [
+            "Review 1 Auggie’s World: Where Kindness Shines Bright｜主題字彙與搭配",
+            "Review 1 Auggie’s World: Where Kindness Shines Bright｜文法與句型應用",
+            "Review 1 Auggie’s World: Where Kindness Shines Bright｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 1 Auggie’s World: Where Kindness Shines Bright｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "善意與包容；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 1 Auggie’s World: Where Kindness Shines Bright｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "善意與包容；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 1 Auggie’s World: Where Kindness Shines Bright｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "善意與包容；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 4 Step into the Virtual Wonderland",
+          "details": [
+            "Unit 4 Step into the Virtual Wonderland｜主題字彙與搭配",
+            "Unit 4 Step into the Virtual Wonderland｜文法與句型應用",
+            "Unit 4 Step into the Virtual Wonderland｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 4 Step into the Virtual Wonderland｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "虛擬世界與科技；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 4 Step into the Virtual Wonderland｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "虛擬世界與科技；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 4 Step into the Virtual Wonderland｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "虛擬世界與科技；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 5 The Forgotten Fear: Oppenheimer and Nuclear War",
+          "details": [
+            "Unit 5 The Forgotten Fear: Oppenheimer and Nuclear War｜主題字彙與搭配",
+            "Unit 5 The Forgotten Fear: Oppenheimer and Nuclear War｜文法與句型應用",
+            "Unit 5 The Forgotten Fear: Oppenheimer and Nuclear War｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 5 The Forgotten Fear: Oppenheimer and Nuclear War｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "科學、歷史與和平；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 5 The Forgotten Fear: Oppenheimer and Nuclear War｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "科學、歷史與和平；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 5 The Forgotten Fear: Oppenheimer and Nuclear War｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "科學、歷史與和平；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 6 Seeing Isn’t Always Believing",
+          "details": [
+            "Unit 6 Seeing Isn’t Always Believing｜主題字彙與搭配",
+            "Unit 6 Seeing Isn’t Always Believing｜文法與句型應用",
+            "Unit 6 Seeing Isn’t Always Believing｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 6 Seeing Isn’t Always Believing｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "視覺與資訊判斷；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 6 Seeing Isn’t Always Believing｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "視覺與資訊判斷；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 6 Seeing Isn’t Always Believing｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "視覺與資訊判斷；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 2 Tides of Courage",
+          "details": [
+            "Review 2 Tides of Courage｜主題字彙與搭配",
+            "Review 2 Tides of Courage｜文法與句型應用",
+            "Review 2 Tides of Courage｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 2 Tides of Courage｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "勇氣與挑戰；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 2 Tides of Courage｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "勇氣與挑戰；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 2 Tides of Courage｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "勇氣與挑戰；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 7 For a World Where Nature Stands Tall",
+          "details": [
+            "Unit 7 For a World Where Nature Stands Tall｜主題字彙與搭配",
+            "Unit 7 For a World Where Nature Stands Tall｜文法與句型應用",
+            "Unit 7 For a World Where Nature Stands Tall｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 7 For a World Where Nature Stands Tall｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然與保育；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 7 For a World Where Nature Stands Tall｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然與保育；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 7 For a World Where Nature Stands Tall｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自然與保育；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 8 Woof! Meow! The Work of an Animal Communicator",
+          "details": [
+            "Unit 8 Woof! Meow! The Work of an Animal Communicator｜主題字彙與搭配",
+            "Unit 8 Woof! Meow! The Work of an Animal Communicator｜文法與句型應用",
+            "Unit 8 Woof! Meow! The Work of an Animal Communicator｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 8 Woof! Meow! The Work of an Animal Communicator｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "動物與溝通；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 8 Woof! Meow! The Work of an Animal Communicator｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "動物與溝通；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 8 Woof! Meow! The Work of an Animal Communicator｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "動物與溝通；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 9 ‘Oh! Susanna’: A Song with Regrettable Echoes",
+          "details": [
+            "Unit 9 ‘Oh! Susanna’: A Song with Regrettable Echoes｜主題字彙與搭配",
+            "Unit 9 ‘Oh! Susanna’: A Song with Regrettable Echoes｜文法與句型應用",
+            "Unit 9 ‘Oh! Susanna’: A Song with Regrettable Echoes｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 9 ‘Oh! Susanna’: A Song with Regrettable Echoes｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "音樂與歷史文化；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 9 ‘Oh! Susanna’: A Song with Regrettable Echoes｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "音樂與歷史文化；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 9 ‘Oh! Susanna’: A Song with Regrettable Echoes｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "音樂與歷史文化；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 3 Three Steps to Make Your Communication More Effective",
+          "details": [
+            "Review 3 Three Steps to Make Your Communication More Effective｜主題字彙與搭配",
+            "Review 3 Three Steps to Make Your Communication More Effective｜文法與句型應用",
+            "Review 3 Three Steps to Make Your Communication More Effective｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 3 Three Steps to Make Your Communication More Effective｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "有效溝通；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 3 Three Steps to Make Your Communication More Effective｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "有效溝通；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 3 Three Steps to Make Your Communication More Effective｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "有效溝通；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-108-english-5-edition-b",
+      "grade": "高中三年級",
+      "subject": "英文",
+      "edition": "三民版（乙版）",
+      "publisher": "三民",
+      "term": "第一學期",
+      "bookLabel": "英文第5冊（乙版）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "language-index-v2",
+      "scopeSelectionStatus": "language-index-v2",
+      "scopeDetailLevel": "publisher-lessons-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "required",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.sanmin.com.tw/product/index/014516968",
+          "type": "publisher-companion-index",
+          "provider": "三民書局",
+          "accessedAt": "2026-11-26",
+          "limitations": "2025年乙版自修目次含六課及三個複習單元；六個主課與出版社習作及WORD UP目錄一致。"
+        },
+        {
+          "url": "https://www.sanmin.com.tw/product/index/015587406",
+          "type": "publisher-companion-index",
+          "provider": "三民書局"
+        },
+        {
+          "url": "https://shop.wordup.com.tw/en/product/1307",
+          "type": "companion-course-index",
+          "provider": "WORD UP"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-lesson-index",
+        "publisher": "三民",
+        "schoolYear": null,
+        "sectionPolicy": "editorial-concepts",
+        "sourceKind": "publisher-companion-index"
+      },
+      "limitations": "細項為編輯性整理，不是官方節名、正式單字表或指定文法。2025年乙版自修目次含六課及三個複習單元；六個主課與出版社習作及WORD UP目錄一致。課本學年度未確認。",
+      "units": [
+        {
+          "unit": "Unit 1 Beyond the Music: Concerts as Economic Engines",
+          "details": [
+            "Unit 1 Beyond the Music: Concerts as Economic Engines｜主題字彙與搭配",
+            "Unit 1 Beyond the Music: Concerts as Economic Engines｜文法與句型應用",
+            "Unit 1 Beyond the Music: Concerts as Economic Engines｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 1 Beyond the Music: Concerts as Economic Engines｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "音樂與經濟；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 1 Beyond the Music: Concerts as Economic Engines｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "音樂與經濟；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 1 Beyond the Music: Concerts as Economic Engines｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "音樂與經濟；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2 The Bubble Tea Buzz",
+          "details": [
+            "Unit 2 The Bubble Tea Buzz｜主題字彙與搭配",
+            "Unit 2 The Bubble Tea Buzz｜文法與句型應用",
+            "Unit 2 The Bubble Tea Buzz｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 2 The Bubble Tea Buzz｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與文化；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 2 The Bubble Tea Buzz｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與文化；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 2 The Bubble Tea Buzz｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "飲食與文化；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 1 A Pound of Flesh or a Heart of Mercy?",
+          "details": [
+            "Review 1 A Pound of Flesh or a Heart of Mercy?｜主題字彙與搭配",
+            "Review 1 A Pound of Flesh or a Heart of Mercy?｜文法與句型應用",
+            "Review 1 A Pound of Flesh or a Heart of Mercy?｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 1 A Pound of Flesh or a Heart of Mercy?｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學、仁慈與倫理；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 1 A Pound of Flesh or a Heart of Mercy?｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學、仁慈與倫理；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 1 A Pound of Flesh or a Heart of Mercy?｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "文學、仁慈與倫理；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 3 The Destiny of Apollo and Daphne",
+          "details": [
+            "Unit 3 The Destiny of Apollo and Daphne｜主題字彙與搭配",
+            "Unit 3 The Destiny of Apollo and Daphne｜文法與句型應用",
+            "Unit 3 The Destiny of Apollo and Daphne｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 3 The Destiny of Apollo and Daphne｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "希臘神話與文學；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 3 The Destiny of Apollo and Daphne｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "希臘神話與文學；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 3 The Destiny of Apollo and Daphne｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "希臘神話與文學；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 4 Understanding Social Cues",
+          "details": [
+            "Unit 4 Understanding Social Cues｜主題字彙與搭配",
+            "Unit 4 Understanding Social Cues｜文法與句型應用",
+            "Unit 4 Understanding Social Cues｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 4 Understanding Social Cues｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "社交線索與溝通；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 4 Understanding Social Cues｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "社交線索與溝通；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 4 Understanding Social Cues｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "社交線索與溝通；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 2 Doctors for the Whole World",
+          "details": [
+            "Review 2 Doctors for the Whole World｜主題字彙與搭配",
+            "Review 2 Doctors for the Whole World｜文法與句型應用",
+            "Review 2 Doctors for the Whole World｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 2 Doctors for the Whole World｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "醫療與人道服務；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 2 Doctors for the Whole World｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "醫療與人道服務；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 2 Doctors for the Whole World｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "醫療與人道服務；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 5 Final Farewell Messages",
+          "details": [
+            "Unit 5 Final Farewell Messages｜主題字彙與搭配",
+            "Unit 5 Final Farewell Messages｜文法與句型應用",
+            "Unit 5 Final Farewell Messages｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 5 Final Farewell Messages｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "告別與生命；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 5 Final Farewell Messages｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "告別與生命；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 5 Final Farewell Messages｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "告別與生命；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Unit 6 Hooked on the Fishing Life",
+          "details": [
+            "Unit 6 Hooked on the Fishing Life｜主題字彙與搭配",
+            "Unit 6 Hooked on the Fishing Life｜文法與句型應用",
+            "Unit 6 Hooked on the Fishing Life｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Unit 6 Hooked on the Fishing Life｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "漁業與生活；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 6 Hooked on the Fishing Life｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "漁業與生活；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Unit 6 Hooked on the Fishing Life｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "漁業與生活；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "Review 3 Last But Not Least: Randy Pausch’s Farewell Speech",
+          "details": [
+            "Review 3 Last But Not Least: Randy Pausch’s Farewell Speech｜主題字彙與搭配",
+            "Review 3 Last But Not Least: Randy Pausch’s Farewell Speech｜文法與句型應用",
+            "Review 3 Last But Not Least: Randy Pausch’s Farewell Speech｜翻譯與語用"
+          ],
+          "concepts": [
+            {
+              "name": "Review 3 Last But Not Least: Randy Pausch’s Farewell Speech｜主題字彙與搭配",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "演說、生命與價值；自編高中程度例句考查詞義、詞性與搭配。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 3 Last But Not Least: Randy Pausch’s Farewell Speech｜文法與句型應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "演說、生命與價值；以原創語境考查高中句法，不宣稱課本指定句型。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            },
+            {
+              "name": "Review 3 Last But Not Least: Randy Pausch’s Farewell Speech｜翻譯與語用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "演說、生命與價值；自編具明確答案的翻譯或情境語用練習。"
+              ],
+              "excludedContent": [
+                "其他未選課文與考點",
+                "未核實的課文內容、正式詞表及指定句型",
+                "不得假造或重製完整課文，不以純閱讀理解取代語言觀念"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
