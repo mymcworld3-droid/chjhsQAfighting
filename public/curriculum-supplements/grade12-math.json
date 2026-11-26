@@ -1,0 +1,4713 @@
+{
+  "schema": 1,
+  "grade": "高中三年級",
+  "books": [
+    {
+      "bookId": "longteng-114-math-a-upper",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第一學期",
+      "bookLabel": "數學甲上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "publisher-units-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰數學 選修數甲(上)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=10298",
+          "type": "official-product-toc"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "龍騰數學 選修數甲(上)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。原表只列單元，不將右欄對應節次冒充出版社節名。",
+      "units": [
+        {
+          "unit": "數列的極限與無窮等比級數",
+          "details": [
+            "數列的極限與無窮等比級數"
+          ],
+          "concepts": [
+            {
+              "name": "數列的極限與無窮等比級數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數列極限、無窮等比級數的收斂條件及級數和"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "函數與函數的極限",
+          "details": [
+            "函數與函數的極限"
+          ],
+          "concepts": [
+            {
+              "name": "函數與函數的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數圖形、定義域、左右極限與函數極限",
+                "連續性的基本判定"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微分",
+          "details": [
+            "微分"
+          ],
+          "concepts": [
+            {
+              "name": "微分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "函數性質的判定",
+          "details": [
+            "函數性質的判定"
+          ],
+          "concepts": [
+            {
+              "name": "函數性質的判定",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分",
+          "details": [
+            "積分"
+          ],
+          "concepts": [
+            {
+              "name": "積分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分的應用",
+          "details": [
+            "積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-114-math-b-upper",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第一學期",
+      "bookLabel": "數學乙上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "publisher-units-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰數學 選修數乙(上)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.ltedu.com.tw/web/mobile2/prodlist2.aspx?ID=10300",
+          "type": "official-product-toc"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "龍騰數學 選修數乙(上)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。原表只列單元，不將右欄對應節次冒充出版社節名。",
+      "units": [
+        {
+          "unit": "數列的極限與無窮等比級數",
+          "details": [
+            "數列的極限與無窮等比級數"
+          ],
+          "concepts": [
+            {
+              "name": "數列的極限與無窮等比級數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數列極限、無窮等比級數的收斂條件及級數和"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "函數與函數的極限",
+          "details": [
+            "函數與函數的極限"
+          ],
+          "concepts": [
+            {
+              "name": "函數與函數的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數圖形、定義域、左右極限與函數極限",
+                "連續性的基本判定"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微分",
+          "details": [
+            "微分"
+          ],
+          "concepts": [
+            {
+              "name": "微分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "函數性質的判定",
+          "details": [
+            "函數性質的判定"
+          ],
+          "concepts": [
+            {
+              "name": "函數性質的判定",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分",
+          "details": [
+            "積分"
+          ],
+          "concepts": [
+            {
+              "name": "積分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分的應用",
+          "details": [
+            "積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-114-math-a-lower",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第二學期",
+      "bookLabel": "數學甲下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "publisher-units-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰數學 選修數甲(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "龍騰數學 選修數甲(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。原表只列單元，不將右欄對應節次冒充出版社節名。",
+      "units": [
+        {
+          "unit": "離散型隨機變數",
+          "details": [
+            "離散型隨機變數"
+          ],
+          "concepts": [
+            {
+              "name": "離散型隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "二項分布與幾何分布",
+          "details": [
+            "二項分布與幾何分布"
+          ],
+          "concepts": [
+            {
+              "name": "二項分布與幾何分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二項分布及幾何分布的定義與機率計算",
+                "成功次數與首次成功等待次數的區別"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數與多項式方程式",
+          "details": [
+            "複數與多項式方程式"
+          ],
+          "concepts": [
+            {
+              "name": "複數與多項式方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數與多項式方程式、實係數多項式的共軛根",
+                "因式定理與代數基本定理的基本應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數的幾何意涵",
+          "details": [
+            "複數的幾何意涵"
+          ],
+          "concepts": [
+            {
+              "name": "複數的幾何意涵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面上的模長、幅角、乘法幾何意義",
+                "極式及棣美弗定理限數甲且節名涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "拋物線",
+          "details": [
+            "拋物線"
+          ],
+          "concepts": [
+            {
+              "name": "拋物線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "拋物線焦點準線定義、標準方程式與頂點",
+                "由方程式求焦點、準線及圖形"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "橢圓",
+          "details": [
+            "橢圓"
+          ],
+          "concepts": [
+            {
+              "name": "橢圓",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "橢圓焦點距離和、標準方程式、長短軸及焦距"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "雙曲線",
+          "details": [
+            "雙曲線"
+          ],
+          "concepts": [
+            {
+              "name": "雙曲線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "雙曲線焦點距離差、標準方程式、頂點、焦點及漸近線"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "longteng-114-math-b-lower",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "龍騰版",
+      "publisher": "龍騰",
+      "term": "第二學期",
+      "bookLabel": "數學乙下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "publisher-units-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 1,
+          "schoolYear": 114,
+          "publisherTable": "龍騰數學 選修數乙(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "龍騰",
+        "page": 1,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "龍騰數學 選修數乙(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。原表只列單元，不將右欄對應節次冒充出版社節名。",
+      "units": [
+        {
+          "unit": "離散型隨機變數",
+          "details": [
+            "離散型隨機變數"
+          ],
+          "concepts": [
+            {
+              "name": "離散型隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "二項分布",
+          "details": [
+            "二項分布"
+          ],
+          "concepts": [
+            {
+              "name": "二項分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "獨立重複試驗、伯努利試驗、二項分布",
+                "二項分布機率、期望值及變異數"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數與複數平面",
+          "details": [
+            "複數與複數平面"
+          ],
+          "concepts": [
+            {
+              "name": "複數與複數平面",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面、實虛部、模長、幾何表示與基本運算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "多項式方程式的根",
+          "details": [
+            "多項式方程式的根"
+          ],
+          "concepts": [
+            {
+              "name": "多項式方程式的根",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式方程式的根、因式分解與共軛根性質"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "線性規劃",
+          "details": [
+            "線性規劃"
+          ],
+          "concepts": [
+            {
+              "name": "線性規劃",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "線性規劃的限制式、可行區域、目標函數",
+                "頂點法、平行直線系及最大最小值"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-math-a-upper",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第一學期",
+      "bookLabel": "數學甲上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "南一數學 選修數甲(上)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "南一數學 選修數甲(上)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "分布與統計",
+          "details": [
+            "1-1 隨機變數",
+            "1-2 二項分布與幾何分布"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 二項分布與幾何分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二項分布及幾何分布的定義與機率計算",
+                "成功次數與首次成功等待次數的區別"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數平面",
+          "details": [
+            "2-1 複數與多項式方程式",
+            "2-2 複數的幾何意涵"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 複數與多項式方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數與多項式方程式、實係數多項式的共軛根",
+                "因式定理與代數基本定理的基本應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 複數的幾何意涵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面上的模長、幅角、乘法幾何意義",
+                "極式及棣美弗定理限數甲且節名涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "二次曲線",
+          "details": [
+            "3-1 拋物線",
+            "3-2 橢圓",
+            "3-3 雙曲線"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 拋物線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "拋物線焦點準線定義、標準方程式與頂點",
+                "由方程式求焦點、準線及圖形"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 橢圓",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "橢圓焦點距離和、標準方程式、長短軸及焦距"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-3 雙曲線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "雙曲線焦點距離差、標準方程式、頂點、焦點及漸近線"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-math-b-upper",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第一學期",
+      "bookLabel": "數學乙上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "南一數學 選修數乙(上)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "南一數學 選修數乙(上)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "分布與統計",
+          "details": [
+            "1-1 隨機變數",
+            "1-2 二項分布"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-2 二項分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "獨立重複試驗、伯努利試驗、二項分布",
+                "二項分布機率、期望值及變異數"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數平面",
+          "details": [
+            "2-1 複數與多項式方程式",
+            "2-2 複數的幾何意涵"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 複數與多項式方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數與多項式方程式、實係數多項式的共軛根",
+                "因式定理與代數基本定理的基本應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 複數的幾何意涵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面上的模長、幅角、乘法幾何意義",
+                "極式及棣美弗定理限數甲且節名涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-math-a-lower",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第二學期",
+      "bookLabel": "數學甲下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "南一數學 選修數甲(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "南一數學 選修數甲(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "極限",
+          "details": [
+            "1-1 數列及其極限",
+            "1-2 函數及其極限"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 數列及其極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數列收斂與發散、數列極限的基本性質",
+                "有理式與等比數列極限、夾擠概念"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 函數及其極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數圖形、定義域、左右極限與函數極限",
+                "連續性的基本判定"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微分",
+          "details": [
+            "2-1 微分的概念與性質",
+            "2-2 微分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 微分的概念與性質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 微分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分",
+          "details": [
+            "3-1 積分的概念與性質",
+            "3-2 積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 積分的概念與性質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-math-b-lower",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "南一版",
+      "publisher": "南一",
+      "term": "第二學期",
+      "bookLabel": "數學乙下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 2,
+          "schoolYear": 114,
+          "publisherTable": "南一數學 選修數乙(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 2,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "南一數學 選修數乙(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "線性規劃",
+          "details": [
+            "1-1 線性規劃"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 線性規劃",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "線性規劃的限制式、可行區域、目標函數",
+                "頂點法、平行直線系及最大最小值"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "極限與函數",
+          "details": [
+            "2-1 無窮等比級數",
+            "2-2 函數及其極限"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 無窮等比級數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "無窮等比級數的收斂條件、級數和",
+                "循環小數及幾何應用依節名限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 函數及其極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數圖形、定義域、左右極限與函數極限",
+                "連續性的基本判定"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微積分",
+          "details": [
+            "3-1 微分",
+            "3-2 微分的應用",
+            "3-3 積分",
+            "3-4 積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 微分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-2 微分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-3 積分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-4 積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-math-a-upper-edition-b",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "南一版（乙版）",
+      "publisher": "南一",
+      "term": "第一學期",
+      "bookLabel": "數學甲上冊（乙版）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "schoolYear": 114,
+          "publisherTable": "南一數學 選修數甲(上)乙版",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "南一數學 選修數甲(上)乙版"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。文字層部分跨欄對齊仍待原檔核對。",
+      "units": [
+        {
+          "unit": "極限與函數",
+          "details": [
+            "1-1 數列及其極限",
+            "1-2 無窮等比級數",
+            "1-3 函數",
+            "1-4 函數的極限"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 數列及其極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數列收斂與發散、數列極限的基本性質",
+                "有理式與等比數列極限、夾擠概念"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 無窮等比級數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "無窮等比級數的收斂條件、級數和",
+                "循環小數及幾何應用依節名限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-3 函數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數定義、定義域、值域、圖形及基本性質",
+                "函數運算依所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-4 函數的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數極限、左右極限、極限運算",
+                "連續性及圖形判讀依課文節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微分",
+          "details": [
+            "2-1 微分的概念與性質",
+            "2-2 微分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 微分的概念與性質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 微分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分",
+          "details": [
+            "3-1 積分的概念與性質",
+            "3-2 積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 積分的概念與性質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-math-b-upper-edition-b",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "南一版（乙版）",
+      "publisher": "南一",
+      "term": "第一學期",
+      "bookLabel": "數學乙上冊（乙版）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "schoolYear": 114,
+          "publisherTable": "南一數學 選修數乙(上)乙版",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "南一數學 選修數乙(上)乙版"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "極限與函數",
+          "details": [
+            "1-1 無窮等比級數",
+            "1-2 函數",
+            "1-3 函數的極限"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 無窮等比級數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "無窮等比級數的收斂條件、級數和",
+                "循環小數及幾何應用依節名限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-2 函數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數定義、定義域、值域、圖形及基本性質",
+                "函數運算依所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-3 函數的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數極限、左右極限、極限運算",
+                "連續性及圖形判讀依課文節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微分",
+          "details": [
+            "2-1 導數與微分",
+            "2-2 微分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 導數與微分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 微分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分",
+          "details": [
+            "3-1 積分的概念與性質",
+            "3-2 積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 積分的概念與性質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-2 積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-math-a-lower-edition-b",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "南一版（乙版）",
+      "publisher": "南一",
+      "term": "第二學期",
+      "bookLabel": "數學甲下冊（乙版）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "schoolYear": 114,
+          "publisherTable": "南一數學 選修數甲(下)乙版",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "南一數學 選修數甲(下)乙版"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "分布與統計",
+          "details": [
+            "1-1 隨機變數",
+            "1-2 二項分布與幾何分布"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 二項分布與幾何分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二項分布及幾何分布的定義與機率計算",
+                "成功次數與首次成功等待次數的區別"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數平面",
+          "details": [
+            "2-1 複數與多項式方程式",
+            "2-2 複數的幾何意涵"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 複數與多項式方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數與多項式方程式、實係數多項式的共軛根",
+                "因式定理與代數基本定理的基本應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 複數的幾何意涵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面上的模長、幅角、乘法幾何意義",
+                "極式及棣美弗定理限數甲且節名涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "二次曲線",
+          "details": [
+            "3-1 拋物線",
+            "3-2 橢圓",
+            "3-3 雙曲線"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 拋物線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "拋物線焦點準線定義、標準方程式與頂點",
+                "由方程式求焦點、準線及圖形"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 橢圓",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "橢圓焦點距離和、標準方程式、長短軸及焦距"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-3 雙曲線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "雙曲線焦點距離差、標準方程式、頂點、焦點及漸近線"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "nani-114-math-b-lower-edition-b",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "南一版（乙版）",
+      "publisher": "南一",
+      "term": "第二學期",
+      "bookLabel": "數學乙下冊（乙版）",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 3,
+          "schoolYear": 114,
+          "publisherTable": "南一數學 選修數乙(下)乙版",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "南一",
+        "page": 3,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "南一數學 選修數乙(下)乙版"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "分布與統計",
+          "details": [
+            "1-1 隨機變數",
+            "1-2 二項分布"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-2 二項分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "獨立重複試驗、伯努利試驗、二項分布",
+                "二項分布機率、期望值及變異數"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數平面",
+          "details": [
+            "2-1 複數與多項式方程式",
+            "2-2 複數的幾何意涵"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 複數與多項式方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數與多項式方程式、實係數多項式的共軛根",
+                "因式定理與代數基本定理的基本應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 複數的幾何意涵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面上的模長、幅角、乘法幾何意義",
+                "極式及棣美弗定理限數甲且節名涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "線性規劃",
+          "details": [
+            "3-1 線性規劃"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 線性規劃",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "線性規劃的限制式、可行區域、目標函數",
+                "頂點法、平行直線系及最大最小值"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-math-a-upper",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "數學甲上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 4,
+          "schoolYear": 114,
+          "publisherTable": "翰林數學 選修數甲(上)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 4,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "翰林數學 選修數甲(上)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "極限與函數",
+          "details": [
+            "1-1 數列及其極限",
+            "1-2 無窮等比級數",
+            "1-3 函數的概念",
+            "1-4 函數的極限"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 數列及其極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數列收斂與發散、數列極限的基本性質",
+                "有理式與等比數列極限、夾擠概念"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 無窮等比級數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "無窮等比級數的收斂條件、級數和",
+                "循環小數及幾何應用依節名限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-3 函數的概念",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數定義、定義域、值域、圖形及基本性質",
+                "函數運算依所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-4 函數的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數極限、左右極限、極限運算",
+                "連續性及圖形判讀依課文節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微分",
+          "details": [
+            "2-1 微分與切線",
+            "2-2 導函數與函數圖形"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 微分與切線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 導函數與函數圖形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分",
+          "details": [
+            "3-1 積分的意義",
+            "3-2 積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 積分的意義",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-math-b-upper",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第一學期",
+      "bookLabel": "數學乙上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 4,
+          "schoolYear": 114,
+          "publisherTable": "翰林數學 選修數乙(上)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.sanmin.com.tw/product/index/013301170",
+          "type": "publisher-aligned-workbook-toc"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 4,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "翰林數學 選修數乙(上)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。乙上積分第二節未能由文字層明確區分；僅收錄可辨識節名，待核。",
+      "units": [
+        {
+          "unit": "極限與函數",
+          "details": [
+            "1-1 無窮等比級數",
+            "1-2 函數的概念",
+            "1-3 函數的極限"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 無窮等比級數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "無窮等比級數的收斂條件、級數和",
+                "循環小數及幾何應用依節名限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-2 函數的概念",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數定義、定義域、值域、圖形及基本性質",
+                "函數運算依所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-3 函數的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數極限、左右極限、極限運算",
+                "連續性及圖形判讀依課文節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微分",
+          "details": [
+            "2-1 微分與切線",
+            "2-2 導函數與函數圖形"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 微分與切線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 導函數與函數圖形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分",
+          "details": [
+            "3-1 積分"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 積分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-math-a-lower",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第二學期",
+      "bookLabel": "數學甲下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 4,
+          "schoolYear": 114,
+          "publisherTable": "翰林數學 選修數甲(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 4,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "翰林數學 選修數甲(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "二次曲線",
+          "details": [
+            "1-1 拋物線",
+            "1-2 橢圓",
+            "1-3 雙曲線"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 拋物線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "拋物線焦點準線定義、標準方程式與頂點",
+                "由方程式求焦點、準線及圖形"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 橢圓",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "橢圓焦點距離和、標準方程式、長短軸及焦距"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-3 雙曲線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "雙曲線焦點距離差、標準方程式、頂點、焦點及漸近線"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數與多項式方程式",
+          "details": [
+            "2-1 複數",
+            "2-2 多項式方程式",
+            "2-3 複數的極式與幾何意義"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 複數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數的實虛部、四則運算、共軛及絕對值",
+                "複數平面的基本表示依節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 多項式方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式方程式的根、因式分解與共軛根性質"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-3 複數的極式與幾何意義",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數極式、幅角、乘除法及棣美弗定理"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "機率統計",
+          "details": [
+            "3-1 離散型隨機變數",
+            "3-2 二項分布與幾何分布"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 離散型隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 二項分布與幾何分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二項分布及幾何分布的定義與機率計算",
+                "成功次數與首次成功等待次數的區別"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "hanlin-114-math-b-lower",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "翰林版",
+      "publisher": "翰林",
+      "term": "第二學期",
+      "bookLabel": "數學乙下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 4,
+          "schoolYear": 114,
+          "publisherTable": "翰林數學 選修數乙(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "翰林",
+        "page": 4,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "翰林數學 選修數乙(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "線性規劃",
+          "details": [
+            "1-1 線性規劃"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 線性規劃",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "線性規劃的限制式、可行區域、目標函數",
+                "頂點法、平行直線系及最大最小值"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數與多項式方程式",
+          "details": [
+            "2-1 複數",
+            "2-2 多項式方程式"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 複數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數的實虛部、四則運算、共軛及絕對值",
+                "複數平面的基本表示依節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 多項式方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式方程式的根、因式分解與共軛根性質"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "機率統計",
+          "details": [
+            "3-1 離散型隨機變數",
+            "3-2 二項分布"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 離散型隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-2 二項分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "獨立重複試驗、伯努利試驗、二項分布",
+                "二項分布機率、期望值及變異數"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-math-a-upper",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第一學期",
+      "bookLabel": "數學甲上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 5,
+          "schoolYear": 114,
+          "publisherTable": "三民數學 選修數甲(上)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.sanmin.com.tw/product/index/013368865",
+          "type": "publisher-workbook-toc"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 5,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "三民數學 選修數甲(上)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "極限與函數",
+          "details": [
+            "1-1 數列及其極限",
+            "1-2 無窮等比級數",
+            "1-3 函數與函數圖形的性質",
+            "1-4 函數的極限"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 數列及其極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數列收斂與發散、數列極限的基本性質",
+                "有理式與等比數列極限、夾擠概念"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 無窮等比級數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "無窮等比級數的收斂條件、級數和",
+                "循環小數及幾何應用依節名限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-3 函數與函數圖形的性質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數定義、定義域、值域、圖形及基本性質",
+                "函數運算依所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-4 函數的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數極限、左右極限、極限運算",
+                "連續性及圖形判讀依課文節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "函數的微分",
+          "details": [
+            "2-1 微分",
+            "2-2 導函數與函數的圖形"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 微分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 導函數與函數的圖形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "多項式函數的積分",
+          "details": [
+            "3-1 黎曼和與積分",
+            "3-2 積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 黎曼和與積分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-math-b-upper",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第一學期",
+      "bookLabel": "數學乙上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 5,
+          "schoolYear": 114,
+          "publisherTable": "三民數學 選修數乙(上)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 5,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "三民數學 選修數乙(上)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "極限與函數",
+          "details": [
+            "1-1 數列及其極限",
+            "1-2 函數與函數圖形的性質",
+            "1-3 函數的極限"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 數列及其極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數列收斂與發散、數列極限的基本性質",
+                "有理式與等比數列極限、夾擠概念"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-2 函數與函數圖形的性質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數定義、定義域、值域、圖形及基本性質",
+                "函數運算依所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-3 函數的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數極限、左右極限、極限運算",
+                "連續性及圖形判讀依課文節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "多項式函數的微分",
+          "details": [
+            "2-1 微分",
+            "2-2 導函數與函數的圖形"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 微分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 導函數與函數的圖形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "多項式函數的積分",
+          "details": [
+            "3-1 積分",
+            "3-2 積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 積分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-2 積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-math-a-lower",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第二學期",
+      "bookLabel": "數學甲下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 5,
+          "schoolYear": 114,
+          "publisherTable": "三民數學 選修數甲(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 5,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "三民數學 選修數甲(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "二次曲線",
+          "details": [
+            "1-1 拋物線",
+            "1-2 橢圓",
+            "1-3 雙曲線"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 拋物線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "拋物線焦點準線定義、標準方程式與頂點",
+                "由方程式求焦點、準線及圖形"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 橢圓",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "橢圓焦點距離和、標準方程式、長短軸及焦距"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-3 雙曲線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "雙曲線焦點距離差、標準方程式、頂點、焦點及漸近線"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數與方程式",
+          "details": [
+            "2-1 複數與方程式",
+            "2-2 複數的幾何意涵"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 複數與方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數與多項式方程式、實係數多項式的共軛根",
+                "因式定理與代數基本定理的基本應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 複數的幾何意涵",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面上的模長、幅角、乘法幾何意義",
+                "極式及棣美弗定理限數甲且節名涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "隨機變數及其應用",
+          "details": [
+            "3-1 離散型隨機變數",
+            "3-2 二項分布及其應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 離散型隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 二項分布及其應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二項分布及幾何分布的定義與機率計算",
+                "成功次數與首次成功等待次數的區別"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-114-math-b-lower",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "三民版",
+      "publisher": "三民",
+      "term": "第二學期",
+      "bookLabel": "數學乙下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 5,
+          "schoolYear": 114,
+          "publisherTable": "三民數學 選修數乙(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "三民",
+        "page": 5,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "三民數學 選修數乙(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。線性規劃章左欄只辨識出1-1，待核是否有後續節名。",
+      "units": [
+        {
+          "unit": "線性規劃",
+          "details": [
+            "1-1 二元一次不等式"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 二元一次不等式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二元一次不等式、聯立不等式與平面可行區域"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數與方程式",
+          "details": [
+            "2-1 複數與複數平面",
+            "2-2 方程式的虛根"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 複數與複數平面",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面、實虛部、模長、幾何表示與基本運算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 方程式的虛根",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式方程式的根、因式分解與共軛根性質"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "隨機變數及其應用",
+          "details": [
+            "3-1 離散型隨機變數",
+            "3-2 二項分布及其應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 離散型隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-2 二項分布及其應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "獨立重複試驗、伯努利試驗、二項分布",
+                "二項分布機率、期望值及變異數"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "taiyu-114-math-a-upper",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "泰宇版",
+      "publisher": "泰宇",
+      "term": "第一學期",
+      "bookLabel": "數學甲上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 6,
+          "schoolYear": 114,
+          "publisherTable": "泰宇數學 選修數甲(上)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "泰宇",
+        "page": 6,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "泰宇數學 選修數甲(上)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "數列的極限",
+          "details": [
+            "1-1 無窮數列的極限",
+            "1-2 數列極限的應用"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 無窮數列的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數列收斂與發散、數列極限的基本性質",
+                "有理式與等比數列極限、夾擠概念"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 數列極限的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數列極限及無窮等比級數的基本應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微分",
+          "details": [
+            "2-1 函數的概念—函數面面觀",
+            "2-2 函數的極限",
+            "2-3 微分與導函數"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 函數的概念—函數面面觀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數定義、定義域、值域、圖形及基本性質",
+                "函數運算依所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 函數的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數極限、左右極限、極限運算",
+                "連續性及圖形判讀依課文節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-3 微分與導函數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分",
+          "details": [
+            "3-1 積分與微分的關係",
+            "3-2 積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 積分與微分的關係",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "微分與積分的關係、微積分基本定理",
+                "多項式反導函數與定積分計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "taiyu-114-math-b-upper",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "泰宇版",
+      "publisher": "泰宇",
+      "term": "第一學期",
+      "bookLabel": "數學乙上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 6,
+          "schoolYear": 114,
+          "publisherTable": "泰宇數學 選修數乙(上)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "泰宇",
+        "page": 6,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "泰宇數學 選修數乙(上)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "無窮等比級數",
+          "details": [
+            "1-1 數列的收斂與發散",
+            "1-2 級數的概念與符號",
+            "1-3 無窮等比級數",
+            "1-4 循環小數及幾何上的應用"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 數列的收斂與發散",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數列收斂與發散、數列極限的基本性質",
+                "有理式與等比數列極限、夾擠概念"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-2 級數的概念與符號",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "部分和、級數符號、級數收斂與發散的基本概念"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-3 無窮等比級數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "無窮等比級數的收斂條件、級數和",
+                "循環小數及幾何應用依節名限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-4 循環小數及幾何上的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "循環小數化分數、無窮等比級數的幾何應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "函數的極限",
+          "details": [
+            "2-1 函數的概念—函數面面觀",
+            "2-2 函數的極限"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 函數的概念—函數面面觀",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數定義、定義域、值域、圖形及基本性質",
+                "函數運算依所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 函數的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數極限、左右極限、極限運算",
+                "連續性及圖形判讀依課文節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微分與導函數",
+          "details": [
+            "3-1 曲線上的切線斜率與導數",
+            "3-2 多項式函數的導函數",
+            "3-3 導函數與函數的圖形"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 曲線上的切線斜率與導數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "割線與切線、導數極限定義、切線方程式"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-2 多項式函數的導函數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的導函數、係數積與和差法則",
+                "在指定點的導數值"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-3 導函數與函數的圖形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分",
+          "details": [
+            "4-1 積分與微分的關係",
+            "4-2 微積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "4-1 積分與微分的關係",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "微分與積分的關係、微積分基本定理",
+                "多項式反導函數與定積分計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "4-2 微積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數增減、極值、面積及累積量",
+                "僅限選定微積分應用節次"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "taiyu-114-math-a-lower",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "泰宇版",
+      "publisher": "泰宇",
+      "term": "第二學期",
+      "bookLabel": "數學甲下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 6,
+          "schoolYear": 114,
+          "publisherTable": "泰宇數學 選修數甲(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "泰宇",
+        "page": 6,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "泰宇數學 選修數甲(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "複數與複數平面",
+          "details": [
+            "1-1 複數",
+            "1-2 複數與方程式",
+            "1-3 複數平面",
+            "1-4 複數的n次方根"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 複數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數的實虛部、四則運算、共軛及絕對值",
+                "複數平面的基本表示依節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 複數與方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數與多項式方程式、實係數多項式的共軛根",
+                "因式定理與代數基本定理的基本應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-3 複數平面",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面、實虛部、模長、幾何表示與基本運算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-4 複數的n次方根",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數的 n 次方根、極式與根在複數平面的分布"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "二次曲線",
+          "details": [
+            "2-1 拋物線",
+            "2-2 橢圓",
+            "2-3 雙曲線"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 拋物線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "拋物線焦點準線定義、標準方程式與頂點",
+                "由方程式求焦點、準線及圖形"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 橢圓",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "橢圓焦點距離和、標準方程式、長短軸及焦距"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-3 雙曲線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "雙曲線焦點距離差、標準方程式、頂點、焦點及漸近線"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "機率分布",
+          "details": [
+            "3-1 隨機變數",
+            "3-2 二項分布與幾何分布"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 二項分布與幾何分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二項分布及幾何分布的定義與機率計算",
+                "成功次數與首次成功等待次數的區別"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "taiyu-114-math-b-lower",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "泰宇版",
+      "publisher": "泰宇",
+      "term": "第二學期",
+      "bookLabel": "數學乙下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 6,
+          "schoolYear": 114,
+          "publisherTable": "泰宇數學 選修數乙(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "泰宇",
+        "page": 6,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "泰宇數學 選修數乙(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "複數與方程式",
+          "details": [
+            "1-1 複數",
+            "1-2 複數與方程式",
+            "1-3 複數平面"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 複數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數的實虛部、四則運算、共軛及絕對值",
+                "複數平面的基本表示依節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-2 複數與方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數與多項式方程式、實係數多項式的共軛根",
+                "因式定理與代數基本定理的基本應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-3 複數平面",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面、實虛部、模長、幾何表示與基本運算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "線性規劃",
+          "details": [
+            "2-1 線性規劃預備",
+            "2-2 線性規劃"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 線性規劃預備",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二元一次不等式、聯立不等式與平面可行區域"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 線性規劃",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "線性規劃的限制式、可行區域、目標函數",
+                "頂點法、平行直線系及最大最小值"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "機率分布",
+          "details": [
+            "3-1 隨機變數",
+            "3-2 二項分布"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-2 二項分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "獨立重複試驗、伯努利試驗、二項分布",
+                "二項分布機率、期望值及變異數"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "chwa-114-math-a-upper",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "全華版",
+      "publisher": "全華",
+      "term": "第一學期",
+      "bookLabel": "數學甲上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 7,
+          "schoolYear": 114,
+          "publisherTable": "全華數學 選修數甲(上)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "全華",
+        "page": 7,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "全華數學 選修數甲(上)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "數列與級數",
+          "details": [
+            "1-1 無窮數列",
+            "1-2 無窮級數"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 無窮數列",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "數列收斂與發散、數列極限的基本性質",
+                "有理式與等比數列極限、夾擠概念"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 無窮級數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "無窮等比級數的收斂條件、級數和",
+                "循環小數及幾何應用依節名限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微分",
+          "details": [
+            "2-1 函數及其圖形",
+            "2-2 函數的極限",
+            "2-3 導數及其性質",
+            "2-4 導函數的應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 函數及其圖形",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數定義、定義域、值域、圖形及基本性質",
+                "函數運算依所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 函數的極限",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數極限、左右極限、極限運算",
+                "連續性及圖形判讀依課文節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-3 導數及其性質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-4 導函數的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "積分及其應用",
+          "details": [
+            "3-1 定積分",
+            "3-2 微積分基本定理",
+            "3-3 定積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 定積分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 微積分基本定理",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "微分與積分的關係、微積分基本定理",
+                "多項式反導函數與定積分計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-3 定積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "chwa-114-math-b-upper",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "全華版",
+      "publisher": "全華",
+      "term": "第一學期",
+      "bookLabel": "數學乙上冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "pending-crosswalk-label",
+      "scopeSelectionStatus": "pending-crosswalk-label",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-1_comparison_math_114.pdf?v=20250901",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 7,
+          "schoolYear": 114,
+          "publisherTable": "全華數學 選修數甲(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "全華",
+        "page": 7,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "全華數學 選修數甲(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。來源標頭與目錄內容及冊次矛盾（第7–8頁），暫存候選、不開放；待出版社原始目次確認。",
+      "units": [
+        {
+          "unit": "線性規劃",
+          "details": [
+            "1-1 二元一次聯立不等式與其應用",
+            "1-2 線性規劃"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 二元一次聯立不等式與其應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二元一次不等式、聯立不等式與平面可行區域"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-2 線性規劃",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "線性規劃的限制式、可行區域、目標函數",
+                "頂點法、平行直線系及最大最小值"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "微分",
+          "details": [
+            "2-1 函數及其運算",
+            "2-2 函數的極限與連續",
+            "2-3 導數及其性質",
+            "2-4 導函數的應用"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 函數及其運算",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數定義、定義域、值域、圖形及基本性質",
+                "函數運算依所選節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 函數的極限與連續",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "函數極限、左右極限、極限運算",
+                "連續性及圖形判讀依課文節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-3 導數及其性質",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "平均與瞬時變化率、導數極限定義、切線斜率",
+                "多項式函數的導函數及微分基本法則"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-4 導函數的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式函數的增減性、臨界點、局部與絕對極值",
+                "函數圖形與最佳化",
+                "數乙包含邊際成本、邊際收益等情境時限其節名"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "無窮等比級數與積分",
+          "details": [
+            "3-1 無窮等比級數",
+            "3-2 定積分",
+            "3-3 微積分基本定理",
+            "3-4 定積分的應用"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 無窮等比級數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "無窮等比級數的收斂條件、級數和",
+                "循環小數及幾何應用依節名限制"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-2 定積分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "多項式的定積分、積分性質、反導函數及基本計算",
+                "黎曼和限所選節次涵蓋"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-3 微積分基本定理",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "微分與積分的關係、微積分基本定理",
+                "多項式反導函數與定積分計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "3-4 定積分的應用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "曲線與坐標軸間及兩曲線間的面積",
+                "多項式函數累積量與定積分應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "chwa-114-math-a-lower",
+      "grade": "高中三年級",
+      "subject": "數學甲",
+      "edition": "全華版",
+      "publisher": "全華",
+      "term": "第二學期",
+      "bookLabel": "數學甲下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 7,
+          "schoolYear": 114,
+          "publisherTable": "全華數學 選修數甲(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "全華",
+        "page": 7,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "全華數學 選修數甲(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "圓錐曲線",
+          "details": [
+            "1-1 拋物線",
+            "1-2 橢圓",
+            "1-3 雙曲線",
+            "1-4 圓錐曲線與二元二次方程式"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 拋物線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "拋物線焦點準線定義、標準方程式與頂點",
+                "由方程式求焦點、準線及圖形"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-2 橢圓",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "橢圓焦點距離和、標準方程式、長短軸及焦距"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-3 雙曲線",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "雙曲線焦點距離差、標準方程式、頂點、焦點及漸近線"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "1-4 圓錐曲線與二元二次方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二元二次方程式、配方與圓錐曲線的辨識"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "複數",
+          "details": [
+            "2-1 複數與複數平面",
+            "2-2 複數的四則運算與絕對值",
+            "2-3 複數與方程式",
+            "2-4 複數的極式及棣美弗定理"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 複數與複數平面",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面、實虛部、模長、幾何表示與基本運算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-2 複數的四則運算與絕對值",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數四則運算、共軛複數、絕對值及相關性質"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-3 複數與方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數與多項式方程式、實係數多項式的共軛根",
+                "因式定理與代數基本定理的基本應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "2-4 複數的極式及棣美弗定理",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數極式、幅角、乘除法及棣美弗定理"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "隨機變數與其機率分布",
+          "details": [
+            "3-1 隨機變數",
+            "3-2 二項分布與幾何分布"
+          ],
+          "concepts": [
+            {
+              "name": "3-1 隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            },
+            {
+              "name": "3-2 二項分布與幾何分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "二項分布及幾何分布的定義與機率計算",
+                "成功次數與首次成功等待次數的區別"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "chwa-114-math-b-lower",
+      "grade": "高中三年級",
+      "subject": "數學乙",
+      "edition": "全華版",
+      "publisher": "全華",
+      "term": "第二學期",
+      "bookLabel": "數學乙下冊",
+      "schoolYear": 114,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "grade12-crosswalk-transcription",
+      "scopeSelectionStatus": "grade12-crosswalk-transcription",
+      "scopeDetailLevel": "crosswalk-sections",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "book-sequence",
+      "sources": [
+        {
+          "url": "https://www.go100.com.tw/file/108_comparison_table/senior/12-2_comparison_elective_math_II_114.pdf?v=20250221",
+          "type": "third-party-curriculum-crosswalk",
+          "provider": "三貝德／升學王",
+          "page": 7,
+          "schoolYear": 114,
+          "publisherTable": "全華數學 選修數乙(下)",
+          "reviewMethod": "structured-text",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-crosswalk-transcription",
+        "publisher": "全華",
+        "page": 7,
+        "schoolYear": 114,
+        "columnPolicy": "publisher-left-only",
+        "reviewMethod": "structured-text",
+        "rawFileHashStatus": "unavailable",
+        "sourceTable": "全華數學 選修數乙(下)"
+      },
+      "limitations": "114學年度對照表文字層；PDF影像與原檔雜湊未取得。細部出題提示為編輯性整理，非官方逐觀念清單。",
+      "units": [
+        {
+          "unit": "複數",
+          "details": [
+            "1-1 複數與複數平面",
+            "1-2 複數的四則運算與絕對值",
+            "1-3 複數與方程式"
+          ],
+          "concepts": [
+            {
+              "name": "1-1 複數與複數平面",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數平面、實虛部、模長、幾何表示與基本運算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-2 複數的四則運算與絕對值",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數四則運算、共軛複數、絕對值及相關性質"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "1-3 複數與方程式",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "複數與多項式方程式、實係數多項式的共軛根",
+                "因式定理與代數基本定理的基本應用"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "分布與統計",
+          "details": [
+            "2-1 隨機變數",
+            "2-2 二項分布"
+          ],
+          "concepts": [
+            {
+              "name": "2-1 隨機變數",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "離散型隨機變數、機率分布表",
+                "期望值、變異數與標準差的基本計算"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            },
+            {
+              "name": "2-2 二項分布",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "獨立重複試驗、伯努利試驗、二項分布",
+                "二項分布機率、期望值及變異數"
+              ],
+              "excludedContent": [
+                "其他未選節次的獨立考點",
+                "大學微積分的泰勒展開、分部積分、換元積分及微分方程",
+                "數甲的圓錐曲線、幾何分布、複數極式與棣美弗定理"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

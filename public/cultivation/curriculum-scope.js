@@ -72,6 +72,9 @@ const label=document.createElement('b');label.textContent=u.unit;summary.append(
 if(u.book?.scopeSelectionStatus==='publisher-chapter-outline'){
  const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='出版社章名 · 細項為整理觀念 · 學年度未標示';group.append(note);
 }
+if(u.book?.scopeSelectionStatus==='grade12-crosswalk-transcription'){
+ const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent='114學年度課程對照 · 原檔待核';group.append(note);
+}
 if(u.book?.scopeSelectionStatus==='elective-crosswalk-transcription'){
  const note=document.createElement('p');note.className='cs-note cs-source-note';note.textContent=u.book.schoolYear+'學年度課程對照 · 原檔待核';group.append(note);
 }
@@ -92,11 +95,12 @@ async function loadCatalogue(g,s){
  if(!memo.has(file))memo.set(file,fetch('/'+file).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).then(async base=>{
    const required=g==='高中一年級'&&['數學','物理','化學','生物','地球科學'].includes(s);
    const elective=['高中二年級','高中三年級'].includes(g)&&['生物','地球科學'].includes(s);
-   if(!required&&!elective)return base;
-   const supplementFile=required?'curriculum-supplements/grade10.json?v=20261126-batch5':'curriculum-supplements/elective-science.json?v=20261126-batch6';
+   const seniorMath=g==='高中三年級'&&['數學甲','數學乙'].includes(s);
+   if(!required&&!elective&&!seniorMath)return base;
+   const supplementFile=required?'curriculum-supplements/grade10.json?v=20261126-batch5':seniorMath?'curriculum-supplements/grade12-math.json?v=20261126-batch7':'curriculum-supplements/elective-science.json?v=20261126-batch6';
    if(!memo.has(supplementFile))memo.set(supplementFile,fetch('/'+supplementFile).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(supplementFile);throw e;}));
    const supplemental=await memo.get(supplementFile);
-   return {...base,books:[...base.books,...supplemental.books.filter(b=>b.subject===s&&(required?b.grade===g:b.eligibleGrades?.includes(g))).map(b=>({...b,grade:g}))]};
+   return {...base,books:[...base.books,...supplemental.books.filter(b=>b.subject===s&&(required||seniorMath?b.grade===g:b.eligibleGrades?.includes(g))).map(b=>({...b,grade:g}))]};
  }).catch(e=>{memo.delete(file);throw e;}));
  return memo.get(file);
 }
@@ -112,6 +116,7 @@ function catalogOptions(){
   if(!available)option.textContent+='（待開放）';
   else if(records.every(b=>b.verificationStatus==='unverified'))option.textContent+='（既有整理）';
   else if(records.every(b=>b.scopeSelectionStatus==='publisher-chapter-outline'))option.textContent+='（章名・整理觀念）';
+  else if(records.every(b=>b.scopeSelectionStatus==='grade12-crosswalk-transcription'))option.textContent+='（課程對照・原檔待核）';
   else if(records.every(b=>b.scopeSelectionStatus==='elective-crosswalk-transcription'))option.textContent+='（課程對照・原檔待核）';
   else if(records.every(b=>b.scopeSelectionStatus==='source-reviewed-crosswalk'))option.textContent+='（課程對照・原檔待核）';
   else if(records.every(b=>b.scopeSelectionStatus==='verified-crosswalk'))option.textContent+='（課程對照）';

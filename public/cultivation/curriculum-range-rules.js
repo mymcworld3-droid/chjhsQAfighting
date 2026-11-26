@@ -32,6 +32,24 @@
         !!book.units?.length&&book.units.every(u=>u.details?.length>0&&new Set(u.details).size===u.details.length&&
           Array.isArray(u.concepts)&&u.concepts.length===u.details.length&&u.concepts.every((c,i)=>c.name===u.details[i]&&Array.isArray(c.allowedContent)&&c.allowedContent.length>0&&Array.isArray(c.excludedContent)));
     }
+    if(book.scopeSelectionStatus==='grade12-crosswalk-transcription'){
+      const e=book.scopeEvidence, track=book.subject==='數學甲'?'甲':book.subject==='數學乙'?'乙':'';
+      const variant=book.edition===book.publisher+'版（乙版）';
+      if(!track||book.grade!=='高中三年級'||book.schoolYear!==114||book.releaseStatus!=='blocked'||
+        book.verificationStatus!==book.scopeSelectionStatus||book.courseType!=='elective'||book.schedulePolicy!=='book-sequence'||
+        !['第一學期','第二學期'].includes(book.term)||(!variant&&book.edition!==book.publisher+'版')||(variant&&book.publisher!=='南一')||
+        !/^\d{4}-\d{2}-\d{2}$/.test(book.verifiedAt||''))return false;
+      const lower=book.term==='第二學期',pages={'龍騰':1,'南一':variant?3:2,'翰林':4,'三民':5,'泰宇':6,'全華':7};
+      const page=pages[book.publisher],table=book.publisher+'數學 選修數'+track+'('+(lower?'下':'上')+')'+(variant?'乙版':'');
+      const url='https://www.go100.com.tw/file/108_comparison_table/senior/'+(lower?'12-2_comparison_elective_math_II_114.pdf?v=20250221':'12-1_comparison_math_114.pdf?v=20250901');
+      if(!page||(book.publisher==='全華'&&track==='乙'&&!lower)||
+        e?.kind!=='publisher-crosswalk-transcription'||e.publisher!==book.publisher||e.page!==page||e.schoolYear!==114||
+        e.columnPolicy!=='publisher-left-only'||e.rawFileHashStatus!=='unavailable'||e.reviewMethod!=='structured-text'||e.sourceTable!==table||
+        book.scopeDetailLevel!==(book.publisher==='龍騰'?'publisher-units-editorial-concepts':'crosswalk-sections'))return false;
+      return !!book.sources?.some(s=>s.type==='third-party-curriculum-crosswalk'&&s.url===url&&s.page===page&&s.schoolYear===114&&s.publisherTable===table&&s.reviewMethod==='structured-text')&&
+        !!book.units?.length&&book.units.every(u=>u.details?.length>0&&u.details.length<=24&&new Set(u.details).size===u.details.length&&
+          Array.isArray(u.concepts)&&u.concepts.length===u.details.length&&u.concepts.every((c,i)=>c.name===u.details[i]&&Array.isArray(c.allowedContent)&&c.allowedContent.length&&Array.isArray(c.excludedContent)));
+    }
     if(['elective-crosswalk-transcription','publisher-chapter-outline'].includes(book.scopeSelectionStatus)){
       const e=book.scopeEvidence, grades=['高中二年級','高中三年級'];
       if(!grades.includes(book.grade)||JSON.stringify(book.eligibleGrades)!==JSON.stringify(grades)||
