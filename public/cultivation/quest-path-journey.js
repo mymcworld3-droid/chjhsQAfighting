@@ -6,6 +6,18 @@
  ['path-union','合體','yin-yang'],['path-mahayana','渡劫','bolt'],['path-tribulation','半仙','feather'],
  ['path-immortal','仙道精進','crown']
  ];
+ // Only live gameplay gates; retired cultivation systems and disabled co-op are excluded.
+ const modes=Object.freeze([
+  {stage:'path-qi-five',name:'問道試煉',icon:'khanda',threshold:0},
+  {stage:'path-qi-five',name:'武器修煉',icon:'book-open',threshold:0},
+  {stage:'path-qi-five',name:'武器副本',icon:'mountain',threshold:0},
+  {stage:'path-qi-five',name:'每日閉關',icon:'yin-yang',threshold:0},
+  {stage:'path-foundation',name:'鬥法論道',icon:'shield-halved',threshold:6},
+  {stage:'path-mahayana',name:'五仙問鼎',icon:'crown',threshold:1268,currentScoreOnly:true}
+ ].map(Object.freeze));
+ function unlocks(stage,{score=0,accessScore=score}={}){
+  return modes.filter(m=>m.stage===stage).map(m=>({...m,unlocked:Number(m.currentScoreOnly?score:accessScore)>=m.threshold}));
+ }
  function journey(snapshot,catalog){
   const byId=new Map((snapshot?.pathRows||[snapshot?.path].filter(Boolean)).map(q=>[q.id,q]));
   const groups=[];let pending=[];
@@ -21,5 +33,5 @@
   const active=groups.find(g=>g.rows.some(q=>q.id===snapshot?.path?.id))||groups.at(-1)||null;
   return {groups,activeId:active?.id||null};
  }
- return Object.freeze({journey});
+ return Object.freeze({journey,unlocks});
 });

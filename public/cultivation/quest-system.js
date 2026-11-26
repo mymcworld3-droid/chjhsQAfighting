@@ -11,7 +11,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   let selectedStage = null, previousActiveStage = null;
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const visible = () => $('page-home')?.classList.contains('active-page');
+  const pathVisible = () => !!$('page-path')?.classList.contains('active-page');
+  const visible = () => $('page-home')?.classList.contains('active-page') || pathVisible();
   const materialNames = { 'raid-refine-key-ii': '淬靈玄印', 'raid-refine-key-iii': '玄天道印' };
   function rewardText(reward) {
     const parts = [];
@@ -135,6 +136,11 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const supplemental=(s.pathTicketRewards||[]).map(q=>card(q,'path')).join('');
     if(!group)return '<p class="quest-empty">仙道任務已全部完成。</p>'+supplemental;
     const state=g=>g.done?'done':g.id===activeId?'current':'future';
+    const player=window.getCurrentUserData?.();
+    const score=Number(player?.stats?.totalScore)||0;
+    const accessScore=window.getTrainingAccessScore?.()??score;
+    const modes=globalThis.QAPathJourney.unlocks(group.id,{score,accessScore});
+    const unlockMarkup=modes.length?modes.map(m=>`<div class="path-unlock-item${m.unlocked?' is-unlocked':' is-locked'}"><i class="fa-solid fa-${m.icon}" aria-hidden="true"></i><span>${esc(m.name)}</span><small>${m.unlocked?'已開放':'未解鎖'}</small></div>`).join(''):'<p class="path-unlock-empty">此境界暫無新增玩法</p>';
     const rail=[...groups].reverse().map(g=>`<button type="button" class="path-stage-node is-${state(g)}" data-path-stage="${esc(g.id)}" aria-pressed="${g.id===selectedStage}" aria-label="${esc(g.name)}，${g.claimed}/${g.rows.length} 項已領取">${badge(g)}<span>${esc(g.name)}</span></button>`).join('');
     const rows=group.rows.map(q=>{
       const locked=q.locked||q.sequenceLocked;
@@ -151,6 +157,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         <div class="path-stage-aura" aria-hidden="true"></div>${badge(group,true)}
         <h2>${esc(group.name)}</h2><span class="path-stage-status is-${state(group)}">${group.done?'此階段已完成':group.id===activeId?'當前仙道階段':'後續仙道階段'}</span>
         <div class="path-stage-progress"><small>階段目標</small><strong>${group.claimed} / ${group.rows.length}</strong><span class="path-task-track"><i style="width:${group.claimed/group.rows.length*100}%"></i></span><small>目標修為 ${group.target}</small></div>
+        <div class="path-unlocks"><h3>此境界解鎖玩法</h3><div class="path-unlock-grid">${unlockMarkup}</div></div>
       </section>
       <section class="path-stage-tasks" aria-label="階段任務"><header><h3>${esc(group.name)} · 修行任務</h3><small>${s.pathCompleted??s.pathIndex} / ${s.pathTotal} 全程進度</small></header>${rows}
         ${supplemental?'<h3 class="path-supplement-heading">可補領獎勵</h3>'+supplemental:''}
@@ -278,7 +285,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         const period=kind==='weekly'?snapshot.weeklyKey:kind==='path'?'path':snapshot.date;
         const presentation=globalThis.QARewardPresentation;
         const options={uid,receiptId:JSON.stringify(['quest',kind,q.id,period,!!q.supplemental]),reward:result.reward,important:false,isCurrent:()=>getMainUser()?.uid===uid};
-        const host=$('quest-dialog')?.open?$('quest-reward-receipt'):null;
+        const host=($('quest-dialog')?.open||pathVisible())?$('quest-reward-receipt'):null;
         if(!presentation.animateInline(host,options))presentation.celebrate(options);
       }
     } catch (e) {
@@ -307,7 +314,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if ($('quest-panel')) return;
     const entry = $('quest-open');
     if (!entry) return;
-    const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css?v=20261126-path-journey'; document.head.append(link);
+    const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css?v=20261126-path-fullscreen'; document.head.append(link);
     const dialog = document.createElement('dialog'); dialog.id = 'quest-dialog'; dialog.className = 'quest-dialog'; dialog.setAttribute('role', 'dialog'); dialog.setAttribute('aria-modal', 'true'); dialog.setAttribute('aria-labelledby', 'quest-title');
     const panel = document.createElement('section'); panel.id = 'quest-panel'; panel.className = 'quest-panel'; panel.setAttribute('aria-label', '修行任務');
     panel.innerHTML = `<header class="quest-heading"><div><small id="quest-heading-kicker">宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
@@ -316,16 +323,23 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     dialog.append(panel); document.body.append(dialog);
     const pathEntry = document.querySelector('[data-home-action="path"]');
     const taskEntry = document.querySelector('[data-home-action="quest"]');
+    const pathPage = $('page-path');
     let pathMode = false;
     function updateExpanded() {
       entry.setAttribute('aria-expanded', String(dialog.open && !pathMode));
       taskEntry?.setAttribute('aria-expanded', String(dialog.open && !pathMode));
-      pathEntry?.setAttribute('aria-expanded', String(dialog.open && pathMode));
+      pathEntry?.setAttribute('aria-current', pathVisible() ? 'page' : 'false');
     }
     function openView(mode) {
       pathMode = mode === 'path';
       tab = pathMode ? 'path' : 'daily';
-      dialog.classList.toggle('quest-dialog-path',pathMode);
+      if(pathMode){
+        if(dialog.open)dialog.close();
+        pathPage?.append(panel);
+        window.switchToPage?.('page-path');
+      }else{
+        dialog.append(panel);
+      }
       selectedStage=null;previousActiveStage=null;
       $('quest-title').textContent = pathMode ? '仙道' : '修行任務';
       $('quest-heading-kicker').textContent = pathMode ? '仙途修行' : '宗門手札';
@@ -334,15 +348,19 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       $('quest-tab-daily').hidden = pathMode;
       $('quest-tab-weekly').hidden = pathMode;
       $('quest-atlas-open').hidden = !pathMode;
-      if (!dialog.open) dialog.showModal();
+      if (!pathMode && !dialog.open) dialog.showModal();
       updateExpanded();
       panel.querySelector('.quest-scroll').scrollTop = 0;
       reconcileAccount(); render(); void refresh(true);
     }
     entry.addEventListener('click', () => openView('tasks'));
     window.openCultivationPathQuests = () => openView('path');
+    function exitView(){
+      if(pathVisible())window.switchToPage?.('page-home');
+      else if(dialog.open)dialog.close();
+    }
     $('quest-atlas-open').addEventListener('click', () => {
-      dialog.close();
+      exitView();
       $('xiuxian-path')?.click();
     });
     $('quest-spotlight')?.addEventListener('click', () => {
@@ -353,7 +371,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       if (item.q.claimable) void claim(item.q, item.kind);
       else go(item.q.destination, item.q);
     });
-    $('quest-close').addEventListener('click', () => dialog.close());
+    $('quest-close').addEventListener('click', exitView);
     dialog.addEventListener('close', updateExpanded);
     dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
     const selectTab = key => {
@@ -380,12 +398,14 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         : kind === 'weekly' ? (snapshot.weekly||[]).find(q=>q.id===b.dataset.questId)
         : snapshot.daily.find(q => q.id === b.dataset.questId);
       if (!q || q.id !== b.dataset.questId || q.claimed || q.locked) return;
-      if (q.claimable) void claim(q, kind); else { dialog.close(); go(q.destination, q); }
+      if (q.claimable) void claim(q, kind); else { exitView(); go(q.destination, q); }
     });
-    new MutationObserver(() => {
+    const navigationObserver = new MutationObserver(() => {
+      updateExpanded();
       if (visible()) { reconcileAccount(); void refresh(); }
-      else if (dialog.open) dialog.close();
-    }).observe($('page-home'), { attributes: true, attributeFilter: ['class'] });
+      if (!$('page-home')?.classList.contains('active-page') && dialog.open) dialog.close();
+    });
+    for(const page of [$('page-home'),pathPage])if(page)navigationObserver.observe(page,{attributes:true,attributeFilter:['class']});
     render();
   }
   mount();

@@ -15,3 +15,11 @@ test('仙道 and regular tasks use separate entry views and preserve atlas acces
   assert.match(ui,/const available = dailyReady \|\| weeklyReady/);
   assert.match(ui,/\$\('home-path-ready-dot'\)\.hidden = !pathReady/);
 });
+
+test('仙道 uses a dedicated page route, while normal tasks retain their dialog',()=>{
+ assert.match(read('public/index.html'),/id="page-path" class="page-section hidden/);
+ assert.match(ui,/window.switchToPage\?\.\('page-path'\)/);
+ assert.match(ui,/if \(!pathMode && !dialog.open\) dialog.showModal\(\)/);
+ assert.match(ui,/pathPage\?\.append\(panel\)/);
+ assert.match(ui,/此境界解鎖玩法/);
+});

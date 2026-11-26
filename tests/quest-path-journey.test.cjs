@@ -18,3 +18,12 @@ test('completed stage remains inspectable and legacy claims preserve next quest'
  assert.equal(j.activeId,'path-foundation');
  assert.equal(j.groups[0].rows.every(q=>q.claimed&&!q.sequenceLocked),true);
 });
+
+test('stage unlock labels match active gates and permanent access without inventing high-realm modes',()=>{
+ assert.equal(J.unlocks('path-qi-five').length,4);
+ assert.equal(J.unlocks('path-foundation',{score:5,accessScore:5})[0].unlocked,false);
+ assert.equal(J.unlocks('path-foundation',{score:5,accessScore:6})[0].unlocked,true);
+ assert.equal(J.unlocks('path-mahayana',{score:1267,accessScore:1868})[0].unlocked,false);
+ assert.equal(J.unlocks('path-mahayana',{score:1268})[0].unlocked,true);
+ assert.deepEqual(J.unlocks('path-golden',{score:1000}),[]);
+});
