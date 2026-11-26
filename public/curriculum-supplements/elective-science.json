@@ -6970,6 +6970,536 @@
           ]
         }
       ]
+    },
+    {
+      "bookId": "sanmin-108-earth-geology-guide",
+      "grade": "高中二年級",
+      "eligibleGrades": [
+        "高中二年級",
+        "高中三年級"
+      ],
+      "subject": "地球科學",
+      "edition": "三民版（講義）",
+      "publisher": "三民",
+      "term": "選修地球科學－地質與環境",
+      "bookLabel": "地質與環境（講義）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "publisher-companion-science",
+      "scopeSelectionStatus": "publisher-companion-science",
+      "scopeDetailLevel": "companion-chapters-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/elective-science.json",
+      "sources": [
+        {
+          "url": "https://www.sanmin.com.tw/product/index/015585642",
+          "type": "publisher-companion-index",
+          "provider": "三民書局",
+          "accessedAt": "2026-11-26",
+          "limitations": "108課綱加深加廣講義公開章節索引，並非正式課本目次。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-companion-index",
+        "publisher": "三民",
+        "sectionPolicy": "editorial-concepts",
+        "schoolYear": null
+      },
+      "limitations": "講義章名及節次順序為來源依據；可選觀念為編輯性整理，未核實正式課本節次與學年度。特集未獨立列入。",
+      "units": [
+        {
+          "unit": "探索地球",
+          "details": [
+            "地球觀念的演變",
+            "地殼運動與板塊"
+          ],
+          "concepts": [
+            {
+              "name": "地球觀念的演變",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地球形狀、內外部觀測及地球科學觀念的演變"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "地殼運動與板塊",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "大陸漂移、海底擴張、板塊邊界與地殼活動"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "探索岩層",
+          "details": [
+            "地表岩石的組成",
+            "塑造地表的作用",
+            "臺灣岩石與板塊構造"
+          ],
+          "concepts": [
+            {
+              "name": "地表岩石的組成",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "常見礦物、火成岩、沉積岩及變質岩"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "塑造地表的作用",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "風化、侵蝕、搬運、沉積與內營力的地貌"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "臺灣岩石與板塊構造",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "臺灣板塊碰撞、地質分區、岩石分布與地形"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "探地層觀山河",
+          "details": [
+            "地表地質探測",
+            "地球內部探測",
+            "海洋鑽探成果"
+          ],
+          "concepts": [
+            {
+              "name": "地表地質探測",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地質圖、露頭、地層與野外觀察"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "地球內部探測",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地震波、重力、磁場等間接探測原理"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "海洋鑽探成果",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "岩芯、沉積物、海洋鑽探與地史證據"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "天然災害",
+          "details": [
+            "山崩與土石流",
+            "地震災害與防災"
+          ],
+          "concepts": [
+            {
+              "name": "山崩與土石流",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "坡地災害成因、降雨影響、預警與減災"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "地震災害與防災",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "震源、震度與規模、地震災害及防災"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "地球資源與永續發展",
+          "details": [
+            "資源利用的問題",
+            "資源與環境困境的改善"
+          ],
+          "concepts": [
+            {
+              "name": "資源利用的問題",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "能源、礦產、水資源利用與環境代價"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "資源與環境困境的改善",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "資源循環、節能減碳、環境治理與永續發展"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bookId": "sanmin-108-earth-atmosphere-guide",
+      "grade": "高中二年級",
+      "eligibleGrades": [
+        "高中二年級",
+        "高中三年級"
+      ],
+      "subject": "地球科學",
+      "edition": "三民版（講義）",
+      "publisher": "三民",
+      "term": "選修地球科學－大氣、海洋及天文",
+      "bookLabel": "大氣、海洋及天文（講義）",
+      "schoolYear": null,
+      "verifiedAt": "2026-11-26",
+      "verificationStatus": "publisher-companion-science",
+      "scopeSelectionStatus": "publisher-companion-science",
+      "scopeDetailLevel": "companion-chapters-editorial-concepts",
+      "releaseStatus": "blocked",
+      "legacyVisible": false,
+      "courseType": "elective",
+      "schedulePolicy": "school-scheduled",
+      "sourceFile": "public/curriculum-supplements/elective-science.json",
+      "sources": [
+        {
+          "url": "https://www.sanmin.com.tw/product/index/015585643",
+          "type": "publisher-companion-index",
+          "provider": "三民書局",
+          "accessedAt": "2026-11-26",
+          "limitations": "108課綱加深加廣講義公開章節索引，並非正式課本目次。"
+        }
+      ],
+      "scopeEvidence": {
+        "kind": "publisher-companion-index",
+        "publisher": "三民",
+        "sectionPolicy": "editorial-concepts",
+        "schoolYear": null
+      },
+      "limitations": "講義章名及節次順序為來源依據；可選觀念為編輯性整理，未核實正式課本節次與學年度。特集未獨立列入。",
+      "units": [
+        {
+          "unit": "浩瀚宇宙",
+          "details": [
+            "星空觀測成果",
+            "星空觀測方法",
+            "太空探測成果"
+          ],
+          "concepts": [
+            {
+              "name": "星空觀測成果",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "天體、星系、星光與宇宙尺度的觀測證據"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "星空觀測方法",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "天球、星座、望遠鏡、不同電磁波段及基本星圖判讀"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "太空探測成果",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "人造衛星、太空探測器與太陽系天體探測"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "探索時序",
+          "details": [
+            "地球觀念的演變",
+            "年、月、日的劃分",
+            "曆法與時間"
+          ],
+          "concepts": [
+            {
+              "name": "地球觀念的演變",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "地心說、日心說、地球自轉公轉的觀測證據"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "年、月、日的劃分",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "自轉、公轉、月相、朔望月與時間週期"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "曆法與時間",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "陽曆、陰曆、陰陽曆、閏年與曆法調整"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "探索天氣",
+          "details": [
+            "大氣運動與影響",
+            "大氣觀測",
+            "氣象預報"
+          ],
+          "concepts": [
+            {
+              "name": "大氣運動與影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣壓梯度力、科氏力、風與大尺度環流"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "大氣觀測",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "氣象觀測要素、探空、雷達與衛星資料"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "氣象預報",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "天氣圖、鋒面、氣象資料及預報不確定性"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "廣闊海洋",
+          "details": [
+            "海洋的空間形態",
+            "海岸環境變遷",
+            "海洋性質觀測"
+          ],
+          "concepts": [
+            {
+              "name": "海洋的空間形態",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海盆、大陸棚、大陸坡、海溝與海底地形"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "海岸環境變遷",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "波浪、潮汐、侵蝕、堆積與海岸變遷"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "海洋性質觀測",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海水溫度、鹽度、密度與海流等觀測"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            }
+          ]
+        },
+        {
+          "unit": "氣候變遷",
+          "details": [
+            "氣候變遷的證據",
+            "氣候變遷對環境與生物的影響",
+            "人類活動與氣候"
+          ],
+          "concepts": [
+            {
+              "name": "氣候變遷的證據",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "冰芯、沉積物、年輪、觀測紀錄等氣候代用指標"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "氣候變遷對環境與生物的影響",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "海平面、極端天氣、生態系與調適"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            },
+            {
+              "name": "人類活動與氣候",
+              "conceptId": null,
+              "status": "unmapped",
+              "allowedContent": [
+                "溫室氣體、土地利用、暖化機制與減緩"
+              ],
+              "excludedContent": [
+                "未選的獨立章節",
+                "大學地球物理及流體力學專業推導",
+                "未經核實的即時資料"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

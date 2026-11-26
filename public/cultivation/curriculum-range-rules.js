@@ -116,6 +116,25 @@
         !!book.units?.length&&book.units.every(u=>u.details?.length>0&&u.details.length<=24&&new Set(u.details).size===u.details.length&&
           Array.isArray(u.concepts)&&u.concepts.length===u.details.length&&u.concepts.every((c,i)=>c.name===u.details[i]&&Array.isArray(c.allowedContent)&&c.allowedContent.length&&Array.isArray(c.excludedContent)));
     }
+    if(book.scopeSelectionStatus==='publisher-companion-science'){
+      const e=book.scopeEvidence, grades=['高中二年級','高中三年級'];
+      const sources={
+        'sanmin-108-earth-geology-guide':{term:'選修地球科學－地質與環境',url:'https://www.sanmin.com.tw/product/index/015585642',titles:['探索地球','探索岩層','探地層觀山河','天然災害','地球資源與永續發展'],counts:[2,3,3,2,2]},
+        'sanmin-108-earth-atmosphere-guide':{term:'選修地球科學－大氣、海洋及天文',url:'https://www.sanmin.com.tw/product/index/015585643',titles:['浩瀚宇宙','探索時序','探索天氣','廣闊海洋','氣候變遷'],counts:[3,3,3,3,3]}
+      };
+      const a=Object.hasOwn(sources,book.bookId)?sources[book.bookId]:null;
+      return !!a&&grades.includes(book.grade)&&JSON.stringify(book.eligibleGrades)===JSON.stringify(grades)&&
+        book.publisher==='三民'&&book.edition==='三民版（講義）'&&book.subject==='地球科學'&&book.term===a.term&&
+        book.courseType==='elective'&&book.schedulePolicy==='school-scheduled'&&book.schoolYear===null&&
+        book.releaseStatus==='blocked'&&book.verificationStatus===book.scopeSelectionStatus&&
+        book.scopeDetailLevel==='companion-chapters-editorial-concepts'&&e?.kind==='publisher-companion-index'&&
+        e.publisher===book.publisher&&e.sectionPolicy==='editorial-concepts'&&e.schoolYear===null&&
+        !!book.sources?.some(s=>s.type==='publisher-companion-index'&&s.url===a.url)&&
+        JSON.stringify(book.units?.map(u=>u.unit))===JSON.stringify(a.titles)&&
+        book.units.every((u,i)=>u.details?.length===a.counts[i]&&new Set(u.details).size===u.details.length&&
+          u.concepts?.length===u.details.length&&u.concepts.every((c,j)=>c.name===u.details[j]&&
+            Array.isArray(c.allowedContent)&&c.allowedContent.length&&Array.isArray(c.excludedContent)));
+    }
     if(['elective-crosswalk-transcription','publisher-chapter-outline'].includes(book.scopeSelectionStatus)){
       const e=book.scopeEvidence, grades=['高中二年級','高中三年級'];
       if(!grades.includes(book.grade)||JSON.stringify(book.eligibleGrades)!==JSON.stringify(grades)||

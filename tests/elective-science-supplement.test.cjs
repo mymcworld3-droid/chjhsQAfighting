@@ -3,7 +3,7 @@ const C=require('../curriculum-catalog.cjs'),R=require('../public/cultivation/cu
 const data=require('../public/curriculum-supplements/elective-science.json');
 function target(b,u,name){return {subject:b.subject,level:b.grade,scope:{path:[b.subject,b.grade,b.term,b.edition,b.subject].join('/'),detail:u.unit,sub_topics:[name],curriculum:{bookId:b.bookId,edition:b.edition,term:b.term,schoolYear:b.schoolYear,conceptIds:[]}}};}
 test('24 elective biology books and two publisher chapter outlines are selectable in both grades',()=>{
- assert.equal(data.books.length,26);assert.equal(new Set(data.books.map(b=>b.bookId)).size,26);
+ assert.equal(data.books.length,28);assert.equal(new Set(data.books.map(b=>b.bookId)).size,28);
  for(const grade of data.eligibleGrades){
   const bio=C.catalog(grade,'生物').books.filter(b=>b.scopeSelectionStatus==='elective-crosswalk-transcription');
   const earth=C.catalog(grade,'地球科學').books.filter(b=>b.scopeSelectionStatus==='publisher-chapter-outline');
@@ -24,4 +24,23 @@ test('source years, publisher pages and editorial depth cannot be confused with 
  assert.ok(!R.selectableBook({...e,scopeDetailLevel:'crosswalk-sections'}));
  const h=data.books.find(b=>b.bookId==='hanlin-114-biology-i');assert.ok(h.units.flatMap(u=>u.details).includes('5-1 聚合酶連鎖反應'));
  const n=data.books.find(b=>b.bookId==='nani-114-biology-iii');assert.ok(n.units.flatMap(u=>u.details).includes('1-4 結締組織'));
+});
+
+test('both Sanmin companion outlines remain explicitly separate from official textbook evidence',()=>{
+ for(const grade of data.eligibleGrades){
+  const books=C.catalog(grade,'地球科學').books.filter(b=>b.scopeSelectionStatus==='publisher-companion-science');
+  assert.equal(books.length,2);assert.equal(books.flatMap(b=>b.units).length,10);assert.equal(books.flatMap(b=>b.units.flatMap(u=>u.details)).length,27);
+  for(const b of books){assert.ok(R.selectableBook(b));assert.equal(b.edition,'三民版（講義）');assert.ok(!R.selectableBook({...b,sources:[]}));assert.ok(!R.selectableBook({...b,edition:'三民版'}));
+   for(const u of b.units)for(const name of u.details){const q=target(b,u,name);assert.equal(C.validateScope(q.scope,q.subject,q.level).bookId,b.bookId);assert.equal(C.sectionGuidance(q).length,1);assert.match(C.scopePrompt(q),/editorialSectionGuidance/);}
+  }
+ }
+});
+test('school-scheduled physics and chemistry books are selectable in grade 12 without duplicating publisher records',()=>{
+ for(const subject of ['物理','化學']){
+  const source=C.catalog('高中二年級',subject).books.filter(b=>b.publisher&&b.courseType==='elective'&&b.schedulePolicy==='school-defined'&&R.selectableBook(b));
+  const senior=C.catalog('高中三年級',subject).books.filter(b=>b.publisher&&b.courseType==='elective'&&R.selectableBook(b));
+  assert.equal(source.length,30);assert.deepEqual(senior.map(b=>b.bookId),source.map(b=>b.bookId));
+  for(const b of senior)for(const u of b.units)for(const name of u.details){const q=target(b,u,name);q.level='高中三年級';q.scope.path=q.scope.path.replace('高中二年級','高中三年級');assert.equal(C.validateScope(q.scope,subject,q.level).bookId,b.bookId);assert.ok(C.sectionGuidance(q).some(g=>g.section===name));}
+  assert.equal(C.catalog('高中一年級',subject).books.filter(b=>b.courseType==='elective').length,0);
+ }
 });
