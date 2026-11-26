@@ -123,9 +123,9 @@ test('a level-10 manual reads 大成, while a level-20 manual is actually 圓滿
 });
 
 test('weapon school badge includes the authoritative weapon realm, not the player realm',()=>{
-  assert.match(draw(book('sword-sky','sword',{weaponType:'sword',tierRealm:'金丹'})),/manual-native-school">劍修 · <span[^>]*data-qy-realm-kind="weapon"[^>]*>金丹<\/span>/);
-  assert.match(draw(book('body-rock','body',{weaponType:'totem',tierRealm:'築基'})),/manual-native-school">體修 · <span[^>]*data-qy-realm-kind="weapon"[^>]*>築基<\/span>/);
-  assert.match(draw(book('sword-wind','sword',{weaponType:'sword',tierRealm:'煉氣'})),/manual-native-school">劍修 · <span[^>]*data-qy-realm-kind="weapon"[^>]*>煉氣<\/span>/);
+  assert.match(draw(book('sword-sky','sword',{weaponType:'sword',tierRealm:'金丹'})),/manual-native-school"[^>]*>劍修 · <span[^>]*data-qy-realm-kind="weapon"[^>]*>金丹<\/span>/);
+  assert.match(draw(book('body-rock','body',{weaponType:'totem',tierRealm:'築基'})),/manual-native-school"[^>]*>體修 · <span[^>]*data-qy-realm-kind="weapon"[^>]*>築基<\/span>/);
+  assert.match(draw(book('sword-wind','sword',{weaponType:'sword',tierRealm:'煉氣'})),/manual-native-school"[^>]*>劍修 · <span[^>]*data-qy-realm-kind="weapon"[^>]*>煉氣<\/span>/);
 });
 
 test('weapon card uses its actual identity for elemental presentation',()=>{
@@ -149,4 +149,13 @@ test('weapon collection shows only real equipment state and bounded current-leve
  assert.match(draw({...item,expInLevel:900}),/--armory-progress:100\.00%/);
  assert.match(draw({...item,expInLevel:-5}),/--armory-progress:0\.00%/);
  assert.doesNotMatch(draw({...item,expToNext:0}),/manual-armory-exp/);
+});
+
+test('realm plaque follows weapon realm for both schools and never mastery level',()=>{
+ for(const school of ['body','sword'])for(const realm of ['煉氣','築基','金丹','元嬰','化神','煉虛','合體','渡劫','半仙','真仙']){
+  const html=draw(book(school==='body'?'body-rock':'sword-wind',school,{weaponType:school==='body'?'totem':'sword',tierRealm:realm,level:20}));
+  assert.ok(html.includes('class="manual-native-school" data-weapon-realm="'+realm+'"'));
+ }
+ const css=fs.readFileSync(path.join(__dirname,'../public/styles/manual-training-layout.css'),'utf8');
+ for(const realm of ['煉氣','築基','金丹','元嬰','化神','煉虛','合體','渡劫','半仙','真仙'])assert.ok(css.includes('.manual-native-school[data-weapon-realm="'+realm+'"]'));
 });

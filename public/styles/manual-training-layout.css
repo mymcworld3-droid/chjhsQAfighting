@@ -1025,3 +1025,21 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
  #manual-training-root .manual-training-screen .manual-native-hero .manual-hero-art-stage::before,
  #manual-training-root .manual-native-skills-panel::before{animation:none!important;translate:none!important}
 }
+
+/* School and realm plaque follows the actual weapon's fixed realm, not the player's
+   realm or weapon mastery. Muted metallic colors match the realm atlas. */
+#manual-training-root:not(.manual-detail-active) :is(.manual-native-card,.manual-weapon-slot-info) .manual-native-school[data-weapon-realm]{
+ background:linear-gradient(110deg,var(--weapon-plaque-edge,#77716a),var(--weapon-plaque-light,#b6aea0) 50%,var(--weapon-plaque-edge,#77716a));
+ border:1px solid var(--weapon-plaque-line,#b9afa0);color:var(--weapon-plaque-ink,#26221e)!important;
+ box-shadow:0 1px 3px #0004;
+}
+#manual-training-root .manual-native-school[data-weapon-realm="煉氣"]{--weapon-plaque-edge:#73948a;--weapon-plaque-light:#c4ded0;--weapon-plaque-line:#b2cabb;--weapon-plaque-ink:#19352c}
+#manual-training-root .manual-native-school[data-weapon-realm="築基"]{--weapon-plaque-edge:#6888a7;--weapon-plaque-light:#c2d8ee;--weapon-plaque-line:#a9c3df;--weapon-plaque-ink:#1c3047}
+#manual-training-root .manual-native-school[data-weapon-realm="金丹"]{--weapon-plaque-edge:#b49a65;--weapon-plaque-light:#efd39a;--weapon-plaque-line:#e4cc9a;--weapon-plaque-ink:#352414}
+#manual-training-root .manual-native-school[data-weapon-realm="元嬰"]{--weapon-plaque-edge:#9474b4;--weapon-plaque-light:#e3cbed;--weapon-plaque-line:#cbb0de;--weapon-plaque-ink:#392447}
+#manual-training-root .manual-native-school[data-weapon-realm="化神"]{--weapon-plaque-edge:#b77e9e;--weapon-plaque-light:#f0c6de;--weapon-plaque-line:#e0accb;--weapon-plaque-ink:#482439}
+#manual-training-root .manual-native-school[data-weapon-realm="煉虛"]{--weapon-plaque-edge:#7887b8;--weapon-plaque-light:#d0d9f7;--weapon-plaque-line:#afbee9;--weapon-plaque-ink:#252e4f}
+#manual-training-root .manual-native-school[data-weapon-realm="合體"]{--weapon-plaque-edge:#bd8b65;--weapon-plaque-light:#f1c9a4;--weapon-plaque-line:#e2b68f;--weapon-plaque-ink:#462e1e}
+#manual-training-root .manual-native-school[data-weapon-realm="渡劫"]{--weapon-plaque-edge:#b97771;--weapon-plaque-light:#f2c0b8;--weapon-plaque-line:#e4aaa0;--weapon-plaque-ink:#4e2724}
+#manual-training-root .manual-native-school[data-weapon-realm="半仙"]{--weapon-plaque-edge:#b4a48a;--weapon-plaque-light:#f3e4c5;--weapon-plaque-line:#e0d0b0;--weapon-plaque-ink:#41372b}
+#manual-training-root .manual-native-school[data-weapon-realm="真仙"]{--weapon-plaque-edge:#bb974c;--weapon-plaque-light:#fff0b5;--weapon-plaque-line:#f8da8b;--weapon-plaque-ink:#412b12}
