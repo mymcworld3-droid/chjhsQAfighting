@@ -13,7 +13,7 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
     enlightenmentRef = db.collection('enlightenmentTrialStates').doc(uid),
     dungeonRef = db.collection('tacticalBattlePlayers').doc(uid);
   return db.runTransaction(async tx => {
-    const [userSnap, stateSnap, enlightenmentSnap] = await Promise.all([tx.get(userRef), tx.get(stateRef), tx.get(enlightenmentRef)]);
+    const [userSnap, stateSnap, enlightenmentSnap, dungeonSnap] = await Promise.all([tx.get(userRef), tx.get(stateRef), tx.get(enlightenmentRef), tx.get(dungeonRef)]);
     if (!userSnap.exists) throw error('玩家資料不存在', 404);
     const user = userSnap.data() || {}, rawState = stateSnap.exists ? stateSnap.data() : {};
     if (user.uid && user.uid !== uid) throw error('玩家身分不符', 403);
@@ -35,10 +35,9 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       stateChanged = true;
     }
     let awarded = false, reward = null, dungeonProgress;
-    // Only path claims need the server-owned weapon dungeon wallet.
-    const dungeonSnap = request?.kind === 'path' ? await tx.get(dungeonRef) : null;
-    const dungeonPointer = dungeonSnap?.exists ? dungeonSnap.data() : {};
-    if (dungeonSnap) dungeonProgress = WeaponDungeons.progress(dungeonPointer.weaponDungeonV1, now.getTime());
+    // The same authoritative pointer records cleared trial stages and weapon dungeons.
+    const dungeonPointer = dungeonSnap.exists ? dungeonSnap.data() : {};
+    if (request?.kind === 'path') dungeonProgress = WeaponDungeons.progress(dungeonPointer.weaponDungeonV1, now.getTime());
     if (request) {
       if (!['path', 'daily', 'commission', 'weekly'].includes(request.kind)) throw error('任務類型無效', 400);
       if (['daily','commission'].includes(request.kind) && request.date !== date)
@@ -57,7 +56,7 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       const ticketOnly = request.kind === 'path' && duplicate && list[index].reward.weaponDungeonTicket > 0 &&
         (state.pathTicketAmounts[request.id] || 0) < list[index].reward.weaponDungeonTicket;
       if (!duplicate || ticketOnly) {
-        const snapshot = rules.view(user, state, date, verifiedTrial);
+        const snapshot = rules.view(user, state, date, verifiedTrial, dungeonPointer);
         const q = ticketOnly ? snapshot.pathTicketRewards.find(q => q.id === request.id)
           : request.kind === 'path' ? snapshot.path
           : request.kind === 'commission' ? snapshot.commissions.find(q => q.id === request.id)
@@ -96,7 +95,7 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       }
     }
     if (stateChanged) tx.set(stateRef, state);
-    return { ok: true, awarded, reward, quests: rules.view(user, state, date, verifiedTrial),
+    return { ok: true, awarded, reward, quests: rules.view(user, state, date, verifiedTrial, dungeonPointer),
       ...(dungeonProgress ? { weaponDungeonTickets: dungeonProgress.tickets } : {}),
       balances: { gold: Math.max(0, Number(user.stats?.gold) || 0), totalScore: Math.max(0, Number(user.stats?.totalScore) || 0) },
       materials: Object.fromEntries(['raid-refine-key-ii', 'raid-refine-key-iii'].map(id => [id, Math.max(0, Number(user.materialSystem?.inventory?.[id]) || 0)])) };

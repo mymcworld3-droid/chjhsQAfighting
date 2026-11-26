@@ -53,14 +53,25 @@
   const STORY_AFTER = {
     'path-qi-five': [storyQuest('qi-five-dongtian', '第二章 · 竹簡天尊', 5)]
   };
+  // Legacy IDs remain in the migration catalog, never in the new active chain.
+  const RETIRED_PATH = new Set(['path-raid-one','path-raid-three','path-raid-ten','path-duel-five']);
+  const PATH_AFTER = {
+    'path-foundation': [quest('path-trial-first','初戰靈獸','成功通過問道試煉第 1 關。','trialStage',1,120,0,'trial')],
+    'path-golden': [
+      quest('path-trial-five','破境試煉','成功通過問道試煉第 5 關。','trialStage',5,220,1,'trial'),
+      quest('path-weapon-dungeon-first','初探秘境','首次通關任一武器副本難度。','weaponDungeonClear',1,250,1,'weaponDungeon')
+    ],
+    'path-nascent': [quest('path-trial-ten','十關問道','成功通過問道試煉第 10 關。','trialStage',10,360,2,'trial')]
+  };
   const PATH_DUNGEON_TICKETS = Object.freeze({
-    'path-golden': 1, 'path-raid-one': 2, 'path-nascent': 3, 'path-raid-ten': 5, 'path-solo-hundred': 5
+    'path-foundation':1,'path-golden':1,'path-weapon-dungeon-first':2,'path-nascent':2,'path-solo-hundred':2
   });
   const PATH = [{ ...storyQuest('prologue-enter-sect', '第一章 · 問道靈根', 0),
     title: '完成第一章 · 問道靈根',
     description: '準備好後，點「前往」認識青雲宗並完整觀看第一章；登入與選擇性別不會自動播放。' },
-    ...LEGACY_PATH.flatMap(q => [q, ...(STORY_AFTER[q.id] || [])])]
-    .map(q => ({ ...q, reward: { ...q.reward, weaponDungeonTicket: PATH_DUNGEON_TICKETS[q.id] || 1 } }));
+    ...LEGACY_PATH.filter(q=>!RETIRED_PATH.has(q.id)).flatMap(q => [q, ...(STORY_AFTER[q.id] || []), ...(PATH_AFTER[q.id] || [])])]
+    .map(q => PATH_DUNGEON_TICKETS[q.id] ? ({ ...q, reward: { ...q.reward, weaponDungeonTicket: PATH_DUNGEON_TICKETS[q.id] } }) : q);
+  const HISTORICAL_PATH_IDS = [...new Set([...PATH.map(q=>q.id), ...LEGACY_PATH.map(q=>q.id)])];
   const DAILY = [
     quest('daily-solo-three', '溫故知新', '今日問道答對 3 題。', 'solo', 3, 40, 1, 'solo'),
     quest('daily-solo-ten', '勤學不輟', '今日問道答對 10 題。', 'solo', 10, 80, 1, 'solo'),
@@ -129,18 +140,20 @@
   function normalizeState(raw = {}, date = dateKey()) {
     const claimed = Array.isArray(raw?.pathClaimed) ? raw.pathClaimed
       : LEGACY_PATH.slice(0, number(raw?.pathIndex)).map(q => q.id);
-    const pathClaimed = PATH.filter(q => claimed.includes(q.id)).map(q => q.id);
+    const pathClaimed = HISTORICAL_PATH_IDS.filter(id => claimed.includes(id));
     // The first ticket rollout stored IDs only and paid exactly one per quest.
     // Preserve that amount even when the tickets have already been spent.
     const pathTicketAmounts = {};
-    for (const q of PATH.filter(q => q.reward.weaponDungeonTicket && pathClaimed.includes(q.id))) {
-      const legacy = Array.isArray(raw?.pathTicketsClaimed) && raw.pathTicketsClaimed.includes(q.id) ? 1 : 0;
-      const paid = Number(raw?.pathTicketAmounts?.[q.id]);
+    for (const id of pathClaimed) {
+      const legacy = Array.isArray(raw?.pathTicketsClaimed) && raw.pathTicketsClaimed.includes(id) ? 1 : 0;
+      const paid = Number(raw?.pathTicketAmounts?.[id]);
       const amount = Math.max(legacy, Number.isFinite(paid) ? number(paid) : 0);
-      if (amount) pathTicketAmounts[q.id] = amount;
+      if (amount) pathTicketAmounts[id] = amount;
     }
-    const pathTicketsClaimed = PATH.filter(q => q.reward.weaponDungeonTicket &&
-      (pathTicketAmounts[q.id] || 0) >= q.reward.weaponDungeonTicket).map(q => q.id);
+    const pathTicketsClaimed = pathClaimed.filter(id => {
+      const target = PATH.find(q=>q.id===id)?.reward.weaponDungeonTicket;
+      return target ? (pathTicketAmounts[id]||0)>=target : (pathTicketAmounts[id]||0)>0;
+    });
     const next = PATH.findIndex(q => !pathClaimed.includes(q.id));
     return { version: 2, pathClaimed, pathTicketsClaimed, pathTicketAmounts, pathIndex: next < 0 ? PATH.length : next, dailyDate: date,
       dailyClaimed: raw?.dailyDate === date && Array.isArray(raw.dailyClaimed) ? raw.dailyClaimed.filter(id => DAILY.some(q => q.id === id)) : [],
@@ -152,7 +165,9 @@
       weeklyClaimed:raw?.weeklyKey===weekKey(date)&&Array.isArray(raw.weeklyClaimed)
         ? raw.weeklyClaimed.filter(id=>WEEKLY.some(q=>q.id===id)) : [] };
   }
-  function progressValue(q, user, p, kind, date, verifiedTrial = null) {
+  function progressValue(q, user, p, kind, date, verifiedTrial = null, battleProgress = null) {
+    if (kind === 'path' && q.metric === 'trialStage') return number(battleProgress?.trial?.best);
+    if (kind === 'path' && q.metric === 'weaponDungeonClear') return (battleProgress?.weaponDungeonV1?.clears || []).reduce((sum,n)=>sum+number(n),0);
     if (kind === 'weekly') {
       const c=p.weekly.counts;
       return q.metric === 'activity' ? c.meditation+c.dongtian+c.battle+c.raid : number(c[q.metric]);
@@ -173,10 +188,10 @@
     if (kind === 'path' && q.metric === 'raid' && user?.raidProgress?.['shen-qingshuang']?.firstVictoryRoomId) return Math.max(1, p.totals.raid);
     return kind !== 'path' ? p.daily.counts[q.metric] : p.totals[q.metric];
   }
-  function view(user = {}, rawState = {}, date = dateKey(), verifiedTrial = null) {
+  function view(user = {}, rawState = {}, date = dateKey(), verifiedTrial = null, battleProgress = null) {
     const p = normalizeProgress(user.questProgress, date), state = normalizeState(rawState, date);
     function row(q, kind, claimed = false) {
-      const current = Math.min(q.target, progressValue(q, user, p, kind, date, verifiedTrial));
+      const current = Math.min(q.target, progressValue(q, user, p, kind, date, verifiedTrial, battleProgress));
       const locked = number(user?.stats?.totalScore) < q.minScore;
       return { ...q, current, claimed, locked, complete: current >= q.target, claimable: !claimed && !locked && current >= q.target };
     }
@@ -185,7 +200,7 @@
     const path = PATH.map(q => row(q, 'path', state.pathClaimed.includes(q.id))).filter(available);
     const next = path.findIndex(q => !q.claimed);
     return { date, pathIndex: next < 0 ? path.length : next,
-      pathCompleted: state.pathClaimed.length, pathTotal: path.length,
+      pathCompleted: path.filter(q=>q.claimed).length, pathTotal: path.length,
       path: path[next] ?? null,
       pathRows: path.map((q,i)=>({...q,sequenceLocked:!q.claimed&&i!==next,claimable:q.claimable&&i===next})),
       pathTicketRewards: PATH.filter(q => q.reward.weaponDungeonTicket && state.pathClaimed.includes(q.id) &&

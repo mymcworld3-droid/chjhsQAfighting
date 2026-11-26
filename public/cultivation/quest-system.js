@@ -79,7 +79,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const ready = !!q?.claimable;
     const labels = { scope: '設定範圍', solo: '繼續問道', meditation: '開始閉關',
       enlightenment: '悟道試煉', battle: '前往鬥法', dongtian: '前往洞天',
-      story: '觀看劇情' };
+      trial: '前往試煉', weaponDungeon: '前往武器副本', story: '觀看劇情' };
     const action = ready ? (q.supplemental ? '補領副本券' : '領取獎勵') : labels[q?.destination] || '查看任務';
     const title = q?.title || (current?.date === window.XianxiaQuestRules.dateKey() ? '今日任務皆已完成' : busy ? '正在同步今日任務…' : '查看今日任務');
     const reward = q ? [q.reward.weaponDungeonTicket ? `副本券 ×${q.reward.weaponDungeonTicket}` : '',
@@ -310,6 +310,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const actions = {
       scope: () => { window.switchToPage?.('page-settings'); window.openCurriculumStudio?.(); },
       solo: () => { void window.startQuizFlow?.(true); },
+      trial: () => { void window.startQuizFlow?.(true); },
+      weaponDungeon: () => { void window.openWeaponDungeons?.(); },
       meditation: () => { void window.openDailyMeditation?.(); },
       enlightenment: () => { window.dispatchEvent(new CustomEvent('xiuxian:enlightenment-open')); },
       battle: () => { void window.startBattleMatchmaking?.(); },
