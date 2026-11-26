@@ -104,7 +104,7 @@ html body.ui-cleanup #page-history .ui-history-panel {padding:18px 20px;margin:0
 html body.ui-cleanup #page-history #history-list {margin-top:18px}
 html body.ui-cleanup #page-history #history-list>li {padding:16px 0;border:0;border-bottom:1px solid var(--review-line);border-radius:0;background:transparent!important;box-shadow:none!important;margin:0}
 html body.ui-cleanup #page-history #history-list>li:last-child {border-bottom:0}
-html body.ui-cleanup #page-rank #leaderboard-back-training {min-height:40px!important;margin:0 0 18px;padding:5px 0;border:0!important;background:transparent!important;font-size:12px!important;font-weight:400!important;color:#a79c85}
+html body.ui-cleanup #page-rank #leaderboard-back-home {min-height:40px!important;margin:0 0 18px;padding:5px 0;border:0!important;background:transparent!important;font-size:12px!important;font-weight:400!important;color:#a79c85}
 html body.ui-cleanup #page-rank #leaderboard-refresh {min-height:40px!important;padding:8px 12px;border-color:var(--review-line);background:transparent;color:#d1bd93;font-weight:400!important}
 html body.ui-cleanup #page-rank>p {font-size:12px;line-height:1.7;color:#a59a82;margin:0 0 20px}
 html body.ui-cleanup #page-rank table {table-layout:fixed;min-width:0!important}

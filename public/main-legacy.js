@@ -2111,7 +2111,7 @@ window.switchToPage = (pageId, {preserveTrialTower = false} = {}) => {
         btn.classList.remove('active-nav-btn');
         
         // 只有目標頁面的按鈕加上發光狀態
-        if (btn.dataset.target === (pageId === 'page-rank' ? 'page-training' : pageId)) {
+        if (btn.dataset.target === (['page-rank','page-path'].includes(pageId) ? 'page-home' : pageId)) {
             btn.classList.add('active-nav-btn');
         }
     });
