@@ -94,7 +94,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
 
   const carousel=weaponMode?`<div class="manual-native-carousel">
     <button type="button" data-manual-browse-weapon="prev" aria-label="上一件武器" ${owned.length<2?'disabled':''}>‹</button>
-    <strong>${esc(book.name)}</strong>
+    <strong>${globalThis.QAWeaponPresentation.refinementStars(book)}${esc(book.name)}</strong>
     <button type="button" data-manual-browse-weapon="next" aria-label="下一件武器" ${owned.length<2?'disabled':''}>›</button>
     <span class="manual-native-dots" aria-label="第 ${owned.indexOf(book)+1} 件，共 ${owned.length} 件">${owned.map(item=>'<i class="'+(item.id===book.id?'is-current':'')+'"></i>').join('')}</span>
   </div>`:'';
@@ -113,7 +113,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
               <span class="manual-hero-mastery-status">${progressLabel}</span>
             </div>
             <small class="manual-hero-attack-bonus">${weaponMode?'本武器':'本功法'}攻擊 +${fmt(ownAttack)} · 已獲${weaponMode?'武器':'功法'}合計 +${fmt(allAttack)}</small>
-            ${copies?`<small class="manual-hero-weapon-copies">持有：${copies}</small>`:''}
+            ${weaponMode&&book.refinement?`<small class="manual-hero-weapon-copies">精煉 ${book.refinement} 星 · 本武器傷害 +${book.refinement*10}%</small>`:''}
             ${weaponMode?globalThis.QAWeaponPresentation.masteryMarkup(book):''}
             ${growth}
             ${nextNote?`<small class="manual-hero-next-inline">${esc(nextNote)}</small>`:''}

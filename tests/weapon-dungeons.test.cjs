@@ -243,8 +243,6 @@ test('exclusive reward roll has exactly 30/20/50 outcomes, including duplicates,
  const normalized=M.weaponize(record),copies=Object.values(normalized.books).reduce((n,b)=>n+Object.values(b.copies||{}).reduce((a,b)=>a+b,0),0);
  assert.equal(copies,50);
  const room={weaponDungeon:W.selection({dungeonId:W.ID,difficulty:5})};
- const drop=Rewards.roll(room,'u1',record,max=>max===100?30:0);assert.equal(drop.tierRealm,'真仙');
- const id=drop.id;const low={weaponDungeon:W.selection({dungeonId:W.ID,difficulty:0})};
- Rewards.roll(low,'u1',record,()=>0);
- assert.equal(M.publicState(record).library.find(b=>b.id===id).tierRealm,'真仙');
+ const drop=Rewards.roll(room,'u1',record,max=>max===100?30:0);assert.equal(drop,null);
+ assert.ok(M.publicState(record).library.every(b=>b.tierRealm===M.BY_BOOK[b.id].tierRealm&&b.refinement===5));
 });

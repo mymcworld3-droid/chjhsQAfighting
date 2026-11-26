@@ -952,3 +952,10 @@ body:has(>#bottom-nav:not(.hidden)) #manual-training-root .manual-training-scree
 @media(prefers-reduced-motion:reduce){
  #manual-training-root .manual-native-hero .manual-ritual-wheel{animation:none!important;transform:none!important}
 }
+
+/* Refinement stars overlay the weapon art above the name, never a grid row. */
+#manual-training-root :is(.manual-native-card,.manual-native-carousel)>strong{position:relative;overflow:visible;z-index:5}
+#manual-training-root .qy-refinement-stars{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);display:flex;justify-content:center;align-items:center;gap:2px;white-space:nowrap;pointer-events:none;line-height:1;color:#ffda76;text-shadow:0 1px 2px #241407,0 0 6px #dca147}
+#manual-training-root .manual-native-card .qy-refinement-stars{font-size:clamp(10px,1.4vw,17px);margin-bottom:2px}
+#manual-training-root .manual-native-carousel .qy-refinement-stars{font-size:clamp(15px,2vw,24px);margin-bottom:3px}
+#manual-training-root .qy-refinement-star{font-style:normal;font-weight:900}

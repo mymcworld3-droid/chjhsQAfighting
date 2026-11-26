@@ -9,6 +9,12 @@
   const fmt=v=>count(v).toLocaleString('zh-TW');
   const levelText=book=>'Lv. '+Math.max(1,Math.min(20,count(book?.level)||1));
   const copiesText=book=>Object.entries(book?.weaponCopies||{}).map(([realm,quantity])=>realm+' × '+fmt(quantity)).join(' · ');
+  function refinementStars(book,{previous=null,className=''}={}){
+    const stars=Math.min(5,count(book?.refinement));
+    if(!stars)return '';
+    const before=previous===null?stars:Math.min(stars,count(previous));
+    return '<span class="qy-refinement-stars '+esc(className)+'" role="img" aria-label="精煉 '+stars+' 星">'+Array.from({length:stars},(_,i)=>'<i class="qy-refinement-star'+(i>=before?' is-new':'')+'" aria-hidden="true" style="--star-index:'+i+'">★</i>').join('')+'</span>';
+  }
   function realmMarkup(name,{kind='weapon'}={}){
     const type=['weapon','character','difficulty'].includes(kind)?kind:'weapon';
     return '<span class="qy-realm-badge" data-qy-realm-kind="'+type+'">'+esc(name||'未定階')+'</span>';
@@ -39,5 +45,5 @@
   function difficultyState({locked=false,clears=0,resume=false}={}){
     return resume?{key:'active',label:'進行中'}:locked?{key:'locked',label:'未解鎖'}:count(clears)?{key:'complete',label:'通關 '+fmt(clears)+' 次'}:{key:'ready',label:'可挑戰'};
   }
-  return Object.freeze({art,artMarkup,identityMarkup,realmMarkup,levelText,copiesText,mastery,masteryMarkup,skillMarkup,difficultyState});
+  return Object.freeze({art,artMarkup,identityMarkup,realmMarkup,levelText,copiesText,refinementStars,mastery,masteryMarkup,skillMarkup,difficultyState});
 });

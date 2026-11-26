@@ -44,7 +44,7 @@
       if(!skill||!book||moves.has(skill.moveId)
         ||Catalog.levelForExp(book.exp)<skill.levelRequired)continue;
       moves.add(skill.moveId);
-      const modified=Catalog.skillAtLevel(skill,normalized.skillLevels[id]);
+      const modified=Catalog.skillAtLevel(skill,normalized.skillLevels[id],Catalog.refinementFor(book));
       selected.push({id:skill.id,moveId:skill.moveId,name:skill.name,
         bookId:skill.manualId,level:modified.level,cost:modified.cost,
         raw:estimateMove(attack,modified)});

@@ -292,6 +292,7 @@ function syncPvpSkillTabs(){
   tabs.replaceChildren(move,...(actor.flyingSword?[moveSword]:[]),...buttons);tabs.dataset.loadoutKey=key;
 }
 function ensure(){
+  if(!document.getElementById('manual-training-celebration-style')){const link=document.createElement('link');link.id='manual-training-celebration-style';link.rel='stylesheet';link.href='/styles/manual-training-celebration.css?v=20261126-refinement-v1';document.head.append(link);}
   if(root){keyboardGuard||=installTacticalKeyboardGuard(root);return;}
   if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css?v=20261116-live-loadouts-v1';document.head.append(link);}
   if(!document.getElementById('tactical-manual-recap-style')){
@@ -1567,7 +1568,7 @@ function resultDialog(){
       ${globalThis.QABattlePresentation.resultMetrics(me,globalThis.QAQuestionPresentation)}
       ${win?`<p>${result?.unlocked>info.difficulty?'下一個難度已解鎖。':info.difficulty===5?'已完成最高難度。':''}</p>`:''}
       ${dungeonCards}
-      ${drop?.duplicate?'<p class="tc-manual-loot">同款武器數量已累計，保留最高等階。</p>':!drop&&win?'<p>本次未掉落武器。</p>':''}
+      ${drop?.duplicate&&Number.isInteger(drop.refinement)?`<div class="tc-refinement-result" role="status"><strong>${drop.refinement>drop.previousRefinement?'武器精煉成功':'武器已達滿星'}</strong>${globalThis.QAWeaponPresentation.refinementStars(drop,{previous:celebrateFresh?drop.previousRefinement:drop.refinement})}<small>${esc(drop.name)} · ${drop.refinement>drop.previousRefinement?'精煉 '+drop.previousRefinement+' → '+drop.refinement+' 星':'額外武器已保留'}</small></div>`:drop?.duplicate?'<p>重複武器已收入收藏。</p>':!drop&&win?'<p>本次未掉落武器。</p>':''}
       ${drop&&!weaponDrop?`<p class="tc-manual-loot">獲得 ${esc(drop.tierRealm)}武器：${esc(drop.name)}</p>`:''}
       ${manualRecap}<button type="button" class="tc-primary" data-weapon-dungeon-menu>返回武器副本</button>
       <button type="button" data-weapon-dungeon-retry>再次挑戰（消耗 1 張券）</button><button type="button" data-exit>收起</button>`);

@@ -106,7 +106,8 @@ function manualLoadout(manualRecord,trainingAccessScore){
   const manualSkills=[...equipped];
   const manualSkillLevels=Object.fromEntries(manualSkills.filter(id=>skillLevels[id])
     .map(id=>[id,skillLevels[id]]));
-  return {trainingAccessScore,manualSkills,manualSkillLevels,
+  const manualRefinements=Object.fromEntries(Object.entries(normalized.books).map(([id,row])=>[id,Manuals.refinementFor(row)]).filter(([,n])=>n));
+  return {trainingAccessScore,manualSkills,manualSkillLevels,manualRefinements,
     manualWeaponIds:[...weaponIds],manualWeaponMode:true,manualRulesVersion:2};
 }
 // Previously running PvE rooms survive deployments. A pre-weapon actor
@@ -140,6 +141,7 @@ function upgradeLegacyRoomWeapons(room,uid,user,manualRecord){
   actor.manualWeaponIds=[...equipped];
   actor.manualSkills=[...available];
   actor.manualSkillLevels={...levels};
+  actor.manualRefinements={...loadout.manualRefinements};
   actor.trainingAccessScore=loadout.trainingAccessScore;
   delete actor.manualLoadoutName;
   delete actor.manualLoadoutIndex;
@@ -344,6 +346,7 @@ async function updateLoadout(db,uid,input){
         if(!actor)continue;
         actor.manualSkills=[...projection.manualSkills];
         actor.manualSkillLevels={...projection.manualSkillLevels};
+        actor.manualRefinements={...projection.manualRefinements};
         actor.manualWeaponIds=[...projection.manualWeaponIds];
         actor.manualWeaponMode=true;actor.manualRulesVersion=2;
         delete actor.manualLoadoutIndex;
@@ -670,6 +673,7 @@ async function switchBattleLoadout(db,uid,input,now=Date.now()){
     const levels=Object.fromEntries(ids.filter(skillId=>manuals.skillLevels[skillId])
       .map(skillId=>[skillId,manuals.skillLevels[skillId]]));
     actor.manualSkills=[...ids];actor.manualSkillLevels=levels;
+    actor.manualRefinements=manualLoadout(manuals,TrainingAccess.score(user)).manualRefinements;
     actor.manualLoadoutName=preset.name;actor.manualLoadoutIndex=index;
     // HP, stamina, position, focus, cooldown legacy data and action counts survive.
     if(s.pveMetrics&&s.mode==='pve')s.pveMetrics.loadout=[...ids];

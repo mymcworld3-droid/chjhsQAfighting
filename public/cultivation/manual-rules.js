@@ -126,12 +126,18 @@
   const BY_SKILL=Object.freeze(Object.fromEntries(BOOKS.flatMap(book=>book.skills.map(skill=>[skill.id,skill]))));
   const skillLevel=raw=>Number.isInteger(raw)&&raw>=1&&raw<=MAX_SKILL_LEVEL?raw:1;
   const skillUpgradeQuote=level=>level<MAX_SKILL_LEVEL?{targetLevel:level+1,gold:200*level}:null;
-  function skillAtLevel(skill,raw){
+  const MAX_REFINEMENT=5;
+  const refinement=raw=>Math.max(0,Math.min(MAX_REFINEMENT,Math.trunc(Number(raw)||0)));
+  const copyCount=record=>Math.max(1,Object.values(record?.copies||{}).reduce((sum,n)=>sum+Math.max(0,Math.trunc(Number(n)||0)),0));
+  const refinementFor=record=>record?Math.max(refinement(record.refinement),refinement(copyCount(record)-1)):0;
+  function skillAtLevel(skill,raw,stars=0){
     const level=skillLevel(raw),upgrades=level-1;
     if(skill.kind==='fist-focus')return {...skill,level,cost:skill.cost-upgrades};
-    const scaled=power=>upgrades?power*(10+upgrades)/10:power;
+    const refine=refinement(stars),factor=1+refine/10;
+    const scaled=power=>{const base=upgrades?power*(10+upgrades)/10:power;return refine?base*factor:base;};
     return {...skill,level,power:scaled(skill.power),
-      ...(skill.centerPower!==undefined?{centerPower:scaled(skill.centerPower)}:{})};
+      ...(skill.centerPower!==undefined?{centerPower:scaled(skill.centerPower)}:{}),
+      ...(skill.collisionPower!==undefined&&refine?{collisionPower:skill.collisionPower*factor}:{})};
   }
   // The tactical engine rounds EACH strike before applying shields, guard
   // or remaining HP. This preview intentionally describes raw per-hit damage,
@@ -221,9 +227,9 @@
     }
     return description+suffix;
   }
-  const publicSkill=(skill,masteryLevel,score,rank)=>{
+  const publicSkill=(skill,masteryLevel,score,rank,stars)=>{
     const mastered=masteryLevel>=skill.levelRequired;
-    const unlocked=mastered,stats=skillAtLevel(skill,rank);
+    const unlocked=mastered,stats=skillAtLevel(skill,rank,stars);
     return {...stats,mastered,realmReady:true,
       unlocked,upgrade:unlocked?skillUpgradeQuote(stats.level):null};
   };
@@ -233,13 +239,12 @@
       if(!Object.hasOwn(BY_BOOK,id))continue;
       const exp=Object.prototype.hasOwnProperty.call(record||{},'exp')
         ?Number(record.exp):legacyKillsToExp(record?.kills);
-      const tierRealm=REALMS.some(r=>r.name===record?.tierRealm)?record.tierRealm:BY_BOOK[id].tierRealm;
-      const copies=Object.fromEntries(REALMS.flatMap(r=>{
-        const count=Math.max(0,Math.min(1000000,Math.trunc(Number(record?.copies?.[r.name])||0)));
-        return count?[[r.name,count]]:[];
-      }));
-      books[id]={exp:mastery(exp).exp,...(record?.tierRealm?{tierRealm}:{}),
-        ...(Object.keys(copies).length?{copies}:{})};
+      const tierRealm=BY_BOOK[id].tierRealm;
+      const copies=copyCount(record);
+      const stars=refinementFor(record);
+      books[id]={exp:mastery(exp).exp,
+        ...(record?.tierRealm||record?.copies?{tierRealm,copies:{[tierRealm]:copies}}:{}),
+        ...(stars?{refinement:stars}:{})};
     }
     const school=['sword','body'].includes(raw?.school)?raw.school:null;
     const equipped=[],moves=new Set();
@@ -341,8 +346,8 @@
     // Do not expose undiscovered scriptures to the cultivation UI.
     const library=BOOKS.filter(book=>!!s.books[book.id]).map(book=>{
       const levelInfo=mastery(s.books[book.id].exp);
-      return {id:book.id,name:book.name,school:book.school,weaponType:book.weaponType,tierRealm:s.books[book.id].tierRealm||book.tierRealm,weaponCopies:s.books[book.id].copies||{[book.tierRealm]:1},description:book.description,
-        owned:true,...levelInfo,upgrade:upgradeQuote(levelInfo.exp),skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level,score,s.skillLevels[skill.id]))};
+      return {id:book.id,name:book.name,school:book.school,weaponType:book.weaponType,tierRealm:book.tierRealm,weaponCopies:s.books[book.id].copies||{[book.tierRealm]:1},refinement:refinementFor(s.books[book.id]),description:book.description,
+        owned:true,...levelInfo,upgrade:upgradeQuote(levelInfo.exp),skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level,score,s.skillLevels[skill.id],refinementFor(s.books[book.id])))};
     });
     return {...s,weaponIds,realmScore:score,realmName:realmForScore(score).name,
       attackBonus:manualAttackBonus(s),cultivationBonusPercent:library.filter(book=>book.level>=MAX_LEVEL).length*30,maxManualLevel:MAX_LEVEL,library};
@@ -354,5 +359,5 @@
     return Object.values(state.books).reduce((sum,row)=>sum+levelForExp(row.exp),0);
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_GOLD_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,weaponize,unlocked,manualAttackBonus,sortedOwnedWeapons,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_GOLD_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,MAX_REFINEMENT,refinement,refinementFor,copyCount,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,weaponize,unlocked,manualAttackBonus,sortedOwnedWeapons,publicState,starterFor});
 });

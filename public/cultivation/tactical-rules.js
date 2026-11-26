@@ -72,7 +72,7 @@
   function manualSkillFor(actor,id){
     if(!actor||!Array.isArray(actor.manualSkills)||!actor.manualSkills.includes(id))return null;
     const Manuals=manuals(),skill=Manuals?.BY_SKILL?.[id];
-    return skill?Manuals.skillAtLevel(skill,actor.manualSkillLevels?.[id]):null;
+    return skill?Manuals.skillAtLevel(skill,actor.manualSkillLevels?.[id],actor.manualRefinements?.[skill.manualId]):null;
   }
   // The existing spirit page remains the single branch-selection surface.
   const SPIRIT_BRANCHES=Object.freeze({ocean:{tide:'tide',surge:'surge'},taichu:{renew:'renew',devour:'drain'},
@@ -551,7 +551,7 @@
       ...(raw.boss?{boss:true,footprint:{width:2,height:2},...(raw.bossKind?{bossKind:raw.bossKind}:{})}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
-      ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills,manualSkillLevels}:{}),
+      ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills,manualSkillLevels,manualRefinements:Object.fromEntries(Object.entries(raw.manualRefinements||{}).filter(([id])=>catalog?.BY_BOOK?.[id]).map(([id,n])=>[id,catalog.refinement(n)]).filter(([,n])=>n))}:{}),
       ...(!raw.bot&&raw.manualWeaponMode?{manualWeaponMode:true,
         manualRulesVersion:2,manualWeaponIds:Array.from({length:2},(_,i)=>{
           const id=raw.manualWeaponIds?.[i];

@@ -53,7 +53,7 @@ const focusCost=(member,skill)=>isFocusEmpowered(member,skill)?
 const skillOf=(id,record,score)=>{
   const s=Manuals.BY_SKILL[id];
   if(!s||!Manuals.unlocked(record,id))return null;
-  return Manuals.skillAtLevel(s,record.skillLevels?.[id]);
+  return Manuals.skillAtLevel(s,record.skillLevels?.[id],Manuals.refinementFor(record.books?.[s.manualId]));
 };
 const describeDungeonSkill=skill=>{
   if(skill.kind==='fist-focus')

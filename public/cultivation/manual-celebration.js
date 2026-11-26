@@ -17,6 +17,8 @@ export function detectManualCelebration(before,after,context={}) {
       extra:newBooks.length>1?`本次共取得 ${newBooks.length} ${book.weaponType?'件武器':'本功法'}`:''
     };
   }
+  const refined=currentBooks.find(book=>Number(book.refinement||0)>Number(oldBooks.get(book.id)?.refinement||0));
+  if(refined){const old=oldBooks.get(refined.id);return {kind:'refinement',school:refined.school,bookId:refined.id,name:refined.name,weaponType:refined.weaponType,refinement:refined.refinement,previousRefinement:old.refinement||0,heading:'武器精煉',kicker:'同款武器 · 靈紋共鳴',detail:'本武器傷害 +'+(refined.refinement*10)+'%',extra:''};}
   const upgrades=[],unlocks=[];
   for(const book of currentBooks){
     const old=oldBooks.get(book.id);
@@ -62,21 +64,21 @@ export function detectManualCelebration(before,after,context={}) {
 }
 
 export function renderManualCelebration(result,{esc,bookArt,skillArt,findSkill}) {
-  if(!result||!['discovery','unlock','skill-upgrade','manual-upgrade'].includes(result.kind))return '';
+  if(!result||!['discovery','unlock','skill-upgrade','manual-upgrade','refinement'].includes(result.kind))return '';
   const school=result.school==='body'?'body':'sword';
   const discovery=result.kind==='discovery';
-  const isUnlock=result.kind==='unlock';
+  const isUnlock=result.kind==='unlock',refined=result.kind==='refinement';
   const skill= result.skillId?findSkill(result.skillId):null;
-  const artwork=discovery||result.kind==='manual-upgrade'?bookArt(result.bookId):skillArt(skill||result.skillId);
+  const artwork=discovery||refined||result.kind==='manual-upgrade'?bookArt(result.bookId):skillArt(skill||result.skillId);
   const fallback=discovery?'卷':'✦';
-  const icon=artwork&&result.bookId&&(discovery||result.kind==='manual-upgrade')
+  const icon=artwork&&result.bookId&&(discovery||refined||result.kind==='manual-upgrade')
     ?globalThis.QAWeaponPresentation.artMarkup({id:result.bookId,name:result.name},{className:'manual-celebration-art'})
     :artwork
     ?`<img src="${esc(artwork)}" alt="" decoding="async" class="manual-celebration-art">`
     :`<span class="manual-celebration-art-fallback" aria-hidden="true">${fallback}</span>`;
   const reveal=discovery||isUnlock;
   const noLevel=discovery;
-  const levelLine=noLevel?(result.weaponType?'已收入兵器閣':'已收入藏經閣'):
+  const levelLine=refined?globalThis.QAWeaponPresentation.refinementStars(result,{previous:result.previousRefinement}):noLevel?(result.weaponType?'已收入兵器閣':'已收入藏經閣'):
     `<span class="manual-celebration-level-label">${result.kind==='skill-upgrade'?'招式':result.weaponType?'武器':'功法'} Lv.</span>
       ${result.previousLevel?`<span class="manual-celebration-old-level">${Number(result.previousLevel)}</span>
        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>`:''}
