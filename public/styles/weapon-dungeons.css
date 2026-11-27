@@ -100,4 +100,22 @@
 #weapon-dungeons-panel[hidden]{display:none!important}
 #page-gameplay [data-wd-open="true"]>.gameplay-atlas{display:none!important}
 #weapon-dungeons-panel .wd-difficulties .qy-realm-badge{font-size:inherit;padding:0;border:0;background:none;color:inherit;white-space:nowrap}
-@media(orientation:landscape){#page-gameplay .gameplay-shell[data-wd-open="true"]>#weapon-dungeons-panel{grid-area:atlas;align-self:start;padding:clamp(8px,1.5vw,16px);background:linear-gradient(135deg,#14251eed,#18251ee8)}}
+/* Full gameplay tab in landscape: no left category rail and no modal. */
+@media(orientation:landscape){
+  #page-gameplay .gameplay-shell[data-atlas-ready="true"][data-wd-open="true"]{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:minmax(0,1fr);
+    grid-template-areas:"detail";
+    gap:0;
+    align-content:stretch;
+  }
+  #page-gameplay .gameplay-shell[data-wd-open="true"]>:is(.gameplay-heading,.gameplay-entries,.gameplay-atlas){display:none!important}
+  #page-gameplay .gameplay-shell[data-wd-open="true"]>#weapon-dungeons-panel{
+    grid-area:detail;align-self:stretch;justify-self:stretch;
+    width:100%;max-width:none;box-sizing:border-box;
+    padding:clamp(8px,1.5vw,16px);
+    background:linear-gradient(135deg,#14251eed,#18251ee8);
+  }
+  #page-gameplay .gameplay-shell[data-wd-open="true"] #weapon-dungeons-panel .wd-body{width:100%;min-width:0}
+  #page-gameplay .gameplay-shell[data-wd-open="true"] #weapon-dungeons-panel [data-wd-back]{display:none}
+}

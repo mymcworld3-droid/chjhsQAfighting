@@ -2,7 +2,7 @@ import './weapon-presentation.js';
 import './weapon-dungeon-rules.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {weaponDungeonTicketMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
-let panel=null,data=null,loading=false,serial=0,trigger=null,selectedId=null,selectedTier=0;
+let panel=null,data=null,loading=false,serial=0,trigger=null,selectedId=null,selectedTier=0,atlasScroll=0;
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const catalog=()=>Array.isArray(data?.dungeons)?data.dungeons:[];
 const selected=()=>catalog().find(d=>d.id===selectedId);
@@ -18,8 +18,12 @@ function ensure(){
   panel=document.createElement('section');panel.id='weapon-dungeons-panel';panel.setAttribute('aria-labelledby','weapon-dungeons-title');panel.hidden=true;host.append(panel);
   panel.addEventListener('click',event=>{
     if(event.target.closest('[data-wd-close]')){hidePanel();return;}
+    if(event.target.closest('[data-wd-back]')){
+      if(landscape()&&atlas){hidePanel();return;}
+      if(loading||!data)return;
+      selectedId=null;selectedTier=0;paint();panel.querySelector?.('[data-wd-dungeon]')?.focus();return;
+    }
     if(loading||!data)return;
-    if(event.target.closest('[data-wd-back]')){selectedId=null;selectedTier=0;paint();panel.querySelector?.('[data-wd-dungeon]')?.focus();return;}
     const card=event.target.closest('[data-wd-dungeon]');
     if(card&&catalog().some(d=>d.id===card.dataset.wdDungeon)){selectedId=card.dataset.wdDungeon;selectedTier=defaultTier(selected());paint();panel.querySelector?.('#weapon-dungeons-title')?.focus();return;}
     const button=event.target.closest('[data-wd-difficulty]');
@@ -31,12 +35,22 @@ function ensure(){
   window.addEventListener('xiuxian:user-data-ready',()=>{hidePanel(false);serial++;data=null;loading=false;selectedId=null;selectedTier=0;});
   return true;
 }
-function showPanel(){panel.hidden=false;panel.parentElement?.setAttribute('data-wd-open','true');}
+function showPanel(){
+  const page=document.getElementById('page-gameplay');
+  if(panel.hidden)atlasScroll=page?.scrollTop||0;
+  panel.hidden=false;panel.parentElement?.setAttribute('data-wd-open','true');
+}
 function hidePanel(restoreFocus=true){
   if(!panel||panel.hidden)return;
   if(loading){serial++;loading=false;}
   panel.hidden=true;panel.parentElement?.removeAttribute('data-wd-open');
-  if(restoreFocus&&trigger?.isConnected!==false)trigger?.focus?.({preventScroll:true});
+  if(restoreFocus){
+    const page=document.getElementById('page-gameplay');
+    if(landscape()&&atlas&&page)page.scrollTop=atlasScroll;
+    const focus=trigger?.isConnected!==false&&trigger?.closest?.('[data-atlas-dungeon]')?trigger:
+      landscape()&&atlas?atlas.querySelector?.('[data-atlas-dungeon]')||trigger:trigger;
+    focus?.focus?.({preventScroll:true});
+  }
 }
 const count=d=>d.difficulties.filter(t=>Number(d.clears[t.index])>0).length;
 const traits=d=>'<div class="wd-traits">'+d.traits.map(t=>'<span>'+esc(t)+'</span>').join('')+'</div>';
@@ -116,11 +130,11 @@ async function enter(difficulty){
   }catch(error){if(serial===token&&getMainUser()?.uid===account){loading=false;paint(error.message||'副本暫時無法開啟');showPanel();}}
   finally{if(serial===token)loading=false;}
 }
-export async function openWeaponDungeons(dungeonId=null){
+export async function openWeaponDungeons(dungeonId=null,origin=null){
   const account=getMainUser()?.uid;
   if(!account){window.showToast?.('請先登入後挑戰武器副本');return;}
   if(!ensure())return;
-  trigger=document.activeElement;
+  trigger=origin||document.activeElement;
   window.switchToPage?.('page-gameplay');data=null;selectedId=null;selectedTier=0;loading=true;paint('正在同步副本券與秘境進度…');
   showPanel();panel.scrollIntoView?.({block:'nearest'});const token=++serial;
   try{
@@ -130,7 +144,7 @@ export async function openWeaponDungeons(dungeonId=null){
     data=result.state;selectedId=typeof dungeonId==='string'&&catalog().some(d=>d.id===dungeonId)?dungeonId:null;selectedTier=defaultTier(selected());loading=false;paint();
   }catch(error){if(serial===token){loading=false;paint(error.message||'副本資料同步失敗');}}
 }
-// Landscape keeps the category rail and replaces the atlas with inline detail.
+// Landscape swaps the entire atlas for inline detail and restores the original atlas on return.
 const landscape=()=>window.matchMedia?.('(orientation: landscape)')?.matches===true;
 let atlas=null,atlasCategory='weapon';
 const atlasArt={ 'peak-stone':'/assets/dungeons/peak-stone.png' };
@@ -165,7 +179,7 @@ function mountAtlas(target){
   atlas.addEventListener('click',event=>{
     if(!landscape())return;
     const node=event.target.closest('[data-atlas-dungeon]');
-    if(node){void openWeaponDungeons(node.dataset.atlasDungeon);return;}
+    if(node){void openWeaponDungeons(node.dataset.atlasDungeon,node);return;}
     if(event.target.closest('[data-atlas-coop]')&&window.QA_COOP_DUNGEON_ENABLED===true)void window.openDungeonLobby?.();
   });
   // Preserve the inactive cooperative mode and its existing portrait launcher.

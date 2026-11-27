@@ -8,10 +8,10 @@ const source=fs.readFileSync(require.resolve('../public/cultivation/weapon-dunge
 function harness({wide=false}={}){
  const elements=new Map(),events=new Map(),entered=[],requests=[];let uid='u1';
  class Element{
-   constructor(tag){this.tagName=tag;this.handlers={};this.hidden=true;this.innerHTML='';}
+   constructor(tag){this.tagName=tag;this.handlers={};this.hidden=true;this.innerHTML='';this.attributes={};}
    addEventListener(type,handler){this.handlers[type]=handler;}
-   setAttribute(){}
-   removeAttribute(){}
+   setAttribute(key,value){this.attributes[key]=value;}
+   removeAttribute(key){delete this.attributes[key];}
    append(child){elements.set(child.id,child);child.parentElement=this;}
    focus(){}
    getBoundingClientRect(){return {left:0,right:500,top:0,bottom:500};}
@@ -126,4 +126,33 @@ test('weapon dungeon is a section in the gameplay shell, and navigation hides it
  assert.equal(h.dialog().tagName,'section');assert.equal(h.dialog().parentElement,h.shell);
  assert.equal(h.dialog().hidden,false);h.events.get('xiuxian:page-switched')({detail:{pageId:'page-training'}});
  assert.equal(h.dialog().hidden,true);assert.doesNotMatch(source,/showModal\(|createElement\('dialog'\)/);
+});
+
+test('landscape details occupy the whole tab and both return controls restore the same atlas',async()=>{
+ const h=harness({wide:true}),atlas=h.elements.get('gameplay-dungeon-atlas'),markup=atlas.innerHTML;
+ const opening=h.open(W.ID);
+ assert.equal(h.shell.attributes['data-wd-open'],'true');
+ h.respond();await opening;
+ assert.equal(h.dialog().hidden,false);assert.match(h.dialog().innerHTML,/尖峰石域/);
+ h.back();
+ assert.equal(h.dialog().hidden,true);
+ assert.equal(h.shell.attributes['data-wd-open'],undefined);
+ assert.equal(h.elements.get('gameplay-dungeon-atlas'),atlas);assert.equal(atlas.innerHTML,markup);
+ assert.equal(h.requests.length,1,'return must not refetch or render the intermediate catalog');
+ const second=h.open(W.ID);h.respond(h.state(),1);await second;
+ h.dialog().handlers.click({target:{closest:s=>s==='[data-wd-close]'?{}:null}});
+ assert.equal(h.dialog().hidden,true);assert.equal(h.shell.attributes['data-wd-open'],undefined);
+ assert.equal(atlas.innerHTML,markup);assert.equal(h.entered.length,0);
+ const css=fs.readFileSync(require.resolve('../public/styles/weapon-dungeons.css'),'utf8');
+ assert.match(css,/grid-template-areas:"detail"/);
+ assert.match(css,/\.gameplay-heading,\.gameplay-entries,\.gameplay-atlas\)\{display:none!important\}/);
+ assert.match(css,/grid-area:detail;align-self:stretch;justify-self:stretch/);
+});
+test('return during a pending landscape request restores the atlas and ignores the late response',async()=>{
+ const h=harness({wide:true}),opening=h.open(W.ID);
+ h.dialog().handlers.click({target:{closest:s=>s==='[data-wd-close]'?{}:null}});
+ h.respond();await opening;
+ assert.equal(h.dialog().hidden,true);
+ assert.equal(h.shell.attributes['data-wd-open'],undefined);
+ assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty=/);
 });

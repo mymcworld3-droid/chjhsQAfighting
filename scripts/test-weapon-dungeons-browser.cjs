@@ -27,7 +27,7 @@ async function main(){
  app.get('/test',(_,res)=>res.type('html').send(`<!doctype html><html><head>
   <meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/styles/gameplay-page.css">
   <style>body{margin:0;background:#14251e;color:#ede5cf}#fixture-study{position:fixed;inset:0;z-index:1000;background:#14251e;padding:20px}button{min-height:32px}</style></head>
-  <body class="xianxia-theme ui-cleanup"><div id="page-gameplay" class="page-section active-page"><div class="gameplay-shell"><div class="gameplay-entries"></div></div></div>
+  <body class="xianxia-theme ui-cleanup"><div id="page-gameplay" class="page-section active-page gameplay-page"><div class="gameplay-shell"><header class="gameplay-heading"><h2>歷練</h2></header><div class="gameplay-entries"></div></div></div>
   <section id="fixture-study" hidden><button id="fixture-answer">回答</button><p id="fixture-explanation"></p><button id="fixture-next">返回戰場</button></section>
   <script>window.getCurrentUserData=()=>({stats:{totalScore:0}});window.switchToPage=()=>{};
   window.QATrialQuestion={open(options){window.__study=options;document.getElementById('fixture-study').hidden=false;
@@ -64,6 +64,29 @@ async function main(){
    assert.equal(await page.locator('dialog:modal').count(),0);
    await page.screenshot({path:path.join(output,'selection-'+viewport.width+'.png')});
   }
+  // Landscape uses the complete gameplay tab and restores the identical atlas on return.
+  await page.setViewportSize({width:1180,height:820});
+  const panel=page.locator('#weapon-dungeons-panel'),atlas=page.locator('#gameplay-dungeon-atlas');
+  const originalAtlas=await atlas.innerHTML();
+  assert.equal(await page.locator('.gameplay-heading').isVisible(),false);
+  assert.equal(await page.locator('.gameplay-entries').isVisible(),false);
+  assert.equal(await atlas.isVisible(),false);
+  const full=await panel.evaluate(el=>{
+    const shell=el.parentElement,s=getComputedStyle(shell),a=el.getBoundingClientRect(),b=shell.getBoundingClientRect();
+    return {width:a.width,available:b.width-parseFloat(s.paddingLeft)-parseFloat(s.paddingRight),height:a.height,availableHeight:b.height-parseFloat(s.paddingTop)-parseFloat(s.paddingBottom),area:getComputedStyle(el).gridArea};
+  });
+  assert(Math.abs(full.width-full.available)<2);assert(full.height>=full.availableHeight-2);assert.match(full.area,/detail/);
+  await panel.locator('[data-wd-close]').click();
+  await atlas.waitFor({state:'visible'});
+  assert.equal(await panel.isVisible(),false);
+  assert.equal(await page.locator('.gameplay-heading').isVisible(),true);
+  assert.equal(await page.locator('.gameplay-entries').isVisible(),true);
+  assert.equal(await atlas.innerHTML(),originalAtlas);
+  await atlas.locator('[data-atlas-dungeon="peak-stone"]').click();
+  await page.locator('[data-wd-difficulty="0"]').waitFor({state:'visible'});
+  assert.equal(await atlas.isVisible(),false);
+  assert.equal((await API.weaponDungeonState(db,'u1')).tickets,3);
+  await page.setViewportSize({width:393,height:852});
   const rail=page.locator('.wd-difficulties');
   await rail.scrollIntoViewIfNeeded();
   assert.equal(await rail.evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
