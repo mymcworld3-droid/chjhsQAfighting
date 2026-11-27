@@ -28,3 +28,16 @@ test('highest realm has no fictional next difficulty',()=>{
  const html=render({info:{name:W.NAME,realm:'渡劫',difficulty:5},result:{cleared:true,unlocked:5,newlyUnlocked:null,tickets:1}});
  assert.match(html,/已完成最高難度/);assert.doesNotMatch(html,/wd-result-unlock/);
 });
+
+test('retry action only opens the settled room once eligible and never forwards a resume token',async()=>{
+ const calls=[];
+ const ctx={busy:false,state:{id:'finished-room',status:'finished',weaponDungeon:{id:W.ID,difficulty:1},weaponDungeonResult:{cleared:true,tickets:2}},uid:'u1',myActor:()=>({team:'player'}),open:async(...args)=>calls.push(args)};
+ vm.createContext(ctx);vm.runInContext(source.slice(source.indexOf('async function retryWeaponDungeon('),source.indexOf('function resultDialog(){')),ctx);
+ await ctx.retryWeaponDungeon();
+ assert.deepEqual(JSON.parse(JSON.stringify(calls)),[['weapon-dungeon',{dungeonId:W.ID,difficulty:1,retryFromRoomId:'finished-room'}]]);
+ ctx.busy=true;await ctx.retryWeaponDungeon();
+ ctx.busy=false;ctx.state.weaponDungeonResult.tickets=0;await ctx.retryWeaponDungeon();
+ ctx.state.weaponDungeonResult={};await ctx.retryWeaponDungeon();
+ ctx.state.status='active';ctx.state.weaponDungeonResult={cleared:true,tickets:1};await ctx.retryWeaponDungeon();
+ assert.equal(calls.length,1);
+});

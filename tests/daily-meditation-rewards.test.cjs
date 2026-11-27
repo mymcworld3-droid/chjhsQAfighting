@@ -47,7 +47,7 @@ test('inline animation stays visual, skips stale or repeated receipts and respec
 });
 test('trial settlement embeds the shared list without replacing navigation or dungeon settlement',()=>{
   const src=require('node:fs').readFileSync(require.resolve('../public/cultivation/tactical-combat.js'),'utf8');
-  const result=src.slice(src.indexOf('function resultDialog(){'),src.indexOf('function leaveDialog(){'));
+  const result=src.slice(src.indexOf('function dungeonSettlementMarkup('),src.indexOf('function leaveDialog(){'));
   assert.match(result,/presentation\.renderSettlement\(settlementReward,/);
   assert.match(result,/presentation\.animateInline/);
   assert.match(result,/data-next-stage/);
