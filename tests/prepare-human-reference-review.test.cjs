@@ -57,3 +57,16 @@ test("question markers preserve school answer-sheet circles and full-width numbe
  assert.deepEqual(blocks[0].labels,["A","B"]);
  assert.deepEqual(t.extractBlocks(["(1) option, not a question\n2. test\n（ ）3. fixture"]).map(b=>b.number),[2,3]);
 });
+
+test("source acquisition by batch never adds question locators or reprocesses the old queue",()=>{
+ const w=t.buildQueue([[23,{sources:[{id:"old"}],records:[{id:"old1",sourceId:"old",questionNumber:1}]}],[24,{sources:[{id:"new",acquisitionOnly:true}],records:[]}],[25,{sources:[{id:"later",acquisitionOnly:true}],records:[]}]]);
+ assert.equal(w.counts.structured,1);assert.equal(w.counts.pending,1);assert.equal(w.counts.drafts,0);
+ assert.deepEqual(t.selectSources(w,{sourceIds:[],acquisitionBatch:null}).map(s=>s.id),["old"]);
+ assert.deepEqual(t.selectSources(w,{sourceIds:[],acquisitionBatch:24}).map(s=>s.id),["new"]);
+ assert.throws(()=>t.selectSources(w,{sourceIds:["old"],acquisitionBatch:24}),/Unknown/);
+ assert.throws(()=>t.selectSources(w,{sourceIds:[],acquisitionBatch:99}),/No acquisition sources/);
+});
+test("acquisition batch argument validation",()=>{
+ assert.equal(t.parseArgs(["--acquisition-batch","24"]).acquisitionBatch,24);
+ for(const argv of [["--acquisition-batch"],["--acquisition-batch","0"],["--acquisition-batch","1.5"],["--acquisition-batch","foo"]])assert.throws(()=>t.parseArgs(argv),/Invalid acquisition batch/);
+});
