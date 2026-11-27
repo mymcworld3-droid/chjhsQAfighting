@@ -26,7 +26,7 @@ function harness({wide=false}={}){
    authenticatedMainFetch:()=>new Promise(resolve=>requests.push(resolve)),
    loadBattle:async()=>({openTacticalCombat:async(...args)=>entered.push(args)})});
  vm.runInContext(source.replace(/^import .*;\n/gm,'').replaceAll('export ','')
-   .replace("import('./tactical-combat.js?v=20261125-weapon-lord-cleared-v1')",'loadBattle()'),context);
+   .replaceAll("import('./tactical-combat.js?v=20261125-weapon-lord-cleared-v1')",'loadBattle()'),context);
  const dialog=()=>elements.get('weapon-dungeons-panel');
  const state=extra=>{const p={tickets:3,unlocked:0,clears:[0,0,0,0,0,0],active:null,...extra};return {...p,dungeonId:W.ID,dungeons:W.catalog(p)};};
  const respond=(data=state(),index=0)=>requests[index]({ok:true,json:async()=>({ok:true,state:data})});
