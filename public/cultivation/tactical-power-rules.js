@@ -17,13 +17,30 @@
   // and control, not fictitious extra damage or guaranteed multi-target hits.
   const UTILITIES=Object.freeze({
     'dash-cleave':.12,'sword-array':.14,'flying-sword':.10,
-    'fist-sweep':.10,'fist-chain':.15,'fist-throw':.22
+    'fist-sweep':.10,'fist-chain':.15,'fist-throw':.22,
+    'prism-reflect':.06,'prism-scatter':.10,'bell-shock':.12,'bell-echo':.18,
+    'weave-thread':.08,'weave-domain':.13,'mirror-swap':.18,'time-union':.07,'gravity-core':.20,'gravity-crash':.12
   });
   const WEIGHTS=Object.freeze([1,.4,.2]);
   function estimateMove(attack,skill){
-    const cost=clamp(finite(skill.cost,2),2,10);
-    const total=skill.kind==='fist-chain'?finite(skill.power)*Math.min(3,finite(skill.steps,4)):
+    let cost=clamp(finite(skill.cost,2),2,10);
+    let total=skill.kind==='fist-chain'?finite(skill.power)*Math.min(3,finite(skill.steps,4)):
       skill.kind==='sword-array'?finite(skill.centerPower,skill.power):finite(skill.power);
+    // Conservative expected single-target utility, not maximum tooltip
+    // damage. Include setup cost for attacks dependent on special objects.
+    switch(skill.kind){
+      case 'prism-reflect':total=skill.powers.initial+.5*skill.powers.reflected;break;
+      case 'prism-scatter':total=Math.min(skill.maxTargetPower,skill.powers.initial+.5*skill.powers.first+.25*skill.powers.second);break;
+      case 'bell-echo':total=skill.power*2;break;
+      case 'weave-thread':cost+=1;break;
+      case 'weave-domain':total=skill.powers.two;cost+=2;break;
+      case 'mirror-strike':total=skill.power*1.15;break;
+      case 'mirror-swap':total=skill.power*1.5;cost+=1;break;
+      case 'time-double':total=skill.power*1.5;cost+=1;break;
+      case 'time-union':total=skill.power*2;cost+=4;break;
+      case 'gravity-core':total=skill.power*3;break;
+      case 'gravity-crash':total=skill.powers.middle;cost+=4;break;
+    }
     const damage=clamp(total,0,6)*2/cost;
     const reach=clamp(skill.unlimited?4:finite(skill.range),0,4)*.025;
     const utility=(UTILITIES[skill.kind]||0)

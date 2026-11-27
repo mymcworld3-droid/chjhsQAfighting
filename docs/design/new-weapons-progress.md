@@ -229,3 +229,9 @@ fe67669 回歸 3123 項，3122 通過，幾何法線負零 (-0) 在 Node 嚴格�
 
 ## 第18階段進行中：多人時鐘與勝利交易
 新增 dungeon-gravity-clock.cjs：即時模式沒有雙方回合，採每個星核生成後每4個一秒伺服器tick一波，至多四次後續觸發，第五次後保留4秒可引爆。此時距為規格未明訂的映射決策；離線長間隔依既有安全追趕策略只在最後可見tick執行一波，不追播歷史傷害。全房間時鐘在原本的Firestore transaction序列化，每核每tick唯一id，不使用玩家技能序號，不由答題、玩家數或靈獸數觸發。實際位移中斷該tick敵人行動；無法位移仍受傷，固定首領保留盾破規則。守鑰、首領勝利與XP接入原有規則；時鐘擊殺首領在同一交易建立永久勝利證明，所有advanceWorld呼叫點處理，防止跨兩個C服務重送重複獎勵。權威gravityEvents有限16筆，每個事件包含受影響敵人前置位置/血量，SSE及動畫依ID去重，不覆寫lastSkill/skillSeq；跨場景重置。新增5項時鐘測試及1項兩C服務勝利交易測試，待原生CI。仍維持新武器私有，後續目錄、技能詳細倍率、戰力、掉落及臨時透明素材待整合；未進入第19階段。
+
+## 第16–18階段既有提交CI紀錄
+第16階段 ad1533a、第17階段 8a36c59、第18階段多人時鐘 f5dc0ae 的完整回歸、戰術瀏覽器、合作副本及 Pages 全部成功。多人時鐘 [回歸](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45927200810)、[戰術](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45927200887)、[合作](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45927200827)、[Pages](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45927199860)。
+
+## 第18階段：目錄、養成、掉落及資源候選整合
+六把武器移入單一權威目錄 DEVELOPMENT_BOOKS，私有草案改引用同一份定義；RELEASE_NEW_WEAPONS=false 時維持舊六把公開目錄。開啟候選旗標後共12把36招，沿用熟練Lv1/5/10解鎖、技能Lv5、精煉5星、兩武器配置及原本各境界掉落。新增多段/分區傷害詳情、戰力估算、合作副本精煉預覽一致性。新增6張512×512透明SVG武器及18張256×256透明SVG技能暫用素材，無背景/圓盤烘焙；路徑 public/assets/weapons/<武器ID>-hd.svg 及 public/assets/skills/<技能ID>.svg，日後可換正式美術，映射已接武器圖鑑、修煉與預載。候選測試只在獨立Node測試程序開啟旗標，檢查18招四模式授權施放與預覽、重送、養成、掉落及素材。待原生CI與第19階段完整公開旗標測試，尚未開放。

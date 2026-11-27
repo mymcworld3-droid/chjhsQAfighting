@@ -19,11 +19,13 @@
   });
   const WEAPONS=new Set(['sword-wind','sword-flight','sword-sky',
     'body-rock','body-dragon','body-tiger']);
+  const DRAFTS=new Set(["sword-prism","body-bell","sword-weave","body-mirror","sword-time","body-gravity"]);
+  const known=id=>WEAPONS.has(id)||DRAFTS.has(id);
   const unique=urls=>[...new Set(urls.filter(x=>typeof x==='string'&&
     /^\/(?:assets\/|styles\/)/.test(x)))];
   function weaponImages(ids){
     return unique((Array.isArray(ids)?ids:[]).slice(0,3)
-      .filter(id=>WEAPONS.has(id)).map(id=>'/assets/weapons/'+id+'-hd.webp'));
+      .filter(known).map(id=>'/assets/weapons/'+id+'-hd.'+(DRAFTS.has(id)?'svg':'webp')));
   }
   function genders(people){
     const found=new Set();
@@ -57,7 +59,7 @@
       .map(book=>book.id).slice(0,3));
   }
   function chosenSkills(weaponId,byBook,skillArt){
-    if(!WEAPONS.has(weaponId)||typeof skillArt!=='function')return [];
+    if(!known(weaponId)||typeof skillArt!=='function')return [];
     const skills=byBook?.[weaponId]?.skills||[];
     return unique(skills.map(skill=>skillArt(skill)).filter(Boolean));
   }

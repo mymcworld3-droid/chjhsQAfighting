@@ -42,7 +42,7 @@ const loadout=(record,score,index,member=null)=>{
         refinement:Manuals.refinementFor(s.books[skill.manualId]),
         singleHitDamage:preview.damage||preview.potential||0,
         ...(preview.center!==undefined?{centerHitDamage:preview.center}:{}),
-        description:describeDungeonSkill(skill)};
+        description:Manuals.DEVELOPMENT_BOOKS?.some(b=>b.id===skill.manualId)?Manuals.descriptionWithDamage(attackPower(s,member),skill):describeDungeonSkill(skill)};
     })};
 };
 function attackPower(record,member=null){

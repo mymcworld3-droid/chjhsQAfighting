@@ -76,7 +76,7 @@
   const breakLine=technique('wind-thousand','遠線破擊',4,null,'line',2,
     '劍氣沿直線延伸至石障或邊界。命中後將存活敵人推至最遠的可落腳格。',{unlimited:true,pushToEdge:true});
   const straightFist=technique('rock-fist','直拳',2,2,'line',1.3,'攻擊前方直線兩格。');
-  const BOOKS=Object.freeze([
+  const ORIGINAL_BOOKS=Object.freeze([
     book('sword-wind','流風靈劍','sword','以身法切入，再以劍氣逼退敵人。',[
       straight,
       technique('wind-step','突進橫斬',4,4,'dash-cleave',2.4,
@@ -122,6 +122,48 @@
         '將身前橫排三格內的敵人摔到身後的對應格，落地時造成傷害。若對應落點有障礙或被占用，該目標留在原地。')
     ],'築基')
   ]);
+  // One authoritative definition of all six new weapons. A release candidate
+  // can be tested by changing this literal in an isolated checkout only.
+  const RELEASE_NEW_WEAPONS=false;
+  const DEVELOPMENT_BOOKS=(()=>{
+  const freeze=o=>{if(o&&typeof o==='object'&&!Object.isFrozen(o)){Object.values(o).forEach(freeze);Object.freeze(o);}return o;};
+  const skill=(id,name,cost,range,kind,power,description,extra={})=>({id,name,cost,range,kind,power,description,cooldown:0,...extra});
+  const book=(id,name,school,tierRealm,description,skills,extra={})=>({id,name,school,weaponType:school==='body'?'totem':'sword',tierRealm,description,
+    release:'development',...extra,skills:skills.map((s,i)=>({...s,moveId:s.id,manualId:id,school,levelRequired:[1,5,10][i]}))});
+  return freeze([
+    book('sword-prism','折光靈劍','sword','煉氣','以地形碰撞、法線反射與漫射攻擊敵人。',[
+      skill('prism-slash','流光斬',2,3,'prism-slash',1.2,'沿指定方向攻擊直線三格，遇障礙停止。'),
+      skill('prism-reflect','折壁穿斬',4,null,'prism-reflect',1.6,'劍氣延伸至碰撞面，再沿法線向可通行側延伸三格。',{unlimited:true,reflectionRange:3,powers:{initial:1.6,reflected:1},maxTargetPower:2.6}),
+      skill('prism-scatter','漫光斬',4,null,'prism-scatter',1,'碰撞後向左右九十度與一百三十五度漫射，最多兩層。',{unlimited:true,branchTurns:[-3,-2,2,3],maxDepth:2,maxRays:21,powers:{initial:1,first:.7,second:.35},maxTargetPower:2.4})
+    ]),
+    book('body-bell','鳴鐘圖騰','body','煉氣','以正方形震波與逐層擊退連續命中。',[
+      skill('bell-strike','鳴拳',2,2,'bell-strike',1.3,'攻擊前方直線兩格。'),
+      skill('bell-shock','震鐘',3,0,'bell-shock',1.65,'以自身為中心攻擊二格正方形，不含自己，向外擊退一格。',{radius:2,push:1,excludeCenter:true}),
+      skill('bell-echo','回響',4,0,'bell-echo',.65,'依次攻擊四層正方形外圈，每層結算後擊退一格。',{rings:4,push:1,maxTargetPower:2.6})
+    ]),
+    book('sword-weave','織界靈劍','sword','築基','以劍痕、兩點連線及封閉劍陣布置戰場。',[
+      skill('weave-mark','刻界',2,3,'weave-mark',1.5,'直線攻擊三格，在有效指定位置留下劍痕。',{maxMarks:3,objectType:'mark'}),
+      skill('weave-thread','牽絲',3,null,'weave-thread',2.25,'選取兩道劍痕或本體與一道劍痕，第二端點點擊即施放；靈絲可穿牆。',{endpointCount:2,allowOwnerEndpoint:true}),
+      skill('weave-domain','織界',4,0,'weave-domain',2.4,'至少兩道劍痕；兩點連線、三點共線或三角封閉區域皆可穿牆攻擊有效格。',{minMarks:2,powers:{two:2.4,collinear:2.8,polygon:3.2},maxTargetPower:3.2})
+    ]),
+    book('body-mirror','蜃影圖騰','body','築基','以地圖中心點對稱蜃影同步複製合法體術。',[
+      skill('mirror-strike','虛形拳',2,2,'mirror-strike',1.6,'攻擊前方兩格；已啟用蜃影時同步複製。'),
+      skill('mirror-summon','金蟬脫殼',4,0,'mirror-summon',2.8,'啟用唯一蜃影，於點對稱位置釋放九格攻擊。',{radius:1,objectType:'mirror',noMirrorCopy:true}),
+      skill('mirror-swap','虛實互換',4,0,'mirror-swap',1.6,'與蜃影合法換位，兩處各釋放九格攻擊。',{radius:1,hits:2,maxTargetPower:3.2,noMirrorCopy:true})
+    ],{mirrorCopyFactor:.3}),
+    book('sword-time','歲輪天劍','sword','金丹','保留施放位置的時間殘影，與本體多重合擊。',[
+      skill('time-slash','刻時斬',2,3,'time-slash',1.9,'攻擊直線三格，於施放原點留下殘影。',{maxEchoes:2,objectType:'echo'}),
+      skill('time-double','昔影重斬',4,4,'time-double',2,'本體與最新殘影各自向同一目標出劍。',{minEchoes:1,maxSources:2,maxTargetPower:4}),
+      skill('time-union','三世歸一',6,4,'time-union',2,'本體與所有殘影合擊，之後消耗所有殘影。',{minEchoes:1,maxSources:3,maxTargetPower:6,consumeEchoes:true})
+    ]),
+    book('body-gravity','星隕圖騰','body','金丹','以持續右旋吸引的星核布置高傷害墜擊。',[
+      skill('gravity-strike','沉星拳',2,2,'gravity-strike',2,'攻擊前方直線兩格。'),
+      skill('gravity-core','引力星核',4,2,'gravity-core',.8,'在空地放置星核，吸引曼哈頓三格內敵人並逐次造成傷害。',{radius:3,maxTriggers:5,push:1,maxTargetPower:4,objectType:'core',noMirrorCopy:true}),
+      skill('gravity-crash','萬象星隕',5,2,'gravity-crash',5.5,'躍至合法星核落點並引爆，依曼哈頓距離結算一次最高傷害。',{radius:3,powers:{near:5.5,middle:3,outer:1.5},maxTargetPower:5.5,consumeCore:true,noMirrorCopy:true})
+    ])
+  ]);
+  })();
+  const BOOKS=Object.freeze(RELEASE_NEW_WEAPONS?[...ORIGINAL_BOOKS,...DEVELOPMENT_BOOKS]:[...ORIGINAL_BOOKS]);
   const BY_BOOK=Object.freeze(Object.fromEntries(BOOKS.map(book=>[book.id,book])));
   const BY_SKILL=Object.freeze(Object.fromEntries(BOOKS.flatMap(book=>book.skills.map(skill=>[skill.id,skill]))));
   const skillLevel=raw=>Number.isInteger(raw)&&raw>=1&&raw<=MAX_SKILL_LEVEL?raw:1;
@@ -159,7 +201,7 @@
       return {damage:0,direct:false,label:'召劍（0 傷害）',potential:hit(power),
         note:'本次先召喚飛劍，不造成傷害；下次移動飛劍才會命中'};
     }
-    const split=skill.hits===2;
+    const split=skill.hits===2&&skill.kind!=='mirror-swap';
     const damage=hit(power/(split?2:1));
     const result={damage,direct:true,label:'單次攻擊力 '+damage,
       note:split?'每次命中獨立結算，最多攻擊兩次':null};
@@ -191,6 +233,20 @@
     const value=singleHitDamage(attack,skill,options);
     const fmt=n=>Math.max(0,Math.round(n)).toLocaleString('zh-TW');
     let suffix='';
+    const hit=p=>fmt(Number(attack)*p);
+    const special={
+      'prism-reflect':()=> '初段 '+hit(skill.powers.initial)+'、法線反射 '+hit(skill.powers.reflected)+' 傷害。',
+      'prism-scatter':()=> '初段 '+hit(skill.powers.initial)+'、第一次漫射 '+hit(skill.powers.first)+'、第二次漫射 '+hit(skill.powers.second)+'；每敵倍率上限 '+hit(skill.maxTargetPower)+'（逐擊取整）。',
+      'bell-echo':()=> '每層 '+hit(skill.power)+' 傷害，最多四層；每層擊退後重判。',
+      'weave-domain':()=> '兩痕 '+hit(skill.powers.two)+'、三痕共線 '+hit(skill.powers.collinear)+'、三角陣 '+hit(skill.powers.polygon)+' 傷害。',
+      'mirror-strike':()=> '本體 '+hit(skill.power)+'，已召喚的蜃影另造成 '+hit(skill.power*.3)+' 傷害。',
+      'mirror-swap':()=> '兩處各 '+hit(skill.power)+' 傷害，重疊可命中兩次。',
+      'time-double':()=> '每道劍氣 '+hit(skill.power)+' 傷害，最多兩道。',
+      'time-union':()=> '每道劍氣 '+hit(skill.power)+' 傷害，最多三道。',
+      'gravity-core':()=> '每波 '+hit(skill.power)+' 傷害，最多 '+skill.maxTriggers+' 次。',
+      'gravity-crash':()=> '中心及相鄰 '+hit(skill.powers.near)+'、距離二 '+hit(skill.powers.middle)+'、距離三 '+hit(skill.powers.outer)+' 傷害。'
+    };
+    if(Object.hasOwn(special,skill.kind))return description+special[skill.kind]();
     if(skill.kind==='fist-focus'){
       suffix='不造成直接傷害。';
     }else if(skill.kind==='flying-sword'){
@@ -363,5 +419,5 @@
     return Object.values(state.books).reduce((sum,row)=>sum+levelForExp(row.exp),0);
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_LEVEL,MAX_GOLD_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,MAX_REFINEMENT,REFINEMENT_PERCENT,refinementPercent,refinement,refinementFor,copyCount,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,weaponize,unlocked,manualAttackBonus,sortedOwnedWeapons,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,DEVELOPMENT_BOOKS,RELEASE_NEW_WEAPONS,EXP_PER_KILL,MAX_LEVEL,MAX_GOLD_LEVEL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,MAX_REFINEMENT,REFINEMENT_PERCENT,refinementPercent,refinement,refinementFor,copyCount,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,weaponize,unlocked,manualAttackBonus,sortedOwnedWeapons,publicState,starterFor});
 });

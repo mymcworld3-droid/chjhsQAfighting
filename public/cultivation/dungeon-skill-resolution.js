@@ -500,7 +500,7 @@ function previewPlan(room,uid,map,skill){
   for(const target of candidates){
     if(!tile(map,target))continue;
     let out;
-    try{out=resolveCast(room,uid,map,sk,{target,seq:(member.skillSeq||0)+1,base,preview:true});}
+    try{out=resolveCast(room,uid,map,sk,{target,seq:(member.skillSeq||0)+1,base,preview:true,refinement:skill.refinement||0});}
     catch(e){if(e.status===409)continue;throw e;}
     const {result}=out,cells=[...new Map(out.cells.map(p=>[key(p),{x:p.x,y:p.y}])).values()];
     const path=result.path||[from,...(result.chainSteps||[]).map(s=>s.position)];

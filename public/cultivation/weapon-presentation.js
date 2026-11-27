@@ -4,7 +4,8 @@
   'use strict';
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const ids=new Set(['sword-wind','sword-flight','sword-sky','body-rock','body-dragon','body-tiger']);
-  const art=id=>ids.has(id)?'/assets/weapons/'+id+'-hd.webp':'';
+  const draftIds=new Set(["sword-prism","body-bell","sword-weave","body-mirror","sword-time","body-gravity"]);
+  const art=id=>ids.has(id)?'/assets/weapons/'+id+'-hd.webp':draftIds.has(id)?'/assets/weapons/'+id+'-hd.svg':'';
   const count=v=>Number.isFinite(Number(v))?Math.max(0,Math.trunc(Number(v))):0;
   const fmt=v=>count(v).toLocaleString('zh-TW');
   const levelText=book=>'Lv. '+Math.max(1,Math.min(20,count(book?.level)||1));
