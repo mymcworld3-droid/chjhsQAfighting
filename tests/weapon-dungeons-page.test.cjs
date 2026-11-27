@@ -110,3 +110,15 @@ test('dungeon map art and universal solid plaque are separate original PNG files
  const css=fs.readFileSync(path.join(__dirname,'../public/styles/gameplay-page.css'),'utf8');
  assert.match(css,/url\('\/assets\/dungeons\/dungeon-button\.png'\)/);
 });
+
+test('realm selector is a single horizontal scroll rail with all six original actions',async()=>{
+ const h=harness(),opening=h.open();h.respond();await opening;h.choose();
+ const markup=h.dialog().innerHTML,css=fs.readFileSync(require.resolve('../public/styles/weapon-dungeons.css'),'utf8');
+ assert.match(markup,/class="wd-difficulties"[^>]*可左右滑動/);
+ assert.match(markup,/data-wd-slide="-1"/);assert.match(markup,/data-wd-slide="1"/);
+ assert.equal((markup.match(/data-wd-difficulty=/g)||[]).length,6);
+ assert.match(css,/\.wd-difficulties\{display:flex;[^}]*overflow-x:auto/);
+ assert.match(css,/scroll-snap-type:x proximity/);
+ assert.doesNotMatch(css,/\.wd-difficulties\{[^}]*grid-template-columns/);
+ assert.equal(h.entered.length,0);
+});

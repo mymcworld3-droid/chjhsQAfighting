@@ -62,6 +62,19 @@ async function main(){
    assert(bounds.x>=0&&bounds.y>=0&&bounds.x+bounds.width<=viewport.width+1&&bounds.y+bounds.height<=viewport.height+1);
    await page.screenshot({path:path.join(output,'selection-'+viewport.width+'.png')});
   }
+  // Drag on an enabled card must scroll without spending a ticket or launching combat.
+  const rail=page.locator('.wd-difficulties');
+  await rail.scrollIntoViewIfNeeded();
+  assert.equal(await rail.evaluate(el=>el.scrollWidth>el.clientWidth),true);
+  const row=await rail.evaluate(el=>Array.from(el.children).map(b=>Math.round(b.getBoundingClientRect().top)));
+  assert.equal(new Set(row).size,1);
+  const cardBox=await page.locator('[data-wd-difficulty="0"]').boundingBox();
+  await page.mouse.move(cardBox.x+cardBox.width-8,cardBox.y+cardBox.height/2);
+  await page.mouse.down();await page.mouse.move(cardBox.x+5,cardBox.y+cardBox.height/2,{steps:10});await page.mouse.up();
+  await page.waitForFunction(()=>document.querySelector('.wd-difficulties').scrollLeft>20);
+  assert.equal((await API.weaponDungeonState(db,'u1')).tickets,3);
+  await page.locator('[data-wd-slide="-1"]').click();
+  await page.waitForFunction(()=>document.querySelector('.wd-difficulties').scrollLeft<5);
   await page.locator('[data-wd-difficulty="0"]').click();
   await page.locator('#tactical-combat canvas').waitFor();
   await page.waitForFunction(()=>!document.querySelector('#tactical-combat [data-quiz]').disabled);
