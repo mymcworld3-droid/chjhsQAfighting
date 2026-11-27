@@ -3,25 +3,33 @@ const {test}=require('node:test'),assert=require('node:assert/strict');
 const Manuals=require('../public/cultivation/manual-rules.js');
 const {roll}=require('../manual-reward-rules.cjs');
 const room=stage=>({mode:'pve',trial:{stage,layoutVersion:4}});
-test('ordinary trial at any stage can only award a missing native 煉氣 weapon',()=>{
+const eligible=Manuals.BOOKS.filter(b=>b.tierRealm==='煉氣'&&b.id!=='body-bell');
+const filled=()=>Object.fromEntries(eligible.map(b=>[b.id,{exp:70}]));
+test('ordinary trial at every stage awards missing eligible native 煉氣 weapons before any copies',()=>{
  for(const stage of [1,5,20,150,1000000]){
   for(const school of ['sword','body']){
    const starter=Manuals.starterFor(school);
    const state=Manuals.normalize({school,books:{[starter]:{exp:70}},dropMisses:3});
-   const result=roll(room(stage),'u',state,()=>0);
-   assert.ok(result.drop);assert.equal(Manuals.BY_BOOK[result.drop].tierRealm,'煉氣');
-   assert.notEqual(result.drop,starter);
+   while(eligible.some(b=>!state.books[b.id])){
+    state.dropMisses=3;
+    const s=room(stage),result=roll(s,'u',state,()=>0);
+    assert.ok(result.drop);assert.ok(eligible.some(b=>b.id===result.drop));
+    assert.notEqual(result.drop,starter);
+    assert.equal(s.manualDrops.u.duplicate,false);
+    assert.equal(state.dropMisses,0);
+   }
+   assert.equal(Object.keys(state.books).length,eligible.length);
    assert.equal(state.books[starter].exp,70);
-   assert.equal(state.dropMisses,0);
-   const qi=Manuals.BOOKS.filter(b=>b.tierRealm==='煉氣');
-   while(Object.keys(state.books).length<qi.length){state.dropMisses=3;const next=roll(room(stage),'u',state,()=>0);assert.ok(next.drop);assert.equal(Manuals.BY_BOOK[next.drop].tierRealm,'煉氣');}
-   const done=roll(room(stage),'u',state,()=>{throw Error('exhausted trial pool must not roll');});
-   assert.equal(done.drop,null);assert.equal(done.changed,false);
-   assert.equal(Object.keys(state.books).length,qi.length);
+   const s=room(stage);state.dropMisses=3;
+   const next=roll(s,'u',state,()=>0);
+   assert.ok(eligible.some(b=>b.id===next.drop));
+   assert.equal(s.manualDrops.u.duplicate,true);
+   assert.equal(Manuals.refinementFor(state.books[next.drop]),1);
+   assert.equal(state.books['body-bell'],undefined);
   }
  }
 });
-test('first tutorial victory guarantees a 煉氣 starter and ordinary trial pity remains unchanged',()=>{
+test('first tutorial victory guarantees starter and 30 percent roll / fourth victory pity stay unchanged',()=>{
  const state=Manuals.normalize({school:'sword'});
  assert.equal(roll(room(1),'u',state,()=>99).drop,'sword-wind');
  for(let i=1;i<=3;i++){
@@ -29,12 +37,45 @@ test('first tutorial victory guarantees a 煉氣 starter and ordinary trial pity
   assert.equal(miss.drop,null);assert.equal(state.dropMisses,i);
  }
  const awarded=roll(room(2),'u',state,()=>0).drop;
- assert.ok(awarded!=='sword-wind'&&Manuals.BY_BOOK[awarded].tierRealm==='煉氣');
+ assert.ok(awarded!=='sword-wind'&&eligible.some(b=>b.id===awarded));
  if(!Manuals.RELEASE_NEW_WEAPONS)assert.equal(awarded,'body-rock');
+ const all=Manuals.normalize({school:'sword',books:filled()});
+ for(let i=1;i<=3;i++){
+  assert.equal(roll(room(5),'u',all,()=>99).drop,null);
+  assert.equal(all.dropMisses,i);
+ }
+ assert.ok(roll(room(5),'u',all,()=>0).drop);
+ assert.equal(all.dropMisses,0);
+ assert.ok(roll(room(5),'u',all,()=>0).drop);
 });
-test('existing higher-tier weapons and their EXP are not removed by trial loot',()=>{
- const state=Manuals.normalize({school:'sword',books:{'sword-wind':{exp:10},'body-rock':{exp:20},'sword-sky':{exp:70}},dropMisses:3});
- for(const b of Manuals.BOOKS.filter(b=>b.tierRealm==='煉氣'))state.books[b.id]||={exp:0};
- assert.equal(roll(room(200),'u',state,()=>0).drop,null);
- assert.equal(state.books['sword-sky'].exp,70);
+test('copies preserve EXP and ownership, refine to five stars, and continue accumulating',()=>{
+ const state=Manuals.normalize({school:'sword',books:{...filled(),'sword-sky':{exp:180},...(Manuals.RELEASE_NEW_WEAPONS?{'body-bell':{exp:150}}:{})},dropMisses:3});
+ const id=eligible[0].id;
+ for(let i=1;i<=7;i++){
+  state.dropMisses=3;
+  const s=room(200),r=roll(s,'u',state,()=>0);
+  assert.equal(r.drop,id);
+  assert.equal(s.manualDrops.u.previousRefinement,Math.min(i-1,5));
+  assert.equal(s.manualDrops.u.refinement,Math.min(i,5));
+  assert.equal(s.manualDrops.u.duplicate,true);
+  assert.equal(s.manualDrops.u.quantity,1);
+  assert.equal(Manuals.copyCount(state.books[id]),i+1);
+  assert.equal(state.books[id].exp,70);
+ }
+ assert.equal(state.books['sword-sky'].exp,180);
+ if(Manuals.RELEASE_NEW_WEAPONS)assert.equal(state.books['body-bell'].exp,150);
+});
+test('every eligible weapon can be selected for copies without a school bias',()=>{
+ for(let i=0;i<eligible.length;i++){
+  const state=Manuals.normalize({school:'sword',books:filled(),dropMisses:3});
+  const r=roll(room(10),'u',state,max=>{assert.equal(max,eligible.length);return i;});
+  assert.equal(r.drop,eligible[i].id);
+ }
+});
+test('non-trial legacy reward pool still excludes owned weapons and may award bell',()=>{
+ const books=Object.fromEntries(Manuals.BOOKS.filter(b=>b.id!=='body-bell').map(b=>[b.id,{exp:0}]));
+ const state=Manuals.normalize({school:'body',books,dropMisses:3});
+ const r=roll({mode:'coop'},'u',state,()=>0);
+ assert.equal(r.drop,Manuals.RELEASE_NEW_WEAPONS?'body-bell':null);
+ assert.equal(roll({mode:'coop'},'u',state,()=>{throw Error('exhausted pool must not roll');}).drop,null);
 });
