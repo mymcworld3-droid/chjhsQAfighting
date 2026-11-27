@@ -1,0 +1,183 @@
+{
+  "schema": 1,
+  "batch": 21,
+  "date": "2026-11-27",
+  "purpose": "新增完整且有官方答案的原題草稿；第十九批已定位的反應速率原題首次完成文字轉錄，不新增純題號，不重查已完成草稿。",
+  "sources": [
+    {
+      "id": "CEEC-111-chem",
+      "subject": "化學",
+      "title": "111學年度分科測驗化學考科定稿",
+      "institution": "大學入學考試中心",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m223496479951425770/06-111分科測驗化學試卷定稿.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m223497020774151742/06-111分科測驗化學選擇題答案.pdf",
+      "rightsBasisCandidate": "著作權法第9條第1項第5款，正式考試原題，附帶素材另審",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ],
+      "humanRightsVerified": false
+    },
+    {
+      "id": "PTTSH-104-2-final-physics",
+      "subject": "物理",
+      "title": "國立臺東高級中學104學年度第二學期期末高二基礎物理(B)",
+      "institution": "國立臺東高級中學",
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=104-2%2F%E6%9C%9F%E6%9C%AB%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%E8%87%AA%E7%84%B6%E7%B5%84%2F&file=201607221739310.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=104-2%2F%E6%9C%9F%E6%9C%AB%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%E8%87%AA%E7%84%B6%E7%B5%84%2F&file=201607221739310.pdf",
+      "rightsBasisCandidate": "正式學校評量；同卷有其他學校題目標記，個別題目命題來源及權利仍須核查",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ],
+      "humanRightsVerified": false
+    }
+  ],
+  "records": [
+    {
+      "originalQuestionType": "single-choice",
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ],
+      "id": "CEEC-111-chem-single-choice-2",
+      "sourceId": "CEEC-111-chem",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "原卷印刷第1頁第2題",
+      "questionPdfPage": 2,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "optionCount": 5,
+      "conceptTags": [
+        "反應速率",
+        "速率常數",
+        "初始反應速率"
+      ],
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m223496479951425770/06-111分科測驗化學試卷定稿.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m223497020774151742/06-111分科測驗化學選擇題答案.pdf",
+      "officialAnswerLocator": "正式答案第1頁第2題",
+      "originalQuestion": {
+        "q": "在溫度 1000 K 下，已知反應式 2N₂O(g) → 2N₂(g) + O₂(g)，其反應速率常數為 0.76 s⁻¹。在此溫度下，若將 1.0 莫耳 N₂O(g) 注入 5.0 公升的真空容器內，則 N₂O 的初始反應速率是多少（M/s）？",
+        "options": [
+          {
+            "label": "A",
+            "text": "7.60×10⁻¹"
+          },
+          {
+            "label": "B",
+            "text": "1.52×10⁻¹"
+          },
+          {
+            "label": "C",
+            "text": "3.04×10⁻²"
+          },
+          {
+            "label": "D",
+            "text": "6.08×10⁻²"
+          },
+          {
+            "label": "E",
+            "text": "6.08×10⁻³"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "original-pdf-bytes-unavailable"
+      ],
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-screenshot",
+        "locator": "PDF第2頁原題及正式答案第1頁；第19批已有數值證據，未曾建立候選"
+      }
+    },
+    {
+      "originalQuestionType": "single-choice",
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ],
+      "id": "PTTSH-104-2-final-physics-single-choice-25",
+      "sourceId": "PTTSH-104-2-final-physics",
+      "questionNumber": 25,
+      "originalQuestionNumberOrLocator": "原卷印刷第3頁第25題",
+      "questionPdfPage": null,
+      "answerPdfPage": null,
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "optionCount": 4,
+      "conceptTags": [
+        "非彈性碰撞",
+        "動量守恆",
+        "動能"
+      ],
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=104-2%2F%E6%9C%9F%E6%9C%AB%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%E8%87%AA%E7%84%B6%E7%B5%84%2F&file=201607221739310.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=104-2%2F%E6%9C%9F%E6%9C%AB%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%E8%87%AA%E7%84%B6%E7%B5%84%2F&file=201607221739310.pdf",
+      "officialAnswerLocator": "同卷第25題下方答案D",
+      "originalQuestion": {
+        "q": "兩物體作非彈性碰撞時，碰撞前後的：",
+        "options": [
+          {
+            "label": "A",
+            "text": "動量和不變，動能和亦不變"
+          },
+          {
+            "label": "B",
+            "text": "動量和與動能和皆改變"
+          },
+          {
+            "label": "C",
+            "text": "動量和改變，動能和不變"
+          },
+          {
+            "label": "D",
+            "text": "動量和不變，動能和改變"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "old-curriculum",
+        "visual-check-pending",
+        "individual-authorship-review"
+      ],
+      "evidence": {
+        "question": "official-pdf-web-text-layer",
+        "answer": "same-document-answer-text-layer",
+        "locator": "校方PDF文字層286–291行，印刷第3頁；截圖cache miss"
+      }
+    }
+  ],
+  "upgrades": [],
+  "answerRechecks": [],
+  "counts": {
+    "newRecords": 2,
+    "newCompleteDrafts": 2,
+    "upgradedTextDrafts": 0,
+    "approved": 0
+  },
+  "limitations": [
+    "無新上傳官方PDF及答案檔；實際下載111化學PDF失敗，git ls-remote DNS失敗。",
+    "113分科化學第13題原卷與答案可閱覽，但本批未收錄長題全文。臺東104下期末衛星題的原頁截圖失敗，公式版面未核實，不收錄。",
+    "平鎮104下反應速率卷未找到正式答案，不新增候選。鼓山113下物理卷尚未配對正式答案。"
+  ]
+}
