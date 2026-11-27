@@ -2077,8 +2077,9 @@ class DungeonMapView{
       this.rangeTiles=skill.kind==='flying-sword'?
         dungeonSwordTiles(this.map,from,member.flyingSword,enemies,this.members()):
         dungeonAttackTiles(this.map,from,skill,enemies);
-      if(skill.id&&globalThis.QADungeonSkillResolution){
-        this.skillPreview=globalThis.QADungeonSkillResolution.previewPlan(this.room,this.uid,this.map,skill);
+      if(globalThis.QADungeonSkillResolution){
+        this.skillPreview=skill.id?globalThis.QADungeonSkillResolution.previewPlan(this.room,this.uid,this.map,skill):
+          globalThis.QADungeonSkillResolution.basicPreviewPlan(this.room,this.uid,this.map);
         this.rangeTiles=this.skillPreview.aims;
       }
     }
@@ -2222,7 +2223,7 @@ class DungeonMapView{
       dungeonSwordRoute(m,own.flyingSword,aim,this.creatures()):null;
     const skill=own?.dungeonSkills?.find(s=>s.id===this.selectedSkillId);
     const selectedAim=skill&&this.wheelMode==='attack'?this.targetFor(skill):null;
-    const selectedPreview=selectedAim&&this.skillPreview?.byAim[selectedAim.x+','+selectedAim.y];
+    const selectedPreview=this.wheelMode==='attack'?(skill?(selectedAim&&this.skillPreview?.byAim[selectedAim.x+','+selectedAim.y]):this.skillPreview?.byEnemy?.[this.selectedBeastId]):null;
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:visualMembers,selfUid:this.uid,showRoutes:false,
       rangeTiles:this.rangeTiles,rangeKind:this.rangeKind,

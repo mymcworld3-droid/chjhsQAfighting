@@ -151,6 +151,12 @@ export function drawWorld(ctx,map,camera,width,height,
     paint(selectedPreview?.path?.slice(1),'rgba(233,207,129,.23)','#e5cc87');
     paint(selectedPreview?.cells,'rgba(233,186,82,.4)','#ffe3a4');
     paint(selectedPreview?.landings,'rgba(0,0,0,0)','#ffe8a6');
+    if(selectedPreview?.hits?.length&&skillPreview.exact){
+      const p=selectedPreview.aim,damage=selectedPreview.totalDamage;
+      const x=g.ox+(p.x+.5)*cell,y=g.oy+(p.y-.18)*cell;
+      ctx.save();ctx.textAlign='center';ctx.font='bold '+Math.max(10,Math.min(14,cell*.3))+'px sans-serif';
+      ctx.fillStyle='#ffe3a4';ctx.fillText('預計 '+damage+' 傷害',x,y);ctx.restore();
+    }
   }else if(Array.isArray(rangeTiles)&&rangeTiles.length){
     ctx.save();ctx.fillStyle=fillColor;ctx.strokeStyle=strokeColor;
     ctx.lineWidth=clamp(cell*.05,.6,1.7);

@@ -364,5 +364,89 @@ function previewPlan(room,uid,map,skill){
   }
   plan.cells=[...union.values()];return plan;
 }
-return Object.freeze({resolveCast,previewPlan,ray,rayTo,visible,beamArray,isFocusEmpowered,focusCost});
+const RANGE=2,DAMAGE=30,DIRECTIONS=[[0,-1],[1,0],[0,1],[-1,0]];
+const playerStrikeDamage=member=>
+  // Initial/switch-loadout values come from verified A-side manuscript state.
+  // The trial includes this bonus even when no technique is equipped.
+  Number.isSafeInteger(member?.dungeonAttack)&&member.dungeonAttack>0?
+    member.dungeonAttack:
+    Number.isSafeInteger(member?.battleAttack)&&member.battleAttack>0?
+      member.battleAttack:DAMAGE;
+function strikeLine(map,origin,enemy){
+  // Select the shortest legal cardinal ray that intersects the requested
+  // creature, including all four cells of the 2x2 boss. Stone blocks rays.
+  let best=null;
+  for(const [dx,dy] of DIRECTIONS){
+    const cells=[];
+    for(let n=1;n<=RANGE;n++){
+      const p={x:origin.x+dx*n,y:origin.y+dy*n};
+      if(!walkable(map,p))break;
+      cells.push(p);
+      if(Boss.occupies(enemy,p)){
+        if(!best||n<best.distance)best={cells:[],distance:n,dx,dy};
+        break;
+      }
+    }
+  }
+  if(!best)return null;
+  const cells=[];
+  for(let n=1;n<=RANGE;n++){
+    const p={x:origin.x+best.dx*n,y:origin.y+best.dy*n};
+    if(!walkable(map,p))break;
+    cells.push(p);
+  }
+  return cells;
+}
+
+function resolveBasic(room,uid,cells){
+  const damageAmount=playerStrikeDamage(room.members[uid]);
+  const tick=Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0;
+  const updated=[],hits=[];
+  for(const enemy of room.enemies){
+    if(!cells.some(p=>Boss.occupies(enemy,p))){
+      updated.push(enemy);continue;
+    }
+    const health=Number.isSafeInteger(enemy.battleHealth)?
+      Math.max(0,Math.min(recordedMax(enemy),enemy.battleHealth)):
+      recordedMax(enemy);
+    if(!health){updated.push(enemy);continue;}
+    const copy={...enemy};
+    const teamwork=enemy.kind==='boss'?
+      Boss.damage(copy,uid,damageAmount,tick,Boss.comboReady(enemy,uid,tick)):null;
+    const remaining=teamwork?copy.battleHealth:Math.max(0,health-damageAmount);
+    if(!teamwork){
+      copy.battleHealth=remaining;
+      copy.battleMaxHealth=recordedMax(enemy);
+    }
+    const hit={enemyId:enemy.id,damage:teamwork?.damage??Math.min(health,damageAmount),
+      remainingHealth:remaining,defeated:remaining===0,
+      ...(teamwork?{shieldDamage:teamwork.shieldDamage,combo:teamwork.combo,
+        shieldBroken:teamwork.shieldBroken}:{})};
+    hits.push(hit);
+    if(remaining>0)updated.push(copy);
+  }
+
+  return {updated,hits};
+}
+function basicPreviewPlan(room,uid,map){
+  const result={aims:[],cells:[],byAim:{},byEnemy:{},exact:true};
+  const member=room?.members?.[uid],from=member?.position;
+  if(!from||room.status!=='assembled'||member.downed||member.battleHealth===0||member.dungeonSkillIds?.length||!tile(map,from))return result;
+  const union=new Map();
+  for(const [dx,dy] of DIRECTIONS)for(const p of ray(map,from,{x:from.x+dx,y:from.y+dy},RANGE))union.set(key(p),p);
+  result.cells=[...union.values()];
+  for(const enemy of room.enemies||[]){
+    if(enemy.battleHealth===0)continue;
+    const cells=strikeLine(map,from,enemy);if(!cells)continue;
+    const {hits}=resolveBasic(room,uid,cells);
+    if(!hits.some(h=>h.enemyId===enemy.id))continue;
+    const scheme={aim:{...enemy.position},cells,path:[],landings:[],hits,cost:2,valid:staminaFor(member)>=2,totalDamage:hits.reduce((n,h)=>n+h.damage,0)};
+    result.byEnemy[enemy.id]=scheme;
+    for(const p of Boss.cells(enemy))if(union.has(key(p))){
+      result.aims.push({...p});result.byAim[key(p)]=scheme;
+    }
+  }
+  return result;
+}
+return Object.freeze({resolveCast,previewPlan,basicPreviewPlan,resolveBasic,strikeLine,playerStrikeDamage,ray,rayTo,visible,beamArray,isFocusEmpowered,focusCost});
 });

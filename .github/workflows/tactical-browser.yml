@@ -2,7 +2,7 @@ name: Tactical browser acceptance
 
 on:
   push:
-    branches: [stamina-battle]
+    branches: [stamina-battle, main]
   pull_request:
     branches: [stamina-battle, main]
 

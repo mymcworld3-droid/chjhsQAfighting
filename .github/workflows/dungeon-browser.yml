@@ -2,7 +2,7 @@ name: Dungeon co-op browser acceptance
 
 on:
   push:
-    branches: [stamina-battle]
+    branches: [stamina-battle, main]
     paths:
       - 'dungeon-room-api.cjs'
       - 'dungeon-boss-battle.cjs'

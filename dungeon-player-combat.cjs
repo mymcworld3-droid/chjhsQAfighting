@@ -17,38 +17,8 @@ const recordedMax=enemy=>Number.isSafeInteger(enemy?.battleMaxHealth)&&
   enemy.battleMaxHealth>0?enemy.battleMaxHealth:maxHealth(enemy?.kind);
 // C-room snapshots contain trusted trial attack, rather than the old
 // temporary 30-point dungeon attack. Preserve fallback for legacy sessions.
-const playerStrikeDamage=member=>
-  // Initial/switch-loadout values come from verified A-side manuscript state.
-  // The trial includes this bonus even when no technique is equipped.
-  Number.isSafeInteger(member?.dungeonAttack)&&member.dungeonAttack>0?
-    member.dungeonAttack:
-    Number.isSafeInteger(member?.battleAttack)&&member.battleAttack>0?
-      member.battleAttack:DAMAGE;
-function strikeLine(map,origin,enemy){
-  // Select the shortest legal cardinal ray that intersects the requested
-  // creature, including all four cells of the 2x2 boss. Stone blocks rays.
-  let best=null;
-  for(const [dx,dy] of DIRECTIONS){
-    const cells=[];
-    for(let n=1;n<=RANGE;n++){
-      const p={x:origin.x+dx*n,y:origin.y+dy*n};
-      if(!walkable(map,p))break;
-      cells.push(p);
-      if(Boss.occupies(enemy,p)){
-        if(!best||n<best.distance)best={cells:[],distance:n,dx,dy};
-        break;
-      }
-    }
-  }
-  if(!best)return null;
-  const cells=[];
-  for(let n=1;n<=RANGE;n++){
-    const p={x:origin.x+best.dx*n,y:origin.y+best.dy*n};
-    if(!walkable(map,p))break;
-    cells.push(p);
-  }
-  return cells;
-}
+const Resolution=require('./public/cultivation/dungeon-skill-resolution.js');
+const {playerStrikeDamage,strikeLine}=Resolution;
 function strikeEnemy(room,uid,map,{enemyId,seq}={}){
   if(typeof enemyId!=='string'||!(/^(beast-[1-9][0-9]{0,4}|guardian-1|boss-1)$/.test(enemyId)))
     throw fail('靈獸目標無效',400);
@@ -72,32 +42,8 @@ function strikeEnemy(room,uid,map,{enemyId,seq}={}){
   if(!cells)throw fail('請選擇同一行或列的前方兩格靈獸，且不能隔著岩壁',409);
   const stamina=staminaFor(member);
   if(stamina<STAMINA_COST)throw fail('探索體力不足，無法攻擊',409);
-  const damageAmount=playerStrikeDamage(member);
   const tick=Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0;
-  const updated=[],hits=[];
-  for(const enemy of room.enemies){
-    if(!cells.some(p=>Boss.occupies(enemy,p))){
-      updated.push(enemy);continue;
-    }
-    const health=Number.isSafeInteger(enemy.battleHealth)?
-      Math.max(0,Math.min(recordedMax(enemy),enemy.battleHealth)):
-      recordedMax(enemy);
-    if(!health){updated.push(enemy);continue;}
-    const copy={...enemy};
-    const teamwork=enemy.kind==='boss'?
-      Boss.damage(copy,uid,damageAmount,tick,Boss.comboReady(enemy,uid,tick)):null;
-    const remaining=teamwork?copy.battleHealth:Math.max(0,health-damageAmount);
-    if(!teamwork){
-      copy.battleHealth=remaining;
-      copy.battleMaxHealth=recordedMax(enemy);
-    }
-    const hit={enemyId:enemy.id,damage:teamwork?.damage??Math.min(health,damageAmount),
-      remainingHealth:remaining,defeated:remaining===0,
-      ...(teamwork?{shieldDamage:teamwork.shieldDamage,combo:teamwork.combo,
-        shieldBroken:teamwork.shieldBroken}:{})};
-    hits.push(hit);
-    if(remaining>0)updated.push(copy);
-  }
+  const {updated,hits}=Resolution.resolveBasic(room,uid,cells);
   const primary=hits.find(hit=>hit.enemyId===enemyId);
   if(!primary)throw fail('靈獸已被擊敗',409);
   const hit={seq,enemyId,origin:{...member.position},
