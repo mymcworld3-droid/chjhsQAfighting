@@ -1,0 +1,108 @@
+{
+  "schema": 1,
+  "batch": 29,
+  "date": "2026-11-27",
+  "purpose": "新增具校方正式答案、可完整保留的碰撞計算原題草稿，待人類覆核。",
+  "sources": [
+    {
+      "id": "PJHS-105-2-final-physics",
+      "subject": "物理",
+      "title": "桃園市立平鎮高中105學年度第二學期期末考高二物理科",
+      "institution": "桃園市立平鎮高中",
+      "originalSourceUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF2488.pdf",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF2488.pdf",
+      "rightsBasisCandidate": "依法令舉行之高中評量原題；個別命題及第三方素材仍須人工確認",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-17037.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-76110.html"
+      ],
+      "humanRightsVerified": false
+    }
+  ],
+  "records": [
+    {
+      "id": "PJHS-105-2-final-physics-single-choice-10",
+      "sourceId": "PJHS-105-2-final-physics",
+      "questionNumber": 10,
+      "originalQuestionNumberOrLocator": "單選第10題",
+      "originalQuestionType": "single-choice",
+      "questionPdfPage": null,
+      "answerPdfPage": null,
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "動量守恆",
+        "完全非彈性碰撞",
+        "動能損失"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "質量 m 動能 $E_k$ 的物體和另一質量 3m 的靜止物體做完全非彈性碰撞，則碰撞後系統損失多少動能？",
+        "options": [
+          {
+            "label": "A",
+            "text": "$\\frac{1}{4}E_k$"
+          },
+          {
+            "label": "B",
+            "text": "$\\frac{1}{3}E_k$"
+          },
+          {
+            "label": "C",
+            "text": "$\\frac{1}{2}E_k$"
+          },
+          {
+            "label": "D",
+            "text": "$\\frac{2}{3}E_k$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac{3}{4}E_k$"
+          }
+        ]
+      },
+      "optionCount": 5,
+      "originalSourceUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF2488.pdf",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF2488.pdf",
+      "officialAnswerLocator": "同檔校方試題分析表第10題標準答案 E",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-17037.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-76110.html"
+      ],
+      "transcriptionStatus": "draft-index-rendering-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "human-review-required",
+        "visual-check-pending",
+        "old-curriculum",
+        "scope-review",
+        "individual-authorship-review"
+      ],
+      "evidence": {
+        "question": "official-pdf-web-index-rendering",
+        "answer": "official-school-analysis-table-web-rendering",
+        "locator": "原卷網頁呈現94–105行，分析表226行；原頁截圖cache miss，公式版面仍待人工核對"
+      }
+    }
+  ],
+  "upgrades": [],
+  "answerRechecks": [],
+  "counts": {
+    "newRecords": 1,
+    "newCompleteDrafts": 1,
+    "upgradedTextDrafts": 0,
+    "approved": 0
+  },
+  "limitations": [
+    "109指考化學反應級數與初速率表原頁可閱覽，106指考物理彈性碰撞原題文字及正式答案可閱覽；為遵守來源文字轉錄限制，本批不收錄較長全文，不以片段充數。",
+    "108物理正式答案開啟逾時，原頁截圖cache miss。107物理原頁截圖可閱覽，答案截圖失敗。直接下載PDF失敗。",
+    "新題僅網頁文字呈現，無PDF實體、原頁截圖及人類核准；未新增純題號索引。"
+  ]
+}
