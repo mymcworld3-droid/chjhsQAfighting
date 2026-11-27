@@ -11,6 +11,7 @@
   const TAU=Math.PI*2;
   const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
   const themes=Object.freeze({
+    stone:Object.freeze({label:'石域',ink:'rgba(210,213,213,.2)',detail:'rgba(80,85,90,.27)',glow:'rgba(204,211,216,.055)',mote:'#c4c9cc',wind:.035}),
     bamboo:Object.freeze({label:'竹林',ink:'rgba(174,218,159,.28)',detail:'rgba(53,89,55,.34)',glow:'rgba(178,215,142,.09)',mote:'#b9df98',wind:.09}),
     desert:Object.freeze({label:'荒漠',ink:'rgba(228,196,137,.25)',detail:'rgba(94,75,50,.32)',glow:'rgba(241,197,113,.085)',mote:'#e5cf9b',wind:.15}),
     snow:Object.freeze({label:'雪嶺',ink:'rgba(215,237,242,.37)',detail:'rgba(94,133,147,.28)',glow:'rgba(203,235,253,.085)',mote:'#f2fbff',wind:.07}),
@@ -18,6 +19,7 @@
     ruins:Object.freeze({label:'遺墟',ink:'rgba(212,192,144,.25)',detail:'rgba(80,77,66,.32)',glow:'rgba(196,167,117,.075)',mote:'#d4c49d',wind:.035})
   });
   function themeFor(state){
+    if(state?.weaponDungeon&&(state.weaponDungeon.id||'peak-stone')==='peak-stone')return 'stone';
     const name=String(state?.trial?.biome||state?.trial?.title||'');
     const terrain=Number(state?.terrain);
     if(/雪|霜|冰/.test(name)||terrain===14)return 'snow';

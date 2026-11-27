@@ -34,6 +34,7 @@ const roomChannel=s=>s?.weaponDungeon?'weapon-dungeon':s?.mode;
 // Legacy in-progress battles had snapshot weapon multipliers; remove them once.
 function disarm(s){
   if(!s)return s;
+  WeaponDungeons.restoreTerrain(s);
   for(const a of s.actors||[]){
     const w=a.weapon;
     if(w&&!a.bot){

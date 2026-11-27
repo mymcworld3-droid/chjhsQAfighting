@@ -2,6 +2,8 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.QAWeaponDungeons=api;})(globalThis,()=>{
   'use strict';
   const ID='peak-stone',NAME='尖峰石域',DAILY_TICKETS=3,MAX_TICKETS=5;
+  // grid-world ground atlas: zero-based 16 = stone, 13 = desert.
+  const STONE_TERRAIN=16;
   const DIFFICULTIES=Object.freeze([
     ['foundation','築基',5],['golden','金丹',10],['nascent','元嬰',20],
     ['divine','化神',35],['unity','合體',80],['tribulation','渡劫',110]
@@ -71,9 +73,15 @@
     const occupied=new Set(enemies.flatMap(a=>Array.from({length:a.boss?4:1},(_,i)=>(a.x+(a.boss?i%2:0))+','+(a.y+(a.boss?Math.floor(i/2):0)))));
     const safeBlocks=blocks.filter(p=>!occupied.has(p.x+','+p.y));
     return {id:'peak-stone',map:'peak-stone',seed,stage:definition.stage,layoutVersion:4,title:NAME+' · '+definition.realm,
-      width,height,terrain:13,biome:'mountain',mode:'elimination',variant:'tracking-stone',structure:'three-stone-gates',
+      width,height,terrain:STONE_TERRAIN,biome:'mountain',mode:'elimination',variant:'tracking-stone',structure:'three-stone-gates',
       attempt:0,layoutHash:'peak-stone:v2:'+index+':'+h.toString(16),
-      blocks:safeBlocks.map(p=>({...p,kind:'rock'})),ground:Array(width*height).fill(13),spawn:{x:6,y:19},enemies,objective:{type:'boss',bossUid:'monster-0',completed:false},weaponDungeon:definition};
+      blocks:safeBlocks.map(p=>({...p,kind:'rock'})),ground:Array(width*height).fill(STONE_TERRAIN),spawn:{x:6,y:19},enemies,objective:{type:'boss',bossUid:'monster-0',completed:false},weaponDungeon:definition};
   }
-  return Object.freeze({ID,NAME,DAILY_TICKETS,MAX_TICKETS,DIFFICULTIES,WEAPON_REALMS,CATALOG,lowerRealm,day,progress,progressFor,recordClear,catalog,selection,layout});
+  function restoreTerrain(room){
+    if(!room?.weaponDungeon||(room.weaponDungeon.id||ID)!==ID)return room;
+    if(room.terrain===13)room.terrain=STONE_TERRAIN;
+    if(Array.isArray(room.ground)&&room.ground.includes(13))room.ground=room.ground.map(t=>t===13?STONE_TERRAIN:t);
+    return room;
+  }
+  return Object.freeze({ID,NAME,DAILY_TICKETS,MAX_TICKETS,STONE_TERRAIN,restoreTerrain,DIFFICULTIES,WEAPON_REALMS,CATALOG,lowerRealm,day,progress,progressFor,recordClear,catalog,selection,layout});
 });

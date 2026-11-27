@@ -37,6 +37,7 @@ test('all six seed maps have reachable guards, a legal 2x2 deepest lord, and at 
  for(let d=0;d<6;d++)for(let seed=0;seed<20;seed++){
    const s=R.create({id:'map',players:[hero()],trial:{seed:String(seed),weaponDungeon:{difficulty:d}},now:NOW});
    const [player,lord,...guards]=s.actors;
+   assert.equal(s.terrain,16);assert.equal(s.ground.length,s.width*s.height);assert.ok(s.ground.every(t=>t===16));
    assert.equal(s.trial.attempt,0);assert.match(s.trial.layoutHash,/^peak-stone:/);
    const noUndefined=value=>{if(value&&typeof value==='object')for(const v of Object.values(value)){assert.notEqual(v,undefined);noUndefined(v);}};
    noUndefined(s);
@@ -316,4 +317,18 @@ test('Peak Stone rolls only swords from the exact current or lower realm, includ
   }
  }
  assert.ok(Object.values(Rewards.previewPools(W.WEAPON_REALMS,'unknown')).every(pool=>pool.length===0));
+});
+
+test('Peak Stone legacy desert terrain is restored to grid-world stone without changing gameplay or other maps',async()=>{
+ const db=database();own(db);
+ const first=await API.start(db,'u1',input('stone-terrain-legacy'),NOW);
+ const raw=db.records.get(API.ROOMS+'/'+first.id);
+ raw.terrain=13;raw.ground=raw.ground.map(()=>13);
+ const expected=JSON.parse(JSON.stringify(raw.actors));
+ const resumed=await API.start(db,'u1',{...input('stone-terrain-resume'),resumeRoomId:first.id},NOW);
+ assert.equal(resumed.id,first.id);assert.equal(resumed.terrain,16);assert.ok(resumed.ground.every(t=>t===16));
+ assert.deepEqual(resumed.actors,expected);assert.equal((await API.weaponDungeonState(db,'u1',NOW)).tickets,2);
+ const ordinary={terrain:13,ground:[13,4]};assert.deepEqual(W.restoreTerrain(ordinary),{terrain:13,ground:[13,4]});
+ const A=require('../public/cultivation/tactical-ambience.js');
+ assert.equal(A.themeFor(resumed),'stone');assert.equal(A.themeFor(ordinary),'desert');
 });
