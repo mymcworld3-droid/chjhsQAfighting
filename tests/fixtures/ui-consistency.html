@@ -37,7 +37,7 @@ window.__previewApi=async(url,init)=>{
  let data;
  if(url==='/api/tactical/manuals/loadout'){window.__previewRaw.weaponIds[body.index]=body.weaponId||null;data={state:window.__previewManuals()};}
  else if(url==='/api/tactical/manuals')data={state:window.__previewManuals()};
- else if(url==='/api/tactical/weapon-dungeons')data={state:{tickets:3,maxTickets:5,active:null,dungeons:[{id:'peak-stone',name:'尖峰石域',subtitle:'巖峰之間',theme:'stone',description:'追蹤落石與強悍靈獸鎮守的單人秘境。',bonus:'圖騰傷害 +15%',traits:['追蹤落石','擊退可打斷'],tactics:['離開攻擊範圍','善用地形與擊退'],clears:{0:1},difficulties:['築基','結丹','元嬰','化神','合體','渡劫'].map((name,index)=>({name,index,nextRealm:['結丹','元嬰','化神','合體','渡劫','渡劫'][index],locked:index>1}))}]}};
+ else if(url==='/api/tactical/weapon-dungeons')data={state:{tickets:3,maxTickets:5,active:null,dungeons:[{id:'peak-stone',name:'尖峰石域',subtitle:'巖峰之間',theme:'stone',description:'追蹤落石與強悍靈獸鎮守的單人秘境。',bonus:'圖騰傷害 +15%',traits:['追蹤落石','擊退可打斷'],tactics:['離開攻擊範圍','善用地形與擊退'],clears:{0:1},difficulties:['築基','結丹','元嬰','化神','合體','渡劫'].map((name,index)=>({name,index,nextRealm:['煉氣','築基','金丹','元嬰','化神','合體'][index],lowerRealm:['煉氣','築基','金丹','元嬰','化神','合體'][index],locked:index>1}))}]}};
  else if(body.action==='status')data={allowed:true,classes:[]};
  else if(body.action==='get')data={cave:structuredClone(window.__previewCave)};
  else if(body.action==='save'){window.__previewCave=structuredClone(body);data={cave:structuredClone(body)};}

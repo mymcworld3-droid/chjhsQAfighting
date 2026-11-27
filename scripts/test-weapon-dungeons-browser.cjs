@@ -63,7 +63,7 @@ async function main(){
   await page.locator('[data-atlas-dungeon="peak-stone"]').click();
   await page.locator('[data-wd-difficulty="0"]').waitFor();
   assert.equal(await page.locator('[data-wd-difficulty]').count(),6);
-  const expectedSwordIds=M.BOOKS.filter(b=>b.weaponType==='sword'&&['築基','金丹'].includes(b.tierRealm)).map(b=>b.id).sort();
+  const expectedSwordIds=M.BOOKS.filter(b=>b.weaponType==='sword'&&['築基','煉氣'].includes(b.tierRealm)).map(b=>b.id).sort();
   assert.deepEqual(await page.locator('[data-wd-reward-id]').evaluateAll(nodes=>nodes.map(n=>n.dataset.wdRewardId).sort()),expectedSwordIds);
   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[data-wd-reward-id] img')).every(img=>img.complete&&img.naturalWidth>0));
   assert.equal(await page.locator('#weapon-dungeons-panel header button').count(),1);
@@ -124,6 +124,7 @@ async function main(){
   assert.equal(await page.locator('[data-wd-difficulty="1"]').getAttribute('aria-pressed'),'true');
   assert.equal(await rail.evaluate(el=>el.style.getPropertyValue('--wd-selected-index')),'1');
   assert.match(await page.locator('[data-wd-preview]').textContent(),/30% 金丹武器/);
+  assert.match(await page.locator('[data-wd-preview]').textContent(),/20% 築基武器/);
   assert.equal((await API.weaponDungeonState(db,'u1')).tickets,3);
   await page.locator('[data-wd-difficulty="0"]').click();
   await page.locator('[data-wd-enter]').click();

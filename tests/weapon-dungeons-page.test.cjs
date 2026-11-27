@@ -212,7 +212,7 @@ test('expedition has one return control with both legacy selectors and compact d
  assert.match(markup,/<svg class="wd-info-glyph"[^>]*>/);
  assert.match(markup,/<details class="wd-tickets"><summary>/);
  assert.match(markup,/<details class="wd-intel"><summary>/);
- assert.match(markup,/30% 築基武器/);assert.match(markup,/20% 金丹武器/);
+ assert.match(markup,/30% 築基武器/);assert.match(markup,/20% 煉氣武器/);
  assert.match(markup,/class="wd-island" src="\/assets\/dungeons\/peak-stone.png"/);
 });
 
@@ -233,7 +233,7 @@ test('reward preview uses the actual server pool and original weapon artwork; em
  let markup=h.dialog().innerHTML;
  assert.match(markup,/可能獲得 · 僅劍類/);
  assert.doesNotMatch(markup,/data-wd-reward-id="body-/);
- for(const book of Object.values(Rewards.previewPools(['築基','金丹'])).flat()){
+ for(const book of Object.values(Rewards.previewPools(['築基','煉氣'])).flat()){
   assert.ok(markup.includes('data-wd-reward-id="'+book.id+'"'));
   assert.ok(markup.includes(book.name));
  }
@@ -242,8 +242,12 @@ test('reward preview uses the actual server pool and original weapon artwork; em
  const pools=Rewards.previewPools(['元嬰','化神']);assert.deepEqual(pools,{元嬰:[],化神:[]});
  const another=harness(),pending=another.open(W.ID);another.respond(another.state({unlocked:2,active:{roomId:'active',difficulty:2}}));await pending;
  markup=another.dialog().innerHTML;
- assert.match(markup,/實際未掉落武器機率 100%/);
- assert.doesNotMatch(markup,/data-wd-reward-id=/);
+ assert.match(markup,/實際未掉落武器機率 80%/);
+ assert.match(markup,/20% 金丹武器/);
+ assert.match(markup,/data-wd-reward-id="sword-sky"/);
+ const higher=harness(),highPending=higher.open(W.ID);higher.respond(higher.state({unlocked:3,active:{roomId:'active',difficulty:3}}));await highPending;
+ assert.match(higher.dialog().innerHTML,/實際未掉落武器機率 100%/);
+ assert.doesNotMatch(higher.dialog().innerHTML,/data-wd-reward-id=/);
 });
 
 test('island displays only authenticated progress and loads styles before the first landscape detail',async()=>{

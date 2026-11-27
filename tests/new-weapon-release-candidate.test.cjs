@@ -59,12 +59,25 @@ for(const b of D.BOOKS)for(const sk of b.skills)test('candidate authorized casts
  assert.equal(Skills.castSkill({...room,...out},'u',map,record,cmd).duplicate,true);
  assert.throws(()=>Skills.castSkill(room,'u',map,{...record,books:{}},cmd),/尚未解鎖/);
 });
-test('each new weapon can drop from its native tier and refine duplicate copies',()=>{
+test('new swords drop and refine in Peak Stone; totems remain available through the existing non-trial reward pool',()=>{
+ const W=require('../public/cultivation/weapon-dungeon-rules.js'),OtherDrops=require('../manual-reward-rules.cjs');
  for(const b of D.BOOKS){
-  const record={books:{},dropMisses:0,school:b.school},pool=M.BOOKS.filter(x=>x.tierRealm===b.tierRealm);
-  const room={weaponDungeon:{realm:b.tierRealm,nextRealm:'真仙'}},rng=max=>max===100?0:pool.findIndex(x=>x.id===b.id);
-  Drops.roll(room,'u',record,rng);assert.ok(record.books[b.id]);
-  Drops.roll(room,'u',record,rng);assert.equal(M.refinementFor(record.books[b.id]),1);
+  const record=M.normalize({school:b.school});
+  const difficulty=b.tierRealm==='金丹'?1:0;
+  const room={weaponDungeon:W.selection({dungeonId:W.ID,difficulty})};
+  const value=b.tierRealm==='煉氣'?30:0;
+  const pool=M.BOOKS.filter(x=>x.tierRealm===b.tierRealm&&x.weaponType==='sword');
+  if(b.weaponType==='sword'){
+   const rng=max=>max===100?value:pool.findIndex(x=>x.id===b.id);
+   assert.equal(Drops.roll(room,'u',record,rng).id,b.id);assert.ok(record.books[b.id]);
+   Drops.roll(room,'u',record,rng);assert.equal(M.refinementFor(record.books[b.id]),1);
+  }else{
+   for(let i=0;i<pool.length;i++)assert.notEqual(Drops.roll(room,'u',record,max=>max===100?value:i)?.id,b.id);
+   assert.equal(record.books[b.id],undefined);
+   const eligible=M.BOOKS.filter(x=>!record.books[x.id]&&x.school===b.school);
+   const other=OtherDrops.roll({},'u',record,max=>max===100?0:eligible.findIndex(x=>x.id===b.id));
+   assert.equal(other.drop,b.id);assert.ok(other.state.books[b.id]);
+  }
  }
 });
 test('all 24 candidate artwork mappings resolve to existing approved assets',()=>{

@@ -83,17 +83,18 @@ function rewardGroup(d,realm,chance,next=false){
     const url=art(book.id);
     return '<div class="wd-reward-item" data-wd-reward-id="'+esc(book.id)+'">'+(url?'<img src="'+esc(url)+'" alt="" decoding="async" draggable="false">':'<i class="fa-solid fa-gem" aria-hidden="true"></i>')+'<small>'+esc(book.name)+'</small></div>';
   }).join(''):'';
-  return '<section class="wd-reward'+(next?' wd-reward-next':'')+'"><div class="wd-reward-label"><small>'+chance+'% '+esc(realm)+'武器</small><b>'+(!known?'掉落池待同步':pool.length?(next?'下一階掉落':'當階掉落'):'此階暫無武器')+'</b></div>'+(items?'<div class="wd-reward-items" aria-label="'+esc(realm)+'可掉落武器">'+items+'</div>':'')+'</section>';
+  return '<section class="wd-reward'+(next?' wd-reward-next':'')+'"><div class="wd-reward-label"><small>'+chance+'% '+esc(realm)+'武器</small><b>'+(!known?'掉落池待同步':pool.length?(next?'低一階掉落':'當階掉落'):'此階暫無武器')+'</b></div>'+(items?'<div class="wd-reward-items" aria-label="'+esc(realm)+'可掉落武器">'+items+'</div>':'')+'</section>';
 }
 function tierPreview(d){
   const t=currentTier(d);
   if(!t)return '';
   const badge=globalThis.QAWeaponPresentation.difficultyState({locked:t.locked,clears:Number(d.clears[t.index])||0,resume:isResume(d,t.index)});
   const pools=d.rewardPools??data?.rewardPools;
-  const current=pools?.[t.name],next=pools?.[t.nextRealm];
+  const lower=t.lowerRealm??globalThis.QAWeaponDungeons.lowerRealm(t.name);
+  const current=pools?.[t.name],next=pools?.[lower];
   const known=Array.isArray(current)&&Array.isArray(next);
   const none=50+(known&&!current.length?30:0)+(known&&!next.length?20:0);
-  return '<div class="wd-preview-title"><strong>可能獲得'+(d.rewardWeaponType==='sword'?' · 僅劍類':'')+'</strong><small>'+globalThis.QAWeaponPresentation.realmMarkup(t.name,{kind:'difficulty'})+' · '+esc(badge.label)+'</small></div><div class="wd-reward-pair">'+rewardGroup(d,t.name,30)+rewardGroup(d,t.nextRealm,20,true)+'</div><small class="wd-no-drop">'+(known?'實際未掉落武器機率 '+none+'%':'基礎未掉落機率 50%（空池時增加）')+'</small>';
+  return '<div class="wd-preview-title"><strong>可能獲得'+(d.rewardWeaponType==='sword'?' · 僅劍類':'')+'</strong><small>'+globalThis.QAWeaponPresentation.realmMarkup(t.name,{kind:'difficulty'})+' · '+esc(badge.label)+'</small></div><div class="wd-reward-pair">'+rewardGroup(d,t.name,30)+rewardGroup(d,lower,20,true)+'</div><small class="wd-no-drop">'+(known?'實際未掉落武器機率 '+none+'%':'基礎未掉落機率 50%（空池時增加）')+'</small>';
 }
 function selectDifficulty(index){
   const d=selected();

@@ -19,9 +19,9 @@ function scene({tracking=true,boss=false,skills=['rock-fist'],enemy={x:4,y:4},pl
  R.prepareIntents(s);return s;
 }
 function own(db){db.records.set(API.MANUALS+'/u1',M.weaponize({school:'body',books:{'body-rock':{exp:M.totalExpForLevel(10)},'sword-wind':{exp:0}},weaponIds:['body-rock','sword-wind']}));}
-test('six sequential difficulty tiers omit 煉虛 and end at 渡劫; next-tier drop above that is 真仙',()=>{
+test('six sequential difficulty tiers omit 煉虛 and reward the preceding tier',()=>{
  assert.deepEqual(W.DIFFICULTIES.map(d=>d.name),['築基','金丹','元嬰','化神','合體','渡劫']);
- assert.equal(W.selection({dungeonId:W.ID,difficulty:5}).nextRealm,'真仙');
+ assert.deepEqual(W.DIFFICULTIES.map(d=>W.selection({dungeonId:W.ID,difficulty:d.index}).lowerRealm),['煉氣','築基','金丹','元嬰','化神','合體']);
  for(const difficulty of [-1,6,1.5,'0',NaN])assert.throws(()=>W.selection({dungeonId:W.ID,difficulty}));
 });
 test('Taipei midnight grants 3 tickets once, carries unused tickets up to 5 and cannot roll the clock back',()=>{
@@ -299,14 +299,14 @@ test('settlement retry is room-bound and idempotent; failed and repeated clears 
  assert.deepEqual((await API.weaponDungeonState(db,'u1',NOW)).clears,[2,0,0,0,0,0]);
 });
 
-test('Peak Stone rolls only swords from the exact current or next realm, including legacy rooms',()=>{
+test('Peak Stone rolls only swords from the exact current or lower realm, including legacy rooms',()=>{
  for(let difficulty=0;difficulty<6;difficulty++){
   const info=W.selection({dungeonId:W.ID,difficulty});
   for(let roll=0;roll<100;roll++){
-   const expectedRealm=roll<30?info.realm:info.nextRealm;
+   const expectedRealm=roll<30?info.realm:['煉氣','築基','金丹','元嬰','化神','合體'][difficulty];
    const expected=roll>=50?[]:M.BOOKS.filter(b=>b.weaponType==='sword'&&b.tierRealm===expectedRealm);
    for(let index=0;index<Math.max(1,expected.length);index++){
-    const room={weaponDungeon:{...info,rewardWeaponType:'totem'}};
+    const room={weaponDungeon:{...info,nextRealm:'真仙',lowerRealm:'真仙',rewardWeaponType:'totem'}};
     if(index===0)delete room.weaponDungeon.id;
     const record=M.normalize({}),drop=Rewards.roll(room,'u1',record,max=>max===100?roll:index);
     assert.equal(drop?.id??null,expected[index]?.id??null);

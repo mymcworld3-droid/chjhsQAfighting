@@ -519,7 +519,7 @@ async function weaponDungeonState(db,uid,now=Date.now()){
     const room=id?exists(await tx.get(db.collection(ROOMS).doc(id))):null;
     tx.set(ref,{...pointer,weaponDungeonV1:progress});
     return {...progress,dungeonId:WeaponDungeons.ID,name:WeaponDungeons.NAME,dailyTickets:3,maxTickets:5,
-      difficulties:WeaponDungeons.DIFFICULTIES.map(d=>({...d,locked:d.index>progress.unlocked,nextRealm:WeaponDungeons.DIFFICULTIES[d.index+1]?.name||'真仙'})),
+      difficulties:WeaponDungeons.DIFFICULTIES.map(d=>({...d,locked:d.index>progress.unlocked,nextRealm:WeaponDungeons.lowerRealm(d.name),lowerRealm:WeaponDungeons.lowerRealm(d.name)})),
       dungeons:WeaponDungeons.catalog(progress).map(d=>({...d,rewardPools:WeaponDungeonRewards.previewPools(WeaponDungeons.WEAPON_REALMS,d.id)})),
       rewardPools:WeaponDungeonRewards.previewPools(WeaponDungeons.WEAPON_REALMS),
       active:room?.status==='active'&&room.weaponDungeon?{roomId:room.id,dungeonId:room.weaponDungeon.id||WeaponDungeons.ID,difficulty:room.weaponDungeon.difficulty}:null};

@@ -13,9 +13,10 @@ function previewPools(realms,dungeonId=W.ID){
 }
 function roll(room,uid,record,randomInt=crypto.randomInt){
   const info=room.weaponDungeon,value=randomInt(100);
-  // Exactly one roll: 30% current, 20% next, 50% no weapon. No pity or reroll.
+  // Exactly one roll: 30% current, 20% lower, 50% no weapon. No pity or reroll.
   if(value>=50)return null;
-  const realm=value<30?info.realm:info.nextRealm;
+  // Recompute from the current realm, including rooms saved before this rule change.
+  const realm=value<30?info.realm:W.lowerRealm(info.realm);
   const pool=poolFor(realm,info.id||W.ID);
   // Never manufacture a different realm version of an existing weapon.
   if(!pool.length)return null;
