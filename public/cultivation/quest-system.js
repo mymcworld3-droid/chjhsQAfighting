@@ -292,14 +292,28 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { source: 'quest-reward', ...result.balances } }));
       }
       const suffix=kind === 'path' && !q.supplemental && snapshot.path ? '，下一個仙道任務已開啟。' : '。';
-      status(result.awarded ? '已獲得 '+rewardText(result.reward)+suffix : '此任務已領取過，進度已同步。',
+      const pathAwarded=kind==='path'&&result.awarded;
+      // Path rewards use the shared modal, not a second card underneath the journey.
+      if(pathAwarded)status('');
+      else status(result.awarded ? '已獲得 '+rewardText(result.reward)+suffix : '此任務已領取過，進度已同步。',
         result.awarded?result.reward:null,suffix,'claimed');
       if (result.awarded) {
         const period=kind==='weekly'?snapshot.weeklyKey:kind==='path'?'path':snapshot.date;
         const presentation=globalThis.QARewardPresentation;
         const options={uid,receiptId:JSON.stringify(['quest',kind,q.id,period,!!q.supplemental]),reward:result.reward,important:false,isCurrent:()=>getMainUser()?.uid===uid};
-        const host=($('quest-dialog')?.open||pathVisible())?$('quest-reward-receipt'):null;
-        if(!presentation.animateInline(host,options))presentation.celebrate(options);
+        if(kind==='path'){
+          // The server has already credited the resources; closing the modal is cosmetic.
+          let shown=false;
+          try{
+            shown=presentation.show({...options,important:true,kicker:'仙道',title:'仙道任務完成',subtitle:q.title,
+              note:!q.supplemental&&snapshot.path?'下一個仙道任務已開啟。':'獎勵已入帳。',
+              focusTarget:()=>$('quest-close')});
+          }catch(error){console.warn('[Quest] reward presentation unavailable:',error);}
+          if(!shown)status('已獲得 '+rewardText(result.reward)+suffix);
+        }else{
+          const host=($('quest-dialog')?.open||pathVisible())?$('quest-reward-receipt'):null;
+          if(!presentation.animateInline(host,options))presentation.celebrate(options);
+        }
       }
     } catch (e) {
       if (getMainUser()?.uid === uid) { status(`${e.message}，請重新同步後重試。`,null,'','unconfirmed'); dirty = true; }

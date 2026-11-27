@@ -46,3 +46,45 @@ test('path title, atlas and refresh share one heading row without a stray tab co
  assert.match(css,/\.quest-dialog-path \.quest-tabs\{display:none!important\}/);
  assert.match(css,/#page-path \.quest-heading\{flex-wrap:nowrap/);
 });
+
+test('confirmed path claims open the shared reward modal instead of adding inline cards',async()=>{
+ const vm=require('node:vm');
+ async function run(kind,{awarded=true,fail=false,stale=false,shown=true,supplemental=false}={}){
+  const calls=[],reward={gold:120,weaponDungeonTicket:1};
+  let uid='u1';
+  const context=vm.createContext({
+   busy:false,snapshot:{date:'2026-11-27',weeklyKey:'2026-11-23'},
+   dirty:false,reconcileAccount:()=>uid,getMainUser:()=>({uid}),
+   render(){},visible:()=>true,invalidate(){},pathVisible:()=>kind==='path',
+   status:(...args)=>calls.push(['status',...args]),rewardText:()=> '120 靈石',
+   $:id=>id==='quest-reward-receipt'?{id}:null,window:{},console,
+   request:async(path,body)=>{calls.push(['request',path,body]);if(fail)throw Error('未入帳');if(stale)uid='u2';return {awarded,reward,quests:{path:{id:'next'},date:'2026-11-27',weeklyKey:'2026-11-23'}};},
+   QARewardPresentation:{show:options=>{calls.push(['modal',options]);return shown;},animateInline:(host,options)=>{calls.push(['inline',host,options]);return true;},celebrate:()=>calls.push(['sound'])}
+  });
+  const body=ui.slice(ui.indexOf('  async function claim(q, kind)'),ui.indexOf('  function go(',ui.indexOf('  async function claim(q, kind)')));
+  assert.ok(body.includes('presentation.show'));
+  vm.runInContext(body+'\nthis.claim=claim;',context);
+  await context.claim({id:'mission',title:'初戰靈獸',supplemental},kind);
+  return calls;
+ }
+ const pathCalls=await run('path');
+ const modal=pathCalls.find(c=>c[0]==='modal')[1];
+ assert.equal(modal.title,'仙道任務完成');assert.equal(modal.subtitle,'初戰靈獸');
+ assert.equal(modal.reward.gold,120);assert.equal(modal.reward.weaponDungeonTicket,1);
+ assert.equal(modal.isCurrent(),true);
+ assert.equal(pathCalls.filter(c=>c[0]==='request').length,1);
+ assert.equal(pathCalls.some(c=>c[0]==='inline'),false);
+ assert.equal(pathCalls.some(c=>c[0]==='status'&&c[2]?.gold),false);
+ for(const kind of ['daily','weekly','commission']){
+  const calls=await run(kind);assert.equal(calls.some(c=>c[0]==='modal'),false);
+  assert.equal(calls.some(c=>c[0]==='inline'),true);
+ }
+ for(const opt of [{awarded:false},{fail:true},{stale:true}]){
+  const calls=await run('path',opt);assert.equal(calls.some(c=>c[0]==='modal'),false);
+ }
+ const fallback=await run('path',{shown:false});
+ assert.ok(fallback.some(c=>c[0]==='status'&&c[1].startsWith('已獲得')));
+ assert.equal(fallback.some(c=>c[0]==='inline'),false);
+ const supplemental=await run('path',{supplemental:true});
+ assert.equal(supplemental.find(c=>c[0]==='modal')[1].note,'獎勵已入帳。');
+});
