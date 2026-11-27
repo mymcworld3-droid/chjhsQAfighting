@@ -50,3 +50,10 @@ test("real Poppler extraction and rendering on synthetic evidence fixture, not a
   assert.ok(fs.existsSync(path.join(tmp,"out","page-1.png")));
  }finally{fs.rmSync(tmp,{recursive:true,force:true});}
 });
+
+test("question markers preserve school answer-sheet circles and full-width numbering",()=>{
+ const blocks=t.extractBlocks(["( ○1 )1. fixture (A) a (B) b\n（②）２．fixture (1) a (2) b\n3. (③) fixture"]);
+ assert.deepEqual(blocks.map(b=>b.number),[1,2,3]);
+ assert.deepEqual(blocks[0].labels,["A","B"]);
+ assert.deepEqual(t.extractBlocks(["(1) option, not a question\n2. test\n（ ）3. fixture"]).map(b=>b.number),[2,3]);
+});
