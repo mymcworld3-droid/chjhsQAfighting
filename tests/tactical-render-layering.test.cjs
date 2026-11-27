@@ -7,7 +7,7 @@ const path=require('node:path');
 test('attack range outlines, selected target frames and danger hints paint below all actor sprites and HP bars',()=>{
   const source=fs.readFileSync(path.resolve(__dirname,'../public/cultivation/tactical-renderer.js'),'utf8');
   const draw=source.slice(source.indexOf('  draw(){'));
-  const actorStart=draw.indexOf('    const actors=scene?A.sample(scene,progress):s.actors;');
+  const actorStart=draw.indexOf('    const positions=actors.filter(R.alive).sort((a,b)=>a.y-b.y);');
   const actorDraw=draw.indexOf('    for(const a of positions){');
   const actorEnd=draw.indexOf('    for(const a of positions){',actorDraw+10);
   assert.ok(actorStart>0&&actorDraw>actorStart&&actorEnd>actorDraw);

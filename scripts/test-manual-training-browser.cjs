@@ -246,6 +246,15 @@ async function main(){
     for(const [width,height] of [[393,680],[393,852],[768,1100],[1180,820],[1440,900],[844,390]]){
       await page.setViewportSize({width,height});
       await page.evaluate(()=>{document.querySelector('main').scrollTop=0;});
+      // ResizeObserver and visualViewport resize handlers run asynchronously.
+      // Wait for the actual armory to fill the resized viewport; keep the exact
+      // original gap and card-ratio assertions below.
+      await page.waitForFunction(()=>{
+        const main=document.querySelector('main'),equipment=document.querySelector('.manual-weapons'),library=document.querySelector('.manual-library');
+        if(!main||!equipment||!library)return false;
+        const bottom=main.getBoundingClientRect().bottom-parseFloat(getComputedStyle(main).paddingBottom);
+        return bottom-Math.max(equipment.getBoundingClientRect().bottom,library.getBoundingClientRect().bottom)<16;
+      },null,{timeout:5000});
       const geometry=await page.evaluate(()=>{
         const main=document.querySelector('main');
         const card=document.querySelector('.manual-native-card').getBoundingClientRect();

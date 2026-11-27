@@ -79,7 +79,7 @@ test('renderer caches targeting and paints objective badges behind characters',(
  const draw=renderer.slice(renderer.indexOf('  draw(){'));
  const art=draw.indexOf("this.sprite('seals'");
  const aim=draw.indexOf("for(const seal of this.sealTargetPlan.seals)");
- const actors=draw.indexOf('const actors=scene?A.sample(scene,progress):s.actors;');
+ const actors=draw.indexOf('const positions=actors.filter(R.alive).sort((a,b)=>a.y-b.y);');
  assert(art>=0&&aim>art&&actors>aim);
  assert.equal(draw.indexOf('SealTargets.derive('),-1);
  assert(renderer.includes("ready?'#173f34ec'"));

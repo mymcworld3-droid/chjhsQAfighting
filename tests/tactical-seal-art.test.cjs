@@ -42,7 +42,7 @@ test('seal pillars remain below hero and beast artwork while combat warnings rem
   const draw=source.slice(source.indexOf('  draw(){'));
   const effect=draw.indexOf("if(scene)this.drawEffect(scene,progress,false);");
   const sealDraw=draw.indexOf("this.sprite('seals'");
-  const actors=draw.indexOf('const actors=scene?A.sample(scene,progress):s.actors;');
+  const actors=draw.indexOf('const positions=actors.filter(R.alive).sort((a,b)=>a.y-b.y);');
   const contours=draw.indexOf('Threats.drawContours(c,this.threatPlan,viewport);');
   const attackPreview=draw.indexOf('for(const p of preview.cells)');
   assert(contours>=0&&attackPreview>=0&&effect>=0&&sealDraw>=0&&actors>=0);

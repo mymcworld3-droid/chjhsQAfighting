@@ -94,7 +94,7 @@ test('renderer loads guardian only in defense mode and keeps it below actors',()
   const shrine=draw.indexOf("this.sprite('guardian'");
   const seal=draw.indexOf("this.sprite('seals'");
   const fx=draw.indexOf('ObjectiveVFX.draw(c,this.objectiveCues');
-  const actors=draw.indexOf('const actors=scene?A.sample(scene,progress):s.actors;');
+  const actors=draw.indexOf('const positions=actors.filter(R.alive).sort((a,b)=>a.y-b.y);');
   assert(shrine>=0&&seal>shrine&&fx>seal&&actors>fx);
   assert.equal(draw.indexOf("this.sprite('guardian'",actors),-1);
   assert(draw.includes('objectiveFxActive||ambienceActive'));
