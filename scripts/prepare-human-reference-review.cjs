@@ -36,7 +36,7 @@ function buildQueue(batches) {
   for(const [batch,doc] of batches){
     for(const source of doc.sources||[]) {
       if(sources.has(source.id)) throw Error("Duplicate source: "+source.id);
-      sources.set(source.id,source);
+      sources.set(source.id,{...source,...(source.acquisitionOnly===true?{acquisitionBatch:batch}:{})});
     }
     for(const record of doc.records||[]){
       if(records.has(record.id)) throw Error("Duplicate record: "+record.id);
@@ -57,7 +57,15 @@ function buildQueue(batches) {
   }
   queue.sort((a,b)=>Number(b.answerRechecked)-Number(a.answerRechecked)||a.sourceId.localeCompare(b.sourceId)||a.questionNumber-b.questionNumber||a.id.localeCompare(b.id));
   const sourceList=prioritizeSources([...sources.values()],queue);
-  return {schema:1,status:"isolated-review-worklist",counts:{structured:records.size,drafts:drafts.size,pending:queue.length,pendingAnswerRechecked:queue.filter(x=>x.answerRechecked).length},sources:sourceList,queue};
+  return {schema:1,status:"isolated-review-worklist",counts:{structured:records.size,drafts:drafts.size,pending:queue.length,pendingAnswerRechecked:queue.filter(x=>x.answerRechecked).length},sources:sourceList,acquisitionSources:[...sources.values()].filter(s=>s.acquisitionOnly===true),queue};
+}
+
+function selectSources(work,args){
+  const pool=args.acquisitionBatch==null?work.sources:(work.acquisitionSources||[]).filter(s=>s.acquisitionBatch===args.acquisitionBatch);
+  const selected=args.sourceIds.length?pool.filter(s=>args.sourceIds.includes(s.id)):pool;
+  for(const id of args.sourceIds)if(!selected.some(s=>s.id===id))throw Error("Unknown or completed source: "+id);
+  if(args.acquisitionBatch!=null&&!selected.length)throw Error("No acquisition sources in batch "+args.acquisitionBatch);
+  return selected;
 }
 
 function extractBlocks(pages) {
@@ -99,9 +107,9 @@ function writeJson(file,obj){fs.writeFileSync(file,JSON.stringify(obj,null,2)+"\
 function safeId(id){if(!/^[A-Za-z0-9_-]+$/.test(id))throw Error("Invalid source ID");return id;}
 function pdfBytes(bytes){return bytes.length>5&&bytes.subarray(0,5).toString()==="%PDF-";}
 function parseArgs(argv){
- const args={out:path.join(os.tmpdir(),"qingyun-human-reference-review"),pdfDir:null,download:false,render:false,selfTest:false,manifestOnly:false,requireAll:false,sourceIds:[]};
+ const args={out:path.join(os.tmpdir(),"qingyun-human-reference-review"),pdfDir:null,download:false,render:false,selfTest:false,manifestOnly:false,requireAll:false,sourceIds:[],acquisitionBatch:null};
  for(let i=0;i<argv.length;i++){
-  const a=argv[i];if(a==="--download")args.download=true;else if(a==="--require-all")args.requireAll=true;else if(a==="--source"){const v=argv[++i];if(!v||v.startsWith("--"))throw Error("Missing source ID");args.sourceIds.push(safeId(v));}else if(a==="--render")args.render=true;else if(a==="--self-test")args.selfTest=true;else if(a==="--manifest-only")args.manifestOnly=true;else if(a==="--out"||a==="--pdf-dir"){const v=argv[++i];if(!v||v.startsWith("--"))throw Error("Missing value "+a);args[a==="--out"?"out":"pdfDir"]=path.resolve(v);}else throw Error("Unknown argument "+a);
+  const a=argv[i];if(a==="--download")args.download=true;else if(a==="--require-all")args.requireAll=true;else if(a==="--acquisition-batch"){const v=argv[++i];if(!v||!/^\d+$/.test(v)||!Number.isSafeInteger(Number(v))||Number(v)<1)throw Error("Invalid acquisition batch");args.acquisitionBatch=Number(v);}else if(a==="--source"){const v=argv[++i];if(!v||v.startsWith("--"))throw Error("Missing source ID");args.sourceIds.push(safeId(v));}else if(a==="--render")args.render=true;else if(a==="--self-test")args.selfTest=true;else if(a==="--manifest-only")args.manifestOnly=true;else if(a==="--out"||a==="--pdf-dir"){const v=argv[++i];if(!v||v.startsWith("--"))throw Error("Missing value "+a);args[a==="--out"?"out":"pdfDir"]=path.resolve(v);}else throw Error("Unknown argument "+a);
  }
  args.pdfDir=args.pdfDir||path.join(args.out,"pdf");
  function canonical(target){
@@ -165,9 +173,8 @@ async function main(){
  const work=buildQueue(batches);
  fs.mkdirSync(args.out,{recursive:true});writeJson(path.join(args.out,"worklist.json"),work);
  if(args.manifestOnly){console.log(JSON.stringify(work.counts));return;}
- const selected=args.sourceIds.length?work.sources.filter(s=>args.sourceIds.includes(s.id)):work.sources;
- for(const id of args.sourceIds)if(!selected.some(s=>s.id===id))throw Error("Unknown or completed source: "+id);
- const hosts=new Set(work.sources.flatMap(s=>[s.originalSourceUrl,s.officialAnswerUrl].filter(Boolean)).map(u=>new URL(u).hostname).filter(h=>/(^|\.)edu\.tw$/i.test(h)));
+ const selected=selectSources(work,args);
+ const hosts=new Set(selected.flatMap(s=>[s.originalSourceUrl,s.officialAnswerUrl].filter(Boolean)).map(u=>new URL(u).hostname).filter(h=>/(^|\.)edu\.tw$/i.test(h)));
  const results=[];const rawCandidates=[];
  for(const source of selected){
   const id=safeId(source.id);const base=path.join(args.out,"evidence",id);const file=path.join(args.pdfDir,id+".pdf");
@@ -191,10 +198,10 @@ async function main(){
   results.push(report);
  }
  writeJson(path.join(args.out,"raw-candidates.json"),rawCandidates);
- writeJson(path.join(args.out,"extraction-report.json"),{status:"not-approved",counts:{...work.counts,sourceCount:results.length,sourcesExtracted:results.filter(r=>r.status==="extracted-unverified").length,rawCandidateRecords:rawCandidates.length,withRawBlocks:rawCandidates.filter(r=>r.blocks.length>0).length,fullTranscriptions:0,approved:0},results});
+ writeJson(path.join(args.out,"extraction-report.json"),{status:"not-approved",counts:{...work.counts,sourceCount:results.length,sourcesExtracted:results.filter(r=>r.status==="extracted-unverified").length,acquisitionBatch:args.acquisitionBatch,rawCandidateRecords:rawCandidates.length,withRawBlocks:rawCandidates.filter(r=>r.blocks.length>0).length,fullTranscriptions:0,approved:0},results});
  console.log(JSON.stringify({work:work.counts,extractedSources:results.filter(r=>r.status==="extracted-unverified").length,blocked:results.filter(r=>r.status==="blocked").length}));
  const usable=results.filter(r=>r.status==="extracted-unverified"||r.status==="image-only-needs-transcription"&&r.question?.rendered);
  if(!usable.length||args.requireAll&&results.some(r=>r.status!=="extracted-unverified"||r.answerError||r.questionWarning||(args.render&&(!r.question?.rendered||r.answer&&!r.answer.rendered))))process.exitCode=2;
 }
 if(require.main===module)main().catch(e=>{console.error(errorText(e));process.exitCode=1;});
-module.exports={buildQueue,extractBlocks,candidateBlocks,prioritizeSources,sourceOverrides,validatedDownloadUrl,errorText,parseArgs,obtainPdf,processPdf,selfTest};
+module.exports={buildQueue,selectSources,extractBlocks,candidateBlocks,prioritizeSources,sourceOverrides,validatedDownloadUrl,errorText,parseArgs,obtainPdf,processPdf,selfTest};
