@@ -1,0 +1,256 @@
+{
+  "schema": 1,
+  "batch": 28,
+  "date": "2026-11-27",
+  "purpose": "補足已取得官方答案的完整原題，以官方文字層及原頁截圖忠實轉錄，不核准。",
+  "sources": [
+    {
+      "id": "CEEC-107-physics",
+      "subject": "物理",
+      "title": "107學年度指定科目考試物理考科定稿",
+      "institution": "大學入學考試中心",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j075625661497981164/08-107學年度指考物理科_定稿.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j075625660853012146/08-107指考物理選擇題答案.pdf",
+      "rightsBasisCandidate": "著作權法第9條第1項第5款，正式考試原題及選擇題答案標記；附帶素材另審",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "humanRightsVerified": false
+    }
+  ],
+  "records": [
+    {
+      "originalQuestionType": "single-choice",
+      "status": "quarantined-pending-human-review",
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "id": "CEEC-109-chem-single-choice-4",
+      "sourceId": "CEEC-109-chem",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "印刷第1頁第4題（3–4題組）",
+      "questionPdfPage": 2,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "化學平衡",
+        "異相平衡",
+        "相對濕度",
+        "理想氣體方程式"
+      ],
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k220536545061333235/09-109指考化學試卷定稿.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k220536685605202263/09-109指考化學選擇題答案.pdf",
+      "officialAnswerLocator": "正式選擇題答案第4題",
+      "originalQuestion": {
+        "q": "在 300 K 時，將 1.8 克水及 x 克的無水硫酸鈣固體一起放入 30 公升之乾燥密閉容器中，容器內之相對濕度為 82%，則 x 約為多少？（假設 CaSO₄ · 2H₂O(s) 不釋放水蒸氣）",
+        "options": [
+          {
+            "label": "A",
+            "text": "2.0"
+          },
+          {
+            "label": "B",
+            "text": "4.1"
+          },
+          {
+            "label": "C",
+            "text": "5.1"
+          },
+          {
+            "label": "D",
+            "text": "6.8"
+          },
+          {
+            "label": "E",
+            "text": "8.2"
+          }
+        ],
+        "sharedStem": {
+          "heading": "3-4為題組",
+          "stem": "無水硫酸鈣（CaSO₄）固體可作為除濕劑，在 300 K 其平衡反應式與平衡常數（Kₚ）如下：\nCaSO₄(s) + 2 H₂O(g) ⇌ CaSO₄ · 2H₂O(s)　　　　Kₚ = 2500\n已知 300 K 時純水的飽和蒸氣壓為 0.040 atm，試回答 3-4 題。（CaSO₄ 式量為 136）",
+          "sourcePage": 2
+        }
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "old-curriculum",
+        "visual-check-pending",
+        "shared-stem-3-4",
+        "original-pdf-bytes-unavailable"
+      ],
+      "evidence": {
+        "question": "official-pdf-text-layer",
+        "answer": "official-answer-pdf-text-layer",
+        "locator": "原卷PDF第2頁文字155–157行，題組148–151行；官方答案第1頁第4題（文字第6行）。沿用第27批既存共用題幹，截圖失敗。"
+      }
+    },
+    {
+      "originalQuestionType": "single-choice",
+      "status": "quarantined-pending-human-review",
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "id": "CEEC-110-chem-single-choice-14",
+      "sourceId": "CEEC-110-chem",
+      "questionNumber": 14,
+      "originalQuestionNumberOrLocator": "印刷第3頁第14題",
+      "questionPdfPage": 4,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "化學平衡",
+        "酸鹼平衡",
+        "酸解離常數",
+        "平衡濃度"
+      ],
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l251610886361704852/09-110指考化學試卷定稿.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l251612637449552906/09-110指考化學選擇題答案.pdf",
+      "officialAnswerLocator": "正式選擇題答案第14題",
+      "originalQuestion": {
+        "q": "已知 HCOOH 與 CH₃COOH 的 Kₐ 分別為 1.8 × 10⁻⁴ 與 1.8 × 10⁻⁵。實驗桌上有 4 杯水溶液，分別為（1）0.1 M 的 CH₃COOH、（2）0.1 M 的 CH₃COONa、（3）0.1 M 的 HCOOH 與（4）0.1 M 的 HCOONa。若將等體積（1）與（2）混合得溶液甲，等體積（1）與（3）混合得溶液乙，等體積（1）與（4）混合得溶液丙，則溶液甲、乙與丙的 [CH₃COOH] 由小至大的順序為何？",
+        "options": [
+          {
+            "label": "A",
+            "text": "甲＜乙＜丙"
+          },
+          {
+            "label": "B",
+            "text": "乙＜甲＜丙"
+          },
+          {
+            "label": "C",
+            "text": "丙＜乙＜甲"
+          },
+          {
+            "label": "D",
+            "text": "甲＜丙＜乙"
+          },
+          {
+            "label": "E",
+            "text": "丙＜甲＜乙"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-index-rendering-only",
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "old-curriculum",
+        "visual-check-pending",
+        "original-pdf-bytes-unavailable"
+      ],
+      "evidence": {
+        "question": "official-pdf-web-index-rendering",
+        "answer": "official-answer-pdf-web-index-rendering",
+        "locator": "原卷印刷第3頁網頁呈現325–333行；正式答案表第14題C。兩份原頁截圖失敗，酸鹼平衡實際年級待人工確認。"
+      }
+    },
+    {
+      "originalQuestionType": "single-choice",
+      "status": "quarantined-pending-human-review",
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "id": "CEEC-107-physics-single-choice-16",
+      "sourceId": "CEEC-107-physics",
+      "questionNumber": 16,
+      "originalQuestionNumberOrLocator": "印刷第4頁第16題",
+      "questionPdfPage": 5,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "簡諧運動",
+        "力學能",
+        "速率與位移"
+      ],
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j075625661497981164/08-107學年度指考物理科_定稿.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j075625660853012146/08-107指考物理選擇題答案.pdf",
+      "officialAnswerLocator": "正式選擇題答案第16題",
+      "originalQuestion": {
+        "q": "一物體在光滑水平面上作簡諧運動，當其位移為振幅一半時，速率為 v，則此物體通過位移為零之平衡點時的速率為下列何者？",
+        "options": [
+          {
+            "label": "A",
+            "text": "$2v$"
+          },
+          {
+            "label": "B",
+            "text": "$\\frac{2\\sqrt{3}}{3}v$"
+          },
+          {
+            "label": "C",
+            "text": "$v$"
+          },
+          {
+            "label": "D",
+            "text": "$\\frac{\\sqrt{3}}{2}v$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac{1}{2}v$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "old-curriculum",
+        "original-pdf-bytes-unavailable",
+        "answer-visual-check-pending"
+      ],
+      "evidence": {
+        "question": "official-original-page-screenshot",
+        "answer": "official-answer-pdf-web-index-rendering",
+        "locator": "官方原卷PDF第5頁（印刷第4頁）原頁截圖成功，五選項根號與分數可辨識；正式答案表第16題B，答案截圖失敗。"
+      }
+    }
+  ],
+  "upgrades": [],
+  "answerRechecks": [],
+  "counts": {
+    "newRecords": 3,
+    "newCompleteDrafts": 3,
+    "upgradedTextDrafts": 0,
+    "approved": 0
+  },
+  "limitations": [
+    "109化學第4題和110化學第14題文字層或網頁呈現完整，但原頁截圖失敗；107物理第16題原頁截圖成功，答案為正式表格網頁呈現。",
+    "109化學第18–19題涉及表格或較長共用題幹，108物理第11題公式選項版面不明且答案下載逾時，未收錄；未新增反應速率、克卜勒定律、衛星變軌與碰撞計算原題。",
+    "直接下載109化學PDF DNS失敗；無上傳原卷，未取得實體PDF。所有新增題目仍須人工比對原文、答案及課綱。"
+  ]
+}
