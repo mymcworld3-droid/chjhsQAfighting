@@ -2375,7 +2375,7 @@ async function open(nextMode='pve',options={}){
   if(opened)close();
   if(battleChannel!==requestedChannel)state=null;
   lastTrigger=document.activeElement;mode=nextMode;battleChannel=requestedChannel;
-  weaponDungeonSelection=battleChannel==='weapon-dungeon'?{dungeonId:options.dungeonId||'peak-stone',difficulty:options.difficulty,requestId:id()}:null;root.dataset.mode=mode;
+  weaponDungeonSelection=battleChannel==='weapon-dungeon'?{dungeonId:options.dungeonId||'peak-stone',difficulty:options.difficulty,requestId:id(),...(options.resumeRoomId?{resumeRoomId:options.resumeRoomId}:{})}:null;root.dataset.mode=mode;
   action='move';attackChoice='attack';selectedManualSkill='';selection=null;
   sealPeekPosition=null;sealGuideForced=false;
   const accountUid=getMainUser()?.uid||'';if(uid!==accountUid||state?.mode!==nextMode)state=null;uid=accountUid;

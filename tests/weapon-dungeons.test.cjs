@@ -256,3 +256,13 @@ test('earned weapon dungeon tickets survive daily refill above the cap',()=>{
  assert.equal(W.progress({...earned,tickets:4},now+86400000).tickets,5);
  assert.equal(W.progress(earned,now+86400000).unlocked,2);
 });
+
+test('resume-only request cannot create a new dungeon or consume tickets if room is missing or mismatched',async()=>{
+ const db=database();own(db);
+ await assert.rejects(API.start(db,'u1',{...input('resume-missing-001'),resumeRoomId:'arena-missing'},NOW),/原副本已結束或變更/);
+ assert.equal((await API.weaponDungeonState(db,'u1',NOW)).tickets,3);
+ const first=await API.start(db,'u1',input('resume-original-001'),NOW);
+ await assert.rejects(API.start(db,'u1',{...input('resume-wrong-001'),resumeRoomId:'arena-wrong'},NOW),/原副本已結束或變更/);
+ const again=await API.start(db,'u1',{...input('resume-correct-001'),resumeRoomId:first.id},NOW);
+ assert.equal(again.id,first.id);assert.equal((await API.weaponDungeonState(db,'u1',NOW)).tickets,2);
+});

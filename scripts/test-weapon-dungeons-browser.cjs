@@ -136,10 +136,9 @@ async function main(){
   assert.equal((await API.weaponDungeonState(db,'u1')).tickets,2);
   await page.locator('[data-close]').click();await page.evaluate(()=>window.openWeaponDungeons());
   await page.waitForFunction(()=>document.querySelector('[data-atlas-tickets] .game-resource-amount')?.textContent==='2');
-  await page.locator('[data-atlas-dungeon="peak-stone"]').click();
-  await page.locator('[data-wd-enter]').waitFor({state:'visible'});
-  assert.match(await page.locator('[data-wd-enter]').textContent(),/不耗券/);
-  await page.locator('[data-wd-enter]').click();await page.locator('#tactical-combat canvas').waitFor();
+  await page.locator('[data-atlas-resume]').waitFor({state:'visible'});
+  assert.match(await page.locator('[data-atlas-resume]').textContent(),/不耗券/);
+  await page.locator('[data-atlas-resume]').click();await page.locator('#tactical-combat canvas').waitFor();
   assert.equal((await read()).id,room.id);assert.equal((await API.weaponDungeonState(db,'u1')).tickets,2);
   const raw=db.records.get(API.ROOMS+'/'+room.id);
   raw.blocks=[];

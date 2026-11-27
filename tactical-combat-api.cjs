@@ -559,6 +559,8 @@ async function start(db,uid,selection={},now=Date.now()){
     const legacyId=pointer.roomId!==priorId&&!Object.values(pointer.roomIds||{}).includes(pointer.roomId)?pointer.roomId:null;
     const legacy=legacyId?exists(await tx.get(db.collection(ROOMS).doc(legacyId))):null;
     const prior=roomChannel(stored)===channel?disarm(stored):null;
+    // Resume is never permission to spend a ticket on a replacement room.
+    if(weapon&&selection.resumeRoomId!=null&&(prior?.status!=='active'||prior.id!==selection.resumeRoomId))throw error('原副本已結束或變更，請返回秘境重新選擇',409);
     // Preserve an unfinished legacy trial when first entering PvP (and vice versa).
     const roomIds={...pointer.roomIds,...(legacy?{[roomChannel(legacy)]:legacy.id}:{}),...(stored?{[roomChannel(stored)]:stored.id}:{})};
     const campaign=trialProgress(pointer.trial,seed);

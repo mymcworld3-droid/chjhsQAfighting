@@ -204,3 +204,18 @@
 }
 @media(max-width:360px){#weapon-dungeons-panel .wd-preparation{padding-inline:8px}#weapon-dungeons-panel .wd-difficulties small{font-size:9px}#weapon-dungeons-panel .wd-tickets summary{font-size:11px;gap:4px}}
 @media(prefers-reduced-motion:reduce){#weapon-dungeons-panel .wd-island{animation:none}}
+
+/* One-tap continuation shares the existing atlas, without another dialog. */
+#page-gameplay .wd-atlas-footer{display:grid;gap:6px;min-width:0;justify-items:end}
+#page-gameplay [data-atlas-resume-slot]{width:min(100%,340px)}
+#page-gameplay [data-atlas-resume-slot]:empty{display:none}
+#page-gameplay .wd-quick-resume{box-sizing:border-box;display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:7px 12px;background:linear-gradient(110deg,#b99b64,#816a43);border:1px solid #e7cc91;border-radius:7px;color:#231c13;font:inherit;text-align:left;cursor:pointer}
+#page-gameplay .wd-quick-resume>span{display:grid;gap:1px;flex:1;min-width:0}
+#page-gameplay .wd-quick-resume strong{font-size:14px;letter-spacing:.06em}
+#page-gameplay .wd-quick-resume small{font-size:11px;white-space:nowrap}
+#page-gameplay .wd-quick-resume:disabled{opacity:.65;cursor:default}
+#page-gameplay .wd-quick-resume:focus-visible{outline:2px solid #f4dfae;outline-offset:2px}
+#weapon-dungeons-panel[data-wd-entering="true"] .wd-island{animation:wd-enter-approach .45s ease-in both}
+@keyframes wd-enter-approach{from{transform:scale(1);opacity:1}to{transform:scale(1.07);opacity:.65}}
+@media(orientation:portrait){#page-gameplay .wd-atlas-footer{justify-items:center}}
+@media(prefers-reduced-motion:reduce){#weapon-dungeons-panel[data-wd-entering="true"] .wd-island{animation:none}}

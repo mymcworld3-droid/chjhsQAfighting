@@ -14,7 +14,7 @@ function harness({wide=false}={}){
    removeAttribute(key){delete this.attributes[key];}
    append(child){elements.set(child.id,child);child.parentElement=this;}
    focus(){}
-   querySelector(selector){if(selector==='[data-atlas-tickets]'&&this.id==='gameplay-dungeon-atlas')return this.ticketSlot||=( {innerHTML:''} );return null;}
+   querySelector(selector){if(selector==='[data-atlas-tickets]'&&this.id==='gameplay-dungeon-atlas')return this.ticketSlot||=( {innerHTML:''} );if(selector==='[data-atlas-resume-slot]'&&this.id==='gameplay-dungeon-atlas')return this.resumeSlot||=({innerHTML:''});return null;}
    getBoundingClientRect(){return {left:0,right:500,top:0,bottom:500};}
  }
  const entries=new Element('div'),trigger=new Element('button'),shell=new Element('div');shell.dataset={};
@@ -210,4 +210,16 @@ test('expedition has one return control with both legacy selectors and compact d
  assert.match(markup,/<details class="wd-intel"><summary>/);
  assert.match(markup,/30% 築基武器/);assert.match(markup,/20% 金丹武器/);
  assert.match(markup,/class="wd-island" src="\/assets\/dungeons\/peak-stone.png"/);
+});
+
+test('atlas one-tap resume opens exact active room, even with zero tickets; account switch removes it',async()=>{
+ const h=harness(),opening=h.open();h.respond(h.state({tickets:0,active:{roomId:'arena-active',difficulty:0}}));await opening;
+ const atlas=h.elements.get('gameplay-dungeon-atlas');
+ assert.match(atlas.resumeSlot.innerHTML,/繼續挑戰/);assert.match(atlas.resumeSlot.innerHTML,/不耗券/);
+ const click=()=>atlas.handlers.click({target:{closest:s=>s==='[data-atlas-resume]'?{}:null}});
+ click();click();await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(h.entered.length,1);assert.equal(h.entered[0][1].resumeRoomId,'arena-active');
+ assert.equal(h.requests.length,1);assert.equal(h.dialog().hidden,true);
+ h.setUid('u2');h.events.get('xiuxian:user-data-ready')();assert.equal(atlas.resumeSlot.innerHTML,'');
+ click();await new Promise(resolve=>setImmediate(resolve));assert.equal(h.entered.length,1);
 });
