@@ -1,0 +1,171 @@
+{
+  "schema": 1,
+  "batch": 14,
+  "date": "2026-11-27",
+  "purpose": "既有原題轉錄草稿；區分直接文字層與搜尋索引呈現；不補造答案、圖形或公式。",
+  "upgrades": [
+    {
+      "id": "PTTSH-105-1-2-physics-single-choice-17",
+      "sourceId": "PTTSH-105-1-2-physics",
+      "questionNumber": 17,
+      "originalQuestionNumberOrLocator": "單選第17題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "虎克定律",
+        "彈簧並聯"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalQuestion": {
+        "q": "作用 1 牛頓之力於 1 條彈簧，其伸長量為 x，若將同樣的彈簧兩條並聯，且作用 4 牛頓之力，則伸長量將變為",
+        "options": [
+          {
+            "label": "A",
+            "text": "2x"
+          },
+          {
+            "label": "B",
+            "text": "3x"
+          },
+          {
+            "label": "C",
+            "text": "4x"
+          },
+          {
+            "label": "D",
+            "text": "5x"
+          },
+          {
+            "label": "E",
+            "text": "6x"
+          }
+        ]
+      },
+      "questionPdfPage": 3,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "human-review-required"
+      ],
+      "batch": 7,
+      "answerPdfPage": 3,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=105-1%2F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%2F&file=201611291559080.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=105-1%2F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%2F&file=201611291559080.pdf",
+      "officialAnswerLocator": "第17題後答案標記A",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-07.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "observedTextLocator": "PDF文字164–167"
+      }
+    },
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-4",
+      "sourceId": "PJHS-108-2-2-chem",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "單選第4題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "化學平衡",
+        "分壓平衡常數",
+        "濃度平衡常數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "draft-indexed-rendering-answer-recheck-pending",
+      "originalQuestion": {
+        "q": "此反應式之 Kc 與 Kp 之關係式為何？",
+        "options": [
+          {
+            "label": "A",
+            "text": "Kp = Kc⁻¹"
+          },
+          {
+            "label": "B",
+            "text": "Kp = Kc × RT"
+          },
+          {
+            "label": "C",
+            "text": "Kc = Kp × RT"
+          },
+          {
+            "label": "D",
+            "text": "Kc = Kp"
+          },
+          {
+            "label": "E",
+            "text": "Kp = Kc × (RT)²"
+          }
+        ],
+        "sharedStem": {
+          "heading": "2~4 題組",
+          "stem": "於 300 K 時，在 2 L 之密閉容器中，依反應 2 NO(g) + O₂(g) ⇌ 2 NO₂(g)，回答下列問題。",
+          "sourcePage": 1
+        }
+      },
+      "questionPdfPage": 1,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "question-type-section-mismatch",
+        "shared-stem-2-4",
+        "human-review-required",
+        "indexed-rendering-not-original-page",
+        "official-answer-recheck-pending"
+      ],
+      "batch": 7,
+      "answerPdfPage": null,
+      "originalSourceUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "officialAnswerLocator": "第二批既有答案標記C；本次未能重開答案頁",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-07.json",
+      "evidence": {
+        "question": "indexed-official-pdf-rendering",
+        "answer": "previous-batch-answer-mark-not-reopened",
+        "recheckedAgainstPreviousMarks": false,
+        "observedTextLocator": "官方PDF搜尋索引呈現第一頁題組；原PDF文字層0行及截圖失敗"
+      }
+    }
+  ],
+  "counts": {
+    "newRecords": 0,
+    "upgradedTextDrafts": 2,
+    "answerRecheckedThisBatch": 1,
+    "indexedRenderingDrafts": 1,
+    "approved": 0
+  },
+  "limitations": [
+    "原卷截圖均未取得；平鎮原PDF沒有可讀文字，僅官方PDF的搜尋索引呈現題組文字，非原頁核對。",
+    "平鎮第4題答案保留第二批標記，未重新查得原答案頁；第2、3、5、6題仍待核對。",
+    "鼓山答案ZIP下載HTTP 400，容器DNS失敗；15題官方答案仍缺。",
+    "反應速率的額外校方原卷來源可定位，但官方答案未取得，不新增候選索引。"
+  ]
+}
