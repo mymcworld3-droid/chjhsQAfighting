@@ -77,3 +77,20 @@
 - 9a431b4 一般完整回歸與候選版完整回歸各 3268 通過、0 失敗、1 項既有 PDF 測試跳過；[一般 CI](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45999202012)、[候選版 CI](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45999203375) 均成功，包含 12 組平衡、合作副本與真實 Chromium。
 - [戰鬥瀏覽器 CI](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45999202081) 已成功，七種尺寸全部通過，截圖產物 15197253582 已下載並逐張檢查武器副本的 13 張截圖。發現無圖示字型環境中返回箭頭及結算印記不可見、短螢幕結算頂部被戰鬥列遮蓋及固定操作列覆蓋內容。改為獨立 SVG，結算蓋過戰鬥標題並讓操作列正常佔位，補上獎勵卡圖像、遮蓋及實際武器掉落的確定性瀏覽器斷言。不改動戰鬥與獎勵規則。
 - 868ab4d 主分支的 [Pages 部署](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45999434681) 已成功，後續截圖修正須以新提交的 CI 與產物確認。此紀錄不等同於正式環境的已登入伺服器實戰測試。
+
+### 2026-11-27 第九階段結案
+
+**狀態：已完成。驗收及正式部署基準：`6fc0d0b23f0c1974abda7beaaff1790f925e18e5`。**
+
+| 驗收項目 | 結果與證據 |
+| --- | --- |
+| 一般完整回歸 | [成功](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46000074569)：3271 項，3270 通過、0 失敗、1 項既有 PDF 測試跳過 |
+| 十二把武器候選版 | [成功](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46000074666)：完整回歸同為 3270 通過、0 失敗、1 跳過；12 組平衡及兩組瀏覽器工作全部成功 |
+| 戰鬥、修煉、秘境及技能動畫 | [成功](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46000074650)：七種入口尺寸、兩次簽章答題、免費續戰、真實武器掉落、首領通關、首次解鎖、再次挑戰及失敗結算 |
+| 合作副本 | [成功](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46000074557) |
+| 靜態資源版本 | 一般與候選版 CI 均確認 module-versions.json 與靜態資源一致 |
+| 正式 Pages 部署 | [成功](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46000073742)：2026-11-27 20:39:03 臺灣時間，部署 SHA 與驗收基準一致；[正式入口](https://mymcworld3-droid.github.io/chjhsQAfighting/) |
+
+從 [截圖產物 15198550110](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46000074650/artifacts/15198550110) 下載並檢查 16 張秘境截圖（島嶼 1、入口 7、勝利頂部與操作區 6、一般勝利 1、失敗 1）。返回箭頭、資訊圖示、勝敗印記、武器掉落圖像均可見；短螢幕結算以正常內容流捲動，標題與按鈕不再覆蓋獎勵內容。320×568、360×640、393×852、568×320、667×375、768×1024、1180×820 七種入口尺寸均通過正式 Chromium 斷言。小螢幕仍允許必要捲動。截圖取自獨立瀏覽器測試頁（非完整登入後的主頁外殼），不代表實體裝置 Safari 或正式後端登入實戰已驗證。
+
+本次複驗無新增驗收失敗，僅更新本紀錄，不改遊戲程式、資源、規則或測試。後續僅文件提交不改變上述已驗收程式版本。未新增秘境、未改武器階級或空掉落池規則；第九階段結案，不再擴大改版範圍。
