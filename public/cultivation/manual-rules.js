@@ -124,7 +124,7 @@
   ]);
   // One authoritative definition of all six new weapons. A release candidate
   // can be tested by changing this literal in an isolated checkout only.
-  const RELEASE_NEW_WEAPONS=false;
+  const RELEASE_NEW_WEAPONS=true;
   const DEVELOPMENT_BOOKS=(()=>{
   const freeze=o=>{if(o&&typeof o==='object'&&!Object.isFrozen(o)){Object.values(o).forEach(freeze);Object.freeze(o);}return o;};
   const skill=(id,name,cost,range,kind,power,description,extra={})=>({id,name,cost,range,kind,power,description,cooldown:0,...extra});
