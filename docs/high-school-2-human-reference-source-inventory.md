@@ -193,3 +193,23 @@ node scripts/prepare-human-reference-review.cjs --download --render --out /tmp/r
 ### 教材範圍
 
 已將114學年度第三方跨版物理II章節對照表（https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_physical_II_114.pdf?v=20260224）中的南一、翰林、龍騰力學及熱學觀念節次對照保存在第七批JSON。龍騰的書籍章次與均一適配主題順序可能不同，兩者分開標記，待官方實體目錄確認；不宣稱全科官方目錄齊全。反應速率及化學平衡仍欠完整原卷轉錄。本次未取得新的正式人工核准；未修改正式題庫、baseline、載入規則或批准清單，未執行全庫稽核測試。
+
+## 12. 第八批（2026-11-27）
+
+新增 [high-school-2-batch-08.json](reference-candidates/high-school-2-batch-08.json)，無新題號，升級既有7筆完整題文草稿（數學3、物理2、化學2）；2筆原卷截圖可讀（武陵113下數A第二次第1題、期末第2題），其餘5筆為文字層草稿。7筆皆重新對照同卷正式答案表文字，答案頁截圖未取得，不視為人工核准。保留原始五選一、多選、是非題型及舊有來源疑義。累積201筆、39筆有草稿、162筆待轉錄（其中81筆先前重新比對答案），待處理原卷來源17個；15筆仍缺官方答案，人工核准0。未達50題新增完整題文目標。
+
+### 擷取工具修正與驗證
+
+- `scripts/prepare-human-reference-review.cjs` 修正臺東112下第二次物理的直接原卷URL：https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf （原卷封面與頁尾考次矛盾仍保留）。
+- 依答案已重新比對、已有答案數、待處理數排序來源；支援 `--source <sourceId>` 多次指定及 `--require-all` 嚴格檢查。HTTP重新導向僅限既有教育機構HTTPS主機、最多4次；記錄最終URL及底層錯誤。區分本機快取與網路下載。限制輸出/快取在儲存庫之外，檢查既有符號連結。
+- 保留頁碼提示以選出可能原題、另存其他同題號區塊。即使頁面渲染失敗也保留已擷取文字及警告；圖片型PDF未轉錄、答案ZIP尚未取得均如實標示。不得把raw block當完整題文或自動核准。
+- 新增 `tests/prepare-human-reference-review.test.cjs`（8項測試，Poppler測試由RUN_POPPLER_TEST=1啟用）；擷取工作流程觸發所有批次JSON改動，另新增正式庫來源稽核job。
+- 實際重新讀取提交後的JS檔，以隔離JS環境解析並執行其3項self-test、讀取所有批次重建工作清單，另檢查4項新輔助函數。使用本機Node 22建立非考題的合成PDF測試件，pdftotext及pdftoppm均成功；這不是完整Node CLI或真實考卷端到端驗收。
+- 本機直接下載校方PDF與GitHub均DNS失敗，另下載工具亦失敗；公開網頁可讀部分PDF文字及少數頁面截圖，無法取得實際原卷檔案。本儲存庫為公開，未核實原卷內容不發布為公開CI artifact。
+- GitHub連接器的commit workflow查詢只支援PR觸發的run，未回傳推送run或combined status；公開Actions頁/API亦無法讀取。尚未驗證先前或本次工作流程執行成功、取得真實PDF artifacts、執行全庫測試或CI完成，不能據此判斷CI失敗/成功。
+
+### 教材對應
+
+直接讀取現行 `public/curriculum-data/高中二年級/` 數學A/B、物理、化學目錄，整理南一、翰林、龍騰42筆既有教材冊次（數A6、數B6、物理15、化學15），保存bookId、來源檔blob SHA、驗證標記、章節、細項及conceptId於本批JSON。這是既有目錄快照，不是42份本批新核實教材；包含不同年度及選修III–V跨年級冊次，實際出題須遵從玩家冊次設定。發現既有翰林114物理II目錄與第七批第三方對照的第一、二章次序不一致，留待原書核對，不更改現有出題目錄。反應速率與化學平衡題文仍有缺口。
+
+下一步先由Actions取得公開狀態報告，或由使用者提供原始PDF，以本機模式完成大量逐題轉錄。不得繼續堆積索引。正式參考題庫、baseline、載入政策、人工批准清單均未修改。
