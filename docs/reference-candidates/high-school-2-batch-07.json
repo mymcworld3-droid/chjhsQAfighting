@@ -1,0 +1,1216 @@
+{
+  "schema": 1,
+  "batch": 7,
+  "date": "2026-11-27",
+  "purpose": "既有候選遷移與轉錄升級，非新題索引；未人工核准，禁止進入AI提示。",
+  "sources": [
+    {
+      "id": "KUSJH-114-1-1-chem",
+      "subject": "化學",
+      "institution": "高雄市立鼓山高中",
+      "title": "114上第一次段考高二自然組化學",
+      "originalSourceUrl": "https://www.kusjh.kh.edu.tw/upload/files/114-1-1%E9%AB%98%E4%B8%AD%E5%8C%96%E5%AD%B8.pdf",
+      "officialAnswerUrl": null,
+      "rightsBasisCandidate": "正式學校評量原題；依著作權法第9條第1項第5款，附帶圖文仍須核對",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ],
+      "humanRightsVerified": false,
+      "notes": "從第一批既有盤點遷移；高二原卷定位在PDF第5頁；答案尚未取得",
+      "officialAnswerArchiveUrl": "https://www.kusjh.kh.edu.tw/upload/files/%E9%AB%98%E4%B8%AD%E8%A7%A3%E7%AD%94114-1-1.zip"
+    },
+    {
+      "id": "WLSH-113-1-final-mathA",
+      "subject": "數學",
+      "institution": "武陵高中",
+      "title": "113上高二數A期末考",
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/201410791.pdf",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/201410791.pdf",
+      "rightsBasisCandidate": "正式學校評量原題；依著作權法第9條第1項第5款，附帶圖文仍須核對",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ],
+      "humanRightsVerified": false,
+      "notes": "第二批舊盤點遷移，五選一、答案標記待再次對照"
+    },
+    {
+      "id": "PJHS-108-2-2-chem",
+      "subject": "化學",
+      "institution": "平鎮高中",
+      "title": "108下高二化學第二次段考",
+      "originalSourceUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "rightsBasisCandidate": "正式學校評量原題；依著作權法第9條第1項第5款，附帶圖文仍須核對",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ],
+      "humanRightsVerified": false,
+      "notes": "第二批舊盤點遷移；舊課綱及題型區塊矛盾，勿直接採用"
+    },
+    {
+      "id": "PTTSH-105-1-2-physics",
+      "subject": "物理",
+      "institution": "國立臺東高中",
+      "title": "105上高二基礎物理B第二次段考",
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/105-1/%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83/%E4%BA%8C%E5%B9%B4%E7%B4%9A/%E7%89%A9%E7%90%86/201611291559080.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/105-1/%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83/%E4%BA%8C%E5%B9%B4%E7%B4%9A/%E7%89%A9%E7%90%86/201611291559080.pdf",
+      "rightsBasisCandidate": "正式學校評量原題；依著作權法第9條第1項第5款，附帶圖文仍須核對",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ],
+      "humanRightsVerified": false,
+      "notes": "第二批舊盤點遷移，舊課綱，需確認108課綱適用性"
+    }
+  ],
+  "records": [
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-1",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "單選第1題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "氧化數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-2",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "單選第2題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "氧化數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-3",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "單選第3題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "氧化劑、還原劑與氧化還原計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-4",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "單選第4題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "氧化還原反應判斷"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-5",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "單選第5題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "限量試劑"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-6",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 6,
+      "originalQuestionNumberOrLocator": "單選第6題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "化學反應計量與純度"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-7",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 7,
+      "originalQuestionNumberOrLocator": "單選第7題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "燃燒反應計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-8",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 8,
+      "originalQuestionNumberOrLocator": "單選第8題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "混合氣體與燃燒計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-9",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 9,
+      "originalQuestionNumberOrLocator": "單選第9題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "反應方程式與質量計算"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-10",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 10,
+      "originalQuestionNumberOrLocator": "單選第10題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "產率"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-11",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 11,
+      "originalQuestionNumberOrLocator": "單選第11題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "氣體反應計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-12",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 12,
+      "originalQuestionNumberOrLocator": "單選第12題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "氣體莫耳體積與反應計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-13",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 13,
+      "originalQuestionNumberOrLocator": "單選第13題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "混合物燃燒計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-14",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 14,
+      "originalQuestionNumberOrLocator": "單選第14題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "莫耳生成熱"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "KUSJH-114-1-1-chem-single-choice-15",
+      "sourceId": "KUSJH-114-1-1-chem",
+      "questionNumber": 15,
+      "originalQuestionNumberOrLocator": "單選第15題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [],
+      "conceptTags": [
+        "反應熱與赫斯定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": 5,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第一批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "official-answer-missing",
+        "combined-grade-pdf"
+      ]
+    },
+    {
+      "id": "WLSH-113-1-final-mathA-single-choice-1",
+      "sourceId": "WLSH-113-1-final-mathA",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "單選第1題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "2"
+      ],
+      "conceptTags": [
+        "正射影",
+        "垂直向量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "requires-original-figure"
+      ]
+    },
+    {
+      "id": "WLSH-113-1-final-mathA-single-choice-2",
+      "sourceId": "WLSH-113-1-final-mathA",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "單選第2題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "1"
+      ],
+      "conceptTags": [
+        "內積",
+        "夾角",
+        "垂直條件"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-2",
+      "sourceId": "PJHS-108-2-2-chem",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "單選第2題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "濃度平衡常數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "question-type-section-mismatch",
+        "shared-stem-2-4"
+      ]
+    },
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-3",
+      "sourceId": "PJHS-108-2-2-chem",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "單選第3題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "反應商與平衡移動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "question-type-section-mismatch",
+        "shared-stem-2-4"
+      ]
+    },
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-4",
+      "sourceId": "PJHS-108-2-2-chem",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "單選第4題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "Kp與Kc關係"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "question-type-section-mismatch",
+        "shared-stem-2-4"
+      ]
+    },
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-5",
+      "sourceId": "PJHS-108-2-2-chem",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "單選第5題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "異相平衡、溫度與壓力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "question-type-section-mismatch"
+      ]
+    },
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-6",
+      "sourceId": "PJHS-108-2-2-chem",
+      "questionNumber": 6,
+      "originalQuestionNumberOrLocator": "單選第6題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "溶度積與離子計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "question-type-section-mismatch"
+      ]
+    },
+    {
+      "id": "PTTSH-105-1-2-physics-single-choice-3",
+      "sourceId": "PTTSH-105-1-2-physics",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "單選第3題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "靜力平衡、虎克定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "requires-original-figure"
+      ]
+    },
+    {
+      "id": "PTTSH-105-1-2-physics-single-choice-4",
+      "sourceId": "PTTSH-105-1-2-physics",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "單選第4題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "水平拋射與速度分量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum"
+      ]
+    },
+    {
+      "id": "PTTSH-105-1-2-physics-single-choice-8",
+      "sourceId": "PTTSH-105-1-2-physics",
+      "questionNumber": 8,
+      "originalQuestionNumberOrLocator": "單選第8題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "靜摩擦係數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum"
+      ]
+    },
+    {
+      "id": "PTTSH-105-1-2-physics-single-choice-13",
+      "sourceId": "PTTSH-105-1-2-physics",
+      "questionNumber": 13,
+      "originalQuestionNumberOrLocator": "單選第13題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "斜面靜摩擦"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum"
+      ]
+    },
+    {
+      "id": "PTTSH-105-1-2-physics-single-choice-15",
+      "sourceId": "PTTSH-105-1-2-physics",
+      "questionNumber": 15,
+      "originalQuestionNumberOrLocator": "單選第15題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "力與力矩平衡"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum"
+      ]
+    },
+    {
+      "id": "PTTSH-105-1-2-physics-single-choice-17",
+      "sourceId": "PTTSH-105-1-2-physics",
+      "questionNumber": 17,
+      "originalQuestionNumberOrLocator": "單選第17題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "彈簧並聯"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum"
+      ]
+    },
+    {
+      "id": "PTTSH-105-1-2-physics-single-choice-20",
+      "sourceId": "PTTSH-105-1-2-physics",
+      "questionNumber": 20,
+      "originalQuestionNumberOrLocator": "單選第20題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "拋體運動概念"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "locator-only",
+      "originalQuestion": null,
+      "questionPdfPage": null,
+      "optionCount": null,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum"
+      ]
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-3",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "一、是非題；第3題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "×"
+      ],
+      "conceptTags": [
+        "指數函數圖形",
+        "對稱"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "坐標平面上，$y=3^x$ 與 $y=(0.3)^x$ 的圖形會對稱 y 軸。",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "原卷是非題，不新增選項",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": null,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-9",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第9題",
+      "questionNumber": 9,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "氧化還原",
+        "化學反應計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "反應 Cu＋HNO₃→Cu(NO₃)₂＋H₂O＋NO 中，若有 3 莫耳 Cu 被溶掉，則需消耗硝酸若干莫耳？",
+        "options": [
+          {
+            "label": "A",
+            "text": "2"
+          },
+          {
+            "label": "B",
+            "text": "4"
+          },
+          {
+            "label": "C",
+            "text": "6"
+          },
+          {
+            "label": "D",
+            "text": "8"
+          },
+          {
+            "label": "E",
+            "text": "10"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-9",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 9,
+      "originalQuestionNumberOrLocator": "第9題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "依數性",
+        "凝固點下降"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "溶解 1.00 克葡萄糖於 100 克水所形成溶液的凝固點為−0.103℃，若在此溶液中再加入葡萄糖 2.00 克所形成溶液的凝固點為多少℃？",
+        "options": [
+          {
+            "label": "A",
+            "text": "0.206℃"
+          },
+          {
+            "label": "B",
+            "text": "－0.0520℃"
+          },
+          {
+            "label": "C",
+            "text": "－0.157℃"
+          },
+          {
+            "label": "D",
+            "text": "－0.20℃"
+          },
+          {
+            "label": "E",
+            "text": "－0.309℃"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-19",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 19,
+      "originalQuestionNumberOrLocator": "第19題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "萬有引力",
+        "表面重力加速度"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "一個密度均勻的星球，分裂為 8 個密度不變、質量相等的星球。則每個星球表面的重力加速度變為原來的多少倍？",
+        "options": [
+          {
+            "label": "A",
+            "text": "$\\frac18$"
+          },
+          {
+            "label": "B",
+            "text": "$\\frac12$"
+          },
+          {
+            "label": "C",
+            "text": "2"
+          },
+          {
+            "label": "D",
+            "text": "8"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 4,
+      "questionPdfPage": 2,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ]
+    }
+  ],
+  "editionEvidence": [
+    {
+      "source": "https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_physical_II_114.pdf?v=20260224",
+      "sourceType": "第三方114學年度跨版目錄對照；文字表已讀，截圖未取得，非出版社正式全目錄",
+      "conflict": "均一龍騰版適配頁的主題順序與114學年度對照表不同，不把適配主題順序當作原書章次。",
+      "editionMap": [
+        {
+          "publisher": "南一",
+          "volume": "選修物理II",
+          "conceptSections": {
+            "friction": "1-1",
+            "torque": "1-2",
+            "equilibrium": "1-3",
+            "centerOfMass": "2-1",
+            "impulseMomentum": "2-2",
+            "momentumConservation": "2-3",
+            "angularMomentum": "2-4",
+            "workPower": "3-1",
+            "kineticEnergy": "3-2",
+            "potentialEnergy": "3-3",
+            "energyConservation": "3-4",
+            "elasticCollision": "4-1",
+            "inelasticCollision": "4-2",
+            "idealGas": "5-1",
+            "kineticTheory": "5-2"
+          }
+        },
+        {
+          "publisher": "翰林",
+          "volume": "選修物理II",
+          "conceptSections": {
+            "impulseMomentum": "1-1",
+            "centerOfMass": "1-2",
+            "momentumConservation": "1-3",
+            "angularMomentum": "1-4/1-5",
+            "torque": "1-4",
+            "equilibrium": "2-1",
+            "friction": "2-2",
+            "work": "3-1/3-2",
+            "kineticEnergy": "3-3",
+            "power": "3-4",
+            "potentialEnergy": "4-1/4-2/4-3",
+            "energyConservation": "4-4",
+            "collision": "4-5",
+            "idealGas": "5-1",
+            "kineticTheory": "5-2/5-3"
+          }
+        },
+        {
+          "publisher": "龍騰",
+          "volume": "選修物理II",
+          "conceptSections": {
+            "friction": "1-1",
+            "torque": "1-2",
+            "equilibrium": "1-3",
+            "impulseMomentum": "2-1",
+            "momentumConservation": "2-2",
+            "centerOfMass": "2-3",
+            "angularMomentum": "2-4",
+            "workKineticEnergy": "3-1",
+            "power": "3-2",
+            "energyPotential": "3-3/3-4/3-5",
+            "collisionConservation": "4-1",
+            "elasticCollision": "4-2",
+            "inelasticCollision": "4-3",
+            "idealGas": "5-1",
+            "kineticTheory": "5-2"
+          }
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "newRecords": 0,
+    "migratedExistingRecords": 29,
+    "migratedWithPreviousAnswerMarks": 14,
+    "migratedWithoutAnswer": 15,
+    "upgradedTextDrafts": 4,
+    "approved": 0
+  },
+  "limitations": [
+    "四份原卷及答案為網頁文字層；PDF截圖cache miss，直接下載DNS失敗。",
+    "不把文字層當作完整視覺核對，沒有自動填寫官方答案或改寫原題。",
+    "反應速率及化學平衡的新完整原題尚未取得；第三方目錄未核對完整教材。"
+  ]
+}
