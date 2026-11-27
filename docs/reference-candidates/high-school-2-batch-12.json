@@ -1,0 +1,1218 @@
+{
+  "schema": 1,
+  "batch": 12,
+  "date": "2026-11-27",
+  "purpose": "既有候選原題文字與完整表格草稿，圖形未取得實體者獨立列為部分轉錄，不重複計數、不自動批准。",
+  "upgrades": [
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-10",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 10,
+      "originalQuestionNumberOrLocator": "第10題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "簡諧運動",
+        "彈簧週期"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "光滑水平地面放置一彈性常數 k = 16 N/m 的彈簧，其一端固定於牆壁，另一端繫著質量為 1 kg 的小球。今將其壓縮 10 cm 後放手，則小球的振動週期為多少 s？",
+        "options": [
+          {
+            "label": "A",
+            "text": "$\\pi$"
+          },
+          {
+            "label": "B",
+            "text": "$\\frac{\\pi}{2}$"
+          },
+          {
+            "label": "C",
+            "text": "$\\frac{\\pi}{3}$"
+          },
+          {
+            "label": "D",
+            "text": "$\\frac{\\pi}{4}$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac{\\pi}{5}$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerLocator": "答案PDF第4頁，第10題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-11",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 11,
+      "originalQuestionNumberOrLocator": "第11題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "萬有引力",
+        "重力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "設地球半徑為 $R_E$，有一火箭由地面鉛直上升，當其質量剩為原出發時的 $\\frac14$ 時，重量變為原出發時的 $\\frac1{16}$，此時火箭距地面高度為多少？",
+        "options": [
+          {
+            "label": "A",
+            "text": "$4R_E$"
+          },
+          {
+            "label": "B",
+            "text": "$3R_E$"
+          },
+          {
+            "label": "C",
+            "text": "$2R_E$"
+          },
+          {
+            "label": "D",
+            "text": "$R_E$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac14 R_E$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerLocator": "答案PDF第4頁，第11題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-13",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 13,
+      "originalQuestionNumberOrLocator": "第13題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "萬有引力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "一般認為銀河系中心有一個超大質量的黑洞。有些天文學家估計這黑洞的質量大約是太陽的四百萬倍，太陽離此超大質量黑洞的距離約為 28000 光年。如果太陽、該超大質量黑洞與地球排成一直線，且二者對地球的主要影響只有重力，則這個超大質量黑洞和地球之間的重力，大約是地球和太陽之間重力的多少倍？（28000 光年大約是 $1.8\\times10^9$ au）",
+        "options": [
+          {
+            "label": "A",
+            "text": "$1.2\\times10^{-12}$"
+          },
+          {
+            "label": "B",
+            "text": "$2.5\\times10^{-7}$"
+          },
+          {
+            "label": "C",
+            "text": "$2.2\\times10^{-3}$"
+          },
+          {
+            "label": "D",
+            "text": "$4\\times10^6$"
+          },
+          {
+            "label": "E",
+            "text": "$8.1\\times10^{11}$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerLocator": "答案PDF第4頁，第13題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-14",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 14,
+      "originalQuestionNumberOrLocator": "第14題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "重力常數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "重力常數 G 值不易測量的主要原因為何？",
+        "options": [
+          {
+            "label": "A",
+            "text": "G 值會隨物體不同而改變其值"
+          },
+          {
+            "label": "B",
+            "text": "G 值會隨地點不同而改變其值"
+          },
+          {
+            "label": "C",
+            "text": "G 值會隨時間不同而改變其值"
+          },
+          {
+            "label": "D",
+            "text": "G 值很大，重力易使儀器超過負荷"
+          },
+          {
+            "label": "E",
+            "text": "G 值很小，儀器不夠靈敏，無法量出微弱的重力"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerLocator": "答案PDF第4頁，第14題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-16",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 16,
+      "originalQuestionNumberOrLocator": "第16題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "萬有引力",
+        "表面重力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "人類太空計畫中的登陸月球已實現，未來將要挑戰登陸火星，試以下表數據，推算火星表面的重力加速度值約為地球表面的",
+        "options": [
+          {
+            "label": "A",
+            "text": "二分之一"
+          },
+          {
+            "label": "B",
+            "text": "三分之二"
+          },
+          {
+            "label": "C",
+            "text": "四分之一"
+          },
+          {
+            "label": "D",
+            "text": "六分之五"
+          },
+          {
+            "label": "E",
+            "text": "八分之三"
+          }
+        ],
+        "table": {
+          "columns": [
+            "",
+            "質量",
+            "星球平均半徑",
+            "星球表面重力加速度值"
+          ],
+          "rows": [
+            [
+              "火星",
+              "9M",
+              "2R",
+              "？"
+            ],
+            [
+              "月球",
+              "M",
+              "R",
+              "地球表面的六分之一"
+            ]
+          ],
+          "position": "題幹與選項之間"
+        }
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "requires-original-table",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerLocator": "答案PDF第4頁，第16題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-17",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 17,
+      "originalQuestionNumberOrLocator": "第17題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "表面重力加速度"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "近年科學家發現某一顆巨大的類地球行星，其質量為地球的 17 倍、直徑為地球的 2.3 倍，它像地球一樣擁有堅固的表層，因此被天文學家歸類為「巨無霸地球」。假設該星球與地球皆可視為均質的球體，則該行星表面的重力加速度約為地球的多少倍？",
+        "options": [
+          {
+            "label": "A",
+            "text": "0.31"
+          },
+          {
+            "label": "B",
+            "text": "2.2"
+          },
+          {
+            "label": "C",
+            "text": "3.2"
+          },
+          {
+            "label": "D",
+            "text": "7.3"
+          },
+          {
+            "label": "E",
+            "text": "39"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerLocator": "答案PDF第4頁，第17題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-25",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 25,
+      "originalQuestionNumberOrLocator": "第25題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "克卜勒第三定律",
+        "圓周運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "承上題，土星繞太陽運轉之速率約為地球繞太陽運轉速率的多少倍？",
+        "options": [
+          {
+            "label": "A",
+            "text": "1"
+          },
+          {
+            "label": "B",
+            "text": "3"
+          },
+          {
+            "label": "C",
+            "text": "9"
+          },
+          {
+            "label": "D",
+            "text": "$\\frac13$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac19$"
+          }
+        ],
+        "dependsOn": "PTTSH-113-1-final-physics-single-choice-24",
+        "sharedStem": {
+          "q": "土星繞太陽運轉之平均軌道半徑，約為地球繞太陽運轉平均軌道半徑的 9 倍，且兩者軌道均可視為圓形，則土星繞太陽一周需時多少年？",
+          "options": [
+            {
+              "label": "A",
+              "text": "3"
+            },
+            {
+              "label": "B",
+              "text": "9"
+            },
+            {
+              "label": "C",
+              "text": "27"
+            },
+            {
+              "label": "D",
+              "text": "81"
+            },
+            {
+              "label": "E",
+              "text": "243"
+            }
+          ]
+        }
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "shared-stem-with-previous",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerLocator": "答案PDF第4頁，第25題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-30",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 30,
+      "originalQuestionNumberOrLocator": "第30題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "D"
+      ],
+      "conceptTags": [
+        "衛星運動",
+        "向心加速度"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "福衛三號衛星系統的衛星繞行於距離地面約 800 km 高度的軌道上，假設衛星作等速圓周運動，則下列有關此衛星繞地球運轉的敘述，哪些正確？（應選 2 項）",
+        "options": [
+          {
+            "label": "A",
+            "text": "重力作為衛星繞地球運轉所需的向心力"
+          },
+          {
+            "label": "B",
+            "text": "衛星的加速度沿其軌道切線方向，並與其切線速度同向"
+          },
+          {
+            "label": "C",
+            "text": "衛星的加速度沿其軌道切線方向，並與其切線速度反向"
+          },
+          {
+            "label": "D",
+            "text": "衛星的加速度方向和衛星與地心之連線方向平行，且為指向地心方向"
+          },
+          {
+            "label": "E",
+            "text": "衛星的加速度方向和衛星與地心之連線方向平行，且為指離地心方向"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "question-number-detached-in-pdf-text",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerLocator": "答案PDF第4頁，第30題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-25",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 25,
+      "originalQuestionNumberOrLocator": "第25題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "液晶",
+        "物質性質"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列關於液晶彩色電視與傳統映像管彩色電視比較的敘述，哪些正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "兩者皆可接收來自空中電磁波的影像訊號"
+          },
+          {
+            "label": "B",
+            "text": "兩者顯像過程皆需要外加電壓以建立電場"
+          },
+          {
+            "label": "C",
+            "text": "兩者皆可顯示各種不同的色彩"
+          },
+          {
+            "label": "D",
+            "text": "兩者皆是利用不同電場改變物質分子排列，造成各像素明暗差異"
+          },
+          {
+            "label": "E",
+            "text": "兩者皆是利用電子撞擊螢光幕上紅、藍、綠三色的小點構成像素，來顯現色彩。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 4,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "答案PDF第7頁，第25題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-5",
+      "sourceId": "CEEC-114-physics",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "印刷第2頁第5題",
+      "questionPdfPage": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "萬有引力",
+        "衛星運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "某生比較太陽系中行星與其最大衛星的資料，相關資料如表一，表中的衛星皆可視為繞其行星作等速圓周運動。",
+        "options": [
+          {
+            "label": "A",
+            "text": "$10^{23}$"
+          },
+          {
+            "label": "B",
+            "text": "$10^{25}$"
+          },
+          {
+            "label": "C",
+            "text": "$10^{27}$"
+          },
+          {
+            "label": "D",
+            "text": "$10^{29}$"
+          },
+          {
+            "label": "E",
+            "text": "$10^{31}$"
+          }
+        ],
+        "table": {
+          "label": "表一",
+          "columns": [
+            "行星",
+            "行星質量（kg）",
+            "最大衛星",
+            "衛星質量（kg）",
+            "衛星繞行星週期（day）",
+            "衛星與行星平均距離（km）"
+          ],
+          "rows": [
+            [
+              "地球",
+              "6.0×10²⁴",
+              "月球",
+              "7.4×10²²",
+              "約為 28",
+              "3.6×10⁵"
+            ],
+            [
+              "土星",
+              "？",
+              "泰坦衛星",
+              "1.3×10²³",
+              "約為 14",
+              "1.2×10⁶"
+            ]
+          ],
+          "position": "after-stem-before-prompt"
+        },
+        "promptAfterTable": "試估算土星的質量約為多少 kg？"
+      },
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "須保留表一",
+        "需依校方實際課程進度審核",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 4,
+      "optionCount": 5,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212549637497857819/05-114分科測驗物理試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "officialAnswerLocator": "答案PDF第1頁，第5題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-04.json",
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-7",
+      "sourceId": "CEEC-114-physics",
+      "questionNumber": 7,
+      "originalQuestionNumberOrLocator": "印刷第2頁第7題",
+      "questionPdfPage": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "功與能",
+        "電功率"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "質量 720 kg 的無人駕駛實驗性電動車以 20 m/s 等速度在斜面上前進。已知電動車以 1200 V 的電池提供動力來源，且馬達的電能轉換作功的效率接近 100%，在直線爬升過程中，除了須克服重力之外，仍須克服 600 N 的空氣阻力，其他阻力則忽略不計。\n若電動車在斜面上前進 120 s，爬升的垂直高度為 200 m，則該電池必須提供約多少 A 的電流？（取重力加速度 g＝10 m/s²）",
+        "options": [
+          {
+            "label": "A",
+            "text": "5.0"
+          },
+          {
+            "label": "B",
+            "text": "10"
+          },
+          {
+            "label": "C",
+            "text": "15"
+          },
+          {
+            "label": "D",
+            "text": "20"
+          },
+          {
+            "label": "E",
+            "text": "25"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "跨單元，須確認電學已學",
+        "需依校方實際課程進度審核",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 4,
+      "optionCount": 5,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212549637497857819/05-114分科測驗物理試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "officialAnswerLocator": "答案PDF第1頁，第7題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-04.json",
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "CEEC-114-physics-multiple-choice-14",
+      "sourceId": "CEEC-114-physics",
+      "questionNumber": 14,
+      "originalQuestionNumberOrLocator": "印刷第3頁第14題",
+      "questionPdfPage": 4,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "彈性碰撞",
+        "非彈性碰撞"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "光滑水平面上有兩個質量不同的小木塊，其中一個為靜止，另一個速率為 $v$，兩木塊發生一維正面碰撞，碰撞後兩木塊的速度分別為 $v_1$ 與 $v_2$。下列關於碰撞前後兩木塊速度的敘述哪些正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "無論是否為彈性碰撞，在碰撞後 $v_1$ 與 $v_2$ 皆不為零"
+          },
+          {
+            "label": "B",
+            "text": "若為彈性碰撞，則碰撞後 $v_1$ 與 $v_2$ 皆不為零"
+          },
+          {
+            "label": "C",
+            "text": "若為彈性碰撞，則 $|v_1-v_2|=v$"
+          },
+          {
+            "label": "D",
+            "text": "若為非彈性碰撞，則 $|v_1-v_2|$ 必不為零"
+          },
+          {
+            "label": "E",
+            "text": "若為非彈性碰撞，則 $|v_1-v_2|$ 必大於 $v$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "原始多選，不能轉換",
+        "需依校方實際課程進度審核",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 4,
+      "optionCount": 5,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212549637497857819/05-114分科測驗物理試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "officialAnswerLocator": "答案PDF第1頁，第14題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-04.json",
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "CEEC-113-physics-single-choice-3",
+      "sourceId": "CEEC-113-physics",
+      "originalQuestionNumberOrLocator": "單選第3題",
+      "questionNumber": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "衛星運動",
+        "脫離速度"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "在俄烏戰爭爆發後，太空服務公司 SpaceX 透過在距離地表 500 到 600 公里間運行之低軌衛星群所組成的「星鏈」（Starlink），補足了地面網路覆蓋性、移動性不足或遭受破壞的問題，為烏克蘭提供不受地理條件限制的網路服務，讓全世界看見低軌衛星通訊的重要性。下列有關低軌衛星與距地表約 36000 公里的同步衛星之性質比較，何者錯誤？",
+        "options": [
+          {
+            "label": "A",
+            "text": "低軌衛星受地球重力產生的加速度較大"
+          },
+          {
+            "label": "B",
+            "text": "低軌衛星的通訊傳輸時間較短"
+          },
+          {
+            "label": "C",
+            "text": "在正常運作條件下，每顆低軌衛星覆蓋的地表通訊面積較小"
+          },
+          {
+            "label": "D",
+            "text": "低軌衛星每天可繞地球運行多次"
+          },
+          {
+            "label": "E",
+            "text": "低軌衛星對地球的脫離速度較小"
+          }
+        ]
+      },
+      "flags": [
+        "scope-review",
+        "human-review-required",
+        "answer-page-screenshot-unavailable",
+        "visual-check-pending"
+      ],
+      "batch": 3,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0O199630760556420467/113分科測驗物理試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221354517405701583/05-113分科測驗物理選擇題答案.pdf",
+      "officialAnswerLocator": "答案PDF第1頁，第3題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    },
+    {
+      "id": "WLSH-113-1-final-mathA-single-choice-1",
+      "sourceId": "WLSH-113-1-final-mathA",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "單選第1題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "2"
+      ],
+      "conceptTags": [
+        "平面向量",
+        "正射影",
+        "垂直向量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalQuestion": {
+        "q": "設 $\\vec u=(3,6)$，$L:2x-6y=1$，若 $\\vec v$ 與 $L$ 垂直，且 $\\vec u$ 在 $\\vec v$ 上的正射影為 $\\vec p=(\\alpha,\\beta)$，則 $\\alpha+3\\beta=$？",
+        "options": [
+          {
+            "label": "1",
+            "text": "-12"
+          },
+          {
+            "label": "2",
+            "text": "12"
+          },
+          {
+            "label": "3",
+            "text": "-15"
+          },
+          {
+            "label": "4",
+            "text": "15"
+          },
+          {
+            "label": "5",
+            "text": "18"
+          }
+        ]
+      },
+      "questionPdfPage": 1,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "requires-original-figure",
+        "prior-figure-flag-retained",
+        "formula-visual-check-required",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 7,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/201410791.pdf",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/201410791.pdf",
+      "officialAnswerLocator": "答案PDF第5頁，第1題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-07.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、數式以Unicode或LaTeX表示；原卷與答案待人工審核。"
+      }
+    }
+  ],
+  "partialVisualEvidence": [
+    {
+      "id": "CEEC-114-physics-single-choice-4",
+      "sourceId": "CEEC-114-physics",
+      "pdfPage": 2,
+      "printedPage": 1,
+      "figure": "圖2",
+      "status": "original-figure-inspected-not-materialized",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212549637497857819/05-114分科測驗物理試卷.pdf",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "textDraft": {
+        "q": "有一質量為 $m$ 的物體懸掛於滑輪組下，如圖 2 所示。假設滑輪與繩子的質量以及摩擦力皆可忽略不計。若施力 $F=mg$，其中 $g$ 為重力加速度，則該物體的加速度量值為何？",
+        "options": [
+          {
+            "label": "A",
+            "text": "0"
+          },
+          {
+            "label": "B",
+            "text": "$\\frac14g$"
+          },
+          {
+            "label": "C",
+            "text": "$\\frac12g$"
+          },
+          {
+            "label": "D",
+            "text": "$g$"
+          },
+          {
+            "label": "E",
+            "text": "$2g$"
+          }
+        ]
+      },
+      "missing": "原圖實體未取得；不得以自行重繪或描述替換",
+      "originalQuestion": null,
+      "reviewer": null,
+      "answerVerified": false,
+      "originalTextAndOptionsMatched": false,
+      "sourceRightsVerified": false,
+      "referenceHash": null
+    },
+    {
+      "id": "CEEC-114-physics-multiple-choice-15",
+      "sourceId": "CEEC-114-physics",
+      "pdfPage": 5,
+      "printedPage": 4,
+      "figure": "圖4",
+      "status": "original-figure-inspected-not-materialized",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212549637497857819/05-114分科測驗物理試卷.pdf",
+      "officialAnswerMarks": [
+        "B",
+        "D",
+        "E"
+      ],
+      "textDraft": {
+        "q": "如圖 4 所示，質量為 $2m$ 之木塊甲放在光滑水平面上，其上置放質量為 $m$ 之木塊乙，兩木塊間接觸面並非光滑。當時間 $t=0$ 時，地面靜止觀察者測得木塊甲與乙的速度方向皆向右，量值分別為 $v$ 與 $2v$。若木塊乙沒有掉落，則下列敘述哪些正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "木塊甲的速率最大為 $\\frac{2v}{3}$"
+          },
+          {
+            "label": "B",
+            "text": "木塊甲的速率最大為 $\\frac{4v}{3}$"
+          },
+          {
+            "label": "C",
+            "text": "木塊乙的速率最小為 $\\frac{2v}{3}$"
+          },
+          {
+            "label": "D",
+            "text": "木塊乙的速率最小為 $\\frac{4v}{3}$"
+          },
+          {
+            "label": "E",
+            "text": "兩木塊之總動能因摩擦力而損失的最大值為 $\\frac{mv^2}{3}$"
+          }
+        ]
+      },
+      "missing": "原圖實體未取得；不得以自行重繪或描述替換",
+      "originalQuestion": null,
+      "reviewer": null,
+      "answerVerified": false,
+      "originalTextAndOptionsMatched": false,
+      "sourceRightsVerified": false,
+      "referenceHash": null
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-1",
+      "sourceId": "CEEC-113-chem",
+      "pdfPage": 2,
+      "printedPage": 1,
+      "status": "original-figure-and-answer-inspected-not-materialized",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "textDraft": {
+        "q": "元素（$\\,^{9}_{4}\\mathrm X$）的第一游離能為 E₁，第二游離能為 E₂，第三游離能為 E₃。將 E₁、E₂及 E₃的數值大小以柱狀圖表示並繪製如下，則下列何者正確？",
+        "options": null,
+        "originalOptionLabels": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ]
+      },
+      "missing": "五個原始柱狀圖選項實體未取得，不推算圖表高度",
+      "originalQuestion": null,
+      "reviewer": null,
+      "answerVerified": false,
+      "originalTextAndOptionsMatched": false,
+      "sourceRightsVerified": false,
+      "referenceHash": null
+    }
+  ],
+  "counts": {
+    "newRecords": 0,
+    "upgradedTextDrafts": 14,
+    "questionScreenshotDrafts": 3,
+    "textLayerDrafts": 11,
+    "partialVisualEvidence": 3,
+    "approved": 0
+  },
+  "editionEvidence": {
+    "reuses": "high-school-2-batch-08.json",
+    "bookMappings": 42
+  },
+  "answerArchiveAttempt": {
+    "sourceId": "KUSJH-114-1-1-chem",
+    "officialIndex": "https://www.kusjh.kh.edu.tw/side_content/1077",
+    "archiveUrl": "https://www.kusjh.kh.edu.tw/upload/files/%E9%AB%98%E4%B8%AD%E8%A7%A3%E7%AD%94114-1-1.zip",
+    "status": "official-link-reopened; fetch-failed",
+    "missingAnswers": 15
+  },
+  "limitations": [
+    "校方PDF截圖失敗；大考中心114物理原卷第2至5頁截圖成功，但正式答案頁截圖失敗，官方文字表可讀。",
+    "113分科化學第1題原卷及答案截圖成功，但圖形選項無實體檔，仍待轉錄。",
+    "平鎮化學平衡原卷無可讀文字及截圖；未新增反應速率全文。",
+    "實際PDF下載及git clone受DNS阻礙；所有資料待人工核對。"
+  ]
+}
