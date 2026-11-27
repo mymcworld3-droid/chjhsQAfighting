@@ -935,6 +935,7 @@ export class TacticalRenderer{
     canvas.dataset.compassMarkers=JSON.stringify(this.compassMarkers.map(m=>
       [m.kind,Math.round(m.screenX),Math.round(m.screenY)]));
     Compass.draw(c,this.compassMarkers,{width:w,height:h});
+    const actors=scene?A.sample(scene,progress):s.actors;
     globalThis.QAWeaponEffects?.drawObjects(c,s.weaponObjects,actors,{ox,oy,cell,width:s.width,height:s.height},now,{reduced});
     if(scene)this.drawEffect(scene,progress,false);
     // A dedicated guardian altar replaces the old '守' circle in v4 defense.
@@ -1041,7 +1042,7 @@ export class TacticalRenderer{
         c.restore();
       }
     }
-    const actors=scene?A.sample(scene,progress):s.actors;
+
     const positions=actors.filter(R.alive).sort((a,b)=>a.y-b.y);
     const focusedIds=new Set(s.mode==='pve'&&s.status==='active'?
       s.actors.filter(a=>R.alive(a)&&!a.bot&&R.focusTurns(a)>0).map(a=>a.uid):[]);

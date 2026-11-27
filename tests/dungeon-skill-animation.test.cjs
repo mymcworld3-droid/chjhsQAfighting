@@ -132,7 +132,7 @@ test('only the trial skill engine is imported; old square-flash VFX are removed'
   const painter=read('public/cultivation/dungeon-map-painter.js');
   assert.match(view,/import '\.\/tactical-skill-effects\.js'/);
   assert.match(view,/dungeonAnimationEvents\(previous,room\)/);
-  assert.match(view,/paintDungeonScene\(context,scene,p,view,above,renderer\)/);
+  assert.match(view,/paintDungeonScene\(context,scene\.weaponTimeline\?\{\.\.\.scene,reducedMotion:reduceMotion\}:scene,p,view,above,renderer\)/);
   assert.match(view,/if\(\(scenes\.length\|\|queuedScenes\|\|phasePulse\|\|enemyImpactScenes\.length\)\&\&!reduceMotion\)\s*this\.drawSoon\(\)/);
   assert.match(painter,/animationUnderlay\(ctx,\{ox:g\.ox/);
   assert.match(painter,/animationOverlay\(ctx,\{ox:g\.ox/);

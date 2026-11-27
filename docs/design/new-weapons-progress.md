@@ -113,3 +113,7 @@ fe67669 回歸 3123 項，3122 通過，幾何法線負零 (-0) 在 Node 嚴格�
 ## 第 4 階段（共用 V2 動畫基礎）
 
 新增 weapon-effects.js：版本2事件 weaponTimeline={version:2,durationMs,segments}，250–650ms；segment 帶 kind/start/impact/end、cells、rays（每條以 cells map 包裝）、vertices、echoes、hits、moves。座標、傷害及位移由結算端提供，不由動畫推測。平行射線共享時間；各段依 impact 排序，數字只於命中出現；位移按段插值，支援 slide/arc/swap/fall。六種通用 Canvas 元件：ray/shock/domain/echo/vortex/crash；地面與命中兩層、持續物件、簡化粒子模式。透過既有 tactical-animation/skill-effects/renderer 與 dungeon-skill-animation/map-view 接入可選 V2 payload，不影響舊 V1。回合制 V2 cast 必須以同一動畫事件提供 committed changes，不得再送重複的獨立 damage/move 視覺事件；即時 V2 result 可帶相同 payload。尚無新武器正式事件，個別技能階段才產生並驗證實際效果；音效先沿用既有命中音，不新增音檔。6 項測試、獨立 JS 2558 次斷言通過；完整 CI 與實際新技能畫面待驗收。未公開新武器。
+
+## 第 4 階段 CI 修正
+
+提交 a44b7c9 回歸 3135 項，3134 通過，1 項舊版共用動畫呼叫字串檢查需同步 V2 參數；合作瀏覽器與 Pages 通過。戰術與單人副本瀏覽器等待畫布逾時：新物件繪製提前使用尚未宣告的 actors，將 sample 宣告移至首次使用之前，保留單次取樣。修正後待 CI 驗證。
