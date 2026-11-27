@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "batch": 23,
+  "date": "2026-11-27",
+  "purpose": "首次完整轉錄113分科化學平衡常數題及新增正面彈性碰撞觀念題，僅隔離草稿。",
+  "sources": [],
+  "records": [
+    {
+      "status": "quarantined-pending-human-review",
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "id": "CEEC-113-chem-multiple-choice-13",
+      "sourceId": "CEEC-113-chem",
+      "questionNumber": 13,
+      "originalQuestionNumberOrLocator": "原卷印刷第4頁第13題",
+      "originalQuestionType": "multiple-choice",
+      "questionPdfPage": 5,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "E"
+      ],
+      "conceptTags": [
+        "化學平衡",
+        "氣體分壓",
+        "Kp與Kc",
+        "平衡常數"
+      ],
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "officialAnswerLocator": "正式答案第1頁第13題",
+      "originalQuestion": {
+        "q": "若將 N₂、F₂ 及 NF₃ 裝入一 0.656 升的密閉容器中，再藉由加熱使其進行下列反應：\nN₂(g) + F₂(g) ⇌ NF₃(g)（反應式未平衡）\n已知在 527°C 反應達平衡時，容器內各氣體的分壓分別為\n$P_{\\mathrm{N_2}}=0.040\\,\\mathrm{atm}$，$P_{\\mathrm{F_2}}=0.060\\,\\mathrm{atm}$，$P_{\\mathrm{NF_3}}=0.700\\,\\mathrm{atm}$\n若三者皆符合理想氣體性質，則下列相關敘述，哪些正確？（$\\frac{7^2}{4\\times6^3}=5.67\\times10^{-2}$）",
+        "options": [
+          {
+            "label": "A",
+            "text": "平衡反應式之最簡整係數總和為 6"
+          },
+          {
+            "label": "B",
+            "text": "密閉容器內的氣體總壓力為 0.80 atm"
+          },
+          {
+            "label": "C",
+            "text": "密閉容器內 N₂ 的莫耳數為 6.1×10⁻⁴ 莫耳"
+          },
+          {
+            "label": "D",
+            "text": "此反應 $K_p$ 的數值為 $5.67\\times10^2$"
+          },
+          {
+            "label": "E",
+            "text": "此反應 $K_c$ 的數值大於 $K_p$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "original-pdf-bytes-unavailable"
+      ],
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-screenshot",
+        "locator": "PDF第5頁（印刷第4頁）原題；正式答案第1頁；第19批只定位，本次首次完整草稿。公式與空白以無損LaTeX或Unicode呈現。"
+      }
+    },
+    {
+      "status": "quarantined-pending-human-review",
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "id": "PTTSH-104-2-final-physics-single-choice-17",
+      "sourceId": "PTTSH-104-2-final-physics",
+      "questionNumber": 17,
+      "originalQuestionNumberOrLocator": "原卷第17題",
+      "originalQuestionType": "single-choice",
+      "questionPdfPage": null,
+      "answerPdfPage": null,
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "正面彈性碰撞",
+        "動量變化量",
+        "速度變化量",
+        "衝量"
+      ],
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=104-2%2F%E6%9C%9F%E6%9C%AB%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%E8%87%AA%E7%84%B6%E7%B5%84%2F&file=201607221739310.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=104-2%2F%E6%9C%9F%E6%9C%AB%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%E8%87%AA%E7%84%B6%E7%B5%84%2F&file=201607221739310.pdf",
+      "officialAnswerLocator": "同卷第17題下方答案C",
+      "originalQuestion": {
+        "q": "甲球10 公斤、乙球5 公斤，兩球發生正面彈性碰撞，下列各項物理量的量值中，何者乙球為甲球的兩倍？",
+        "options": [
+          {
+            "label": "A",
+            "text": "所受撞擊力"
+          },
+          {
+            "label": "B",
+            "text": "動量變化量"
+          },
+          {
+            "label": "C",
+            "text": "速度變化量"
+          },
+          {
+            "label": "D",
+            "text": "動能變化量"
+          },
+          {
+            "label": "E",
+            "text": "所受衝量"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "old-curriculum",
+        "visual-check-pending",
+        "individual-authorship-review"
+      ],
+      "evidence": {
+        "question": "official-pdf-web-text-layer",
+        "answer": "same-document-answer-text-layer",
+        "locator": "校方文件文字層205–213行；原頁截圖cache miss；題文與五選項均可讀。"
+      }
+    }
+  ],
+  "upgrades": [],
+  "answerRechecks": [],
+  "counts": {
+    "newRecords": 2,
+    "upgradedTextDrafts": 0,
+    "newCompleteDrafts": 2,
+    "approved": 0
+  },
+  "limitations": [
+    "容器只有專案文字檔，沒有原卷PDF或答案檔；curl直接下載官方113化學PDF及git ls-remote均DNS解析失敗。",
+    "113分科化學第13題已實際閱覽原題與正式答案截圖，但未取得PDF實體。臺東物理第17題僅文字層，原頁截圖cache miss。",
+    "臺東同卷若干碰撞與橢圓軌道題帶其他學校來源標記，未收錄該等權利尚待查核的題；未新增衛星變軌、克卜勒定律或速率定律原題。"
+  ]
+}
