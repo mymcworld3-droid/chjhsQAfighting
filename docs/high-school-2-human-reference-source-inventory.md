@@ -213,3 +213,15 @@ node scripts/prepare-human-reference-review.cjs --download --render --out /tmp/r
 直接讀取現行 `public/curriculum-data/高中二年級/` 數學A/B、物理、化學目錄，整理南一、翰林、龍騰42筆既有教材冊次（數A6、數B6、物理15、化學15），保存bookId、來源檔blob SHA、驗證標記、章節、細項及conceptId於本批JSON。這是既有目錄快照，不是42份本批新核實教材；包含不同年度及選修III–V跨年級冊次，實際出題須遵從玩家冊次設定。發現既有翰林114物理II目錄與第七批第三方對照的第一、二章次序不一致，留待原書核對，不更改現有出題目錄。反應速率與化學平衡題文仍有缺口。
 
 下一步先由Actions取得公開狀態報告，或由使用者提供原始PDF，以本機模式完成大量逐題轉錄。不得繼續堆積索引。正式參考題庫、baseline、載入政策、人工批准清單均未修改。
+
+## 13. 第九批（2026-11-27）
+
+新增 [high-school-2-batch-09.json](reference-candidates/high-school-2-batch-09.json)，升級6筆既有候選草稿（數學2、物理1、化學3），不新增題號或重複計數。3筆原卷截圖可見，其中114分科化學第4題的題目及官方答案截圖均可見；武陵113下數A第二次第2題的答案使用同卷末頁文字層；112學測數B第2題原答案URL重新開啟失敗，改以大考中心112學年度學科能力測驗工作報告附錄印刷第203頁正式答案表作交叉證據（https://www.ceec.edu.tw/files/file_pool/1/0n208552206460314670/112學年度學科能力測驗工作報告(公告).pdf ，報告截圖未取得）。其他3筆為臺東同卷文字層草稿，未取得視覺比對。所有人工欄位維持未核准，沿用42冊次的第八批對應資料，未調整遊戲出題範圍。
+
+大考中心114分科化學第14–15題（反應速率）本次重新確認原卷PDF第6頁（印刷第5頁）及正式答案PDF第1頁截圖，答案BCE、AE及實驗數值均一致。共用題幹與選項仍未完整轉錄，不計入新增6筆。臺東112下高二化學期末反應速率原卷文字可讀，仍未取得正式答案，未自行解題補答案。化學平衡與力學的完整題文仍不足。
+
+修正 `scripts/prepare-human-reference-review.cjs` 對武陵等試卷「(○1)1.」式答題卡位置、圈號、全形數字的擷取；避免把僅有選項標號的行當成題號。新增對應回歸測試至 `tests/prepare-human-reference-review.test.cjs`。重新讀取主分支工具，以隔離JS執行既有3項self-test及9項補充斷言，全部通過；另於本地Node及Poppler以非考題合成PDF實際測試文字擷取、頁面渲染、題號與選項辨識，通過（僅測取出的擷取函數，非整個repo CLI/CI測試）。URL驗證測試受隔離JS缺少URL類別限制，未重新驗證全套9項Node測試。
+
+GitHub連接器只回傳PR觸發run；查詢最新提交無runs、無combined statuses。Actions網頁及REST讀取失敗，瀏覽器連接器亦無可用來源瀏覽器上下文。直接下載PDF失敗，容器DNS無法解析GitHub API；沒有取得實際真實PDF或Actions artifact，也未確認全庫稽核、CI通過。公開儲存庫未上傳未核實的原卷圖片。必要時可由有存取權的使用者開啟 https://github.com/mymcworld3-droid/chjhsQAfighting/actions/workflows/human-reference-pdf-review.yml ，提供實際run網址或下載reference-review-report artifact；原卷可由校方網址直接下載後上傳至對話或放置在本機PDF快取。維持人工核准與正式題庫隔離政策。
+
+重建所有批次工作清單：201筆候選、45筆題文草稿、156筆待轉錄（77筆曾重新比對答案）、待處理來源15個，人工核准0。本批未達50題新增完整轉錄目標。
