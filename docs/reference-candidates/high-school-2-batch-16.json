@@ -1,0 +1,381 @@
+{
+  "schema": 1,
+  "batch": 16,
+  "date": "2026-11-27",
+  "purpose": "新增有原卷與官方答案之完整候選草稿；既有題目升級與答案重查，不新增純定位索引。",
+  "sources": [
+    {
+      "id": "CEEC-115-mathB",
+      "subject": "數學",
+      "title": "115學年度學科能力測驗數學B試題",
+      "institution": "大學入學考試中心",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0q054533256912682493/04-115學測數學b試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0q040592403413040721/04-115學測數學b答案.pdf",
+      "rightsBasisCandidate": "依法令舉行之考試原題；第三方附帶素材仍需個別核對",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "humanRightsVerified": false
+    }
+  ],
+  "records": [
+    {
+      "id": "CEEC-115-mathB-single-choice-3",
+      "sourceId": "CEEC-115-mathB",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "印刷第1頁第3題",
+      "originalQuestionType": "single-choice",
+      "questionPdfPage": 2,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "2"
+      ],
+      "conceptTags": [
+        "矩陣",
+        "反方陣"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "已知實數二階方陣 $A$ 滿足 $A\\begin{bmatrix}1\\\\1\\end{bmatrix}=\\begin{bmatrix}0\\\\1\\end{bmatrix}$ 以及 $A\\begin{bmatrix}1\\\\-1\\end{bmatrix}=\\begin{bmatrix}1\\\\0\\end{bmatrix}$。試選出 $A$ 的反方陣。",
+        "options": [
+          {
+            "label": "1",
+            "text": "$\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}$"
+          },
+          {
+            "label": "2",
+            "text": "$\\begin{bmatrix}1&1\\\\-1&1\\end{bmatrix}$"
+          },
+          {
+            "label": "3",
+            "text": "$\\begin{bmatrix}1&1\\\\1&-1\\end{bmatrix}$"
+          },
+          {
+            "label": "4",
+            "text": "$\\begin{bmatrix}1&\\frac12\\\\-\\frac12&1\\end{bmatrix}$"
+          },
+          {
+            "label": "5",
+            "text": "$\\begin{bmatrix}1&-\\frac12\\\\\\frac12&1\\end{bmatrix}$"
+          }
+        ]
+      },
+      "optionCount": 5,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0q054533256912682493/04-115學測數學b試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0q040592403413040721/04-115學測數學b答案.pdf",
+      "officialAnswerLocator": "官方答案第3題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "human-review-required",
+        "answer-page-screenshot-unavailable",
+        "須核對實際選修冊次"
+      ],
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-text-layer"
+      }
+    },
+    {
+      "id": "CEEC-115-mathB-multiple-choice-8",
+      "sourceId": "CEEC-115-mathB",
+      "questionNumber": 8,
+      "originalQuestionNumberOrLocator": "印刷第3頁第8題",
+      "originalQuestionType": "multiple-choice",
+      "questionPdfPage": 4,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "3",
+        "5"
+      ],
+      "conceptTags": [
+        "三角函數",
+        "週期",
+        "三角函數圖形"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "試選出與函數 $y=3\\sin(\\frac{\\pi}{5}x+\\pi)+3$ 在每個實數 $x$ 所得函數值皆相同的函數。",
+        "options": [
+          {
+            "label": "1",
+            "text": "$y=6\\sin(\\frac{\\pi}{5}x)+3$"
+          },
+          {
+            "label": "2",
+            "text": "$y=3\\sin((\\frac{\\pi}{5}+2\\pi)x+\\pi)+3$"
+          },
+          {
+            "label": "3",
+            "text": "$y=3\\sin(\\frac{\\pi}{5}x-\\pi)+3$"
+          },
+          {
+            "label": "4",
+            "text": "$y=-3\\sin(\\frac{\\pi}{5}x)-3$"
+          },
+          {
+            "label": "5",
+            "text": "$y=-3\\sin(\\frac{\\pi}{5}x)+3$"
+          }
+        ]
+      },
+      "optionCount": 5,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0q054533256912682493/04-115學測數學b試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0q040592403413040721/04-115學測數學b答案.pdf",
+      "officialAnswerLocator": "官方答案第8題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "human-review-required",
+        "answer-page-screenshot-unavailable",
+        "須核對實際選修冊次"
+      ],
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-text-layer"
+      }
+    },
+    {
+      "id": "CEEC-114-chem-single-choice-1",
+      "sourceId": "CEEC-114-chem",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "印刷第1頁第1題",
+      "originalQuestionType": "single-choice",
+      "questionPdfPage": 2,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "化學鍵",
+        "分子結構"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "穩定分子的分子式 $\\mathrm{CH_3SH_x}$、$\\mathrm{CH_3(CH_y)_3Cl}$、$\\mathrm{CH_3NH_z}$ 中，則 $x、y、z$ 值應分別為下列哪一項？",
+        "options": [
+          {
+            "label": "A",
+            "text": "1、2、2"
+          },
+          {
+            "label": "B",
+            "text": "1、2、3"
+          },
+          {
+            "label": "C",
+            "text": "2、3、1"
+          },
+          {
+            "label": "D",
+            "text": "2、3、2"
+          },
+          {
+            "label": "E",
+            "text": "3、2、1"
+          }
+        ]
+      },
+      "optionCount": 5,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "officialAnswerLocator": "官方答案第1題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "human-review-required",
+        "須核對實際選修冊次"
+      ],
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-screenshot"
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "PTTSH-105-1-2-physics-single-choice-13",
+      "sourceId": "PTTSH-105-1-2-physics",
+      "questionNumber": 13,
+      "originalQuestionNumberOrLocator": "單選第13題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "靜摩擦力",
+        "斜面平衡"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalQuestion": {
+        "q": "質量 m 之物與斜面間之靜摩擦係數為 0.8，動摩擦係數為 0.6，將此物置於此斜面上，當斜角由 0°增為 37°時，該物所受之摩擦力為",
+        "options": [
+          {
+            "label": "A",
+            "text": "$\\frac{12}{25}mg$"
+          },
+          {
+            "label": "B",
+            "text": "$\\frac35mg$"
+          },
+          {
+            "label": "C",
+            "text": "$\\frac45mg$"
+          },
+          {
+            "label": "D",
+            "text": "$\\frac9{25}mg$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac{16}{25}mg$"
+          }
+        ]
+      },
+      "questionPdfPage": 2,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "human-review-required",
+        "fraction-layout-needs-original-page-confirmation"
+      ],
+      "batch": 7,
+      "answerPdfPage": 2,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=105-1%2F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%2F&file=201611291559080.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=105-1%2F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%2F&file=201611291559080.pdf",
+      "officialAnswerLocator": "原卷第13題後答案B",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-07.json",
+      "evidence": {
+        "question": "official-pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "observedTextLocator": "第128–146行；分數文字順序須原頁核對",
+        "recheckedAgainstPreviousMarks": true
+      }
+    }
+  ],
+  "answerRechecks": [
+    {
+      "id": "CEEC-113-physics-single-choice-9",
+      "sourceId": "CEEC-113-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221354517405701583/05-113分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-physics-multiple-choice-16",
+      "sourceId": "CEEC-113-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221354517405701583/05-113分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "A",
+        "C",
+        "E"
+      ],
+      "observedMarks": [
+        "A",
+        "C",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-4",
+      "sourceId": "CEEC-114-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-physics-multiple-choice-15",
+      "sourceId": "CEEC-114-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "B",
+        "D",
+        "E"
+      ],
+      "observedMarks": [
+        "B",
+        "D",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    }
+  ],
+  "sourceEvidence": [
+    {
+      "sourceId": "CEEC-114-physics",
+      "alternateOfficialSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0P192363480434794446/05-114分科測驗物理試卷定稿.pdf",
+      "status": "official-alternate-located-original-figures-not-materialized"
+    }
+  ],
+  "counts": {
+    "newRecords": 3,
+    "upgradedTextDrafts": 1,
+    "newCompleteDrafts": 4,
+    "existingAnswerRechecks": 4,
+    "approved": 0
+  },
+  "limitations": [
+    "115數B原卷截圖可見，答案文字可讀，答案頁截圖未取得。",
+    "114分科化學第1題原卷與答案截圖均可見。",
+    "臺東第13題分數轉錄仍需原頁核對。",
+    "114及113分科物理原始圖形未取得；不重繪。",
+    "平鎮化學原頁仍無可讀文字；本批沒有新增反應速率或化學平衡全文。",
+    "無上傳PDF或ZIP；實體PDF下載DNS失敗。"
+  ]
+}
