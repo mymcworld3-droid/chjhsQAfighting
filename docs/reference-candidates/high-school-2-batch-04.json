@@ -1,0 +1,509 @@
+{
+  "schema": 1,
+  "batch": 4,
+  "date": "2026-11-27",
+  "purpose": "隔離審核工作清單；原題草稿不是正式題庫，不得進入AI提示。只保留原始題型及官方答案，不生成解析。",
+  "sources": [
+    {
+      "id": "CEEC-112-mathB",
+      "subject": "數學",
+      "title": "112學年度學測數學B",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357250979165004/04-112學測數學b試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112學測數學b選擇(填)題答案.pdf",
+      "answerEvidence": "正式答案文字表；截圖失敗",
+      "institution": "大學入學考試中心",
+      "rightsBasisCandidate": "著作權法第9條第1項第5款，正式考試原題；附帶素材另核，不包含第三方解析",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "humanRightsVerified": false
+    },
+    {
+      "id": "CEEC-114-physics",
+      "subject": "物理",
+      "title": "114學年度分科物理",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212549637497857819/05-114分科測驗物理試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "answerEvidence": "正式答案文字表；截圖失敗",
+      "institution": "大學入學考試中心",
+      "rightsBasisCandidate": "著作權法第9條第1項第5款，正式考試原題；附帶素材另核，不包含第三方解析",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "humanRightsVerified": false
+    },
+    {
+      "id": "CEEC-114-chem",
+      "subject": "化學",
+      "title": "114學年度分科化學",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "answerEvidence": "正式答案文字及截圖均確認",
+      "institution": "大學入學考試中心",
+      "rightsBasisCandidate": "著作權法第9條第1項第5款，正式考試原題；附帶素材另核，不包含第三方解析",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "humanRightsVerified": false
+    }
+  ],
+  "records": [
+    {
+      "id": "CEEC-112-mathB-fill-in-13",
+      "sourceId": "CEEC-112-mathB",
+      "questionNumber": 13,
+      "originalQuestionNumberOrLocator": "印刷第4頁第13題",
+      "questionPdfPage": 5,
+      "originalQuestionType": "fill-in",
+      "officialAnswerMarks": [
+        "7",
+        "3"
+      ],
+      "conceptTags": [
+        "指數律",
+        "常用對數",
+        "對數運算"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "有兩個正實數 $a、b$，已知 $ab^2=10^5$，$a^2b=10^3$，則 $\\log b=\\frac{\\text{（13-1）}}{\\text{（13-2）}}$。（化為最簡分數）",
+        "options": null,
+        "answerSlots": [
+          "13-1",
+          "13-2"
+        ]
+      },
+      "transcriptionStatus": "draft-text-from-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "原始選填題，不轉成單選",
+        "需依校方實際課程進度審核"
+      ]
+    },
+    {
+      "id": "CEEC-112-mathB-single-choice-2",
+      "sourceId": "CEEC-112-mathB",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "印刷第1頁第2題",
+      "questionPdfPage": 2,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "2"
+      ],
+      "conceptTags": [
+        "矩陣乘法"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "需依校方實際課程進度審核"
+      ]
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-4",
+      "sourceId": "CEEC-114-physics",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "印刷第1頁第4題",
+      "questionPdfPage": 2,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "牛頓第二定律",
+        "滑輪"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "須保留圖2",
+        "需依校方實際課程進度審核"
+      ]
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-5",
+      "sourceId": "CEEC-114-physics",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "印刷第2頁第5題",
+      "questionPdfPage": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "萬有引力",
+        "圓周運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "須保留表一",
+        "需依校方實際課程進度審核"
+      ]
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-6",
+      "sourceId": "CEEC-114-physics",
+      "questionNumber": 6,
+      "originalQuestionNumberOrLocator": "印刷第2頁第6題",
+      "questionPdfPage": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "單擺",
+        "簡諧運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "小角度的單擺擺動可視為簡諧運動。一個擺長 0.20 m 的單擺作小角度的左右來回擺動，當擺錘由左向右經過平衡位置時開始計時，經過 1.5 s 後，下列關於單擺運動狀況的敘述何者正確？（取重力加速度為 9.8 m/s²）",
+        "options": [
+          {
+            "label": "A",
+            "text": "擺錘向左運動且速率增加"
+          },
+          {
+            "label": "B",
+            "text": "擺錘向左運動且速率減少"
+          },
+          {
+            "label": "C",
+            "text": "擺錘向右運動且速率減少"
+          },
+          {
+            "label": "D",
+            "text": "擺錘向右運動且速率增加"
+          },
+          {
+            "label": "E",
+            "text": "擺錘向左作等速運動"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-from-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "需依校方實際課程進度審核"
+      ]
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-7",
+      "sourceId": "CEEC-114-physics",
+      "questionNumber": 7,
+      "originalQuestionNumberOrLocator": "印刷第2頁第7題",
+      "questionPdfPage": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "功與能",
+        "功率",
+        "電能"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "跨單元，須確認電學已學",
+        "需依校方實際課程進度審核"
+      ]
+    },
+    {
+      "id": "CEEC-114-physics-multiple-choice-14",
+      "sourceId": "CEEC-114-physics",
+      "questionNumber": 14,
+      "originalQuestionNumberOrLocator": "印刷第3頁第14題",
+      "questionPdfPage": 4,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "彈性碰撞",
+        "非彈性碰撞"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "原始多選，不能轉換",
+        "需依校方實際課程進度審核"
+      ]
+    },
+    {
+      "id": "CEEC-114-physics-multiple-choice-15",
+      "sourceId": "CEEC-114-physics",
+      "questionNumber": 15,
+      "originalQuestionNumberOrLocator": "印刷第4頁第15題",
+      "questionPdfPage": 5,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "D",
+        "E"
+      ],
+      "conceptTags": [
+        "摩擦力",
+        "動量守恆",
+        "動能損失"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "須保留圖4",
+        "需依校方實際課程進度審核"
+      ]
+    },
+    {
+      "id": "CEEC-114-chem-single-choice-4",
+      "sourceId": "CEEC-114-chem",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "印刷第2頁第4題",
+      "questionPdfPage": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "酸鹼中和",
+        "pH"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "須確認選修進度",
+        "需依校方實際課程進度審核"
+      ]
+    },
+    {
+      "id": "CEEC-114-chem-single-choice-5",
+      "sourceId": "CEEC-114-chem",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "印刷第2頁第5題",
+      "questionPdfPage": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "化學平衡",
+        "反應計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "氣體 A 與氣體 B 反應生成氣體 C。在定溫下，某固定體積的密閉容器中，A、B 與 C 的起始濃度分別為 1.000 M、1.500 M 與 1.000 M；當反應達到平衡後，A 的濃度為 0.921 M，B 的濃度為 1.342 M，C 的濃度為 1.158 M。試問此反應的化學反應式為何？",
+        "options": [
+          {
+            "label": "A",
+            "text": "A+B ⇌ 2C"
+          },
+          {
+            "label": "B",
+            "text": "A+2B ⇌ 2C"
+          },
+          {
+            "label": "C",
+            "text": "2A+B ⇌ C"
+          },
+          {
+            "label": "D",
+            "text": "A+3B ⇌ 2C"
+          },
+          {
+            "label": "E",
+            "text": "2A+3B ⇌ 3C"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-from-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "需依校方實際課程進度審核"
+      ]
+    },
+    {
+      "id": "CEEC-114-chem-multiple-choice-14",
+      "sourceId": "CEEC-114-chem",
+      "questionNumber": 14,
+      "originalQuestionNumberOrLocator": "印刷第5頁第14題",
+      "questionPdfPage": 6,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "C",
+        "E"
+      ],
+      "conceptTags": [
+        "反應速率實驗",
+        "控制變因",
+        "氧化還原"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "須保留14–15題共用題幹、式2及表1",
+        "需依校方實際課程進度審核"
+      ]
+    },
+    {
+      "id": "CEEC-114-chem-multiple-choice-15",
+      "sourceId": "CEEC-114-chem",
+      "questionNumber": 15,
+      "originalQuestionNumberOrLocator": "印刷第5頁第15題",
+      "questionPdfPage": 6,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "E"
+      ],
+      "conceptTags": [
+        "反應級數",
+        "濃度與速率"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "須保留14–15題共用題幹、式2及表1",
+        "需依校方實際課程進度審核"
+      ]
+    }
+  ],
+  "sharedEvidence": [
+    {
+      "sourceId": "CEEC-114-chem",
+      "questionNumbers": [
+        14,
+        15
+      ],
+      "printedPage": 5,
+      "tableLocator": "表1",
+      "tableColumns": [
+        "Na₂S₂O₃溶液體積(mL)",
+        "蒸餾水體積(mL)",
+        "標誌消失時間t(秒)",
+        "1/t數值(1/秒)"
+      ],
+      "tableRows": [
+        [
+          50,
+          0,
+          33.8,
+          0.0296
+        ],
+        [
+          30,
+          20,
+          49.2,
+          0.0203
+        ],
+        [
+          10,
+          40,
+          150,
+          0.0067
+        ]
+      ],
+      "equation": "S₂O₃²⁻ + 2 H⁺ → SO₂ + S + H₂O",
+      "status": "partial-evidence-not-complete-stem"
+    }
+  ],
+  "editionEvidence": [
+    {
+      "publisher": "南一",
+      "url": "https://www.junyiacademy.org/topics/n-math-high",
+      "A": "十一A上：指數函數",
+      "B": "十一B上：對數",
+      "sourceType": "均一適配索引，非出版社正式全目錄"
+    },
+    {
+      "publisher": "龍騰",
+      "url": "https://www.junyiacademy.org/topics/l-math-high",
+      "A": null,
+      "B": "十一B上：指數函數",
+      "sourceType": "均一適配索引，非出版社正式全目錄"
+    },
+    {
+      "publisher": "翰林",
+      "url": "https://www.junyiacademy.org/topics/h-math-high",
+      "A": "十一A上：指數與對數函數",
+      "B": "十一B上：按比例成長模型",
+      "sourceType": "均一適配索引，非出版社正式全目錄"
+    }
+  ],
+  "counts": {
+    "total": 12,
+    "transcribed": 3,
+    "locatorOnly": 9,
+    "approved": 0
+  }
+}
