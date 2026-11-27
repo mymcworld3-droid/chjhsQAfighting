@@ -411,7 +411,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     ...(flightPath?{path:flightPath}:{}),
     cost,hits,visualMoves,...(chainSteps.length?{chainSteps}:{}),
     ...(mirrorSteps.length?{mirrorSteps}:{}),
-    ...(timePlan?{timePlan}:{}),
+    ...(timePlan?{timePlan,weaponTimeline:time().timeline(timePlan,sk,hits)}:{}),
     ...(mirrorPlan?{mirrorPlan}:{}),
     ...(mirrorTimeline?{weaponTimeline:mirrorTimeline}:{}),
     ...(weavePlan?{first:first?{x:first.x,y:first.y}:null,weavePlan,weaponTimeline:weave().timeline(weavePlan,sk,hits.map(h=>({uid:h.enemyId,damage:h.damage,absorbed:h.shieldDamage||0,cell:h.cell})))}:{}),
@@ -420,7 +420,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
     focusBefore:chargeBefore,focusEmpowered:empowered,
-    focusActivated:sk.kind==='fist-focus',visualVersion:prismPlan||bellPlan||weavePlan||mirrorTimeline?2:1,effectCells,
+    focusActivated:sk.kind==='fist-focus',visualVersion:prismPlan||bellPlan||weavePlan||mirrorTimeline||timePlan?2:1,effectCells,
     tick:Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0,
     ...(position?{position}:{})};
   player.lastSkill=result;

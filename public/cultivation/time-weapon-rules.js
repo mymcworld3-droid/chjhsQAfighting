@@ -62,5 +62,16 @@
       if(cell)apply(enemy,ray.power,cell,ray.id);
     }
   }
-  return Object.freeze({supports,plans,selected,update,resolve});
+  function timeline(plan,sk,hits){
+    const union=sk.kind==='time-union',slash=sk.kind==='time-slash';
+    const durationMs=union?550:slash?280:350,start=union?180:slash?45:95,impact=union?300:slash?145:220;
+    const segments=plan.rays.map(ray=>({kind:'ray',time:true,timeEcho:!!ray.echoId,timeConsume:union&&!!ray.echoId,timeBirth:slash,start,impact,end:durationMs,chargeMs:start,
+      tone:ray.echoId?'gold':'violet',origin:point(ray.origin),cells:ray.cells.map(point),rays:[{cells:[point(ray.origin),...ray.cells.map(point)],tone:ray.echoId?'gold':'violet'}],
+      hits:hits.filter(h=>h.rayId===ray.id).map(h=>({uid:h.uid??h.enemyId,damage:h.damage,absorbed:h.absorbed??h.shieldDamage??0,...(h.cell?{cell:point(h.cell)}:{})}))}));
+    // A consumed but obstructed echo fades in place, without fabricating a ray.
+    if(union)for(const echo of plan.echoes)if(!plan.rays.some(r=>r.echoId===echo.id))
+      segments.push({kind:'echo',time:true,timeEcho:true,timeConsume:true,start,impact,end:durationMs,chargeMs:start,tone:'gold',origin:point(echo.position),hits:[],rays:[]});
+    return {version:2,durationMs,segments};
+  }
+  return Object.freeze({supports,plans,selected,update,resolve,timeline});
 });

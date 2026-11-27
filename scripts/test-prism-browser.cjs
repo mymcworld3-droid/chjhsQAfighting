@@ -117,6 +117,31 @@ for(const [id,from,aim,enemy,hasMirror] of [
   assert.equal(result.result.totalDamage,out.hits.reduce((n,h)=>n+h.damage,0));
   fixtures.push({id:'mirror-'+id,state,scene:scenes[0],room,nextRoom:{...room,members:result.members,enemies:result.enemies,weaponObjects:result.weaponObjects||weaponObjects},duration:timeline.durationMs,map:mirrorMap});
 }
+const temporalState=[p(6,4),p(8,7)].reduce((state,position)=>O.add(state,{type:'echo',ownerUid:'u',board:mirrorBoard,position,generatedAt:1}),O.empty());
+for(const [id,from,aim,enemy,hasEcho] of [
+  ['time-slash',p(4,7),p(5,7),p(6,7),false],
+  ['time-double',p(4,7),p(6,7),p(6,7),true],
+  ['time-union',p(4,7),p(6,7),p(6,7),true]]){
+  const skill=Manuals.BY_SKILL[id]?Manuals.skillAtLevel(Manuals.BY_SKILL[id],1,0):D.skillAtLevel(id,1,0);
+  const weaponObjects=hasEcho?temporalState:O.empty();
+  const state=R.create({id:'time-browser-'+id,mode:'pve',players:[{uid:'u',name:'青雲修士',atk:100,maxHp:10000,manualSkills:[]}],now:2000000000000});
+  Object.assign(state,{width:15,height:15,blocks:[],ground:Array(225).fill(0),objective:null,events:[],revision:1,actors:state.actors.slice(0,2),weaponObjects});
+  Object.assign(state.actors[0],{...from,atk:100,stamina:10});
+  Object.assign(state.actors[1],{...enemy,hp:10000,maxHp:10000,shield:0,guard:0,counter:0,boss:false,footprint:{width:1,height:1}});
+  const out=R.previewCast(state,state.actors[0],skill,aim),timeline=W.normalize(out.weaponTimeline);assert.ok(timeline);
+  assert.ok(timeline.segments.some(q=>q.time));
+  const changes=state.actors.map(a=>({...a,...out.finalPositions.find(p=>p.uid===a.uid),hp:a.hp-timeline.segments.flatMap(s=>s.hits).filter(h=>h.uid===a.uid).reduce((n,h)=>n+h.damage,0)}));
+  const next={...state,actors:changes,weaponObjects:out.weaponObjects||weaponObjects,revision:2,events:[{id:'2:1',actor:'u',type:'cast',skill:id,animation:{kind:'cast',style:skill.kind,origin:from,target:aim,cells:out.cells,weaponTimeline:timeline,changes}}]};
+  const scenes=A.plan(state,next,'u');assert.equal(scenes.length,1);
+  const room={id:'time-browser-room',dungeonArena:'exploration',status:'assembled',battleAppliedTick:0,weaponObjects,
+    members:{u:{uid:'u',position:from,battleHealth:10000,battleMaxHealth:10000,explorationStamina:10,dungeonSkills:[skill]}},
+    enemies:[{id:'e',kind:'wolf',position:enemy,battleHealth:10000,battleMaxHealth:10000}]};
+  const result=C.resolveCast(room,'u',mirrorMap,skill,{target:aim,seq:1,base:100});
+  assert.ok(W.normalize(result.result.weaponTimeline));
+  assert.equal(result.result.totalDamage,result.result.weaponTimeline.segments.flatMap(s=>s.hits).reduce((n,h)=>n+h.damage,0));
+  assert.equal(result.result.totalDamage,out.hits.reduce((n,h)=>n+h.damage,0));
+  fixtures.push({id,state,scene:scenes[0],room,nextRoom:{...room,members:result.members,enemies:result.enemies,weaponObjects:result.weaponObjects||weaponObjects},duration:timeline.durationMs,map:mirrorMap});
+}
 async function main(){
   const output=path.resolve(process.argv[2]||'/tmp/prism-browser');fs.mkdirSync(output,{recursive:true});
   const app=express();

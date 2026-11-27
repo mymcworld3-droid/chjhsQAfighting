@@ -1216,7 +1216,12 @@
     if(timePlan){
       castEvent.animation.timePlan=timePlan;
       s.weaponObjects=time().update(s.weaponObjects,timePlan,sk,{uid:a.uid,board:prism().boardForTrial(s),clock:s.eventSequence||0,level:sk.level,refinement:a.manualRefinements?.[sk.manualId]||0});
-      time().resolve(timePlan,s.actors.filter(t=>t.team!==a.team),covers,alive,(target,power,cell,index)=>damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId,strike:index}),()=>alive(a));
+      const records=[];
+      time().resolve(timePlan,s.actors.filter(t=>t.team!==a.team),covers,alive,(target,power,cell,index)=>damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId,strike:index,weaponHit:{group:castEvent.id,rayId:index,cell,records}}),()=>alive(a));
+      castEvent.animation.weaponTimeline=time().timeline(timePlan,sk,records);
+      castEvent.animation.weaponGroup=castEvent.id;
+      castEvent.animation.changes=s.actors.filter(t=>t.uid===a.uid||records.some(h=>h.uid===t.uid)).map(appearance);
+      if(!s.events.includes(castEvent)){s.events.unshift(castEvent);if(s.events.length>LIMITS.events)s.events.splice(1,1);}
       return;
     }
     if(mirrorPlan){

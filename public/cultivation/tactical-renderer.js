@@ -331,6 +331,8 @@ export class TacticalRenderer{
         void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.BELL_SOUNDS);
       if(planned.some(scene=>globalThis.QAWeaponEffects.weaveSoundCues(scene.weaponTimeline,scene.skill).length))
         void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.WEAVE_SOUNDS);
+      if(planned.some(scene=>globalThis.QAWeaponEffects.timeSoundCues(scene.weaponTimeline,scene.skill).length))
+        void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.TIME_SOUNDS);
       const changes=ObjectiveVFX.transitions(this.state,state);
       if(changes.length)this.objectiveCues.push(...changes.map(cue=>({...cue,started:null})));
       if(this.objectiveCues.length>12)this.objectiveCues=this.objectiveCues.slice(-12);
@@ -749,7 +751,10 @@ export class TacticalRenderer{
       const weavePlayed=scene.weaponTimeline&&globalThis.QAWeaponEffects.advanceWeaveSound(scene.weaponTimeline,scene.skill,
         progress*scene.weaponTimeline.durationMs,scene._playedWeaveCues||=new Set(),
         (id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},s.id+':'+(scene.weaponGroup||scene.eventRevision)+':'+scene.actor);
-      const windows=prismPlayed||bellPlayed||weavePlayed?[]:scene.weaponTimeline?[...new Set(scene.weaponTimeline.segments.filter(s=>s.hits.some(h=>h.damage||h.absorbed)).map(s=>s.impact))].slice(0,3).map(at=>({at:at/scene.weaponTimeline.durationMs})):Impact.hitWindows(scene,A);
+      const timePlayed=scene.weaponTimeline&&globalThis.QAWeaponEffects.advanceTimeSound(scene.weaponTimeline,scene.skill,
+        progress*scene.weaponTimeline.durationMs,scene._playedTimeCues||=new Set(),
+        (id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},s.id+':'+(scene.weaponGroup||scene.eventRevision)+':'+scene.actor);
+      const windows=prismPlayed||bellPlayed||weavePlayed||timePlayed?[]:scene.weaponTimeline?[...new Set(scene.weaponTimeline.segments.filter(s=>s.hits.some(h=>h.damage||h.absorbed)).map(s=>s.impact))].slice(0,3).map(at=>({at:at/scene.weaponTimeline.durationMs})):Impact.hitWindows(scene,A);
       if(windows.length){
         scene._playedImpactCues||=new Set();
         for(let i=0;i<windows.length;i++){
@@ -965,7 +970,7 @@ export class TacticalRenderer{
       [m.kind,Math.round(m.screenX),Math.round(m.screenY)]));
     Compass.draw(c,this.compassMarkers,{width:w,height:h});
     const actors=scene?A.sample(scene,progress):s.actors;
-    globalThis.QAWeaponEffects?.drawObjects(c,s.weaponObjects,actors,{ox,oy,cell,width:s.width,height:s.height},now,{reduced,blocked:p=>R.blocked(s,p),summoningOwners:scene?.skill==='mirror-summon'?[scene.actor]:[]});
+    globalThis.QAWeaponEffects?.drawObjects(c,s.weaponObjects,actors,{ox,oy,cell,width:s.width,height:s.height},now,{reduced,blocked:p=>R.blocked(s,p),summoningOwners:scene?.skill==='mirror-summon'?[scene.actor]:[],timeBirths:scene?.skill==='time-slash'?scene.weaponTimeline?.segments.filter(q=>q.timeBirth).map(q=>({uid:scene.actor,...q.origin}))||[]:[]});
     if(scene)this.drawEffect(scene,progress,false);
     // A dedicated guardian altar replaces the old '守' circle in v4 defense.
     // The same authoritative objective.hp/maxHp controls sprite damage state

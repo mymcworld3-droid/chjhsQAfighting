@@ -1726,6 +1726,8 @@ class DungeonMapView{
             void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.BELL_SOUNDS);
           if(globalThis.QAWeaponEffects?.weaveSoundCues(scene.weaponTimeline,scene.skill).length)
             void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.WEAVE_SOUNDS);
+          if(globalThis.QAWeaponEffects?.timeSoundCues(scene.weaponTimeline,scene.skill).length)
+            void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.TIME_SOUNDS);
         }
       }
       while(this.visualScenes.size>12)
@@ -2206,7 +2208,9 @@ class DungeonMapView{
         elapsed,entry.playedBellCues||=new Set(),(id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},this.room?.id+':'+key);
       const weavePlayed=entry.scene.weaponTimeline&&globalThis.QAWeaponEffects.advanceWeaveSound(entry.scene.weaponTimeline,entry.scene.skill,
         elapsed,entry.playedWeaveCues||=new Set(),(id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},this.room?.id+':'+key);
-      if(!prismPlayed&&!bellPlayed&&!weavePlayed&&!entry.soundPlayed&&p>=(firstImpact===undefined?.38:firstImpact/entry.scene.weaponTimeline.durationMs)){
+      const timePlayed=entry.scene.weaponTimeline&&globalThis.QAWeaponEffects.advanceTimeSound(entry.scene.weaponTimeline,entry.scene.skill,
+        elapsed,entry.playedTimeCues||=new Set(),(id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},this.room?.id+':'+key);
+      if(!prismPlayed&&!bellPlayed&&!weavePlayed&&!timePlayed&&!entry.soundPlayed&&p>=(firstImpact===undefined?.38:firstImpact/entry.scene.weaponTimeline.durationMs)){
         entry.soundPlayed=true;
         if(entry.scene.hits?.some(hit=>hit.damage>0))
           try{window.QAGameAudio?.play('combat-impact',{volume:.27});}catch(_){}
@@ -2233,7 +2237,7 @@ class DungeonMapView{
     }
     const paintEffects=(context,view,above)=>{
       const renderer=globalThis.QATacticalSkillEffects;
-      if(!above)globalThis.QAWeaponEffects?.drawObjects(context,this.room?.weaponObjects,visualMembers.map(m=>({uid:m.uid,...m.position})),{...view,width:m.width,height:m.height},now,{reduced:reduceMotion,blocked:p=>m.tiles[p.y*m.width+p.x]===0,summoningOwners:scenes.filter(q=>q.scene.skill==='mirror-summon').map(q=>q.scene.actor)});
+      if(!above)globalThis.QAWeaponEffects?.drawObjects(context,this.room?.weaponObjects,visualMembers.map(m=>({uid:m.uid,...m.position})),{...view,width:m.width,height:m.height},now,{reduced:reduceMotion,blocked:p=>m.tiles[p.y*m.width+p.x]===0,summoningOwners:scenes.filter(q=>q.scene.skill==='mirror-summon').map(q=>q.scene.actor),timeBirths:scenes.flatMap(q=>q.scene.skill==='time-slash'?q.scene.weaponTimeline?.segments.filter(s=>s.timeBirth).map(s=>({uid:q.scene.actor,...s.origin}))||[]:[])});
       for(const {scene,p} of scenes){
         try{
           paintDungeonScene(context,scene.weaponTimeline?{...scene,reducedMotion:reduceMotion}:scene,p,view,above,renderer);
