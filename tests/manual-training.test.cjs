@@ -12,9 +12,9 @@ const lowBeast=(id,x,y,hp=80,level=1)=>R.actor({
 },{x,y});
 
 test('each of the six manuals has exactly three skills unlocked at Lv.1 / Lv.5 / Lv.10',()=>{
-  assert.equal(Catalog.BOOKS.length,6);
-  assert.equal(Catalog.BOOKS.filter(book=>book.school==='sword').length,3);
-  assert.equal(Catalog.BOOKS.filter(book=>book.school==='body').length,3);
+  assert.equal(Catalog.BOOKS.length,Catalog.RELEASE_NEW_WEAPONS?12:6);
+  assert.equal(Catalog.BOOKS.filter(book=>book.school==='sword').length,Catalog.RELEASE_NEW_WEAPONS?6:3);
+  assert.equal(Catalog.BOOKS.filter(book=>book.school==='body').length,Catalog.RELEASE_NEW_WEAPONS?6:3);
   for(const book of Catalog.BOOKS){
     assert.equal(book.skills.length,3);
     assert.deepEqual(book.skills.map(skill=>skill.levelRequired),[1,5,10]);
@@ -315,7 +315,8 @@ test('trial clear awards a fresh manual with zero EXP, once, in the same transac
   assert.equal(complete.status,'finished');
   const drop=complete.manualDrops?.u1;
   assert.ok(drop?.id&&drop?.name);
-  assert.equal(drop.id,'sword-wind','the only missing 煉氣 weapon after the body starter');
+  assert.ok(drop.id!=='body-rock'&&Catalog.BY_BOOK[drop.id].tierRealm==='煉氣','missing 煉氣 weapon after body starter');
+  if(!Catalog.RELEASE_NEW_WEAPONS)assert.equal(drop.id,'sword-wind');
   assert.equal(bookRecord(db).books[drop.id].exp,0);
   const count=Object.keys(bookRecord(db).books).length;
   const replay=await API.command(db,'u1',request,now);
@@ -616,7 +617,8 @@ test('manual realm tiers are explicit and independent of original skill/possessi
   const tiers=Object.fromEntries(Catalog.BOOKS.map(book=>[book.id,book.tierRealm]));
   assert.deepEqual(tiers,{
     'sword-wind':'煉氣','sword-flight':'築基','sword-sky':'金丹',
-    'body-rock':'煉氣','body-dragon':'金丹','body-tiger':'築基'
+    'body-rock':'煉氣','body-dragon':'金丹','body-tiger':'築基',
+    ...(Catalog.RELEASE_NEW_WEAPONS?{'sword-prism':'煉氣','body-bell':'煉氣','sword-weave':'築基','body-mirror':'築基','sword-time':'金丹','body-gravity':'金丹'}:{})
   });
   assert(Catalog.BY_BOOK['sword-sky'].skills.every(skill=>!Object.hasOwn(skill,'realmRequired')));
   const publicBook=Catalog.publicState({books:{'sword-sky':{exp:0}}}).library[0];

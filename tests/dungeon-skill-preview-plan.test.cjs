@@ -13,7 +13,7 @@ function setup(id,{boss=false,stamina=10,stars=0}={}){
   return {room,record,skill:room.members.u.dungeonSkills.find(s=>s.id===id)};
 }
 test('all eighteen existing skills share the authoritative dungeon cast geometry and hit order',()=>{
-  for(const book of M.BOOKS)for(const sk of book.skills){
+  for(const book of M.BOOKS.filter(b=>!b.release))for(const sk of book.skills){
     const {room,record,skill}=setup(sk.id,{boss:true,stars:2});
     assert.ok(skill,sk.id);
     const before=JSON.stringify(room),plan=R.previewPlan(room,'u',map,skill);

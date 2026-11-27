@@ -43,7 +43,7 @@ const aim={
 };
 
 test('every manual slot resolves to an animated skill using the committed battle events',()=>{
-  for(const book of Manuals.BOOKS)for(const skill of book.skills){
+  for(const book of Manuals.BOOKS.filter(b=>!b.release))for(const skill of book.skills){
     const before=fixture(skill.id),target=aim[skill.id]||{x:5,y:4};
     const after=R.apply(before,'hero',{type:'manual',skillId:skill.id,...target},now);
     const scenes=A.plan(before,after,'hero');

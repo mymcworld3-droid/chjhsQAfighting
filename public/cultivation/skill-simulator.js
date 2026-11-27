@@ -17,7 +17,7 @@ const techniques=[];
 for(const book of Manuals.BOOKS)for(const skill of book.skills){
   if(!techniques.some(item=>item.moveId===skill.moveId))techniques.push(skill);
 }
-let chosen=techniques[0],tool='cast',state,renderer,nextBeast=0;
+let chosen=techniques[0],tool='cast',state,renderer,nextBeast=0,selection=null;
 const hero=()=>state.actors.find(actor=>actor.uid===uid);
 const announce=text=>{$('#message').textContent=text;};
 function newBattle(){
@@ -44,7 +44,7 @@ function refreshControls(){
   $('#actor-status').textContent=`體力 ${player.stamina} / ${R.LIMITS.stamina} · 出手 ${player.attacks} / ${R.attackLimit(player)}`+
     (focus?` · 蓄勢 ${focus} 回合`:'');
   $('#battle-status').textContent=state.status==='finished'?'本場演武已結束，請重置戰場':hints[tool];
-  $('#tool-hint').textContent=hints[tool];
+  $('#tool-hint').textContent=tool==='cast'&&chosen.kind==='weave-thread'?'點選第一端點，再點第二端點施放':hints[tool];
   $('#cast-self').hidden=chosen.range!==0||tool!=='cast';
   $('#cast-self').disabled=busy||state.status!=='active';
   $('#next-turn').disabled=busy||state.status!=='active';
@@ -53,19 +53,19 @@ function refreshControls(){
   glyph.style.backgroundImage=art?'url("'+art+'")':'';
   glyph.classList.toggle('has-art',!!art);
   $('#skill-name').textContent=chosen.name;
-  $('#skill-stats').textContent=`${chosen.cost} 體力 · ${chosen.unlimited?'無固定射程':chosen.range===0?'自身':chosen.range+' 格'}`;
+  $('#skill-stats').textContent=`${chosen.cost} 體力 · ${chosen.unlimited?'無固定射程':chosen.range===0?'自身':chosen.kind==='weave-thread'?'兩端點':chosen.range+' 格'}`;
   $('#skill-description').textContent=Manuals.descriptionWithDamage(player.atk,chosen,
     {flyingSwordReady:!!player.flyingSword});
 }
-function render(selection=null){
+function render(selected=selection){
   if(!state||!renderer)return;
-  renderer.update(state,uid,tool==='cast'?'manual:'+chosen.id:'inspect',selection);
+  renderer.update(state,uid,tool==='cast'?'manual:'+chosen.id:'inspect',selected);
   refreshControls();
 }
 function setSkill(id){
   const next=techniques.find(skill=>skill.id===id);
   if(!next)return;
-  chosen=next;
+  chosen=next;selection=null;
   const copy=structuredClone(state);
   copy.actors.find(actor=>actor.uid===uid).manualSkills=[chosen.id];
   copy.revision++;
@@ -83,7 +83,7 @@ function updateSkillOptions(){
   setSkill(available[0].id);
 }
 function setTool(value){
-  tool=value;
+  tool=value;selection=null;
   render();
 }
 function prepareCast(){
@@ -97,7 +97,15 @@ function castAt(point){
   if(state.status!=='active'){announce('請先重置戰場。');return;}
   try{
     const current=prepareCast();
-    state=R.apply(current,uid,{type:'manual',skillId:chosen.id,...point});
+    let first=null;
+    if(chosen.kind==='weave-thread'){
+      const plan=R.skillPreviewPlan(current,current.actors.find(a=>a.uid===uid),chosen);
+      const choice=globalThis.QAWeaveRules.choose(plan,selection,point);
+      selection=choice.selection;announce(choice.reason||'');
+      if(!choice.confirm){render();return;}
+      first=selection.first;
+    }
+    state=R.apply(current,uid,{type:'manual',skillId:chosen.id,...point,...(first?{first}:{})});selection=null;
     announce('');
     render();
   }catch(error){announce(error.message);}
@@ -134,7 +142,7 @@ function start(){
   document.querySelectorAll('[data-tool]').forEach(button=>button.addEventListener('click',()=>setTool(button.dataset.tool)));
   $('#cast-self').addEventListener('click',()=>castAt({x:hero().x,y:hero().y}));
   $('#reset').addEventListener('click',()=>{
-    state=newBattle();announce('');render();
+    state=newBattle();selection=null;announce('');render();
   });
   $('#reset-view').addEventListener('click',()=>renderer.resetView());
   $('#next-turn').addEventListener('click',()=>{

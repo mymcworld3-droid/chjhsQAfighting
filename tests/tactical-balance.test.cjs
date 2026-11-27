@@ -46,9 +46,9 @@ test('matchup batches pair identical answer seeds across all maps and both seats
     if(!i)continue;const va=S.variants[i],vb=S.variants[j];emptyPairs.push({a:va.id,b:vb.id,seeds:2,games:12,winsA:5,winsB:5,draws:2,castsA:12,castsB:12,seat0Wins:6,turnLimit:2,totalTurns:144,
       clusters:[0,1].map(seed=>({seed,games:6,winsA:seed?2:3,winsB:seed?3:2,draws:1}))});
   }
-  const summary=Runner.summarize(emptyPairs,.7);assert.equal(summary.rows.length,18);assert.equal(summary.byCore.length,6);
-  assert.ok(summary.rows.every(r=>r.games===204&&r.wins+r.losses+r.draws===204));
-  assert.ok(Math.abs(summary.rows.reduce((n,r)=>n+r.scorePercent,0)/18-50)<1e-9);
+  const summary=Runner.summarize(emptyPairs,.7);const n=S.variants.length-1;assert.equal(summary.rows.length,n);assert.equal(summary.byCore.length,n/3);
+  assert.ok(summary.rows.every(r=>r.games===(n-1)*12&&r.wins+r.losses+r.draws===(n-1)*12));
+  assert.ok(Math.abs(summary.rows.reduce((n,r)=>n+r.scorePercent,0)/n-50)<1e-9);
   for(const r of summary.rows)assert.ok(r.ci95[0]<=r.winPercent&&r.ci95[1]>=r.winPercent);
   assert.throws(()=>Runner.parse(['--seeds','0']),/Invalid/);assert.throws(()=>Runner.parse(['--unknown','2']),/Unknown/);
 });

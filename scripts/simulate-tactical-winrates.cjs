@@ -45,7 +45,8 @@ function interval(clusters,key){
 }
 function summarize(pairs,accuracy){
   const archived=pairs.some(p=>archivedCoreVariants.some(v=>v.id===p.a||v.id===p.b));
-  const summaryVariants=archived?archivedCoreVariants:coreVariants;
+  const activeIds=new Set(pairs.flatMap(p=>[p.a,p.b]));
+  const summaryVariants=(archived?archivedCoreVariants:coreVariants).filter(v=>activeIds.has(v.id));
   const rows=summaryVariants.map(v=>{
     const clusters=Array.from({length:pairs[0].seeds},(_,seed)=>({seed,games:0,wins:0,draws:0}));let games=0,wins=0,draws=0,casts=0;
     for(const p of pairs.filter(p=>p.a===v.id||p.b===v.id)){
@@ -96,7 +97,7 @@ async function run(config){
   const hash=file=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex');
   const report={schema:1,sourceRevision:cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),rulesSha256:hash('public/cultivation/tactical-rules.js'),policySha256:hash('scripts/lib/tactical-balance.cjs'),
     config,stats:{atk:200,maxHp:1000,openingShield:0,equipment:'none',nascentProjection:'equalized',skillScaling:'fixed tactical coefficients'},
-    variants:S.variants.map(v=>({...v,skillDefinition:S.R.CORES[v.core].branches.find(b=>b.id===v.branch).skill})),
+    variants:S.variants.map(v=>({...v,skillDefinition:v.manualSkillId?require('../public/cultivation/manual-rules.js').BY_SKILL[v.manualSkillId]:S.R.BASIC})),
     pvp,baseline:results.filter(r=>r.baseline).sort((a,b)=>a.b.localeCompare(b.b)),pve:results.filter(r=>r.variant).sort((a,b)=>a.variant.localeCompare(b.variant)||a.stage-b.stage)};
   const out=path.resolve(root,config.out);fs.mkdirSync(out,{recursive:true});
   fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(report)+'\n');

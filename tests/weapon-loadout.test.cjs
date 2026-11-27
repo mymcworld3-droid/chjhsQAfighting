@@ -9,9 +9,9 @@ const owned=()=>({books:{
   'sword-wind':{exp:280},'body-rock':{exp:1080},'sword-flight':{exp:0}},
   weaponIds:['sword-wind','body-rock','sword-flight'],skillLevels:{'rock-fist':4}});
 test('all six vector-illustrated sword/totem weapons retain the original mastery gates',()=>{
-  assert.equal(Catalog.BOOKS.length,6);
-  assert.equal(Catalog.BOOKS.filter(b=>b.weaponType==='sword').length,3);
-  assert.equal(Catalog.BOOKS.filter(b=>b.weaponType==='totem').length,3);
+  assert.equal(Catalog.BOOKS.length,Catalog.RELEASE_NEW_WEAPONS?12:6);
+  assert.equal(Catalog.BOOKS.filter(b=>b.weaponType==='sword').length,Catalog.RELEASE_NEW_WEAPONS?6:3);
+  assert.equal(Catalog.BOOKS.filter(b=>b.weaponType==='totem').length,Catalog.RELEASE_NEW_WEAPONS?6:3);
   assert(Catalog.BOOKS.every(b=>b.skills.length===3));
   assert(Catalog.BOOKS.every(b=>JSON.stringify(b.skills.map(s=>s.levelRequired))==='[1,5,10]'));
   const state=Catalog.normalize({...owned(),version:3});

@@ -3,7 +3,7 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const {BOOKS}=require('../public/cultivation/manual-rules.js');
+const {BOOKS,RELEASE_NEW_WEAPONS}=require('../public/cultivation/manual-rules.js');
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-art.js'),'utf8');
 const {bookArt,skillArt}=new Function(source.replace(/^export const /gm,'const ')+'\nreturn {bookArt,skillArt};')();
 const imageExists=(url,kind)=>{
@@ -11,16 +11,16 @@ const imageExists=(url,kind)=>{
   assert.ok(fs.existsSync(path.join(__dirname,'../public',url.slice(1))),url+' must exist');
 };
 test('each known manual has an actual book image',()=>{
-  assert.equal(BOOKS.length,6);
-  for(const book of BOOKS)imageExists(bookArt(book.id),'books');
+  assert.equal(BOOKS.length,RELEASE_NEW_WEAPONS?12:6);
+  for(const book of BOOKS){if(!book.release)imageExists(bookArt(book.id),'books');else{const url=bookArt(book.id);assert.equal(url,'/assets/weapons/'+book.id+'-hd.svg');assert.ok(fs.existsSync(path.join(__dirname,'../public',url.slice(1))));}}
 });
 test('all thirteen unique skills resolve to uploaded paintings, including shared moves',()=>{
   const moves=new Set();
   for(const book of BOOKS)for(const skill of book.skills){
     moves.add(skill.moveId);
-    imageExists(skillArt(skill),'skills');
+    if(!book.release)imageExists(skillArt(skill),'skills');else{const url=skillArt(skill);assert.equal(url,'/assets/skills/'+skill.id+'.svg');assert.ok(fs.existsSync(path.join(__dirname,'../public',url.slice(1))));}
   }
-  assert.equal(moves.size,13);
+  assert.equal(moves.size,RELEASE_NEW_WEAPONS?31:13);
   assert.equal(skillArt('flight-slash'),skillArt('wind-slash'));
   assert.equal(skillArt('sky-pierce'),skillArt('wind-slash'));
   assert.equal(skillArt('dragon-strike'),skillArt('rock-fist'));

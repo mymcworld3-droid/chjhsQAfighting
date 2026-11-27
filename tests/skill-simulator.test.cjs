@@ -35,7 +35,7 @@ function boot(){
 }
 test('simulator offers all distinct techniques, casts against the real rules and places pieces',()=>{
   const app=boot(),{els,tools}=app;
-  assert.equal(els.skill.children.length,6);
+  assert.equal(els.skill.children.length,Manuals.RELEASE_NEW_WEAPONS?15:6);
   assert.equal(app.renderer.mode,'manual:wind-slash');
   const before=app.renderer.state.actors.find(actor=>actor.uid==='practice-beast-1').hp;
   app.renderer.select({x:4,y:4});
@@ -52,7 +52,7 @@ test('simulator offers all distinct techniques, casts against the real rules and
   app.renderer.select({x:2,y:4});
   assert.equal(app.renderer.state.actors[0].x,2);
   els.school.value='body';els.school.fire('change');
-  assert.equal(els.skill.children.length,7);
+  assert.equal(els.skill.children.length,Manuals.RELEASE_NEW_WEAPONS?16:7);
   assert.equal(app.renderer.mode,'manual:rock-fist');
   els.skill.value='dragon-roar';els.skill.fire('change');
   assert.equal(els['cast-self'].hidden,false);

@@ -4,6 +4,8 @@
 const R=require('../../public/cultivation/tactical-rules.js');
 const NOW=2000000000000;
 const Manuals=require('../../public/cultivation/manual-rules.js');
+const Weave=require('../../public/cultivation/weave-weapon-rules.js'),Prism=require('../../public/cultivation/prism-weapon-rules.js'),Objects=require('../../public/cultivation/weapon-special-objects.js');
+const prerequisites={'weave-thread':'weave-mark','weave-domain':'weave-mark','mirror-swap':'mirror-summon','time-double':'time-slash','time-union':'time-slash','gravity-crash':'gravity-core'};
 // Compare the eighteen currently equipped manual techniques, not retired
 // golden-core actions. The plain attack remains an explicit baseline.
 const variants=Object.freeze([
@@ -48,20 +50,21 @@ function harm(source,target,sk){
   return damage+.7*absorbed+(damage>=target.hp?source.atk*.75:0)+Math.min(source.maxHp-source.hp,Math.round(damage*(sk.leech||0)))*hpWeight(source);
 }
 function options(s,a,budget=a.stamina){
-  const results=[],enemies=opponents(s,a),manualId=a.manualSkills?.[0]||null;
-  const selected=manualId?R.manualSkillFor(a,manualId):R.BASIC;
-  if(!selected||a.attacks>=R.LIMITS.attacks||a.actions>=R.LIMITS.actions)return results;
-  const cost=selected.cost;
+  const results=[],enemies=opponents(s,a),manualIds=a.manualSkills?.length?a.manualSkills:[null];
+  if(a.attacks>=R.LIMITS.attacks||a.actions>=R.LIMITS.actions)return results;
+  for(const manualId of manualIds){
+  const selected=manualId?R.manualSkillFor(a,manualId):R.BASIC;if(!selected)continue;
+  const cost=R.techniqueCost(a,selected);
   const maxTargets=8;
   // Aim with the same geometry supplied to real players. Prioritize cells
   // near enemies while retaining all four cardinal directions for line attacks.
-  const positions=selected.range===0?[point(a)]:R.aimCells(s,a,selected);
+  const positions=selected.kind==='weave-thread'?Weave.plans(Prism.boardForTrial(s),a,selected,s.weaponObjects,a.uid).pairs.map(pair=>({...pair.second,first:pair.first})):selected.range===0?[point(a)]:R.aimCells(s,a,selected);
   const best=positions.map(p=>({p,proximity:Math.min(...enemies.map(b=>R.dist(b,p)))}))
     .sort((x,y)=>x.proximity-y.proximity||x.p.y-y.p.y||x.p.x-y.p.x)
     .slice(0,maxTargets);
   for(const {p} of best){
     if(cost>budget)break;
-    const command=manualId?{type:'manual',skillId:manualId,x:p.x,y:p.y}:
+    const command=manualId?{type:'manual',skillId:manualId,x:p.x,y:p.y,...(p.first?{first:p.first}:{})}:
       {type:'attack',x:p.x,y:p.y};
     let next;
     try{next=R.apply(emptyHistory(s),a.uid,command,NOW);}
@@ -80,7 +83,10 @@ function options(s,a,budget=a.stamina){
     value+=Math.max(0,(after.shield||0)-(a.shield||0))*.65;
     if(selected.kind==='flying-sword'&&!a.flyingSword&&after.flyingSword)value+=a.atk*.9;
     if(selected.kind==='fist-focus'&&(Number(after.fistFocusUntil)||0)>(Number(a.fistFocusUntil)||0))value+=a.atk;
+    const setup=Object.values(prerequisites).includes(manualId);
+    if(setup){const prev=Objects.owned(s.weaponObjects,a.uid).length,afterCount=Objects.owned(next.weaponObjects,a.uid).length;if(afterCount>prev)value+=a.atk*.9;}
     if(value>1)results.push({command,value,cost,id:manualId||'attack'});
+  }
   }
   const danger=incoming(s,a);
   if(a.attacks<R.LIMITS.attacks&&(a.guard||0)<.4&&danger>0)
@@ -173,7 +179,7 @@ function playTurn(state,uid,{accuracy=.7,seed='0',audit=null,metrics=null}={}){
 }
 function fighter(v,uid,{atk=200,maxHp=1000}={}){return {
   uid,name:v.id,atk,maxHp,trainingAccessScore:68,
-  manualSkills:v.manualSkillId?[v.manualSkillId]:[]
+  manualSkills:v.manualSkillId?[v.manualSkillId,...(prerequisites[v.manualSkillId]?[prerequisites[v.manualSkillId]]:[])]:[]
 };}
 function duel(a,b,{map='courtyard',accuracy=.7,seed='0',stats={},audit=null}={}){
   let s=R.create({id:'offline-duel',mode:'pvp',simultaneous:false,map,players:[fighter(a,'seat0',stats),fighter(b,'seat1',stats)],now:NOW});

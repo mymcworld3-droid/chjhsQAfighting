@@ -5,6 +5,7 @@ const candidate=new Module(filename,module);candidate.filename=filename;candidat
 candidate._compile(fs.readFileSync(filename,'utf8').replace('const RELEASE_NEW_WEAPONS=false;','const RELEASE_NEW_WEAPONS=true;'),filename);
 require.cache[filename].exports=candidate.exports;
 const M=require(filename),D=require('../public/cultivation/new-weapon-drafts.js'),O=require('../public/cultivation/weapon-special-objects.js'),R=require('../public/cultivation/tactical-rules.js'),C=require('../public/cultivation/dungeon-skill-resolution.js'),Skills=require('../dungeon-skill-combat.cjs'),Drops=require('../weapon-dungeon-rewards.cjs');
+const Animation=require('../public/cultivation/tactical-animation.js'),Effects=require('../public/cultivation/tactical-skill-effects.js');
 const p=(x,y)=>({x,y}),origin=p(5,6),board={width:13,height:13,blocked:()=>false},map={width:13,height:13,tiles:Array(169).fill(1)},now=2000000000000;
 const raw=b=>({school:b.school,books:{[b.id]:{exp:M.totalExpForLevel(10),refinement:2}},weaponIds:[b.id,null],skillLevels:Object.fromEntries(b.skills.map(s=>[s.id,3]))});
 function objects(id){
@@ -43,6 +44,9 @@ for(const b of D.BOOKS)for(const sk of b.skills)test('candidate authorized casts
   assert.ok(opts.length,id+' '+mode);const best=opts.sort((a,b)=>b.hits.reduce((n,h)=>n+h.damage,0)-a.hits.reduce((n,h)=>n+h.damage,0))[0];
   const before=JSON.stringify(s),out=R.apply(s,'u',{type:'manual',skillId:id,x:best.aim.x,y:best.aim.y,first:best.first||null},now+1);
   assert.equal(JSON.stringify(s),before);assert.equal(out.actors[0].stamina,10-best.cost);assert.equal(out.actors[1].hp,10000-best.hits.reduce((n,h)=>n+h.damage,0));
+  const scenes=Animation.plan(s,out,'u');const cast=scenes.find(scene=>scene.skill===id&&scene.weaponTimeline);assert.ok(cast,id+' committed V2 animation');
+  const view={cell:40,ox:0,oy:0,width:13,height:13},snapshot=JSON.stringify(cast);let count=0;const ctx=new Proxy({}, {get:(o,k)=>o[k]||((...args)=>{count++;assert.ok(args.every(v=>typeof v!=='number'||Number.isFinite(v)),String(k));return k==='createLinearGradient'||k==='createRadialGradient'?{addColorStop(){}}:undefined;}),set:(o,k,v)=>{o[k]=v;return true;}});
+  for(const above of [false,true])assert.equal(Effects.draw(ctx,cast,.5,view,above),true,id);assert.ok(count>0);assert.equal(JSON.stringify(cast),snapshot);
  }
  const baseMember={uid:'u',position:origin,battleAttack:100,battleHealth:10000,explorationStamina:10};
  const member={...baseMember,...Skills.initialCombatLoadout(baseMember,record)};
@@ -51,6 +55,7 @@ for(const b of D.BOOKS)for(const sk of b.skills)test('candidate authorized casts
  assert.ok(plan.exact&&opts.length,id);const best=opts.sort((a,b)=>b.totalDamage-a.totalDamage)[0];
  const cmd={skillId:id,target:best.aim,first:best.first||null,seq:1},out=Skills.castSkill(room,'u',map,record,cmd);
  assert.equal(out.result.totalDamage,best.totalDamage);assert.equal(out.members.u.explorationStamina,10-best.cost);
+ assert.deepEqual(out.result.hits,best.hits);assert.deepEqual(best.landings,out.result.visualMoves.map(m=>m.to));assert.deepEqual(best.cells,[...new Map(out.cells.map(p=>[p.x+','+p.y,p])).values()]);
  assert.equal(Skills.castSkill({...room,...out},'u',map,record,cmd).duplicate,true);
  assert.throws(()=>Skills.castSkill(room,'u',map,{...record,books:{}},cmd),/尚未解鎖/);
 });

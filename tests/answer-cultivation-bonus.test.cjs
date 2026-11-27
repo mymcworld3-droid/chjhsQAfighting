@@ -22,10 +22,17 @@ test('bonuses add rather than multiply and saved remainder is preserved',()=>{
 });
 
 test('six mastered weapons grant 180% and enlightenment adds another 100%',()=>{
- const raw={books:Object.fromEntries(M.BOOKS.map(book=>[book.id,{exp:M.MAX_EXP}])),weaponIds:[null,null]};
+ const raw={books:Object.fromEntries(M.BOOKS.filter(book=>!book.release).map(book=>[book.id,{exp:M.MAX_EXP}])),weaponIds:[null,null]};
  const count=B.maxedWeapons(raw,M);
  assert.equal(count,6);assert.equal(B.PER_WEAPON,30);
  assert.equal(M.publicState(raw).cultivationBonusPercent,180);
  assert.equal(B.award(null,10,true,count).gain,28);
  assert.equal(B.award({remaining:3},10,true,count).gain,38);
+});
+
+test('all released mastered weapons retain 30 percent per distinct weapon',()=>{
+ const raw={books:Object.fromEntries(M.BOOKS.map(book=>[book.id,{exp:M.MAX_EXP}]))};
+ const count=M.RELEASE_NEW_WEAPONS?12:6;
+ assert.equal(B.maxedWeapons(raw,M),count);assert.equal(M.publicState(raw).cultivationBonusPercent,30*count);
+ assert.equal(B.award(null,10,true,count).gain,10+3*count);
 });

@@ -63,8 +63,9 @@ test('trial preview invokes private cast, is immutable and rejects draft in publ
   assert.deepEqual(plan.byAim['3,4'].hits.map(h=>h.damage),[160,100]);
   assert.deepEqual(plan.byAim['3,4'].hits,plan.byAim['5,4'].hits);
   assert.equal(JSON.stringify(s),before);
-  assert.equal(R.manualSkillFor(a,skill.id),null);
-  assert.equal(M.BY_SKILL[skill.id],undefined);
+  if(M.RELEASE_NEW_WEAPONS){assert.equal(R.manualSkillFor(a,skill.id).id,skill.id);assert.equal(M.BY_SKILL[skill.id].id,skill.id);}
+  else{assert.equal(R.manualSkillFor(a,skill.id),null);assert.equal(M.BY_SKILL[skill.id],undefined);}
+  assert.equal(R.manualSkillFor({...a,manualSkills:[]},skill.id),null);
 });
 test('private dungeon resolver uses same hit order and cap without mutating room',()=>{
   const map={width:9,height:9,tiles:Array(81).fill(1)};map.tiles[4*9+7]=0;

@@ -236,7 +236,7 @@
     const hit=p=>fmt(Number(attack)*p);
     const special={
       'prism-reflect':()=> '初段 '+hit(skill.powers.initial)+'、法線反射 '+hit(skill.powers.reflected)+' 傷害。',
-      'prism-scatter':()=> '初段 '+hit(skill.powers.initial)+'、第一次漫射 '+hit(skill.powers.first)+'、第二次漫射 '+hit(skill.powers.second)+'；每敵倍率上限 '+hit(skill.maxTargetPower)+'（逐擊取整）。',
+      'prism-scatter':()=> '初段 '+hit(skill.powers.initial)+'、第一次漫射 '+hit(skill.powers.first)+'、第二次漫射 '+hit(skill.powers.second)+' 傷害；每敵傷害上限 '+hit(skill.maxTargetPower)+'（逐擊取整）。',
       'bell-echo':()=> '每層 '+hit(skill.power)+' 傷害，最多四層；每層擊退後重判。',
       'weave-domain':()=> '兩痕 '+hit(skill.powers.two)+'、三痕共線 '+hit(skill.powers.collinear)+'、三角陣 '+hit(skill.powers.polygon)+' 傷害。',
       'mirror-strike':()=> '本體 '+hit(skill.power)+'，已召喚的蜃影另造成 '+hit(skill.power*.3)+' 傷害。',

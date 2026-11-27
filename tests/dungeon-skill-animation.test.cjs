@@ -45,7 +45,7 @@ function mockCanvas(){
   return {ctx,commands};
 }
 test('all eighteen manual IDs use the exact trial animation catalog, including shared aliases',()=>{
-  const names=Object.keys(catalog.BY_SKILL);
+  const names=catalog.BOOKS.filter(b=>!b.release).flatMap(b=>b.skills.map(s=>s.id));
   assert.equal(names.length,18);
   for(const id of names){
     assert.equal(shared.moveFor(id),fx.dungeonVisualMove(id));

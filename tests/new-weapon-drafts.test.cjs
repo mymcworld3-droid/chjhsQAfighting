@@ -1,20 +1,24 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict');
 const M=require('../public/cultivation/manual-rules.js');
+const fs=require('node:fs'),Module=require('node:module');
+const file=require.resolve('../public/cultivation/manual-rules.js'),hidden=new Module(file,module);hidden.filename=file;hidden.paths=module.paths;
+hidden._compile(fs.readFileSync(file,'utf8').replace('const RELEASE_NEW_WEAPONS=true;','const RELEASE_NEW_WEAPONS=false;'),file);
+const Hidden=hidden.exports;
 const D=require('../public/cultivation/new-weapon-drafts.js');
 const O=require('../public/cultivation/weapon-special-objects.js');
 const board={width:9,height:7,blocked:p=>p.x===0&&p.y===0};
 const p=(x,y)=>({x,y});
 const put=(s,type,position,generatedAt=0,ownerUid='u')=>O.add(s,{type,ownerUid,position,generatedAt,board,level:3,refinement:2});
 test('six new weapons have eighteen unique private skills and unchanged existing public catalog',()=>{
-  assert.equal(D.BOOKS.length,6);assert.equal(Object.keys(D.BY_SKILL).length,18);assert.equal(M.BOOKS.length,6);
+  assert.equal(D.BOOKS.length,6);assert.equal(Object.keys(D.BY_SKILL).length,18);assert.equal(Hidden.BOOKS.length,6);assert.equal(M.BOOKS.length,M.RELEASE_NEW_WEAPONS?12:6);
   for(const b of D.BOOKS){
-    assert.equal(M.BY_BOOK[b.id],undefined);
+    assert.equal(Hidden.BY_BOOK[b.id],undefined);
     assert.deepEqual(b.skills.map(s=>s.levelRequired),[1,5,10]);
     assert.ok(Object.isFrozen(b.skills));
-    for(const s of b.skills){assert.equal(M.BY_SKILL[s.id],undefined);assert.equal(D.mastered(s.id,M.totalExpForLevel(s.levelRequired)),true);}
+    for(const s of b.skills){assert.equal(Hidden.BY_SKILL[s.id],undefined);assert.equal(D.mastered(s.id,M.totalExpForLevel(s.levelRequired)),true);}
     const malicious={school:b.school,books:{[b.id]:{exp:4000}},equipped:b.skills.map(s=>s.id),weaponIds:[b.id,null]};
-    const normalized=M.normalize(malicious);assert.equal(normalized.books[b.id],undefined);assert.equal(normalized.equipped.length,0);
+    const normalized=Hidden.normalize(malicious);assert.equal(normalized.books[b.id],undefined);assert.equal(normalized.equipped.length,0);
   }
 });
 test('all alternate damage coefficients use existing level and refinement scaling',()=>{

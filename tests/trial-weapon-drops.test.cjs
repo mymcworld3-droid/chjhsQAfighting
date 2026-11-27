@@ -13,9 +13,11 @@ test('ordinary trial at any stage can only award a missing native 煉氣 weapon'
    assert.notEqual(result.drop,starter);
    assert.equal(state.books[starter].exp,70);
    assert.equal(state.dropMisses,0);
+   const qi=Manuals.BOOKS.filter(b=>b.tierRealm==='煉氣');
+   while(Object.keys(state.books).length<qi.length){state.dropMisses=3;const next=roll(room(stage),'u',state,()=>0);assert.ok(next.drop);assert.equal(Manuals.BY_BOOK[next.drop].tierRealm,'煉氣');}
    const done=roll(room(stage),'u',state,()=>{throw Error('exhausted trial pool must not roll');});
    assert.equal(done.drop,null);assert.equal(done.changed,false);
-   assert.equal(Object.keys(state.books).length,2);
+   assert.equal(Object.keys(state.books).length,qi.length);
   }
  }
 });
@@ -26,10 +28,13 @@ test('first tutorial victory guarantees a 煉氣 starter and ordinary trial pity
   const miss=roll(room(2),'u',state,()=>99);
   assert.equal(miss.drop,null);assert.equal(state.dropMisses,i);
  }
- assert.equal(roll(room(2),'u',state,()=>0).drop,'body-rock');
+ const awarded=roll(room(2),'u',state,()=>0).drop;
+ assert.ok(awarded!=='sword-wind'&&Manuals.BY_BOOK[awarded].tierRealm==='煉氣');
+ if(!Manuals.RELEASE_NEW_WEAPONS)assert.equal(awarded,'body-rock');
 });
 test('existing higher-tier weapons and their EXP are not removed by trial loot',()=>{
  const state=Manuals.normalize({school:'sword',books:{'sword-wind':{exp:10},'body-rock':{exp:20},'sword-sky':{exp:70}},dropMisses:3});
+ for(const b of Manuals.BOOKS.filter(b=>b.tierRealm==='煉氣'))state.books[b.id]||={exp:0};
  assert.equal(roll(room(200),'u',state,()=>0).drop,null);
  assert.equal(state.books['sword-sky'].exp,70);
 });
