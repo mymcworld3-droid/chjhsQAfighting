@@ -12,8 +12,11 @@ test('attack range outlines, selected target frames and danger hints paint below
   const actorEnd=draw.indexOf('    for(const a of positions){',actorDraw+10);
   assert.ok(actorStart>0&&actorDraw>actorStart&&actorEnd>actorDraw);
   const overlays=[
-    'for(const p of this.range)fill(p,aimedPath?',
-    "for(const p of preview.cells)fill(p,'#ef39398c'",
+    'for(const p of plan?.cells||[])fill(p,',
+    'for(const p of plan?.aims||[])fill(p,',
+    'for(const p of preview.path.slice(1))fill(p,',
+    'for(const p of preview.landings)fill(p,',
+    'for(const p of preview.cells)fill(p,',
     'Threats.drawGround(c,this.threatPlan,',
     'Threats.drawContours(c,this.threatPlan,viewport);',
     'Threats.drawGuidance(c,this.threatPlan,viewport,reduced);',
