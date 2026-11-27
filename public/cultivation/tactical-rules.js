@@ -12,6 +12,9 @@
     ?require('./flying-sword-path.js'):globalThis.QAFlyingSwordPath;
   const weaponDungeons=()=>typeof module==='object'&&module.exports
     ?require('./weapon-dungeon-rules.js'):globalThis.QAWeaponDungeons;
+  const mirror=()=>typeof module==='object'&&module.exports?require('./mirror-weapon-rules.js'):globalThis.QAMirrorRules;
+  const mirrorGeometry=(s,a,sk)=>mirror().plans(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,p=>canOccupy(s,a,p)&&!a.immobilized);
+  const mirrorSelection=(s,a,sk,p)=>mirror().selected(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,p,q=>canOccupy(s,a,q)&&!a.immobilized);
   const weave=()=>typeof module==='object'&&module.exports?require('./weave-weapon-rules.js'):globalThis.QAWeaveRules;
   const bell=()=>typeof module==='object'&&module.exports?require('./bell-weapon-rules.js'):globalThis.QABellRules;
   const prism=()=>typeof module==='object'&&module.exports?require('./prism-weapon-rules.js'):globalThis.QAPrismRules;
@@ -910,6 +913,7 @@
   }
   function aimCells(s,a,sk){
     if(!a||!alive(a))return [];
+    if(mirror()?.supports(sk))return mirrorGeometry(s,a,sk).aims;
     if(weave()?.supports(sk))return weave().plans(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid).aims;
     if(bell()?.supports(sk))return bell().plans(prism().boardForTrial(s),a,sk).aims;
     if(prism()?.supports(sk))return prism().plans(prism().boardForTrial(s),a,sk).aims;
@@ -937,6 +941,7 @@
     return cells;
   }
   function skillCells(s,a,sk,p,first=null){
+    if(mirror()?.supports(sk))return mirrorSelection(s,a,sk,p).plan?.cells||[];
     if(weave()?.supports(sk))return weave().selected(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,p,first).plan?.cells||[];
     if(bell()?.supports(sk))return bell().selected(prism().boardForTrial(s),a,sk,p)?.cells||[];
     if(prism()?.supports(sk))return prism().selected(prism().boardForTrial(s),a,sk,p)?.cells||[];
@@ -960,6 +965,9 @@
     if(!geometryOnly){
       if(a.stamina<techniqueCost(a,sk))fail('體力不足，先答題補充');
       validateAttackLimit(a);
+    }
+    if(mirror()?.supports(sk)){
+      const selection=mirrorSelection(s,a,sk,p);if(!selection.plan)fail(selection.reason);return;
     }
     if(weave()?.supports(sk)){
       const selection=weave().selected(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,p,first);
@@ -1044,6 +1052,7 @@
     const bellSteps=events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.bellSteps;
     const rayPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,aim):null;
     return {aim,cost,valid:!reason,reason,cells:[...cells.values()],path,hits,moves,finalPositions,
+      ...(mirror()?.supports(sk)?{weaponObjects:simulation.weaponObjects||null,mirrorPlan:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.mirrorPlan}:{}),
       ...(weave()?.supports(sk)?{first:first?point(first):null,weaponObjects:simulation.weaponObjects,weavePlan:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weavePlan,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       ...(bellSteps?{bellSteps,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       ...(rayPlan?{rays:rayPlan.rays,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
@@ -1052,6 +1061,11 @@
   function skillPreviewPlan(s,a,sk){
     const result={aims:[],cells:[],byAim:{}};
     if(!alive(a)||!sk)return result;
+    if(mirror()?.supports(sk)){
+      const geometry=mirrorGeometry(s,a,sk);result.aims=geometry.aims;result.cells=geometry.cells;result.reason=geometry.reason;
+      for(const aim of geometry.aims)result.byAim[key(aim)]=previewCast(s,a,sk,aim);
+      return result;
+    }
     if(weave()?.supports(sk)){
       const geometry=weave().plans(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid);
       result.aims=geometry.aims;result.cells=geometry.cells;result.reason=geometry.reason;result.pairs=geometry.pairs;result.byPair={};
@@ -1089,10 +1103,11 @@
     if(s.pveMetrics){s.pveMetrics.staminaSpent+=cost;if(sk.manualId)s.pveMetrics.manualCasts[sk.id]=(s.pveMetrics.manualCasts[sk.id]||0)+1;}
     const fixedTarget=sealAt(s,p);
     if(s.mode==='pve'&&s.trial?.layoutVersion>=3&&sk.manualId){s.manualUsed||={};s.manualUsed[a.uid]||={};s.manualUsed[a.uid][sk.manualId]=true;}
+    const mirrorPlan=mirror()?.supports(sk)?mirrorSelection(s,a,sk,p).plan:null;
     const weavePlan=weave()?.supports(sk)?weave().selected(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,p,first).plan:null;
     const bellPlan=bell()?.supports(sk)?bell().selected(prism().boardForTrial(s),a,sk,p):null;
     const prismPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,p):null;
-    const cells=weavePlan?.cells||prismPlan?.cells||skillCells(s,a,sk,p);
+    const cells=mirrorPlan?.cells||weavePlan?.cells||prismPlan?.cells||skillCells(s,a,sk,p);
     const rays=sk.kind==='sword-array'?swordArray(s,sk,p):null;
     const cuts=rays&&!sk.orthogonal?crossedSwordLines(rays,p):null;
     const route=techniquePath(s,a,sk,p);
@@ -1119,6 +1134,18 @@
     if(!['fist-chain','meteor','restore','counter','fist-focus'].includes(sk.kind)&&(sk.kind!=='blink'||sk.burst))strikeSeals(s,cells);
     // Fixed objectives can be hit by targeted techniques, but cannot be moved.
     if(fixedTarget&&!at(s,p)&&['hit','lunge','swap'].includes(sk.kind))return;
+    if(mirrorPlan){
+      castEvent.animation.mirrorPlan=mirrorPlan;
+      if(mirrorPlan.summon)s.weaponObjects=mirror().activate(s.weaponObjects,mirrorPlan,{uid:a.uid,board:prism().boardForTrial(s),clock:s.eventSequence||0,level:sk.level,refinement:a.manualRefinements?.[sk.manualId]||0});
+      if(mirrorPlan.landing){
+        const from=point(a);Object.assign(a,mirrorPlan.landing);
+        motion(s,a,[from,point(a)],'teleport',a.name+'與蜃影交換位置');
+      }
+      const hits=mirror().resolve(mirrorPlan,s.actors.filter(t=>t.team!==a.team),covers,alive,
+        (target,power,cell,index,part)=>({damage:damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId,strike:index})}),()=>alive(a));
+      castEvent.animation.mirrorHits=hits;
+      return;
+    }
     if(weavePlan){
       castEvent.animation.weavePlan=weavePlan;
       s.weaponObjects=weave().place(s.weaponObjects,weavePlan,{uid:a.uid,board:prism().boardForTrial(s),clock:s.eventSequence||0,level:sk.level,refinement:a.manualRefinements?.[sk.manualId]||0});

@@ -1,3 +1,4 @@
+const WeaponObjects=require('./public/cultivation/weapon-special-objects.js');
 'use strict';
 // Stage 11B: deterministic dungeon-only martial arts, independent of tactical
 // turns. The server owns loadouts, geometry, stamina, damage and NPC positions.
@@ -69,7 +70,8 @@ function switchLoadout(room,uid,raw,index){
     JSON.stringify(member.dungeonSkillIds||[])===JSON.stringify(setting.dungeonSkillIds))
     return {duplicate:true,members:room.members};
   return {duplicate:false,members:{...room.members,
-    [uid]:{...member,...setting,dungeonAttack:attackPower(raw,member)}}};
+    [uid]:{...member,...setting,dungeonAttack:attackPower(raw,member)}},
+    ...(room.weaponObjects?{weaponObjects:WeaponObjects.reconcileEquipment(room.weaponObjects,uid,setting.dungeonSkillIds.map(id=>Manuals.BY_SKILL[id]?.manualId).filter(Boolean))}:{})};
 }
 function castSkill(room,uid,map,raw,{skillId,target,seq,moveSword=false,first=null}={}){
   if(typeof skillId!=='string'||!Manuals.BY_SKILL[skillId])

@@ -1,3 +1,4 @@
+const WeaponObjects=require('./public/cultivation/weapon-special-objects.js');
 'use strict';
 const crypto=require('node:crypto');
 const Rules=require('./public/cultivation/tactical-rules.js');
@@ -349,6 +350,7 @@ async function updateLoadout(db,uid,input){
         actor.manualSkillLevels={...projection.manualSkillLevels};
         actor.manualRefinements={...projection.manualRefinements};
         actor.manualWeaponIds=[...projection.manualWeaponIds];
+        if(room.weaponObjects)room.weaponObjects=WeaponObjects.reconcileEquipment(room.weaponObjects,uid,actor.manualWeaponIds);
         actor.manualWeaponMode=true;actor.manualRulesVersion=2;
         delete actor.manualLoadoutIndex;
         delete actor.manualLoadoutName;
@@ -677,6 +679,7 @@ async function switchBattleLoadout(db,uid,input,now=Date.now()){
     const levels=Object.fromEntries(ids.filter(skillId=>manuals.skillLevels[skillId])
       .map(skillId=>[skillId,manuals.skillLevels[skillId]]));
     actor.manualSkills=[...ids];actor.manualSkillLevels=levels;
+    if(s.weaponObjects)s.weaponObjects=WeaponObjects.reconcileEquipment(s.weaponObjects,uid,ids.map(id=>Manuals.BY_SKILL[id]?.manualId).filter(Boolean));
     actor.manualRefinements=manualLoadout(manuals,TrainingAccess.score(user)).manualRefinements;
     actor.manualLoadoutName=preset.name;actor.manualLoadoutIndex=index;
     // HP, stamina, position, focus, cooldown legacy data and action counts survive.

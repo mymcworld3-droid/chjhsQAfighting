@@ -20,6 +20,7 @@ import './bell-weapon-rules.js';
 import './new-weapon-drafts.js';
 import './weapon-special-objects.js';
 import './weave-weapon-rules.js';
+import './mirror-weapon-rules.js';
 import './dungeon-boss-hit.js';
 import './dungeon-skill-resolution.js';
 import './tactical-animation.js';

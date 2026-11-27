@@ -1,3 +1,4 @@
+const WeaponObjects=require('./public/cultivation/weapon-special-objects.js');
 'use strict';
 
 // Multiplayer dungeon lobby only. No raid ticket, quiz, combat, or reward logic
@@ -581,12 +582,13 @@ function createHandler({
             ...(progress?{dungeonProgress:progress}:{}),
             ...(bossEncounter?{bossEncounter}:{}),
             revision:current.revision+1};
+          if(next.bossEncounter?.status==='defeated'&&next.weaponObjects)next.weaponObjects=WeaponObjects.finish(next.weaponObjects);
           const saveVictory=action==='skill'&&
             evolved.bossEncounter?.status==='fighting'&&
             bossEncounter?.status==='defeated'?
             await Victory.prepareArchive(tx,db,roomId,next,at):null;
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
-            ...(outcome.weaponObjects?{weaponObjects:next.weaponObjects}:{}),
+            ...(next.weaponObjects!==evolved.weaponObjects?{weaponObjects:next.weaponObjects}:{}),
             ...(mastery?{manualExp:next.manualExp,
               manualProgressSession:next.manualProgressSession}:{}),
             ...(action==='skill'?{enemies:next.enemies}:{}),
@@ -645,11 +647,13 @@ function createHandler({
           const outcome=Portal.vote(evolved,uid,map,at,ready,roomId);
           if(!outcome.changed&&!delta)return current;
           const next={...outcome.room,revision:current.revision+1};
+          if(outcome.transitioned&&evolved.weaponObjects)next.weaponObjects=WeaponObjects.finish(evolved.weaponObjects);
           tx.update(roomRef,{
             ...(delta||{}),members:next.members,
             bossPortalReady:next.bossPortalReady,
             ...(outcome.transitioned?{
               dungeonArena:'boss',bossEncounter:next.bossEncounter,
+              ...(next.weaponObjects?{weaponObjects:next.weaponObjects}:{}),
               enemies:next.enemies,battleAppliedTick:next.battleAppliedTick,
               battleAppliedAtMs:next.battleAppliedAtMs
             }:{}),
@@ -865,7 +869,7 @@ function createHandler({
                 }:{}),
                 ...Skills.initialCombatLoadout(startingMembers[id],manualByUid[id].manual)};
             }
-            const clockState=initialClock(at);
+            const clockState={...initialClock(at),...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{})};
             const objectives=Objectives.spawn(map,initialEnemies(map));
             const enemyState={enemyAiVersion:ENEMY_AI_VERSION,
               enemies:objectives.enemies,dungeonProgress:objectives.progress};
@@ -901,7 +905,7 @@ function createHandler({
             }));
           const clockState={battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null};
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null,...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{})};
           const next={...room,status:'waiting',...clockState,members,
             revision:room.revision+1};
           tx.update(roomRef,{status:'waiting',...clockState,members,
@@ -945,7 +949,7 @@ function createHandler({
           const codeSnap=await tx.get(codeRef);
           const cleared={battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null};
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null,...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{})};
           const next={...room,status:'closed',closedAtMs:at,...cleared,
             revision:room.revision+1};
           tx.update(roomRef,{status:'closed',closedAtMs:at,...cleared,
@@ -988,20 +992,21 @@ function createHandler({
           const reset=closed&&room.status==='assembled'?{
             battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null,...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{})
           }:{};
           const votes={...(room.bossPortalReady?.votes||{})};
           delete votes[uid];
           const portalState=closed?null:
             room.bossPortalReady?{version:Portal.VERSION,votes}:null;
+          const objects=room.weaponObjects?(closed?WeaponObjects.finish(room.weaponObjects):WeaponObjects.clear(room.weaponObjects,uid)):null;
           const updated={...room,revision:room.revision+1,
-            status:closed?'closed':room.status,hostUid,members,...reset,
+            status:closed?'closed':room.status,hostUid,members,...reset,...(objects?{weaponObjects:objects}:{}),
             bossPortalReady:portalState,
             ...(closed?{closedAtMs:at}:{})};
           const codeRef=db.collection(CODES).doc(room.code);
           const codeSnap=closed?await tx.get(codeRef):null; // read before writes
           tx.update(roomRef,{revision:updated.revision,status:updated.status,
-            hostUid,members,...reset,bossPortalReady:portalState,
+            hostUid,members,...reset,bossPortalReady:portalState,...(objects?{weaponObjects:objects}:{}),
             ...(closed?{closedAtMs:at}:{})});
           tx.set(pointerRef,{roomId:null,updatedAtMs:at});
           if(closed&&codeSnap?.exists&&codeSnap.data()?.roomId===roomId)
