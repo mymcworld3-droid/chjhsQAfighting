@@ -1,0 +1,1456 @@
+{
+  "schema": 1,
+  "batch": 10,
+  "date": "2026-11-27",
+  "purpose": "既有候選全文草稿升級；保留反應速率題組所有條件及原始多選；非正式庫，禁止自動核准。",
+  "upgrades": [
+    {
+      "id": "CEEC-114-chem-multiple-choice-14",
+      "sourceId": "CEEC-114-chem",
+      "questionNumber": 14,
+      "originalQuestionNumberOrLocator": "印刷第5頁第14題",
+      "questionPdfPage": 6,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "C",
+        "E"
+      ],
+      "conceptTags": [
+        "反應速率實驗",
+        "控制變因",
+        "氧化還原"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "關於式 2 的反應與實驗設計，下列敘述哪些正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "H⁺是催化劑"
+          },
+          {
+            "label": "B",
+            "text": "是一個氧化還原反應"
+          },
+          {
+            "label": "C",
+            "text": "三個實驗中，加入 H⁺的濃度與體積為一定值"
+          },
+          {
+            "label": "D",
+            "text": "可以用 Na₂S₂O₃濃度對 t 作圖，得知其為線性關係"
+          },
+          {
+            "label": "E",
+            "text": "若使用20.0 mL Na₂S₂O₃溶液再進行一次實驗，需使用30.0 mL 蒸餾水"
+          }
+        ],
+        "sharedStem": {
+          "id": "CEEC-114-chem-group-14-15",
+          "heading": "14-15題為題組",
+          "stem": "某生在恆溫下進行 Na₂S₂O₃ 水溶液的分解反應速率實驗，反應式如式 2：",
+          "equationLabel": "式 2",
+          "equation": "S₂O₃²⁻＋2 H⁺ → SO₂＋S＋H₂O",
+          "procedureHeading": "其實驗步驟如下：",
+          "steps": [
+            "在一個錐形瓶中置入50 mL 的0.20 M Na₂S₂O₃溶液",
+            "在瓶子底部下方放置一張畫有黑色「X」標誌的白紙",
+            "將10 mL 的0.10 M HCl溶液加入上述錐形瓶中，並立刻按下秒錶且以玻棒攪拌",
+            "由錐形瓶開口向下觀察，當無法看見白紙上「X」標誌時，停止計時並記錄時間（t）",
+            "改變步驟（1）的 Na₂S₂O₃溶液體積，並另加入適量蒸餾水。再重複上述步驟進行實驗，結果如表1所示。"
+          ],
+          "table": {
+            "label": "表 1",
+            "columns": [
+              "Na₂S₂O₃溶液體積（mL）",
+              "蒸餾水體積（mL）",
+              "標誌消失時間 t（秒）",
+              "1/t 數值（1/秒）"
+            ],
+            "rows": [
+              [
+                "50.0",
+                "0",
+                "33.8",
+                "0.0296"
+              ],
+              [
+                "30.0",
+                "20.0",
+                "49.2",
+                "0.0203"
+              ],
+              [
+                "10.0",
+                "40.0",
+                "150",
+                "0.0067"
+              ]
+            ]
+          },
+          "sourcePdfPage": 6,
+          "printedPage": 5,
+          "sourceId": "CEEC-114-chem",
+          "status": "transcription-draft-pending-human-review"
+        }
+      },
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "須保留14–15題共用題幹、式2及表1",
+        "需依校方實際課程進度審核",
+        "human-review-required"
+      ],
+      "batch": 4,
+      "optionCount": 5,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-04.json",
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-screenshot",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "CEEC-114-chem-multiple-choice-15",
+      "sourceId": "CEEC-114-chem",
+      "questionNumber": 15,
+      "originalQuestionNumberOrLocator": "印刷第5頁第15題",
+      "questionPdfPage": 6,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "E"
+      ],
+      "conceptTags": [
+        "反應級數",
+        "濃度與速率"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "關於實驗結果與推論，下列敘述哪些正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "此反應對 S₂O₃²⁻而言為一級反應"
+          },
+          {
+            "label": "B",
+            "text": "看不清「X」標誌時，代表產生了0.5 mmol 的硫"
+          },
+          {
+            "label": "C",
+            "text": "看不清「X」標誌是由於產生的二氧化硫氣泡干擾"
+          },
+          {
+            "label": "D",
+            "text": "若將 HCl溶液濃度改為0.15 M時，不會改變標誌消失的時間（t）"
+          },
+          {
+            "label": "E",
+            "text": "若固定反應總體積，並增加 Na₂S₂O₃溶液體積與減少蒸餾水體積，則標誌消失時間（t）將變小"
+          }
+        ],
+        "sharedStem": {
+          "id": "CEEC-114-chem-group-14-15",
+          "heading": "14-15題為題組",
+          "stem": "某生在恆溫下進行 Na₂S₂O₃ 水溶液的分解反應速率實驗，反應式如式 2：",
+          "equationLabel": "式 2",
+          "equation": "S₂O₃²⁻＋2 H⁺ → SO₂＋S＋H₂O",
+          "procedureHeading": "其實驗步驟如下：",
+          "steps": [
+            "在一個錐形瓶中置入50 mL 的0.20 M Na₂S₂O₃溶液",
+            "在瓶子底部下方放置一張畫有黑色「X」標誌的白紙",
+            "將10 mL 的0.10 M HCl溶液加入上述錐形瓶中，並立刻按下秒錶且以玻棒攪拌",
+            "由錐形瓶開口向下觀察，當無法看見白紙上「X」標誌時，停止計時並記錄時間（t）",
+            "改變步驟（1）的 Na₂S₂O₃溶液體積，並另加入適量蒸餾水。再重複上述步驟進行實驗，結果如表1所示。"
+          ],
+          "table": {
+            "label": "表 1",
+            "columns": [
+              "Na₂S₂O₃溶液體積（mL）",
+              "蒸餾水體積（mL）",
+              "標誌消失時間 t（秒）",
+              "1/t 數值（1/秒）"
+            ],
+            "rows": [
+              [
+                "50.0",
+                "0",
+                "33.8",
+                "0.0296"
+              ],
+              [
+                "30.0",
+                "20.0",
+                "49.2",
+                "0.0203"
+              ],
+              [
+                "10.0",
+                "40.0",
+                "150",
+                "0.0067"
+              ]
+            ]
+          },
+          "sourcePdfPage": 6,
+          "printedPage": 5,
+          "sourceId": "CEEC-114-chem",
+          "status": "transcription-draft-pending-human-review"
+        }
+      },
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "須保留14–15題共用題幹、式2及表1",
+        "需依校方實際課程進度審核",
+        "human-review-required"
+      ],
+      "batch": 4,
+      "optionCount": 5,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-04.json",
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-screenshot",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "WLSH-113-2-1-mathA-multiple-choice-1",
+      "sourceId": "WLSH-113-2-1-mathA",
+      "originalQuestionNumberOrLocator": "多選第1題",
+      "questionNumber": 1,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "1"
+      ],
+      "conceptTags": [
+        "空間直線與平面"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "設空間中有三相異平面 $E_1、E_2、E_3$，三相異直線 $L_1、L_2、L_3$，判斷下列敘述何者正確？",
+        "options": [
+          {
+            "label": "1",
+            "text": "若 $E_1$ 與 $E_2$ 相交於一直線 $L_2$，且 $L_1$ 平行 $L_2$，則 $L_1$ 平行 $E_1$ 或 $L_1$ 平行 $E_2$"
+          },
+          {
+            "label": "2",
+            "text": "設 $E_1$ 與 $E_2$ 平行，若 $L_1$ 在 $E_1$ 上且 $L_2$ 在 $E_2$ 上，則 $L_1$ 與 $L_2$ 平行"
+          },
+          {
+            "label": "3",
+            "text": "若 $E_1$ 與 $E_2$ 垂直且 $E_3$ 與 $E_2$ 垂直，則 $E_1$ 與 $E_3$ 平行"
+          },
+          {
+            "label": "4",
+            "text": "若 $L_1$ 與 $L_2$ 垂直且 $L_2$ 與 $L_3$ 垂直，則 $L_1$ 與 $L_3$ 平行或歪斜"
+          },
+          {
+            "label": "5",
+            "text": "若 $L_1$ 與 $L_2$ 歪斜且 $L_2$ 與 $L_3$ 歪斜，則 $L_1$ 與 $L_3$ 平行或歪斜"
+          }
+        ]
+      },
+      "flags": [
+        "human-review-required",
+        "visual-check-pending"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "batch": 3,
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/441431177.pdf",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/441431177.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "WLSH-113-2-1-mathA-multiple-choice-2",
+      "sourceId": "WLSH-113-2-1-mathA",
+      "originalQuestionNumberOrLocator": "多選第2題",
+      "questionNumber": 2,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "3",
+        "5"
+      ],
+      "conceptTags": [
+        "空間向量",
+        "外積",
+        "純量三重積"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "設 $\\vec a$，$\\vec b$，$\\vec c$ 為空間中三個相異的非零向量，p，q，r 皆為實數，判斷下列敘述何者正確？",
+        "options": [
+          {
+            "label": "1",
+            "text": "若 $p\\vec a+q\\vec b+r\\vec c=\\vec 0$，則 $p=q=r=0$"
+          },
+          {
+            "label": "2",
+            "text": "若 $\\vec a=p\\vec b+q\\vec c$，則 $\\vec a$ 在 $\\vec b$ 上的正射影為 $p\\vec b$"
+          },
+          {
+            "label": "3",
+            "text": "$\\vec a\\cdot(\\vec b\\times\\vec c)=(\\vec a\\times\\vec b)\\cdot\\vec c$"
+          },
+          {
+            "label": "4",
+            "text": "若 $\\vec a\\times\\vec b=\\vec 0$，則 $\\vec a=\\vec 0$ 或 $\\vec b=\\vec 0$"
+          },
+          {
+            "label": "5",
+            "text": "$(\\vec a\\times\\vec b)\\cdot(2\\vec a-3\\vec b)=0$"
+          }
+        ]
+      },
+      "flags": [
+        "human-review-required",
+        "visual-check-pending"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "batch": 3,
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/441431177.pdf",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/441431177.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-1",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第1題",
+      "questionNumber": 1,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "氧化還原",
+        "還原劑"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "人體血紅蛋白中含有 Fe²⁺，如果誤食亞硝酸鹽會使人中毒，因為亞硝酸鹽會使 Fe²⁺ 轉變成 Fe³⁺，生成變性血紅素而喪失與 O₂結合的能力，服用維生素 C 可以緩解亞硝酸鹽的中毒，這說明維生素 C 具有何種性質？",
+        "options": [
+          {
+            "label": "A",
+            "text": "還原性"
+          },
+          {
+            "label": "B",
+            "text": "氧化性"
+          },
+          {
+            "label": "C",
+            "text": "鹼性"
+          },
+          {
+            "label": "D",
+            "text": "酸性"
+          },
+          {
+            "label": "E",
+            "text": "中性。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-4",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第4題",
+      "questionNumber": 4,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "氧化數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "下列關於各元素氧化數的敘述，何者正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "NaCl、Na₂O₂、NaO₂中，Na之氧化數均為+1"
+          },
+          {
+            "label": "B",
+            "text": "Na₂S₂O₃、Na₂SO₄、H₂S中，S之氧化數均為−2"
+          },
+          {
+            "label": "C",
+            "text": "KH、HCl、H₂O中，H之氧化數均為+1"
+          },
+          {
+            "label": "D",
+            "text": "KMnO₄、OF₂、H₂O₂中，O之氧化數均為−2"
+          },
+          {
+            "label": "E",
+            "text": "HF、OF₂、O₂F₂中，F之氧化數有正有負。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-5",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第5題",
+      "questionNumber": 5,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "氧化數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "下列有關氧化數的敘述，何者錯誤？",
+        "options": [
+          {
+            "label": "A",
+            "text": "對每一個原子而言，氧化數必為整數，但原子的平均氧化數可能為小數"
+          },
+          {
+            "label": "B",
+            "text": "元素發生還原反應時，氧化數會減少"
+          },
+          {
+            "label": "C",
+            "text": "金屬的氧化數為正值，而非金屬的氧化數為負值"
+          },
+          {
+            "label": "D",
+            "text": "元素失去電子時，氧化數會增加。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 4,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-8",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第8題",
+      "questionNumber": 8,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "氧化還原反應式平衡"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "有一氧化還原反應：a H₂O₂(aq)＋b MnO₄⁻(aq)＋c H⁺(aq)→d O₂(g)＋e Mn²⁺(aq)＋f H₂O(aq)，其中a、b、c、d、e、f為平衡方程式之係數，則a＋b＋c＋d＋e＋f的和為多少？（各係數為最簡單整數比）",
+        "options": [
+          {
+            "label": "A",
+            "text": "20"
+          },
+          {
+            "label": "B",
+            "text": "24"
+          },
+          {
+            "label": "C",
+            "text": "28"
+          },
+          {
+            "label": "D",
+            "text": "32。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 4,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-10",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第10題",
+      "questionNumber": 10,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "限量試劑"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "化學反應中所謂的限量試劑，指的是下列何者？",
+        "options": [
+          {
+            "label": "A",
+            "text": "反應時，消耗質量最多的反應物"
+          },
+          {
+            "label": "B",
+            "text": "反應初，質量最少的反應物"
+          },
+          {
+            "label": "C",
+            "text": "反應時，最先被耗盡的反應物"
+          },
+          {
+            "label": "D",
+            "text": "分子量最小的反應物"
+          },
+          {
+            "label": "E",
+            "text": "反應初，莫耳數最少的反應物。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-11",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第11題",
+      "questionNumber": 11,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "燃燒計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "丙烷和丁烷的混合氣體完全燃燒後，得3.74克CO₂及1.98克H₂O，則原混合氣體中，丙烷、丁烷的莫耳數比為若干？",
+        "options": [
+          {
+            "label": "A",
+            "text": "1：1"
+          },
+          {
+            "label": "B",
+            "text": "1：3"
+          },
+          {
+            "label": "C",
+            "text": "3：2"
+          },
+          {
+            "label": "D",
+            "text": "2：3"
+          },
+          {
+            "label": "E",
+            "text": "3：1。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-1",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "第1題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "圓周運動",
+        "向心力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "自行車以等速繞行水平的圓弧彎道時，與輪胎接觸的地面須提供自行車足夠的向心力，方能順利轉彎。在相同的彎道轉彎，若速率變為原來的 2 倍時，所需的向心力約需變為原來的多少倍？",
+        "options": [
+          {
+            "label": "A",
+            "text": "4"
+          },
+          {
+            "label": "B",
+            "text": "2"
+          },
+          {
+            "label": "C",
+            "text": "1"
+          },
+          {
+            "label": "D",
+            "text": "$\\frac12$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac14$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-5",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "第5題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "圓周運動",
+        "向心力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "在高速公路的大轉彎處，為了提供足夠的向心力，讓高速行駛的汽車可以順利地通過，工程師設計讓路面呈一傾斜角度 $\\theta$。如果你是工程師，下列哪項因素可以不用考慮？",
+        "options": [
+          {
+            "label": "A",
+            "text": "車輛轉彎的安全速率"
+          },
+          {
+            "label": "B",
+            "text": "轉彎車輛的質量"
+          },
+          {
+            "label": "C",
+            "text": "彎道的曲率半徑"
+          },
+          {
+            "label": "D",
+            "text": "當地的重力加速度值"
+          },
+          {
+            "label": "E",
+            "text": "地面與車輛輪胎間的摩擦係數"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-20",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 20,
+      "originalQuestionNumberOrLocator": "第20題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "萬有引力",
+        "衛星運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "同步衛星繞地球運行的週期和地球自轉的週期相同。若部署一顆與同步衛星質量相同的新衛星，使其繞行地球一次的時間約為 3 hr，且兩顆衛星的軌道均為圓形，則該新衛星所受的重力量值約是同步衛星的多少倍？",
+        "options": [
+          {
+            "label": "A",
+            "text": "16"
+          },
+          {
+            "label": "B",
+            "text": "8"
+          },
+          {
+            "label": "C",
+            "text": "1"
+          },
+          {
+            "label": "D",
+            "text": "$\\frac18$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac1{16}$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-21",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 21,
+      "originalQuestionNumberOrLocator": "第21題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "萬有引力",
+        "重力加速度"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "已知地球半徑為 R，地球表面的重力加速度量值為 g。有一位質量 m 的太空人駕駛太空船在距地球表面高度為 R 之軌道上作等速圓周運動，則在太空船軌道處的重力加速度量值為何？",
+        "options": [
+          {
+            "label": "A",
+            "text": "0"
+          },
+          {
+            "label": "B",
+            "text": "g"
+          },
+          {
+            "label": "C",
+            "text": "$\\frac12g$"
+          },
+          {
+            "label": "D",
+            "text": "$\\frac13g$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac14g$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-22",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 22,
+      "originalQuestionNumberOrLocator": "第22題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "視重"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "承上題，太空人的視重量值為何？",
+        "options": [
+          {
+            "label": "A",
+            "text": "0"
+          },
+          {
+            "label": "B",
+            "text": "mg"
+          },
+          {
+            "label": "C",
+            "text": "$\\frac12mg$"
+          },
+          {
+            "label": "D",
+            "text": "$\\frac13mg$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac14mg$"
+          }
+        ],
+        "dependsOn": "PTTSH-113-1-final-physics-single-choice-21",
+        "sharedStem": {
+          "q": "已知地球半徑為 R，地球表面的重力加速度量值為 g。有一位質量 m 的太空人駕駛太空船在距地球表面高度為 R 之軌道上作等速圓周運動，則在太空船軌道處的重力加速度量值為何？",
+          "options": [
+            "0",
+            "g",
+            "$\\frac12g$",
+            "$\\frac13g$",
+            "$\\frac14g$"
+          ]
+        }
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "shared-stem-with-previous",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-23",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 23,
+      "originalQuestionNumberOrLocator": "第23題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "克卜勒第三定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "質量為 M₁ 及 M₂ 之兩行星，各有一小衛星 m₁ 及 m₂，其作圓周運動的軌道半徑分別為 r₁ = 2R 及 r₂ = R，且 m₁ 週期為 m₂ 之兩倍，則兩行星的質量比 M₁：M₂ =？",
+        "options": [
+          {
+            "label": "A",
+            "text": "1：1"
+          },
+          {
+            "label": "B",
+            "text": "1：2"
+          },
+          {
+            "label": "C",
+            "text": "1：4"
+          },
+          {
+            "label": "D",
+            "text": "2：1"
+          },
+          {
+            "label": "E",
+            "text": "4：1"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-26",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 26,
+      "originalQuestionNumberOrLocator": "第26題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B"
+      ],
+      "conceptTags": [
+        "圓周運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列關於等速圓周運動的敘述，哪些正確？（應選 2 項）",
+        "options": [
+          {
+            "label": "A",
+            "text": "物體因受向心力的作用而產生向心加速度"
+          },
+          {
+            "label": "B",
+            "text": "在「慣性參考坐標系」中觀察物體時，物體所受的向心力是指該物體所受外力的總和"
+          },
+          {
+            "label": "C",
+            "text": "向心加速度使物體速度的量值改變"
+          },
+          {
+            "label": "D",
+            "text": "具有切向加速度"
+          },
+          {
+            "label": "E",
+            "text": "如果向心力突然消失，物體將維持與原本具向心力時相同的運動狀態"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-27",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 27,
+      "originalQuestionNumberOrLocator": "第27題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "D",
+        "E"
+      ],
+      "conceptTags": [
+        "簡諧運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列有關簡諧運動的敘述，哪些正確？（應選 2 項）",
+        "options": [
+          {
+            "label": "A",
+            "text": "為一等加速運動"
+          },
+          {
+            "label": "B",
+            "text": "簡諧運動是一種等速率圓周運動"
+          },
+          {
+            "label": "C",
+            "text": "若一物體受力大小與位移成正比，無論所受力的方向為何，必然作簡諧運動"
+          },
+          {
+            "label": "D",
+            "text": "簡諧運動所受力的方向及加速度方向皆恆指向平衡點"
+          },
+          {
+            "label": "E",
+            "text": "簡諧運動的軌跡必為直線"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-28",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 28,
+      "originalQuestionNumberOrLocator": "第28題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "E"
+      ],
+      "conceptTags": [
+        "萬有引力",
+        "衛星運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "已知重力常數 G，月球繞地球作圓周運動的軌道半徑 R 和月球繞地球運行的週期 T，利用這三個數據，可以估算出的物理量有哪些？（應選 2 項）",
+        "options": [
+          {
+            "label": "A",
+            "text": "地球的質量"
+          },
+          {
+            "label": "B",
+            "text": "太陽的質量"
+          },
+          {
+            "label": "C",
+            "text": "月球的質量"
+          },
+          {
+            "label": "D",
+            "text": "地球繞日運行的週期"
+          },
+          {
+            "label": "E",
+            "text": "月球繞地球運行的速率"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-29",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 29,
+      "originalQuestionNumberOrLocator": "第29題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "簡諧運動",
+        "重力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "火星表面上的重力加速度量值比地球表面上為小。下列有關在地球和火星表面上各種物理現象的敘述，哪些正確？（應選 2 項）",
+        "options": [
+          {
+            "label": "A",
+            "text": "繩長相同的單擺作小幅度擺動的週期相同"
+          },
+          {
+            "label": "B",
+            "text": "同一個質量─彈簧系統鉛直懸掛，作簡諧振動的週期相同"
+          },
+          {
+            "label": "C",
+            "text": "同一個物體的慣性質量相同"
+          },
+          {
+            "label": "D",
+            "text": "同一個物體的重量相同"
+          },
+          {
+            "label": "E",
+            "text": "同一個物體由相同高度作自由落體的時間相同"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "空白、換行、上下標及公式以Unicode/LaTeX轉錄；文字層草稿需原頁複核。"
+      }
+    }
+  ],
+  "counts": {
+    "newRecords": 0,
+    "upgradedTextDrafts": 20,
+    "questionAndAnswerScreenshotDrafts": 2,
+    "textLayerDrafts": 18,
+    "approved": 0
+  },
+  "limitations": [
+    "校方原卷與答案截圖失敗，文字層草稿未完成原版面核對。",
+    "反應速率題組完整保存於兩筆originalQuestion.sharedStem，不重複計為新題。",
+    "未取得真實PDF實體檔，保留前批考次矛盾及人工核准機制。"
+  ]
+}
