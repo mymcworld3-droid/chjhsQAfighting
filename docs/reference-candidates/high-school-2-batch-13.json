@@ -1,0 +1,300 @@
+{
+  "schema": 1,
+  "batch": 13,
+  "date": "2026-11-27",
+  "purpose": "升級既有可忠實取得文字與表格的候選；不增加題號索引，缺失原圖或數式不計入全文。",
+  "upgrades": [
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-12",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 12,
+      "originalQuestionNumberOrLocator": "第12題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "萬有引力",
+        "衛星運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下表為甲、乙、丙、丁、戊等五顆以正圓軌道繞地球運行之衛星資料：",
+        "table": {
+          "columns": [
+            "",
+            "甲",
+            "乙",
+            "丙",
+            "丁",
+            "戊"
+          ],
+          "rows": [
+            [
+              "質量",
+              "m",
+              "4m",
+              "6m",
+              "9m",
+              "30m"
+            ],
+            [
+              "軌道半徑",
+              "R",
+              "2R",
+              "3R",
+              "4R",
+              "5R"
+            ]
+          ]
+        },
+        "promptAfterTable": "試問何者受到的地球引力最大？",
+        "options": [
+          {
+            "label": "A",
+            "text": "甲"
+          },
+          {
+            "label": "B",
+            "text": "乙"
+          },
+          {
+            "label": "C",
+            "text": "丙"
+          },
+          {
+            "label": "D",
+            "text": "丁"
+          },
+          {
+            "label": "E",
+            "text": "戊"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "requires-original-table",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerLocator": "卷末單選答案第12題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "observedTextLocator": "原卷文字101–105；答案254"
+      }
+    },
+    {
+      "id": "PTTSH-105-1-2-physics-single-choice-4",
+      "sourceId": "PTTSH-105-1-2-physics",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "單選第4題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "水平拋射",
+        "速度分量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalQuestion": {
+        "q": "一球自樓頂水平拋出，若不計空氣阻力，則當速度與水平夾角各為 37°與 53°時，其速度量值的比為",
+        "options": [
+          {
+            "label": "A",
+            "text": "1：1"
+          },
+          {
+            "label": "B",
+            "text": "1：3"
+          },
+          {
+            "label": "C",
+            "text": "1：4"
+          },
+          {
+            "label": "D",
+            "text": "3：4"
+          },
+          {
+            "label": "E",
+            "text": "4：7。"
+          }
+        ]
+      },
+      "questionPdfPage": 1,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "human-review-required"
+      ],
+      "batch": 7,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=105-1%2F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%2F&file=201611291559080.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=105-1%2F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%2F&file=201611291559080.pdf",
+      "officialAnswerLocator": "第4題後答案標記D",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-07.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "observedTextLocator": "原卷文字33–35"
+      }
+    }
+  ],
+  "partialEvidence": [
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-18",
+      "page": 2,
+      "answerPage": 5,
+      "marks": [
+        "E"
+      ],
+      "missing": "D選項反應箭頭未出現在文字層，需原頁確認；不補寫缺字",
+      "data": {
+        "temperatureC": 25,
+        "pressureAtm": 1,
+        "enthalpiesKJ": [
+          -110.5,
+          -483.2,
+          -525,
+          -56,
+          -1420
+        ],
+        "reactions": [
+          "C(s) + ½O₂(g) → CO(g)",
+          "2H₂(g) + O₂(g) → 2H₂O(g)",
+          "CO(g) + H₂(g) + O₂(g) → CO₂(g) + H₂O(g)",
+          "HCl(aq) + NaOH(aq) NaCl(aq) + H₂O(l)",
+          "C₂H₄(g) + 3O₂(g) → 2CO₂(g) + 2H₂O(l)"
+        ]
+      },
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestion": null,
+      "status": "incomplete-evidence-only",
+      "reviewer": null,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "originalTextAndOptionsMatched": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-10",
+      "page": 1,
+      "answerPage": 5,
+      "marks": [
+        "○"
+      ],
+      "missing": "文字層未保留log的底數位置；原卷已有答案疑義旗標，無原圖不作推定",
+      "data": {
+        "rawFragment": "log11 沒有意義"
+      },
+      "sourceId": "WLSH-111-1-1-mathB",
+      "originalQuestion": null,
+      "status": "incomplete-evidence-only",
+      "reviewer": null,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "originalTextAndOptionsMatched": false
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-29",
+      "page": 4,
+      "answerPage": 5,
+      "marks": [
+        "B",
+        "D",
+        "E"
+      ],
+      "missing": "F-d圖實體及曲線未取得",
+      "data": {
+        "answerLocator": "多選第4題（原卷第29題）"
+      },
+      "sourceId": "PTTSH-112-2-2-physics",
+      "originalQuestion": null,
+      "status": "incomplete-evidence-only",
+      "reviewer": null,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "originalTextAndOptionsMatched": false
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-32",
+      "page": 4,
+      "answerPage": 5,
+      "marks": [
+        "B",
+        "D"
+      ],
+      "missing": "原題青蛙與滑板示意圖未取得",
+      "data": {
+        "answerLocator": "多選第7題（原卷第32題）"
+      },
+      "sourceId": "PTTSH-112-2-2-physics",
+      "originalQuestion": null,
+      "status": "incomplete-evidence-only",
+      "reviewer": null,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "originalTextAndOptionsMatched": false
+    }
+  ],
+  "counts": {
+    "newRecords": 0,
+    "upgradedTextDrafts": 2,
+    "partialEvidence": 4,
+    "approved": 0
+  },
+  "sourceAttempts": [
+    {
+      "sourceId": "KUSJH-114-1-1-chem",
+      "url": "https://www.kusjh.kh.edu.tw/side_content/1077",
+      "archiveUrl": "https://www.kusjh.kh.edu.tw/upload/files/%E9%AB%98%E4%B8%AD%E8%A7%A3%E7%AD%94114-1-1.zip",
+      "result": "官方連結可見；ZIP讀取HTTP 400；15題答案仍缺"
+    },
+    {
+      "sourceId": "PJHS-108-2-2-chem",
+      "url": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "result": "5頁PDF，0行可讀文字；兩頁截圖cache miss"
+    },
+    {
+      "sourceId": "PTTSH-112-2-final-chem",
+      "url": "https://www.pttsh.ttct.edu.tw/paper/112-2/期末考/高二/112-2高二化學期末考.pdf",
+      "result": "原卷反應速率範圍3-1至3-3可讀，未取得正式答案；未增候選"
+    }
+  ],
+  "limitations": [
+    "本批原卷及答案截圖未成功。容器下載DNS失敗，未取得PDF原檔或圖像實體。",
+    "105年度物理為舊課綱；原有旗標不移除。",
+    "未達化學平衡、反應速率全文補強目標；不自行解題補官方答案。"
+  ]
+}
