@@ -1,0 +1,2054 @@
+{
+  "schema": 1,
+  "batch": 6,
+  "date": "2026-11-27",
+  "purpose": "升級既有候選；非正式參考題。所有人工核准欄保持false。只計已有完整題文草稿的upgrade，不將答案比對或題組頁定位當成全文。",
+  "upgrades": [
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-2",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "一、是非題；第2題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "×"
+      ],
+      "conceptTags": [
+        "指數與對數",
+        "對數底數限制"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "對數 $\\log_a b$ 中的底數 $a$，可以是大於 0 的任意實數",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "原卷是非題，不新增選項",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "questionPdfPage": 1,
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf"
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-6",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 6,
+      "originalQuestionNumberOrLocator": "一、是非題；第6題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "×"
+      ],
+      "conceptTags": [
+        "對數函數",
+        "圖形"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "對數函數 $y=\\log x$ 的圖形是凹口向上",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "原卷是非題，不新增選項",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "questionPdfPage": 1,
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf"
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-2",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第2題",
+      "questionNumber": 2,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "氧化數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "下列關於氯的氧化數，何者錯誤？",
+        "options": [
+          {
+            "label": "A",
+            "text": "KClO₄：＋7"
+          },
+          {
+            "label": "B",
+            "text": "ClO₂：＋3"
+          },
+          {
+            "label": "C",
+            "text": "Cl₂：0"
+          },
+          {
+            "label": "D",
+            "text": "HClO：＋1"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf"
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-2",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "第2題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "液晶"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列何者是目前液晶材料的主要用途？",
+        "options": [
+          {
+            "label": "A",
+            "text": "陰極射線管"
+          },
+          {
+            "label": "B",
+            "text": "奈米光觸媒"
+          },
+          {
+            "label": "C",
+            "text": "導電塑膠"
+          },
+          {
+            "label": "D",
+            "text": "平面顯示器"
+          },
+          {
+            "label": "E",
+            "text": "LED 發光二極體"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "questionPdfPage": 1,
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf"
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-4",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "第4題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "等速圓周運動",
+        "向心力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "有一條最大耐重 32 N、長度 1 m 的繩子，在光滑水平面上一端固定於定點、一端繫著質量 2 kg 的球，使球作等速圓周運動。當球的速率達多少 m/s 時，繩子將會斷裂？",
+        "options": [
+          {
+            "label": "A",
+            "text": "1"
+          },
+          {
+            "label": "B",
+            "text": "2"
+          },
+          {
+            "label": "C",
+            "text": "4"
+          },
+          {
+            "label": "D",
+            "text": "6"
+          },
+          {
+            "label": "E",
+            "text": "8"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "questionPdfPage": 1,
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf"
+    },
+    {
+      "id": "WLSH-113-2-final-mathA-multiple-choice-3",
+      "sourceId": "WLSH-113-2-final-mathA",
+      "originalQuestionNumberOrLocator": "多選第3題",
+      "questionNumber": 3,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "2",
+        "4"
+      ],
+      "conceptTags": [
+        "矩陣",
+        "旋轉矩陣",
+        "線性變換"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "設 $A=\\begin{bmatrix}1&1\\\\1&-1\\end{bmatrix}$，$B=\\begin{bmatrix}-\\frac12&\\frac12\\\\\\frac12&\\frac12\\end{bmatrix}$，則下列選項哪些是正確的？",
+        "options": [
+          {
+            "label": "1",
+            "text": "$A$ 為一鏡射矩陣"
+          },
+          {
+            "label": "2",
+            "text": "$AB$ 為一旋轉矩陣"
+          },
+          {
+            "label": "3",
+            "text": "$AB=BA$"
+          },
+          {
+            "label": "4",
+            "text": "設 $k>0$，則 $(AB)^{2025}\\begin{bmatrix}k\\\\0\\end{bmatrix}=\\begin{bmatrix}0\\\\-k\\end{bmatrix}$"
+          },
+          {
+            "label": "5",
+            "text": "設 $\\triangle PQR$ 經矩陣 $(BA)^{2025}$ 變換到 $\\triangle P'Q'R'$，則 $\\triangle P'Q'R'$ 的面積會大於 $\\triangle PQR$ 的面積。"
+          }
+        ]
+      },
+      "flags": [
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 4,
+      "batch": 3,
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/407114352.pdf"
+    }
+  ],
+  "answerRechecks": [
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-1",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "previousMarks": [
+        "○"
+      ],
+      "observedMarks": [
+        "○"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-2",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "previousMarks": [
+        "×"
+      ],
+      "observedMarks": [
+        "×"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-3",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "previousMarks": [
+        "×"
+      ],
+      "observedMarks": [
+        "×"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-4",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "previousMarks": [
+        "×"
+      ],
+      "observedMarks": [
+        "×"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-5",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "previousMarks": [
+        "○"
+      ],
+      "observedMarks": [
+        "○"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-6",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "previousMarks": [
+        "×"
+      ],
+      "observedMarks": [
+        "×"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-7",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "previousMarks": [
+        "○"
+      ],
+      "observedMarks": [
+        "○"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-8",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "previousMarks": [
+        "○"
+      ],
+      "observedMarks": [
+        "○"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-9",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "previousMarks": [
+        "○"
+      ],
+      "observedMarks": [
+        "○"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-10",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "previousMarks": [
+        "○"
+      ],
+      "observedMarks": [
+        "○"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-1",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-2",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-3",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-4",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-5",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-6",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-7",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-8",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-9",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-10",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-11",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-12",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-13",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-14",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-15",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-16",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-17",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-18",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-19",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-20",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-21",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-22",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer; previous heading mismatch retained",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-1",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-2",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-3",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-4",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-5",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-6",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-7",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-8",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-9",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-10",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-11",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-12",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-13",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-14",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-15",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-16",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-17",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-18",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-19",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-20",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-21",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-22",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-23",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-24",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-25",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "observedMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-26",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "B",
+        "C",
+        "D"
+      ],
+      "observedMarks": [
+        "B",
+        "C",
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-27",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "observedMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-28",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C",
+        "D"
+      ],
+      "observedMarks": [
+        "C",
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-29",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "A",
+        "C"
+      ],
+      "observedMarks": [
+        "A",
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-30",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "observedMarks": [
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-31",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "observedMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-32",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "C",
+        "E"
+      ],
+      "observedMarks": [
+        "C",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-33",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "B",
+        "C"
+      ],
+      "observedMarks": [
+        "B",
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-34",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "answerPdfPage": 7,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "previousMarks": [
+        "A",
+        "B",
+        "E"
+      ],
+      "observedMarks": [
+        "A",
+        "B",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-1",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-2",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-3",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-4",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-5",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-6",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-7",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-8",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-9",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-10",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-11",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-12",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-13",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-14",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-15",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-16",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-17",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-18",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-19",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-20",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-21",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-22",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-23",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-24",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-25",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-26",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "A",
+        "B"
+      ],
+      "observedMarks": [
+        "A",
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-27",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "D",
+        "E"
+      ],
+      "observedMarks": [
+        "D",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-28",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "A",
+        "E"
+      ],
+      "observedMarks": [
+        "A",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-29",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "B",
+        "C"
+      ],
+      "observedMarks": [
+        "B",
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-30",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "previousMarks": [
+        "A",
+        "D"
+      ],
+      "observedMarks": [
+        "A",
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-113-2-1-mathA-multiple-choice-1",
+      "sourceId": "WLSH-113-2-1-mathA",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/441431177.pdf",
+      "previousMarks": [
+        "1"
+      ],
+      "observedMarks": [
+        "1"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-113-2-1-mathA-multiple-choice-2",
+      "sourceId": "WLSH-113-2-1-mathA",
+      "answerPdfPage": 5,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/441431177.pdf",
+      "previousMarks": [
+        "3",
+        "5"
+      ],
+      "observedMarks": [
+        "3",
+        "5"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-113-2-2-mathA-multiple-choice-1",
+      "sourceId": "WLSH-113-2-2-mathA",
+      "answerPdfPage": 6,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/594724368.pdf",
+      "previousMarks": [
+        "2",
+        "3",
+        "5"
+      ],
+      "observedMarks": [
+        "2",
+        "3",
+        "5"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-113-2-2-mathA-multiple-choice-2",
+      "sourceId": "WLSH-113-2-2-mathA",
+      "answerPdfPage": 6,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/594724368.pdf",
+      "previousMarks": [
+        "2"
+      ],
+      "observedMarks": [
+        "2"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-113-2-2-mathA-multiple-choice-3",
+      "sourceId": "WLSH-113-2-2-mathA",
+      "answerPdfPage": 6,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/594724368.pdf",
+      "previousMarks": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "observedMarks": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-chem-multiple-choice-14",
+      "sourceId": "CEEC-114-chem",
+      "answerPdfPage": 1,
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "previousMarks": [
+        "B",
+        "C",
+        "E"
+      ],
+      "observedMarks": [
+        "B",
+        "C",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "screenshot-and-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-chem-multiple-choice-15",
+      "sourceId": "CEEC-114-chem",
+      "answerPdfPage": 1,
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "previousMarks": [
+        "A",
+        "E"
+      ],
+      "observedMarks": [
+        "A",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "screenshot-and-text-layer",
+      "humanVerified": false
+    }
+  ],
+  "rateGroupEvidence": {
+    "sourceId": "CEEC-114-chem",
+    "existingIds": [
+      "CEEC-114-chem-multiple-choice-14",
+      "CEEC-114-chem-multiple-choice-15"
+    ],
+    "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+    "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+    "questionPdfPage": 6,
+    "printedPage": 5,
+    "answerPdfPage": 1,
+    "observedAnswerMarks": [
+      [
+        "B",
+        "C",
+        "E"
+      ],
+      [
+        "A",
+        "E"
+      ]
+    ],
+    "originalPageCropNormalized": [
+      0.09,
+      0.09,
+      0.91,
+      0.8
+    ],
+    "table": {
+      "columns": [
+        "硫代硫酸鈉溶液體積(mL)",
+        "蒸餾水體積(mL)",
+        "時間(s)",
+        "倒數(s⁻¹)"
+      ],
+      "rows": [
+        [
+          50,
+          0,
+          33.8,
+          0.0296
+        ],
+        [
+          30,
+          20,
+          49.2,
+          0.0203
+        ],
+        [
+          10,
+          40,
+          150,
+          0.0067
+        ]
+      ]
+    },
+    "reaction": "S₂O₃²⁻ + 2H⁺ → SO₂ + S + H₂O",
+    "experimentalConstants": {
+      "sodiumThiosulfateM": 0.2,
+      "hclM": 0.1,
+      "hclMl": 10
+    },
+    "status": "original-page-and-answer-image-inspected; not full transcription",
+    "conceptTags": [
+      "反應速率",
+      "反應級數",
+      "控制變因"
+    ],
+    "humanVerified": false
+  },
+  "editionEvidence": [
+    {
+      "publisher": "南一",
+      "source": "https://www.junyiacademy.org/topics/n-chemical-high",
+      "sourceType": "curriculum-alignment",
+      "II": [
+        "原子構造",
+        "化學鍵",
+        "反應速率"
+      ],
+      "III": [
+        "化學平衡",
+        "酸鹼反應"
+      ]
+    },
+    {
+      "publisher": "翰林",
+      "source": "https://books.hanlin.com.tw/product/435023",
+      "sourceType": "publisher-teaching-guide",
+      "III": [
+        "化學平衡",
+        "沉澱反應與溶解平衡",
+        "酸鹼反應"
+      ]
+    },
+    {
+      "publisher": "龍騰",
+      "source": "https://www.ltedu.com.tw/Web/mobile2/prodlist2.aspx?ID=10468&SbjSubjectDesc=%E5%8C%96%E5%AD%B8&SourceType=Subject",
+      "sourceType": "official-textbook-contents",
+      "III": [
+        {
+          "chapter": 1,
+          "concepts": [
+            "化學平衡",
+            "平衡常數",
+            "勒沙特列原理"
+          ]
+        },
+        {
+          "chapter": 2,
+          "concepts": [
+            "電解質",
+            "沉澱反應",
+            "溶解平衡"
+          ]
+        },
+        {
+          "chapter": 3,
+          "concepts": [
+            "酸鹼",
+            "水的解離",
+            "弱酸弱鹼",
+            "緩衝",
+            "滴定"
+          ]
+        }
+      ]
+    }
+  ],
+  "scopeEvidence": {
+    "source": "https://dept.pjhs.tyc.edu.tw/DEPT/NB_files/NB_7284_8672.pdf",
+    "note": "平鎮高中114年度版本選用表：化學II高二自然組、III高三自然組；不將此單校安排當作全國規則。"
+  },
+  "rightsEvidence": [
+    "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+    "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+    "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+  ],
+  "counts": {
+    "newRecords": 0,
+    "upgradedTextDrafts": 6,
+    "answerRechecked": 103,
+    "answerMatches": 103,
+    "answerMismatches": 0,
+    "approved": 0
+  },
+  "limitations": [
+    "校方PDF直接下載DNS失敗，多數截圖cache miss；文字層不能證明上標、圖形、排版完整。",
+    "未取得臺東112下期末反應速率官方答案。",
+    "未複製第三方解析或未核實圖像；圖表題留待原卷核對。"
+  ]
+}
