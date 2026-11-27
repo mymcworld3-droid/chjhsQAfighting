@@ -184,10 +184,9 @@ async function main(){
       },fixture);
       const tap=async i=>page.touchscreen.tap(coords[i].x,coords[i].y);
       await tap(0);assert.equal(await page.evaluate(()=>window.weaveTap.selection?.choosing),true);
-      await tap(1);assert.equal(await page.evaluate(()=>window.weaveTap.selection?.choosing),false);
-      assert.equal(await page.evaluate(()=>window.weaveTap.confirm),0);
       await tap(0);assert.equal(await page.evaluate(()=>window.weaveTap.selection),null);
-      await tap(0);await tap(1);await tap(1);
+      assert.equal(await page.evaluate(()=>window.weaveTap.confirm),0);
+      await tap(0);await tap(1);assert.equal(await page.evaluate(()=>window.weaveTap.selection?.choosing),false);
       assert.equal(await page.evaluate(()=>window.weaveTap.confirm),1);
     }
     // Real browser audio decoding and the existing single-context manager.

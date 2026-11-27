@@ -16,7 +16,7 @@ test('weave mark attacks three tiles and preserves FIFO without duplicate refres
   assert.deepEqual(O.owned(state,'u','mark').map(o=>o.position),[p(6,7),p(5,6),p(6,5)]);
   const {plan}=W.selected(board,origin,sk('weave-mark'),state,'u',p(5,6));assert.deepEqual(W.place(state,plan,{uid:'u',board,clock:2}),state);
 });
-test('all ordered pairs precomputed, no foreign endpoint, reversible paths and walls reject',()=>{
+test('all ordered pairs precomputed, no foreign endpoint, reversible paths and intervening walls do not block',()=>{
   let state=marks([p(2,2),p(2,7),p(7,2)]);state=marks([p(10,10)],'v',state);
   const all=W.plans(board,origin,sk('weave-thread'),state,'u');assert.equal(all.pairs.length,12);
   for(const pair of all.pairs){
@@ -25,16 +25,19 @@ test('all ordered pairs precomputed, no foreign endpoint, reversible paths and w
     assert.ok(a.cells.every(q=>all.cells.some(c=>G.key(c)===G.key(q))));
   }
   assert.equal(W.selected(board,origin,sk('weave-thread'),state,'u',p(10,10),p(2,2)).plan,null);
-  assert.equal(W.selected({...board,blocked:q=>q.x===2&&q.y===4},origin,sk('weave-thread'),state,'u',p(2,7),p(2,2)).plan,null);
+  const through=W.selected({...board,blocked:q=>q.x===2&&q.y===4},origin,sk('weave-thread'),state,'u',p(2,7),p(2,2)).plan;
+  assert.ok(through);assert.ok(through.cells.some(q=>q.x===2&&q.y===5));assert.ok(!through.cells.some(q=>q.x===2&&q.y===4));
+  assert.equal(W.selected({...board,blocked:q=>q.x===2&&q.y===7},origin,sk('weave-thread'),state,'u',p(2,7),p(2,2)).plan,null);
 });
-test('domain two, collinear and polygon powers include boundary and interior, reject broken edges',()=>{
+test('domain two, collinear and polygon powers include boundary and interior across walls',()=>{
   for(const [points,power] of [[[p(2,2),p(2,8)],2.4],[[p(2,2),p(2,5),p(2,8)],2.8],[[p(2,2),p(2,8),p(8,2)],3.2]]){
     const state=marks(points),plan=W.selected(board,origin,sk('weave-domain'),state,'u',origin).plan;
     assert.equal(plan.power,power);assert.ok(points.every(q=>plan.cells.some(c=>G.key(c)===G.key(q))));
     if(power===3.2){assert.ok(plan.cells.some(q=>q.x===4&&q.y===4));
       const interior=W.selected({...board,blocked:q=>q.x===4&&q.y===4},origin,sk('weave-domain'),state,'u',origin).plan;
       assert.ok(interior);assert.ok(!interior.cells.some(q=>q.x===4&&q.y===4));}
-    assert.equal(W.selected({...board,blocked:q=>q.x===2&&q.y===4},origin,sk('weave-domain'),state,'u',origin).plan,null);
+    const through=W.selected({...board,blocked:q=>q.x===2&&q.y===4},origin,sk('weave-domain'),state,'u',origin).plan;
+    assert.ok(through);assert.equal(through.power,power);assert.ok(through.cells.some(q=>q.x===2&&q.y===7));assert.ok(!through.cells.some(q=>q.x===2&&q.y===4));
   }
   assert.equal(W.selected(board,origin,sk('weave-domain'),marks([p(2,2)]),'u',origin).plan,null);
 });
@@ -51,10 +54,26 @@ test('actual trial preview uses all pairs, does not mutate and matches dungeon d
   assert.equal(actual.result.totalDamage,320);assert.equal(actual.result.hits.length,1);assert.deepEqual(actual.weaponObjects,r.weaponObjects);assert.equal(JSON.stringify(r),old);
 });
 test('actual dungeon arbitrary pair and mark persistence, no resource spent by rejected pair',()=>{
-  const {map,room:r}=room([p(2,2),p(2,8)],p(2,4)),before=JSON.stringify(r);
+  const {map,room:r}=room([p(2,2),p(2,8)],p(2,6),[p(2,4)]),before=JSON.stringify(r);
   const out=C.resolveCast(r,'u',map,sk('weave-thread'),{first:p(2,2),target:p(2,8),seq:1,base:100});
   assert.equal(out.result.totalDamage,225);assert.equal(out.members.u.explorationStamina,7);assert.deepEqual(out.weaponObjects,r.weaponObjects);
   assert.throws(()=>C.resolveCast(r,'u',map,sk('weave-thread'),{first:p(3,3),target:p(2,8),seq:1,base:100}),/端點/);
   const mark=C.resolveCast(r,'u',map,sk('weave-mark'),{target:p(7,6),seq:1,base:100});
   assert.equal(O.owned(mark.weaponObjects,'u','mark').length,3);assert.equal(JSON.stringify(r),before);
+});
+
+test('weave through-wall hits agree in trial and dungeon while mark still stops at wall',()=>{
+  const points=[p(2,2),p(2,8),p(8,2)],wall=p(2,4),enemy=p(2,6);
+  const s=R.create({id:'weave-wall',mode:'pve',players:[{uid:'u',name:'u',atk:100,maxHp:1000,manualSkills:[]}],now:2000000000000});
+  Object.assign(s,{width:13,height:13,blocks:[wall],objective:null,actors:s.actors.slice(0,2),weaponObjects:marks(points)});
+  Object.assign(s.actors[0],{...origin,atk:100,stamina:10});
+  Object.assign(s.actors[1],{...enemy,hp:1000,maxHp:1000,shield:0,guard:0,counter:0,boss:false,footprint:{width:1,height:1}});
+  for(const [id,aim,first,damage] of [['weave-thread',p(2,8),p(2,2),225],['weave-domain',origin,null,320]]){
+    const out=R.previewCast(s,s.actors[0],sk(id),aim,first),{map,room:r}=room(points,enemy,[wall]);
+    assert.equal(out.hits[0].damage,damage);assert.ok(!out.cells.some(q=>G.key(q)===G.key(wall)));
+    const actual=C.resolveCast(r,'u',map,sk(id),{target:aim,first,seq:1,base:100});
+    assert.equal(actual.result.totalDamage,damage);assert.deepEqual(actual.cells,out.cells);
+  }
+  const blocked={...board,blocked:q=>q.x===7&&q.y===6};
+  assert.equal(W.selected(blocked,origin,sk('weave-mark'),undefined,'u',p(8,6)).plan,null);
 });

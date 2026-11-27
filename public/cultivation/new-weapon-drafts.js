@@ -23,8 +23,8 @@
     ]),
     book('sword-weave','織界靈劍','sword','築基','以劍痕、兩點連線及封閉劍陣布置戰場。',[
       skill('weave-mark','刻界',2,3,'weave-mark',1.5,'直線攻擊三格，在有效指定位置留下劍痕。',{maxMarks:3,objectType:'mark'}),
-      skill('weave-thread','牽絲',3,null,'weave-thread',2.25,'選取兩道劍痕或本體與一道劍痕，攻擊完整合法連線。',{endpointCount:2,allowOwnerEndpoint:true}),
-      skill('weave-domain','織界',4,0,'weave-domain',2.4,'至少兩道劍痕；兩點連線、三點共線或三角封閉區域皆可攻擊。',{minMarks:2,powers:{two:2.4,collinear:2.8,polygon:3.2},maxTargetPower:3.2})
+      skill('weave-thread','牽絲',3,null,'weave-thread',2.25,'選取兩道劍痕或本體與一道劍痕，第二端點點擊即施放；靈絲可穿牆。',{endpointCount:2,allowOwnerEndpoint:true}),
+      skill('weave-domain','織界',4,0,'weave-domain',2.4,'至少兩道劍痕；兩點連線、三點共線或三角封閉區域皆可穿牆攻擊有效格。',{minMarks:2,powers:{two:2.4,collinear:2.8,polygon:3.2},maxTargetPower:3.2})
     ]),
     book('body-mirror','蜃影圖騰','body','築基','以地圖中心點對稱蜃影同步複製合法體術。',[
       skill('mirror-strike','虛形拳',2,2,'mirror-strike',1.6,'攻擊前方兩格；已啟用蜃影時同步複製。'),

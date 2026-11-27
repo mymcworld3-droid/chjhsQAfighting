@@ -11,12 +11,13 @@ const trial=(enemy=p(4,4))=>{
   Object.assign(s.actors[1],{...enemy,hp:1000,maxHp:1000,shield:0,guard:0,counter:0,boss:false,footprint:{width:1,height:1}});
   return s;
 };
-test('two endpoint selection highlights all legal seconds, previews then confirms, and cancels without mutation',()=>{
+test('two endpoint selection highlights all legal seconds and casts on second tap, cancels without mutation',()=>{
   const s=trial(),plan=R.skillPreviewPlan(s,s.actors[0],sk('weave-thread')),before=JSON.stringify(s);
   const first=Q.choose(plan,null,p(2,2));assert.equal(first.confirm,false);assert.equal(first.selection.choosing,true);
   assert.equal(Q.selectionPlan(plan,first.selection).aims.length,3);
-  const second=Q.choose(plan,first.selection,p(2,8));assert.equal(second.confirm,false);assert.equal(second.selection.choosing,false);
-  assert.equal(Q.choose(plan,second.selection,p(2,8)).confirm,plan.byPair['2,2|2,8'].valid);
+  const second=Q.choose(plan,first.selection,p(2,8));assert.equal(second.confirm,plan.byPair['2,2|2,8'].valid);assert.equal(second.selection.choosing,false);
+  const insufficient={...plan,byPair:{...plan.byPair,'2,2|2,8':{...plan.byPair['2,2|2,8'],valid:false}}};
+  assert.equal(Q.choose(insufficient,first.selection,p(2,8)).confirm,false);
   assert.equal(Q.choose(plan,second.selection,p(2,2)).selection,null);
   assert.equal(Q.choose(plan,first.selection,p(1,1)).selection,first.selection);
   assert.equal(JSON.stringify(s),before);

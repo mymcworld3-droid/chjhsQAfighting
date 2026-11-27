@@ -11,7 +11,10 @@
   function plans(board,origin,sk,state,uid){
     const out={aims:[],cells:[],byAim:{},byPair:{},pairs:[],reason:''},union=new Map(),aims=new Map();
     if(!supports(sk)||!G.open(board,origin))return out;
-    const marks=O.owned(state,uid,'mark').map(o=>o.position);
+    const marks=O.owned(state,uid,'mark').map(o=>o.position).filter(q=>G.open(board,q));
+    // Only weave formations ignore intervening terrain. Endpoints and damage
+    // tiles must still be legal on the real board; other weapons are unchanged.
+    const through={width:board.width,height:board.height,blocked:()=>false};
     function add(plan,first=null){
       for(const cell of plan.cells)union.set(G.key(cell),cell);
       if(first){
@@ -32,17 +35,17 @@
       const endpoints=[...new Map([origin,...marks].map(q=>[G.key(q),p(q)])).values()];
       for(const first of endpoints)for(const second of endpoints){
         if(same(first,second))continue;
-        const line=G.segment(board,first,second);
-        if(line.valid)add({aim:p(second),first:p(first),cells:line.cells,vertices:[p(first),p(second)],power:sk.power},first);
+        const line=G.segment(through,first,second);
+        if(line.valid)add({aim:p(second),first:p(first),cells:line.cells.filter(q=>G.open(board,q)),vertices:[p(first),p(second)],power:sk.power},first);
       }
-      if(!out.pairs.length)out.reason=marks.length?'端點之間遭障礙阻斷，無合法連線':'尚未留下劍痕';
+      if(!out.pairs.length)out.reason=marks.length?'需要兩個不同的有效端點':'尚未留下劍痕';
     }else{
       const distinct=[...new Map(marks.map(q=>[G.key(q),q])).values()];
       if(distinct.length<2)out.reason='織界至少需要兩道劍痕';
       else{
-        const area=G.polygon(board,distinct);
-        if(!area.valid)out.reason='障礙阻斷劍陣邊界，無法形成完整劍陣';
-        else add({aim:p(origin),cells:area.cells,vertices:area.vertices,power:distinct.length===2?sk.powers.two:area.vertices.length===2?sk.powers.collinear:sk.powers.polygon});
+        const area=G.polygon(through,distinct);
+        if(!area.valid)out.reason='無法形成有效劍陣';
+        else add({aim:p(origin),cells:area.cells.filter(q=>G.open(board,q)),vertices:area.vertices,power:distinct.length===2?sk.powers.two:area.vertices.length===2?sk.powers.collinear:sk.powers.polygon});
       }
     }
     out.aims=[...aims.values()];out.cells=[...union.values()];return out;
@@ -66,20 +69,20 @@
       if(cell){seen.add(id);apply(target,plan.power,p(cell));}
     }
   }
-  // Shared touch/keyboard interaction: first tap picks, second previews,
-  // third confirms. Tap the first endpoint again to cancel without casting.
+  // Shared touch/keyboard interaction: first tap picks, second casts.
+  // Tap the first endpoint again to cancel without casting.
   function choose(plan,selection,tile){
     const pairs=plan?.pairs||[];
     const first=selection?.first;
     if(first&&same(first,tile))return {selection:null,confirm:false,reason:'已取消端點，請重新選擇'};
     if(!first){
       if(!pairs.some(q=>same(q.first,tile)))return {selection:null,confirm:false,reason:plan?.reason||'請選擇可連接的第一端點'};
-      return {selection:{...p(tile),first:p(tile),choosing:true},confirm:false,reason:'選擇第二端點；再次點擊第一端點可取消'};
+      return {selection:{...p(tile),first:p(tile),choosing:true},confirm:false,reason:'選擇第二端點立即施放；再點第一端點取消'};
     }
     const scheme=plan?.byPair?.[pairKey(first,tile)];
-    if(!scheme)return {selection,confirm:false,reason:'兩端點無法連通，請選其他端點'};
-    const confirm=!selection.choosing&&same(selection,tile)&&scheme.valid;
-    return {selection:{...p(tile),first:p(first),choosing:false},confirm,reason:scheme.valid?'再次點選此端點確認施放':scheme.reason||'體力不足或目前不可施放'};
+    if(!scheme)return {selection,confirm:false,reason:'請選擇另一個有效端點'};
+    const confirm=Boolean(scheme.valid);
+    return {selection:{...p(tile),first:p(first),choosing:false},confirm,reason:confirm?'施放牽絲':scheme.reason||'體力不足或目前不可施放'};
   }
   function selectionPlan(plan,selection){
     if(!plan?.pairs?.length||!selection?.first)return plan;

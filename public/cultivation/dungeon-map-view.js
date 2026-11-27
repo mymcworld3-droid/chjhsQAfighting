@@ -890,7 +890,7 @@ class DungeonMapView{
     this.$('[data-dm-focus]').textContent=charges>0?
       '✦ 金身蓄勢 '+charges+'/6 · 體術減耗':'';
     const aimed=this.currentAim();
-    this.$('[data-dm-aim]').textContent=this.selectedSkillId==='weave-thread'?(this.weaveSelection?.choosing?'已選第一端點 · 點第二端點；重點第一端點取消':this.weaveSelection?'已選兩端點 · 再點第二端點施放':'選擇第一端點'):aimed?
+    this.$('[data-dm-aim]').textContent=this.selectedSkillId==='weave-thread'?(this.weaveSelection?.choosing?'已選第一端點 · 點第二端點施放；重點第一端點取消':this.weaveSelection?'已選兩端點 · 牽絲':'選擇第一端點'):aimed?
       '目標格 ('+aimed.x+'，'+aimed.y+') · 點其他格改變目標':
       '點擊靈獸或空白地格，再施放技能';
     this.root.querySelectorAll('[data-dm-presets] button').forEach((button,index)=>{
@@ -1261,7 +1261,11 @@ class DungeonMapView{
       this.aimTile=chosen.selection&&!chosen.selection.choosing?{x:chosen.selection.x,y:chosen.selection.y}:null;
       this.selectedBeastId=null;this.followBeast=false;
       this.updateBeastHUD();this.updateSkillHUD();this.drawSoon();
-      if(chosen.confirm)void this.cast('weave-thread',this.aimTile,false,chosen.selection.first);
+      if(chosen.confirm){
+        const target=this.aimTile,first=chosen.selection.first;
+        this.weaveSelection=null;this.aimTile=null;
+        void this.cast('weave-thread',target,false,first);
+      }
       else this.actionFeedback(chosen.reason);
       return;
     }

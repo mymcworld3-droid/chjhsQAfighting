@@ -1454,7 +1454,7 @@ function updateControls(){
     action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):
     shown.kind==='dash-cleave'?'點選金色地格突進，紅格為攻擊範圍':
     shown.kind==='flying-sword'?(me.flyingSword?'點選金色地格御劍':'點選金色地格召喚飛劍'):
-    shown.kind==='weave-thread'?'點選第一端點，再選第二端點預覽；重點第二端點確認':
+    shown.kind==='weave-thread'?'點選第一端點，再點第二端點直接施放':
     shown.kind==='fist-focus'?'點選自己蓄勢，施放後立即結束回合':
     directional?'點選紅格，選擇出拳或出劍方向':
     shown.range===0?'點選自己施放技能':'點選紅格施放技能';
@@ -1464,7 +1464,7 @@ function updateControls(){
       t?t.name+' · 生命 '+t.hp+'/'+t.maxHp:'位置 '+(selection.x+1)+', '+(selection.y+1)}
       ${error?' · '+error:''}`:
     mine?hint:'等待對手行動';
-  if(shown.kind==='weave-thread'&&selection?.first)$('[data-selection]').textContent=selection.choosing?'已選第一端點 · 選第二端點；重點第一端點取消':'已選兩端點 · 再點第二端點或確認施放；重點第一端點取消';
+  if(shown.kind==='weave-thread'&&selection?.first)$('[data-selection]').textContent=selection.choosing?'已選第一端點 · 點第二端點施放；重點第一端點取消':'已選兩端點 · 牽絲；重點第一端點取消';
   if(animating)$('[data-selection]').textContent=renderer.currentAction;
   refreshSealTargetGuidance();
 }
