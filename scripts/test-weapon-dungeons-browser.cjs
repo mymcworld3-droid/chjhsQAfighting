@@ -47,10 +47,17 @@ async function main(){
   page=await browser.newPage({viewport:{width:393,height:852}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('http://127.0.0.1:'+server.address().port+'/test');
   await page.locator('#gameplay-weapon-dungeon-entry').click();
-  await page.locator('[data-wd-dungeon="peak-stone"]').waitFor();
+  await page.locator('[data-atlas-dungeon="peak-stone"]').waitFor();
   assert.equal(await page.locator('[data-wd-difficulty]').count(),0);
-  await page.screenshot({path:path.join(output,'dungeon-catalog.png')});
-  await page.locator('[data-wd-dungeon="peak-stone"]').click();
+  assert.equal(await page.locator('.gameplay-entries').isVisible(),false);
+  assert.equal(await page.locator('[data-atlas-back]').isVisible(),true);
+  await page.waitForFunction(()=>{const img=document.querySelector('[data-atlas-dungeon="peak-stone"] img');return img?.complete&&img.naturalWidth>0;});
+  await page.screenshot({path:path.join(output,'dungeon-islands.png')});
+  await page.locator('[data-atlas-back]').click();
+  assert.equal(await page.locator('.gameplay-entries').isVisible(),true);
+  assert.equal(await page.locator('#gameplay-dungeon-atlas').isVisible(),false);
+  await page.locator('#gameplay-weapon-dungeon-entry').click();
+  await page.locator('[data-atlas-dungeon="peak-stone"]').click();
   await page.locator('[data-wd-difficulty="0"]').waitFor();
   assert.equal(await page.locator('[data-wd-difficulty]').count(),6);
   assert.equal(await page.locator('[data-wd-difficulty="1"]').getAttribute('data-qy-difficulty'),'locked');
@@ -119,8 +126,9 @@ async function main(){
   }
   room=await read();assert.equal(room.actors[0].stamina,10);assert.equal(room.actors[0].questions,2);
   assert.equal((await API.weaponDungeonState(db,'u1')).tickets,2);
-  await page.locator('[data-close]').click();await page.locator('#gameplay-weapon-dungeon-entry').click();
-  await page.locator('[data-wd-dungeon="peak-stone"]').click();
+  await page.locator('[data-close]').click();await page.evaluate(()=>window.openWeaponDungeons());
+  await page.locator('[data-atlas-dungeon="peak-stone"]').click();
+  await page.locator('[data-wd-enter]').waitFor({state:'visible'});
   assert.match(await page.locator('[data-wd-enter]').textContent(),/不耗券/);
   await page.locator('[data-wd-enter]').click();await page.locator('#tactical-combat canvas').waitFor();
   assert.equal((await read()).id,room.id);assert.equal((await API.weaponDungeonState(db,'u1')).tickets,2);
@@ -140,7 +148,7 @@ async function main(){
   assert.equal(await page.locator('[data-manual-xp-toast]').count(),0,'live XP must not obscure the results');
   await page.screenshot({path:path.join(output,'victory.png'),animations:'disabled'});
   await page.locator('[data-weapon-dungeon-menu]').click();
-  await page.locator('[data-wd-dungeon="peak-stone"]').click();
+  await page.locator('[data-atlas-dungeon="peak-stone"]').click();
   await page.waitForFunction(()=>document.querySelector('[data-wd-difficulty="1"]')?.dataset.qyDifficulty==='ready');
   await page.locator('[data-wd-difficulty="1"]').click();assert.equal(await page.locator('[data-wd-enter]').isDisabled(),false);
   assert.match(await page.locator('.wd-tickets').textContent(),/副本券\s*2\b/);

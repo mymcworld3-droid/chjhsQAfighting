@@ -25,7 +25,7 @@
 }
 
 /* Landscape expedition atlas: category rail + actual world destinations, not a
-   second modal just to choose a dungeon. Portrait retains the original list. */
+   second modal just to choose a dungeon. Portrait opens the same atlas from the launcher. */
 #page-gameplay .gameplay-atlas{display:none}
 @media(orientation:landscape){
   #page-gameplay.gameplay-page:has(.gameplay-shell[data-atlas-ready="true"]){
@@ -123,3 +123,34 @@
   #page-gameplay .gameplay-atlas-node>small{margin-top:4px}
 }
 @media(prefers-reduced-motion:reduce){#page-gameplay .gameplay-atlas-node img{transition:none}#page-gameplay .gameplay-atlas-node:hover img{transform:none}}
+
+/* Portrait: the weapon category opens the illustrated world, not a card catalog. */
+#page-gameplay .gameplay-atlas-back{display:none}
+@media(orientation:portrait){
+  #page-gameplay .gameplay-shell[data-wd-atlas="true"]>:is(.gameplay-heading,.gameplay-entries){display:none!important}
+  #page-gameplay.gameplay-page:has(.gameplay-shell[data-wd-atlas="true"]):not(:has([data-wd-open="true"])){
+    padding:0 0 8px!important;overflow-x:hidden;
+  }
+  #page-gameplay .gameplay-shell[data-wd-atlas="true"]:not([data-wd-open="true"]){
+    width:100%;max-width:none;padding:0;gap:0;box-sizing:border-box;
+    min-height:clamp(360px,calc(100dvh - 155px),1000px);
+    grid-template-rows:minmax(0,1fr);align-content:stretch;
+    background:linear-gradient(180deg,#181b19bd,transparent 35%,#1c231deb),url('/assets/scenes/mountains-landscape-ai.webp') center/cover no-repeat;
+  }
+  #page-gameplay .gameplay-shell[data-wd-atlas="true"]:not([data-wd-open="true"])>.gameplay-atlas{
+    display:grid;min-width:0;min-height:0;grid-template-rows:auto minmax(0,1fr) auto;
+    padding:16px clamp(12px,4vw,28px);gap:12px;
+  }
+  #page-gameplay .gameplay-atlas-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#f4e3bb;text-shadow:0 2px 8px #131914}
+  #page-gameplay .gameplay-atlas-heading h3{margin:0;font:700 clamp(19px,4.8vw,26px)/1.4 "Noto Serif TC",serif;letter-spacing:.08em}
+  #page-gameplay .gameplay-atlas-heading>span{font-size:11px;white-space:nowrap}
+  #page-gameplay .gameplay-atlas-back{display:block;min-height:40px;border:1px solid #c8ae7480;border-radius:8px;padding:6px 10px;background:#282821b8;color:#f4e3bb;font:inherit;font-size:13px;cursor:pointer}
+  #page-gameplay .gameplay-atlas-sites{display:grid;align-content:center;justify-items:center;grid-template-columns:minmax(0,1fr);gap:18px;min-width:0}
+  #page-gameplay .gameplay-atlas-node{display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,340px);min-width:0;padding:0;border:0;background:transparent;color:#f9e6b7;cursor:pointer;font:inherit}
+  #page-gameplay .gameplay-atlas-node img{display:block;width:100%;height:clamp(145px,36dvh,340px);object-fit:contain;object-position:center bottom;filter:drop-shadow(0 12px 12px #111b1b8c);pointer-events:none}
+  #page-gameplay .gameplay-atlas-name{display:grid;place-items:center;z-index:1;margin-top:-8px;width:min(92%,290px);aspect-ratio:1325/236;padding:0 30% 0 20%;box-sizing:border-box;background:url('/assets/dungeons/dungeon-button.png') center/100% 100% no-repeat;color:#f8e3b8;font:700 clamp(17px,4.8vw,22px)/1.15 "Noto Serif TC",serif;text-shadow:0 1px 3px #0b1119;white-space:nowrap}
+  #page-gameplay .gameplay-atlas-name>span{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+  #page-gameplay .gameplay-atlas-node>small{margin-top:7px;color:#f2e3c4;text-shadow:0 2px 6px #081110;font-size:13px}
+  #page-gameplay .gameplay-atlas-hint{margin:0;text-align:center;color:#e3d8bd;text-shadow:0 2px 6px #10160e;font-size:12px}
+  #page-gameplay .gameplay-atlas-node:focus-visible,#page-gameplay .gameplay-atlas-back:focus-visible{outline:2px solid #f1d29a;outline-offset:2px}
+}

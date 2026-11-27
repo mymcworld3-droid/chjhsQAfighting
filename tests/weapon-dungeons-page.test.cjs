@@ -31,7 +31,7 @@ function harness({wide=false}={}){
  const respond=(data=state(),index=0)=>requests[index]({ok:true,json:async()=>({ok:true,state:data})});
  return {elements,entered,requests,dialog,state,respond,events,shell,
    setUid:value=>{uid=value;},open:(id)=>window.openWeaponDungeons(id),
-   choose:(id=W.ID)=>dialog().handlers.click({target:{closest:s=>s==='[data-wd-dungeon]'?{dataset:{wdDungeon:id}}:null}}),
+   choose:(id=W.ID)=>elements.get('gameplay-dungeon-atlas').handlers.click({target:{closest:s=>s==='[data-atlas-dungeon]'?{dataset:{atlasDungeon:id}}:null}}),
    back:()=>dialog().handlers.click({target:{closest:s=>s==='[data-wd-back]'?{}:null}}),
    click:async difficulty=>{dialog().handlers.click({target:{closest:selector=>selector==='[data-wd-difficulty]'?
      {dataset:{wdDifficulty:String(difficulty)},disabled:false}:null}});await new Promise(resolve=>setImmediate(resolve));},
@@ -39,11 +39,13 @@ function harness({wide=false}={}){
 }
 test('gameplay entry opens an authenticated inline panel with six difficulties, ticket balance and tracking counterplay',async()=>{
  const h=harness();assert(h.elements.has('gameplay-weapon-dungeon-entry'));
- const loading=h.open();assert.equal(h.dialog().hidden,false);assert.match(h.dialog().innerHTML,/同步中/);
- h.respond();await loading;
- assert.match(h.dialog().innerHTML,/data-wd-dungeon="peak-stone"/);
- assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty=/);
- h.choose();h.back();assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty=/);h.choose();
+ await h.open();assert.equal(h.requests.length,0);assert.equal(h.dialog().hidden,true);
+ assert.equal(h.shell.attributes['data-wd-atlas'],'true');
+ assert.match(h.elements.get('gameplay-dungeon-atlas').innerHTML,/data-atlas-dungeon="peak-stone"/);
+ h.choose();assert.equal(h.dialog().hidden,false);assert.match(h.dialog().innerHTML,/同步中/);
+ h.respond();await new Promise(resolve=>setImmediate(resolve));
+ h.back();assert.equal(h.dialog().hidden,true);assert.equal(h.shell.attributes['data-wd-atlas'],'true');
+ h.choose();h.respond(h.state(),1);await new Promise(resolve=>setImmediate(resolve));
  assert.equal((h.dialog().innerHTML.match(/data-wd-difficulty=/g)||[]).length,6);
  assert.match(h.dialog().innerHTML,/副本券 .*?>3<\/b>/);
  assert.match(h.dialog().innerHTML,/擊退則會打斷蓄勢/);
@@ -54,25 +56,25 @@ test('gameplay entry opens an authenticated inline panel with six difficulties, 
  assert.equal(h.dialog().hidden,true);
 });
 test('an active dungeon can resume with zero tickets and other challenges remain unavailable',async()=>{
- const h=harness(),opening=h.open();h.respond(h.state({tickets:0,active:{roomId:'arena-active',difficulty:0}}));await opening;h.choose();
+ const h=harness(),opening=h.open(W.ID);h.respond(h.state({tickets:0,active:{roomId:'arena-active',difficulty:0}}));await opening;
  assert.match(h.dialog().innerHTML,/繼續挑戰 · 不耗券/);
  assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty="0"[^>]* disabled/);
  await h.click(0);assert.equal(h.entered.length,0);await h.enter();assert.equal(h.entered.length,1);
 });
 test('late account responses and responses after closing cannot overwrite a new modal session',async()=>{
- const h=harness(),old=h.open();h.setUid('u2');h.events.get('xiuxian:user-data-ready')();
+ const h=harness(),old=h.open(W.ID);h.setUid('u2');h.events.get('xiuxian:user-data-ready')();
  assert.equal(h.dialog().hidden,true);
- const current=h.open();h.respond(h.state({tickets:5}),1);await current;
+ const current=h.open(W.ID);h.respond(h.state({tickets:5}),1);await current;
  h.respond(h.state({tickets:1}),0);await old;
  assert.match(h.dialog().innerHTML,/副本券 .*?>5<\/b>/);
- const closing=h.open();h.dialog().handlers.click({target:{closest:s=>s==='[data-wd-close]'?{}:null}});h.respond(h.state({tickets:2}),2);await closing;
+ const closing=h.open(W.ID);h.dialog().handlers.click({target:{closest:s=>s==='[data-wd-close]'?{}:null}});h.respond(h.state({tickets:2}),2);await closing;
  assert.equal(h.dialog().hidden,true);assert.doesNotMatch(h.dialog().innerHTML,/副本券 .*?>2<\/b>/);
 });
 
 test('catalog preserves per-dungeon progress and stone gates are deterministic',()=>{const p=W.progress({unlocked:1,clears:[2,0,0,0,0,0]});const d=W.catalog(p)[0];assert.equal(d.id,W.ID);assert.equal(d.clears[0],2);assert.equal(d.difficulties[1].locked,false);assert.equal(d.difficulties[2].locked,true);const map=W.layout('seed',0);assert.deepEqual(map,W.layout('seed',0));assert.equal(map.structure,'three-stone-gates');assert(map.blocks.length>75);});
 
 test('earned dungeon ticket balances above daily refill cap remain visible',async()=>{
- const h=harness(),opening=h.open();h.respond(h.state({tickets:8}));await opening;
+ const h=harness(),opening=h.open(W.ID);h.respond(h.state({tickets:8}));await opening;
  assert.match(h.dialog().innerHTML,/副本券 .*?>8<\/b>/);
  assert.match(h.dialog().innerHTML,/補發上限 5 張/);
 });
@@ -93,11 +95,25 @@ test('landscape page shows weapon category and authentic map destination without
  assert.equal((h.dialog().innerHTML.match(/data-wd-difficulty=/g)||[]).length,6);
  assert.match(h.dialog().innerHTML,/尖峰石域/);
 });
-test('portrait launcher and external callers still open the inline catalog',async()=>{
- const h=harness();assert.equal(h.elements.has('gameplay-dungeon-atlas'),true);
- const opening=h.open();h.respond();await opening;
- assert.match(h.dialog().innerHTML,/data-wd-dungeon="peak-stone"/);
- assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty=/);
+test('portrait launcher and external callers open the same island atlas, with no intermediate catalog',async()=>{
+ const h=harness(),atlas=h.elements.get('gameplay-dungeon-atlas');
+ assert.equal(h.shell.attributes['data-wd-atlas'],undefined);
+ h.elements.get('gameplay-weapon-dungeon-entry').handlers.click();
+ await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(h.shell.attributes['data-wd-atlas'],'true');
+ assert.equal(h.requests.length,0);assert.equal(h.dialog().hidden,true);
+ assert.match(atlas.innerHTML,/data-atlas-dungeon="peak-stone"/);
+ h.choose();h.respond();await new Promise(resolve=>setImmediate(resolve));
+ assert.match(h.dialog().innerHTML,/data-wd-difficulty=/);
+ assert.doesNotMatch(h.dialog().innerHTML,/尋訪秘境|data-wd-dungeon=/);
+ h.back();assert.equal(h.dialog().hidden,true);
+ assert.equal(h.shell.attributes['data-wd-atlas'],'true');
+ atlas.handlers.click({target:{closest:s=>s==='[data-atlas-back]'?{}:null}});
+ assert.equal(h.shell.attributes['data-wd-atlas'],undefined);
+ await h.open();assert.equal(h.shell.attributes['data-wd-atlas'],'true');
+ assert.equal(h.requests.length,1);
+ h.events.get('xiuxian:page-switched')({detail:{pageId:'page-home'}});
+ assert.equal(h.shell.attributes['data-wd-atlas'],undefined);
 });
 
 test('dungeon map art and universal solid plaque are separate original PNG files',()=>{
@@ -112,7 +128,7 @@ test('dungeon map art and universal solid plaque are separate original PNG files
 });
 
 test('realm selector uses six segments and a moving highlight, previews without entry',async()=>{
- const h=harness(),opening=h.open();h.respond(h.state({unlocked:1}));await opening;h.choose();
+ const h=harness(),opening=h.open(W.ID);h.respond(h.state({unlocked:1}));await opening;
  const markup=h.dialog().innerHTML,css=fs.readFileSync(require.resolve('../public/styles/weapon-dungeons.css'),'utf8');
  assert.match(markup,/class="wd-difficulty-selection"/);assert.match(markup,/--wd-selected-index:0/);
  assert.equal((markup.match(/data-wd-difficulty=/g)||[]).length,6);
@@ -122,7 +138,7 @@ test('realm selector uses six segments and a moving highlight, previews without 
 });
 
 test('weapon dungeon is a section in the gameplay shell, and navigation hides it',async()=>{
- const h=harness(),opening=h.open();h.respond();await opening;
+ const h=harness(),opening=h.open(W.ID);h.respond();await opening;
  assert.equal(h.dialog().tagName,'section');assert.equal(h.dialog().parentElement,h.shell);
  assert.equal(h.dialog().hidden,false);h.events.get('xiuxian:page-switched')({detail:{pageId:'page-training'}});
  assert.equal(h.dialog().hidden,true);assert.doesNotMatch(source,/showModal\(|createElement\('dialog'\)/);

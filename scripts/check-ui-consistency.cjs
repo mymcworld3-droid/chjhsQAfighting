@@ -62,7 +62,8 @@ const server=http.createServer((req,res)=>{
    await page.screenshot({path:path.join(output,name+'-teacher.png')});
    await page.evaluate(()=>switchToPage('battle-preview'));
    await page.screenshot({path:path.join(output,name+'-battle.png')});
-   await page.locator('#open-dungeon').click();await page.locator('[data-wd-dungeon]').first().click();
+   await page.locator('#open-dungeon').click();await page.locator('[data-atlas-dungeon]').first().click();
+   await page.locator('[data-wd-difficulty]').first().waitFor();
    assert.equal(await page.locator('[data-wd-difficulty]').count(),6);
    assert.equal(await page.locator('.wd-difficulties [data-qy-realm-kind="difficulty"]').count(),6);
    await page.screenshot({path:path.join(output,name+'-dungeon.png')});

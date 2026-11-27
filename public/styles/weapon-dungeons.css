@@ -119,3 +119,10 @@
   #page-gameplay .gameplay-shell[data-wd-open="true"] #weapon-dungeons-panel .wd-body{width:100%;min-width:0}
   #page-gameplay .gameplay-shell[data-wd-open="true"] #weapon-dungeons-panel [data-wd-back]{display:none}
 }
+
+/* The portrait detail is the full tab as well, with one return control. */
+@media(orientation:portrait){
+  #page-gameplay .gameplay-shell[data-wd-open="true"]>:is(.gameplay-heading,.gameplay-entries,.gameplay-atlas){display:none!important}
+  #page-gameplay .gameplay-shell[data-wd-open="true"]>#weapon-dungeons-panel{width:100%;max-width:none}
+  #page-gameplay .gameplay-shell[data-wd-open="true"] #weapon-dungeons-panel [data-wd-back]{display:none}
+}
