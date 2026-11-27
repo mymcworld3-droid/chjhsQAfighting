@@ -89,3 +89,7 @@
 ## 第 2 階段（共用幾何工具）
 
 新增 weapon-geometry.js：八方向格點射線、閉角阻擋、碰撞面法線與法線射線、正方形外圈/區域、可逆任意兩點連線、凸包與包含內部的多邊形填充、點對稱、完整占地及順時針強制位移分配。原始占地在分配期間保留，禁止交換與重疊；邊界視為阻擋面，斜向碰撞面不唯一時取反向對角法線。此兩點為實作決策，需在個別武器階段驗收。新增 8 項 Node 測試及獨立 JS 6561 組線段正反向對照，全通過；完整 CI 未確認。工具尚未接入新技能，無新武器公開。第 1 階段瀏覽器驗收可與純幾何測試並行，仍未正式完成。
+
+## 瀏覽器驗收追蹤
+
+[fe22736 完整回歸](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45915314444)：3115 項全通過，靜態資源版號一致。新增的 main 合作副本瀏覽器測試 [45915314521](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45915314521) 在第 598 行停止，原腳本要求舊 img/book PNG，而現行共用 weapon-presentation.js 使用 data-qy-weapon-art、role=img 和 HD WebP 背景；本次更新測試檢查正確武器 ID、HD 圖片路徑及 role，不移除 XP、進度、音效等檢查。尚待重新執行完整合作瀏覽器測試與戰術瀏覽器測試，幾何 CI 也尚待確認。第 1、2 階段尚未標記正式驗收。

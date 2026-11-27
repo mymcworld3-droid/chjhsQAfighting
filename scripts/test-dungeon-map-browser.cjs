@@ -585,7 +585,8 @@ async function main(){
       const toast=document.querySelector('#dungeon-map-view [data-manual-xp-toast]');
       return {
         text:toast?.textContent,
-        artwork:toast?.querySelector('img')?.getAttribute('src'),
+        artwork:toast?.querySelector('[data-qy-weapon-art="sword-wind"]')?.style.backgroundImage,
+        artworkRole:toast?.querySelector('[data-qy-weapon-art="sword-wind"]')?.getAttribute('role'),
         animation:getComputedStyle(toast).animationName,
         progress:toast?.querySelector('[data-manual-xp-progress]')?.getAttribute('data-manual-xp-progress'),
         soundEvents:window.__dungeonXpSounds||[],
@@ -595,7 +596,8 @@ async function main(){
     assert.match(xpVisual.text,/流風靈劍/);
     assert.match(xpVisual.text,/\+35 EXP/);
     assert.match(xpVisual.text,/Lv\./);
-    assert.equal(xpVisual.artwork,'/assets/books/sword-wind.png');
+    assert.match(xpVisual.artwork,/\/assets\/weapons\/sword-wind-hd\.webp/);
+    assert.equal(xpVisual.artworkRole,'img');
     assert.equal(xpVisual.progress,'sword-wind');
     assert.equal(xpVisual.pointerEvents,'none');
     assert.match(xpVisual.animation,/tc-manual-xp-enter|none/);
