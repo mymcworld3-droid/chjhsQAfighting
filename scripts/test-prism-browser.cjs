@@ -115,6 +115,43 @@ async function main(){
         }
       }
     }
+    // Real browser audio decoding and the existing single-context manager.
+    await page.evaluate(async()=>{
+      await import('/game-audio.js');
+      window.QAGameAudio.setPreferences({enabled:true,volume:.35});
+      const button=document.createElement('button');
+      button.id='audio-unlock';button.textContent='Test audio';
+      Object.assign(button.style,{position:'fixed',top:'0',left:'0',zIndex:100});
+      button.addEventListener('click',()=>{window.prismAudioReady=window.QAGameAudio.unlock()});
+      document.body.append(button);
+    });
+    await page.locator('#audio-unlock').click();
+    const audio=await page.evaluate(async()=>{
+      const A=window.QAGameAudio,W=window.QAWeaponEffects;
+      const check=(value,label)=>{if(!value)throw new Error(label)};
+      check(await window.prismAudioReady,'audio context unlock');
+      await A.preload(['prism-sword','prism-crystal','prism-split']);
+      check(A.diagnostics().failed.length===0,'MP3 decode failure');
+      check(A.diagnostics().decoded>=3,'three decoded cues');
+      // Separate real playback requests by more than the combat cooldown.
+      const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+      await wait(300);
+      const before=A.diagnostics().played;
+      for(const id of ['prism-sword','prism-crystal','prism-split']){
+        check(A.play(id,{key:'browser:'+id}),'cue rejected: '+id);
+        await wait(220);
+      }
+      const result=A.diagnostics();
+      check(result.played===before+3,'three real cues played');
+      check(result.peakVoices<=2&&result.pending===null,'audio backlog/overlap');
+      check(!A.play('prism-sword',{key:'browser:prism-sword'}),'duplicate replay');
+      A.setPreferences({enabled:false});
+      check(!A.play('prism-split',{key:'muted'}),'mute ignored');
+      check(A.diagnostics().voices===0,'mute left live sources');
+      A.dispose();document.getElementById('audio-unlock').remove();
+      return result;
+    });
+    console.log('Prism real Chromium audio acceptance',audio);
     assert.deepEqual(errors,[]);
     await page.evaluate(()=>window.prismTest.renderer.destroy());
     console.log('Prism Chromium acceptance passed');

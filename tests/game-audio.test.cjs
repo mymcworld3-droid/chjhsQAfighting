@@ -90,8 +90,9 @@ test('optional on-demand sound packs share one context and never refetch cached 
   await r.manager.preload(Object.keys(SOUNDS));
   for (let i = 0; i < 20; i++) { await r.manager.unlock();
     await r.manager.preload(['combat-impact','spirit-pulse','reward-chime','grand-reveal']); }
-  assert.equal(r.contexts.length, 1); assert.equal(r.requests.length, 8);
-  assert.equal(r.decodes.length, 8);
+  assert.equal(r.contexts.length, 1); assert.equal(r.requests.length, Object.keys(SOUNDS).length);
+  assert.equal(new Set(r.requests).size, Object.keys(SOUNDS).length);
+  assert.equal(r.decodes.length, Object.keys(SOUNDS).length);
   assert.equal(r.manager.diagnostics().decoded, Object.keys(SOUNDS).length);
 });
 test('a single burst of click, answer, reward and breakthrough requests plays only the breakthrough', async () => {
