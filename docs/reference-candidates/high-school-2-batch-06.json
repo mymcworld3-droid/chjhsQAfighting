@@ -1898,6 +1898,61 @@
       "match": true,
       "evidenceMethod": "screenshot-and-text-layer",
       "humanVerified": false
+    },
+    {
+      "id": "WLSH-113-2-final-mathA-multiple-choice-1",
+      "sourceId": "WLSH-113-2-final-mathA",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/407114352.pdf",
+      "previousMarks": [
+        "2",
+        "4",
+        "5"
+      ],
+      "observedMarks": [
+        "2",
+        "4",
+        "5"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-113-2-final-mathA-multiple-choice-2",
+      "sourceId": "WLSH-113-2-final-mathA",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/407114352.pdf",
+      "previousMarks": [
+        "1",
+        "3",
+        "4"
+      ],
+      "observedMarks": [
+        "1",
+        "3",
+        "4"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-113-2-final-mathA-multiple-choice-3",
+      "sourceId": "WLSH-113-2-final-mathA",
+      "answerPdfPage": 4,
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/407114352.pdf",
+      "previousMarks": [
+        "2",
+        "4"
+      ],
+      "observedMarks": [
+        "2",
+        "4"
+      ],
+      "match": true,
+      "evidenceMethod": "text-layer",
+      "humanVerified": false
     }
   ],
   "rateGroupEvidence": {
@@ -2041,8 +2096,8 @@
   "counts": {
     "newRecords": 0,
     "upgradedTextDrafts": 6,
-    "answerRechecked": 103,
-    "answerMatches": 103,
+    "answerRechecked": 106,
+    "answerMatches": 106,
     "answerMismatches": 0,
     "approved": 0
   },
