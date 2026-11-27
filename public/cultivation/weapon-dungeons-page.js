@@ -10,11 +10,14 @@ const activeId=()=>data?.active?.dungeonId||data?.dungeonId;
 const isResume=(d,i)=>data?.active&&activeId()===d.id&&data.active.difficulty===i;
 const canEnter=(d,t)=>!loading&&t&&!t.locked&&(isResume(d,t.index)||(!data.active&&data.tickets>0));
 const theme=d=>d.theme==='stone'?' wd-stone':'';
+function ensureStyle(){
+  if(!document.getElementById('weapon-dungeons-style')){const link=document.createElement('link');link.id='weapon-dungeons-style';link.rel='stylesheet';link.href='/styles/weapon-dungeons.css';document.head.append(link);}
+}
 function ensure(){
   if(panel)return true;
   const host=document.querySelector('#page-gameplay .gameplay-shell')||document.querySelector('#page-gameplay');
   if(!host)return false;
-  if(!document.getElementById('weapon-dungeons-style')){const link=document.createElement('link');link.id='weapon-dungeons-style';link.rel='stylesheet';link.href='/styles/weapon-dungeons.css';document.head.append(link);}
+  ensureStyle();
   panel=document.createElement('section');panel.id='weapon-dungeons-panel';panel.setAttribute('aria-labelledby','weapon-dungeons-title');panel.hidden=true;host.append(panel);
   panel.addEventListener('click',event=>{
     if(event.target.closest('[data-wd-close]')){hidePanel();return;}
@@ -47,8 +50,11 @@ function hidePanel(restoreFocus=true){
 }
 const count=d=>d.difficulties.filter(t=>Number(d.clears[t.index])>0).length;
 const traits=d=>'<div class="wd-traits">'+d.traits.map(t=>'<span>'+esc(t)+'</span>').join('')+'</div>';
+function sceneHero(d){
+  return `<section class="wd-hero${theme(d)}"><img class="wd-island" src="${esc(atlasArt[d.id]||'/assets/training/layers/landscape-island-secret.webp')}" alt="" draggable="false"><div class="wd-scene-caption"><small>${esc(d.subtitle)} · 單人挑戰</small><h3>${esc(d.name)}</h3>${traits(d)}<div class="wd-bonus"><i class="fa-solid fa-bolt" aria-hidden="true"></i> ${esc(d.bonus)}</div></div></section>`;
+}
 function detail(d){
-  return `<div class="wd-expedition"><section class="wd-hero${theme(d)}"><img class="wd-island" src="${esc(atlasArt[d.id]||'/assets/training/layers/landscape-island-secret.webp')}" alt="" draggable="false"><div class="wd-scene-caption"><small>${esc(d.subtitle)} · 單人挑戰</small><h3>${esc(d.name)}</h3>${traits(d)}<div class="wd-bonus"><i class="fa-solid fa-bolt" aria-hidden="true"></i> ${esc(d.bonus)}</div></div></section><section class="wd-preparation" aria-label="挑戰準備">
+  return `<div class="wd-expedition">${sceneHero(d)}<section class="wd-preparation" aria-label="挑戰準備">
   <div class="wd-section-heading"><h3>選擇挑戰境界</h3><span>已征服 ${count(d)} / ${d.difficulties.length}</span></div>
   <div class="wd-difficulties" role="group" aria-label="選擇副本難度" style="--wd-selected-index:${selectedTier}"><span class="wd-difficulty-selection" aria-hidden="true"></span>${d.difficulties.map(t=>{
     const resume=isResume(d,t.index),cleared=Number(d.clears[t.index])||0;
@@ -104,11 +110,11 @@ function selectDifficulty(index){
 }
 
 function paint(message=''){
-  const d=selected();
+  const d=selected(),destination=globalThis.QAWeaponDungeons?.CATALOG?.find(entry=>entry.id===selectedId);
   panel.innerHTML=`<header><div class="wd-heading"><button type="button" data-wd-close data-wd-back data-qy-nav-action="back" aria-label="返回秘境選擇"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><h2 id="weapon-dungeons-title" tabindex="-1">武器秘境</h2></div><details class="wd-tickets"><summary><strong>副本券 ${data?weaponDungeonTicketMarkup(data.tickets):'同步中'}</strong><i class="fa-solid fa-circle-info" aria-hidden="true"></i></summary><span class="wd-ticket-help">每日補發 3 張 · 補發上限 5 張<br>臺灣時間 00:00</span></details></header>
     <div class="wd-body">
     ${data?.active?'<div class="wd-active">已有進行中的挑戰，續戰不耗券；完成或離場後才能開啟其他挑戰。</div>':''}
-    ${!data?'<p data-qy-state="'+(loading?'loading':'error')+'">'+(loading?'正在讀取秘境資料…':'秘境資料未能同步，請返回後重新開啟。')+'</p>':d?detail(d):'<p data-qy-state="error">此秘境目前未開放，請返回島嶼選擇。</p>'}
+    ${!data?(destination?'<div class="wd-expedition wd-loading">'+sceneHero(destination)+'<section class="wd-preparation wd-pending" aria-busy="'+loading+'"><p data-qy-state="'+(loading?'loading':'error')+'">'+(loading?'正在讀取秘境資料…':'秘境資料未能同步，請返回後重新開啟。')+'</p></section></div>':'<p data-qy-state="'+(loading?'loading':'error')+'">'+(loading?'正在讀取秘境資料…':'秘境資料未能同步，請返回後重新開啟。')+'</p>'):d?detail(d):'<p data-qy-state="error">此秘境目前未開放，請返回島嶼選擇。</p>'}
     <p class="wd-message" role="status" aria-live="polite"${message?' data-qy-state="'+(loading?'syncing':'error')+'"':''}>${esc(message)}</p></div>`;
 
 }
@@ -136,8 +142,9 @@ export async function openWeaponDungeons(dungeonId=null,origin=null){
   trigger=origin||document.activeElement;
   openAtlas();
   invalidateAtlasTickets();
-  data=null;selectedId=null;selectedTier=0;loading=true;paint('正在同步副本券與秘境進度…');
-  showPanel();panel.scrollIntoView?.({block:'nearest'});const token=++serial;
+  data=null;selectedId=dungeonId;selectedTier=0;loading=true;paint('');
+  showPanel();const page=document.getElementById('page-gameplay');if(page)page.scrollTop=0;
+  panel.querySelector?.('#weapon-dungeons-title')?.focus?.({preventScroll:true});const token=++serial;
   try{
     const response=await authenticatedMainFetch('/api/tactical/weapon-dungeons'),result=await response.json();
     if(serial!==token||getMainUser()?.uid!==account)return;
@@ -149,6 +156,7 @@ export async function openWeaponDungeons(dungeonId=null,origin=null){
 const landscape=()=>window.matchMedia?.('(orientation: landscape)')?.matches===true;
 let atlas=null,atlasCategory='weapon',atlasShown=false,navigatingToAtlas=false;
 let atlasTickets=null,atlasTicketEpoch=0,atlasTicketRequest=null,atlasActive=null,quickResumeBusy=false;
+let atlasProgress=new Map();
 function atlasTicketMarkup(){
   return '武器副本券 '+weaponDungeonTicketMarkup(atlasTickets===null?'—':atlasTickets);
 }
@@ -157,7 +165,18 @@ function setAtlasTickets(value){
   const balance=atlas?.querySelector?.('[data-atlas-tickets]');
   if(balance)balance.innerHTML=atlasTicketMarkup();
 }
+function progressMarkup(id){
+  const d=atlasProgress.get(id);
+  if(!d)return '';
+  const cleared=count(d),total=d.difficulties.length;
+  return '<span class="wd-atlas-pips" aria-hidden="true">'+d.difficulties.map(t=>'<i class="'+(Number(d.clears[t.index])>0?'is-cleared':t.locked?'is-locked':'is-ready')+'"></i>').join('')+'</span><span>已征服 '+cleared+' / '+total+'</span>';
+}
+function setAtlasProgress(state){
+  atlasProgress=new Map((Array.isArray(state?.dungeons)?state.dungeons:[]).filter(d=>Array.isArray(d.difficulties)&&Array.isArray(d.clears)).map(d=>[d.id,d]));
+  atlas?.querySelectorAll?.('[data-atlas-progress]').forEach(slot=>{slot.innerHTML=progressMarkup(slot.dataset.atlasProgress);});
+}
 function setAtlasActive(state){
+  setAtlasProgress(state);
   const active=state?.active,d=state?.dungeons?.find(d=>d.id===(active?.dungeonId||state.dungeonId)),tier=d?.difficulties.find(t=>t.index===active?.difficulty);
   atlasActive=active?.roomId&&tier&&!tier.locked?{roomId:active.roomId,dungeonId:d.id,difficulty:tier.index,name:d.name,realm:tier.name,account:getMainUser()?.uid}:null;
   const slot=atlas?.querySelector?.('[data-atlas-resume-slot]');
@@ -168,7 +187,7 @@ function atlasResumeMarkup(){
 }
 async function quickResume(){
   const active=atlasActive;
-  if(!active||quickResumeBusy||getMainUser()?.uid!==active.account)return;
+  if(!active||quickResumeBusy||panel&&!panel.hidden||getMainUser()?.uid!==active.account)return;
   quickResumeBusy=true;
   const slot=atlas?.querySelector?.('[data-atlas-resume-slot]');
   if(slot)slot.innerHTML=atlasResumeMarkup();
@@ -210,7 +229,7 @@ function atlasMarkup(category){
     <div class="gameplay-atlas-sites">${entries.map(d=>`<button type="button" class="gameplay-atlas-node" data-atlas-dungeon="${esc(d.id)}" aria-label="選擇${esc(d.name)}">
       <img src="${atlasArt[d.id]||'/assets/training/layers/landscape-island-secret.webp'}" alt="" draggable="false">
       <span class="gameplay-atlas-name"><span>${esc(d.name)}</span></span>
-      <small>${esc(d.subtitle)}</small></button>`).join('')}</div>
+      <small>${esc(d.subtitle)}</small><span class="wd-atlas-progress" data-atlas-progress="${esc(d.id)}">${progressMarkup(d.id)}</span></button>`).join('')}</div>
     <div class="wd-atlas-footer"><div data-atlas-resume-slot>${atlasResumeMarkup()}</div><p class="gameplay-atlas-hint"><i class="fa-solid fa-compass" aria-hidden="true"></i> 選擇秘境，查看可挑戰的境界</p></div>`;
 }
 function selectCategory(category='weapon'){
@@ -227,12 +246,12 @@ function selectCategory(category='weapon'){
 function openAtlas(){
   if(!atlas)return;
   if(atlasCategory!=='weapon')selectCategory('weapon');
-  atlasShown=true;atlas.parentElement?.setAttribute('data-wd-atlas','true');
+  const alreadyShown=atlasShown;atlasShown=true;atlas.parentElement?.setAttribute('data-wd-atlas','true');
   const page=document.getElementById('page-gameplay');
-  if(page)page.scrollTop=0;
+  if(page&&!alreadyShown&&!landscape())page.scrollTop=0;
 }
 function closeAtlas(restoreFocus=true){
-  atlasShown=false;atlas?.parentElement?.removeAttribute('data-wd-atlas');setAtlasActive(null);
+  atlasShown=false;atlas?.parentElement?.removeAttribute('data-wd-atlas');invalidateAtlasTickets();
   if(restoreFocus){
     const page=document.getElementById('page-gameplay');if(page)page.scrollTop=0;
     document.getElementById('gameplay-weapon-dungeon-entry')?.focus?.({preventScroll:true});
@@ -241,13 +260,14 @@ function closeAtlas(restoreFocus=true){
 function mountAtlas(target){
   const shell=document.querySelector('#page-gameplay .gameplay-shell');
   if(!shell||atlas)return;
+  ensureStyle();
   atlas=document.createElement('section');atlas.id='gameplay-dungeon-atlas';atlas.className='gameplay-atlas';
   atlas.setAttribute('aria-label','副本選擇');shell.append(atlas);shell.dataset.atlasReady='true';
   atlas.addEventListener('click',event=>{
     if(event.target.closest('[data-atlas-back]')){closeAtlas();return;}
     if(event.target.closest('[data-atlas-resume]')){void quickResume();return;}
     const node=event.target.closest('[data-atlas-dungeon]');
-    if(node){void openWeaponDungeons(node.dataset.atlasDungeon,node);return;}
+    if(node){if(quickResumeBusy||panel&&!panel.hidden)return;void openWeaponDungeons(node.dataset.atlasDungeon,node);return;}
     if(event.target.closest('[data-atlas-coop]')&&window.QA_COOP_DUNGEON_ENABLED===true)void window.openDungeonLobby?.();
   });
   // Preserve the inactive cooperative mode and its existing portrait launcher.
@@ -264,11 +284,10 @@ function mountAtlas(target){
   };
   window.addEventListener('xiuxian:page-switched',event=>{
     if(event.detail?.pageId==='page-gameplay')refreshVisible();
-    else if(event.detail?.pageId){hidePanel(false);closeAtlas(false);invalidateAtlasTickets();}
+    else if(event.detail?.pageId){hidePanel(false);closeAtlas(false);}
   });
   window.addEventListener('xiuxian:user-data-ready',()=>{
     hidePanel(false);closeAtlas(false);serial++;data=null;loading=false;selectedId=null;selectedTier=0;
-    invalidateAtlasTickets();
     if(page?.classList.contains('active-page'))refreshVisible();
   });
   window.addEventListener('xiuxian:weapon-dungeon-closed',()=>{

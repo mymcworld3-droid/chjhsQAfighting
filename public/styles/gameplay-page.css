@@ -160,3 +160,39 @@
 #page-gameplay .gameplay-atlas-tickets .game-resource-icon{width:19px;height:19px;object-fit:contain}
 #page-gameplay .gameplay-atlas-tickets .game-resource-amount{font-size:1.15em;color:#ffe0a0}
 @media(orientation:portrait) and (max-width:380px){#page-gameplay .gameplay-atlas-tickets{gap:3px;font-size:10px}#page-gameplay .gameplay-atlas-heading h3{font-size:17px}}
+
+/* Island destinations are the interactive map itself. No extra enclosing card. */
+#page-gameplay .gameplay-atlas-node{box-sizing:border-box;min-width:0;max-height:none;height:auto;transition:filter .18s ease;touch-action:manipulation}
+#page-gameplay .gameplay-atlas-node img{height:clamp(92px,calc(100dvh - 300px),320px);transition:transform .22s ease,filter .22s ease}
+#page-gameplay .gameplay-atlas-node:active img{transform:translateY(-5px) scale(1.04);filter:drop-shadow(0 0 15px #efcf8b88)}
+#page-gameplay .gameplay-atlas-node:focus-visible img{transform:translateY(-4px);filter:drop-shadow(0 0 12px #efcf8b88)}
+#page-gameplay .gameplay-atlas-name{font-family:var(--xq-serif,"Noto Serif TC",serif);padding-inline:20%;line-height:1.2}
+#page-gameplay .gameplay-atlas-heading{min-width:0;gap:4px}
+#page-gameplay .gameplay-atlas-heading h3{min-width:0;white-space:nowrap;font-family:var(--xq-serif,"Noto Serif TC",serif)}
+#page-gameplay .gameplay-atlas-back{border:0;background:transparent;box-shadow:none;color:var(--xq-gold,#e6ce98);min-width:44px;min-height:44px;padding:4px;font-size:12px;white-space:nowrap}
+#page-gameplay .gameplay-atlas-tickets{gap:3px;font-size:11px}
+#page-gameplay .wd-atlas-progress{display:flex;justify-content:center;align-items:center;gap:6px;color:#ead9b5;font-size:10px;margin-top:5px;line-height:1.25;text-shadow:0 2px 5px #12191c}
+#page-gameplay .wd-atlas-progress:empty{display:none}
+#page-gameplay .wd-atlas-pips{display:flex;gap:5px;align-items:center}
+#page-gameplay .wd-atlas-pips i{width:6px;height:6px;transform:rotate(45deg);border:1px solid #b9a980;background:#263239;box-sizing:border-box}
+#page-gameplay .wd-atlas-pips i.is-cleared{background:#e7c886;border-color:#ffe4ab;box-shadow:0 0 5px #e6c17d77}
+#page-gameplay .wd-atlas-pips i.is-ready{border-color:#e6ce98}
+#page-gameplay .wd-atlas-pips i.is-locked{opacity:.5}
+#page-gameplay .gameplay-shell[data-atlas-ready="true"]:not([data-wd-open="true"]){border:0;border-radius:0;box-shadow:none}
+@media(orientation:landscape){
+  #page-gameplay.gameplay-page:has(.gameplay-shell[data-atlas-ready="true"]){padding:0!important}
+  #page-gameplay .gameplay-shell[data-atlas-ready="true"]:not([data-wd-open="true"]){min-height:clamp(180px,calc(100dvh - 165px),780px);padding:8px clamp(8px,1.7vw,24px);grid-template-columns:clamp(110px,19%,220px) minmax(0,1fr);column-gap:8px;row-gap:8px;background:linear-gradient(90deg,#202a30e0,#35434a26 55%,#202a3055),linear-gradient(0deg,#263238dd,transparent 55%),url('/assets/scenes/mountains-landscape-ai.webp') center/cover no-repeat}
+  #page-gameplay .gameplay-atlas-sites{align-content:center}
+  #page-gameplay .gameplay-atlas-node{width:min(100%,330px)}
+  #page-gameplay .gameplay-entries>button strong{white-space:normal;line-height:1.2}
+}
+@media(orientation:portrait){
+  #page-gameplay .gameplay-shell[data-wd-atlas="true"]:not([data-wd-open="true"]){min-height:clamp(280px,calc(100dvh - 165px),920px);background:linear-gradient(180deg,#202a30b0,transparent 36%,#263238df),url('/assets/scenes/mountains-landscape-ai.webp') center/cover no-repeat}
+  #page-gameplay .gameplay-shell[data-wd-atlas="true"]:not([data-wd-open="true"])>.gameplay-atlas{padding:8px clamp(8px,3vw,24px);gap:6px}
+  #page-gameplay .gameplay-atlas-heading h3{font-size:clamp(15px,4.2vw,23px);letter-spacing:.04em}
+  #page-gameplay .gameplay-atlas-node img{height:clamp(112px,30dvh,300px)}
+  #page-gameplay .gameplay-atlas-name{width:min(100%,270px)}
+}
+@media(orientation:landscape) and (max-height:450px){#page-gameplay .gameplay-atlas-node img{height:clamp(72px,calc(100dvh - 250px),165px)}#page-gameplay .gameplay-atlas-name{width:min(100%,220px)}#page-gameplay .gameplay-atlas-node>small{margin-top:2px}#page-gameplay .wd-atlas-progress{margin-top:3px}}
+@media(max-width:350px){#page-gameplay .gameplay-atlas-heading h3{font-size:15px}#page-gameplay .gameplay-atlas-tickets{font-size:10px;gap:2px}#page-gameplay .gameplay-atlas-tickets .game-resource-icon{width:15px;height:15px}}
+@media(prefers-reduced-motion:reduce){#page-gameplay .gameplay-atlas-node,#page-gameplay .gameplay-atlas-node img{transition:none}#page-gameplay .gameplay-atlas-node:is(:active,:hover,:focus-visible) img{transform:none}}

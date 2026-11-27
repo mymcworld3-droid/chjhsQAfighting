@@ -309,3 +309,18 @@
 @media(orientation:landscape) and (min-width:640px){#tactical-combat .wd-result{width:min(100%,980px);display:grid;grid-template-columns:minmax(175px,.68fr) minmax(0,1.32fr);grid-template-rows:minmax(0,1fr) auto;align-items:start;gap:10px 22px}#tactical-combat .wd-result-hero{align-self:center}#tactical-combat .wd-result-actions{grid-column:1/-1}}
 @media(orientation:landscape) and (max-height:480px){#tactical-combat .wd-result{padding:8px 16px;gap:6px 16px}#tactical-combat .wd-result-hero h2{font-size:26px}#tactical-combat .wd-result-body{gap:6px}#tactical-combat .wd-result-actions{padding-top:4px;gap:3px}}
 @media(prefers-reduced-motion:reduce){#tactical-combat .wd-result *{animation:none!important;transition:none!important}}
+
+/* Let the result content determine its height; no minmax(0,1fr) clipping in
+   short landscape. Only the full settlement scrolls when its content needs it. */
+#tactical-combat .tc-dialog.tc-dungeon-settlement{box-sizing:border-box;overscroll-behavior:contain}
+#tactical-combat .wd-result{padding:clamp(9px,2vw,20px);padding-bottom:max(9px,env(safe-area-inset-bottom));gap:8px}
+#tactical-combat .wd-result-hero{gap:3px;padding:0}
+#tactical-combat .wd-result-hero h2{font-family:var(--xq-serif,"Noto Serif TC",serif);font-size:clamp(25px,4.5vw,38px)}
+#tactical-combat .wd-result-crest{width:clamp(52px,11vmin,88px);margin-bottom:2px}
+#tactical-combat .wd-result-body{gap:7px}
+#tactical-combat .wd-result-unlock{padding:7px 9px}
+#tactical-combat .wd-result-actions{gap:4px;padding-top:6px}
+#tactical-combat .wd-result-actions>div button{overflow-wrap:anywhere;white-space:normal}
+#tactical-combat .wd-result-collapse{min-height:32px}
+@media(orientation:landscape) and (min-width:480px){#tactical-combat .wd-result{display:grid;grid-template-columns:minmax(125px,.65fr) minmax(0,1.35fr);grid-template-rows:1fr auto;align-content:start;gap:8px 14px}#tactical-combat .wd-result-actions{grid-column:1/-1}}
+@media(orientation:landscape) and (max-height:450px){#tactical-combat .wd-result{padding:6px 12px;gap:4px 12px}#tactical-combat .wd-result-hero h2{font-size:25px}#tactical-combat .wd-result-body{gap:5px}#tactical-combat .wd-result-actions{gap:3px;padding-top:3px}}

@@ -53,6 +53,7 @@ async function main(){
   assert.equal(await page.locator('[data-atlas-back]').isVisible(),true);
   await page.waitForFunction(()=>{const img=document.querySelector('[data-atlas-dungeon="peak-stone"] img');return img?.complete&&img.naturalWidth>0;});
   await page.waitForFunction(()=>document.querySelector('[data-atlas-tickets] .game-resource-amount')?.textContent==='3');
+  await page.waitForFunction(()=>document.querySelector('[data-atlas-progress]')?.textContent.includes('已征服 0 / 6'));
   await page.screenshot({path:path.join(output,'dungeon-islands.png')});
   await page.locator('[data-atlas-back]').click();
   assert.equal(await page.locator('.gameplay-entries').isVisible(),true);
@@ -73,12 +74,15 @@ async function main(){
   assert.equal(await page.locator('[data-wd-difficulty="1"]').getAttribute('data-qy-difficulty'),'locked');
   assert.match(await page.locator('.wd-tickets').textContent(),/副本券\s*3\b/);
   assert.match(await page.locator('.wd-tickets').textContent(),/補發上限 5 張/);
-  for(const viewport of [{width:393,height:852},{width:1180,height:820},{width:360,height:640}]){
+  for(const viewport of [{width:320,height:568},{width:393,height:852},{width:768,height:1024},{width:1180,height:820},{width:360,height:640},{width:667,height:375},{width:568,height:320}]){
    await page.setViewportSize(viewport);
    const bounds=await page.locator('#weapon-dungeons-panel').boundingBox();
    assert(bounds.x>=0&&bounds.x+bounds.width<=viewport.width+1);
    assert.equal(await page.locator('#weapon-dungeons-panel').evaluate(el=>el.tagName==='SECTION'&&!!el.closest('#page-gameplay')&&getComputedStyle(el).position!=='fixed'),true);
    assert.equal(await page.locator('dialog:modal').count(),0);
+   const layout=await page.locator('#weapon-dungeons-panel').evaluate(el=>{const visible=['header','[data-wd-enter]','.wd-difficulties','.wd-reward-pair'].map(s=>el.querySelector(s));return {inside:visible.every(n=>{const a=n.getBoundingClientRect(),b=el.getBoundingClientRect();return a.left>=b.left-1&&a.right<=b.right+1}),rail:el.querySelector('.wd-difficulties').scrollWidth<=el.querySelector('.wd-difficulties').clientWidth+1,root:el.scrollWidth<=el.clientWidth+1};});
+   assert(layout.inside&&layout.rail&&layout.root,'no horizontal overflow at '+viewport.width+'x'+viewport.height);
+   await page.locator('[data-wd-enter]').scrollIntoViewIfNeeded();assert.equal(await page.locator('[data-wd-enter]').isVisible(),true);
    await page.screenshot({path:path.join(output,'selection-'+viewport.width+'.png')});
   }
   // Landscape uses the complete gameplay tab and restores the identical atlas on return.
@@ -158,6 +162,12 @@ async function main(){
   assert.equal(await page.locator('[data-manual-xp-toast]').count(),0,'live XP must not obscure the results');
   assert.equal(await page.locator('[data-wd-result="cleared"]').count(),1);
   assert.match(await page.locator('.wd-result-unlock').textContent(),/首次解鎖.*金丹/);
+  for(const viewport of [{width:320,height:568},{width:667,height:375},{width:1180,height:820}]){
+   await page.setViewportSize(viewport);const settled=page.locator('.tc-dungeon-settlement');assert.equal(await settled.evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+   await page.locator('[data-weapon-dungeon-retry]').scrollIntoViewIfNeeded();assert.equal(await page.locator('[data-weapon-dungeon-retry]').isVisible(),true);
+   await page.screenshot({path:path.join(output,'victory-'+viewport.width+'.png'),animations:'disabled'});
+  }
+  await page.setViewportSize({width:393,height:852});
   await page.screenshot({path:path.join(output,'victory.png'),animations:'disabled'});
   await page.locator('[data-weapon-dungeon-retry]').click();
   await page.waitForFunction(()=>!document.querySelector('[data-wd-result]')&&!!document.querySelector('#tactical-combat canvas')&&!document.querySelector('.wd-portal'));

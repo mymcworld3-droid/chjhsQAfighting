@@ -16,6 +16,7 @@ function harness({wide=false}={}){
    append(child){elements.set(child.id,child);child.parentElement=this;}
    focus(){}
    querySelector(selector){if(selector==='[data-atlas-tickets]'&&this.id==='gameplay-dungeon-atlas')return this.ticketSlot||=( {innerHTML:''} );if(selector==='[data-atlas-resume-slot]'&&this.id==='gameplay-dungeon-atlas')return this.resumeSlot||=({innerHTML:''});return null;}
+   querySelectorAll(selector){if(selector==='[data-atlas-progress]'&&this.id==='gameplay-dungeon-atlas')return [this.progressSlot||=({dataset:{atlasProgress:W.ID},innerHTML:''})];return [];}
    getBoundingClientRect(){return {left:0,right:500,top:0,bottom:500};}
  }
  const entries=new Element('div'),trigger=new Element('button'),shell=new Element('div');shell.dataset={};
@@ -239,4 +240,32 @@ test('reward preview uses the actual server pool and original weapon artwork; em
  markup=another.dialog().innerHTML;
  assert.match(markup,/實際未掉落武器機率 100%/);
  assert.doesNotMatch(markup,/data-wd-reward-id=/);
+});
+
+test('island displays only authenticated progress and loads styles before the first landscape detail',async()=>{
+ const h=harness({wide:true}),atlas=h.elements.get('gameplay-dungeon-atlas');
+ assert.ok(h.elements.get('weapon-dungeons-style'));
+ assert.match(atlas.innerHTML,/data-atlas-progress="peak-stone"/);
+ const opening=h.open();h.respond(h.state({unlocked:1,clears:[1,0,0,0,0,0]}));await opening;
+ assert.match(atlas.progressSlot.innerHTML,/已征服 1 \/ 6/);
+ assert.equal((atlas.progressSlot.innerHTML.match(/is-cleared/g)||[]).length,1);
+ assert.equal((atlas.progressSlot.innerHTML.match(/is-ready/g)||[]).length,1);
+ const old=h.open();h.setUid('u2');h.events.get('xiuxian:user-data-ready')();
+ h.respond(h.state({unlocked:5,clears:[1,1,1,1,1,1]}),1);await old;
+ assert.equal(atlas.progressSlot.innerHTML,'');
+});
+test('one click reveals authentic island immediately, but no challenge controls before authenticated state',async()=>{
+ const h=harness(),opening=h.open(W.ID);
+ assert.match(h.dialog().innerHTML,/class="wd-expedition wd-loading"/);
+ assert.match(h.dialog().innerHTML,/尖峰石域/);
+ assert.doesNotMatch(h.dialog().innerHTML,/data-wd-enter|data-wd-difficulty=/);
+ h.respond();await opening;
+ assert.match(h.dialog().innerHTML,/data-wd-enter/);
+ assert.doesNotMatch(h.dialog().innerHTML,/wd-expedition wd-loading/);
+});
+test('closing portrait atlas invalidates an in-flight status request',async()=>{
+ const h=harness(),opening=h.open(),atlas=h.elements.get('gameplay-dungeon-atlas');
+ atlas.handlers.click({target:{closest:s=>s==='[data-atlas-back]'?{}:null}});
+ h.respond(h.state({active:{roomId:'stale',difficulty:0},unlocked:1,clears:[1,0,0,0,0,0]}));await opening;
+ assert.equal(atlas.resumeSlot.innerHTML,'');assert.equal(atlas.progressSlot.innerHTML,'');
 });
