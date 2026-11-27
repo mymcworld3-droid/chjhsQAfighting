@@ -62,11 +62,11 @@ function buildQueue(batches) {
 
 function extractBlocks(pages) {
   const out=[];
-  const marker=/^\s*(?:[（(]\s*[）)]\s*)?(\d{1,3})[.．、]\s*(?=\S)/u;
+  const marker=/^\s*(?:[（(]\s*(?:[○◯]\s*\d{1,3}|[①-⑳㉑-㉟]|\s*)\s*[）)]\s*)?([0-9０-９]{1,3})[.．、]\s*(?=\S)/u;
   for(let p=0;p<pages.length;p++){
     const lines=pages[p].split(/\r?\n/);
     const starts=[];
-    for(let i=0;i<lines.length;i++){const m=lines[i].match(marker);if(m)starts.push({i,number:Number(m[1])});}
+    for(let i=0;i<lines.length;i++){const m=lines[i].match(marker);if(m)starts.push({i,number:Number(m[1].normalize("NFKC"))});}
     for(let i=0;i<starts.length;i++){
       const start=starts[i];
       const raw=lines.slice(start.i,starts[i+1]?.i??lines.length).join("\n").trimEnd();
