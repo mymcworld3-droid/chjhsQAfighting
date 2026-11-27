@@ -272,7 +272,7 @@
 #weapon-dungeons-panel .wd-reward{padding:3px 0;gap:3px}
 #weapon-dungeons-panel .wd-reward-label{gap:2px;font-size:10px;line-height:1.2}
 #weapon-dungeons-panel .wd-reward-label b{font-size:10px}
-#weapon-dungeons-panel .wd-reward-items{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}
+#weapon-dungeons-panel .wd-reward-items{grid-template-columns:repeat(auto-fit,minmax(min(100%,56px),1fr));gap:3px}
 #weapon-dungeons-panel .wd-reward-item img{height:clamp(26px,5dvh,46px)}
 #weapon-dungeons-panel .wd-reward-item small{font-size:10px;line-height:1.15;word-break:normal;overflow-wrap:anywhere}
 #weapon-dungeons-panel .wd-intel{padding-top:2px}

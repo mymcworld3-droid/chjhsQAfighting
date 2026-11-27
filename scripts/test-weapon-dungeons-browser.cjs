@@ -63,7 +63,8 @@ async function main(){
   await page.locator('[data-atlas-dungeon="peak-stone"]').click();
   await page.locator('[data-wd-difficulty="0"]').waitFor();
   assert.equal(await page.locator('[data-wd-difficulty]').count(),6);
-  assert.ok(await page.locator('[data-wd-reward-id]').count()>=2);
+  const expectedSwordIds=M.BOOKS.filter(b=>b.weaponType==='sword'&&['築基','金丹'].includes(b.tierRealm)).map(b=>b.id).sort();
+  assert.deepEqual(await page.locator('[data-wd-reward-id]').evaluateAll(nodes=>nodes.map(n=>n.dataset.wdRewardId).sort()),expectedSwordIds);
   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[data-wd-reward-id] img')).every(img=>img.complete&&img.naturalWidth>0));
   assert.equal(await page.locator('#weapon-dungeons-panel header button').count(),1);
   assert.equal(await page.locator('[data-wd-back]').isVisible(),true);
@@ -166,6 +167,7 @@ async function main(){
    victory=await API.command(db,'u1',{roomId:room.id,type:'manual',skillId:'rock-fist',x:6,y:2,revision:raw.revision,requestId:'browser-final-blow'},Date.now());
   }finally{Rewards.roll=originalRoll;}
   assert.ok(victory.manualDrops?.u1?.id,'real transaction awards a weapon');
+  assert.equal(M.BY_BOOK[victory.manualDrops.u1.id].weaponType,'sword');
   assert.equal(victory.status,'finished');
   assert.equal(victory.weaponDungeonResult.cleared,true);
   assert.equal(victory.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length,remainingGuards);

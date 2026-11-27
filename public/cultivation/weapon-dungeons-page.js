@@ -76,8 +76,8 @@ function tierAction(d){
   if(data.tickets<1)return '副本券不足';
   return (Number(d.clears[t.index])?'再次挑戰 · ':'開始挑戰 · ')+weaponDungeonTicketMarkup(1);
 }
-function rewardGroup(realm,chance,next=false){
-  const pool=data?.rewardPools?.[realm],known=Array.isArray(pool);
+function rewardGroup(d,realm,chance,next=false){
+  const pool=(d.rewardPools??data?.rewardPools)?.[realm],known=Array.isArray(pool);
   const art=globalThis.QAWeaponPresentation.art;
   const items=known?pool.map(book=>{
     const url=art(book.id);
@@ -89,10 +89,11 @@ function tierPreview(d){
   const t=currentTier(d);
   if(!t)return '';
   const badge=globalThis.QAWeaponPresentation.difficultyState({locked:t.locked,clears:Number(d.clears[t.index])||0,resume:isResume(d,t.index)});
-  const current=data?.rewardPools?.[t.name],next=data?.rewardPools?.[t.nextRealm];
+  const pools=d.rewardPools??data?.rewardPools;
+  const current=pools?.[t.name],next=pools?.[t.nextRealm];
   const known=Array.isArray(current)&&Array.isArray(next);
   const none=50+(known&&!current.length?30:0)+(known&&!next.length?20:0);
-  return '<div class="wd-preview-title"><strong>可能獲得</strong><small>'+globalThis.QAWeaponPresentation.realmMarkup(t.name,{kind:'difficulty'})+' · '+esc(badge.label)+'</small></div><div class="wd-reward-pair">'+rewardGroup(t.name,30)+rewardGroup(t.nextRealm,20,true)+'</div><small class="wd-no-drop">'+(known?'實際未掉落武器機率 '+none+'%':'基礎未掉落機率 50%（空池時增加）')+'</small>';
+  return '<div class="wd-preview-title"><strong>可能獲得'+(d.rewardWeaponType==='sword'?' · 僅劍類':'')+'</strong><small>'+globalThis.QAWeaponPresentation.realmMarkup(t.name,{kind:'difficulty'})+' · '+esc(badge.label)+'</small></div><div class="wd-reward-pair">'+rewardGroup(d,t.name,30)+rewardGroup(d,t.nextRealm,20,true)+'</div><small class="wd-no-drop">'+(known?'實際未掉落武器機率 '+none+'%':'基礎未掉落機率 50%（空池時增加）')+'</small>';
 }
 function selectDifficulty(index){
   const d=selected();

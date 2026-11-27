@@ -272,7 +272,8 @@ test('preview pools contain precisely the live reward catalog, including empty t
  const db=database();own(db);
  const state=await API.weaponDungeonState(db,'u1',NOW);
  for(const realm of W.WEAPON_REALMS){
-  assert.deepEqual(state.rewardPools[realm],M.BOOKS.filter(b=>b.tierRealm===realm).map(({id,name,tierRealm})=>({id,name,tierRealm})));
+  assert.deepEqual(state.rewardPools[realm],M.BOOKS.filter(b=>b.tierRealm===realm&&b.weaponType==='sword').map(({id,name,tierRealm})=>({id,name,tierRealm})));
+  assert.deepEqual(state.dungeons.find(d=>d.id===W.ID).rewardPools[realm],state.rewardPools[realm]);
  }
  assert.deepEqual(state.rewardPools['元嬰'],[]);
 });
@@ -296,4 +297,23 @@ test('settlement retry is room-bound and idempotent; failed and repeated clears 
  assert.equal(repeated.weaponDungeonResult.newlyUnlocked,null);assert.equal(repeated.weaponDungeonResult.tickets,0);
  await assert.rejects(API.start(db,'u1',{...input('settle-retry-003'),retryFromRoomId:third.id},NOW),/副本券不足/);
  assert.deepEqual((await API.weaponDungeonState(db,'u1',NOW)).clears,[2,0,0,0,0,0]);
+});
+
+test('Peak Stone rolls only swords from the exact current or next realm, including legacy rooms',()=>{
+ for(let difficulty=0;difficulty<6;difficulty++){
+  const info=W.selection({dungeonId:W.ID,difficulty});
+  for(let roll=0;roll<100;roll++){
+   const expectedRealm=roll<30?info.realm:info.nextRealm;
+   const expected=roll>=50?[]:M.BOOKS.filter(b=>b.weaponType==='sword'&&b.tierRealm===expectedRealm);
+   for(let index=0;index<Math.max(1,expected.length);index++){
+    const room={weaponDungeon:{...info,rewardWeaponType:'totem'}};
+    if(index===0)delete room.weaponDungeon.id;
+    const record=M.normalize({}),drop=Rewards.roll(room,'u1',record,max=>max===100?roll:index);
+    assert.equal(drop?.id??null,expected[index]?.id??null);
+    if(drop)assert.equal(M.BY_BOOK[drop.id].weaponType,'sword');
+    assert.ok(Object.keys(record.books).every(id=>M.BY_BOOK[id].weaponType==='sword'));
+   }
+  }
+ }
+ assert.ok(Object.values(Rewards.previewPools(W.WEAPON_REALMS,'unknown')).every(pool=>pool.length===0));
 });

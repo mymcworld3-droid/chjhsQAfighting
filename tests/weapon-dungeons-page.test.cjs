@@ -30,7 +30,7 @@ function harness({wide=false}={}){
  vm.runInContext(source.replace(/^import .*;\n/gm,'').replaceAll('export ','')
    .replaceAll("import('./tactical-combat.js?v=20261125-weapon-lord-cleared-v1')",'loadBattle()'),context);
  const dialog=()=>elements.get('weapon-dungeons-panel');
- const state=extra=>{const p={tickets:3,unlocked:0,clears:[0,0,0,0,0,0],active:null,...extra};return {...p,dungeonId:W.ID,dungeons:W.catalog(p),rewardPools:Rewards.previewPools(W.WEAPON_REALMS)};};
+ const state=extra=>{const p={tickets:3,unlocked:0,clears:[0,0,0,0,0,0],active:null,...extra};return {...p,dungeonId:W.ID,dungeons:W.catalog(p).map(d=>({...d,rewardPools:Rewards.previewPools(W.WEAPON_REALMS,d.id)})),rewardPools:Rewards.previewPools(W.WEAPON_REALMS)};};
  const respond=(data=state(),index=0)=>requests[index]({ok:true,json:async()=>({ok:true,state:data})});
  return {elements,entered,requests,dialog,state,respond,events,shell,
    setUid:value=>{uid=value;},open:(id)=>window.openWeaponDungeons(id),
@@ -231,7 +231,9 @@ test('atlas one-tap resume opens exact active room, even with zero tickets; acco
 test('reward preview uses the actual server pool and original weapon artwork; empty tiers do not invent drops',async()=>{
  const h=harness(),opening=h.open(W.ID);h.respond(h.state());await opening;
  let markup=h.dialog().innerHTML;
- for(const book of Rewards.previewPools(['築基','金丹'])['築基']){
+ assert.match(markup,/可能獲得 · 僅劍類/);
+ assert.doesNotMatch(markup,/data-wd-reward-id="body-/);
+ for(const book of Object.values(Rewards.previewPools(['築基','金丹'])).flat()){
   assert.ok(markup.includes('data-wd-reward-id="'+book.id+'"'));
   assert.ok(markup.includes(book.name));
  }
