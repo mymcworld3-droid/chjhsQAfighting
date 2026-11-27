@@ -28,3 +28,43 @@ jobs:
           npm run check:module-versions
       - name: Complete regression with public catalog
         run: node --test --test-reporter=tap --test-timeout=60000 tests/*.test.cjs
+
+  candidate-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [tactical, coop]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --no-audit --no-fund
+      - run: npm install --no-save --no-audit --no-fund playwright@1.62.1
+      - run: npx playwright install --with-deps chromium
+      - name: Enable candidate in CI workspace only
+        run: |
+          node -e "const fs=require('node:fs');const p='public/cultivation/manual-rules.js';const s=fs.readFileSync(p,'utf8');if(!/const RELEASE_NEW_WEAPONS=(true|false);/.test(s))throw Error('Missing release gate');fs.writeFileSync(p,s.replace('const RELEASE_NEW_WEAPONS=false;','const RELEASE_NEW_WEAPONS=true;'));"
+          npm run build:module-versions
+          npm run check:module-versions
+      - name: Tactical and training browser acceptance with twelve weapons
+        if: matrix.suite == 'tactical'
+        run: |
+          TACTICAL_SKETCH_ONLY=1 node scripts/test-tactical-browser.cjs
+          node scripts/test-manual-training-browser.cjs
+          node scripts/test-weapon-dungeons-browser.cjs
+          node scripts/test-prism-browser.cjs
+      - name: Real-time co-op browser acceptance with twelve weapons
+        if: matrix.suite == 'coop'
+        run: node scripts/test-dungeon-map-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: new-weapon-candidate-${{ matrix.suite }}-screenshots
+          path: |
+            /tmp/tactical-browser/*.png
+            /tmp/weapon-dungeon-browser/*.png
+            /tmp/prism-browser/*.png
+          if-no-files-found: ignore
