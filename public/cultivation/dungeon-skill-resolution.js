@@ -7,6 +7,7 @@
   else root.QADungeonSkillResolution=factory(root.QAFlyingSwordPath,root.QADungeonBossHit,root.QAManuals);
 })(globalThis,(SwordPath,Boss,Manuals)=>{
   'use strict';
+  const prism=()=>typeof module==='object'&&module.exports?require('./prism-weapon-rules.js'):globalThis.QAPrismRules;
   // Match the room's authoritative dungeon health and stamina contracts.
   const HEALTH=Object.freeze({wolf:500,wisp:440,golem:650,guardian:1200,boss:Boss.HP});
   const maxHealth=kind=>HEALTH[kind]||HEALTH.wolf;
@@ -166,7 +167,15 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     }
     return total;
   };
-  if(sk.kind==='fist-focus'){
+  const prismPlan=prism()?.supports(sk)?prism().selected(prism().boardForDungeon(map),origin,sk,target):null;
+  if(prism()?.supports(sk)){
+    if(!prismPlan)throw fail('請選擇未受阻擋的八方向直線',409);
+    cells=prismPlan.cells;
+    prism().resolve(prismPlan,sk,enemies.filter(e=>healthy(e)>0),h=>{
+      const enemy=enemies.find(e=>e.id===h.uid);if(healthy(enemy)<=0)return null;
+      apply(enemy,h.power);const hit=hits.at(-1);hit.rayId=h.rayId;hit.depth=h.depth;return hit;
+    },Boss.occupies);
+  }else if(sk.kind==='fist-focus'){
     if(!same(origin,target))throw fail('蓄勢必須選擇自身格',409);
     player.focusCharges=6;
   }else if(sk.kind==='line'){
@@ -312,6 +321,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     moveSword:Boolean(moveSword),origin:{...origin},target:{...target},
     ...(flightPath?{path:flightPath}:{}),
     cost,hits,visualMoves,...(chainSteps.length?{chainSteps}:{}),
+    ...(prismPlan?{prismRays:prismPlan.rays}:{}),
     totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
     focusBefore:chargeBefore,focusEmpowered:empowered,
@@ -334,7 +344,9 @@ function previewPlan(room,uid,map,skill){
   const base=Number.isSafeInteger(member.dungeonAttack)&&member.dungeonAttack>0?member.dungeonAttack:member.battleAttack||30;
   plan.exact=Number.isInteger(skill.refinement)&&Number.isSafeInteger(member.dungeonAttack)&&member.dungeonAttack>0;
   const candidates=[];
-  if(sk.kind==='fist-focus')candidates.push({...from});
+  const prismGeometry=prism()?.supports(sk)?prism().plans(prism().boardForDungeon(map),from,sk):null;
+  if(prismGeometry)candidates.push(...Object.values(prismGeometry.byDirection).map(p=>p.aims[0]));
+  else if(sk.kind==='fist-focus')candidates.push({...from});
   else if(sk.kind==='line'||sk.kind==='dash-cleave'){
     for(const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0]]){
       candidates.push(...ray(map,from,{x:from.x+dx,y:from.y+dy},sk.unlimited?map.width+map.height:sk.range));
@@ -357,9 +369,10 @@ function previewPlan(room,uid,map,skill){
     const path=result.path||[from,...(result.chainSteps||[]).map(s=>s.position)];
     const scheme={aim:{...target},cells,path:path.map(p=>({...p})),cost:result.cost,valid:staminaFor(member)>=result.cost,
       hits:result.hits,landings:result.visualMoves.map(m=>m.to),position:result.position,
-      totalDamage:result.totalDamage};
+      totalDamage:result.totalDamage,...(result.prismRays?{rays:result.prismRays}:{})};
     if(result.position&&path.length===1)scheme.path.push({...result.position});
-    plan.aims.push({...target});plan.byAim[key(target)]=scheme;
+    const aliases=prismGeometry?.byAim[key(target)]?.aims||[target];
+    for(const aim of aliases){plan.aims.push({...aim});plan.byAim[key(aim)]={...scheme,aim:{...aim}};}
     for(const p of cells)union.set(key(p),p);
   }
   plan.cells=[...union.values()];return plan;

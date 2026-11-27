@@ -12,6 +12,7 @@
     ?require('./flying-sword-path.js'):globalThis.QAFlyingSwordPath;
   const weaponDungeons=()=>typeof module==='object'&&module.exports
     ?require('./weapon-dungeon-rules.js'):globalThis.QAWeaponDungeons;
+  const prism=()=>typeof module==='object'&&module.exports?require('./prism-weapon-rules.js'):globalThis.QAPrismRules;
   const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,events:64,turns:60,turnMs:30000,answerMs:50000});
   const MAPS=Object.freeze([
     {id:'courtyard',name:'演武庭',width:7,height:7,terrain:2,description:'開闊石庭，練習近身與迂迴。'},
@@ -904,6 +905,7 @@
   }
   function aimCells(s,a,sk){
     if(!a||!alive(a))return [];
+    if(prism()?.supports(sk))return prism().plans(prism().boardForTrial(s),a,sk).aims;
     if(fistDirectional(sk))return CARDINALS.map(([x,y])=>offset(a,{x,y},1)).filter(p=>fistDirection(s,a,p,sk));
     if(sk.kind==='ring')return ring(s,a);
     if(sk.kind==='cleave'){const cells=new Map();for(const d of [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}])for(const p of rectangle(s,a,sk,{x:a.x+d.x,y:a.y+d.y}))cells.set(key(p),p);return [...cells.values()];}
@@ -928,6 +930,7 @@
     return cells;
   }
   function skillCells(s,a,sk,p){
+    if(prism()?.supports(sk))return prism().selected(prism().boardForTrial(s),a,sk,p)?.cells||[];
     if(fistDirectional(sk)){
       const d=fistDirection(s,a,p,sk);
       return d?frontStrike(s,a,d,sk.tShape):[];
@@ -948,6 +951,10 @@
     if(!geometryOnly){
       if(a.stamina<techniqueCost(a,sk))fail('體力不足，先答題補充');
       validateAttackLimit(a);
+    }
+    if(prism()?.supports(sk)){
+      if(!prism().selected(prism().boardForTrial(s),a,sk,p))fail('請選擇未受阻擋的八方向直線');
+      return;
     }
     if(fistDirectional(sk)){
       if(!fistDirection(s,a,p,sk))fail('請選擇上下左右的出拳方向');
@@ -1016,12 +1023,22 @@
     if(s.status!=='active'||s.turnUid!==a.uid||s.quizRound&&s.phase!=='action')reason='目前不是你的行動回合';
     else if((a.actions||0)>=LIMITS.actions)reason='本回合行動已達上限';
     else try{validateSkill(s,a,sk,aim);}catch(e){reason=String(e.message||e);}
+    const rayPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,aim):null;
     return {aim,cost,valid:!reason,reason,cells:[...cells.values()],path,hits,moves,finalPositions,
+      ...(rayPlan?{rays:rayPlan.rays}:{}),
       landings:finalPositions.filter(t=>t.uid!==a.uid).map(point)};
   }
   function skillPreviewPlan(s,a,sk){
     const result={aims:[],cells:[],byAim:{}};
     if(!alive(a)||!sk)return result;
+    if(prism()?.supports(sk)){
+      const geometry=prism().plans(prism().boardForTrial(s),a,sk);
+      for(const rayPlan of Object.values(geometry.byDirection)){
+        const scheme=previewCast(s,a,sk,rayPlan.aims[0]);
+        for(const aim of rayPlan.aims){result.aims.push(point(aim));result.byAim[key(aim)]={...scheme,aim:point(aim)};}
+      }
+      result.cells=geometry.cells;return result;
+    }
     const aims=aimCells(s,a,sk).slice();
     if(sk.kind==='ring'||sk.range===0)aims.push(point(a));
     const union=new Map(),seen=new Set();
@@ -1044,7 +1061,8 @@
     if(s.pveMetrics){s.pveMetrics.staminaSpent+=cost;if(sk.manualId)s.pveMetrics.manualCasts[sk.id]=(s.pveMetrics.manualCasts[sk.id]||0)+1;}
     const fixedTarget=sealAt(s,p);
     if(s.mode==='pve'&&s.trial?.layoutVersion>=3&&sk.manualId){s.manualUsed||={};s.manualUsed[a.uid]||={};s.manualUsed[a.uid][sk.manualId]=true;}
-    const cells=skillCells(s,a,sk,p);
+    const prismPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,p):null;
+    const cells=prismPlan?.cells||skillCells(s,a,sk,p);
     const rays=sk.kind==='sword-array'?swordArray(s,sk,p):null;
     const cuts=rays&&!sk.orthogonal?crossedSwordLines(rays,p):null;
     const route=techniquePath(s,a,sk,p);
@@ -1071,6 +1089,15 @@
     if(!['fist-chain','meteor','restore','counter','fist-focus'].includes(sk.kind)&&(sk.kind!=='blink'||sk.burst))strikeSeals(s,cells);
     // Fixed objectives can be hit by targeted techniques, but cannot be moved.
     if(fixedTarget&&!at(s,p)&&['hit','lunge','swap'].includes(sk.kind))return;
+    if(prismPlan){
+      const targets=s.actors.filter(t=>alive(t)&&t.team!==a.team);
+      prism().resolve(prismPlan,sk,targets,h=>{
+        const target=s.actors.find(t=>t.uid===h.uid);
+        if(!alive(a)||!alive(target))return null;
+        return {damage:damage(s,a,target,a.atk*h.power,{skill:sk.id,manualId:sk.manualId,strike:h.rayId})};
+      },covers);
+      return;
+    }
     if(sk.kind==='fist-focus'){
       a.fistFocusUntil=a.turns+2;
       return;
