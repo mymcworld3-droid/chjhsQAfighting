@@ -44,7 +44,8 @@ for(const b of D.BOOKS)for(const sk of b.skills)test('candidate authorized casts
   const before=JSON.stringify(s),out=R.apply(s,'u',{type:'manual',skillId:id,x:best.aim.x,y:best.aim.y,first:best.first||null},now+1);
   assert.equal(JSON.stringify(s),before);assert.equal(out.actors[0].stamina,10-best.cost);assert.equal(out.actors[1].hp,10000-best.hits.reduce((n,h)=>n+h.damage,0));
  }
- const member=Skills.initialCombatLoadout({uid:'u',position:origin,battleAttack:100,battleHealth:10000,explorationStamina:10},record);
+ const baseMember={uid:'u',position:origin,battleAttack:100,battleHealth:10000,explorationStamina:10};
+ const member={...baseMember,...Skills.initialCombatLoadout(baseMember,record)};
  const room={status:'assembled',battleAppliedTick:1,members:{u:member},enemies:[{id:'e',kind:'wolf',position:p(8,6),battleHealth:10000,battleMaxHealth:10000}],...(objects(id)?{weaponObjects:objects(id)}:{})};
  const plan=C.previewPlan(room,'u',map,member.dungeonSkills.find(s=>s.id===id)),opts=id==='weave-thread'?Object.values(plan.byPair):Object.values(plan.byAim);
  assert.ok(plan.exact&&opts.length,id);const best=opts.sort((a,b)=>b.totalDamage-a.totalDamage)[0];
