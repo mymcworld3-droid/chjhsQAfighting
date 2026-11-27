@@ -35,7 +35,8 @@ function harness({wide=false}={}){
    choose:(id=W.ID)=>dialog().handlers.click({target:{closest:s=>s==='[data-wd-dungeon]'?{dataset:{wdDungeon:id}}:null}}),
    back:()=>dialog().handlers.click({target:{closest:s=>s==='[data-wd-back]'?{}:null}}),
    click:async difficulty=>{dialog().handlers.click({target:{closest:selector=>selector==='[data-wd-difficulty]'?
-     {dataset:{wdDifficulty:String(difficulty)},disabled:false}:null}});await new Promise(resolve=>setImmediate(resolve));}};
+     {dataset:{wdDifficulty:String(difficulty)},disabled:false}:null}});await new Promise(resolve=>setImmediate(resolve));},
+   enter:async()=>{dialog().handlers.click({target:{closest:s=>s==='[data-wd-enter]'?{disabled:false}:null}});await new Promise(resolve=>setImmediate(resolve));}};
 }
 test('gameplay entry opens an authenticated modal with six difficulties, ticket balance and tracking counterplay',async()=>{
  const h=harness();assert(h.elements.has('gameplay-weapon-dungeon-entry'));
@@ -47,9 +48,9 @@ test('gameplay entry opens an authenticated modal with six difficulties, ticket 
  assert.equal((h.dialog().innerHTML.match(/data-wd-difficulty=/g)||[]).length,6);
  assert.match(h.dialog().innerHTML,/副本券 .*?>3<\/b>/);
  assert.match(h.dialog().innerHTML,/擊退則會打斷蓄勢/);
- assert.match(h.dialog().innerHTML,/data-wd-difficulty="1"[^>]* disabled/);
- await h.click(1);assert.equal(h.entered.length,0,'a forged locked-difficulty click cannot enter');
- await h.click(0);assert.equal(h.entered.length,1);assert.equal(h.entered[0][0],'weapon-dungeon');
+ assert.match(h.dialog().innerHTML,/data-wd-difficulty="1"[^>]*class="locked"/);
+ await h.click(1);await h.enter();assert.equal(h.entered.length,0,'a forged locked-difficulty start cannot enter');
+ await h.click(0);assert.equal(h.entered.length,0);await h.enter();assert.equal(h.entered.length,1);assert.equal(h.entered[0][0],'weapon-dungeon');
  assert.equal(h.entered[0][1].difficulty,0);assert.equal(h.entered[0][1].dungeonId,W.ID);
  assert.equal(h.dialog().open,false);
 });
@@ -57,7 +58,7 @@ test('an active dungeon can resume with zero tickets and other challenges remain
  const h=harness(),opening=h.open();h.respond(h.state({tickets:0,active:{roomId:'arena-active',difficulty:0}}));await opening;h.choose();
  assert.match(h.dialog().innerHTML,/繼續挑戰 · 不耗券/);
  assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty="0"[^>]* disabled/);
- await h.click(0);assert.equal(h.entered.length,1);
+ await h.click(0);assert.equal(h.entered.length,0);await h.enter();assert.equal(h.entered.length,1);
 });
 test('late account responses and responses after closing cannot overwrite a new modal session',async()=>{
  const h=harness(),old=h.open();h.setUid('u2');h.events.get('xiuxian:user-data-ready')();
@@ -111,14 +112,12 @@ test('dungeon map art and universal solid plaque are separate original PNG files
  assert.match(css,/url\('\/assets\/dungeons\/dungeon-button\.png'\)/);
 });
 
-test('realm selector is a single horizontal scroll rail with all six original actions',async()=>{
- const h=harness(),opening=h.open();h.respond();await opening;h.choose();
+test('realm selector uses six segments and a moving highlight, previews without entry',async()=>{
+ const h=harness(),opening=h.open();h.respond(h.state({unlocked:1}));await opening;h.choose();
  const markup=h.dialog().innerHTML,css=fs.readFileSync(require.resolve('../public/styles/weapon-dungeons.css'),'utf8');
- assert.match(markup,/class="wd-difficulties"[^>]*可左右滑動/);
- assert.match(markup,/data-wd-slide="-1"/);assert.match(markup,/data-wd-slide="1"/);
+ assert.match(markup,/class="wd-difficulty-selection"/);assert.match(markup,/--wd-selected-index:0/);
  assert.equal((markup.match(/data-wd-difficulty=/g)||[]).length,6);
- assert.match(css,/\.wd-difficulties\{display:flex;[^}]*overflow-x:auto/);
- assert.match(css,/scroll-snap-type:x proximity/);
- assert.doesNotMatch(css,/\.wd-difficulties\{[^}]*grid-template-columns/);
- assert.equal(h.entered.length,0);
+ assert.match(css,/grid-template-columns:repeat\(6,minmax\(0,1fr\)\)/);
+ assert.match(css,/transform:translateX\(calc\(var\(--wd-selected-index,0\)\*100%\)\)/);
+ await h.click(1);assert.equal(h.entered.length,0);await h.enter();assert.equal(h.entered[0][1].difficulty,1);
 });

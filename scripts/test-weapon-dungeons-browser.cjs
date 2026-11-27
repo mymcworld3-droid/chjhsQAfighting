@@ -53,7 +53,7 @@ async function main(){
   await page.locator('[data-wd-dungeon="peak-stone"]').click();
   await page.locator('[data-wd-difficulty="0"]').waitFor();
   assert.equal(await page.locator('[data-wd-difficulty]').count(),6);
-  assert.equal(await page.locator('[data-wd-difficulty="1"]').isDisabled(),true);
+  assert.equal(await page.locator('[data-wd-difficulty="1"]').getAttribute('data-qy-difficulty'),'locked');
   assert.match(await page.locator('.wd-tickets').textContent(),/副本券\s*3\b/);
   assert.match(await page.locator('.wd-tickets').textContent(),/補發上限 5 張/);
   for(const viewport of [{width:393,height:852},{width:1180,height:820},{width:360,height:640}]){
@@ -62,20 +62,19 @@ async function main(){
    assert(bounds.x>=0&&bounds.y>=0&&bounds.x+bounds.width<=viewport.width+1&&bounds.y+bounds.height<=viewport.height+1);
    await page.screenshot({path:path.join(output,'selection-'+viewport.width+'.png')});
   }
-  // Drag on an enabled card must scroll without spending a ticket or launching combat.
   const rail=page.locator('.wd-difficulties');
   await rail.scrollIntoViewIfNeeded();
-  assert.equal(await rail.evaluate(el=>el.scrollWidth>el.clientWidth),true);
-  const row=await rail.evaluate(el=>Array.from(el.children).map(b=>Math.round(b.getBoundingClientRect().top)));
+  assert.equal(await rail.evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+  const row=await rail.locator('button').evaluateAll(items=>items.map(b=>Math.round(b.getBoundingClientRect().top)));
   assert.equal(new Set(row).size,1);
-  const cardBox=await page.locator('[data-wd-difficulty="0"]').boundingBox();
-  await page.mouse.move(cardBox.x+cardBox.width-8,cardBox.y+cardBox.height/2);
-  await page.mouse.down();await page.mouse.move(cardBox.x+5,cardBox.y+cardBox.height/2,{steps:10});await page.mouse.up();
-  await page.waitForFunction(()=>document.querySelector('.wd-difficulties').scrollLeft>20);
+  await page.locator('[data-wd-difficulty="1"]').click();
+  assert.equal(await page.locator('[data-wd-enter]').isDisabled(),true);
+  assert.equal(await page.locator('[data-wd-difficulty="1"]').getAttribute('aria-pressed'),'true');
+  assert.equal(await rail.evaluate(el=>el.style.getPropertyValue('--wd-selected-index')),'1');
+  assert.match(await page.locator('[data-wd-preview]').textContent(),/30% 金丹武器/);
   assert.equal((await API.weaponDungeonState(db,'u1')).tickets,3);
-  await page.locator('[data-wd-slide="-1"]').click();
-  await page.waitForFunction(()=>document.querySelector('.wd-difficulties').scrollLeft<5);
   await page.locator('[data-wd-difficulty="0"]').click();
+  await page.locator('[data-wd-enter]').click();
   await page.locator('#tactical-combat canvas').waitFor();
   await page.waitForFunction(()=>!document.querySelector('#tactical-combat [data-quiz]').disabled);
   const read=()=>API.state(db,'u1',Date.now(),'weapon-dungeon');
@@ -97,8 +96,8 @@ async function main(){
   assert.equal((await API.weaponDungeonState(db,'u1')).tickets,2);
   await page.locator('[data-close]').click();await page.locator('#gameplay-weapon-dungeon-entry').click();
   await page.locator('[data-wd-dungeon="peak-stone"]').click();
-  assert.match(await page.locator('[data-wd-difficulty="0"]').textContent(),/不耗券/);
-  await page.locator('[data-wd-difficulty="0"]').click();await page.locator('#tactical-combat canvas').waitFor();
+  assert.match(await page.locator('[data-wd-enter]').textContent(),/不耗券/);
+  await page.locator('[data-wd-enter]').click();await page.locator('#tactical-combat canvas').waitFor();
   assert.equal((await read()).id,room.id);assert.equal((await API.weaponDungeonState(db,'u1')).tickets,2);
   const raw=db.records.get(API.ROOMS+'/'+room.id);
   raw.blocks=[];
@@ -117,7 +116,8 @@ async function main(){
   await page.screenshot({path:path.join(output,'victory.png'),animations:'disabled'});
   await page.locator('[data-weapon-dungeon-menu]').click();
   await page.locator('[data-wd-dungeon="peak-stone"]').click();
-  await page.waitForFunction(()=>document.querySelector('[data-wd-difficulty="1"]')?.disabled===false);
+  await page.waitForFunction(()=>document.querySelector('[data-wd-difficulty="1"]')?.dataset.qyDifficulty==='ready');
+  await page.locator('[data-wd-difficulty="1"]').click();assert.equal(await page.locator('[data-wd-enter]').isDisabled(),false);
   assert.match(await page.locator('.wd-tickets').textContent(),/副本券\s*2\b/);
   assert.match(await page.locator('.wd-tickets').textContent(),/補發上限 5 張/);
   assert.equal((await API.weaponDungeonState(db,'u1')).clears[0],1);assert.deepEqual(errors,[]);
