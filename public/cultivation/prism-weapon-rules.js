@@ -93,7 +93,7 @@
     const segments=plan.rays.map(ray=>{
       const [start,impact,end]=beats[ray.depth];
       const tone=ray.depth===0?'ice':reflect?'gold':ray.depth===1?'jade':'violet';
-      return {kind:'ray',start,impact,end,tone,origin:point(ray.origin),
+      return {kind:'ray',start,impact,end,tone,origin:point(ray.origin),...(ray.depth===0?{chargeMs:start}:{}),
         cells:ray.cells.map(point),rays:[{cells:[point(ray.origin),...ray.cells.map(point)],tone,
           ...(ray.collision?{collision:point(ray.collision.from)}:{})}],
         hits:hits.filter(h=>h.rayId===ray.id).map(h=>({uid:h.uid??h.enemyId,damage:h.damage,

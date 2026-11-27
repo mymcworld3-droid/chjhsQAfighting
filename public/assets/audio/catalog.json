@@ -51,6 +51,25 @@
       "taskId": "e0d7ba18-4e1f-4886-80c5-ef33020a54b1",
       "prompt": "A short Chinese immortal fantasy breakthrough reveal: a soft deep energy swell for 0.3 seconds opens into three warm luminous bell and singing-bowl tones, triumphant yet restrained, fading fully by 1.8 seconds. For realm breakthrough and rare treasure. No vocals, speech, music bed, drums, harsh blast or extended reverb.",
       "requestedDuration": 1.8
+    },
+    {
+      "id": "prism-sword",
+      "source": "Original procedural synthesis",
+      "method": "Rising metallic sword chirp and filtered noise",
+      "duration": 0.125
+    },
+    {
+      "id": "prism-crystal",
+      "source": "Original procedural synthesis",
+      "method": "Damped inharmonic crystal modes and a brief transient",
+      "duration": 0.135
+    },
+    {
+      "id": "prism-split",
+      "source": "Original procedural synthesis",
+      "method": "Three rising beam chirps with a bright decaying texture",
+      "duration": 0.15
     }
-  ]
+  ],
+  "additionalFormat": "Prism: original procedural sound synthesis, mono MP3, 22050 Hz, 32 kbps; deterministic chirps/modal resonances, short envelope, peak 0.70; no external source."
 }

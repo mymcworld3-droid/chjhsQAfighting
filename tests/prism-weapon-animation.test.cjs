@@ -78,3 +78,20 @@ test('maximum prism scatter renders the committed ray tree in both layers and re
   assert.equal(W.active(timeline,319/600).filter(s=>s.tone==='violet').length,0);
   assert.equal(W.active(timeline,320/600).filter(s=>s.tone==='violet').length,16);
 });
+
+test('prism charges before the first ray and plays at most one cue per collision beat',()=>{
+  const blocks=[p(3,1),p(12,3),p(4,4),p(7,4),p(13,4),p(3,6),p(11,7),p(6,8),p(7,10),p(6,11),p(13,11)];
+  const board={width:15,height:15,blocked:q=>blocks.some(b=>b.x===q.x&&b.y===q.y)};
+  const sk=D.skillAtLevel('prism-scatter',1,0),plan=P.build(board,p(7,7),sk,p(1,0));
+  const t=W.normalize(P.timeline(plan,sk,[]));
+  assert.equal(t.segments[0].chargeMs,60);
+  assert.deepEqual(W.prismSoundCues(t,sk.id).map(c=>[c.at,c.id]),[[60,'prism-sword'],[175,'prism-crystal'],[320,'prism-split']]);
+  const played=new Set(),calls=[],play=(id,opts)=>calls.push([id,opts.key]);
+  for(let ms=0;ms<600;ms++)W.advancePrismSound(t,sk.id,ms,played,play,'cast-1');
+  assert.deepEqual(calls,[['prism-sword','cast-1:prism:0'],['prism-crystal','cast-1:prism:1'],['prism-split','cast-1:prism:2']]);
+  const late=[];W.advancePrismSound(t,sk.id,330,new Set(),id=>late.push(id),'cast-2');
+  assert.deepEqual(late,['prism-split']);
+  const old=[];W.advancePrismSound(t,sk.id,550,new Set(),id=>old.push(id),'cast-3');
+  assert.deepEqual(old,[]);
+  assert.equal(W.advancePrismSound(t,'bell-echo',330,new Set(),play,'other'),false);
+});

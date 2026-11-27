@@ -1692,9 +1692,12 @@ class DungeonMapView{
         this.travelScenes.set(event.key,{...joined,startedAt:now});
       }
       for(const {key,scene} of dungeonAnimationEvents(previous,room)){
-        if(!this.visualScenes.has(key))
+        if(!this.visualScenes.has(key)){
           this.visualScenes.set(key,{scene,
             startedAt:now+(scene.delayMs||0),soundPlayed:false});
+          if(globalThis.QAWeaponEffects?.prismSoundCues(scene.weaponTimeline,scene.skill).length)
+            void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.PRISM_SOUNDS);
+        }
       }
       while(this.visualScenes.size>12)
         this.visualScenes.delete(this.visualScenes.keys().next().value);
@@ -2153,7 +2156,9 @@ class DungeonMapView{
       const p=reduceMotion ? .77 : Math.max(0,Math.min(1,
         elapsed/Math.max(1,entry.scene.duration)));
       const firstImpact=entry.scene.weaponTimeline?.segments.find(s=>s.hits.some(h=>h.damage||h.absorbed))?.impact;
-      if(!entry.soundPlayed&&p>=(firstImpact===undefined?.38:firstImpact/entry.scene.weaponTimeline.durationMs)){
+      const prismPlayed=entry.scene.weaponTimeline&&globalThis.QAWeaponEffects.advancePrismSound(entry.scene.weaponTimeline,entry.scene.skill,
+        elapsed,entry.playedPrismCues||=new Set(),(id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},this.room?.id+':'+key);
+      if(!prismPlayed&&!entry.soundPlayed&&p>=(firstImpact===undefined?.38:firstImpact/entry.scene.weaponTimeline.durationMs)){
         entry.soundPlayed=true;
         if(entry.scene.hits?.some(hit=>hit.damage>0))
           try{window.QAGameAudio?.play('combat-impact',{volume:.27});}catch(_){}

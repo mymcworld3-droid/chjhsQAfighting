@@ -26,6 +26,7 @@
       const hits=Array.isArray(s.hits)?s.hits.slice(0,128).filter(h=>uid(h?.uid)&&Number.isFinite(h.damage)&&h.damage>=0).map(h=>({uid:h.uid,damage:amount(h.damage),absorbed:amount(h.absorbed),...(valid(h.cell)?{cell:point(h.cell)}:{})})):[];
       const echoes=Array.isArray(s.echoes)?s.echoes.slice(0,8).filter(e=>valid(e?.position)).map(e=>({position:point(e.position),...(valid(e.to)?{to:point(e.to)}:{}),type:e.type==='time'?'time':'mirror',tone:tone(e.tone||(e.type==='time'?'gold':'violet'))})):[];
       segments.push({kind:s.kind,start:s.start,impact:s.impact,end:s.end,tone:tone(s.tone),
+        ...(Number.isInteger(s.chargeMs)&&s.chargeMs>0&&s.chargeMs<=s.start?{chargeMs:s.chargeMs}:{}),
         origin:valid(s.origin)?point(s.origin):null,target:valid(s.target)?point(s.target):null,
         cells:points(s.cells),vertices:points(s.vertices,16),radius:Number.isFinite(s.radius)?Math.max(0,Math.min(8,s.radius)):0,rays,moves,hits,echoes});
     }
@@ -90,10 +91,43 @@
     ctx.beginPath();ctx.moveTo(a.x-size*.17,a.y+size*.3);ctx.lineTo(a.x-size*.1,a.y-size*.1);ctx.lineTo(a.x+size*.1,a.y-size*.1);ctx.lineTo(a.x+size*.17,a.y+size*.3);ctx.closePath();ctx.fill();
     ring(ctx,a,size*.35);
   }
+  const PRISM_SOUNDS=Object.freeze(['prism-sword','prism-crystal','prism-split']);
+  const isPrism=id=>['prism-slash','prism-reflect','prism-scatter'].includes(id);
+  // The timeline's committed collision/hit data controls cues. One cue per
+  // causal beat, never per ray or victim, including an empty wall collision.
+  function prismSoundCues(timeline,id){
+    if(!isPrism(id)||!timeline?.segments?.length)return [];
+    const root=timeline.segments[0],cues=[{at:root.start,id:PRISM_SOUNDS[0],volume:.34}];
+    const impact=s=>s.rays.some(r=>r.collision)||s.hits.some(h=>h.damage||h.absorbed);
+    if(impact(root))cues.push({at:root.impact,id:PRISM_SOUNDS[1],volume:.32});
+    const secondary=timeline.segments.filter(s=>s.start===root.impact);
+    const beat=secondary.find(impact);
+    if(beat)cues.push({at:beat.impact,id:id==='prism-scatter'&&timeline.segments.some(s=>s.start===beat.impact)?PRISM_SOUNDS[2]:PRISM_SOUNDS[1],volume:.29});
+    return cues;
+  }
+  function advancePrismSound(timeline,id,elapsed,played,play,key){
+    if(!isPrism(id)||!timeline)return false;
+    const cues=prismSoundCues(timeline,id);
+    let due=null;
+    cues.forEach((cue,i)=>{
+      if(elapsed<cue.at||played.has(i))return;
+      played.add(i);due={...cue,index:i};
+    });
+    // A stalled frame must never queue multiple old sounds on resume.
+    if(due&&elapsed-due.at<=100)play(due.id,{volume:due.volume,key:key+':prism:'+due.index});
+    return true;
+  }
   function draw(ctx,timeline,p,v,above,{reduced=false}={}){
     if(!timeline)return false;
     const size=v.cell,at=p=>center(v,p);
     ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+    const ms=clamp(p)*timeline.durationMs;
+    if(!above)for(const s of timeline.segments){
+      if(!s.chargeMs||!s.origin||ms<s.start-s.chargeMs||ms>=s.start)continue;
+      const a=at(s.origin),q=(ms-s.start+s.chargeMs)/s.chargeMs,r=size*(.08+.16*q);
+      ctx.strokeStyle='#effaff';ctx.lineWidth=Math.max(1,size*.045);ctx.globalAlpha=.25+.65*q;
+      ring(ctx,a,r);line(ctx,[{x:a.x-r*1.7,y:a.y},{x:a.x,y:a.y-r*1.7},{x:a.x+r*1.7,y:a.y},{x:a.x,y:a.y+r*1.7},{x:a.x-r*1.7,y:a.y}]);
+    }
     for(const s of active(timeline,p)){
       const q=s.progress,b=s.impactProgress,origin=s.origin&&at(s.origin),target=s.target&&at(s.target),color=ink(s.tone);
       ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=Math.max(1,size*.045);
@@ -125,6 +159,12 @@
           else line(ctx,[a,z]);
         }
       }else if(b>=0){
+        if(s.kind==='ray')for(const ray of s.rays){
+          if(!ray.collision||b>.55)continue;
+          const a=at(ray.collision),r=size*(.14+b*.4);
+          ctx.strokeStyle='#f5fbff';ctx.lineWidth=Math.max(1,size*.035);ctx.globalAlpha=(1-b/.55)*.9;
+          line(ctx,[{x:a.x-r,y:a.y},{x:a.x,y:a.y-r},{x:a.x+r,y:a.y},{x:a.x,y:a.y+r},{x:a.x-r,y:a.y}]);
+        }
         const spots=s.rays.map(r=>r.collision).filter(Boolean).concat(s.hits.map(h=>h.cell).filter(Boolean)).slice(0,16);
         ctx.strokeStyle=color;ctx.globalAlpha=(1-b)*.85;
         for(const cell of spots){const a=at(cell);ring(ctx,a,size*(.14+b*.42));
@@ -164,5 +204,5 @@
     }
     ctx.restore();return state.objects.length>0;
   }
-  return Object.freeze({normalize,active,numberFrames,motionPose,sample,draw,drawNumbers,drawObjects});
+  return Object.freeze({normalize,active,numberFrames,motionPose,sample,draw,drawNumbers,drawObjects,PRISM_SOUNDS,prismSoundCues,advancePrismSound});
 });
