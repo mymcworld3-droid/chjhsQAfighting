@@ -165,3 +165,31 @@
 - 原卷下載DNS失敗，校方多數PDF截圖仍無法取得；臺東112下期末反應速率尚未找到正式答案。未達新增50份全文目標；沒有補造題目或答案。
 
 累積主要候選仍201筆，已具完整題文草稿28筆（含歷次升級），人工核准0。候選JSON檢查既有ID關聯、升級不重複、答案標記與來源比對、核准旗標。未修改正式題庫、載入政策或人工批准清單；未執行全庫稽核與測試。下一批應優先取得實際PDF檔並對既有候選逐題轉錄，不再單純增加索引。
+
+## 11. 第七批（2026-11-27）
+
+新增 [high-school-2-batch-07.json](reference-candidates/high-school-2-batch-07.json)。將第一批15筆、第二批14筆已存在於本文件的定位記錄遷移至結構化JSON，不新增或重複計算題數；其中15筆仍缺正式答案，答案欄空陣列。另有4筆既有候選完成文字層轉錄草稿（數學1、物理1、化學2），重新比對原卷與同卷答案表，均未取得PDF截圖，仍需視覺及人工審核。未達50題新增全文草稿的目標。
+
+全批結構檢查：累積201筆、32筆有題文草稿、169筆待轉錄，待轉錄中86筆曾重新配對官方答案，共18個原卷來源；人工核准0。前兩批原先位於Markdown的29筆現已納入同一工作清單。106筆的第六批答案重新比對數量不變，不能與完整轉錄混算。
+
+### 批次擷取流程
+
+新增 `scripts/prepare-human-reference-review.cjs`，從所有批次建立工作清單、排除已有草稿、優先排入答案已重新核對的候選。支援本機PDF、選擇性下載、原始PDF SHA-256、Poppler文字層、原頁PNG及保留多個可能題文區塊。原始區塊並非完整題目；不自動合併頁面、補選項、核准或寫入正式題庫。所有輸出位於儲存庫之外。
+
+需要 Node.js 22 與 Poppler（pdftotext，渲染時另需 pdftoppm）。
+
+```sh
+node scripts/prepare-human-reference-review.cjs --self-test
+node scripts/prepare-human-reference-review.cjs --manifest-only --out /tmp/reference-review
+node scripts/prepare-human-reference-review.cjs --pdf-dir /path/to/original-pdfs --render --out /tmp/reference-review
+# 可選：嘗試從既有官方HTTPS教育機構來源下載
+node scripts/prepare-human-reference-review.cjs --download --render --out /tmp/reference-review
+```
+
+本機PDF命名依worklist.json的sourceId，原卷為 `<sourceId>.pdf`；答案獨立時為 `<sourceId>.answers.pdf`。合併卷答案ZIP仍需人工取得及選擇正確答案檔，未自動解壓或假定答案。輸出worklist.json、raw-candidates.json、extraction-report.json及各原卷頁面證據。無法取得來源的情況列為blocked。題組、跨頁、公式及圖表仍需對照原卷。
+
+新增 GitHub Actions `.github/workflows/human-reference-pdf-review.yml`：唯讀工作流程，支援手動觸發及相關指定檔案推送，使用Poppler並保存報告；僅私有儲存庫保留未核准的頁面/文字擷取artifact，公開儲存庫只保存索引及狀態報告，避免未核實第三方素材被重新發布。不向正式庫寫入任何資料。三項純JS輔助函數檢查已通過，實際Node CLI與完整PDF擷取尚未驗證；本次四份原卷的web文字層可讀但截圖cache miss，直接下載DNS/下載失敗；連接器未回傳本次CI run或combined status，不宣稱工作流程成功或已產生artifact。
+
+### 教材範圍
+
+已將114學年度第三方跨版物理II章節對照表（https://www.go100.com.tw/file/108_comparison_table/senior/11-2_comparison_elective_physical_II_114.pdf?v=20260224）中的南一、翰林、龍騰力學及熱學觀念節次對照保存在第七批JSON。龍騰的書籍章次與均一適配主題順序可能不同，兩者分開標記，待官方實體目錄確認；不宣稱全科官方目錄齊全。反應速率及化學平衡仍欠完整原卷轉錄。本次未取得新的正式人工核准；未修改正式題庫、baseline、載入規則或批准清單，未執行全庫稽核測試。
