@@ -1,0 +1,745 @@
+{
+  "schema": 1,
+  "batch": 19,
+  "date": "2026-11-27",
+  "purpose": "原卷及正式答案重新核對；補充可驗證的數據證據，不建立只有題號的新候選，不將未取得原檔的長題計作全文。",
+  "records": [],
+  "upgrades": [],
+  "answerRechecks": [
+    {
+      "id": "CEEC-113-physics-single-choice-3",
+      "sourceId": "CEEC-113-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221354517405701583/05-113分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-physics-single-choice-9",
+      "sourceId": "CEEC-113-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221354517405701583/05-113分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-physics-multiple-choice-16",
+      "sourceId": "CEEC-113-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221354517405701583/05-113分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "A",
+        "C",
+        "E"
+      ],
+      "observedMarks": [
+        "A",
+        "C",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-1",
+      "sourceId": "CEEC-113-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-2",
+      "sourceId": "CEEC-113-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-4",
+      "sourceId": "CEEC-113-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-5",
+      "sourceId": "CEEC-113-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-7",
+      "sourceId": "CEEC-113-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-4",
+      "sourceId": "CEEC-114-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-5",
+      "sourceId": "CEEC-114-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-6",
+      "sourceId": "CEEC-114-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-7",
+      "sourceId": "CEEC-114-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-physics-multiple-choice-14",
+      "sourceId": "CEEC-114-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "B",
+        "C"
+      ],
+      "observedMarks": [
+        "B",
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-physics-multiple-choice-15",
+      "sourceId": "CEEC-114-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "B",
+        "D",
+        "E"
+      ],
+      "observedMarks": [
+        "B",
+        "D",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-chem-single-choice-4",
+      "sourceId": "CEEC-114-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-chem-single-choice-5",
+      "sourceId": "CEEC-114-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-chem-multiple-choice-14",
+      "sourceId": "CEEC-114-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "B",
+        "C",
+        "E"
+      ],
+      "observedMarks": [
+        "B",
+        "C",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-chem-multiple-choice-15",
+      "sourceId": "CEEC-114-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "A",
+        "E"
+      ],
+      "observedMarks": [
+        "A",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-1",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "answerPdfPage": 5,
+      "previousMarks": [
+        "○"
+      ],
+      "observedMarks": [
+        "○"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-5",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "answerPdfPage": 5,
+      "previousMarks": [
+        "○"
+      ],
+      "observedMarks": [
+        "○"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-10",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "answerPdfPage": 5,
+      "previousMarks": [
+        "○"
+      ],
+      "observedMarks": [
+        "○"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-二、多重選擇題-multiple-choice-2",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "answerPdfPage": 5,
+      "previousMarks": [
+        "C",
+        "D",
+        "E"
+      ],
+      "observedMarks": [
+        "C",
+        "D",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-chem-multiple-choice-18",
+      "sourceId": "CEEC-113-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "A",
+        "B",
+        "D"
+      ],
+      "observedMarks": [
+        "A",
+        "B",
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-chem-single-choice-1",
+      "sourceId": "CEEC-114-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "A"
+      ],
+      "observedMarks": [
+        "A"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-6",
+      "sourceId": "CEEC-113-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "E"
+      ],
+      "observedMarks": [
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-114-physics-single-choice-8",
+      "sourceId": "CEEC-114-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p217332507401284656/05-114分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-chem-multiple-choice-12",
+      "sourceId": "CEEC-113-chem",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "A",
+        "B",
+        "E"
+      ],
+      "observedMarks": [
+        "A",
+        "B",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-page-screenshot",
+      "humanVerified": false
+    }
+  ],
+  "draftReviewChecks": [
+    {
+      "id": "CEEC-113-chem-single-choice-2",
+      "sourceId": "CEEC-113-chem",
+      "reviewedBatch": 11,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "questionPdfPage": 2,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-4",
+      "sourceId": "CEEC-113-chem",
+      "reviewedBatch": 11,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "questionPdfPage": 3,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-5",
+      "sourceId": "CEEC-113-chem",
+      "reviewedBatch": 11,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "questionPdfPage": 3,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-6",
+      "sourceId": "CEEC-113-chem",
+      "reviewedBatch": 17,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "questionPdfPage": 3,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-7",
+      "sourceId": "CEEC-113-chem",
+      "reviewedBatch": 11,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "questionPdfPage": 3,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    },
+    {
+      "id": "CEEC-113-chem-multiple-choice-12",
+      "sourceId": "CEEC-113-chem",
+      "reviewedBatch": 18,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "questionPdfPage": 5,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    },
+    {
+      "id": "CEEC-113-chem-multiple-choice-18",
+      "sourceId": "CEEC-113-chem",
+      "reviewedBatch": 15,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "questionPdfPage": 8,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    },
+    {
+      "id": "CEEC-114-chem-single-choice-1",
+      "sourceId": "CEEC-114-chem",
+      "reviewedBatch": 16,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+      "questionPdfPage": 2,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    },
+    {
+      "id": "CEEC-114-chem-single-choice-4",
+      "sourceId": "CEEC-114-chem",
+      "reviewedBatch": 9,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+      "questionPdfPage": 3,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    },
+    {
+      "id": "CEEC-114-chem-single-choice-5",
+      "sourceId": "CEEC-114-chem",
+      "reviewedBatch": 4,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+      "questionPdfPage": 3,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    },
+    {
+      "id": "CEEC-114-chem-multiple-choice-14",
+      "sourceId": "CEEC-114-chem",
+      "reviewedBatch": 10,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+      "questionPdfPage": 6,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    },
+    {
+      "id": "CEEC-114-chem-multiple-choice-15",
+      "sourceId": "CEEC-114-chem",
+      "reviewedBatch": 10,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+      "questionPdfPage": 6,
+      "answerPdfPage": 1,
+      "method": "visual comparison of question page and official answer screenshot",
+      "observations": "題幹條件、數式、選項次序與答案標記未發現實質差異；排版及原始頁面仍由實際人類覆核。",
+      "humanVerified": false,
+      "approvalGranted": false
+    }
+  ],
+  "existingVisualEvidence": [
+    {
+      "id": "CEEC-113-chem-single-choice-1",
+      "sourceId": "CEEC-113-chem",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "questionPdfPage": 2,
+      "printedPage": 1,
+      "originalOptionLabels": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "pageImageObserved": true,
+      "answerImageObserved": true,
+      "figureRegionNormalized": [
+        0.13,
+        0.235,
+        0.91,
+        0.56
+      ],
+      "regionMeaning": "五個原圖選項的近似裁切範圍（左、上、右、下），僅供取得原PDF後裁切，非圖片實體",
+      "assetMaterialized": false,
+      "status": "pending-original-figure",
+      "humanVerified": false
+    }
+  ],
+  "sourceRecoveryNotes": {
+    "notCandidates": true,
+    "source111": {
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m223496479951425770/06-111分科測驗化學試卷定稿.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m223497020774151742/06-111分科測驗化學選擇題答案.pdf",
+      "questionAndAnswerScreenshotsObserved": true,
+      "observedFacts": [
+        {
+          "questionNumber": 2,
+          "questionPdfPage": 2,
+          "answerMarks": [
+            "B"
+          ],
+          "equation": "2N₂O(g) → 2N₂(g) + O₂(g)",
+          "temperatureK": 1000,
+          "rateConstantPerSecond": 0.76,
+          "initialAmountMol": 1,
+          "volumeL": 5
+        },
+        {
+          "questionNumber": 13,
+          "questionPdfPage": 6,
+          "answerMarks": [
+            "C",
+            "E"
+          ],
+          "reactionEnthalpyKJPerMol": -196,
+          "activationEnergyBeforeKJPerMol": 76,
+          "activationEnergyAfterKJPerMol": 57,
+          "reactionEquations": [
+            "2H₂O₂(l) → 2H₂O(l) + O₂(g)",
+            "H₂O₂(l) + I⁻(aq) → Y(aq) + H₂O(l)",
+            "H₂O₂(l) + Y(aq) → Z(aq) + H₂O(l)"
+          ]
+        }
+      ]
+    },
+    "source113": {
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "questionAndAnswerScreenshotsObserved": true,
+      "observedFacts": [
+        {
+          "questionNumber": 13,
+          "questionPdfPage": 5,
+          "answerMarks": [
+            "A",
+            "B",
+            "E"
+          ],
+          "volumeL": 0.656,
+          "temperatureC": 527,
+          "partialPressuresAtm": {
+            "N2": 0.04,
+            "F2": 0.06,
+            "NF3": 0.7
+          }
+        },
+        {
+          "questionNumber": 17,
+          "questionPdfPage": 8,
+          "answerMarks": [
+            "B",
+            "D",
+            "E"
+          ],
+          "figure": "圖5",
+          "axisUnits": [
+            "s",
+            "mmHg"
+          ],
+          "plottedPoints": [
+            [
+              0,
+              480
+            ],
+            [
+              20,
+              510
+            ],
+            [
+              40,
+              540
+            ],
+            [
+              60,
+              570
+            ],
+            [
+              80,
+              600
+            ],
+            [
+              100,
+              630
+            ]
+          ],
+          "figureRegionNormalized": [
+            0.29,
+            0.2,
+            0.73,
+            0.41
+          ],
+          "assetMaterialized": false,
+          "notReplacementForOriginalFigure": true
+        }
+      ]
+    }
+  },
+  "counts": {
+    "newRecords": 0,
+    "upgradedTextDrafts": 0,
+    "answerRechecks": 27,
+    "existingDraftVisualComparisons": 12,
+    "approved": 0
+  },
+  "limitations": [
+    "網頁截圖可閱覽但容器curl DNS失敗，沒有取得PDF原檔或圖形實體；未將長篇考題全文複製到公開庫，未增加不完整候選。",
+    "武陵原頁與答案頁截圖失敗，僅重核對答案文字；公式底數位置不推定。",
+    "113/114物理原頁及答案頁截圖未取得；僅比對官方答案文字。",
+    "平鎮化學PDF文字層仍空白，未更新題文。",
+    "本批未新增完整題文或解除缺答；核准仍須實際人類。"
+  ],
+  "rightsEvidence": [
+    "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+    "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+    "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+  ]
+}
