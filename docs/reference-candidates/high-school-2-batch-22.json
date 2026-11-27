@@ -1,0 +1,161 @@
+{
+  "schema": 1,
+  "batch": 22,
+  "date": "2026-11-27",
+  "purpose": "補齊既有缺文候選並新增原題文字草稿；不增純題號，不改正式題庫，不核准。",
+  "sources": [],
+  "records": [
+    {
+      "originalQuestionType": "single-choice",
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "optionCount": 5,
+      "id": "PTTSH-104-2-final-physics-single-choice-20",
+      "sourceId": "PTTSH-104-2-final-physics",
+      "questionNumber": 20,
+      "originalQuestionNumberOrLocator": "原卷印刷第3頁第20題",
+      "questionPdfPage": null,
+      "answerPdfPage": null,
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "萬有引力",
+        "衛星運動",
+        "圓軌道動能"
+      ],
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=104-2%2F%E6%9C%9F%E6%9C%AB%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%E8%87%AA%E7%84%B6%E7%B5%84%2F&file=201607221739310.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=104-2%2F%E6%9C%9F%E6%9C%AB%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%E8%87%AA%E7%84%B6%E7%B5%84%2F&file=201607221739310.pdf",
+      "officialAnswerLocator": "同卷第20題後答案標記C",
+      "originalQuestion": {
+        "q": "設地球半徑為R，質量為M，自地面發射質量m的人造衛星，使其在離地面高度R之軌道上繞地球作等速圓周運動，則人造衛星在軌道上的動能為何？（設無窮遠處的重力位能為零）",
+        "options": [
+          {
+            "label": "A",
+            "text": "$\\frac{GMm}{R}$"
+          },
+          {
+            "label": "B",
+            "text": "$\\frac{GMm}{2R}$"
+          },
+          {
+            "label": "C",
+            "text": "$\\frac{GMm}{4R}$"
+          },
+          {
+            "label": "D",
+            "text": "$\\frac{2GMm}{R}$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac{4GMm}{R}$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "flags": [
+        "human-review-required",
+        "old-curriculum",
+        "scope-review",
+        "visual-check-pending",
+        "individual-authorship-review"
+      ],
+      "evidence": {
+        "question": "official-pdf-web-text-layer",
+        "answer": "same-document-answer-text-layer",
+        "locator": "校方PDF文字層233–244行；第3頁截圖cache miss，分數版面須人工覆核"
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "originalQuestionType": "single-choice",
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "optionCount": 5,
+      "id": "PJHS-108-2-2-chem-single-choice-6",
+      "sourceId": "PJHS-108-2-2-chem",
+      "questionNumber": 6,
+      "originalQuestionNumberOrLocator": "單選第6題",
+      "questionPdfPage": null,
+      "answerPdfPage": null,
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "溶度積與離子計量",
+        "化學平衡"
+      ],
+      "originalSourceUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "officialAnswerLocator": "同檔試題分析表第6題標準答案D",
+      "originalQuestion": {
+        "q": "若自固體溶於純水中以達平衡，則下列溶度積之表示法何者錯誤？",
+        "options": [
+          {
+            "label": "A",
+            "text": "CH₃COOAg(s) 之 Ksp = [Ag⁺]²"
+          },
+          {
+            "label": "B",
+            "text": "Hg₂Cl₂(s) 之 Ksp = 1/2 [Cl⁻]³"
+          },
+          {
+            "label": "C",
+            "text": "Ca₃(PO₄)₂(s) 之 Ksp = 27/8 [PO₄³⁻]⁵"
+          },
+          {
+            "label": "D",
+            "text": "Mg(OH)₂(s) 之 Ksp = 4 [OH⁻]³"
+          },
+          {
+            "label": "E",
+            "text": "MgNH₄PO₄ 之 Ksp = [Mg²⁺]³"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-index-rendering-only",
+      "replacesLocatorIn": "high-school-2-batch-07.json",
+      "flags": [
+        "legacy-inventory-migration",
+        "human-review-required",
+        "old-curriculum",
+        "visual-check-pending",
+        "question-type-section-mismatch",
+        "original-pdf-bytes-unavailable"
+      ],
+      "evidence": {
+        "question": "official-pdf-web-index-rendering",
+        "answer": "official-school-analysis-table-web-rendering",
+        "locator": "網頁呈現66–76行及471行；原頁截圖cache miss；答案標記與既有候選一致"
+      }
+    }
+  ],
+  "answerRechecks": [],
+  "counts": {
+    "newRecords": 1,
+    "upgradedTextDrafts": 1,
+    "newCompleteDrafts": 2,
+    "approved": 0
+  },
+  "limitations": [
+    "無上傳PDF或答案檔；容器git ls-remote DNS失敗、113分科化學原檔下載失敗。",
+    "113分科化學第13題可見原卷及正式答案截圖，本批未複製長題全文；不新增純題號。",
+    "115分科官方歷屆試題頁開啟逾時；臺東113上第二次物理及化學附件開啟cache miss。",
+    "兩筆僅文字呈現草稿，未取得原始PDF實體與原頁截圖；舊課綱與權利須人工核對。未新增反應速率、克卜勒定律及碰撞計算題。"
+  ]
+}
