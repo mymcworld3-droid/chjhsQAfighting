@@ -1,0 +1,465 @@
+{
+  "schema": 1,
+  "batch": 9,
+  "date": "2026-11-27",
+  "purpose": "既有候選草稿升級；非人工核准。未新增候選索引。",
+  "upgrades": [
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-15",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第15題",
+      "questionNumber": 15,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "反應熱",
+        "狀態函數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "反應熱與下列何者無關？",
+        "options": [
+          {
+            "label": "A",
+            "text": "濃度"
+          },
+          {
+            "label": "B",
+            "text": "壓力"
+          },
+          {
+            "label": "C",
+            "text": "物質狀態"
+          },
+          {
+            "label": "D",
+            "text": "反應過程"
+          },
+          {
+            "label": "E",
+            "text": "溫度"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true
+      },
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-14",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 14,
+      "originalQuestionNumberOrLocator": "第14題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "蒸氣壓",
+        "溶液性質"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "將各為 1.0 莫耳的 Ba(OH)₂、NaOH、BaSO₄ 及 Na₂SO₄ 固體，分別置入 1.0 升的水中。試問哪一個溶液之蒸氣壓最高？",
+        "options": [
+          {
+            "label": "A",
+            "text": "Ba(OH)₂"
+          },
+          {
+            "label": "B",
+            "text": "NaOH"
+          },
+          {
+            "label": "C",
+            "text": "BaSO₄"
+          },
+          {
+            "label": "D",
+            "text": "Na₂SO₄"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 4,
+      "questionPdfPage": 2,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true
+      },
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-24",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 24,
+      "originalQuestionNumberOrLocator": "第24題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "克卜勒第三定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "土星繞太陽運轉之平均軌道半徑，約為地球繞太陽運轉平均軌道半徑的 9 倍，且兩者軌道均可視為圓形，則土星繞太陽一周需時多少年？",
+        "options": [
+          {
+            "label": "A",
+            "text": "3"
+          },
+          {
+            "label": "B",
+            "text": "9"
+          },
+          {
+            "label": "C",
+            "text": "27"
+          },
+          {
+            "label": "D",
+            "text": "81"
+          },
+          {
+            "label": "E",
+            "text": "243"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 4,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1-2物理3.pdf",
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true
+      },
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ]
+    },
+    {
+      "id": "CEEC-114-chem-single-choice-4",
+      "sourceId": "CEEC-114-chem",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "印刷第2頁第4題",
+      "questionPdfPage": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "酸鹼中和",
+        "pH"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "將 pH=2.0 的 HCl 水溶液 50 mL，與一未知濃度的 KOH 水溶液 50 mL 均勻混合後，若溫度沒有改變，體積為 100 mL，此溶液的 pH 值為 4.0。則原來 KOH 水溶液的濃度（M）為下列何者？",
+        "options": [
+          {
+            "label": "A",
+            "text": "0.098"
+          },
+          {
+            "label": "B",
+            "text": "0.0098"
+          },
+          {
+            "label": "C",
+            "text": "0.0049"
+          },
+          {
+            "label": "D",
+            "text": "0.0018"
+          },
+          {
+            "label": "E",
+            "text": "0.00098"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "須確認選修進度",
+        "需依校方實際課程進度審核",
+        "human-review-required"
+      ],
+      "batch": 4,
+      "optionCount": 5,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "replacesLocatorIn": "high-school-2-batch-04.json",
+      "evidence": {
+        "question": "question-and-answer-screenshot",
+        "answer": "official-answer-screenshot",
+        "recheckedAgainstPreviousMarks": true
+      },
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ]
+    },
+    {
+      "id": "WLSH-113-2-2-mathA-multiple-choice-2",
+      "sourceId": "WLSH-113-2-2-mathA",
+      "originalQuestionNumberOrLocator": "多選第2題",
+      "questionNumber": 2,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "2"
+      ],
+      "conceptTags": [
+        "條件機率",
+        "排列"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "今有 2 顆黑球、2 顆白球、3 顆紅球共 7 顆大小相同的球排成一列。設事件 A 為 2 顆黑球相鄰的事件，事件 B 為 2 顆白球不相鄰的事件，而事件 C 為紅球完全不相鄰的事件。試選出正確的選項。",
+        "options": [
+          {
+            "label": "1",
+            "text": "$P(A)>P(B)$"
+          },
+          {
+            "label": "2",
+            "text": "$P(C)=\\frac27$"
+          },
+          {
+            "label": "3",
+            "text": "$P(B\\mid A)=\\frac27$"
+          },
+          {
+            "label": "4",
+            "text": "$P(C\\mid A)>0.2$"
+          },
+          {
+            "label": "5",
+            "text": "$P(C\\mid B)\\geq0.35$"
+          }
+        ]
+      },
+      "flags": [
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 6,
+      "batch": 3,
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/594724368.pdf",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/594724368.pdf",
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "question-screenshot-answer-text",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true
+      },
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ]
+    },
+    {
+      "id": "CEEC-112-mathB-single-choice-2",
+      "sourceId": "CEEC-112-mathB",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "印刷第1頁第2題",
+      "questionPdfPage": 2,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "2"
+      ],
+      "conceptTags": [
+        "矩陣乘法"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "考慮實數二階方陣 $\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}$，若 $\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}\\begin{bmatrix}1&0\\\\0&-2\\end{bmatrix}=\\begin{bmatrix}3&-4\\\\-9&-7\\end{bmatrix}$，則 $c-2b$ 的值為何？",
+        "options": [
+          {
+            "label": "1",
+            "text": "−11"
+          },
+          {
+            "label": "2",
+            "text": "−4"
+          },
+          {
+            "label": "3",
+            "text": "1"
+          },
+          {
+            "label": "4",
+            "text": "10"
+          },
+          {
+            "label": "5",
+            "text": "11"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "需依校方實際課程進度審核",
+        "human-review-required",
+        "answer-page-screenshot-unavailable"
+      ],
+      "batch": 4,
+      "optionCount": 5,
+      "answerPdfPage": null,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357250979165004/04-112學測數學b試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n208552206460314670/112學年度學科能力測驗工作報告(公告).pdf",
+      "officialAnswerLocator": "工作報告附錄各科選擇（填）題答案，印刷第203頁，數學B第2題",
+      "replacesLocatorIn": "high-school-2-batch-04.json",
+      "evidence": {
+        "question": "question-screenshot-official-report-answer-text",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true
+      },
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html"
+      ]
+    }
+  ],
+  "sharedEvidence": [
+    {
+      "sourceId": "CEEC-114-chem",
+      "existingIds": [
+        "CEEC-114-chem-multiple-choice-14",
+        "CEEC-114-chem-multiple-choice-15"
+      ],
+      "questionPdfPage": 6,
+      "answerPdfPage": 1,
+      "printedPage": 5,
+      "questionScreenshotInspected": true,
+      "answerScreenshotInspected": true,
+      "officialAnswerMarks": [
+        [
+          "B",
+          "C",
+          "E"
+        ],
+        [
+          "A",
+          "E"
+        ]
+      ],
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212547955511545740/06-114分科測驗化學試卷.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p212548454142000280/06-114分科測驗化學選擇題答案.pdf",
+      "tableRows": [
+        [
+          50,
+          0,
+          33.8,
+          0.0296
+        ],
+        [
+          30,
+          20,
+          49.2,
+          0.0203
+        ],
+        [
+          10,
+          40,
+          150,
+          0.0067
+        ]
+      ],
+      "status": "page-and-answer-checked; full shared-stem transcription still pending",
+      "humanVerified": false
+    }
+  ],
+  "editionEvidence": {
+    "reuses": "high-school-2-batch-08.json",
+    "bookMappings": 42,
+    "note": "保留既有教材冊次及驗證狀態，不重新建索引。"
+  },
+  "counts": {
+    "newRecords": 0,
+    "upgradedTextDrafts": 6,
+    "questionScreenshotDrafts": 3,
+    "questionAndAnswerScreenshotDrafts": 1,
+    "approved": 0
+  },
+  "limitations": [
+    "未取得PDF實體檔，校方試卷截圖多數失敗。",
+    "大考中心反應速率題組頁及答案頁已可見，但未完成整組題幹與選項的轉錄；不列入草稿數。",
+    "本批未達50題，沒有AI補題。"
+  ]
+}
