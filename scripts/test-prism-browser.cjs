@@ -60,6 +60,31 @@ for(const id of ['bell-strike','bell-shock','bell-echo']){
   assert.ok(W.normalize(result.result.weaponTimeline));assert.equal(result.result.totalDamage,result.result.weaponTimeline.segments.flatMap(s=>s.hits).reduce((n,h)=>n+h.damage,0));
   fixtures.push({id,state,scene:scenes[0],room,nextRoom:{...room,members:result.members,enemies:result.enemies},duration:timeline.durationMs});
 }
+// Private weave fixtures use the same committed resolver and painters.
+const O=require('../public/cultivation/weapon-special-objects.js');
+const weaveBoard={width:15,height:15,blocked:q=>map.tiles[q.y*15+q.x]===0};
+const marks=[p(8,7),p(10,5),p(10,9)].reduce((state,position,i)=>O.add(state,{type:'mark',ownerUid:'u',position,board:weaveBoard,generatedAt:i}),undefined);
+for(const [id,aim,first,enemy] of [
+  ['weave-mark',p(8,7),null,p(9,7)],['weave-thread',p(10,9),p(10,5),p(10,7)],['weave-domain',origin,null,p(9,7)]]){
+  const skill=D.skillAtLevel(id,1,0);
+  const state=R.create({id:'weave-browser-'+id,mode:'pve',players:[{uid:'u',name:'青雲修士',atk:100,maxHp:10000,manualSkills:[]}],now:2000000000000});
+  Object.assign(state,{width:15,height:15,blocks,ground:Array(225).fill(0),objective:null,events:[],revision:1,actors:state.actors.slice(0,2),weaponObjects:marks});
+  Object.assign(state.actors[0],{...origin,atk:100,stamina:10});
+  Object.assign(state.actors[1],{...enemy,hp:10000,maxHp:10000,shield:0,guard:0,counter:0,boss:false,footprint:{width:1,height:1}});
+  const out=R.previewCast(state,state.actors[0],skill,aim,first),timeline=W.normalize(out.weaponTimeline);assert.ok(timeline);
+  const changes=state.actors.map(a=>({...a,hp:a.hp-timeline.segments.flatMap(s=>s.hits).filter(h=>h.uid===a.uid).reduce((n,h)=>n+h.damage,0)}));
+  const next={...state,actors:changes,weaponObjects:out.weaponObjects,revision:2,events:[{id:'2:1',actor:'u',type:'cast',skill:id,animation:{kind:'cast',style:id,origin,target:aim,cells:out.cells,weaponTimeline:timeline,changes}}]};
+  const scenes=A.plan(state,next,'u');assert.equal(scenes.length,1);
+  const room={id:'weave-browser-room',dungeonArena:'exploration',status:'assembled',battleAppliedTick:0,weaponObjects:marks,
+    members:{u:{uid:'u',position:origin,battleHealth:10000,battleMaxHealth:10000,explorationStamina:10,dungeonSkills:[skill]}},
+    enemies:[{id:'e',kind:'wolf',position:enemy,battleHealth:10000,battleMaxHealth:10000}]};
+  const result=C.resolveCast(room,'u',map,skill,{target:aim,first,seq:1,base:100});
+  assert.ok(W.normalize(result.result.weaponTimeline));
+  assert.equal(result.result.totalDamage,result.result.weaponTimeline.segments.flatMap(s=>s.hits).reduce((n,h)=>n+h.damage,0));
+  assert.deepEqual(result.weaponObjects,marks);
+  fixtures.push({id,state,scene:scenes[0],room,nextRoom:{...room,members:result.members,enemies:result.enemies,weaponObjects:result.weaponObjects},duration:timeline.durationMs,
+    ...(id==='weave-thread'?{endpointPlan:R.skillPreviewPlan(state,state.actors[0],skill),first,aim}:{})});
+}
 async function main(){
   const output=path.resolve(process.argv[2]||'/tmp/prism-browser');fs.mkdirSync(output,{recursive:true});
   const app=express();
@@ -69,7 +94,7 @@ async function main(){
   let browser;
   try{
     browser=await chromium.launch({headless:true});
-    const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
+    const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,hasTouch:true});
     const errors=[];page.on('pageerror',e=>errors.push(String(e)));
     await page.goto('http://127.0.0.1:'+server.address().port+'/prism-test');
     await page.evaluate(async()=>{
@@ -119,7 +144,7 @@ async function main(){
             let under=0,over=0;
             const render=(q)=>drawWorld(ctx,map,initialCamera(),w,h,{
               members:Object.values(fixture.room.members),enemies:fixture.room.enemies,selfUid:'u',reducedMotion:reduced,
-              animationUnderlay:(c,v)=>{under++;check(dungeon.paintDungeonScene(c,{...dungeonScene,reducedMotion:reduced},q,v,false,F),'dungeon underlay')},
+              animationUnderlay:(c,v)=>{under++;if(fixture.room.weaponObjects)W.drawObjects(c,fixture.room.weaponObjects,[],{...v,width:map.width,height:map.height},q*fixture.duration,{reduced});check(dungeon.paintDungeonScene(c,{...dungeonScene,reducedMotion:reduced},q,v,false,F),'dungeon underlay')},
               animationOverlay:(c,v)=>{over++;check(dungeon.paintDungeonScene(c,{...dungeonScene,reducedMotion:reduced},q,v,true,F),'dungeon overlay');dungeon.drawDungeonHitNumbers(c,dungeonScene,q,v)}
             });
             for(const ms of [0,...beats,Math.floor(fixture.duration*.8)])render(ms/fixture.duration);
@@ -135,6 +160,35 @@ async function main(){
           await page.locator('canvas').screenshot({path:path.join(output,fixture.id+'-'+viewport.width+'x'+viewport.height+'-'+(reduced?'reduced':'normal')+'.png')});
         }
       }
+    }
+    // Actual touch taps through the trial renderer's existing canvas event
+    // handler, with private preview data supplied only in this test harness.
+    const fixture=fixtures.find(f=>f.id==='weave-thread');
+    for(const viewport of [{width:390,height:844},{width:768,height:1024}]){
+      await page.setViewportSize(viewport);
+      const coords=await page.evaluate(async fixture=>{
+        const {renderer,canvas}=window.prismTest;
+        const cameraModule=await import('/cultivation/tactical-camera.js');
+        const Camera=window.QATacticalCamera,Q=window.QAWeaveRules;
+        renderer.preview=null;renderer.queue=[];renderer.scene=null;renderer.state=fixture.state;
+        renderer.uid='u';renderer.mode='demo';renderer.camera=Camera.create();
+        window.weaveTap={selection:null,confirm:0};
+        renderer.onSelect=tile=>{
+          const picked=Q.choose(fixture.endpointPlan,window.weaveTap.selection,tile);
+          window.weaveTap.selection=picked.selection;
+          if(picked.confirm)window.weaveTap.confirm++;
+        };
+        renderer.draw();
+        const rect=canvas.getBoundingClientRect(),g=Camera.geometry(renderer.camera,rect.width,rect.height,{x:0,y:0,width:fixture.state.width,height:fixture.state.height});
+        return [fixture.first,fixture.aim].map(p=>({x:rect.left+g.ox+(p.x+.5)*g.cell,y:rect.top+g.oy+(p.y+.5)*g.cell}));
+      },fixture);
+      const tap=async i=>page.touchscreen.tap(coords[i].x,coords[i].y);
+      await tap(0);assert.equal(await page.evaluate(()=>window.weaveTap.selection?.choosing),true);
+      await tap(1);assert.equal(await page.evaluate(()=>window.weaveTap.selection?.choosing),false);
+      assert.equal(await page.evaluate(()=>window.weaveTap.confirm),0);
+      await tap(0);assert.equal(await page.evaluate(()=>window.weaveTap.selection),null);
+      await tap(0);await tap(1);await tap(1);
+      assert.equal(await page.evaluate(()=>window.weaveTap.confirm),1);
     }
     // Real browser audio decoding and the existing single-context manager.
     await page.evaluate(async()=>{
@@ -180,8 +234,17 @@ async function main(){
       }
       const bellResult=A.diagnostics();
       check(bellResult.played===bellStart+4&&bellResult.peakVoices<=2,'four bell cues with bounded sources');
+      await wait(300);await A.preload(['weave-thread','weave-domain']);
+      check(A.diagnostics().failed.length===0,'weave MP3 decode failure');
+      const weaveStart=A.diagnostics().played;
+      for(const id of ['weave-thread','weave-domain']){
+        check(A.play(id,{key:'browser:'+id}),'weave cue rejected');
+        await wait(250);
+      }
+      const weaveResult=A.diagnostics();
+      check(weaveResult.played===weaveStart+2&&weaveResult.peakVoices<=2,'weave playback count');
       A.dispose();document.getElementById('audio-unlock').remove();
-      return {...result,bellPlayed:bellResult.played-bellStart,bellPeakVoices:bellResult.peakVoices};
+      return {...result,bellPlayed:bellResult.played-bellStart,bellPeakVoices:bellResult.peakVoices,weavePlayed:weaveResult.played-weaveStart};
     });
     console.log('Prism real Chromium audio acceptance',audio);
     assert.deepEqual(errors,[]);

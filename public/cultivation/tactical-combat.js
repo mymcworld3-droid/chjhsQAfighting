@@ -1168,6 +1168,15 @@ function buildGame(){
     if(modernPveWheel()&&selectedWeaponSlot>=0&&action==='move'){
       notice('請先選擇這把武器內圈的技能');return;
     }
+    if(action==='manual'&&selectedManualSkill==='weave-thread'){
+      const plan=R.skillPreviewPlan(state,myActor(),R.manualSkillFor(myActor(),selectedManualSkill));
+      const chosen=globalThis.QAWeaveRules.choose(plan,selection,p);
+      sealPeekPosition=null;selection=chosen.selection;
+      renderer.update(state,uid,battlefieldMode(),selection);updateControls();
+      if(chosen.confirm&&!$('[data-execute]').disabled)void execute();
+      else notice(chosen.reason);
+      return;
+    }
     sealPeekPosition=null;selection=p;renderer.update(state,uid,battlefieldMode(),selection);updateControls();
     // The sketch has no extra confirm button: choosing a valid map tile
     // directly executes the selected move or directional attack.
@@ -1347,7 +1356,8 @@ function updateControls(){
     if(action==='manual'&&!chosenSkill)error='尚未裝備此功法技能';
     else {
       label=(action==='attack'&&directional&&direction?'向'+direction+'攻擊':shown.name)+' · '+cost+' 體力';
-      try{R.validateSkill(state,me,shown,selection);}catch(e){error=e.message;}
+      if(shown.kind==='weave-thread'&&selection.choosing)error='請選擇第二端點';
+      else try{R.validateSkill(state,me,shown,selection,{first:selection.first||null});}catch(e){error=e.message;}
     }
   }
   // A valid aim does not guarantee that an AoE actually hits the seal.
@@ -1356,7 +1366,7 @@ function updateControls(){
     const guidance=SealTargets.at(renderer?.sealTargetPlan,selection);
     if(guidance&&guidance.status!=='ready')error=guidance.reason;
     let affected=[];
-    try{affected=R.skillCells(state,me,shown,selection)||[];}catch(_){}
+    try{affected=R.skillCells(state,me,shown,selection,selection.first||null)||[];}catch(_){}
     if(!error&&!affected.some(p=>p.x===selectedSeal.x&&p.y===selectedSeal.y))
       error='此招式不會命中所選陣眼，請改選能覆蓋陣眼的攻擊方向';
   }
@@ -1385,7 +1395,7 @@ function updateControls(){
     else if(attackMode&&action==='manual'&&!chosenSkill)reason='尚未裝備或解鎖此武器技能';
     else if(attackMode&&me.stamina<cost)reason='體力不足：需要 '+cost+' 點，目前 '+me.stamina+' 點，請答題充能';
     else if(selection&&error)reason=error;
-    else if(attackMode&&shown&&!R.aimCells(state,me,shown).length)reason='目前沒有可指定的攻擊地格，請移動或改用其他招式';
+    else if(attackMode&&shown&&!R.aimCells(state,me,shown).length)reason=renderer?.skillPreview?.reason||'目前沒有可指定的攻擊地格，請移動或改用其他招式';
     feedback.textContent=reason?(attackMode?'無法攻擊：':'無法移動：')+reason:'';
     feedback.hidden=!reason;
   }
@@ -1444,6 +1454,7 @@ function updateControls(){
     action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):
     shown.kind==='dash-cleave'?'點選金色地格突進，紅格為攻擊範圍':
     shown.kind==='flying-sword'?(me.flyingSword?'點選金色地格御劍':'點選金色地格召喚飛劍'):
+    shown.kind==='weave-thread'?'點選第一端點，再選第二端點預覽；重點第二端點確認':
     shown.kind==='fist-focus'?'點選自己蓄勢，施放後立即結束回合':
     directional?'點選紅格，選擇出拳或出劍方向':
     shown.range===0?'點選自己施放技能':'點選紅格施放技能';
@@ -1453,6 +1464,7 @@ function updateControls(){
       t?t.name+' · 生命 '+t.hp+'/'+t.maxHp:'位置 '+(selection.x+1)+', '+(selection.y+1)}
       ${error?' · '+error:''}`:
     mine?hint:'等待對手行動';
+  if(shown.kind==='weave-thread'&&selection?.first)$('[data-selection]').textContent=selection.choosing?'已選第一端點 · 選第二端點；重點第一端點取消':'已選兩端點 · 再點第二端點或確認施放；重點第一端點取消';
   if(animating)$('[data-selection]').textContent=renderer.currentAction;
   refreshSealTargetGuidance();
 }
@@ -1715,7 +1727,7 @@ async function execute(){
     renderer?.update(state,uid,battlefieldMode(),selection);
     return;
   }
-  if(selection)await send({type:action,x:selection.x,y:selection.y,...(action==='manual'?{skillId:selectedManualSkill}:{})});
+  if(selection&&!selection.choosing)await send({type:action,x:selection.x,y:selection.y,...(action==='manual'?{skillId:selectedManualSkill,...(selectedManualSkill==='weave-thread'&&selection.first?{first:selection.first}:{})}:{})});
 }
 // Start both requests as soon as a battle can accept a charge, BEFORE the
 // player presses the charging button. The server still checks the selected

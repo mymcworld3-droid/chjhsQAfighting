@@ -76,6 +76,20 @@
       "method": "Damped inharmonic bronze bell modes, 220–2290 Hz, short attack and decay",
       "duration": 0.18,
       "format": "MP3 mono 22050 Hz 32 kbps"
+    },
+    {
+      "id": "weave-thread",
+      "source": "Original procedural synthesis",
+      "method": "Rising harmonic tension chirps with short envelope",
+      "duration": 0.15,
+      "format": "MP3 mono 22050 Hz 24 kbps"
+    },
+    {
+      "id": "weave-domain",
+      "source": "Original procedural synthesis",
+      "method": "Damped chord-like jade resonance with short envelope",
+      "duration": 0.2,
+      "format": "MP3 mono 22050 Hz 24 kbps"
     }
   ],
   "additionalFormat": "Prism: original procedural sound synthesis, mono MP3, 22050 Hz, 32 kbps; deterministic chirps/modal resonances, short envelope, peak 0.70; no external source."

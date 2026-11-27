@@ -248,7 +248,7 @@ export class TacticalRenderer{
     const next=active&&tile?{x:tile.x,y:tile.y}:null;
     if((!next&&!this.hoverSelection)||(next&&this.hoverSelection&&R.key(next)===R.key(this.hoverSelection)))return;
     this.hoverSelection=next;
-    this.hoverPlan=next?Targets.derive(this.state,this.uid,this.mode,next,R,this.threatPlan,this.skillPreview):null;
+    this.hoverPlan=next?Targets.derive(this.state,this.uid,this.mode,this.selection?.first?{...next,first:this.selection.first}:next,R,this.threatPlan,this.displaySkillPreview||this.skillPreview):null;
     if(this.hoverPlan){
       this.canvas.dataset.hoverPreviewCost=String(this.hoverPlan.cost);
       this.canvas.dataset.hoverPreviewValid=String(this.hoverPlan.valid);
@@ -327,6 +327,8 @@ export class TacticalRenderer{
         void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.PRISM_SOUNDS);
       if(planned.some(scene=>globalThis.QAWeaponEffects.bellSoundCues(scene.weaponTimeline,scene.skill).length))
         void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.BELL_SOUNDS);
+      if(planned.some(scene=>globalThis.QAWeaponEffects.weaveSoundCues(scene.weaponTimeline,scene.skill).length))
+        void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.WEAVE_SOUNDS);
       const changes=ObjectiveVFX.transitions(this.state,state);
       if(changes.length)this.objectiveCues.push(...changes.map(cue=>({...cue,started:null})));
       if(this.objectiveCues.length>12)this.objectiveCues=this.objectiveCues.slice(-12);
@@ -341,7 +343,7 @@ export class TacticalRenderer{
     const fighter=state.actors.find(a=>a.uid===uid);
     const signature=attackMode?JSON.stringify([state.id,state.revision,state.mode,
       state.status,state.turnUid,state.phase,state.quizRound,state.width,state.height,
-      state.blocks,state.actors,state.trial,state.objective,state.weaponDungeon,uid,mode]):'';
+      state.blocks,state.actors,state.trial,state.objective,state.weaponDungeon,state.weaponObjects,uid,mode]):'';
     if(signature!==this.skillPreviewSignature){
       this.skillPreviewSignature=signature;
       this.skillPreview=attackMode?R.skillPreviewPlan(state,fighter,attackSkill(fighter,mode)):null;
@@ -350,9 +352,10 @@ export class TacticalRenderer{
     // Compute once per authoritative state update, never in the animation loop.
     this.sealRangePlan=SealRanges.derive(state,R);
     this.sealTargetPlan=SealTargets.derive(state,uid,mode,R);
-    this.targetPlan=Targets.derive(state,uid,mode,selection,R,this.threatPlan,this.skillPreview);
+    this.displaySkillPreview=globalThis.QAWeaveRules.selectionPlan(this.skillPreview,selection);
+    this.targetPlan=selection?.choosing?null:Targets.derive(state,uid,mode,selection,R,this.threatPlan,this.displaySkillPreview);
     this.hoverPlan=this.hoverSelection?
-      Targets.derive(state,uid,mode,this.hoverSelection,R,this.threatPlan,this.skillPreview):null;
+      Targets.derive(state,uid,mode,selection?.first?{...this.hoverSelection,first:selection.first}:this.hoverSelection,R,this.threatPlan,this.displaySkillPreview):null;
     const alert=this.canvas.parentElement?.querySelector('[data-threat-a11y]');
     if(state.mode==='pve'){
       const message=this.threatPlan.description+
@@ -741,7 +744,10 @@ export class TacticalRenderer{
       const bellPlayed=scene.weaponTimeline&&globalThis.QAWeaponEffects.advanceBellSound(scene.weaponTimeline,scene.skill,
         progress*scene.weaponTimeline.durationMs,scene._playedBellCues||=new Set(),
         (id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},s.id+':'+(scene.weaponGroup||scene.eventRevision)+':'+scene.actor);
-      const windows=prismPlayed||bellPlayed?[]:scene.weaponTimeline?[...new Set(scene.weaponTimeline.segments.filter(s=>s.hits.some(h=>h.damage||h.absorbed)).map(s=>s.impact))].slice(0,3).map(at=>({at:at/scene.weaponTimeline.durationMs})):Impact.hitWindows(scene,A);
+      const weavePlayed=scene.weaponTimeline&&globalThis.QAWeaponEffects.advanceWeaveSound(scene.weaponTimeline,scene.skill,
+        progress*scene.weaponTimeline.durationMs,scene._playedWeaveCues||=new Set(),
+        (id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},s.id+':'+(scene.weaponGroup||scene.eventRevision)+':'+scene.actor);
+      const windows=prismPlayed||bellPlayed||weavePlayed?[]:scene.weaponTimeline?[...new Set(scene.weaponTimeline.segments.filter(s=>s.hits.some(h=>h.damage||h.absorbed)).map(s=>s.impact))].slice(0,3).map(at=>({at:at/scene.weaponTimeline.durationMs})):Impact.hitWindows(scene,A);
       if(windows.length){
         scene._playedImpactCues||=new Set();
         for(let i=0;i<windows.length;i++){
@@ -841,15 +847,16 @@ export class TacticalRenderer{
       for(const p of this.range)fill(p,`rgba(128,128,128,${alpha})`,'#dadde18c');
     }
     if(myTurn&&(this.mode==='attack'||this.mode.startsWith('manual:'))){
-      const plan=this.skillPreview;
-      for(const p of plan?.cells||[])fill(p,'#e5c77326','#e5cc8766');
+      const plan=this.displaySkillPreview||this.skillPreview;
+      for(const p of plan?.cells||[])fill(p,this.mode.startsWith('manual:weave-')?'#52b79528':'#e5c77326',this.mode.startsWith('manual:weave-')?'#79d9b988':'#e5cc8766');
       // Aims may be empty landing tiles or directions, not damage tiles.
       for(const p of plan?.aims||[])fill(p,'#fff0','#e5cc87a6');
-      const aim=this.hoverSelection||this.selection;
+      if(plan?.first)fill(plan.first,'#6ce9bc55','#bcffe9');
+      const aim=this.hoverSelection||(!this.selection?.choosing?this.selection:null);
       const preview=aim&&plan?.byAim[R.key(aim)];
       if(preview){
         for(const p of preview.path.slice(1))fill(p,'#e9cf813b','#e5cc87');
-        for(const p of preview.cells)fill(p,'#e9ba5266','#ffe3a4');
+        for(const p of preview.cells)fill(p,preview.weavePlan?'#4bd3a966':'#e9ba5266',preview.weavePlan?'#b4ffe0':'#ffe3a4');
         for(const ray of preview.rays||[])if(ray.depth>0)for(const p of ray.cells)fill(p,ray.depth===1?'#eea45b44':'#b49ae744',ray.depth===1?'#ffc58c':'#d2bcff');
         c.save();c.setLineDash([Math.max(2,cell*.1),Math.max(2,cell*.06)]);
         for(const p of preview.landings)fill(p,'#fff0','#ffe8a6');

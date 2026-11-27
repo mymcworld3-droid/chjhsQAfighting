@@ -73,7 +73,7 @@ class DungeonMapView{
     this.rescuePending=false;this.guardPending=false;this.guardSignature='';
     this.rewardPending=false;this.rewardResult=null;
     this.manualXpTimer=null;this.manualXpGeneration=0;
-    this.aimTile=null;this.skillSignature='';
+    this.aimTile=null;this.weaveSelection=null;this.skillSignature='';
     this.focusAuras=new Map();this.sprites={};
     this.visualScenes=new Map(); // authenticated room events only; never controls damage
     this.travelScenes=new Map(); // sampled trial movement; server positions remain untouched
@@ -349,7 +349,7 @@ class DungeonMapView{
     this.movePending=false;this.strikePending=false;this.skillPending=false;
     this.portalPending=false;this.bossPending=false;
     this.rescuePending=false;this.rewardPending=false;this.rewardResult=null;
-    this.loadoutPending=false;this.aimTile=null;this.skillSignature='';
+    this.loadoutPending=false;this.aimTile=null;this.weaveSelection=null;this.skillSignature='';
     this.wheelMode='attack';this.moveTarget='player';this.selectedSkillId='';this.weaponWheelSlot=-1;this.manualOpen=false;this.wheelSwipeStart=null;
     this.routePending=false;this.rangeSignature='';this.rangeTiles=[];
     this.inspectOpen=false;this.selectedBeastId=null;this.followBeast=false;
@@ -504,7 +504,7 @@ class DungeonMapView{
   setWheelMode(mode){
     if(mode!=='attack'&&mode!=='move')return;
     if(this.wheelMode!==mode){
-      this.wheelMode=mode;this.aimTile=null;this.selectedBeastId=null;
+      this.wheelMode=mode;this.aimTile=null;this.weaveSelection=null;this.selectedBeastId=null;
       this.updateBeastHUD();this.updateSkillHUD();
       this.drawSoon();
     }
@@ -519,7 +519,7 @@ class DungeonMapView{
       this.weaponWheelSlot=slot;this.selectedSkillId='';
       // Choosing an outer weapon only opens its skill list. It cannot move
       // or cast until a skill is explicitly selected on the inner ring.
-      this.wheelMode='move';this.aimTile=null;this.selectedBeastId=null;
+      this.wheelMode='move';this.aimTile=null;this.weaveSelection=null;this.selectedBeastId=null;
       this.rangeSignature='';
       this.updateBeastHUD();this.updateSkillHUD();this.updateWheelHUD();
       this.drawSoon();return;
@@ -528,7 +528,7 @@ class DungeonMapView{
       if(value==='sword'&&!own?.flyingSword)return;
       if(modern&&this.weaponWheelSlot>=0)return;
       this.weaponWheelSlot=-1;
-      this.moveTarget=value;this.wheelMode='move';this.aimTile=null;
+      this.moveTarget=value;this.wheelMode='move';this.aimTile=null;this.weaveSelection=null;
       this.selectedBeastId=null;this.rangeSignature='';
       this.updateBeastHUD();this.updateSkillHUD();this.updateWheelHUD();
       this.drawSoon();return;
@@ -550,7 +550,7 @@ class DungeonMapView{
         (chosen?.weaponId||globalThis.QAManuals?.BY_SKILL?.[chosen?.id]?.manualId)!==
           weaponIds[this.weaponWheelSlot]))return;
     if(this.selectedSkillId!==value){
-      this.selectedSkillId=value;this.aimTile=null;this.selectedBeastId=null;
+      this.selectedSkillId=value;this.aimTile=null;this.weaveSelection=null;this.selectedBeastId=null;
     }
     this.wheelMode='attack';
     this.updateBeastHUD();this.updateSkillHUD();
@@ -890,7 +890,7 @@ class DungeonMapView{
     this.$('[data-dm-focus]').textContent=charges>0?
       '✦ 金身蓄勢 '+charges+'/6 · 體術減耗':'';
     const aimed=this.currentAim();
-    this.$('[data-dm-aim]').textContent=aimed?
+    this.$('[data-dm-aim]').textContent=this.selectedSkillId==='weave-thread'?(this.weaveSelection?.choosing?'已選第一端點 · 點第二端點；重點第一端點取消':this.weaveSelection?'已選兩端點 · 再點第二端點施放':'選擇第一端點'):aimed?
       '目標格 ('+aimed.x+'，'+aimed.y+') · 點其他格改變目標':
       '點擊靈獸或空白地格，再施放技能';
     this.root.querySelectorAll('[data-dm-presets] button').forEach((button,index)=>{
@@ -930,6 +930,7 @@ class DungeonMapView{
   targetFor(skill){
     const own=this.room?.members?.[this.uid]?.position;
     if(!own)return null;
+    if(skill?.kind==='weave-thread')return this.weaveSelection&&!this.weaveSelection.choosing?{x:this.weaveSelection.x,y:this.weaveSelection.y}:null;
     if(skill?.kind==='fist-focus')return {...own};
     if(skill?.kind==='flying-sword')return this.aimTile;
     const picked=this.currentAim();
@@ -981,7 +982,7 @@ class DungeonMapView{
       if(this.isCurrent()&&this.seq===token)this.updateSkillHUD();
     }
   }
-  async cast(skillId,requestedTarget=null,moveSword=false){
+  async cast(skillId,requestedTarget=null,moveSword=false,requestedFirst=null){
     const member=this.room?.members?.[this.uid];
     if(!this.isCurrent()||!member||this.loadoutPending||
       this.room.status!=='assembled')return;
@@ -990,10 +991,12 @@ class DungeonMapView{
         id:'flight-summon',name:'移動飛劍',kind:'flying-sword'}:null);
     if(!skill)return;
     const target=requestedTarget||this.targetFor(skill);
+    const first=skill.kind==='weave-thread'?(requestedFirst||this.weaveSelection?.first||null):null;
+    if(skill.kind==='weave-thread'&&!first){this.skillAlert('請先選擇牽絲的兩個端點');return;}
     if(!target){this.skillAlert('請先選擇同一直線上的目標，或空白地格');return;}
     if(this.skillPending){
       // Keep only the most recent follow-up input and its original target.
-      this.queuedSkill={skillId,target:{...target},moveSword,
+      this.queuedSkill={skillId,target:{...target},moveSword,first,
         roomId:this.roomId,token:this.seq};
       this.skillAlert('下一招已預備 · 前一招結算後立即施放');
       return;
@@ -1008,9 +1011,10 @@ class DungeonMapView{
     this.skillAlert('出招中 · 正在確認命中結果');
     this.drawSoon();
     try{
-      const response=await castDungeonSkill(roomId,skillId,target,seq,moveSword);
+      const response=await castDungeonSkill(roomId,skillId,target,seq,moveSword,first);
       if(!this.isCurrent()||this.seq!==token||this.roomId!==roomId)return;
       if(response?.room){
+        if(skill.kind==='weave-thread'){this.weaveSelection=null;this.aimTile=null;}
         this.updateRoom(response.room);
         committed=true;
         window.dispatchEvent(new CustomEvent('xiuxian:dungeon-room-state',{
@@ -1072,7 +1076,7 @@ class DungeonMapView{
         // resource spend occurs while waiting for the response.
         if(committed&&queued?.token===token&&queued.roomId===roomId)
           queueMicrotask(()=>{if(this.isCurrent()&&this.seq===token)
-            void this.cast(queued.skillId,queued.target,queued.moveSword);});
+            void this.cast(queued.skillId,queued.target,queued.moveSword,queued.first);});
         else if(!committed&&queued)
           this.skillAlert('上一招未成功，預備招式已取消，請重新施放');
       }
@@ -1249,6 +1253,17 @@ class DungeonMapView{
     if(this.room?.members?.[this.uid]&&
         this.weaponWheelSlot>=0&&this.wheelMode!=='attack'){
       this.actionFeedback('請先選擇武器內圈的技能');return;
+    }
+    if(this.wheelMode==='attack'&&this.selectedSkillId==='weave-thread'){
+      this.updateRangePlan();
+      const chosen=globalThis.QAWeaveRules.choose(this.skillPreview,this.weaveSelection,{x,y});
+      this.weaveSelection=chosen.selection;
+      this.aimTile=chosen.selection&&!chosen.selection.choosing?{x:chosen.selection.x,y:chosen.selection.y}:null;
+      this.selectedBeastId=null;this.followBeast=false;
+      this.updateBeastHUD();this.updateSkillHUD();this.drawSoon();
+      if(chosen.confirm)void this.cast('weave-thread',this.aimTile,false,chosen.selection.first);
+      else this.actionFeedback(chosen.reason);
+      return;
     }
     this.aimTile={x,y};this.followBeast=false;
     // Tapping an enemy is a combat action, not an inspector popup.
@@ -1703,6 +1718,8 @@ class DungeonMapView{
             void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.PRISM_SOUNDS);
           if(globalThis.QAWeaponEffects?.bellSoundCues(scene.weaponTimeline,scene.skill).length)
             void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.BELL_SOUNDS);
+          if(globalThis.QAWeaponEffects?.weaveSoundCues(scene.weaponTimeline,scene.skill).length)
+            void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.WEAVE_SOUNDS);
         }
       }
       while(this.visualScenes.size>12)
@@ -1729,7 +1746,7 @@ class DungeonMapView{
       this.map=null;this.camera=Camera.initialCamera();
       this.follow=true;this.followBeast=false;
       this.inspectOpen=false;this.selectedBeastId=null;
-      this.aimTile=null;this.beastIds='';
+      this.aimTile=null;this.weaveSelection=null;this.beastIds='';
       this.alert('全隊正在進入首領戰場…');
       void this.load();
     }
@@ -1828,7 +1845,7 @@ class DungeonMapView{
     this.strikePending=false;this.skillPending=false;this.loadoutPending=false;
     this.queuedSkill=null;
     this.guardPending=false;this.guardSignature='';
-    this.aimTile=null;this.skillSignature='';
+    this.aimTile=null;this.weaveSelection=null;this.skillSignature='';
     this.wheelSwipeStart=null;this.manualOpen=false;this.wheelMode='attack';
     this.moveTarget='player';this.selectedSkillId='';this.weaponWheelSlot=-1;this.routePending=false;
     this.rangeSignature='';this.rangeTiles=[];
@@ -2181,7 +2198,9 @@ class DungeonMapView{
         elapsed,entry.playedPrismCues||=new Set(),(id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},this.room?.id+':'+key);
       const bellPlayed=entry.scene.weaponTimeline&&globalThis.QAWeaponEffects.advanceBellSound(entry.scene.weaponTimeline,entry.scene.skill,
         elapsed,entry.playedBellCues||=new Set(),(id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},this.room?.id+':'+key);
-      if(!prismPlayed&&!bellPlayed&&!entry.soundPlayed&&p>=(firstImpact===undefined?.38:firstImpact/entry.scene.weaponTimeline.durationMs)){
+      const weavePlayed=entry.scene.weaponTimeline&&globalThis.QAWeaponEffects.advanceWeaveSound(entry.scene.weaponTimeline,entry.scene.skill,
+        elapsed,entry.playedWeaveCues||=new Set(),(id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},this.room?.id+':'+key);
+      if(!prismPlayed&&!bellPlayed&&!weavePlayed&&!entry.soundPlayed&&p>=(firstImpact===undefined?.38:firstImpact/entry.scene.weaponTimeline.durationMs)){
         entry.soundPlayed=true;
         if(entry.scene.hits?.some(hit=>hit.damage>0))
           try{window.QAGameAudio?.play('combat-impact',{volume:.27});}catch(_){}
@@ -2263,11 +2282,12 @@ class DungeonMapView{
       dungeonSwordRoute(m,own.flyingSword,aim,this.creatures()):null;
     const skill=own?.dungeonSkills?.find(s=>s.id===this.selectedSkillId);
     const selectedAim=skill&&this.wheelMode==='attack'?this.targetFor(skill):null;
-    const selectedPreview=this.wheelMode==='attack'?(skill?(selectedAim&&this.skillPreview?.byAim[selectedAim.x+','+selectedAim.y]):this.skillPreview?.byEnemy?.[this.selectedBeastId]):null;
+    const displayPlan=globalThis.QAWeaveRules.selectionPlan(this.skillPreview,this.selectedSkillId==='weave-thread'?this.weaveSelection:null);
+    const selectedPreview=this.wheelMode==='attack'?(skill?(selectedAim&&displayPlan?.byAim[selectedAim.x+','+selectedAim.y]):this.skillPreview?.byEnemy?.[this.selectedBeastId]):null;
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:visualMembers,selfUid:this.uid,showRoutes:false,
       rangeTiles:this.rangeTiles,rangeKind:this.rangeKind,
-      skillPreview:this.wheelMode==='attack'?this.skillPreview:null,selectedPreview,
+      skillPreview:this.wheelMode==='attack'?displayPlan:null,selectedPreview,
       swordPreviewRoute,swordVisuals,
       enemies:visualEnemies,objectives:this.room?.dungeonProgress,
       aimTile:this.currentAim(),art:this.sprites,

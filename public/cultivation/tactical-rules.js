@@ -686,6 +686,7 @@
       }
     }
     if(s.status==='finished'){
+      if(s.weaponObjects)s.weaponObjects=weave().finish(s.weaponObjects);
       s.deadlineMs=0;
       if(s.pveMetrics&&!s.pveMetrics.outcome){
         s.pveMetrics.outcome=s.winner===human[0]?.team?'win':'loss';s.pveMetrics.reason=s.finishReason;
@@ -1043,7 +1044,7 @@
     const bellSteps=events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.bellSteps;
     const rayPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,aim):null;
     return {aim,cost,valid:!reason,reason,cells:[...cells.values()],path,hits,moves,finalPositions,
-      ...(weave()?.supports(sk)?{first:first?point(first):null,weaponObjects:simulation.weaponObjects,weavePlan:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weavePlan}:{}),
+      ...(weave()?.supports(sk)?{first:first?point(first):null,weaponObjects:simulation.weaponObjects,weavePlan:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weavePlan,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       ...(bellSteps?{bellSteps,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       ...(rayPlan?{rays:rayPlan.rays,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       landings:finalPositions.filter(t=>t.uid!==a.uid).map(point)};
@@ -1121,8 +1122,14 @@
     if(weavePlan){
       castEvent.animation.weavePlan=weavePlan;
       s.weaponObjects=weave().place(s.weaponObjects,weavePlan,{uid:a.uid,board:prism().boardForTrial(s),clock:s.eventSequence||0,level:sk.level,refinement:a.manualRefinements?.[sk.manualId]||0});
+      const records=[];
       weave().resolve(weavePlan,s.actors.filter(t=>t.team!==a.team),covers,alive,
-        (target,power)=>damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId}),()=>alive(a));
+        (target,power,cell)=>damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId,
+          weaponHit:{group:castEvent.id,rayId:0,cell,records}}),()=>alive(a));
+      castEvent.animation.weaponTimeline=weave().timeline(weavePlan,sk,records);
+      castEvent.animation.weaponGroup=castEvent.id;
+      castEvent.animation.changes=s.actors.filter(t=>t.uid===a.uid||records.some(h=>h.uid===t.uid)).map(appearance);
+      if(!s.events.includes(castEvent)){s.events.unshift(castEvent);if(s.events.length>LIMITS.events)s.events.splice(1,1);}
       return;
     }
     if(bellPlan){
@@ -1672,6 +1679,7 @@
     if(s.status==='finished')return s;
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
     if(s.pveMetrics)Object.assign(s.pveMetrics,{outcome:'loss',reason:'forfeit',turns:s.actors.find(a=>a.uid===uid)?.turns||0});
+    if(s.weaponObjects)s.weaponObjects=weave().finish(s.weaponObjects);
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
   return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterProfileFor,trackingCells,retargetTrackingIntents,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,previewCast,skillPreviewPlan,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});

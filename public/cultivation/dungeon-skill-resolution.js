@@ -347,13 +347,13 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     moveSword:Boolean(moveSword),origin:{...origin},target:{...target},
     ...(flightPath?{path:flightPath}:{}),
     cost,hits,visualMoves,...(chainSteps.length?{chainSteps}:{}),
-    ...(weavePlan?{first:first?{x:first.x,y:first.y}:null,weavePlan}:{}),
+    ...(weavePlan?{first:first?{x:first.x,y:first.y}:null,weavePlan,weaponTimeline:weave().timeline(weavePlan,sk,hits.map(h=>({uid:h.enemyId,damage:h.damage,absorbed:h.shieldDamage||0,cell:h.cell})))}:{}),
     ...(bellSteps?{bellSteps,weaponTimeline:bell().timeline(bellPlan,sk,bellSteps)}:{}),
     ...(prismPlan?{prismRays:prismPlan.rays,weaponTimeline:prism().timeline(prismPlan,sk,hits)}:{}),
     totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
     focusBefore:chargeBefore,focusEmpowered:empowered,
-    focusActivated:sk.kind==='fist-focus',visualVersion:prismPlan||bellPlan?2:1,effectCells,
+    focusActivated:sk.kind==='fist-focus',visualVersion:prismPlan||bellPlan||weavePlan?2:1,effectCells,
     tick:Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0,
     ...(position?{position}:{})};
   player.lastSkill=result;
@@ -376,7 +376,7 @@ function previewPlan(room,uid,map,skill){
     plan.aims=geometry.aims;plan.cells=geometry.cells;plan.reason=geometry.reason;plan.pairs=geometry.pairs;plan.byPair={};
     const scheme=(target,first=null)=>{
       const out=resolveCast(room,uid,map,sk,{target,first,seq:(member.skillSeq||0)+1,base,preview:true,refinement:skill.refinement||0});
-      return {aim:target,first,cells:out.cells,path:[],cost:out.result.cost,valid:staminaFor(member)>=out.result.cost,hits:out.result.hits,landings:[],totalDamage:out.result.totalDamage,weaponObjects:out.weaponObjects,weavePlan:out.result.weavePlan};
+      return {aim:target,first,cells:out.cells,path:[],cost:out.result.cost,valid:staminaFor(member)>=out.result.cost,hits:out.result.hits,landings:[],totalDamage:out.result.totalDamage,weaponObjects:out.weaponObjects,weavePlan:out.result.weavePlan,weaponTimeline:out.result.weaponTimeline};
     };
     for(const q of Object.values(geometry.byAim))plan.byAim[key(q.aim)]=scheme(q.aim);
     for(const pair of geometry.pairs)plan.byPair[weave().pairKey(pair.first,pair.second)]=scheme(pair.second,pair.first);

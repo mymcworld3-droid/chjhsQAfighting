@@ -147,9 +147,10 @@ export function drawWorld(ctx,map,camera,width,height,
       ctx.restore();
     };
     paint(skillPreview.cells,'rgba(229,199,115,.15)','rgba(229,204,135,.4)');
-    paint(skillPreview.aims,'rgba(0,0,0,0)','rgba(229,204,135,.65)');
+    paint(skillPreview.aims,'rgba(0,0,0,0)',skillPreview.pairs?.length?'#87e3c3':'rgba(229,204,135,.65)');
+    if(skillPreview.first)paint([skillPreview.first],'rgba(79,216,167,.38)','#baffdf');
     paint(selectedPreview?.path?.slice(1),'rgba(233,207,129,.23)','#e5cc87');
-    paint(selectedPreview?.cells,'rgba(233,186,82,.4)','#ffe3a4');
+    paint(selectedPreview?.cells,selectedPreview?.weavePlan?'rgba(79,216,167,.38)':'rgba(233,186,82,.4)',selectedPreview?.weavePlan?'#baffdf':'#ffe3a4');
     for(const ray of selectedPreview?.rays||[])if(ray.depth>0)paint(ray.cells,ray.depth===1?'#eea45b44':'#b49ae744',ray.depth===1?'#ffc58c':'#d2bcff');
     paint(selectedPreview?.landings,'rgba(0,0,0,0)','#ffe8a6');
     if(selectedPreview?.hits?.length&&skillPreview.exact){

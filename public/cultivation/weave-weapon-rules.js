@@ -49,6 +49,7 @@
   }
   function selected(board,origin,sk,state,uid,aim,first){
     const all=plans(board,origin,sk,state,uid);
+    if(!G.open(board,aim)||sk.kind==='weave-thread'&&!G.open(board,first))return {plan:null,reason:all.reason||'請選擇合法端點'};
     const plan=sk.kind==='weave-thread'?first&&aim&&all.byPair[pairKey(first,aim)]:aim&&all.byAim[G.key(aim)];
     return {plan:plan||null,reason:plan?'':all.reason||'請選擇兩個不同且可連通的合法端點'};
   }
@@ -65,5 +66,33 @@
       if(cell){seen.add(id);apply(target,plan.power,p(cell));}
     }
   }
-  return Object.freeze({supports,plans,selected,place,resolve,pairKey,clear:O.clear,reconcileEquipment:O.reconcileEquipment,finish:O.finish});
+  // Shared touch/keyboard interaction: first tap picks, second previews,
+  // third confirms. Tap the first endpoint again to cancel without casting.
+  function choose(plan,selection,tile){
+    const pairs=plan?.pairs||[];
+    const first=selection?.first;
+    if(first&&same(first,tile))return {selection:null,confirm:false,reason:'已取消端點，請重新選擇'};
+    if(!first){
+      if(!pairs.some(q=>same(q.first,tile)))return {selection:null,confirm:false,reason:plan?.reason||'請選擇可連接的第一端點'};
+      return {selection:{...p(tile),first:p(tile),choosing:true},confirm:false,reason:'選擇第二端點；再次點擊第一端點可取消'};
+    }
+    const scheme=plan?.byPair?.[pairKey(first,tile)];
+    if(!scheme)return {selection,confirm:false,reason:'兩端點無法連通，請選其他端點'};
+    const confirm=!selection.choosing&&same(selection,tile)&&scheme.valid;
+    return {selection:{...p(tile),first:p(first),choosing:false},confirm,reason:scheme.valid?'再次點選此端點確認施放':scheme.reason||'體力不足或目前不可施放'};
+  }
+  function selectionPlan(plan,selection){
+    if(!plan?.pairs?.length||!selection?.first)return plan;
+    const first=selection.first,pairs=plan.pairs.filter(q=>same(q.first,first));
+    return {...plan,aims:pairs.map(q=>q.second),first:p(first),byAim:Object.fromEntries(pairs.map(q=>[G.key(q.second),plan.byPair[pairKey(first,q.second)]]))};
+  }
+  function timeline(plan,sk,hits){
+    const durationMs=sk.kind==='weave-mark'?300:sk.kind==='weave-thread'?360:500;
+    const impact=sk.kind==='weave-mark'?140:sk.kind==='weave-thread'?220:320;
+    return {version:2,durationMs,segments:[{kind:sk.kind==='weave-mark'?'ray':'domain',weave:sk.kind,tone:'jade',start:0,impact,end:durationMs,
+      origin:plan.vertices[0],target:plan.mark||plan.vertices.at(-1),vertices:plan.vertices,cells:plan.cells,
+      ...(plan.mark?{mark:plan.mark,rays:[{cells:[plan.vertices[0],...plan.cells],tone:'jade'}]}:{}),
+      hits:hits.map(h=>({uid:h.uid,damage:h.damage,absorbed:h.absorbed||0,cell:h.cell})),moves:[]}]};
+  }
+  return Object.freeze({supports,plans,selected,place,resolve,pairKey,choose,selectionPlan,timeline,clear:O.clear,reconcileEquipment:O.reconcileEquipment,finish:O.finish});
 });
