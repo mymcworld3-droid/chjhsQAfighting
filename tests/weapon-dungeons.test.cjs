@@ -266,3 +266,12 @@ test('resume-only request cannot create a new dungeon or consume tickets if room
  const again=await API.start(db,'u1',{...input('resume-correct-001'),resumeRoomId:first.id},NOW);
  assert.equal(again.id,first.id);assert.equal((await API.weaponDungeonState(db,'u1',NOW)).tickets,2);
 });
+
+test('preview pools contain precisely the live reward catalog, including empty tiers',async()=>{
+ const db=database();own(db);
+ const state=await API.weaponDungeonState(db,'u1',NOW);
+ for(const realm of W.WEAPON_REALMS){
+  assert.deepEqual(state.rewardPools[realm],M.BOOKS.filter(b=>b.tierRealm===realm).map(({id,name,tierRealm})=>({id,name,tierRealm})));
+ }
+ assert.deepEqual(state.rewardPools['元嬰'],[]);
+});

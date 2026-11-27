@@ -2,6 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs'),vm=require('node:vm');
 const W=require('../public/cultivation/weapon-dungeon-rules.js');
+const Rewards=require('../weapon-dungeon-rewards.cjs');
 const resourceCode=fs.readFileSync(require.resolve('../public/cultivation/spirit-stone-ui.js'),'utf8');
 const weaponDungeonTicketMarkup=vm.runInNewContext(resourceCode.replace(/^export /gm,'')+'\nweaponDungeonTicketMarkup');
 const source=fs.readFileSync(require.resolve('../public/cultivation/weapon-dungeons-page.js'),'utf8');
@@ -28,7 +29,7 @@ function harness({wide=false}={}){
  vm.runInContext(source.replace(/^import .*;\n/gm,'').replaceAll('export ','')
    .replaceAll("import('./tactical-combat.js?v=20261125-weapon-lord-cleared-v1')",'loadBattle()'),context);
  const dialog=()=>elements.get('weapon-dungeons-panel');
- const state=extra=>{const p={tickets:3,unlocked:0,clears:[0,0,0,0,0,0],active:null,...extra};return {...p,dungeonId:W.ID,dungeons:W.catalog(p)};};
+ const state=extra=>{const p={tickets:3,unlocked:0,clears:[0,0,0,0,0,0],active:null,...extra};return {...p,dungeonId:W.ID,dungeons:W.catalog(p),rewardPools:Rewards.previewPools(W.WEAPON_REALMS)};};
  const respond=(data=state(),index=0)=>requests[index]({ok:true,json:async()=>({ok:true,state:data})});
  return {elements,entered,requests,dialog,state,respond,events,shell,
    setUid:value=>{uid=value;},open:(id)=>window.openWeaponDungeons(id),
@@ -222,4 +223,20 @@ test('atlas one-tap resume opens exact active room, even with zero tickets; acco
  assert.equal(h.requests.length,1);assert.equal(h.dialog().hidden,true);
  h.setUid('u2');h.events.get('xiuxian:user-data-ready')();assert.equal(atlas.resumeSlot.innerHTML,'');
  click();await new Promise(resolve=>setImmediate(resolve));assert.equal(h.entered.length,1);
+});
+
+test('reward preview uses the actual server pool and original weapon artwork; empty tiers do not invent drops',async()=>{
+ const h=harness(),opening=h.open(W.ID);h.respond(h.state());await opening;
+ let markup=h.dialog().innerHTML;
+ for(const book of Rewards.previewPools(['築基','金丹'])['築基']){
+  assert.ok(markup.includes('data-wd-reward-id="'+book.id+'"'));
+  assert.ok(markup.includes(book.name));
+ }
+ assert.match(markup,/src="\/assets\/weapons\/sword-flight-hd.webp"/);
+ assert.match(markup,/實際未掉落武器機率 50%/);
+ const pools=Rewards.previewPools(['元嬰','化神']);assert.deepEqual(pools,{元嬰:[],化神:[]});
+ const another=harness(),pending=another.open(W.ID);another.respond(another.state({unlocked:2,active:{roomId:'active',difficulty:2}}));await pending;
+ markup=another.dialog().innerHTML;
+ assert.match(markup,/實際未掉落武器機率 100%/);
+ assert.doesNotMatch(markup,/data-wd-reward-id=/);
 });

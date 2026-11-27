@@ -47,6 +47,7 @@ let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=
 let freshRewardReceipt='';
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
 let bossIntroSeenRoom='',bossTransitionPending=null,bossBannerTimer=null;
+let dungeonPortal=null;
 let warmedCombatAudioRoomId='';
 let autoQuizKey='',quizContext=null;
 let pairQuestions=[],pairChoices=[],pairReviews=[],pairDisplayIndex=0;
@@ -387,7 +388,7 @@ function ensure(){
     else if(b.hasAttribute('data-hub')){hideModal();mode==='pve'?close():renderHub();}
     else if(b.hasAttribute('data-tutorial-collapse'))close();
     else if(b.hasAttribute('data-weapon-dungeon-menu')){close();void window.openWeaponDungeons?.();}
-    else if(b.hasAttribute('data-weapon-dungeon-retry'))void open('weapon-dungeon',weaponDungeonSelection);
+    else if(b.hasAttribute('data-weapon-dungeon-retry'))void open('weapon-dungeon',{dungeonId:weaponDungeonSelection?.dungeonId,difficulty:weaponDungeonSelection?.difficulty});
     else if(b.hasAttribute('data-next-stage')||b.hasAttribute('data-retry-entry'))void open(battleChannel,weaponDungeonSelection||{});
     else if(b.hasAttribute('data-manual-training')){
       const account=uid;
@@ -2344,6 +2345,36 @@ function schedule(){
   if(state.status==='waiting')poll=setTimeout(()=>{if(!busy)void start();else schedule();},Math.max(6000,retryMs));
   else if(state.mode==='pvp')poll=setTimeout(()=>{if(!busy)void sync();else schedule();},retryMs);
 }
+function removeDungeonPortal(){
+  dungeonPortal?.remove();dungeonPortal=null;
+}
+async function playDungeonPortal(reveal,{isCurrent,selection}){
+  if(!isCurrent())return;
+  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches===true;
+  if(reduced){await reveal();return;}
+  removeDungeonPortal();
+  const definition=globalThis.QAWeaponDungeons?.CATALOG?.find(d=>d.id===selection?.dungeonId);
+  const realm=globalThis.QAWeaponDungeons?.DIFFICULTIES?.find(d=>d.index===selection?.difficulty);
+  const portal=document.createElement('div');portal.className='wd-portal';portal.setAttribute('role','status');portal.setAttribute('aria-live','polite');
+  portal.innerHTML='<div class="wd-portal-array" aria-hidden="true"><i></i><i></i><i></i><span></span>'+Array.from({length:12},(_,i)=>'<b style="--wd-ray:'+i+'"></b>').join('')+'</div><div class="wd-portal-title"><small></small><strong></strong><span></span></div>';
+  portal.querySelector('.wd-portal-title small').textContent=selection?.resumeRoomId?'重返秘境':'傳送陣啟動';
+  portal.querySelector('.wd-portal-title strong').textContent=definition?.name||'武器秘境';
+  portal.querySelector('.wd-portal-title span').textContent=realm?.name||'';
+  dungeonPortal=portal;
+  const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  try{
+    document.body.append(portal);
+    globalThis.QAGameAudio?.transition?.();
+    await wait(selection?.resumeRoomId?160:420);
+    if(!isCurrent())return;
+    await reveal();
+    if(!isCurrent())return;
+    portal.classList.add('is-revealing');
+    await wait(260);
+  }finally{
+    portal.remove();if(dungeonPortal===portal)dungeonPortal=null;
+  }
+}
 async function enterTrial(e,account){
   // Start preparation immediately while the existing full-screen clouds close.
   // Resolve failures into values so a slow curtain cannot cause an unhandled rejection.
@@ -2355,7 +2386,8 @@ async function enterTrial(e,account){
     tutorialEvent('entered');
   };
   try{
-    if(typeof window.playStartupCloudCurtain==='function')await window.playStartupCloudCurtain(reveal,{isCurrent:()=>valid(e,account),blockInput:true});
+    if(battleChannel==='weapon-dungeon')await playDungeonPortal(reveal,{isCurrent:()=>valid(e,account),selection:weaponDungeonSelection});
+    else if(typeof window.playStartupCloudCurtain==='function')await window.playStartupCloudCurtain(reveal,{isCurrent:()=>valid(e,account),blockInput:true});
     else await reveal();
   }catch(error){
     if(!valid(e,account))return;
@@ -2396,6 +2428,7 @@ async function open(nextMode='pve',options={}){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
+  removeDungeonPortal();
   if(!root)return;
   clearWeaponToast();
   warmedCombatAudioRoomId='';

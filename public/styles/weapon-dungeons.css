@@ -219,3 +219,17 @@
 @keyframes wd-enter-approach{from{transform:scale(1);opacity:1}to{transform:scale(1.07);opacity:.65}}
 @media(orientation:portrait){#page-gameplay .wd-atlas-footer{justify-items:center}}
 @media(prefers-reduced-motion:reduce){#weapon-dungeons-panel[data-wd-entering="true"] .wd-island{animation:none}}
+
+/* Show the same public weapon art as cultivation, grouped by server roll pool. */
+#weapon-dungeons-panel .wd-reward-pair{align-items:start;gap:12px}
+#weapon-dungeons-panel .wd-reward{display:grid;gap:4px;padding:4px 0;align-content:start;border-top:1px solid #a9b5b33d}
+#weapon-dungeons-panel .wd-reward-next{border-color:#d9bd8260}
+#weapon-dungeons-panel .wd-reward-label{display:flex;align-items:baseline;flex-wrap:wrap;justify-content:space-between;gap:2px 6px}
+#weapon-dungeons-panel .wd-reward-label small{color:#e8d4ac;font-size:11px;font-weight:600}
+#weapon-dungeons-panel .wd-reward-label b{font-size:10px;color:var(--wd-muted)}
+#weapon-dungeons-panel .wd-reward-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,56px),1fr));gap:4px;min-width:0}
+#weapon-dungeons-panel .wd-reward-item{display:grid;justify-items:center;align-content:start;min-width:0;gap:2px;text-align:center}
+#weapon-dungeons-panel .wd-reward-item img{display:block;width:100%;height:clamp(30px,5.5vh,52px);object-fit:contain;filter:drop-shadow(0 3px 4px #101820a0)}
+#weapon-dungeons-panel .wd-reward-item small{font-size:10px;line-height:1.2;overflow-wrap:anywhere;color:#e8dcc4}
+#weapon-dungeons-panel .wd-no-drop{color:var(--wd-muted);font-size:10px}
+@media(orientation:landscape) and (max-height:500px){#weapon-dungeons-panel .wd-reward-item img{height:30px}#weapon-dungeons-panel .wd-reward-pair{gap:8px}#weapon-dungeons-panel .wd-reward-item small{font-size:9px}}

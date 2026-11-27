@@ -61,6 +61,8 @@ async function main(){
   await page.locator('[data-atlas-dungeon="peak-stone"]').click();
   await page.locator('[data-wd-difficulty="0"]').waitFor();
   assert.equal(await page.locator('[data-wd-difficulty]').count(),6);
+  assert.ok(await page.locator('[data-wd-reward-id]').count()>=2);
+  await page.waitForFunction(()=>Array.from(document.querySelectorAll('[data-wd-reward-id] img')).every(img=>img.complete&&img.naturalWidth>0));
   assert.equal(await page.locator('#weapon-dungeons-panel header button').count(),1);
   assert.equal(await page.locator('[data-wd-back]').isVisible(),true);
   assert.equal(await page.locator('.wd-ticket-help').isVisible(),false);
