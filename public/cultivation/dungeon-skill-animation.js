@@ -68,7 +68,7 @@ function buildSkill(uid,result,previous,next){
   if(!validPoint(origin)||!validPoint(target))return null;
   const skill=source?.dungeonSkills?.find(s=>s.id===result.skillId)||
     newSource?.dungeonSkills?.find(s=>s.id===result.skillId)||
-    (result.skillId==='flight-summon'&&Array.isArray(result.path)?{kind:'flying-sword'}:null);
+    (result.skillId==='flight-summon'&&Array.isArray(result.path)?{kind:'flying-sword'}:result.skillId==='gravity-core'&&result.gravityBeat?{kind:'gravity-core'}:null);
   if(!skill)return null;
   const move=dungeonVisualMove(result.skillId);
   const cells=(result.effectCells||[]).filter(validPoint).slice(0,result.skillId.startsWith('weave-')?1024:result.skillId==='bell-echo'?80:72)
@@ -193,6 +193,12 @@ export function dungeonAnimationEvents(previous,next){
       const scene=buildStrike(uid,strike,previous);
       if(scene)events.push({key:uid+':strike:'+strike.seq,scene});
     }
+  }
+  const priorGravity=new Set((previous.gravityEvents||[]).map(e=>e.id));
+  for(const event of next.gravityEvents||[]){
+    if(priorGravity.has(event.id)||!event.result||!Array.isArray(event.beforeEnemies)||!next.members?.[event.uid])continue;
+    const scene=buildSkill(event.uid,event.result,{...previous,enemies:event.beforeEnemies},next);
+    if(scene)events.push({key:'gravity:'+event.id,scene});
   }
   return events.slice(0,12);
 }

@@ -75,6 +75,7 @@ const publicRoom=(roomId,room,at=Date.now(),viewerUid='')=>({
   // Presentational snapshots expose only the current NPC action state,
   // never the secret map seed or server-side patrol/decision internals.
   ...(room.weaponObjects?{weaponObjects:room.weaponObjects}:{}),
+  ...(Array.isArray(room.gravityEvents)?{gravityEvents:room.gravityEvents.slice(-16)}:{}),
   enemies:Array.isArray(room.enemies)?room.enemies.map(e=>({
     id:e.id,name:e.name,kind:e.kind,position:e.position,
     realm:e.realm||ManualProgress.REALM,
@@ -99,6 +100,14 @@ const publicRoom=(roomId,room,at=Date.now(),viewerUid='')=>({
       ...(room.status==='assembled'?{explorationStamina:staminaFor(member)}:{}),
       online:memberOnline(member,at)}]))
 });
+// A clock pulse can kill the boss before any requested action executes.
+async function commitClockVictory(tx,db,roomRef,roomId,current,delta,at){
+  if(current.bossEncounter?.status!=='fighting'||delta?.bossEncounter?.status!=='defeated')return null;
+  const next={...current,...delta,revision:current.revision+1};
+  const save=await Victory.prepareArchive(tx,db,roomId,next,at);
+  tx.update(roomRef,{...delta,revision:next.revision});save();
+  return next;
+}
 const safeName=(value,uid)=>{
   const name=String(value||'').trim().slice(0,32);
   return name||('修士'+String(uid).slice(0,8));
@@ -372,6 +381,7 @@ function createHandler({
             throw err('副本時鐘尚未啟動',409);
           const time=clock(),delta=advanceWorld(current,roomMap(current,roomId),time);
           if(!delta)return current;
+          const victory=await commitClockVictory(tx,db,roomRef,roomId,current,delta,time);if(victory)return victory;
           const next={...current,...delta,revision:current.revision+1};
           tx.update(roomRef,{...delta,revision:next.revision});
           return next;
@@ -418,6 +428,7 @@ function createHandler({
           const shouldRenew=Number(current.expiresAtMs)-at<RENEW_IF_LESS_THAN_MS;
           const battleDelta=current.status==='assembled'?
             advanceWorld(current,roomMap(current,roomId),at):null;
+          const victory=await commitClockVictory(tx,db,roomRef,roomId,current,battleDelta,at);if(victory)return victory;
           if(!shouldTouch&&!shouldRenew&&!battleDelta)return current;
           const codeRef=db.collection(CODES).doc(current.code);
           const codeSnap=shouldRenew?await tx.get(codeRef):null;
@@ -485,6 +496,7 @@ function createHandler({
           // checking the movement cost; otherwise a zero-stamina member could
           // remain stuck when their SSE briefly disconnects.
           const battleDelta=advanceWorld(current,map,at);
+          const clockVictory=await commitClockVictory(tx,db,roomRef,roomId,current,battleDelta,at);if(clockVictory)return clockVictory;
           const evolved={...current,...(battleDelta||{})};
           const outcome=action==='move-route'?
             moveRouteOnMap(evolved,uid,map,{vectors,step}):
@@ -508,6 +520,7 @@ function createHandler({
           if(current.status!=='assembled')throw err('請先完成全隊集結',409);
           const map=roomMap(current,roomId);
           const battleDelta=advanceWorld(current,map,at);
+          const clockVictory=await commitClockVictory(tx,db,roomRef,roomId,current,battleDelta,at);if(clockVictory)return clockVictory;
           const evolved={...current,...(battleDelta||{})};
           const outcome=strikeEnemy(evolved,uid,map,{enemyId,seq});
           if(outcome.duplicate&&!battleDelta)return current;
@@ -519,11 +532,13 @@ function createHandler({
             ...(progress?{dungeonProgress:progress}:{}),
             ...(bossEncounter?{bossEncounter}:{}),
             revision:current.revision+1};
+          if(next.bossEncounter?.status==='defeated'&&next.weaponObjects)next.weaponObjects=WeaponObjects.finish(next.weaponObjects);
           const saveVictory=evolved.bossEncounter?.status==='fighting'&&
             bossEncounter?.status==='defeated'?
             await Victory.prepareArchive(tx,db,roomId,next,at):null;
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
             enemies:next.enemies,
+            ...(next.weaponObjects!==evolved.weaponObjects?{weaponObjects:next.weaponObjects}:{}),
             ...(progress!==evolved.dungeonProgress?{dungeonProgress:progress}:{}),
             ...(bossEncounter!==evolved.bossEncounter?{bossEncounter}:{}),
             revision:next.revision});
@@ -548,6 +563,7 @@ function createHandler({
           // Client-side skill lists, upgrades and combat stats are never trusted.
           const map=roomMap(current,roomId);
           const battleDelta=advanceWorld(current,map,at);
+          const clockVictory=await commitClockVictory(tx,db,roomRef,roomId,current,battleDelta,at);if(clockVictory)return clockVictory;
           const evolved={...current,...(battleDelta||{})};
           const outcome=action==='skill'?
             Skills.castSkill(evolved,uid,map,record,{
@@ -615,6 +631,7 @@ function createHandler({
           if(current.status!=='assembled')throw err('請先完成集結',409);
           const map=roomMap(current,roomId);
           const battleDelta=advanceWorld(current,map,at);
+          const clockVictory=await commitClockVictory(tx,db,roomRef,roomId,current,battleDelta,at);if(clockVictory)return clockVictory;
           const evolved={...current,...(battleDelta||{})};
           const result=Objectives.activate(evolved,uid,map);
           if(result.duplicate&&!battleDelta)return current;
@@ -643,17 +660,20 @@ function createHandler({
           }
           const map=roomMap(current,roomId);
           const delta=advanceWorld(current,map,at);
+          const clockVictory=await commitClockVictory(tx,db,roomRef,roomId,current,delta,at);if(clockVictory)return clockVictory;
           const evolved={...current,...(delta||{})};
           const outcome=Portal.vote(evolved,uid,map,at,ready,roomId);
           if(!outcome.changed&&!delta)return current;
           const next={...outcome.room,revision:current.revision+1};
           if(outcome.transitioned&&evolved.weaponObjects)next.weaponObjects=WeaponObjects.finish(evolved.weaponObjects);
+          if(outcome.transitioned&&evolved.gravityEvents)next.gravityEvents=[];
           tx.update(roomRef,{
             ...(delta||{}),members:next.members,
             bossPortalReady:next.bossPortalReady,
             ...(outcome.transitioned?{
               dungeonArena:'boss',bossEncounter:next.bossEncounter,
               ...(next.weaponObjects?{weaponObjects:next.weaponObjects}:{}),
+              ...(next.gravityEvents?{gravityEvents:next.gravityEvents}:{}),
               enemies:next.enemies,battleAppliedTick:next.battleAppliedTick,
               battleAppliedAtMs:next.battleAppliedAtMs
             }:{}),
@@ -677,6 +697,7 @@ function createHandler({
           if(current.status!=='assembled')throw err('副本尚未開始',409);
           const map=roomMap(current,roomId);
           const battleDelta=advanceWorld(current,map,at);
+          const clockVictory=await commitClockVictory(tx,db,roomRef,roomId,current,battleDelta,at);if(clockVictory)return clockVictory;
           const evolved={...current,...(battleDelta||{})};
           const result=QuizCredit.credit(evolved,uid,graded,questionId,roomId);
           if(result.duplicate&&!battleDelta)return current;
@@ -707,6 +728,7 @@ function createHandler({
           const receipt=await tx.get(receiptRef);
           const map=roomMap(current,roomId);
           const battleDelta=advanceWorld(current,map,at);
+          const clockVictory=await commitClockVictory(tx,db,roomRef,roomId,current,battleDelta,at);if(clockVictory)return clockVictory;
           if(receipt.exists&&!battleDelta)return current;
           const evolved={...current,...(battleDelta||{})};
           if(receipt.exists){
@@ -747,6 +769,7 @@ function createHandler({
           if(current.status!=='assembled')throw err('副本尚未開始',409);
           const map=roomMap(current,roomId);
           const battleDelta=advanceWorld(current,map,at);
+          const clockVictory=await commitClockVictory(tx,db,roomRef,roomId,current,battleDelta,at);if(clockVictory)return clockVictory;
           const evolved={...current,...(battleDelta||{})};
           const out=Boss.guard(evolved,uid,map,{targetUid,seq});
           if(out.duplicate&&!battleDelta)return current;
@@ -768,6 +791,7 @@ function createHandler({
           if(current.status!=='assembled')throw err('副本尚未開始',409);
           const map=roomMap(current,roomId);
           const battleDelta=advanceWorld(current,map,at);
+          const clockVictory=await commitClockVictory(tx,db,roomRef,roomId,current,battleDelta,at);if(clockVictory)return clockVictory;
           const evolved={...current,...(battleDelta||{})};
           const out=Rescue.help(evolved,uid,map,{targetUid,seq});
           if(out.duplicate&&!battleDelta)return current;
@@ -869,7 +893,7 @@ function createHandler({
                 }:{}),
                 ...Skills.initialCombatLoadout(startingMembers[id],manualByUid[id].manual)};
             }
-            const clockState={...initialClock(at),...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{})};
+            const clockState={...initialClock(at),...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{}),...(room.gravityEvents?{gravityEvents:[]}:{} )};
             const objectives=Objectives.spawn(map,initialEnemies(map));
             const enemyState={enemyAiVersion:ENEMY_AI_VERSION,
               enemies:objectives.enemies,dungeonProgress:objectives.progress};
@@ -905,7 +929,7 @@ function createHandler({
             }));
           const clockState={battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null,...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{})};
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null,...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{}),...(room.gravityEvents?{gravityEvents:[]}:{} )};
           const next={...room,status:'waiting',...clockState,members,
             revision:room.revision+1};
           tx.update(roomRef,{status:'waiting',...clockState,members,
@@ -949,7 +973,7 @@ function createHandler({
           const codeSnap=await tx.get(codeRef);
           const cleared={battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null,...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{})};
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null,...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{}),...(room.gravityEvents?{gravityEvents:[]}:{} )};
           const next={...room,status:'closed',closedAtMs:at,...cleared,
             revision:room.revision+1};
           tx.update(roomRef,{status:'closed',closedAtMs:at,...cleared,
@@ -992,7 +1016,7 @@ function createHandler({
           const reset=closed&&room.status==='assembled'?{
             battleClockVersion:null,battleStartedAtMs:null,
             battleAppliedTick:0,battleAppliedAtMs:null,assembledAtMs:null,
-            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null,...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{})
+            enemyAiVersion:null,enemies:[],dungeonProgress:null,dungeonArena:null,bossEncounter:null,bossPortalReady:null,...(room.weaponObjects?{weaponObjects:WeaponObjects.finish(room.weaponObjects)}:{}),...(room.gravityEvents?{gravityEvents:[]}:{} )
           }:{};
           const votes={...(room.bossPortalReady?.votes||{})};
           delete votes[uid];

@@ -8,6 +8,7 @@ const Boss=require('./dungeon-boss-battle.cjs');
 const {maxHealth}=require('./dungeon-player-combat.cjs');
 const {replenishMembers}=require('./dungeon-stamina-rules.cjs');
 const {STAGE,REALM}=require('./dungeon-manual-progression.cjs');
+const GravityClock=require('./dungeon-gravity-clock.cjs');
 const ENEMY_AI_VERSION=1;
 const MAX_CATCHUP_TICKS=24;
 const DIRECTIONS=Object.freeze([[0,-1],[1,0],[0,1],[-1,0]]);
@@ -153,7 +154,7 @@ function simulate(map,enemies,members,startTick,endTick){
 }
 
 function simulateCombat(map,enemies,members,startTick,endTick,
-  {safeCatchup=false,committedTick=startTick-1}={}){
+  {safeCatchup=false,committedTick=startTick-1,beforeTick=null}={}){
   let currentMembers=members;
   let next=enemies.map(enemy=>({
     ...enemy,position:{...enemy.position},
@@ -162,6 +163,7 @@ function simulateCombat(map,enemies,members,startTick,endTick,
     ...(safeCatchup?{attack:null}: {})
   }));
   for(let tick=startTick;tick<=endTick;tick++){
+    if(beforeTick&&(!safeCatchup||tick===endTick))next=beforeTick(next,currentMembers,tick);
     const occupied=new Set(next.map(e=>key(e.position)));
     const updated=[];
     for(const enemy of next){
@@ -170,7 +172,8 @@ function simulateCombat(map,enemies,members,startTick,endTick,
       const attack=enemy.attack;
       // During catch-up we simulate patrol/pathing only. At the *last*
       // replay tick a new telegraph may begin, but no retroactive hits occur.
-      if(safeCatchup&&tick<endTick){
+      if(enemy.gravityStaggerTick===tick){out=enemy;}
+      else if(safeCatchup&&tick<endTick){
         out=nextEnemy(map,enemy,currentMembers,tick,occupied);
       }else if(attack&&tick>=attack.resolvesAtTick){
         if(attack.startedAtTick>committedTick){
@@ -220,7 +223,11 @@ function simulateCombat(map,enemies,members,startTick,endTick,
 }
 function advanceWorld(room,map,now){
   if(!isRunning(room))return null;
-  if(room.dungeonArena==='boss')return Boss.advance(room,map,now);
+  const gravity=GravityClock.create(room,map);
+  if(room.dungeonArena==='boss'){
+    const delta=Boss.advance(room,map,now,{beforeTick:gravity?.beforeTick});
+    return delta?{...delta,...gravity?.patch()}:null;
+  }
   const applied=Number.isSafeInteger(room.battleAppliedTick)&&room.battleAppliedTick>=0?
     room.battleAppliedTick:0;
   const due=Math.max(applied,dueTick(room,now));
@@ -236,11 +243,11 @@ function advanceWorld(room,map,now){
   const safeCatchup=due-applied>Combat.SAFE_CATCHUP_TICKS;
   const outcome=due>applied?
     simulateCombat(map,base,room.members,start,due,{
-      safeCatchup,committedTick:applied
+      safeCatchup,committedTick:applied,beforeTick:gravity?.beforeTick
     }):
     {enemies:base,members:room.members};
   const members=replenishMembers(room,outcome.members,due-applied);
-  return {enemies:outcome.enemies,enemyAiVersion:ENEMY_AI_VERSION,
+  return {enemies:outcome.enemies,enemyAiVersion:ENEMY_AI_VERSION,...gravity?.patch(),
     ...(members!==room.members?{members}:{}),
     ...(due>applied?{battleAppliedTick:due,battleAppliedAtMs:now}:{})};
 }

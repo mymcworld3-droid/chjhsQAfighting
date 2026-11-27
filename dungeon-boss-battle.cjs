@@ -234,7 +234,7 @@ function plan(map,boss,members,tick){
     from:{...boss.position},cells:squares,targetUid,
     startedAtTick:tick,resolvesAtTick:tick+Combat.WINDUP_TICKS};
 }
-function advance(room,map,now){
+function advance(room,map,now,{beforeTick=null}={}){
   if(!isRunning(room)||room?.dungeonArena!=='boss'||!room.bossEncounter)
     return null;
   const applied=Number.isSafeInteger(room.battleAppliedTick)?
@@ -251,6 +251,11 @@ function advance(room,map,now){
   const start=safeCatchup?due:applied+1;
   let boss={...initial,...(safeCatchup?{attack:null}:{})},members=room.members;
   for(let tick=start;tick<=due;tick++){
+    if(beforeTick){
+      const enemies=beforeTick([boss],members,tick);
+      if(!enemies.length)return {enemies:[],members:replenishMembers(room,members,due-applied),battleAppliedTick:due,battleAppliedAtMs:now};
+      boss=enemies[0];
+    }
     if(boss.attack&&tick>=boss.attack.resolvesAtTick){
       if(boss.attack.startedAtTick>applied){
         boss.attack={...boss.attack,resolvesAtTick:due+Combat.WINDUP_TICKS};

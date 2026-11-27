@@ -185,3 +185,28 @@ test('leaving a boss room preserves the surviving party and revokes ex-member ac
   assert.equal(f.raw().members.b,undefined);
   assert.equal((await f.call('b','get',{roomId:f.id},1)).status,403);
 });
+
+test('gravity clock victory is atomically archived once across two C servers',async()=>{
+  const O=require('../public/cultivation/weapon-special-objects.js'),V=require('../dungeon-victory-reward.cjs');
+  const f=await create(),room=unlock(f);
+  room.members.a.position={...f.map.portalSite};room.members.b.position={...f.map.portalSite};
+  assert.equal((await f.call('a','enter-boss',{roomId:f.id})).status,200);
+  assert.equal((await f.call('b','enter-boss',{roomId:f.id},1)).status,200);
+  const raw=f.raw(),map=(await f.call('a','get-map',{roomId:f.id})).body.map,boss=raw.enemies[0];
+  raw.members.a.dungeonAttack=100;boss.battleHealth=40;boss.shield=0;boss.nextActionTick=99;
+  const board={width:map.width,height:map.height,blocked:q=>!map.tiles[q.y*map.width+q.x]};
+  raw.weaponObjects=O.add(undefined,{type:'core',ownerUid:'a',position:{x:boss.position.x-1,y:boss.position.y},board,generatedAt:0});
+  raw.weaponObjects=O.triggerCore(raw.weaponObjects,'a',0).state;
+  const seq=raw.members.a.skillSeq;
+  f.advance(4000);
+  const replies=await Promise.all([f.call('a','clock',{roomId:f.id}),f.call('b','clock',{roomId:f.id},1)]);
+  assert.ok(replies.every(r=>r.status===200),JSON.stringify(replies));
+  const result=f.raw();assert.equal(result.bossEncounter.status,'defeated');
+  assert.equal(result.bossEncounter.defeatedByUid,'a');assert.equal(result.enemies.length,0);
+  assert.equal(result.gravityEvents.length,1);assert.equal(result.members.a.skillSeq,seq);
+  assert.equal(result.weaponObjects.objects.length,0);
+  assert.ok(f.c.records.get(V.ARCHIVES+'/'+f.id));
+  const revision=result.revision;
+  assert.equal((await f.call('b','clock',{roomId:f.id},1)).status,200);
+  assert.equal(f.raw().revision,revision);
+});
