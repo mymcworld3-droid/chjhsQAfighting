@@ -12,6 +12,10 @@
     ?require('./flying-sword-path.js'):globalThis.QAFlyingSwordPath;
   const weaponDungeons=()=>typeof module==='object'&&module.exports
     ?require('./weapon-dungeon-rules.js'):globalThis.QAWeaponDungeons;
+  const gravity=()=>typeof module==='object'&&module.exports?require('./gravity-weapon-rules.js'):globalThis.QAGravityRules;
+  const gravityLanding=(s,a,p)=>canOccupy(s,a,p)&&!a.immobilized&&!sealAt(s,p)&&!(s.objective?.shrine&&key(s.objective.shrine)===key(p));
+  const gravityGeometry=(s,a,sk)=>gravity().plans(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,s.actors,p=>gravityLanding(s,a,p));
+  const gravitySelection=(s,a,sk,p)=>gravity().selected(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,s.actors,p,q=>gravityLanding(s,a,q));
   const time=()=>typeof module==='object'&&module.exports?require('./time-weapon-rules.js'):globalThis.QATimeRules;
   const timeGeometry=(s,a,sk)=>time().plans(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid);
   const timeSelection=(s,a,sk,p)=>time().selected(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,p);
@@ -918,6 +922,7 @@
   }
   function aimCells(s,a,sk){
     if(!a||!alive(a))return [];
+    if(gravity()?.supports(sk))return gravityGeometry(s,a,sk).aims;
     if(time()?.supports(sk))return timeGeometry(s,a,sk).aims;
     if(mirror()?.supports(sk))return mirrorGeometry(s,a,sk).aims;
     if(weave()?.supports(sk))return weave().plans(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid).aims;
@@ -947,6 +952,7 @@
     return cells;
   }
   function skillCells(s,a,sk,p,first=null){
+    if(gravity()?.supports(sk))return gravitySelection(s,a,sk,p).plan?.cells||[];
     if(time()?.supports(sk))return timeSelection(s,a,sk,p).plan?.cells||[];
     if(mirror()?.supports(sk))return mirrorSelection(s,a,sk,p).plan?.cells||[];
     if(weave()?.supports(sk))return weave().selected(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,p,first).plan?.cells||[];
@@ -973,6 +979,7 @@
       if(a.stamina<techniqueCost(a,sk))fail('體力不足，先答題補充');
       validateAttackLimit(a);
     }
+    if(gravity()?.supports(sk)){const selection=gravitySelection(s,a,sk,p);if(!selection.plan)fail(selection.reason);return;}
     if(time()?.supports(sk)){const selection=timeSelection(s,a,sk,p);if(!selection.plan)fail(selection.reason);return;}
     if(mirror()?.supports(sk)){
       const selection=mirrorSelection(s,a,sk,p);if(!selection.plan)fail(selection.reason);return;
@@ -1043,6 +1050,7 @@
     }
     // The hero's intended route is separate from the enemies' final positions.
     const path=techniquePath(s,a,sk,aim).map(point);
+    if(sk.kind==='gravity-crash')for(const m of moves.filter(m=>m.uid===a.uid))path.push(...m.path);
     if(sk.kind==='mirror-swap')for(const m of moves.filter(m=>m.uid===a.uid))path.push(...m.path);
     if(sk.kind==='fist-chain'){
       for(const m of moves.filter(m=>m.uid===a.uid)){
@@ -1065,6 +1073,7 @@
     const rayPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,aim):null;
     return {aim,cost,valid:!reason,reason,cells:[...cells.values()],path,hits,moves,finalPositions,
       ...(mirrorSteps?.length?{mirrorSteps,weaponTimeline:castAnimation.weaponTimeline}:{}),
+      ...(gravity()?.supports(sk)?{weaponObjects:simulation.weaponObjects||null,gravityPlan:castAnimation?.gravityPlan,gravityBeat:castAnimation?.gravityBeat,weaponTimeline:castAnimation?.weaponTimeline}:{}),
       ...(time()?.supports(sk)?{weaponObjects:simulation.weaponObjects||null,timePlan:castAnimation?.timePlan,weaponTimeline:castAnimation?.weaponTimeline}:{}),
       ...(mirror()?.supports(sk)?{weaponObjects:simulation.weaponObjects||null,mirrorPlan:castAnimation?.mirrorPlan,weaponTimeline:castAnimation?.weaponTimeline}:{}),
       ...(weave()?.supports(sk)?{first:first?point(first):null,weaponObjects:simulation.weaponObjects,weavePlan:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weavePlan,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
@@ -1075,6 +1084,11 @@
   function skillPreviewPlan(s,a,sk){
     const result={aims:[],cells:[],byAim:{}};
     if(!alive(a)||!sk)return result;
+    if(gravity()?.supports(sk)){
+      const geometry=gravityGeometry(s,a,sk);result.aims=geometry.aims;result.cells=geometry.cells;result.reason=geometry.reason;
+      for(const aim of geometry.aims)result.byAim[key(aim)]=previewCast(s,a,sk,aim);
+      return result;
+    }
     if(time()?.supports(sk)){
       const geometry=timeGeometry(s,a,sk);result.aims=geometry.aims;result.cells=geometry.cells;result.reason=geometry.reason;
       for(const aim of geometry.aims)result.byAim[key(aim)]=previewCast(s,a,sk,aim);
@@ -1156,12 +1170,13 @@
     if(s.pveMetrics){s.pveMetrics.staminaSpent+=cost;if(sk.manualId)s.pveMetrics.manualCasts[sk.id]=(s.pveMetrics.manualCasts[sk.id]||0)+1;}
     const fixedTarget=sealAt(s,p);
     if(s.mode==='pve'&&s.trial?.layoutVersion>=3&&sk.manualId){s.manualUsed||={};s.manualUsed[a.uid]||={};s.manualUsed[a.uid][sk.manualId]=true;}
+    const gravityPlan=gravity()?.supports(sk)?gravitySelection(s,a,sk,p).plan:null;
     const timePlan=time()?.supports(sk)?timeSelection(s,a,sk,p).plan:null;
     const mirrorPlan=mirror()?.supports(sk)?mirrorSelection(s,a,sk,p).plan:null;
     const weavePlan=weave()?.supports(sk)?weave().selected(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,p,first).plan:null;
     const bellPlan=bell()?.supports(sk)?bell().selected(prism().boardForTrial(s),a,sk,p):null;
     const prismPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,p):null;
-    const cells=timePlan?.cells||mirrorPlan?.cells||weavePlan?.cells||prismPlan?.cells||skillCells(s,a,sk,p);
+    const cells=gravityPlan?.cells||timePlan?.cells||mirrorPlan?.cells||weavePlan?.cells||prismPlan?.cells||skillCells(s,a,sk,p);
     const rays=sk.kind==='sword-array'?swordArray(s,sk,p):null;
     const cuts=rays&&!sk.orthogonal?crossedSwordLines(rays,p):null;
     const route=techniquePath(s,a,sk,p);
@@ -1213,6 +1228,23 @@
     if(!['fist-chain','meteor','restore','counter','fist-focus'].includes(sk.kind)&&(sk.kind!=='blink'||sk.burst))strikeSeals(s,cells);
     // Fixed objectives can be hit by targeted techniques, but cannot be moved.
     if(fixedTarget&&!at(s,p)&&['hit','lunge','swap'].includes(sk.kind))return;
+    if(gravityPlan){
+      castEvent.animation.gravityPlan=gravityPlan;
+      if(sk.kind==='gravity-core'){
+        s.weaponObjects=gravity().place(s.weaponObjects,gravityPlan,{uid:a.uid,board:prism().boardForTrial(s),clock:2*s.turn,level:sk.level,refinement:a.manualRefinements?.[sk.manualId]||0});
+        castEvent.animation.gravityBeat=gravityTrigger(s,a,2*s.turn,castEvent);
+      }else{
+        if(gravityPlan.landing){
+          const from=point(a);Object.assign(a,gravityPlan.landing);
+          motion(s,a,[from,point(a)],'leap',a.name+'躍向星核');
+          s.weaponObjects=gravity().clear(s.weaponObjects,a.uid,'core');
+        }
+        gravity().attack(gravityPlan,sk,s.actors.filter(t=>t.team!==a.team),alive,
+          (target,power,cell)=>damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId}),()=>alive(a));
+        if(copy&&sk.kind==='gravity-strike')copy(origin,{direction:gravityPlan.direction,power:sk.power,layer:1});
+      }
+      return;
+    }
     if(timePlan){
       castEvent.animation.timePlan=timePlan;
       s.weaponObjects=time().update(s.weaponObjects,timePlan,sk,{uid:a.uid,board:prism().boardForTrial(s),clock:s.eventSequence||0,level:sk.level,refinement:a.manualRefinements?.[sk.manualId]||0});
@@ -1616,6 +1648,27 @@
     if(route.length>1){m.x=end.x;m.y=end.y;log(s,m.name+'以'+monsterProfileFor(m).moveName+'移動','monster-move',{actor:m.uid,path:route,animation:{kind:'move',style:monsterProfileFor(m).move.kind}});}
     else log(s,m.name+'觀察戰局','wait',{actor:m.uid,animation:{kind:'guard'}});
   }
+  function gravityTrigger(s,a,step,existing=null){
+    if(!alive(a)||!gravity()?.core(s.weaponObjects,a.uid))return null;
+    const obj=gravity().core(s.weaponObjects,a.uid);
+    if(obj.remainingTriggers<=0||obj.lastTrigger!==null&&obj.lastTrigger>=step)return null;
+    const event=existing||log(s,a.name+'的引力星核共鳴','cast',{actor:a.uid,skill:'gravity-core',animation:{kind:'cast',style:'gravity-core',origin:point(a),target:obj.position,cells:gravity().area(prism().boardForTrial(s),obj.position,3)}});
+    const records=[];
+    const out=gravity().trigger(s.weaponObjects,a.uid,step,{
+      board:prism().boardForTrial(s),actors:s.actors,targets:s.actors.filter(t=>t.team!==a.team),alive,
+      forbidden:[...(s.objective?.shrine?[s.objective.shrine]:[]),...(s.objective?.points||[]).filter(q=>!q.activated)],
+      canMove:t=>!t.boss||!!t.trackingAttack,
+      move:(t,to,from)=>{Object.assign(t,to);motion(s,t,[from,to],'push',t.name+'受到引力牽引',event.id);if(t.bot)interruptMonster(t);},
+      apply:(t,power,cell)=>{const shield=t.shield;const dealt=damage(s,a,t,a.atk*power,{skill:'gravity-core',manualId:'body-gravity',weaponHit:{group:event.id,rayId:0,cell,records}});return {damage:dealt,absorbed:shield-t.shield};}
+    });
+    s.weaponObjects=out.state;
+    if(out.beat){event.animation.gravityBeat=out.beat;event.animation.gravityRecords=records;event.animation.changes=s.actors.filter(t=>t.uid===a.uid||out.beat.moves.some(m=>m.uid===t.uid)).map(t=>({...appearance(t),x:t.x,y:t.y}));}
+    return out.beat;
+  }
+  function gravityRound(s,step){
+    if(!s.weaponObjects)return;
+    for(const a of s.actors.filter(a=>!a.bot&&alive(a)))gravityTrigger(s,a,step);
+  }
   function begin(s,a,now){
     s.turnUid=a.uid;a.turns++;if(!s.quizRound)a.questions=0;a.attacks=0;a.actions=0;a.guard=0;a.counter=0;
     if(s.quizRound){s.phase='action';s.actionRevision=s.revision+1;}
@@ -1623,6 +1676,7 @@
     if((a.slowUntil||0)<a.turns)a.slow=0;
     if(a.counterManualId&&!a.counter)delete a.counterManualId;
     s.turnStartedAtMs=now;s.deadlineMs=s.mode==='pvp'?now+LIMITS.turnMs:0;
+    gravityRound(s,2*s.turn);
     const due=s.effects.filter(e=>e.owner===a.uid&&e.due<=a.turns);
     s.effects=s.effects.filter(e=>!due.includes(e));
     for(const e of due){
@@ -1648,12 +1702,14 @@
     else{s.phase='waiting-answer';s.deadlineMs=0;}
   }
   function end(s,now){
+    if(s.weaponObjects)s.weaponObjects=gravity().endOwnerWindow(s.weaponObjects,s.turnUid,2*s.turn);
     if(s.mode==='pve'){
       const hero=s.actors[0];
       if(s.trial?.layoutVersion===4&&s.objective?.type==='sealing'&&s.objective.hazards?.some(p=>key(p)===key(hero))){
         const hit=Math.min(hero.hp,Math.max(1,Math.round(hero.maxHp*SEAL_TYPES.hazard.maxHpDamageRatio)));hero.hp-=hit;
         log(s,'妖煞陣爆發 −'+hit,'damage',{target:hero.uid,damage:hit,animation:{kind:'damage',changes:[appearance(hero)],numbers:[{uid:hero.uid,damage:hit}]}});
       }
+      gravityRound(s,2*s.turn+1);
       for(const m of s.actors.filter(a=>a.bot&&alive(a))){
         if(!alive(hero)||s.objective?.type==='defense'&&s.objective.hp<=0)break;
         monsterTurn(s,m,hero);

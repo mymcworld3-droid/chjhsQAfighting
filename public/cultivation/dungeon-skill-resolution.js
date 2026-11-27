@@ -7,6 +7,7 @@
   else root.QADungeonSkillResolution=factory(root.QAFlyingSwordPath,root.QADungeonBossHit,root.QAManuals);
 })(globalThis,(SwordPath,Boss,Manuals)=>{
   'use strict';
+  const gravity=()=>typeof module==='object'&&module.exports?require('./gravity-weapon-rules.js'):globalThis.QAGravityRules;
   const time=()=>typeof module==='object'&&module.exports?require('./time-weapon-rules.js'):globalThis.QATimeRules;
   const mirror=()=>typeof module==='object'&&module.exports?require('./mirror-weapon-rules.js'):globalThis.QAMirrorRules;
   const weave=()=>typeof module==='object'&&module.exports?require('./weave-weapon-rules.js'):globalThis.QAWeaveRules;
@@ -197,6 +198,10 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     bodyHitStart=hits.length;bodyPositions=new Map(enemies.map(e=>[e.id,{...e.position}]));return result;
   }:null;
   const mirrorCanSwap=q=>tile(map,q)&&!occupied(q,enemies)&&!Object.entries(members).some(([id,m])=>id!==uid&&same(m.position,q));
+  const gravityActors=[...enemies,...Object.entries(members).map(([id,m])=>({...m,uid:id}))];
+  const gravitySelection=gravity()?.supports(sk)?gravity().selected(prism().boardForDungeon(map),origin,sk,room.weaponObjects,uid,gravityActors,target):null;
+  const gravityPlan=gravitySelection?.plan;
+  let gravityBeat=null;
   const timeSelection=time()?.supports(sk)?time().selected(prism().boardForDungeon(map),origin,sk,room.weaponObjects,uid,target):null;
   const timePlan=timeSelection?.plan;
   const mirrorSelection=mirror()?.supports(sk)?mirror().selected(prism().boardForDungeon(map),origin,sk,room.weaponObjects,uid,target,mirrorCanSwap):null;
@@ -207,7 +212,22 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
   const bellPlan=bell()?.supports(sk)?bell().selected(prism().boardForDungeon(map),origin,sk,target):null;
   let bellSteps=null;
   const prismPlan=prism()?.supports(sk)?prism().selected(prism().boardForDungeon(map),origin,sk,target):null;
-  if(timeSelection){
+  if(gravitySelection){
+    if(!gravityPlan)throw fail(gravitySelection.reason,409);
+    cells=gravityPlan.cells;
+    if(sk.kind==='gravity-core'){
+      weaponObjects=gravity().place(room.weaponObjects,gravityPlan,{uid,board:prism().boardForDungeon(map),clock:tick,level:sk.level,refinement});
+      const out=gravity().trigger(weaponObjects,uid,tick,{board:prism().boardForDungeon(map),actors:gravityActors,targets:enemies,alive:e=>healthy(e)>0,
+        canMove:e=>e.kind!=='boss',move:(e,to)=>{e.position={...to};e.attack=null;},
+        apply:(e,power,cell)=>{apply(e,power);const hit=hits.at(-1);hit.cell=cell;return {damage:hit.damage,absorbed:hit.shieldDamage||0};}
+      });
+      weaponObjects=out.state;gravityBeat=out.beat;
+    }else{
+      if(gravityPlan.landing){position={...gravityPlan.landing};player.position=position;weaponObjects=gravity().clear(room.weaponObjects,uid,'core');}
+      gravity().attack(gravityPlan,sk,enemies,e=>healthy(e)>0,(enemy,power,cell)=>{apply(enemy,power);hits.at(-1).cell=cell;});
+      if(copy&&sk.kind==='gravity-strike')copy(origin,{direction:gravityPlan.direction,power:sk.power,layer:1});
+    }
+  }else if(timeSelection){
     if(!timePlan)throw fail(timeSelection.reason,409);
     cells=timePlan.cells;
     weaponObjects=time().update(room.weaponObjects,timePlan,sk,{uid,board:prism().boardForDungeon(map),clock:tick,level:sk.level,refinement});
@@ -411,6 +431,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     ...(flightPath?{path:flightPath}:{}),
     cost,hits,visualMoves,...(chainSteps.length?{chainSteps}:{}),
     ...(mirrorSteps.length?{mirrorSteps}:{}),
+    ...(gravityPlan?{gravityPlan,...(gravityBeat?{gravityBeat}:{})}:{}),
     ...(timePlan?{timePlan,weaponTimeline:time().timeline(timePlan,sk,hits)}:{}),
     ...(mirrorPlan?{mirrorPlan}:{}),
     ...(mirrorTimeline?{weaponTimeline:mirrorTimeline}:{}),
@@ -451,7 +472,10 @@ function previewPlan(room,uid,map,skill){
   }
   const candidates=[];
   const prismGeometry=prism()?.supports(sk)?prism().plans(prism().boardForDungeon(map),from,sk):null;
-  if(time()?.supports(sk)){
+  if(gravity()?.supports(sk)){
+    const geometry=gravity().plans(prism().boardForDungeon(map),from,sk,room.weaponObjects,uid,[...(room.enemies||[]),...Object.entries(room.members).map(([id,m])=>({...m,uid:id}))]);
+    candidates.push(...geometry.aims);plan.reason=geometry.reason;
+  }else if(time()?.supports(sk)){
     const geometry=time().plans(prism().boardForDungeon(map),from,sk,room.weaponObjects,uid);
     candidates.push(...geometry.aims);plan.reason=geometry.reason;
   }else if(mirror()?.supports(sk)){
@@ -482,7 +506,7 @@ function previewPlan(room,uid,map,skill){
     const path=result.path||[from,...(result.chainSteps||[]).map(s=>s.position)];
     const scheme={aim:{...target},cells,path:path.map(p=>({...p})),cost:result.cost,valid:staminaFor(member)>=result.cost,
       hits:result.hits,landings:result.visualMoves.map(m=>m.to),position:result.position,
-      totalDamage:result.totalDamage,...(result.timePlan?{timePlan:result.timePlan,weaponObjects:out.weaponObjects||room.weaponObjects||null,weaponTimeline:result.weaponTimeline}:{}),...(result.mirrorSteps?{mirrorSteps:result.mirrorSteps,weaponTimeline:result.weaponTimeline}:{}),...(result.mirrorPlan?{mirrorPlan:result.mirrorPlan,weaponObjects:out.weaponObjects||room.weaponObjects||null,weaponTimeline:result.weaponTimeline}:{}),...(result.bellSteps?{bellSteps:result.bellSteps,weaponTimeline:result.weaponTimeline}:{}),...(result.prismRays?{rays:result.prismRays,weaponTimeline:result.weaponTimeline}:{})};
+      totalDamage:result.totalDamage,...(result.gravityPlan?{gravityPlan:result.gravityPlan,gravityBeat:result.gravityBeat,weaponObjects:out.weaponObjects||room.weaponObjects||null}:{}),...(result.timePlan?{timePlan:result.timePlan,weaponObjects:out.weaponObjects||room.weaponObjects||null,weaponTimeline:result.weaponTimeline}:{}),...(result.mirrorSteps?{mirrorSteps:result.mirrorSteps,weaponTimeline:result.weaponTimeline}:{}),...(result.mirrorPlan?{mirrorPlan:result.mirrorPlan,weaponObjects:out.weaponObjects||room.weaponObjects||null,weaponTimeline:result.weaponTimeline}:{}),...(result.bellSteps?{bellSteps:result.bellSteps,weaponTimeline:result.weaponTimeline}:{}),...(result.prismRays?{rays:result.prismRays,weaponTimeline:result.weaponTimeline}:{})};
     if(result.position&&path.length===1)scheme.path.push({...result.position});
     const aliases=prismGeometry?.byAim[key(target)]?.aims||[target];
     for(const aim of aliases){plan.aims.push({...aim});plan.byAim[key(aim)]={...scheme,aim:{...aim}};}

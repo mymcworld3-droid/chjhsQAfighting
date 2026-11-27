@@ -124,17 +124,17 @@
   // Clockwise from north, then stable uid. Original footprints remain
   // occupied during assignment, so no overlap, swaps or moves into a tile
   // that another unit has not yet vacated. Reserve complete footprints.
-  function pullClockwise(board,core,targets,actors=targets,radius=3){
+  function pullClockwise(board,core,targets,actors=targets,radius=3,{forbidden:blocked=new Set(),canMove=()=>true}={}){
     const anchor=a=>a.position||a;
     const angle=a=>{const p=anchor(a);return (Math.atan2(p.x-core.x,core.y-p.y)+2*Math.PI)%(2*Math.PI);};
     const order=targets.filter(a=>living(a)&&distanceTo(core,a,anchor(a))<=radius)
       .slice().sort((a,b)=>angle(a)-angle(b)||(id(a)<id(b)?-1:id(a)>id(b)?1:0));
-    const reserved=new Set(),forbidden=new Set([key(core)]),moves=[];
+    const reserved=new Set(),forbidden=new Set([key(core),...blocked]),moves=[];
     for(const a of order){
       const from=point(anchor(a)),before=distanceTo(core,a,from);
       const clockwise=d=>(from.x-core.x)*d.y-(from.y-core.y)*d.x;
       const dirs=CARDINAL.slice().sort((a,b)=>clockwise(b)-clockwise(a)||directionIndex(a)-directionIndex(b));
-      const to=dirs.map(d=>add(from,d)).find(p=>distanceTo(core,a,p)<before&&canPlace(board,a,p,actors,reserved,forbidden))||from;
+      const to=canMove(a)?dirs.map(d=>add(from,d)).find(p=>distanceTo(core,a,p)<before&&canPlace(board,a,p,actors,reserved,forbidden))||from:from;
       for(const p of footprint(a,to))reserved.add(key(p));
       moves.push({uid:id(a),from,to:point(to),moved:!same(from,to)});
     }
