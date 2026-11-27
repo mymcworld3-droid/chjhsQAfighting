@@ -1234,13 +1234,18 @@
         s.weaponObjects=gravity().place(s.weaponObjects,gravityPlan,{uid:a.uid,board:prism().boardForTrial(s),clock:2*s.turn,level:sk.level,refinement:a.manualRefinements?.[sk.manualId]||0});
         castEvent.animation.gravityBeat=gravityTrigger(s,a,2*s.turn,castEvent);
       }else{
+        const records=[];
         if(gravityPlan.landing){
           const from=point(a);Object.assign(a,gravityPlan.landing);
-          motion(s,a,[from,point(a)],'leap',a.name+'躍向星核');
+          motion(s,a,[from,point(a)],'leap',a.name+'躍向星核',castEvent.id);
           s.weaponObjects=gravity().clear(s.weaponObjects,a.uid,'core');
         }
         gravity().attack(gravityPlan,sk,s.actors.filter(t=>t.team!==a.team),alive,
-          (target,power,cell)=>damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId}),()=>alive(a));
+          (target,power,cell)=>damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId,weaponHit:{group:castEvent.id,rayId:0,cell,records}}),()=>alive(a));
+        castEvent.animation.weaponTimeline=gravity().timeline(gravityPlan,sk,records,{uid:a.uid});
+        castEvent.animation.weaponGroup=castEvent.id;
+        castEvent.animation.changes=s.actors.filter(t=>t.uid===a.uid||records.some(h=>h.uid===t.uid)).map(t=>({...appearance(t),x:t.x,y:t.y}));
+        if(!s.events.includes(castEvent)){s.events.unshift(castEvent);if(s.events.length>LIMITS.events)s.events.splice(1,1);}
         if(copy&&sk.kind==='gravity-strike')copy(origin,{direction:gravityPlan.direction,power:sk.power,layer:1});
       }
       return;
@@ -1662,7 +1667,8 @@
       apply:(t,power,cell)=>{const shield=t.shield;const dealt=damage(s,a,t,a.atk*power,{skill:'gravity-core',manualId:'body-gravity',weaponHit:{group:event.id,rayId:0,cell,records}});return {damage:dealt,absorbed:shield-t.shield};}
     });
     s.weaponObjects=out.state;
-    if(out.beat){event.animation.gravityBeat=out.beat;event.animation.gravityRecords=records;event.animation.changes=s.actors.filter(t=>t.uid===a.uid||out.beat.moves.some(m=>m.uid===t.uid)).map(t=>({...appearance(t),x:t.x,y:t.y}));}
+    if(out.beat){event.animation.gravityBeat=out.beat;event.animation.gravityRecords=records;event.animation.weaponTimeline=gravity().timeline({cells:out.beat.cells},gravity().skillFor(obj),records,{uid:a.uid,beat:out.beat,automatic:!existing});event.animation.weaponGroup=event.id;event.animation.changes=s.actors.filter(t=>t.uid===a.uid||out.beat.moves.some(m=>m.uid===t.uid)).map(t=>({...appearance(t),x:t.x,y:t.y}));}
+    if(!s.events.includes(event)){s.events.unshift(event);if(s.events.length>LIMITS.events)s.events.splice(1,1);}
     return out.beat;
   }
   function gravityRound(s,step){

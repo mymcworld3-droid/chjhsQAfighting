@@ -71,5 +71,17 @@
       apply(e,power,cell);
     }
   }
-  return Object.freeze({supports,core,skillFor,area,plans,selected,place,trigger,attack,clear:O.clear,endOwnerWindow:O.endOwnerWindow});
+  function timeline(plan,sk,hits,{uid,beat=null,automatic=false}={}){
+    const pull=sk.kind==='gravity-core',crash=sk.kind==='gravity-crash';
+    const durationMs=crash?600:pull?automatic?280:350:280;
+    const start=crash?0:pull?automatic?0:45:35,impact=crash?300:pull?automatic?190:240:145;
+    const origin=p(pull?beat.core:plan.origin),target=p(pull?beat.core:plan.aim);
+    const moves=pull?beat.moves.filter(m=>m.moved).map(m=>({uid:m.uid,path:[m.from,m.to],style:'gravity'})):
+      crash&&key(origin)!==key(target)?[{uid,path:[origin,target],style:'fall'}]:[];
+    const records=hits.map(h=>({uid:h.uid??h.enemyId,damage:h.damage,absorbed:h.absorbed??h.shieldDamage??0,cell:p(h.cell||target)}));
+    return {version:2,durationMs,segments:[{kind:pull?'vortex':crash?'crash':'ray',gravity:pull?automatic?'pull':'birth':crash?'crash':'strike',
+      tone:crash?'gold':'violet',origin,target,start,impact,end:durationMs,cells:plan.cells,radius:pull||crash?3:0,moves,hits:records,
+      ...(!pull&&!crash?{rays:[{cells:[origin,...plan.cells],tone:'gold'}]}:{})}]};
+  }
+  return Object.freeze({supports,core,skillFor,area,plans,selected,place,trigger,attack,timeline,clear:O.clear,endOwnerWindow:O.endOwnerWindow});
 });

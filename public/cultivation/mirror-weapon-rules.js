@@ -154,7 +154,7 @@
   }
   function timeline(sk,beats){
     const count=Math.max(1,beats.length),chain=sk.kind==='fist-chain',strike=sk.kind==='mirror-strike'||sk.kind==='line'||sk.kind==='gravity-strike';
-    const durationMs=chain?600:sk.kind==='mirror-summon'?400:sk.kind==='mirror-swap'?420:count>1?460:sk.kind==='mirror-strike'?280:350;
+    const durationMs=chain?600:sk.kind==='mirror-summon'?400:sk.kind==='mirror-swap'?420:count>1?460:['mirror-strike','gravity-strike'].includes(sk.kind)?280:350;
     const width=Math.floor(durationMs/count),segments=[];
     for(const [index,beat] of beats.entries()){
       const start=index*width,end=index===count-1?durationMs:(index+1)*width;
@@ -165,7 +165,7 @@
         const radial=sk.kind==='mirror-summon'||sk.kind==='mirror-swap';
         const cells=part.cells||[];
         segments.push({kind:strike?'ray':radial?'shock':'domain',tone:avatar?'violet':'ice',mirror:true,mirrorAvatar:avatar,
-          mirrorSummon:sk.kind==='mirror-summon',mirrorSuppressed:part.suppressed===true,
+          ...(sk.kind==='gravity-strike'?{gravity:'strike'}:{}),mirrorSummon:sk.kind==='mirror-summon',mirrorSuppressed:part.suppressed===true,
           start,impact,end,origin:p(part.source),target:p(cells.at(-1)||part.source),radius:radial?1:0,cells:cells.map(p),
           ...(strike&&cells.length?{rays:[{cells:[p(part.source),...cells.map(p)],tone:avatar?'violet':'ice'}]}:{}),
           hits:(part.hits||[]).map(h=>({uid:h.uid,damage:h.damage,absorbed:h.absorbed||0,cell:p(h.cell||part.source)})),

@@ -431,7 +431,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     ...(flightPath?{path:flightPath}:{}),
     cost,hits,visualMoves,...(chainSteps.length?{chainSteps}:{}),
     ...(mirrorSteps.length?{mirrorSteps}:{}),
-    ...(gravityPlan?{gravityPlan,...(gravityBeat?{gravityBeat}:{})}:{}),
+    ...(gravityPlan?{gravityPlan,...(gravityBeat?{gravityBeat}:{}),weaponTimeline:gravity().timeline(gravityPlan,sk,hits,{uid,beat:gravityBeat})}:{}),
     ...(timePlan?{timePlan,weaponTimeline:time().timeline(timePlan,sk,hits)}:{}),
     ...(mirrorPlan?{mirrorPlan}:{}),
     ...(mirrorTimeline?{weaponTimeline:mirrorTimeline}:{}),
@@ -441,7 +441,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
     focusBefore:chargeBefore,focusEmpowered:empowered,
-    focusActivated:sk.kind==='fist-focus',visualVersion:prismPlan||bellPlan||weavePlan||mirrorTimeline||timePlan?2:1,effectCells,
+    focusActivated:sk.kind==='fist-focus',visualVersion:prismPlan||bellPlan||weavePlan||mirrorTimeline||timePlan||gravityPlan?2:1,effectCells,
     tick:Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0,
     ...(position?{position}:{})};
   player.lastSkill=result;
@@ -506,7 +506,7 @@ function previewPlan(room,uid,map,skill){
     const path=result.path||[from,...(result.chainSteps||[]).map(s=>s.position)];
     const scheme={aim:{...target},cells,path:path.map(p=>({...p})),cost:result.cost,valid:staminaFor(member)>=result.cost,
       hits:result.hits,landings:result.visualMoves.map(m=>m.to),position:result.position,
-      totalDamage:result.totalDamage,...(result.gravityPlan?{gravityPlan:result.gravityPlan,gravityBeat:result.gravityBeat,weaponObjects:out.weaponObjects||room.weaponObjects||null}:{}),...(result.timePlan?{timePlan:result.timePlan,weaponObjects:out.weaponObjects||room.weaponObjects||null,weaponTimeline:result.weaponTimeline}:{}),...(result.mirrorSteps?{mirrorSteps:result.mirrorSteps,weaponTimeline:result.weaponTimeline}:{}),...(result.mirrorPlan?{mirrorPlan:result.mirrorPlan,weaponObjects:out.weaponObjects||room.weaponObjects||null,weaponTimeline:result.weaponTimeline}:{}),...(result.bellSteps?{bellSteps:result.bellSteps,weaponTimeline:result.weaponTimeline}:{}),...(result.prismRays?{rays:result.prismRays,weaponTimeline:result.weaponTimeline}:{})};
+      totalDamage:result.totalDamage,...(result.gravityPlan?{gravityPlan:result.gravityPlan,gravityBeat:result.gravityBeat,weaponTimeline:result.weaponTimeline,weaponObjects:out.weaponObjects||room.weaponObjects||null}:{}),...(result.timePlan?{timePlan:result.timePlan,weaponObjects:out.weaponObjects||room.weaponObjects||null,weaponTimeline:result.weaponTimeline}:{}),...(result.mirrorSteps?{mirrorSteps:result.mirrorSteps,weaponTimeline:result.weaponTimeline}:{}),...(result.mirrorPlan?{mirrorPlan:result.mirrorPlan,weaponObjects:out.weaponObjects||room.weaponObjects||null,weaponTimeline:result.weaponTimeline}:{}),...(result.bellSteps?{bellSteps:result.bellSteps,weaponTimeline:result.weaponTimeline}:{}),...(result.prismRays?{rays:result.prismRays,weaponTimeline:result.weaponTimeline}:{})};
     if(result.position&&path.length===1)scheme.path.push({...result.position});
     const aliases=prismGeometry?.byAim[key(target)]?.aims||[target];
     for(const aim of aliases){plan.aims.push({...aim});plan.byAim[key(aim)]={...scheme,aim:{...aim}};}

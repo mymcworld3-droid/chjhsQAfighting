@@ -119,7 +119,7 @@ function buildSkill(uid,result,previous,next){
   const timeline=globalThis.QAWeaponEffects?.normalize(result.weaponTimeline);
   if(timeline){
     scene.weaponTimeline=timeline;scene.duration=timeline.durationMs;
-    if(timeline.segments.some(s=>s.bell||s.weave||s.mirror)){
+    if(timeline.segments.some(s=>s.bell||s.weave||s.mirror||s.time||s.gravity)){
       const hitIds=new Set(timeline.segments.flatMap(s=>s.hits.map(h=>h.uid)));
       scene.bellBeforeEnemies=(previous?.enemies||[]).filter(e=>hitIds.has(e.id)).map(e=>({...e,position:{...e.position}}));
     }

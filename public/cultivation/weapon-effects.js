@@ -22,11 +22,12 @@
       if(!s||!kinds.has(s.kind)||![s.start,s.impact,s.end].every(Number.isInteger)||s.start<0||s.impact<s.start||s.impact>=s.end||s.end>raw.durationMs||s.impact<lastImpact)return null;
       lastImpact=s.impact;
       const rays=Array.isArray(s.rays)?s.rays.slice(0,21).map(r=>({cells:points(r?.cells,256),tone:tone(r?.tone||s.tone),collision:valid(r?.collision)?point(r.collision):null})).filter(r=>r.cells.length>1):[];
-      const moves=Array.isArray(s.moves)?s.moves.slice(0,64).filter(m=>uid(m?.uid)&&Array.isArray(m.path)&&m.path.length>=2&&m.path.length<=256&&m.path.every(valid)).map(m=>({uid:m.uid,path:points(m.path,256),style:['arc','swap','fall','slide','dash'].includes(m.style)?m.style:'slide'})):[];
+      const moves=Array.isArray(s.moves)?s.moves.slice(0,64).filter(m=>uid(m?.uid)&&Array.isArray(m.path)&&m.path.length>=2&&m.path.length<=256&&m.path.every(valid)).map(m=>({uid:m.uid,path:points(m.path,256),style:['arc','swap','fall','slide','dash','gravity'].includes(m.style)?m.style:'slide'})):[];
       const hits=Array.isArray(s.hits)?s.hits.slice(0,128).filter(h=>uid(h?.uid)&&Number.isFinite(h.damage)&&h.damage>=0).map(h=>({uid:h.uid,damage:amount(h.damage),absorbed:amount(h.absorbed),...(valid(h.cell)?{cell:point(h.cell)}:{})})):[];
       const echoes=Array.isArray(s.echoes)?s.echoes.slice(0,8).filter(e=>valid(e?.position)).map(e=>({position:point(e.position),...(valid(e.to)?{to:point(e.to)}:{}),type:e.type==='time'?'time':'mirror',tone:tone(e.tone||(e.type==='time'?'gold':'violet'))})):[];
       segments.push({kind:s.kind,start:s.start,impact:s.impact,end:s.end,tone:tone(s.tone),
         ...(['weave-mark','weave-thread','weave-domain'].includes(s.weave)?{weave:s.weave,...(valid(s.mark)?{mark:point(s.mark)}:{})}:{}),
+        ...(['strike','birth','pull','crash'].includes(s.gravity)?{gravity:s.gravity}:{}),
         ...(s.time===true?{time:true,timeEcho:s.timeEcho===true,timeConsume:s.timeConsume===true,timeBirth:s.timeBirth===true}:{}),
         ...(s.mirror===true?{mirror:true,mirrorAvatar:s.mirrorAvatar===true,mirrorSummon:s.mirrorSummon===true,mirrorSuppressed:s.mirrorSuppressed===true}:{}),
         ...(s.bell===true?{bell:true,waveFrom:Number.isFinite(s.waveFrom)?Math.max(0,Math.min(8,s.waveFrom)):0}:{}),
@@ -60,12 +61,14 @@
   }
   function routePose(path,q,style){
     q=clamp(q);const n=q*q*(3-2*q)*(path.length-1),i=Math.min(path.length-2,Math.floor(n));
-    return {...lerp(path[i],path[i+1],n-i),lift:style==='fall'?Math.sin(Math.PI*q)*1.15:style==='arc'?Math.sin(Math.PI*q)*.16:0,opacity:style==='swap'?.35+.65*Math.abs(2*q-1):1};
+    const pos=lerp(path[i],path[i+1],n-i);
+    if(style==='gravity'){const a=path[i],b=path[i+1],arc=.12*Math.sin(Math.PI*(n-i));pos.x-=(b.y-a.y)*arc;pos.y+=(b.x-a.x)*arc;}
+    return {...pos,lift:style==='fall'?Math.sin(Math.PI*q)*1.15:style==='arc'?Math.sin(Math.PI*q)*.16:0,opacity:style==='swap'?.35+.65*Math.abs(2*q-1):1};
   }
   function motionPose(timeline,id,p){
     const t=clamp(p)*timeline.durationMs;let pose=null;
     for(const s of timeline.segments)for(const m of s.moves){
-      const approach=m.style==='dash'||s.mirror&&m.style==='swap';
+      const approach=m.style==='dash'||m.style==='gravity'||s.gravity==='crash'&&m.style==='fall'||s.mirror&&m.style==='swap';
       const start=approach||['fall','swap'].includes(m.style)?s.start:s.impact;
       if(m.uid!==id)continue;
       if(t<start){if(!pose)pose={...m.path[0],lift:0,opacity:1};continue;}
@@ -190,6 +193,18 @@
       const q=s.progress,b=s.impactProgress,origin=s.origin&&at(s.origin),target=s.target&&at(s.target),color=ink(s.tone);
       ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=Math.max(1,size*.045);
       if(!above){
+        if(s.gravity&&origin){
+          const a=s.gravity==='crash'?target:origin;
+          if(a){
+            const radius=s.gravity==='strike'?size*(.26+.2*(1-s.travel)):s.gravity==='crash'?size*(.35+1.5*(1-s.travel)):size*(.35+2.65*(1-s.travel));
+            clockRing(ctx,a,radius,reduced?0:q*6,ink('violet'),.55*(1-q*.5));
+            if(s.gravity!=='strike'){
+              ctx.strokeStyle='#f4d38d';ctx.globalAlpha=.55*(1-q);ring(ctx,a,radius*.72);
+              if(!reduced)for(let j=0;j<8;j++){const angle=j*Math.PI/4+q*7;const x=a.x+Math.cos(angle)*radius*.82,y=a.y+Math.sin(angle)*radius*.82;
+                ctx.fillStyle='#e3be7a';ctx.fillRect(x-size*.035,y-size*.035,size*.07,size*.07);}
+            }
+          }
+        }
         if(s.time&&origin){
           const fade=s.timeConsume&&ms>=380?clamp((550-ms)/170):1;
           clockRing(ctx,origin,size*(.39+(b>=0?.13*b:0)),reduced?0:-q*2.5,ink('gold'),.66*fade);
@@ -299,6 +314,7 @@
           ctx.strokeStyle='#f5fbff';ctx.lineWidth=Math.max(1,size*.035);ctx.globalAlpha=(1-b/.55)*.9;
           line(ctx,[{x:a.x-r,y:a.y},{x:a.x,y:a.y-r},{x:a.x+r,y:a.y},{x:a.x,y:a.y+r},{x:a.x-r,y:a.y}]);
         }
+        if(s.gravity==='crash'&&target){ctx.strokeStyle='#f5dca3';ctx.globalAlpha=.72*(1-b);for(let j=1;j<=3;j++){const r=size*(.25+j*b);line(ctx,[{x:target.x-r,y:target.y},{x:target.x,y:target.y-r},{x:target.x+r,y:target.y},{x:target.x,y:target.y+r},{x:target.x-r,y:target.y}]);}}
         if(s.time&&b<.55)for(const h of s.hits.filter(h=>h.cell)){
           const a=at(h.cell),r=size*(.2+b*.38);ctx.strokeStyle='#ffe8aa';ctx.globalAlpha=.82*(1-b/.55);
           line(ctx,[{x:a.x-r,y:a.y-r},{x:a.x+r,y:a.y+r}]);line(ctx,[{x:a.x+r,y:a.y-r},{x:a.x-r,y:a.y+r}]);
@@ -351,7 +367,7 @@
         if(timeBirths.some(q=>q.uid===o.ownerUid&&q.x===pos.x&&q.y===pos.y))continue;
         silhouette(ctx,a,v.cell,color,.32);clockRing(ctx,a,r*1.2,-clock*.65,color,.57);
       }
-      else if(o.type==='core'){ring(ctx,a,r);ctx.globalAlpha=.35;ring(ctx,a,r*.65);ctx.beginPath();ctx.arc(a.x,a.y,r*.42,0,Math.PI*2);ctx.fill();for(let i=0;i<6;i++){const t=i*Math.PI/3+clock;ctx.beginPath();ctx.arc(a.x+Math.cos(t)*r,a.y+Math.sin(t)*r,Math.max(1,r*.1),0,Math.PI*2);ctx.fill();}}
+      else if(o.type==='core'){clockRing(ctx,a,r*1.35,clock*1.3,'#ebcb8b',.67);ring(ctx,a,r);ctx.globalAlpha=.35;ring(ctx,a,r*.65);ctx.beginPath();ctx.arc(a.x,a.y,r*.42,0,Math.PI*2);ctx.fill();for(let i=0;i<6;i++){const t=i*Math.PI/3+clock;ctx.beginPath();ctx.arc(a.x+Math.cos(t)*r,a.y+Math.sin(t)*r,Math.max(1,r*.1),0,Math.PI*2);ctx.fill();}}
     }
     ctx.restore();return state.objects.length>0;
   }
