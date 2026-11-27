@@ -1,0 +1,3606 @@
+{
+  "schema": 1,
+  "batch": 11,
+  "date": "2026-11-27",
+  "purpose": "既有候選全文草稿升級，不新增題號索引，不自動核准。",
+  "upgrades": [
+    {
+      "id": "PTTSH-113-1-1-mathB-single-choice-1",
+      "sourceId": "PTTSH-113-1-1-mathB",
+      "originalQuestionNumberOrLocator": "單選第1題",
+      "questionNumber": 1,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "3"
+      ],
+      "conceptTags": [
+        "弧度量",
+        "三角函數值"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "若 $\\sin 1=a$，則下列敘述何者正確？",
+        "options": [
+          {
+            "label": "1",
+            "text": "$0<a<\\frac12$"
+          },
+          {
+            "label": "2",
+            "text": "$\\frac12<a<\\frac{\\sqrt2}{2}$"
+          },
+          {
+            "label": "3",
+            "text": "$\\frac{\\sqrt2}{2}<a<\\frac{\\sqrt3}{2}$"
+          },
+          {
+            "label": "4",
+            "text": "$\\frac{\\sqrt3}{2}<a<1$"
+          },
+          {
+            "label": "5",
+            "text": "$-\\frac{\\sqrt2}{2}<a<-\\frac12$"
+          }
+        ]
+      },
+      "flags": [
+        "math-rendered-web-text-needs-visual-check",
+        "human-review-required",
+        "visual-check-pending"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "batch": 3,
+      "answerPdfPage": 3,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "officialAnswerLocator": "原卷第3頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-mathB-single-choice-2",
+      "sourceId": "PTTSH-113-1-1-mathB",
+      "originalQuestionNumberOrLocator": "單選第2題",
+      "questionNumber": 2,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "1"
+      ],
+      "conceptTags": [
+        "三角函數值比較"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "下列哪一個三角函數值最大？",
+        "options": [
+          {
+            "label": "1",
+            "text": "$\\sin\\frac{2\\pi}{3}$"
+          },
+          {
+            "label": "2",
+            "text": "$\\cos\\frac\\pi2$"
+          },
+          {
+            "label": "3",
+            "text": "$\\sin\\frac\\pi6$"
+          },
+          {
+            "label": "4",
+            "text": "$\\cos1$"
+          },
+          {
+            "label": "5",
+            "text": "$\\sin1$"
+          }
+        ]
+      },
+      "flags": [
+        "math-rendered-web-text-needs-visual-check",
+        "human-review-required",
+        "visual-check-pending"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "batch": 3,
+      "answerPdfPage": 3,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "officialAnswerLocator": "原卷第3頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-mathB-single-choice-3",
+      "sourceId": "PTTSH-113-1-1-mathB",
+      "originalQuestionNumberOrLocator": "單選第3題",
+      "questionNumber": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "4"
+      ],
+      "conceptTags": [
+        "三角函數圖形",
+        "水平伸縮",
+        "平移"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "將函數 $y=\\sin x$ 的圖形由 $y$ 軸左右往中央壓縮為 $\\frac12$ 倍，再向左平移 $\\frac\\pi6$ 個單位，所得新圖形的函數為何？",
+        "options": [
+          {
+            "label": "1",
+            "text": "$y=\\sin(\\frac12x-\\frac\\pi6)$"
+          },
+          {
+            "label": "2",
+            "text": "$y=\\sin(\\frac12x+\\frac\\pi6)$"
+          },
+          {
+            "label": "3",
+            "text": "$y=\\sin\\frac12(x+\\frac\\pi6)$"
+          },
+          {
+            "label": "4",
+            "text": "$y=\\sin2(x+\\frac\\pi6)$"
+          },
+          {
+            "label": "5",
+            "text": "$y=\\sin(2x+\\frac\\pi6)$"
+          }
+        ]
+      },
+      "flags": [
+        "math-rendered-web-text-needs-visual-check",
+        "human-review-required",
+        "visual-check-pending"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "batch": 3,
+      "answerPdfPage": 3,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "officialAnswerLocator": "原卷第3頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-mathB-single-choice-4",
+      "sourceId": "PTTSH-113-1-1-mathB",
+      "originalQuestionNumberOrLocator": "單選第4題",
+      "questionNumber": 4,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "2"
+      ],
+      "conceptTags": [
+        "三角函數方程式"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "方程式 $\\pi\\sin x=x$ 的實根個數為",
+        "options": [
+          {
+            "label": "1",
+            "text": "1"
+          },
+          {
+            "label": "2",
+            "text": "3"
+          },
+          {
+            "label": "3",
+            "text": "5"
+          },
+          {
+            "label": "4",
+            "text": "7"
+          },
+          {
+            "label": "5",
+            "text": "9"
+          }
+        ]
+      },
+      "flags": [
+        "math-rendered-web-text-needs-visual-check",
+        "human-review-required",
+        "visual-check-pending"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "batch": 3,
+      "answerPdfPage": 3,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "officialAnswerLocator": "原卷第3頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-mathB-single-choice-6",
+      "sourceId": "PTTSH-113-1-1-mathB",
+      "originalQuestionNumberOrLocator": "單選第6題",
+      "questionNumber": 6,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "3"
+      ],
+      "conceptTags": [
+        "弧度量",
+        "象限角"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "$\\pi^2$ 弳為第幾象限角？",
+        "options": [
+          {
+            "label": "1",
+            "text": "一"
+          },
+          {
+            "label": "2",
+            "text": "二"
+          },
+          {
+            "label": "3",
+            "text": "三"
+          },
+          {
+            "label": "4",
+            "text": "四"
+          },
+          {
+            "label": "5",
+            "text": "剛好在軸上"
+          }
+        ]
+      },
+      "flags": [
+        "math-rendered-web-text-needs-visual-check",
+        "human-review-required",
+        "visual-check-pending"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "batch": 3,
+      "answerPdfPage": 3,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "officialAnswerLocator": "原卷第3頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-3",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第3題",
+      "questionNumber": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "氧化數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "下列各元素的氧化數，何者不存在？",
+        "options": [
+          {
+            "label": "A",
+            "text": "氧的氧化數為－$\\frac12$"
+          },
+          {
+            "label": "B",
+            "text": "氟的氧化數＋1"
+          },
+          {
+            "label": "C",
+            "text": "Na的氧化數為0"
+          },
+          {
+            "label": "D",
+            "text": "氯的氧化數為＋7。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "fraction-layout-check",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 4,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerLocator": "原卷第5頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-6",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第6題",
+      "questionNumber": 6,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "自身氧化還原"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "在碘的自身氧化還原反應 I₂＋OH⁻→I⁻＋IO₃⁻＋H₂O（未平衡）中，約有多少比率的 I₂進行還原反應？",
+        "options": [
+          {
+            "label": "A",
+            "text": "$\\frac16$"
+          },
+          {
+            "label": "B",
+            "text": "$\\frac13$"
+          },
+          {
+            "label": "C",
+            "text": "$\\frac12$"
+          },
+          {
+            "label": "D",
+            "text": "$\\frac23$"
+          },
+          {
+            "label": "E",
+            "text": "$\\frac56$"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "fraction-layout-check",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerLocator": "原卷第5頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-12",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第12題",
+      "questionNumber": 12,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "能量守恆",
+        "能源"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "科學上有「能量守恆」的原理，環境議題上常聽到「能源危機」的議題，下列哪一種觀念才是正確的？",
+        "options": [
+          {
+            "label": "A",
+            "text": "「能量守恆」表示總能量不會減少，故能量是用不完的。所以「能源危機」只是勸人節省的口號而已"
+          },
+          {
+            "label": "B",
+            "text": "「能量守恆」只有在特殊情況下才成立，一般來說，能量愈用愈少，總有用完之時，故有「能源危機」"
+          },
+          {
+            "label": "C",
+            "text": "能量在使用中相互轉換，其總值會守恆，故沒有「能源危機」"
+          },
+          {
+            "label": "D",
+            "text": "「能量守恆」總是成立的，但是被用來發電的煤或汽、機車使用的汽油，用過之後變成廢氣和熱能，通常無法再使用，故有「能源危機」"
+          },
+          {
+            "label": "E",
+            "text": "兩者沒有關係。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerLocator": "原卷第5頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-13",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第13題",
+      "questionNumber": 13,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "能量轉換"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "下列哪一種是屬於光能轉變為化學能的情況？",
+        "options": [
+          {
+            "label": "A",
+            "text": "太陽能發電"
+          },
+          {
+            "label": "B",
+            "text": "通電流的電燈"
+          },
+          {
+            "label": "C",
+            "text": "植物的光合作用"
+          },
+          {
+            "label": "D",
+            "text": "鉛蓄電池充電時"
+          },
+          {
+            "label": "E",
+            "text": "蠟燭的燃燒。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerLocator": "原卷第5頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-14",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第14題",
+      "questionNumber": 14,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "反應熱",
+        "生成熱",
+        "燃燒熱"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "下列有關反應熱的敘述，何者正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "標準反應熱是指在0 ℃、1 atm下所測得的反應熱，可記為ΔH°"
+          },
+          {
+            "label": "B",
+            "text": "二氧化碳的莫耳生成熱與石墨的莫耳燃燒熱數值相同，符號相反"
+          },
+          {
+            "label": "C",
+            "text": "反應熱的大小與反應物的莫耳數數量無關，但與反應途徑有關"
+          },
+          {
+            "label": "D",
+            "text": "氫氣的莫耳燃燒熱即為水的莫耳生成熱"
+          },
+          {
+            "label": "E",
+            "text": "可藉由實驗求出單一物質的熱含量。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerLocator": "原卷第5頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-16",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第16題",
+      "questionNumber": 16,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "熱化學反應式",
+        "反應熱"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "已知2 H₂(g)＋O₂(g) →2H₂O(g) ΔH＝－240.0 kJ，下列敘述何者正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "H₂O(g)的莫耳生成熱為240.0 kJ"
+          },
+          {
+            "label": "B",
+            "text": "生成物所含的能量總和比反應物多"
+          },
+          {
+            "label": "C",
+            "text": "1克的氫完全燃燒，可放熱120 kJ"
+          },
+          {
+            "label": "D",
+            "text": "若生成物為H₂O(l)，則放熱大於240 kJ。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 4,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerLocator": "原卷第5頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-17",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第17題",
+      "questionNumber": 17,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "中和熱"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "強酸與強鹼滴定生成 1 莫耳水時，約放出 56.0 千焦的熱，則將 0.01 M 硫酸 1 升與 0.01 M 氫氧化鈉 2升混合，放熱約為若干千焦？",
+        "options": [
+          {
+            "label": "A",
+            "text": "0.56"
+          },
+          {
+            "label": "B",
+            "text": "1.12"
+          },
+          {
+            "label": "C",
+            "text": "2.24"
+          },
+          {
+            "label": "D",
+            "text": "3.36。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 1,
+      "batch": 3,
+      "optionCount": 4,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerLocator": "原卷第5頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-19",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第19題",
+      "questionNumber": 19,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "生成熱",
+        "燃燒熱"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "下列有關反應熱的敘述，何者正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "H₂(g)的莫耳燃燒熱與H₂O(l)的莫耳生成熱同值異號"
+          },
+          {
+            "label": "B",
+            "text": "石墨的莫耳生成熱為零"
+          },
+          {
+            "label": "C",
+            "text": "C(s)＋½O₂(g)→CO(g)，ΔH°＝－110 kJ 為C(s)的莫耳燃燒熱"
+          },
+          {
+            "label": "D",
+            "text": "CO(g)＋½O₂(g)→CO₂(g)，該反應之反應熱可稱為CO₂的莫耳生成熱"
+          },
+          {
+            "label": "E",
+            "text": "C(s)＋O₂(g)→CO₂(g)，該反應之反應熱可稱為C(s)的莫耳燃燒熱，但不能稱為CO₂(g)的莫耳生成熱。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "fraction-layout-check",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 2,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerLocator": "原卷第5頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-20",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第20題",
+      "questionNumber": 20,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "赫斯定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "C₂H₅OH(l)、C(s)、H₂(g)之燃燒熱分別為－329、－95、－67 kcal／mol，則C₂H₅OH(l)之莫耳生成熱為何？",
+        "options": [
+          {
+            "label": "A",
+            "text": "－167"
+          },
+          {
+            "label": "B",
+            "text": "－62"
+          },
+          {
+            "label": "C",
+            "text": "62"
+          },
+          {
+            "label": "D",
+            "text": "167"
+          },
+          {
+            "label": "E",
+            "text": "－329。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 2,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerLocator": "原卷第5頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-21",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第21題",
+      "questionNumber": 21,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "燃燒熱",
+        "氣體計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "在STP時，將5600 mL乙炔完全燃燒，測得放出的熱量為325 kJ，試求乙炔的莫耳燃燒熱為若干kJ？",
+        "options": [
+          {
+            "label": "A",
+            "text": "560"
+          },
+          {
+            "label": "B",
+            "text": "650"
+          },
+          {
+            "label": "C",
+            "text": "1300"
+          },
+          {
+            "label": "D",
+            "text": "1860"
+          },
+          {
+            "label": "E",
+            "text": "280。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "sign-convention-review",
+        "original-sign-ambiguity-retained",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 2,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerLocator": "原卷第5頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-22",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第22題",
+      "questionNumber": 22,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "赫斯定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "在標準狀況下，已知CO₂之標準莫耳生成熱為－393.6 kJ，且已知：3C(s)＋2Fe₂O₃(s)→4Fe(s)＋3CO₂(g)，ΔH =463.6kJ 試問Fe₂O₃之標準莫耳生成熱應為多少？",
+        "options": [
+          {
+            "label": "A",
+            "text": "70 kJ"
+          },
+          {
+            "label": "B",
+            "text": "−70 kJ"
+          },
+          {
+            "label": "C",
+            "text": "−822.2 kJ"
+          },
+          {
+            "label": "D",
+            "text": "−857.2 kJ"
+          },
+          {
+            "label": "E",
+            "text": "−1644.4 kJ。"
+          }
+        ]
+      },
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "formula-layout-check",
+        "human-review-required"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": 2,
+      "batch": 3,
+      "optionCount": 5,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerLocator": "原卷第5頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-1",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "第1題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "物質三態"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列有關物質三態的敘述，哪些正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "物質三態中，粒子之間的作用力，以液體最大"
+          },
+          {
+            "label": "B",
+            "text": "物質三態中，粒子之間的距離，以氣體最大"
+          },
+          {
+            "label": "C",
+            "text": "物質在熔化期間，所加熱量是用來增加物質分子動能"
+          },
+          {
+            "label": "D",
+            "text": "物質在汽化期間，溫度持續增加。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "stem-plural-single-choice-section-retained",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 4,
+      "questionPdfPage": 1,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-3",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "第3題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "沉澱反應"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "硝酸鉛與氯化鈉作用產生的白色沉澱，其正確的化學式為下列哪一項？",
+        "options": [
+          {
+            "label": "A",
+            "text": "NaNO₃"
+          },
+          {
+            "label": "B",
+            "text": "Na₂NO₃"
+          },
+          {
+            "label": "C",
+            "text": "PbCl"
+          },
+          {
+            "label": "D",
+            "text": "PbCl₂"
+          },
+          {
+            "label": "E",
+            "text": "Pb(OH)₂。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-5",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "第5題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "飽和蒸氣壓",
+        "動態平衡"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "在某一溫度下，當一液體在密閉容器中蒸發達平衡時，下列敘述何者錯誤？",
+        "options": [
+          {
+            "label": "A",
+            "text": "飽和蒸氣壓與液體的存量多寡無關"
+          },
+          {
+            "label": "B",
+            "text": "液體的飽和蒸氣壓與絕對溫度成正比"
+          },
+          {
+            "label": "C",
+            "text": "蒸發速率等於凝結速率"
+          },
+          {
+            "label": "D",
+            "text": "液體的飽和蒸氣壓與容器大小無關"
+          },
+          {
+            "label": "E",
+            "text": "常溫時，乙醇的飽和蒸氣壓大於純水的飽和蒸氣壓。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-6",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 6,
+      "originalQuestionNumberOrLocator": "第6題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "拉午耳定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "蒸氣壓分別為 a mm Hg 的純質 X 與 2a mm Hg 的純質 Y，兩者可形成理想溶液，若以 X、Y 製備甲、乙及丙三種混合溶液，Y 的莫耳分率分別為 0.25、0.50 及 0.75，則下列有關甲乙丙三者蒸氣壓大小之比較，何者正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "甲＞乙＞丙"
+          },
+          {
+            "label": "B",
+            "text": "乙＞甲＞丙"
+          },
+          {
+            "label": "C",
+            "text": "丙＞乙＞甲"
+          },
+          {
+            "label": "D",
+            "text": "甲＞丙＞乙"
+          },
+          {
+            "label": "E",
+            "text": "乙＞丙＞甲。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-8",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 8,
+      "originalQuestionNumberOrLocator": "第8題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "亨利定律",
+        "氣體溶解度"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "根據下列各種氣體的亨利定律常數（K_H，mM/atm）下列敘述何者錯誤？",
+        "options": [
+          {
+            "label": "A",
+            "text": "氣體在水中溶解度隨著溫度上升而下降"
+          },
+          {
+            "label": "B",
+            "text": "25°C、2 atm 下，O₂的溶解度為 2.6×10⁻³ M"
+          },
+          {
+            "label": "C",
+            "text": "若空氣中氧之分壓為 0.2 atm，則 25°C 時水中溶氧為 2.6×10⁻³ M"
+          },
+          {
+            "label": "D",
+            "text": "He 之 K_H 極小，可用來取代 N₂ 稀釋潛水用氧氣"
+          },
+          {
+            "label": "E",
+            "text": "在 0°C 與 25°C 時，四種氣體中皆以 O₂ 的溶解度為最高。"
+          }
+        ],
+        "table": {
+          "position": "題幹兩句之間",
+          "columns": [
+            "氣體",
+            "0°C",
+            "25°C",
+            "30°C"
+          ],
+          "rows": [
+            [
+              "N₂",
+              "1.1",
+              "0.67",
+              "0.40"
+            ],
+            [
+              "O₂",
+              "2.5",
+              "1.3",
+              "0.89"
+            ],
+            [
+              "CO",
+              "1.6",
+              "0.96",
+              "0.44"
+            ],
+            [
+              "He",
+              "0.41",
+              "0.40",
+              "0.38"
+            ]
+          ]
+        }
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "requires-original-figure-or-table",
+        "table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-12",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 12,
+      "originalQuestionNumberOrLocator": "第12題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "依數性"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列哪個公式只適用於非揮發性溶質所形成的溶液？",
+        "options": [
+          {
+            "label": "A",
+            "text": "沸點上升度數 ΔTb=iKbCm"
+          },
+          {
+            "label": "B",
+            "text": "凝固點下降度數 ΔTf=iKfCm"
+          },
+          {
+            "label": "C",
+            "text": "滲透壓 π=iCMRT"
+          },
+          {
+            "label": "D",
+            "text": "溶液蒸氣壓 $P=P_A^\\circ x_A+P_B^\\circ x_B$ （A 為溶劑，B 為溶質）。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending",
+        "formula-typography-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 4,
+      "questionPdfPage": 2,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-13",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 13,
+      "originalQuestionNumberOrLocator": "第13題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "沉澱反應",
+        "物質鑑定"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "某白色固體化合物，當它與 NaOH 溶液共熱時，會有鹼性氣體產生；若加入 BaCl₂ 溶液中，產生一種不溶於稀鹽酸的白色沉澱，則此白色固體化合物是下列何者？",
+        "options": [
+          {
+            "label": "A",
+            "text": "ZnSO₄"
+          },
+          {
+            "label": "B",
+            "text": "(NH₄)₂CO₃"
+          },
+          {
+            "label": "C",
+            "text": "K₂SO₃"
+          },
+          {
+            "label": "D",
+            "text": "(NH₄)₂SO₄"
+          },
+          {
+            "label": "E",
+            "text": "NH₄Cl。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-15",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 15,
+      "originalQuestionNumberOrLocator": "第15題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "相對濕度",
+        "氣體定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "在 25℃，水的蒸氣壓為 23.8 mmHg，100 公升相對濕度 60%的空氣中，含多少克水蒸氣？",
+        "options": [
+          {
+            "label": "A",
+            "text": "14.3 克"
+          },
+          {
+            "label": "B",
+            "text": "2.38 克"
+          },
+          {
+            "label": "C",
+            "text": "1.38 克"
+          },
+          {
+            "label": "D",
+            "text": "0.68 克"
+          },
+          {
+            "label": "E",
+            "text": "3.20 克。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-16",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 16,
+      "originalQuestionNumberOrLocator": "第16題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "沉澱反應",
+        "離子分離"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "水溶液含 Ag⁺、Mg²⁺、Ba²⁺及 Ni²⁺ 四種陽離子各 0.01M。若以 NaOH、NaCl、Na₂SO₄及 Na₂S 溶液作為試劑使之分離，則下列滴加四種試劑的先後順序中，哪一項可達到分離的目的？",
+        "options": [
+          {
+            "label": "A",
+            "text": "NaOH；NaCl；Na₂SO₄；Na₂S"
+          },
+          {
+            "label": "B",
+            "text": "Na₂S；NaOH；NaCl；Na₂SO₄"
+          },
+          {
+            "label": "C",
+            "text": "Na₂SO₄；Na₂S；NaOH；NaCl"
+          },
+          {
+            "label": "D",
+            "text": "NaCl；Na₂SO₄；NaOH；Na₂S"
+          },
+          {
+            "label": "E",
+            "text": "NaCl；Na₂SO₄；Na₂S；NaOH。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-19",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 19,
+      "originalQuestionNumberOrLocator": "第19題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "沸點上升"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "水溶液的沸點與其所含溶質的性質及其濃度有關。試問濃度均為 1.0 m 的葡萄糖、果糖及蔗糖水溶液，三者沸點高低順序符合下列哪一項敘述？",
+        "options": [
+          {
+            "label": "A",
+            "text": "葡萄糖溶液＞果糖溶液＞蔗糖溶液"
+          },
+          {
+            "label": "B",
+            "text": "蔗糖溶液＞葡萄糖溶液＞果糖溶液"
+          },
+          {
+            "label": "C",
+            "text": "蔗糖溶液＞葡萄糖溶液＝果糖溶液"
+          },
+          {
+            "label": "D",
+            "text": "葡萄糖溶液＞果糖溶液＝蔗糖溶液"
+          },
+          {
+            "label": "E",
+            "text": "葡萄糖溶液＝果糖溶液＝蔗糖溶液。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-20",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 20,
+      "originalQuestionNumberOrLocator": "第20題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "離子共存"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列何組水溶液中，其每一離子皆可以 0.1M 濃度存在而不發生反應？",
+        "options": [
+          {
+            "label": "A",
+            "text": "Na⁺、Ag⁺、SO₄²⁻、Cl⁻、NO₃⁻"
+          },
+          {
+            "label": "B",
+            "text": "Na⁺、Ca²⁺、CO₃²⁻、Br⁻、S²⁻"
+          },
+          {
+            "label": "C",
+            "text": "H⁺、K⁺、CrO₄²⁻、F⁻、NO₃⁻"
+          },
+          {
+            "label": "D",
+            "text": "K⁺、Cu²⁺、SO₄²⁻、Cl⁻、NO₃⁻"
+          },
+          {
+            "label": "E",
+            "text": "NH₄⁺、Cu⁺、OH⁻、I⁻、NO₃⁻。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-21",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 21,
+      "originalQuestionNumberOrLocator": "第21題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "亨利定律",
+        "分壓"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "已知在 0℃、1 atm 下，100 克水可溶解純氧 6.5×10⁻³ 克，同樣狀況下，可溶解純氮 3.0×10⁻³ 克，試求 0℃、1atm 下的空氣與水長期接觸，每升水中可溶解空氣多少克？（設空氣體積組成 N₂：80%，O₂：20%）",
+        "options": [
+          {
+            "label": "A",
+            "text": "0.020"
+          },
+          {
+            "label": "B",
+            "text": "0.037"
+          },
+          {
+            "label": "C",
+            "text": "0.053"
+          },
+          {
+            "label": "D",
+            "text": "0.065"
+          },
+          {
+            "label": "E",
+            "text": "0.073。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-23",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 23,
+      "originalQuestionNumberOrLocator": "第23題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "滲透壓",
+        "分子量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "有 1.0 升水溶液中含 5.0 克的血紅素，27℃時之滲透壓為 1.80×10⁻³atm，則血紅素的平均分子量約為多少？",
+        "options": [
+          {
+            "label": "A",
+            "text": "2500"
+          },
+          {
+            "label": "B",
+            "text": "28000"
+          },
+          {
+            "label": "C",
+            "text": "43000"
+          },
+          {
+            "label": "D",
+            "text": "56000"
+          },
+          {
+            "label": "E",
+            "text": "68000。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 3,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-26",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 26,
+      "originalQuestionNumberOrLocator": "第26題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "C",
+        "D"
+      ],
+      "conceptTags": [
+        "理想溶液"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "理想溶液具有下列哪些性質？",
+        "options": [
+          {
+            "label": "A",
+            "text": "溶質與溶劑分子間無引力存在"
+          },
+          {
+            "label": "B",
+            "text": "溶液形成時不放熱也不吸熱"
+          },
+          {
+            "label": "C",
+            "text": "溶質與溶劑混合時，體積具有加成性"
+          },
+          {
+            "label": "D",
+            "text": "遵守拉午耳定律"
+          },
+          {
+            "label": "E",
+            "text": "遵守波以耳定律。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 4,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-27",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 27,
+      "originalQuestionNumberOrLocator": "第27題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "蒸氣壓",
+        "沸點"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列關於液體蒸氣壓的敘述，哪些正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "在同溫時，分子間引力強者比引力弱者具有較低的蒸氣壓"
+          },
+          {
+            "label": "B",
+            "text": "液體的蒸氣壓隨溫度的上升而增加"
+          },
+          {
+            "label": "C",
+            "text": "外界壓力愈高，則液體的沸點愈高"
+          },
+          {
+            "label": "D",
+            "text": "液體的飽和蒸氣壓與絕對溫度成正比"
+          },
+          {
+            "label": "E",
+            "text": "容易汽化的液體，通常具有較低的蒸氣壓。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 4,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-28",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 28,
+      "originalQuestionNumberOrLocator": "第28題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "C",
+        "D"
+      ],
+      "conceptTags": [
+        "氣體溶解度",
+        "亨利定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "關於物質的溶解度，下列敘述哪些正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "鹽類在水中的溶解度均隨溫度增加而增加"
+          },
+          {
+            "label": "B",
+            "text": "混合氣體中某物種在水中的溶解度必定隨總壓增加而增加"
+          },
+          {
+            "label": "C",
+            "text": "氣體在水中的溶解度隨溫度增加而減少"
+          },
+          {
+            "label": "D",
+            "text": "亨利定律不適用於氯在水中的溶解度"
+          },
+          {
+            "label": "E",
+            "text": "亨利定律在氣體溶解度愈大時愈適用。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 4,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-29",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 29,
+      "originalQuestionNumberOrLocator": "第29題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "C"
+      ],
+      "conceptTags": [
+        "依數性"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "20%尿素水溶液，再加水稀釋後，下列各項性質與稀釋前比較哪些變大？",
+        "options": [
+          {
+            "label": "A",
+            "text": "凝固點"
+          },
+          {
+            "label": "B",
+            "text": "沸點"
+          },
+          {
+            "label": "C",
+            "text": "同溫下的蒸氣壓"
+          },
+          {
+            "label": "D",
+            "text": "滲透壓"
+          },
+          {
+            "label": "E",
+            "text": "沸點上升度數。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 4,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-33",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 33,
+      "originalQuestionNumberOrLocator": "第33題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "飽和蒸氣壓",
+        "動態平衡"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "30°C 的密閉容器中，有液態水和水蒸氣達成平衡狀態，下列哪些操作可使容器內水蒸氣壓發生永久性改變？",
+        "options": [
+          {
+            "label": "A",
+            "text": "使容器體積擴大"
+          },
+          {
+            "label": "B",
+            "text": "加入少量的乙醇"
+          },
+          {
+            "label": "C",
+            "text": "加入少量硝酸鉀晶體"
+          },
+          {
+            "label": "D",
+            "text": "加入一些木炭粉"
+          },
+          {
+            "label": "E",
+            "text": "改變水量。"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "requires-original-figure-or-concept-check",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 5,
+      "answerPdfPage": 7,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerLocator": "原卷第7頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-1",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "第1題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "動量守恆"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "ㄧ顆炮彈做斜向拋射，僅考慮鉛直方向的重力作用，故於空中某處爆炸的瞬間，只在水平方向滿足動量守恆。",
+        "options": null,
+        "responseLabels": {
+          "A": "是",
+          "B": "否"
+        },
+        "sectionInstruction": "答案為是請劃記 A、否請劃記 B"
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": null,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁「一、是非」第1題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-2",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "第2題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "質心",
+        "動量守恆"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "考慮在太空中不受外力且一開始保持靜止的飛船(包含船體與船體內的人)上，不論船體內的人員如何移動，飛船船體恆保持靜止。",
+        "options": null,
+        "responseLabels": {
+          "A": "是",
+          "B": "否"
+        },
+        "sectionInstruction": "答案為是請劃記 A、否請劃記 B"
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": null,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁「一、是非」第2題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-3",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "第3題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "質心運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "在僅考慮重力作用的情況下，於斜拋中途爆炸的炮彈，若有其中一個碎片先著地，系統的質心仍維持原本的拋物線運動。",
+        "options": null,
+        "responseLabels": {
+          "A": "是",
+          "B": "否"
+        },
+        "sectionInstruction": "答案為是請劃記 A、否請劃記 B"
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": null,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁「一、是非」第3題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-4",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "第4題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "質心"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "質心的運動狀態雖不一定代表系統各部分的運動狀態，卻可為各質點之資訊提供線索。",
+        "options": null,
+        "responseLabels": {
+          "A": "是",
+          "B": "否"
+        },
+        "sectionInstruction": "答案為是請劃記 A、否請劃記 B"
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": null,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁「一、是非」第4題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-5",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "第5題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "角動量",
+        "力矩"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "一物體所受力矩隨參考點不同而可能改變，故角動量是否守恆亦需按照參考點的選取來決定。",
+        "options": null,
+        "responseLabels": {
+          "A": "是",
+          "B": "否"
+        },
+        "sectionInstruction": "答案為是請劃記 A、否請劃記 B"
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": null,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁「一、是非」第5題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-6",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 6,
+      "originalQuestionNumberOrLocator": "第6題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "角動量守恆"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "地球的自轉軸之方向雖然會旋轉（徑動現象），影響北極星的位置，但因為地球僅受到來自太陽的連心力作用，故相對於太陽的角動量保持守恆。",
+        "options": null,
+        "responseLabels": {
+          "A": "是",
+          "B": "否"
+        },
+        "sectionInstruction": "答案為是請劃記 A、否請劃記 B"
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": null,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁「一、是非」第6題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-7",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 7,
+      "originalQuestionNumberOrLocator": "第7題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "功",
+        "非保守力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "考慮沿著ㄧ水平圓形軌道行駛一周返回原點的汽車，因位移為零，故所受之風阻所作之功亦為零。",
+        "options": null,
+        "responseLabels": {
+          "A": "是",
+          "B": "否"
+        },
+        "sectionInstruction": "答案為是請劃記 A、否請劃記 B"
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": null,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁「一、是非」第7題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-9",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 9,
+      "originalQuestionNumberOrLocator": "第9題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "重力位能",
+        "功"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "地表附近之重力位能之量值會依照座標原點選取而改變，但重力所作之功僅與鉛直座標的差值有關，不受原點選取影響。",
+        "options": null,
+        "responseLabels": {
+          "A": "是",
+          "B": "否"
+        },
+        "sectionInstruction": "答案為是請劃記 A、否請劃記 B"
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": null,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁「一、是非」第9題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-10",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 10,
+      "originalQuestionNumberOrLocator": "第10題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "非保守力",
+        "力學能"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "在考慮存在非保守力的情況下，因其所作功恆為負功，故系統的力學能總是減少。",
+        "options": null,
+        "responseLabels": {
+          "A": "是",
+          "B": "否"
+        },
+        "sectionInstruction": "答案為是請劃記 A、否請劃記 B"
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": null,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁「一、是非」第10題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-15",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 15,
+      "originalQuestionNumberOrLocator": "第15題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "衝量",
+        "動能"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "某物體在光滑水平面上，由靜止受一方向固定的變力作用，其受力 F 與時間 t 的函數為 F＝2t（SI 制）。若物體質量 4kg，作用 8s 後，物體獲得的動能為多少 J？",
+        "options": [
+          {
+            "label": "A",
+            "text": "156"
+          },
+          {
+            "label": "B",
+            "text": "236"
+          },
+          {
+            "label": "C",
+            "text": "512"
+          },
+          {
+            "label": "D",
+            "text": "625"
+          },
+          {
+            "label": "E",
+            "text": "865"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10",
+        "concept-tag-pending",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 2,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁單選第5題（原卷第15題）",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-27",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 27,
+      "originalQuestionNumberOrLocator": "第27題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "conceptTags": [
+        "功率"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "一物體質量 5 kg，作鉛直方向初速為零之自由落體運動（重力加速度量值為 10 m/s²），下列敘述哪些正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "2s 內重力對物體的平均功率為 500 W"
+          },
+          {
+            "label": "B",
+            "text": "2s 末瞬間，重力對物體的瞬時功率為 1000 W"
+          },
+          {
+            "label": "C",
+            "text": "第 2s 內平均功率為 750 W"
+          },
+          {
+            "label": "D",
+            "text": "瞬時功率為重力和瞬時速度的內積"
+          },
+          {
+            "label": "E",
+            "text": "平均功率為重力和瞬時速度的乘積"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-25",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 4,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁多選第2題（原卷第27題）",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-28",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 28,
+      "originalQuestionNumberOrLocator": "第28題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "瞬時功率"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列各種作用力對物體產生的瞬時功率，哪些必為零？",
+        "options": [
+          {
+            "label": "A",
+            "text": "作用於沿固定斜面加速下滑物體的正向力"
+          },
+          {
+            "label": "B",
+            "text": "物體作斜向拋射在最高點時的重力"
+          },
+          {
+            "label": "C",
+            "text": "錐動擺擺動期間物體所受到擺線拉力"
+          },
+          {
+            "label": "D",
+            "text": "物體繫於彈簧上，在光滑平面上作簡諧運動所受到的彈性力"
+          },
+          {
+            "label": "E",
+            "text": "繞太陽作橢圓運動的地球所受到的重力"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-25",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 4,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁多選第3題（原卷第28題）",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-30",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 30,
+      "originalQuestionNumberOrLocator": "第30題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "角動量守恆"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列哪些現象可用「角動量守恆」的原理來解釋？",
+        "options": [
+          {
+            "label": "A",
+            "text": "花式溜冰選手，利用兩手或一腳的縮回，來使轉動的角速度變大"
+          },
+          {
+            "label": "B",
+            "text": "馬戲團的空中飛人，利用手腳及身體屈曲，來控制翻滾的轉動速率"
+          },
+          {
+            "label": "C",
+            "text": "直昇機利用主、副螺旋槳，來保持機身的穩定"
+          },
+          {
+            "label": "D",
+            "text": "捕手接球時，手套微微後退延長棒球停下的時間"
+          },
+          {
+            "label": "E",
+            "text": "參加 100 公尺賽跑的小明，到達終點時無法立刻停下來"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-25",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 4,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁多選第5題（原卷第30題）",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-31",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 31,
+      "originalQuestionNumberOrLocator": "第31題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "C",
+        "D",
+        "E"
+      ],
+      "conceptTags": [
+        "質心",
+        "動量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列有關質點組的敘述，哪些正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "質心速度與內力的大小有關"
+          },
+          {
+            "label": "B",
+            "text": "質心速度為零時，表示系統內的每一個質點一定都是靜止的"
+          },
+          {
+            "label": "C",
+            "text": "質心速度為定值時，表示外力的合力為零"
+          },
+          {
+            "label": "D",
+            "text": "質心速度發生改變時，總動量也一定改變"
+          },
+          {
+            "label": "E",
+            "text": "外力不為零時，質心加速度一定不為零"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-25",
+        "human-review-required"
+      ],
+      "batch": 5,
+      "optionCount": 5,
+      "questionPdfPage": 4,
+      "answerPdfPage": 5,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/112-2/第二次段考/高二/台東高中112學年度第二學期第二次段考高二物理科題目卷.pdf",
+      "officialAnswerLocator": "第五頁多選第6題（原卷第31題）",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-05.json",
+      "evidence": {
+        "question": "pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-2",
+      "sourceId": "CEEC-113-chem",
+      "originalQuestionNumberOrLocator": "單選第2題",
+      "questionNumber": 2,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "分子結構",
+        "化學鍵"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "下列有關 N₂、N₂H₂及 N₂H₄三種分子組成與結構的敘述，何者正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "孤對電子數：N₂＞N₂H₂＞N₂H₄"
+          },
+          {
+            "label": "B",
+            "text": "鍵結電子對的總數：N₂＞N₂H₂＞N₂H₄"
+          },
+          {
+            "label": "C",
+            "text": "N－N鍵長的大小：N₂＞N₂H₂＞N₂H₄"
+          },
+          {
+            "label": "D",
+            "text": "N₂H₄中 N－N－H的鍵角為120°"
+          },
+          {
+            "label": "E",
+            "text": "N₂H₂為一平面分子"
+          }
+        ]
+      },
+      "flags": [
+        "human-review-required"
+      ],
+      "optionCount": 5,
+      "batch": 3,
+      "questionPdfPage": 2,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "officialAnswerLocator": "原卷第1頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-screenshot",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-4",
+      "sourceId": "CEEC-113-chem",
+      "originalQuestionNumberOrLocator": "單選第4題",
+      "questionNumber": 4,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "氧化還原計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "根據下列反應，一莫耳的氧氣可消耗多少莫耳硫代硫酸鈉？",
+        "options": [
+          {
+            "label": "A",
+            "text": "6"
+          },
+          {
+            "label": "B",
+            "text": "5"
+          },
+          {
+            "label": "C",
+            "text": "4"
+          },
+          {
+            "label": "D",
+            "text": "3"
+          },
+          {
+            "label": "E",
+            "text": "2"
+          }
+        ],
+        "sharedStem": {
+          "id": "CEEC-113-chem-group-4-5",
+          "heading": "4-5題為題組",
+          "stem": "陳同學依據下述三步驟，對某湖水樣進行溶氧量分析：",
+          "steps": [
+            "量取97.0 mL水樣，置於一100 mL容量瓶中，加入1.0 mL硫酸亞錳（MnSO₄·2H₂O）以及1.0 mL鹼性碘化鈉後，激烈搖晃，使瓶內溶液混合均勻，此時溶液中產生MnO₂沉澱。",
+            "待沉澱不再增加後，隨即加入1.0 mL濃硫酸，並以蒸餾水稀釋至刻度。",
+            "從容量瓶中取出10.0 mL溶液，隨即以0.015 M硫代硫酸鈉溶液（Na₂S₂O₃）滴定。當滴定到達終點時，共耗去0.52 mL硫代硫酸鈉溶液。"
+          ],
+          "sourcePdfPage": 3,
+          "printedPage": 2,
+          "status": "draft-pending-human-review"
+        },
+        "equations": [
+          "Mn²⁺＋2 OH⁻→Mn(OH)₂",
+          "2 Mn(OH)₂＋O₂→2 MnO₂＋2 H₂O",
+          "MnO₂＋2 I⁻＋4 H⁺→Mn²⁺＋I₂＋2 H₂O",
+          "I₂＋2 S₂O₃²⁻→2 I⁻＋S₄O₆²⁻"
+        ]
+      },
+      "flags": [
+        "shared-stem-4-5",
+        "human-review-required"
+      ],
+      "optionCount": 5,
+      "batch": 3,
+      "questionPdfPage": 3,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "officialAnswerLocator": "原卷第1頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-screenshot",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-5",
+      "sourceId": "CEEC-113-chem",
+      "originalQuestionNumberOrLocator": "單選第5題",
+      "questionNumber": 5,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "溶液濃度",
+        "氧化還原滴定"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "下列哪一數值最接近水樣中的溶氧量（單位：M）？（0.015×0.52＝7.8×10⁻³）",
+        "options": [
+          {
+            "label": "A",
+            "text": "1.0×10⁻⁴"
+          },
+          {
+            "label": "B",
+            "text": "2.0×10⁻⁴"
+          },
+          {
+            "label": "C",
+            "text": "4.0×10⁻⁴"
+          },
+          {
+            "label": "D",
+            "text": "6.0×10⁻⁴"
+          },
+          {
+            "label": "E",
+            "text": "8.0×10⁻⁴"
+          }
+        ],
+        "sharedStem": {
+          "id": "CEEC-113-chem-group-4-5",
+          "heading": "4-5題為題組",
+          "stem": "陳同學依據下述三步驟，對某湖水樣進行溶氧量分析：",
+          "steps": [
+            "量取97.0 mL水樣，置於一100 mL容量瓶中，加入1.0 mL硫酸亞錳（MnSO₄·2H₂O）以及1.0 mL鹼性碘化鈉後，激烈搖晃，使瓶內溶液混合均勻，此時溶液中產生MnO₂沉澱。",
+            "待沉澱不再增加後，隨即加入1.0 mL濃硫酸，並以蒸餾水稀釋至刻度。",
+            "從容量瓶中取出10.0 mL溶液，隨即以0.015 M硫代硫酸鈉溶液（Na₂S₂O₃）滴定。當滴定到達終點時，共耗去0.52 mL硫代硫酸鈉溶液。"
+          ],
+          "sourcePdfPage": 3,
+          "printedPage": 2,
+          "status": "draft-pending-human-review"
+        },
+        "dependsOn": "CEEC-113-chem-single-choice-4",
+        "precedingQuestionEquations": [
+          "Mn²⁺＋2 OH⁻→Mn(OH)₂",
+          "2 Mn(OH)₂＋O₂→2 MnO₂＋2 H₂O",
+          "MnO₂＋2 I⁻＋4 H⁺→Mn²⁺＋I₂＋2 H₂O",
+          "I₂＋2 S₂O₃²⁻→2 I⁻＋S₄O₆²⁻"
+        ]
+      },
+      "flags": [
+        "shared-stem-4-5",
+        "human-review-required"
+      ],
+      "optionCount": 5,
+      "batch": 3,
+      "questionPdfPage": 3,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "officialAnswerLocator": "原卷第1頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-screenshot",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-7",
+      "sourceId": "CEEC-113-chem",
+      "originalQuestionNumberOrLocator": "單選第7題",
+      "questionNumber": 7,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "滲透壓",
+        "分子量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "某蛋白質中鐵元素的重量百分比為 0.33%，將此蛋白質 0.20 克溶於水中配成 10.0 毫升的溶液，此溶液在 25°C下的滲透壓為 5.5 torr。每莫耳的此蛋白質含有多少莫耳的鐵原子？（已知 1atm＝760 torr、$\\frac{20\\times82\\times298\\times760}{5.5}=6.75\\times10^7$、Fe的原子量＝56.0）",
+        "options": [
+          {
+            "label": "A",
+            "text": "5"
+          },
+          {
+            "label": "B",
+            "text": "4"
+          },
+          {
+            "label": "C",
+            "text": "3"
+          },
+          {
+            "label": "D",
+            "text": "2"
+          },
+          {
+            "label": "E",
+            "text": "1"
+          }
+        ]
+      },
+      "flags": [
+        "scope-review",
+        "human-review-required"
+      ],
+      "optionCount": 5,
+      "batch": 3,
+      "questionPdfPage": 3,
+      "answerPdfPage": 1,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "officialAnswerLocator": "原卷第1頁答案表",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-102727.html"
+      ],
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "replacesLocatorIn": "high-school-2-batch-03.json",
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-screenshot",
+        "recheckedAgainstPreviousMarks": true,
+        "typographyNote": "Unicode/LaTeX排版轉錄，未改動數字、選項、題型或官方答案；仍待人工核對。"
+      }
+    }
+  ],
+  "counts": {
+    "newRecords": 0,
+    "upgradedTextDrafts": 52,
+    "questionAndAnswerScreenshotDrafts": 4,
+    "textLayerDrafts": 48,
+    "approved": 0
+  },
+  "editionEvidence": {
+    "reuses": "high-school-2-batch-08.json",
+    "bookMappings": 42
+  },
+  "limitations": [
+    "臺東校方PDF原卷與答案截圖均失敗，文字層草稿待核對；數學文字層含數式轉錄。",
+    "臺東112下物理封面/頁尾考次矛盾，答案號碼分節重新編號，保留原有旗標。",
+    "平鎮平衡試卷無可讀文字且截圖失敗；臺東反應速率官方答案仍缺，不增加無證據題文。",
+    "未取得實體PDF，不收錄第三方解析或重繪圖像。"
+  ],
+  "rightsNote": "依法令舉行之正式考試題目及選擇/是非通用答案標記的權利依據；附帶第三方內容仍需個別審核。"
+}
