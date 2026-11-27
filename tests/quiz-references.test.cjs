@@ -1,7 +1,7 @@
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { quizReferences, referencePrompt } = require('../quiz-references.cjs');
+const { quizReferences: liveReferences, referencePrompt: livePrompt, referenceVersion, __test: {selectCandidates:quizReferences,candidatePrompt:referencePrompt} } = require('../quiz-references.cjs');
 const { scopeCode } = require('../ai-question-bank.cjs');
 const { questionQualityIssue } = require('../question-quality.cjs');
 
@@ -107,4 +107,39 @@ test('every expanded history reference appears across seeded three-item samples'
  const ids=new Set();
  for(let i=0;i<100;i++) for(const ref of quizReferences({...query,referenceSeed:'seed-'+i}))ids.add(ref.id);
  assert.deepEqual(ids,new Set(all.map(r=>r.id)));
+});
+
+test('production references require verified human provenance, never a source label alone',()=>{
+ const {isApproved}=require('../human-reference-policy.cjs');
+ const candidates=quizReferences(target);
+ const active=liveReferences(target);
+ assert.deepEqual(active.map(r=>r.id),candidates.filter(r=>isApproved(r)).map(r=>r.id));
+ const forged={...candidates[0],id:'forged-human-source',source:'大考中心 115 學年度學測數學第 1 題'};
+ assert.equal(isApproved(forged),false);
+ assert.equal(livePrompt([forged]),'');
+ assert.match(referenceVersion([]),/^human-reference-v1:/);
+});
+test('provenance requires original text/options, human comparison, rights and exact content hash',()=>{
+ const {checkApproval,digest}=require('../human-reference-policy.cjs');
+ const file='question-references/數學/高中二年級/平面向量內積.json';
+ const ref={id:'official-original-test-fixture',source:'正式考試原題測試資料',question:{q:'fixture',correct:'1',wrong:['2','3','4']}};
+ const approval={file,referenceId:ref.id,referenceHash:digest(ref),status:'approved',authorship:'human-original',method:'human-original-source-comparison',
+ originalTextAndOptionsMatched:true,answerVerified:true,sourceRightsVerified:true,sourceType:'official-exam',rightsBasis:'statutory-exam',sourceTitle:'fixture',sourceAuthorOrInstitution:'fixture',originalQuestionNumberOrLocator:'1',rightsEvidence:'fixture',reviewer:'fixture',reviewEvidence:'fixture',reviewedAt:'2026-11-27',originalSourceUrl:'https://example.invalid/test-fixture'};
+ assert.equal(checkApproval(ref,approval,file),true);
+ for(const key of ['originalSourceUrl','reviewer','reviewEvidence','rightsEvidence','originalQuestionNumberOrLocator','referenceHash','sourceAuthorOrInstitution','authorship','method','originalTextAndOptionsMatched','answerVerified','sourceRightsVerified'])
+  assert.equal(checkApproval(ref,{...approval,[key]:null},file),false,key);
+ assert.equal(checkApproval({...ref,question:{...ref.question,q:'modified'}},approval,file),false);
+ for(const source of ['自編高中課綱參考題','大考中心試題，依命題思路改寫','AI 生成']){
+  const modified={...ref,source};
+  assert.equal(checkApproval(modified,{...approval,referenceHash:digest(modified)},file),false);
+ }
+ assert.equal(checkApproval(ref,approval,'question-references/數學/高中一年級/其他.json'),false);
+});
+test('every reference is audited; new or changed banks cannot contain unverified entries',()=>{
+ const {audit}=require('../scripts/audit-human-reference-provenance.cjs');
+ const report=audit();
+ console.log('HUMAN_REFERENCE_AUDIT '+JSON.stringify(report.summary));
+ assert.ok(report.summary.total>0);
+ assert.equal(report.summary.total,report.summary.approved+report.summary.quarantined);
+ assert.deepEqual(report.errors,[]);
 });

@@ -1,4 +1,4 @@
-const { quizReferences, referencePrompt } = require('./quiz-references.cjs');
+const { quizReferences, referencePrompt, referenceVersion } = require('./quiz-references.cjs');
 const CurriculumCatalog = require('./curriculum-catalog.cjs');
 const express = require('express');
 const cors = require('cors');
@@ -974,13 +974,13 @@ async function generateQuiz(req, res) {
         ...curriculumTarget, facet, exclusions:scopeExclusions, referenceSeed:randomSeed, difficulty
     }) : [];
     // Sample rotation must not create a different durable bank for every request.
-    const referenceVersionFor=facet=>useReferences?quizReferences({
+    const referenceVersionFor=facet=>useReferences?referenceVersion(quizReferences({
         ...curriculumTarget,facet,exclusions:scopeExclusions,difficulty
-    }).map(entry=>entry.id).join(','):'';
+    })):'';
     const spareKey = correction ? '' : quizSparePool.key({
         owner: adaptiveContext ? 'adaptive:'+adaptiveContext.uid : sessionOwner, mode: (tacticalMode||dungeonMode)?'tactical-references-v1':adaptiveContext?'adaptive-solo':String(quizMode || 'solo'), subject, level,
         topic: targetTopic, difficulty:adaptiveContext?'adaptive':difficulty, rank:adaptiveContext?'adaptive':rank,
-        curriculumRevision:CurriculumCatalog.revision,curriculum:adaptiveContext?.scope?.curriculum,
+        curriculumRevision:CurriculumCatalog.revision+(useReferences?':'+referenceVersionFor(null):''),curriculum:adaptiveContext?.scope?.curriculum,
         // A newly excluded question type must never reuse a spare generated
         // before that rule was saved, including in the parallel question race.
         knowledge: adaptiveContext
@@ -1456,7 +1456,7 @@ app.post('/api/tactical/bank-warm',async(req,res)=>{
                 difficulty:choice.difficulty};
             return {...target,scope:choice.adaptiveScope||undefined,
                 curriculum:choice.adaptiveScope?.curriculum,
-                referenceVersion:quizReferences({...target,scope:choice.adaptiveScope}).map(entry=>entry.id).join(','),
+                referenceVersion:referenceVersion(quizReferences({...target,scope:choice.adaptiveScope})),
                 curriculumRevision:CurriculumCatalog.revision};
         });
         const current=Date.now(),warmKey=JSON.stringify(targets),last=tacticalBankWarmLast.get(uid);

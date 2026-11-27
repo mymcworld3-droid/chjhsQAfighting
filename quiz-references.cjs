@@ -3,6 +3,7 @@ const path = require('node:path');
 const index = require('./question-references/index.json');
 const Catalog = require('./curriculum-catalog.cjs');
 const {exclusionIssue} = require('./quiz-scope-exclusions.cjs');
+const {isApproved,policyVersion} = require('./human-reference-policy.cjs');
 const normalize = value => String(value || '').normalize('NFKC').replace(/\s+/g, '');
 const labels = value => {
   const text = String(value || '').replace('.json', '');
@@ -22,7 +23,7 @@ function excludedReference(reference, rules) {
     return label.length>=2&&text.includes(label);
   });
 }
-function quizReferences({ subject, level, topic, scope, facet, exclusions = [], referenceSeed = '', difficulty, questionForm }) {
+function selectReferences({ subject, level, topic, scope, facet, exclusions = [], referenceSeed = '', difficulty, questionForm }, eligibility) {
   const book=Catalog.validateScope(scope,subject,level);
   if (!Object.hasOwn(index, subject) || !Object.hasOwn(index[subject], level)) return [];
   const concepts = index[subject][level];
@@ -50,7 +51,8 @@ function quizReferences({ subject, level, topic, scope, facet, exclusions = [], 
     const group = require(path.join(__dirname, 'question-references', subject, level, key + '.json'));
     if (!selectedKeys.has(key) && !group.units.some(unit => selected.includes(normalize(unit)))) continue;
     if (group.excludedConcepts.some(word => scopeText.some(value => value.includes(word)))) continue;
-    const pool = group.references.filter(ref=>!excludedReference(ref,exclusions));
+    const groupFile = ['question-references',subject,level,key+'.json'].join('/');
+    const pool = group.references.filter(ref=>eligibility(ref,groupFile)&&!excludedReference(ref,exclusions));
     if(!pool.length)continue;
     let start = 0;
     if (referenceSeed && pool.length > 3) {
@@ -69,7 +71,7 @@ function quizReferences({ subject, level, topic, scope, facet, exclusions = [], 
   return references;
 }
 
-function referencePrompt(references) {
+function candidatePrompt(references) {
   if (!references.length) return '';
   return '\n[同觀念命題參考例]\n' +
     '以下 JSON 僅供分析。先在內部整理核心觀念、必要條件、解題步驟及干擾選項對應的迷思，再寫全新題目。' +
@@ -80,4 +82,10 @@ function referencePrompt(references) {
     JSON.stringify(references.map(({ question, design }) => ({ question, design })));
 }
 
-module.exports = { quizReferences, referencePrompt, excludedReference };
+// Live selection and prompt construction both fail closed. Raw candidates are
+// exposed only for structural regression tests, never for an AI request.
+function quizReferences(input){return selectReferences(input,isApproved);}
+function referencePrompt(references){return candidatePrompt(references.filter(ref=>isApproved(ref)));}
+function referenceVersion(references){return policyVersion+':'+references.map(ref=>ref.id).join(',');}
+module.exports = { quizReferences, referencePrompt, referenceVersion, excludedReference,
+  __test: {selectCandidates:input=>selectReferences(input,()=>true),candidatePrompt} };

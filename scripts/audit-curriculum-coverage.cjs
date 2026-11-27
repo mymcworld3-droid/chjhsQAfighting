@@ -4,6 +4,7 @@ const fs=require('node:fs'),path=require('node:path');
 const {buildInventory}=require('./audit-curriculum-inventory.cjs');
 const {selectableBook}=require('../public/cultivation/curriculum-range-rules.js');
 const ROOT=path.join(__dirname,'..');
+const {isApproved}=require('../human-reference-policy.cjs');
 const read=(root,file)=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
 const digest=bytes=>require('node:crypto').createHash('sha256').update(bytes).digest('hex');
 function audit(root=ROOT) {
@@ -29,7 +30,7 @@ function audit(root=ROOT) {
   for(const id of ids.keys())visit(id);
   const reviewedCount=c=>c.references.reduce((n,file)=>{
     const group=read(root,file);
-    return n+group.references.filter(r=>reviews.some(v=>v.referenceId===r.id&&v.status==='approved'&&
+    return n+group.references.filter(r=>isApproved(r,file)&&reviews.some(v=>v.referenceId===r.id&&v.status==='approved'&&
       v.method==='independent-content-review'&&typeof v.reviewer==='string'&&v.reviewer.trim()&&
       /^\d{4}-\d{2}-\d{2}$/.test(v.reviewedAt||'')&&v.questionHash===digest(JSON.stringify(r)))).length;
   },0);

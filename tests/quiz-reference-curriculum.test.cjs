@@ -5,7 +5,7 @@ const path = require('node:path');
 const index = require('../question-references/index.json');
 const curriculum = require('../public/high_school_unit_name/humanities.json');
 const knowledge = require('../public/cultivation/knowledge-points.js');
-const { quizReferences, referencePrompt } = require('../quiz-references.cjs');
+const { __test: {selectCandidates:quizReferences,candidatePrompt:referencePrompt} } = require('../quiz-references.cjs');
 
 // All checks execute in Node tests only. The game client never scans reference files.
 const coverage = {

@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const C=require('../curriculum-catalog.cjs'),R=require('../public/cultivation/curriculum-range-rules.js');
-const {quizReferences}=require('../quiz-references.cjs');
+const {__test:{selectCandidates:quizReferences}}=require('../quiz-references.cjs');
 const {scopeFor}=require('../adaptive-learning-api.cjs').__test;
 const E=require('../quiz-scope-exclusions.cjs');
 const Tower=require('../trial-tower-scope.cjs');

@@ -5,7 +5,7 @@ const path=require('node:path');
 const curriculum=require('../public/high_school_unit_name/core.json').subjects;
 const index=require('../question-references/index.json');
 const knowledge=require('../public/cultivation/knowledge-points.js');
-const {quizReferences}=require('../quiz-references.cjs');
+const {__test:{selectCandidates:quizReferences}}=require('../quiz-references.cjs');
 
 // Mathematics A/B/Jia/Yi all use the canonical Math index. This test never
 // loads a reference file in the browser or scans it during live quiz requests.
