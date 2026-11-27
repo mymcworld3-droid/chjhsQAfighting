@@ -48,17 +48,15 @@ function hidePanel(restoreFocus=true){
 const count=d=>d.difficulties.filter(t=>Number(d.clears[t.index])>0).length;
 const traits=d=>'<div class="wd-traits">'+d.traits.map(t=>'<span>'+esc(t)+'</span>').join('')+'</div>';
 function detail(d){
-  return `<section class="wd-hero${theme(d)}"><div><small>${esc(d.subtitle)}</small><h3>${esc(d.name)}</h3><p>${esc(d.description)}</p>${traits(d)}</div><div class="wd-emblem" aria-hidden="true"></div></section>
-  <div class="wd-detail-grid"><section class="wd-panel"><h3>秘境法則</h3><div class="wd-bonus">${esc(d.bonus)}</div><ol>${d.tactics.map(t=>'<li>'+esc(t)+'</li>').join('')}</ol></section>
-  <section class="wd-panel"><h3>武器掉落</h3><div class="wd-loot-bar" aria-hidden="true"><i></i><i></i><i></i></div><div class="wd-loot-legend"><span>30% 當階</span><span>20% 下一階</span><span>50% 無武器</span></div><p>通關時擲一次，三種結果互斥。重複武器累計持有數，保留最高等階。</p></section></div>
+  return `<div class="wd-expedition"><section class="wd-hero${theme(d)}"><img class="wd-island" src="${esc(atlasArt[d.id]||'/assets/training/layers/landscape-island-secret.webp')}" alt="" draggable="false"><div class="wd-scene-caption"><small>${esc(d.subtitle)} · 單人挑戰</small><h3>${esc(d.name)}</h3>${traits(d)}<div class="wd-bonus"><i class="fa-solid fa-bolt" aria-hidden="true"></i> ${esc(d.bonus)}</div></div></section><section class="wd-preparation" aria-label="挑戰準備">
   <div class="wd-section-heading"><h3>選擇挑戰境界</h3><span>已征服 ${count(d)} / ${d.difficulties.length}</span></div>
   <div class="wd-difficulties" role="group" aria-label="選擇副本難度" style="--wd-selected-index:${selectedTier}"><span class="wd-difficulty-selection" aria-hidden="true"></span>${d.difficulties.map(t=>{
     const resume=isResume(d,t.index),cleared=Number(d.clears[t.index])||0;
     const badge=globalThis.QAWeaponPresentation.difficultyState({locked:t.locked,clears:cleared,resume});
-    return `<button type="button" data-wd-difficulty="${t.index}" data-qy-difficulty="${badge.key}" class="${t.index===selectedTier?'active ':''}${t.locked?'locked':''}" aria-pressed="${t.index===selectedTier}" ${loading?'disabled':''}><strong>${globalThis.QAWeaponPresentation.realmMarkup(t.name,{kind:'difficulty'})}</strong><small>${esc(resume?'續戰':t.locked?'未解鎖':cleared?'已通關':'可挑戰')}</small></button>`;
+    return `<button type="button" data-wd-difficulty="${t.index}" data-qy-difficulty="${badge.key}" class="${t.index===selectedTier?'active ':''}${t.locked?'locked':''}" aria-pressed="${t.index===selectedTier}" ${loading?'disabled':''}><i class="fa-solid ${t.locked?'fa-lock':cleared?'fa-circle-check':resume?'fa-play':'fa-diamond'}" aria-hidden="true"></i><strong>${globalThis.QAWeaponPresentation.realmMarkup(t.name,{kind:'difficulty'})}</strong><small>${esc(resume?'續戰':t.locked?'未解鎖':cleared?'已通關':'可挑戰')}</small></button>`;
   }).join('')}</div>
   <div class="wd-tier-preview" data-wd-preview aria-live="polite">${tierPreview(d)}</div>
-  <button type="button" class="wd-enter" data-wd-enter ${canEnter(d,currentTier(d))?'':'disabled'}>${tierAction(d)}</button>`;
+  <details class="wd-intel"><summary>秘境情報與掉落規則</summary><p>${esc(d.description)}</p><ol>${d.tactics.map(t=>'<li>'+esc(t)+'</li>').join('')}</ol><p>通關時擲一次，三種結果互斥。若該階沒有可掉落武器，則不發放。重複武器累計持有數，保留最高等階。</p></details><div class="wd-action"><button type="button" class="wd-enter" data-wd-enter ${canEnter(d,currentTier(d))?'':'disabled'}>${tierAction(d)}</button><small class="wd-cost">新挑戰消耗 ${weaponDungeonTicketMarkup(1)}；失敗或中途離場不退券。收起戰場可續戰。</small></div></section></div>`;
 }
 const defaultTier=d=>d&&data?.active&&activeId()===d.id&&d.difficulties.some(t=>t.index===data.active.difficulty)?data.active.difficulty:0;
 const currentTier=d=>d?.difficulties.find(t=>t.index===selectedTier);
@@ -76,7 +74,7 @@ function tierPreview(d){
   const t=currentTier(d);
   if(!t)return '';
   const badge=globalThis.QAWeaponPresentation.difficultyState({locked:t.locked,clears:Number(d.clears[t.index])||0,resume:isResume(d,t.index)});
-  return '<strong>'+globalThis.QAWeaponPresentation.realmMarkup(t.name,{kind:'difficulty'})+' · '+esc(badge.label)+'</strong><small>30% '+esc(t.name)+'武器 · 20% '+esc(t.nextRealm)+'武器</small>';
+  return '<div class="wd-preview-title"><strong>可能獲得</strong><small>'+globalThis.QAWeaponPresentation.realmMarkup(t.name,{kind:'difficulty'})+' · '+esc(badge.label)+'</small></div><div class="wd-reward-pair"><div class="wd-reward"><i class="fa-solid fa-gem" aria-hidden="true"></i><span><small>30% '+esc(t.name)+'武器</small><b>當階掉落</b></span></div><div class="wd-reward wd-reward-next"><i class="fa-solid fa-gem" aria-hidden="true"></i><span><small>20% '+esc(t.nextRealm)+'武器</small><b>下一階掉落</b></span></div></div><small>另有 50% 無武器</small>';
 }
 function selectDifficulty(index){
   const d=selected();
@@ -95,11 +93,10 @@ function selectDifficulty(index){
 
 function paint(message=''){
   const d=selected();
-  panel.innerHTML=`<header><div class="wd-heading">${d?'<button type="button" data-wd-back data-qy-nav-action="back" aria-label="返回秘境選擇">‹</button>':''}<div><small>青雲問道 / 歷練 / 武器副本</small><h2 id="weapon-dungeons-title" tabindex="-1">${d?esc(d.name):'武器秘境'}</h2></div></div><button type="button" data-wd-close data-qy-nav-action="close" aria-label="返回秘境選擇">返回秘境選擇</button></header>
-    <div class="wd-body"><div class="wd-tickets"><div><strong>副本券 ${data?weaponDungeonTicketMarkup(data.tickets):'同步中'}</strong><div class="wd-ticket-pips" aria-hidden="true">${Array.from({length:5},(_,i)=>'<i class="'+(data&&i<data.tickets?'filled':'')+'"></i>').join('')}</div></div><span>每日補發 3 張 · 補發上限 5 張<br>臺灣時間 00:00</span></div>
+  panel.innerHTML=`<header><div class="wd-heading"><button type="button" data-wd-close data-wd-back data-qy-nav-action="back" aria-label="返回秘境選擇"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><h2 id="weapon-dungeons-title" tabindex="-1">武器秘境</h2></div><details class="wd-tickets"><summary><strong>副本券 ${data?weaponDungeonTicketMarkup(data.tickets):'同步中'}</strong><i class="fa-solid fa-circle-info" aria-hidden="true"></i></summary><span class="wd-ticket-help">每日補發 3 張 · 補發上限 5 張<br>臺灣時間 00:00</span></details></header>
+    <div class="wd-body">
     ${data?.active?'<div class="wd-active">已有進行中的挑戰，續戰不耗券；完成或離場後才能開啟其他挑戰。</div>':''}
     ${!data?'<p data-qy-state="'+(loading?'loading':'error')+'">'+(loading?'正在讀取秘境資料…':'秘境資料未能同步，請返回後重新開啟。')+'</p>':d?detail(d):'<p data-qy-state="error">此秘境目前未開放，請返回島嶼選擇。</p>'}
-    <p class="wd-cost">新挑戰消耗 ${weaponDungeonTicketMarkup(1)}；失敗或中途離場不退券。收起戰場可續戰。</p>
     <p class="wd-message" role="status" aria-live="polite"${message?' data-qy-state="'+(loading?'syncing':'error')+'"':''}>${esc(message)}</p></div>`;
 
 }

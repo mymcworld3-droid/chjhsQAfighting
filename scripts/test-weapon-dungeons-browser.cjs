@@ -61,6 +61,13 @@ async function main(){
   await page.locator('[data-atlas-dungeon="peak-stone"]').click();
   await page.locator('[data-wd-difficulty="0"]').waitFor();
   assert.equal(await page.locator('[data-wd-difficulty]').count(),6);
+  assert.equal(await page.locator('#weapon-dungeons-panel header button').count(),1);
+  assert.equal(await page.locator('[data-wd-back]').isVisible(),true);
+  assert.equal(await page.locator('.wd-ticket-help').isVisible(),false);
+  await page.locator('.wd-tickets summary').click();
+  assert.equal(await page.locator('.wd-ticket-help').isVisible(),true);
+  await page.locator('.wd-tickets summary').click();
+  assert.equal(await page.locator('.wd-intel ol').isVisible(),false);
   assert.equal(await page.locator('[data-wd-difficulty="1"]').getAttribute('data-qy-difficulty'),'locked');
   assert.match(await page.locator('.wd-tickets').textContent(),/副本券\s*3\b/);
   assert.match(await page.locator('.wd-tickets').textContent(),/補發上限 5 張/);

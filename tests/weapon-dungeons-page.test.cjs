@@ -199,3 +199,15 @@ test('detail response replaces pending atlas balance without stale overwrites',a
  assert.match(atlas.ticketSlot.innerHTML,/>2<\/b>/);
  h.back();assert.equal(h.dialog().hidden,true);assert.equal(h.requests.length,2);
 });
+
+test('expedition has one return control with both legacy selectors and compact disclosure',async()=>{
+ const h=harness(),opening=h.open(W.ID);h.respond(h.state({tickets:8}));await opening;
+ const markup=h.dialog().innerHTML;
+ assert.equal((markup.match(/<button[^>]*data-wd-back/g)||[]).length,1);
+ assert.equal((markup.match(/<button[^>]*data-wd-close/g)||[]).length,1);
+ assert.match(markup,/data-wd-close data-wd-back data-qy-nav-action="back"/);
+ assert.match(markup,/<details class="wd-tickets"><summary>/);
+ assert.match(markup,/<details class="wd-intel"><summary>/);
+ assert.match(markup,/30% 築基武器/);assert.match(markup,/20% 金丹武器/);
+ assert.match(markup,/class="wd-island" src="\/assets\/dungeons\/peak-stone.png"/);
+});

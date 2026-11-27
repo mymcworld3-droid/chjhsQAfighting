@@ -40,7 +40,7 @@ test('shared visual roles retain original action selectors',()=>{
   assert.match(read('styles/scene-art-shell.css'),/button\[data-qy-nav-action\]/);
   for(const [file,role,action] of [
     ['index.html','back','data-dv-back'],['cultivation/manual-training-page.js','back','data-manual-close-training'],
-    ['cultivation/weapon-dungeons-page.js','back','data-wd-back'],['cultivation/weapon-dungeons-page.js','close','data-wd-close'],
+    ['cultivation/weapon-dungeons-page.js','back','data-wd-back'],
     ['cultivation/daily-meditation.js','close','dm-close'],['cultivation/tactical-combat.js','collapse','收起戰場'],
     ['cultivation/dongtian.js','exit','dt-exit']
   ]){const s=read(file);assert.ok(s.includes('data-qy-nav-action="'+role+'"'),file);assert.ok(s.includes(action),file);}
