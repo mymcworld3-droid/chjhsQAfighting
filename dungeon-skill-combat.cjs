@@ -71,11 +71,12 @@ function switchLoadout(room,uid,raw,index){
   return {duplicate:false,members:{...room.members,
     [uid]:{...member,...setting,dungeonAttack:attackPower(raw,member)}}};
 }
-function castSkill(room,uid,map,raw,{skillId,target,seq,moveSword=false}={}){
+function castSkill(room,uid,map,raw,{skillId,target,seq,moveSword=false,first=null}={}){
   if(typeof skillId!=='string'||!Manuals.BY_SKILL[skillId])
     throw fail('功法技能無效',400);
   if(!target||!Number.isSafeInteger(target.x)||!Number.isSafeInteger(target.y)||
-      !Number.isSafeInteger(seq)||seq<1||seq>MAX_STRIKE_SEQ)
+      !Number.isSafeInteger(seq)||seq<1||seq>MAX_STRIKE_SEQ||
+      first!==null&&(!Number.isSafeInteger(first.x)||!Number.isSafeInteger(first.y)))
     throw fail('技能目標或操作序號無效',400);
   if(room.status!=='assembled')throw fail('隊伍尚未開始探索',409);
   const member=room.members?.[uid];
@@ -83,7 +84,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq,moveSword=false}={}){
   const prior=Number.isSafeInteger(member.skillSeq)?member.skillSeq:0;
   if(seq===prior&&member.lastSkill?.skillId===skillId&&
       member.lastSkill.moveSword===Boolean(moveSword)&&
-      same(member.lastSkill.target,target))
+      same(member.lastSkill.target,target)&&(!first&&!member.lastSkill.first||first&&same(member.lastSkill.first,first)))
     return {duplicate:true,members:room.members,enemies:room.enemies};
   if(seq!==prior+1)throw fail('技能操作已不同步，請重新取得戰場資料',409);
   if(!isAlive(member)||!walkable(map,member.position))throw fail('角色倒地或位置無效',409);
@@ -95,7 +96,7 @@ function castSkill(room,uid,map,raw,{skillId,target,seq,moveSword=false}={}){
   const sk=skillOf(skillId,normalized,member.accessScore||0);
   if(!sk)throw fail('武器技能尚未解鎖',403);
   return Resolution.resolveCast(room,uid,map,sk,{
-    target,seq,moveSword,base:attackPower(normalized,member)
+    target,seq,moveSword,first,refinement:Manuals.refinementFor(normalized.books?.[sk.manualId]),base:attackPower(normalized,member)
   });
 }
 module.exports={attackPower,initialCombatLoadout,loadout,switchLoadout,

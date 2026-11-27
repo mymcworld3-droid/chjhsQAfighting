@@ -177,8 +177,8 @@ export const moveDungeonMemberRoute=(roomId,vectors,step)=>
 export const strikeDungeonBeast=(roomId,enemyId,seq)=>
   request('strike',{roomId,enemyId,seq});
 
-export const castDungeonSkill=(roomId,skillId,target,seq,moveSword=false)=>
-  request('skill',{roomId,skillId,target,seq,...(moveSword?{moveSword:true}:{})});
+export const castDungeonSkill=(roomId,skillId,target,seq,moveSword=false,first=null)=>
+  request('skill',{roomId,skillId,target,seq,...(moveSword?{moveSword:true}:{}),...(first?{first}:{})});
 export const guardDungeonTeammate=(roomId,targetUid,seq)=>
   request('boss-guard',{roomId,targetUid,seq});
 export const switchDungeonLoadout=(roomId,index)=>

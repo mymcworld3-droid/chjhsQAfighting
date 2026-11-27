@@ -7,6 +7,7 @@
   else root.QADungeonSkillResolution=factory(root.QAFlyingSwordPath,root.QADungeonBossHit,root.QAManuals);
 })(globalThis,(SwordPath,Boss,Manuals)=>{
   'use strict';
+  const weave=()=>typeof module==='object'&&module.exports?require('./weave-weapon-rules.js'):globalThis.QAWeaveRules;
   const bell=()=>typeof module==='object'&&module.exports?require('./bell-weapon-rules.js'):globalThis.QABellRules;
   const prism=()=>typeof module==='object'&&module.exports?require('./prism-weapon-rules.js'):globalThis.QAPrismRules;
   // Match the room's authoritative dungeon health and stamina contracts.
@@ -108,7 +109,7 @@ function beamArray(map,center,sk){
   return rays;
 }
 
-function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=false}){
+function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=false,first=null,refinement=0}){
   const member=room.members[uid],skillId=sk.id;
   const empowered=isFocusEmpowered(member,sk);
   const origin=member.position;
@@ -168,10 +169,20 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     }
     return total;
   };
+  const selection=weave()?.supports(sk)?weave().selected(prism().boardForDungeon(map),origin,sk,room.weaponObjects,uid,target,first):null;
+  const weavePlan=selection?.plan;
+  let weaponObjects=null;
   const bellPlan=bell()?.supports(sk)?bell().selected(prism().boardForDungeon(map),origin,sk,target):null;
   let bellSteps=null;
   const prismPlan=prism()?.supports(sk)?prism().selected(prism().boardForDungeon(map),origin,sk,target):null;
-  if(bell()?.supports(sk)){
+  if(selection){
+    if(!weavePlan)throw fail(selection.reason,409);
+    cells=weavePlan.cells;
+    weaponObjects=weave().place(room.weaponObjects,weavePlan,{uid,board:prism().boardForDungeon(map),clock:tick,level:sk.level,refinement});
+    weave().resolve(weavePlan,enemies,Boss.occupies,e=>healthy(e)>0,(enemy,power,cell)=>{
+      apply(enemy,power);hits.at(-1).cell=cell;
+    });
+  }else if(bell()?.supports(sk)){
     if(!bellPlan)throw fail('請選擇合法出拳方向或自身格',409);
     cells=bellPlan.cells;
     bellSteps=bell().resolve(bellPlan,{
@@ -327,7 +338,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
   const seen=new Set();
   const effectCells=(sk.kind==='fist-focus'?[origin]:cells)
     .filter(p=>tile(map,p)&&!seen.has(key(p))&&seen.add(key(p)))
-    .slice(0,bellPlan?80:72).map(p=>({x:p.x,y:p.y}));
+    .slice(0,weavePlan?map.width*map.height:bellPlan?80:72).map(p=>({x:p.x,y:p.y}));
   const visualMoves=enemies.filter(e=>startingPositions.has(e.id)&&
     !same(startingPositions.get(e.id),e.position)).slice(0,12).map(e=>({
       enemyId:e.id,from:{...startingPositions.get(e.id)},to:{...e.position}
@@ -336,6 +347,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     moveSword:Boolean(moveSword),origin:{...origin},target:{...target},
     ...(flightPath?{path:flightPath}:{}),
     cost,hits,visualMoves,...(chainSteps.length?{chainSteps}:{}),
+    ...(weavePlan?{first:first?{x:first.x,y:first.y}:null,weavePlan}:{}),
     ...(bellSteps?{bellSteps,weaponTimeline:bell().timeline(bellPlan,sk,bellSteps)}:{}),
     ...(prismPlan?{prismRays:prismPlan.rays,weaponTimeline:prism().timeline(prismPlan,sk,hits)}:{}),
     totalDamage:hits.reduce((a,h)=>a+h.damage,0),
@@ -346,7 +358,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     ...(position?{position}:{})};
   player.lastSkill=result;
   members[uid]=player;
-  return {duplicate:false,members,enemies:surviving,result,cells};
+  return {duplicate:false,members,enemies:surviving,result,cells,...(weaponObjects?{weaponObjects}:{})};
 }
 function previewPlan(room,uid,map,skill){
   const plan={aims:[],cells:[],byAim:{},exact:false};
@@ -359,6 +371,17 @@ function previewPlan(room,uid,map,skill){
   const sk=Manuals.skillAtLevel(catalog,skill.level,skill.refinement||0);
   const base=Number.isSafeInteger(member.dungeonAttack)&&member.dungeonAttack>0?member.dungeonAttack:member.battleAttack||30;
   plan.exact=Number.isInteger(skill.refinement)&&Number.isSafeInteger(member.dungeonAttack)&&member.dungeonAttack>0;
+  if(weave()?.supports(sk)){
+    const geometry=weave().plans(prism().boardForDungeon(map),from,sk,room.weaponObjects,uid);
+    plan.aims=geometry.aims;plan.cells=geometry.cells;plan.reason=geometry.reason;plan.pairs=geometry.pairs;plan.byPair={};
+    const scheme=(target,first=null)=>{
+      const out=resolveCast(room,uid,map,sk,{target,first,seq:(member.skillSeq||0)+1,base,preview:true,refinement:skill.refinement||0});
+      return {aim:target,first,cells:out.cells,path:[],cost:out.result.cost,valid:staminaFor(member)>=out.result.cost,hits:out.result.hits,landings:[],totalDamage:out.result.totalDamage,weaponObjects:out.weaponObjects,weavePlan:out.result.weavePlan};
+    };
+    for(const q of Object.values(geometry.byAim))plan.byAim[key(q.aim)]=scheme(q.aim);
+    for(const pair of geometry.pairs)plan.byPair[weave().pairKey(pair.first,pair.second)]=scheme(pair.second,pair.first);
+    return plan;
+  }
   const candidates=[];
   const prismGeometry=prism()?.supports(sk)?prism().plans(prism().boardForDungeon(map),from,sk):null;
   if(bell()?.supports(sk))candidates.push(...bell().plans(prism().boardForDungeon(map),from,sk).aims);

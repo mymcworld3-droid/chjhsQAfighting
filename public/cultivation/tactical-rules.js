@@ -12,6 +12,7 @@
     ?require('./flying-sword-path.js'):globalThis.QAFlyingSwordPath;
   const weaponDungeons=()=>typeof module==='object'&&module.exports
     ?require('./weapon-dungeon-rules.js'):globalThis.QAWeaponDungeons;
+  const weave=()=>typeof module==='object'&&module.exports?require('./weave-weapon-rules.js'):globalThis.QAWeaveRules;
   const bell=()=>typeof module==='object'&&module.exports?require('./bell-weapon-rules.js'):globalThis.QABellRules;
   const prism=()=>typeof module==='object'&&module.exports?require('./prism-weapon-rules.js'):globalThis.QAPrismRules;
   const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,events:64,turns:60,turnMs:30000,answerMs:50000});
@@ -908,6 +909,7 @@
   }
   function aimCells(s,a,sk){
     if(!a||!alive(a))return [];
+    if(weave()?.supports(sk))return weave().plans(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid).aims;
     if(bell()?.supports(sk))return bell().plans(prism().boardForTrial(s),a,sk).aims;
     if(prism()?.supports(sk))return prism().plans(prism().boardForTrial(s),a,sk).aims;
     if(fistDirectional(sk))return CARDINALS.map(([x,y])=>offset(a,{x,y},1)).filter(p=>fistDirection(s,a,p,sk));
@@ -933,7 +935,8 @@
     }
     return cells;
   }
-  function skillCells(s,a,sk,p){
+  function skillCells(s,a,sk,p,first=null){
+    if(weave()?.supports(sk))return weave().selected(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,p,first).plan?.cells||[];
     if(bell()?.supports(sk))return bell().selected(prism().boardForTrial(s),a,sk,p)?.cells||[];
     if(prism()?.supports(sk))return prism().selected(prism().boardForTrial(s),a,sk,p)?.cells||[];
     if(fistDirectional(sk)){
@@ -952,10 +955,15 @@
     }
     return ['area','meteor'].includes(sk.kind)||sk.kind==='blink'&&sk.burst?area(s,p,sk.radius||1):[p];
   }
-  function validateSkill(s,a,sk,p,{geometryOnly=false}={}){
+  function validateSkill(s,a,sk,p,{geometryOnly=false,first=null}={}){
     if(!geometryOnly){
       if(a.stamina<techniqueCost(a,sk))fail('體力不足，先答題補充');
       validateAttackLimit(a);
+    }
+    if(weave()?.supports(sk)){
+      const selection=weave().selected(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,p,first);
+      if(!selection.plan)fail(selection.reason);
+      return;
     }
     if(bell()?.supports(sk)){
       if(!bell().selected(prism().boardForTrial(s),a,sk,p))fail('請選擇合法出拳方向或自身格');
@@ -994,13 +1002,13 @@
   // One private simulation per geometric aim; use the actual cast implementation
   // so repeated damage, shields, boss footprints and displacement stay authoritative.
   // The public server apply() never passes preview=true.
-  function previewCast(s,a,sk,p){
+  function previewCast(s,a,sk,p,first=null){
     const aim=point(p),cost=techniqueCost(a,sk);
-    validateSkill(s,a,sk,aim,{geometryOnly:true});
+    validateSkill(s,a,sk,aim,{geometryOnly:true,first});
     const simulation=clone({...s,events:[]}),fighter=simulation.actors.find(t=>t.uid===a.uid);
     const events=[];
     previewEvents.set(simulation,events);
-    try{cast(simulation,fighter,sk,aim,true);}finally{previewEvents.delete(simulation);}
+    try{cast(simulation,fighter,sk,aim,true,first);}finally{previewEvents.delete(simulation);}
     const cells=new Map(),hits=[],moves=[];
     const nonAttack=['restore','counter','fist-focus'].includes(sk.kind)||sk.kind==='blink'&&!sk.burst;
     for(const event of events){
@@ -1031,10 +1039,11 @@
     let reason='';
     if(s.status!=='active'||s.turnUid!==a.uid||s.quizRound&&s.phase!=='action')reason='目前不是你的行動回合';
     else if((a.actions||0)>=LIMITS.actions)reason='本回合行動已達上限';
-    else try{validateSkill(s,a,sk,aim);}catch(e){reason=String(e.message||e);}
+    else try{validateSkill(s,a,sk,aim,{first});}catch(e){reason=String(e.message||e);}
     const bellSteps=events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.bellSteps;
     const rayPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,aim):null;
     return {aim,cost,valid:!reason,reason,cells:[...cells.values()],path,hits,moves,finalPositions,
+      ...(weave()?.supports(sk)?{first:first?point(first):null,weaponObjects:simulation.weaponObjects,weavePlan:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weavePlan}:{}),
       ...(bellSteps?{bellSteps,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       ...(rayPlan?{rays:rayPlan.rays,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       landings:finalPositions.filter(t=>t.uid!==a.uid).map(point)};
@@ -1042,6 +1051,13 @@
   function skillPreviewPlan(s,a,sk){
     const result={aims:[],cells:[],byAim:{}};
     if(!alive(a)||!sk)return result;
+    if(weave()?.supports(sk)){
+      const geometry=weave().plans(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid);
+      result.aims=geometry.aims;result.cells=geometry.cells;result.reason=geometry.reason;result.pairs=geometry.pairs;result.byPair={};
+      for(const aim of Object.values(geometry.byAim))result.byAim[key(aim.aim)]=previewCast(s,a,sk,aim.aim);
+      for(const pair of geometry.pairs)result.byPair[weave().pairKey(pair.first,pair.second)]=previewCast(s,a,sk,pair.second,pair.first);
+      return result;
+    }
     if(prism()?.supports(sk)){
       const geometry=prism().plans(prism().boardForTrial(s),a,sk);
       for(const rayPlan of Object.values(geometry.byDirection)){
@@ -1067,14 +1083,15 @@
   }
   // Compatibility for old saves: old cooldown timestamps cannot prevent casting.
   function cooldownUntil(){return 0;}
-  function cast(s,a,sk,p,preview=false){
-    validateSkill(s,a,sk,p,{geometryOnly:preview});const cost=techniqueCost(a,sk);a.stamina-=cost;a.attacks++;
+  function cast(s,a,sk,p,preview=false,first=null){
+    validateSkill(s,a,sk,p,{geometryOnly:preview,first});const cost=techniqueCost(a,sk);a.stamina-=cost;a.attacks++;
     if(s.pveMetrics){s.pveMetrics.staminaSpent+=cost;if(sk.manualId)s.pveMetrics.manualCasts[sk.id]=(s.pveMetrics.manualCasts[sk.id]||0)+1;}
     const fixedTarget=sealAt(s,p);
     if(s.mode==='pve'&&s.trial?.layoutVersion>=3&&sk.manualId){s.manualUsed||={};s.manualUsed[a.uid]||={};s.manualUsed[a.uid][sk.manualId]=true;}
+    const weavePlan=weave()?.supports(sk)?weave().selected(prism().boardForTrial(s),a,sk,s.weaponObjects,a.uid,p,first).plan:null;
     const bellPlan=bell()?.supports(sk)?bell().selected(prism().boardForTrial(s),a,sk,p):null;
     const prismPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,p):null;
-    const cells=prismPlan?.cells||skillCells(s,a,sk,p);
+    const cells=weavePlan?.cells||prismPlan?.cells||skillCells(s,a,sk,p);
     const rays=sk.kind==='sword-array'?swordArray(s,sk,p):null;
     const cuts=rays&&!sk.orthogonal?crossedSwordLines(rays,p):null;
     const route=techniquePath(s,a,sk,p);
@@ -1101,6 +1118,13 @@
     if(!['fist-chain','meteor','restore','counter','fist-focus'].includes(sk.kind)&&(sk.kind!=='blink'||sk.burst))strikeSeals(s,cells);
     // Fixed objectives can be hit by targeted techniques, but cannot be moved.
     if(fixedTarget&&!at(s,p)&&['hit','lunge','swap'].includes(sk.kind))return;
+    if(weavePlan){
+      castEvent.animation.weavePlan=weavePlan;
+      s.weaponObjects=weave().place(s.weaponObjects,weavePlan,{uid:a.uid,board:prism().boardForTrial(s),clock:s.eventSequence||0,level:sk.level,refinement:a.manualRefinements?.[sk.manualId]||0});
+      weave().resolve(weavePlan,s.actors.filter(t=>t.team!==a.team),covers,alive,
+        (target,power)=>damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId}),()=>alive(a));
+      return;
+    }
     if(bellPlan){
       const records=[];
       const steps=bell().resolve(bellPlan,{
@@ -1576,7 +1600,7 @@
       if(command.type==='manual'&&!a.manualSkills?.length)fail('尚未裝備功法技能');
       const selected=command.type==='attack'?basicFor(a):manualSkillFor(a,command.skillId);
       if(!selected)fail('尚未裝備或解鎖此功法技能');
-      cast(s,a,selected,p);
+      cast(s,a,selected,p,false,command.first||null);
       endsTurn=selected.kind==='fist-focus';
     }else if(command.type==='guard'){
       validateAttackLimit(a);a.guard=Math.max(.4,a.guard);a.attacks++;log(s,a.name+'凝神護身，下次自身回合前減傷 40%','guard',{actor:a.uid,animation:{kind:'guard',changes:[appearance(a)]}});

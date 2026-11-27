@@ -73,6 +73,7 @@ const publicRoom=(roomId,room,at=Date.now(),viewerUid='')=>({
   enemyAiVersion:room.enemyAiVersion||null,
   // Presentational snapshots expose only the current NPC action state,
   // never the secret map seed or server-side patrol/decision internals.
+  ...(room.weaponObjects?{weaponObjects:room.weaponObjects}:{}),
   enemies:Array.isArray(room.enemies)?room.enemies.map(e=>({
     id:e.id,name:e.name,kind:e.kind,position:e.position,
     realm:e.realm||ManualProgress.REALM,
@@ -550,7 +551,7 @@ function createHandler({
           const outcome=action==='skill'?
             Skills.castSkill(evolved,uid,map,record,{
               skillId:req.body?.skillId,target:req.body?.target,seq:req.body?.seq,
-              moveSword:req.body?.moveSword===true
+              moveSword:req.body?.moveSword===true,first:req.body?.first??null
             }):Skills.switchLoadout(evolved,uid,record,req.body?.index);
           if(outcome.duplicate&&!battleDelta)return current;
           const mastery=action==='skill'&&!outcome.duplicate?
@@ -568,6 +569,7 @@ function createHandler({
           const bossEncounter=action==='skill'&&!outcome.duplicate?
             Boss.onDefeat(evolved,outcome.enemies,uid):evolved.bossEncounter;
           const next={...evolved,members:outcome.members,
+            ...(outcome.weaponObjects?{weaponObjects:outcome.weaponObjects}:{}),
             ...(mastery?{
               manualExp:mastery.ledger,
               // Mid-session migration: retain the original session even if
@@ -584,6 +586,7 @@ function createHandler({
             bossEncounter?.status==='defeated'?
             await Victory.prepareArchive(tx,db,roomId,next,at):null;
           tx.update(roomRef,{...(battleDelta||{}),members:next.members,
+            ...(outcome.weaponObjects?{weaponObjects:next.weaponObjects}:{}),
             ...(mastery?{manualExp:next.manualExp,
               manualProgressSession:next.manualProgressSession}:{}),
             ...(action==='skill'?{enemies:next.enemies}:{}),
