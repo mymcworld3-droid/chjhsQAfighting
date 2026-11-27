@@ -1,0 +1,176 @@
+{
+  "schema": 1,
+  "batch": 20,
+  "date": "2026-11-27",
+  "purpose": "新增有完整文字與原選項、校方答案標記的短題，不重查已具充分證據的候選，不新增純題號紀錄。",
+  "sources": [
+    {
+      "id": "CJHS-97-2-2-physics",
+      "subject": "物理",
+      "title": "高雄市立前鎮高中97學年度第二學期第二次段考高二物理試題",
+      "institution": "高雄市立前鎮高中",
+      "originalSourceUrl": "https://wp.cjhs.kh.edu.tw/PhysicsElearning/wp-content/uploads/2009/06/9722-2.pdf",
+      "officialAnswerUrl": "https://wp.cjhs.kh.edu.tw/PhysicsElearning/wp-content/uploads/2009/06/9722-2.pdf",
+      "rightsBasisCandidate": "著作權法第9條第1項第5款，依法令舉行正式學校評量的原題；須人工確認",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ],
+      "humanRightsVerified": false
+    }
+  ],
+  "records": [
+    {
+      "originalQuestionType": "single-choice",
+      "status": "quarantined-pending-human-review",
+      "questionPdfPage": null,
+      "answerPdfPage": null,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "transcriptionStatus": "draft-index-rendering-only",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ],
+      "flags": [
+        "human-review-required",
+        "old-curriculum",
+        "scope-review",
+        "visual-check-pending",
+        "answer-page-screenshot-unavailable",
+        "question-type-section-mismatch",
+        "original-pdf-bytes-unavailable"
+      ],
+      "id": "PJHS-108-2-2-chem-single-choice-1",
+      "sourceId": "PJHS-108-2-2-chem",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "單選第1題",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "反應速率",
+        "反應物本性"
+      ],
+      "originalSourceUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "officialAnswerLocator": "同檔末尾全體考生試題分析表第1題",
+      "originalQuestion": {
+        "q": "下列反應於室溫下，其反應的速率由快至慢依序為何？\n（甲）Ag⁺ + Cl⁻ → AgCl(s)\n（乙）5 Fe²⁺ + MnO₄⁻ + 8 H⁺ → 5 Fe³⁺ + Mn²⁺ + 4 H₂O\n（丙）CH₃COOH + C₂H₅OH → CH₃COOC₂H₅ + H₂O\n（丁）5 C₂O₄²⁻ + 2 MnO₄⁻ + 16 H⁺ → 10 CO₂ + 2 Mn²⁺ + 8 H₂O\n（戊）H⁺ + OH⁻ → H₂O",
+        "options": [
+          {
+            "label": "A",
+            "text": "戊,甲,乙,丁,丙"
+          },
+          {
+            "label": "B",
+            "text": "甲,乙,丁,丙,戊"
+          },
+          {
+            "label": "C",
+            "text": "甲,乙,丙,丁,戊"
+          },
+          {
+            "label": "D",
+            "text": "戊,甲,丙,乙,丁"
+          },
+          {
+            "label": "E",
+            "text": "戊,甲,丁,乙,丙"
+          }
+        ]
+      },
+      "evidence": {
+        "question": "official-pdf-web-index-rendering",
+        "answer": "official-school-analysis-table-web-rendering",
+        "locator": "校方同檔網頁呈現第18–30行題目及第465行標準答案；未取得PDF原檔或截圖"
+      }
+    },
+    {
+      "originalQuestionType": "single-choice",
+      "status": "quarantined-pending-human-review",
+      "questionPdfPage": null,
+      "answerPdfPage": null,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "transcriptionStatus": "draft-text-layer-only",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html",
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html"
+      ],
+      "flags": [
+        "human-review-required",
+        "old-curriculum",
+        "scope-review",
+        "visual-check-pending",
+        "answer-page-screenshot-unavailable"
+      ],
+      "id": "CJHS-97-2-2-physics-single-choice-22",
+      "sourceId": "CJHS-97-2-2-physics",
+      "questionNumber": 22,
+      "originalQuestionNumberOrLocator": "第二部份單選第22題",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "功率",
+        "阻力",
+        "速率"
+      ],
+      "originalSourceUrl": "https://wp.cjhs.kh.edu.tw/PhysicsElearning/wp-content/uploads/2009/06/9722-2.pdf",
+      "officialAnswerUrl": "https://wp.cjhs.kh.edu.tw/PhysicsElearning/wp-content/uploads/2009/06/9722-2.pdf",
+      "officialAnswerLocator": "同檔參考答案第二部份第22題",
+      "originalQuestion": {
+        "q": "假設一船在水中航行時，所受之阻力和速率平方成正比。若欲使船速率加倍，則所需功率必為原有之：",
+        "options": [
+          {
+            "label": "A",
+            "text": "1 倍"
+          },
+          {
+            "label": "B",
+            "text": "2 倍"
+          },
+          {
+            "label": "C",
+            "text": "4 倍"
+          },
+          {
+            "label": "D",
+            "text": "9 倍"
+          },
+          {
+            "label": "E",
+            "text": "8 倍"
+          }
+        ]
+      },
+      "evidence": {
+        "question": "official-pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "locator": "同檔第57–58行原題，第159–162行正式答案；截圖cache miss"
+      }
+    }
+  ],
+  "upgrades": [],
+  "answerRechecks": [],
+  "counts": {
+    "newRecords": 2,
+    "newCompleteDrafts": 2,
+    "upgradedTextDrafts": 0,
+    "approved": 0
+  },
+  "limitations": [
+    "無上傳官方PDF或答案檔；直接下載111分科化學及前鎮高中97物理失敗，GitHub git ls-remote DNS失敗。",
+    "兩題只具完整文字草稿，原頁及答案頁未取得截圖，均需人工核准；化學平衡長題與缺圖力學未新增。",
+    "115分科官方入口超時；前鎮105下物理同檔可讀答案但原頁截圖cache miss，未收錄依賴圖形的題目。"
+  ]
+}
