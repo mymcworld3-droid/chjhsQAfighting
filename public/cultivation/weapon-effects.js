@@ -286,7 +286,7 @@
       const a=center(v,pos),r=v.cell*.31,color=ink(o.type==='mark'?'jade':o.type==='echo'?'gold':'violet');
       ctx.strokeStyle=color;ctx.fillStyle=color;ctx.globalAlpha=.6;
       if(o.type==='mark'){
-        ctx.globalAlpha=.55+.2*Math.sin(clock*2+o.sequence);
+        ctx.globalAlpha=.55+.2*Math.sin(clock*2+(Number.isFinite(o.sequence)?o.sequence:0));
         line(ctx,[{x:a.x,y:a.y-r},{x:a.x+r*.7,y:a.y},{x:a.x,y:a.y+r},{x:a.x-r*.7,y:a.y},{x:a.x,y:a.y-r}]);
         ring(ctx,a,r*.25);
         if(!reduced)for(let i=0;i<3;i++){const t=clock*.8+i*2.094;ctx.globalAlpha=.24;line(ctx,[{x:a.x+Math.cos(t)*r*.45,y:a.y+Math.sin(t)*r*.45},{x:a.x+Math.cos(t)*r*.45,y:a.y+Math.sin(t)*r*.45-v.cell*.15}]);}
