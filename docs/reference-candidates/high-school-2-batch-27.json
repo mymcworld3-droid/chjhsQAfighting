@@ -1,0 +1,168 @@
+{
+  "schema": 1,
+  "batch": 27,
+  "date": "2026-11-27",
+  "purpose": "自行查找可讀官方原卷及正式答案，對不依賴圖形的原題作隔離文字轉錄；不增加純題號或自動核准。",
+  "sources": [],
+  "records": [
+    {
+      "originalQuestionType": "single-choice",
+      "status": "quarantined-pending-human-review",
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "id": "CEEC-106-chem-single-choice-16",
+      "sourceId": "CEEC-106-chem",
+      "questionNumber": 16,
+      "originalQuestionNumberOrLocator": "印刷第4頁第16題",
+      "questionPdfPage": 5,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "化學平衡",
+        "平衡常數",
+        "Kc與Kp",
+        "動態平衡"
+      ],
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j052596928516674830/09-106指考化學試卷定稿.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j052596929150543868/09-106指考化學選擇題答案.pdf",
+      "officialAnswerLocator": "正式選擇題答案第16題",
+      "originalQuestion": {
+        "q": "若某氣體的化學反應：a A(g) + b B(g) ⇌ c C(g) + d D(g) 其平衡常數可用 Kc 與 Kp 表示，則下列關於此化學反應與其平衡常數的敘述，哪一項正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "當 a + b = c + d 時，Kc = Kp"
+          },
+          {
+            "label": "B",
+            "text": "改變反應溫度，平衡常數不變"
+          },
+          {
+            "label": "C",
+            "text": "平衡常數大小可藉由添加催化劑來改變"
+          },
+          {
+            "label": "D",
+            "text": "平衡常數中的 Kc 可由化學反應式來決定，但 Kp 則不能"
+          },
+          {
+            "label": "E",
+            "text": "反應達到平衡時，正反應與逆反應的反應速率皆等於零"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "old-curriculum",
+        "original-pdf-bytes-unavailable",
+        "answer-visual-check-pending"
+      ],
+      "evidence": {
+        "question": "official-original-page-screenshot",
+        "answer": "official-answer-pdf-text-layer",
+        "locator": "原卷PDF第5頁截圖；答案PDF第1頁文字層第18行。Kc、Kp 下標為純文字轉錄。答案截圖cache miss。"
+      }
+    },
+    {
+      "originalQuestionType": "single-choice",
+      "status": "quarantined-pending-human-review",
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "id": "CEEC-109-chem-single-choice-3",
+      "sourceId": "CEEC-109-chem",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "印刷第1頁第3題（3–4題組）",
+      "questionPdfPage": null,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "化學平衡",
+        "異相平衡",
+        "分壓平衡常數",
+        "相對濕度"
+      ],
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k220536545061333235/09-109指考化學試卷定稿.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k220536685605202263/09-109指考化學選擇題答案.pdf",
+      "officialAnswerLocator": "正式選擇題答案第3題",
+      "originalQuestion": {
+        "q": "在 300 K 時，將足量的 CaSO₄ · 2H₂O(s) 置於一乾燥之密閉容器中，使其達成上述反應之平衡時，容器內之相對濕度為多少？",
+        "options": [
+          {
+            "label": "A",
+            "text": "30%"
+          },
+          {
+            "label": "B",
+            "text": "40%"
+          },
+          {
+            "label": "C",
+            "text": "50%"
+          },
+          {
+            "label": "D",
+            "text": "60%"
+          },
+          {
+            "label": "E",
+            "text": "70%"
+          }
+        ],
+        "sharedStem": {
+          "heading": "3-4為題組",
+          "stem": "無水硫酸鈣（CaSO₄）固體可作為除濕劑，在 300 K 其平衡反應式與平衡常數（Kₚ）如下：\nCaSO₄(s) + 2 H₂O(g) ⇌ CaSO₄ · 2H₂O(s)　　　　Kₚ = 2500\n已知 300 K 時純水的飽和蒸氣壓為 0.040 atm，試回答 3-4 題。（CaSO₄ 式量為 136）",
+          "sourcePage": null
+        }
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "old-curriculum",
+        "visual-check-pending",
+        "shared-stem-3-4",
+        "original-pdf-bytes-unavailable"
+      ],
+      "evidence": {
+        "question": "official-pdf-web-text-rendering",
+        "answer": "official-answer-pdf-text-layer",
+        "locator": "另一官方定稿網址印刷第1頁文字第82–92行；答案第5行。原卷及答案截圖未取得。"
+      }
+    }
+  ],
+  "upgrades": [],
+  "answerRechecks": [],
+  "counts": {
+    "newRecords": 2,
+    "newCompleteDrafts": 2,
+    "upgradedTextDrafts": 0,
+    "approved": 0
+  },
+  "limitations": [
+    "原始實體PDF直接下載DNS失敗；106化學原頁截圖成功，答案文字層可讀；109化學另一官方定稿文字可讀，原頁及答案截圖失敗。",
+    "108物理第11題選項分數版面未核實，第17題依賴原圖，第7題官方全體給分，均未收錄。110化學正式答案開啟逾時。",
+    "未新增來源ID或純題號。"
+  ]
+}
