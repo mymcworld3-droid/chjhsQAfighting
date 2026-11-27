@@ -26,6 +26,9 @@ jobs:
       - name: Weapon dungeon entry, signed quiz, resume and victory
         if: ${{ !cancelled() }}
         run: node scripts/test-weapon-dungeons-browser.cjs
+      - name: Private prism animation on real Chromium in both battle painters
+        if: ${{ !cancelled() }}
+        run: node scripts/test-prism-browser.cjs
       - name: Browser screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -34,6 +37,7 @@ jobs:
           path: |
             /tmp/tactical-browser/*.png
             /tmp/weapon-dungeon-browser/*.png
+            /tmp/prism-browser/*.png
           if-no-files-found: ignore
       # Co-op dungeon map has an independent path-scoped browser workflow:
       # .github/workflows/dungeon-browser.yml. Keep battle UI failures separate.
