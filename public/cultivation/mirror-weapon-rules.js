@@ -72,7 +72,66 @@
     }
     return hits;
   }
+  // Each original attack beat generates exactly one independent mirror beat.
+  // Do not mirror actual body hit cells: an obstacle on the body side must
+  // not erroneously truncate a clear reflected attack on the opposite side.
+  const copyKinds=new Set(['line','dash-cleave','fist-sweep','fist-throw','fist-chain','bell-strike','bell-shock','bell-echo','gravity-strike']);
+  const canCopy=sk=>sk?.school==='body'&&!sk.noMirrorCopy&&copyKinds.has(sk.kind);
+  const opposite=d=>d?{x:-d.x||0,y:-d.y||0}:null;
+  function copyGeometry(board,origin,sk,beat){
+    const source=G.mirror(board,origin),d=opposite(beat.direction);
+    const part={source,cells:[],direction:d,layer:beat.layer||1,power:beat.power*.3,suppressed:!G.open(board,source)};
+    if(part.suppressed)return part;
+    if(['line','bell-strike','gravity-strike'].includes(sk.kind)){
+      if(d)part.cells=G.traceRay(board,source,d,sk.range).cells;
+    }else if(['dash-cleave','fist-sweep','fist-throw','fist-chain'].includes(sk.kind)){
+      if(d){
+        const tShape=sk.kind!=='fist-chain'&&sk.tShape,row=tShape?2:1;
+        const cells=[-1,0,1].map(side=>({x:source.x+d.x*row-d.y*side,y:source.y+d.y*row+d.x*side}));
+        if(tShape)cells.unshift({x:source.x+d.x,y:source.y+d.y});
+        part.cells=cells.filter(q=>G.segment(board,source,q).valid);
+      }
+    }else{
+      const cells=sk.kind==='bell-echo'?G.squareRing(board,source,beat.layer):G.squareArea(board,source,sk.radius);
+      part.cells=cells.filter(q=>G.segment(board,source,q).valid);
+    }
+    return part;
+  }
+  // All mutations use callbacks to authoritative owner/target state. A copy
+  // never invokes cast, spends resources, creates objects or changes owner
+  // position. Fixed bosses preserve the existing displacement exceptions.
+  function copyBeat(board,origin,sk,beat,{targets,alive,covers,apply,push,throwTo,outward,canContinue=()=>true}){
+    const part=copyGeometry(board,origin,sk,beat),hits=[],moves=[],seen=new Set();
+    const pos=e=>e.position||e,id=e=>String(e.uid??e.id);
+    const candidates=targets().filter(alive).map(enemy=>({enemy,cell:part.cells.find(q=>covers(enemy,q))})).filter(h=>h.cell);
+    if(sk.push||sk.kind==='fist-chain'||sk.kind.startsWith('bell-')&&sk.kind!=='bell-strike')
+      candidates.sort((a,b)=>Math.abs(pos(b.enemy).x-part.source.x)+Math.abs(pos(b.enemy).y-part.source.y)-Math.abs(pos(a.enemy).x-part.source.x)-Math.abs(pos(a.enemy).y-part.source.y)||(id(a.enemy)<id(b.enemy)?-1:id(a.enemy)>id(b.enemy)?1:0));
+    for(const {enemy,cell} of candidates){
+      if(!canContinue())break;
+      const uid=id(enemy);
+      if(seen.has(uid)||!alive(enemy))continue;
+      seen.add(uid);
+      const before=p(pos(enemy));
+      if(sk.kind==='fist-throw'&&!throwTo(enemy,part.direction))continue;
+      const hit=apply(enemy,part.power,cell,part.layer);
+      if(hit)hits.push({...hit,uid,cell:p(cell)});
+      if(alive(enemy)){
+        const bellPush=sk.kind==='bell-shock'||sk.kind==='bell-echo';
+        const count=bellPush||sk.kind==='fist-chain'?1:sk.push||0;
+        const d=bellPush?outward(part.source,enemy):part.direction;
+        if(count&&d){
+          push(enemy,d,count);
+          if(sk.kind==='fist-chain'&&alive(enemy)&&same(before,pos(enemy))&&sk.collisionPower>0){
+            const collision=apply(enemy,sk.collisionPower*.3,p(pos(enemy)),part.layer);
+            if(collision)hits.push({...collision,uid,cell:p(pos(enemy)),collision:true});
+          }
+        }
+      }
+      if(!same(before,pos(enemy)))moves.push({uid,from:before,to:p(pos(enemy))});
+    }
+    return {...part,hits,moves};
+  }
   // Battle-local identity, dynamically derived coordinates, no stored actor.
   function reconcile(state,uid,weaponIds){return O.reconcileEquipment(state,uid,weaponIds);}
-  return Object.freeze({supports,active,location,plans,selected,activate,resolve,clear:O.clear,reconcileEquipment:reconcile,finish:O.finish});
+  return Object.freeze({supports,active,location,plans,selected,activate,resolve,canCopy,copyGeometry,copyBeat,clear:O.clear,reconcileEquipment:reconcile,finish:O.finish});
 });

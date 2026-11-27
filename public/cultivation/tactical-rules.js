@@ -868,7 +868,7 @@
   function strikeTargets(s,a,cells){
     return [...new Map(cells.map(cell=>at(s,cell)).filter(target=>target&&target.team!==a.team).map(target=>[target.uid,target])).values()];
   }
-  function chainFists(s,a,sk,d,animate=true){
+  function chainFists(s,a,sk,d,animate=true,copy=null){
     const cells=new Map(),path=[point(a)];
     const sealsHit=new Set();
     for(let step=0;step<sk.steps&&alive(a);step++){
@@ -891,6 +891,7 @@
             damage(s,a,target,a.atk*sk.collisionPower,{skill:sk.id,manualId:sk.manualId});
         }
       }
+      if(copy)copy(point(a),{direction:d,power:sk.power,layer:step+1});
       const next=offset(a,d,1);
       if(!alive(a)||blocked(s,next)||at(s,next))break;
       const from=point(a);
@@ -1035,6 +1036,7 @@
     }
     // The hero's intended route is separate from the enemies' final positions.
     const path=techniquePath(s,a,sk,aim).map(point);
+    if(sk.kind==='mirror-swap')for(const m of moves.filter(m=>m.uid===a.uid))path.push(...m.path);
     if(sk.kind==='fist-chain'){
       for(const m of moves.filter(m=>m.uid===a.uid)){
         if(!path.length)path.push(m.path[0]);
@@ -1049,9 +1051,13 @@
     if(s.status!=='active'||s.turnUid!==a.uid||s.quizRound&&s.phase!=='action')reason='目前不是你的行動回合';
     else if((a.actions||0)>=LIMITS.actions)reason='本回合行動已達上限';
     else try{validateSkill(s,a,sk,aim,{first});}catch(e){reason=String(e.message||e);}
-    const bellSteps=events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.bellSteps;
+    const castAnimation=events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation;
+    const mirrorSteps=castAnimation?.mirrorSteps;
+    for(const step of mirrorSteps||[])for(const cell of step.cells)cells.set(key(cell),point(cell));
+    const bellSteps=castAnimation?.bellSteps;
     const rayPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,aim):null;
     return {aim,cost,valid:!reason,reason,cells:[...cells.values()],path,hits,moves,finalPositions,
+      ...(mirrorSteps?.length?{mirrorSteps}:{}),
       ...(mirror()?.supports(sk)?{weaponObjects:simulation.weaponObjects||null,mirrorPlan:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.mirrorPlan}:{}),
       ...(weave()?.supports(sk)?{first:first?point(first):null,weaponObjects:simulation.weaponObjects,weavePlan:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weavePlan,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       ...(bellSteps?{bellSteps,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
@@ -1131,6 +1137,30 @@
         // A stored Firestore array cannot directly contain another array.
         ...(rays?{rays:rays.map(cells=>({cells}))}:{}),...(cuts?{cuts:cuts.map(cells=>({cells}))}:{}),...(sk.hits?{hits:sk.hits}:{}),...(sk.kind==='fist-chain'?{step:1}:{}),
         color:sk.color||(CORES[a.core]||CORES.none).color,changes:[appearance(a)]}});
+    const mirrorSteps=[];
+    const copy=mirror()?.canCopy(sk)&&mirror().active(s.weaponObjects,a.uid)?(from,beat,group=null,records=null)=>{
+      const result=mirror().copyBeat(prism().boardForTrial(s),from,sk,beat,{
+        targets:()=>s.actors.filter(t=>t.team!==a.team),alive,covers,canContinue:()=>alive(a),
+        apply:(target,power,cell,layer)=>{
+          const shield=target.shield;
+          const dealt=damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId,strike:layer,
+            ...(group?{weaponHit:{group,rayId:layer+100,cell,records}}:{})});
+          return {damage:dealt,absorbed:shield-target.shield};
+        },
+        push:(target,d,count)=>push(s,a,target,count,d,group),
+        throwTo:(target,d)=>{
+          if(target.boss&&!target.trackingAttack)return true;
+          const landing=offset(target,d,-2);
+          if(!canOccupy(s,target,landing))return false;
+          const from=point(target);Object.assign(target,landing);
+          motion(s,target,[from,landing],'throw',target.name+'被蜃影翻摔',group);
+          if(target.bot)interruptMonster(target);
+          return true;
+        },outward:bell().outward
+      });
+      mirrorSteps.push(result);castEvent.animation.mirrorSteps=mirrorSteps;
+      return result;
+    }:null;
     if(!['fist-chain','meteor','restore','counter','fist-focus'].includes(sk.kind)&&(sk.kind!=='blink'||sk.burst))strikeSeals(s,cells);
     // Fixed objectives can be hit by targeted techniques, but cannot be moved.
     if(fixedTarget&&!at(s,p)&&['hit','lunge','swap'].includes(sk.kind))return;
@@ -1170,10 +1200,11 @@
             weaponHit:{group:castEvent.id,rayId:layer,cell,records}});
           return {damage:dealt,absorbed:shield-(target.shield||0)};
         },
-        push:(target,d)=>push(s,a,target,1,d,castEvent.id)
+        push:(target,d)=>push(s,a,target,1,d,castEvent.id),
+        afterStep:step=>{if(copy)copy(origin,{direction:attackDirection(origin,p),layer:step.layer,power:sk.power},castEvent.id,records);}
       });
       castEvent.animation.bellSteps=steps;
-      castEvent.animation.weaponTimeline=bell().timeline(bellPlan,sk,steps,records);
+      castEvent.animation.weaponTimeline=bell().timeline(bellPlan,sk,steps,records,mirrorSteps);
       castEvent.animation.weaponGroup=castEvent.id;
       castEvent.animation.changes=s.actors.filter(t=>t.uid===a.uid||records.some(h=>h.uid===t.uid))
         .map(t=>({...appearance(t),x:t.x,y:t.y}));
@@ -1201,7 +1232,7 @@
       return;
     }
     if(sk.kind==='fist-chain'){
-      chainFists(s,a,sk,attackDirection(a,p));
+      chainFists(s,a,sk,attackDirection(a,p),true,copy);
       return;
     }
     if(sk.kind==='fist-throw'){
@@ -1218,6 +1249,7 @@
       if(moves.length)log(s,a.name+'將敵人翻摔至身後','displace',{
         actor:a.uid,animation:{kind:'move',style:'throw',moves}});
       for(const target of thrown)damage(s,a,target,a.atk*sk.power,{skill:sk.id,manualId:sk.manualId});
+      if(copy)copy(point(a),{direction:d,power:sk.power,layer:1});
       return;
     }
     if(sk.kind==='restore'){
@@ -1262,6 +1294,7 @@
           }
           damage(s,a,t,a.atk*power,{...sk,skill:sk.id,strike});
         }
+        if(copy)copy(point(a),{direction:aim||attackDirection(a,p),power:sk.power/2,layer:strike+1});
       }
       return;
     }
@@ -1282,6 +1315,7 @@
       if(sk.slow&&alive(t)){t.slow=1;t.slowUntil=t.turns+1;}if(sk.push&&alive(t))push(s,a,t,sk.push,pushForward);
     }
     if(sk.pushToEdge)for(const t of hit)if(alive(t))push(s,a,t,boardSpan(s));
+    if(copy)copy(point(a),{direction:aim||attackDirection(a,p),power:sk.power,layer:1});
   }
   function interruptMonster(m){m.intent={version:2,kind:'stagger',cells:[],text:'位移打斷：下回合重新蓄勢'};}
   function monsterCells(s,m,target,profile=monsterProfileFor(m)){

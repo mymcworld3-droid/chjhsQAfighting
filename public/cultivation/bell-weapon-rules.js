@@ -41,7 +41,7 @@
     const y=cells.reduce((n,p)=>n+p.y,0)/cells.length-origin.y;
     return x&&Math.abs(x)>=Math.abs(y)?{x:Math.sign(x),y:0}:y?{x:0,y:Math.sign(y)}:null;
   }
-  function resolve(plan,{targets,alive,covers,apply,push,canContinue=()=>true}){
+  function resolve(plan,{targets,alive,covers,apply,push,canContinue=()=>true,afterStep=()=>{}}){
     const steps=[];
     for(const step of plan.steps){
       if(!canContinue())break;
@@ -63,13 +63,13 @@
           if(!same(from,to))moves.push({uid:id(enemy),from,to});
         }
       }
-      steps.push({layer:step.layer,cells:step.cells.map(point),hits,moves});
+      const settled={layer:step.layer,cells:step.cells.map(point),hits,moves};steps.push(settled);afterStep(settled);
     }
     return steps;
   }
   // One authoritative segment per wave, with the exact displacement endpoints.
   // Consecutive movements finish before the next hit; no jump to final position.
-  function timeline(plan,sk,steps,records=null){
+  function timeline(plan,sk,steps,records=null,mirrorSteps=[]){
     const strike=sk.kind==='bell-strike',echo=sk.kind==='bell-echo';
     const durationMs=strike?260:echo?600:350;
     const segments=steps.map((step,i)=>{
@@ -84,6 +84,17 @@
         hits:hits.map(h=>({uid:h.uid,damage:h.damage,absorbed:h.absorbed||0,cell:point(h.cell)})),
         moves:step.moves.map(m=>({uid:m.uid,path:[point(m.from),point(m.to)],style:'slide'}))};
     });
+    if(mirrorSteps.length){
+      for(const part of mirrorSteps){
+        const body=segments[part.layer-1];if(!body)continue;
+        if(part.suppressed||!part.cells.length)continue;
+        segments.push({...body,tone:'violet',bell:false,origin:part.source,target:part.cells.at(-1),cells:part.cells,
+          ...(strike?{rays:[{cells:[part.source,...part.cells],tone:'violet'}]}:{}),
+          hits:(records?records.filter(h=>h.rayId===part.layer+100):part.hits).map(h=>({uid:h.uid,damage:h.damage,absorbed:h.absorbed||0,cell:h.cell})),
+          moves:part.moves.map(m=>({uid:m.uid,path:[m.from,m.to],style:'slide'}))});
+      }
+      segments.sort((a,b)=>a.impact-b.impact);
+    }
     return {version:2,durationMs,segments};
   }
   return Object.freeze({supports,plans,selected,outward,resolve,timeline});

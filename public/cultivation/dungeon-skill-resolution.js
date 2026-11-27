@@ -170,6 +170,25 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     }
     return total;
   };
+  const mirrorSteps=[];
+  const copy=mirror()?.canCopy(sk)&&mirror().active(room.weaponObjects,uid)?(from,beat)=>{
+    const prior=members[uid];members[uid]={...player,position:{...from}};
+    const result=mirror().copyBeat(prism().boardForDungeon(map),from,sk,beat,{
+      targets:()=>enemies,alive:e=>healthy(e)>0,covers:Boss.occupies,
+      apply:(enemy,power,cell,layer)=>{
+        apply(enemy,power);const hit=hits.at(-1);Object.assign(hit,{avatar:true,layer,cell});
+        return {damage:hit.damage,absorbed:hit.shieldDamage||0};
+      },
+      push:(enemy,d,count)=>{if(advance(enemy,d,count))enemy.attack=null;},
+      throwTo:(enemy,d)=>{
+        if(enemy.kind==='boss')return true;
+        const landing=forward(enemy.position,d,-2);
+        if(!tile(map,landing)||occupied(landing,enemies,enemy.id)||present(members,landing))return false;
+        enemy.position={...landing};enemy.attack=null;return true;
+      },outward:bell().outward
+    });
+    members[uid]=prior;mirrorSteps.push(result);return result;
+  }:null;
   const mirrorCanSwap=q=>tile(map,q)&&!occupied(q,enemies)&&!Object.entries(members).some(([id,m])=>id!==uid&&same(m.position,q));
   const mirrorSelection=mirror()?.supports(sk)?mirror().selected(prism().boardForDungeon(map),origin,sk,room.weaponObjects,uid,target,mirrorCanSwap):null;
   const mirrorPlan=mirrorSelection?.plan;
@@ -204,7 +223,8 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
         const hit=hits.at(-1);hit.layer=layer;hit.cell=cell;
         return {damage:hit.damage,absorbed:hit.shieldDamage||0};
       },
-      push:(enemy,d)=>{if(advance(enemy,d,1))enemy.attack=null;}
+      push:(enemy,d)=>{if(advance(enemy,d,1))enemy.attack=null;},
+      afterStep:step=>{if(copy)copy(origin,{direction:axis(origin,target),layer:step.layer,power:sk.power});}
     });
   }else if(prism()?.supports(sk)){
     if(!prismPlan)throw fail('請選擇未受阻擋的八方向直線',409);
@@ -221,6 +241,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     if(!line.some(p=>same(p,target)))throw fail('請選擇同一直線且未被岩壁阻擋的目標',409);
     cells=line;
     for(const e of targets(cells))apply(e,sk.power);
+    if(copy)copy(origin,{direction:axis(origin,target),layer:1,power:sk.power});
     // Forced displacement is processed from farthest first to avoid overlaps.
     if(sk.pushToEdge){
       const d=axis(origin,target);
@@ -278,7 +299,13 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     const d=axis(origin,target);
     player.position={...target};position={...target};
     cells=front(map,target,d,!!sk.tShape);
-    for(const e of targets(cells)){
+    if(copy){
+      const times=sk.hits||1;
+      for(let i=0;i<times;i++){
+        for(const e of targets(cells))apply(e,sk.power/times);
+        copy(target,{direction:d,power:sk.power/times,layer:i+1});
+      }
+    }else for(const e of targets(cells)){
       const times=sk.hits||1;
       for(let i=0;i<times;i++)apply(e,sk.power/times);
     }
@@ -305,6 +332,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
             if(!moved&&sk.collisionPower>0)apply(e,sk.collisionPower);
           }
         }
+        if(copy)copy(current,{direction:d,power:sk.power,layer:n+1});
         const ahead=forward(current,d,1);
         const canStep=tile(map,ahead)&&!occupied(ahead,enemies)&&
           !present(members,ahead);
@@ -336,6 +364,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
           }
         }
       }
+      if(copy)copy(origin,{direction:d,power:sk.power,layer:1});
     }
   }else throw fail('此技能尚未支援即時副本，請選擇其他功法',409);
   // The client cannot create damage, revive defeated enemies, or set focus.
@@ -347,10 +376,11 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
   // Small, bounded visual payload: the shared SSE already transports the
   // last resolved skill, so all clients see the same ground-level impact
   // trace without trusting browser-supplied damage or affected squares.
+  if(mirrorSteps.length)cells=[...new Map([...cells,...mirrorSteps.flatMap(s=>s.cells)].map(p=>[key(p),p])).values()];
   const seen=new Set();
   const effectCells=(sk.kind==='fist-focus'?[origin]:cells)
     .filter(p=>tile(map,p)&&!seen.has(key(p))&&seen.add(key(p)))
-    .slice(0,weavePlan?map.width*map.height:bellPlan?80:72).map(p=>({x:p.x,y:p.y}));
+    .slice(0,weavePlan||mirrorSteps.length?map.width*map.height:bellPlan?80:72).map(p=>({x:p.x,y:p.y}));
   const visualMoves=enemies.filter(e=>startingPositions.has(e.id)&&
     !same(startingPositions.get(e.id),e.position)).slice(0,12).map(e=>({
       enemyId:e.id,from:{...startingPositions.get(e.id)},to:{...e.position}
@@ -359,9 +389,10 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     moveSword:Boolean(moveSword),origin:{...origin},target:{...target},
     ...(flightPath?{path:flightPath}:{}),
     cost,hits,visualMoves,...(chainSteps.length?{chainSteps}:{}),
+    ...(mirrorSteps.length?{mirrorSteps}:{}),
     ...(mirrorPlan?{mirrorPlan}:{}),
     ...(weavePlan?{first:first?{x:first.x,y:first.y}:null,weavePlan,weaponTimeline:weave().timeline(weavePlan,sk,hits.map(h=>({uid:h.enemyId,damage:h.damage,absorbed:h.shieldDamage||0,cell:h.cell})))}:{}),
-    ...(bellSteps?{bellSteps,weaponTimeline:bell().timeline(bellPlan,sk,bellSteps)}:{}),
+    ...(bellSteps?{bellSteps,weaponTimeline:bell().timeline(bellPlan,sk,bellSteps,null,mirrorSteps)}:{}),
     ...(prismPlan?{prismRays:prismPlan.rays,weaponTimeline:prism().timeline(prismPlan,sk,hits)}:{}),
     totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
@@ -425,7 +456,7 @@ function previewPlan(room,uid,map,skill){
     const path=result.path||[from,...(result.chainSteps||[]).map(s=>s.position)];
     const scheme={aim:{...target},cells,path:path.map(p=>({...p})),cost:result.cost,valid:staminaFor(member)>=result.cost,
       hits:result.hits,landings:result.visualMoves.map(m=>m.to),position:result.position,
-      totalDamage:result.totalDamage,...(result.mirrorPlan?{mirrorPlan:result.mirrorPlan,weaponObjects:out.weaponObjects||room.weaponObjects||null}:{}),...(result.bellSteps?{bellSteps:result.bellSteps,weaponTimeline:result.weaponTimeline}:{}),...(result.prismRays?{rays:result.prismRays,weaponTimeline:result.weaponTimeline}:{})};
+      totalDamage:result.totalDamage,...(result.mirrorSteps?{mirrorSteps:result.mirrorSteps}:{}),...(result.mirrorPlan?{mirrorPlan:result.mirrorPlan,weaponObjects:out.weaponObjects||room.weaponObjects||null}:{}),...(result.bellSteps?{bellSteps:result.bellSteps,weaponTimeline:result.weaponTimeline}:{}),...(result.prismRays?{rays:result.prismRays,weaponTimeline:result.weaponTimeline}:{})};
     if(result.position&&path.length===1)scheme.path.push({...result.position});
     const aliases=prismGeometry?.byAim[key(target)]?.aims||[target];
     for(const aim of aliases){plan.aims.push({...aim});plan.byAim[key(aim)]={...scheme,aim:{...aim}};}
