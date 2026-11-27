@@ -629,9 +629,9 @@
   }
   const point=a=>({x:a.x,y:a.y});
   const appearance=a=>({uid:a.uid,hp:a.hp,shield:a.shield,stamina:a.stamina,guard:a.guard,slow:a.slow,...(a.flyingSword?{flyingSword:a.flyingSword}:{})});
-  function motion(s,a,route,style='walk',text=a.name+'調整位置'){
+  function motion(s,a,route,style='walk',text=a.name+'調整位置',weaponGroup=null){
     if(route.length<2||key(route[0])===key(route.at(-1)))return;
-    log(s,text,'displace',{actor:a.uid,path:route,animation:{kind:'move',style}});
+    log(s,text,'displace',{actor:a.uid,path:route,animation:{kind:'move',style,...(weaponGroup?{weaponGroup}:{})}});
   }
   function recovery(s,a,hp,shield=0){
     if(!hp&&!shield)return;
@@ -751,11 +751,11 @@
     if(dx&&Math.abs(dx)>=Math.abs(dy))return {x:Math.sign(dx),y:0};
     return dy?{x:0,y:Math.sign(dy)}:null;
   }
-  function push(s,a,target,steps,direction=pushDirection(a,target)){
+  function push(s,a,target,steps,direction=pushDirection(a,target),weaponGroup=null){
     if(!direction||target.boss&&!target.trackingAttack)return;
     const route=[point(target)],{x:dx,y:dy}=direction;
     for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(!canOccupy(s,target,p))break;target.x=p.x;target.y=p.y;route.push(point(target));}
-    motion(s,target,route,'push',target.name+'被擊退');
+    motion(s,target,route,'push',target.name+'被擊退',weaponGroup);
     if(target.bot&&route.length>1)interruptMonster(target);
   }
   // Geometric aiming range stays visible even while stamina/cooldown prevents a
@@ -1035,7 +1035,7 @@
     const bellSteps=events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.bellSteps;
     const rayPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,aim):null;
     return {aim,cost,valid:!reason,reason,cells:[...cells.values()],path,hits,moves,finalPositions,
-      ...(bellSteps?{bellSteps}:{}),
+      ...(bellSteps?{bellSteps,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       ...(rayPlan?{rays:rayPlan.rays,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       landings:finalPositions.filter(t=>t.uid!==a.uid).map(point)};
   }
@@ -1102,16 +1102,24 @@
     // Fixed objectives can be hit by targeted techniques, but cannot be moved.
     if(fixedTarget&&!at(s,p)&&['hit','lunge','swap'].includes(sk.kind))return;
     if(bellPlan){
-      castEvent.animation.bellSteps=bell().resolve(bellPlan,{
+      const records=[];
+      const steps=bell().resolve(bellPlan,{
         targets:()=>s.actors.filter(t=>t.team!==a.team),alive,covers,
         canContinue:()=>alive(a),
         apply:(target,power,layer,cell)=>{
           const shield=target.shield||0;
-          const dealt=damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId,strike:layer});
+          const dealt=damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId,strike:layer,
+            weaponHit:{group:castEvent.id,rayId:layer,cell,records}});
           return {damage:dealt,absorbed:shield-(target.shield||0)};
         },
-        push:(target,d)=>push(s,a,target,1,d)
+        push:(target,d)=>push(s,a,target,1,d,castEvent.id)
       });
+      castEvent.animation.bellSteps=steps;
+      castEvent.animation.weaponTimeline=bell().timeline(bellPlan,sk,steps,records);
+      castEvent.animation.weaponGroup=castEvent.id;
+      castEvent.animation.changes=s.actors.filter(t=>t.uid===a.uid||records.some(h=>h.uid===t.uid))
+        .map(t=>({...appearance(t),x:t.x,y:t.y}));
+      if(!s.events.includes(castEvent)){s.events.unshift(castEvent);if(s.events.length>LIMITS.events)s.events.splice(1,1);}
       return;
     }
     if(prismPlan){

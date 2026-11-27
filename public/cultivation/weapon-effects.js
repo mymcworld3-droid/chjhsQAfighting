@@ -26,6 +26,7 @@
       const hits=Array.isArray(s.hits)?s.hits.slice(0,128).filter(h=>uid(h?.uid)&&Number.isFinite(h.damage)&&h.damage>=0).map(h=>({uid:h.uid,damage:amount(h.damage),absorbed:amount(h.absorbed),...(valid(h.cell)?{cell:point(h.cell)}:{})})):[];
       const echoes=Array.isArray(s.echoes)?s.echoes.slice(0,8).filter(e=>valid(e?.position)).map(e=>({position:point(e.position),...(valid(e.to)?{to:point(e.to)}:{}),type:e.type==='time'?'time':'mirror',tone:tone(e.tone||(e.type==='time'?'gold':'violet'))})):[];
       segments.push({kind:s.kind,start:s.start,impact:s.impact,end:s.end,tone:tone(s.tone),
+        ...(s.bell===true?{bell:true,waveFrom:Number.isFinite(s.waveFrom)?Math.max(0,Math.min(8,s.waveFrom)):0}:{}),
         ...(Number.isInteger(s.chargeMs)&&s.chargeMs>0&&s.chargeMs<=s.start?{chargeMs:s.chargeMs}:{}),
         origin:valid(s.origin)?point(s.origin):null,target:valid(s.target)?point(s.target):null,
         cells:points(s.cells),vertices:points(s.vertices,16),radius:Number.isFinite(s.radius)?Math.max(0,Math.min(8,s.radius)):0,rays,moves,hits,echoes});
@@ -117,6 +118,22 @@
     if(due&&elapsed-due.at<=100)play(due.id,{volume:due.volume,key:key+':prism:'+due.index});
     return true;
   }
+  const BELL_SOUNDS=Object.freeze(['bell-wave']);
+  const isBell=id=>['bell-strike','bell-shock','bell-echo'].includes(id);
+  function bellSoundCues(timeline,id){
+    if(!isBell(id)||!timeline?.segments?.length)return [];
+    return timeline.segments.filter(s=>s.bell).map((s,i)=>({at:s.impact,id:BELL_SOUNDS[0],volume:.36-i*.035,rate:Math.max(.78,1.08-i*.10)}));
+  }
+  function advanceBellSound(timeline,id,elapsed,played,play,key){
+    if(!isBell(id)||!timeline)return false;
+    let due=null;
+    bellSoundCues(timeline,id).forEach((cue,i)=>{
+      if(elapsed<cue.at||played.has(i))return;
+      played.add(i);due={...cue,index:i};
+    });
+    if(due&&elapsed-due.at<=100)play(due.id,{volume:due.volume,rate:due.rate,key:key+':bell:'+due.index});
+    return true;
+  }
   function draw(ctx,timeline,p,v,above,{reduced=false}={}){
     if(!timeline)return false;
     const size=v.cell,at=p=>center(v,p);
@@ -136,7 +153,23 @@
           ctx.globalAlpha=.12*(1-q)+.07;
           for(const c of s.cells)ctx.fillRect(v.ox+c.x*size+1,v.oy+c.y*size+1,Math.max(1,size-2),Math.max(1,size-2));
           ctx.globalAlpha=.72*(1-q);
-          if(s.kind==='shock'&&origin){const r=size*(.4+s.radius*s.travel);ctx.strokeRect(origin.x-r,origin.y-r,2*r,2*r);}
+          if(s.kind==='shock'&&origin){
+            const radius=s.bell?(s.waveFrom+(s.radius-s.waveFrom)*s.travel):s.radius*s.travel;
+            const r=size*(.4+radius);ctx.strokeRect(origin.x-r,origin.y-r,2*r,2*r);
+            if(s.bell){
+              // Bronze double contour expands from the previous layer. The
+              // inner inscription is translucent and below every character.
+              ctx.strokeStyle='#f9d499';ctx.globalAlpha=.4*(1-q);
+              const inset=Math.min(size*.12,r*.3);
+              ctx.strokeRect(origin.x-r+inset,origin.y-r+inset,2*(r-inset),2*(r-inset));
+              if(s.waveFrom===0){
+                ctx.globalAlpha=.48*(1-q);ring(ctx,origin,size*.35);
+                for(let i=0;i<4;i++){const angle=i*Math.PI/2;
+                  line(ctx,[{x:origin.x+Math.cos(angle)*size*.2,y:origin.y+Math.sin(angle)*size*.2},{x:origin.x+Math.cos(angle)*size*.48,y:origin.y+Math.sin(angle)*size*.48}]);
+                }
+              }
+            }
+          }
           if(s.kind==='domain'&&s.vertices.length>1){const pts=s.vertices.map(at);line(ctx,s.vertices.length>2?[...pts,pts[0]]:pts);}
           if(s.kind==='vortex'&&origin){ring(ctx,origin,size*(.3+s.radius*(1-s.travel)));ring(ctx,origin,size*(.22+s.radius*(1-s.travel)*.65));}
           if(s.kind==='crash'&&target&&b>=0)for(let i=1;i<=3;i++)ring(ctx,target,size*(i*.27+b*i*.8));
@@ -147,6 +180,16 @@
           for(const [width,alpha] of [[.19,.18],[.065,.9],[.018,.95]]){
             ctx.strokeStyle=width===.018?'#fffaf0':ink(ray.tone);ctx.lineWidth=Math.max(1,size*width);
             ctx.globalAlpha=alpha*(1-Math.max(0,b)*.85);line(ctx,trail);
+          }
+        }
+        if(s.bell&&s.kind==='ray'&&origin&&s.rays[0]){
+          const last=at(s.rays[0].cells.at(-1)),head=lerp(origin,last,s.travel);
+          const angle=Math.atan2(last.y-origin.y,last.x-origin.x),nx=-Math.sin(angle),ny=Math.cos(angle);
+          ctx.globalAlpha=.75*(1-Math.max(0,b));ctx.strokeStyle='#f6d39b';ctx.lineWidth=Math.max(1,size*.065);
+          for(let i=0;i<2;i++){
+            const a={x:head.x-Math.cos(angle)*size*.16*i,y:head.y-Math.sin(angle)*size*.16*i};
+            const radius=size*(.18+.08*i);
+            line(ctx,[{x:a.x+nx*radius,y:a.y+ny*radius},{x:a.x+Math.cos(angle)*radius*.55,y:a.y+Math.sin(angle)*radius*.55},{x:a.x-nx*radius,y:a.y-ny*radius}]);
           }
         }
         for(const e of s.echoes)silhouette(ctx,at(e.to?lerp(e.position,e.to,s.travel):e.position),size,ink(e.tone),.36);
@@ -204,5 +247,5 @@
     }
     ctx.restore();return state.objects.length>0;
   }
-  return Object.freeze({normalize,active,numberFrames,motionPose,sample,draw,drawNumbers,drawObjects,PRISM_SOUNDS,prismSoundCues,advancePrismSound});
+  return Object.freeze({normalize,active,numberFrames,motionPose,sample,draw,drawNumbers,drawObjects,PRISM_SOUNDS,prismSoundCues,advancePrismSound,BELL_SOUNDS,bellSoundCues,advanceBellSound});
 });

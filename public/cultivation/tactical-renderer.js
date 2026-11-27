@@ -322,6 +322,8 @@ export class TacticalRenderer{
       this.queue.push(...planned);
       if(planned.some(scene=>globalThis.QAWeaponEffects.prismSoundCues(scene.weaponTimeline,scene.skill).length))
         void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.PRISM_SOUNDS);
+      if(planned.some(scene=>globalThis.QAWeaponEffects.bellSoundCues(scene.weaponTimeline,scene.skill).length))
+        void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.BELL_SOUNDS);
       const changes=ObjectiveVFX.transitions(this.state,state);
       if(changes.length)this.objectiveCues.push(...changes.map(cue=>({...cue,started:null})));
       if(this.objectiveCues.length>12)this.objectiveCues=this.objectiveCues.slice(-12);
@@ -733,7 +735,10 @@ export class TacticalRenderer{
       const prismPlayed=scene.weaponTimeline&&globalThis.QAWeaponEffects.advancePrismSound(scene.weaponTimeline,scene.skill,
         progress*scene.weaponTimeline.durationMs,scene._playedPrismCues||=new Set(),
         (id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},s.id+':'+(scene.weaponGroup||scene.eventRevision)+':'+scene.actor);
-      const windows=prismPlayed?[]:scene.weaponTimeline?[...new Set(scene.weaponTimeline.segments.filter(s=>s.hits.some(h=>h.damage||h.absorbed)).map(s=>s.impact))].slice(0,3).map(at=>({at:at/scene.weaponTimeline.durationMs})):Impact.hitWindows(scene,A);
+      const bellPlayed=scene.weaponTimeline&&globalThis.QAWeaponEffects.advanceBellSound(scene.weaponTimeline,scene.skill,
+        progress*scene.weaponTimeline.durationMs,scene._playedBellCues||=new Set(),
+        (id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},s.id+':'+(scene.weaponGroup||scene.eventRevision)+':'+scene.actor);
+      const windows=prismPlayed||bellPlayed?[]:scene.weaponTimeline?[...new Set(scene.weaponTimeline.segments.filter(s=>s.hits.some(h=>h.damage||h.absorbed)).map(s=>s.impact))].slice(0,3).map(at=>({at:at/scene.weaponTimeline.durationMs})):Impact.hitWindows(scene,A);
       if(windows.length){
         scene._playedImpactCues||=new Set();
         for(let i=0;i<windows.length;i++){

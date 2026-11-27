@@ -67,5 +67,24 @@
     }
     return steps;
   }
-  return Object.freeze({supports,plans,selected,outward,resolve});
+  // One authoritative segment per wave, with the exact displacement endpoints.
+  // Consecutive movements finish before the next hit; no jump to final position.
+  function timeline(plan,sk,steps,records=null){
+    const strike=sk.kind==='bell-strike',echo=sk.kind==='bell-echo';
+    const durationMs=strike?260:echo?600:350;
+    const segments=steps.map((step,i)=>{
+      const impact=strike?130:echo?110*(i+1):175;
+      const start=echo?110*i:0,end=echo&&i<steps.length-1?110*(i+2):durationMs;
+      const radius=strike?0:echo?step.layer:sk.radius;
+      const hits=records?records.filter(h=>h.rayId===step.layer):step.hits;
+      return {kind:strike?'ray':'shock',tone:'copper',bell:true,start,impact,end,
+        origin:point(plan.origin),target:point(plan.aim),radius,waveFrom:echo?step.layer-1:0,
+        cells:step.cells.map(point),
+        ...(strike?{rays:[{cells:[point(plan.origin),...step.cells.map(point)],tone:'copper'}]}:{}),
+        hits:hits.map(h=>({uid:h.uid,damage:h.damage,absorbed:h.absorbed||0,cell:point(h.cell)})),
+        moves:step.moves.map(m=>({uid:m.uid,path:[point(m.from),point(m.to)],style:'slide'}))};
+    });
+    return {version:2,durationMs,segments};
+  }
+  return Object.freeze({supports,plans,selected,outward,resolve,timeline});
 });

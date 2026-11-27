@@ -71,7 +71,7 @@ function buildSkill(uid,result,previous,next){
     (result.skillId==='flight-summon'&&Array.isArray(result.path)?{kind:'flying-sword'}:null);
   if(!skill)return null;
   const move=dungeonVisualMove(result.skillId);
-  const cells=(result.effectCells||[]).filter(validPoint).slice(0,72)
+  const cells=(result.effectCells||[]).filter(validPoint).slice(0,result.skillId==='bell-echo'?80:72)
     .map(copyPoint);
   const hits=Array.isArray(result.hits)?result.hits.slice(0,30):[];
   const hitIds=new Set(hits.map(h=>h.enemyId));
@@ -117,7 +117,13 @@ function buildSkill(uid,result,previous,next){
     duration:durationFor(result.skillId),
     visualVersion:1};
   const timeline=globalThis.QAWeaponEffects?.normalize(result.weaponTimeline);
-  if(timeline){scene.weaponTimeline=timeline;scene.duration=timeline.durationMs;}
+  if(timeline){
+    scene.weaponTimeline=timeline;scene.duration=timeline.durationMs;
+    if(timeline.segments.some(s=>s.bell)){
+      const hitIds=new Set(timeline.segments.flatMap(s=>s.hits.map(h=>h.uid)));
+      scene.bellBeforeEnemies=(previous?.enemies||[]).filter(e=>hitIds.has(e.id)).map(e=>({...e,position:{...e.position}}));
+    }
+  }
   if(move==='sky-cloud')scene.cuts=skyCuts(cells,target);
   if(move==='sky-sever')scene.rays=skyRays(cells,target);
   return scene;

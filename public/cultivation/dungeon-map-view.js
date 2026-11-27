@@ -1698,6 +1698,8 @@ class DungeonMapView{
             startedAt:now+(scene.delayMs||0),soundPlayed:false});
           if(globalThis.QAWeaponEffects?.prismSoundCues(scene.weaponTimeline,scene.skill).length)
             void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.PRISM_SOUNDS);
+          if(globalThis.QAWeaponEffects?.bellSoundCues(scene.weaponTimeline,scene.skill).length)
+            void window.QAGameAudio?.preload?.(globalThis.QAWeaponEffects.BELL_SOUNDS);
         }
       }
       while(this.visualScenes.size>12)
@@ -2109,6 +2111,14 @@ class DungeonMapView{
       if(!reduceMotion)for(const entry of [...this.visualScenes.values()].reverse()){
         const timeline=entry.scene.weaponTimeline,elapsed=now-entry.startedAt;
         if(!timeline||elapsed<0||elapsed>=entry.scene.duration)continue;
+        if(entry.scene.bellBeforeEnemies?.some(e=>e.id===uid)){
+          const before=entry.scene.before.find(e=>e.uid===uid);
+          if(before){
+            const sample=globalThis.QAWeaponEffects.sample(timeline,[before],[],elapsed/entry.scene.duration)[0];
+            travelActive=true;
+            return {...actor,position:{x:sample.x,y:sample.y},battleHealth:Math.ceil(sample.hp),visualLift:sample.lift,attack:null};
+          }
+        }
         const pose=globalThis.QAWeaponEffects.motionPose(timeline,uid,elapsed/entry.scene.duration);
         if(pose){travelActive=true;if(key==='member:'+this.uid)heroTravelActive=true;return {...actor,position:{x:pose.x,y:pose.y},visualLift:pose.lift};}
       }
@@ -2140,8 +2150,15 @@ class DungeonMapView{
     };
     const visualMembers=this.members().map(member=>
       visualActor(member,'member:'+member.uid));
-    const visualEnemies=this.creatures().map(enemy=>
-      visualActor(enemy,'enemy:'+enemy.id));
+    const liveEnemies=this.creatures(),shownEnemies=new Map(liveEnemies.map(e=>[e.id,e]));
+    if(!reduceMotion)for(const entry of [...this.visualScenes.values()].reverse()){
+      const elapsed=now-entry.startedAt;
+      if(elapsed<0||elapsed>=entry.scene.duration)continue;
+      for(const enemy of entry.scene.bellBeforeEnemies||[])if(!shownEnemies.has(enemy.id))
+        shownEnemies.set(enemy.id,enemy);
+    }
+    const visualEnemies=[...shownEnemies.values()].map(enemy=>
+      visualActor(enemy,'enemy:'+enemy.id)).filter(enemy=>enemy.battleHealth!==0);
     // Follow the same interpolated hero position, not the already-committed
     // server endpoint. The player remains screen-centered while terrain glides.
     const visualHero=visualMembers.find(member=>member.uid===this.uid)?.position||this.selfPad();
@@ -2159,7 +2176,9 @@ class DungeonMapView{
       const firstImpact=entry.scene.weaponTimeline?.segments.find(s=>s.hits.some(h=>h.damage||h.absorbed))?.impact;
       const prismPlayed=entry.scene.weaponTimeline&&globalThis.QAWeaponEffects.advancePrismSound(entry.scene.weaponTimeline,entry.scene.skill,
         elapsed,entry.playedPrismCues||=new Set(),(id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},this.room?.id+':'+key);
-      if(!prismPlayed&&!entry.soundPlayed&&p>=(firstImpact===undefined?.38:firstImpact/entry.scene.weaponTimeline.durationMs)){
+      const bellPlayed=entry.scene.weaponTimeline&&globalThis.QAWeaponEffects.advanceBellSound(entry.scene.weaponTimeline,entry.scene.skill,
+        elapsed,entry.playedBellCues||=new Set(),(id,opts)=>{try{window.QAGameAudio?.play(id,opts);}catch(_){}},this.room?.id+':'+key);
+      if(!prismPlayed&&!bellPlayed&&!entry.soundPlayed&&p>=(firstImpact===undefined?.38:firstImpact/entry.scene.weaponTimeline.durationMs)){
         entry.soundPlayed=true;
         if(entry.scene.hits?.some(hit=>hit.damage>0))
           try{window.QAGameAudio?.play('combat-impact',{volume:.27});}catch(_){}

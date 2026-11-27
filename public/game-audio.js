@@ -17,6 +17,7 @@
     'prism-sword': { priority: 40, group: 'combat', cooldown: 85, max: .16, gain: .60 },
     'prism-crystal': { priority: 40, group: 'combat', cooldown: 85, max: .17, gain: .58 },
     'prism-split': { priority: 40, group: 'combat', cooldown: 85, max: .18, gain: .58 },
+    'bell-wave': { priority: 40, group: 'combat', cooldown: 85, max: .15, gain: .62 },
     'spirit-pulse': { priority: 50, group: 'spirit', cooldown: 650, max: 1, gain: .60 },
     'reward-chime': { priority: 80, group: 'reward', cooldown: 900, max: .9, gain: .65 },
     'grand-reveal': { priority: 100, group: 'reveal', cooldown: 2000, max: 1.8, gain: .70 }

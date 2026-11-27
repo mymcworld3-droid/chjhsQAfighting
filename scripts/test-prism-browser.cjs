@@ -39,6 +39,27 @@ const fixtures=['prism-slash','prism-reflect','prism-scatter'].map((id,index)=>{
   assert.equal(result.result.totalDamage,result.result.weaponTimeline.segments.flatMap(s=>s.hits).reduce((sum,h)=>sum+h.damage,0));
   return {id,state,scene:scenes[0],room,nextRoom:{...room,members:result.members,enemies:result.enemies},duration:timeline.durationMs};
 });
+// Bell uses the same real renderers, but its positions and numbers are
+// sourced from the four sequential committed hits rather than a ray tree.
+for(const id of ['bell-strike','bell-shock','bell-echo']){
+  const skill=D.skillAtLevel(id,1,0),aim=id==='bell-strike'?p(8,7):origin;
+  const state=R.create({id:'bell-browser-'+id,mode:'pve',players:[{uid:'u',name:'青雲修士',atk:100,maxHp:10000,manualSkills:[]}],now:2000000000000});
+  Object.assign(state,{width:15,height:15,blocks:[],ground:Array(225).fill(0),objective:null,events:[],revision:1,actors:state.actors.slice(0,2)});
+  Object.assign(state.actors[0],{...origin,atk:100,stamina:10});
+  Object.assign(state.actors[1],{x:8,y:7,hp:10000,maxHp:10000,shield:0,guard:0,counter:0,boss:false,footprint:{width:1,height:1}});
+  const out=R.previewCast(state,state.actors[0],skill,aim),timeline=W.normalize(out.weaponTimeline);assert.ok(timeline);
+  if(id==='bell-echo')assert.equal(timeline.segments.length,4);
+  const changes=state.actors.map(a=>({...a,hp:a.hp-timeline.segments.flatMap(s=>s.hits).filter(h=>h.uid===a.uid).reduce((n,h)=>n+h.damage,0),...out.finalPositions.find(p=>p.uid===a.uid)}));
+  const next={...state,actors:changes,revision:2,events:[{id:'2:1',actor:'u',type:'cast',skill:id,animation:{kind:'cast',style:id,origin,target:aim,cells:out.cells,weaponTimeline:timeline,changes}}]};
+  const scenes=A.plan(state,next,'u');assert.equal(scenes.length,1);
+  const room={id:'bell-browser-room',dungeonArena:'exploration',status:'assembled',battleAppliedTick:0,
+    members:{u:{uid:'u',position:origin,battleHealth:10000,battleMaxHealth:10000,explorationStamina:10,dungeonSkills:[skill]}},
+    enemies:[{id:'e',kind:'wolf',position:p(8,7),battleHealth:10000,battleMaxHealth:10000}]};
+  // Use the normal irregular map for both dungeon painter and resolver.
+  const result=C.resolveCast(room,'u',map,skill,{target:aim,seq:1,base:100});
+  assert.ok(W.normalize(result.result.weaponTimeline));assert.equal(result.result.totalDamage,result.result.weaponTimeline.segments.flatMap(s=>s.hits).reduce((n,h)=>n+h.damage,0));
+  fixtures.push({id,state,scene:scenes[0],room,nextRoom:{...room,members:result.members,enemies:result.enemies},duration:timeline.durationMs});
+}
 async function main(){
   const output=path.resolve(process.argv[2]||'/tmp/prism-browser');fs.mkdirSync(output,{recursive:true});
   const app=express();
@@ -148,8 +169,19 @@ async function main(){
       A.setPreferences({enabled:false});
       check(!A.play('prism-split',{key:'muted'}),'mute ignored');
       check(A.diagnostics().voices===0,'mute left live sources');
+      A.setPreferences({enabled:true});
+      await A.preload(['bell-wave']);
+      check(A.diagnostics().failed.length===0,'bell MP3 decode failure');
+      const bellStart=A.diagnostics().played;
+      await wait(300);
+      for(let i=0;i<4;i++){
+        check(A.play('bell-wave',{key:'browser:bell:'+i,rate:1.08-i*.10}),'bell cue rejected');
+        await wait(135);
+      }
+      const bellResult=A.diagnostics();
+      check(bellResult.played===bellStart+4&&bellResult.peakVoices<=2,'four bell cues with bounded sources');
       A.dispose();document.getElementById('audio-unlock').remove();
-      return result;
+      return {...result,bellPlayed:bellResult.played-bellStart,bellPeakVoices:bellResult.peakVoices};
     });
     console.log('Prism real Chromium audio acceptance',audio);
     assert.deepEqual(errors,[]);

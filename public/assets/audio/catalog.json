@@ -69,6 +69,13 @@
       "source": "Original procedural synthesis",
       "method": "Three rising beam chirps with a bright decaying texture",
       "duration": 0.15
+    },
+    {
+      "id": "bell-wave",
+      "source": "Original procedural synthesis",
+      "method": "Damped inharmonic bronze bell modes, 220–2290 Hz, short attack and decay",
+      "duration": 0.18,
+      "format": "MP3 mono 22050 Hz 32 kbps"
     }
   ],
   "additionalFormat": "Prism: original procedural sound synthesis, mono MP3, 22050 Hz, 32 kbps; deterministic chirps/modal resonances, short envelope, peak 0.70; no external source."
