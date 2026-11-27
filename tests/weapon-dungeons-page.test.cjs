@@ -14,6 +14,7 @@ function harness({wide=false}={}){
    removeAttribute(key){delete this.attributes[key];}
    append(child){elements.set(child.id,child);child.parentElement=this;}
    focus(){}
+   querySelector(selector){if(selector==='[data-atlas-tickets]'&&this.id==='gameplay-dungeon-atlas')return this.ticketSlot||=( {innerHTML:''} );return null;}
    getBoundingClientRect(){return {left:0,right:500,top:0,bottom:500};}
  }
  const entries=new Element('div'),trigger=new Element('button'),shell=new Element('div');shell.dataset={};
@@ -39,13 +40,13 @@ function harness({wide=false}={}){
 }
 test('gameplay entry opens an authenticated inline panel with six difficulties, ticket balance and tracking counterplay',async()=>{
  const h=harness();assert(h.elements.has('gameplay-weapon-dungeon-entry'));
- await h.open();assert.equal(h.requests.length,0);assert.equal(h.dialog().hidden,true);
+ const atlasOpening=h.open();assert.equal(h.requests.length,1);h.respond();await atlasOpening;assert.equal(h.dialog().hidden,true);
  assert.equal(h.shell.attributes['data-wd-atlas'],'true');
  assert.match(h.elements.get('gameplay-dungeon-atlas').innerHTML,/data-atlas-dungeon="peak-stone"/);
  h.choose();assert.equal(h.dialog().hidden,false);assert.match(h.dialog().innerHTML,/同步中/);
- h.respond();await new Promise(resolve=>setImmediate(resolve));
+ h.respond(h.state(),1);await new Promise(resolve=>setImmediate(resolve));
  h.back();assert.equal(h.dialog().hidden,true);assert.equal(h.shell.attributes['data-wd-atlas'],'true');
- h.choose();h.respond(h.state(),1);await new Promise(resolve=>setImmediate(resolve));
+ h.choose();h.respond(h.state(),2);await new Promise(resolve=>setImmediate(resolve));
  assert.equal((h.dialog().innerHTML.match(/data-wd-difficulty=/g)||[]).length,6);
  assert.match(h.dialog().innerHTML,/副本券 .*?>3<\/b>/);
  assert.match(h.dialog().innerHTML,/擊退則會打斷蓄勢/);
@@ -88,10 +89,11 @@ test('landscape page shows weapon category and authentic map destination without
  assert.match(atlas.innerHTML,/<span class="gameplay-atlas-name"><span>尖峰石域<\/span><\/span>/);
  assert.doesNotMatch(atlas.innerHTML,/fa-chevron-right/);
  h.elements.get('gameplay-weapon-dungeon-entry').handlers.click();
- assert.equal(h.requests.length,0,'category only changes the right pane');
- atlas.handlers.click({target:{closest:s=>s==='[data-atlas-dungeon]'?{dataset:{atlasDungeon:W.ID}}:null}});
- assert.equal(h.requests.length,1);assert.equal(h.dialog().hidden,false);
+ assert.equal(h.requests.length,1,'category requests only the balance');
  h.respond();await new Promise(resolve=>setImmediate(resolve));
+ atlas.handlers.click({target:{closest:s=>s==='[data-atlas-dungeon]'?{dataset:{atlasDungeon:W.ID}}:null}});
+ assert.equal(h.requests.length,2);assert.equal(h.dialog().hidden,false);
+ h.respond(h.state(),1);await new Promise(resolve=>setImmediate(resolve));
  assert.equal((h.dialog().innerHTML.match(/data-wd-difficulty=/g)||[]).length,6);
  assert.match(h.dialog().innerHTML,/尖峰石域/);
 });
@@ -101,17 +103,18 @@ test('portrait launcher and external callers open the same island atlas, with no
  h.elements.get('gameplay-weapon-dungeon-entry').handlers.click();
  await new Promise(resolve=>setImmediate(resolve));
  assert.equal(h.shell.attributes['data-wd-atlas'],'true');
- assert.equal(h.requests.length,0);assert.equal(h.dialog().hidden,true);
+ assert.equal(h.requests.length,1);assert.equal(h.dialog().hidden,true);
+ h.respond();await new Promise(resolve=>setImmediate(resolve));
  assert.match(atlas.innerHTML,/data-atlas-dungeon="peak-stone"/);
- h.choose();h.respond();await new Promise(resolve=>setImmediate(resolve));
+ h.choose();h.respond(h.state(),1);await new Promise(resolve=>setImmediate(resolve));
  assert.match(h.dialog().innerHTML,/data-wd-difficulty=/);
  assert.doesNotMatch(h.dialog().innerHTML,/尋訪秘境|data-wd-dungeon=/);
  h.back();assert.equal(h.dialog().hidden,true);
  assert.equal(h.shell.attributes['data-wd-atlas'],'true');
  atlas.handlers.click({target:{closest:s=>s==='[data-atlas-back]'?{}:null}});
  assert.equal(h.shell.attributes['data-wd-atlas'],undefined);
- await h.open();assert.equal(h.shell.attributes['data-wd-atlas'],'true');
- assert.equal(h.requests.length,1);
+ const reopening=h.open();assert.equal(h.shell.attributes['data-wd-atlas'],'true');
+ assert.equal(h.requests.length,3);h.respond(h.state(),2);await reopening;
  h.events.get('xiuxian:page-switched')({detail:{pageId:'page-home'}});
  assert.equal(h.shell.attributes['data-wd-atlas'],undefined);
 });
@@ -171,4 +174,28 @@ test('return during a pending landscape request restores the atlas and ignores t
  assert.equal(h.dialog().hidden,true);
  assert.equal(h.shell.attributes['data-wd-open'],undefined);
  assert.doesNotMatch(h.dialog().innerHTML,/data-wd-difficulty=/);
+});
+
+test('atlas shows the authenticated ticket balance, including zero and above-cap rewards',async()=>{
+ for(const wide of [false,true]){
+  const h=harness({wide}),atlas=h.elements.get('gameplay-dungeon-atlas');
+  assert.doesNotMatch(atlas.innerHTML,/座秘境開放/);
+  assert.match(atlas.innerHTML,/武器副本券/);
+  const opening=h.open();h.respond(h.state({tickets:8}));await opening;
+  assert.match(atlas.ticketSlot.innerHTML,/>8<\/b>/);
+  const next=h.open();h.respond(h.state({tickets:0}),1);await next;
+  assert.match(atlas.ticketSlot.innerHTML,/>0<\/b>/);
+  const old=h.open();h.setUid('u2');h.events.get('xiuxian:user-data-ready')();
+  const current=h.open();h.respond(h.state({tickets:4}),3);await current;
+  h.respond(h.state({tickets:9}),2);await old;
+  assert.match(atlas.ticketSlot.innerHTML,/>4<\/b>/);
+ }
+});
+test('detail response replaces pending atlas balance without stale overwrites',async()=>{
+ const h=harness(),atlas=h.elements.get('gameplay-dungeon-atlas');
+ const balance=h.open(),detail=h.open(W.ID);
+ h.respond(h.state({tickets:2}),1);await detail;
+ h.respond(h.state({tickets:3}),0);await balance;
+ assert.match(atlas.ticketSlot.innerHTML,/>2<\/b>/);
+ h.back();assert.equal(h.dialog().hidden,true);assert.equal(h.requests.length,2);
 });

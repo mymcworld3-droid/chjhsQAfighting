@@ -154,3 +154,9 @@
   #page-gameplay .gameplay-atlas-hint{margin:0;text-align:center;color:#e3d8bd;text-shadow:0 2px 6px #10160e;font-size:12px}
   #page-gameplay .gameplay-atlas-node:focus-visible,#page-gameplay .gameplay-atlas-back:focus-visible{outline:2px solid #f1d29a;outline-offset:2px}
 }
+
+#page-gameplay .gameplay-atlas-tickets{display:inline-flex;align-items:center;gap:5px;color:#f4e3bb;white-space:nowrap;font-variant-numeric:tabular-nums}
+#page-gameplay .gameplay-atlas-tickets .game-resource-value{display:inline-flex;align-items:center;gap:4px}
+#page-gameplay .gameplay-atlas-tickets .game-resource-icon{width:19px;height:19px;object-fit:contain}
+#page-gameplay .gameplay-atlas-tickets .game-resource-amount{font-size:1.15em;color:#ffe0a0}
+@media(orientation:portrait) and (max-width:380px){#page-gameplay .gameplay-atlas-tickets{gap:3px;font-size:10px}#page-gameplay .gameplay-atlas-heading h3{font-size:17px}}

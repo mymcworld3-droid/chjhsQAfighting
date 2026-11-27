@@ -2407,6 +2407,7 @@ function close(){
   window.QATrialQuestion?.close();keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;manualRecapCache=null;manualRecapLoadingKey='';battleMasteryBaseline=null;clearLiveManualXp();clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
   if(completedFirstStage)tutorialEvent('battle-closed');
+  if(battleChannel==='weapon-dungeon')window.dispatchEvent(new CustomEvent('xiuxian:weapon-dungeon-closed'));
 }
 window.openTacticalCombat=open;
 window.startQuizFlow=()=>open('pve');

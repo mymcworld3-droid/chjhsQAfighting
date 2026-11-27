@@ -52,6 +52,7 @@ async function main(){
   assert.equal(await page.locator('.gameplay-entries').isVisible(),false);
   assert.equal(await page.locator('[data-atlas-back]').isVisible(),true);
   await page.waitForFunction(()=>{const img=document.querySelector('[data-atlas-dungeon="peak-stone"] img');return img?.complete&&img.naturalWidth>0;});
+  await page.waitForFunction(()=>document.querySelector('[data-atlas-tickets] .game-resource-amount')?.textContent==='3');
   await page.screenshot({path:path.join(output,'dungeon-islands.png')});
   await page.locator('[data-atlas-back]').click();
   assert.equal(await page.locator('.gameplay-entries').isVisible(),true);
@@ -127,6 +128,7 @@ async function main(){
   room=await read();assert.equal(room.actors[0].stamina,10);assert.equal(room.actors[0].questions,2);
   assert.equal((await API.weaponDungeonState(db,'u1')).tickets,2);
   await page.locator('[data-close]').click();await page.evaluate(()=>window.openWeaponDungeons());
+  await page.waitForFunction(()=>document.querySelector('[data-atlas-tickets] .game-resource-amount')?.textContent==='2');
   await page.locator('[data-atlas-dungeon="peak-stone"]').click();
   await page.locator('[data-wd-enter]').waitFor({state:'visible'});
   assert.match(await page.locator('[data-wd-enter]').textContent(),/不耗券/);
