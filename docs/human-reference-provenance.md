@@ -19,3 +19,5 @@
 self-or-generated 與 adapted 是標籤辨識，不是對實際作者的確定判決；exam-claimed-unverified、other-human-source-claimed-unverified、unverified-other、missing-source 都是未核實；只有 verified-human-original 可用。不得由 AI 僅憑標記批次核准。
 
 原始資料查證及取得授權未完成前，不得在競賽文件宣稱題庫全部為人類原題。
+
+GitHub Actions 的 Reference question curriculum audit 工作流程會產生逐題 JSON 報告並保留為 human-reference-provenance-report artifact，供人工後續核對。政策、載入器、審核規則及題庫改動均觸發稽核。

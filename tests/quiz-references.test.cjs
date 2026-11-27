@@ -113,7 +113,10 @@ test('production references require verified human provenance, never a source la
  const {isApproved}=require('../human-reference-policy.cjs');
  const candidates=quizReferences(target);
  const active=liveReferences(target);
- assert.deepEqual(active.map(r=>r.id),candidates.filter(r=>isApproved(r)).map(r=>r.id));
+ const group=require('../question-references/數學/高中二年級/平面向量內積.json');
+ const eligible=group.references.filter(r=>isApproved(r,'question-references/數學/高中二年級/平面向量內積.json'));
+ assert.equal(active.length,Math.min(3,eligible.length));
+ assert.ok(active.every(r=>eligible.includes(r)));
  const forged={...candidates[0],id:'forged-human-source',source:'大考中心 115 學年度學測數學第 1 題'};
  assert.equal(isApproved(forged),false);
  assert.equal(livePrompt([forged]),'');

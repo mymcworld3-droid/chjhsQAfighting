@@ -12,6 +12,12 @@ on:
       - 'adaptive-learning-api.cjs'
       - 'public/cultivation/curriculum-range-rules.js'
       - 'quiz-references.cjs'
+      - 'human-reference-policy.cjs'
+      - 'scripts/audit-human-reference-provenance.cjs'
+      - 'server.js'
+      - 'AGENTS.md'
+      - 'docs/human-reference-provenance.md'
+      - 'tests/quiz-references.test.cjs'
       - 'scripts/build-curriculum-catalog.cjs'
       - 'scripts/audit-curriculum-coverage.cjs'
       - 'tests/curriculum-catalog.test.cjs'
@@ -37,6 +43,12 @@ on:
       - 'adaptive-learning-api.cjs'
       - 'public/cultivation/curriculum-range-rules.js'
       - 'quiz-references.cjs'
+      - 'human-reference-policy.cjs'
+      - 'scripts/audit-human-reference-provenance.cjs'
+      - 'server.js'
+      - 'AGENTS.md'
+      - 'docs/human-reference-provenance.md'
+      - 'tests/quiz-references.test.cjs'
       - 'scripts/build-curriculum-catalog.cjs'
       - 'scripts/audit-curriculum-coverage.cjs'
       - 'tests/curriculum-catalog.test.cjs'
@@ -70,3 +82,12 @@ jobs:
           node scripts/build-curriculum-catalog.cjs --check
           node scripts/audit-curriculum-coverage.cjs --check
           node --test tests/curriculum-catalog.test.cjs tests/quiz-references.test.cjs
+      - name: Export per-question human-source audit
+        run: node scripts/audit-human-reference-provenance.cjs reference-provenance-report.json
+      - name: Upload source audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: human-reference-provenance-report
+          path: reference-provenance-report.json
+          if-no-files-found: warn
