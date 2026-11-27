@@ -46,3 +46,35 @@ test('realtime resolver publishes version 2 and exact per-ray damage with no cap
     assert.ok(timeline.segments.flatMap(s=>s.hits).every(h=>h.damage>0));
   }
 });
+
+test('maximum prism scatter renders the committed ray tree in both layers and reduced effects',()=>{
+  const blocks=[p(3,1),p(12,3),p(4,4),p(7,4),p(13,4),p(3,6),p(11,7),p(6,8),p(7,10),p(6,11),p(13,11)];
+  const board={width:15,height:15,blocked:q=>blocks.some(b=>b.x===q.x&&b.y===q.y)},sk=D.skillAtLevel('prism-scatter',1,0);
+  const plan=P.build(board,p(7,7),sk,p(1,0));
+  assert.equal(plan.rays.length,21);
+  const enemy={uid:'e',x:9,y:7},hits=P.hitIntents(plan,sk,[enemy]).map(h=>({...h,damage:Math.round(h.power*100)}));
+  const timeline=W.normalize(P.timeline(plan,sk,hits));assert.ok(timeline);
+  const before=JSON.stringify(timeline),view={ox:0,oy:0,cell:36,width:15,height:15};
+  for(const reduced of [false,true])for(const above of [false,true]){
+    let depth=0,draws=0;
+    const ctx=new Proxy({},{
+      get(o,k){if(k in o)return o[k];return (...args)=>{
+        if(k==='save')depth++;if(k==='restore')depth--;
+        for(const value of args)if(typeof value==='number')assert.ok(Number.isFinite(value));
+        if(k==='stroke'||k==='fill'||k==='fillText')draws++;
+      };},
+      set(o,k,value){if(typeof value==='number')assert.ok(Number.isFinite(value));o[k]=value;return true;}
+    });
+    for(let ms=0;ms<=600;ms+=10){
+      assert.equal(W.draw(ctx,timeline,ms/600,view,above,{reduced}),true);
+      if(above)W.drawNumbers(ctx,timeline,ms/600,view,[enemy]);
+      assert.equal(depth,0);
+    }
+    assert.ok(draws>0);
+  }
+  assert.equal(JSON.stringify(timeline),before);
+  assert.equal(W.active(timeline,174/600).filter(s=>s.tone==='jade').length,0);
+  assert.equal(W.active(timeline,175/600).filter(s=>s.tone==='jade').length,4);
+  assert.equal(W.active(timeline,319/600).filter(s=>s.tone==='violet').length,0);
+  assert.equal(W.active(timeline,320/600).filter(s=>s.tone==='violet').length,16);
+});
