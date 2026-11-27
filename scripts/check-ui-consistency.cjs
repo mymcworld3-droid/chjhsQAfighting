@@ -64,9 +64,9 @@ const server=http.createServer((req,res)=>{
    await page.screenshot({path:path.join(output,name+'-battle.png')});
    await page.locator('#open-dungeon').click();await page.locator('[data-wd-dungeon]').first().click();
    assert.equal(await page.locator('[data-wd-difficulty]').count(),6);
-   assert.equal(await page.locator('[data-qy-realm-kind="difficulty"]').count(),6);
+   assert.equal(await page.locator('.wd-difficulties [data-qy-realm-kind="difficulty"]').count(),6);
    await page.screenshot({path:path.join(output,name+'-dungeon.png')});
-   await page.keyboard.press('Escape');assert.equal(await page.locator('#weapon-dungeons-dialog').evaluate(el=>el.open),false);
+   await page.locator('[data-wd-close]').click();assert.equal(await page.locator('#weapon-dungeons-panel').evaluate(el=>el.hidden),true);
    assert.deepEqual(errors,[],name+' browser errors');
    console.log(name+': training, teacher, battlefield and dungeon passed');await context.close();
   }

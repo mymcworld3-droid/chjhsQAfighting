@@ -344,7 +344,7 @@ body.xianxia-theme :is(.dv-shell,.cc-shell,.quest-panel,.xpp-dialog) {
   color:var(--qy-paper);font-size:var(--ui-text);line-height:1.6;
 }
 body.xianxia-theme :is(.dv-view-heading h3,.dv-today-heading h3,.cc-toolbar h3,.cc-section-title h3,
-  .mr-reward-header h2,.tc-dialog h2,.dt-result h2,#weapon-dungeons-dialog h2,
+  .mr-reward-header h2,.tc-dialog h2,.dt-result h2,#weapon-dungeons-panel h2,
   #section-classes .cc-class-title h2) {
   font-family:var(--ui-title-font) !important;
   color:var(--qy-paper);

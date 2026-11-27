@@ -1,19 +1,17 @@
-#weapon-dungeons-dialog{position:fixed;inset:0;margin:auto;padding:0;width:min(780px,calc(100% - 24px));max-width:calc(100% - 24px);max-height:90dvh;border:1px solid #a9956b;border-radius:15px;background:#14251e;color:#ede5cf;box-shadow:0 20px 70px #0009;overflow:hidden;font-family:inherit}
-#weapon-dungeons-dialog::backdrop{background:#070f0bd1}
-#weapon-dungeons-dialog>header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid #a9956b66;background:#1c2e24}
-#weapon-dungeons-dialog h2{margin:3px 0 0;color:#f0deb1;font-size:25px}
-#weapon-dungeons-dialog header small{color:#b7c7b4}
-#weapon-dungeons-dialog header button{padding:5px 12px;border:1px solid #a9956b88;border-radius:8px;background:#263c30;color:#f0deb1;font-size:24px;cursor:pointer}
-#weapon-dungeons-dialog .wd-body{padding:18px 20px;max-height:calc(90dvh - 90px);overflow-y:auto;overscroll-behavior:contain}
-#weapon-dungeons-dialog p{font-size:13px;line-height:1.8;color:#bfd0c0}
-#weapon-dungeons-dialog .wd-tickets{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-#weapon-dungeons-dialog .wd-tickets strong{color:#f3d286}
-#weapon-dungeons-dialog .wd-tickets span{font-size:12px;color:#abc4b0}
-#weapon-dungeons-dialog .wd-bonus{padding:9px 12px;background:#254733;color:#c7efc6;border:1px solid #6b977477;border-radius:7px}
-#weapon-dungeons-dialog button:focus-visible{outline:2px solid #e5cb8e;outline-offset:2px}
-#weapon-dungeons-dialog .wd-message{color:#f3d286}
-#weapon-dungeons-dialog .wd-cost{font-size:11px}
-@media(max-width:450px){#weapon-dungeons-dialog .wd-body{padding:14px}#weapon-dungeons-dialog>header{padding:12px 14px}}
+#weapon-dungeons-panel>header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 0 12px;border-bottom:1px solid #a9956b66;background:transparent}
+#weapon-dungeons-panel h2{margin:3px 0 0;color:#f0deb1;font-size:25px}
+#weapon-dungeons-panel header small{color:#b7c7b4}
+#weapon-dungeons-panel header button{padding:5px 12px;border:1px solid #a9956b88;border-radius:8px;background:#263c30;color:#f0deb1;font-size:13px;cursor:pointer}
+#weapon-dungeons-panel .wd-body{padding:10px 0 0;min-width:0}
+#weapon-dungeons-panel p{font-size:13px;line-height:1.8;color:#bfd0c0}
+#weapon-dungeons-panel .wd-tickets{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#weapon-dungeons-panel .wd-tickets strong{color:#f3d286}
+#weapon-dungeons-panel .wd-tickets span{font-size:12px;color:#abc4b0}
+#weapon-dungeons-panel .wd-bonus{padding:9px 12px;background:#254733;color:#c7efc6;border:1px solid #6b977477;border-radius:7px}
+#weapon-dungeons-panel button:focus-visible{outline:2px solid #e5cb8e;outline-offset:2px}
+#weapon-dungeons-panel .wd-message{color:#f3d286}
+#weapon-dungeons-panel .wd-cost{font-size:11px}
+@media(max-width:450px){#weapon-dungeons-panel .wd-body{padding:8px 0 0}#weapon-dungeons-panel>header{padding:0 0 8px}}
 
 #gameplay-weapon-dungeon-entry{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border:1px solid #c6ae7859;border-radius:12px;background:linear-gradient(120deg,#243629,#1b2620);color:#eee0bc;text-align:left;cursor:pointer;font:inherit;min-height:68px}
 #gameplay-weapon-dungeon-entry>i:first-child{font-size:21px;color:#cdb987}
@@ -24,77 +22,82 @@
 #gameplay-weapon-dungeon-entry:focus-visible{outline:2px solid #ead5a6;outline-offset:3px}
 
 /* Responsive realm atlas and illustrated dungeon detail. */
-#weapon-dungeons-dialog{width:min(1000px,calc(100% - 24px));max-height:94dvh;background:#101d19}
-#weapon-dungeons-dialog *{box-sizing:border-box}
-#weapon-dungeons-dialog .wd-heading{display:flex;align-items:center;gap:12px}
-#weapon-dungeons-dialog>header{background:linear-gradient(105deg,#30463a,#14251e)}
-#weapon-dungeons-dialog h2{letter-spacing:.12em}
-#weapon-dungeons-dialog .wd-body{max-height:calc(94dvh - 86px)}
-#weapon-dungeons-dialog .wd-tickets{padding:12px 15px;border:1px solid #baa27266;border-radius:10px;background:var(--qy-surface,#242018)}
-#weapon-dungeons-dialog .wd-tickets>span{text-align:right;line-height:1.5}
-#weapon-dungeons-dialog .wd-ticket-pips,#weapon-dungeons-dialog .wd-progress-track{display:flex;gap:5px;margin-top:7px}
-#weapon-dungeons-dialog .wd-ticket-pips i,#weapon-dungeons-dialog .wd-progress-track i{height:6px;width:18px;border:1px solid #b6a47966;border-radius:2px;background:#0d1b15}
-#weapon-dungeons-dialog .wd-ticket-pips i.filled,#weapon-dungeons-dialog .wd-progress-track i.cleared{background:#d5b572;border-color:#ebcf91}
-#weapon-dungeons-dialog .wd-progress-track i{flex:1}
-#weapon-dungeons-dialog .wd-progress-track i.available{border-color:#e5c586}
-#weapon-dungeons-dialog .wd-section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:20px 0 8px}
-#weapon-dungeons-dialog h3{margin:0;color:#f0deb1;font-size:17px;letter-spacing:.08em}
-#weapon-dungeons-dialog .wd-section-heading span,#weapon-dungeons-dialog .wd-progress{font-size:12px;color:#b4c6b7}
-#weapon-dungeons-dialog .wd-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-#weapon-dungeons-dialog .wd-card{padding:0;overflow:hidden;min-width:0;display:flex;flex-direction:column;text-align:left;background:#1c3027;border:1px solid #ad956688;border-radius:12px;color:inherit;cursor:pointer;font:inherit;transition:border-color .18s,transform .18s}
-#weapon-dungeons-dialog .wd-card:hover{border-color:#ebcb8a;transform:translateY(-2px)}
-#weapon-dungeons-dialog .wd-card-art{position:relative;width:100%;min-height:170px;padding:12px;display:flex;justify-content:space-between;align-items:flex-start;background:#30483b}
-#weapon-dungeons-dialog .wd-stone .wd-card-art,#weapon-dungeons-dialog .wd-hero.wd-stone{background-image:linear-gradient(0deg,#091710f5,#0a191342 65%,#101e1970),url('/assets/scenes/mountains-landscape-ai.webp');background-size:cover;background-position:center 52%}
-#weapon-dungeons-dialog .wd-chip{font-size:10px;padding:4px 7px;border:1px solid #d2b77f77;border-radius:4px;background:#111f19dd;color:#f4dca9}
-#weapon-dungeons-dialog .wd-card-name{position:absolute;inset:auto 12px 12px;display:grid;gap:4px;text-shadow:0 2px 6px #000}
-#weapon-dungeons-dialog .wd-card-name small,#weapon-dungeons-dialog .wd-hero small{color:#dbcda7;font-size:11px}
-#weapon-dungeons-dialog .wd-card-name strong{font-size:25px;color:#fff1cd;letter-spacing:.14em}
-#weapon-dungeons-dialog .wd-card-body{padding:12px;display:flex;flex:1;flex-direction:column;gap:10px;width:100%}
-#weapon-dungeons-dialog .wd-card-body p{margin:0}
-#weapon-dungeons-dialog .wd-traits{display:flex;flex-wrap:wrap;gap:5px}
-#weapon-dungeons-dialog .wd-traits span{padding:4px 7px;font-size:10px;color:#e2d6b6;background:#10241bcc;border:1px solid #a68c5a66;border-radius:4px}
-#weapon-dungeons-dialog .wd-progress,#weapon-dungeons-dialog .wd-card-footer{display:flex;justify-content:space-between;gap:6px}
-#weapon-dungeons-dialog .wd-progress b,#weapon-dungeons-dialog .wd-card-footer{color:#e2c587}
-#weapon-dungeons-dialog .wd-card-footer{flex-wrap:wrap;padding-top:10px;margin-top:auto;border-top:1px solid #ab986944;font-size:11px}
-#weapon-dungeons-dialog .wd-coming{min-height:160px;display:grid;align-content:center;justify-items:center;gap:10px;text-align:center;border:1px dashed #8d987a66;border-radius:12px;color:#a9b9a9;background:radial-gradient(ellipse,#293c30,#16231e)}
-#weapon-dungeons-dialog .wd-coming>span{font-size:42px;color:#9e9a77}
-#weapon-dungeons-dialog .wd-coming small{font-size:11px}
-#weapon-dungeons-dialog .wd-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;min-height:170px;margin-top:15px;border:1px solid #ad956688;border-radius:12px;padding:19px;background:#263e32;text-shadow:0 2px 6px #000}
-#weapon-dungeons-dialog .wd-hero h3{font-size:clamp(25px,4vw,38px);letter-spacing:.15em}
-#weapon-dungeons-dialog .wd-hero p{color:#eee7d4}
-#weapon-dungeons-dialog .wd-emblem{width:90px;height:100px;flex:none}#weapon-dungeons-dialog .wd-stone .wd-emblem{background:center/contain no-repeat url('/assets/weapons/body-rock-hd.webp');filter:drop-shadow(0 4px 6px #000)}
-#weapon-dungeons-dialog .wd-detail-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-top:12px}
-#weapon-dungeons-dialog .wd-panel{padding:13px;border:1px solid #a9956b44;border-radius:10px;background:#192b23}
-#weapon-dungeons-dialog .wd-panel ol{margin:8px 0 0;padding-left:19px;color:#c3d0c6;font-size:12px;line-height:1.7}
-#weapon-dungeons-dialog .wd-bonus{margin-top:9px}
-#weapon-dungeons-dialog .wd-loot-bar{display:flex;overflow:hidden;height:9px;margin:15px 0 8px;border-radius:4px}
-#weapon-dungeons-dialog .wd-loot-bar i:nth-child(1){width:30%;background:#a5cbb0}
-#weapon-dungeons-dialog .wd-loot-bar i:nth-child(2){width:20%;background:#dbb66c}
-#weapon-dungeons-dialog .wd-loot-bar i:nth-child(3){width:50%;background:#607168}
-#weapon-dungeons-dialog .wd-loot-legend{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;font-size:11px;color:#e1ca94}
+#weapon-dungeons-panel *{box-sizing:border-box}
+#weapon-dungeons-panel .wd-heading{display:flex;align-items:center;gap:12px}
 
-#weapon-dungeons-dialog .wd-active{font-size:12px;margin-top:12px;padding:10px;border-left:3px solid #c8b16f;background:#323b28;color:#e8dbb8}
-@media(max-width:720px){#weapon-dungeons-dialog .wd-catalog{grid-template-columns:repeat(2,minmax(0,1fr))}#weapon-dungeons-dialog .wd-detail-grid{grid-template-columns:1fr}}
-@media(max-width:460px){#weapon-dungeons-dialog .wd-catalog{grid-template-columns:1fr}#weapon-dungeons-dialog .wd-coming{min-height:105px}#weapon-dungeons-dialog .wd-hero{padding:12px;min-height:145px}#weapon-dungeons-dialog .wd-emblem{width:60px;height:72px}}
-@media(prefers-reduced-motion:reduce){#weapon-dungeons-dialog .wd-card{transition:none}#weapon-dungeons-dialog .wd-card:hover{transform:none}}
+#weapon-dungeons-panel h2{letter-spacing:.12em}
+#weapon-dungeons-panel .wd-tickets{padding:12px 15px;border:1px solid #baa27266;border-radius:10px;background:var(--qy-surface,#242018)}
+#weapon-dungeons-panel .wd-tickets>span{text-align:right;line-height:1.5}
+#weapon-dungeons-panel .wd-ticket-pips,#weapon-dungeons-panel .wd-progress-track{display:flex;gap:5px;margin-top:7px}
+#weapon-dungeons-panel .wd-ticket-pips i,#weapon-dungeons-panel .wd-progress-track i{height:6px;width:18px;border:1px solid #b6a47966;border-radius:2px;background:#0d1b15}
+#weapon-dungeons-panel .wd-ticket-pips i.filled,#weapon-dungeons-panel .wd-progress-track i.cleared{background:#d5b572;border-color:#ebcf91}
+#weapon-dungeons-panel .wd-progress-track i{flex:1}
+#weapon-dungeons-panel .wd-progress-track i.available{border-color:#e5c586}
+#weapon-dungeons-panel .wd-section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:20px 0 8px}
+#weapon-dungeons-panel h3{margin:0;color:#f0deb1;font-size:17px;letter-spacing:.08em}
+#weapon-dungeons-panel .wd-section-heading span,#weapon-dungeons-panel .wd-progress{font-size:12px;color:#b4c6b7}
+#weapon-dungeons-panel .wd-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+#weapon-dungeons-panel .wd-card{padding:0;overflow:hidden;min-width:0;display:flex;flex-direction:column;text-align:left;background:#1c3027;border:1px solid #ad956688;border-radius:12px;color:inherit;cursor:pointer;font:inherit;transition:border-color .18s,transform .18s}
+#weapon-dungeons-panel .wd-card:hover{border-color:#ebcb8a;transform:translateY(-2px)}
+#weapon-dungeons-panel .wd-card-art{position:relative;width:100%;min-height:170px;padding:12px;display:flex;justify-content:space-between;align-items:flex-start;background:#30483b}
+#weapon-dungeons-panel .wd-stone .wd-card-art,#weapon-dungeons-panel .wd-hero.wd-stone{background-image:linear-gradient(0deg,#091710f5,#0a191342 65%,#101e1970),url('/assets/scenes/mountains-landscape-ai.webp');background-size:cover;background-position:center 52%}
+#weapon-dungeons-panel .wd-chip{font-size:10px;padding:4px 7px;border:1px solid #d2b77f77;border-radius:4px;background:#111f19dd;color:#f4dca9}
+#weapon-dungeons-panel .wd-card-name{position:absolute;inset:auto 12px 12px;display:grid;gap:4px;text-shadow:0 2px 6px #000}
+#weapon-dungeons-panel .wd-card-name small,#weapon-dungeons-panel .wd-hero small{color:#dbcda7;font-size:11px}
+#weapon-dungeons-panel .wd-card-name strong{font-size:25px;color:#fff1cd;letter-spacing:.14em}
+#weapon-dungeons-panel .wd-card-body{padding:12px;display:flex;flex:1;flex-direction:column;gap:10px;width:100%}
+#weapon-dungeons-panel .wd-card-body p{margin:0}
+#weapon-dungeons-panel .wd-traits{display:flex;flex-wrap:wrap;gap:5px}
+#weapon-dungeons-panel .wd-traits span{padding:4px 7px;font-size:10px;color:#e2d6b6;background:#10241bcc;border:1px solid #a68c5a66;border-radius:4px}
+#weapon-dungeons-panel .wd-progress,#weapon-dungeons-panel .wd-card-footer{display:flex;justify-content:space-between;gap:6px}
+#weapon-dungeons-panel .wd-progress b,#weapon-dungeons-panel .wd-card-footer{color:#e2c587}
+#weapon-dungeons-panel .wd-card-footer{flex-wrap:wrap;padding-top:10px;margin-top:auto;border-top:1px solid #ab986944;font-size:11px}
+#weapon-dungeons-panel .wd-coming{min-height:160px;display:grid;align-content:center;justify-items:center;gap:10px;text-align:center;border:1px dashed #8d987a66;border-radius:12px;color:#a9b9a9;background:radial-gradient(ellipse,#293c30,#16231e)}
+#weapon-dungeons-panel .wd-coming>span{font-size:42px;color:#9e9a77}
+#weapon-dungeons-panel .wd-coming small{font-size:11px}
+#weapon-dungeons-panel .wd-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;min-height:170px;margin-top:15px;border:1px solid #ad956688;border-radius:12px;padding:19px;background:#263e32;text-shadow:0 2px 6px #000}
+#weapon-dungeons-panel .wd-hero h3{font-size:clamp(25px,4vw,38px);letter-spacing:.15em}
+#weapon-dungeons-panel .wd-hero p{color:#eee7d4}
+#weapon-dungeons-panel .wd-emblem{width:90px;height:100px;flex:none}#weapon-dungeons-panel .wd-stone .wd-emblem{background:center/contain no-repeat url('/assets/weapons/body-rock-hd.webp');filter:drop-shadow(0 4px 6px #000)}
+#weapon-dungeons-panel .wd-detail-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-top:12px}
+#weapon-dungeons-panel .wd-panel{padding:13px;border:1px solid #a9956b44;border-radius:10px;background:#192b23}
+#weapon-dungeons-panel .wd-panel ol{margin:8px 0 0;padding-left:19px;color:#c3d0c6;font-size:12px;line-height:1.7}
+#weapon-dungeons-panel .wd-bonus{margin-top:9px}
+#weapon-dungeons-panel .wd-loot-bar{display:flex;overflow:hidden;height:9px;margin:15px 0 8px;border-radius:4px}
+#weapon-dungeons-panel .wd-loot-bar i:nth-child(1){width:30%;background:#a5cbb0}
+#weapon-dungeons-panel .wd-loot-bar i:nth-child(2){width:20%;background:#dbb66c}
+#weapon-dungeons-panel .wd-loot-bar i:nth-child(3){width:50%;background:#607168}
+#weapon-dungeons-panel .wd-loot-legend{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;font-size:11px;color:#e1ca94}
+
+#weapon-dungeons-panel .wd-active{font-size:12px;margin-top:12px;padding:10px;border-left:3px solid #c8b16f;background:#323b28;color:#e8dbb8}
+@media(max-width:720px){#weapon-dungeons-panel .wd-catalog{grid-template-columns:repeat(2,minmax(0,1fr))}#weapon-dungeons-panel .wd-detail-grid{grid-template-columns:1fr}}
+@media(max-width:460px){#weapon-dungeons-panel .wd-catalog{grid-template-columns:1fr}#weapon-dungeons-panel .wd-coming{min-height:105px}#weapon-dungeons-panel .wd-hero{padding:12px;min-height:145px}#weapon-dungeons-panel .wd-emblem{width:60px;height:72px}}
+@media(prefers-reduced-motion:reduce){#weapon-dungeons-panel .wd-card{transition:none}#weapon-dungeons-panel .wd-card:hover{transform:none}}
 
 
 /* Same sliding selection treatment as the legacy multiplayer raid picker; six realm segments. */
-#weapon-dungeons-dialog .wd-difficulties{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;width:100%;box-sizing:border-box;margin:0 0 10px;padding:4px;border:1px solid var(--trial-line,#568e87);border-radius:18px;background:#02070c70}
-#weapon-dungeons-dialog .wd-difficulty-selection{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/6);box-sizing:border-box;border:1px solid var(--trial-accent,#8ddaca);border-radius:13px;background:var(--trial-selection,#23584f);box-shadow:0 2px 12px #0004,inset 0 1px #ffffff18;transform:translateX(calc(var(--wd-selected-index,0)*100%));transition:transform .32s cubic-bezier(.22,.75,.25,1),background-color .32s,border-color .32s;pointer-events:none}
-#weapon-dungeons-dialog .wd-difficulties button{position:relative;z-index:1;min-width:0;display:grid;align-content:center;gap:3px;padding:9px 6px;border:0;border-radius:13px;background:transparent;color:#b9b8bc;text-align:center;cursor:pointer;transition:color .25s,opacity .25s}
-#weapon-dungeons-dialog .wd-difficulties button.active{color:var(--trial-text,#d7fff2);background:transparent;box-shadow:none}
-#weapon-dungeons-dialog .wd-difficulties button.locked:not(.active){opacity:.64}
-#weapon-dungeons-dialog .wd-difficulties strong{font-size:12px;letter-spacing:.08em}
-#weapon-dungeons-dialog .wd-difficulties small{font-size:9px;line-height:1.45;color:inherit;opacity:.8}
-#weapon-dungeons-dialog .wd-difficulties button:focus-visible{outline:2px solid var(--trial-accent,#8ddaca);outline-offset:-3px}
-#weapon-dungeons-dialog .wd-difficulties{margin:0 0 10px;--trial-line:#568e87;--trial-accent:#8ddaca;--trial-selection:#23584f;--trial-text:#d7fff2}
-#weapon-dungeons-dialog .wd-difficulties button{font-family:inherit;min-height:52px;padding:9px 3px}
-#weapon-dungeons-dialog .wd-difficulties strong{font-size:15px;letter-spacing:0}
-#weapon-dungeons-dialog .wd-difficulties small{font-size:10px}
-#weapon-dungeons-dialog .wd-tier-preview{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;padding:6px 2px 10px;color:#e2d6b6;font-size:12px}
-#weapon-dungeons-dialog .wd-tier-preview small{font-size:11px;color:#b7c7b4}
-#weapon-dungeons-dialog .wd-enter{width:100%;min-height:42px;border:1px solid #8ddaca;border-radius:10px;background:linear-gradient(120deg,#2c6054,#20463d);color:#e5fff2;font:inherit;font-weight:600;cursor:pointer}
-#weapon-dungeons-dialog .wd-enter:disabled{opacity:.5;cursor:default}
-@media(max-width:460px){#weapon-dungeons-dialog .wd-difficulties button{padding:7px 0;min-height:48px}#weapon-dungeons-dialog .wd-difficulties strong{font-size:13px}#weapon-dungeons-dialog .wd-difficulties small{font-size:9px}}
-@media(prefers-reduced-motion:reduce){#weapon-dungeons-dialog .wd-difficulty-selection,#weapon-dungeons-dialog .wd-difficulties button{transition:none}}
+#weapon-dungeons-panel .wd-difficulties{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;width:100%;box-sizing:border-box;margin:0 0 10px;padding:4px;border:1px solid var(--trial-line,#568e87);border-radius:18px;background:#02070c70}
+#weapon-dungeons-panel .wd-difficulty-selection{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/6);box-sizing:border-box;border:1px solid var(--trial-accent,#8ddaca);border-radius:13px;background:var(--trial-selection,#23584f);box-shadow:0 2px 12px #0004,inset 0 1px #ffffff18;transform:translateX(calc(var(--wd-selected-index,0)*100%));transition:transform .32s cubic-bezier(.22,.75,.25,1),background-color .32s,border-color .32s;pointer-events:none}
+#weapon-dungeons-panel .wd-difficulties button{position:relative;z-index:1;min-width:0;display:grid;align-content:center;gap:3px;padding:9px 6px;border:0;border-radius:13px;background:transparent;color:#b9b8bc;text-align:center;cursor:pointer;transition:color .25s,opacity .25s}
+#weapon-dungeons-panel .wd-difficulties button.active{color:var(--trial-text,#d7fff2);background:transparent;box-shadow:none}
+#weapon-dungeons-panel .wd-difficulties button.locked:not(.active){opacity:.64}
+#weapon-dungeons-panel .wd-difficulties strong{font-size:12px;letter-spacing:.08em}
+#weapon-dungeons-panel .wd-difficulties small{font-size:9px;line-height:1.45;color:inherit;opacity:.8}
+#weapon-dungeons-panel .wd-difficulties button:focus-visible{outline:2px solid var(--trial-accent,#8ddaca);outline-offset:-3px}
+#weapon-dungeons-panel .wd-difficulties{margin:0 0 10px;--trial-line:#568e87;--trial-accent:#8ddaca;--trial-selection:#23584f;--trial-text:#d7fff2}
+#weapon-dungeons-panel .wd-difficulties button{font-family:inherit;min-height:52px;padding:9px 3px}
+#weapon-dungeons-panel .wd-difficulties strong{font-size:15px;letter-spacing:0}
+#weapon-dungeons-panel .wd-difficulties small{font-size:10px}
+#weapon-dungeons-panel .wd-tier-preview{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;padding:6px 2px 10px;color:#e2d6b6;font-size:12px}
+#weapon-dungeons-panel .wd-tier-preview small{font-size:11px;color:#b7c7b4}
+#weapon-dungeons-panel .wd-enter{width:100%;min-height:42px;border:1px solid #8ddaca;border-radius:10px;background:linear-gradient(120deg,#2c6054,#20463d);color:#e5fff2;font:inherit;font-weight:600;cursor:pointer}
+#weapon-dungeons-panel .wd-enter:disabled{opacity:.5;cursor:default}
+@media(max-width:460px){#weapon-dungeons-panel .wd-difficulties button{padding:7px 0;min-height:48px}#weapon-dungeons-panel .wd-difficulties strong{font-size:13px}#weapon-dungeons-panel .wd-difficulties small{font-size:9px}}
+@media(prefers-reduced-motion:reduce){#weapon-dungeons-panel .wd-difficulty-selection,#weapon-dungeons-panel .wd-difficulties button{transition:none}}
+
+/* Inline page content: no top-layer dialog and no nested scroll container. */
+#weapon-dungeons-panel{position:relative;min-width:0;width:100%;max-width:100%;margin:0;padding:0;color:var(--qy-paper,#ede5cf);font-family:inherit;background:none;border:0;box-shadow:none;overflow:visible}
+#weapon-dungeons-panel[hidden]{display:none!important}
+#page-gameplay [data-wd-open="true"]>.gameplay-atlas{display:none!important}
+#weapon-dungeons-panel .wd-difficulties .qy-realm-badge{font-size:inherit;padding:0;border:0;background:none;color:inherit;white-space:nowrap}
+@media(orientation:landscape){#page-gameplay .gameplay-shell[data-wd-open="true"]>#weapon-dungeons-panel{grid-area:atlas;align-self:start;padding:clamp(8px,1.5vw,16px);background:linear-gradient(135deg,#14251eed,#18251ee8)}}

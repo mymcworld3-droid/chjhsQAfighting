@@ -31,7 +31,7 @@ test('math and icon fonts are excluded from the ordinary text rule and inherit s
   assert.match(math,/fill:\s*currentColor !important/);
 });
 test('responsive reading tokens and active reward, classroom, dungeon and practice roles are included',()=>{
-  for(const value of ['.mr-reward-amount','.cc-stat','.tc-result-stats b','.manual-native-level','.dv-today-score strong','#weapon-dungeons-dialog h2','.cc-question','#question-text','.dt-explain','#feedback-text'])assert.ok(format.includes(value),value);
+  for(const value of ['.mr-reward-amount','.cc-stat','.tc-result-stats b','.manual-native-level','.dv-today-score strong','#weapon-dungeons-panel h2','.cc-question','#question-text','.dt-explain','#feedback-text'])assert.ok(format.includes(value),value);
   assert.match(format,/@media \(orientation:landscape\) and \(max-height:540px\)/);
   assert.match(format,/--ui-action-height: 44px/);
   assert.match(format,/font-size: var\(--qy-question\) !important/);

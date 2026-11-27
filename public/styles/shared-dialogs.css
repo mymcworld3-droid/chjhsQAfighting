@@ -5,12 +5,12 @@
   --qy-modal-shadow:0 16px 56px #0008;
   --qy-modal-padding:clamp(14px,3vw,24px);
 }
-html body.xianxia-theme :is(#quest-dialog,#weapon-dungeons-dialog,#game-issue-dialog,.qy-confirm-dialog){
+html body.xianxia-theme :is(#quest-dialog,#game-issue-dialog,.qy-confirm-dialog){
   color:var(--qy-paper)!important;background:var(--qy-surface)!important;
   border:1px solid var(--qy-accent-line)!important;
   border-radius:var(--qy-radius-panel)!important;box-shadow:var(--qy-modal-shadow)!important;
 }
-html body.xianxia-theme :is(#quest-dialog,#weapon-dungeons-dialog,#game-issue-dialog,#meditation-reward-receipt,.qy-confirm-dialog)::backdrop{
+html body.xianxia-theme :is(#quest-dialog,#game-issue-dialog,#meditation-reward-receipt,.qy-confirm-dialog)::backdrop{
   background:var(--qy-modal-backdrop)!important;
 }
 html body.xianxia-theme :is(#custom-alert-modal,#custom-confirm-modal,#report-modal,#daily-meditation-overlay,.dt-modal){
@@ -27,7 +27,7 @@ html body.xianxia-theme :is(#custom-alert-box,#custom-confirm-box,#report-box,.d
 html body.xianxia-theme :is(#custom-alert-msg,#custom-confirm-msg){
   color:var(--qy-paper)!important;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;
 }
-html body.xianxia-theme :is(#custom-alert-box,#custom-confirm-box,#report-box,#quest-dialog,#weapon-dungeons-dialog,#game-issue-dialog,.dt-modal-card) :is(h2,h3){
+html body.xianxia-theme :is(#custom-alert-box,#custom-confirm-box,#report-box,#quest-dialog,#game-issue-dialog,.dt-modal-card) :is(h2,h3){
   font-family:var(--qy-font-title)!important;line-height:1.4;
 }
 html body.xianxia-theme #manual-training-root .manual-training-screen:not([hidden]),

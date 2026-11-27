@@ -2,7 +2,7 @@ import './weapon-presentation.js';
 import './weapon-dungeon-rules.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {weaponDungeonTicketMarkup} from './spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
-let dialog=null,data=null,loading=false,serial=0,trigger=null,selectedId=null,selectedTier=0;
+let panel=null,data=null,loading=false,serial=0,trigger=null,selectedId=null,selectedTier=0;
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const catalog=()=>Array.isArray(data?.dungeons)?data.dungeons:[];
 const selected=()=>catalog().find(d=>d.id===selectedId);
@@ -11,23 +11,32 @@ const isResume=(d,i)=>data?.active&&activeId()===d.id&&data.active.difficulty===
 const canEnter=(d,t)=>!loading&&t&&!t.locked&&(isResume(d,t.index)||(!data.active&&data.tickets>0));
 const theme=d=>d.theme==='stone'?' wd-stone':'';
 function ensure(){
-  if(dialog)return;
+  if(panel)return true;
+  const host=document.querySelector('#page-gameplay .gameplay-shell')||document.querySelector('#page-gameplay');
+  if(!host)return false;
   if(!document.getElementById('weapon-dungeons-style')){const link=document.createElement('link');link.id='weapon-dungeons-style';link.rel='stylesheet';link.href='/styles/weapon-dungeons.css';document.head.append(link);}
-  dialog=document.createElement('dialog');dialog.id='weapon-dungeons-dialog';dialog.setAttribute('aria-labelledby','weapon-dungeons-title');document.body.append(dialog);
-  dialog.addEventListener('click',event=>{
-    if(event.target.closest('[data-wd-close]')){dialog.close();return;}
-    if(event.target===dialog){const b=dialog.getBoundingClientRect();if(event.clientX<b.left||event.clientX>b.right||event.clientY<b.top||event.clientY>b.bottom)dialog.close();return;}
+  panel=document.createElement('section');panel.id='weapon-dungeons-panel';panel.setAttribute('aria-labelledby','weapon-dungeons-title');panel.hidden=true;host.append(panel);
+  panel.addEventListener('click',event=>{
+    if(event.target.closest('[data-wd-close]')){hidePanel();return;}
     if(loading||!data)return;
-    if(event.target.closest('[data-wd-back]')){selectedId=null;selectedTier=0;paint();dialog.querySelector?.('[data-wd-dungeon]')?.focus();return;}
+    if(event.target.closest('[data-wd-back]')){selectedId=null;selectedTier=0;paint();panel.querySelector?.('[data-wd-dungeon]')?.focus();return;}
     const card=event.target.closest('[data-wd-dungeon]');
-    if(card&&catalog().some(d=>d.id===card.dataset.wdDungeon)){selectedId=card.dataset.wdDungeon;selectedTier=defaultTier(selected());paint();dialog.querySelector?.('#weapon-dungeons-title')?.focus();return;}
+    if(card&&catalog().some(d=>d.id===card.dataset.wdDungeon)){selectedId=card.dataset.wdDungeon;selectedTier=defaultTier(selected());paint();panel.querySelector?.('#weapon-dungeons-title')?.focus();return;}
     const button=event.target.closest('[data-wd-difficulty]');
     if(button&&selected()){selectDifficulty(Number(button.dataset.wdDifficulty));return;}
     const start=event.target.closest('[data-wd-enter]');
     if(start&&!start.disabled&&selected())void enter(selectedTier);
   });
-  dialog.addEventListener('close',()=>{if(loading){serial++;loading=false;}trigger?.focus?.({preventScroll:true});});
-  window.addEventListener('xiuxian:user-data-ready',()=>{serial++;data=null;loading=false;selectedId=null;selectedTier=0;if(dialog.open)dialog.close();});
+  window.addEventListener('xiuxian:page-switched',event=>{if(event.detail?.pageId&&event.detail.pageId!=='page-gameplay')hidePanel(false);});
+  window.addEventListener('xiuxian:user-data-ready',()=>{hidePanel(false);serial++;data=null;loading=false;selectedId=null;selectedTier=0;});
+  return true;
+}
+function showPanel(){panel.hidden=false;panel.parentElement?.setAttribute('data-wd-open','true');}
+function hidePanel(restoreFocus=true){
+  if(!panel||panel.hidden)return;
+  if(loading){serial++;loading=false;}
+  panel.hidden=true;panel.parentElement?.removeAttribute('data-wd-open');
+  if(restoreFocus&&trigger?.isConnected!==false)trigger?.focus?.({preventScroll:true});
 }
 const count=d=>d.difficulties.filter(t=>Number(d.clears[t.index])>0).length;
 const traits=d=>'<div class="wd-traits">'+d.traits.map(t=>'<span>'+esc(t)+'</span>').join('')+'</div>';
@@ -47,7 +56,7 @@ function detail(d){
   <div class="wd-difficulties" role="group" aria-label="選擇副本難度" style="--wd-selected-index:${selectedTier}"><span class="wd-difficulty-selection" aria-hidden="true"></span>${d.difficulties.map(t=>{
     const resume=isResume(d,t.index),cleared=Number(d.clears[t.index])||0;
     const badge=globalThis.QAWeaponPresentation.difficultyState({locked:t.locked,clears:cleared,resume});
-    return `<button type="button" data-wd-difficulty="${t.index}" data-qy-difficulty="${badge.key}" class="${t.index===selectedTier?'active ':''}${t.locked?'locked':''}" aria-pressed="${t.index===selectedTier}" ${loading?'disabled':''}><strong>${esc(t.name)}</strong><small>${esc(resume?'續戰':t.locked?'未解鎖':cleared?'已通關':'可挑戰')}</small></button>`;
+    return `<button type="button" data-wd-difficulty="${t.index}" data-qy-difficulty="${badge.key}" class="${t.index===selectedTier?'active ':''}${t.locked?'locked':''}" aria-pressed="${t.index===selectedTier}" ${loading?'disabled':''}><strong>${globalThis.QAWeaponPresentation.realmMarkup(t.name,{kind:'difficulty'})}</strong><small>${esc(resume?'續戰':t.locked?'未解鎖':cleared?'已通關':'可挑戰')}</small></button>`;
   }).join('')}</div>
   <div class="wd-tier-preview" data-wd-preview aria-live="polite">${tierPreview(d)}</div>
   <button type="button" class="wd-enter" data-wd-enter ${canEnter(d,currentTier(d))?'':'disabled'}>${tierAction(d)}</button>`;
@@ -74,26 +83,26 @@ function selectDifficulty(index){
   const d=selected();
   if(loading||!d?.difficulties.some(t=>t.index===index))return;
   selectedTier=index;
-  const picker=dialog.querySelector?.('.wd-difficulties');
+  const picker=panel.querySelector?.('.wd-difficulties');
   picker?.style.setProperty('--wd-selected-index',String(index));
   picker?.querySelectorAll('[data-wd-difficulty]').forEach(button=>{
     const active=Number(button.dataset.wdDifficulty)===index;
     button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));
   });
-  const preview=dialog.querySelector?.('[data-wd-preview]'),action=dialog.querySelector?.('[data-wd-enter]');
+  const preview=panel.querySelector?.('[data-wd-preview]'),action=panel.querySelector?.('[data-wd-enter]');
   if(preview)preview.innerHTML=tierPreview(d);
   if(action){action.disabled=!canEnter(d,currentTier(d));action.innerHTML=tierAction(d);}
 }
 
 function paint(message=''){
   const d=selected();
-  dialog.innerHTML=`<header><div class="wd-heading">${d?'<button type="button" data-wd-back data-qy-nav-action="back" aria-label="返回秘境選擇">‹</button>':''}<div><small>青雲問道 / 歷練 / 武器副本</small><h2 id="weapon-dungeons-title" tabindex="-1">${d?esc(d.name):'武器秘境'}</h2></div></div><button type="button" data-wd-close data-qy-nav-action="close" aria-label="關閉武器副本">×</button></header>
+  panel.innerHTML=`<header><div class="wd-heading">${d?'<button type="button" data-wd-back data-qy-nav-action="back" aria-label="返回秘境選擇">‹</button>':''}<div><small>青雲問道 / 歷練 / 武器副本</small><h2 id="weapon-dungeons-title" tabindex="-1">${d?esc(d.name):'武器秘境'}</h2></div></div><button type="button" data-wd-close data-qy-nav-action="close" aria-label="返回歷練">返回歷練</button></header>
     <div class="wd-body"><div class="wd-tickets"><div><strong>副本券 ${data?weaponDungeonTicketMarkup(data.tickets):'同步中'}</strong><div class="wd-ticket-pips" aria-hidden="true">${Array.from({length:5},(_,i)=>'<i class="'+(data&&i<data.tickets?'filled':'')+'"></i>').join('')}</div></div><span>每日補發 3 張 · 補發上限 5 張<br>臺灣時間 00:00</span></div>
     ${data?.active?'<div class="wd-active">已有進行中的挑戰，續戰不耗券；完成或離場後才能開啟其他挑戰。</div>':''}
-    ${!data?'<p data-qy-state="'+(loading?'loading':'error')+'">'+(loading?'正在讀取秘境資料…':'秘境資料未能同步，請關閉後重新開啟。')+'</p>':d?detail(d):`<div class="wd-section-heading"><h3>尋訪秘境</h3><span>${catalog().length} 座開放</span></div><p>選擇秘境，探索不同戰鬥法則，挑戰更高境界並尋找武器。</p><div class="wd-catalog">${catalog().map(card).join('')}<div class="wd-coming"><span aria-hidden="true">◇</span><strong>群山之外</strong><small>更多秘境尚待開放</small></div></div>`}
+    ${!data?'<p data-qy-state="'+(loading?'loading':'error')+'">'+(loading?'正在讀取秘境資料…':'秘境資料未能同步，請返回後重新開啟。')+'</p>':d?detail(d):`<div class="wd-section-heading"><h3>尋訪秘境</h3><span>${catalog().length} 座開放</span></div><p>選擇秘境，探索不同戰鬥法則，挑戰更高境界並尋找武器。</p><div class="wd-catalog">${catalog().map(card).join('')}<div class="wd-coming"><span aria-hidden="true">◇</span><strong>群山之外</strong><small>更多秘境尚待開放</small></div></div>`}
     <p class="wd-cost">新挑戰消耗 ${weaponDungeonTicketMarkup(1)}；失敗或中途離場不退券。收起戰場可續戰。</p>
     <p class="wd-message" role="status" aria-live="polite"${message?' data-qy-state="'+(loading?'syncing':'error')+'"':''}>${esc(message)}</p></div>`;
-  const body=dialog.querySelector?.('.wd-body');if(body)body.scrollTop=0;
+
 }
 async function enter(difficulty){
   const d=selected(),tier=d?.difficulties.find(t=>t.index===difficulty);
@@ -102,16 +111,18 @@ async function enter(difficulty){
   try{
     const battle=await import('./tactical-combat.js?v=20261125-weapon-lord-cleared-v1');
     if(serial!==token||getMainUser()?.uid!==account)return;
-    loading=false;dialog.close();
+    loading=false;hidePanel(false);
     await battle.openTacticalCombat('weapon-dungeon',{dungeonId:d.id,difficulty});
-  }catch(error){if(serial===token&&getMainUser()?.uid===account){loading=false;paint(error.message||'副本暫時無法開啟');if(!dialog.open)dialog.showModal();}}
+  }catch(error){if(serial===token&&getMainUser()?.uid===account){loading=false;paint(error.message||'副本暫時無法開啟');showPanel();}}
   finally{if(serial===token)loading=false;}
 }
 export async function openWeaponDungeons(dungeonId=null){
   const account=getMainUser()?.uid;
   if(!account){window.showToast?.('請先登入後挑戰武器副本');return;}
-  ensure();trigger=document.activeElement;data=null;selectedId=null;selectedTier=0;loading=true;paint('正在同步副本券與秘境進度…');
-  if(!dialog.open)dialog.showModal();const token=++serial;
+  if(!ensure())return;
+  trigger=document.activeElement;
+  window.switchToPage?.('page-gameplay');data=null;selectedId=null;selectedTier=0;loading=true;paint('正在同步副本券與秘境進度…');
+  showPanel();panel.scrollIntoView?.({block:'nearest'});const token=++serial;
   try{
     const response=await authenticatedMainFetch('/api/tactical/weapon-dungeons'),result=await response.json();
     if(serial!==token||getMainUser()?.uid!==account)return;
@@ -119,8 +130,7 @@ export async function openWeaponDungeons(dungeonId=null){
     data=result.state;selectedId=typeof dungeonId==='string'&&catalog().some(d=>d.id===dungeonId)?dungeonId:null;selectedTier=defaultTier(selected());loading=false;paint();
   }catch(error){if(serial===token){loading=false;paint(error.message||'副本資料同步失敗');}}
 }
-// Landscape: the page itself is the category/catalog screen. Only the selected
-// dungeon's detail dialog is opened. The portrait launcher stays unchanged.
+// Landscape keeps the category rail and replaces the atlas with inline detail.
 const landscape=()=>window.matchMedia?.('(orientation: landscape)')?.matches===true;
 let atlas=null,atlasCategory='weapon';
 const atlasArt={ 'peak-stone':'/assets/dungeons/peak-stone.png' };
@@ -137,6 +147,7 @@ function atlasMarkup(category){
     <p class="gameplay-atlas-hint"><i class="fa-solid fa-compass" aria-hidden="true"></i> 選擇秘境，查看可挑戰的境界</p>`;
 }
 function selectCategory(category='weapon'){
+  if(panel&&!panel.hidden)hidePanel(false);
   atlasCategory=category==='coop'&&window.QA_COOP_DUNGEON_ENABLED===true?'coop':'weapon';
   if(!atlas)return;
   atlas.innerHTML=atlasMarkup(atlasCategory);
@@ -163,13 +174,14 @@ function mountAtlas(target){
     event.preventDefault();event.stopImmediatePropagation();selectCategory('coop');
   },true);
   const media=window.matchMedia?.('(orientation: landscape)');
-  media?.addEventListener?.('change',()=>selectCategory('weapon'));
+  media?.addEventListener?.('change',()=>{if(!panel||panel.hidden)selectCategory('weapon');});
   const page=document.getElementById('page-gameplay');
   let active=page?.classList.contains('active-page');
   if(page&&typeof MutationObserver==='function'){
     new MutationObserver(()=>{
       const next=page.classList.contains('active-page');
-      if(next&&!active)selectCategory('weapon');
+      if(!next&&active)hidePanel(false);
+      if(next&&!active&&(!panel||panel.hidden))selectCategory('weapon');
       active=next;
     }).observe(page,{attributes:true,attributeFilter:['class']});
   }

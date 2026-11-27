@@ -27,7 +27,7 @@ async function main(){
  app.get('/test',(_,res)=>res.type('html').send(`<!doctype html><html><head>
   <meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/styles/gameplay-page.css">
   <style>body{margin:0;background:#14251e;color:#ede5cf}#fixture-study{position:fixed;inset:0;z-index:1000;background:#14251e;padding:20px}button{min-height:32px}</style></head>
-  <body class="xianxia-theme ui-cleanup"><div id="page-gameplay" class="page-section active-page"><div class="gameplay-entries"></div></div>
+  <body class="xianxia-theme ui-cleanup"><div id="page-gameplay" class="page-section active-page"><div class="gameplay-shell"><div class="gameplay-entries"></div></div></div>
   <section id="fixture-study" hidden><button id="fixture-answer">回答</button><p id="fixture-explanation"></p><button id="fixture-next">返回戰場</button></section>
   <script>window.getCurrentUserData=()=>({stats:{totalScore:0}});window.switchToPage=()=>{};
   window.QATrialQuestion={open(options){window.__study=options;document.getElementById('fixture-study').hidden=false;
@@ -58,8 +58,10 @@ async function main(){
   assert.match(await page.locator('.wd-tickets').textContent(),/補發上限 5 張/);
   for(const viewport of [{width:393,height:852},{width:1180,height:820},{width:360,height:640}]){
    await page.setViewportSize(viewport);
-   const bounds=await page.locator('#weapon-dungeons-dialog').boundingBox();
-   assert(bounds.x>=0&&bounds.y>=0&&bounds.x+bounds.width<=viewport.width+1&&bounds.y+bounds.height<=viewport.height+1);
+   const bounds=await page.locator('#weapon-dungeons-panel').boundingBox();
+   assert(bounds.x>=0&&bounds.x+bounds.width<=viewport.width+1);
+   assert.equal(await page.locator('#weapon-dungeons-panel').evaluate(el=>el.tagName==='SECTION'&&!!el.closest('#page-gameplay')&&getComputedStyle(el).position!=='fixed'),true);
+   assert.equal(await page.locator('dialog:modal').count(),0);
    await page.screenshot({path:path.join(output,'selection-'+viewport.width+'.png')});
   }
   const rail=page.locator('.wd-difficulties');
