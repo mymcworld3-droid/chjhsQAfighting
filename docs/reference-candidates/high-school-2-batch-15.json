@@ -1,0 +1,340 @@
+{
+  "schema": 1,
+  "batch": 15,
+  "date": "2026-11-27",
+  "purpose": "既有候選全文轉錄及正式答案重新取得；僅新增具完整題文與答案的新候選。",
+  "records": [
+    {
+      "id": "CEEC-113-chem-multiple-choice-18",
+      "sourceId": "CEEC-113-chem",
+      "questionNumber": 18,
+      "originalQuestionNumberOrLocator": "印刷第7頁第18題",
+      "originalQuestionType": "multiple-choice",
+      "questionPdfPage": 8,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "D"
+      ],
+      "conceptTags": [
+        "反應速率",
+        "反應機構",
+        "速率定律",
+        "催化劑",
+        "反應中間產物"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "造成臭氧層破壞的可能化學反應，主要來自下列兩個步驟：\n步驟一：O₃＋Cl → O₂＋ClO（慢）\n步驟二：ClO＋O → Cl＋O₂（快）\n若此反應的速率定律可表示為 r＝k[O₃][Cl]，則下列有關臭氧分解的相關敘述，哪些正確？",
+        "options": [
+          {
+            "label": "A",
+            "text": "Cl 是反應的催化劑"
+          },
+          {
+            "label": "B",
+            "text": "ClO 是反應的中間產物"
+          },
+          {
+            "label": "C",
+            "text": "O₂ 是反應的中間產物"
+          },
+          {
+            "label": "D",
+            "text": "反應的速率決定於步驟一"
+          },
+          {
+            "label": "E",
+            "text": "反應的速率決定於步驟二"
+          }
+        ]
+      },
+      "optionCount": 5,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "officialAnswerLocator": "官方選擇題答案第1頁第18題 ABD",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-14587.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-12164.html"
+      ],
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "human-review-required",
+        "原始多選，不轉單選",
+        "依實際選修II進度核對"
+      ],
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-screenshot"
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "PTTSH-105-1-2-physics-single-choice-8",
+      "sourceId": "PTTSH-105-1-2-physics",
+      "questionNumber": 8,
+      "originalQuestionNumberOrLocator": "單選第8題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "靜摩擦力",
+        "摩擦係數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalQuestion": {
+        "q": "一質量為10公斤的物體置於水平桌面上，以一水平拉力拉它，恰可使之移動。若此拉力的量值為9.8牛頓，則物體與桌面的靜摩擦係數為多少？",
+        "options": [
+          {
+            "label": "A",
+            "text": "0.1"
+          },
+          {
+            "label": "B",
+            "text": "0.98"
+          },
+          {
+            "label": "C",
+            "text": "98"
+          },
+          {
+            "label": "D",
+            "text": "0.49"
+          },
+          {
+            "label": "E",
+            "text": "0.5"
+          }
+        ]
+      },
+      "questionPdfPage": 2,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "human-review-required"
+      ],
+      "batch": 7,
+      "answerPdfPage": 2,
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=105-1%2F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%2F&file=201611291559080.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=105-1%2F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%2F%E4%BA%8C%E5%B9%B4%E7%B4%9A%2F%E7%89%A9%E7%90%86%2F&file=201611291559080.pdf",
+      "officialAnswerLocator": "第8題後答案標記A",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-14587.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-12164.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-07.json",
+      "evidence": {
+        "question": "official-pdf-web-text-rendering",
+        "answer": "official-answer-text-rendering",
+        "recheckedAgainstPreviousMarks": true,
+        "observedTextLocator": "原卷文字81–84"
+      }
+    },
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-2",
+      "sourceId": "PJHS-108-2-2-chem",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "單選第2題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "化學平衡",
+        "濃度平衡常數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalQuestion": {
+        "q": "本反應達成平衡時，測得容器中含有 NO(g) 0.2 mol，O₂(g) 0.5 mol，NO₂(g) 0.4 mol：試求其平衡常數 Kc 值：",
+        "options": [
+          {
+            "label": "A",
+            "text": "8"
+          },
+          {
+            "label": "B",
+            "text": "16"
+          },
+          {
+            "label": "C",
+            "text": "32"
+          },
+          {
+            "label": "D",
+            "text": "64"
+          },
+          {
+            "label": "E",
+            "text": "4"
+          }
+        ],
+        "sharedStem": {
+          "heading": "2~4 題組",
+          "stem": "於 300 K 時，在 2 L 之密閉容器中，依反應 2 NO(g) + O₂(g) ⇌ 2 NO₂(g)，回答下列問題。",
+          "sourcePage": 1
+        }
+      },
+      "questionPdfPage": 1,
+      "optionCount": 5,
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "migratedFrom": "docs/high-school-2-human-reference-source-inventory.md#第二批",
+      "flags": [
+        "legacy-inventory-migration",
+        "visual-check-pending",
+        "old-curriculum",
+        "question-type-section-mismatch",
+        "shared-stem-2-4",
+        "human-review-required"
+      ],
+      "batch": 7,
+      "answerPdfPage": null,
+      "originalSourceUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "officialAnswerLocator": "卷末試題分析表（頁碼1/1）第2題標準答案B",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/692-14587.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-12164.html"
+      ],
+      "replacesLocatorIn": "high-school-2-batch-07.json",
+      "evidence": {
+        "question": "official-pdf-web-text-rendering",
+        "answer": "official-answer-text-rendering",
+        "recheckedAgainstPreviousMarks": true,
+        "observedTextLocator": "官方PDF網頁呈現35–37；分析表467"
+      }
+    }
+  ],
+  "answerRechecks": [
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-2",
+      "sourceId": "PJHS-108-2-2-chem",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "answerPdfPage": null,
+      "answerLocator": "卷末試題分析表第2題",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "official-pdf-web-rendering",
+      "humanVerified": false
+    },
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-3",
+      "sourceId": "PJHS-108-2-2-chem",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "answerPdfPage": null,
+      "answerLocator": "卷末試題分析表第3題",
+      "previousMarks": [
+        "B"
+      ],
+      "observedMarks": [
+        "B"
+      ],
+      "match": true,
+      "evidenceMethod": "official-pdf-web-rendering",
+      "humanVerified": false
+    },
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-4",
+      "sourceId": "PJHS-108-2-2-chem",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "answerPdfPage": null,
+      "answerLocator": "卷末試題分析表第4題",
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "official-pdf-web-rendering",
+      "humanVerified": false
+    },
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-5",
+      "sourceId": "PJHS-108-2-2-chem",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "answerPdfPage": null,
+      "answerLocator": "卷末試題分析表第5題",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "official-pdf-web-rendering",
+      "humanVerified": false
+    },
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-6",
+      "sourceId": "PJHS-108-2-2-chem",
+      "officialAnswerUrl": "https://dept.pjhs.tyc.edu.tw/DEPT/BF_files/FBF3646.pdf",
+      "answerPdfPage": null,
+      "answerLocator": "卷末試題分析表第6題",
+      "previousMarks": [
+        "D"
+      ],
+      "observedMarks": [
+        "D"
+      ],
+      "match": true,
+      "evidenceMethod": "official-pdf-web-rendering",
+      "humanVerified": false
+    }
+  ],
+  "counts": {
+    "newRecords": 1,
+    "upgradedTextDrafts": 2,
+    "newCompleteDrafts": 3,
+    "existingAnswerRechecks": 5,
+    "approved": 0
+  },
+  "unresolved": [
+    {
+      "id": "PJHS-108-2-2-chem-single-choice-3",
+      "reason": "本次官方PDF網頁呈現第3題條件與答案標記B；數值與方向有表面疑義，原頁截圖失敗，不以計算修正原卷或答案。",
+      "observedAnswer": [
+        "B"
+      ]
+    },
+    {
+      "sourceId": "KUSJH-114-1-1-chem",
+      "reason": "官方ZIP點擊仍HTTP 400；15題未取得答案。"
+    },
+    {
+      "sourceId": "CEEC-113-chem",
+      "reason": "第17題依賴圖5，原圖尚未取得實體；不新增題號索引。"
+    }
+  ],
+  "limitations": [
+    "平鎮及臺東原卷截圖cache miss；網頁轉錄待視覺核對。",
+    "未取得任何原始圖檔或答案ZIP。",
+    "保留舊課綱、考卷題型區段矛盾旗標，不自行校正。"
+  ]
+}
