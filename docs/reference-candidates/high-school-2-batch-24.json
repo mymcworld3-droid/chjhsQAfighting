@@ -7,22 +7,23 @@
     {
       "id": "CEEC-108-physics",
       "subject": "物理",
-      "title": "108指考工作報告附錄物理原卷及正式答案",
+      "title": "108指考物理定稿及正式選擇題答案",
       "institution": "大學入學考試中心",
-      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k015592288344101231/108指考工作報告.pdf",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196366056033318514/08-108指考物理試卷定稿.pdf",
       "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j197367862889442836/08-108指考物理選擇題答案.pdf",
       "topics": [
         "克卜勒定律",
         "衛星角速率",
         "正面彈性碰撞"
       ],
-      "notes": "原卷在官方工作報告，衛星題須保留共用題幹；碰撞題依賴原圖；答案表第7題有全體給分註記，不當普通單選處理。原頁截圖未取得。",
+      "notes": "原卷在官方工作報告，衛星題須保留共用題幹；碰撞題依賴原圖；答案表第7題有全體給分註記，不當普通單選處理。原頁截圖未取得。 第25批確認獨立原卷網頁可讀，取代大型工作報告作為主要原卷下載來源；尚未取得實體或核實原圖。",
       "acquisitionOnly": true,
       "humanRightsVerified": false,
       "rightsBasisCandidate": "正式考試原題，依法令舉行之考試試題權利適用性及附帶素材仍須人工確認",
       "rightsEvidence": [
         "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
-      ]
+      ],
+      "alternateOriginalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k015592288344101231/108指考工作報告.pdf"
     },
     {
       "id": "CEEC-109-chem",
@@ -47,22 +48,23 @@
     {
       "id": "CEEC-106-chem",
       "subject": "化學",
-      "title": "106指考化學定稿及官方工作報告答案",
+      "title": "106指考化學定稿及正式選擇題答案",
       "institution": "大學入學考試中心",
       "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j052596928516674830/09-106指考化學試卷定稿.pdf",
-      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j051834730874762561/106指考工作報告.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j052596929150543868/09-106指考化學選擇題答案.pdf",
       "topics": [
         "平衡常數",
         "反應級數",
         "秒錶反應"
       ],
-      "notes": "原卷印刷第4頁截圖成功，正式答案可於工作報告印刷第239頁文字層查閱，答案頁截圖未取得。",
+      "notes": "原卷印刷第4頁截圖成功，正式答案可於工作報告印刷第239頁文字層查閱，答案頁截圖未取得。 第25批確認獨立正式答案表可讀（第16題A），取代大型工作報告作為主要答案下載來源；答案原頁截圖未成功。",
       "acquisitionOnly": true,
       "humanRightsVerified": false,
       "rightsBasisCandidate": "正式考試原題，依法令舉行之考試試題權利適用性及附帶素材仍須人工確認",
       "rightsEvidence": [
         "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
-      ]
+      ],
+      "alternateOfficialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j051834730874762561/106指考工作報告.pdf"
     },
     {
       "id": "CEEC-110-chem",
