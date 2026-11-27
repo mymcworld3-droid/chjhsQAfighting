@@ -711,3 +711,56 @@ test('weapon collection API uses equipped, level, then realm priority and re-sor
   assert.deepEqual(next.library.map(book=>book.id),['body-dragon','sword-wind','sword-sky','sword-flight','body-tiger','body-rock']);
   assert.deepEqual(Catalog.sortedOwnedWeapons(next.library,next.weaponIds).map(book=>book.id),next.library.map(book=>book.id));
 });
+
+test('admin release gift grants only missing new weapons once, preserving old weapons and existing refinement',async()=>{
+  const db=database();
+  await API.chooseSchool(db,'u1',{school:'sword'});
+  db.records.get('users/u1').isAdmin=true;
+  db.records.get('users/u3').isAdmin='true'; // non-boolean is not an authorized role
+  const original=bookRecord(db);
+  original.books['sword-wind'].exp=280;
+  if(Catalog.RELEASE_NEW_WEAPONS){
+    original.books['sword-prism']={exp:1080,tierRealm:'煉氣',copies:{'煉氣':3},refinement:2};
+    original.skillLevels['prism-slash']=3;
+  }
+  const [a,b]=await Promise.all([API.manualsState(db,'u1'),API.manualsState(db,'u1')]);
+  const expected=Catalog.RELEASE_NEW_WEAPONS?7:1;
+  assert.equal(a.library.length,expected);assert.deepEqual(a,b);
+  assert.equal(a.gold,0);assert.deepEqual(a.weaponIds,['sword-wind',null]);
+  assert.equal(a.library.find(book=>book.id==='sword-wind').exp,280);
+  if(Catalog.RELEASE_NEW_WEAPONS){
+    for(const book of Catalog.DEVELOPMENT_BOOKS){
+      const row=a.library.find(item=>item.id===book.id);
+      assert.ok(row,book.id);
+      if(book.id==='sword-prism'){
+        assert.equal(row.exp,1080);assert.equal(row.refinement,2);assert.equal(row.skills[0].level,3);
+      }else{
+        assert.equal(row.exp,0);assert.equal(row.level,1);assert.equal(row.refinement,0);
+        assert.equal(Object.values(row.weaponCopies).reduce((n,v)=>n+v,0),1);
+      }
+    }
+  }
+  const saved=structuredClone(bookRecord(db));
+  assert.deepEqual(await API.manualsState(db,'u1'),a);
+  assert.deepEqual(bookRecord(db),saved);
+  assert.equal((await API.manualsState(db,'u2')).library.length,0);
+  assert.equal((await API.manualsState(db,'u3')).library.length,0);
+  assert.equal(db.records.has(API.MANUALS+'/u2'),false);
+  assert.equal(db.records.has(API.MANUALS+'/u3'),false);
+});
+test('admin gift can initialize an empty inventory without choosing a school',async()=>{
+  const db=database();db.records.get('users/u2').isAdmin=true;
+  const state=await API.manualsState(db,'u2');
+  assert.equal(state.library.length,Catalog.RELEASE_NEW_WEAPONS?6:0);
+  assert.equal(state.school,null);assert.deepEqual(state.weaponIds,[null,null]);
+  assert.equal(state.starterClaimed,false);
+});
+test('admin gift rechecks privilege in transaction and does not grant after demotion',async()=>{
+  if(!Catalog.RELEASE_NEW_WEAPONS)return;
+  const db=database();db.records.get('users/u1').isAdmin=true;
+  const transaction=db.runTransaction.bind(db);
+  db.runTransaction=fn=>{db.records.get('users/u1').isAdmin=false;return transaction(fn);};
+  const state=await API.manualsState(db,'u1');
+  assert.equal(state.library.length,0);
+  assert.equal(bookRecord(db),undefined);
+});

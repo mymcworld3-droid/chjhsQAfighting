@@ -224,10 +224,32 @@ function manualResponse(record,user,gold=Rules.num(user.stats?.gold)){
   const state=Manuals.publicState(record,TrainingAccess.score(user));
   return {...state,library:Manuals.sortedOwnedWeapons(state.library,state.weaponIds),gold,battleAttack,trialStage};
 }
+// Release gift: ensure each authoritative admin owns one of the six new
+// weapons. Never add copies/refinement to an existing weapon. Ordinary GETs
+// stay read-only; the transaction rechecks the role and ownership on retry.
+const adminReleaseBooks=()=>Manuals.RELEASE_NEW_WEAPONS?
+  Manuals.DEVELOPMENT_BOOKS.filter(book=>Object.hasOwn(Manuals.BY_BOOK,book.id)):[];
+function needsAdminReleaseGift(user,record){
+  return user?.isAdmin===true&&adminReleaseBooks().some(book=>!Object.hasOwn(record?.books||{},book.id));
+}
 async function manualsState(db,uid){
-  const [player,record]=await Promise.all([db.collection('users').doc(uid).get(),db.collection(MANUALS).doc(uid).get()]);
+  const userRef=db.collection('users').doc(uid),manualRef=db.collection(MANUALS).doc(uid);
+  const [player,record]=await Promise.all([userRef.get(),manualRef.get()]);
   const user=exists(player);if(!user)throw error('玩家資料不存在',404);
-  return manualResponse(exists(record),user);
+  const raw=exists(record);
+  if(!needsAdminReleaseGift(user,raw))return manualResponse(raw,user);
+  return db.runTransaction(async tx=>{
+    const [latestPlayer,latestManual]=await Promise.all([tx.get(userRef),tx.get(manualRef)]);
+    const currentUser=exists(latestPlayer),currentRaw=exists(latestManual);
+    if(!currentUser)throw error('玩家資料不存在',404);
+    if(!needsAdminReleaseGift(currentUser,currentRaw))return manualResponse(currentRaw,currentUser);
+    const next=Manuals.normalize(currentRaw);
+    for(const book of adminReleaseBooks()){
+      if(!Object.hasOwn(next.books,book.id))next.books[book.id]={exp:0};
+    }
+    tx.set(manualRef,next);
+    return manualResponse(next,currentUser);
+  });
 }
 async function chooseSchool(db,uid,input){
   const school=String(input?.school||'');
