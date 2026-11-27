@@ -2448,9 +2448,9 @@ async function open(nextMode='pve',options={}){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
-  removeDungeonPortal();
   if(!root)return;
   clearWeaponToast();
+  removeDungeonPortal();
   warmedCombatAudioRoomId='';
   const completedFirstStage=mode==='pve'&&state?.trial?.stage===1&&state.status==='finished'&&
     state.winner==='player'&&tutorialStep()===9;

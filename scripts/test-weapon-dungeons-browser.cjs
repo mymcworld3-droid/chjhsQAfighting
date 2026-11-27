@@ -84,6 +84,7 @@ async function main(){
    assert(layout.inside&&layout.rail&&layout.root,'no horizontal overflow at '+viewport.width+'x'+viewport.height);
    await page.locator('[data-wd-enter]').scrollIntoViewIfNeeded();assert.equal(await page.locator('[data-wd-enter]').isVisible(),true);
    await page.screenshot({path:path.join(output,'selection-'+viewport.width+'.png')});
+   console.log('Dungeon selection viewport passed',viewport.width+'x'+viewport.height);
   }
   // Landscape uses the complete gameplay tab and restores the identical atlas on return.
   await page.setViewportSize({width:1180,height:820});
@@ -145,6 +146,8 @@ async function main(){
   await page.locator('[data-atlas-resume]').waitFor({state:'visible'});
   assert.match(await page.locator('[data-atlas-resume]').textContent(),/不耗券/);
   await page.locator('[data-atlas-resume]').click();await page.locator('#tactical-combat canvas').waitFor();
+  await page.locator('.wd-portal').waitFor({state:'detached'});
+  await page.waitForFunction(()=>document.querySelector('[data-sync]')?.disabled===false);
   assert.equal((await read()).id,room.id);assert.equal((await API.weaponDungeonState(db,'u1')).tickets,2);
   const raw=db.records.get(API.ROOMS+'/'+room.id);
   raw.blocks=[];
@@ -155,6 +158,7 @@ async function main(){
   assert.equal(victory.status,'finished');
   assert.equal(victory.weaponDungeonResult.cleared,true);
   assert.equal(victory.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length,remainingGuards);
+  await page.waitForFunction(()=>document.querySelector('[data-sync]')?.disabled===false);
   await page.evaluate(()=>document.querySelector('[data-sync]').click());
   await page.locator('[data-weapon-dungeon-menu]').waitFor();
   assert.match(await page.locator('.tc-dialog').textContent(),/尖峰石域.*通關/);
@@ -173,6 +177,7 @@ async function main(){
   await page.waitForFunction(()=>!document.querySelector('[data-wd-result]')&&!!document.querySelector('#tactical-combat canvas')&&!document.querySelector('.wd-portal'));
   const retryRoom=await read();assert.notEqual(retryRoom.id,room.id);assert.equal((await API.weaponDungeonState(db,'u1')).tickets,1);
   await API.command(db,'u1',{roomId:retryRoom.id,type:'leave',requestId:'browser-retry-forfeit'},Date.now());
+  await page.waitForFunction(()=>document.querySelector('[data-sync]')?.disabled===false);
   await page.evaluate(()=>document.querySelector('[data-sync]').click());
   await page.locator('[data-wd-result="failed"]').waitFor();assert.equal(await page.locator('.wd-result-unlock').count(),0);
   await page.screenshot({path:path.join(output,'failure-settlement.png'),animations:'disabled'});
@@ -184,7 +189,7 @@ async function main(){
   assert.match(await page.locator('.wd-tickets').textContent(),/補發上限 5 張/);
   assert.equal((await API.weaponDungeonState(db,'u1')).clears[0],1);assert.deepEqual(errors,[]);
   console.log('Weapon dungeon verified: responsive selector, hidden locked skills, two signed quiz answers, free resume, victory and next-tier unlock.');
- }catch(error){if(page)await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});throw error;}
+ }catch(error){if(page)console.error('Dungeon browser diagnostic',await page.evaluate(()=>({notice:document.querySelector('[data-notice]')?.textContent,modal:document.querySelector('[data-modal]')?.textContent,portal:!!document.querySelector('.wd-portal'),syncDisabled:document.querySelector('[data-sync]')?.disabled})).catch(()=>null));if(page)await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});throw error;}
  finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

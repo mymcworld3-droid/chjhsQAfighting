@@ -7,7 +7,7 @@ function harness({reduced=false}={}){
  const context={QAWeaponDungeons:W,window:{matchMedia:()=>({matches:reduced})},setTimeout:(fn,ms)=>{timers.push({fn,ms});},
  document:{body:{append:n=>nodes.push(n)},createElement:()=>{const labels=new Map();return {classList:{add:c=>calls.push(c)},setAttribute(){},querySelector:k=>{if(!labels.has(k))labels.set(k,{});return labels.get(k)},remove(){calls.push('remove')}}}}};
  vm.createContext(context);vm.runInContext('let dungeonPortal=null;\n'+source.slice(source.indexOf('function removeDungeonPortal(){'),source.indexOf('async function enterTrial(e,account){')),context);
- return {calls,timers,nodes,stop:()=>{current=false;context.removeDungeonPortal()},run:(reveal=async()=>calls.push('reveal'),resume=false)=>context.playDungeonPortal(reveal,{isCurrent:()=>current,selection:{dungeonId:W.ID,difficulty:0,...(resume?{resumeRoomId:'room'}:{})}}),tick:async()=>{timers.shift().fn();await Promise.resolve();await Promise.resolve();}};
+ return {calls,timers,nodes,stop:()=>{current=false;context.removeDungeonPortal()},run:(reveal=async()=>calls.push('reveal'),resume=false)=>context.playDungeonPortal(reveal,{isCurrent:()=>current,selection:{dungeonId:W.ID,difficulty:0,...(resume?{resumeRoomId:'room'}:{})}}),tick:async()=>{timers.shift().fn();await new Promise(resolve=>setImmediate(resolve));}};
 }
 test('portal covers entry until server reveal then fades and cleans up',async()=>{
  const h=harness(),p=h.run();
