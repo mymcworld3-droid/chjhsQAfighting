@@ -1,5 +1,5 @@
 // Canonical filenames for stamina-battle manual and skill artwork.
-// Shared techniques reuse the base move's art; released sword skills use approved paintings.
+// Shared techniques reuse the base move's art; released weapons use approved paintings.
 const BOOK_ART=Object.freeze({
   'sword-wind':'/assets/books/sword-wind.png',
   'sword-flight':'/assets/books/sword-flight.png',
@@ -8,11 +8,11 @@ const BOOK_ART=Object.freeze({
   'body-dragon':'/assets/books/body-dragon.png',
   'body-tiger':'/assets/books/body-tiger.png',
   'sword-prism':'/assets/weapons/sword-prism-hd.webp',
-  'body-bell':'/assets/weapons/body-bell-hd.svg',
+  'body-bell':'/assets/weapons/body-bell-hd.webp',
   'sword-weave':'/assets/weapons/sword-weave-hd.webp',
-  'body-mirror':'/assets/weapons/body-mirror-hd.svg',
+  'body-mirror':'/assets/weapons/body-mirror-hd.webp',
   'sword-time':'/assets/weapons/sword-time-hd.webp',
-  'body-gravity':'/assets/weapons/body-gravity-hd.svg'
+  'body-gravity':'/assets/weapons/body-gravity-hd.webp'
 });
 const MOVE_ART=Object.freeze({
   'wind-slash':'/assets/skills/wind-slash.png',

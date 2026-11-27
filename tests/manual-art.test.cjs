@@ -6,7 +6,7 @@ const path=require('node:path');
 const {BOOKS,RELEASE_NEW_WEAPONS}=require('../public/cultivation/manual-rules.js');
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-art.js'),'utf8');
 const {bookArt,skillArt}=new Function(source.replace(/^export const /gm,'const ')+'\nreturn {bookArt,skillArt};')();
-const HD_SWORDS=new Set(['sword-prism','sword-weave','sword-time']);
+const HD_WEAPONS=new Set(['sword-prism','sword-weave','sword-time','body-bell','body-mirror','body-gravity']);
 const HD_SKILLS=new Set(["prism-reflect","prism-scatter","weave-mark","weave-thread","weave-domain","time-slash","time-double","time-union"]);
 const presentation=require('../public/cultivation/weapon-presentation.js');
 const imageExists=(url,kind)=>{
@@ -15,7 +15,7 @@ const imageExists=(url,kind)=>{
 };
 test('each known manual has an actual book image',()=>{
   assert.equal(BOOKS.length,RELEASE_NEW_WEAPONS?12:6);
-  for(const book of BOOKS){if(!book.release)imageExists(bookArt(book.id),'books');else{const url=bookArt(book.id);assert.equal(url,'/assets/weapons/'+book.id+'-hd.'+(HD_SWORDS.has(book.id)?'webp':'svg'));assert.ok(fs.existsSync(path.join(__dirname,'../public',url.slice(1))));assert.equal(presentation.art(book.id),url);if(HD_SWORDS.has(book.id)){const bytes=fs.readFileSync(path.join(__dirname,'../public',url.slice(1)));assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');assert.equal(bytes.toString('ascii',12,16),'VP8X');assert.ok(bytes[20]&16,'WebP alpha flag');assert.equal(bytes.readUIntLE(24,3)+1,1024);assert.equal(bytes.readUIntLE(27,3)+1,1024);}}}
+  for(const book of BOOKS){if(!book.release)imageExists(bookArt(book.id),'books');else{const url=bookArt(book.id);assert.equal(url,'/assets/weapons/'+book.id+'-hd.'+(HD_WEAPONS.has(book.id)?'webp':'svg'));assert.ok(fs.existsSync(path.join(__dirname,'../public',url.slice(1))));assert.equal(presentation.art(book.id),url);if(HD_WEAPONS.has(book.id)){const bytes=fs.readFileSync(path.join(__dirname,'../public',url.slice(1)));assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');assert.equal(bytes.toString('ascii',12,16),'VP8X');assert.ok(bytes[20]&16,'WebP alpha flag');assert.equal(bytes.readUIntLE(24,3)+1,1024);assert.equal(bytes.readUIntLE(27,3)+1,1024);}}}
 });
 test('all skills resolve to their approved artwork, including shared moves',()=>{
   const moves=new Set();

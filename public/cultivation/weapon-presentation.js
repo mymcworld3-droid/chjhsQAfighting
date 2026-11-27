@@ -3,9 +3,8 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.QAWeaponPresentation=api;})(globalThis,()=>{
   'use strict';
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const ids=new Set(['sword-wind','sword-flight','sword-sky','body-rock','body-dragon','body-tiger','sword-prism','sword-weave','sword-time']);
-  const draftIds=new Set(["body-bell","body-mirror","body-gravity"]);
-  const art=id=>ids.has(id)?'/assets/weapons/'+id+'-hd.webp':draftIds.has(id)?'/assets/weapons/'+id+'-hd.svg':'';
+  const ids=new Set(['sword-wind','sword-flight','sword-sky','body-rock','body-dragon','body-tiger','sword-prism','sword-weave','sword-time','body-bell','body-mirror','body-gravity']);
+  const art=id=>ids.has(id)?'/assets/weapons/'+id+'-hd.webp':'';
   const count=v=>Number.isFinite(Number(v))?Math.max(0,Math.trunc(Number(v))):0;
   const fmt=v=>count(v).toLocaleString('zh-TW');
   const levelText=book=>'Lv. '+Math.max(1,Math.min(20,count(book?.level)||1));

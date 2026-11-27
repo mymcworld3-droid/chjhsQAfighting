@@ -25,7 +25,7 @@
     /^\/(?:assets\/|styles\/)/.test(x)))];
   function weaponImages(ids){
     return unique((Array.isArray(ids)?ids:[]).slice(0,3)
-      .filter(known).map(id=>'/assets/weapons/'+id+'-hd.'+(DRAFTS.has(id)?'svg':'webp')));
+      .filter(known).map(id=>'/assets/weapons/'+id+'-hd.webp'));
   }
   function genders(people){
     const found=new Set();

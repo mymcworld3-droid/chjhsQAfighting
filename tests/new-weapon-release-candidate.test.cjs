@@ -86,8 +86,10 @@ test('all 24 candidate artwork mappings resolve to existing approved assets',()=
  const {skillArt}=new Function(artSource.replace(/^export const /gm,'const ')+'\nreturn {skillArt};')();
  const hdSkills=new Set(["prism-reflect","prism-scatter","weave-mark","weave-thread","weave-domain","time-slash","time-double","time-union"]);
  for(const b of D.BOOKS){
-  const hd=['sword-prism','sword-weave','sword-time'].includes(b.id);
-  const weapon='assets/weapons/'+b.id+'-hd.'+(hd?'webp':'svg');assert.ok(fs.existsSync(path.join(root,weapon)),weapon);
+  const weapon='assets/weapons/'+b.id+'-hd.webp';assert.ok(fs.existsSync(path.join(root,weapon)),weapon);
+  const bytes=fs.readFileSync(path.join(root,weapon));
+  assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,16),'WEBPVP8X');
+  assert.ok(bytes[20]&16,'WebP alpha flag');assert.equal(bytes.readUIntLE(24,3)+1,1024);assert.equal(bytes.readUIntLE(27,3)+1,1024);
   assert.ok(artSource.includes('/'+weapon),weapon+' mapped');
   assert.equal(require('../public/cultivation/weapon-presentation.js').art(b.id),'/'+weapon);
   for(const sk of b.skills){const file=sk.id==='prism-slash'?'assets/skills/wind-slash.png':'assets/skills/'+sk.id+(hdSkills.has(sk.id)?'.webp':'.svg');assert.ok(fs.existsSync(path.join(root,file)),file);assert.equal(skillArt(sk),'/'+file);}

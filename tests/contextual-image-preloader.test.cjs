@@ -87,3 +87,14 @@ test('a bounded preload queue deduplicates requests and excludes unapproved URLs
     assert.deepEqual(stopped,[]);
   }finally{global.Image=prior;}
 });
+
+test('new weapons warm the same HD images as the presentation catalog',()=>{
+  const presentation=require('../public/cultivation/weapon-presentation.js');
+  for(const id of ['sword-prism','sword-weave','sword-time','body-bell','body-mirror','body-gravity']){
+    const url='/assets/weapons/'+id+'-hd.webp';
+    assert.deepEqual(policy.weaponImages([id]),[url]);
+    assert.equal(presentation.art(id),url);
+    assert.deepEqual(policy.manualImages({library:[{id,owned:true}]}),[url]);
+    assert.deepEqual(policy.manualImages({library:[{id,owned:false}]}),[]);
+  }
+});
