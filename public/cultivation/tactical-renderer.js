@@ -1,4 +1,5 @@
 import './battle-presentation.js';
+import './weapon-effects.js';
 import './manual-rules.js?v=20261116-loadout-presets-v1';
 import './flying-sword-path.js?v=20261120-sword-movement-v1';
 import './tactical-rules.js?v=20261120-guided-first-stage-v1';
@@ -481,7 +482,11 @@ export class TacticalRenderer{
     };
     c.save();c.beginPath();c.rect(ox,Math.max(0,oy-size*.35),size*this.state.width,size*(this.state.height+.35));c.clip();
     const view={cell:size,ox,oy,width:this.state.width,height:this.state.height};
-    const manualCast=SkillEffects.draw(c,scene,p,view,above);
+    const manualCast=SkillEffects.draw(c,scene.weaponTimeline?{...scene,reducedMotion:this.reducedMotion.matches}:scene,p,view,above);
+    if(scene.weaponTimeline&&manualCast){
+      if(above)globalThis.QAWeaponEffects.drawNumbers(c,scene.weaponTimeline,p,view,scene.before);
+      c.restore();return;
+    }
     const impact=scene.parallelImpact?Math.max(0,Math.min(1,(p-scene.impactStart)/(1-scene.impactStart))):p;
     if(!above){
       if(!manualCast&&['cast','impact'].includes(scene.kind))for(const [i,cell]of cells.entries()){
@@ -930,6 +935,7 @@ export class TacticalRenderer{
     canvas.dataset.compassMarkers=JSON.stringify(this.compassMarkers.map(m=>
       [m.kind,Math.round(m.screenX),Math.round(m.screenY)]));
     Compass.draw(c,this.compassMarkers,{width:w,height:h});
+    globalThis.QAWeaponEffects?.drawObjects(c,s.weaponObjects,actors,{ox,oy,cell,width:s.width,height:s.height},now,{reduced});
     if(scene)this.drawEffect(scene,progress,false);
     // A dedicated guardian altar replaces the old '守' circle in v4 defense.
     // The same authoritative objective.hp/maxHp controls sprite damage state

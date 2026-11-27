@@ -116,6 +116,8 @@ function buildSkill(uid,result,previous,next){
     parallelImpact:numbers.length>0,impactStart:skill.kind==='fist-chain'?.15:.45,
     duration:durationFor(result.skillId),
     visualVersion:1};
+  const timeline=globalThis.QAWeaponEffects?.normalize(result.weaponTimeline);
+  if(timeline){scene.weaponTimeline=timeline;scene.duration=timeline.durationMs;}
   if(move==='sky-cloud')scene.cuts=skyCuts(cells,target);
   if(move==='sky-sever')scene.rays=skyRays(cells,target);
   return scene;
@@ -169,7 +171,7 @@ export function dungeonAnimationEvents(previous,next){
     const old=previous.members?.[uid];
     if(!old)continue;
     const lastSkill=member.lastSkill,priorSkill=old.lastSkill;
-    if(lastSkill?.visualVersion===1&&Number.isSafeInteger(lastSkill.seq)&&
+    if([1,2].includes(lastSkill?.visualVersion)&&Number.isSafeInteger(lastSkill.seq)&&
         lastSkill.seq>(Number(priorSkill?.seq)||0)){
       if(lastSkill.skillId==='dragon-guard'&&
           Array.isArray(lastSkill.chainSteps)&&lastSkill.chainSteps.length)
@@ -190,6 +192,7 @@ export function dungeonAnimationEvents(previous,next){
 }
 // Authoritative hits might be multi-hit; show one number per affected enemy.
 export function drawDungeonHitNumbers(ctx,scene,p,view){
+  if(scene.weaponTimeline&&globalThis.QAWeaponEffects){globalThis.QAWeaponEffects.drawNumbers(ctx,scene.weaponTimeline,p,view,scene.before);return;}
   if(p<.30||p>=1)return;
   const impacts=(scene.hits||[]).filter(h=>h&&Number.isFinite(h.damage)&&h.damage>0);
   const merged=new Map();
@@ -254,7 +257,7 @@ export function paintDungeonScene(ctx,scene,p,view,above,skillEffects){
   if(scene.kind==='basic')return drawDungeonBasicStrike(ctx,scene,p,view,above);
   if(!skillEffects?.draw)return false;
   const result=skillEffects.draw(ctx,scene,p,view,above);
-  if(above&&skillEffects.drawMotion&&scene.moves?.length){
+  if(above&&!scene.weaponTimeline&&skillEffects.drawMotion&&scene.moves?.length){
     const advances=scene.moves.filter(m=>m.timing==='dash'||m.timing==='chain-advance');
     if(advances.length)skillEffects.drawMotion(ctx,{
       kind:'move',style:'dash',visualSkill:scene.skill,moves:advances

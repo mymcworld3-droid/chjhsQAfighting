@@ -44,10 +44,10 @@
 | 階段 | 狀態 |
 | --- | --- |
 | 0 專案盤點 | 完成：3106/3106 |
-| 1 共用技能預覽 | 回合制與即時副本技能核心及渲染已接入；待完整 CI、瀏覽器驗收與多端點技能整合 |
-| 2 共用幾何與位移工具 | 純函式已實作；待完整 CI 與個別武器接入 |
-| 3 武器資料與特殊物件 | 私有資料與純狀態工具已建立；待 CI 與個別技能接入 |
-| 4 共用動畫及特效 | 未開始 |
+| 1 共用技能預覽 | 基礎驗收完成；新技能多端點隨個別階段接入 |
+| 2 共用幾何與位移工具 | 基礎驗收完成 |
+| 3 武器資料與特殊物件 | 基礎驗收完成；正式時鐘及授權隨技能接入 |
+| 4 共用動畫及特效 | V2 共用時間軸及雙模式橋接已實作；待 CI |
 | 5–6 折光靈劍 | 未開始 |
 | 7–8 鳴鐘圖騰 | 未開始 |
 | 9–10 織界靈劍 | 未開始 |
@@ -105,3 +105,11 @@ fe67669 回歸 3123 項，3122 通過，幾何法線負零 (-0) 在 Node 嚴格�
 新增 weapon-special-objects.js：版本化純 JSON 狀態、來源及擁有者驗證、序號、生成時鐘、技能等級/精煉快照、劍痕最多3道 FIFO 且同格重複不刷新、蜃影唯一且點對稱動態求值、殘影最多2道 FIFO（同格可保留不同施放時刻）、星核唯一且空地替換、5次單調事件去重、第五次後保留至 owner window 結束；提供裝備清理與戰鬥結束清除。尚未連到正式回合/即時時鐘及技能授權：後續個別階段才接入，不能公開或取得新武器。
 
 新增 6 項測試，獨立 JS 嚴格比較 161 次斷言通過。需核對完整 CI；第1、2階段的修正 CI 與瀏覽器驗收仍需確認。所有新檔案的 module-versions 已同步。
+
+## 第 1–3 階段驗收
+
+提交 af9abdc：[回歸](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45916321214) 3129/3129，0 失敗、0 跳過，版本檢查通過；[戰術瀏覽器](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45916321333) 三個測試步驟全部通過；合作瀏覽器先前 45915482218 成功。既有基礎驗收完成；多端點、特殊物件與各新技能結算仍按個別階段接入。
+
+## 第 4 階段（共用 V2 動畫基礎）
+
+新增 weapon-effects.js：版本2事件 weaponTimeline={version:2,durationMs,segments}，250–650ms；segment 帶 kind/start/impact/end、cells、rays（每條以 cells map 包裝）、vertices、echoes、hits、moves。座標、傷害及位移由結算端提供，不由動畫推測。平行射線共享時間；各段依 impact 排序，數字只於命中出現；位移按段插值，支援 slide/arc/swap/fall。六種通用 Canvas 元件：ray/shock/domain/echo/vortex/crash；地面與命中兩層、持續物件、簡化粒子模式。透過既有 tactical-animation/skill-effects/renderer 與 dungeon-skill-animation/map-view 接入可選 V2 payload，不影響舊 V1。回合制 V2 cast 必須以同一動畫事件提供 committed changes，不得再送重複的獨立 damage/move 視覺事件；即時 V2 result 可帶相同 payload。尚無新武器正式事件，個別技能階段才產生並驗證實際效果；音效先沿用既有命中音，不新增音檔。6 項測試、獨立 JS 2558 次斷言通過；完整 CI 與實際新技能畫面待驗收。未公開新武器。

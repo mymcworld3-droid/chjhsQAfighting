@@ -3,6 +3,7 @@
   const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.QATacticalAnimation=api;
 })(globalThis,()=>{
   'use strict';
+  const weaponEffects=()=>typeof module==='object'&&module.exports?require('./weapon-effects.js'):globalThis.QAWeaponEffects;
   const copy=actors=>actors.map(a=>({...a}));
   const clamp=n=>Math.max(0,Math.min(1,n));
   const smooth=n=>n*n*(3-2*n);
@@ -45,6 +46,7 @@
   }
   const swordFlightDuration=scene=>Math.min(640,230+45*Math.max(1,(scene.path?.length||2)-1));
   function duration(scene){
+    if(scene.weaponTimeline)return scene.weaponTimeline.durationMs;
     if(flyingSwordPose(scene,0))return swordFlightDuration(scene);
     if(scene.kind==='move'){
       if(scene.style==='dash'&&scene.visualSkill==='dragon-guard')return 200;
@@ -62,7 +64,7 @@
   // already resolved collisions and ordering; use only those committed paths.
   function combineKnockback(scenes){
     for(let i=0;i<scenes.length;i++){
-      const cast=scenes[i];if(cast.kind!=='cast')continue;
+      const cast=scenes[i];if(cast.kind!=='cast'||cast.weaponTimeline)continue;
       const hit=new Set(),numbers=[],moves=[],reflections=[];let j=i+1,hasDamage=false;
       const addNumber=number=>{
         const earlier=numbers.find(item=>item.uid===number.uid);
@@ -142,7 +144,7 @@
   function combineManualImpact(scenes){
     for(let i=0;i<scenes.length;i++){
       const cast=scenes[i];
-      if(cast.kind!=='cast'||cast.parallelImpact||cast.style==='fist-chain'||!manuals()?.BY_SKILL?.[cast.skill])continue;
+      if(cast.kind!=='cast'||cast.weaponTimeline||cast.parallelImpact||cast.style==='fist-chain'||!manuals()?.BY_SKILL?.[cast.skill])continue;
       let j=i+1;const hits=new Set(),numbers=[],reflections=[],strikeImpacts=[[],[]];
       for(;j<scenes.length;j++){
         const scene=scenes[j];if(scene.eventRevision!==cast.eventRevision||scene.kind!=='damage')break;
@@ -201,6 +203,10 @@
       const raw=event.animation||(['move','monster-move','displace'].includes(event.type)?{kind:'move',style:'walk'}:null);
       if(!raw)continue;
       const scene={...raw,actor:event.actor,skill:event.skill,label:event.text,eventRevision:String(event.id).split(':')[0],numbers:(raw.numbers||[]).map(number=>({...number})),before:copy(actors)};
+      if(raw.weaponTimeline){
+        const timeline=weaponEffects()?.normalize(raw.weaponTimeline);
+        if(timeline)scene.weaponTimeline=timeline;else delete scene.weaponTimeline;
+      }
       for(const key of ['rays','cuts']){
         if(Array.isArray(raw[key]))scene[key]=raw[key].map(line=>Array.isArray(line)?line:line.cells);
       }
@@ -268,6 +274,7 @@
     return q>0&&q<1?Math.sin(Math.PI*q)*(1-q*.2):0;
   }
   function sample(scene,progress){
+    if(scene.weaponTimeline&&weaponEffects())return weaponEffects().sample(scene.weaponTimeline,scene.before,scene.after,clamp(progress));
     const p=clamp(progress),beat=Math.sin(Math.PI*p),actors=copy(scene.before);
     const impact=scene.parallelImpact?clamp((p-scene.impactStart)/(1-scene.impactStart)):p;
     const crossed=moveFor(scene.skill)==='sky-cloud',cutImpact=crossed?crossCutImpact(scene,p):null;

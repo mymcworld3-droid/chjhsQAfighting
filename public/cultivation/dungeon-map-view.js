@@ -13,6 +13,7 @@ import { manualXpDelta, renderManualXpToast, renderManualXpProgress } from './ta
 import {manualAnticipation,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
 // The trial's original shared manual catalog, animation timing and VFX.
 import './manual-rules.js';
+import './weapon-effects.js';
 import './dungeon-boss-hit.js';
 import './dungeon-skill-resolution.js';
 import './tactical-animation.js';
@@ -2098,6 +2099,13 @@ class DungeonMapView{
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     let travelActive=false,heroTravelActive=false;
     const visualActor=(actor,key)=>{
+      const uid=actor.uid||actor.id;
+      if(!reduceMotion)for(const entry of [...this.visualScenes.values()].reverse()){
+        const timeline=entry.scene.weaponTimeline,elapsed=now-entry.startedAt;
+        if(!timeline||elapsed<0||elapsed>=entry.scene.duration)continue;
+        const pose=globalThis.QAWeaponEffects.motionPose(timeline,uid,elapsed/entry.scene.duration);
+        if(pose){travelActive=true;if(key==='member:'+this.uid)heroTravelActive=true;return {...actor,position:{x:pose.x,y:pose.y},visualLift:pose.lift};}
+      }
       const entry=this.travelScenes.get(key);
       if(!entry||reduceMotion){
         if(reduceMotion)return actor;
@@ -2169,9 +2177,10 @@ class DungeonMapView{
     }
     const paintEffects=(context,view,above)=>{
       const renderer=globalThis.QATacticalSkillEffects;
+      if(!above)globalThis.QAWeaponEffects?.drawObjects(context,this.room?.weaponObjects,visualMembers.map(m=>({uid:m.uid,...m.position})),view,now,{reduced:reduceMotion});
       for(const {scene,p} of scenes){
         try{
-          paintDungeonScene(context,scene,p,view,above,renderer);
+          paintDungeonScene(context,scene.weaponTimeline?{...scene,reducedMotion:reduceMotion}:scene,p,view,above,renderer);
           if(above)drawDungeonHitNumbers(context,scene,p,view);
         }catch(error){
           // A malformed visual must never block the live multiplayer fight.

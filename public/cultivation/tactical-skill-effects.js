@@ -25,6 +25,10 @@
     return moves.has(move)?move:null;
   }
   function draw(ctx,scene,progress,view,above){
+    if(scene.weaponTimeline){
+      const engine=typeof module==='object'&&module.exports?require('./weapon-effects.js'):globalThis.QAWeaponEffects;
+      if(engine)return engine.draw(ctx,scene.weaponTimeline,progress,view,above,{reduced:scene.reducedMotion===true});
+    }
     const move=moveFor(scene.skill);
     if(!move||scene.kind!=='cast')return false;
     const p=clamp(progress),beat=pulse(p),{cell:size,ox,oy,width,height}=view;
