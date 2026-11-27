@@ -2,6 +2,11 @@ name: Human reference PDF review preparation
 
 on:
   workflow_dispatch:
+    inputs:
+      acquisition_batch:
+        description: 'Optional new-source acquisition batch number; blank uses existing pending queue'
+        required: false
+        type: string
   push:
     branches: [main]
     paths:
@@ -32,8 +37,14 @@ jobs:
       - name: Run PDF acquisition and extraction regression tests
         run: RUN_POPPLER_TEST=1 node --test tests/prepare-human-reference-review.test.cjs
       - name: Acquire and extract originals for review
+        env:
+          ACQUISITION_BATCH: ${{ inputs.acquisition_batch }}
+          IS_BATCH_24_PUSH: ${{ github.event_name == 'push' && contains(github.event.head_commit.added, 'docs/reference-candidates/high-school-2-batch-24.json') }}
         run: |
-          node scripts/prepare-human-reference-review.cjs --download --render --out "$RUNNER_TEMP/reference-review"
+          args=()
+          if [ "$IS_BATCH_24_PUSH" = "true" ]; then ACQUISITION_BATCH=24; fi
+          if [ -n "$ACQUISITION_BATCH" ]; then args+=(--acquisition-batch "$ACQUISITION_BATCH"); fi
+          node scripts/prepare-human-reference-review.cjs --download --render "${args[@]}" --out "$RUNNER_TEMP/reference-review"
       - name: Upload source status report
         if: always()
         uses: actions/upload-artifact@v4
