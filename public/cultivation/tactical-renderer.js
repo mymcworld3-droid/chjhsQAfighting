@@ -8,6 +8,7 @@ import './new-weapon-drafts.js';
 import './weapon-special-objects.js';
 import './weave-weapon-rules.js';
 import './mirror-weapon-rules.js';
+import './time-weapon-rules.js';
 import './flying-sword-path.js?v=20261120-sword-movement-v1';
 import './tactical-rules.js?v=20261120-guided-first-stage-v1';
 import './tactical-animation.js?v=20261126-flying-sword-v1';
