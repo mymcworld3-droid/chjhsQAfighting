@@ -726,7 +726,7 @@ export class TacticalRenderer{
     if(!this.preview&&s.mode==='pve'&&scene&&!reduced){
       // Once per committed impact beat, while preserving the player's
       // existing sound preferences and the audio manager's own cooldown.
-      const windows=Impact.hitWindows(scene,A);
+      const windows=scene.weaponTimeline?[...new Set(scene.weaponTimeline.segments.filter(s=>s.hits.some(h=>h.damage||h.absorbed)).map(s=>s.impact))].slice(0,3).map(at=>({at:at/scene.weaponTimeline.durationMs})):Impact.hitWindows(scene,A);
       if(windows.length){
         scene._playedImpactCues||=new Set();
         for(let i=0;i<windows.length;i++){
@@ -835,6 +835,7 @@ export class TacticalRenderer{
       if(preview){
         for(const p of preview.path.slice(1))fill(p,'#e9cf813b','#e5cc87');
         for(const p of preview.cells)fill(p,'#e9ba5266','#ffe3a4');
+        for(const ray of preview.rays||[])if(ray.depth>0)for(const p of ray.cells)fill(p,ray.depth===1?'#eea45b44':'#b49ae744',ray.depth===1?'#ffc58c':'#d2bcff');
         c.save();c.setLineDash([Math.max(2,cell*.1),Math.max(2,cell*.06)]);
         for(const p of preview.landings)fill(p,'#fff0','#ffe8a6');
         c.restore();

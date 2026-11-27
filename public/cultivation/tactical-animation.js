@@ -198,10 +198,11 @@
       const at=events.findIndex((v,j)=>j<i&&v.actor===e.actor&&v.animation?.kind==='cast'&&['lunge','pounce','dive'].includes(v.animation.style));
       if(at>=0){events.splice(i,1);events.splice(at,0,e);}
     }
+    const covered=new Set(events.filter(e=>e.animation?.weaponGroup&&weaponEffects()?.normalize(e.animation.weaponTimeline)).map(e=>e.animation.weaponGroup));
     let actors=copy(previous.actors);const scenes=[];
     for(const [index,event] of events.entries()){
       const raw=event.animation||(['move','monster-move','displace'].includes(event.type)?{kind:'move',style:'walk'}:null);
-      if(!raw)continue;
+      if(!raw||raw.weaponGroup&&!raw.weaponTimeline&&covered.has(raw.weaponGroup))continue;
       const scene={...raw,actor:event.actor,skill:event.skill,label:event.text,eventRevision:String(event.id).split(':')[0],numbers:(raw.numbers||[]).map(number=>({...number})),before:copy(actors)};
       if(raw.weaponTimeline){
         const timeline=weaponEffects()?.normalize(raw.weaponTimeline);

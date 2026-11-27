@@ -2152,7 +2152,8 @@ class DungeonMapView{
       }
       const p=reduceMotion ? .77 : Math.max(0,Math.min(1,
         elapsed/Math.max(1,entry.scene.duration)));
-      if(!entry.soundPlayed&&p>=.38){
+      const firstImpact=entry.scene.weaponTimeline?.segments.find(s=>s.hits.some(h=>h.damage||h.absorbed))?.impact;
+      if(!entry.soundPlayed&&p>=(firstImpact===undefined?.38:firstImpact/entry.scene.weaponTimeline.durationMs)){
         entry.soundPlayed=true;
         if(entry.scene.hits?.some(hit=>hit.damage>0))
           try{window.QAGameAudio?.play('combat-impact',{volume:.27});}catch(_){}

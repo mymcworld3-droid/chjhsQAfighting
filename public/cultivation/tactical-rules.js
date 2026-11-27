@@ -701,9 +701,11 @@
     let amount=Math.max(0,Math.round(raw));if(!opts.pierce)amount=Math.round(amount*(1-(target.guard||0)));
     const shieldScale=opts.shieldMultiplier||1,absorbed=opts.pierce?0:Math.min(target.shield,Math.round(amount*shieldScale));target.shield-=absorbed;amount=Math.max(0,amount-Math.ceil(absorbed/shieldScale));
     const dealt=Math.min(target.hp,amount);target.hp-=dealt;
+    if(opts.weaponHit)opts.weaponHit.records.push({uid:target.uid,rayId:opts.weaponHit.rayId,damage:dealt,absorbed,
+      cell:opts.reflected?point(target):opts.weaponHit.cell});
     log(s,source.name+' → '+target.name+' −'+dealt+(absorbed?'（護盾 '+absorbed+'）':''),'damage',{actor:source.uid,target:target.uid,damage:dealt,skill:opts.skill||'attack',x:target.x,y:target.y,
       animation:{kind:'damage',style:opts.skill||'attack',origin:point(source),target:point(target),changes:[appearance(target)],numbers:[{uid:target.uid,damage:dealt,absorbed}],
-        ...(Number.isInteger(opts.strike)?{strike:opts.strike}:{})}});
+        ...(Number.isInteger(opts.strike)?{strike:opts.strike}:{}),...(opts.weaponHit?{weaponGroup:opts.weaponHit.group}:{})}});
     if(opts.leech&&dealt){const heal=Math.min(source.maxHp-source.hp,Math.round(dealt*opts.leech));source.hp+=heal;recovery(s,source,heal);}
     const Manuals=manuals();
     if(target.hp<=0&&target.bot&&source&&!source.bot&&opts.manualId&&Manuals?.BY_BOOK?.[opts.manualId]){
@@ -718,7 +720,7 @@
     if(target.counter&&alive(target)&&!opts.reflected){
       const reflect=target.counter,manualId=target.counterManualId;
       target.counter=0;delete target.counterManualId;
-      damage(s,target,source,target.atk*reflect,{reflected:true,skill:manualId?'manual-counter':'counter',manualId,strike:opts.strike});
+      damage(s,target,source,target.atk*reflect,{reflected:true,skill:manualId?'manual-counter':'counter',manualId,strike:opts.strike,weaponHit:opts.weaponHit});
     }
     return dealt;
   }
@@ -1025,7 +1027,7 @@
     else try{validateSkill(s,a,sk,aim);}catch(e){reason=String(e.message||e);}
     const rayPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,aim):null;
     return {aim,cost,valid:!reason,reason,cells:[...cells.values()],path,hits,moves,finalPositions,
-      ...(rayPlan?{rays:rayPlan.rays}:{}),
+      ...(rayPlan?{rays:rayPlan.rays,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       landings:finalPositions.filter(t=>t.uid!==a.uid).map(point)};
   }
   function skillPreviewPlan(s,a,sk){
@@ -1091,11 +1093,18 @@
     if(fixedTarget&&!at(s,p)&&['hit','lunge','swap'].includes(sk.kind))return;
     if(prismPlan){
       const targets=s.actors.filter(t=>alive(t)&&t.team!==a.team);
+      const records=[];
       prism().resolve(prismPlan,sk,targets,h=>{
         const target=s.actors.find(t=>t.uid===h.uid);
         if(!alive(a)||!alive(target))return null;
-        return {damage:damage(s,a,target,a.atk*h.power,{skill:sk.id,manualId:sk.manualId,strike:h.rayId})};
+        return {damage:damage(s,a,target,a.atk*h.power,{skill:sk.id,manualId:sk.manualId,strike:h.rayId,
+          weaponHit:{group:castEvent.id,rayId:h.rayId,cell:h.cell,records}})};
       },covers);
+      castEvent.animation.weaponTimeline=prism().timeline(prismPlan,sk,records);
+      castEvent.animation.weaponGroup=castEvent.id;
+      castEvent.animation.changes=s.actors.filter(t=>t.uid===a.uid||records.some(h=>h.uid===t.uid)).map(appearance);
+      // The log is bounded; retain the summary when a large crowd evicts it.
+      if(!s.events.includes(castEvent)){s.events.unshift(castEvent);if(s.events.length>LIMITS.events)s.events.splice(1,1);}
       return;
     }
     if(sk.kind==='fist-focus'){

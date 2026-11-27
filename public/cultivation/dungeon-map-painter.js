@@ -150,6 +150,7 @@ export function drawWorld(ctx,map,camera,width,height,
     paint(skillPreview.aims,'rgba(0,0,0,0)','rgba(229,204,135,.65)');
     paint(selectedPreview?.path?.slice(1),'rgba(233,207,129,.23)','#e5cc87');
     paint(selectedPreview?.cells,'rgba(233,186,82,.4)','#ffe3a4');
+    for(const ray of selectedPreview?.rays||[])if(ray.depth>0)paint(ray.cells,ray.depth===1?'#eea45b44':'#b49ae744',ray.depth===1?'#ffc58c':'#d2bcff');
     paint(selectedPreview?.landings,'rgba(0,0,0,0)','#ffe8a6');
     if(selectedPreview?.hits?.length&&skillPreview.exact){
       const p=selectedPreview.aim,damage=selectedPreview.totalDamage;

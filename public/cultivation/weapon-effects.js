@@ -137,11 +137,14 @@
   }
   function drawNumbers(ctx,timeline,p,v,actors=[]){
     ctx.save();ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='bold '+Math.max(10,Math.min(17,v.cell*.3))+'px sans-serif';ctx.lineWidth=3;
+    const stacked=new Map();
     for(const h of numberFrames(timeline,p)){
+      if(!h.damage&&!h.absorbed)continue;
       const pos=h.cell||actors.find(a=>a.uid===h.uid);if(!pos)continue;
-      const a=center(v,pos),y=a.y-v.cell*(.55+h.progress*.6);
+      const i=stacked.get(h.uid)||0;stacked.set(h.uid,i+1);
+      const a=center(v,pos),y=a.y-v.cell*(.55+h.progress*.6)-i*Math.max(10,v.cell*.28);
       ctx.globalAlpha=Math.min(1,(1-h.progress)*3);ctx.strokeStyle='#18201b';ctx.fillStyle=h.absorbed?'#b8e5f6':'#ffd39e';
-      const label='-'+Math.round(h.damage);ctx.strokeText(label,a.x,y);ctx.fillText(label,a.x,y);
+      const label=h.damage?'−'+Math.round(h.damage):'護盾 −'+Math.round(h.absorbed);ctx.strokeText(label,a.x,y);ctx.fillText(label,a.x,y);
     }
     ctx.restore();
   }

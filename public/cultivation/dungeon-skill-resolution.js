@@ -173,7 +173,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     cells=prismPlan.cells;
     prism().resolve(prismPlan,sk,enemies.filter(e=>healthy(e)>0),h=>{
       const enemy=enemies.find(e=>e.id===h.uid);if(healthy(enemy)<=0)return null;
-      apply(enemy,h.power);const hit=hits.at(-1);hit.rayId=h.rayId;hit.depth=h.depth;return hit;
+      apply(enemy,h.power);const hit=hits.at(-1);hit.rayId=h.rayId;hit.depth=h.depth;hit.cell=h.cell;return hit;
     },Boss.occupies);
   }else if(sk.kind==='fist-focus'){
     if(!same(origin,target))throw fail('蓄勢必須選擇自身格',409);
@@ -321,11 +321,11 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     moveSword:Boolean(moveSword),origin:{...origin},target:{...target},
     ...(flightPath?{path:flightPath}:{}),
     cost,hits,visualMoves,...(chainSteps.length?{chainSteps}:{}),
-    ...(prismPlan?{prismRays:prismPlan.rays}:{}),
+    ...(prismPlan?{prismRays:prismPlan.rays,weaponTimeline:prism().timeline(prismPlan,sk,hits)}:{}),
     totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
     focusBefore:chargeBefore,focusEmpowered:empowered,
-    focusActivated:sk.kind==='fist-focus',visualVersion:1,effectCells,
+    focusActivated:sk.kind==='fist-focus',visualVersion:prismPlan?2:1,effectCells,
     tick:Number.isSafeInteger(room.battleAppliedTick)?room.battleAppliedTick:0,
     ...(position?{position}:{})};
   player.lastSkill=result;
@@ -369,7 +369,7 @@ function previewPlan(room,uid,map,skill){
     const path=result.path||[from,...(result.chainSteps||[]).map(s=>s.position)];
     const scheme={aim:{...target},cells,path:path.map(p=>({...p})),cost:result.cost,valid:staminaFor(member)>=result.cost,
       hits:result.hits,landings:result.visualMoves.map(m=>m.to),position:result.position,
-      totalDamage:result.totalDamage,...(result.prismRays?{rays:result.prismRays}:{})};
+      totalDamage:result.totalDamage,...(result.prismRays?{rays:result.prismRays,weaponTimeline:result.weaponTimeline}:{})};
     if(result.position&&path.length===1)scheme.path.push({...result.position});
     const aliases=prismGeometry?.byAim[key(target)]?.aims||[target];
     for(const aim of aliases){plan.aims.push({...aim});plan.byAim[key(aim)]={...scheme,aim:{...aim}};}

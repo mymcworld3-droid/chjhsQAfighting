@@ -83,5 +83,23 @@
     }
     return hits;
   }
-  return Object.freeze({supports,boardForTrial,boardForDungeon,direction,build,plans,selected,hitIntents,resolve});
+  // Fixed depth clocks preserve breadth-first settlement. Each sibling starts
+  // only after its parent impact; all same-depth rays are parallel, never queued.
+  function timeline(plan,sk,hits){
+    const scatter=sk.kind==='prism-scatter',reflect=sk.kind==='prism-reflect';
+    const durationMs=scatter?600:reflect?440:260;
+    const beats=scatter?[[60,175,315],[175,320,465],[320,465,600]]:
+      reflect?[[60,180,300],[180,300,440]]:[[45,150,260]];
+    const segments=plan.rays.map(ray=>{
+      const [start,impact,end]=beats[ray.depth];
+      const tone=ray.depth===0?'ice':reflect?'gold':ray.depth===1?'jade':'violet';
+      return {kind:'ray',start,impact,end,tone,origin:point(ray.origin),
+        cells:ray.cells.map(point),rays:[{cells:[point(ray.origin),...ray.cells.map(point)],tone,
+          ...(ray.collision?{collision:point(ray.collision.from)}:{})}],
+        hits:hits.filter(h=>h.rayId===ray.id).map(h=>({uid:h.uid??h.enemyId,damage:h.damage,
+          absorbed:h.absorbed??h.shieldDamage??0,...(h.cell?{cell:point(h.cell)}:{})}))};
+    });
+    return {version:2,durationMs,segments};
+  }
+  return Object.freeze({supports,boardForTrial,boardForDungeon,direction,build,plans,selected,hitIntents,resolve,timeline});
 });
