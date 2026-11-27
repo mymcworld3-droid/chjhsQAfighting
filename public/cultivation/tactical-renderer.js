@@ -2,6 +2,7 @@ import './battle-presentation.js';
 import './weapon-effects.js';
 import './weapon-geometry.js';
 import './prism-weapon-rules.js';
+import './bell-weapon-rules.js';
 import './manual-rules.js?v=20261116-loadout-presets-v1';
 import './flying-sword-path.js?v=20261120-sword-movement-v1';
 import './tactical-rules.js?v=20261120-guided-first-stage-v1';

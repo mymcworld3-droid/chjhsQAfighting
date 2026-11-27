@@ -16,6 +16,7 @@ import './manual-rules.js';
 import './weapon-effects.js';
 import './weapon-geometry.js';
 import './prism-weapon-rules.js';
+import './bell-weapon-rules.js';
 import './dungeon-boss-hit.js';
 import './dungeon-skill-resolution.js';
 import './tactical-animation.js';

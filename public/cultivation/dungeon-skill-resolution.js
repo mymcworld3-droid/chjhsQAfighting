@@ -7,6 +7,7 @@
   else root.QADungeonSkillResolution=factory(root.QAFlyingSwordPath,root.QADungeonBossHit,root.QAManuals);
 })(globalThis,(SwordPath,Boss,Manuals)=>{
   'use strict';
+  const bell=()=>typeof module==='object'&&module.exports?require('./bell-weapon-rules.js'):globalThis.QABellRules;
   const prism=()=>typeof module==='object'&&module.exports?require('./prism-weapon-rules.js'):globalThis.QAPrismRules;
   // Match the room's authoritative dungeon health and stamina contracts.
   const HEALTH=Object.freeze({wolf:500,wisp:440,golem:650,guardian:1200,boss:Boss.HP});
@@ -167,8 +168,22 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     }
     return total;
   };
+  const bellPlan=bell()?.supports(sk)?bell().selected(prism().boardForDungeon(map),origin,sk,target):null;
+  let bellSteps=null;
   const prismPlan=prism()?.supports(sk)?prism().selected(prism().boardForDungeon(map),origin,sk,target):null;
-  if(prism()?.supports(sk)){
+  if(bell()?.supports(sk)){
+    if(!bellPlan)throw fail('請選擇合法出拳方向或自身格',409);
+    cells=bellPlan.cells;
+    bellSteps=bell().resolve(bellPlan,{
+      targets:()=>enemies,alive:e=>healthy(e)>0,covers:Boss.occupies,
+      apply:(enemy,power,layer,cell)=>{
+        apply(enemy,power);
+        const hit=hits.at(-1);hit.layer=layer;hit.cell=cell;
+        return {damage:hit.damage,absorbed:hit.shieldDamage||0};
+      },
+      push:(enemy,d)=>{if(advance(enemy,d,1))enemy.attack=null;}
+    });
+  }else if(prism()?.supports(sk)){
     if(!prismPlan)throw fail('請選擇未受阻擋的八方向直線',409);
     cells=prismPlan.cells;
     prism().resolve(prismPlan,sk,enemies.filter(e=>healthy(e)>0),h=>{
@@ -312,7 +327,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
   const seen=new Set();
   const effectCells=(sk.kind==='fist-focus'?[origin]:cells)
     .filter(p=>tile(map,p)&&!seen.has(key(p))&&seen.add(key(p)))
-    .slice(0,72).map(p=>({x:p.x,y:p.y}));
+    .slice(0,bellPlan?80:72).map(p=>({x:p.x,y:p.y}));
   const visualMoves=enemies.filter(e=>startingPositions.has(e.id)&&
     !same(startingPositions.get(e.id),e.position)).slice(0,12).map(e=>({
       enemyId:e.id,from:{...startingPositions.get(e.id)},to:{...e.position}
@@ -321,6 +336,7 @@ function resolveCast(room,uid,map,sk,{target,seq,moveSword=false,base,preview=fa
     moveSword:Boolean(moveSword),origin:{...origin},target:{...target},
     ...(flightPath?{path:flightPath}:{}),
     cost,hits,visualMoves,...(chainSteps.length?{chainSteps}:{}),
+    ...(bellSteps?{bellSteps}:{}),
     ...(prismPlan?{prismRays:prismPlan.rays,weaponTimeline:prism().timeline(prismPlan,sk,hits)}:{}),
     totalDamage:hits.reduce((a,h)=>a+h.damage,0),
     focusCharges:player.focusCharges||0,
@@ -345,7 +361,8 @@ function previewPlan(room,uid,map,skill){
   plan.exact=Number.isInteger(skill.refinement)&&Number.isSafeInteger(member.dungeonAttack)&&member.dungeonAttack>0;
   const candidates=[];
   const prismGeometry=prism()?.supports(sk)?prism().plans(prism().boardForDungeon(map),from,sk):null;
-  if(prismGeometry)candidates.push(...Object.values(prismGeometry.byDirection).map(p=>p.aims[0]));
+  if(bell()?.supports(sk))candidates.push(...bell().plans(prism().boardForDungeon(map),from,sk).aims);
+  else if(prismGeometry)candidates.push(...Object.values(prismGeometry.byDirection).map(p=>p.aims[0]));
   else if(sk.kind==='fist-focus')candidates.push({...from});
   else if(sk.kind==='line'||sk.kind==='dash-cleave'){
     for(const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0]]){
@@ -369,7 +386,7 @@ function previewPlan(room,uid,map,skill){
     const path=result.path||[from,...(result.chainSteps||[]).map(s=>s.position)];
     const scheme={aim:{...target},cells,path:path.map(p=>({...p})),cost:result.cost,valid:staminaFor(member)>=result.cost,
       hits:result.hits,landings:result.visualMoves.map(m=>m.to),position:result.position,
-      totalDamage:result.totalDamage,...(result.prismRays?{rays:result.prismRays,weaponTimeline:result.weaponTimeline}:{})};
+      totalDamage:result.totalDamage,...(result.bellSteps?{bellSteps:result.bellSteps}:{}),...(result.prismRays?{rays:result.prismRays,weaponTimeline:result.weaponTimeline}:{})};
     if(result.position&&path.length===1)scheme.path.push({...result.position});
     const aliases=prismGeometry?.byAim[key(target)]?.aims||[target];
     for(const aim of aliases){plan.aims.push({...aim});plan.byAim[key(aim)]={...scheme,aim:{...aim}};}

@@ -12,6 +12,7 @@
     ?require('./flying-sword-path.js'):globalThis.QAFlyingSwordPath;
   const weaponDungeons=()=>typeof module==='object'&&module.exports
     ?require('./weapon-dungeon-rules.js'):globalThis.QAWeaponDungeons;
+  const bell=()=>typeof module==='object'&&module.exports?require('./bell-weapon-rules.js'):globalThis.QABellRules;
   const prism=()=>typeof module==='object'&&module.exports?require('./prism-weapon-rules.js'):globalThis.QAPrismRules;
   const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,events:64,turns:60,turnMs:30000,answerMs:50000});
   const MAPS=Object.freeze([
@@ -907,6 +908,7 @@
   }
   function aimCells(s,a,sk){
     if(!a||!alive(a))return [];
+    if(bell()?.supports(sk))return bell().plans(prism().boardForTrial(s),a,sk).aims;
     if(prism()?.supports(sk))return prism().plans(prism().boardForTrial(s),a,sk).aims;
     if(fistDirectional(sk))return CARDINALS.map(([x,y])=>offset(a,{x,y},1)).filter(p=>fistDirection(s,a,p,sk));
     if(sk.kind==='ring')return ring(s,a);
@@ -932,6 +934,7 @@
     return cells;
   }
   function skillCells(s,a,sk,p){
+    if(bell()?.supports(sk))return bell().selected(prism().boardForTrial(s),a,sk,p)?.cells||[];
     if(prism()?.supports(sk))return prism().selected(prism().boardForTrial(s),a,sk,p)?.cells||[];
     if(fistDirectional(sk)){
       const d=fistDirection(s,a,p,sk);
@@ -953,6 +956,10 @@
     if(!geometryOnly){
       if(a.stamina<techniqueCost(a,sk))fail('體力不足，先答題補充');
       validateAttackLimit(a);
+    }
+    if(bell()?.supports(sk)){
+      if(!bell().selected(prism().boardForTrial(s),a,sk,p))fail('請選擇合法出拳方向或自身格');
+      return;
     }
     if(prism()?.supports(sk)){
       if(!prism().selected(prism().boardForTrial(s),a,sk,p))fail('請選擇未受阻擋的八方向直線');
@@ -1025,8 +1032,10 @@
     if(s.status!=='active'||s.turnUid!==a.uid||s.quizRound&&s.phase!=='action')reason='目前不是你的行動回合';
     else if((a.actions||0)>=LIMITS.actions)reason='本回合行動已達上限';
     else try{validateSkill(s,a,sk,aim);}catch(e){reason=String(e.message||e);}
+    const bellSteps=events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.bellSteps;
     const rayPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,aim):null;
     return {aim,cost,valid:!reason,reason,cells:[...cells.values()],path,hits,moves,finalPositions,
+      ...(bellSteps?{bellSteps}:{}),
       ...(rayPlan?{rays:rayPlan.rays,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       landings:finalPositions.filter(t=>t.uid!==a.uid).map(point)};
   }
@@ -1063,6 +1072,7 @@
     if(s.pveMetrics){s.pveMetrics.staminaSpent+=cost;if(sk.manualId)s.pveMetrics.manualCasts[sk.id]=(s.pveMetrics.manualCasts[sk.id]||0)+1;}
     const fixedTarget=sealAt(s,p);
     if(s.mode==='pve'&&s.trial?.layoutVersion>=3&&sk.manualId){s.manualUsed||={};s.manualUsed[a.uid]||={};s.manualUsed[a.uid][sk.manualId]=true;}
+    const bellPlan=bell()?.supports(sk)?bell().selected(prism().boardForTrial(s),a,sk,p):null;
     const prismPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,p):null;
     const cells=prismPlan?.cells||skillCells(s,a,sk,p);
     const rays=sk.kind==='sword-array'?swordArray(s,sk,p):null;
@@ -1091,6 +1101,19 @@
     if(!['fist-chain','meteor','restore','counter','fist-focus'].includes(sk.kind)&&(sk.kind!=='blink'||sk.burst))strikeSeals(s,cells);
     // Fixed objectives can be hit by targeted techniques, but cannot be moved.
     if(fixedTarget&&!at(s,p)&&['hit','lunge','swap'].includes(sk.kind))return;
+    if(bellPlan){
+      castEvent.animation.bellSteps=bell().resolve(bellPlan,{
+        targets:()=>s.actors.filter(t=>t.team!==a.team),alive,covers,
+        canContinue:()=>alive(a),
+        apply:(target,power,layer,cell)=>{
+          const shield=target.shield||0;
+          const dealt=damage(s,a,target,a.atk*power,{skill:sk.id,manualId:sk.manualId,strike:layer});
+          return {damage:dealt,absorbed:shield-(target.shield||0)};
+        },
+        push:(target,d)=>push(s,a,target,1,d)
+      });
+      return;
+    }
     if(prismPlan){
       const targets=s.actors.filter(t=>alive(t)&&t.team!==a.team);
       const records=[];
