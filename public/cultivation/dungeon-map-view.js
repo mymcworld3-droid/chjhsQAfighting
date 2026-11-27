@@ -13,6 +13,8 @@ import { manualXpDelta, renderManualXpToast, renderManualXpProgress } from './ta
 import {manualAnticipation,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
 // The trial's original shared manual catalog, animation timing and VFX.
 import './manual-rules.js';
+import './dungeon-boss-hit.js';
+import './dungeon-skill-resolution.js';
 import './tactical-animation.js';
 import './tactical-skill-effects.js';
 import './tactical-ambience.js';
@@ -2042,7 +2044,7 @@ class DungeonMapView{
   }
   updateRangePlan(){
     if(!this.map||this.room?.status!=='assembled'){
-      this.rangeSignature='';this.rangeTiles=[];return;
+      this.rangeSignature='';this.rangeTiles=[];this.skillPreview=null;return;
     }
     const member=this.room.members?.[this.uid];
     if(!member)return;
@@ -2051,6 +2053,7 @@ class DungeonMapView{
       this.wheelMode+'|'+this.moveTarget+'|'+this.selectedSkillId;
     if(this.rangeSignature===key)return;
     this.rangeSignature=key;
+    this.skillPreview=null;
     const from=this.selfPad(),enemies=this.creatures();
     if(member&&this.weaponWheelSlot>=0&&this.wheelMode!=='attack'){
       this.rangeKind='move';this.rangeTiles=[];return;
@@ -2074,6 +2077,10 @@ class DungeonMapView{
       this.rangeTiles=skill.kind==='flying-sword'?
         dungeonSwordTiles(this.map,from,member.flyingSword,enemies,this.members()):
         dungeonAttackTiles(this.map,from,skill,enemies);
+      if(skill.id&&globalThis.QADungeonSkillResolution){
+        this.skillPreview=globalThis.QADungeonSkillResolution.previewPlan(this.room,this.uid,this.map,skill);
+        this.rangeTiles=this.skillPreview.aims;
+      }
     }
   }
   drawSoon(){
@@ -2213,9 +2220,13 @@ class DungeonMapView{
     const swordPreviewRoute=previewSword&&this.rangeTiles.some(p=>
       p.x===aim.x&&p.y===aim.y)?
       dungeonSwordRoute(m,own.flyingSword,aim,this.creatures()):null;
+    const skill=own?.dungeonSkills?.find(s=>s.id===this.selectedSkillId);
+    const selectedAim=skill&&this.wheelMode==='attack'?this.targetFor(skill):null;
+    const selectedPreview=selectedAim&&this.skillPreview?.byAim[selectedAim.x+','+selectedAim.y];
     const geometry=drawWorld(ctx,m,this.camera,w,h,{
       members:visualMembers,selfUid:this.uid,showRoutes:false,
       rangeTiles:this.rangeTiles,rangeKind:this.rangeKind,
+      skillPreview:this.wheelMode==='attack'?this.skillPreview:null,selectedPreview,
       swordPreviewRoute,swordVisuals,
       enemies:visualEnemies,objectives:this.room?.dungeonProgress,
       aimTile:this.currentAim(),art:this.sprites,
@@ -2234,6 +2245,8 @@ class DungeonMapView{
     this.updateFocusAuras(geometry,visualMembers);
     // Read-only render diagnostics for real-device/browser acceptance.
     // These reflect actually constructed visual plans, not combat authority.
+    this.canvas.dataset.skillPreviewCells=String(this.skillPreview?.cells.length||0);
+    this.canvas.dataset.skillPreviewDamage=selectedPreview&&this.skillPreview?.exact?String(selectedPreview.totalDamage):'';
     this.canvas.dataset.environmentEffects=String(
       this.environmentPlan?.positions?.length||0);
     const visibleBoss=this.creatures().find(e=>e.kind==='boss');

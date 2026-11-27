@@ -8,11 +8,12 @@ const {dueTick,isRunning}=require('./dungeon-battle-clock.cjs');
 const {replenishMembers}=require('./dungeon-stamina-rules.cjs');
 const Combat=require('./dungeon-enemy-combat.cjs');
 const {clampStamina,staminaFor,staminaAfterCost}=require('./dungeon-stamina-rules.cjs');
-const VERSION=1,ID='boss-1',KIND='boss',NAME='玄炎鎮殿獸',HP=2800;
+const BossHit=require('./public/cultivation/dungeon-boss-hit.js');
+const {HP,SHIELD_MAX,COMBO_WINDOW_TICKS,STAGGER_TICKS,EXPOSED_TICKS}=BossHit;
+const VERSION=1,ID='boss-1',KIND='boss',NAME='玄炎鎮殿獸';
 const SIZE=2,WIDTH=23,HEIGHT=17;
-const SHIELD_MAX=180,COMBO_WINDOW_TICKS=5,GUARD_DURATION_TICKS=5;
+const GUARD_DURATION_TICKS=5;
 const ALLY_GUARD_COST=3,SELF_GUARD_COST=6;
-const STAGGER_TICKS=3,EXPOSED_TICKS=6;
 const MAX_GUARD_SEQ=100000;
 const ANCHOR=Object.freeze({x:11,y:6});
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
@@ -60,59 +61,14 @@ function mapFor(seed){
     if(!walkable(map,p))throw fail('首領戰場出生點生成失敗',409);
   return map;
 }
-function cells(enemy){
-  if(enemy?.kind!==KIND)return enemy?.position?[enemy.position]:[];
-  const p=enemy.position;
-  if(!p||!Number.isSafeInteger(p.x)||!Number.isSafeInteger(p.y))return [];
-  return [{x:p.x,y:p.y},{x:p.x+1,y:p.y},
-    {x:p.x,y:p.y+1},{x:p.x+1,y:p.y+1}];
-}
-const occupies=(enemy,p)=>cells(enemy).some(q=>same(q,p));
+const {cells,occupies}=BossHit;
 const reach=(from,enemy)=>Math.min(...cells(enemy).map(p=>dist(from,p)),Infinity);
 // Legacy rooms retain their stored maxHP, including their original phase gates.
 const phase=(hp,maximum=HP)=>hp>maximum*.7?1:hp>maximum*.35?2:3;
 const tickOf=room=>Number.isSafeInteger(room?.battleAppliedTick)?
   Math.max(0,room.battleAppliedTick):0;
 const int=(value,otherwise=0)=>Number.isSafeInteger(value)&&value>=0?value:otherwise;
-function comboReady(boss,uid,tick){
-  return boss?.kind===KIND&&typeof uid==='string'&&uid.length>0&&
-    typeof boss.lastContributorUid==='string'&&
-    boss.lastContributorUid!==uid&&
-    Number.isSafeInteger(boss.lastContributorTick)&&
-    tick>=boss.lastContributorTick&&
-    tick-boss.lastContributorTick<=COMBO_WINDOW_TICKS;
-}
-// Mutates ONLY the local enemy snapshot calculated inside the C transaction.
-// One martial skill may hit the boss several times; the caller computes linked
-// ONCE per skill, so its own repeated hits cannot manufacture teamwork.
-function damage(boss,uid,amount,tick,linked=false){
-  if(boss?.kind!==KIND||typeof uid!=='string'||!uid||
-      !Number.isSafeInteger(tick)||tick<0||!Number.isFinite(amount))
-    throw fail('首領傷害資料無效',409);
-  const health=int(boss.battleHealth,HP);
-  if(!health)return {damage:0,shieldDamage:0,combo:false,shieldBroken:false};
-  const combo=linked===true;
-  const attack=Math.max(1,Math.round(amount*(combo?1.2:1)));
-  const shieldBefore=Math.min(SHIELD_MAX,int(boss.shield));
-  const shieldDamage=Math.min(shieldBefore,attack);
-  // Shield reduces HP damage, but never makes the boss invulnerable.
-  const exposed=shieldBefore===0&&tick<=int(boss.exposedUntilTick,-1);
-  const dealt=Math.min(health,Math.max(1,Math.round(attack*(
-    shieldBefore>0?.7:exposed?1.25:1))));
-  boss.battleHealth=health-dealt;
-  boss.shield=shieldBefore-shieldDamage;
-  const broken=shieldBefore>0&&boss.shield===0;
-  if(broken){
-    boss.exposedUntilTick=tick+EXPOSED_TICKS;
-    // A shield break interrupts a wind-up once and opens a short counter window.
-    boss.attack=null;boss.intent='staggered';boss.targetUid=null;
-    boss.nextActionTick=Math.max(int(boss.nextActionTick),tick+STAGGER_TICKS);
-  }
-  boss.lastContributorUid=uid;boss.lastContributorTick=tick;
-  boss.lastTeamHit={uid,tick,damage:dealt,shieldDamage,
-    combo,shieldBroken:broken};
-  return {...boss.lastTeamHit};
-}
+const {comboReady,damage}=BossHit;
 function guard(room,uid,map,{targetUid,seq}={}){
   if(room?.status!=='assembled'||room.dungeonArena!=='boss'||
     room.bossEncounter?.status!=='fighting')throw fail('目前無法使用首領掩護',409);

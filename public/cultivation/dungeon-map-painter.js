@@ -37,6 +37,7 @@ export function drawWorld(ctx,map,camera,width,height,
   {members=[],selfUid='',showRoutes=false,enemies=[],currentTick=0,
     aimTile=null,visualTimeMs=0,objectives=null,art=null,
     rangeTiles=[],rangeKind='move',swordPreviewRoute=null,swordVisuals={},
+    skillPreview=null,selectedPreview=null,
     animationUnderlay=null,animationOverlay=null,
     dangerPlan=null,showDangerGuidance=false,ambiencePlan=null,
     environmentPlan=null,bossTransition=null,displayTick=currentTick,
@@ -134,7 +135,23 @@ export function drawWorld(ctx,map,camera,width,height,
   const strokeColor=moveOverlay?'rgba(223,229,236,.46)':
     rangeKind==='sword'?'rgba(125,255,228,.55)':
     rangeKind==='dash'?'rgba(251,219,131,.62)':'rgba(255,142,126,.58)';
-  if(Array.isArray(rangeTiles)&&rangeTiles.length){
+  if(skillPreview){
+    const paint=(cells,fill,stroke)=>{
+      ctx.save();ctx.fillStyle=fill;ctx.strokeStyle=stroke;ctx.lineWidth=clamp(cell*.05,.6,1.7);
+      for(const p of cells||[]){
+        if(!p||p.x<v.x0||p.x>v.x1||p.y<v.y0||p.y>v.y1||!walk(p.x,p.y))continue;
+        const x=g.ox+p.x*cell,y=g.oy+p.y*cell;
+        ctx.fillRect(x+.7,y+.7,Math.max(1,cell-1.4),Math.max(1,cell-1.4));
+        if(cell>=12)ctx.strokeRect(x+1.3,y+1.3,Math.max(1,cell-2.6),Math.max(1,cell-2.6));
+      }
+      ctx.restore();
+    };
+    paint(skillPreview.cells,'rgba(229,199,115,.15)','rgba(229,204,135,.4)');
+    paint(skillPreview.aims,'rgba(0,0,0,0)','rgba(229,204,135,.65)');
+    paint(selectedPreview?.path?.slice(1),'rgba(233,207,129,.23)','#e5cc87');
+    paint(selectedPreview?.cells,'rgba(233,186,82,.4)','#ffe3a4');
+    paint(selectedPreview?.landings,'rgba(0,0,0,0)','#ffe8a6');
+  }else if(Array.isArray(rangeTiles)&&rangeTiles.length){
     ctx.save();ctx.fillStyle=fillColor;ctx.strokeStyle=strokeColor;
     ctx.lineWidth=clamp(cell*.05,.6,1.7);
     for(const p of rangeTiles){
