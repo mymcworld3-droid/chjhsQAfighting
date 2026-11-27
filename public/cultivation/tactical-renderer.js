@@ -241,7 +241,7 @@ export class TacticalRenderer{
     const next=active&&tile?{x:tile.x,y:tile.y}:null;
     if((!next&&!this.hoverSelection)||(next&&this.hoverSelection&&R.key(next)===R.key(this.hoverSelection)))return;
     this.hoverSelection=next;
-    this.hoverPlan=next?Targets.derive(this.state,this.uid,this.mode,next,R,this.threatPlan):null;
+    this.hoverPlan=next?Targets.derive(this.state,this.uid,this.mode,next,R,this.threatPlan,this.skillPreview):null;
     if(this.hoverPlan){
       this.canvas.dataset.hoverPreviewCost=String(this.hoverPlan.cost);
       this.canvas.dataset.hoverPreviewValid=String(this.hoverPlan.valid);
@@ -323,13 +323,24 @@ export class TacticalRenderer{
       const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
       this.range=mine?(mode==='move'?R.moveCells(state,me):mode==='sword-move'?R.swordMoveCells(state,me):R.aimCells(state,me,attackSkill(me,mode))):[];
     }
+    // The target set stays separate from the affected-cell union. Cache only
+    // across equivalent combat snapshots, not just equivalent selection clicks.
+    const attackMode=mode==='attack'||mode.startsWith('manual:');
+    const fighter=state.actors.find(a=>a.uid===uid);
+    const signature=attackMode?JSON.stringify([state.id,state.revision,state.mode,
+      state.status,state.turnUid,state.phase,state.quizRound,state.width,state.height,
+      state.blocks,state.actors,state.trial,state.objective,state.weaponDungeon,uid,mode]):'';
+    if(signature!==this.skillPreviewSignature){
+      this.skillPreviewSignature=signature;
+      this.skillPreview=attackMode?R.skillPreviewPlan(state,fighter,attackSkill(fighter,mode)):null;
+    }
     this.threatPlan=Threats.derive(state,uid,mode,this.range);
     // Compute once per authoritative state update, never in the animation loop.
     this.sealRangePlan=SealRanges.derive(state,R);
     this.sealTargetPlan=SealTargets.derive(state,uid,mode,R);
-    this.targetPlan=Targets.derive(state,uid,mode,selection,R,this.threatPlan);
+    this.targetPlan=Targets.derive(state,uid,mode,selection,R,this.threatPlan,this.skillPreview);
     this.hoverPlan=this.hoverSelection?
-      Targets.derive(state,uid,mode,this.hoverSelection,R,this.threatPlan):null;
+      Targets.derive(state,uid,mode,this.hoverSelection,R,this.threatPlan,this.skillPreview):null;
     const alert=this.canvas.parentElement?.querySelector('[data-threat-a11y]');
     if(state.mode==='pve'){
       const message=this.threatPlan.description+
@@ -808,13 +819,18 @@ export class TacticalRenderer{
       for(const p of this.range)fill(p,`rgba(128,128,128,${alpha})`,'#dadde18c');
     }
     if(myTurn&&(this.mode==='attack'||this.mode.startsWith('manual:'))){
-      const sk=attackSkill(mine,this.mode);
-      const aimedPath=['dash-cleave','flying-sword'].includes(sk.kind);
-      for(const p of this.range)fill(p,aimedPath?'#dec17b45':'#e445454d',aimedPath?'#e5cc87':'#ed6a6a99');
-      if(this.selection&&(this.range.some(p=>R.key(p)===R.key(this.selection))||sk.kind==='ring'&&R.key(this.selection)===R.key(mine))){
-        const preview=R.techniquePreview(s,mine,sk,this.selection);
-        for(const p of [...preview.path.slice(1),...preview.landings])fill(p,'#e9cf8165','#e5cc87');
-        for(const p of preview.cells)fill(p,'#ef39398c','#ffb1a3');
+      const plan=this.skillPreview;
+      for(const p of plan?.cells||[])fill(p,'#e5c77326','#e5cc8766');
+      // Aims may be empty landing tiles or directions, not damage tiles.
+      for(const p of plan?.aims||[])fill(p,'#fff0','#e5cc87a6');
+      const aim=this.hoverSelection||this.selection;
+      const preview=aim&&plan?.byAim[R.key(aim)];
+      if(preview){
+        for(const p of preview.path.slice(1))fill(p,'#e9cf813b','#e5cc87');
+        for(const p of preview.cells)fill(p,'#e9ba5266','#ffe3a4');
+        c.save();c.setLineDash([Math.max(2,cell*.1),Math.max(2,cell*.06)]);
+        for(const p of preview.landings)fill(p,'#fff0','#ffe8a6');
+        c.restore();
       }
     }
     if(myTurn&&this.mode==='sword-move'&&this.selection&&mine?.flyingSword){

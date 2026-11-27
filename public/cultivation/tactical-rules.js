@@ -618,10 +618,12 @@
     if(s.quizRound){s.quizRound=0;questionRound(s,now);}
     s.revision++;return s;
   }
+  // Preview collectors belong only to private cloned states, never stored room data.
+  const previewEvents=new WeakMap();
   function log(s,text,type='info',extra={}){
     // A bounded log still needs unique IDs when one turn produces many effects.
     s.eventSequence=(s.eventSequence||0)+1;
-    const event={id:s.revision+':'+s.eventSequence,type,text,...extra};s.events.push(event);s.events=s.events.slice(-LIMITS.events);return event;
+    const event={id:s.revision+':'+s.eventSequence,type,text,...extra};s.events.push(event);s.events=s.events.slice(-LIMITS.events);previewEvents.get(s)?.push(event);return event;
   }
   const point=a=>({x:a.x,y:a.y});
   const appearance=a=>({uid:a.uid,hp:a.hp,shield:a.shield,stamina:a.stamina,guard:a.guard,slow:a.slow,...(a.flyingSword?{flyingSword:a.flyingSword}:{})});
@@ -942,9 +944,11 @@
     }
     return ['area','meteor'].includes(sk.kind)||sk.kind==='blink'&&sk.burst?area(s,p,sk.radius||1):[p];
   }
-  function validateSkill(s,a,sk,p){
-    if(a.stamina<techniqueCost(a,sk))fail('體力不足，先答題補充');
-    validateAttackLimit(a);
+  function validateSkill(s,a,sk,p,{geometryOnly=false}={}){
+    if(!geometryOnly){
+      if(a.stamina<techniqueCost(a,sk))fail('體力不足，先答題補充');
+      validateAttackLimit(a);
+    }
     if(fistDirectional(sk)){
       if(!fistDirection(s,a,p,sk))fail('請選擇上下左右的出拳方向');
       return;
@@ -971,10 +975,72 @@
       if(!routes.length)fail('無法突進至敵人身旁');
     }
   }
+  // One private simulation per geometric aim; use the actual cast implementation
+  // so repeated damage, shields, boss footprints and displacement stay authoritative.
+  // The public server apply() never passes preview=true.
+  function previewCast(s,a,sk,p){
+    const aim=point(p),cost=techniqueCost(a,sk);
+    validateSkill(s,a,sk,aim,{geometryOnly:true});
+    const simulation=clone({...s,events:[]}),fighter=simulation.actors.find(t=>t.uid===a.uid);
+    const events=[];
+    previewEvents.set(simulation,events);
+    try{cast(simulation,fighter,sk,aim,true);}finally{previewEvents.delete(simulation);}
+    const cells=new Map(),hits=[],moves=[];
+    const nonAttack=['restore','counter','fist-focus'].includes(sk.kind)||sk.kind==='blink'&&!sk.burst;
+    for(const event of events){
+      if(!nonAttack&&event.type==='cast'&&event.actor===a.uid){
+        for(const cell of event.animation?.cells||[])cells.set(key(cell),point(cell));
+      }
+      if(event.type==='damage'&&event.actor===a.uid)
+        hits.push({uid:event.target,damage:event.damage,absorbed:event.animation?.numbers?.[0]?.absorbed||0,
+          cell:{x:event.x,y:event.y},...(Number.isInteger(event.animation?.strike)?{strike:event.animation.strike}:{})});
+      if(event.animation?.kind==='move'){
+        if(event.path?.length>1)moves.push({uid:event.actor,path:event.path.map(point)});
+        for(const move of event.animation.moves||[])if(move.path?.length>1)
+          moves.push({uid:move.uid,path:move.path.map(point)});
+      }
+    }
+    // The hero's intended route is separate from the enemies' final positions.
+    const path=techniquePath(s,a,sk,aim).map(point);
+    if(sk.kind==='fist-chain'){
+      for(const m of moves.filter(m=>m.uid===a.uid)){
+        if(!path.length)path.push(m.path[0]);
+        path.push(...m.path.slice(1));
+      }
+    }
+    const finalPositions=simulation.actors.filter(t=>{
+      const old=s.actors.find(v=>v.uid===t.uid);
+      return old&&key(old)!==key(t);
+    }).map(t=>({uid:t.uid,x:t.x,y:t.y}));
+    let reason='';
+    if(s.status!=='active'||s.turnUid!==a.uid||s.quizRound&&s.phase!=='action')reason='目前不是你的行動回合';
+    else if((a.actions||0)>=LIMITS.actions)reason='本回合行動已達上限';
+    else try{validateSkill(s,a,sk,aim);}catch(e){reason=String(e.message||e);}
+    return {aim,cost,valid:!reason,reason,cells:[...cells.values()],path,hits,moves,finalPositions,
+      landings:finalPositions.filter(t=>t.uid!==a.uid).map(point)};
+  }
+  function skillPreviewPlan(s,a,sk){
+    const result={aims:[],cells:[],byAim:{}};
+    if(!alive(a)||!sk)return result;
+    const aims=aimCells(s,a,sk).slice();
+    if(sk.kind==='ring'||sk.range===0)aims.push(point(a));
+    const union=new Map(),seen=new Set();
+    for(const aim of aims){
+      const id=key(aim);if(seen.has(id))continue;seen.add(id);
+      // aimCells intentionally preserves broad legacy selection hints; only
+      // the same geometry validation as casting can admit a preview scheme.
+      try{validateSkill(s,a,sk,aim,{geometryOnly:true});}catch(_){continue;}
+      const scheme=previewCast(s,a,sk,aim);
+      result.aims.push(point(aim));result.byAim[id]=scheme;
+      for(const p of scheme.cells)union.set(key(p),p);
+    }
+    result.cells=[...union.values()];
+    return result;
+  }
   // Compatibility for old saves: old cooldown timestamps cannot prevent casting.
   function cooldownUntil(){return 0;}
-  function cast(s,a,sk,p){
-    validateSkill(s,a,sk,p);const cost=techniqueCost(a,sk);a.stamina-=cost;a.attacks++;
+  function cast(s,a,sk,p,preview=false){
+    validateSkill(s,a,sk,p,{geometryOnly:preview});const cost=techniqueCost(a,sk);a.stamina-=cost;a.attacks++;
     if(s.pveMetrics){s.pveMetrics.staminaSpent+=cost;if(sk.manualId)s.pveMetrics.manualCasts[sk.id]=(s.pveMetrics.manualCasts[sk.id]||0)+1;}
     const fixedTarget=sealAt(s,p);
     if(s.mode==='pve'&&s.trial?.layoutVersion>=3&&sk.manualId){s.manualUsed||={};s.manualUsed[a.uid]||={};s.manualUsed[a.uid][sk.manualId]=true;}
@@ -1517,5 +1583,5 @@
     if(s.pveMetrics)Object.assign(s.pveMetrics,{outcome:'loss',reason:'forfeit',turns:s.actors.find(a=>a.uid===uid)?.turns||0});
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterProfileFor,trackingCells,retargetTrackingIntents,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterProfileFor,trackingCells,retargetTrackingIntents,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,previewCast,skillPreviewPlan,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

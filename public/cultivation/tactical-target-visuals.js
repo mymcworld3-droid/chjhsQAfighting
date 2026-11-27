@@ -1,5 +1,5 @@
-/* Selection previews for the real battle. All estimates are geometry-only.
- * Do not mutate combat state, estimate damage, or submit commands.
+/* Selection previews for the real battle. Geometry and optional private cast simulation.
+ * Do not mutate combat state or submit commands.
  */
 (function(root,factory){
   const api=factory();
@@ -11,7 +11,7 @@
   const clamp=(n,low,high)=>Math.min(high,Math.max(low,n));
   const restricted=(s,p)=>!p||!Number.isInteger(p.x)||!Number.isInteger(p.y)||
     p.x<0||p.y<0||p.x>=s.width||p.y>=s.height;
-  function derive(s,uid,mode,selection,rules,threats){
+  function derive(s,uid,mode,selection,rules,threats,skillPlan){
     if(s?.mode!=='pve'||!selection||restricted(s,selection)||!rules)return null;
     const me=s.actors?.find(a=>a.uid===uid);
     if(!me||me.hp<=0)return null;
@@ -52,7 +52,8 @@
         (sk.kind==='ring'||sk.range===0)&&key(selection)===key(me);
       result.valid=currentTurn&&permitted&&(Number(me.actions)||0)<rules.LIMITS.actions;
       if(!permitted){result.hint='不在可指定的攻擊範圍';return result;}
-      const preview=rules.techniquePreview(s,me,sk,selection);
+      const simulated=skillPlan?.byAim?.[key(selection)];
+      const preview=simulated||rules.techniquePreview(s,me,sk,selection);
       result.cells=(preview.cells||[]).map(p=>({x:p.x,y:p.y}));
       const affected=new Map();
       for(const p of result.cells){
@@ -60,12 +61,25 @@
         if(actor&&actor.uid!==uid&&actor.team!==me.team&&actor.hp>0)
           affected.set(actor.uid,actor);
       }
+      if(simulated){
+        affected.clear();
+        for(const hit of simulated.hits){
+          const actor=s.actors.find(a=>a.uid===hit.uid);
+          if(actor&&actor.team!==me.team)affected.set(actor.uid,actor);
+        }
+        result.hits=simulated.hits;
+        result.landings=simulated.landings;
+        result.estimatedDamage=simulated.hits.reduce((sum,hit)=>sum+hit.damage,0);
+      }
       result.affected=[...affected.values()].map(a=>({uid:a.uid,x:a.x,y:a.y,
         width:a.footprint?.width||1,height:a.footprint?.height||1}));
       result.hint=!currentTurn?'等待行動回合':
         result.remaining<0?'體力不足':
         !result.valid?'目前無法施放':
-        result.affected.length?'範圍涵蓋 '+result.affected.length+' 名敵人':'預覽範圍未涵蓋敵人';
+        result.affected.length?(simulated?result.affected.map(a=>{
+          const hits=simulated.hits.filter(h=>h.uid===a.uid);
+          return (s.actors.find(t=>t.uid===a.uid)?.name||'敵人')+'：預計 '+hits.map(h=>h.damage).join('＋')+' 傷害';
+        }).join('；'):'範圍涵蓋 '+result.affected.length+' 名敵人'):'預覽範圍未涵蓋敵人';
     }catch(e){result.hint=String(e?.message||'目前不能使用此技能');}
     return result;
   }
@@ -119,7 +133,7 @@
     const t=plan.target;
     const anchorX=ox+(t.x+.5)*cell,anchorY=oy+t.y*cell;
     const label=plan.type==='move'?plan.label:
-      plan.affected.length?plan.affected.length+' 名敵人':plan.valid?'預覽範圍':'無法施放';
+      plan.affected.length?(Number.isFinite(plan.estimatedDamage)?'預計 '+plan.estimatedDamage+' 傷害':plan.affected.length+' 名敵人'):plan.valid?'預覽範圍':'無法施放';
     const fontSize=Math.round(clamp(cell*.24,10,13));
     ctx.font='600 '+fontSize+'px system-ui,sans-serif';
     const width=clamp(ctx.measureText(label).width+15,54,Math.max(54,view.width*cell-10));

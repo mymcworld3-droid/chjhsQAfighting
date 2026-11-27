@@ -44,7 +44,7 @@
 | 階段 | 狀態 |
 | --- | --- |
 | 0 專案盤點 | 完成：3106/3106 |
-| 1 共用技能預覽 | 未開始 |
+| 1 共用技能預覽 | 回合制核心及渲染已接入；待完整 CI、瀏覽器驗收與即時副本整合 |
 | 2 共用幾何與位移工具 | 未開始 |
 | 3 武器資料與特殊物件 | 未開始 |
 | 4 共用動畫及特效 | 未開始 |
@@ -66,3 +66,12 @@
 ## 第 0 階段最終驗收
 
 基準提交 `7e34a934b44cb0dcab7c7e91d2f4ca6e0ae0242a` 的 [GitHub Actions](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45913936579) 已完成：3106 項全部通過、0 失敗、0 跳過，module-versions 檢查亦通過；Pages 部署成功。先前記錄的未執行與失敗狀態為歷史紀錄，現以此提交為穩定開發基準。已補查武器修煉頁（manual-training-page.js）、動畫事件（tactical-animation.js 的 plan 按事件 ID/revision 建立時間軸，damage/move/cast）、即時副本前端（dungeon-map-view.js），後續須接入共用預覽規則。無法本地 checkout 不再阻礙基準確認，使用 CI 驗收。
+
+## 第 1 階段（回合制預覽核心）
+
+- tactical-rules.js：previewCast/skillPreviewPlan 逐個合法目標呼叫相同 cast，使用獨立 clone、WeakMap 收集完整事件，不受正式事件 64 筆截斷；低體力仍可查看幾何但不可施放。預測傷害逐段、強制位移、終點與範圍；不相信客戶端值。
+- tactical-renderer.js：依 revision、角色、地形、目標及配置等快照快取所有方案，繪圖時僅查快取；金色淡/亮範圍、虛線位移落點，保留紅色敵方預告及點選語意。
+- tactical-target-visuals.js：選定/懸停方案顯示模擬傷害，原無方案呼叫保留幾何相容性；未擅改確認/自動施放互動。
+- tests/tactical-skill-preview-plan.test.cjs：4 個新增測試在獨立 JS 環境執行通過（使用實際共用規則及輕量 assertion，非完整 Node CI）。
+- module-versions.json 使用 Git 實際 blob SHA 同步 3 個靜態資源；完整版本檢查待 CI。
+- 尚未完成：即時合作副本仍有獨立 geometry/castSkill，待共用轉接；新武器多端點方案尚未實作；瀏覽器視覺驗收待執行。第 1 階段尚不能標記完整驗收。不得公開新武器。
