@@ -139,7 +139,9 @@
     return {...skill,level,power:scaled(skill.power),
       ...(skill.centerPower!==undefined?{centerPower:scaled(skill.centerPower)}:{}),
       ...(skill.collisionPower!==undefined?{collisionPower:scaled(skill.collisionPower)}:{}),
-      ...(skill.movePower!==undefined?{movePower:scaled(skill.movePower)}:{})};
+      ...(skill.movePower!==undefined?{movePower:scaled(skill.movePower)}:{}),
+      ...(skill.powers?{powers:Object.fromEntries(Object.entries(skill.powers).map(([id,power])=>[id,scaled(power)]))}:{}),
+      ...(skill.maxTargetPower!==undefined?{maxTargetPower:scaled(skill.maxTargetPower)}:{})};
   }
   // The tactical engine rounds EACH strike before applying shields, guard
   // or remaining HP. This preview intentionally describes raw per-hit damage,
