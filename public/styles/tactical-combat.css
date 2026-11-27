@@ -273,3 +273,39 @@
 @keyframes wd-portal-title{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes wd-portal-spark{to{opacity:.25}}
 @media(prefers-reduced-motion:reduce){.wd-portal,.wd-portal *{animation:none!important}}
+
+/* Weapon dungeon settlement: no nested card frame, shared reward receipt remains intact. */
+#tactical-combat .tc-modal:has(.tc-dungeon-settlement){padding:0;place-items:stretch;background:#1a252b;overflow:hidden}
+#tactical-combat .tc-dialog.tc-dungeon-settlement{width:100%;max-width:none;height:100%;max-height:none;padding:0;border:0;border-radius:0;box-shadow:none;background:radial-gradient(ellipse at 50% 12%,#48575b 0%,#26333a 40%,#1c252a 82%);overflow:auto;display:block;animation:none}
+#tactical-combat .wd-result{width:min(100%,680px);min-height:100%;box-sizing:border-box;margin:auto;padding:clamp(12px,2.5vw,26px);display:flex;flex-direction:column;gap:12px;color:#e9dfc7}
+#tactical-combat .wd-result-hero{display:grid;justify-items:center;text-align:center;gap:5px;padding:3px 0 8px}
+#tactical-combat .wd-result-hero>small{color:#d9c7a4;font-size:12px;letter-spacing:.08em}
+#tactical-combat .wd-result-hero h2{margin:0;color:#f1d99e;font:700 clamp(29px,5vw,42px)/1.25 "Noto Serif TC",serif;letter-spacing:.18em}
+#tactical-combat .wd-result-hero p{margin:0;font-size:12px;color:#c4cecb;line-height:1.6}
+#tactical-combat .wd-result-crest{position:relative;display:grid;place-items:center;width:clamp(60px,12vmin,104px);aspect-ratio:1;color:#e9ca8e;filter:drop-shadow(0 0 12px #dbb87555);margin-bottom:4px}
+#tactical-combat .wd-result-crest>i:nth-child(1){position:absolute;inset:0;border:1px solid currentColor;border-radius:50%;opacity:.8}
+#tactical-combat .wd-result-crest>i:nth-child(2){position:absolute;inset:14%;border:1px solid currentColor;transform:rotate(45deg);opacity:.65}
+#tactical-combat .wd-result-crest>i:last-child{font-size:clamp(23px,5vmin,40px)}
+#tactical-combat .wd-result--failed .wd-result-crest,#tactical-combat .wd-result--pending .wd-result-crest{color:#aebbbc;filter:none}
+#tactical-combat .wd-result--failed .wd-result-hero h2,#tactical-combat .wd-result--pending .wd-result-hero h2{color:#d5dedb}
+#tactical-combat .wd-result-body{display:grid;gap:10px;min-width:0}
+#tactical-combat .wd-result-unlock{display:flex;align-items:center;gap:12px;padding:10px 14px;border-block:1px solid #c4a66d66;color:#e9cc92;background:linear-gradient(90deg,#6b55312b,transparent)}
+#tactical-combat .wd-result-unlock span{flex:1;display:grid;gap:3px}
+#tactical-combat .wd-result-unlock small{font-size:10px;color:#c9b892;letter-spacing:.06em}
+#tactical-combat .wd-result-unlock strong{font-size:20px;font-family:"Noto Serif TC",serif;letter-spacing:.14em}
+#tactical-combat .wd-result-unlock>i:first-child{font-size:23px}
+#tactical-combat .wd-result-no-drop,#tactical-combat .wd-result-final{margin:0;color:#bdc9c7;font-size:12px;text-align:center}
+#tactical-combat .wd-result-actions{position:sticky;bottom:0;margin-top:auto;display:grid;gap:6px;padding:10px 0 4px;background:linear-gradient(transparent,#1c252a 22%);z-index:2}
+#tactical-combat .wd-result-ticket{text-align:center;color:#c3ceca;font-size:11px}
+#tactical-combat .wd-result-actions>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#tactical-combat .wd-result-actions>div button{min-width:0;min-height:44px;font-size:13px;padding:8px;line-height:1.3}
+#tactical-combat .wd-result-collapse{justify-self:center;min-height:36px;padding:5px 20px;background:none;border:0;color:#bcc8c4;font-size:12px}
+#tactical-combat .wd-result.is-fresh .wd-result-crest{animation:wd-result-seal .55s cubic-bezier(.2,.7,.2,1) both}
+#tactical-combat .wd-result.is-fresh .wd-result-unlock.is-new{animation:wd-unlock-light .8s .15s ease-out both}
+#tactical-combat .wd-result.is-fresh .mr-reward-item--weapon .mr-reward-icon{animation:wd-loot-light .85s .2s ease-out both}
+@keyframes wd-result-seal{from{opacity:0;transform:scale(.72) rotate(-12deg)}to{opacity:1;transform:none}}
+@keyframes wd-unlock-light{0%{opacity:.5;filter:brightness(.65)}45%{filter:brightness(1.4)}100%{opacity:1;filter:none}}
+@keyframes wd-loot-light{0%{transform:scale(.8);filter:brightness(.8)}45%{transform:scale(1.09);filter:drop-shadow(0 0 8px #e0b66a)}100%{transform:none;filter:none}}
+@media(orientation:landscape) and (min-width:640px){#tactical-combat .wd-result{width:min(100%,980px);display:grid;grid-template-columns:minmax(175px,.68fr) minmax(0,1.32fr);grid-template-rows:minmax(0,1fr) auto;align-items:start;gap:10px 22px}#tactical-combat .wd-result-hero{align-self:center}#tactical-combat .wd-result-actions{grid-column:1/-1}}
+@media(orientation:landscape) and (max-height:480px){#tactical-combat .wd-result{padding:8px 16px;gap:6px 16px}#tactical-combat .wd-result-hero h2{font-size:26px}#tactical-combat .wd-result-body{gap:6px}#tactical-combat .wd-result-actions{padding-top:4px;gap:3px}}
+@media(prefers-reduced-motion:reduce){#tactical-combat .wd-result *{animation:none!important;transition:none!important}}

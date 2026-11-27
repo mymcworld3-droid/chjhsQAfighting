@@ -388,8 +388,9 @@ function ensure(){
     else if(b.hasAttribute('data-hub')){hideModal();mode==='pve'?close():renderHub();}
     else if(b.hasAttribute('data-tutorial-collapse'))close();
     else if(b.hasAttribute('data-weapon-dungeon-menu')){close();void window.openWeaponDungeons?.();}
-    else if(b.hasAttribute('data-weapon-dungeon-retry'))void open('weapon-dungeon',{dungeonId:weaponDungeonSelection?.dungeonId,difficulty:weaponDungeonSelection?.difficulty});
-    else if(b.hasAttribute('data-next-stage')||b.hasAttribute('data-retry-entry'))void open(battleChannel,weaponDungeonSelection||{});
+    else if(b.hasAttribute('data-weapon-dungeon-retry'))void retryWeaponDungeon();
+    else if(b.hasAttribute('data-retry-entry'))void open(battleChannel,{...weaponDungeonSelection,reuseStartRequest:true});
+    else if(b.hasAttribute('data-next-stage'))void open(battleChannel,weaponDungeonSelection||{});
     else if(b.hasAttribute('data-manual-training')){
       const account=uid;
       close();window.switchToPage?.('page-training');
@@ -1486,11 +1487,11 @@ function updateClock(){
   const answerExpired=state.answerDeadlineMs&&now>=state.answerDeadlineMs&&state.actors.some(a=>a.questions<2&&!a.quizExpired);
   if(state.status==='active'&&(state.deadlineMs&&now>=state.deadlineMs||answerExpired)&&!busy&&Date.now()>=deadlineSyncAt){deadlineSyncAt=Date.now()+retryMs;void sync();}
 }
-function showModal(html,{quiz=false,encounter=false}={}){
+function showModal(html,{quiz=false,encounter=false,dungeonResult=false}={}){
   hideBossBanner();beastInspector?.dismiss();sealInspector?.dismiss();
   loadoutMenuOpen=false;renderBattleLoadouts();
   introDemo?.destroy();introDemo=null;
-  modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}${encounter?' tc-encounter':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
+  modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}${encounter?' tc-encounter':''}${dungeonResult?' tc-dungeon-settlement':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
   $('[data-main]').inert=true;$('[data-close]').disabled=true;renderer?.setPaused(true);
   beastInspector?.refresh();
   $('[data-modal] .tc-dialog').focus({preventScroll:true});
@@ -1575,6 +1576,33 @@ async function refreshManualRecap({force=false}={}){
     }
   }
 }
+function dungeonSettlementMarkup({info,result,win,drop,weaponDrop,celebrateFresh,dungeonCards,manualRecap,metrics,reason,confirmed}){
+  const cleared=result?.cleared===true;
+  const failed=result?.cleared===false||(!win&&confirmed);
+  const outcome=cleared?'cleared':failed?'failed':'pending';
+  const fresh=cleared&&celebrateFresh;
+  const title=cleared?'秘境已破':failed?'整裝再戰':'結算待確認';
+  const status=cleared?'通關':failed?'挑戰結束':'待確認';
+  const unlocked=cleared&&result.unlocked>info.difficulty?info.difficulty+1:null;
+  const next=globalThis.QAWeaponDungeons?.DIFFICULTIES?.find(d=>d.index===unlocked);
+  const newUnlock=next&&result.newlyUnlocked===unlocked;
+  const tickets=Number.isSafeInteger(result?.tickets)&&result.tickets>=0?result.tickets:null;
+  const retryAllowed=(cleared||failed)&&tickets!==0;
+  const mark=cleared?'fa-check':failed?'fa-shield-halved':'fa-hourglass-half';
+  const explanation=cleared?'已擊敗石域領主，副本通關；剩餘守衛不影響結算。':failed?(reason==='forfeit'?'已離開戰場，副本券不退還。':'本次未能通關，調整武器與走位後再戰。'):'尚未確認通關紀錄，請返回秘境同步進度。';
+  const unlock=next?'<div class="wd-result-unlock'+(fresh&&newUnlock?' is-new':'')+'" role="status"><i class="fa-solid fa-lock-open" aria-hidden="true"></i><span><small>'+(newUnlock?'首次解鎖':'已開放境界')+'</small><strong>'+esc(next.name)+'</strong></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></div>':cleared&&info.difficulty===5?'<p class="wd-result-final">已完成最高難度 · 渡劫</p>':'';
+  const refinement=drop?.duplicate&&Number.isInteger(drop.refinement)?`<div class="tc-refinement-result" role="status"><strong>${drop.refinement>drop.previousRefinement?'武器精煉成功':'武器已達滿星'}</strong>${globalThis.QAWeaponPresentation.refinementStars(drop,{previous:fresh?drop.previousRefinement:drop.refinement})}<small>${esc(drop.name)} · ${drop.refinement>drop.previousRefinement?'精煉 '+drop.previousRefinement+' → '+drop.refinement+' 星':'額外武器已保留'}</small></div>`:drop?.duplicate?'<p>重複武器已收入收藏。</p>':'';
+  const missingDrop=cleared&&!drop?'<p class="wd-result-no-drop">本次未掉落武器。</p>':'';
+  const fallback=drop&&!weaponDrop?`<p class="tc-manual-loot">獲得 ${esc(drop.tierRealm)}武器：${esc(drop.name)}</p>`:'';
+  return `<div class="wd-result wd-result--${outcome}${fresh?' is-fresh':''}" data-wd-result="${outcome}"><header class="wd-result-hero"><div class="wd-result-crest" aria-hidden="true"><i></i><i></i><i class="fa-solid ${mark}"></i></div><small>${esc(info.name)} · ${esc(info.realm)} · ${status}</small><h2>${title}</h2><p>${explanation}</p></header><div class="wd-result-body">${metrics}${unlock}${dungeonCards}${refinement}${missingDrop}${fallback}${manualRecap}</div><footer class="wd-result-actions"><small class="wd-result-ticket">${tickets===null?'副本券以伺服器最新資料為準':'結算時剩餘副本券 '+tickets+' 張'} · 新挑戰消耗 1 張</small><div><button type="button" data-weapon-dungeon-menu>返回武器副本</button><button type="button" class="tc-primary" data-weapon-dungeon-retry ${retryAllowed?'':'disabled'}>${tickets===0?'副本券不足':'再次挑戰（消耗 1 張券）'}</button></div><button type="button" class="wd-result-collapse" data-exit>收起</button></footer></div>`;
+}
+async function retryWeaponDungeon(){
+  if(busy||state?.status!=='finished'||!state.weaponDungeon)return;
+  const result=state.weaponDungeonResult;
+  if(result?.tickets===0||!(result?.cleared===true||result?.cleared===false||state.rewarded?.includes(uid)&&state.winner!==myActor()?.team))return;
+  const info=state.weaponDungeon;
+  await open('weapon-dungeon',{dungeonId:info.id||'peak-stone',difficulty:info.difficulty,retryFromRoomId:state.id});
+}
 function resultDialog(){
   clearLiveManualXp();
   const me=state.actors.find(a=>a.uid===uid),win=state.winner===me.team,draw=state.winner==='draw',reward=state.rewards?.[uid];
@@ -1587,17 +1615,9 @@ function resultDialog(){
     const info=state.weaponDungeon,result=state.weaponDungeonResult;
     const presentation=globalThis.QARewardPresentation;
     const weaponDrop=drop&&Manuals.BY_BOOK[drop.id]?drop:null;
-    const dungeonReward=reward==null?(weaponDrop?{weapon:weaponDrop}:null):{...reward,...(weaponDrop?{weapon:weaponDrop}:{})};
+    const dungeonReward=reward==null&&!weaponDrop&&!state.rewarded?.includes(uid)?null:{...reward,...(weaponDrop?{weapon:weaponDrop}:{})};
     const dungeonCards=presentation.renderSettlement(dungeonReward,{emptyText:'本次無額外獎勵。'});
-    showModal(`<small>單人武器副本 · ${esc(info.realm)}</small><h2>${esc(info.name)} · ${win?'通關':'挑戰結束'}</h2>
-      <p>${win?'已擊敗石域領主，副本通關；剩餘守衛不影響結算。':'副本券已消耗，可調整武器與走位後再次挑戰。'}</p>
-      ${globalThis.QABattlePresentation.resultMetrics(me,globalThis.QAQuestionPresentation)}
-      ${win?`<p>${result?.unlocked>info.difficulty?'下一個難度已解鎖。':info.difficulty===5?'已完成最高難度。':''}</p>`:''}
-      ${dungeonCards}
-      ${drop?.duplicate&&Number.isInteger(drop.refinement)?`<div class="tc-refinement-result" role="status"><strong>${drop.refinement>drop.previousRefinement?'武器精煉成功':'武器已達滿星'}</strong>${globalThis.QAWeaponPresentation.refinementStars(drop,{previous:celebrateFresh?drop.previousRefinement:drop.refinement})}<small>${esc(drop.name)} · ${drop.refinement>drop.previousRefinement?'精煉 '+drop.previousRefinement+' → '+drop.refinement+' 星':'額外武器已保留'}</small></div>`:drop?.duplicate?'<p>重複武器已收入收藏。</p>':!drop&&win?'<p>本次未掉落武器。</p>':''}
-      ${drop&&!weaponDrop?`<p class="tc-manual-loot">獲得 ${esc(drop.tierRealm)}武器：${esc(drop.name)}</p>`:''}
-      ${manualRecap}<button type="button" class="tc-primary" data-weapon-dungeon-menu>返回武器副本</button>
-      <button type="button" data-weapon-dungeon-retry>再次挑戰（消耗 1 張券）</button><button type="button" data-exit>收起</button>`);
+    showModal(dungeonSettlementMarkup({info,result,win,drop,weaponDrop,celebrateFresh,dungeonCards,manualRecap,metrics:globalThis.QABattlePresentation.resultMetrics(me,globalThis.QAQuestionPresentation),reason:state.finishReason,confirmed:state.rewarded?.includes(uid)}),{dungeonResult:true});
     const receiptRoom=state,receiptUid=uid,receiptEpoch=epoch;
     if(celebrateFresh)presentation.animateInline($('[data-trial-reward-list]'),{
       uid:receiptUid,receiptId:JSON.stringify(['weapon-dungeon',receiptRoom.id,info.difficulty,receiptRoom.createdAtMs??null]),reward:dungeonReward,
@@ -2393,7 +2413,7 @@ async function enterTrial(e,account){
     if(!valid(e,account))return;
     root.hidden=false;hideModal();destroyRenderer(); $('[data-title]').textContent=battleChannel==='weapon-dungeon'?'武器副本':'問道試煉';$('[data-turn]').textContent='';
     $('[data-main]').className='tc-main tc-waiting';
-    $('[data-main]').innerHTML=`<div><h2>暫時未能進入試煉</h2><p>${esc(error.message)}</p><button type="button" class="tc-primary" data-retry-entry>重新進入</button><button type="button" data-exit>返回宗門</button></div>`;
+    $('[data-main]').innerHTML=`<div><h2>暫時未能進入試煉</h2><p>${esc(error.message)}</p><button type="button" class="tc-primary" data-retry-entry>重新進入</button><button type="button" ${battleChannel==='weapon-dungeon'?'data-weapon-dungeon-menu':'data-exit'}>${battleChannel==='weapon-dungeon'?'返回武器副本':'返回宗門'}</button></div>`;
   }finally{
     if(valid(e,account)){busy=false;if($('canvas'))paint();schedule();}
   }
@@ -2407,7 +2427,7 @@ async function open(nextMode='pve',options={}){
   if(opened)close();
   if(battleChannel!==requestedChannel)state=null;
   lastTrigger=document.activeElement;mode=nextMode;battleChannel=requestedChannel;
-  weaponDungeonSelection=battleChannel==='weapon-dungeon'?{dungeonId:options.dungeonId||'peak-stone',difficulty:options.difficulty,requestId:id(),...(options.resumeRoomId?{resumeRoomId:options.resumeRoomId}:{})}:null;root.dataset.mode=mode;
+  weaponDungeonSelection=battleChannel==='weapon-dungeon'?{dungeonId:options.dungeonId||'peak-stone',difficulty:options.difficulty,requestId:options.reuseStartRequest&&options.requestId?options.requestId:id(),...(options.resumeRoomId?{resumeRoomId:options.resumeRoomId}:{}),...(options.retryFromRoomId?{retryFromRoomId:options.retryFromRoomId}:{})}:null;root.dataset.mode=mode;
   action='move';attackChoice='attack';selectedManualSkill='';selection=null;
   sealPeekPosition=null;sealGuideForced=false;
   const accountUid=getMainUser()?.uid||'';if(uid!==accountUid||state?.mode!==nextMode)state=null;uid=accountUid;

@@ -482,11 +482,16 @@ async function settle(tx,db,s,userOverrides={}){
        s.actors.some(enemy=>enemy.bot&&enemy.weaponDungeonLord&&!Rules.alive(enemy))){
       const dungeon=WeaponDungeons.progress(pointer?.weaponDungeonV1,s.updatedAtMs);
       const index=s.weaponDungeon.difficulty;
+      const before=WeaponDungeons.progressFor(dungeon,s.weaponDungeon.id||WeaponDungeons.ID).unlocked;
       const clearedProgress=WeaponDungeons.recordClear(dungeon,s.weaponDungeon.id||WeaponDungeons.ID,index);
       gatePointer={...pointer,weaponDungeonV1:dungeon};weaponCleared=true;
       tx.set(db.collection(PLAYERS).doc(a.uid),gatePointer);
       const drop=WeaponDungeonRewards.roll(s,a.uid,manuals);manualChanged=manualChanged||!!drop;
-      s.weaponDungeonResult={cleared:true,difficulty:index,unlocked:clearedProgress.unlocked,tickets:dungeon.tickets,drop};
+      s.weaponDungeonResult={cleared:true,difficulty:index,unlocked:clearedProgress.unlocked,newlyUnlocked:clearedProgress.unlocked>before?clearedProgress.unlocked:null,tickets:dungeon.tickets,drop};
+    }else if(s.weaponDungeon&&currentRoomId(pointer,'weapon-dungeon')===s.id){
+      const dungeon=WeaponDungeons.progress(pointer?.weaponDungeonV1,s.updatedAtMs);
+      const progress=WeaponDungeons.progressFor(dungeon,s.weaponDungeon.id||WeaponDungeons.ID);
+      s.weaponDungeonResult={cleared:false,difficulty:s.weaponDungeon.difficulty,unlocked:progress.unlocked,newlyUnlocked:null,tickets:dungeon.tickets,drop:null};
     }
     if(manualChanged)tx.set(manualRef,manuals);
     if(reward)patch['stats.gold']=Rules.num(u.stats?.gold)+reward.gold;
@@ -526,6 +531,7 @@ async function start(db,uid,selection={},now=Date.now()){
   const dungeonChoice=weapon?WeaponDungeons.selection(selection):null;
   const startRequest=weapon?requestId(selection.requestId):'';
   if(weapon&&!startRequest)throw error('副本挑戰識別碼無效',400);
+  if(weapon&&selection.retryFromRoomId!=null&&selection.resumeRoomId!=null)throw error('續戰與再次挑戰不可同時指定',400);
   const mode=selection.mode==='pvp'?'pvp':'pve',channel=weapon?'weapon-dungeon':mode,map=Rules.mapFor(selection.map).id;
   const code=String(selection.code||'').trim().toLowerCase().replace(/^arena-/,'');
   if(code&&!/^[a-f0-9]{16}$/.test(code))throw error('請輸入完整的 16 碼戰場代碼',400);
@@ -562,6 +568,8 @@ async function start(db,uid,selection={},now=Date.now()){
     const prior=roomChannel(stored)===channel?disarm(stored):null;
     // Resume is never permission to spend a ticket on a replacement room.
     if(weapon&&selection.resumeRoomId!=null&&(prior?.status!=='active'||prior.id!==selection.resumeRoomId))throw error('原副本已結束或變更，請返回秘境重新選擇',409);
+    // A settlement retry may only spend a ticket against the exact finished room.
+    if(weapon&&selection.retryFromRoomId!=null&&(prior?.status!=='finished'||prior.id!==selection.retryFromRoomId||prior.weaponDungeon?.difficulty!==dungeonChoice.difficulty||(prior.weaponDungeon?.id||WeaponDungeons.ID)!==dungeonChoice.id))throw error('原結算已失效，請返回秘境重新選擇',409);
     // Preserve an unfinished legacy trial when first entering PvP (and vice versa).
     const roomIds={...pointer.roomIds,...(legacy?{[roomChannel(legacy)]:legacy.id}:{}),...(stored?{[roomChannel(stored)]:stored.id}:{})};
     const campaign=trialProgress(pointer.trial,seed);

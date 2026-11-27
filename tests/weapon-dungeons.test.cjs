@@ -194,6 +194,7 @@ test('lord defeat immediately settles weapon dungeon, unlocks next difficulty an
  assert.equal(settled.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length,guardsAlive);
  assert.equal(settled.actors[0].answered,0);
  assert.equal(settled.weaponDungeonResult.cleared,true);
+ assert.equal(settled.weaponDungeonResult.newlyUnlocked,1);
  const progress=await API.weaponDungeonState(db,'u1',NOW);
  assert.equal(progress.unlocked,1);
  assert.equal(progress.clears[0],1);
@@ -274,4 +275,25 @@ test('preview pools contain precisely the live reward catalog, including empty t
   assert.deepEqual(state.rewardPools[realm],M.BOOKS.filter(b=>b.tierRealm===realm).map(({id,name,tierRealm})=>({id,name,tierRealm})));
  }
  assert.deepEqual(state.rewardPools['元嬰'],[]);
+});
+
+test('settlement retry is room-bound and idempotent; failed and repeated clears do not fake unlocks',async()=>{
+ const db=database();own(db);
+ const first=await API.start(db,'u1',input('settle-first-001'),NOW);
+ const raw=db.records.get(API.ROOMS+'/'+first.id);raw.blocks=[];Object.assign(raw.actors[0],{x:6,y:3,stamina:10});raw.actors.find(a=>a.weaponDungeonLord).hp=1;R.prepareIntents(raw);
+ const clear=await API.command(db,'u1',{roomId:first.id,type:'manual',skillId:'rock-fist',x:6,y:2,revision:raw.revision,requestId:'settle-kill-001'},NOW);
+ assert.equal(clear.weaponDungeonResult.newlyUnlocked,1);
+ const retry={...input('settle-retry-001'),retryFromRoomId:first.id};
+ const second=await API.start(db,'u1',retry,NOW);const replay=await API.start(db,'u1',retry,NOW);
+ assert.equal(second.id,replay.id);assert.notEqual(first.id,second.id);
+ assert.equal((await API.weaponDungeonState(db,'u1',NOW)).tickets,1);
+ await assert.rejects(API.start(db,'u1',{...input('settle-stale-001'),retryFromRoomId:first.id},NOW),/原結算已失效/);
+ const loss=await API.command(db,'u1',{roomId:second.id,type:'leave',requestId:'settle-leave-001'},NOW);
+ assert.equal(loss.weaponDungeonResult.cleared,false);assert.equal(loss.weaponDungeonResult.newlyUnlocked,null);assert.equal(loss.weaponDungeonResult.tickets,1);
+ const third=await API.start(db,'u1',{...input('settle-retry-002'),retryFromRoomId:second.id},NOW);
+ const raw3=db.records.get(API.ROOMS+'/'+third.id);raw3.blocks=[];Object.assign(raw3.actors[0],{x:6,y:3,stamina:10});raw3.actors.find(a=>a.weaponDungeonLord).hp=1;R.prepareIntents(raw3);
+ const repeated=await API.command(db,'u1',{roomId:third.id,type:'manual',skillId:'rock-fist',x:6,y:2,revision:raw3.revision,requestId:'settle-kill-002'},NOW);
+ assert.equal(repeated.weaponDungeonResult.newlyUnlocked,null);assert.equal(repeated.weaponDungeonResult.tickets,0);
+ await assert.rejects(API.start(db,'u1',{...input('settle-retry-003'),retryFromRoomId:third.id},NOW),/副本券不足/);
+ assert.deepEqual((await API.weaponDungeonState(db,'u1',NOW)).clears,[2,0,0,0,0,0]);
 });
