@@ -7,11 +7,11 @@ const BOOK_ART=Object.freeze({
   'body-rock':'/assets/books/body-rock.png',
   'body-dragon':'/assets/books/body-dragon.png',
   'body-tiger':'/assets/books/body-tiger.png',
-  'sword-prism':'/assets/weapons/sword-prism-hd.svg',
+  'sword-prism':'/assets/weapons/sword-prism-hd.webp',
   'body-bell':'/assets/weapons/body-bell-hd.svg',
-  'sword-weave':'/assets/weapons/sword-weave-hd.svg',
+  'sword-weave':'/assets/weapons/sword-weave-hd.webp',
   'body-mirror':'/assets/weapons/body-mirror-hd.svg',
-  'sword-time':'/assets/weapons/sword-time-hd.svg',
+  'sword-time':'/assets/weapons/sword-time-hd.webp',
   'body-gravity':'/assets/weapons/body-gravity-hd.svg'
 });
 const MOVE_ART=Object.freeze({

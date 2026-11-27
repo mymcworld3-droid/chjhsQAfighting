@@ -71,7 +71,10 @@ test('all 24 transparent candidate assets exist and are mapped',()=>{
  const path=require('node:path'),root=path.join(__dirname,'../public');
  const artSource=fs.readFileSync(path.join(root,'cultivation/manual-art.js'),'utf8');
  for(const b of D.BOOKS){
-  const weapon='assets/weapons/'+b.id+'-hd.svg';assert.ok(fs.existsSync(path.join(root,weapon)),weapon);
+  const hd=['sword-prism','sword-weave','sword-time'].includes(b.id);
+  const weapon='assets/weapons/'+b.id+'-hd.'+(hd?'webp':'svg');assert.ok(fs.existsSync(path.join(root,weapon)),weapon);
+  assert.ok(artSource.includes('/'+weapon),weapon+' mapped');
+  assert.equal(require('../public/cultivation/weapon-presentation.js').art(b.id),'/'+weapon);
   for(const sk of b.skills){const file='assets/skills/'+sk.id+'.svg';assert.ok(fs.existsSync(path.join(root,file)),file);assert.ok(artSource.includes(sk.id));}
  }
 });
