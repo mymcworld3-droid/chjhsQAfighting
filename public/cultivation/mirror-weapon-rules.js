@@ -33,7 +33,7 @@
           const mirrorCells=G.traceRay(board,shadow,{x:-d.x||0,y:-d.y||0},sk.range).cells;
           if(mirrorCells.length)parts.push(part(shadow,mirrorCells,sk.power*.3,true));
         }
-        for(const aim of cells)add(aim,parts);
+        for(const aim of cells)add(aim,parts,{suppressed:!!shadow&&!G.open(board,shadow)});
       }
       if(!out.aims.length)out.reason='沒有合法出拳方向';
     }else if(sk.kind==='mirror-summon'){
@@ -131,7 +131,50 @@
     }
     return {...part,hits,moves};
   }
+  // V2 presentation consumes committed, per-beat hits and movement only.
+  // Two attack origins share the same impact; sequential displacements on
+  // one target within that beat are stitched into a single legal route.
+  function mergeMoves(moves){
+    const byUid=new Map();
+    for(const m of moves){
+      if(!m.path||m.path.length<2)continue;
+      const old=byUid.get(m.uid);
+      if(!old)byUid.set(m.uid,{uid:m.uid,path:m.path.map(p),style:m.style||'slide'});
+      else if(same(old.path.at(-1),m.path[0]))old.path.push(...m.path.slice(1).map(p));
+      else old.path.push(...m.path.map(p));
+    }
+    return [...byUid.values()];
+  }
+  function baseBeats(plan,sk,uid,hits,moves=[]){
+    const bodyPart=plan.parts.find(q=>!q.avatar),shadowPart=plan.parts.find(q=>q.avatar);
+    const byAvatar=avatar=>hits.filter(h=>Boolean(plan.parts[h.part]?.avatar)===avatar);
+    const body={source:bodyPart?.source||plan.origin,cells:bodyPart?.cells||[],hits:byAvatar(false),moves};
+    const shadow=plan.shadow?{source:shadowPart?.source||plan.shadow,cells:shadowPart?.cells||[],hits:byAvatar(true),moves:[],suppressed:plan.suppressed===true}:null;
+    return [{body,shadow}];
+  }
+  function timeline(sk,beats){
+    const count=Math.max(1,beats.length),chain=sk.kind==='fist-chain',strike=sk.kind==='mirror-strike'||sk.kind==='line'||sk.kind==='gravity-strike';
+    const durationMs=chain?600:sk.kind==='mirror-summon'?400:sk.kind==='mirror-swap'?420:count>1?460:sk.kind==='mirror-strike'?280:350;
+    const width=Math.floor(durationMs/count),segments=[];
+    for(const [index,beat] of beats.entries()){
+      const start=index*width,end=index===count-1?durationMs:(index+1)*width;
+      const impact=start+Math.max(1,Math.round((end-start)*.50));
+      const moveList=mergeMoves([...(beat.body?.moves||[]),...(beat.shadow?.moves||[])]);
+      for(const [avatar,part] of [[false,beat.body],[true,beat.shadow]]){
+        if(!part)continue;
+        const radial=sk.kind==='mirror-summon'||sk.kind==='mirror-swap';
+        const cells=part.cells||[];
+        segments.push({kind:strike?'ray':radial?'shock':'domain',tone:avatar?'violet':'ice',mirror:true,mirrorAvatar:avatar,
+          mirrorSummon:sk.kind==='mirror-summon',mirrorSuppressed:part.suppressed===true,
+          start,impact,end,origin:p(part.source),target:p(cells.at(-1)||part.source),radius:radial?1:0,cells:cells.map(p),
+          ...(strike&&cells.length?{rays:[{cells:[p(part.source),...cells.map(p)],tone:avatar?'violet':'ice'}]}:{}),
+          hits:(part.hits||[]).map(h=>({uid:h.uid,damage:h.damage,absorbed:h.absorbed||0,cell:p(h.cell||part.source)})),
+          moves:avatar?[]:moveList});
+      }
+    }
+    return {version:2,durationMs,segments};
+  }
   // Battle-local identity, dynamically derived coordinates, no stored actor.
   function reconcile(state,uid,weaponIds){return O.reconcileEquipment(state,uid,weaponIds);}
-  return Object.freeze({supports,active,location,plans,selected,activate,resolve,canCopy,copyGeometry,copyBeat,clear:O.clear,reconcileEquipment:reconcile,finish:O.finish});
+  return Object.freeze({supports,active,location,plans,selected,activate,resolve,canCopy,copyGeometry,copyBeat,baseBeats,timeline,mergeMoves,clear:O.clear,reconcileEquipment:reconcile,finish:O.finish});
 });

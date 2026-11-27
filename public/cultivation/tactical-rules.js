@@ -625,11 +625,11 @@
     s.revision++;return s;
   }
   // Preview collectors belong only to private cloned states, never stored room data.
-  const previewEvents=new WeakMap();
+  const previewEvents=new WeakMap(),mirrorFrames=new WeakMap();
   function log(s,text,type='info',extra={}){
     // A bounded log still needs unique IDs when one turn produces many effects.
     s.eventSequence=(s.eventSequence||0)+1;
-    const event={id:s.revision+':'+s.eventSequence,type,text,...extra};s.events.push(event);s.events=s.events.slice(-LIMITS.events);previewEvents.get(s)?.push(event);return event;
+    const event={id:s.revision+':'+s.eventSequence,type,text,...extra};s.events.push(event);s.events=s.events.slice(-LIMITS.events);previewEvents.get(s)?.push(event);const frame=mirrorFrames.get(s);if(frame)frame.events.push({event,layer:frame.layer,avatar:frame.avatar});return event;
   }
   const point=a=>({x:a.x,y:a.y});
   const appearance=a=>({uid:a.uid,hp:a.hp,shield:a.shield,stamina:a.stamina,guard:a.guard,slow:a.slow,...(a.flyingSword?{flyingSword:a.flyingSword}:{})});
@@ -872,6 +872,7 @@
     const cells=new Map(),path=[point(a)];
     const sealsHit=new Set();
     for(let step=0;step<sk.steps&&alive(a);step++){
+      const frame=mirrorFrames.get(s);if(frame)frame.layer=step+1;
       const row=frontStrike(s,a,d,false),targets=strikeTargets(s,a,row);
       if(!row.length)break;
       if(animate)strikeSeals(s,row,sealsHit);
@@ -1057,8 +1058,8 @@
     const bellSteps=castAnimation?.bellSteps;
     const rayPlan=prism()?.supports(sk)?prism().selected(prism().boardForTrial(s),a,sk,aim):null;
     return {aim,cost,valid:!reason,reason,cells:[...cells.values()],path,hits,moves,finalPositions,
-      ...(mirrorSteps?.length?{mirrorSteps}:{}),
-      ...(mirror()?.supports(sk)?{weaponObjects:simulation.weaponObjects||null,mirrorPlan:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.mirrorPlan}:{}),
+      ...(mirrorSteps?.length?{mirrorSteps,weaponTimeline:castAnimation.weaponTimeline}:{}),
+      ...(mirror()?.supports(sk)?{weaponObjects:simulation.weaponObjects||null,mirrorPlan:castAnimation?.mirrorPlan,weaponTimeline:castAnimation?.weaponTimeline}:{}),
       ...(weave()?.supports(sk)?{first:first?point(first):null,weaponObjects:simulation.weaponObjects,weavePlan:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weavePlan,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       ...(bellSteps?{bellSteps,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
       ...(rayPlan?{rays:rayPlan.rays,weaponTimeline:events.find(e=>e.type==='cast'&&e.actor===a.uid)?.animation?.weaponTimeline}:{}),
@@ -1105,6 +1106,40 @@
   // Compatibility for old saves: old cooldown timestamps cannot prevent casting.
   function cooldownUntil(){return 0;}
   function cast(s,a,sk,p,preview=false,first=null){
+    const needs=mirror()?.supports(sk)||(!bell()?.supports(sk)&&mirror()?.canCopy(sk)&&mirror().active(s.weaponObjects,a.uid));
+    if(!needs)return castInternal(s,a,sk,p,preview,first);
+    const frame={events:[],layer:1,avatar:false};mirrorFrames.set(s,frame);
+    try{
+      castInternal(s,a,sk,p,preview,first);
+      const firstCast=frame.events.find(x=>x.event.type==='cast'&&x.event.actor===a.uid)?.event;
+      if(!firstCast)return;
+      const raw=firstCast.animation,hit=e=>({uid:e.target,damage:e.damage,absorbed:e.animation?.numbers?.[0]?.absorbed||0,cell:{x:e.x,y:e.y},part:e.animation?.strike||0});
+      const motions=entries=>entries.filter(x=>x.event.animation?.kind==='move').flatMap(({event:e})=>{
+        const style=e.animation.style==='teleport'?'swap':e.animation.style==='throw'?'arc':e.animation.style==='dash'&&sk.kind==='dash-cleave'?'dash':'slide';
+        return (e.animation.moves||[{uid:e.actor,path:e.path}]).filter(m=>m.path?.length>1).map(m=>({...m,style}));
+      });
+      let beats=[];
+      if(raw.mirrorPlan){
+        beats=mirror().baseBeats(raw.mirrorPlan,sk,a.uid,frame.events.filter(x=>x.event.type==='damage').map(x=>hit(x.event)),motions(frame.events));
+      }else if(raw.mirrorSteps?.length){
+        beats=raw.mirrorSteps.map(step=>{
+          const items=frame.events.filter(x=>x.layer===step.layer);
+          const bodyCast=items.find(x=>x.event.type==='cast'&&x.event.actor===a.uid)?.event.animation||raw;
+          const bodyHits=items.filter(x=>!x.avatar&&x.event.type==='damage').map(x=>hit(x.event));
+          const shadowHits=items.filter(x=>x.avatar&&x.event.type==='damage').map(x=>hit(x.event));
+          return {body:{source:bodyCast.origin,cells:bodyCast.cells||[],hits:bodyHits,moves:motions(items)},
+            shadow:{...step,hits:shadowHits,moves:[]}};
+        });
+      }
+      if(!beats.length)return;
+      raw.weaponTimeline=mirror().timeline(sk,beats);raw.weaponGroup=firstCast.id;
+      const affected=new Set([a.uid,...raw.weaponTimeline.segments.flatMap(q=>[...q.hits.map(h=>h.uid),...q.moves.map(m=>m.uid)])]);
+      raw.changes=s.actors.filter(t=>affected.has(t.uid)).map(t=>({...appearance(t),x:t.x,y:t.y}));
+      for(const {event} of frame.events)if(event!==firstCast&&['cast','damage','move','displace'].includes(event.type)&&event.animation)event.animation.weaponGroup=firstCast.id;
+      if(!s.events.includes(firstCast)){s.events.unshift(firstCast);if(s.events.length>LIMITS.events)s.events.splice(1,1);}
+    }finally{mirrorFrames.delete(s);}
+  }
+  function castInternal(s,a,sk,p,preview=false,first=null){
     validateSkill(s,a,sk,p,{geometryOnly:preview,first});const cost=techniqueCost(a,sk);a.stamina-=cost;a.attacks++;
     if(s.pveMetrics){s.pveMetrics.staminaSpent+=cost;if(sk.manualId)s.pveMetrics.manualCasts[sk.id]=(s.pveMetrics.manualCasts[sk.id]||0)+1;}
     const fixedTarget=sealAt(s,p);
@@ -1139,6 +1174,7 @@
         color:sk.color||(CORES[a.core]||CORES.none).color,changes:[appearance(a)]}});
     const mirrorSteps=[];
     const copy=mirror()?.canCopy(sk)&&mirror().active(s.weaponObjects,a.uid)?(from,beat,group=null,records=null)=>{
+      const frame=mirrorFrames.get(s);if(frame)frame.avatar=true;
       const result=mirror().copyBeat(prism().boardForTrial(s),from,sk,beat,{
         targets:()=>s.actors.filter(t=>t.team!==a.team),alive,covers,canContinue:()=>alive(a),
         apply:(target,power,cell,layer)=>{
@@ -1158,7 +1194,7 @@
           return true;
         },outward:bell().outward
       });
-      mirrorSteps.push(result);castEvent.animation.mirrorSteps=mirrorSteps;
+      if(frame)frame.avatar=false;mirrorSteps.push(result);castEvent.animation.mirrorSteps=mirrorSteps;
       return result;
     }:null;
     if(!['fist-chain','meteor','restore','counter','fist-focus'].includes(sk.kind)&&(sk.kind!=='blink'||sk.burst))strikeSeals(s,cells);
@@ -1282,6 +1318,7 @@
       // Finish the whole first sweep before beginning the second one.
       const activeCuts=cuts?.flatMap((cut,index)=>cut.length>1?[index]:[]);
       for(let strike=0;strike<2&&alive(a);strike++){
+        const frame=mirrorFrames.get(s);if(frame)frame.layer=strike+1;
         for(const t of targets){
           if(!alive(a))break;
           if(!alive(t))continue;

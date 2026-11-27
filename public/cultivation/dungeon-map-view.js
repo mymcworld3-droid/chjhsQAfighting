@@ -2232,7 +2232,7 @@ class DungeonMapView{
     }
     const paintEffects=(context,view,above)=>{
       const renderer=globalThis.QATacticalSkillEffects;
-      if(!above)globalThis.QAWeaponEffects?.drawObjects(context,this.room?.weaponObjects,visualMembers.map(m=>({uid:m.uid,...m.position})),view,now,{reduced:reduceMotion});
+      if(!above)globalThis.QAWeaponEffects?.drawObjects(context,this.room?.weaponObjects,visualMembers.map(m=>({uid:m.uid,...m.position})),{...view,width:m.width,height:m.height},now,{reduced:reduceMotion,blocked:p=>m.tiles[p.y*m.width+p.x]===0,summoningOwners:scenes.filter(q=>q.scene.skill==='mirror-summon').map(q=>q.scene.actor)});
       for(const {scene,p} of scenes){
         try{
           paintDungeonScene(context,scene.weaponTimeline?{...scene,reducedMotion:reduceMotion}:scene,p,view,above,renderer);

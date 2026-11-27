@@ -87,11 +87,17 @@
     if(mirrorSteps.length){
       for(const part of mirrorSteps){
         const body=segments[part.layer-1];if(!body)continue;
-        if(part.suppressed||!part.cells.length)continue;
-        segments.push({...body,tone:'violet',bell:false,origin:part.source,target:part.cells.at(-1),cells:part.cells,
-          ...(strike?{rays:[{cells:[part.source,...part.cells],tone:'violet'}]}:{}),
+        const combined=new Map(body.moves.map(m=>[m.uid,{...m,path:m.path.slice()}]));
+        for(const m of part.moves){
+          const prior=combined.get(m.uid);
+          if(prior)prior.path.push(m.to);
+          else combined.set(m.uid,{uid:m.uid,path:[m.from,m.to],style:'slide'});
+        }
+        body.moves=[...combined.values()];
+        segments.push({...body,tone:'violet',bell:false,mirror:true,mirrorAvatar:true,mirrorSuppressed:part.suppressed===true,origin:part.source,target:part.cells.at(-1)||part.source,cells:part.cells,
+          ...(strike?{rays:part.cells.length?[{cells:[part.source,...part.cells],tone:'violet'}]:[]}:{}),
           hits:(records?records.filter(h=>h.rayId===part.layer+100):part.hits).map(h=>({uid:h.uid,damage:h.damage,absorbed:h.absorbed||0,cell:h.cell})),
-          moves:part.moves.map(m=>({uid:m.uid,path:[m.from,m.to],style:'slide'}))});
+          moves:[]});
       }
       segments.sort((a,b)=>a.impact-b.impact);
     }

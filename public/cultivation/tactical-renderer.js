@@ -853,11 +853,13 @@ export class TacticalRenderer{
       // Aims may be empty landing tiles or directions, not damage tiles.
       for(const p of plan?.aims||[])fill(p,'#fff0','#e5cc87a6');
       if(plan?.first)fill(plan.first,'#6ce9bc55','#bcffe9');
+      for(const p of Object.values(plan?.byAim||{}).flatMap(v=>[...(v.mirrorSteps||[]),...(v.mirrorPlan?.parts||[]).filter(q=>q.avatar)].flatMap(q=>q.cells)))fill(p,'#9a7ce832','#b49aee77');
       const aim=this.hoverSelection||(!this.selection?.choosing?this.selection:null);
       const preview=aim&&plan?.byAim[R.key(aim)];
       if(preview){
         for(const p of preview.path.slice(1))fill(p,'#e9cf813b','#e5cc87');
         for(const p of preview.cells)fill(p,preview.weavePlan?'#4bd3a966':'#e9ba5266',preview.weavePlan?'#b4ffe0':'#ffe3a4');
+        for(const p of [...(preview.mirrorSteps||[]),...(preview.mirrorPlan?.parts||[]).filter(q=>q.avatar)].flatMap(q=>q.cells))fill(p,'#a18ae866','#d9c3ff');
         for(const ray of preview.rays||[])if(ray.depth>0)for(const p of ray.cells)fill(p,ray.depth===1?'#eea45b44':'#b49ae744',ray.depth===1?'#ffc58c':'#d2bcff');
         c.save();c.setLineDash([Math.max(2,cell*.1),Math.max(2,cell*.06)]);
         for(const p of preview.landings)fill(p,'#fff0','#ffe8a6');
@@ -962,7 +964,7 @@ export class TacticalRenderer{
       [m.kind,Math.round(m.screenX),Math.round(m.screenY)]));
     Compass.draw(c,this.compassMarkers,{width:w,height:h});
     const actors=scene?A.sample(scene,progress):s.actors;
-    globalThis.QAWeaponEffects?.drawObjects(c,s.weaponObjects,actors,{ox,oy,cell,width:s.width,height:s.height},now,{reduced});
+    globalThis.QAWeaponEffects?.drawObjects(c,s.weaponObjects,actors,{ox,oy,cell,width:s.width,height:s.height},now,{reduced,blocked:p=>R.blocked(s,p),summoningOwners:scene?.skill==='mirror-summon'?[scene.actor]:[]});
     if(scene)this.drawEffect(scene,progress,false);
     // A dedicated guardian altar replaces the old '守' circle in v4 defense.
     // The same authoritative objective.hp/maxHp controls sprite damage state

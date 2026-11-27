@@ -119,7 +119,7 @@ function buildSkill(uid,result,previous,next){
   const timeline=globalThis.QAWeaponEffects?.normalize(result.weaponTimeline);
   if(timeline){
     scene.weaponTimeline=timeline;scene.duration=timeline.durationMs;
-    if(timeline.segments.some(s=>s.bell||s.weave)){
+    if(timeline.segments.some(s=>s.bell||s.weave||s.mirror)){
       const hitIds=new Set(timeline.segments.flatMap(s=>s.hits.map(h=>h.uid)));
       scene.bellBeforeEnemies=(previous?.enemies||[]).filter(e=>hitIds.has(e.id)).map(e=>({...e,position:{...e.position}}));
     }
@@ -179,7 +179,7 @@ export function dungeonAnimationEvents(previous,next){
     const lastSkill=member.lastSkill,priorSkill=old.lastSkill;
     if([1,2].includes(lastSkill?.visualVersion)&&Number.isSafeInteger(lastSkill.seq)&&
         lastSkill.seq>(Number(priorSkill?.seq)||0)){
-      if(lastSkill.skillId==='dragon-guard'&&
+      if(!lastSkill.weaponTimeline&&lastSkill.skillId==='dragon-guard'&&
           Array.isArray(lastSkill.chainSteps)&&lastSkill.chainSteps.length)
         events.push(...buildChain(uid,lastSkill,previous,next));
       else{
