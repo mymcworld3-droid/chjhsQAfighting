@@ -137,7 +137,8 @@ test('only the trial skill engine is imported; old square-flash VFX are removed'
   assert.match(painter,/animationUnderlay\(ctx,\{ox:g\.ox/);
   assert.match(painter,/animationOverlay\(ctx,\{ox:g\.ox/);
   assert.doesNotMatch(painter,/Stage 13: server-confirmed strike paths briefly gild/);
-  assert.match(read('dungeon-skill-combat.cjs'),/origin:\{\.\.\.origin\}/);
+  assert.match(read('dungeon-skill-combat.cjs'),/return Resolution\.resolveCast\(room,uid,map,sk,/);
+  assert.match(read('public/cultivation/dungeon-skill-resolution.js'),/origin:\{\.\.\.origin\}/);
   assert.match(read('dungeon-player-combat.cjs'),/origin:\{\.\.\.member\.position\}/);
 });
 
