@@ -1,0 +1,374 @@
+{
+  "schema": 1,
+  "batch": 18,
+  "date": "2026-11-27",
+  "purpose": "只新增直接核對原文和官方答案的完整短題；其他來源不增加純題號索引。",
+  "sources": [
+    {
+      "id": "CEEC-111-mathA",
+      "subject": "數學",
+      "title": "111學年度分科測驗數學甲定稿",
+      "institution": "大學入學考試中心",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m223505137960339935/01-111分科測驗數學甲試卷定稿.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n115349073464370939/111學年度分科測驗工作報告.pdf",
+      "rightsBasisCandidate": "著作權法第9條第1項第5款；依法令舉行的正式考試試題，第三方素材另行核對",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "humanRightsVerified": false
+    },
+    {
+      "id": "CEEC-112-chem",
+      "subject": "化學",
+      "title": "112學年度分科測驗化學考科",
+      "institution": "大學入學考試中心",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n214390396803217901/06-112分科測驗化學考科試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o218598885766219983/112學年度分科測驗工作報告.pdf",
+      "rightsBasisCandidate": "著作權法第9條第1項第5款；依法令舉行的正式考試試題，第三方素材另行核對",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "humanRightsVerified": false
+    },
+    {
+      "id": "CEEC-112-physics",
+      "subject": "物理",
+      "title": "112學年度分科測驗物理（官方工作報告附錄）",
+      "institution": "大學入學考試中心",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o218598885766219983/112學年度分科測驗工作報告.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o218598885766219983/112學年度分科測驗工作報告.pdf",
+      "rightsBasisCandidate": "著作權法第9條第1項第5款；依法令舉行的正式考試試題，第三方素材另行核對",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "humanRightsVerified": false
+    }
+  ],
+  "records": [
+    {
+      "id": "CEEC-111-mathA-single-choice-1",
+      "sourceId": "CEEC-111-mathA",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "原卷印刷第1頁第1題",
+      "originalQuestionType": "single-choice",
+      "questionPdfPage": 2,
+      "answerPdfPage": null,
+      "officialAnswerMarks": [
+        "3"
+      ],
+      "conceptTags": [
+        "等比數列",
+        "對數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "設 $a_1,a_2,a_3,a_4$ 是首項為 10、公比是 10 的等比數列。令 $b=\\sum_{n=1}^{3}\\log_{a_n}a_{n+1}$，試選出正確的選項。",
+        "options": [
+          {
+            "label": "1",
+            "text": "$2<b\\le3$"
+          },
+          {
+            "label": "2",
+            "text": "$3<b\\le4$"
+          },
+          {
+            "label": "3",
+            "text": "$4<b\\le5$"
+          },
+          {
+            "label": "4",
+            "text": "$5<b\\le6$"
+          },
+          {
+            "label": "5",
+            "text": "$6<b\\le7$"
+          }
+        ]
+      },
+      "optionCount": 5,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m223505137960339935/01-111分科測驗數學甲試卷定稿.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n115349073464370939/111學年度分科測驗工作報告.pdf",
+      "officialAnswerLocator": "111分科工作報告印刷第167頁數學甲第1題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "answer-page-screenshot-unavailable"
+      ],
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-text-layer",
+        "locator": "原卷第2頁截圖；報告9744–9747行答案"
+      }
+    },
+    {
+      "id": "CEEC-112-chem-single-choice-1",
+      "sourceId": "CEEC-112-chem",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "原卷印刷第1頁第1題",
+      "originalQuestionType": "single-choice",
+      "questionPdfPage": 2,
+      "answerPdfPage": null,
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "酸鹼平衡",
+        "共軛酸鹼對"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列哪一選項所列的物質不互為共軛酸鹼對？",
+        "options": [
+          {
+            "label": "A",
+            "text": "H₂O，H₃O⁺"
+          },
+          {
+            "label": "B",
+            "text": "HCO₃⁻，CO₃²⁻"
+          },
+          {
+            "label": "C",
+            "text": "NH₃，NH₄⁺"
+          },
+          {
+            "label": "D",
+            "text": "H₂PO₄⁻，HPO₃²⁻"
+          },
+          {
+            "label": "E",
+            "text": "NO₃⁻，HNO₃"
+          }
+        ],
+        "underlinedText": "不互為"
+      },
+      "optionCount": 5,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n214390396803217901/06-112分科測驗化學考科試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o218598885766219983/112學年度分科測驗工作報告.pdf",
+      "officialAnswerLocator": "112分科工作報告印刷第162頁化學第1題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "answer-page-screenshot-unavailable"
+      ],
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-text-layer",
+        "locator": "原卷第2頁截圖；報告10810–10816行答案"
+      }
+    },
+    {
+      "id": "CEEC-113-chem-multiple-choice-12",
+      "sourceId": "CEEC-113-chem",
+      "questionNumber": 12,
+      "originalQuestionNumberOrLocator": "原卷印刷第4頁第12題",
+      "originalQuestionType": "multiple-choice",
+      "questionPdfPage": 5,
+      "answerPdfPage": 1,
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "E"
+      ],
+      "conceptTags": [
+        "酸鹼平衡",
+        "弱酸解離",
+        "稀釋",
+        "pH"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "在 25°C 下，將 1.0 M 的醋酸稀釋至 0.1 M，則下列哪些數值會增加？（CH₃COOH 的解離常數為 $K_a$）",
+        "options": [
+          {
+            "label": "A",
+            "text": "pH"
+          },
+          {
+            "label": "B",
+            "text": "[OH⁻]"
+          },
+          {
+            "label": "C",
+            "text": "[CH₃COO⁻]"
+          },
+          {
+            "label": "D",
+            "text": "$K_a$"
+          },
+          {
+            "label": "E",
+            "text": "$\\dfrac{[\\mathrm{CH_3COO^-}]}{[\\mathrm{CH_3COOH}]}$"
+          }
+        ]
+      },
+      "optionCount": 5,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "officialAnswerLocator": "正式答案第1頁第12題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "human-review-required",
+        "scope-review"
+      ],
+      "evidence": {
+        "question": "original-page-screenshot",
+        "answer": "official-answer-screenshot",
+        "locator": "原卷第5頁及答案第1頁截圖"
+      }
+    },
+    {
+      "id": "CEEC-112-physics-single-choice-1",
+      "sourceId": "CEEC-112-physics",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "112分科工作報告印刷第110頁、物理第1題",
+      "originalQuestionType": "single-choice",
+      "questionPdfPage": null,
+      "answerPdfPage": null,
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "因次分析",
+        "能量",
+        "功"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列選項的因次何者與能量因次不同？",
+        "options": [
+          {
+            "label": "A",
+            "text": "質量乘以速率平方"
+          },
+          {
+            "label": "B",
+            "text": "力矩乘以角度"
+          },
+          {
+            "label": "C",
+            "text": "壓力乘以體積"
+          },
+          {
+            "label": "D",
+            "text": "衝量乘以時間"
+          },
+          {
+            "label": "E",
+            "text": "電量乘以電壓"
+          }
+        ]
+      },
+      "optionCount": 5,
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o218598885766219983/112學年度分科測驗工作報告.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o218598885766219983/112學年度分科測驗工作報告.pdf",
+      "officialAnswerLocator": "同報告印刷第163頁物理第1題",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "human-review-required",
+        "scope-review",
+        "visual-check-pending",
+        "answer-page-screenshot-unavailable"
+      ],
+      "evidence": {
+        "question": "official-pdf-web-text-layer",
+        "answer": "official-answer-text-layer",
+        "locator": "報告7215–7222行原卷；10842–10849行答案；截圖未取得"
+      }
+    }
+  ],
+  "upgrades": [],
+  "answerRechecks": [
+    {
+      "id": "CEEC-113-physics-single-choice-9",
+      "sourceId": "CEEC-113-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221354517405701583/05-113分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "C"
+      ],
+      "observedMarks": [
+        "C"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    },
+    {
+      "id": "CEEC-113-physics-multiple-choice-16",
+      "sourceId": "CEEC-113-physics",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221354517405701583/05-113分科測驗物理選擇題答案.pdf",
+      "answerPdfPage": 1,
+      "previousMarks": [
+        "A",
+        "C",
+        "E"
+      ],
+      "observedMarks": [
+        "A",
+        "C",
+        "E"
+      ],
+      "match": true,
+      "evidenceMethod": "official-answer-text-layer",
+      "humanVerified": false
+    }
+  ],
+  "counts": {
+    "newRecords": 4,
+    "upgradedTextDrafts": 0,
+    "newCompleteDrafts": 4,
+    "questionScreenshotDrafts": 3,
+    "questionAndAnswerScreenshotDrafts": 1,
+    "approved": 0
+  },
+  "limitations": [
+    "111數甲與112化學的官方工作報告答案可讀，但答案頁截圖失敗。112物理原卷及答案為報告文字層，截圖失敗。",
+    "111分科化學原卷及最終答案表可讀，但未新增長題組全文；未新增反應速率完整草稿。",
+    "115官方試題索引可搜尋，索引直接開啟超時，未取得完整試題及答案。",
+    "臺東校方試卷原文可讀，但原頁截圖失敗，缺圖和公式不補造。原有63筆待轉錄未升級。",
+    "容器DNS無法下載PDF或clone儲存庫；沒有上傳考卷PDF或ZIP。"
+  ]
+}
