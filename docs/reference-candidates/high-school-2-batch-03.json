@@ -1,0 +1,1214 @@
+{
+  "schema": 1,
+  "batch": 3,
+  "date": "2026-11-27",
+  "purpose": "人工查證工作清單，非正式參考題庫；未轉錄題幹，未生成新題，無法直接載入出題引擎。",
+  "sources": [
+    {
+      "id": "PTTSH-113-1-1-mathB",
+      "subject": "數學",
+      "institution": "國立臺東高中",
+      "title": "113上第一次期中考數學B",
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1-1高二數B段考答案卷.pdf",
+      "notes": "原卷第1頁單選；答案頁標題明示答案卷。截圖失敗，文字層初核。",
+      "rightsBasisCandidate": "正式考試原題；依著作權法第9條適用性及附帶素材另待人工確認",
+      "humanRightsVerified": false
+    },
+    {
+      "id": "WLSH-113-2-1-mathA",
+      "subject": "數學",
+      "institution": "武陵高中",
+      "title": "113下第一次期中考數學A",
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/441431177.pdf",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/441431177.pdf",
+      "notes": "原卷PDF第1頁起，答案第5頁；多選，截圖失敗。",
+      "rightsBasisCandidate": "正式考試原題；依著作權法第9條適用性及附帶素材另待人工確認",
+      "humanRightsVerified": false
+    },
+    {
+      "id": "WLSH-113-2-2-mathA",
+      "subject": "數學",
+      "institution": "武陵高中",
+      "title": "113下第二次期中考數學A",
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/594724368.pdf",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/594724368.pdf",
+      "notes": "題目第1頁截圖成功，答案第6頁文字層；多選。",
+      "rightsBasisCandidate": "正式考試原題；依著作權法第9條適用性及附帶素材另待人工確認",
+      "humanRightsVerified": false
+    },
+    {
+      "id": "WLSH-113-2-final-mathA",
+      "subject": "數學",
+      "institution": "武陵高中",
+      "title": "113下期末考數學A",
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/407114352.pdf",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/407114352.pdf",
+      "notes": "題目第1頁截圖成功，答案第4頁文字層；多選。",
+      "rightsBasisCandidate": "正式考試原題；依著作權法第9條適用性及附帶素材另待人工確認",
+      "humanRightsVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-1-chem",
+      "subject": "化學",
+      "institution": "國立臺東高中",
+      "title": "113上第一次期中考選修化學一",
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/第一次段考/高二/113-1高二化學第一次期中考.pdf",
+      "notes": "原卷標題第一次，後段空白答案卷標題第二次，末尾有單選答案表；同文件匹配但標題矛盾必須人工確認；截圖失敗。",
+      "rightsBasisCandidate": "正式考試原題；依著作權法第9條適用性及附帶素材另待人工確認",
+      "humanRightsVerified": false
+    },
+    {
+      "id": "CEEC-113-physics",
+      "subject": "物理",
+      "institution": "大學入學考試中心",
+      "title": "113學年度分科物理",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0O199630760556420467/113分科測驗物理試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221354517405701583/05-113分科測驗物理選擇題答案.pdf",
+      "notes": "正式答案非初版參考答案；依高二實際學習進度另行篩選。原卷與答案截圖未成功。",
+      "rightsBasisCandidate": "正式考試原題；依著作權法第9條適用性及附帶素材另待人工確認",
+      "humanRightsVerified": false
+    },
+    {
+      "id": "CEEC-113-chem",
+      "subject": "化學",
+      "institution": "大學入學考試中心",
+      "title": "113學年度分科化學",
+      "originalSourceUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352518254580513/113分科測驗化學試題.pdf",
+      "officialAnswerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o221352850077217595/06-113分科測驗化學選擇題答案.pdf",
+      "notes": "正式答案截圖已確認，第2印刷頁截圖成功；依高二實際學習進度另篩。",
+      "rightsBasisCandidate": "正式考試原題；依著作權法第9條適用性及附帶素材另待人工確認",
+      "humanRightsVerified": false
+    }
+  ],
+  "records": [
+    {
+      "id": "PTTSH-113-1-1-mathB-single-choice-1",
+      "sourceId": "PTTSH-113-1-1-mathB",
+      "originalQuestionNumberOrLocator": "單選第1題",
+      "questionNumber": 1,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "3"
+      ],
+      "conceptTags": [
+        "弧度與三角函數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1
+    },
+    {
+      "id": "PTTSH-113-1-1-mathB-single-choice-2",
+      "sourceId": "PTTSH-113-1-1-mathB",
+      "originalQuestionNumberOrLocator": "單選第2題",
+      "questionNumber": 2,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "1"
+      ],
+      "conceptTags": [
+        "三角函數值比較"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1
+    },
+    {
+      "id": "PTTSH-113-1-1-mathB-single-choice-3",
+      "sourceId": "PTTSH-113-1-1-mathB",
+      "originalQuestionNumberOrLocator": "單選第3題",
+      "questionNumber": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "4"
+      ],
+      "conceptTags": [
+        "三角函數圖形伸縮與平移"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1
+    },
+    {
+      "id": "PTTSH-113-1-1-mathB-single-choice-4",
+      "sourceId": "PTTSH-113-1-1-mathB",
+      "originalQuestionNumberOrLocator": "單選第4題",
+      "questionNumber": 4,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "2"
+      ],
+      "conceptTags": [
+        "三角函數與方程式根"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1
+    },
+    {
+      "id": "PTTSH-113-1-1-mathB-single-choice-5",
+      "sourceId": "PTTSH-113-1-1-mathB",
+      "originalQuestionNumberOrLocator": "單選第5題",
+      "questionNumber": 5,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "5"
+      ],
+      "conceptTags": [
+        "三角函數圖形"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "requires-original-figure"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1
+    },
+    {
+      "id": "PTTSH-113-1-1-mathB-single-choice-6",
+      "sourceId": "PTTSH-113-1-1-mathB",
+      "originalQuestionNumberOrLocator": "單選第6題",
+      "questionNumber": 6,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "3"
+      ],
+      "conceptTags": [
+        "弧度與象限"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1
+    },
+    {
+      "id": "WLSH-113-2-1-mathA-multiple-choice-1",
+      "sourceId": "WLSH-113-2-1-mathA",
+      "originalQuestionNumberOrLocator": "多選第1題",
+      "questionNumber": 1,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "1"
+      ],
+      "conceptTags": [
+        "空間直線與平面"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5
+    },
+    {
+      "id": "WLSH-113-2-1-mathA-multiple-choice-2",
+      "sourceId": "WLSH-113-2-1-mathA",
+      "originalQuestionNumberOrLocator": "多選第2題",
+      "questionNumber": 2,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "3",
+        "5"
+      ],
+      "conceptTags": [
+        "空間幾何"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 5
+    },
+    {
+      "id": "WLSH-113-2-2-mathA-multiple-choice-1",
+      "sourceId": "WLSH-113-2-2-mathA",
+      "originalQuestionNumberOrLocator": "多選第1題",
+      "questionNumber": 1,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "2",
+        "3",
+        "5"
+      ],
+      "conceptTags": [
+        "空間直線與平面",
+        "方向向量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 6
+    },
+    {
+      "id": "WLSH-113-2-2-mathA-multiple-choice-2",
+      "sourceId": "WLSH-113-2-2-mathA",
+      "originalQuestionNumberOrLocator": "多選第2題",
+      "questionNumber": 2,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "2"
+      ],
+      "conceptTags": [
+        "條件機率",
+        "排列"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 6
+    },
+    {
+      "id": "WLSH-113-2-2-mathA-multiple-choice-3",
+      "sourceId": "WLSH-113-2-2-mathA",
+      "originalQuestionNumberOrLocator": "多選第3題",
+      "questionNumber": 3,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "conceptTags": [
+        "機率",
+        "骰子"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 6
+    },
+    {
+      "id": "WLSH-113-2-final-mathA-multiple-choice-1",
+      "sourceId": "WLSH-113-2-final-mathA",
+      "originalQuestionNumberOrLocator": "多選第1題",
+      "questionNumber": 1,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "2",
+        "4",
+        "5"
+      ],
+      "conceptTags": [
+        "矩陣方程式",
+        "反方陣",
+        "行列式"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 4
+    },
+    {
+      "id": "WLSH-113-2-final-mathA-multiple-choice-2",
+      "sourceId": "WLSH-113-2-final-mathA",
+      "originalQuestionNumberOrLocator": "多選第2題",
+      "questionNumber": 2,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "1",
+        "3",
+        "4"
+      ],
+      "conceptTags": [
+        "線性變換",
+        "矩陣"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 4
+    },
+    {
+      "id": "WLSH-113-2-final-mathA-multiple-choice-3",
+      "sourceId": "WLSH-113-2-final-mathA",
+      "originalQuestionNumberOrLocator": "多選第3題",
+      "questionNumber": 3,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "2",
+        "4"
+      ],
+      "conceptTags": [
+        "矩陣乘法",
+        "旋轉變換"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 4
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-1",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第1題",
+      "questionNumber": 1,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "氧化還原",
+        "還原劑"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-2",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第2題",
+      "questionNumber": 2,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "氧化數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-3",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第3題",
+      "questionNumber": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "氧化數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-4",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第4題",
+      "questionNumber": 4,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "氧化數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-5",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第5題",
+      "questionNumber": 5,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "氧化數概念"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-6",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第6題",
+      "questionNumber": 6,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "自身氧化還原"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-7",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第7題",
+      "questionNumber": 7,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "氧化劑"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-8",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第8題",
+      "questionNumber": 8,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "氧化還原反應式平衡"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-9",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第9題",
+      "questionNumber": 9,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "氧化還原計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-10",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第10題",
+      "questionNumber": 10,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "限量試劑"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-11",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第11題",
+      "questionNumber": 11,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "燃燒計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-12",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第12題",
+      "questionNumber": 12,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "能量守恆"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-13",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第13題",
+      "questionNumber": 13,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "能量轉換"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-14",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第14題",
+      "questionNumber": 14,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "生成熱與燃燒熱"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-15",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第15題",
+      "questionNumber": 15,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "反應熱與反應途徑"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-16",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第16題",
+      "questionNumber": 16,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "熱化學反應式"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-17",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第17題",
+      "questionNumber": 17,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "中和熱"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-18",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第18題",
+      "questionNumber": 18,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "莫耳燃燒熱"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-19",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第19題",
+      "questionNumber": 19,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "標準生成熱"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-20",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第20題",
+      "questionNumber": 20,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "赫斯定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-21",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第21題",
+      "questionNumber": 21,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "燃燒熱與氣體計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending",
+        "sign-convention-review"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "PTTSH-113-1-1-chem-single-choice-22",
+      "sourceId": "PTTSH-113-1-1-chem",
+      "originalQuestionNumberOrLocator": "單選第22題",
+      "questionNumber": 22,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "赫斯定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "exam-heading-mismatch",
+        "visual-check-pending"
+      ],
+      "answerLocation": "同PDF末尾單選答案表",
+      "questionPdfPage": null
+    },
+    {
+      "id": "CEEC-113-physics-single-choice-3",
+      "sourceId": "CEEC-113-physics",
+      "originalQuestionNumberOrLocator": "單選第3題",
+      "questionNumber": 3,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "萬有引力",
+        "衛星運動",
+        "脫離速度"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "scope-review"
+      ]
+    },
+    {
+      "id": "CEEC-113-physics-single-choice-9",
+      "sourceId": "CEEC-113-physics",
+      "originalQuestionNumberOrLocator": "單選第9題",
+      "questionNumber": 9,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "單擺",
+        "週期運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "requires-original-figure"
+      ]
+    },
+    {
+      "id": "CEEC-113-physics-multiple-choice-16",
+      "sourceId": "CEEC-113-physics",
+      "originalQuestionNumberOrLocator": "多選第16題",
+      "questionNumber": 16,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "C",
+        "E"
+      ],
+      "conceptTags": [
+        "動量守恆",
+        "非彈性碰撞"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "requires-original-figure"
+      ]
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-1",
+      "sourceId": "CEEC-113-chem",
+      "originalQuestionNumberOrLocator": "單選第1題",
+      "questionNumber": 1,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "游離能"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "requires-original-figure"
+      ],
+      "optionCount": 5
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-2",
+      "sourceId": "CEEC-113-chem",
+      "originalQuestionNumberOrLocator": "單選第2題",
+      "questionNumber": 2,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "分子結構",
+        "化學鍵"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [],
+      "optionCount": 5
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-4",
+      "sourceId": "CEEC-113-chem",
+      "originalQuestionNumberOrLocator": "單選第4題",
+      "questionNumber": 4,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "氧化還原計量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "shared-stem-4-5"
+      ],
+      "optionCount": 5
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-5",
+      "sourceId": "CEEC-113-chem",
+      "originalQuestionNumberOrLocator": "單選第5題",
+      "questionNumber": 5,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "溶液濃度",
+        "氧化還原滴定"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "shared-stem-4-5"
+      ],
+      "optionCount": 5
+    },
+    {
+      "id": "CEEC-113-chem-single-choice-7",
+      "sourceId": "CEEC-113-chem",
+      "originalQuestionNumberOrLocator": "單選第7題",
+      "questionNumber": 7,
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "滲透壓",
+        "溶液性質"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": null,
+      "flags": [
+        "scope-review"
+      ],
+      "optionCount": 5
+    }
+  ],
+  "counts": {
+    "total": 44,
+    "singleChoice": 35,
+    "multipleChoice": 9,
+    "approved": 0
+  },
+  "reviewInstructions": "以原始PDF與正式答案核對題幹、全部選項、圖表、共用題幹、題型、適用課綱及權利；確認後才由真實人類依既有政策核准。originalQuestion:null 表示尚未完成轉錄；不得以本索引作為題目使用。"
+}
