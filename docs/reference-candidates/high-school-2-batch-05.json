@@ -1,0 +1,3306 @@
+{
+  "schema": 1,
+  "batch": 5,
+  "date": "2026-11-27",
+  "purpose": "隔離審核工作清單。數學公式及正式原題短文依原卷保存，所有轉錄草稿需人工逐題比對。沒有人工核准，不可作AI提示。",
+  "sources": [
+    {
+      "id": "WLSH-111-1-1-mathB",
+      "subject": "數學",
+      "institution": "武陵高中",
+      "title": "111上高二數學B第一次段考",
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/298620185.pdf",
+      "notes": "三民版第一章按比例成長模型。同卷末答案表；原卷與答案截圖未取得，文字層草稿不得視為視覺核對。",
+      "rightsBasisCandidate": "依法令舉行之正式學校評量原題，著作權法第9條第1項第5款；第三方圖文和詳解除外，需人工確認",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "humanRightsVerified": false
+    },
+    {
+      "id": "WLSH-113-1-1-mathA",
+      "subject": "數學",
+      "institution": "武陵高中",
+      "title": "113上高二數學A第一次期中考",
+      "originalSourceUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/391977456.pdf",
+      "officialAnswerUrl": "https://www.wlsh.tyc.edu.tw/var/file/0/1000/img/31/391977456.pdf",
+      "notes": "同卷附答案，原卷截圖失敗。",
+      "rightsBasisCandidate": "依法令舉行之正式學校評量原題，著作權法第9條第1項第5款；第三方圖文和詳解除外，需人工確認",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "humanRightsVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-chem",
+      "subject": "化學",
+      "institution": "國立臺東高中",
+      "title": "113上高二選修化學一第一學期期末考",
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/113-1/期末考/高二/113-1高二化學期末考試.pdf",
+      "notes": "卷末答案表；PDF文字擷取有表格行號錯位，13–24對應第二行；印刷頁尾第7頁共6頁，須人工確認。截圖未取得。",
+      "rightsBasisCandidate": "依法令舉行之正式學校評量原題，著作權法第9條第1項第5款；第三方圖文和詳解除外，需人工確認",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "humanRightsVerified": false
+    },
+    {
+      "id": "PTTSH-113-1-final-physics",
+      "subject": "物理",
+      "institution": "國立臺東高中",
+      "title": "113上高二選修物理I期末考",
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=113-1%2F%E6%9C%9F%E6%9C%AB%E8%80%83%2F%E9%AB%98%E4%BA%8C%2F&file=113-1-2%E7%89%A9%E7%90%863.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=113-1%2F%E6%9C%9F%E6%9C%AB%E8%80%83%2F%E9%AB%98%E4%BA%8C%2F&file=113-1-2%E7%89%A9%E7%90%863.pdf",
+      "notes": "封面明列期末，卷末答案表含1–25單選及26–30多選；截圖失敗。",
+      "rightsBasisCandidate": "依法令舉行之正式學校評量原題，著作權法第9條第1項第5款；第三方圖文和詳解除外，需人工確認",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "humanRightsVerified": false
+    },
+    {
+      "id": "PTTSH-112-2-2-physics",
+      "subject": "物理",
+      "institution": "國立臺東高中",
+      "title": "112下高二選修物理II第二次期中考",
+      "originalSourceUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=112-2%2F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%2F%E9%AB%98%E4%BA%8C%2F&file=%E5%8F%B0%E6%9D%B1%E9%AB%98%E4%B8%AD112%E5%AD%B8%E5%B9%B4%E5%BA%A6%E7%AC%AC%E4%BA%8C%E5%AD%B8%E6%9C%9F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%E9%AB%98%E4%BA%8C%E7%89%A9%E7%90%86%E7%A7%91%E9%A1%8C%E7%9B%AE%E5%8D%B7.pdf",
+      "officialAnswerUrl": "https://www.pttsh.ttct.edu.tw/paper/index.php?dir=112-2%2F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%2F%E9%AB%98%E4%BA%8C%2F&file=%E5%8F%B0%E6%9D%B1%E9%AB%98%E4%B8%AD112%E5%AD%B8%E5%B9%B4%E5%BA%A6%E7%AC%AC%E4%BA%8C%E5%AD%B8%E6%9C%9F%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%AE%B5%E8%80%83%E9%AB%98%E4%BA%8C%E7%89%A9%E7%90%86%E7%A7%91%E9%A1%8C%E7%9B%AE%E5%8D%B7.pdf",
+      "notes": "封面112下第二次、頁尾112上期末，整卷保留題名矛盾旗標；卷末按大題重新編號，單選1–15對應原題11–25，多選1–7對應26–32。截圖失敗。",
+      "rightsBasisCandidate": "依法令舉行之正式學校評量原題，著作權法第9條第1項第5款；第三方圖文和詳解除外，需人工確認",
+      "rightsEvidence": [
+        "https://www.tipo.gov.tw/tw/copyright/694-17733.html",
+        "https://www.tipo.gov.tw/tw/copyright/773-4954.html",
+        "https://www.tipo.gov.tw/tw/copyright/692-16754.html"
+      ],
+      "humanRightsVerified": false
+    }
+  ],
+  "records": [
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-1",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "一、是非題；第1題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "○"
+      ],
+      "conceptTags": [
+        "指數與對數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "source-text-answer-apparent-conflict",
+        "原卷是非題，不新增選項"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-2",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "一、是非題；第2題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "×"
+      ],
+      "conceptTags": [
+        "指數與對數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "原卷是非題，不新增選項"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-3",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "一、是非題；第3題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "×"
+      ],
+      "conceptTags": [
+        "指數與對數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "原卷是非題，不新增選項"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-4",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "一、是非題；第4題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "×"
+      ],
+      "conceptTags": [
+        "指數與對數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "$\\log(5+9)=\\log5\\times\\log9$",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "原卷是非題，不新增選項"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-5",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "一、是非題；第5題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "○"
+      ],
+      "conceptTags": [
+        "指數與對數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "原卷是非題，不新增選項"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-6",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 6,
+      "originalQuestionNumberOrLocator": "一、是非題；第6題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "×"
+      ],
+      "conceptTags": [
+        "指數與對數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "原卷是非題，不新增選項"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-7",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 7,
+      "originalQuestionNumberOrLocator": "一、是非題；第7題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "○"
+      ],
+      "conceptTags": [
+        "指數與對數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "$\\log_3 2=\\dfrac{\\log2}{\\log3}$",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "原卷是非題，不新增選項"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-8",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 8,
+      "originalQuestionNumberOrLocator": "一、是非題；第8題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "○"
+      ],
+      "conceptTags": [
+        "指數與對數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "$\\log0.9>\\log0.8$",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "原卷是非題，不新增選項"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-9",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 9,
+      "originalQuestionNumberOrLocator": "一、是非題；第9題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "○"
+      ],
+      "conceptTags": [
+        "指數與對數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "$0.99^{-0.5}<0.99^{-0.6}$",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "原卷是非題，不新增選項"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-一、是非題-true-false-10",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 10,
+      "originalQuestionNumberOrLocator": "一、是非題；第10題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "○"
+      ],
+      "conceptTags": [
+        "指數與對數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "source-text-answer-apparent-conflict",
+        "原卷是非題，不新增選項"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-二、多重選擇題-multiple-choice-1",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "二、多重選擇題；第1題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "對數運算",
+        "換底公式"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "設 $\\log_2 3=a$，$\\log_3 5=b$，選出正確的選項：",
+        "options": [
+          {
+            "label": "A",
+            "text": "$\\log_2 5=ab$"
+          },
+          {
+            "label": "B",
+            "text": "$\\log_5 2=\\frac1{ab}$"
+          },
+          {
+            "label": "C",
+            "text": "$\\log_2 10=1+ab$"
+          },
+          {
+            "label": "D",
+            "text": "$\\log_2 6=2a$"
+          },
+          {
+            "label": "E",
+            "text": "$\\log_6 5=\\frac b{1+a}$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-二、多重選擇題-multiple-choice-2",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "二、多重選擇題；第2題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "C",
+        "D",
+        "E"
+      ],
+      "conceptTags": [
+        "指數函數圖形"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "requires-original-figures"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-三、填充題-fill-in-3",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "三、填充題；第3題",
+      "originalQuestionType": "fill-in",
+      "officialAnswerMarks": [
+        "3"
+      ],
+      "conceptTags": [
+        "對數運算"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "化簡 $1+2\\log8+\\log45-\\log16+\\log15-3\\log3=$ __________",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-三、填充題-fill-in-4",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "三、填充題；第4題",
+      "originalQuestionType": "fill-in",
+      "officialAnswerMarks": [
+        "5/2"
+      ],
+      "conceptTags": [
+        "對數運算"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "試求 $(\\log_3 4+\\log_{27}16)(\\log_4 9-\\log_{16}3)$ 的值為 __________",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-三、填充題-fill-in-7",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 7,
+      "originalQuestionNumberOrLocator": "三、填充題；第7題",
+      "originalQuestionType": "fill-in",
+      "officialAnswerMarks": [
+        "12"
+      ],
+      "conceptTags": [
+        "指數不等式"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "求滿足 $(1.1)^n>3$ 的最小正整數 $n=$ __________（已知 $\\log1.1=0.0414$）",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "WLSH-111-1-1-mathB-三、填充題-fill-in-8",
+      "sourceId": "WLSH-111-1-1-mathB",
+      "questionNumber": 8,
+      "originalQuestionNumberOrLocator": "三、填充題；第8題",
+      "originalQuestionType": "fill-in",
+      "officialAnswerMarks": [
+        "x > 3/2（x ≠ 2）"
+      ],
+      "conceptTags": [
+        "對數定義域"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "欲使對數 $\\log_{x-1}(2x^2-x-3)$ 有意義，求實數 $x$ 的範圍為 __________",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "WLSH-113-1-1-mathA-一、多重選擇題-multiple-choice-1",
+      "sourceId": "WLSH-113-1-1-mathA",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "一、多重選擇題；第1題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "C",
+        "E"
+      ],
+      "conceptTags": [
+        "弧度量",
+        "三角函數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列哪些選項中的數值為正實數？",
+        "options": [
+          {
+            "label": "A",
+            "text": "$\\sin2$"
+          },
+          {
+            "label": "B",
+            "text": "$\\cos3$"
+          },
+          {
+            "label": "C",
+            "text": "$\\tan4$"
+          },
+          {
+            "label": "D",
+            "text": "$\\sin5+\\cos5$"
+          },
+          {
+            "label": "E",
+            "text": "$1+\\tan6$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "WLSH-113-1-1-mathA-二、填充題 I-fill-in-3",
+      "sourceId": "WLSH-113-1-1-mathA",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "二、填充題 I；第3題",
+      "originalQuestionType": "fill-in",
+      "officialAnswerMarks": [
+        "4"
+      ],
+      "conceptTags": [
+        "三角函數方程式"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "方程式 $\\sin4x-x^2+1=0$ 有 ______ 個實根",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "WLSH-113-1-1-mathA-二、填充題 I-fill-in-4",
+      "sourceId": "WLSH-113-1-1-mathA",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "二、填充題 I；第4題",
+      "originalQuestionType": "fill-in",
+      "officialAnswerMarks": [
+        "2"
+      ],
+      "conceptTags": [
+        "三角函數恆等式"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "化簡 $(\\tan79^\\circ-1)(\\tan56^\\circ-1)=$ ________",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "WLSH-113-1-1-mathA-二、填充題 I-fill-in-8",
+      "sourceId": "WLSH-113-1-1-mathA",
+      "questionNumber": 8,
+      "originalQuestionNumberOrLocator": "二、填充題 I；第8題",
+      "originalQuestionType": "fill-in",
+      "officialAnswerMarks": [
+        "π/3 ≤ x ≤ 5π/3"
+      ],
+      "conceptTags": [
+        "三角不等式"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "設 $0\\leq x<2\\pi$，不等式 $\\cos x\\leq\\dfrac12$ 的解為 ____________",
+        "options": null
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-1",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "第1題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "物質三態"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-2",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "第2題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "液晶"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-3",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "第3題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "沉澱反應"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-4",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "第4題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "沉澱顏色"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列沉澱物的顏色，何者錯誤？",
+        "options": [
+          {
+            "label": "A",
+            "text": "AgCl —白色"
+          },
+          {
+            "label": "B",
+            "text": "PbI₂ —黃色"
+          },
+          {
+            "label": "C",
+            "text": "ZnS —黑色"
+          },
+          {
+            "label": "D",
+            "text": "Ag₂CrO₄ —磚紅色"
+          },
+          {
+            "label": "E",
+            "text": "PbSO₄ —白色"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-5",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "第5題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "飽和蒸氣壓"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-6",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 6,
+      "originalQuestionNumberOrLocator": "第6題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "拉午耳定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-7",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 7,
+      "originalQuestionNumberOrLocator": "第7題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "氣體溶解度"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "requires-original-figure-or-table"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-8",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 8,
+      "originalQuestionNumberOrLocator": "第8題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "亨利定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "requires-original-figure-or-table"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-9",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 9,
+      "originalQuestionNumberOrLocator": "第9題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-10",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 10,
+      "originalQuestionNumberOrLocator": "第10題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-11",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 11,
+      "originalQuestionNumberOrLocator": "第11題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-12",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 12,
+      "originalQuestionNumberOrLocator": "第12題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-13",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 13,
+      "originalQuestionNumberOrLocator": "第13題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-14",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 14,
+      "originalQuestionNumberOrLocator": "第14題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-15",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 15,
+      "originalQuestionNumberOrLocator": "第15題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-16",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 16,
+      "originalQuestionNumberOrLocator": "第16題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-17",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 17,
+      "originalQuestionNumberOrLocator": "第17題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "理想溶液蒸氣壓"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "requires-original-figure-or-table"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-18",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 18,
+      "originalQuestionNumberOrLocator": "第18題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "依數性"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "下列何者不是溶液的依數性？",
+        "options": [
+          {
+            "label": "A",
+            "text": "蒸氣壓"
+          },
+          {
+            "label": "B",
+            "text": "滲透壓"
+          },
+          {
+            "label": "C",
+            "text": "沸點上升度數"
+          },
+          {
+            "label": "D",
+            "text": "凝固點下降度數"
+          },
+          {
+            "label": "E",
+            "text": "蒸氣壓下降量"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-19",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 19,
+      "originalQuestionNumberOrLocator": "第19題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "沸點上升"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-20",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 20,
+      "originalQuestionNumberOrLocator": "第20題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "離子共存"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-21",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 21,
+      "originalQuestionNumberOrLocator": "第21題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "亨利定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-22",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 22,
+      "originalQuestionNumberOrLocator": "第22題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "滲透壓"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "在室溫，下列水溶液中，何者的滲透壓最高？",
+        "options": [
+          {
+            "label": "A",
+            "text": "$3.0\\times10^{-3}\\ \\mathrm{M\\ HCl}$"
+          },
+          {
+            "label": "B",
+            "text": "$4.0\\times10^{-3}\\ \\mathrm{M\\ NaCl}$"
+          },
+          {
+            "label": "C",
+            "text": "$5.0\\times10^{-3}\\ \\mathrm{M\\ CaCl_2}$"
+          },
+          {
+            "label": "D",
+            "text": "$6.0\\times10^{-3}\\ \\mathrm{M\\ CH_3COOH}$"
+          },
+          {
+            "label": "E",
+            "text": "$7.0\\times10^{-3}\\ \\mathrm{M\\ C_6H_{12}O_6}$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-23",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 23,
+      "originalQuestionNumberOrLocator": "第23題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "滲透壓",
+        "分子量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-single-choice-24",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 24,
+      "originalQuestionNumberOrLocator": "第24題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "滲透平衡"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "requires-original-figure-or-table"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-25",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 25,
+      "originalQuestionNumberOrLocator": "第25題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "液晶"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-26",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 26,
+      "originalQuestionNumberOrLocator": "第26題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "C",
+        "D"
+      ],
+      "conceptTags": [
+        "理想溶液"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-27",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 27,
+      "originalQuestionNumberOrLocator": "第27題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "蒸氣壓"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-28",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 28,
+      "originalQuestionNumberOrLocator": "第28題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "C",
+        "D"
+      ],
+      "conceptTags": [
+        "溶解度",
+        "亨利定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-29",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 29,
+      "originalQuestionNumberOrLocator": "第29題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "C"
+      ],
+      "conceptTags": [
+        "依數性"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-30",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 30,
+      "originalQuestionNumberOrLocator": "第30題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "conceptTags": [
+        "拉午耳定律",
+        "非理想溶液"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "stem-says-single-incorrect-but-section-multiple",
+        "requires-original-figure-or-concept-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-31",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 31,
+      "originalQuestionNumberOrLocator": "第31題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "氣體溶解度"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "requires-original-figure-or-concept-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-32",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 32,
+      "originalQuestionNumberOrLocator": "第32題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "C",
+        "E"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "requires-original-figure-or-concept-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-33",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 33,
+      "originalQuestionNumberOrLocator": "第33題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "C"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "requires-original-figure-or-concept-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-chem-multiple-choice-34",
+      "sourceId": "PTTSH-113-1-final-chem",
+      "questionNumber": 34,
+      "originalQuestionNumberOrLocator": "第34題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "E"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "answer-table-layout-check",
+        "requires-original-figure-or-concept-check"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-1",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "第1題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "圓周運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-2",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "第2題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-3",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "第3題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-4",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "第4題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-5",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "第5題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-6",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 6,
+      "originalQuestionNumberOrLocator": "第6題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-7",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 7,
+      "originalQuestionNumberOrLocator": "第7題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-8",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 8,
+      "originalQuestionNumberOrLocator": "第8題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-9",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 9,
+      "originalQuestionNumberOrLocator": "第9題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "單擺",
+        "簡諧運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-10",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 10,
+      "originalQuestionNumberOrLocator": "第10題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-11",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 11,
+      "originalQuestionNumberOrLocator": "第11題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-12",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 12,
+      "originalQuestionNumberOrLocator": "第12題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "萬有引力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "requires-original-table"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-13",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 13,
+      "originalQuestionNumberOrLocator": "第13題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "萬有引力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-14",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 14,
+      "originalQuestionNumberOrLocator": "第14題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "重力常數"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-15",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 15,
+      "originalQuestionNumberOrLocator": "第15題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "萬有引力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": {
+        "q": "密度相等的 A、B 兩個大鐵球緊緊靠在一起，兩球的質量分別為 $8M$ 和 $M$。已知 B 球的半徑為 $R$，則兩球間的重力量值為：",
+        "options": [
+          {
+            "label": "A",
+            "text": "$\\dfrac{GM^2}{9R^2}$"
+          },
+          {
+            "label": "B",
+            "text": "$\\dfrac{2GM^2}{9R^2}$"
+          },
+          {
+            "label": "C",
+            "text": "$\\dfrac{4GM^2}{9R^2}$"
+          },
+          {
+            "label": "D",
+            "text": "$\\dfrac{8GM^2}{9R^2}$"
+          },
+          {
+            "label": "E",
+            "text": "$\\dfrac{GM^2}{R^2}$"
+          }
+        ]
+      },
+      "transcriptionStatus": "draft-text-layer-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-16",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 16,
+      "originalQuestionNumberOrLocator": "第16題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "表面重力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "requires-original-table"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-17",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 17,
+      "originalQuestionNumberOrLocator": "第17題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-18",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 18,
+      "originalQuestionNumberOrLocator": "第18題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-19",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 19,
+      "originalQuestionNumberOrLocator": "第19題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-20",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 20,
+      "originalQuestionNumberOrLocator": "第20題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-21",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 21,
+      "originalQuestionNumberOrLocator": "第21題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "衛星重力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-22",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 22,
+      "originalQuestionNumberOrLocator": "第22題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "視重"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "shared-stem-with-previous"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-23",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 23,
+      "originalQuestionNumberOrLocator": "第23題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "克卜勒第三定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-24",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 24,
+      "originalQuestionNumberOrLocator": "第24題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "克卜勒第三定律"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-single-choice-25",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 25,
+      "originalQuestionNumberOrLocator": "第25題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "圓周運動速率"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "shared-stem-with-previous"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-26",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 26,
+      "originalQuestionNumberOrLocator": "第26題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B"
+      ],
+      "conceptTags": [
+        "圓周運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-27",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 27,
+      "originalQuestionNumberOrLocator": "第27題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "D",
+        "E"
+      ],
+      "conceptTags": [
+        "簡諧運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-28",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 28,
+      "originalQuestionNumberOrLocator": "第28題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "E"
+      ],
+      "conceptTags": [
+        "萬有引力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-29",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 29,
+      "originalQuestionNumberOrLocator": "第29題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "簡諧運動",
+        "重力"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-113-1-final-physics-multiple-choice-30",
+      "sourceId": "PTTSH-113-1-final-physics",
+      "questionNumber": 30,
+      "originalQuestionNumberOrLocator": "第30題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "D"
+      ],
+      "conceptTags": [
+        "衛星運動"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-1",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 1,
+      "originalQuestionNumberOrLocator": "第1題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-2",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 2,
+      "originalQuestionNumberOrLocator": "第2題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-3",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 3,
+      "originalQuestionNumberOrLocator": "第3題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-4",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 4,
+      "originalQuestionNumberOrLocator": "第4題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-5",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 5,
+      "originalQuestionNumberOrLocator": "第5題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-6",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 6,
+      "originalQuestionNumberOrLocator": "第6題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-7",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 7,
+      "originalQuestionNumberOrLocator": "第7題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-8",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 8,
+      "originalQuestionNumberOrLocator": "第8題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-9",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 9,
+      "originalQuestionNumberOrLocator": "第9題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-true-false-10",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 10,
+      "originalQuestionNumberOrLocator": "第10題",
+      "originalQuestionType": "true-false",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-11",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 11,
+      "originalQuestionNumberOrLocator": "第11題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-12",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 12,
+      "originalQuestionNumberOrLocator": "第12題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-13",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 13,
+      "originalQuestionNumberOrLocator": "第13題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-14",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 14,
+      "originalQuestionNumberOrLocator": "第14題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-15",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 15,
+      "originalQuestionNumberOrLocator": "第15題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-16",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 16,
+      "originalQuestionNumberOrLocator": "第16題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-17",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 17,
+      "originalQuestionNumberOrLocator": "第17題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-18",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 18,
+      "originalQuestionNumberOrLocator": "第18題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "A"
+      ],
+      "conceptTags": [
+        "角動量",
+        "拋體"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-19",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 19,
+      "originalQuestionNumberOrLocator": "第19題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "角動量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-20",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 20,
+      "originalQuestionNumberOrLocator": "第20題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10",
+        "concept-tag-pending"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-21",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 21,
+      "originalQuestionNumberOrLocator": "第21題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "E"
+      ],
+      "conceptTags": [
+        "質心",
+        "力學"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-22",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 22,
+      "originalQuestionNumberOrLocator": "第22題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "質心加速度"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-23",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 23,
+      "originalQuestionNumberOrLocator": "第23題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "C"
+      ],
+      "conceptTags": [
+        "質心位置"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-24",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 24,
+      "originalQuestionNumberOrLocator": "第24題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "B"
+      ],
+      "conceptTags": [
+        "動量守恆"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-single-choice-25",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 25,
+      "originalQuestionNumberOrLocator": "第25題",
+      "originalQuestionType": "single-choice",
+      "officialAnswerMarks": [
+        "D"
+      ],
+      "conceptTags": [
+        "拋體",
+        "動量守恆"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-10"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-26",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 26,
+      "originalQuestionNumberOrLocator": "第26題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "D"
+      ],
+      "conceptTags": [
+        "拋體",
+        "力學能"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-25",
+        "requires-original-figure"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-27",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 27,
+      "originalQuestionNumberOrLocator": "第27題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "conceptTags": [
+        "功率"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-25"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-28",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 28,
+      "originalQuestionNumberOrLocator": "第28題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "瞬時功率"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-25"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-29",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 29,
+      "originalQuestionNumberOrLocator": "第29題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "D",
+        "E"
+      ],
+      "conceptTags": [
+        "功與能"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-25",
+        "requires-original-figure"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-30",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 30,
+      "originalQuestionNumberOrLocator": "第30題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "A",
+        "B",
+        "C"
+      ],
+      "conceptTags": [
+        "角動量守恆"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-25"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-31",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 31,
+      "originalQuestionNumberOrLocator": "第31題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "C",
+        "D",
+        "E"
+      ],
+      "conceptTags": [
+        "質心",
+        "動量"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-25"
+      ]
+    },
+    {
+      "id": "PTTSH-112-2-2-physics-multiple-choice-32",
+      "sourceId": "PTTSH-112-2-2-physics",
+      "questionNumber": 32,
+      "originalQuestionNumberOrLocator": "第32題",
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "B",
+        "D"
+      ],
+      "conceptTags": [
+        "動量守恆"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalQuestion": null,
+      "transcriptionStatus": "locator-only",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "flags": [
+        "visual-check-pending",
+        "exam-heading-mismatch",
+        "answer-number-offset-25",
+        "requires-original-figure"
+      ]
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "WLSH-113-2-2-mathA-multiple-choice-3",
+      "sourceId": "WLSH-113-2-2-mathA",
+      "originalQuestionNumberOrLocator": "多選第3題",
+      "questionNumber": 3,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "conceptTags": [
+        "機率",
+        "骰子"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "擲一公正骰子三次，點數依序為 a、b、c，試問下列敘述哪些正確？",
+        "options": [
+          {
+            "label": "1",
+            "text": "abc是偶數的機率為 $\\frac78$"
+          },
+          {
+            "label": "2",
+            "text": "a+b+c是奇數的機率 $\\frac12$"
+          },
+          {
+            "label": "3",
+            "text": "a、b、c 依序為等差數列的機率 $\\frac1{12}$"
+          },
+          {
+            "label": "4",
+            "text": "a+b+c為3的倍數的機率 $\\frac13$"
+          },
+          {
+            "label": "5",
+            "text": "ab+c 為偶數的機率 $\\frac58$"
+          }
+        ]
+      },
+      "flags": [
+        "answer-page-screenshot-unavailable",
+        "manual-review-required"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 6,
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "replacesLocatorIn": "high-school-2-batch-03.json"
+    },
+    {
+      "id": "WLSH-113-2-final-mathA-multiple-choice-1",
+      "sourceId": "WLSH-113-2-final-mathA",
+      "originalQuestionNumberOrLocator": "多選第1題",
+      "questionNumber": 1,
+      "originalQuestionType": "multiple-choice",
+      "officialAnswerMarks": [
+        "2",
+        "4",
+        "5"
+      ],
+      "conceptTags": [
+        "矩陣方程式",
+        "反方陣",
+        "行列式"
+      ],
+      "status": "quarantined-pending-human-review",
+      "originalTextAndOptionsMatched": false,
+      "answerVerified": false,
+      "sourceRightsVerified": false,
+      "reviewer": null,
+      "referenceHash": null,
+      "originalQuestion": {
+        "q": "設A與B都是二階方陣，$I_2$ 為二階單位方陣，若二階方陣X滿足 $AX=B$，請選出正確的選項。",
+        "options": [
+          {
+            "label": "1",
+            "text": "若 $A=B$，則 $X=I_2$"
+          },
+          {
+            "label": "2",
+            "text": "若 $B=I_2$，則 $X=A^{-1}$"
+          },
+          {
+            "label": "3",
+            "text": "若 $A=2B$，則 $\\det X=\\frac14$"
+          },
+          {
+            "label": "4",
+            "text": "若 $A^2=I_2$，則 $X=A^{-1}B$"
+          },
+          {
+            "label": "5",
+            "text": "若 $B=I_2$，則 $\\det A=\\frac1{\\det X}$。"
+          }
+        ]
+      },
+      "flags": [
+        "answer-page-screenshot-unavailable",
+        "manual-review-required"
+      ],
+      "optionCount": 5,
+      "questionPdfPage": 1,
+      "answerPdfPage": 4,
+      "transcriptionStatus": "draft-original-page-screenshot",
+      "replacesLocatorIn": "high-school-2-batch-03.json"
+    }
+  ],
+  "counts": {
+    "newRecords": 116,
+    "newTextDrafts": 17,
+    "upgradedTextDrafts": 2,
+    "newLocatorOnly": 99,
+    "approved": 0
+  },
+  "notes": [
+    "文字層草稿不代表視覺核實；原卷截圖成功且答案文字表吻合的舊候選升級另列，不重複計入新題。",
+    "本批未找到臺東112下期末化學反應速率正式答案；不自行補答案。",
+    "選填、是非、多選維持原題型，不轉成單選；有共用題幹或圖表的題目暫不轉錄。"
+  ]
+}
