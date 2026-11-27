@@ -216,7 +216,11 @@ async function main(){
     // Upgrading the original sword keeps both weapon artwork nodes stable.
     await library.locator('[data-manual-book="sword-wind"] .manual-library-choice').click();
     await page.evaluate(()=>{window.__art=[...document.querySelectorAll('.manual-weapon-art')];});
-    await page.locator('[data-manual-upgrade="sword-wind"]').click();
+    const confirmation=page.waitForEvent('dialog');
+    const upgradeClick=page.locator('[data-manual-upgrade="sword-wind"]').click();
+    const dialog=await confirmation;
+    assert.equal(dialog.type(),'confirm');assert.match(dialog.message(),/確定升級.*Lv\./);
+    await dialog.accept();await upgradeClick;
     await page.waitForFunction(()=>document.querySelector('[data-manual-dialog-status]')?.textContent?.includes('已升級'));
     const visualStable=await page.evaluate(()=>window.__art.every(node=>node.isConnected));
     assert.equal(visualStable,true,'weapon image nodes should not blink after upgrade');

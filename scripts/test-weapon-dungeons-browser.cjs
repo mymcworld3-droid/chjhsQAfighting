@@ -54,7 +54,8 @@ async function main(){
   await page.locator('[data-wd-difficulty="0"]').waitFor();
   assert.equal(await page.locator('[data-wd-difficulty]').count(),6);
   assert.equal(await page.locator('[data-wd-difficulty="1"]').isDisabled(),true);
-  assert.match(await page.locator('.wd-tickets').textContent(),/3 \/ 5/);
+  assert.match(await page.locator('.wd-tickets').textContent(),/副本券\s*3\b/);
+  assert.match(await page.locator('.wd-tickets').textContent(),/補發上限 5 張/);
   for(const viewport of [{width:393,height:852},{width:1180,height:820},{width:360,height:640}]){
    await page.setViewportSize(viewport);
    const bounds=await page.locator('#weapon-dungeons-dialog').boundingBox();
@@ -104,7 +105,8 @@ async function main(){
   await page.locator('[data-weapon-dungeon-menu]').click();
   await page.locator('[data-wd-dungeon="peak-stone"]').click();
   await page.waitForFunction(()=>document.querySelector('[data-wd-difficulty="1"]')?.disabled===false);
-  assert.match(await page.locator('.wd-tickets').textContent(),/2 \/ 5/);
+  assert.match(await page.locator('.wd-tickets').textContent(),/副本券\s*2\b/);
+  assert.match(await page.locator('.wd-tickets').textContent(),/補發上限 5 張/);
   assert.equal((await API.weaponDungeonState(db,'u1')).clears[0],1);assert.deepEqual(errors,[]);
   console.log('Weapon dungeon verified: responsive selector, hidden locked skills, two signed quiz answers, free resume, victory and next-tier unlock.');
  }catch(error){if(page)await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});throw error;}

@@ -32,7 +32,7 @@
     const yBlocked=d.y!==0&&!open(board,{x:from.x,y:from.y+d.y});
     const corner=d.x!==0&&d.y!==0&&xBlocked&&yBlocked;
     if(open(board,to)&&!corner)return null;
-    let normal={x:-d.x,y:-d.y};
+    let normal={x:d.x?-d.x:0,y:d.y?-d.y:0};
     if(d.x&&d.y&&xBlocked!==yBlocked)normal=xBlocked?{x:-d.x,y:0}:{x:0,y:-d.y};
     return {from:point(from),to,normal,kind:corner?'closed-corner':inside(board,to)?'wall':'edge'};
   }

@@ -93,3 +93,7 @@
 ## 瀏覽器驗收追蹤
 
 [fe22736 完整回歸](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45915314444)：3115 項全通過，靜態資源版號一致。新增的 main 合作副本瀏覽器測試 [45915314521](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45915314521) 在第 598 行停止，原腳本要求舊 img/book PNG，而現行共用 weapon-presentation.js 使用 data-qy-weapon-art、role=img 和 HD WebP 背景；本次更新測試檢查正確武器 ID、HD 圖片路徑及 role，不移除 XP、進度、音效等檢查。尚待重新執行完整合作瀏覽器測試與戰術瀏覽器測試，幾何 CI 也尚待確認。第 1、2 階段尚未標記正式驗收。
+
+## 第 1、2 階段 CI 修正
+
+fe67669 回歸 3123 項，3122 通過，幾何法線負零 (-0) 在 Node 嚴格比較失敗；現已正規化方向零分量，未更改反射規則。多人副本真實瀏覽器 [45915482218](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45915482218) 全數通過。戰術瀏覽器 [45915482130](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45915482130) 三個子測試失敗：關閉按鈕新增共用導覽 data 屬性，舊 dataset 拼接不再等於 close；修煉升級新增確認對話框，舊腳本未同意；副本券採共用獎勵元件，舊 3 / 5、2 / 5 文案改為檢查當前券數與補發上限。更新測試並保留功能要求，不改主頁/修煉 UI 或略過確認。待 CI 重跑。

@@ -951,7 +951,7 @@ async function main(){
             const css=getComputedStyle(button);
             return css.display!=='none'&&css.visibility!=='hidden'&&button.getClientRects().length>0&&
               button.getBoundingClientRect().width>1&&button.getBoundingClientRect().height>1;
-          }).map(button=>button.dataset.action||Object.keys(button.dataset).join(','));
+          }).map(button=>button.dataset.action||Object.keys(button.dataset).find(key=>['beastToggle','close','end','loadoutToggle','quiz'].includes(key))||Object.keys(button.dataset).join(','));
           const button=root.querySelector('.tc-quarter-energy>[data-quiz]');
           const segments=[...root.querySelectorAll('[data-energy-segment]')];
           const charging={total:segments.length,
