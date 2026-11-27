@@ -208,6 +208,8 @@ test('expedition has one return control with both legacy selectors and compact d
  assert.equal((markup.match(/<button[^>]*data-wd-back/g)||[]).length,1);
  assert.equal((markup.match(/<button[^>]*data-wd-close/g)||[]).length,1);
  assert.match(markup,/data-wd-close data-wd-back data-qy-nav-action="back"/);
+ assert.match(markup,/<svg class="wd-nav-glyph"[^>]*>/);
+ assert.match(markup,/<svg class="wd-info-glyph"[^>]*>/);
  assert.match(markup,/<details class="wd-tickets"><summary>/);
  assert.match(markup,/<details class="wd-intel"><summary>/);
  assert.match(markup,/30% 築基武器/);assert.match(markup,/20% 金丹武器/);

@@ -324,3 +324,12 @@
 #tactical-combat .wd-result-collapse{min-height:32px}
 @media(orientation:landscape) and (min-width:480px){#tactical-combat .wd-result{display:grid;grid-template-columns:minmax(125px,.65fr) minmax(0,1.35fr);grid-template-rows:1fr auto;align-content:start;gap:8px 14px}#tactical-combat .wd-result-actions{grid-column:1/-1}}
 @media(orientation:landscape) and (max-height:450px){#tactical-combat .wd-result{padding:6px 12px;gap:4px 12px}#tactical-combat .wd-result-hero h2{font-size:25px}#tactical-combat .wd-result-body{gap:5px}#tactical-combat .wd-result-actions{gap:3px;padding-top:3px}}
+
+/* Keep the settlement above the battle header. Its footer belongs to the
+   content flow, never floating over reward cards or the skip-animation action. */
+#tactical-combat .tc-modal:has(.tc-dungeon-settlement){z-index:7}
+#tactical-combat .wd-result-crest .wd-result-glyph{width:clamp(24px,5vmin,40px);height:auto;z-index:1}
+#tactical-combat .wd-result-actions{position:static;background:transparent;z-index:auto;flex-shrink:0}
+#tactical-combat .wd-result-body{min-width:0}
+@media(orientation:landscape) and (min-width:480px){#tactical-combat .wd-result{grid-template-rows:minmax(min-content,1fr) auto}}
+@media(orientation:landscape) and (max-height:450px){#tactical-combat .wd-result-hero{align-self:start}}

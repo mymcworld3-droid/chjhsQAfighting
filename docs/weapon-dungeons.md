@@ -71,3 +71,9 @@
 - 第八階段提交 2934c43 的正式 CI：一般回歸與候選版回歸均出現兩項失敗（裝備提示清理順序及跨 VM Promise 時序）；候選版實際 Chromium 測試在續戰後的結算同步逾時。合作副本瀏覽器測試已通過。
 - 保留裝備提示清理斷言，恢復 close() 的清理順序；傳送陣測試等待完整事件迴圈，不刪除原動畫斷言。瀏覽器在傳送陣退出、同步按鈕真正可用後才觸發結算同步；七種尺寸逐項輸出驗收紀錄，失敗時額外輸出畫面狀態。
 - 新提交仍須以對應 SHA 的 CI 結果為準；在所有必要工作完成前不標記完整驗收通過。
+
+### 2026-11-27 第二次驗收與截圖修正
+
+- 9a431b4 一般完整回歸與候選版完整回歸各 3268 通過、0 失敗、1 項既有 PDF 測試跳過；[一般 CI](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45999202012)、[候選版 CI](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45999203375) 均成功，包含 12 組平衡、合作副本與真實 Chromium。
+- [戰鬥瀏覽器 CI](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45999202081) 已成功，七種尺寸全部通過，截圖產物 15197253582 已下載並逐張檢查武器副本的 13 張截圖。發現無圖示字型環境中返回箭頭及結算印記不可見、短螢幕結算頂部被戰鬥列遮蓋及固定操作列覆蓋內容。改為獨立 SVG，結算蓋過戰鬥標題並讓操作列正常佔位，補上獎勵卡圖像、遮蓋及實際武器掉落的確定性瀏覽器斷言。不改動戰鬥與獎勵規則。
+- 868ab4d 主分支的 [Pages 部署](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45999434681) 已成功，後續截圖修正須以新提交的 CI 與產物確認。此紀錄不等同於正式環境的已登入伺服器實戰測試。

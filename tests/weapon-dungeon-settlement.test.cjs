@@ -10,7 +10,7 @@ function render(overrides={}){
  return ctx.dungeonSettlementMarkup({info:{id:W.ID,name:W.NAME,realm:'築基',difficulty:0},result:{cleared:true,unlocked:1,newlyUnlocked:1,tickets:2},win:true,drop,weaponDrop:drop,celebrateFresh:true,dungeonCards:Feedback.renderSettlement({weapon:drop}),manualRecap:'<section data-manual-battle-result></section>',metrics:'<p>答對 2</p>',confirmed:true,...overrides});
 }
 test('first clear displays shared weapon reward, genuine unlock, remaining tickets and retry',()=>{
- const html=render();assert.match(html,/data-wd-result="cleared"/);assert.match(html,/秘境已破/);assert.match(html,/wd-result-unlock is-new/);assert.match(html,/首次解鎖.*金丹/);assert.match(html,/mr-reward-item--weapon/);assert.match(html,/御靈飛劍/);assert.match(html,/剩餘副本券 2 張/);assert.match(html,/data-manual-battle-result/);
+ const html=render();assert.match(html,/data-wd-result="cleared"/);assert.match(html,/秘境已破/);assert.match(html,/<svg class="wd-result-glyph"/);assert.match(html,/wd-result-unlock is-new/);assert.match(html,/首次解鎖.*金丹/);assert.match(html,/mr-reward-item--weapon/);assert.match(html,/御靈飛劍/);assert.match(html,/剩餘副本券 2 張/);assert.match(html,/data-manual-battle-result/);
 });
 test('replayed or repeated clear has no new celebration',()=>{
  const replay=render({celebrateFresh:false});assert.doesNotMatch(replay,/is-fresh|wd-result-unlock is-new/);

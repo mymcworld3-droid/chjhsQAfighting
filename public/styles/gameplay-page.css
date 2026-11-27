@@ -196,3 +196,8 @@
 @media(orientation:landscape) and (max-height:450px){#page-gameplay .gameplay-atlas-node img{height:clamp(72px,calc(100dvh - 250px),165px)}#page-gameplay .gameplay-atlas-name{width:min(100%,220px)}#page-gameplay .gameplay-atlas-node>small{margin-top:2px}#page-gameplay .wd-atlas-progress{margin-top:3px}}
 @media(max-width:350px){#page-gameplay .gameplay-atlas-heading h3{font-size:15px}#page-gameplay .gameplay-atlas-tickets{font-size:10px;gap:2px}#page-gameplay .gameplay-atlas-tickets .game-resource-icon{width:15px;height:15px}}
 @media(prefers-reduced-motion:reduce){#page-gameplay .gameplay-atlas-node,#page-gameplay .gameplay-atlas-node img{transition:none}#page-gameplay .gameplay-atlas-node:is(:active,:hover,:focus-visible) img{transform:none}}
+
+/* Keep the shared resource's accessible name from duplicating the atlas label,
+   including the standalone acceptance page without global utility CSS. */
+#page-gameplay .gameplay-atlas-tickets .game-stone-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+#page-gameplay.gameplay-page:has(.gameplay-shell[data-wd-atlas="true"]):not(:has(.gameplay-shell[data-wd-open="true"])){background:#263238}

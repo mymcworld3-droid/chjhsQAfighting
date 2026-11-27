@@ -5,6 +5,7 @@ const assert=require('node:assert/strict'),path=require('node:path'),fs=require(
 const express=require('express'),{chromium}=require('playwright');
 const register=require('../tactical-combat-api.cjs'),API=register.__test;
 const M=require('../public/cultivation/manual-rules.js'),R=require('../public/cultivation/tactical-rules.js');
+const Rewards=require('../weapon-dungeon-rewards.cjs');
 const Receipt=require('../solo-question-receipt.cjs'),{database}=require('../tests/helpers/tactical-db.cjs');
 const output=path.resolve(process.argv[2]||'/tmp/weapon-dungeon-browser');fs.mkdirSync(output,{recursive:true});
 async function main(){
@@ -66,6 +67,9 @@ async function main(){
   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[data-wd-reward-id] img')).every(img=>img.complete&&img.naturalWidth>0));
   assert.equal(await page.locator('#weapon-dungeons-panel header button').count(),1);
   assert.equal(await page.locator('[data-wd-back]').isVisible(),true);
+  assert.equal(await page.locator('[data-wd-back] svg path').count(),1);
+  assert.equal(await page.locator('[data-wd-back] svg').isVisible(),true);
+  assert.equal(await page.locator('.wd-tickets .game-stone-sr-only').evaluate(el=>el.getBoundingClientRect().width<=1),true);
   assert.equal(await page.locator('.wd-ticket-help').isVisible(),false);
   await page.locator('.wd-tickets summary').click();
   assert.equal(await page.locator('.wd-ticket-help').isVisible(),true);
@@ -154,7 +158,14 @@ async function main(){
   const remainingGuards=raw.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length;
   assert(remainingGuards>=8,'guards must remain alive for the boss-only victory regression');
   Object.assign(raw.actors[0],{x:6,y:3,stamina:10});raw.actors[1].hp=1;R.prepareIntents(raw);
-  const victory=await API.command(db,'u1',{roomId:room.id,type:'manual',skillId:'rock-fist',x:6,y:2,revision:raw.revision,requestId:'browser-final-blow'},Date.now());
+  // Force a current-tier roll only in this isolated fixture. The real roll,
+  // inventory transaction and public artwork still execute; probability tests
+  // separately cover all 100 values.
+  const originalRoll=Rewards.roll;let victory;
+  try{Rewards.roll=(...args)=>originalRoll(...args,()=>0);
+   victory=await API.command(db,'u1',{roomId:room.id,type:'manual',skillId:'rock-fist',x:6,y:2,revision:raw.revision,requestId:'browser-final-blow'},Date.now());
+  }finally{Rewards.roll=originalRoll;}
+  assert.ok(victory.manualDrops?.u1?.id,'real transaction awards a weapon');
   assert.equal(victory.status,'finished');
   assert.equal(victory.weaponDungeonResult.cleared,true);
   assert.equal(victory.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length,remainingGuards);
@@ -166,8 +177,16 @@ async function main(){
   assert.equal(await page.locator('[data-manual-xp-toast]').count(),0,'live XP must not obscure the results');
   assert.equal(await page.locator('[data-wd-result="cleared"]').count(),1);
   assert.match(await page.locator('.wd-result-unlock').textContent(),/首次解鎖.*金丹/);
+  assert.equal(await page.locator('.wd-result-crest svg').isVisible(),true);
+  const rewardImage=page.locator('.mr-reward-item--weapon img');await rewardImage.waitFor();
+  await page.waitForFunction(()=>{const im=document.querySelector('.mr-reward-item--weapon img');return im?.complete&&im.naturalWidth>0});
+  await page.locator('.wd-result .mr-reward-skip').waitFor({state:'detached'});
   for(const viewport of [{width:320,height:568},{width:667,height:375},{width:1180,height:820}]){
    await page.setViewportSize(viewport);const settled=page.locator('.tc-dungeon-settlement');assert.equal(await settled.evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+   await settled.evaluate(el=>{el.scrollTop=0;});
+   const geometry=await settled.evaluate(el=>{const a=el.querySelector('.wd-result-crest').getBoundingClientRect(),b=el.querySelector('.wd-result-body').getBoundingClientRect(),f=el.querySelector('.wd-result-actions').getBoundingClientRect(),p=el.getBoundingClientRect();return {crest:a.top>=p.top-1,footer:f.top>=b.bottom-1,modal:document.elementFromPoint(p.left+3,p.top+3)?.closest('.tc-dungeon-settlement')===el};});
+   assert(geometry.crest&&geometry.footer&&geometry.modal,'settlement content must not be covered by battle header or action bar '+viewport.width+'x'+viewport.height);
+   await page.screenshot({path:path.join(output,'victory-top-'+viewport.width+'.png'),animations:'disabled'});
    await page.locator('[data-weapon-dungeon-retry]').scrollIntoViewIfNeeded();assert.equal(await page.locator('[data-weapon-dungeon-retry]').isVisible(),true);
    await page.screenshot({path:path.join(output,'victory-'+viewport.width+'.png'),animations:'disabled'});
   }

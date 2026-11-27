@@ -299,3 +299,10 @@
 }
 @media(max-width:350px){#weapon-dungeons-panel .wd-preparation{padding-inline:7px}#weapon-dungeons-panel .wd-difficulties strong{font-size:11px}#weapon-dungeons-panel .wd-difficulties small{font-size:8px}#weapon-dungeons-panel .wd-ticket-help{max-width:calc(100vw - 16px)}}
 @media(prefers-reduced-motion:reduce){#weapon-dungeons-panel .wd-loading .wd-island{animation:none}}
+
+/* Screenshot acceptance: a real vector return icon, independent of icon-font load. */
+#weapon-dungeons-panel [data-wd-back]{display:grid;place-items:center}
+#weapon-dungeons-panel .wd-nav-glyph,#weapon-dungeons-panel .wd-info-glyph{display:block;flex:none;color:var(--wd-gold)}
+#weapon-dungeons-panel .game-resource-value{display:inline-flex;align-items:center;gap:4px}
+#weapon-dungeons-panel .game-resource-value .game-stone-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+#page-gameplay.gameplay-page:has(.gameplay-shell[data-wd-open="true"]){background:linear-gradient(155deg,#303c42,#202a2f)}
