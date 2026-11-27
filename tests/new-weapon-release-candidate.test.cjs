@@ -75,3 +75,46 @@ test('all 24 transparent candidate assets exist and are mapped',()=>{
   for(const sk of b.skills){const file='assets/skills/'+sk.id+'.svg';assert.ok(fs.existsSync(path.join(root,file)),file);assert.ok(artSource.includes(sk.id));}
  }
 });
+
+function dualBattle(ids){
+ const records=Object.fromEntries(ids.map(id=>[id,{exp:M.totalExpForLevel(10)}]));
+ const equipped=M.normalize({books:records,weaponIds:ids}).equipped;
+ assert.equal(equipped.length,6);
+ const s=R.create({id:'release-dual',mode:'pvp',simultaneous:false,players:[
+  {uid:'u',atk:100,maxHp:10000,manualSkills:equipped,manualWeaponMode:true,manualWeaponIds:ids},
+  {uid:'v',atk:100,maxHp:10000}],now});
+ Object.assign(s,{width:19,height:13,blocks:[]});
+ Object.assign(s.actors[0],p(3,6),{stamina:10});
+ Object.assign(s.actors[1],p(14,6),{hp:10000,maxHp:10000});
+ return s;
+}
+const dualCast=(s,id,x,y)=>R.apply(s,'u',{type:'manual',skillId:id,x,y},now);
+const dualEnd=(s,uid)=>R.apply(s,uid,{type:'end'},now);
+test('authorized mirror plus dragon focus: three discounted attacks, no extra shadow action',()=>{
+ let s=dualBattle(['body-mirror','body-dragon']);
+ s=dualCast(s,'mirror-summon',3,6);
+ assert.equal(s.actors[1].hp,9720);assert.equal(s.actors[0].stamina,6);
+ s=R.answer(s,'u',true,now);s=dualCast(s,'dragon-roar',3,6);
+ assert.equal(s.turnUid,'v');assert.equal(O.owned(s.weaponObjects,'u').length,1);
+ s=dualEnd(s,'v');s=R.answer(s,'u',true,now);
+ assert.equal(R.attackLimit(s.actors[0]),3);
+ const hp=s.actors[1].hp,stamina=s.actors[0].stamina;
+ for(let i=0;i<3;i++)s=dualCast(s,'dragon-strike',4,6);
+ assert.equal(hp-s.actors[1].hp,180);assert.equal(stamina-s.actors[0].stamina,3);
+ assert.equal(s.actors[0].attacks,3);assert.equal(s.actors.length,2);
+ assert.throws(()=>dualCast(s,'dragon-strike',4,6),/三次/);
+ assert.equal(O.owned(s.weaponObjects,'u').length,1);
+});
+test('authorized mirror plus gravity: summon one core, clock advances once per side, strike copies only damage',()=>{
+ let s=dualBattle(['body-mirror','body-gravity']);
+ s=dualCast(s,'mirror-summon',3,6);s=dualCast(s,'gravity-core',4,6);
+ const owned=()=>O.owned(s.weaponObjects,'u'),core=()=>owned().find(o=>o.type==='core');
+ assert.equal(s.actors[0].stamina,2);assert.equal(owned().length,2);assert.equal(core().remainingTriggers,4);
+ s=dualEnd(s,'u');s=dualEnd(s,'v');s=R.answer(s,'u',true,now);
+ assert.equal(core().remainingTriggers,2);
+ const hp=s.actors[1].hp,stamina=s.actors[0].stamina;
+ s=dualCast(s,'gravity-strike',4,6);
+ assert.equal(hp-s.actors[1].hp,60);assert.equal(stamina-s.actors[0].stamina,2);
+ assert.equal(owned().filter(o=>o.type==='core').length,1);assert.equal(core().remainingTriggers,2);
+ assert.equal(s.actors[0].attacks,1);assert.equal(s.actors.length,2);
+});

@@ -245,3 +245,8 @@ fe67669 回歸 3123 項，3122 通過，幾何法線負零 (-0) 在 Node 嚴格�
 
 ### 第19階段：雙旗標完整回歸已通過
 `ef2b9d5` 隱藏旗標 [完整回歸](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45928611376) 3224/3224、0失敗、0跳過；正式目錄12把36招旗標 [候選回歸](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45928611439) 3224/3224、0失敗、0跳過，版本檢查同樣成功。首次候選20項失敗已修正。新增候選CI真旗標瀏覽器矩陣 tactical/coop，使用原本各瀏覽器測試程式與版本建置，仍不修改實際發布旗標。尚待此矩陣結果、十二武器完整實戰（含雙武器特殊組合、實際通關答題數、各階武器副本）平衡驗收及公開後回歸；實體手機未實測，SVG是暫用素材、星隕沿用既有音效。依第19階段公開門檻，RELEASE_NEW_WEAPONS 仍為 false，不宣稱已正式公開。後續不要重做第15–18階段已完成機制；完成缺項並修正所有最新CI失敗後才開旗標。
+
+### 第19階段：最新雙旗標及瀏覽器驗收、實戰矩陣接續（2026-11-27）
+基準 2e70d60 之[隱藏回歸](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45932568255)、[候選回歸與瀏覽器矩陣](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45932568230)、[戰術瀏覽器](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45932568305)、[Pages](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45932567379)、[題庫稽核](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/45932568064) 均成功。候選三個job（回歸3227/3227、tactical、coop）皆成功，包含手機直/橫及平板模擬視窗；非實體裝置。提交以最新 HEAD d4d77e9 為父提交，保留同期題庫文件。
+隔離載入實際戰鬥模組完成十二把三招全裝的第5關24場（Lv1零星及Lv5五星）與築基副本12場（Lv1零星），全部通關；答題數及體力紀錄見 balance 文件。全六階一次執行超時，不算完成。新增分片實戰腳本及候選CI 12個分片，覆蓋十二把與八個特殊雙武器組合、五種試煉關卡及六階武器副本、兩種成長與兩種答對率，共880場，使用實際 create/apply/answer，輸出逐場JSON。離線策略新增陣眼傷害價值及實際蓄勢出手上限；隔離驗證織界/蜃影第8關均通關。新增授權雙武器蜃影+龍象蓄勢及蜃影+星隕時鐘測試，實際模組隔離驗證三次折扣拳法總扣3體力、蜃影180傷害；星核唯一、雙邊時鐘各觸發一次、沉星拳蜃影60且不重觸發星核。以上非新增提交原生CI結果。
+尚須檢查新分片全部結果、分析答題與勝負差異（既有御靈/折光/蜃影可較早命中領主，不擅自更改既定技能）、修復新CI失敗及必要失衡；未實測真機聽感。不更改遊戲核心規則、技能、靜態資源或玩家資料；RELEASE_NEW_WEAPONS 仍為 false，待所有必要驗收通過才正式公開及重建版本表。不要把模擬器單次通關視為最少答題或最優策略。

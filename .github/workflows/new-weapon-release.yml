@@ -7,6 +7,8 @@ on:
       - 'public/assets/weapons/**'
       - 'public/assets/skills/**'
       - 'tests/**'
+      - 'scripts/accept-new-weapon-balance.cjs'
+      - 'scripts/lib/tactical-balance.cjs'
       - '*weapon*.cjs'
       - '*dungeon*.cjs'
       - '.github/workflows/new-weapon-release.yml'
@@ -68,3 +70,27 @@ jobs:
             /tmp/weapon-dungeon-browser/*.png
             /tmp/prism-browser/*.png
           if-no-files-found: ignore
+
+  candidate-balance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Enable candidate in CI workspace only
+        run: |
+          node -e "const fs=require('node:fs');const p='public/cultivation/manual-rules.js';const s=fs.readFileSync(p,'utf8');if(!/const RELEASE_NEW_WEAPONS=(true|false);/.test(s))throw Error('Missing release gate');fs.writeFileSync(p,s.replace('const RELEASE_NEW_WEAPONS=false;','const RELEASE_NEW_WEAPONS=true;'));"
+      - name: Full-loadout trial and six-tier weapon dungeon combat
+        run: node scripts/accept-new-weapon-balance.cjs ${{ matrix.shard }} 12 /tmp/stage19-balance-${{ matrix.shard }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage19-balance-${{ matrix.shard }}
+          path: /tmp/stage19-balance-${{ matrix.shard }}.json
+          if-no-files-found: error

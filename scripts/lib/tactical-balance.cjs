@@ -18,6 +18,7 @@ const variants=Object.freeze([
 ]);
 const emptyHistory=s=>({...s,events:[],receipts:[],rewarded:[]});
 const opponents=(s,a)=>s.actors.filter(b=>R.alive(b)&&b.team!==a.team);
+const activeSeals=s=>s.trial?.layoutVersion===4&&s.objective?.type==='sealing'?(s.objective.points||[]).filter(p=>!p.activated):[];
 const me=(s,uid)=>s.actors.find(a=>a.uid===uid);
 const point=a=>({x:a.x,y:a.y});
 function random(seed){return R.seeded(String(seed));}
@@ -51,7 +52,7 @@ function harm(source,target,sk){
 }
 function options(s,a,budget=a.stamina){
   const results=[],enemies=opponents(s,a),manualIds=a.manualSkills?.length?a.manualSkills:[null];
-  if(a.attacks>=R.LIMITS.attacks||a.actions>=R.LIMITS.actions)return results;
+  if(a.attacks>=R.attackLimit(a)||a.actions>=R.LIMITS.actions)return results;
   for(const manualId of manualIds){
   const selected=manualId?R.manualSkillFor(a,manualId):R.BASIC;if(!selected)continue;
   const cost=R.techniqueCost(a,selected);
@@ -59,7 +60,7 @@ function options(s,a,budget=a.stamina){
   // Aim with the same geometry supplied to real players. Prioritize cells
   // near enemies while retaining all four cardinal directions for line attacks.
   const positions=selected.kind==='weave-thread'?Weave.plans(Prism.boardForTrial(s),a,selected,s.weaponObjects,a.uid).pairs.map(pair=>({...pair.second,first:pair.first})):selected.range===0?[point(a)]:R.aimCells(s,a,selected);
-  const best=positions.map(p=>({p,proximity:Math.min(...enemies.map(b=>R.dist(b,p)))}))
+  const best=positions.map(p=>({p,proximity:Math.min(...[...enemies,...activeSeals(s)].map(b=>R.dist(b,p)))}))
     .sort((x,y)=>x.proximity-y.proximity||x.p.y-y.p.y||x.p.x-y.p.x)
     .slice(0,maxTargets);
   for(const {p} of best){
@@ -79,6 +80,7 @@ function options(s,a,budget=a.stamina){
       value+=hpLoss+shieldLoss*.6+(pushed?b.atk*.3:0);
       if(hpLoss&&current.hp===0)value+=a.atk*.8;
     }
+    for(const seal of activeSeals(s)){const updated=next.objective?.points?.find(p=>R.key(p)===R.key(seal));if(updated)value+=Math.max(0,seal.hp-updated.hp)/R.SEAL_HIT_DAMAGE*a.atk*1.2;}
     value+=Math.max(0,after.hp-a.hp)*hpWeight(a);
     value+=Math.max(0,(after.shield||0)-(a.shield||0))*.65;
     if(selected.kind==='flying-sword'&&!a.flyingSword&&after.flyingSword)value+=a.atk*.9;
@@ -89,7 +91,7 @@ function options(s,a,budget=a.stamina){
   }
   }
   const danger=incoming(s,a);
-  if(a.attacks<R.LIMITS.attacks&&(a.guard||0)<.4&&danger>0)
+  if(a.attacks<R.attackLimit(a)&&(a.guard||0)<.4&&danger>0)
     results.push({command:{type:'guard'},value:danger*(.4-(a.guard||0))*hpWeight(a),cost:0,id:'guard'});
   return results.sort((x,y)=>y.value-x.value||x.cost-y.cost||x.id.localeCompare(y.id)||
     ((x.command.y||0)-(y.command.y||0))||((x.command.x||0)-(y.command.x||0)));
@@ -110,7 +112,7 @@ function potential(s,a,accuracy){
   return score;
 }
 function approach(s,a){
-  const enemies=opponents(s,a);return Math.min(...enemies.map(b=>R.dist(a,b)));
+  const seals=activeSeals(s),targets=seals.length?seals:opponents(s,a);return targets.length?Math.min(...targets.map(b=>R.dist(a,b))):0;
 }
 function moveChoice(s,a,accuracy,{escape=false,visited=new Set()}={}){
   const dangers=new Set(warnings(s,a).map(R.key)),base=potential(s,a,accuracy)-hazardDamage(s,a)*hpWeight(a)-approach(s,a)*a.atk*.06;
