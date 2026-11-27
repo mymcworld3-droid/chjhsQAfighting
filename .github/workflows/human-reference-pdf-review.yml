@@ -1,0 +1,52 @@
+name: Human reference PDF review preparation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/human-reference-pdf-review.yml
+      - scripts/prepare-human-reference-review.cjs
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate candidate queue and extraction helpers
+        run: |
+          node --check scripts/prepare-human-reference-review.cjs
+          node scripts/prepare-human-reference-review.cjs --self-test
+          node scripts/prepare-human-reference-review.cjs --manifest-only --out "$RUNNER_TEMP/reference-review"
+      - name: Install PDF tools
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - name: Acquire and extract originals for review
+        run: |
+          node scripts/prepare-human-reference-review.cjs --download --render --out "$RUNNER_TEMP/reference-review"
+      - name: Upload source status report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reference-review-report
+          path: |
+            ${{ runner.temp }}/reference-review/worklist.json
+            ${{ runner.temp }}/reference-review/extraction-report.json
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Upload unapproved source evidence for private repository reviewers
+        if: always() && github.event.repository.private == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: reference-review-unapproved-evidence
+          path: |
+            ${{ runner.temp }}/reference-review/evidence/
+            ${{ runner.temp }}/reference-review/raw-candidates.json
+          if-no-files-found: warn
+          retention-days: 3
