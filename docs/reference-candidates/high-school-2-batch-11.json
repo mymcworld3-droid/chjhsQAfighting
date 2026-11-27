@@ -255,7 +255,8 @@
             "label": "5",
             "text": "9"
           }
-        ]
+        ],
+        "optionSuffix": "個"
       },
       "flags": [
         "math-rendered-web-text-needs-visual-check",
@@ -1468,7 +1469,8 @@
               "0.40",
               "0.38"
             ]
-          ]
+          ],
+          "columnGroup": "溫度"
         }
       },
       "transcriptionStatus": "draft-text-layer-only",
