@@ -72,3 +72,13 @@ test('published balance counts cover every matchup, paired seed and trial withou
   const expected=153*6*(d.config.seeds+2*d.config.sensitivitySeeds)+18*6*d.config.seeds+19*d.config.stages.length*d.config.pveSeeds;
   assert.equal(total,expected);
 });
+
+test('V4 counts a real displacement from an active warning to stagger, not a null intent',()=>{
+ const {interruptedWarning}=require('../scripts/accept-new-weapon-balance.cjs');
+ const before={x:1,y:1,hp:100,intent:{cells:[{x:2,y:1}]}};
+ assert.equal(interruptedWarning(before,{x:2,y:1,hp:90,intent:{kind:'stagger',cells:[]}}),true);
+ assert.equal(interruptedWarning(before,{x:1,y:1,hp:90,intent:{kind:'stagger',cells:[]}}),false);
+ assert.equal(interruptedWarning(before,{x:2,y:1,hp:0,intent:{kind:'stagger',cells:[]}}),false);
+ assert.equal(interruptedWarning(before,{x:2,y:1,hp:90,intent:null}),false);
+ assert.equal(interruptedWarning({...before,intent:{kind:'stagger',cells:[]}},{x:2,y:1,hp:90,intent:{kind:'stagger',cells:[]}}),false);
+});

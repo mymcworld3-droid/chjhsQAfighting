@@ -157,8 +157,25 @@ function choose(s,uid,accuracy,visited,moves){
   if(moves===0){const movement=moveChoice(s,a,accuracy,{visited});if(movement)return movement;}
   return {type:'end'};
 }
-function playTurn(state,uid,{accuracy=.7,seed='0',audit=null,metrics=null}={}){
-  let s=state,moves=0;const visited=new Set([R.key(me(s,uid))]);
+// Separate opt-in policy: preview legal independent sword movement with the
+// production engine, accept only real enemy HP loss, at most one per turn.
+function damagingSwordMove(s,a){
+ if(!a.flyingSword)return null;
+ const enemies=opponents(s,a);
+ if(!enemies.length)return null;
+ const destinations=R.swordMoveCells(s,a).sort((x,y)=>Math.min(...enemies.map(b=>R.dist(x,b)))-Math.min(...enemies.map(b=>R.dist(y,b)))||x.cost-y.cost||x.y-y.y||x.x-y.x).slice(0,16);
+ let best=null,bestValue=0;
+ for(const p of destinations){
+  const command={type:'sword-move',x:p.x,y:p.y};
+  let next;try{next=R.apply(emptyHistory(s),a.uid,command,NOW);}catch(_){continue;}
+  const damage=enemies.reduce((sum,b)=>sum+Math.max(0,b.hp-(me(next,b.uid)?.hp??b.hp)),0);
+  const value=damage/(p.cost||1);
+  if(value>bestValue){best=command;bestValue=value;}
+ }
+ return best;
+}
+function playTurn(state,uid,{accuracy=.7,seed='0',audit=null,metrics=null,flightPolicy=false}={}){
+  let s=state,moves=0,flightMoved=false;const visited=new Set([R.key(me(s,uid))]);
   const answers=random(seed+':'+uid+':'+me(s,uid).turns),outcomes=[answers()<accuracy,answers()<accuracy];
   const execute=command=>{
     const before=s;s=R.apply(emptyHistory(s),uid,command,NOW);
@@ -171,7 +188,9 @@ function playTurn(state,uid,{accuracy=.7,seed='0',audit=null,metrics=null}={}){
     if(a.questions<2&&a.stamina<=6){
       const before=s,correct=outcomes[a.questions];s=R.answer(emptyHistory(s),uid,correct,NOW);if(audit)audit({type:'answer',uid,correct,before,after:s});continue;
     }
-    let command=a.actions>=R.LIMITS.actions?{type:'end'}:choose(s,uid,accuracy,visited,moves);
+    const flight=flightPolicy&&!flightMoved&&a.actions<R.LIMITS.actions?damagingSwordMove(s,a):null;
+    let command=flight|| (a.actions>=R.LIMITS.actions?{type:'end'}:choose(s,uid,accuracy,visited,moves));
+    if(flight)flightMoved=true;
     if(command.type==='end'&&a.questions<2&&a.stamina<10){
       const before=s,correct=outcomes[a.questions];s=R.answer(emptyHistory(s),uid,correct,NOW);if(audit)audit({type:'answer',uid,correct,before,after:s});continue;
     }
@@ -195,4 +214,4 @@ function trial(v,{stage=1,accuracy=.7,seed='0',stats={},audit=null}={}){
   while(s.status==='active')s=playTurn(s,'seat0',{accuracy,seed,audit});
   return {winner:s.winner,reason:s.finishReason,turns:s.turn,hp:s.actors[0].hp,map,enemySpecies:s.actors.filter(a=>a.bot).map(a=>a.species)};
 }
-module.exports={R,NOW,variants,random,options,playTurn,duel,trial,fighter};
+module.exports={R,NOW,variants,random,options,playTurn,duel,trial,fighter,damagingSwordMove};
