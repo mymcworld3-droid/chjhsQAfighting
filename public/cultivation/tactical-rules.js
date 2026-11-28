@@ -218,7 +218,7 @@
       return {...profile,name:m.name,attackName:sk.name,attack:{...sk},move:{kind:'heavy',steps:1},moveName:'重步',
         attackText:m.dungeonSkills.map(sk=>sk.name).join('、')+(sk.warning==='locked'?'；預告鎖定後不追蹤。':'；蓄勢會追蹤合法方向及射程。'),
         moveText:m.trackingAttack?'普通移動最多一格；穿刺突進另有合法技能位移。':m.dungeonSkills.some(sk=>sk.shape==='charge')?'普通移動最多一格；衝撞沿鎖定路徑逐格推動修士。':'普通移動最多一格。',
-        tip:sk.warning==='locked'?'離開已顯示的危險格，或成功擊退打斷蓄勢。':'避開合法攻擊線或射程，或成功擊退打斷蓄勢。'};
+        tip:sk.warning==='locked'?'離開已顯示的危險格，或成功擊退打斷蓄勢。'+(m.dungeonResistanceEvery?'重甲可週期性抵消一格擊退。':''):'避開合法攻擊線或射程，或成功擊退打斷蓄勢。'};
     }
     if(!m.trackingAttack)return profile;
     return {...profile,name:m.name,attackName:m.weaponDungeonLord?'尖峰崩裂':'追蹤落石',
@@ -338,16 +338,50 @@
     }
     return {cells,path,waves,direction,target};
   }
-  function dungeonIntent(s,m,hero,prior=null){
+  const wildAi=(s,m)=>s.weaponDungeon?.id==='beast-wilds'&&m.dungeonAiVersion===1;
+  // A reachable safe tile remains outside the complete union of locked
+  // warnings. Four movement points are a provisional design allowance; two
+  // correct answers can grant eight. Paths can cross warnings before execution.
+  function dungeonEscapeCells(s,hero,budget=4){
+    const queue=[{...point(hero),steps:0}],seen=new Set([key(hero)]);
+    for(let i=0;i<queue.length;i++){
+      const q=queue[i];if(q.steps>=budget)continue;
+      for(const p of neighbours(s,q))if(!seen.has(key(p))&&canOccupy(s,hero,p)){
+        seen.add(key(p));queue.push({...p,steps:q.steps+1});
+      }
+    }
+    return queue;
+  }
+  function dungeonOutward(m,hero){
+    const body=footprint(m);
+    const center={x:body.reduce((a,p)=>a+p.x,0)/body.length,y:body.reduce((a,p)=>a+p.y,0)/body.length};
+    return bell().outward(center,hero);
+  }
+  function dungeonIntent(s,m,hero,prior=null,coordination=null){
     const choices=dungeonSkillSet(s,m);
     // A tracking warning can move, but may never silently switch skills.
     const last=choices.findIndex(sk=>sk.id===m.lastDungeonSkill);
-    const ordered=last<0?choices:[...choices.slice(last+1),...choices.slice(0,last+1)];
+    let ordered=last<0?choices:[...choices.slice(last+1),...choices.slice(0,last+1)];
+    const highLord=wildAi(s,m)&&m.weaponDungeonLord&&(s.weaponDungeon.difficulty??0)>=4;
+    if(highLord&&m.dungeonChargeStreak===1)ordered=[...ordered.filter(sk=>sk.shape==='charge'),...ordered.filter(sk=>sk.shape!=='charge')];
+    if(highLord&&m.dungeonChargeStreak>=2)ordered=ordered.filter(sk=>sk.shape!=='charge');
+    // Later actors have already selected their warnings for the upcoming
+    // window. Prefer a legal shock that can push into a later charge lane,
+    // without changing the stable enemy execution order.
+    if(coordination&&wildAi(s,m)&&(s.weaponDungeon.difficulty??0)>=1&&!(highLord&&m.dungeonChargeStreak===1)){
+      const d=dungeonOutward(m,hero),p=d?{x:hero.x+d.x,y:hero.y+d.y}:null;
+      if(p&&canOccupy(s,hero,p)&&coordination.chargeDanger.has(key(p)))
+        ordered=[...ordered.filter(sk=>sk.shape==='square'),...ordered.filter(sk=>sk.shape!=='square')];
+    }
     const candidates=prior?[choices.find(sk=>sk.id===prior.skillId)||(!prior.skillId?choices[0]:null)].filter(Boolean):ordered;
     for(const sk of candidates){
       if(!dungeonSkillAllowed(s,m,sk))continue;
       const plan=dungeonSkillPlan(s,m,hero,sk),ready=plan.cells.length>0;
       if(!ready&&!prior)continue;
+      if(coordination&&ready){
+        const cells=new Set(plan.cells.map(key));
+        if(!coordination.escape.some(p=>!cells.has(key(p))&&!coordination.danger.has(key(p))))continue;
+      }
       return {version:3,kind:'attack',skillId:sk.id,skillName:sk.name,origin:point(m),...plan,
         shape:sk.shape,power:sk.power,warning:sk.warning,tracking:sk.warning==='tracking',
         animation:sk.animation||sk.shape,requiresPath:!!sk.requiresPath,slow:!!sk.slow,push:sk.push||0,interruptible:true,
@@ -691,6 +725,7 @@
       ...(raw.bot?{level:Math.max(1,num(raw.level)||1),...(raw.trackingAttack?{trackingAttack:true}:{}),...(raw.weaponDungeonLord?{weaponDungeonLord:true}:{})}:{}),
       ...(raw.bot&&Array.isArray(raw.dungeonSkills)?{dungeonSkills:clone(raw.dungeonSkills)}:{}),
       ...(raw.bot&&['charge','shock','lord'].includes(raw.dungeonRole)?{dungeonRole:raw.dungeonRole}:{}),
+      ...(raw.bot&&raw.dungeonAiVersion===1?{dungeonAiVersion:1,dungeonResistanceEvery:Math.max(0,Math.trunc(num(raw.dungeonResistanceEvery))),dungeonResistanceAttempts:0,dungeonChargeStreak:0}:{}),
       ...(raw.bot&&raw.role?{role:raw.role,home:raw.home}:{}),
       ...(raw.boss?{boss:true,footprint:{width:2,height:2},...(raw.bossKind?{bossKind:raw.bossKind}:{})}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
@@ -905,6 +940,13 @@
   function push(s,a,target,steps,direction=pushDirection(a,target),weaponGroup=null){
     if(!direction||target.boss&&!target.trackingAttack&&!soloDungeonBeast(s,target))return;
     const route=[point(target)],{x:dx,y:dy}=direction;
+    // Deterministic partial resistance only for new high-tier Wilds beasts;
+    // blocked terrain does not consume a resistance attempt. Actual movement
+    // still interrupts, even when one cell of a longer push is resisted.
+    if(wildAi(s,target)&&target.dungeonResistanceEvery>=2&&steps>0&&canOccupy(s,target,{x:target.x+dx,y:target.y+dy})){
+      target.dungeonResistanceAttempts=(target.dungeonResistanceAttempts||0)+1;
+      if(target.dungeonResistanceAttempts%target.dungeonResistanceEvery===0)steps--;
+    }
     for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(!canOccupy(s,target,p))break;target.x=p.x;target.y=p.y;route.push(point(target));}
     motion(s,target,route,'push',target.name+'被擊退',weaponGroup);
     if(target.bot&&route.length>1)interruptMonster(target);
@@ -1720,6 +1762,26 @@
         power:profile.attack.power||1,slow:!!profile.attack.slow,push:profile.attack.push||0,
         text:ready?'下次：'+name:'下次：'+profile.moveName+(profile.move.steps?' '+profile.move.steps+' 格':'')};
     }
+    coordinateWildIntents(s,hero,preserveDungeonIntents);
+  }
+  // Finalize new Wilds warnings only at the start of a player window, after
+  // every enemy has moved. Never replan an interrupted warning or re-aim
+  // while the player can act. Old room snapshots retain their behavior.
+  function coordinateWildIntents(s,hero,preserve){
+    const beasts=s.actors.filter(m=>alive(m)&&m.bot&&wildAi(s,m));
+    if(!beasts.length)return;
+    const coordination={escape:dungeonEscapeCells(s,hero),danger:new Set(),chargeDanger:new Set()};
+    for(const m of s.actors.filter(a=>alive(a)&&a.bot&&!wildAi(s,a))){
+      if(m.intent?.kind==='attack')for(const q of m.intent.cells||[])coordination.danger.add(key(q));
+    }
+    for(const m of beasts.reverse()){
+      if(preserve&&m.intent?.kind==='stagger')continue;
+      m.intent=dungeonIntent(s,m,hero,null,coordination);
+      if(m.intent.kind==='attack')for(const p of m.intent.cells){
+        coordination.danger.add(key(p));
+        if(m.intent.shape==='charge')coordination.chargeDanger.add(key(p));
+      }
+    }
   }
   // The solo weapon-dungeon turn is one atomic attack (if previously warned),
   // followed by at most one ordinary move and preparation for the next window.
@@ -1766,13 +1828,38 @@
     }
     if(!hit)log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});
   }
+  // Reuse the bell's square-ring geometry (in dungeonSkillPlan) and its
+  // cardinal outward rule, but use the full beast footprint's centre. The
+  // snapshot is authoritative; one cast/impact per wave, fresh hero position.
+  function resolveWildShock(s,m,hero,intent){
+    const origin=point(m),skillId=intent.skillId,advertised=new Set((intent.cells||[]).map(key));
+    const waves=intent.waves?.length?intent.waves:[{layer:1,cells:intent.cells||[]}];
+    let hit=false;
+    for(const wave of waves.slice(0,4)){
+      if(s.status!=='active'||!alive(m)||!alive(hero))break;
+      const cells=[...new Map(wave.cells.filter(p=>advertised.has(key(p))&&!blocked(s,p)&&!covers(m,p)).map(p=>[key(p),p])).values()];
+      log(s,m.name+'施展「'+intent.skillName+'」'+(waves.length>1?' · 第 '+wave.layer+' 層':''),'monster-attack',
+        {actor:m.uid,skill:skillId,animation:{kind:'cast',style:skillId,origin,target:origin,cells,waveLayer:wave.layer,waveRadius:waves.length>1?wave.layer:2,footprint:{width:m.footprint?.width||1,height:m.footprint?.height||1},color:'#d9a080'}});
+      if(!cells.some(p=>covers(hero,p)))continue;
+      hit=true;
+      damage(s,m,hero,m.atk*(intent.power??1),{skill:skillId,strike:wave.layer});
+      checkFinished(s);
+      if(s.status!=='active'||!alive(m)||!alive(hero))break;
+      if(intent.push)push(s,m,hero,intent.push,dungeonOutward(m,hero));
+    }
+    if(!hit)log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});
+  }
   function weaponDungeonMonsterTurn(s,m,hero){
     if(s.status!=='active'||!alive(m)||!alive(hero))return;
     const intent=m.intent;
     if(intent?.kind==='attack'&&(!intent.origin||key(intent.origin)===key(m))){
+      if(wildAi(s,m))m.dungeonChargeStreak=intent.shape==='charge'?Math.min(2,(m.dungeonChargeStreak||0)+1):0;
       if(intent.shape==='charge'){
         m.lastDungeonSkill=intent.skillId;
         resolveDungeonCharge(s,m,hero,intent);
+      }else if(intent.skillId==='wild-shock'||intent.skillId==='wild-echo'){
+        m.lastDungeonSkill=intent.skillId;
+        resolveWildShock(s,m,hero,intent);
       }else{
       // Resolve only the published snapshot, including legacy v2 warnings.
       let cells=intent.cells||[];
@@ -2125,5 +2212,5 @@
     if(s.weaponObjects)s.weaponObjects=weave().finish(s.weaponObjects);
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterProfileFor,trackingCells,DUNGEON_ENEMY_SKILLS,dungeonDamageMultiplier,dungeonSkillPlan,dungeonIntent,retargetTrackingIntents,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,previewCast,skillPreviewPlan,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterProfileFor,trackingCells,DUNGEON_ENEMY_SKILLS,dungeonDamageMultiplier,dungeonEscapeCells,dungeonSkillPlan,dungeonIntent,retargetTrackingIntents,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,previewCast,skillPreviewPlan,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

@@ -123,7 +123,7 @@
 
 - 修正提交 7437438 的完整回歸 [46113718535](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46113718535)、候選版 [46113718542](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46113718542)、真實瀏覽器 [46113718530](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46113718530)、Pages [46113718146](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46113718146) 全部成功。第四階段結案。
 
-## 第 5 階段：蠻獸衝撞（程式已實作，待 CI）
+## 第 5 階段：蠻獸衝撞（已驗收）
 
 - 三隻赤鬃蠻豬與 2×2 領主配置鎖定 charge；普通最多三格、領主四格、基本傷害倍率 1、撞牆額外倍率 .5，均為第八階段待調整的暫定數值，不改尖峰石域。震波型仍用階段四測試攻擊，階段六替換正式震波。
 - 選擇可命中玩家的四向合法完整掃掠占位；預告保存固定方向、路徑、最大距離、全部格位及倍率。玩家移動不重瞄；結算僅縮短原有路徑，逐格檢查最新地形、其他靈獸、完整占位及玩家。單次技能首次接觸造成一次基礎傷害；後續每步持續推動，不重複基礎扣血。岩壁/邊界造成一次額外碰撞傷害並停止，其他角色阻擋只停止、不追加傷害或連鎖推動。死亡、反傷通關立即停止；保留共通攻擊後普通移動與再準備、實際擊退打斷及舊房間技能快照。
@@ -136,3 +136,16 @@
 - 實作提交 [8d1253e99dbb9cd35d92b6502fcdc5f43560d7b3](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/8d1253e99dbb9cd35d92b6502fcdc5f43560d7b3)。2026-11-28T07:58:27.4718657Z module-versions.json 與靜態資源一致；2026-11-28T07:59:01.5894198Z # tests 3305；2026-11-28T07:59:01.5894595Z # pass 3304；2026-11-28T07:59:01.5894791Z # fail 0；2026-11-28T07:59:01.5895177Z # skipped 1。
 - [Tactical browser acceptance 46123600978](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46123600978)：in_progress/未結論；[New weapon release candidate acceptance 46123600950](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46123600950)：in_progress/未結論；[Cultivation regression tests 46123600923](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46123600923)：completed/success；[pages build and deployment 46123600504](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46123600504)：completed/success。
 - 本地完整工作樹不可用，以 GitHub Actions 執行驗收。七組新增測試已納入完整回歸。候選版、瀏覽器、部署與最新文件提交 CI 均須確認成功後才開始第六階段；不提前公開萬獸險域。
+
+### 第五階段正式結案（2026-11-28）
+
+- 8d1253e 的回歸 46123600923、候選版 46123600950、瀏覽器 46123600978、Pages 46123600504 均成功；最新文件 7f40da4 的回歸 46123682334、瀏覽器 46123682239、Pages 46123681635 皆成功。
+
+## 第 6 階段：方形震波及靈獸 AI（程式已實作，待 CI）
+
+- 重用鳴鐘圖騰的 squareRing/squareArea 幾何及 outward 方向規則：震地兩層聯集只命中一次，連環震地四個互斥外圈依序讀取當前玩家位置，每層最多一次傷害及一格合法擊退。2×2 領主以完整占位最短 Chebyshev 距離及占位中心向外推動，阻擋不重複命中，反傷或死亡立即停止。每層獨立實際事件及基礎方形動畫，未更動玩家鳴鐘圖騰。
+- 新房間全部正式配置：三赤鬃蠻豬衝撞、三裂地蠻牛震地（合體/渡劫另可衝撞）、領主三技能。舊測試房間保留技能快照。萬獸仍 hidden。
+- 暫定六階：普通衝撞 3/3/4/4/5/5 格，領主 4/4/5/5/6/6 格；震地 0.8+0.03*d，連環震地每層 0.45+0.03*d（d=0..5）。化神起領主每第三次合法擊退抵消一格、渡劫每第二次；合體裂地蠻牛每第四次、渡劫每第三次。只有實際位移才打斷；不適用其他副本或非推動技能。合體起領主可連續兩個各自完整預告的衝撞，之後需換招。
+- 新房間於玩家回合開始、所有敵人位移完成後，逆行動順序選擇下一次鎖定預告；金丹起優先合法震波推入後續已預告衝撞線；穩定行動順序不變。每次加入預告保留四步內至少一個不在聯集危險格的可達位置。四步是暫定體力預算，不代表任何剩餘體力或主動站位都必然安全；第八階段進行完整答題成本及實戰平衡。保留 stagger，不在玩家行動中重瞄。
+- 新增八組測試：震地單次/完整占位、四層結算和動畫、阻擋及閃避、擊退及反傷終局、六階與抵抗、連續衝撞限制、多種子安全格及實際閃避、震波衝撞配合；原階段五配置斷言更新為正式震地，保留其餘全部測試。
+- 修改 public/cultivation/weapon-dungeon-rules.js、public/cultivation/tactical-rules.js、public/cultivation/tactical-skill-effects.js、public/cultivation/tactical-combat.js、tests/weapon-dungeons.test.cjs、public/module-versions.json、本文件。待 npm test、npm run test:battle、npm run check:module-versions、瀏覽器、候選版及 Pages，最新 CI 全通過才進入第七階段。數值暫定，美術及完整平衡留後續階段。

@@ -657,10 +657,12 @@ const chargeSteps=s=>s.events.filter(e=>e.type==='displace'&&e.skill==='wild-cha
 const chargeHits=s=>s.events.filter(e=>e.type==='damage'&&e.skill==='wild-charge');
 const wallHits=s=>s.events.filter(e=>e.type==='damage'&&e.skill==='wild-charge-wall');
 const guardAt=(x,y)=>R.actor({uid:'blocker',bot:true,team:'monster',species:8,atk:1,maxHp:10000,dungeonSkills:[]},{x,y});
-test('wild charge is configured for three boars and lord only, shock guards retain their stage-four test strike',()=>{
+test('wild charge is configured for three boars and lord at foundation, shock guards use their real shockwave',()=>{
  const s=R.create({id:'charge-map',players:[hero()],trial:{seed:'wild-charge',weaponDungeon:{id:W.WILD_ID,difficulty:0}},now:NOW});
  for(const m of s.actors.slice(1)){
-  assert.equal(m.dungeonSkills[0].shape,m.dungeonRole==='shock'?'point':'charge');
+  assert.equal(m.dungeonSkills[0].shape,m.dungeonRole==='shock'?'square':'charge');
+  assert.ok(m.dungeonSkills.every(sk=>sk.id!=='wild-test-hit'));
+  if(m.weaponDungeonLord)assert.deepEqual(m.dungeonSkills.map(sk=>sk.id),['wild-charge','wild-shock','wild-echo']);
   assert.equal(m.dungeonSkills[0].warning,'locked');
  }
 });
@@ -735,4 +737,117 @@ test('reflection that defeats the charging lord stops charge and all subsequent 
  assert.equal(next.status,'finished');assert.equal(next.winner,'player');
  assert.equal(chargeHits(next).length,1);assert.equal(wallHits(next).length,0);
  assert.equal(next.actors[0].x,7);assert.ok(!next.events.some(e=>e.actor==='blocker'&&['monster-attack','monster-move'].includes(e.type)));
+});
+
+function shockScene(skill=W.WILD_SHOCK.ground,options={}){
+ const s=chargeScene(options);const m=s.actors[1];m.dungeonSkills=[skill];R.prepareIntents(s);return s;
+}
+const waveHits=(s,id)=>s.events.filter(e=>e.type==='damage'&&e.skill===id);
+test('two-ring shock shares bell geometry, hits once and pushes outward from the full footprint centre',()=>{
+ const G=require('../public/cultivation/weapon-geometry.js');
+ let s=shockScene(W.WILD_SHOCK.ground,{enemy:{x:4,y:4},player:{x:6,y:5}});
+ const expected=G.squareArea({width:s.width,height:s.height,blocked:p=>R.blocked(s,p)},s.actors[1],2);
+ assert.deepEqual(new Set(s.actors[1].intent.cells.map(R.key)),new Set(expected.map(R.key)));
+ let next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(next.actors[0].hp,9920);assert.equal(waveHits(next,'wild-shock').length,1);assert.equal(next.actors[0].x,7);
+ s=shockScene(W.WILD_SHOCK.ground,{boss:true,player:{x:4,y:6}});
+ assert.equal(s.actors[1].intent.cells.length,32);
+ next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(next.actors[0].hp,9920);assert.equal(next.actors[0].y,7);assert.equal(next.actors[0].x,4);
+});
+test('four echo waves use disjoint complete 2x2 rings, fresh position, and separately committed animation and damage',()=>{
+ const s=shockScene(W.WILD_SHOCK.echo,{boss:true,player:{x:6,y:5}}),intent=s.actors[1].intent;
+ assert.deepEqual(intent.waves.map(w=>w.cells.length),[12,20,28,36]);
+ assert.equal(new Set(intent.cells.map(R.key)).size,96);
+ const next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(next.actors[0].hp,9820);assert.equal(next.actors[0].x,10);
+ assert.deepEqual(waveHits(next,'wild-echo').map(e=>e.x),[6,7,8,9]);
+ const casts=next.events.filter(e=>e.type==='monster-attack'&&e.skill==='wild-echo');
+ assert.deepEqual(casts.map(e=>e.animation.waveLayer),[1,2,3,4]);
+ assert.deepEqual(casts.map(e=>e.animation.cells),intent.waves.map(w=>w.cells));
+ assert.deepEqual(next,R.apply(JSON.parse(JSON.stringify(s)),'u1',{type:'end'},NOW));
+ const A=require('../public/cultivation/tactical-animation.js');
+ assert.deepEqual(A.plan(s,next,'u1').filter(e=>e.kind==='cast'&&e.skill==='wild-echo').map(e=>e.waveLayer),[1,2,3,4]);
+});
+test('wall-blocked echo does not repeat the same ring; locked warning permits complete escape',()=>{
+ let s=shockScene(W.WILD_SHOCK.echo,{boss:true,player:{x:6,y:5},blocks:[{x:7,y:5}]});
+ let next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(waveHits(next,'wild-echo').length,1);assert.equal(next.actors[0].hp,9955);assert.equal(next.actors[0].x,6);
+ s=shockScene(W.WILD_SHOCK.echo,{boss:true,player:{x:6,y:5}});
+ const warning=structuredClone(s.actors[1].intent);
+ s=R.apply(s,'u1',{type:'move',x:10,y:5},NOW);assert.deepEqual(s.actors[1].intent,warning);
+ next=R.apply(s,'u1',{type:'end'},NOW);assert.equal(next.actors[0].hp,10000);
+ assert.equal(waveHits(next,'wild-echo').length,0);
+});
+test('shock and echo are interrupted on actual displacement and reflection immediately ends a lord wave',()=>{
+ for(const sk of [W.WILD_SHOCK.ground,W.WILD_SHOCK.echo]){
+  const s=shockScene(sk,{boss:true,enemy:{x:7,y:4},player:{x:5,y:4}});
+  const next=R.apply(s,'u1',{type:'manual',skillId:'rock-break',x:6,y:4},NOW);
+  assert.ok(next.actors[1].x>7);assert.equal(next.actors[1].intent.kind,'stagger');
+  assert.equal(waveHits(R.apply(next,'u1',{type:'end'},NOW),sk.id).length,0);
+ }
+ const s=shockScene(W.WILD_SHOCK.echo,{boss:true,player:{x:6,y:5}});
+ s.actors[1].hp=1;s.actors[0].counter=1;
+ const next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(next.status,'finished');assert.equal(waveHits(next,'wild-echo').length,1);
+ assert.equal(next.actors[0].x,6);
+});
+test('six tiers have real roles, bounded charge lengths, echo powers and explicit high-tier partial resistance',()=>{
+ for(let d=0;d<6;d++){
+  const s=R.create({id:'wild-tier',players:[hero()],trial:{seed:'tier',weaponDungeon:{id:W.WILD_ID,difficulty:d}},now:NOW});
+  assert.deepEqual(s.actors[1].dungeonSkills.map(sk=>sk.id),['wild-charge','wild-shock','wild-echo']);
+  assert.equal(s.actors[1].dungeonSkills[0].range,4+Math.floor(d/2));
+  assert.equal(s.actors[1].dungeonResistanceEvery,W.wildResistance('lord',d));
+  for(const m of s.actors.slice(2)){
+   assert.deepEqual(m.dungeonSkills.map(sk=>sk.id),m.dungeonRole==='charge'?['wild-charge']:d>=4?['wild-shock','wild-charge']:['wild-shock']);
+  }
+ }
+ const s=chargeScene({boss:true,enemy:{x:7,y:4},player:{x:6,y:4}});
+ Object.assign(s.actors[1],{dungeonAiVersion:1,dungeonResistanceEvery:2,dungeonResistanceAttempts:1});
+ // A one-cell push on every second valid attempt is resisted; a longer
+ // push loses one cell but still interrupts when actual displacement occurs.
+ const m=s.actors[1];m.dungeonResistanceAttempts=0;
+ const first=R.apply(s,'u1',{type:'manual',skillId:'rock-break',x:7,y:4},NOW);
+ assert.ok(first.actors[1].x>7);assert.equal(first.actors[1].intent.kind,'stagger');
+ assert.equal(first.actors[1].dungeonResistanceAttempts,1);
+ const resisted=structuredClone(s);resisted.actors[1].dungeonResistanceAttempts=1;
+ const second=R.apply(resisted,'u1',{type:'manual',skillId:'rock-break',x:7,y:4},NOW);
+ assert.equal(second.actors[1].dungeonResistanceAttempts,2);
+ assert.equal(second.actors[1].x-7,Math.max(0,first.actors[1].x-8));
+ assert.equal(second.actors[1].intent.kind,second.actors[1].x>7?'stagger':'attack');
+});
+test('high-tier lord can warn a second charge only in the next window and must rotate after two',()=>{
+ const s=chargeScene({boss:true,player:{x:7,y:4}});
+ s.weaponDungeon.difficulty=4;
+ const m=s.actors[1];Object.assign(m,{dungeonAiVersion:1,dungeonSkills:W.wildSkills('lord',4),dungeonChargeStreak:1,lastDungeonSkill:'wild-charge'});
+ assert.equal(R.dungeonIntent(s,m,s.actors[0]).skillId,'wild-charge');
+ m.dungeonChargeStreak=2;
+ assert.notEqual(R.dungeonIntent(s,m,s.actors[0]).skillId,'wild-charge');
+});
+test('new Wilds combined warnings always leave a reachable safe tile across seeds, tiers and successive turns',()=>{
+ for(let d=0;d<6;d++)for(let seed=0;seed<16;seed++){
+  let s=R.create({id:'wild-escape',players:[hero()],trial:{seed:'safe-'+seed,weaponDungeon:{id:W.WILD_ID,difficulty:d}},now:NOW});
+  for(let turn=0;turn<5&&s.status==='active';turn++){
+   const player=s.actors[0],danger=new Set(s.actors.filter(m=>m.bot&&R.alive(m)&&m.intent?.kind==='attack').flatMap(m=>m.intent.cells.map(R.key)));
+   const safe=R.dungeonEscapeCells(s,player).filter(q=>!danger.has(R.key(q)));
+   assert.ok(safe.length,'safe reachable tile '+d+'/'+seed+'/'+turn);
+   player.stamina=10;
+   const dest=safe[0];
+   if(R.key(dest)!==R.key(player))s=R.apply(s,'u1',{type:'move',x:dest.x,y:dest.y},NOW);
+   const hp=s.actors[0].hp;s=R.apply(s,'u1',{type:'end'},NOW);
+   assert.equal(s.actors[0].hp,hp,'escape avoids all prewarned attacks');
+  }
+ }
+});
+test('shock can push player into a later already-locked charge, without re-aim or infinite chain',()=>{
+ const s=shockScene(W.WILD_SHOCK.ground,{enemy:{x:4,y:4},player:{x:5,y:4}});
+ const m=R.actor({uid:'charger',bot:true,team:'monster',name:'蠻豬',species:1,atk:100,maxHp:10000,dungeonSkills:[W.WILD_CHARGE.guard]},{x:6,y:6});
+ s.actors.push(m);R.prepareIntents(s);
+ // Charge was legally warned at (6,4), before the player stepped to (5,4).
+ const original=R.dungeonIntent(s,m,{...s.actors[0],x:6,y:4});
+ assert.equal(original.skillId,'wild-charge');m.intent=original;
+ const next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(waveHits(next,'wild-shock').length,1);assert.equal(waveHits(next,'wild-charge').length,1);
+ assert.equal(next.actors[0].hp,9820);assert.equal(next.actors[0].x,6);
+ assert.ok(chargeSteps(next).length<=3);assert.equal(wallHits(next).length,0);
 });

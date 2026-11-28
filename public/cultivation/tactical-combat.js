@@ -1266,7 +1266,7 @@ function paint({preserveModal=false}={}){
     // Keep the battlefield objective summary in sync with the server's seal metadata.
     const sealEffects=[...new Set((objective.points||[]).filter(p=>!p.activated)
       .map(p=>R.sealDefinition(p.kind)?.shortEffect).filter(Boolean))].join('／');
-    const text=state.weaponDungeon?`${state.weaponDungeon.name} · ${weaponLord?.hp>0?'擊敗領主即通關':'領主已擊敗'} · ${threats?'危險：'+threats+(wild?' 道鎖定攻擊':' 道追蹤攻擊'):wild?'弦修 +15%':'圖騰 +'+Math.round(((state.weaponDungeon.totemDamageMultiplier??1.15)-1)*100)+'%'}`:
+    const text=state.weaponDungeon?`${state.weaponDungeon.name} · ${weaponLord?.hp>0?'擊敗領主即通關':'領主已擊敗'} · ${wild?'弦修 +15%'+(threats?' · 危險：'+threats+' 道鎖定攻擊':''):threats?'危險：'+threats+' 道追蹤攻擊':'圖騰 +'+Math.round(((state.weaponDungeon.totemDamageMultiplier??1.15)-1)*100)+'%'}`:
       objective.type==='transport'?(objective.carrying?`${label} · 將靈物送至交付點`:`${label} · 先取得靈物`):
       objective.type==='defense'?`鎮守 · ${objective.completedRounds} / ${objective.rounds} 回合 · 靈陣 ${objective.hp} / ${objective.maxHp}`:
       objective.type==='sealing'?`封印 · ${objective.points.filter(p=>p.activated).length} / ${objective.points.length} 陣眼${state.trial?.layoutVersion===4?' · 攻擊陣眼'+(sealEffects?' · '+sealEffects:''):''}`:

@@ -24,17 +24,29 @@
     traits:['追蹤劍法','重甲靈獸','領主劍雨'],bonus:'圖騰攻擊傷害 +15%',
     tactics:['蓄勢中的劍法會追蹤站位；離開合法攻擊線或射程，或利用障礙物閃避。','成功擊退則會打斷蓄勢，撞牆未位移不算。','領主從開戰起即可攻擊，也能直接受到傷害及擊退，不必先清除守衛。','擊敗領主立即通關，剩餘守衛不必清除。'],totemDamageMultiplier:1.15}),
     Object.freeze({id:WILD_ID,name:WILD_NAME,hidden:true,subtitle:'赤砂荒原 · 群獸之試',theme:'desert',rewardWeaponType:'totem',
-      description:'穿越赤砂荒原，擊敗中央領主即可通關。',traits:['鎖定預告','重型靈獸','緊湊戰場'],
-      bonus:'弦修技能傷害 +15%',tactics:['預告鎖定後不追蹤玩家。','擊退可打斷準備攻擊。','擊敗領主立即通關。'],
+      description:'穿越赤砂荒原，擊敗中央領主即可通關。',traits:['鎖定衝撞','方形震波','重型靈獸'],
+      bonus:'弦修技能傷害 +15%',tactics:['預告鎖定後不追蹤玩家；側移避開衝撞。','震地一次命中；連環震地逐層擊退，可能再次命中。','成功擊退可打斷；高階重型靈獸可能抵抗部分擊退。','擊敗領主立即通關。'],
       totemDamageMultiplier:1,bowDamageMultiplier:1.15})]);
-  // Stage four development-only close-range attack. Charge and shockwaves
-  // are implemented in stages five/six, not advertised as finished skills.
-  const WILD_TEST_SKILL=Object.freeze({id:'wild-test-hit',name:'近身試擊',shape:'point',range:1,power:1,warning:'locked',animation:'hit'});
+  // Old rooms retain their saved development-only attack snapshots; no new
+  // room uses them. Stage eight will tune the provisional combat values.
   // Stage eight will tune these provisional ranges and collision multiplier.
   const WILD_CHARGE=Object.freeze({
     guard:Object.freeze({id:'wild-charge',name:'蠻獸衝撞',shape:'charge',range:3,power:1,collisionPower:.5,warning:'locked',animation:'wild-charge'}),
     lord:Object.freeze({id:'wild-charge',name:'蠻獸衝撞',shape:'charge',range:4,power:1,collisionPower:.5,warning:'locked',animation:'wild-charge',lordOnly:true})
   });
+  const WILD_SHOCK=Object.freeze({
+    ground:Object.freeze({id:'wild-shock',name:'震地',shape:'square',range:2,power:.8,push:1,warning:'locked',animation:'wild-shock'}),
+    echo:Object.freeze({id:'wild-echo',name:'連環震地',shape:'square',range:4,rings:4,power:.45,push:1,warning:'locked',animation:'wild-echo',lordOnly:true})
+  });
+  function wildSkills(role,index){
+    const charge={...WILD_CHARGE[role==='lord'?'lord':'guard'],range:WILD_CHARGE[role==='lord'?'lord':'guard'].range+Math.floor(index/2)};
+    const shock={...WILD_SHOCK.ground,power:.8+index*.03};
+    const echo={...WILD_SHOCK.echo,power:.45+index*.03};
+    if(role==='lord')return [charge,shock,echo];
+    if(role==='charge')return [charge];
+    return index>=4?[shock,charge]:[shock];
+  }
+  const wildResistance=(role,index)=>role==='lord'&&index>=3?(index>=5?2:3):role==='shock'&&index>=4?(index>=5?3:4):0;
   const WEAPON_REALMS=Object.freeze(['煉氣',...DIFFICULTIES.map(d=>d.name),'真仙']);
   // The drop ladder follows the six dungeon difficulties, with 煉氣 below 築基.
   const lowerRealm=realm=>WEAPON_REALMS[WEAPON_REALMS.indexOf(realm)-1]||null;
@@ -85,11 +97,11 @@
     for(const [x,y] of variants[(h>>>1)%3])rock(x,y);
     const lordY=6-((h>>>3)%2);
     const enemies=[{x:h%2?width-2-5:5,y:lordY,species:8,name:WILD_NAME+'領主',boss:true,bossKind:'rock',weaponDungeonLord:true,
-      dungeonRole:'lord',dungeonSkills:[WILD_CHARGE.lord],hpFactor:7+index*1.2,attackFactor:1+index*.12,moveSteps:1,level:definition.stage}];
+      dungeonRole:'lord',dungeonAiVersion:1,dungeonResistanceEvery:wildResistance('lord',index),dungeonSkills:wildSkills('lord',index),hpFactor:7+index*1.2,attackFactor:1+index*.12,moveSteps:1,level:definition.stage}];
     for(const [x,y,role] of [[3,5,'charge'],[8,6,'shock'],[2,9,'shock'],[8,9,'charge'],[3,12,'charge'],[7,12,'shock']]){
       const charge=role==='charge';
       enemies.push({x:mirror(x),y,species:charge?1:8,name:charge?'赤鬃蠻豬':'裂地蠻牛',
-        dungeonRole:role,dungeonSkills:[charge?WILD_CHARGE.guard:WILD_TEST_SKILL],hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
+        dungeonRole:role,dungeonAiVersion:1,dungeonResistanceEvery:wildResistance(role,index),dungeonSkills:wildSkills(role,index),hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
     }
     const occupied=new Set([spawn.x+','+spawn.y,...enemies.flatMap(a=>Array.from({length:a.boss?4:1},(_,i)=>(a.x+(a.boss?i%2:0))+','+(a.y+(a.boss?Math.floor(i/2):0))))]);
     return {id:WILD_ID,map:WILD_ID,seed,stage:definition.stage,layoutVersion:4,title:WILD_NAME+' · '+definition.realm,
@@ -133,5 +145,5 @@
     if(Array.isArray(room.ground)&&room.ground.includes(13))room.ground=room.ground.map(t=>t===13?STONE_TERRAIN:t);
     return room;
   }
-  return Object.freeze({ID,NAME,DAILY_TICKETS,MAX_TICKETS,STONE_TERRAIN,DESERT_TERRAIN,WILD_ID,WILD_NAME,PEAK_SKILLS,WILD_CHARGE,restoreTerrain,DIFFICULTIES,WEAPON_REALMS,CATALOG,lowerRealm,day,progress,progressFor,recordClear,catalog,selection,layout});
+  return Object.freeze({ID,NAME,DAILY_TICKETS,MAX_TICKETS,STONE_TERRAIN,DESERT_TERRAIN,WILD_ID,WILD_NAME,PEAK_SKILLS,WILD_CHARGE,WILD_SHOCK,wildSkills,wildResistance,restoreTerrain,DIFFICULTIES,WEAPON_REALMS,CATALOG,lowerRealm,day,progress,progressFor,recordClear,catalog,selection,layout});
 });

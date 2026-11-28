@@ -14,7 +14,7 @@
   const moves=new Set([
     'wind-slash','wind-step','wind-thousand','flight-summon','sky-cloud','sky-sever',
     'rock-fist','rock-quake','rock-break','dragon-guard','dragon-roar','tiger-step','tiger-throw',
-    'peak-sword-line','peak-sword-sweep','peak-sword-thrust','peak-sword-rain','wild-charge','wild-charge-wall'
+    'peak-sword-line','peak-sword-sweep','peak-sword-thrust','peak-sword-rain','wild-charge','wild-charge-wall','wild-shock','wild-echo'
   ]);
   const heavyMoves=new Set(['rock-fist','rock-quake','rock-break','dragon-guard','tiger-step','tiger-throw','wind-thousand','sky-sever']);
   const clamp=n=>Math.max(0,Math.min(1,n));
@@ -215,7 +215,17 @@
         circle(at,.10+beat*.22,beat*.5,white,.016);
       }
     }
-    if(move==='wild-charge'||move==='wild-charge-wall'){
+    if(move==='wild-shock'||move==='wild-echo'){
+      // Per-wave event is emitted only after authoritative resolution, with
+      // exact committed cells and the complete source footprint.
+      const w=scene.footprint?.width||1,h=scene.footprint?.height||1,r=scene.waveRadius||1;
+      const start=move==='wild-echo'?Math.max(0,r-1):0,reach=start+(r-start)*phase(p,.05,.82);
+      const x=ox+(origin.x-reach)*size,y=oy+(origin.y-reach)*size;
+      c.save();c.beginPath();for(const tile of cells)c.rect(ox+tile.x*size,oy+tile.y*size,size,size);c.clip();
+      c.globalAlpha=beat*.85;c.strokeStyle=gold;c.lineWidth=Math.max(1,size*.065);c.strokeRect(x,y,(w+2*reach)*size,(h+2*reach)*size);
+      for(const at of hit){circle(at,.14+.2*p,beat*.44,ember,.022);}
+      c.restore();
+    }else if(move==='wild-charge'||move==='wild-charge-wall'){
       const at=move==='wild-charge-wall'?to:from;
       circle(at,.18+.48*p,beat*.8,gold,.035);sparks(at,12,ember,.75);
       if(move==='wild-charge-wall')impact(at,p,ember);
