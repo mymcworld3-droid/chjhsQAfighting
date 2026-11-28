@@ -4457,7 +4457,10 @@ function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
             btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
             btn.type = "button"; btn.dataset.qyOption = "";
             btn.innerHTML = globalThis.QAQuestionPresentation.optionMarkup(optText, idx, {rich:window.quizMathRichText || formatQuizRichText});
-            btn.onclick = () => onAnswer ? onAnswer(idx) : handleAnswer(idx, data.ans, data.q, data.exp);
+            btn.onclick = () => {
+                if(globalThis.QAQuestionVisualUI?.allowAnswer(data.q,data.opts)===false)return;
+                return onAnswer ? onAnswer(idx) : handleAnswer(idx, data.ans, data.q, data.exp);
+            };
             container.appendChild(btn);
         });
     };
@@ -5715,7 +5718,10 @@ function listenToBattleRoom(roomId) {
                         const btn = document.createElement('button');
                         btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 active:scale-95 mb-2 flex items-center";
                         btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full inline-flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 mr-3 shrink-0">${String.fromCharCode(65+idx)}</span><span class="text-white font-bold quiz-rich-option">${(window.quizMathRichText || parseMarkdownImages)(opt)}</span>`;
-                        btn.onclick = () => handleBattleAnswer(roomId, idx, room.currentQuestion.ans, isHost);
+                        btn.onclick = () => {
+                            if(globalThis.QAQuestionVisualUI?.allowAnswer(room.currentQuestion.q,room.currentQuestion.opts)===false)return;
+                            return handleBattleAnswer(roomId, idx, room.currentQuestion.ans, isHost);
+                        };
                         container.appendChild(btn);
                     });
                     

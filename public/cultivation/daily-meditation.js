@@ -286,6 +286,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
   async function nextQuestion() {await task(async()=>{const result=await request('next');session=result.session;await prepareCurrentQuestion();});}
   async function answer(choice) {
     if(busy||!session?.question||session.questionAnswered)return;
+    if(globalThis.QAQuestionVisualUI?.allowAnswer(session.question.q,session.question.opts)===false)return;
     pauseClock();const body={questionId:session.question.id,choice,activeMs:Math.floor(clock?.total||0)};
     await task(async()=>{
       try{const result=await request('answer',body);session=result.session;renderQuestion();

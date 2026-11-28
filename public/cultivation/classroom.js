@@ -818,7 +818,11 @@ async function act(target) {
   if (action === 'previous-question' || action === 'next-question') { state.questionIndex += action === 'next-question' ? 1 : -1; return render(); }
   if (action === 'answer' || action === 'submit') {
     const answers = [...(state.submission?.answers || state.assignment.questions.map(() => null))];
-    if (action === 'answer') answers[state.questionIndex] = Number(target.dataset.option);
+    if (action === 'answer') {
+      const q=state.assignment.questions[state.questionIndex];
+      if(!q||globalThis.QAQuestionVisualUI?.allowAnswer(q.question,q.options)===false)return;
+      answers[state.questionIndex] = Number(target.dataset.option);
+    } else if(state.assignment.questions.some(q=>globalThis.QAQuestionVisualUI?.allowAnswer(q.question,q.options)===false))return;
     if (action === 'submit' && !window.confirm('繳交後首次成績將固定，仍可進行訂正。確定繳交？')) return;
     const data = await request({ action: action === 'answer' ? 'saveProgress' : 'submit', classId, assignmentId: state.assignment.id, version: state.submission?.version || 0, answers });
     state.submission = data.submission;
@@ -827,6 +831,7 @@ async function act(target) {
   }
   if (action === 'correct') {
     const q = state.assignment.questions[Number(target.dataset.index)];
+    if(!q||globalThis.QAQuestionVisualUI?.allowAnswer(q.question,q.options)===false)return;
     const data = await request({ action: 'correct', classId, assignmentId: state.assignment.id, questionId: q.id, selectedIndex: Number(target.dataset.option) });
     state.submission = data.submission; render(); message(data.correct ? '訂正已記錄' : '再看一次解析，重新選擇答案。'); return;
   }

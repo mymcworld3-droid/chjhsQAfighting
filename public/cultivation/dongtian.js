@@ -756,8 +756,9 @@ export const featureReady = (async () => {
   function answerDongtian(optionIndex) {
     const s = state.session;
     if (!s || s.answered) return;
-    s.answered = true;
     const q = s.dongtian.questions[s.index];
+    if(!q||globalThis.QAQuestionVisualUI?.allowAnswer(q.q,s.currentOptions.map(item=>item.text))===false)return;
+    s.answered = true;
     const selected = s.currentOptions[optionIndex];
     const correctIdx = s.currentOptions.findIndex((item) => item.correct);
     const isCorrect = !!selected?.correct;

@@ -164,6 +164,8 @@ import { playerRepository } from './data/player-repository.js';
   }
   async function answer(selected) {
     if (busy || !validOwner() || run.questions[index]?.feedback) return;
+    const question=run.questions[index];
+    if(!question||globalThis.QAQuestionVisualUI?.allowAnswer(question.q,question.options)===false)return;
     busy = true;
     const expectedRun = run.id, expectedIndex = index;
     document.querySelectorAll('#opportunity-overlay [data-op-answer]').forEach(b => { b.disabled = true; });

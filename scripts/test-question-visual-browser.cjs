@@ -28,6 +28,12 @@ for(const viewport of [{width:390,height:844},{width:844,height:390},{width:768,
  await page.locator('#letter').click();assert.equal(await page.evaluate(()=>window.count),1);
  await page.evaluate(g=>document.getElementById('question-text').innerHTML=window.QAQuestionVisualEngine.renderInline(g.slice(0,-5)),graph);
  await page.locator('#letter').click();assert.equal(await page.evaluate(()=>window.count),1);assert(await page.locator('#qy-visual-block-notice').isVisible());
+ // Exercise the shared data-level guard as well as the rendered click guard.
+ const guards=await page.evaluate(({graph,table})=>{
+   const UI=window.QAQuestionVisualUI;
+   return [UI.allowAnswer('純文字題',['甲','乙']),UI.allowAnswer(graph,[table,'乙']),UI.allowAnswer(graph.slice(0,-5),['甲','乙']),UI.allowAnswer('題幹',['甲',table.slice(0,-3)])];
+ },{graph,table});
+ assert.deepEqual(guards,[true,true,false,false]);
  await page.close();
 }
 console.log('question visual browser: phone portrait, landscape, tablet passed');

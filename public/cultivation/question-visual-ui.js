@@ -18,7 +18,7 @@ const scopes=[
  ['[data-op-answer]','.op-question','h3,.op-options'],
  ['[data-action="answer"],[data-action="correct"]','.cc-card','.cc-question,.cc-options']
 ];
-function invalidIn(node){return Boolean(node&&(node.matches?.(invalid)||node.querySelector?.(invalid)||/\[\[QYVISUAL:/.test(node.textContent||'')))}
+function invalidIn(node){return Boolean(node&&(node.matches?.(invalid)||node.querySelector?.(invalid)||/\[\[QYVISUAL|QYVISUAL\]\]/.test(node.textContent||'')))}
 function blocked(button){
  for(const [selector,scope,parts] of scopes){
   if(!button.matches(selector))continue;
@@ -36,7 +36,11 @@ function notify(button){
  box.className='qy-visual-block-notice';document.body.append(box);
  setTimeout(()=>box.remove(),6000);
 }
-function allowAnswer(stem,options){if(!root.QAQuestionVisualEngine?.answerIssue(stem,options))return true;notify();return false;}
+function allowAnswer(stem,options){
+ const engine=root.QAQuestionVisualEngine;
+ if(engine? !engine.answerIssue(stem,options) : ![stem,...(Array.isArray(options)?options:[])].some(v=>/\[\[QYVISUAL|QYVISUAL\]\]/.test(String(v??''))))return true;
+ notify();return false;
+}
 let dialog=null,previous=null;
 function close(){if(dialog?.open)dialog.close();}
 function open(visual){

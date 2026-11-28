@@ -300,8 +300,9 @@ import { playerRepository } from './data/player-repository.js';
 
   async function answerChallenge(choice, serial) {
     if (!challenge?.active || challenge.serial !== serial || challenge.busy || !challenge.question) return;
-    challenge.busy = true;
     const q = challenge.question;
+    if(globalThis.QAQuestionVisualUI?.allowAnswer(q.question,q.options)===false)return;
+    challenge.busy = true;
     challenge.questionNumber += 1;
     globalThis.QAGameAudio?.answer(choice === q.answer, 'immortal:'+challenge.attemptId+':'+challenge.questionNumber);
     preserveChallengeAnswer(q, choice, serial);
