@@ -45,3 +45,7 @@ node scripts/audit-adaptive-beta-deployment.cjs --read-only
 
 ### 驗收順序修訂（2026-11-29）
 使用者取消本輪 Render 部署；第 2B 程式驗收與正式部署驗收拆開，第 25 階段補做正式部署 SHA、唯讀診斷、Rules 語意、D1 實際權限、獨立測試帳號外部刪除、實際備份還原、保留期限與 fence 回收證據。以上全部仍未驗證，任何一項未完成均禁止第 26 階段公開 Beta。不觸發 Render 部署、不改正式環境、方案及玩家資料。第 3 階段真實搜尋須在獨立開發環境 opt-in 驗證；不把搜尋憑證加入 repo 或輸出至聊天。
+
+
+### 第 3B 真實網路驗收（獨立 CI）
+在 GitHub Actions 的 Adaptive Beta live network diagnostics 工作流程執行公開文件診斷和 Brave 真實搜尋診斷。若需搜尋憑證，使用者自行於 GitHub repository Settings → Secrets and variables → Actions 設定 `BRAVE_SEARCH_API_KEY`（不要貼到聊天、repo、日誌）；或於獨立開發環境以既有安全憑證執行 CLI。此操作不需 Render 部署、不改正式玩家資料。工作流程只讀，單次搜尋可能消耗 provider 配額；無 key 不送出搜尋。固定來源成功僅證明擷取傳輸，不能代替搜尋到的來源、版權/真人審核。工作流程缺憑證或網路錯誤時需保留 blocked 證據，不要刪除或放寬安全測試。正式網路及部署驗收在第 25 階段仍必須重做。

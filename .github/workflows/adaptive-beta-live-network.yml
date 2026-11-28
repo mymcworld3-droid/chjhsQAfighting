@@ -1,0 +1,50 @@
+name: Adaptive Beta live network diagnostics
+
+# Deliberately separate from deterministic CI. One initial run on changes to
+# this workflow or its fixed probe, then manual re-run/dispatch as needed.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/adaptive-beta-live-network.yml'
+      - 'scripts/test-adaptive-beta-fetch-live.cjs'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: adaptive-beta-live-network
+  cancel-in-progress: false
+
+jobs:
+  public-document:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Actual HTTPS DNS-pinned robots-aware document retrieval
+        run: node scripts/test-adaptive-beta-fetch-live.cjs --live
+  brave-provider:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: One real search and bounded candidate retrieval
+        env:
+          BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
+          ADAPTIVE_LEARNING_ENGINE_LIVE_SEARCH: '1'
+          ADAPTIVE_LEARNING_ENGINE_SEARCH_ENABLED: '1'
+          ADAPTIVE_LEARNING_ENGINE_SEARCH_PROVIDER: brave
+          ADAPTIVE_LEARNING_ENGINE_FETCH_HOSTS: stv.naer.edu.tw,www.naer.edu.tw
+        run: node scripts/test-adaptive-beta-search-live.cjs --live
