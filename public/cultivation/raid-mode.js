@@ -1100,6 +1100,7 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
     const selectedChoice = state.question.submittedChoice ?? (Number.isInteger(choice) ? choice : null);
     if (selectedChoice === null || selectedChoice < 0 || selectedChoice > 3) return;
     const question = state.question;
+    if(globalThis.QAQuestionVisualUI?.allowAnswer(question.q,question.opts)===false)return;
     const actionId = question.actionId || state.playerActionCount + 1;
     question.actionId = actionId;
     question.submittedChoice = selectedChoice;

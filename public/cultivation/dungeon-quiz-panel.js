@@ -653,6 +653,7 @@ export class DungeonQuizPanel{
   async submit(choice){
     if(!this.valid()||!this.question||this.answering||this.review)return;
     const epoch=this.epoch,q=this.question,startedAt=this.questionStartedAt||Date.now();
+    if(globalThis.QAQuestionVisualUI?.allowAnswer(q.q,q.opts)===false)return;
     this.answering=true;this.errorMessage='';this.paint();this.status('正在批改本題…');
     try{
       const result=await answerDungeonQuestion(this.roomId,q.id,choice,0,

@@ -1585,6 +1585,7 @@ export const featureReady = (async () => {
     if (hasSubmittedAnswer(mine, round) || state.pendingAnswer?.round === round) return;
     const questionId = state.room.currentQuestion?.id;
     if (!questionId) return;
+    if(globalThis.QAQuestionVisualUI?.allowAnswer(state.room.currentQuestion.q,state.room.currentQuestion.opts)===false)return;
 
     state.pendingAnswer = { round, choice };
     renderQuestion(state.room, mine);

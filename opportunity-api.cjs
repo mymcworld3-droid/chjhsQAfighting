@@ -132,7 +132,7 @@ async function generatePack(target, history, generate = aiRouter.generateJSON, {
       if (history.some(h => h.fingerprint === pack.fingerprint || rules.signature(h.title) === rules.signature(pack.title))) throw packFail('新文章與近期機緣重複','duplicate-article');
       stage = 'review';
       const example = {scopeValid:true,passageValid:true,reason:'審核理由',questions:pack.questions.map(q => ({id:q.id,valid:true,applicationValid:true,correct:'自行求出的正解內容'}))};
-      const review = await call(`獨立審核以下素養題組，從原文自行解題，不要盲信標示正解。驗證範圍、唯一正解、逐字原文依據、解析、跨題洩題與年級適當性。更要獨立確認每題需運用所選課內知識而非單純從文章擷取答案；未實際應用時即使答案唯一，applicationValid=false且valid=false。Q2與Q5必須各引用兩段不同原文。正負號、小數點、分數線不可省略；判斷每個wrong是否確實錯誤。範圍=${JSON.stringify(target)}\n題組=${JSON.stringify(pack)}\n只輸出JSON：${JSON.stringify(example)}。questions必須涵蓋Q1至Q5各一次；每題重新求解並將完整正解內容填入correct。不合格應valid:false。`,stage);
+      const review = await call(`${VISUAL_REVIEW}\n獨立審核以下素養題組，從原文自行解題，不要盲信標示正解。驗證範圍、唯一正解、逐字原文依據、解析、跨題洩題與年級適當性。更要獨立確認每題需運用所選課內知識而非單純從文章擷取答案；未實際應用時即使答案唯一，applicationValid=false且valid=false。Q2與Q5必須各引用兩段不同原文。正負號、小數點、分數線不可省略；判斷每個wrong是否確實錯誤。範圍=${JSON.stringify(target)}\n題組=${JSON.stringify(pack)}\n只輸出JSON：${JSON.stringify(example)}。questions必須涵蓋Q1至Q5各一次；每題重新求解並將完整正解內容填入correct。不合格應valid:false。`,stage);
       const r = review.data;
       if (r?.scopeValid !== true || r?.passageValid !== true || !Array.isArray(r.questions) || r.questions.length !== 5 ||
           pack.questions.some(q => r.questions.filter(v => v.id === q.id && v.valid === true && v.applicationValid===true && answerKey(v.correct) === answerKey(q.correct)).length !== 1)) {

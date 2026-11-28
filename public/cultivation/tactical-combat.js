@@ -2164,6 +2164,7 @@ function activatePairContext(index){
 }
 function selectPairChoice(index,choice){
   if(busy||index!==pairDisplayIndex||index!==pairReviews.length||!pairQuestions[index]||!Number.isInteger(choice)||choice<0||choice>=pairQuestions[index].opts.length)return;
+  if(globalThis.QAQuestionVisualUI?.allowAnswer(pairQuestions[index].q,pairQuestions[index].opts)===false)return;
   pairChoices[index]=choice;
   // A single option tap commits this answer immediately. submitPair sets
   // busy synchronously, so rapid second taps cannot dispatch another answer.
@@ -2325,6 +2326,7 @@ async function submitPair(){
   // press of 答題充能 and no double-answer form is required.
   const index=pairReviews.length,q=pairQuestions[index],choice=pairChoices[index];
   if(busy||index!==pairDisplayIndex||!q||!Number.isInteger(choice)||choice<0||choice>=q.opts.length)return;
+  if(globalThis.QAQuestionVisualUI?.allowAnswer(q.q,q.opts)===false)return;
   busy=true;
   const e=epoch,account=uid,serial=++op,roomId=state.id;
   const timeTaken=Math.max(0,(Date.now()-(quizContext?.shownAtMs||Date.now()))/1000);

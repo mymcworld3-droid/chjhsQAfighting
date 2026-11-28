@@ -137,6 +137,7 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
   }
   async function answer(choice){
     if(busy||!trial?.question)return;
+    if(globalThis.QAQuestionVisualUI?.allowAnswer(trial.question.q,trial.question.opts)===false)return;
     busy=true;const q=trial.question,epoch=++generation,uid=identity;
     $('enlightenment-body')?.querySelectorAll('[data-answer]').forEach(b=>b.disabled=true);
     try{

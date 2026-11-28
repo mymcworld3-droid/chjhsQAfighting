@@ -4,10 +4,10 @@ const Knowledge = require('./public/cultivation/knowledge-points.js');
 // One contract for regular practice, trials, and compact combat generation.
 const QUESTION_PRESENTATION_RULES = [
   '[題幹不得洩題與符號格式]',
-  '題幹不得洩題或僅以底線、粗體、括號、顏色標出正解或錯誤。文法找錯題不標記字詞，四選項直接提供原句字詞。',
+  '題幹不得洩題，不得只對正解或錯誤所在處加底線、粗體、括號或顏色。文法找錯題不標記字詞，四選項直接提供原句字詞。',
   '選項隨機重排，q、correct、wrong 不附 A/B/C/D 標記；解析只用選項內容，不以 (A) 或底線暴露錯誤。',
   '一般文字直接使用真正的 Unicode 符號（例如 ×、÷、≤、≥、π），不要輸出 HTML entity、字面上的 Unicode 跳脫碼或 Markdown／HTML 底線。',
-  'LaTeX 公式完整放在 $...$，中文留在外；禁止裸反斜線、JSON 雙重跳脫、自訂巨集或額外套件，只用 MathJax 基本指令。'
+  'LaTeX 公式完整放在 $...$，中文留在外；禁止裸露的反斜線指令；JSON 只跳脫一次，只用 MathJax 基本指令，不用自訂巨集或額外套件。'
 ].join('\n');
 const QUESTION_RELIABILITY_RULES = [
   '[輸出前核對；只輸出題目 JSON，不輸出檢查過程]',
