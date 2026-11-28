@@ -70,3 +70,10 @@
 - 待 CI：npm test、npm run test:battle、npm run check:module-versions、瀏覽器及候選版驗收。未完成最新 CI 前不得宣稱第三階段正式驗收；下一階段為隱藏萬獸險域基礎建置。
 
 - 補強：穿刺位移動畫同樣使用劍法速度線，新增四技（含穿刺）擊退打斷及實際動畫路徑辨識斷言。
+
+### 第三階段提交與 CI 查核
+
+- 主要實作提交 [baf81494bdbd0dc3a4aef9ef1ec0a13f65f751d0](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/baf81494bdbd0dc3a4aef9ef1ec0a13f65f751d0)；補強動畫及測試 [f20180a3b7126a25ea29b7d2a3a0db293a085d81](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/f20180a3b7126a25ea29b7d2a3a0db293a085d81)，均已直接更新 main。
+- 首次程式提交：[Cultivation regression tests](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46110995091) completed / success；[Tactical browser acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46110995134) in_progress / 未結論；[New weapon release candidate acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46110995120) in_progress / 未結論；[pages build and deployment](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46110994689) completed / cancelled。
+- 最新程式提交：[Tactical browser acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111036453) in_progress / 未結論；[pages build and deployment](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111036213) in_progress / 未結論；[New weapon release candidate acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111036435) queued / 未結論；[Cultivation regression tests](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111036378) in_progress / 未結論。
+- 本地完整工作樹仍未取得，尚無本地 Node 測試結果；已觸發 GitHub Actions。必須確認最新程式提交及後續 main CI 成功，修復所有失敗，才能標記第三階段已驗收及開始第四階段。萬獸險域未開放。
