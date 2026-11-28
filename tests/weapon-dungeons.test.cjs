@@ -625,7 +625,16 @@ test('wild and stone share atomic tickets and one active room while independentl
   assert.equal(p.unlocked,2);assert.deepEqual(p.clears,[3,1,0,0,0,0]);
   assert.deepEqual(p.byDungeon[W.WILD_ID],{unlocked:Math.min(5,d+1),clears:Array.from({length:6},(_,i)=>Number(i<=d))});
   assert.equal(p.tickets,2-(d+1)%3);
-  assert.equal((await API.weaponDungeonState(db,'u1',now)).byDungeon,undefined);
+  // Wilds is now public; a fresh ordinary state read must preserve its actual progress.
+  const reloaded=await API.weaponDungeonState(db,'u1',now);
+  assert.deepEqual(reloaded.byDungeon,p.byDungeon);
+  assert.equal(reloaded.unlocked,p.unlocked);assert.deepEqual(reloaded.clears,p.clears);
+  assert.equal(reloaded.tickets,p.tickets);
+  const visibleWild=reloaded.dungeons.find(entry=>entry.id===W.WILD_ID);
+  assert.ok(visibleWild,'public wild dungeon must remain visible');
+  assert.equal(visibleWild.unlocked,p.byDungeon[W.WILD_ID].unlocked);
+  assert.deepEqual(visibleWild.clears,p.byDungeon[W.WILD_ID].clears);
+  assert.deepEqual(visibleWild.difficulties.map(tier=>tier.locked),Array.from({length:6},(_,i)=>i>visibleWild.unlocked));
  }
 });
 test('wild reward uses the live totem pool and one 30/20/50 roll, no re-roll or swords',()=>{
