@@ -37,3 +37,9 @@
 - 修改：public/cultivation/tactical-rules.js、tests/weapon-dungeons.test.cjs、public/module-versions.json、本文件。
 - 測試命令：node --test tests/weapon-dungeons.test.cjs；npm run test:battle；npm test；npm run check:module-versions。待本次 CI，未確認測試全部通過。
 - 下一步：第二階段 CI 驗收及修正，通過後才實作第三階段四種劍法。
+
+### 第二階段提交與 CI 查核
+
+- 程式提交：[45e212883915ada95a967b9e96d02014dc47f886](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/45e212883915ada95a967b9e96d02014dc47f886)，已確認 main 已包含本次變更。
+- [Tactical browser acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114687)：in_progress / 未結論；[New weapon release candidate acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114726)：in_progress / 未結論；[Cultivation regression tests](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114697)：in_progress / 未結論；[pages build and deployment](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114429)：in_progress / 未結論
+- 本地 Node v22.16.0 可用，但 git ls-remote 無法解析 github.com，未能取得完整工作樹執行本地測試。等待上述 GitHub Actions 結果；第二階段尚未正式結案。
