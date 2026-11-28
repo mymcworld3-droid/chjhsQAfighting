@@ -11,6 +11,7 @@ import { renderLearningAnalysis } from './classroom-analysis.js';
 
 const $ = id => document.getElementById(id);
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const richQuestion=v=>globalThis.QAQuestionVisualEngine?.renderInline(v,window.quizMathRichText||escape)??escape(v);
 const date = ms => ms ? new Date(ms).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false }) : '不限時間';
 const localDate = ms => { const d = new Date(ms); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16); };
 const labels = ['A', 'B', 'C', 'D'];
@@ -190,14 +191,14 @@ function workView() {
     const corrected = (s.corrections || []).filter(c => c.correct && answers[a.questions.findIndex(q => q.id === c.questionId)] !== a.questions.find(q => q.id === c.questionId)?.answerIndex).length;
     return `<div class="cc-toolbar"><h3>${escape(a.title)}</h3>${button('back', '返回班級')}</div><section class="cc-card"><span class="cc-muted">首次作答成績</span><div class="cc-stat">${s.score} 分</div><p>答對 ${s.correctCount} / ${s.total} 題 · 已訂正 ${corrected} / ${s.total - s.correctCount} 題</p><p class="cc-muted">首次成績保留，訂正進度另外記錄。</p></section>${a.questions.map((q, i) => {
       const wrong = answers[i] !== q.answerIndex, correction = s.corrections?.find(c => c.questionId === q.id);
-      const extra = `<p class="cc-muted">首次選擇：${labels[answers[i]]} · 正確答案：${labels[q.answerIndex]}${wrong ? '' : ' · 答對'}</p>` + (wrong ? `<p class="cc-status">${correction?.correct ? '已完成訂正' : correction ? '再試一次，請依解析重新選擇。' : '請重新選擇答案，完成訂正。'}</p><div class="cc-options">${q.options.map((o, n) => button('correct', `${labels[n]}. ${escape(o)}`, `data-index="${i}" data-option="${n}" ${correction?.correct ? 'disabled' : ''}`)).join('')}</div>` : '');
+      const extra = `<p class="cc-muted">首次選擇：${labels[answers[i]]} · 正確答案：${labels[q.answerIndex]}${wrong ? '' : ' · 答對'}</p>` + (wrong ? `<p class="cc-status">${correction?.correct ? '已完成訂正' : correction ? '再試一次，請依解析重新選擇。' : '請重新選擇答案，完成訂正。'}</p><div class="cc-options">${q.options.map((o, n) => button('correct', `${labels[n]}. ${richQuestion(o)}`, `data-index="${i}" data-option="${n}" ${correction?.correct ? 'disabled' : ''}`)).join('')}</div>` : '');
       return questionView(q, i, extra);
     }).join('')}`;
   }
   const i = state.questionIndex || 0, q = a.questions[i], done = answers.filter(n => n !== null).length;
   const closed = state.classroom.status !== 'active' || a.status !== 'published' || a.dueAtMs && Date.now() > a.dueAtMs;
   return `<div class="cc-toolbar"><h3>${escape(a.title)}</h3>${button('back', '返回班級')}</div><p class="cc-muted">已完成 ${done} / ${a.questions.length} 題 · 截止：${date(a.dueAtMs)}</p><progress max="${a.questions.length}" value="${done}"></progress>${closed ? '<p role="status">作業已截止，目前只能查看已保存的作答。</p>' : ''}
-    <section class="cc-card"><h4>第 ${i + 1} / ${a.questions.length} 題</h4><div class="cc-question">${escape(q.question)}</div><div class="cc-options">${q.options.map((o, n) => button('answer', `${labels[n]}. ${escape(o)}`, `data-option="${n}" aria-pressed="${answers[i] === n}" ${closed ? 'disabled' : ''}`)).join('')}</div><div class="cc-toolbar">${button('previous-question', '上一題', i === 0 ? 'disabled' : '')}${i < a.questions.length - 1 ? button('next-question', '下一題') : button('submit', '繳交作業', `class="cc-primary" ${done !== a.questions.length || closed ? 'disabled' : ''}`)}</div></section>`;
+    <section class="cc-card"><h4>第 ${i + 1} / ${a.questions.length} 題</h4><div class="cc-question">${richQuestion(q.question)}</div><div class="cc-options">${q.options.map((o, n) => button('answer', `${labels[n]}. ${richQuestion(o)}`, `data-option="${n}" aria-pressed="${answers[i] === n}" ${closed ? 'disabled' : ''}`)).join('')}</div><div class="cc-toolbar">${button('previous-question', '上一題', i === 0 ? 'disabled' : '')}${i < a.questions.length - 1 ? button('next-question', '下一題') : button('submit', '繳交作業', `class="cc-primary" ${done !== a.questions.length || closed ? 'disabled' : ''}`)}</div></section>`;
 }
 function learningView() {
   return renderLearningAnalysis(state, { escape, button, date, status });
@@ -216,7 +217,7 @@ function reportView() {
       <form class="cc-form" data-form="deadline">${field('dueAtMs', '截止時間（留空表示不限時間）', r.assignment.dueAtMs ? localDate(r.assignment.dueAtMs) : '', 'type="datetime-local"')}<div class="cc-actions">${button('update-deadline', '更新截止時間')}${r.assignment.status === 'closed' ? button('reopen-assignment', '重新開放收件', 'class="cc-primary"') : ''}</div></form></section>
     <div class="cc-grid"><section class="cc-card"><span class="cc-muted">繳交人數</span><div class="cc-stat">${r.totals.submitted} / ${r.totals.students}</div></section><section class="cc-card"><span class="cc-muted">已繳交學生的首次平均</span><div class="cc-stat">${r.totals.average === null ? '—' : r.totals.average + ' 分'}</div></section></div>
     <section class="cc-card cc-table-wrap"><table><thead><tr><th>座號</th><th>姓名</th><th>狀態</th><th>首次成績</th><th>錯題訂正</th></tr></thead><tbody>${r.students.map(s => `<tr><td>${escape(s.seat || '—')}</td><td>${escape(s.name)}${s.active ? '' : '（已退出）'}</td><td>${status(s.status)}</td><td>${s.score === null ? '—' : s.score}</td><td>${s.wrongCount === null ? '—' : s.correctedCount + ' / ' + s.wrongCount}</td></tr>`).join('') || '<tr><td colspan="5">尚無學生</td></tr>'}</tbody></table></section>
-    <section class="cc-card"><h4>各題首次作答</h4>${r.questions.map((q, i) => `<details><summary>第 ${i + 1} 題 · ${q.total ? Math.round(q.correct / q.total * 100) + '%' : '尚無作答'}（${q.correct} / ${q.total}）</summary><div class="cc-question">${escape(q.question)}</div><p class="cc-muted">${q.knowledge_points.map(p => escape(p.name)).join('、') || '未標記知識點'}</p></details>`).join('')}</section>
+    <section class="cc-card"><h4>各題首次作答</h4>${r.questions.map((q, i) => `<details><summary>第 ${i + 1} 題 · ${q.total ? Math.round(q.correct / q.total * 100) + '%' : '尚無作答'}（${q.correct} / ${q.total}）</summary><div class="cc-question">${richQuestion(q.question)}</div><p class="cc-muted">${q.knowledge_points.map(p => escape(p.name)).join('、') || '未標記知識點'}</p></details>`).join('')}</section>
     ${r.knowledgePoints?.length ? `<section class="cc-card"><h4>本次作業的知識點表現</h4>${r.knowledgePoints.map(p => `<p>${escape(p.subject)} · ${escape(p.name)}：${p.total ? Math.round(p.correct / p.total * 100) + '%' : '尚無作答'}（${p.correct} / ${p.total}）</p>`).join('')}<p class="cc-muted">依本次固定題組統計，樣本少時請搭配實際作答判讀。</p></section>` : ''}`;
 }
 function filterClassroomList(panel, type) {

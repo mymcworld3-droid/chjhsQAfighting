@@ -1,12 +1,14 @@
 'use strict';
 
-// Generated questions are text only. Reject prompts that depend on an absent
+// Generated questions may include validated inline visuals. Reject prompts that depend on an absent
 // figure and explanations that explicitly contradict or correct the answer.
 const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
 const MathGuard = require('./public/cultivation/math-guard.js');
 const { inspectQuestionFormat } = require('./question-format.cjs');
+const Visual=require('./public/cultivation/question-visual-engine.js');
 
 function questionQualityIssue({ q, correct, wrong, exp } = {}) {
+  const visualIssue=Visual.questionIssue({q,correct,wrong,exp});if(visualIssue)return visualIssue;
   if (inspectQuestionFormat({ q, correct, wrong, exp }).damaged) {
     return '數學公式的單位指令受損，請重新產生完整題目';
   }
@@ -19,11 +21,11 @@ function questionQualityIssue({ q, correct, wrong, exp } = {}) {
   }
   // Validate TeX even when a human-readable explanation superficially looks correct.
   for (const piece of [q, correct, ...(Array.isArray(wrong) ? wrong : []), exp]) {
-    const checked = MathGuard.inspect(piece);
+    const checked = MathGuard.inspect(Visual.plainText(piece));
     if (!checked.valid) return '數學公式定界符或結構不完整';
   }
-  const stem = String(q || '');
-  const explanation = String(exp || '');
+  const stem = Visual.plainText(q);
+  const explanation = Visual.plainText(exp);
   if (/(?:正確答案|本題正解)\s*(?:[:：]|(?:是|為)(?!何|什麼|哪|多少|幾|否))/.test(stem)) return '題幹直接洩漏正解';
   const errorIdentification = /(?:文法|語法|用字|用詞|語病).*(?:錯|誤)|(?:找出|何者|哪個).*(?:錯誤|不正確)|\b(?:error|incorrect|mistake)\b/i.test(stem);
   if (errorIdentification) {
@@ -37,7 +39,7 @@ function questionQualityIssue({ q, correct, wrong, exp } = {}) {
       return '題幹只標示錯誤位置或正解，洩漏答案；請取消標記並讓玩家自行判斷';
     }
   }
-  if (/(?:附圖|下圖|右圖|左圖|如圖所示|圖中所示)/.test(stem)) return '題目引用未提供的圖片';
+  if (/(?:附圖|下圖|右圖|左圖|如圖所示|圖中所示)/.test(stem) && !Visual.inspectInline(q).plots) return '題目引用未提供的圖片';
   if (/[（(][A-D][）)]/.test(stem) && (stem.match(/[（(][A-D][）)]/g) || []).length >= 3) {
     return '題幹重複列出會再被排序的選項';
   }
@@ -61,11 +63,11 @@ function questionQualityIssue({ q, correct, wrong, exp } = {}) {
 // The browser shuffles the four answers. AI-authored A/B/C/D references in an
 // explanation describe an imagined order and can point at the wrong choice.
 function removeUnstableOptionLabels(explanation) {
-  return String(explanation || '')
+  return Visual.mapText(String(explanation || ''), text=>text
     .replace(/(?:錯誤\s*)?(?:選項|答案)\s*第?\s*[一二三四1-4](?:項|個)?/g, '相關敘述')
     .replace(/第[一二三四1-4]項(?=\s*(?:的|是|為|正確|錯誤|與|雖|則|將|過度|強調))/g, '相關敘述')
     .replace(/(?:選項|答案)\s*[（(]?[A-D][）)]?/gi, '相關敘述')
-    .replace(/[（(][A-D][）)](?=\s*(?:的|是|為|正確|錯誤|與|雖|則|將|過度|強調))/gi, '相關敘述');
+    .replace(/[（(][A-D][）)](?=\s*(?:的|是|為|正確|錯誤|與|雖|則|將|過度|強調))/gi, '相關敘述'));
 }
 
 function escapeRegExp(value) {

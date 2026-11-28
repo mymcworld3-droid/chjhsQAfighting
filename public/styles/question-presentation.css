@@ -77,3 +77,12 @@ html body.xianxia-theme [data-qy-disclosure]{min-width:0;max-width:100%;border:1
 html body.xianxia-theme [data-qy-disclosure]>summary{cursor:pointer;color:var(--qy-gold,#d2b374);font-weight:700;line-height:1.5;min-height:28px}
 html body.xianxia-theme [data-qy-disclosure][open]>summary{margin-bottom:8px}
 @media(max-width:700px),(orientation:landscape) and (max-height:540px){html body.xianxia-theme [data-qy-tool]{min-height:38px}html body.xianxia-theme [data-qy-disclosure]{padding:6px 9px}}
+
+/* Shared data-only question visuals. Keep diagrams inside the existing scroller. */
+.qy-visual{min-width:0;max-width:100%;overflow-wrap:normal;line-height:1.4;text-align:start}
+.qy-visual svg{max-width:100%;height:auto;vertical-align:middle}
+.qy-visual-table{overscroll-behavior-x:contain;margin-block:8px}
+.qy-visual-table :is(th,td){border:1px solid var(--qy-line,#8b92658c);padding:6px 10px;text-align:start;white-space:normal;vertical-align:top}
+.qy-visual-table th{background:var(--qy-inset,#192820);font-weight:700}
+.qy-visual-table caption{text-align:start;padding-block:4px}
+.qy-visual-invalid{display:block;color:#ffbcb0;font-weight:700}

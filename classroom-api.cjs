@@ -4,6 +4,7 @@ const { randomUUID, randomBytes } = require('node:crypto');
 const { playerRepository } = require('./server-repositories.cjs');
 const { verifyRequest } = require('./invitation-api.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
+const Visual=require('./public/cultivation/question-visual-engine.js');
 const { summarizeClassAssignment, summarizeStudentAssignment } = require('./classroom-learning-analysis.cjs');
 const LIMITS = Object.freeze({ classes: 20, students: 100, assignments: 100, questions: 30 });
 const fail = (message, status = 400) => Object.assign(Error(message), { status });
@@ -37,6 +38,8 @@ function questionsOf(values, subject) {
   return values.map((q, i) => {
     if (!q || !Array.isArray(q.options) || q.options.length !== 4 || !Number.isInteger(q.answerIndex) || q.answerIndex < 0 || q.answerIndex > 3) throw fail('第 ' + (i + 1) + ' 題需有四個選項與正確答案');
     const options = q.options.map(value => text(value, 1200, '選項'));
+    const visualIssue=Visual.questionIssue({q:q.question,correct:options[q.answerIndex],wrong:options.filter((_,n)=>n!==q.answerIndex),exp:q.explanation});
+    if(visualIssue)throw fail('第 '+(i+1)+' 題圖表無效：'+visualIssue);
     if (new Set(options).size !== 4) throw fail('第 ' + (i + 1) + ' 題的選項不可重複');
     const labels = Knowledge.labels(q, subject);
     if (q.knowledge_points !== undefined && (!Array.isArray(q.knowledge_points) || labels.length !== q.knowledge_points.length)) throw fail('知識點標記無效');

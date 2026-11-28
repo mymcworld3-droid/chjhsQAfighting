@@ -1,4 +1,6 @@
 'use strict';
+const Visual=require('./public/cultivation/question-visual-engine.js');
+const {VISUAL_PROMPT}=require('./question-visual-prompt.cjs');
 const crypto=require('node:crypto');
 const aiRouter=require('./ai-router');
 const {playerRepository}=require('./server-repositories.cjs');
@@ -122,8 +124,8 @@ function createAdaptiveLearning({resolve=()=>playerRepository.resolve(),verify=v
     if(!concept||!Rules.needsLesson(state,concept.id))throw fail('目前沒有需要補強的連續錯題',409);
     const key=c.scope.scopeId+':'+c.plan.version+':'+concept.id;
     if(!lessons.has(key)){
-      const work=generate('你是台灣課綱教師。只講解下列已選範圍中的一個細觀念。提供短講解與一個簡單、完整可核對的示範例題（含解題過程與答案），讓學生再練另一道新情境題。不出選擇題、不跨範圍、不猜測學生錯因。數學使用成對 TeX。\n'+JSON.stringify({scope:c.scope,concept:concept.name,methods:concept.methods.map(m=>m.name)})+'\n只回傳 JSON {"explanation":"80～250字概念講解","example":"簡單示例、步驟與答案"}。',
-        {timeoutMs:15000,validate:value=>{if(typeof value.explanation!=='string'||value.explanation.trim().length<10||typeof value.example!=='string'||value.example.trim().length<10)throw fail('觀念講解未完成');}})
+      const work=generate('你是台灣課綱教師。只講解下列已選範圍中的一個細觀念。提供短講解與一個簡單、完整可核對的示範例題（含解題過程與答案），讓學生再練另一道新情境題。不出選擇題、不跨範圍、不猜測學生錯因。數學使用成對 TeX。\n'+VISUAL_PROMPT+'\n'+JSON.stringify({scope:c.scope,concept:concept.name,methods:concept.methods.map(m=>m.name)})+'\n只回傳 JSON {"explanation":"80～250字概念講解","example":"簡單示例、步驟與答案"}。',
+        {timeoutMs:15000,validate:value=>{if(typeof value.explanation!=='string'||value.explanation.trim().length<10||typeof value.example!=='string'||value.example.trim().length<10||!Visual.inspectInline(value.explanation,1800).valid||!Visual.inspectInline(value.example,2200).valid)throw fail('觀念講解未完成或圖表無效');}})
         .then(result=>({explanation:result.data.explanation.slice(0,1800),example:result.data.example.slice(0,2200)}));
       lessons.set(key,work);work.catch(()=>lessons.delete(key));while(lessons.size>160)lessons.delete(lessons.keys().next().value);
     }

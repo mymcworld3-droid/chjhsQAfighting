@@ -1,5 +1,6 @@
 'use strict';
 const { numericExpression, numericCalculationIssue } = require('./numeric-calculation-guard.cjs');
+const Visual=require('./public/cultivation/question-visual-engine.js');
 
 // Lightweight, deterministic checks supplement (but do not replace) independent
 // model review. Only block issues provable from the returned data.
@@ -74,6 +75,7 @@ function arithmeticExpected(question) {
 }
 
 function questionIntegrityIssue(input, { rejectRepairNotes = true } = {}) {
+  const visualIssue=Visual.questionIssue(input);if(visualIssue)return visualIssue;
   const q = clean(input?.q), correct = clean(input?.correct);
   const wrong = Array.isArray(input?.wrong) ? input.wrong.map(clean) : [];
   const exp = clean(input?.exp);
@@ -84,20 +86,20 @@ function questionIntegrityIssue(input, { rejectRepairNotes = true } = {}) {
   if (rejectRepairNotes && solutionCorrectionNote(exp))
     return '解析包含題目出錯或修改答案的註記；必須直接產出全新且正確的完整解析';
   const choices = [correct, ...wrong];
-  const answerSignals = explicitSolutionAnswer(exp);
+  const answerSignals = explicitSolutionAnswer(Visual.plainText(exp));
   for (const answer of answerSignals) {
     const matchingChoices = choices.filter(x => answerKey(x) === answer);
     const numericChoices = choices.every(x => numericAnswer(x) !== null);
     if ((matchingChoices.length || numericChoices && numericAnswer(answer) !== null) && answerKey(correct) !== answer)
       return '解析所標示的最終答案與 correct 不一致';
   }
-  const expected = arithmeticExpected(input?.q);
+  const expected = arithmeticExpected(Visual.plainText(input?.q));
   if (expected !== null && choices.every(x => /^-?\d+$/.test(normalized(x))) &&
       normalized(correct) !== expected)
     return '題目明確算式的數值答案與 correct 不一致';
   // Preserve Unicode superscripts until the arithmetic lexer converts them;
   // NFKC alone would turn 3² into 32 rather than 3^2.
-  const calculationIssue = numericCalculationIssue(input?.exp);
+  const calculationIssue = numericCalculationIssue(Visual.plainText(input?.exp));
   if (calculationIssue) return calculationIssue;
   return '';
 }

@@ -1,5 +1,6 @@
 'use strict';
 const Knowledge = require('./public/cultivation/knowledge-points.js');
+const {VISUAL_PROMPT}=require('./question-visual-prompt.cjs');
 
 // One contract for regular practice, trials, and compact combat generation.
 const QUESTION_PRESENTATION_RULES = [
@@ -44,6 +45,7 @@ function subjectReliabilityPrompt(subject, { examples = true } = {}) {
 const ANSWER_AND_EXPLANATION_RULES = [
   QUESTION_RELIABILITY_RULES,
   QUESTION_PRESENTATION_RULES,
+  VISUAL_PROMPT,
   '[答案與解析核對]',
   '先只依 q 的條件獨立求解，再填 correct，最後設計三個 wrong；不得先決定選項再湊解析。',
   '輸出前重新核算：檢查正負號、常數項、括號、分母、單位及題目問的是什麼，再逐一代入或判斷四個選項。',

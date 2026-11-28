@@ -1,4 +1,5 @@
 import './cultivation/community-presentation.js';
+import './cultivation/question-visual-engine.js';
 import './cultivation/question-presentation.js';
 import {stoneCostMarkup,cultivationMarkup,formatResourceAmount} from './cultivation/spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import { createStudyQuestionBridge } from './cultivation/study-question-bridge.js';
@@ -1854,6 +1855,8 @@ function sanitizeQuizImageUrl(rawUrl) {
 }
 
 function formatQuizRichText(text) {
+    const visual=globalThis.QAQuestionVisualEngine?.renderInline(text,formatQuizRichText);
+    if(visual!==null&&visual!==undefined)return visual;
     // The formatter also runs in isolated test/import contexts without window.
     const guard = typeof window === 'undefined' ? null : window.QAMathGuard;
     const decoded = guard?.normalizeMathText?.(text) ?? guard?.expandTextEscapes?.(text) ?? text;

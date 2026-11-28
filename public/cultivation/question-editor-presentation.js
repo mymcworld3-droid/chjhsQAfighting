@@ -2,9 +2,10 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.QAQuestionEditorPresentation=api;})(globalThis,()=>{
   'use strict';
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const rich=v=>globalThis.QAQuestionVisualEngine?.renderInline(v,globalThis.quizMathRichText||esc)??esc(v);
   function preview(question,index=0){
     const q=question||{},options=Array.isArray(q.options)?q.options:[];
-    return '<div data-qy-editor-preview><h4>第 '+(index+1)+' 題</h4><div class="cc-question">'+esc(q.question)+'</div><div class="cc-options">'+options.map((value,i)=>'<div'+(i===q.answerIndex?' class="cc-status"':'')+'><b>'+String.fromCharCode(65+i)+'.</b> '+esc(value)+(i===q.answerIndex?' <span>✓ 正確答案</span>':'')+'</div>').join('')+'</div>'+(q.explanation?'<div class="cc-explanation">'+esc(q.explanation)+'</div>':'')+'</div>';
+    return '<div data-qy-editor-preview><h4>第 '+(index+1)+' 題</h4><div class="cc-question">'+rich(q.question)+'</div><div class="cc-options">'+options.map((value,i)=>'<div'+(i===q.answerIndex?' class="cc-status"':'')+'><b>'+String.fromCharCode(65+i)+'.</b> '+rich(value)+(i===q.answerIndex?' <span>✓ 正確答案</span>':'')+'</div>').join('')+'</div>'+(q.explanation?'<div class="cc-explanation">'+rich(q.explanation)+'</div>':'')+'</div>';
   }
   function fields(q,index,{questionName='question-',explanationName='explanation-',points='',field}={}){
     const options=Array.from({length:4},(_,i)=>q.options?.[i]||'');

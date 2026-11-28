@@ -5,6 +5,7 @@ const { verifyRequest } = require('./invitation-api.cjs');
 const { teacherAccess, assertEntry } = require('./dongtian-access.cjs');
 const Classrooms = require('./classroom-api.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
+const Visual=require('./public/cultivation/question-visual-engine.js');
 const LEVELS = ['國小中年級', '國小高年級', '國中一年級', '國中二年級', '國中三年級', '高中職', '大學以上'];
 const fail = (message, status = 400) => Object.assign(Error(message), { status });
 function text(value, max, label, required = true) {
@@ -34,6 +35,7 @@ function normalize(body, caveId, version, previous) {
     if (!raw || !Array.isArray(raw.wrong) || raw.wrong.length !== 3) throw fail('第 ' + (i + 1) + ' 題須有一個正解與三個其他選項');
     const q = { q: text(raw.q, 4000, '題幹'), correct: text(raw.correct, 1200, '正確答案'), wrong: raw.wrong.map(v => text(v, 1200, '選項')),
       exp: text(raw.exp || '', 4000, '解析', false), subject, difficulty, knowledge_points: Knowledge.labels(raw, subject) };
+    const visualIssue=Visual.questionIssue(q);if(visualIssue)throw fail('圖表無效：'+visualIssue);
     if (new Set([q.correct, ...q.wrong]).size !== 4) throw fail('第 ' + (i + 1) + ' 題選項不可重複');
     q.optionOrder = raw.optionOrder || [q.correct, ...q.wrong];
     if (!Array.isArray(q.optionOrder) || q.optionOrder.length !== 4 || new Set(q.optionOrder).size !== 4 || q.optionOrder.some(v => ![q.correct, ...q.wrong].includes(v))) throw fail('選項順序格式錯誤');

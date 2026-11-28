@@ -19,6 +19,8 @@
   }
 
   function rich(value) {
+    const visual=window.QAQuestionVisualEngine?.renderInline(value,rich);
+    if(visual!==null&&visual!==undefined)return visual;
     // Normalize only prose escapes; TeX commands and math environments stay intact.
     const text = normalize(window.QAMathGuard?.expandTextEscapes?.(value) ?? value);
     // If the AI supplied malformed delimiters/TeX, preserve its original

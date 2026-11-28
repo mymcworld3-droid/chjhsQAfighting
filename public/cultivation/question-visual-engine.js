@@ -93,5 +93,45 @@ function render(spec){
  return '<span class="qy-visual" style="display:block;width:100%;max-width:640px;margin:8px auto"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="'+esc(label(spec.title??'題目圖形'))+'" style="display:block;width:100%;height:auto;color:inherit"><title>'+esc(label(spec.title??'題目圖形'))+'</title>'+grid+'<svg x="'+L+'" y="'+T+'" width="'+(R-L)+'" height="'+(B-T)+'" viewBox="'+L+' '+T+' '+(R-L)+' '+(B-T)+'" overflow="hidden">'+body+'</svg>'+labels+'</svg></span>';
 }
 function inspect(spec){try{render(spec);return {valid:true}}catch(e){return {valid:false,reason:String(e.message)}}}
-return Object.freeze({compile,render,inspect});
+function inlineAPI(render,inspect){
+ const OPEN='[[QYVISUAL:',END=':QYVISUAL]]',has=v=>typeof v==='string'&&(/\[\[QYVISUAL|QYVISUAL\]\]/.test(v));
+ function parse(value){
+   const s=String(value??'');if(!has(s))return [{type:'text',text:s}];
+   if(s.length>5000)throw Error('圖文欄位過長');
+   let at=0,blocks=0;const out=[];
+   function plain(t){if(has(t))throw Error('圖表標記不完整');if(t)out.push({type:'text',text:t})}
+   while(at<s.length){
+     const i=s.indexOf(OPEN,at);
+     if(i<0){plain(s.slice(at));break}
+     plain(s.slice(at,i));const j=s.indexOf(END,i+OPEN.length);
+     if(j<0||++blocks>4)throw Error('圖表區塊不完整或過多');
+     const raw=s.slice(i+OPEN.length,j);
+     if(raw.length>2000||has(raw)||/[\r\n]/.test(raw))throw Error('圖表 JSON 必須為單行且長度受限');
+     let spec;try{spec=JSON.parse(raw)}catch(_){throw Error('圖表 JSON 格式錯誤')}
+     const result=inspect(spec);if(!result.valid)throw Error('圖表資料無效：'+result.reason);
+     out.push({type:'visual',spec,raw:s.slice(i,j+END.length)});at=j+END.length;
+   }
+   if(!blocks)throw Error('圖表標記不完整');return out;
+ }
+ const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])).replace(/\n/g,'<br>');
+ function inspectInline(value,max=5000){
+   if(!has(value))return {valid:true,count:0,plots:0};
+   try{if(value.length>max)throw Error('圖文欄位超過相容長度');const blocks=parse(value).filter(p=>p.type==='visual');return {valid:true,count:blocks.length,plots:blocks.filter(p=>p.spec.type==='plot').length}}
+   catch(e){return {valid:false,count:0,plots:0,reason:String(e.message)}}
+ }
+ function renderInline(value,rich=escape){
+   if(!has(value))return null;
+   try{return parse(value).map(p=>p.type==='text'?rich(p.text):render(p.spec)).join('')}
+   catch(_){return '<span class="qy-visual-invalid" role="alert" data-qy-invalid-visual>圖表資料不完整，請回報或重新取得題目。</span>'}
+ }
+ function plainText(value){if(!has(value))return String(value??'');try{return parse(value).map(p=>p.type==='text'?p.text:' [圖表] ').join('')}catch(_){return String(value??'')}}
+ function mapText(value,fn){if(!has(value))return fn(value);try{return parse(value).map(p=>p.type==='text'?fn(p.text):p.raw).join('')}catch(_){return value}}
+ function questionIssue(q){
+   const entries=[[q?.q,1400],[q?.correct,280],...(Array.isArray(q?.wrong)?q.wrong.map(v=>[v,280]):[]),[q?.exp,1800]];
+   for(const [v,max] of entries){const result=inspectInline(v,max);if(!result.valid)return result.reason}return '';
+ }
+ function hasQuestion(q){return [q?.q,q?.correct,...(Array.isArray(q?.wrong)?q.wrong:[]),q?.exp].some(has)}
+ return {has,parse,inspectInline,renderInline,plainText,mapText,questionIssue,hasQuestion};
+}
+return Object.freeze({compile,render,inspect,...inlineAPI(render,inspect)});
 });

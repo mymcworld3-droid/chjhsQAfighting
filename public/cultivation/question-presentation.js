@@ -5,7 +5,9 @@
   function stemMarkup(value,rich){
     const text=String(value??'');
     const render=typeof rich==='function'?rich:root.quizMathRichText||root.formatQuizRichText;
-    return typeof render==='function'?render(text):escape(text).replace(/\n/g,'<br>');
+    const plain=typeof render==='function'?render:v=>escape(v).replace(/\n/g,'<br>');
+    const visual=root.QAQuestionVisualEngine?.renderInline(text,plain);
+    return visual??plain(text);
   }
   function optionMarkup(value,index,{rich,correctMark=false,contentClass='',contentTag='span',state}={}){
     const letter=Number.isInteger(index)&&index>=0&&index<26?String.fromCharCode(65+index):'—';

@@ -1,6 +1,8 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const aiRouter = require('./ai-router');
 const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
+const Visual=require('./public/cultivation/question-visual-engine.js');
+const {VISUAL_PROMPT,VISUAL_REVIEW}=require('./question-visual-prompt.cjs');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, dongtianRepository } = require('./server-repositories.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
@@ -251,6 +253,8 @@ ${JSON.stringify({
     questionStructure: plan.questionStructure
   })}
 
+${VISUAL_PROMPT}
+
 [本批題目藍圖]
 ${JSON.stringify(blueprints)}
 ${Knowledge.promptFor(plan.subject)}
@@ -307,6 +311,7 @@ function normalizeQuestionBatch(raw, plan, existingQuestions, startIndex, expect
     const wrong = Array.isArray(item?.wrong) ? item.wrong.map((x) => cleanText(x, 800)).filter(Boolean) : [];
     const exp = cleanText(item?.exp, 3500);
     if (!q || !correct || wrong.length !== 3 || !exp) continue;
+    if(Visual.questionIssue({q,correct,wrong,exp}))throw Error('洞天圖表資料無效');
     if (requireDetailedExplanation) {
       const issue = questionIntegrityIssue({ q, correct, wrong, exp });
       if (issue) throw new Error(`第 ${startIndex + 1} 題答案與解析一致性未通過：${issue}；請完整重寫題目與解析`);
@@ -434,6 +439,7 @@ function normalizeResult(raw, creatorLevel) {
     const wrong = Array.isArray(item?.wrong) ? item.wrong.map((x) => cleanText(x, 800)).filter(Boolean) : [];
     const exp = cleanText(item?.exp, 3500);
     if (!q || !correct || wrong.length < 3 || !exp) continue;
+    if(Visual.questionIssue({q,correct,wrong,exp}))throw Error('洞天圖表資料無效');
     const uniqueWrong = [...new Set(wrong.filter((x) => x !== correct))].slice(0, 3);
     if (uniqueWrong.length !== 3) continue;
     const fp = q.toLowerCase().replace(/\s+/g, ' ').slice(0, 220);
@@ -473,6 +479,7 @@ function normalizeResult(raw, creatorLevel) {
 
 function buildDongtianDoubleCheckPrompt(dongtian) {
   return `
+${VISUAL_REVIEW}
 [任務]
 你是第二位獨立的洞天品質審核員。這份洞天已由另一個 AI 生成，請逐題重新檢查，而不是假設它正確。
 
@@ -617,6 +624,7 @@ function normalizeQuestionSnapshot(input) {
 function buildQuestionReviewPrompt(question, reason, dongtian = {}) {
   const q = normalizeQuestionSnapshot(question);
   return `
+${VISUAL_REVIEW}
 [任務]
 你是洞天題目品質審核員。玩家回報一題可能有錯，請保守、嚴格判定，不要因為玩家質疑就迎合。
 
@@ -664,6 +672,7 @@ function normalizeQuestionReview(raw) {
 
 function buildQuestionReviewVerificationPrompt(question, reason, firstReview, dongtian = {}) {
   return `
+${VISUAL_REVIEW}
 [任務]
 你是第二位獨立審核員。請重新檢查洞天題目，不得因第一位審核員說有錯就直接同意。只有你也能指出可驗證的實質錯誤，才能 confirmError=true。
 
@@ -724,6 +733,8 @@ ${Knowledge.promptFor(original?.subject,Knowledge.labels(original,original?.subj
 [任務]
 你是洞天題目修復師。請依洞天主人的「修改提示詞」修正被確認有誤的題目，但必須保持題目本質不變。
 
+${VISUAL_PROMPT}
+
 [不可改變]
 1. 核心知識點、學習目標、原本要考的概念／能力必須相同，禁止換成另一個章節、公式、人物、事件或新知識點。
 2. 題目 id、subject、difficulty 必須保持原值；不要藉修改提示詞更換科目或提高／降低程度。
@@ -757,6 +768,7 @@ ${cleanText(hint, MAX_REVISION_HINT)}
 
 function buildRevisionValidationPrompt(original, revised, issue, hint, dongtian = {}) {
   return `
+${VISUAL_REVIEW}
 [任務]
 你是洞天修復的最終把關者。比較原題與修正版，嚴格確認修正版只是修正原錯誤，而不是偷換題目。
 
