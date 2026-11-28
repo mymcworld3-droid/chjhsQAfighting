@@ -58,7 +58,7 @@
 
 - 基準 main 7bb78031419df2dd2e97c761bff071c031ced34d；最新完整回歸 [46107314075](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107314075)、瀏覽器 [46107314077](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107314077)、Pages [46107313121](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107313121) 均成功。程式提交 45e2128 的候選版整合驗收 [46107114726](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114726) 全部成功；先前未結論的兩次瀏覽器驗收亦成功。第二階段結案。
 
-## 第 3 階段：尖峰石域劍法（程式已實作，待 CI）
+## 第 3 階段：尖峰石域劍法（已驗收）
 
 - 新開副本配置直線劍氣（5 格）、橫掃斬擊（3 格扇區）、穿刺突進（3 格、最多 2 格技能位移）、領主劍雨（4 格瞄準、曼哈頓半徑 2）；倍率暫沿用 1，未調整血量/普通移動/基礎傷害。上述射程為暫定值，最終待第八階段平衡。
 - 巖獸使用橫掃及穿刺；石靈使用直線及橫掃；守衛使用穿刺及直線；領主四技。從上次已施展技能之後循環尋找合法選項，不改已預告的技能；不合法則正常追擊。
@@ -90,3 +90,16 @@
 - 候選版工作 12/15 成功，未結論：candidate-browser (tactical)、candidate-balance (5)、candidate-balance (10)。最新已完成工作無失敗。
 - 第四階段預檢：weapon-dungeon-rules.js 的 CATALOG、progressFor/recordClear 與 layout；tactical-combat-api.cjs 的 start/weaponDungeonState 已共用原子扣券及重送憑證；weapon-dungeon-rewards.cjs 已依權威目錄限制掉落流派。須將隱藏目錄與可公開目錄分離，僅允許伺服器可信測試設定進場，禁止客戶端自行開啟。舊 peak-stone 存檔仍維持頂層 unlocked/clears，萬獸險域獨立 byDungeon。沙地圖集索引 13，石域遷移已限定 peak-stone；初步素材使用玄甲山豬 species 1、巖甲獸 species 8，領主可採現有大型巖獸，正式造型待第七階段。需修正僅對相應武器流派生效的環境倍率，避免新副本沿用舊圖騰預設 1.15。
 - 尚未寫入第四階段戰鬥或副本資料；依要求全部最新第三階段 CI 通過才開工。本次僅補記驗收證據與預檢，不公開萬獸險域。
+
+### 第三階段正式結案（2026-11-28）
+
+- 修正程式 e140d50 的完整回歸 46111230150、瀏覽器 46111230179、候選版 46111230218（15/15）及 Pages 46111229261 全部成功。最新文件 50e5cfb 的回歸 46111441978、瀏覽器 46111442014、Pages 46111441727 亦全部成功。第三階段正式結案。
+
+## 第 4 階段：萬獸險域基礎建置（已實作，待 CI）
+
+- 技術 ID beast-wilds。公開 catalog/selection 預設排除 hidden；僅伺服器註冊時明確傳 allowHiddenWeaponDungeons:true 可進場及列出測試副本，客戶端 body/query 不能開啟。正式 register 預設 false，無環境自動開啟或公開按鈕。
+- 11×15 沙地索引 13，主畫面繪製時僅新副本加赤紅色調；舊石域遷移仍只作用於 peak-stone。種子鏡像與三種側翼障礙配置、領主上下變化；出生點 (5,13)，領主最近占位距離六/七格，六隻普通靈獸三衝撞型三震波型，暫沿用山豬 species 1、巖甲獸 species 8 及大型巖獸素材。
+- 共用原子進場、扣券、重送與結算；六階獨立 byDungeon，尖峰石域頂層進度保留。內部權威 CATALOG 支援隱藏圖騰掉落池，30/20/50 及空池規則不變；公開 API 不暴露隱藏進度。弦修預留 weaponType bow +15%，不新增弓系武器；萬獸圖騰倍率 1，保留尖峰舊存檔圖騰 1.15。
+- 暫定敵人數值沿用尖峰基礎倍率；開發測試用近身鎖定試擊只用於隱藏副本，並非正式衝撞或震波。第五階段逐格衝撞/推動/撞牆，第六階段方形震波及 AI，第七階段完整美術。不得提前公開。
+- 新增五組測試：API 隱藏限制與可信開發進場、六階 48 種子完整占位及閃避、共用票券與六階實際通關及防重複、圖騰掉落及空池、環境加成隔離及實際武器傷害。
+- 修改 public/cultivation/weapon-dungeon-rules.js、public/cultivation/tactical-rules.js、public/cultivation/tactical-renderer.js、tactical-combat-api.cjs、tests/weapon-dungeons.test.cjs、public/module-versions.json、本文件。待 npm test、npm run test:battle、npm run check:module-versions、瀏覽器、候選版及 Pages 驗收。未確認最新 CI 前不得宣稱完成；萬獸險域仍隱藏。

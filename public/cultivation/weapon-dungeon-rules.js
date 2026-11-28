@@ -3,7 +3,7 @@
   'use strict';
   const ID='peak-stone',NAME='尖峰石域',DAILY_TICKETS=3,MAX_TICKETS=5;
   // grid-world ground atlas: zero-based 16 = stone, 13 = desert.
-  const STONE_TERRAIN=16;
+  const STONE_TERRAIN=16,DESERT_TERRAIN=13,WILD_ID='beast-wilds',WILD_NAME='萬獸險域';
   const DIFFICULTIES=Object.freeze([
     ['foundation','築基',5],['golden','金丹',10],['nascent','元嬰',20],
     ['divine','化神',35],['unity','合體',80],['tribulation','渡劫',110]
@@ -22,7 +22,14 @@
   const CATALOG=Object.freeze([Object.freeze({id:ID,name:NAME,subtitle:'群峰深處 · 重甲之試',theme:'stone',rewardWeaponType:'sword',
     description:'穿過三重石陣擊敗深處領主即可通關，沿途守衛會持續追擊。',
     traits:['追蹤劍法','重甲靈獸','領主劍雨'],bonus:'圖騰攻擊傷害 +15%',
-    tactics:['蓄勢中的劍法會追蹤站位；離開合法攻擊線或射程，或利用障礙物閃避。','成功擊退則會打斷蓄勢，撞牆未位移不算。','領主從開戰起即可攻擊，也能直接受到傷害及擊退，不必先清除守衛。','擊敗領主立即通關，剩餘守衛不必清除。'],totemDamageMultiplier:1.15})]);
+    tactics:['蓄勢中的劍法會追蹤站位；離開合法攻擊線或射程，或利用障礙物閃避。','成功擊退則會打斷蓄勢，撞牆未位移不算。','領主從開戰起即可攻擊，也能直接受到傷害及擊退，不必先清除守衛。','擊敗領主立即通關，剩餘守衛不必清除。'],totemDamageMultiplier:1.15}),
+    Object.freeze({id:WILD_ID,name:WILD_NAME,hidden:true,subtitle:'赤砂荒原 · 群獸之試',theme:'desert',rewardWeaponType:'totem',
+      description:'穿越赤砂荒原，擊敗中央領主即可通關。',traits:['鎖定預告','重型靈獸','緊湊戰場'],
+      bonus:'弦修技能傷害 +15%',tactics:['預告鎖定後不追蹤玩家。','擊退可打斷準備攻擊。','擊敗領主立即通關。'],
+      totemDamageMultiplier:1,bowDamageMultiplier:1.15})]);
+  // Stage four development-only close-range attack. Charge and shockwaves
+  // are implemented in stages five/six, not advertised as finished skills.
+  const WILD_TEST_SKILL=Object.freeze({id:'wild-test-hit',name:'近身試擊',shape:'point',range:1,power:1,warning:'locked',animation:'hit'});
   const WEAPON_REALMS=Object.freeze(['煉氣',...DIFFICULTIES.map(d=>d.name),'真仙']);
   // The drop ladder follows the six dungeon difficulties, with 煉氣 below 築基.
   const lowerRealm=realm=>WEAPON_REALMS[WEAPON_REALMS.indexOf(realm)-1]||null;
@@ -48,21 +55,48 @@
     if(id===ID)Object.assign(p,next);else p.byDungeon={...p.byDungeon,[id]:next};
     return next;
   }
-  function catalog(p){
-    return CATALOG.map(entry=>{const current=progressFor(p,entry.id);
+  function catalog(p,{allowHidden=false}={}){
+    return CATALOG.filter(entry=>!entry.hidden||allowHidden===true).map(entry=>{const current=progressFor(p,entry.id);
       return {...entry,...current,difficulties:DIFFICULTIES.map(d=>({...d,locked:d.index>current.unlocked,nextRealm:lowerRealm(d.name),lowerRealm:lowerRealm(d.name)}))};});
   }
-  function selection(input){
-    const entry=CATALOG.find(d=>d.id===input?.dungeonId);
+  function selection(input,{allowHidden=false}={}){
+    const entry=CATALOG.find(d=>d.id===input?.dungeonId&&(!d.hidden||allowHidden===true));
     if(!entry)throw Object.assign(Error('武器副本不存在'),{status:400});
     const difficulty=input.difficulty;
     if(!Number.isInteger(difficulty)||difficulty<0||difficulty>=6)throw Object.assign(Error('副本難度無效'),{status:400});
     return {id:entry.id,name:entry.name,difficulty,realm:DIFFICULTIES[difficulty].name,stage:DIFFICULTIES[difficulty].stage,
-      nextRealm:lowerRealm(DIFFICULTIES[difficulty].name),lowerRealm:lowerRealm(DIFFICULTIES[difficulty].name),totemDamageMultiplier:entry.totemDamageMultiplier};
+      nextRealm:lowerRealm(DIFFICULTIES[difficulty].name),lowerRealm:lowerRealm(DIFFICULTIES[difficulty].name),totemDamageMultiplier:entry.totemDamageMultiplier,...(entry.bowDamageMultiplier?{bowDamageMultiplier:entry.bowDamageMultiplier}:{})};
+  }
+  function wildLayout(seed,index,definition){
+    const width=11,height=15;
+    let h=0;for(const ch of String(seed))h=(Math.imul(h,31)+ch.charCodeAt(0))>>>0;
+    const mirror=x=>h%2?width-1-x:x;
+    const spawn={x:5,y:13},blocks=[];
+    const rock=(x,y)=>blocks.push({x:mirror(x),y,kind:'rock'});
+    for(let y=0;y<height;y++)for(let x=0;x<width;x++)if(x===0||x===width-1||y===0||y===height-1)rock(x,y);
+    // Open central arena; obstacles stay at the flanks and off the spawn exits.
+    for(const [x,y] of [[2,3],[2,4],[8,3],[8,4],[1,7],[9,7],[2,11],[8,11]])rock(x,y);
+    const variants=[[[1,9],[9,10]],[[2,1],[8,2]],[[1,5],[9,9]]];
+    for(const [x,y] of variants[(h>>>1)%3])rock(x,y);
+    const lordY=6-((h>>>3)%2);
+    const enemies=[{x:h%2?width-2-5:5,y:lordY,species:8,name:WILD_NAME+'領主',boss:true,bossKind:'rock',weaponDungeonLord:true,
+      dungeonRole:'lord',dungeonSkills:[WILD_TEST_SKILL],hpFactor:7+index*1.2,attackFactor:1+index*.12,moveSteps:1,level:definition.stage}];
+    for(const [x,y,role] of [[3,5,'charge'],[8,6,'shock'],[2,9,'shock'],[8,9,'charge'],[3,12,'charge'],[7,12,'shock']]){
+      const charge=role==='charge';
+      enemies.push({x:mirror(x),y,species:charge?1:8,name:charge?'赤鬃蠻豬':'裂地蠻牛',
+        dungeonRole:role,dungeonSkills:[WILD_TEST_SKILL],hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
+    }
+    const occupied=new Set([spawn.x+','+spawn.y,...enemies.flatMap(a=>Array.from({length:a.boss?4:1},(_,i)=>(a.x+(a.boss?i%2:0))+','+(a.y+(a.boss?Math.floor(i/2):0))))]);
+    return {id:WILD_ID,map:WILD_ID,seed,stage:definition.stage,layoutVersion:4,title:WILD_NAME+' · '+definition.realm,
+      width,height,terrain:DESERT_TERRAIN,biome:'desert',mode:'elimination',variant:'locked-beasts',structure:'open-red-sand',
+      attempt:0,layoutHash:WILD_ID+':v1:'+index+':'+h.toString(16),blocks:blocks.filter(p=>!occupied.has(p.x+','+p.y)),
+      ground:Array(width*height).fill(DESERT_TERRAIN),spawn,enemies,objective:{type:'boss',bossUid:'monster-0',completed:false},weaponDungeon:definition};
   }
   function layout(seed,index,dungeonId=ID){
-    const definition=selection({dungeonId,difficulty:index});
-    if(dungeonId!==ID)throw Error('副本地圖尚未配置');
+    // Internal room construction must support hidden saved rooms. Public entry
+    // is checked separately by the authenticated server start endpoint.
+    const definition=selection({dungeonId,difficulty:index},{allowHidden:true});
+    if(dungeonId===WILD_ID)return wildLayout(seed,index,definition);
     const width=13,height=21;
     let h=0;for(const c of String(seed))h=(Math.imul(h,31)+c.charCodeAt(0))>>>0;
     const blocks=[];
@@ -94,5 +128,5 @@
     if(Array.isArray(room.ground)&&room.ground.includes(13))room.ground=room.ground.map(t=>t===13?STONE_TERRAIN:t);
     return room;
   }
-  return Object.freeze({ID,NAME,DAILY_TICKETS,MAX_TICKETS,STONE_TERRAIN,PEAK_SKILLS,restoreTerrain,DIFFICULTIES,WEAPON_REALMS,CATALOG,lowerRealm,day,progress,progressFor,recordClear,catalog,selection,layout});
+  return Object.freeze({ID,NAME,DAILY_TICKETS,MAX_TICKETS,STONE_TERRAIN,DESERT_TERRAIN,WILD_ID,WILD_NAME,PEAK_SKILLS,restoreTerrain,DIFFICULTIES,WEAPON_REALMS,CATALOG,lowerRealm,day,progress,progressFor,recordClear,catalog,selection,layout});
 });

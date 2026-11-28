@@ -552,3 +552,97 @@ test('the next legal sword rotates after a cast without changing the already ann
  assert.equal(s.actors[1].lastDungeonSkill,skills[0].id);
  assert.equal(s.actors[1].intent.skillId,skills[1].id);
 });
+
+const wildAccess=Object.freeze({allowHidden:true});
+const wildInput=(requestId,difficulty=0)=>({activity:'weapon-dungeon',dungeonId:W.WILD_ID,difficulty,requestId});
+test('Beast Wilds is absent from public catalog and cannot be entered with client flags; dev access is server-only',async()=>{
+ const db=database();own(db);
+ const state=await API.weaponDungeonState(db,'u1',NOW);
+ assert.deepEqual(state.dungeons.map(d=>d.id),[W.ID]);
+ assert.throws(()=>W.selection({...wildInput('hidden-selection'),allowHidden:true}),/副本不存在/);
+ await assert.rejects(API.start(db,'u1',{...wildInput('hidden-request'),allowHidden:true,allowHiddenWeaponDungeons:true},NOW),/副本不存在/);
+ assert.equal((await API.weaponDungeonState(db,'u1',NOW)).tickets,3);
+ const dev=await API.weaponDungeonState(db,'u1',NOW,wildAccess);
+ assert.equal(dev.dungeons.find(d=>d.id===W.WILD_ID).difficulties.length,6);
+ const s=await API.start(db,'u1',wildInput('dev-wild-start'),NOW,wildAccess);
+ assert.equal(s.weaponDungeon.id,W.WILD_ID);assert.equal((await API.weaponDungeonState(db,'u1',NOW,wildAccess)).tickets,2);
+ assert.equal((await API.weaponDungeonState(db,'u1',NOW)).active,null);
+});
+test('six tiers and many seeds produce legal 11x15 red desert layouts, full lord mobility, and six distinct guards',()=>{
+ const hashes=new Set(),positions=new Set();
+ for(let d=0;d<6;d++)for(let seed=0;seed<48;seed++){
+  const layout=W.layout('wild-'+seed,d,W.WILD_ID);
+  assert.deepEqual(layout,W.layout('wild-'+seed,d,W.WILD_ID));
+  const s=R.create({id:'wild-map',players:[hero()],trial:{seed:'wild-'+seed,weaponDungeon:{id:W.WILD_ID,difficulty:d}},now:NOW});
+  const [player,lord,...guards]=s.actors;
+  assert.equal(s.width,11);assert.equal(s.height,15);assert.equal(s.terrain,13);assert.equal(s.ground.length,165);
+  assert.ok(s.ground.every(t=>t===13));
+  assert.deepEqual(W.restoreTerrain(structuredClone(s)),s);
+  assert.equal(R.footprint(lord).length,4);assert.equal(lord.weaponDungeonLord,true);
+  assert.ok([6,7].includes(Math.min(...R.footprint(lord).map(q=>R.dist(q,player)))));
+  assert.equal(guards.length,6);assert.equal(guards.filter(m=>m.dungeonRole==='charge').length,3);
+  assert.equal(guards.filter(m=>m.dungeonRole==='shock').length,3);
+  const all=s.actors.flatMap(R.footprint);assert.equal(new Set(all.map(R.key)).size,all.length);
+  assert.ok(all.every(q=>!R.blocked(s,q)));
+  const around=R.neighbours(s,lord).filter(q=>R.canOccupy(s,lord,q));assert.ok(around.length>=2);
+  const queue=[player],seen=new Set([R.key(player)]);
+  for(let i=0;i<queue.length;i++)for(const q of R.neighbours(s,queue[i]))if(!seen.has(R.key(q))){seen.add(R.key(q));queue.push(q);}
+  assert.ok(all.every(q=>seen.has(R.key(q))));assert.ok(R.neighbours(s,player).filter(q=>!R.at(s,q)).length>=3);
+  assert.ok(s.actors.slice(1).every(m=>!m.trackingAttack&&m.dungeonSkills.every(sk=>sk.warning==='locked')&&R.monsterProfileFor(m).move.steps===1));
+  hashes.add(s.trial.layoutHash);positions.add(JSON.stringify([s.blocks,lord.x,lord.y,guards.map(m=>[m.x,m.y])]));
+ }
+ assert.ok(hashes.size>48);assert.ok(positions.size>2);
+});
+test('wild and stone share atomic tickets and one active room while independently unlocking all six tiers',async()=>{
+ const db=database();own(db);
+ const stone=await API.start(db,'u1',input('stone-before-wild'),NOW);
+ await assert.rejects(API.start(db,'u1',wildInput('parallel-wild'),NOW,wildAccess),/已有進行中/);
+ await API.command(db,'u1',{roomId:stone.id,type:'leave',requestId:'leave-before-wild'},NOW);
+ let p=await API.weaponDungeonState(db,'u1',NOW,wildAccess);assert.equal(p.tickets,2);
+ // Preserve a real legacy top-level progress record through every wild win.
+ const pointer=db.records.get(API.PLAYERS+'/u1');pointer.weaponDungeonV1.unlocked=2;pointer.weaponDungeonV1.clears=[3,1,0,0,0,0];
+ for(let d=0;d<6;d++){
+  const now=NOW+Math.floor((d+1)/3)*86400000;
+  if(d<5)await assert.rejects(API.start(db,'u1',wildInput('wild-skip-'+d,d+1),now,wildAccess),/前一個難度/);
+  const req=wildInput('wild-tier-'+d,d);
+  const [s,replay]=await Promise.all([API.start(db,'u1',req,now,wildAccess),API.start(db,'u1',req,now,wildAccess)]);
+  assert.equal(s.id,replay.id);
+  const resume=await API.start(db,'u1',{...wildInput('wild-resume-'+d,d),resumeRoomId:s.id},now,wildAccess);assert.equal(resume.id,s.id);
+  const raw=db.records.get(API.ROOMS+'/'+s.id),lord=raw.actors[1];
+  Object.assign(raw.actors[0],{x:lord.x,y:lord.y+2,stamina:10,answered:0,correct:0});lord.hp=1;
+  R.prepareIntents(raw);
+  const command={roomId:s.id,type:'manual',skillId:'rock-fist',x:lord.x,y:lord.y+1,revision:raw.revision,requestId:'wild-win-'+d};
+  const win=await API.command(db,'u1',command,now);assert.equal(win.weaponDungeonResult.cleared,true);
+  assert.equal(win.actors.slice(2).filter(R.alive).length,6);
+  await API.command(db,'u1',command,now);
+  p=await API.weaponDungeonState(db,'u1',now,wildAccess);
+  assert.equal(p.unlocked,2);assert.deepEqual(p.clears,[3,1,0,0,0,0]);
+  assert.deepEqual(p.byDungeon[W.WILD_ID],{unlocked:Math.min(5,d+1),clears:Array.from({length:6},(_,i)=>Number(i<=d))});
+  assert.equal(p.tickets,2-(d+1)%3);
+  assert.equal((await API.weaponDungeonState(db,'u1',now)).byDungeon,undefined);
+ }
+});
+test('wild reward uses the live totem pool and one 30/20/50 roll, no re-roll or swords',()=>{
+ for(let d=0;d<6;d++){
+  const info=W.selection(wildInput('pool-test',d),wildAccess);
+  for(let roll=0;roll<100;roll++){
+   const expected=roll>=50?[]:M.BOOKS.filter(b=>b.weaponType==='totem'&&b.tierRealm===(roll<30?info.realm:info.lowerRealm));
+   let rolls=0;
+   const rec=M.normalize({}),drop=Rewards.roll({weaponDungeon:{...info,rewardWeaponType:'sword'}},'u1',rec,max=>{rolls++;return max===100?roll:0});
+   assert.equal(drop?.id??null,expected[0]?.id??null);assert.equal(rolls,expected.length?2:1);
+  }
+  assert.deepEqual(Rewards.previewPools([info.realm],W.WILD_ID)[info.realm],M.BOOKS.filter(b=>b.weaponType==='totem'&&b.tierRealm===info.realm).map(({id,name,tierRealm})=>({id,name,tierRealm})));
+ }
+});
+test('only bow receives wild bonus; real sword and totem attacks remain unboosted',()=>{
+ const info=W.selection(wildInput('bonus-test'),wildAccess);
+ assert.equal(R.dungeonDamageMultiplier(info,'bow'),1.15);
+ for(const type of ['sword','totem','spear','body',undefined])assert.equal(R.dungeonDamageMultiplier(info,type),1);
+ assert.equal(R.dungeonDamageMultiplier({id:W.WILD_ID,totemDamageMultiplier:1.15},'totem'),1);
+ assert.equal(R.dungeonDamageMultiplier({},'totem'),1.15);assert.equal(R.dungeonDamageMultiplier(null,'bow'),1);
+ for(const [skill,expected] of [['rock-fist',260],['wind-slash',240]]){
+  const s=scene({skills:[skill],enemy:{x:7,y:4},player:{x:6,y:4}});s.weaponDungeon=info;
+  const next=R.apply(s,'u1',{type:'manual',skillId:skill,x:7,y:4},NOW);
+  assert.equal(s.actors[1].hp-next.actors[1].hp,expected);
+ }
+});

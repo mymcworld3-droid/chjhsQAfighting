@@ -213,13 +213,14 @@
   // Keep the original generator for retries of battles created before layout v2.
   function monsterProfileFor(m){
     const profile=monsterProfile(m.species);
-    if(!m.trackingAttack)return profile;
     if(Array.isArray(m.dungeonSkills)&&m.dungeonSkills.length){
       const sk=m.dungeonSkills.find(sk=>sk.id===m.intent?.skillId)||m.dungeonSkills[0];
       return {...profile,name:m.name,attackName:sk.name,attack:{...sk},move:{kind:'heavy',steps:1},moveName:'重步',
-        attackText:m.dungeonSkills.map(sk=>sk.name).join('、')+'；蓄勢會追蹤合法方向及射程。',
-        moveText:'普通移動最多一格；穿刺突進另有合法技能位移。',tip:'避開合法攻擊線或射程，或成功擊退打斷蓄勢。'};
+        attackText:m.dungeonSkills.map(sk=>sk.name).join('、')+(sk.warning==='locked'?'；預告鎖定後不追蹤。':'；蓄勢會追蹤合法方向及射程。'),
+        moveText:m.trackingAttack?'普通移動最多一格；穿刺突進另有合法技能位移。':'普通移動最多一格。',
+        tip:sk.warning==='locked'?'離開已顯示的危險格，或成功擊退打斷蓄勢。':'避開合法攻擊線或射程，或成功擊退打斷蓄勢。'};
     }
+    if(!m.trackingAttack)return profile;
     return {...profile,name:m.name,attackName:m.weaponDungeonLord?'尖峰崩裂':'追蹤落石',
       attack:{shape:'blast',range:m.weaponDungeonLord?4:3,radius:m.weaponDungeonLord?1:0,sight:false,power:1},
       move:{kind:'heavy',steps:1},moveName:'重步',
@@ -670,6 +671,7 @@
       ...(num(raw.enemyScaleAttack)?{enemyScaleAttack:num(raw.enemyScaleAttack)}:{}),
       ...(raw.bot?{level:Math.max(1,num(raw.level)||1),...(raw.trackingAttack?{trackingAttack:true}:{}),...(raw.weaponDungeonLord?{weaponDungeonLord:true}:{})}:{}),
       ...(raw.bot&&Array.isArray(raw.dungeonSkills)?{dungeonSkills:clone(raw.dungeonSkills)}:{}),
+      ...(raw.bot&&['charge','shock','lord'].includes(raw.dungeonRole)?{dungeonRole:raw.dungeonRole}:{}),
       ...(raw.bot&&raw.role?{role:raw.role,home:raw.home}:{}),
       ...(raw.boss?{boss:true,footprint:{width:2,height:2},...(raw.bossKind?{bossKind:raw.bossKind}:{})}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
@@ -794,7 +796,7 @@
         else if(o.type==='elimination')o.completed=!s.actors.some(a=>a.bot&&alive(a));
         if(o.completed&&(s.weaponDungeon||hero.answered>0)){
           s.status='finished';s.winner=hero.team;s.finishReason='objective';
-          if(s.weaponDungeon)log(s,'石域領主已被擊敗，武器副本通關','objective');
+          if(s.weaponDungeon)log(s,(s.weaponDungeon.id==='beast-wilds'?'萬獸險域領主':'石域領主')+'已被擊敗，武器副本通關','objective');
         }
         else if(o.completed&&!o.awaitingAnswer){o.awaitingAnswer=true;log(s,'目標已完成，請先完成一題作答','objective');}
       }
@@ -814,10 +816,18 @@
       }
     }
   }
+  function dungeonDamageMultiplier(dungeon,weaponType){
+    if(!dungeon)return 1;
+    const id=dungeon.id||'peak-stone';
+    // Only the matching weapon family can receive each dungeon's bonus.
+    if(id==='peak-stone'&&weaponType==='totem')return dungeon.totemDamageMultiplier??1.15;
+    if(id==='beast-wilds'&&weaponType==='bow')return dungeon.bowDamageMultiplier??1.15;
+    return 1;
+  }
   function damage(s,source,target,raw,opts={}){
     if(!alive(source)||!alive(target))return 0;
     const manual=manuals()?.BY_BOOK?.[opts.manualId||manuals()?.BY_SKILL?.[opts.skill]?.manualId];
-    if(s.weaponDungeon&&!source.bot&&target.bot&&manual?.weaponType==='totem')raw*=s.weaponDungeon.totemDamageMultiplier??1.15;
+    if(s.weaponDungeon&&!source.bot&&target.bot)raw*=dungeonDamageMultiplier(s.weaponDungeon,manual?.weaponType);
     const active=s.trial?.layoutVersion===4&&s.objective?.type==='sealing'?s.objective.points.filter(p=>!p.activated):[];
     if(source.bot&&active.some(p=>p.kind==='rage'&&dist(p,source)<=SEAL_TYPES.rage.range.radius))raw*=SEAL_TYPES.rage.damageMultiplier;
     if(target.bot&&active.some(p=>p.kind==='shield'&&dist(p,target)<=SEAL_TYPES.shield.range.radius)&&!opts.pierce)raw*=SEAL_TYPES.shield.damageMultiplier;
@@ -2049,5 +2059,5 @@
     if(s.weaponObjects)s.weaponObjects=weave().finish(s.weaponObjects);
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterProfileFor,trackingCells,DUNGEON_ENEMY_SKILLS,dungeonSkillPlan,dungeonIntent,retargetTrackingIntents,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,previewCast,skillPreviewPlan,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterProfileFor,trackingCells,DUNGEON_ENEMY_SKILLS,dungeonDamageMultiplier,dungeonSkillPlan,dungeonIntent,retargetTrackingIntents,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,previewCast,skillPreviewPlan,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

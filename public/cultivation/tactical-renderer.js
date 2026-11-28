@@ -783,6 +783,7 @@ export class TacticalRenderer{
     for(let y=view.y;y<view.y+view.height;y++)for(let x=view.x;x<view.x+view.width;x++){
       const px=Math.round(ox+x*cell),py=Math.round(oy+y*cell),edgeX=Math.round(ox+(x+1)*cell),edgeY=Math.round(oy+(y+1)*cell),t=s.ground?.[y*s.width+x]??s.terrain;
       if(!this.sprite('ground',t%4*128,Math.floor(t/4)*128,128,128,px,py,edgeX-px,edgeY-py)){c.fillStyle=t===16&&s.weaponDungeon&&(s.weaponDungeon.id||'peak-stone')==='peak-stone'?((x+y)%2?'#93999b':'#9da1a3'):((x+y)%2?'#5b6650':'#5f6b53');c.fillRect(px,py,edgeX-px,edgeY-py);}
+      if(s.weaponDungeon?.id==='beast-wilds'&&t===13){c.fillStyle='rgba(164,65,35,.24)';c.fillRect(px,py,edgeX-px,edgeY-py);}
       c.strokeStyle='#10291b30';c.lineWidth=.7;c.strokeRect(px,py,edgeX-px,edgeY-py);
     }
     // Stone gate inscriptions are strictly decorative, below combat telegraphs.
