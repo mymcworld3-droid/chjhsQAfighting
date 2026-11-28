@@ -421,7 +421,7 @@
     if(!move||!['dash','throw'].includes(scene.style))return false;
     const p=clamp(progress),beat=pulse(p),{cell:size,ox,oy,width,height}=view,c=ctx;
     const center=pos=>({x:ox+(pos.x+.5)*size,y:oy+(pos.y+.5)*size});
-    const sword=move==='wind-step',color=sword?'#a5f6da':'#ffc77b';
+    const sword=move==='wind-step'||move==='peak-sword-thrust',color=sword?'#a5f6da':'#ffc77b';
     c.save();c.beginPath();c.rect(ox,Math.max(0,oy-size*.35),size*width,size*(height+.35));c.clip();
     c.strokeStyle=color;c.lineCap='round';c.lineJoin='round';c.shadowColor=color;c.shadowBlur=size*.16;
     for(const motion of scene.moves||[]){

@@ -213,7 +213,7 @@
       }
       if(scene.kind==='move'&&['dash','throw'].includes(scene.style)){
         const revision=String(event.id).split(':')[0];
-        const related=events.filter(other=>other.actor===event.actor&&other.type==='cast'&&
+        const related=events.filter(other=>other.actor===event.actor&&(other.type==='cast'||other.type==='monster-attack')&&
           String(other.id).split(':')[0]===revision&&other.skill);
         const cast=related.find(other=>events.indexOf(other)>index)||related.at(-1);
         if(cast)scene.visualSkill=cast.skill;

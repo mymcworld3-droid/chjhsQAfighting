@@ -68,3 +68,5 @@
 - 新增六項回歸，涵蓋正式配置、四技能傷害及動畫事件、追蹤方向與遮蔽、扇形及劍雨、2×2 路徑碰撞、技能循環；保留既有測試。
 - 修改：public/cultivation/tactical-rules.js、public/cultivation/weapon-dungeon-rules.js、public/cultivation/tactical-skill-effects.js、public/cultivation/tactical-animation.js、tests/weapon-dungeons.test.cjs、public/module-versions.json、本文件。
 - 待 CI：npm test、npm run test:battle、npm run check:module-versions、瀏覽器及候選版驗收。未完成最新 CI 前不得宣稱第三階段正式驗收；下一階段為隱藏萬獸險域基礎建置。
+
+- 補強：穿刺位移動畫同樣使用劍法速度線，新增四技（含穿刺）擊退打斷及實際動畫路徑辨識斷言。

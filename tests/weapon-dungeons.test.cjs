@@ -495,6 +495,7 @@ test('all four Peak Stone sword skills use published cells, real damage and comm
    const dash=s.events.find(ev=>ev.type==='displace'&&ev.actor==='beast');
    assert.deepEqual(dash.path,[{x:4,y:4},{x:5,y:4},{x:6,y:4}]);
    assert.equal(s.actors[1].x,6);
+   assert.ok(plan.some(scene=>scene.kind==='move'&&scene.visualSkill===sk.id&&scene.moves.some(m=>m.uid==='beast'&&m.path.length===3)));
   }
  }
 });
@@ -518,9 +519,7 @@ test('sweep follows lateral steps, lord rain is finite, and all sword warnings c
  const rain=configuredScene(W.PEAK_SKILLS.rain,{boss:true,enemy:{x:4,y:4},player:{x:7,y:4}});
  assert.equal(rain.actors[1].intent.cells.length,12); // one body tile is excluded
  for(const [name,sk] of Object.entries(W.PEAK_SKILLS)){
-  const boss=name==='rain',enemy={x:7,y:4},player={x:6,y:4};
-  // Thrust requires a free advance tile, so use a ranged knockback fixture separately.
-  if(name==='thrust')continue;
+  const boss=name==='rain',enemy={x:7,y:4},player={x:name==='thrust'?5:6,y:4};
   let st=configuredScene(sk,{boss,enemy,player,skills:['rock-break']});
   assert.equal(st.actors[1].intent.kind,'attack');
   st=R.apply(st,'u1',{type:'manual',skillId:'rock-break',x:7,y:4},NOW);
