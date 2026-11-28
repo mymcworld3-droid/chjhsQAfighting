@@ -160,7 +160,7 @@
 
 - acc1c8f 的回歸 46124234668、候選版 46124234634（15/15）、瀏覽器 46124234657、Pages 46124233974 全數成功；b547f9b 的回歸 46124329725、瀏覽器 46124329757、Pages 46124329436 全數成功。
 
-## 第 7 階段：美術及介面（原始素材已接入，待最新 CI）
+## 第 7 階段：美術及介面（自動化驗收通過）
 
 - 萬獸赤砂色調、地面砂粒及砂岩細節、低伏蓄勢、踏地沙塵、衝撞尾跡、撞牆震動、方形金銅震波；以伺服器每層事件同步傷害演出，不改戰鬥規則。預告格新增方向、方形、波次及追蹤標記，均在角色下層；新增預告回歸。
 - 浮空島已生成 1312×1199 RGBA PNG（透明 Alpha 0–255），但本地 GitHub DNS 不可用且 GitHub 連接器只接收 base64 字串、無法直接接收生成檔案，尚未提交原圖。保持既有安全 fallback，不建立破圖路徑；須補上 public/assets/dungeons/beast-wilds.png、atlasArt 對應、資源版本及原圖風格/透明度驗收才可結案。未公開萬獸險域，不提前開始第八階段。
@@ -173,3 +173,17 @@
 - 803bb22 戰場美術及 fdcda07 介面實作；fdcda07 完整回歸 46125038414（3314 項、3313 通過、0 失敗、1 跳過）、候選版 46125038333、Chromium 46125038352、合作副本 46125038382、Pages 46125038256 均成功。
 - 原圖透過私人 Drive 暫存檔完整轉入 GitHub blob 127e3712190a0674638cdd66e7bdf4cba64fd175，本地 git hash-object 相同；原始 SHA-256 fb3155ca077f469f94a2a98c36c81bc5a2230f5bbbb6eeb686b28a0940468818、1952364 bytes、1312×1199 RGBA，未縮圖或轉碼。新增 public/assets/dungeons/beast-wilds.png 與 atlasArt，沿用原共用名稱牌，更新 module-versions.json。
 - 真實 Chromium 新增入口及難度頁的原始圖路徑斷言、解碼尺寸、完整透明/不透明像素檢查；保留五種視窗及原有公開 HTTP 拒絕測試。待最新 CI 全數成功才正式結案；萬獸險域仍 hidden，不提前開始第八階段。
+
+### 第七階段 CI 結案（2026-11-28）
+
+- 實際原圖接入提交 [beeb69e18b4c123d6d196cc2cf79e150706d2445](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/beeb69e18b4c123d6d196cc2cf79e150706d2445)。同一 SHA 的完整回歸 [46130040051](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46130040051) 成功：3314 項、3313 通過、0 失敗、1 跳過，靜態版本一致；真實瀏覽器 [46130040114](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46130040114)、候選版 [46130040100](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46130040100)（15/15，含合作與戰術 Chromium）、Pages [46130039485](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46130039485) 均成功。原圖透明度、解碼尺寸、入口/難度頁及五種視窗已通過自動化驗收。前面待上傳/fallback 的紀錄為歷史狀態，不再適用。未獨立人工目視比較原圖風格；第九階段須保留實際視覺驗收。萬獸仍隱藏。
+
+## 第 8 階段：實戰平衡（8A 基線已提交，未完成驗收）
+
+- 讀取 V4、進度、美術三份規格及 AGENTS.md；正式公開目錄 RELEASE_NEW_WEAPONS=true，十二把武器。沿用 scripts/lib/tactical-balance.cjs 的 production R.create/R.apply/R.answer 及既有十二分片 CI，未刪除原 Stage 19 的試煉或石域案例。
+- 提交 [f2bda522f60a217960f6be8f5eda2a6393964aa3](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/f2bda522f60a217960f6be8f5eda2a6393964aa3)，修改 scripts/accept-new-weapon-balance.cjs；新增 12 單武器與 8 代表雙武器配置 × 2 副本 × 6 階 × 3 種子 × 2 答題正確率 = 1440 個基線案例，固定攻擊 200、生命 1000、技能等級 1、精煉 0；70%/100% 為答對概率而非保證每場實際比例。此為同條件比較，非全玩家養成梯度或最優策略。原 Stage 19 報告 rows 保留，v4.rows 記錄新增逐場資料。
+- 新增紀錄：勝負原因、回合、答題與答對/錯題、體力/移動/技能準備消耗、實際敵方 HP 減少、己方操作間淨 HP 減少/恢復（不是逐段毛傷害）、實際擊退與打斷、離開預告格、結束回合仍在預告及當時可達安全格狀態、施放各技能次數。安全格診斷以當前體力及預告聯集為準，不能單憑無安全格就宣稱整個回合無解；石域追蹤會隨移動重算。仍需核對特殊技能確實被策略使用，並對召劍獨立飛劍移動、連環震波及雙武器特殊協同補專項實戰；通過既有規則測試不等同通過平衡。
+- 權威掉落池靜態盤點（manual-rules.js + weapon-dungeon-rewards.cjs）：煉氣劍為流風/折光，築基劍為御靈/織界，金丹劍為八方/歲輪；煉氣圖騰為玄嶽/鳴鐘，築基圖騰為伏虎/蜃影，金丹圖騰為龍象/星隕。元嬰、化神、合體、渡劫兩流派均空池。因此依當階30%、低階20%、無武器50%規則，兩副本六階實際武器掉落概率均為50/50/20/0/0/0%。不新增武器、不重抽、不調整概率。新增對每副本難度逐一枚舉 0..99 抽選值並呼叫真實 Rewards.roll，檢驗空池不重抽及流派隔離；執行結果待 CI。
+- 測試指令：node scripts/accept-new-weapon-balance.cjs <shard> 12 /tmp/stage19-balance-<shard>.json；既有 workflow 上傳同名 artifact（新增 v4 欄位）。完整回歸及靜態版本由既有 workflow 執行。
+- 本次查核 f2bda52 的候選版 [46130703492](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46130703492)、瀏覽器 [46130703519](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46130703519)、回歸 [46130703569](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46130703569)、Pages [46130702062](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46130702062) 尚在執行、無結論。本地 git ls-remote DNS 失敗，無法取得完整工作樹，因此不可宣稱 1440 場已完成。未改任何戰鬥數值（尚無完整可重現的 V4 基線，不做無證據調整），未公開萬獸險域。
+- 下一批 8B：先取得十二分片實際逐場資料、驗證 1440 案例完整性及 CI，分副本/難度/武器/正確率匯總勝率、回合、答題、體力、傷害、失敗原因及特殊技能覆蓋，補強專項策略與養成梯度，定位數值問題後逐項調整並以相同種子重跑對照；全部必要驗收通過才進入第九階段。
