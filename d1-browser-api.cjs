@@ -4,6 +4,7 @@ const {getD1Store,Transaction,Query,Codec,validPath}=require('./d1-store.cjs');
 const {mayCommitDiscovery}=require('./refinery-discovery-commit.cjs');
 const {listed:publicDongtian}=require('./dongtian-access.cjs');
 const RealmGate=require('./realm-dungeon-gate.cjs');
+const {isBetaPath}=require('./adaptive-learning-engine-beta-store.cjs');
 const fail=(message='無權存取這筆資料',status=403,code='permission-denied')=>Object.assign(Error(message),{status,code});
 const same=(a,b)=>JSON.stringify(Codec.encode(a??null))===JSON.stringify(Codec.encode(b??null));
 const changed=(a,b)=>[...new Set([...Object.keys(a||{}),...Object.keys(b||{})])].filter(k=>!same(a?.[k],b?.[k]));
@@ -20,6 +21,7 @@ function publicPlayer(data) {
   return result;
 }
 function mayRead({role,path,data,uid,admin}) {
+  if(isBetaPath(path))return false;
   if(admin)return true;
   const [col,id,...nested]=path.split('/');
   if(nested.length)return false; // Private chat is served by its authenticated domain API.
@@ -33,6 +35,8 @@ function mayRead({role,path,data,uid,admin}) {
 }
 function buildTarget(db,target) {
   if(target?.role!==db.role)throw fail('資料區不符',400,'invalid-argument');
+  // Beta answers, reviews and private records never use the generic browser API, even for admins.
+  if(isBetaPath(target.path))throw fail();
   if(target.kind==='doc')return db.doc(validPath(target.path));
   let query=db.collection(validPath(target.path,false));
   if(!Array.isArray(target.constraints)||target.constraints.length>12)throw fail('查詢條件過多',400,'invalid-argument');
@@ -55,6 +59,7 @@ function requireScopedQuery(query,context) {
   if(!PUBLIC.has(col)&&!['dongtians','dongtianReports','exam_logs','dongtianPlays'].includes(col))throw fail();
 }
 function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
+  if(isBetaPath(path))throw fail();
   const {uid,admin,decoded}=context;
   const [col,id,...nested]=path.split('/');
   if(nested.length)throw fail();

@@ -2,7 +2,7 @@
 
 規格：V1.0，`docs/adaptive-learning-engine-beta.md`（完整 324 行，Git blob `6b29dad7bd791e962718be32c08202840cd695b4`）。
 目標分支：main。基準提交：`8614dff06518962901e123a010dbfddc5d37a453`（2026-11-28）。
-階段 0｜最新 main 盤點與架構基線：**passed**。當前階段 1｜Beta 入口及功能開關：**in_progress**，待本提交 CI。最新通過階段：0。
+階段 0｜最新 main 盤點與架構基線：**passed**。階段 1｜Beta 入口及功能開關：**passed**。當前階段 2A｜共用資料契約與隔離基礎：**in_progress**，待 CI 及 2B。最新通過階段：1。
 本文件與測試修正為同一提交；提交 SHA 由 `git log -1 --format=%H -- docs/adaptive-learning-engine-progress.md` 或 GitHub 檔案歷史取得，不在提交內容內自我引用雜湊。Beta 僅完成獨立開發預覽入口；正式環境未啟用。
 
 ## 0A. 實際程式盤點與重用清單
@@ -65,8 +65,10 @@
 | 階段 | 狀態 |
 |---|---|
 | 0 | passed — 124e2e2 基準 CI 全部成功 |
-| 1 | in_progress — 已提交入口、伺服器開關、隔離 shell 與驗收測試；待新 CI |
-| 2–26 | not_started |
+| 1 | passed — 917be25 全部 23 項 CI checks 成功，四種 Chromium 尺寸通過 |
+| 2A | in_progress — 資料契約及隔離基礎，待新 CI |
+| 2B | not_started — 隱私清除、正式資料層權限及回滾驗收 |
+| 3–26 | not_started |
 
 接續時先讀完整規格與本文件，核對最新 main 的 CI。若仍有失敗，修正本階段阻塞，不降低驗收。若本次測試修正的 CI 通過，記錄真實 run URL、測試數與提交 SHA，再開始第 1 階段。未確認正式搜尋服務不等於現有搜尋已啟用；第 3 階段需完成真實驗證。
 
@@ -88,3 +90,16 @@
 - scripts/test-adaptive-learning-engine-beta-browser.cjs 及 tactical-browser workflow：真實 Chromium，以隔離 fixture 身份與宿主頁、實際入口 HTML/CSS、前端 module 和後端 handler 驗證手機/平板直橫式、關閉及 Escape、帳號切換、舊模式與選擇保留。不是正式網站全流程或真實帳號驗收。
 - 測試命令：`node --test tests/adaptive-learning-engine-beta.test.cjs`（包含於完整回歸）、`npm run check:module-versions`、`node scripts/test-adaptive-learning-engine-beta-browser.cjs`（CI）。目前本地尚無完整 checkout；本提交 CI 實測結果待確認，不標 passed。
 - 尚未驗證正式搜尋與憑證、正式瀏覽器真實帳號及完整學習流程（後續階段）。不改正式開關，不實作第 2 階段。CI 通過後才記錄第 1 階段 passed 並進第 2 階段。
+
+## 第 1 階段最終驗收（2026-11-28）
+基準 `917be256e5e33b8554ecbb50af8506b3a7baf34e`。完整回歸 [46152230445](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46152230445)：3328 tests、3327 pass、0 fail、1 skipped。實際 Chromium [46152230500](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46152230500) 日誌明列 Adaptive Beta preview passed 360x640、640x360、768x1024、1024x768。另 [新武器](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46152230513)、[參考題稽核](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46152230438)、[合作副本](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46152230459)、[Pages](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46152230173) 與 Worker 全部成功（23 checks）。第 1 階段 passed。
+
+## 第 2A 階段｜資料契約與伺服器隔離基礎
+基準 `917be256e5e33b8554ecbb50af8506b3a7baf34e`。第 2 階段拆 A/B：先建立嚴格資料契約及 server-only repository，下一子階段確認實際資料層存取規則與帳號刪除/回滾；不跳至第 3 階段。
+- 新增 adaptive-learning-engine-beta-contract.cjs：13 種 v1 schema（edition, section, concept, scope, source, reference, question, review, job, queue, attempt, mastery, report），未知欄位/版本 fail closed，單選、多選、數值、來源證據、觀念版本、範圍及掌握度基本一致性。schema 通過不代表教材或真人來源已確認。舊 q/correct/wrong/exp 轉為 pending candidate，不沿用舊核准、不改舊資料。
+- 新增 adaptive-learning-engine-beta-store.cjs：獨立 adaptiveEngineBetaV1_* 文件集合；私有鍵依驗證 owner + record ID 雜湊，scope 每次 append immutable revision + head 原子更新；拒絕跨帳號、舊 revision 工作、未確認考點、不允許玩家讀 shared 題目。shared 候選只准 server-only append；暫不支援批准/正式發題/queue 寫入/作答記帳，避免偽造未實作安全流程。不註冊新資料路由，不從正式玩家建立資料。
+- d1-browser-api.cjs：Beta 集合及任何未來版本前綴在通用瀏覽器 API 一律拒絕，包含管理員、query/doc/watch/交易讀寫；buildTarget 在資料庫查詢前拒絕，不洩漏存在性。沿用現有 D1/Firestore transaction 介面，不改舊資料結構與既有 API。
+- tests/adaptive-learning-engine-beta-contract.test.cjs：13 schema roundtrip、錯誤格式/版本、舊題轉換、兩帳號相同 scope ID、交易/版本、D1 SQLite 實際 adapter fixture、通用 API 阻擋，未審核題不能進 queue。全為 synthetic fixture，不作真實教材/真人來源。
+- 測試命令：node --test tests/adaptive-learning-engine-beta-contract.test.cjs（完整 CI glob 自動包含）、npm run check:module-versions、既有完整回歸及瀏覽器 workflow。本地未執行完整 checkout；新 CI 待確認。
+- 遷移/回滾：D1 使用既有 documents 通用結構，無 DDL/批次搬遷；舊 users、focusedUnits、adaptiveLearningV1、舊題庫不被重寫。未知版本拒絕並保留原資料，日後新增版本須以明確轉換及測試處理；關閉 Beta 即停止新路由，先保留合法 Beta 資料，不自動逆向覆蓋 legacy。第 2B 補可驗證的匯出、清除與回滾演練，禁止對真實玩家啟用持久寫入直至確認。
+- 阻塞與後續：專案只有 firestore-c.rules，未找到 A 專案實際生效的 Firestore Rules；不能從 D1 的 API 拒絕推斷 Firestore 亦安全。既有 public/account-delete.js 的帳號刪除沒有 Beta 集合清除。第 2B 需整合經認證的資料清除、確認 Firestore A/D1 後端隔離及保留期限/停用測試；正式搜尋服務仍屬第 3 階段。正式 Beta 保持 release-locked；本階段沒有啟用新資料路由。CI 完成後仍需先完成 2B，才能標記第 2 階段 passed。
