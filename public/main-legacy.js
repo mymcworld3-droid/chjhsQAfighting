@@ -3588,6 +3588,10 @@ async function generateVisualAid(imagePrompt) {
 }
 
 // 2. [修改] renderQuiz 函式 (移除圖片載入邏輯)
+function questionOriginText(value) {
+    const raw=String(value||'');
+    return globalThis.QAQuestionVisualEngine?.has(raw)?globalThis.QAQuestionVisualEngine.transportText(raw,1000):raw.slice(0,1000);
+}
 const extendedPracticeState = {
     active: false,
     subject: '',
@@ -4022,7 +4026,7 @@ window.startQuizExtendedPractice = async (knowledgePoint, options = {}) => {
         scope: soloQuestionScope(),
         subject: String(currentQuiz.learningSubject || quizHelperState.subject || currentQuiz.extendedPracticeSubject || '綜合').slice(0, 40),
         knowledgePoint: point,
-        originQuestion: String(currentQuiz.data.q || quizHelperState.question || '').slice(0, 1000),
+        originQuestion: questionOriginText(currentQuiz.data.q || quizHelperState.question || ''),
         recoveryOrigin:options.correction || (answeredSoloQuizzes.has(currentQuiz) && quizHelperState.selectedIndex >= 0 &&
             quizHelperState.selectedIndex !== quizHelperState.correctIndex) ? currentQuiz.data.q : (currentQuiz.recoveryOrigin || '')
     };
@@ -4039,7 +4043,7 @@ window.startQuizExtendedPractice = async (knowledgePoint, options = {}) => {
 // prompt pipeline without copying that algorithm into the battle page.
 window.queueTacticalSoloCorrection = ({question,subject,topic,difficulty,adaptive}={}) => {
     const uid=auth.currentUser?.uid;
-    const origin=String(question||'').trim().slice(0,1000);
+    const origin=questionOriginText(String(question||'').trim());
     const point=String(topic||'本題核心觀念').trim().slice(0,60);
     if(!uid||!currentUserData||!origin||!point)
         return Promise.reject(Error('訂正練習需要已登入的有效錯題'));
@@ -4073,7 +4077,7 @@ window.queueTacticalSoloExtension = async ({question,subject,topic,adaptive}={})
     const scope=soloQuestionScope();
     const practice={
         uid,subject:String(subject||'綜合').slice(0,40),
-        knowledgePoint:point,originQuestion:String(question||'').slice(0,1000),
+        knowledgePoint:point,originQuestion:questionOriginText(question),
         quiz:{learningDifficulty:getSmartDifficulty(subject),
             ...(adaptive?{adaptive}:{})},recoveryOrigin:''
     };

@@ -6,6 +6,8 @@ import { getProjectServices, getMainUser, authenticatedMainFetch } from './proje
 import { resolvePlayerAvatar } from '../profile-avatar.js';
 import '../curriculum-range-rules.js';
 import '../knowledge-points.js';
+import '../question-visual-engine.js';
+const historyText=(value,max)=>{const s=String(value??'');return globalThis.QAQuestionVisualEngine?.has(s)?globalThis.QAQuestionVisualEngine.transportText(s,max):s.slice(0,max);};
 
 const COLLECTION='users';
 function uidValue(uid){const value=String(uid||'').trim();if(!value)throw new Error('玩家 UID 不可為空');return value;}
@@ -50,13 +52,13 @@ export const playerRepository=Object.freeze({
       if (getMainUser()?.uid !== user.uid) throw new Error('帳號已更換，請重新載入');
       const playerRef = point ? doc(db,COLLECTION,user.uid) : null;
       const player = playerRef ? await tx.get(playerRef) : null;
-      const opts=Array.isArray(value.options)?value.options.slice(0,4).map(x=>String(x??'').slice(0,1500)):[];
+      const opts=Array.isArray(value.options)?value.options.slice(0,4).map(x=>historyText(x,1500)):[];
       tx.set(ref,{
         uid:user.uid,email:user.email||'',timestamp:serverTimestamp(),
         mode:['raid','duel','immortal'].includes(value.mode)?value.mode:'raid',
         topic:String(value.topic||'').slice(0,70),
         rankAtTime:String(value.rankAtTime||'').slice(0,80),
-        question:String(value.question||'').slice(0,3000),
+        question:historyText(value.question,3000),
         subject:String(value.subject||'').slice(0,50),
         subTopic:String(value.subTopic||'').slice(0,150),
         knowledgeSubject:point?.subject || '',
@@ -68,7 +70,7 @@ export const playerRepository=Object.freeze({
         options:opts,
         correctIdx:Number.isInteger(value.correctIdx)?value.correctIdx:-1,
         userIdx:Number.isInteger(value.userIdx)?value.userIdx:-1,
-        explanation:String(value.explanation||'').slice(0,3500),
+        explanation:historyText(value.explanation,3500),
         timeTaken:Math.max(0,Number(value.timeTaken)||0)
       });
       if (player?.exists()) tx.update(playerRef, {

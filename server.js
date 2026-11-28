@@ -530,7 +530,9 @@ async function generateQuiz(req, res) {
         return res.json({ ...payload, text: JSON.stringify(parsed), ...(soloProof ? { soloProof } : {}) });
     };
     if (req.body?.correctionPractice !== undefined) {
-        const sourceQuestion = String(req.body.correctionPractice?.sourceQuestion || '').trim().slice(0, 1000);
+        const rawOrigin=String(req.body.correctionPractice?.sourceQuestion || '').trim();
+        if (!VisualEngine.inspectInline(rawOrigin).valid) return res.status(400).json({error:'訂正原題圖表不完整，請重新取得原題'});
+        const sourceQuestion = VisualEngine.transportText(rawOrigin,1000);
         const knowledgePoint = String(specificTopic || '').trim().slice(0, 60);
         if (!sourceQuestion || !knowledgePoint || (quizMode && quizMode !== 'solo')) {
             return res.status(400).json({error:'訂正練習需要原題與知識點'});

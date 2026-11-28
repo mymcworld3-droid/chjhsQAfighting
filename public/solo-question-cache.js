@@ -47,7 +47,8 @@ function structuralDuplicate(a, b) {
 function compactMeta(item) {
   const q = item?.data?.q || item?.q || item?.question || '';
   return {
-    q: String(q).slice(0, 500),
+    // This is only duplicate-detection metadata, not the saved question.
+    q: String(globalThis.QAQuestionVisualEngine?.plainText(q)??q).slice(0, 500),
     bankQuestionId: String(item?.bankQuestionId || '').slice(0, 160),
     concept_id: String(item?.meta?.concept_id || item?.concept_id || '').slice(0, 100),
     template_id: String(item?.meta?.template_id || item?.template_id || '').slice(0, 120),
@@ -70,6 +71,8 @@ export function createSoloQuestionCache(storage) {
     return item && typeof item === 'object' &&
       typeof q?.q === 'string' && q.q.length > 0 &&
       Array.isArray(q.opts) && q.opts.length >= 2 &&
+      !globalThis.QAQuestionVisualEngine?.answerIssue(q.q,q.opts) &&
+      globalThis.QAQuestionVisualEngine?.inspectInline(q.exp).valid!==false &&
       Number.isInteger(q.ans) && q.ans >= 0 && q.ans < q.opts.length &&
       typeof item.rank === 'string' && typeof item.badge === 'string';
   }

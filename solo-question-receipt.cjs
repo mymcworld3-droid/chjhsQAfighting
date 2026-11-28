@@ -39,7 +39,7 @@ function issue(uid, parsed, { difficulty, recoveryOrigin, practiceTopic } = {}, 
 
 function read(uid, input, key = deriveKey()) {
   const { proof, question, options } = input;
-  if (typeof proof !== 'string' || proof.length > 40000 || typeof question !== 'string' ||
+  if (typeof proof !== 'string' || proof.length > 180000 || typeof question !== 'string' ||
       !Array.isArray(options) || options.length !== 4 || options.some(value => typeof value !== 'string')) return null;
   const parts = proof.split('.');
   if (parts.length !== 2 || !/^[\w-]{43}$/.test(parts[1])) return null;
