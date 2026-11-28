@@ -327,8 +327,73 @@ test('Peak Stone legacy desert terrain is restored to grid-world stone without c
  const expected=JSON.parse(JSON.stringify(raw.actors));
  const resumed=await API.start(db,'u1',{...input('stone-terrain-resume'),resumeRoomId:first.id},NOW);
  assert.equal(resumed.id,first.id);assert.equal(resumed.terrain,16);assert.ok(resumed.ground.every(t=>t===16));
- assert.deepEqual(resumed.actors,expected);assert.equal((await API.weaponDungeonState(db,'u1',NOW)).tickets,2);
+ // Public rooms deliberately omit the private knowledgeScope. Compare like
+ // projections and separately assert the persisted actors are unchanged.
+ assert.deepEqual(resumed.actors,first.actors);
+ assert.deepEqual(db.records.get(API.ROOMS+'/'+first.id).actors,expected);
+ assert.equal((await API.weaponDungeonState(db,'u1',NOW)).tickets,2);
  const ordinary={terrain:13,ground:[13,4]};assert.deepEqual(W.restoreTerrain(ordinary),{terrain:13,ground:[13,4]});
  const A=require('../public/cultivation/tactical-ambience.js');
  assert.equal(A.themeFor(resumed),'stone');assert.equal(A.themeFor(ordinary),'desert');
+});
+
+test('solo guards and 2x2 lords attack once, move one legal step, and warn again in the same window',()=>{
+ for(const boss of [false,true]){
+   let s=scene({boss,enemy:{x:4,y:4},player:{x:7,y:4}});
+   assert.equal(s.actors[1].intent.kind,'attack');
+   const hp=s.actors[0].hp;
+   s=R.apply(s,'u1',{type:'end'},NOW);
+   assert.equal(s.actors[0].hp,hp-100);
+   assert.equal(s.actors[1].x,5);
+   assert.equal(s.actors[1].intent.kind,'attack');
+   assert.deepEqual(s.actors[1].intent.origin,{x:5,y:4});
+   assert.ok(s.actors[1].intent.cells.some(p=>p.x===7&&p.y===4));
+   const actions=s.events.filter(e=>e.actor==='beast'&&['monster-attack','monster-move'].includes(e.type));
+   assert.deepEqual(actions.map(e=>e.type),['monster-attack','monster-move']);
+   assert.ok(R.footprint(s.actors[1]).every(p=>!R.blocked(s,p)&&R.key(p)!==R.key(s.actors[0])));
+   const saved=JSON.parse(JSON.stringify(s)),next=R.apply(saved,'u1',{type:'end'},NOW);
+   assert.equal(next.actors[0].hp,hp-200);
+   assert.deepEqual(next,R.apply(s,'u1',{type:'end'},NOW),'saved warning has the same deterministic result');
+ }
+});
+test('solo pursuit and a missed attack move at most once and never deal an unannounced hit',()=>{
+ let s=scene({enemy:{x:4,y:4},player:{x:8,y:4}});
+ assert.equal(s.actors[1].intent.kind,'advance');
+ s=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(s.actors[1].x,5);assert.equal(s.actors[1].intent.kind,'attack');
+ assert.equal(s.actors[0].hp,10000);
+ s=R.apply(s,'u1',{type:'move',x:9,y:4},NOW);
+ assert.equal(s.actors[1].intent.cells.length,0);
+ s=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(s.actors[1].x,6);assert.equal(s.actors[1].intent.kind,'attack');
+ assert.equal(s.actors[0].hp,10000);
+ s=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(s.actors[0].hp,9900);
+});
+test('solo stagger cancels the attack but resumes pursuit and preparation on the next action',()=>{
+ let s=scene({enemy:{x:7,y:4},player:{x:6,y:4},skills:['rock-break']});
+ s=R.apply(s,'u1',{type:'manual',skillId:'rock-break',x:7,y:4},NOW);
+ const x=s.actors[1].x;assert.ok(x>7);assert.equal(s.actors[1].intent.kind,'stagger');
+ s=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(s.actors[0].hp,10000);assert.equal(s.actors[1].x,x-1);
+ assert.equal(s.actors[1].intent.kind,'attack');
+});
+test('solo blocked large lord can stay and warn without moving through a wall',()=>{
+ let s=scene({boss:true,enemy:{x:4,y:4},player:{x:7,y:4}});
+ s.blocks=[{x:3,y:4},{x:6,y:5},{x:4,y:3},{x:5,y:6}];
+ s=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(s.actors[0].hp,9900);
+ assert.deepEqual({x:s.actors[1].x,y:s.actors[1].y},{x:4,y:4});
+ assert.equal(s.actors[1].intent.kind,'attack');
+});
+test('a lord killed by a counter ends the dungeon before it can move or the next guard can act',()=>{
+ let s=scene({boss:true,enemy:{x:4,y:4},player:{x:7,y:4}});
+ s.actors[1].hp=1;s.actors[0].counter=1;
+ s.actors.push(R.actor({uid:'guard',bot:true,name:'守衛',species:8,team:'monster',atk:100,maxHp:10000,trackingAttack:true},{x:8,y:4}));
+ R.prepareIntents(s);
+ s=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(s.status,'finished');assert.equal(s.winner,s.actors[0].team);
+ assert.equal(s.actors[1].hp,0);assert.equal(s.actors[1].x,4);
+ assert.ok(!s.events.some(e=>e.actor==='guard'&&['monster-attack','monster-move'].includes(e.type)));
+ assert.ok(!s.events.some(e=>e.actor==='beast'&&e.type==='monster-move'));
 });

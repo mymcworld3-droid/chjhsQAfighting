@@ -1453,7 +1453,11 @@
     return [...new Map(cells.map(p=>[key(p),p])).values()];
   }
   function monsterRoute(s,m,hero){
-    if(m.boss){
+    // Weapon-dungeon beasts pursue even after an attack. The existing footprint
+    // route handles both one-cell guards and large lords, with a one-step budget.
+    const dungeonBeast=!!s.weaponDungeon&&m.trackingAttack;
+    if(dungeonBeast&&m.slow)return [point(m)];
+    if(m.boss||dungeonBeast){
       const origin=point(m),queue=[origin],parents=new Map([[key(origin),null]]);
       for(let i=0;i<queue.length;i++)for(const [dx,dy] of CARDINALS){
         const p={x:queue[i].x+dx,y:queue[i].y+dy};
@@ -1530,14 +1534,19 @@
     }
     return {phase,cells:[...new Map(cells.map(p=>[key(p),p])).values()],name,slow};
   }
-  function prepareIntents(s){
+  function prepareIntents(s,preserveDungeonIntents=false){
     if(s.mode!=='pve')return;const hero=s.actors[0];
     if(s.trial?.layoutVersion===4&&s.objective?.type==='sealing'){
       const active=s.objective.points.some(p=>!p.activated&&p.kind==='hazard');
       s.objective.hazards=active&&s.turn%SEAL_TYPES.hazard.triggerEveryTurns===0?[point(hero)]:[];
     }
     for(const m of s.actors.filter(a=>a.bot&&alive(a))){
-      if(m.trackingAttack){m.intent=trackingIntent(s,m,hero);continue;}
+      if(m.trackingAttack){
+        // The solo dungeon action has already selected its next warning. A
+        // player-window effect may have interrupted it in begin(); keep that state.
+        if(!preserveDungeonIntents||!s.weaponDungeon||!m.intent)m.intent=trackingIntent(s,m,hero);
+        continue;
+      }
       if(s.trial?.layoutVersion===4&&s.objective?.type==='defense'){
         const shrine=s.objective.shrine;
         const target=dist(m,hero)<=1?hero:dist(m,shrine)<=1?shrine:null;
@@ -1573,7 +1582,33 @@
         text:ready?'下次：'+name:'下次：'+profile.moveName+(profile.move.steps?' '+profile.move.steps+' 格':'')};
     }
   }
+  // The solo weapon-dungeon turn is one atomic attack (if previously warned),
+  // followed by at most one ordinary move and preparation for the next window.
+  // Never turn a newly prepared attack into damage in this same action.
+  function weaponDungeonMonsterTurn(s,m,hero){
+    if(s.status!=='active'||!alive(m)||!alive(hero))return;
+    const intent=m.intent;
+    if(intent?.kind==='attack'&&(!intent.origin||key(intent.origin)===key(m))){
+      const profile=monsterProfileFor(m);
+      // Use the last published warning. Player movement updates tracking
+      // intents in apply(); do not silently re-aim at attack resolution.
+      const cells=intent.cells||[];
+      log(s,m.name+'施展「'+profile.attackName+'」','monster-attack',{actor:m.uid,animation:{kind:'cast',style:intent.shape||'blast',origin:point(m),target:intent.target||point(hero),cells,color:'#d9a080'}});
+      if(cells.some(p=>key(p)===key(hero)))damage(s,m,hero,m.atk*(intent.power||1),{skill:'monster-'+m.species});
+      else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});
+    }
+    // Reflected damage may kill the lord during its own attack.
+    checkFinished(s);
+    if(s.status!=='active'||!alive(m)||!alive(hero))return;
+    const route=monsterRoute(s,m,hero),end=route.at(-1);m.slow=0;
+    if(route.length>1){
+      Object.assign(m,end);
+      log(s,m.name+'以'+monsterProfileFor(m).moveName+'移動','monster-move',{actor:m.uid,path:route,animation:{kind:'move',style:monsterProfileFor(m).move.kind}});
+    }
+    m.intent=trackingIntent(s,m,hero);
+  }
   function monsterTurn(s,m,hero){
+    if(s.weaponDungeon&&m.trackingAttack)return weaponDungeonMonsterTurn(s,m,hero);
     const intent=m.trackingAttack&&m.intent?.kind==='attack'?trackingIntent(s,m,hero,true):
       m.weaponDungeonLord&&m.intent?.kind==='wait'?trackingIntent(s,m,hero):m.intent;
     if(intent?.kind==='defense-attack'){
@@ -1716,9 +1751,12 @@
         log(s,'妖煞陣爆發 −'+hit,'damage',{target:hero.uid,damage:hit,animation:{kind:'damage',changes:[appearance(hero)],numbers:[{uid:hero.uid,damage:hit}]}});
       }
       gravityRound(s,2*s.turn+1);
+      if(s.weaponDungeon){checkFinished(s);if(s.status!=='active')return;}
       for(const m of s.actors.filter(a=>a.bot&&alive(a))){
         if(!alive(hero)||s.objective?.type==='defense'&&s.objective.hp<=0)break;
+        if(s.weaponDungeon&&!alive(m))continue;
         monsterTurn(s,m,hero);
+        if(s.weaponDungeon){checkFinished(s);if(s.status!=='active')return;}
         if(!alive(hero))break;
       }
       if(s.trial?.layoutVersion===4&&s.objective?.type==='defense'){
@@ -1737,7 +1775,7 @@
           }
         }
       }
-      s.turn++;checkFinished(s);if(s.status==='active'){begin(s,hero,now);prepareIntents(s);}
+      s.turn++;checkFinished(s);if(s.status==='active'){begin(s,hero,now);if(s.status==='active'||!s.weaponDungeon)prepareIntents(s,!!s.weaponDungeon);}
     }else if(s.quizRound){
       s.actedUids.push(s.turnUid);s.turn++;checkFinished(s);if(s.status==='active')nextAction(s,now);
     }else{
