@@ -130,3 +130,9 @@
 - 伺服器同步推動兩者，記錄每步共同移動事件；Canvas 基礎蓄力、速度線與撞牆火花分別由實際事件繪製，完整沙塵美術留第七階段。
 - 新增七組確定性測試：配置分工、鎖定/閃避/JSON 恢復、連續推動/單次傷害/動畫、牆壁/邊界/其他單位、2×2 雙道阻擋、合法擊退打斷、反傷終局。
 - 修改 public/cultivation/weapon-dungeon-rules.js、public/cultivation/tactical-rules.js、public/cultivation/tactical-animation.js、public/cultivation/tactical-skill-effects.js、tests/weapon-dungeons.test.cjs、public/module-versions.json、本文件。待 npm test、npm run test:battle、npm run check:module-versions、瀏覽器、候選版及 Pages；最新 CI 未完成前不結案、不公開萬獸險域。
+
+### 第五階段提交及 CI 查核
+
+- 實作提交 [8d1253e99dbb9cd35d92b6502fcdc5f43560d7b3](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/8d1253e99dbb9cd35d92b6502fcdc5f43560d7b3)。2026-11-28T07:58:27.4718657Z module-versions.json 與靜態資源一致；2026-11-28T07:59:01.5894198Z # tests 3305；2026-11-28T07:59:01.5894595Z # pass 3304；2026-11-28T07:59:01.5894791Z # fail 0；2026-11-28T07:59:01.5895177Z # skipped 1。
+- [Tactical browser acceptance 46123600978](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46123600978)：in_progress/未結論；[New weapon release candidate acceptance 46123600950](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46123600950)：in_progress/未結論；[Cultivation regression tests 46123600923](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46123600923)：completed/success；[pages build and deployment 46123600504](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46123600504)：completed/success。
+- 本地完整工作樹不可用，以 GitHub Actions 執行驗收。七組新增測試已納入完整回歸。候選版、瀏覽器、部署與最新文件提交 CI 均須確認成功後才開始第六階段；不提前公開萬獸險域。
