@@ -160,10 +160,16 @@
 
 - acc1c8f 的回歸 46124234668、候選版 46124234634（15/15）、瀏覽器 46124234657、Pages 46124233974 全數成功；b547f9b 的回歸 46124329725、瀏覽器 46124329757、Pages 46124329436 全數成功。
 
-## 第 7 階段：美術及介面（部分實作，待 CI 及素材上傳）
+## 第 7 階段：美術及介面（原始素材已接入，待最新 CI）
 
 - 萬獸赤砂色調、地面砂粒及砂岩細節、低伏蓄勢、踏地沙塵、衝撞尾跡、撞牆震動、方形金銅震波；以伺服器每層事件同步傷害演出，不改戰鬥規則。預告格新增方向、方形、波次及追蹤標記，均在角色下層；新增預告回歸。
 - 浮空島已生成 1312×1199 RGBA PNG（透明 Alpha 0–255），但本地 GitHub DNS 不可用且 GitHub 連接器只接收 base64 字串、無法直接接收生成檔案，尚未提交原圖。保持既有安全 fallback，不建立破圖路徑；須補上 public/assets/dungeons/beast-wilds.png、atlasArt 對應、資源版本及原圖風格/透明度驗收才可結案。未公開萬獸險域，不提前開始第八階段。
 - 修改 public/cultivation/tactical-threat-visuals.js、public/cultivation/tactical-renderer.js、public/cultivation/tactical-animation.js、public/cultivation/tactical-skill-effects.js、tests/tactical-threat-visuals.test.cjs、靜態版本及進度文件。待 npm test、npm run test:battle、npm run check:module-versions、Chromium、候選版及 Pages。
 
 - 介面補強：入口目錄以伺服器回傳為準，初始僅顯示非 hidden 項目，可信開發路由仍可顯示萬獸。沿用共用名稱牌，手機雙島排列、沙地場景、鎖定形狀、格數、層數與抗性資訊。新增五種視窗的開發入口與難度頁實際 Chromium 測試。正式 PNG 尚未接入，暫用既有 fallback；不得將 fallback 的驗收宣稱為正式素材驗收。
+
+### 第七階段原始美術接入（2026-11-28）
+
+- 803bb22 戰場美術及 fdcda07 介面實作；fdcda07 完整回歸 46125038414（3314 項、3313 通過、0 失敗、1 跳過）、候選版 46125038333、Chromium 46125038352、合作副本 46125038382、Pages 46125038256 均成功。
+- 原圖透過私人 Drive 暫存檔完整轉入 GitHub blob 127e3712190a0674638cdd66e7bdf4cba64fd175，本地 git hash-object 相同；原始 SHA-256 fb3155ca077f469f94a2a98c36c81bc5a2230f5bbbb6eeb686b28a0940468818、1952364 bytes、1312×1199 RGBA，未縮圖或轉碼。新增 public/assets/dungeons/beast-wilds.png 與 atlasArt，沿用原共用名稱牌，更新 module-versions.json。
+- 真實 Chromium 新增入口及難度頁的原始圖路徑斷言、解碼尺寸、完整透明/不透明像素檢查；保留五種視窗及原有公開 HTTP 拒絕測試。待最新 CI 全數成功才正式結案；萬獸險域仍 hidden，不提前開始第八階段。

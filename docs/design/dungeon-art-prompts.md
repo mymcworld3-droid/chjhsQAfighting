@@ -39,4 +39,4 @@
 
 > 赤紅沙地、赤褐砂岩、少量枯草。前方赤鬃蠻豬低伏向左前，後方重甲巖獸/領主朝右，兩者造型、體型及姿勢區分；底部砂岩自然向下收束。沿用共用名稱牌。
 
-生成圖 1312×1199 RGBA PNG，已確認存在完全透明及完全不透明像素；目前原始檔尚未傳入儲存庫。正式素材路徑預定 `public/assets/dungeons/beast-wilds.png`，接入前勿將 fallback 換成不存在的 URL。
+已接入原始 `public/assets/dungeons/beast-wilds.png`，1312×1199 RGBA PNG，1952364 bytes，SHA-256 `fb3155ca077f469f94a2a98c36c81bc5a2230f5bbbb6eeb686b28a0940468818`，Git blob `127e3712190a0674638cdd66e7bdf4cba64fd175`。保留透明 Alpha 與原始完整解析度；入口及難度頁共用 atlasArt，沿用原名稱牌，不新增箭頭或外框。實際 Chromium 解碼及五種視窗驗收待最新 CI。

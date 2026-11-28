@@ -225,7 +225,7 @@ function refreshAtlasTickets(){
   atlasTicketRequest={account,epoch,promise};
   return promise;
 }
-const atlasArt={ 'peak-stone':'/assets/dungeons/peak-stone.png' };
+const atlasArt={ 'peak-stone':'/assets/dungeons/peak-stone.png','beast-wilds':'/assets/dungeons/beast-wilds.png' };
 function atlasMarkup(category){
   if(category==='coop'&&window.QA_COOP_DUNGEON_ENABLED===true){
     return `<div class="gameplay-atlas-heading"><h3>合作副本</h3></div><div class="gameplay-atlas-sites"><button type="button" class="gameplay-atlas-node" data-atlas-coop><img src="/assets/training/layers/landscape-island-secret.webp" alt="" draggable="false"><span class="gameplay-atlas-name"><span>合作秘境</span></span><small>組隊挑戰</small></button></div>`;

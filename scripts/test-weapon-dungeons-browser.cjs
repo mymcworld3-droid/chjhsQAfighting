@@ -235,6 +235,11 @@ async function main(){
    await devPage.locator('#gameplay-weapon-dungeon-entry').click();
    await devPage.locator('[data-atlas-dungeon="beast-wilds"]').waitFor();
    assert.equal(await devPage.locator('[data-atlas-dungeon]').count(),2);
+   const wildArt=devPage.locator('[data-atlas-dungeon="beast-wilds"] img');
+   assert.equal(await wildArt.getAttribute('src'),'/assets/dungeons/beast-wilds.png');
+   await devPage.waitForFunction(()=>{const el=document.querySelector('[data-atlas-dungeon="beast-wilds"] img');return el?.complete&&el.naturalWidth>0});
+   const rgba=await wildArt.evaluate(img=>{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);const data=ctx.getImageData(0,0,c.width,c.height).data;let transparent=0,opaque=0;for(let i=3;i<data.length;i+=4){if(data[i]===0)transparent++;if(data[i]===255)opaque++;}return {width:c.width,height:c.height,transparent,opaque};});
+   assert.equal(rgba.width,1312);assert.equal(rgba.height,1199);assert.ok(rgba.transparent>0&&rgba.opaque>0,'Original RGBA Wilds asset must contain transparent and opaque pixels');
    for(const viewport of [{width:320,height:568},{width:393,height:852},{width:768,height:1024},{width:667,height:375},{width:1180,height:820}]){
     await devPage.setViewportSize(viewport);await devPage.locator('[data-atlas-dungeon="beast-wilds"]').waitFor();
     await devPage.waitForFunction(()=>{const el=document.querySelector('[data-atlas-dungeon="beast-wilds"] img');return el?.complete&&el.naturalWidth>0});
@@ -245,6 +250,7 @@ async function main(){
    await devPage.locator('[data-wd-difficulty="0"]').waitFor();
    assert.equal(await devPage.locator('[data-wd-difficulty]').count(),6);
    assert.match(await devPage.locator('.wd-bonus').textContent(),/弦修/);
+   assert.equal(await devPage.locator('.wd-island').getAttribute('src'),'/assets/dungeons/beast-wilds.png');
    for(const viewport of [{width:320,height:568},{width:393,height:852},{width:768,height:1024},{width:667,height:375},{width:1180,height:820}]){
     await devPage.setViewportSize(viewport);await devPage.waitForFunction(()=>{const el=document.querySelector('.wd-island');return el?.complete&&el.naturalWidth>0});
     const fit=await devPage.locator('#weapon-dungeons-panel').evaluate(el=>el.scrollWidth<=el.clientWidth+1&&el.querySelector('.wd-island').complete&&el.querySelector('.wd-island').naturalWidth>0);
