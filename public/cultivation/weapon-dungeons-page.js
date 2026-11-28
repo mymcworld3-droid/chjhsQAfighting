@@ -9,7 +9,7 @@ const selected=()=>catalog().find(d=>d.id===selectedId);
 const activeId=()=>data?.active?.dungeonId||data?.dungeonId;
 const isResume=(d,i)=>data?.active&&activeId()===d.id&&data.active.difficulty===i;
 const canEnter=(d,t)=>!loading&&t&&!t.locked&&(isResume(d,t.index)||(!data.active&&data.tickets>0));
-const theme=d=>d.theme==='stone'?' wd-stone':'';
+const theme=d=>d.theme==='stone'?' wd-stone':d.theme==='desert'?' wd-desert':'';
 function ensureStyle(){
   if(!document.getElementById('weapon-dungeons-style')){const link=document.createElement('link');link.id='weapon-dungeons-style';link.rel='stylesheet';link.href='/styles/weapon-dungeons.css';document.head.append(link);}
 }
@@ -112,7 +112,7 @@ function selectDifficulty(index){
 }
 
 function paint(message=''){
-  const d=selected(),destination=globalThis.QAWeaponDungeons?.CATALOG?.find(entry=>entry.id===selectedId);
+  const d=selected(),destination=(atlasEntries||globalThis.QAWeaponDungeons?.CATALOG?.filter(entry=>!entry.hidden)||[]).find(entry=>entry.id===selectedId);
   panel.innerHTML=`<header><div class="wd-heading"><button type="button" data-wd-close data-wd-back data-qy-nav-action="back" aria-label="返回秘境選擇"><svg class="wd-nav-glyph" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><h2 id="weapon-dungeons-title" tabindex="-1">武器秘境</h2></div><details class="wd-tickets"><summary><strong>副本券 ${data?weaponDungeonTicketMarkup(data.tickets):'同步中'}</strong><svg class="wd-info-glyph" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v1"/></svg></summary><span class="wd-ticket-help">每日補發 3 張 · 補發上限 5 張<br>臺灣時間 00:00</span></details></header>
     <div class="wd-body">
     ${data?.active?'<div class="wd-active">已有進行中的挑戰，續戰不耗券；完成或離場後才能開啟其他挑戰。</div>':''}
@@ -158,7 +158,7 @@ export async function openWeaponDungeons(dungeonId=null,origin=null){
 const landscape=()=>window.matchMedia?.('(orientation: landscape)')?.matches===true;
 let atlas=null,atlasCategory='weapon',atlasShown=false,navigatingToAtlas=false;
 let atlasTickets=null,atlasTicketEpoch=0,atlasTicketRequest=null,atlasActive=null,quickResumeBusy=false;
-let atlasProgress=new Map();
+let atlasProgress=new Map(),atlasEntries=null;
 function atlasTicketMarkup(){
   return '武器副本券 '+weaponDungeonTicketMarkup(atlasTickets===null?'—':atlasTickets);
 }
@@ -174,7 +174,11 @@ function progressMarkup(id){
   return '<span class="wd-atlas-pips" aria-hidden="true">'+d.difficulties.map(t=>'<i class="'+(Number(d.clears[t.index])>0?'is-cleared':t.locked?'is-locked':'is-ready')+'"></i>').join('')+'</span><span>已征服 '+cleared+' / '+total+'</span>';
 }
 function setAtlasProgress(state){
-  atlasProgress=new Map((Array.isArray(state?.dungeons)?state.dungeons:[]).filter(d=>Array.isArray(d.difficulties)&&Array.isArray(d.clears)).map(d=>[d.id,d]));
+  const previous=(atlasEntries||globalThis.QAWeaponDungeons?.CATALOG?.filter(d=>!d.hidden)||[]).map(d=>d.id).join(',');
+  atlasEntries=Array.isArray(state?.dungeons)?state.dungeons:null;
+  atlasProgress=new Map((atlasEntries||[]).filter(d=>Array.isArray(d.difficulties)&&Array.isArray(d.clears)).map(d=>[d.id,d]));
+  const next=(atlasEntries||globalThis.QAWeaponDungeons?.CATALOG?.filter(d=>!d.hidden)||[]).map(d=>d.id).join(',');
+  if(atlas&&atlasCategory==='weapon'&&previous!==next)atlas.innerHTML=atlasMarkup('weapon');
   atlas?.querySelectorAll?.('[data-atlas-progress]').forEach(slot=>{slot.innerHTML=progressMarkup(slot.dataset.atlasProgress);});
 }
 function setAtlasActive(state){
@@ -226,9 +230,9 @@ function atlasMarkup(category){
   if(category==='coop'&&window.QA_COOP_DUNGEON_ENABLED===true){
     return `<div class="gameplay-atlas-heading"><h3>合作副本</h3></div><div class="gameplay-atlas-sites"><button type="button" class="gameplay-atlas-node" data-atlas-coop><img src="/assets/training/layers/landscape-island-secret.webp" alt="" draggable="false"><span class="gameplay-atlas-name"><span>合作秘境</span></span><small>組隊挑戰</small></button></div>`;
   }
-  const entries=globalThis.QAWeaponDungeons?.CATALOG||[];
+  const entries=atlasEntries||globalThis.QAWeaponDungeons?.CATALOG?.filter(d=>!d.hidden)||[];
   return `<div class="gameplay-atlas-heading"><button type="button" class="gameplay-atlas-back" data-atlas-back aria-label="返回歷練">‹ 返回</button><h3>武器副本</h3><span class="gameplay-atlas-tickets" data-atlas-tickets aria-live="polite">${atlasTicketMarkup()}</span></div>
-    <div class="gameplay-atlas-sites">${entries.map(d=>`<button type="button" class="gameplay-atlas-node" data-atlas-dungeon="${esc(d.id)}" aria-label="選擇${esc(d.name)}">
+    <div class="gameplay-atlas-sites">${entries.map(d=>`<button type="button" class="gameplay-atlas-node" data-atlas-dungeon="${esc(d.id)}" data-atlas-theme="${esc(d.theme)}" aria-label="選擇${esc(d.name)}">
       <img src="${atlasArt[d.id]||'/assets/training/layers/landscape-island-secret.webp'}" alt="" draggable="false">
       <span class="gameplay-atlas-name"><span>${esc(d.name)}</span></span>
       <small>${esc(d.subtitle)}</small><span class="wd-atlas-progress" data-atlas-progress="${esc(d.id)}">${progressMarkup(d.id)}</span></button>`).join('')}</div>

@@ -34,3 +34,9 @@
 兩張均是已確認的原始 RGBA PNG，非重新繪製或壓縮替代。地形在 `public/cultivation/weapon-dungeons-page.js` 的 `atlasArt` 依副本 ID 配置，名稱牌由 `public/styles/gameplay-page.css` 的 `.gameplay-atlas-name` 共用，文字由目錄名稱渲染。素材內已有箭頭，不要另疊箭頭或額外邊框。
 
 新增秘境時先核對實際戰鬥地形與靈獸，再以固定提示詞生成獨立圖示，存為 `public/assets/dungeons/<dungeon-id>.png`，只新增對應 atlasArt 路徑；共用名稱牌不重新生成。更新資源版本並在橫式小／大視窗檢查文字、點擊範圍、透明邊緣與圖示尺寸。
+
+### 萬獸險域專屬設定（第七階段）
+
+> 赤紅沙地、赤褐砂岩、少量枯草。前方赤鬃蠻豬低伏向左前，後方重甲巖獸/領主朝右，兩者造型、體型及姿勢區分；底部砂岩自然向下收束。沿用共用名稱牌。
+
+生成圖 1312×1199 RGBA PNG，已確認存在完全透明及完全不透明像素；目前原始檔尚未傳入儲存庫。正式素材路徑預定 `public/assets/dungeons/beast-wilds.png`，接入前勿將 fallback 換成不存在的 URL。

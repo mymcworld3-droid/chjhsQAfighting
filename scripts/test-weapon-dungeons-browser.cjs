@@ -235,10 +235,22 @@ async function main(){
    await devPage.locator('#gameplay-weapon-dungeon-entry').click();
    await devPage.locator('[data-atlas-dungeon="beast-wilds"]').waitFor();
    assert.equal(await devPage.locator('[data-atlas-dungeon]').count(),2);
+   for(const viewport of [{width:320,height:568},{width:393,height:852},{width:768,height:1024},{width:667,height:375},{width:1180,height:820}]){
+    await devPage.setViewportSize(viewport);await devPage.locator('[data-atlas-dungeon="beast-wilds"]').waitFor();
+    await devPage.waitForFunction(()=>{const el=document.querySelector('[data-atlas-dungeon="beast-wilds"] img');return el?.complete&&el.naturalWidth>0});
+    const fit=await devPage.locator('[data-atlas-dungeon="beast-wilds"]').evaluate(el=>{const r=el.getBoundingClientRect();return r.left>=-1&&r.right<=innerWidth+1&&el.querySelector('img').complete&&el.querySelector('img').naturalWidth>0});
+    assert.ok(fit,'Wilds atlas '+viewport.width+'x'+viewport.height);await devPage.screenshot({path:path.join(output,'wild-atlas-'+viewport.width+'.png')});
+   }
    await devPage.locator('[data-atlas-dungeon="beast-wilds"]').click();
    await devPage.locator('[data-wd-difficulty="0"]').waitFor();
    assert.equal(await devPage.locator('[data-wd-difficulty]').count(),6);
    assert.match(await devPage.locator('.wd-bonus').textContent(),/弦修/);
+   for(const viewport of [{width:320,height:568},{width:393,height:852},{width:768,height:1024},{width:667,height:375},{width:1180,height:820}]){
+    await devPage.setViewportSize(viewport);await devPage.waitForFunction(()=>{const el=document.querySelector('.wd-island');return el?.complete&&el.naturalWidth>0});
+    const fit=await devPage.locator('#weapon-dungeons-panel').evaluate(el=>el.scrollWidth<=el.clientWidth+1&&el.querySelector('.wd-island').complete&&el.querySelector('.wd-island').naturalWidth>0);
+    assert.ok(fit,'Wilds selection '+viewport.width+'x'+viewport.height);await devPage.locator('[data-wd-enter]').scrollIntoViewIfNeeded();assert.ok(await devPage.locator('[data-wd-enter]').isVisible());
+    await devPage.screenshot({path:path.join(output,'wild-selection-'+viewport.width+'.png')});
+   }
    await devPage.locator('[data-wd-enter]').click();
    await devPage.locator('#tactical-combat canvas').waitFor();
    await devPage.waitForFunction(()=>document.querySelector('[data-objective]')?.textContent.includes('萬獸險域'));

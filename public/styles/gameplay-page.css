@@ -201,3 +201,6 @@
    including the standalone acceptance page without global utility CSS. */
 #page-gameplay .gameplay-atlas-tickets .game-stone-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 #page-gameplay.gameplay-page:has(.gameplay-shell[data-wd-atlas="true"]):not(:has(.gameplay-shell[data-wd-open="true"])){background:#263238}
+
+/* Two authorized islands use the same nameplate and keep both tap targets in view. */
+@media(orientation:portrait){#page-gameplay .gameplay-atlas-sites:has([data-atlas-theme="desert"]){grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#page-gameplay .gameplay-atlas-sites:has([data-atlas-theme="desert"]) .gameplay-atlas-node img{height:clamp(105px,27dvh,260px)}#page-gameplay .gameplay-atlas-sites:has([data-atlas-theme="desert"]) .gameplay-atlas-name{font-size:clamp(13px,3.7vw,20px);width:100%;padding:0 24% 0 15%}#page-gameplay .gameplay-atlas-sites:has([data-atlas-theme="desert"]) .gameplay-atlas-node>small{font-size:clamp(9px,2.6vw,12px)}}

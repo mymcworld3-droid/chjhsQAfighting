@@ -306,3 +306,6 @@
 #weapon-dungeons-panel .game-resource-value{display:inline-flex;align-items:center;gap:4px}
 #weapon-dungeons-panel .game-resource-value .game-stone-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 #page-gameplay.gameplay-page:has(.gameplay-shell[data-wd-open="true"]){background:linear-gradient(155deg,#303c42,#202a2f)}
+
+/* Preserve the shared island/description layout; only the local palette differs. */
+#weapon-dungeons-panel .wd-hero.wd-desert{background:radial-gradient(ellipse at 55% 25%,#b98b6459,transparent 65%),linear-gradient(145deg,#755143,#342d29 78%);color:#f6e3c1}#weapon-dungeons-panel .wd-desert .wd-scene-caption{color:#f8e4c4}

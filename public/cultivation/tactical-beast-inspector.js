@@ -153,7 +153,8 @@ export class BeastInspector {
     if(!actor){this.dismiss();return;}
     const beast=profile(actor),manuals=this.getManuals(),realm=manuals?.realmForStage?.(actor.level);
     const statuses=[actor.shield?'護盾 '+actor.shield:'',actor.slow?'緩速':'',actor.guard?'護身':'',actor.hp<=0?'已擊敗':''].filter(Boolean);
-    const threat=actor.intent?.text||'目前沒有已鎖定的攻擊預告';
+    const intent=actor.intent,shape=({charge:'直線衝撞',line:'直線',cone:'扇形',square:'方形震波',blast:'範圍'})[intent?.shape];
+    const threat=(intent?.text||'目前沒有已鎖定的攻擊預告')+(intent?.kind==='attack'&&intent.version===3?' · '+(intent.warning==='locked'?'固定鎖定':'追蹤')+(shape?' · '+shape:'')+' · '+(intent.cells?.length||0)+' 格'+(intent.waves?.length?' · '+intent.waves.length+' 層':''):'')+(actor.dungeonResistanceEvery?'；每 '+actor.dungeonResistanceEvery+' 次合法推動抵消一格':'');
     const html='<header class="tc-beast-card-title"><div><small>戰場資料 · 即時狀態</small><h2>'+esc(actor.name||beast?.name)+'</h2></div>'+
       '<button type="button" data-beast-close aria-label="關閉靈獸資料">×</button></header>'+
       '<div class="tc-beast-identity">'+portrait(actor)+'<div><small>'+esc(actor.boss?'首領靈獸':'靈獸')+

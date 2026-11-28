@@ -165,3 +165,5 @@
 - 萬獸赤砂色調、地面砂粒及砂岩細節、低伏蓄勢、踏地沙塵、衝撞尾跡、撞牆震動、方形金銅震波；以伺服器每層事件同步傷害演出，不改戰鬥規則。預告格新增方向、方形、波次及追蹤標記，均在角色下層；新增預告回歸。
 - 浮空島已生成 1312×1199 RGBA PNG（透明 Alpha 0–255），但本地 GitHub DNS 不可用且 GitHub 連接器只接收 base64 字串、無法直接接收生成檔案，尚未提交原圖。保持既有安全 fallback，不建立破圖路徑；須補上 public/assets/dungeons/beast-wilds.png、atlasArt 對應、資源版本及原圖風格/透明度驗收才可結案。未公開萬獸險域，不提前開始第八階段。
 - 修改 public/cultivation/tactical-threat-visuals.js、public/cultivation/tactical-renderer.js、public/cultivation/tactical-animation.js、public/cultivation/tactical-skill-effects.js、tests/tactical-threat-visuals.test.cjs、靜態版本及進度文件。待 npm test、npm run test:battle、npm run check:module-versions、Chromium、候選版及 Pages。
+
+- 介面補強：入口目錄以伺服器回傳為準，初始僅顯示非 hidden 項目，可信開發路由仍可顯示萬獸。沿用共用名稱牌，手機雙島排列、沙地場景、鎖定形狀、格數、層數與抗性資訊。新增五種視窗的開發入口與難度頁實際 Chromium 測試。正式 PNG 尚未接入，暫用既有 fallback；不得將 fallback 的驗收宣稱為正式素材驗收。
