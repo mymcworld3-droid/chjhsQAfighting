@@ -236,7 +236,17 @@ async function main(){
     await wildPage.setViewportSize(viewport);await wildPage.locator('[data-atlas-dungeon="beast-wilds"]').waitFor();
     await wildPage.waitForFunction(()=>{const el=document.querySelector('[data-atlas-dungeon="beast-wilds"] img');return el?.complete&&el.naturalWidth>0});
     const fit=await wildPage.locator('[data-atlas-dungeon="beast-wilds"]').evaluate(el=>{const r=el.getBoundingClientRect();return r.left>=-1&&r.right<=innerWidth+1&&el.querySelector('img').complete&&el.querySelector('img').naturalWidth>0});
-    assert.ok(fit,'Wilds atlas '+viewport.width+'x'+viewport.height);await wildPage.screenshot({path:path.join(output,'wild-atlas-'+viewport.width+'.png')});
+    assert.ok(fit,'Wilds atlas '+viewport.width+'x'+viewport.height);
+     const placement=await wildPage.evaluate(()=>{
+      const peak=document.querySelector('[data-atlas-dungeon="peak-stone"]'),wild=document.querySelector('[data-atlas-dungeon="beast-wilds"]');
+      const p=peak.getBoundingClientRect(),w=wild.getBoundingClientRect(),pn=peak.querySelector('.gameplay-atlas-name').getBoundingClientRect(),wn=wild.querySelector('.gameplay-atlas-name').getBoundingClientRect();
+      const footer=document.querySelector('.wd-atlas-footer').getBoundingClientRect();
+      return {left:p.right<=w.left+1,lower:w.top>p.top+12,lowerName:wn.top>pn.top+12,
+       within:p.left>=-1&&w.right<=innerWidth+1,footerClear:footer.top>=Math.max(p.bottom,w.bottom)-1,
+       nameplates:[peak,wild].every(el=>getComputedStyle(el.querySelector('.gameplay-atlas-name')).backgroundImage.includes('dungeon-button.png'))};
+     });
+     assert.deepEqual(placement,{left:true,lower:true,lowerName:true,within:true,footerClear:true,nameplates:true},'Diagonal weapon atlas '+viewport.width+'x'+viewport.height);
+     await wildPage.screenshot({path:path.join(output,'wild-atlas-'+viewport.width+'.png')});
    }
    await wildPage.locator('[data-atlas-dungeon="beast-wilds"]').click();
    await wildPage.locator('[data-wd-difficulty="0"]').waitFor();

@@ -204,3 +204,34 @@
 
 /* Two authorized islands use the same nameplate and keep both tap targets in view. */
 @media(orientation:portrait){#page-gameplay .gameplay-atlas-sites:has([data-atlas-theme="desert"]){grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#page-gameplay .gameplay-atlas-sites:has([data-atlas-theme="desert"]) .gameplay-atlas-node img{height:clamp(105px,27dvh,260px)}#page-gameplay .gameplay-atlas-sites:has([data-atlas-theme="desert"]) .gameplay-atlas-name{font-size:clamp(13px,3.7vw,20px);width:100%;padding:0 24% 0 15%}#page-gameplay .gameplay-atlas-sites:has([data-atlas-theme="desert"]) .gameplay-atlas-node>small{font-size:clamp(9px,2.6vw,12px)}}
+
+/* Diagonal weapon destinations; in-flow margins reserve room for both tap
+   targets and the footer. Single/coop atlases and difficulty panels stay unchanged. */
+#page-gameplay .gameplay-atlas:has([data-atlas-dungeon="peak-stone"]):has([data-atlas-dungeon="beast-wilds"]){
+  grid-template-rows:auto minmax(min-content,1fr) auto;
+}
+#page-gameplay .gameplay-atlas-sites:has([data-atlas-dungeon="peak-stone"]):has([data-atlas-dungeon="beast-wilds"]){
+  --wd-atlas-rise:clamp(28px,9dvh,88px);
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-content:center;align-items:center;
+  gap:clamp(6px,2vw,26px);
+}
+#page-gameplay .gameplay-atlas-sites:has([data-atlas-dungeon="beast-wilds"])>[data-atlas-dungeon="peak-stone"]{
+  grid-column:1;grid-row:1;justify-self:start;margin-block-end:var(--wd-atlas-rise,0px);
+}
+#page-gameplay .gameplay-atlas-sites:has([data-atlas-dungeon="peak-stone"])>[data-atlas-dungeon="beast-wilds"]{
+  grid-column:2;grid-row:1;justify-self:end;margin-block-start:var(--wd-atlas-rise,0px);
+}
+@media(orientation:portrait){
+  #page-gameplay .gameplay-atlas-sites:has([data-atlas-dungeon="peak-stone"]):has([data-atlas-dungeon="beast-wilds"]){
+    --wd-atlas-rise:clamp(38px,11dvh,100px);
+  }
+}
+@media(orientation:landscape) and (max-height:450px){
+  #page-gameplay .gameplay-atlas-sites:has([data-atlas-dungeon="peak-stone"]):has([data-atlas-dungeon="beast-wilds"]){
+    --wd-atlas-rise:clamp(20px,6dvh,27px);
+  }
+  #page-gameplay .gameplay-atlas-sites:has([data-atlas-dungeon="peak-stone"]):has([data-atlas-dungeon="beast-wilds"]) .gameplay-atlas-node img{
+    height:clamp(72px,calc(100dvh - 272px),143px);
+  }
+}
