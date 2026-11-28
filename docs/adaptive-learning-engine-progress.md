@@ -2,7 +2,7 @@
 
 規格：V1.0，`docs/adaptive-learning-engine-beta.md`（完整 324 行，Git blob `6b29dad7bd791e962718be32c08202840cd695b4`）。
 目標分支：main。基準提交：`8614dff06518962901e123a010dbfddc5d37a453`（2026-11-28）。
-階段 0｜最新 main 盤點與架構基線：**passed**。階段 1｜Beta 入口及功能開關：**passed**。階段 2A｜共用資料契約與隔離基礎：**passed**。當前階段 2B｜隱私清除、資料層及回滾：**blocked**（前一 Beta 程式基準 CI 全綠；指定 Render 服務 ID 的查詢回傳 404，實際部署驗收未完成）。最新通過完整階段：1。
+階段 0｜最新 main 盤點與架構基線：**passed**。階段 1｜Beta 入口及功能開關：**passed**。階段 2A｜共用資料契約與隔離基礎：**passed**。當前階段 2B｜隱私清除、資料層及回滾：**blocked**（Render 服務存取已恢復；正式部署仍為第 1 階段，未具備第 2B 唯讀工具及隔離演練條件）。最新通過完整階段：1。
 本文件與測試修正為同一提交；提交 SHA 由 `git log -1 --format=%H -- docs/adaptive-learning-engine-progress.md` 或 GitHub 檔案歷史取得，不在提交內容內自我引用雜湊。Beta 僅完成獨立開發預覽入口；正式環境未啟用。
 
 ## 0A. 實際程式盤點與重用清單
@@ -67,7 +67,7 @@
 | 0 | passed — 124e2e2 基準 CI 全部成功 |
 | 1 | passed — 917be25 全部 23 項 CI checks 成功，四種 Chromium 尺寸通過 |
 | 2A | passed — 6017cd0 21 checks 全部成功 |
-| 2B | blocked — 380e741 全部 22 checks 通過；指定 Render 服務 ID 查詢 404；真實 Firestore/D1 及隔離演練未驗證 |
+| 2B | blocked — cf0ba58 CI 全綠；Render 存取成功但 live 917be25 尚未部署第 2 階段；真實 Firestore/D1 及隔離演練未驗證 |
 | 3–26 | not_started |
 
 接續時先讀完整規格與本文件，核對最新 main 的 CI。若仍有失敗，修正本階段阻塞，不降低驗收。若本次測試修正的 CI 通過，記錄真實 run URL、測試數與提交 SHA，再開始第 1 階段。未確認正式搜尋服務不等於現有搜尋已啟用；第 3 階段需完成真實驗證。
@@ -142,3 +142,9 @@
 - 使用者已提供 chjhsqafighting-2 的確切服務 ID srv-dbvai3rl550s7397ic9g、部署 ID dep-dc5ee48u01pc738fad3g 並授權唯讀。使用先前確認的 Render workspace 分別查 get_service、get_deploy、list_deploys，三項均回傳 404 not found。這是目前連線可見性/服務歸屬未確認的阻塞，不證明服務已刪除、停機或帳務異常；不需再次向使用者索取 ID。對推定公開網址 /api/data-config、/api/adaptive-learning-engine-beta/status 的讀取仍不可取得。未取得正確服務的部署 SHA、憑證或伺服器執行權限，未執行正式唯讀 CLI。未存取玩家資料，未更動 Render 設定、帳務、Rules、D1 或 Auth。
 - 最新 main 已前進至 `30c891347e59739cee2923c23858ae368bfe9912`，相較 b1e198f 新增獨立 question visual engine 及其測試、規格、manifest；不覆寫其他開發成果。b1e198f 的 6/6 checks completed/success（回歸 46160203877、瀏覽器 46160203908、Pages 46160202883）；本次基準 7/21 checks success、14 pending，0 failure。回歸 [46160549733](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46160549733)、瀏覽器 [46160549767](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46160549767)、候選 [46160549723](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46160549723)、Pages [46160549366](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46160549366)。本次僅文件更新，無新增程式測試；最新提交 CI 待查。
 - 下一步：在 ChatGPT 重新連接有指定服務權限的 Render 帳號/工作區，或由使用者在該服務的已授權 shell 執行現有唯讀診斷（若 shell 或新版程式不可用則不得自行啟用付費方案、部署或暴露憑證）。僅提供診斷無密鑰 JSON、實際部署 SHA。即使唯讀診斷通過，仍需驗證有效 Rules 語意、獨立測試帳號的生命週期、隔離 D1 回復及備份保留。第 2B blocked；第 3 尚未開始，正式 Beta release lock 保持不變。
+
+## 第 2B Render 連線恢復與部署版本查核（2026-11-29，Asia/Taipei）
+- 正確的 Chjhsqafighting-2 Render 連線現可讀取指定服務 srv-dbvai3rl550s7397ic9g。已核實 repository、main 分支、Free 方案、未暫停、自動部署 no。指定部署 dep-dc5ee48u01pc738fad3g 為最新 live，完成時間 2026-11-28T14:37:58.472985Z（台灣 22:37），實際部署 SHA 917be256e5e33b8554ecbb50af8506b3a7baf34e，非最新 main。基準 cf0ba58 相對 live 領先 7 commits、23 changed files，包含第 2A/B 程式及唯讀診斷 CLI。原服務存取 404 阻塞已解除；不再要求服務 ID 或重連帳號。
+- 基準 `cf0ba581777d77cc66eba1874aade0c29bb66703` 的 6/6 checks 成功，完整回歸 [46160664029](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46160664029) 實際 TAP：3370 tests、3369 pass、0 fail、1 skipped、0 cancelled；[瀏覽器 46160663971](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46160663971)、[Pages 46160663408](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46160663408) success。上一程式提交 30c8913 的 21/21 checks 已全部成功。無已知失敗；未重跑或放寬測試。
+- 現有部署不包含 scripts/audit-adaptive-beta-deployment.cjs；目前 Render 連線沒有遠端 shell/exec 能力。已嘗試讀取確認服務 URL 的 /api/data-config、/api/adaptive-learning-engine-beta/status，工具無法取得 HTTP 回應，不能據此宣稱服務故障或 Beta 實際 HTTP 驗收成功。基準程式 RELEASE_ADAPTIVE_LEARNING_ENGINE_BETA=false；沒有改動開關或正式環境設定。此次僅有唯讀部署授權，不觸發正式部署、變更方案或環境變數、不觸碰正式資料。
+- 下一步：經使用者另行明確授權部署通過 CI 的指定 main 版本（保持 Beta 關閉），或提供具合法憑證的獨立測試環境。在可用的執行環境執行既有唯讀 CLI，另驗證實際 Firebase Rules 語意、D1 權限、隔離 Auth 帳號生命週期、備份還原及保留期限。即使部署更新，Free 方案 shell 能力仍須確認；不可假設部署即代表完成驗收。第 2B 仍 blocked，第 3 階段尚未開始。本次只更新文件，沒有新增程式測試，提交後查 CI。
