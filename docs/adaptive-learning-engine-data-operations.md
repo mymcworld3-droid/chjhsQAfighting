@@ -35,3 +35,6 @@ node scripts/audit-adaptive-beta-deployment.cjs --read-only
 
 ### 指定 Render 服務的接續方式
 使用者已指定 chjhsqafighting-2 為現有後端；目前 connector 回傳清單不含此服務，不應將 chjhsQAlegend 視為其替代。請由 Render Dashboard 開啟指定服務，取得服務 URL 或 srv- ID，確認正確工作區與授權連線，核對部署 commit SHA。在可用且獲授權的 shell 中執行上述唯讀 CLI（若部署尚未包含此檔，勿擅自為驗收觸發部署或改設定）。只需提供無憑證的 JSON 報告與 commit SHA，禁止提供 API key、Firebase 私鑰、D1 token。若方案不支援 shell，可使用具同等合法憑證與隔離環境的維運端執行；不建立公開診斷端點、不將密鑰移入 GitHub。正式規則語意與隔離刪除/還原另需驗證，程式 CI 全綠不代表正式部署驗收已完成。
+
+### 指定服務 ID 的查核結果（2026-11-28）
+正確服務 ID 已取得：srv-dbvai3rl550s7397ic9g，指定部署 dep-dc5ee48u01pc738fad3g。現有 Render 連線三項直接查詢均 404，不需重複提供 ID。請先確認 Render 連線帳號及可存取工作區，或以有權限的服務 shell 執行現有唯讀診斷。不得將 404 當作部署停機證據，不得用舊服務替代。無可用 shell 時保留阻塞，不新增公開診斷 API、不傳送私鑰，不改正式部署。只讀報告不等同隔離演練驗收。
