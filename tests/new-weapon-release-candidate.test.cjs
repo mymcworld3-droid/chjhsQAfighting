@@ -84,6 +84,7 @@ test('all 24 candidate artwork mappings resolve to existing approved assets',()=
  const path=require('node:path'),root=path.join(__dirname,'../public');
  const artSource=fs.readFileSync(path.join(root,'cultivation/manual-art.js'),'utf8');
  const {skillArt}=new Function(artSource.replace(/^export const /gm,'const ')+'\nreturn {skillArt};')();
+ const BLACK_SKILLS=new Set(["bell-strike","bell-shock","bell-echo","mirror-strike","mirror-summon","mirror-swap","gravity-strike","gravity-core","gravity-crash"]);
  const hdSkills=new Set(["prism-reflect","prism-scatter","weave-mark","weave-thread","weave-domain","time-slash","time-double","time-union"]);
  for(const b of D.BOOKS){
   const weapon='assets/weapons/'+b.id+'-hd.webp';assert.ok(fs.existsSync(path.join(root,weapon)),weapon);
@@ -92,7 +93,7 @@ test('all 24 candidate artwork mappings resolve to existing approved assets',()=
   assert.ok(bytes[20]&16,'WebP alpha flag');assert.equal(bytes.readUIntLE(24,3)+1,1024);assert.equal(bytes.readUIntLE(27,3)+1,1024);
   assert.ok(artSource.includes('/'+weapon),weapon+' mapped');
   assert.equal(require('../public/cultivation/weapon-presentation.js').art(b.id),'/'+weapon);
-  for(const sk of b.skills){const file=sk.id==='prism-slash'?'assets/skills/wind-slash.png':'assets/skills/'+sk.id+(hdSkills.has(sk.id)?'.webp':'.svg');assert.ok(fs.existsSync(path.join(root,file)),file);assert.equal(skillArt(sk),'/'+file);}
+  for(const sk of b.skills){const file=sk.id==='prism-slash'?'assets/skills/wind-slash.png':'assets/skills/'+sk.id+((hdSkills.has(sk.id)||BLACK_SKILLS.has(sk.id))?'.webp':'.svg');assert.ok(fs.existsSync(path.join(root,file)),file);assert.equal(skillArt(sk),'/'+file);if(BLACK_SKILLS.has(sk.id)){const image=fs.readFileSync(path.join(root,file));assert.equal(image.toString('ascii',8,16),'WEBPVP8 ');assert.equal(image.subarray(23,26).toString('hex'),'9d012a');assert.equal(image.readUInt16LE(26)&0x3fff,512);assert.equal(image.readUInt16LE(28)&0x3fff,512);}}
  }
 });
 

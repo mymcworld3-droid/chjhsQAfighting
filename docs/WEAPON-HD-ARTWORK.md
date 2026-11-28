@@ -23,3 +23,7 @@
 ## 2026-11-27 新圖騰正式原畫
 
 新增鳴鐘、蜃影及星隕圖騰三張 1024 × 1024 透明 WebP 原畫：`body-bell-hd.webp`、`body-mirror-hd.webp`、`body-gravity-hd.webp`。使用本次生成的 PNG 原畫，僅縮放及 WebP 壓縮，保留 Alpha 通道。共用武器呈現、功法收藏與情境預載均指向高清圖；舊 SVG 保留但不主動載入。新圖騰的技能圖示與戰鬥規則不在此次修改範圍。
+
+## 2026-11-28 新圖騰九招技能正式圖片
+
+依使用者選定的九張圖片，逐一核對相同構圖的透明原 PNG，再合成純黑背景並縮放為 512 × 512 不透明 WebP。鳴鐘：`bell-strike`、`bell-shock`、`bell-echo`；蜃影：`mirror-strike`、`mirror-summon`、`mirror-swap`；星隕：`gravity-strike`、`gravity-core`、`gravity-crash`。全部置於 `public/assets/skills/`，由 `manual-art.js` 統一提供修煉與戰鬥使用；舊 SVG 保留但不再由該映射載入。武器本身原畫仍為透明背景，不變更既有靈劍技能圖片、技能數值或解鎖規則。
