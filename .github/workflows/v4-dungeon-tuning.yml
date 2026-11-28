@@ -1,0 +1,42 @@
+name: V4 isolated dungeon tuning
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/accept-v4-tuning.cjs'
+      - '.github/workflows/v4-dungeon-tuning.yml'
+  workflow_dispatch:
+jobs:
+  tuning-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --no-audit --no-fund
+      - run: node scripts/accept-v4-tuning.cjs --prepare
+      - run: npm run build:module-versions
+      - run: npm run check:module-versions
+      - run: npm test
+  tuning-combat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node scripts/accept-v4-tuning.cjs --prepare
+      - run: node scripts/accept-v4-tuning.cjs --run ${{ matrix.shard }} /tmp/v4-tuning-${{ matrix.shard }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-tuning-a-${{ matrix.shard }}
+          path: /tmp/v4-tuning-${{ matrix.shard }}.json
+          if-no-files-found: error
