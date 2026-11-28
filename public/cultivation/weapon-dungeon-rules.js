@@ -114,30 +114,30 @@
     // is checked separately by the authenticated server start endpoint.
     const definition=selection({dungeonId,difficulty:index},{allowHidden:true});
     if(dungeonId===WILD_ID)return wildLayout(seed,index,definition);
-    const width=13,height=21;
+    const width=11,height=15;
     let h=0;for(const c of String(seed))h=(Math.imul(h,31)+c.charCodeAt(0))>>>0;
     const blocks=[];
     for(let y=0;y<height;y++)for(let x=0;x<width;x++)if(x===0||x===width-1||y===0||y===height-1)blocks.push({x,y});
-    // Entrance barricades, staggered stone gates and a broad lord arena.
-    // Keep the center connected; seed varies the flank routes.
+    // Compact v3: three staggered stone gates, open centre and lord arena.
+    // Saved v2 rooms retain their serialized board; only new layouts shrink.
     const mirror=x=>h%2?width-1-x:x,stone=(x,y)=>blocks.push({x:mirror(x),y});
-    for(const [x,y] of [[2,17],[3,17],[9,17],[10,17],[2,13],[2,12],[3,12],[9,11],[10,11],
-      [2,9],[3,9],[4,9],[8,7],[9,7],[10,7],[2,4],[10,4],[2,5],[10,5]])stone(x,y);
-    if(h%3===0){stone(1,15);stone(11,14);}
-    else if(h%3===1){stone(3,14);stone(9,15);}
-    else {stone(1,10);stone(11,9);}
+    for(const [x,y] of [[2,11],[3,11],[7,11],[8,11],[2,8],[3,8],[8,7],[9,7],
+      [2,5],[3,5],[7,4],[8,4],[2,3],[8,3]])stone(x,y);
+    if(h%3===0){stone(1,10);stone(9,9);}
+    else if(h%3===1){stone(2,12);stone(8,12);}
+    else {stone(1,6);stone(9,5);}
     const enemies=[{x:5,y:1,species:8,name:'尖峰石域領主',boss:true,bossKind:'rock',weaponDungeonLord:true,
       trackingAttack:true,dungeonSkills:peakSkills('lord'),hpFactor:7+index*1.2,attackFactor:1+index*.12,moveSteps:1,level:definition.stage}];
-    for(let row=0;row<4;row++)for(const x of [4,8])enemies.push({x,y:15-row*3,species:row%2?9:8,
+    for(let row=0;row<3;row++)for(const x of [3,7])enemies.push({x,y:10-row*3,species:row%2?9:8,
       name:row%2?'尖峰石靈':'重甲巖獸',trackingAttack:true,dungeonSkills:peakSkills(row%2?'spirit':'heavy'),hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
-    for(let i=0;i<index;i++)enemies.push({x:i%2?10:2,y:6+i*2,species:8,name:'石域守衛',trackingAttack:true,dungeonSkills:peakSkills('guard'),
+    for(let i=0;i<Math.floor(index/2);i++)enemies.push({x:mirror(i?9:1),y:i?5:8,species:8,name:'石域守衛',trackingAttack:true,dungeonSkills:peakSkills('guard'),
       hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
     const occupied=new Set(enemies.flatMap(a=>Array.from({length:a.boss?4:1},(_,i)=>(a.x+(a.boss?i%2:0))+','+(a.y+(a.boss?Math.floor(i/2):0)))));
     const safeBlocks=blocks.filter(p=>!occupied.has(p.x+','+p.y));
     return {id:'peak-stone',map:'peak-stone',seed,stage:definition.stage,layoutVersion:4,title:NAME+' · '+definition.realm,
       width,height,terrain:STONE_TERRAIN,biome:'mountain',mode:'elimination',variant:'tracking-stone',structure:'three-stone-gates',
-      attempt:0,layoutHash:'peak-stone:v2:'+index+':'+h.toString(16),
-      blocks:safeBlocks.map(p=>({...p,kind:'rock'})),ground:Array(width*height).fill(STONE_TERRAIN),spawn:{x:6,y:19},enemies,objective:{type:'boss',bossUid:'monster-0',completed:false},weaponDungeon:definition};
+      attempt:0,layoutHash:'peak-stone:v3:'+index+':'+h.toString(16),
+      blocks:safeBlocks.map(p=>({...p,kind:'rock'})),ground:Array(width*height).fill(STONE_TERRAIN),spawn:{x:5,y:13},enemies,objective:{type:'boss',bossUid:'monster-0',completed:false},weaponDungeon:definition};
   }
   function restoreTerrain(room){
     if(!room?.weaponDungeon||(room.weaponDungeon.id||ID)!==ID)return room;

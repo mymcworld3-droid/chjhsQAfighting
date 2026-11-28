@@ -789,8 +789,8 @@ export class TacticalRenderer{
     // Stone gate inscriptions are strictly decorative, below combat telegraphs.
     if(s.weaponDungeon?.id==='peak-stone'&&s.trial?.structure==='three-stone-gates'){
       c.save();c.strokeStyle='#dec69755';c.lineWidth=Math.max(1,cell*.035);
-      for(const row of [16,10,4]){
-        const x=ox+6.5*cell,y=oy+(row+.5)*cell;
+      for(const row of (s.height===15?[11,8,5]:[16,10,4])){
+        const x=ox+(s.width/2)*cell,y=oy+(row+.5)*cell;
         c.beginPath();c.moveTo(x-cell*1.12,y);c.lineTo(x,y-cell*.31);c.lineTo(x+cell*1.12,y);c.lineTo(x,y+cell*.31);c.closePath();c.stroke();
         c.beginPath();c.arc(x,y,cell*.20,0,Math.PI*2);c.stroke();
       }

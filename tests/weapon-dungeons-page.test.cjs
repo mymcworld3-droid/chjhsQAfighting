@@ -74,7 +74,7 @@ test('late account responses and responses after closing cannot overwrite a new 
  assert.equal(h.dialog().hidden,true);assert.doesNotMatch(h.dialog().innerHTML,/副本券 .*?>2<\/b>/);
 });
 
-test('catalog preserves per-dungeon progress and stone gates are deterministic',()=>{const p=W.progress({unlocked:1,clears:[2,0,0,0,0,0]});const d=W.catalog(p)[0];assert.equal(d.id,W.ID);assert.equal(d.clears[0],2);assert.equal(d.difficulties[1].locked,false);assert.equal(d.difficulties[2].locked,true);const map=W.layout('seed',0);assert.deepEqual(map,W.layout('seed',0));assert.equal(map.structure,'three-stone-gates');assert(map.blocks.length>75);});
+test('catalog preserves per-dungeon progress and stone gates are deterministic',()=>{const p=W.progress({unlocked:1,clears:[2,0,0,0,0,0]});const d=W.catalog(p)[0];assert.equal(d.id,W.ID);assert.equal(d.clears[0],2);assert.equal(d.difficulties[1].locked,false);assert.equal(d.difficulties[2].locked,true);const map=W.layout('seed',0);assert.deepEqual(map,W.layout('seed',0));assert.equal(map.structure,'three-stone-gates');assert.equal(map.width,11);assert.equal(map.height,15);assert(map.blocks.length>48);assert.match(map.layoutHash,/^peak-stone:v3:/);});
 
 test('earned dungeon ticket balances above daily refill cap remain visible',async()=>{
  const h=harness(),opening=h.open(W.ID);h.respond(h.state({tickets:8}));await opening;

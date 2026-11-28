@@ -14,7 +14,7 @@ const make=(manualSkills=[])=>R.create({
 const lord=s=>s.actors.find(a=>a.weaponDungeonLord);
 const guards=s=>s.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0);
 test('weapon dungeon lord has an active intent while all guards are alive',()=>{
-  const s=make();assert.equal(guards(s).length,8);
+  const s=make();assert.equal(guards(s).length,6);
   assert.notEqual(lord(s).intent?.kind,'wait');
   assert.equal(Impact.bossStatus(s).dormant,undefined);
   s.blocks=[];Object.assign(s.actors[0],{x:4,y:3});
@@ -66,7 +66,7 @@ test('defeating only the lord ends weapon dungeon immediately with guards still 
   lord(s).hp=1;
   R.prepareIntents(s);
   const original=guards(s).length;
-  assert(original>=8);
+  assert.equal(original,6);
   const win=R.apply(s,'u1',{type:'manual',skillId:'rock-fist',x:6,y:2},NOW);
   assert.equal(win.status,'finished');
   assert.equal(win.winner,'player');

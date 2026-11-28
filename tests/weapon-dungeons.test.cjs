@@ -33,7 +33,7 @@ test('Taipei midnight grants 3 tickets once, carries unused tickets up to 5 and 
  assert.equal(W.progress(p,after+86400000*8).tickets,5);
  assert.equal(W.progress(p,before).grantDay,p.grantDay);
 });
-test('all six seed maps have reachable guards, a legal 2x2 deepest lord, and at least 8 low-mobility guards',()=>{
+test('all six seed maps have reachable guards, a legal 2x2 deepest lord, and six to eight low-mobility guards',()=>{
  for(let d=0;d<6;d++)for(let seed=0;seed<20;seed++){
    const s=R.create({id:'map',players:[hero()],trial:{seed:String(seed),weaponDungeon:{difficulty:d}},now:NOW});
    const [player,lord,...guards]=s.actors;
@@ -41,7 +41,10 @@ test('all six seed maps have reachable guards, a legal 2x2 deepest lord, and at 
    assert.equal(s.trial.attempt,0);assert.match(s.trial.layoutHash,/^peak-stone:/);
    const noUndefined=value=>{if(value&&typeof value==='object')for(const v of Object.values(value)){assert.notEqual(v,undefined);noUndefined(v);}};
    noUndefined(s);
-   assert(lord.boss&&lord.weaponDungeonLord);assert(guards.length>=8);
+   assert(lord.boss&&lord.weaponDungeonLord);assert.equal(guards.length,6+Math.floor(d/2));
+   assert.equal(s.width,11);assert.equal(s.height,15);assert.match(s.trial.layoutHash,/^peak-stone:v3:/);
+   assert.equal(new Set(s.actors.flatMap(a=>R.footprint(a).map(R.key))).size,guards.length+5);
+   assert(s.actors.every(a=>R.footprint(a).every(p=>!R.blocked(s,p))));
    assert(guards.every(a=>a.y>lord.y+1));
    assert(R.footprint(lord).every(p=>!R.blocked(s,p)));
    const queue=[{x:player.x,y:player.y}],seen=new Set([R.key(player)]);
@@ -182,7 +185,7 @@ test('lord defeat immediately settles weapon dungeon, unlocks next difficulty an
  Object.assign(raw.actors[0],{x:6,y:3,stamina:10,answered:0,correct:0});
  raw.actors.find(a=>a.weaponDungeonLord).hp=1;
  const guardsAlive=raw.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length;
- assert(guardsAlive>=8);
+ assert.equal(guardsAlive,6);
  R.prepareIntents(raw);
  const action={roomId:started.id,type:'manual',skillId:'rock-fist',x:6,y:2,
    revision:raw.revision,requestId:'boss-only-final-blow'};
@@ -474,7 +477,7 @@ test('new Peak Stone layouts assign distinct sword techniques to guards and all 
   assert.ok(guards.every(m=>m.dungeonSkills.length===2&&!m.dungeonSkills.some(sk=>sk.lordOnly)));
   assert.ok(guards.some(m=>m.dungeonSkills.some(sk=>sk.id===W.PEAK_SKILLS.line.id)));
   assert.ok(guards.some(m=>m.dungeonSkills.some(sk=>sk.id===W.PEAK_SKILLS.thrust.id)));
-  assert.equal(s.width,13);assert.equal(s.height,21);assert.equal(s.weaponDungeon.totemDamageMultiplier,1.15);
+  assert.equal(s.width,11);assert.equal(s.height,15);assert.equal(s.weaponDungeon.totemDamageMultiplier,1.15);
  }
 });
 test('all four Peak Stone sword skills use published cells, real damage and committed animation identifiers',()=>{

@@ -163,7 +163,7 @@ async function main(){
   const raw=db.records.get(API.ROOMS+'/'+room.id);
   raw.blocks=[];
   const remainingGuards=raw.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length;
-  assert(remainingGuards>=8,'guards must remain alive for the boss-only victory regression');
+  assert(remainingGuards===6,'guards must remain alive for the boss-only victory regression');
   Object.assign(raw.actors[0],{x:6,y:3,stamina:10});raw.actors[1].hp=1;R.prepareIntents(raw);
   // Force a current-tier roll only in this isolated fixture. The real roll,
   // inventory transaction and public artwork still execute; probability tests
