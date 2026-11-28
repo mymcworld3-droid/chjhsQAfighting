@@ -14,3 +14,9 @@
 - 測試命令：node --test tests/weapon-dungeons.test.cjs；npm run test:battle；npm test；npm run check:module-versions。
 - 本地環境無法解析 github.com，無法下載完整儲存庫並執行 Node 測試；使用 GitHub Actions 驗收。尚未確認新提交 CI 結果，不能標記完成。
 - 下一步：取得包含本修改的實際提交 SHA 及最新 CI，修正任何失敗；全部必要回歸通過後開始第 2 階段共用靈獸技能架構。第 3 階段才加入四種劍法技能；第 4 階段才建置隱藏萬獸險域。
+
+### 提交與 CI 查核
+
+- 程式與回歸測試提交：[ebbf5b32519f36f5074e117c56d265deb6f4a832](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/ebbf5b32519f36f5074e117c56d265deb6f4a832)，已確認 main 指向該提交。
+- GitHub Actions 查核：Cultivation regression tests：in_progress / 未結論（46106093401）；Tactical browser acceptance：in_progress / 未結論（46106092805）；New weapon release candidate acceptance：in_progress / 未結論（46106092826）；pages build and deployment：in_progress / 未結論（46106092636）
+- 仍須在此階段完成最新 CI 及必要測試；下一次先補驗收，不直接跳到第二階段。
