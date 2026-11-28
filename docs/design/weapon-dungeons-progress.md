@@ -95,7 +95,7 @@
 
 - 修正程式 e140d50 的完整回歸 46111230150、瀏覽器 46111230179、候選版 46111230218（15/15）及 Pages 46111229261 全部成功。最新文件 50e5cfb 的回歸 46111441978、瀏覽器 46111442014、Pages 46111441727 亦全部成功。第三階段正式結案。
 
-## 第 4 階段：萬獸險域基礎建置（已實作，待 CI）
+## 第 4 階段：萬獸險域基礎建置（已驗收）
 
 - 技術 ID beast-wilds。公開 catalog/selection 預設排除 hidden；僅伺服器註冊時明確傳 allowHiddenWeaponDungeons:true 可進場及列出測試副本，客戶端 body/query 不能開啟。正式 register 預設 false，無環境自動開啟或公開按鈕。
 - 11×15 沙地索引 13，主畫面繪製時僅新副本加赤紅色調；舊石域遷移仍只作用於 peak-stone。種子鏡像與三種側翼障礙配置、領主上下變化；出生點 (5,13)，領主最近占位距離六/七格，六隻普通靈獸三衝撞型三震波型，暫沿用山豬 species 1、巖甲獸 species 8 及大型巖獸素材。
@@ -118,3 +118,15 @@
 - 補強提交 87a90fb 的瀏覽器 46112267896 成功；候選版 46112267877 共 14/15 成功（含 tactical/coop 及十二組實戰），僅 candidate-regression 失敗；一般回歸 46112267890 及最新文件 d3e7baf 回歸 46112268565 同一失敗。最新文件瀏覽器 46112268571、Pages 46112268442 成功（補強提交 Pages 被取代取消）。
 - 失敗根因：tests/manual-damage-description.test.cjs 仍用兩個舊硬編碼 body/圖騰加成正規式。修正為精確驗證兩處 UI 均呼叫共用 R.dungeonDamageMultiplier 並以武器目錄的 weaponType 選擇；原有其他斷言全部保留，另增實際傷害說明測試（無副本、舊存檔、石域、萬獸、弦修預留）。不改任何戰鬥規則或降低標準。
 - 修正後重跑最新 CI，全部必要驗收通過才開始第五階段。萬獸險域仍隱藏。
+
+### 第四階段正式結案（2026-11-28）
+
+- 修正提交 7437438 的完整回歸 [46113718535](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46113718535)、候選版 [46113718542](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46113718542)、真實瀏覽器 [46113718530](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46113718530)、Pages [46113718146](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46113718146) 全部成功。第四階段結案。
+
+## 第 5 階段：蠻獸衝撞（程式已實作，待 CI）
+
+- 三隻赤鬃蠻豬與 2×2 領主配置鎖定 charge；普通最多三格、領主四格、基本傷害倍率 1、撞牆額外倍率 .5，均為第八階段待調整的暫定數值，不改尖峰石域。震波型仍用階段四測試攻擊，階段六替換正式震波。
+- 選擇可命中玩家的四向合法完整掃掠占位；預告保存固定方向、路徑、最大距離、全部格位及倍率。玩家移動不重瞄；結算僅縮短原有路徑，逐格檢查最新地形、其他靈獸、完整占位及玩家。單次技能首次接觸造成一次基礎傷害；後續每步持續推動，不重複基礎扣血。岩壁/邊界造成一次額外碰撞傷害並停止，其他角色阻擋只停止、不追加傷害或連鎖推動。死亡、反傷通關立即停止；保留共通攻擊後普通移動與再準備、實際擊退打斷及舊房間技能快照。
+- 伺服器同步推動兩者，記錄每步共同移動事件；Canvas 基礎蓄力、速度線與撞牆火花分別由實際事件繪製，完整沙塵美術留第七階段。
+- 新增七組確定性測試：配置分工、鎖定/閃避/JSON 恢復、連續推動/單次傷害/動畫、牆壁/邊界/其他單位、2×2 雙道阻擋、合法擊退打斷、反傷終局。
+- 修改 public/cultivation/weapon-dungeon-rules.js、public/cultivation/tactical-rules.js、public/cultivation/tactical-animation.js、public/cultivation/tactical-skill-effects.js、tests/weapon-dungeons.test.cjs、public/module-versions.json、本文件。待 npm test、npm run test:battle、npm run check:module-versions、瀏覽器、候選版及 Pages；最新 CI 未完成前不結案、不公開萬獸險域。

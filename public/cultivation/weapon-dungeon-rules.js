@@ -30,6 +30,11 @@
   // Stage four development-only close-range attack. Charge and shockwaves
   // are implemented in stages five/six, not advertised as finished skills.
   const WILD_TEST_SKILL=Object.freeze({id:'wild-test-hit',name:'近身試擊',shape:'point',range:1,power:1,warning:'locked',animation:'hit'});
+  // Stage eight will tune these provisional ranges and collision multiplier.
+  const WILD_CHARGE=Object.freeze({
+    guard:Object.freeze({id:'wild-charge',name:'蠻獸衝撞',shape:'charge',range:3,power:1,collisionPower:.5,warning:'locked',animation:'wild-charge'}),
+    lord:Object.freeze({id:'wild-charge',name:'蠻獸衝撞',shape:'charge',range:4,power:1,collisionPower:.5,warning:'locked',animation:'wild-charge',lordOnly:true})
+  });
   const WEAPON_REALMS=Object.freeze(['煉氣',...DIFFICULTIES.map(d=>d.name),'真仙']);
   // The drop ladder follows the six dungeon difficulties, with 煉氣 below 築基.
   const lowerRealm=realm=>WEAPON_REALMS[WEAPON_REALMS.indexOf(realm)-1]||null;
@@ -80,11 +85,11 @@
     for(const [x,y] of variants[(h>>>1)%3])rock(x,y);
     const lordY=6-((h>>>3)%2);
     const enemies=[{x:h%2?width-2-5:5,y:lordY,species:8,name:WILD_NAME+'領主',boss:true,bossKind:'rock',weaponDungeonLord:true,
-      dungeonRole:'lord',dungeonSkills:[WILD_TEST_SKILL],hpFactor:7+index*1.2,attackFactor:1+index*.12,moveSteps:1,level:definition.stage}];
+      dungeonRole:'lord',dungeonSkills:[WILD_CHARGE.lord],hpFactor:7+index*1.2,attackFactor:1+index*.12,moveSteps:1,level:definition.stage}];
     for(const [x,y,role] of [[3,5,'charge'],[8,6,'shock'],[2,9,'shock'],[8,9,'charge'],[3,12,'charge'],[7,12,'shock']]){
       const charge=role==='charge';
       enemies.push({x:mirror(x),y,species:charge?1:8,name:charge?'赤鬃蠻豬':'裂地蠻牛',
-        dungeonRole:role,dungeonSkills:[WILD_TEST_SKILL],hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
+        dungeonRole:role,dungeonSkills:[charge?WILD_CHARGE.guard:WILD_TEST_SKILL],hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
     }
     const occupied=new Set([spawn.x+','+spawn.y,...enemies.flatMap(a=>Array.from({length:a.boss?4:1},(_,i)=>(a.x+(a.boss?i%2:0))+','+(a.y+(a.boss?Math.floor(i/2):0))))]);
     return {id:WILD_ID,map:WILD_ID,seed,stage:definition.stage,layoutVersion:4,title:WILD_NAME+' · '+definition.realm,
@@ -128,5 +133,5 @@
     if(Array.isArray(room.ground)&&room.ground.includes(13))room.ground=room.ground.map(t=>t===13?STONE_TERRAIN:t);
     return room;
   }
-  return Object.freeze({ID,NAME,DAILY_TICKETS,MAX_TICKETS,STONE_TERRAIN,DESERT_TERRAIN,WILD_ID,WILD_NAME,PEAK_SKILLS,restoreTerrain,DIFFICULTIES,WEAPON_REALMS,CATALOG,lowerRealm,day,progress,progressFor,recordClear,catalog,selection,layout});
+  return Object.freeze({ID,NAME,DAILY_TICKETS,MAX_TICKETS,STONE_TERRAIN,DESERT_TERRAIN,WILD_ID,WILD_NAME,PEAK_SKILLS,WILD_CHARGE,restoreTerrain,DIFFICULTIES,WEAPON_REALMS,CATALOG,lowerRealm,day,progress,progressFor,recordClear,catalog,selection,layout});
 });

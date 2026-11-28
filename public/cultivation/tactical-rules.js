@@ -217,7 +217,7 @@
       const sk=m.dungeonSkills.find(sk=>sk.id===m.intent?.skillId)||m.dungeonSkills[0];
       return {...profile,name:m.name,attackName:sk.name,attack:{...sk},move:{kind:'heavy',steps:1},moveName:'重步',
         attackText:m.dungeonSkills.map(sk=>sk.name).join('、')+(sk.warning==='locked'?'；預告鎖定後不追蹤。':'；蓄勢會追蹤合法方向及射程。'),
-        moveText:m.trackingAttack?'普通移動最多一格；穿刺突進另有合法技能位移。':'普通移動最多一格。',
+        moveText:m.trackingAttack?'普通移動最多一格；穿刺突進另有合法技能位移。':m.dungeonSkills.some(sk=>sk.shape==='charge')?'普通移動最多一格；衝撞沿鎖定路徑逐格推動修士。':'普通移動最多一格。',
         tip:sk.warning==='locked'?'離開已顯示的危險格，或成功擊退打斷蓄勢。':'避開合法攻擊線或射程，或成功擊退打斷蓄勢。'};
     }
     if(!m.trackingAttack)return profile;
@@ -247,7 +247,8 @@
   const dungeonSkillSet=(s,m)=>Array.isArray(m.dungeonSkills)?m.dungeonSkills:
     m.trackingAttack||(s.weaponDungeon?.id||'peak-stone')==='peak-stone'?[m.weaponDungeonLord?DUNGEON_ENEMY_SKILLS.stoneLord:DUNGEON_ENEMY_SKILLS.stoneFall]:[];
   const dungeonSkillAllowed=(s,m,sk)=>sk&&typeof sk.id==='string'&&typeof sk.name==='string'&&
-    ['blast','point','line','cone','square'].includes(sk.shape)&&['tracking','locked'].includes(sk.warning)&&
+    ['blast','point','line','cone','square','charge'].includes(sk.shape)&&['tracking','locked'].includes(sk.warning)&&
+    (sk.shape!=='charge'||(sk.warning==='locked'&&Number.isFinite(sk.collisionPower)&&sk.collisionPower>=0))&&
     Number.isInteger(sk.range)&&sk.range>=0&&Number.isFinite(sk.power)&&sk.power>=0&&
     (!sk.lordOnly||m.weaponDungeonLord)&&
     (s.weaponDungeon.difficulty??0)>=(sk.minDifficulty??0)&&(s.weaponDungeon.difficulty??0)<=(sk.maxDifficulty??5);
@@ -273,12 +274,30 @@
     }
     return [...new Map(cells.filter(p=>!covers(m,p)).map(p=>[key(p),p])).values()];
   }
+  // Plan the entire swept footprint, treating only the player as pushable.
+  // A blocked lane of a 2x2 beast stops the whole body, not just that lane.
+  function dungeonChargePlan(s,m,hero,sk){
+    const target=point(hero),empty={cells:[],path:[],waves:[],direction:null,target};
+    for(const [dx,dy] of CARDINALS){
+      const direction={x:dx,y:dy},path=[],cells=new Map();
+      let anchor=point(m);
+      for(let step=0;step<Math.min(sk.range,Math.max(s.width,s.height));step++){
+        const next={x:anchor.x+dx,y:anchor.y+dy},body=footprint({...m,...next});
+        if(body.some(q=>blocked(s,q)||s.actors.some(a=>alive(a)&&a.uid!==m.uid&&a.uid!==hero.uid&&covers(a,q))))break;
+        path.push(next);anchor=next;
+        for(const q of body)if(!covers(m,q))cells.set(key(q),q);
+      }
+      if(cells.has(key(hero)))return {cells:[...cells.values()],path,waves:[],direction,target};
+    }
+    return empty;
+  }
   function dungeonSkillPlan(s,m,hero,sk){
     const body=footprint(m),target=point(hero);
     const nearest=body.slice().sort((a,b)=>dist(a,target)-dist(b,target))[0];
     const direction=attackDirection(nearest,target);
     const empty={cells:[],path:[],waves:[],direction,target};
     if(!dungeonSkillAllowed(s,m,sk))return empty;
+    if(sk.shape==='charge')return dungeonChargePlan(s,m,hero,sk);
     const range=sk.range,radius=sk.radius??0;
     let cells=[],waves=[];
     if(sk.shape==='square'){
@@ -302,8 +321,7 @@
     }
     cells=[...new Map(cells.filter(p=>!blocked(s,p)&&!covers(m,p)).map(p=>[key(p),p])).values()];
     if(!cells.some(p=>key(p)===key(hero)))return empty;
-    // Generic skill displacement stores the legal route before the warning.
-    // Charge/pushing through a target and collision damage are stage five.
+    // Generic non-charge skill displacement stores the legal route before the warning.
     const path=[];
     if(direction&&Number.isInteger(sk.moveSteps)&&sk.moveSteps>0){
       let p=point(m);
@@ -333,6 +351,7 @@
       return {version:3,kind:'attack',skillId:sk.id,skillName:sk.name,origin:point(m),...plan,
         shape:sk.shape,power:sk.power,warning:sk.warning,tracking:sk.warning==='tracking',
         animation:sk.animation||sk.shape,requiresPath:!!sk.requiresPath,slow:!!sk.slow,push:sk.push||0,interruptible:true,
+        ...(sk.shape==='charge'?{collisionPower:sk.collisionPower,maxDistance:sk.range}:{}),
         text:ready?'下次：'+sk.name+(sk.warning==='tracking'?'（追蹤，請退出射程）':'（鎖定）'):'已離開射程，本次'+sk.name+'無法命中'};
     }
     return {version:3,kind:'advance',cells:[],origin:point(m),target:point(hero),text:'下次：重步 1 格'};
@@ -1705,10 +1724,56 @@
   // The solo weapon-dungeon turn is one atomic attack (if previously warned),
   // followed by at most one ordinary move and preparation for the next window.
   // Never turn a newly prepared attack into damage in this same action.
+  function resolveDungeonCharge(s,m,hero,intent){
+    const direction=intent.direction,origin=point(m),skillId=intent.skillId;
+    if(!direction||!Number.isInteger(direction.x)||!Number.isInteger(direction.y)||Math.abs(direction.x)+Math.abs(direction.y)!==1)return;
+    const {x:dx,y:dy}=direction,advertised=new Set((intent.cells||[]).map(key));
+    let hit=false;
+    // The wind-up effect stays at the origin; motion/impact use only actual
+    // step events, never the speculative end of the warning.
+    log(s,m.name+'施展「'+intent.skillName+'」','monster-attack',{actor:m.uid,skill:skillId,
+      animation:{kind:'cast',style:'wild-charge',origin,target:{x:origin.x+dx,y:origin.y+dy},cells:[origin],direction,color:'#d9a080'}});
+    for(const next of (intent.path||[]).slice(0,Math.max(0,Math.min(intent.maxDistance||0,Math.max(s.width,s.height))))){
+      if(s.status!=='active'||!alive(m)||!alive(hero)||next.x!==m.x+dx||next.y!==m.y+dy)break;
+      const body=footprint({...m,...next});
+      if(body.some(q=>blocked(s,q)||(!covers(m,q)&&!advertised.has(key(q)))||
+        s.actors.some(a=>alive(a)&&a.uid!==m.uid&&a.uid!==hero.uid&&covers(a,q))))break;
+      const touching=body.some(q=>covers(hero,q)),moves=[];
+      if(touching){
+        if(!hit){
+          hit=true;damage(s,m,hero,m.atk*(intent.power??1),{skill:skillId});
+          checkFinished(s);
+          if(s.status!=='active'||!alive(m)||!alive(hero))break;
+        }
+        const pushed={x:hero.x+dx,y:hero.y+dy};
+        if(footprint({...hero,...pushed}).some(q=>blocked(s,q))){
+          // Stop at the last legal position. A wall collision is one separate
+          // damage event, even for a two-cell-wide charging lord.
+          log(s,hero.name+'撞上岩壁','impact',{actor:m.uid,skill:'wild-charge-wall',
+            animation:{kind:'cast',style:'wild-charge-wall',origin:point(hero),target:point(hero),cells:[point(hero)],direction,color:'#ffb077'}});
+          damage(s,m,hero,m.atk*(intent.collisionPower??0),{skill:'wild-charge-wall'});
+          checkFinished(s);break;
+        }
+        if(!canOccupy(s,hero,pushed)||body.some(q=>covers({...hero,...pushed},q)))break;
+        moves.push({uid:hero.uid,path:[point(hero),pushed]});
+        Object.assign(hero,pushed);
+      }
+      // Both positions are now committed as a single simultaneous step.
+      moves.push({uid:m.uid,path:[point(m),point(next)]});
+      Object.assign(m,next);
+      log(s,m.name+(touching?'衝撞推動'+hero.name:'衝撞前進'),'displace',{actor:m.uid,skill:skillId,path:moves.at(-1).path,
+        animation:{kind:'move',style:'dash',visualSkill:skillId,moves}});
+    }
+    if(!hit)log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});
+  }
   function weaponDungeonMonsterTurn(s,m,hero){
     if(s.status!=='active'||!alive(m)||!alive(hero))return;
     const intent=m.intent;
     if(intent?.kind==='attack'&&(!intent.origin||key(intent.origin)===key(m))){
+      if(intent.shape==='charge'){
+        m.lastDungeonSkill=intent.skillId;
+        resolveDungeonCharge(s,m,hero,intent);
+      }else{
       // Resolve only the published snapshot, including legacy v2 warnings.
       let cells=intent.cells||[];
       const name=intent.skillName||monsterProfileFor(m).attackName;
@@ -1750,6 +1815,7 @@
           Object.assign(m,p);route.push(point(m));
         }
         motion(s,m,route,'dash',m.name+'施展位移');
+      }
       }
     }
     // Reflected damage may kill the lord during its own attack.

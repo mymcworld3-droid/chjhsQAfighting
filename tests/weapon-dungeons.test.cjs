@@ -646,3 +646,93 @@ test('only bow receives wild bonus; real sword and totem attacks remain unbooste
   assert.equal(s.actors[1].hp-next.actors[1].hp,expected);
  }
 });
+
+function chargeScene({boss=false,enemy={x:4,y:4},player={x:6,y:4},blocks=[],skills=['rock-break'],extra=[]}={}){
+ const s=scene({boss,enemy,player,skills});
+ s.weaponDungeon=W.selection({dungeonId:W.WILD_ID,difficulty:0},wildAccess);
+ const m=s.actors[1];delete m.trackingAttack;m.dungeonSkills=[boss?W.WILD_CHARGE.lord:W.WILD_CHARGE.guard];
+ s.blocks=blocks;s.actors.push(...extra);R.prepareIntents(s);return s;
+}
+const chargeSteps=s=>s.events.filter(e=>e.type==='displace'&&e.skill==='wild-charge');
+const chargeHits=s=>s.events.filter(e=>e.type==='damage'&&e.skill==='wild-charge');
+const wallHits=s=>s.events.filter(e=>e.type==='damage'&&e.skill==='wild-charge-wall');
+const guardAt=(x,y)=>R.actor({uid:'blocker',bot:true,team:'monster',species:8,atk:1,maxHp:10000,dungeonSkills:[]},{x,y});
+test('wild charge is configured for three boars and lord only, shock guards retain their stage-four test strike',()=>{
+ const s=R.create({id:'charge-map',players:[hero()],trial:{seed:'wild-charge',weaponDungeon:{id:W.WILD_ID,difficulty:0}},now:NOW});
+ for(const m of s.actors.slice(1)){
+  assert.equal(m.dungeonSkills[0].shape,m.dungeonRole==='shock'?'point':'charge');
+  assert.equal(m.dungeonSkills[0].warning,'locked');
+ }
+});
+test('charge locks complete path and does not chase a lateral dodge; saved warning resolves identically',()=>{
+ let s=chargeScene(),warning=structuredClone(s.actors[1].intent);
+ assert.equal(warning.skillId,'wild-charge');assert.deepEqual(warning.direction,{x:1,y:0});
+ assert.deepEqual(warning.path,[{x:5,y:4},{x:6,y:4},{x:7,y:4}]);
+ assert.deepEqual(warning.cells,warning.path);
+ s=R.apply(s,'u1',{type:'move',x:6,y:5},NOW);assert.deepEqual(s.actors[1].intent,warning);
+ const next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.deepEqual(next,R.apply(JSON.parse(JSON.stringify(s)),'u1',{type:'end'},NOW));
+ assert.equal(next.actors[0].hp,10000);assert.equal(chargeSteps(next).length,3);
+ assert.equal(chargeHits(next).length,0);assert.equal(wallHits(next).length,0);
+ assert.ok(next.events.some(e=>e.type==='dodge'));
+});
+test('charge pushes on each contact step, deals base damage once, and uses simultaneous committed animation paths',()=>{
+ const s=chargeScene(),next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(next.actors[0].hp,9900);assert.equal(next.actors[0].x,8);
+ assert.equal(chargeHits(next).length,1);assert.equal(wallHits(next).length,0);
+ const steps=chargeSteps(next);assert.equal(steps.length,3);
+ assert.equal(steps.filter(e=>e.animation.moves.length===2).length,2);
+ const A=require('../public/cultivation/tactical-animation.js'),plan=A.plan(s,next,'u1');
+ const moving=plan.filter(e=>e.kind==='move'&&e.visualSkill==='wild-charge');
+ assert.equal(moving.length,3);
+ assert.ok(moving.every(e=>e.moves.every(m=>m.path.length===2)));
+ assert.ok(moving.every(e=>new Set(e.after.flatMap(R.footprint).map(R.key)).size===e.after.flatMap(R.footprint).length));
+});
+test('charge hits a rock or boundary once for additional damage, but another beast blocks without wall damage',()=>{
+ for(const blocks of [[{x:7,y:4}],[]]){
+  const boundary=!blocks.length;
+  const s=chargeScene({enemy:{x:boundary?10:4,y:4},player:{x:boundary?12:6,y:4},blocks});
+  const next=R.apply(s,'u1',{type:'end'},NOW);
+  assert.equal(next.actors[0].hp,9850);assert.equal(chargeHits(next).length,1);assert.equal(wallHits(next).length,1);
+  assert.equal(next.actors[0].x,boundary?12:6);
+  assert.ok(next.actors[1].x<next.actors[0].x);
+  assert.ok(next.events.some(e=>e.skill==='wild-charge-wall'&&e.animation?.kind==='cast'));
+ }
+ const s=chargeScene({extra:[guardAt(7,4)]}),next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(next.actors[0].hp,9900);assert.equal(next.actors[0].x,6);assert.equal(wallHits(next).length,0);
+ assert.equal(chargeHits(next).length,1);
+});
+test('large charge sweeps both lanes and rechecks a newly blocked lane without extending the saved warning',()=>{
+ let s=chargeScene({boss:true,player:{x:7,y:5}});
+ const intent=structuredClone(s.actors[1].intent);
+ assert.equal(intent.path.length,4);assert.ok(intent.cells.some(q=>q.x===6&&q.y===4));assert.ok(intent.cells.some(q=>q.x===6&&q.y===5));
+ let next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(next.actors[0].hp,9900);assert.equal(next.actors[0].x,10);assert.equal(chargeHits(next).length,1);
+ assert.ok(R.footprint(next.actors[1]).every(q=>!R.blocked(next,q)&&!R.covers(next.actors[0],q)));
+ s.blocks=[{x:6,y:4}];assert.deepEqual(s.actors[1].intent,intent);
+ next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(chargeSteps(next).length,0);assert.equal(next.actors[0].hp,10000);
+ s=chargeScene({boss:true,player:{x:7,y:5},blocks:[{x:6,y:4}]});
+ assert.equal(s.actors[1].intent.kind,'advance');
+});
+test('actual knockback interrupts a charge, blocked knockback leaves the same locked warning',()=>{
+ for(const boss of [false,true]){
+  let s=chargeScene({boss,enemy:{x:7,y:4},player:{x:5,y:4}});
+  assert.equal(s.actors[1].intent.skillId,'wild-charge');
+  const next=R.apply(s,'u1',{type:'manual',skillId:'rock-break',x:6,y:4},NOW);
+  assert.ok(next.actors[1].x>7);assert.equal(next.actors[1].intent.kind,'stagger');
+  assert.equal(chargeHits(R.apply(next,'u1',{type:'end'},NOW)).length,0);
+  s.blocks=[{x:boss?9:8,y:4}];
+  const warning=structuredClone(s.actors[1].intent);
+  const blocked=R.apply(s,'u1',{type:'manual',skillId:'rock-break',x:6,y:4},NOW);
+  assert.deepEqual(blocked.actors[1].intent,warning);
+ }
+});
+test('reflection that defeats the charging lord stops charge and all subsequent enemy actions',()=>{
+ const s=chargeScene({boss:true,player:{x:7,y:4},extra:[guardAt(8,6)]});
+ s.actors[1].hp=1;s.actors[0].counter=1;
+ const next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(next.status,'finished');assert.equal(next.winner,'player');
+ assert.equal(chargeHits(next).length,1);assert.equal(wallHits(next).length,0);
+ assert.equal(next.actors[0].x,7);assert.ok(!next.events.some(e=>e.actor==='blocker'&&['monster-attack','monster-move'].includes(e.type)));
+});

@@ -14,7 +14,7 @@
   const moves=new Set([
     'wind-slash','wind-step','wind-thousand','flight-summon','sky-cloud','sky-sever',
     'rock-fist','rock-quake','rock-break','dragon-guard','dragon-roar','tiger-step','tiger-throw',
-    'peak-sword-line','peak-sword-sweep','peak-sword-thrust','peak-sword-rain'
+    'peak-sword-line','peak-sword-sweep','peak-sword-thrust','peak-sword-rain','wild-charge','wild-charge-wall'
   ]);
   const heavyMoves=new Set(['rock-fist','rock-quake','rock-break','dragon-guard','tiger-step','tiger-throw','wind-thousand','sky-sever']);
   const clamp=n=>Math.max(0,Math.min(1,n));
@@ -215,7 +215,11 @@
         circle(at,.10+beat*.22,beat*.5,white,.016);
       }
     }
-    if(move.startsWith('peak-sword-')){
+    if(move==='wild-charge'||move==='wild-charge-wall'){
+      const at=move==='wild-charge-wall'?to:from;
+      circle(at,.18+.48*p,beat*.8,gold,.035);sparks(at,12,ember,.75);
+      if(move==='wild-charge-wall')impact(at,p,ember);
+    }else if(move.startsWith('peak-sword-')){
       // Restrict horizontal sword effects to the exact committed attack tiles.
       // Rain falls from above per tile rather than sweeping across the board.
       if(move==='peak-sword-rain'){

@@ -49,6 +49,7 @@
     if(scene.weaponTimeline)return scene.weaponTimeline.durationMs;
     if(flyingSwordPose(scene,0))return swordFlightDuration(scene);
     if(scene.kind==='move'){
+      if(scene.style==='dash'&&scene.visualSkill==='wild-charge')return 150;
       if(scene.style==='dash'&&scene.visualSkill==='dragon-guard')return 200;
       if(scene.style==='teleport')return 360;
       if(jumps.has(scene.style))return 420;
@@ -211,7 +212,7 @@
       for(const key of ['rays','cuts']){
         if(Array.isArray(raw[key]))scene[key]=raw[key].map(line=>Array.isArray(line)?line:line.cells);
       }
-      if(scene.kind==='move'&&['dash','throw'].includes(scene.style)){
+      if(scene.kind==='move'&&!scene.visualSkill&&['dash','throw'].includes(scene.style)){
         const revision=String(event.id).split(':')[0];
         const related=events.filter(other=>other.actor===event.actor&&(other.type==='cast'||other.type==='monster-attack')&&
           String(other.id).split(':')[0]===revision&&other.skill);
