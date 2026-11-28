@@ -29,6 +29,9 @@ jobs:
       - name: Private prism animation on real Chromium in both battle painters
         if: ${{ !cancelled() }}
         run: node scripts/test-prism-browser.cjs
+      - name: Adaptive learning Beta preview on phone and tablet
+        if: ${{ !cancelled() }}
+        run: node scripts/test-adaptive-learning-engine-beta-browser.cjs
       - name: Browser screenshots
         if: always()
         uses: actions/upload-artifact@v4

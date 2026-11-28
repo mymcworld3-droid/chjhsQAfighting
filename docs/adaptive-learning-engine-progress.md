@@ -2,8 +2,8 @@
 
 規格：V1.0，`docs/adaptive-learning-engine-beta.md`（完整 324 行，Git blob `6b29dad7bd791e962718be32c08202840cd695b4`）。
 目標分支：main。基準提交：`8614dff06518962901e123a010dbfddc5d37a453`（2026-11-28）。
-階段 0｜最新 main 盤點與架構基線：**in_progress**；已完成程式及既存 CI 盤點，待本提交回歸 CI。最新通過階段：無。下一步：先驗證本階段；通過後才能開始第 1 階段。
-本文件與測試修正為同一提交；提交 SHA 由 `git log -1 --format=%H -- docs/adaptive-learning-engine-progress.md` 或 GitHub 檔案歷史取得，不在提交內容內自我引用雜湊。Beta 尚未實作、未啟用。
+階段 0｜最新 main 盤點與架構基線：**passed**。當前階段 1｜Beta 入口及功能開關：**in_progress**，待本提交 CI。最新通過階段：0。
+本文件與測試修正為同一提交；提交 SHA 由 `git log -1 --format=%H -- docs/adaptive-learning-engine-progress.md` 或 GitHub 檔案歷史取得，不在提交內容內自我引用雜湊。Beta 僅完成獨立開發預覽入口；正式環境未啟用。
 
 ## 0A. 實際程式盤點與重用清單
 
@@ -64,7 +64,27 @@
 
 | 階段 | 狀態 |
 |---|---|
-| 0 | in_progress — 本提交回歸 CI 尚待確認；待驗證後標記 passed |
-| 1–26 | not_started |
+| 0 | passed — 124e2e2 基準 CI 全部成功 |
+| 1 | in_progress — 已提交入口、伺服器開關、隔離 shell 與驗收測試；待新 CI |
+| 2–26 | not_started |
 
 接續時先讀完整規格與本文件，核對最新 main 的 CI。若仍有失敗，修正本階段阻塞，不降低驗收。若本次測試修正的 CI 通過，記錄真實 run URL、測試數與提交 SHA，再開始第 1 階段。未確認正式搜尋服務不等於現有搜尋已啟用；第 3 階段需完成真實驗證。
+
+## 第 0 階段最終驗收（2026-11-28）
+
+提交 `124e2e21cc50a839c359e2f745935a4cfd30f52d`：
+- 回歸 [46150632032](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46150632032)：success；3323 tests、3322 pass、0 fail、0 cancelled、1 skipped/其他（依 TAP）。
+- 戰鬥瀏覽器 [46150632059](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46150632059)：success。
+- Pages [46150631534](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46150631534)：success。
+- 新武器候選驗收 [46150632056](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46150632056)：success；所有 21 個 check-runs（含 Worker）均 completed/success。第 0 階段通過。
+
+## 第 1 階段｜入口及功能開關
+
+基準 SHA：`124e2e21cc50a839c359e2f745935a4cfd30f52d`。實際確認專注入口是洞府 → 範圍設定 → 範圍研修所的「專注練習 (自訂單元)」，由 scope-fullscreen.js 移動 set-source-mode 所在 block，沒有名為「專注學習」的獨立卡片。因此採既有選單正下方的獨立按鈕，沿用研修所配色與原生 dialog；不插入未支援的 sourceMode、不新增全域導覽、不變更草稿或舊儲存行為。只有 page-settings 開啟的研修所提供預覽，不在戰鬥或答題入口啟用。
+
+- `adaptive-learning-engine-beta-api.cjs` + server.js：獨立 GET /api/adaptive-learning-engine-beta/status，沿用 verifyMainIdentity，no-store、缺身份/配置/錯誤 fail closed；無資料寫入、無題目發放。環境開關 ADAPTIVE_LEARNING_ENGINE_BETA=1 且 NODE_ENV 為 development/test 才可預覽，正式 release 常數 false，直到第 26 階段才可按驗收調整。.env.example 預設 0，不改正式部署設定。
+- public/index.html、public/cultivation/scope-fullscreen.js、public/cultivation/adaptive-learning-engine-beta.js、public/styles/curriculum-studio.css：靜態預設隱藏，從設定研修所按需載入；伺服器同意後才顯示；每次點擊重新驗證、前景定期刷新及失敗隱藏，關閉安全返回既有範圍、不保存新資料，帳號切換不接受遲到回應。未提供正式出題，顯示實際開發預覽狀態。module-versions 同步更新。
+- tests/adaptive-learning-engine-beta.test.cjs：預設/正式關閉、驗證權限、停用、失效與舊模式契約。
+- scripts/test-adaptive-learning-engine-beta-browser.cjs 及 tactical-browser workflow：真實 Chromium，以隔離 fixture 身份與宿主頁、實際入口 HTML/CSS、前端 module 和後端 handler 驗證手機/平板直橫式、關閉及 Escape、帳號切換、舊模式與選擇保留。不是正式網站全流程或真實帳號驗收。
+- 測試命令：`node --test tests/adaptive-learning-engine-beta.test.cjs`（包含於完整回歸）、`npm run check:module-versions`、`node scripts/test-adaptive-learning-engine-beta-browser.cjs`（CI）。目前本地尚無完整 checkout；本提交 CI 實測結果待確認，不標 passed。
+- 尚未驗證正式搜尋與憑證、正式瀏覽器真實帳號及完整學習流程（後續階段）。不改正式開關，不實作第 2 階段。CI 通過後才記錄第 1 階段 passed 並進第 2 階段。

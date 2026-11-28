@@ -232,6 +232,10 @@ import { playerRepository } from './data/player-repository.js';
     updateSummary();
     $('ss-close')?.focus({ preventScroll: true });
     finishTransition?.();
+    // Optional independent preview; a failed module/API never blocks the existing picker.
+    if (returnPage === 'page-settings') {
+      void import('./adaptive-learning-engine-beta.js').then(m=>m.openBetaContext()).catch(()=>{});
+    }
   }
 
   function close(force = false) {
@@ -255,6 +259,7 @@ import { playerRepository } from './data/player-repository.js';
     saveButton.textContent = '儲存出題範圍';
     saveButton.disabled = false;
     studio.hidden = true;
+    window.dispatchEvent(new Event('qingyun:scope-studio-closed'));
     opened = false;
     baseline = null;
     document.body.classList.remove('scope-studio-open');

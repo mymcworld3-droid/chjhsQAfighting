@@ -207,3 +207,10 @@ body:not(:has(#newbie-tutorial-layer)) #scope-studio:not(.fv-scope) .cs-stage-ti
 
 #scope-studio .cs-catalog-controls{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin:0 0 14px}
 @media(max-width:450px){#scope-studio .cs-catalog-controls{grid-template-columns:1fr!important}}
+/* Independent adaptive engine preview, styled as part of the existing scroll studio. */
+#adaptive-learning-beta-entry[hidden]{display:none!important}
+#scope-studio .adaptive-beta-entry{box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:44px;margin:0 0 14px;padding:8px 12px;border:1px solid rgba(235,202,131,.24);border-radius:12px;background:#111c1d;color:#f4e5c9;font:700 13px/1.4 "Noto Sans TC",sans-serif;text-align:left;cursor:pointer}
+#scope-studio .adaptive-beta-entry:hover{border-color:rgba(235,202,131,.55)}
+#scope-studio :is(.adaptive-beta-entry,.adaptive-beta-dialog) small{margin-left:5px;color:#d8bc81;font:600 10px/1.4 sans-serif}
+#scope-studio .adaptive-beta-dialog .ss-transfer-actions button{min-height:44px}
+#scope-studio .adaptive-beta-dialog .ss-transfer-body{overflow:auto}
