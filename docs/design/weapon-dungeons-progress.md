@@ -77,3 +77,8 @@
 - 首次程式提交：[Cultivation regression tests](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46110995091) completed / success；[Tactical browser acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46110995134) in_progress / 未結論；[New weapon release candidate acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46110995120) in_progress / 未結論；[pages build and deployment](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46110994689) completed / cancelled。
 - 最新程式提交：[Tactical browser acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111036453) in_progress / 未結論；[pages build and deployment](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111036213) in_progress / 未結論；[New weapon release candidate acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111036435) queued / 未結論；[Cultivation regression tests](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111036378) in_progress / 未結論。
 - 本地完整工作樹仍未取得，尚無本地 Node 測試結果；已觸發 GitHub Actions。必須確認最新程式提交及後續 main CI 成功，修復所有失敗，才能標記第三階段已驗收及開始第四階段。萬獸險域未開放。
+
+### 第三階段 CI 修正
+
+- 858b969 最新回歸 46111072913 與 f20180a 回歸 46111036378、候選版 regression 140874394638 皆出現同一失敗：四技擊退測試的穿刺案例將崩山拳目標設成距離兩格的靈獸，而非相鄰方向格；遊戲正確拒絕該指令。修正為合法相鄰方向，增加瞄準合法性與實際位移斷言，保留四技能 stagger、無傷害與既有測試。不改任何戰鬥規則。
+- 修正後須重跑完整回歸、候選版、瀏覽器及部署驗收；未全數通過前不得開始第四階段。

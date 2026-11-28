@@ -522,7 +522,11 @@ test('sweep follows lateral steps, lord rain is finite, and all sword warnings c
   const boss=name==='rain',enemy={x:7,y:4},player={x:name==='thrust'?5:6,y:4};
   let st=configuredScene(sk,{boss,enemy,player,skills:['rock-break']});
   assert.equal(st.actors[1].intent.kind,'attack');
-  st=R.apply(st,'u1',{type:'manual',skillId:'rock-break',x:7,y:4},NOW);
+  // The fist selects the adjacent direction tile, not the distant victim.
+  const aim={x:player.x+1,y:player.y};
+  assert.ok(R.aimCells(st,st.actors[0],R.manualSkillFor(st.actors[0],'rock-break')).some(p=>R.key(p)===R.key(aim)));
+  st=R.apply(st,'u1',{type:'manual',skillId:'rock-break',...aim},NOW);
+  assert.ok(st.actors[1].x>enemy.x,'every sword skill must be interrupted by actual displacement');
   assert.equal(st.actors[1].intent.kind,'stagger');
   assert.equal(R.apply(st,'u1',{type:'end'},NOW).actors[0].hp,10000);
  }
