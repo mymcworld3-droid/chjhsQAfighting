@@ -558,18 +558,21 @@ test('the next legal sword rotates after a cast without changing the already ann
 
 const wildAccess=Object.freeze({allowHidden:true});
 const wildInput=(requestId,difficulty=0)=>({activity:'weapon-dungeon',dungeonId:W.WILD_ID,difficulty,requestId});
-test('Beast Wilds is absent from public catalog and cannot be entered with client flags; dev access is server-only',async()=>{
+test('Beast Wilds is public, locked difficulties and unknown dungeon IDs cannot be bypassed with client flags',async()=>{
  const db=database();own(db);
  const state=await API.weaponDungeonState(db,'u1',NOW);
- assert.deepEqual(state.dungeons.map(d=>d.id),[W.ID]);
- assert.throws(()=>W.selection({...wildInput('hidden-selection'),allowHidden:true}),/副本不存在/);
- await assert.rejects(API.start(db,'u1',{...wildInput('hidden-request'),allowHidden:true,allowHiddenWeaponDungeons:true},NOW),/副本不存在/);
+ assert.deepEqual(state.dungeons.map(d=>d.id),[W.ID,W.WILD_ID]);
+ assert.equal(state.dungeons[1].difficulties.length,6);
+ assert.equal(state.dungeons[1].difficulties[0].locked,false);
+ assert.throws(()=>W.selection({dungeonId:'not-a-dungeon',difficulty:0,allowHidden:true}),/副本不存在/);
+ await assert.rejects(API.start(db,'u1',{...wildInput('public-locked',1),allowHidden:true,allowHiddenWeaponDungeons:true},NOW),/前一個難度/);
  assert.equal((await API.weaponDungeonState(db,'u1',NOW)).tickets,3);
- const dev=await API.weaponDungeonState(db,'u1',NOW,wildAccess);
- assert.equal(dev.dungeons.find(d=>d.id===W.WILD_ID).difficulties.length,6);
- const s=await API.start(db,'u1',wildInput('dev-wild-start'),NOW,wildAccess);
- assert.equal(s.weaponDungeon.id,W.WILD_ID);assert.equal((await API.weaponDungeonState(db,'u1',NOW,wildAccess)).tickets,2);
- assert.equal((await API.weaponDungeonState(db,'u1',NOW)).active,null);
+ const s=await API.start(db,'u1',wildInput('public-wild-start'),NOW);
+ assert.equal(s.weaponDungeon.id,W.WILD_ID);
+ const active=await API.weaponDungeonState(db,'u1',NOW);
+ assert.equal(active.tickets,2);assert.equal(active.active.roomId,s.id);assert.equal(active.active.dungeonId,W.WILD_ID);
+ const resumed=await API.start(db,'u1',{...wildInput('public-wild-resume'),resumeRoomId:s.id},NOW);
+ assert.equal(resumed.id,s.id);assert.equal((await API.weaponDungeonState(db,'u1',NOW)).tickets,2);
 });
 test('six tiers and many seeds produce legal 11x15 red desert layouts, full lord mobility, and six distinct guards',()=>{
  const hashes=new Set(),positions=new Set();
@@ -599,18 +602,18 @@ test('six tiers and many seeds produce legal 11x15 red desert layouts, full lord
 test('wild and stone share atomic tickets and one active room while independently unlocking all six tiers',async()=>{
  const db=database();own(db);
  const stone=await API.start(db,'u1',input('stone-before-wild'),NOW);
- await assert.rejects(API.start(db,'u1',wildInput('parallel-wild'),NOW,wildAccess),/已有進行中/);
+ await assert.rejects(API.start(db,'u1',wildInput('parallel-wild'),NOW),/已有進行中/);
  await API.command(db,'u1',{roomId:stone.id,type:'leave',requestId:'leave-before-wild'},NOW);
- let p=await API.weaponDungeonState(db,'u1',NOW,wildAccess);assert.equal(p.tickets,2);
+ let p=await API.weaponDungeonState(db,'u1',NOW);assert.equal(p.tickets,2);
  // Preserve a real legacy top-level progress record through every wild win.
  const pointer=db.records.get(API.PLAYERS+'/u1');pointer.weaponDungeonV1.unlocked=2;pointer.weaponDungeonV1.clears=[3,1,0,0,0,0];
  for(let d=0;d<6;d++){
   const now=NOW+Math.floor((d+1)/3)*86400000;
-  if(d<5)await assert.rejects(API.start(db,'u1',wildInput('wild-skip-'+d,d+1),now,wildAccess),/前一個難度/);
+  if(d<5)await assert.rejects(API.start(db,'u1',wildInput('wild-skip-'+d,d+1),now),/前一個難度/);
   const req=wildInput('wild-tier-'+d,d);
-  const [s,replay]=await Promise.all([API.start(db,'u1',req,now,wildAccess),API.start(db,'u1',req,now,wildAccess)]);
+  const [s,replay]=await Promise.all([API.start(db,'u1',req,now),API.start(db,'u1',req,now)]);
   assert.equal(s.id,replay.id);
-  const resume=await API.start(db,'u1',{...wildInput('wild-resume-'+d,d),resumeRoomId:s.id},now,wildAccess);assert.equal(resume.id,s.id);
+  const resume=await API.start(db,'u1',{...wildInput('wild-resume-'+d,d),resumeRoomId:s.id},now);assert.equal(resume.id,s.id);
   const raw=db.records.get(API.ROOMS+'/'+s.id),lord=raw.actors[1];
   Object.assign(raw.actors[0],{x:lord.x,y:lord.y+2,stamina:10,answered:0,correct:0});lord.hp=1;
   R.prepareIntents(raw);
@@ -618,7 +621,7 @@ test('wild and stone share atomic tickets and one active room while independentl
   const win=await API.command(db,'u1',command,now);assert.equal(win.weaponDungeonResult.cleared,true);
   assert.equal(win.actors.slice(2).filter(R.alive).length,6);
   await API.command(db,'u1',command,now);
-  p=await API.weaponDungeonState(db,'u1',now,wildAccess);
+  p=await API.weaponDungeonState(db,'u1',now);
   assert.equal(p.unlocked,2);assert.deepEqual(p.clears,[3,1,0,0,0,0]);
   assert.deepEqual(p.byDungeon[W.WILD_ID],{unlocked:Math.min(5,d+1),clears:Array.from({length:6},(_,i)=>Number(i<=d))});
   assert.equal(p.tickets,2-(d+1)%3);

@@ -23,7 +23,7 @@
     description:'穿過三重石陣擊敗深處領主即可通關，沿途守衛會持續追擊。',
     traits:['追蹤劍法','重甲靈獸','領主劍雨'],bonus:'圖騰攻擊傷害 +15%',
     tactics:['蓄勢中的劍法會追蹤站位；離開合法攻擊線或射程，或利用障礙物閃避。','成功擊退則會打斷蓄勢，撞牆未位移不算。','領主從開戰起即可攻擊，也能直接受到傷害及擊退，不必先清除守衛。','擊敗領主立即通關，剩餘守衛不必清除。'],totemDamageMultiplier:1.15}),
-    Object.freeze({id:WILD_ID,name:WILD_NAME,hidden:true,subtitle:'赤砂荒原 · 群獸之試',theme:'desert',rewardWeaponType:'totem',
+    Object.freeze({id:WILD_ID,name:WILD_NAME,hidden:false,subtitle:'赤砂荒原 · 群獸之試',theme:'desert',rewardWeaponType:'totem',
       description:'穿越赤砂荒原，擊敗中央領主即可通關。',traits:['鎖定衝撞','方形震波','重型靈獸'],
       bonus:'弦修技能傷害 +15%',tactics:['預告鎖定後不追蹤玩家；側移避開衝撞。','震地一次命中；連環震地逐層擊退，可能再次命中。','成功擊退可打斷；高階重型靈獸可能抵抗部分擊退。','擊敗領主立即通關。'],
       totemDamageMultiplier:1,bowDamageMultiplier:1.15})]);

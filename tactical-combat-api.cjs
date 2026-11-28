@@ -520,11 +520,14 @@ async function weaponDungeonState(db,uid,now=Date.now(),{allowHidden=false}={}){
     const room=id?exists(await tx.get(db.collection(ROOMS).doc(id))):null;
     tx.set(ref,{...pointer,weaponDungeonV1:progress});
     const {byDungeon,...publicProgress}=progress;
-    return {...(allowHidden===true?progress:publicProgress),dungeonId:WeaponDungeons.ID,name:WeaponDungeons.NAME,dailyTickets:3,maxTickets:5,
+    const visibleDungeons=WeaponDungeons.catalog(progress,{allowHidden});
+    const visibleIds=new Set(visibleDungeons.map(d=>d.id));
+    const visibleProgress=Object.fromEntries(Object.entries(byDungeon||{}).filter(([id])=>visibleIds.has(id)));
+    return {...publicProgress,...(Object.keys(visibleProgress).length?{byDungeon:visibleProgress}:{}),dungeonId:WeaponDungeons.ID,name:WeaponDungeons.NAME,dailyTickets:3,maxTickets:5,
       difficulties:WeaponDungeons.DIFFICULTIES.map(d=>({...d,locked:d.index>progress.unlocked,nextRealm:WeaponDungeons.lowerRealm(d.name),lowerRealm:WeaponDungeons.lowerRealm(d.name)})),
-      dungeons:WeaponDungeons.catalog(progress,{allowHidden}).map(d=>({...d,rewardPools:WeaponDungeonRewards.previewPools(WeaponDungeons.WEAPON_REALMS,d.id)})),
+      dungeons:visibleDungeons.map(d=>({...d,rewardPools:WeaponDungeonRewards.previewPools(WeaponDungeons.WEAPON_REALMS,d.id)})),
       rewardPools:WeaponDungeonRewards.previewPools(WeaponDungeons.WEAPON_REALMS),
-      active:room?.status==='active'&&room.weaponDungeon&&(allowHidden===true||(room.weaponDungeon.id||WeaponDungeons.ID)===WeaponDungeons.ID)?{roomId:room.id,dungeonId:room.weaponDungeon.id||WeaponDungeons.ID,difficulty:room.weaponDungeon.difficulty}:null};
+      active:room?.status==='active'&&room.weaponDungeon&&visibleIds.has(room.weaponDungeon.id||WeaponDungeons.ID)?{roomId:room.id,dungeonId:room.weaponDungeon.id||WeaponDungeons.ID,difficulty:room.weaponDungeon.difficulty}:null};
   });
 }
 async function start(db,uid,selection={},now=Date.now(),{allowHidden=false}={}){
