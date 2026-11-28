@@ -25,3 +25,10 @@ V1 為初始獨立集合，不需要搬移 legacy 或 DDL。舊題僅可透過 f
 - 保留策略：學習範圍、作答、掌握度、回報保留至玩家清除或合法保留期限；尚未引入個人照片或原始上傳暫存。暫定 terminal job/queue 30 天上限，須在第 19 階段設計並驗收過期、引用、冪等 tombstone，當前尚未啟用 TTL。共同來源依授權與撤回規則，第 12 階段實作；不得包含個資。備份暫定最長 30 天、實際服務方案與法規須正式核對，不宣稱已設定。
 - 刪除 fence 僅儲存 hashed key、schemaVersion、blocked、complete。雜湊仍屬假名化資料；暫不自動刪除，因無法在缺乏備份/重放證據時安全決定回收時間。正式驗收需證明備份最大年齡、所有寫入重新驗證、工作最大有效期、UID 不重用，再制定回收條件並記錄。不得任意清除 fence。對帳 checkpoint 不儲存原始 UID（cursor 為文件雜湊鍵）。
 - 恢復時保持 maintenance，保留或重放較新的 fence，先執行完整對帳及核對刪除者資料為零，再解除維護。SQLite 測試模擬還原刪除前私有文件但保留較新 fence，證明禁止存取並重新清除；不代表正式 D1 備份已還原。若無可驗證的較新 fence 備份，不得開放恢復後的 Beta。
+
+## 唯讀部署診斷（第 2B）
+在已獲授權的正確後端部署/隔離環境、已具備現有服務端憑證時執行：
+```bash
+node scripts/audit-adaptive-beta-deployment.cjs --read-only
+```
+不新增或改變正式帳務、部署、規則或資料。CLI 讀取 Firebase Rules API 的 default Firestore release 與 ruleset（官方 API：https://firebase.google.com/docs/reference/rules/rest/v1/projects.releases/get 與 https://firebase.google.com/docs/reference/rules/rest/v1/projects.rulesets/get），只回報規則 SHA-256、保留前綴集合數。D1 僅送固定 aggregate SELECT（不取得任何玩家記錄內容），先確認無 token 得 401 再進行已授權查詢。拒絕重導向與非 HTTPS，禁止將 API 憑證或規則原文貼到聊天/GitHub。缺權限或不可連線回報 unavailable；readOnlyChecksPassed 僅為有限探測成功，不代表 Firestore 規則語意完整安全（需檢查重疊 allow）、實際 Auth 刪除、回滾或正式備份保留已通過，stage2Approval 永遠 false。需另外在隔離帳號及 D1 資料庫完成具證據的測試。Render 查核目前對應服務 suspended 且為 stamina-battle，不能用其作 main 驗收；勿為繼續開發自行恢復帳務或改分支。
