@@ -105,3 +105,9 @@
 - 修改 public/cultivation/weapon-dungeon-rules.js、public/cultivation/tactical-rules.js、public/cultivation/tactical-renderer.js、tactical-combat-api.cjs、tests/weapon-dungeons.test.cjs、public/module-versions.json、本文件。待 npm test、npm run test:battle、npm run check:module-versions、瀏覽器、候選版及 Pages 驗收。未確認最新 CI 前不得宣稱完成；萬獸險域仍隱藏。
 
 - 補強：共用戰場介面改用同一傷害倍率函式、依副本顯示領主、追蹤/鎖定預告、弦修加成與結算文案；保留石域原本結算文字。新增既有 Chromium 驗收腳本內的公開 HTTP 進場拒絕及可信測試路由進入萬獸險域、共用扣券與實際地圖檢查，不移除原石域驗收。
+
+### 第四階段提交及 CI 查核
+
+- 基礎實作 [723839182dfda79e50391101f15f36c4abe2a1ca](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/723839182dfda79e50391101f15f36c4abe2a1ca)：完整回歸 46112148156 成功（3297 項、3296 通過、0 失敗、1 跳過；靜態版本一致）。[Tactical browser acceptance 46112148247](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46112148247) in_progress/未結論；[New weapon release candidate acceptance 46112148204](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46112148204) in_progress/未結論；[Cultivation regression tests 46112148156](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46112148156) completed/success；[pages build and deployment 46112147574](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46112147574) completed/success。
+- UI 與真實瀏覽器驗收補強 [87a90fb08025ea5b56ac0adc19a9681b251c8968](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/87a90fb08025ea5b56ac0adc19a9681b251c8968)：查核時尚未列出 workflow run。不能以基礎提交成功代替最新驗收。
+- 本地完整工作樹不可用，Node/Chromium 驗收以 GitHub Actions 為準。待全部最新 CI 成功才進入第五階段；萬獸險域正式進場仍關閉。
