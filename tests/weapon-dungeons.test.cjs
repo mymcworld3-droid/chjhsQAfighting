@@ -652,6 +652,10 @@ test('only bow receives wild bonus; real sword and totem attacks remain unbooste
 
 function chargeScene({boss=false,enemy={x:4,y:4},player={x:6,y:4},blocks=[],skills=['rock-break'],extra=[]}={}){
  const s=scene({boss,enemy,player,skills});
+ // Controlled geometry fixture, independent of the live Peak Stone map size.
+ // Keep the original test arena so boundary collision and resistance are tested
+ // at the intended coordinates, including the x=12 boundary contact.
+ Object.assign(s,{width:13,height:21,ground:Array(13*21).fill(W.DESERT_TERRAIN),terrain:W.DESERT_TERRAIN});
  s.weaponDungeon=W.selection({dungeonId:W.WILD_ID,difficulty:0},wildAccess);
  const m=s.actors[1];delete m.trackingAttack;m.dungeonSkills=[boss?W.WILD_CHARGE.lord:W.WILD_CHARGE.guard];
  s.blocks=blocks;s.actors.push(...extra);R.prepareIntents(s);return s;
