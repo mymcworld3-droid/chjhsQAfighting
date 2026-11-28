@@ -25,6 +25,11 @@ async function main(){
   res.json({ok:true,state:await API.answer(db,'u1',req.body,Date.now(),(uid,input)=>Receipt.read(uid,input,key))});
  }catch(e){res.status(e.status||500).json({error:e.message});}});
  register(app,{resolve:()=>({db}),verify:async()=> 'u1'});
+ // Isolated test fixture only: actual HTTP routes with an explicit server-side
+ // developer option. Production keeps the default public register above.
+ const devRouter=express.Router();
+ register(devRouter,{resolve:()=>({db}),verify:async()=> 'u1',allowHiddenWeaponDungeons:true});
+ app.use('/dev',devRouter);
  app.get('/test',(_,res)=>res.type('html').send(`<!doctype html><html><head>
   <meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/styles/gameplay-page.css">
   <style>body{margin:0;background:#14251e;color:#ede5cf}#fixture-study{position:fixed;inset:0;z-index:1000;background:#14251e;padding:20px}button{min-height:32px}</style></head>
@@ -211,6 +216,39 @@ async function main(){
   assert.match(await page.locator('.wd-tickets').textContent(),/補發上限 5 張/);
   assert.equal((await API.weaponDungeonState(db,'u1')).clears[0],1);assert.deepEqual(errors,[]);
   console.log('Weapon dungeon verified: responsive selector, hidden locked skills, two signed quiz answers, free resume, victory and next-tier unlock.');
+  // Verify that no request flag can expose the second dungeon on public HTTP.
+  const publicGate=await page.evaluate(async()=>{
+   const list=await(await fetch('/api/tactical/weapon-dungeons?allowHidden=true')).json();
+   const denied=await fetch('/api/tactical/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    activity:'weapon-dungeon',dungeonId:'beast-wilds',difficulty:0,requestId:'hidden-browser-denied',allowHidden:true,allowHiddenWeaponDungeons:true})});
+   return {ids:list.state.dungeons.map(d=>d.id),status:denied.status};
+  });
+  assert.deepEqual(publicGate,{ids:['peak-stone'],status:400});
+  assert.equal((await API.weaponDungeonState(db,'u1')).tickets,1);
+  const devPage=await browser.newPage({viewport:{width:393,height:852}}),devErrors=[];
+  devPage.on('pageerror',e=>devErrors.push(e.message));
+  try{
+   await devPage.route('**/api/tactical/**',route=>{
+    const url=new URL(route.request().url());url.pathname='/dev'+url.pathname;return route.continue({url:url.href});
+   });
+   await devPage.goto('http://127.0.0.1:'+server.address().port+'/test');
+   await devPage.locator('#gameplay-weapon-dungeon-entry').click();
+   await devPage.locator('[data-atlas-dungeon="beast-wilds"]').waitFor();
+   assert.equal(await devPage.locator('[data-atlas-dungeon]').count(),2);
+   await devPage.locator('[data-atlas-dungeon="beast-wilds"]').click();
+   await devPage.locator('[data-wd-difficulty="0"]').waitFor();
+   assert.equal(await devPage.locator('[data-wd-difficulty]').count(),6);
+   assert.match(await devPage.locator('.wd-bonus').textContent(),/弦修/);
+   await devPage.locator('[data-wd-enter]').click();
+   await devPage.locator('#tactical-combat canvas').waitFor();
+   await devPage.waitForFunction(()=>document.querySelector('[data-objective]')?.textContent.includes('萬獸險域'));
+   const wild=await read();assert.equal(wild.weaponDungeon.id,'beast-wilds');assert.equal(wild.width,11);assert.equal(wild.height,15);assert.equal(wild.terrain,13);
+   assert.match(await devPage.locator('[data-objective]').textContent(),/弦修 \+15%/);
+   assert.equal((await API.weaponDungeonState(db,'u1',Date.now(),{allowHidden:true})).tickets,0);
+   await devPage.screenshot({path:path.join(output,'hidden-beast-wilds.png'),animations:'disabled'});
+   assert.deepEqual(devErrors,[]);
+  }finally{await devPage.close();}
+  console.log('Hidden Beast Wilds verified: public admission rejected, trusted development atlas and 11x15 battlefield, shared ticket consumed once.');
  }catch(error){if(page)console.error('Dungeon browser diagnostic',await page.evaluate(()=>({notice:document.querySelector('[data-notice]')?.textContent,modal:document.querySelector('[data-modal]')?.textContent,portal:!!document.querySelector('.wd-portal'),syncDisabled:document.querySelector('[data-sync]')?.disabled})).catch(()=>null));if(page)await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});throw error;}
  finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 }

@@ -103,3 +103,5 @@
 - 暫定敵人數值沿用尖峰基礎倍率；開發測試用近身鎖定試擊只用於隱藏副本，並非正式衝撞或震波。第五階段逐格衝撞/推動/撞牆，第六階段方形震波及 AI，第七階段完整美術。不得提前公開。
 - 新增五組測試：API 隱藏限制與可信開發進場、六階 48 種子完整占位及閃避、共用票券與六階實際通關及防重複、圖騰掉落及空池、環境加成隔離及實際武器傷害。
 - 修改 public/cultivation/weapon-dungeon-rules.js、public/cultivation/tactical-rules.js、public/cultivation/tactical-renderer.js、tactical-combat-api.cjs、tests/weapon-dungeons.test.cjs、public/module-versions.json、本文件。待 npm test、npm run test:battle、npm run check:module-versions、瀏覽器、候選版及 Pages 驗收。未確認最新 CI 前不得宣稱完成；萬獸險域仍隱藏。
+
+- 補強：共用戰場介面改用同一傷害倍率函式、依副本顯示領主、追蹤/鎖定預告、弦修加成與結算文案；保留石域原本結算文字。新增既有 Chromium 驗收腳本內的公開 HTTP 進場拒絕及可信測試路由進入萬獸險域、共用扣券與實際地圖檢查，不移除原石域驗收。

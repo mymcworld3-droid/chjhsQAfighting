@@ -735,7 +735,7 @@ function updateWheelChoices(container,options,selected,moveCost,hero,locked){
       cost>hero.stamina?'體力不足，還需要 '+(cost-hero.stamina)+' 點':'';
     button.disabled=locked;
     button.setAttribute('aria-pressed',String(option.value===selected));
-    const description=option.skill?Manuals.descriptionWithDamage(hero.atk*(state?.weaponDungeon&&option.skill?.school==='body'?(state.weaponDungeon.totemDamageMultiplier??1.15):1),option.skill,
+    const description=option.skill?Manuals.descriptionWithDamage(hero.atk*R.dungeonDamageMultiplier(state?.weaponDungeon,Manuals.BY_BOOK[option.skill?.manualId]?.weaponType),option.skill,
       {flyingSwordReady:!!hero.flyingSword}):'';
     button.setAttribute('aria-label',option.name+'，'+price+
       (description?'。'+description:'')+(unavailable?'，'+unavailable:''));
@@ -1216,8 +1216,9 @@ function showBossBanner(kind,name){
   const node=$('[data-boss-announcement]');
   if(!node||!state||state.mode!=='pve')return;
   hideBossBanner();node.dataset.kind=kind;
-  const title=state.weaponDungeon?'石域領主現身':kind==='phase'?'靈壓暴漲 · 第二階段':'鎮關靈獸現身';
-  const subtitle=state.weaponDungeon?'追蹤落石已啟動，可退出射程或擊退打斷':kind==='phase'?'攻擊形態已改變，留意地面的紅色預告格':'觀察首領攻擊意圖，避開危險範圍';
+  const wild=state.weaponDungeon?.id==='beast-wilds';
+  const title=state.weaponDungeon?(wild?'萬獸險域領主現身':'石域領主現身'):kind==='phase'?'靈壓暴漲 · 第二階段':'鎮關靈獸現身';
+  const subtitle=state.weaponDungeon?(wild?'預告鎖定後不追蹤，可閃避或擊退打斷':'留意追蹤攻擊，可退出射程或擊退打斷'):kind==='phase'?'攻擊形態已改變，留意地面的紅色預告格':'觀察首領攻擊意圖，避開危險範圍';
   node.innerHTML='<small>'+esc(title)+'</small><strong>'+esc(name)+'</strong><span>'+esc(subtitle)+'</span>';
   // Reinsert only the passive announcement; none of the battle controls move.
   node.hidden=false;
@@ -1259,12 +1260,13 @@ function paint({preserveModal=false}={}){
   if(objective){
     const living=state.actors.filter(a=>a.bot&&a.hp>0).length;
     const weaponLord=state.weaponDungeon?state.actors.find(a=>a.bot&&a.weaponDungeonLord):null;
-    const tracking=state.weaponDungeon?state.actors.filter(a=>a.bot&&a.hp>0&&a.intent?.tracking&&a.intent.kind==='attack'&&a.intent.cells?.some(p=>p.x===me.x&&p.y===me.y)).length:0;
+    const wild=state.weaponDungeon?.id==='beast-wilds';
+    const threats=state.weaponDungeon?state.actors.filter(a=>a.bot&&a.hp>0&&a.intent?.kind==='attack'&&a.intent.cells?.some(p=>p.x===me.x&&p.y===me.y)).length:0;
     const label=state.trial?.variant?.includes('breakthrough')?'突圍運送':objective.item?'尋物運送':'運送';
     // Keep the battlefield objective summary in sync with the server's seal metadata.
     const sealEffects=[...new Set((objective.points||[]).filter(p=>!p.activated)
       .map(p=>R.sealDefinition(p.kind)?.shortEffect).filter(Boolean))].join('／');
-    const text=state.weaponDungeon?`${state.weaponDungeon.name} · ${weaponLord?.hp>0?'擊敗領主即通關':'領主已擊敗'} · ${tracking?'危險：'+tracking+' 道追蹤落石':'圖騰 +'+Math.round(((state.weaponDungeon.totemDamageMultiplier??1.15)-1)*100)+'%'}`:
+    const text=state.weaponDungeon?`${state.weaponDungeon.name} · ${weaponLord?.hp>0?'擊敗領主即通關':'領主已擊敗'} · ${threats?'危險：'+threats+(wild?' 道鎖定攻擊':' 道追蹤攻擊'):wild?'弦修 +15%':'圖騰 +'+Math.round(((state.weaponDungeon.totemDamageMultiplier??1.15)-1)*100)+'%'}`:
       objective.type==='transport'?(objective.carrying?`${label} · 將靈物送至交付點`:`${label} · 先取得靈物`):
       objective.type==='defense'?`鎮守 · ${objective.completedRounds} / ${objective.rounds} 回合 · 靈陣 ${objective.hp} / ${objective.maxHp}`:
       objective.type==='sealing'?`封印 · ${objective.points.filter(p=>p.activated).length} / ${objective.points.length} 陣眼${state.trial?.layoutVersion===4?' · 攻擊陣眼'+(sealEffects?' · '+sealEffects:''):''}`:
@@ -1372,7 +1374,7 @@ function updateControls(){
     if(!error&&!affected.some(p=>p.x===selectedSeal.x&&p.y===selectedSeal.y))
       error='此招式不會命中所選陣眼，請改選能覆蓋陣眼的攻擊方向';
   }
-  const description=Manuals.descriptionWithDamage(me.atk*(state?.weaponDungeon&&shown?.school==='body'?(state.weaponDungeon.totemDamageMultiplier??1.15):1),shown,
+  const description=Manuals.descriptionWithDamage(me.atk*R.dungeonDamageMultiplier(state?.weaponDungeon,Manuals.BY_BOOK[shown?.manualId]?.weaponType),shown,
     {flyingSwordReady:!!me.flyingSword});
   $('[data-skill-title]').textContent=action==='move'||action==='sword-move'?'移動說明':
     `${shown.name} · ${cost} 體力`;
@@ -1589,7 +1591,7 @@ function dungeonSettlementMarkup({info,result,win,drop,weaponDrop,celebrateFresh
   const tickets=Number.isSafeInteger(result?.tickets)&&result.tickets>=0?result.tickets:null;
   const retryAllowed=(cleared||failed)&&tickets!==0;
   const mark=cleared?'M5 12l4 4L19 6':failed?'M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3z M12 7l-2 5 3 2-1 3':'M6 3h12M6 21h12M7 3v4l5 5-5 5v4M17 3v4l-5 5 5 5v4';
-  const explanation=cleared?'已擊敗石域領主，副本通關；剩餘守衛不影響結算。':failed?(reason==='forfeit'?'已離開戰場，副本券不退還。':'本次未能通關，調整武器與走位後再戰。'):'尚未確認通關紀錄，請返回秘境同步進度。';
+  const explanation=cleared?(info.id==='beast-wilds'?'已擊敗萬獸險域領主，副本通關；剩餘守衛不影響結算。':'已擊敗石域領主，副本通關；剩餘守衛不影響結算。'):failed?(reason==='forfeit'?'已離開戰場，副本券不退還。':'本次未能通關，調整武器與走位後再戰。'):'尚未確認通關紀錄，請返回秘境同步進度。';
   const unlock=next?'<div class="wd-result-unlock'+(fresh&&newUnlock?' is-new':'')+'" role="status"><i class="fa-solid fa-lock-open" aria-hidden="true"></i><span><small>'+(newUnlock?'首次解鎖':'已開放境界')+'</small><strong>'+esc(next.name)+'</strong></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></div>':cleared&&info.difficulty===5?'<p class="wd-result-final">已完成最高難度 · 渡劫</p>':'';
   const refinement=drop?.duplicate&&Number.isInteger(drop.refinement)?`<div class="tc-refinement-result" role="status"><strong>${drop.refinement>drop.previousRefinement?'武器精煉成功':'武器已達滿星'}</strong>${globalThis.QAWeaponPresentation.refinementStars(drop,{previous:fresh?drop.previousRefinement:drop.refinement})}<small>${esc(drop.name)} · ${drop.refinement>drop.previousRefinement?'精煉 '+drop.previousRefinement+' → '+drop.refinement+' 星':'額外武器已保留'}</small></div>`:drop?.duplicate?'<p>重複武器已收入收藏。</p>':'';
   const missingDrop=cleared&&!drop?'<p class="wd-result-no-drop">本次未掉落武器。</p>':'';
