@@ -111,3 +111,10 @@
 - 基礎實作 [723839182dfda79e50391101f15f36c4abe2a1ca](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/723839182dfda79e50391101f15f36c4abe2a1ca)：完整回歸 46112148156 成功（3297 項、3296 通過、0 失敗、1 跳過；靜態版本一致）。[Tactical browser acceptance 46112148247](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46112148247) in_progress/未結論；[New weapon release candidate acceptance 46112148204](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46112148204) in_progress/未結論；[Cultivation regression tests 46112148156](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46112148156) completed/success；[pages build and deployment 46112147574](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46112147574) completed/success。
 - UI 與真實瀏覽器驗收補強 [87a90fb08025ea5b56ac0adc19a9681b251c8968](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/87a90fb08025ea5b56ac0adc19a9681b251c8968)：查核時尚未列出 workflow run。不能以基礎提交成功代替最新驗收。
 - 本地完整工作樹不可用，Node/Chromium 驗收以 GitHub Actions 為準。待全部最新 CI 成功才進入第五階段；萬獸險域正式進場仍關閉。
+
+### 第四階段 CI 修正（2026-11-28）
+
+- 基礎提交 7238391 的回歸 46112148156、瀏覽器 46112148247、候選版 46112148204、Pages 46112147574 全部成功。
+- 補強提交 87a90fb 的瀏覽器 46112267896 成功；候選版 46112267877 共 14/15 成功（含 tactical/coop 及十二組實戰），僅 candidate-regression 失敗；一般回歸 46112267890 及最新文件 d3e7baf 回歸 46112268565 同一失敗。最新文件瀏覽器 46112268571、Pages 46112268442 成功（補強提交 Pages 被取代取消）。
+- 失敗根因：tests/manual-damage-description.test.cjs 仍用兩個舊硬編碼 body/圖騰加成正規式。修正為精確驗證兩處 UI 均呼叫共用 R.dungeonDamageMultiplier 並以武器目錄的 weaponType 選擇；原有其他斷言全部保留，另增實際傷害說明測試（無副本、舊存檔、石域、萬獸、弦修預留）。不改任何戰鬥規則或降低標準。
+- 修正後重跑最新 CI，全部必要驗收通過才開始第五階段。萬獸險域仍隱藏。

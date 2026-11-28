@@ -42,10 +42,25 @@ test('all surfaces put damage in description and remove wheel/card damage badges
   const battle=read('cultivation/tactical-combat.js');
   const simulator=read('cultivation/skill-simulator.js');
   assert.match(library,/descriptionWithDamage:Catalog\.descriptionWithDamage/);
-  assert.match(battle,/Manuals\.descriptionWithDamage\(me\.atk\*\(state\?\.weaponDungeon&&shown\?\.school===\x27body\x27\?\(state\.weaponDungeon\.totemDamageMultiplier\?\?1\.15\):1\),shown/);
-  assert.match(battle,/Manuals\.descriptionWithDamage\(hero\.atk\*\(state\?\.weaponDungeon&&option\.skill\?\.school===\x27body\x27\?\(state\.weaponDungeon\.totemDamageMultiplier\?\?1\.15\):1\),option\.skill/);
+  assert.match(battle,/Manuals\.descriptionWithDamage\(me\.atk\*R\.dungeonDamageMultiplier\(state\?\.weaponDungeon,Manuals\.BY_BOOK\[shown\?\.manualId\]\?\.weaponType\),shown/);
+  assert.match(battle,/Manuals\.descriptionWithDamage\(hero\.atk\*R\.dungeonDamageMultiplier\(state\?\.weaponDungeon,Manuals\.BY_BOOK\[option\.skill\?\.manualId\]\?\.weaponType\),option\.skill/);
   assert.match(simulator,/Manuals\.descriptionWithDamage\(player\.atk,chosen/);
   assert.doesNotMatch(library,/manual-skill-damage|damageDetails/);
   assert.doesNotMatch(battle,/tc-single-damage|tc-pvp-skill-damage|單次攻擊力/);
   assert.doesNotMatch(read('styles/manual-training.css'),/\.manual-skill-damage/);
+});
+
+test('shared dungeon multiplier keeps skill descriptions consistent with weapon family and saved dungeon',()=>{
+  const R=require('../public/cultivation/tactical-rules.js');
+  const W=require('../public/cultivation/weapon-dungeon-rules.js');
+  const peak=W.selection({dungeonId:W.ID,difficulty:0});
+  const wild=W.selection({dungeonId:W.WILD_ID,difficulty:0},{allowHidden:true});
+  for(const [dungeon,totem,sword] of [[null,260,240],[{},299,240],[peak,299,240],[wild,260,240]]){
+    for(const [skill,expected] of [['rock-fist',totem],['wind-slash',sword]]){
+      const family=Q.BY_BOOK[Q.BY_SKILL[skill].manualId].weaponType;
+      assert.match(desc(skill,200*R.dungeonDamageMultiplier(dungeon,family)),new RegExp('造成 '+expected+' 傷害'));
+    }
+  }
+  assert.equal(R.dungeonDamageMultiplier(wild,'bow'),1.15);
+  assert.equal(R.dungeonDamageMultiplier(peak,'bow'),1);
 });
