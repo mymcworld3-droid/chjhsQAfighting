@@ -230,11 +230,91 @@
     return {version:2,kind:ready||armed?'attack':'advance',cells,origin:point(m),target:point(hero),shape:'blast',
       power:1,tracking:true,slow:false,push:0,text:ready?'下次：'+monsterProfileFor(m).attackName+'（追蹤，請退出射程）':armed?'已離開射程，本次落石無法命中':'下次：重步 1 格'};
   }
+  // Solo-only skill definitions. Live Peak Stone values are unchanged; later
+  // dungeons can assign their own ordered definitions in the server layout.
+  const DUNGEON_ENEMY_SKILLS=Object.freeze({
+    stoneFall:Object.freeze({id:'stone-fall',name:'追蹤落石',shape:'blast',range:3,radius:0,power:1,sight:false,warning:'tracking',animation:'blast'}),
+    stoneLord:Object.freeze({id:'stone-lord',name:'尖峰崩裂',shape:'blast',range:4,radius:1,power:1,sight:false,warning:'tracking',animation:'blast'})
+  });
+  const soloDungeonBeast=(s,m)=>s.mode==='pve'&&!!s.weaponDungeon&&m.bot;
+  const dungeonSkillSet=(s,m)=>Array.isArray(m.dungeonSkills)?m.dungeonSkills:
+    m.trackingAttack||(s.weaponDungeon?.id||'peak-stone')==='peak-stone'?[m.weaponDungeonLord?DUNGEON_ENEMY_SKILLS.stoneLord:DUNGEON_ENEMY_SKILLS.stoneFall]:[];
+  const dungeonSkillAllowed=(s,m,sk)=>sk&&typeof sk.id==='string'&&typeof sk.name==='string'&&
+    ['blast','point','line','cone','square'].includes(sk.shape)&&['tracking','locked'].includes(sk.warning)&&
+    Number.isInteger(sk.range)&&sk.range>=0&&Number.isFinite(sk.power)&&sk.power>=0&&
+    (!sk.lordOnly||m.weaponDungeonLord)&&
+    (s.weaponDungeon.difficulty??0)>=(sk.minDifficulty??0)&&(s.weaponDungeon.difficulty??0)<=(sk.maxDifficulty??5);
+  function dungeonSquareRing(s,m,r){
+    const G=typeof module==='object'&&module.exports?require('./weapon-geometry.js'):globalThis.QAWeaponGeometry;
+    const body=footprint(m),board={width:s.width,height:s.height,blocked:p=>blocked(s,p)};
+    const cells=body.flatMap(p=>G.squareRing(board,p,r));
+    return [...new Map(cells.filter(p=>Math.min(...body.map(q=>Math.max(Math.abs(p.x-q.x),Math.abs(p.y-q.y))))===r).map(p=>[key(p),p])).values()];
+  }
+  function dungeonSkillPlan(s,m,hero,sk){
+    const body=footprint(m),target=point(hero);
+    const nearest=body.slice().sort((a,b)=>dist(a,target)-dist(b,target))[0];
+    const direction=attackDirection(nearest,target);
+    const empty={cells:[],path:[],waves:[],direction,target};
+    if(!dungeonSkillAllowed(s,m,sk))return empty;
+    const range=sk.range,radius=sk.radius??0;
+    let cells=[],waves=[];
+    if(sk.shape==='square'){
+      const rings=Number.isInteger(sk.rings)&&sk.rings>0?Math.min(sk.rings,range):0;
+      const layers=Array.from({length:rings||range},(_,i)=>dungeonSquareRing(s,m,i+1));
+      if(rings)waves=layers.map((cells,i)=>({layer:i+1,cells}));
+      cells=layers.flat();
+    }else if(sk.shape==='blast'||sk.shape==='point'){
+      if(dist(nearest,target)>range||sk.sight!==false&&!sight(s,nearest,target))return empty;
+      cells=area(s,target,sk.shape==='point'?0:radius);
+    }else if(direction){
+      // The leading edge is the full width of a large actor, not its anchor.
+      const projection=p=>p.x*direction.x+p.y*direction.y;
+      const front=Math.max(...body.map(projection));
+      const edge=body.filter(p=>projection(p)===front);
+      for(const p of edge){
+        const aim={x:p.x+direction.x,y:p.y+direction.y};
+        if(sk.shape==='line')cells.push(...line(s,p,aim,range));
+        else cells.push(...monsterCells(s,p,aim,{attack:{shape:'cone',range,sight:sk.sight}}));
+      }
+    }
+    cells=[...new Map(cells.filter(p=>!blocked(s,p)&&!covers(m,p)).map(p=>[key(p),p])).values()];
+    if(!cells.some(p=>key(p)===key(hero)))return empty;
+    // Generic skill displacement stores the legal route before the warning.
+    // Charge/pushing through a target and collision damage are stage five.
+    const path=[];
+    if(direction&&Number.isInteger(sk.moveSteps)&&sk.moveSteps>0){
+      let p=point(m);
+      for(let i=0;i<Math.min(sk.moveSteps,range);i++){
+        const next={x:p.x+direction.x,y:p.y+direction.y};
+        if(!canOccupy(s,m,next))break;
+        path.push(next);p=next;
+      }
+    }
+    return {cells,path,waves,direction,target};
+  }
+  function dungeonIntent(s,m,hero,prior=null){
+    const choices=dungeonSkillSet(s,m);
+    // A tracking warning can move, but may never silently switch skills.
+    const candidates=prior?[choices.find(sk=>sk.id===prior.skillId)||(!prior.skillId?choices[0]:null)].filter(Boolean):choices;
+    for(const sk of candidates){
+      if(!dungeonSkillAllowed(s,m,sk))continue;
+      const plan=dungeonSkillPlan(s,m,hero,sk),ready=plan.cells.length>0;
+      if(!ready&&!prior)continue;
+      return {version:3,kind:'attack',skillId:sk.id,skillName:sk.name,origin:point(m),...plan,
+        shape:sk.shape,power:sk.power,warning:sk.warning,tracking:sk.warning==='tracking',
+        animation:sk.animation||sk.shape,slow:!!sk.slow,push:sk.push||0,interruptible:true,
+        text:ready?'下次：'+sk.name+(sk.warning==='tracking'?'（追蹤，請退出射程）':'（鎖定）'):'已離開射程，本次'+sk.name+'無法命中'};
+    }
+    return {version:3,kind:'advance',cells:[],origin:point(m),target:point(hero),text:'下次：重步 1 格'};
+  }
   function retargetTrackingIntents(s){
     if(!s.weaponDungeon||s.status!=='active')return;
     const hero=s.actors[0];
-    for(const m of s.actors.filter(a=>a.bot&&alive(a)&&a.trackingAttack)){
-      if(m.intent?.kind==='attack')m.intent=trackingIntent(s,m,hero,true);
+    for(const m of s.actors.filter(a=>soloDungeonBeast(s,a)&&alive(a))){
+      const prior=m.intent;
+      if(prior?.kind==='attack'&&(prior.warning==='tracking'||!prior.warning&&prior.tracking)){
+        m.intent=dungeonIntent(s,m,hero,prior);
+      }
     }
   }
   const LEGACY_TRIAL_TERRAINS=Object.freeze([
@@ -560,6 +640,7 @@
       gender:raw.gender==='female'?'female':'male',species:num(raw.species),core:type,branch:branch.id,
       ...(num(raw.enemyScaleAttack)?{enemyScaleAttack:num(raw.enemyScaleAttack)}:{}),
       ...(raw.bot?{level:Math.max(1,num(raw.level)||1),...(raw.trackingAttack?{trackingAttack:true}:{}),...(raw.weaponDungeonLord?{weaponDungeonLord:true}:{})}:{}),
+      ...(raw.bot&&Array.isArray(raw.dungeonSkills)?{dungeonSkills:clone(raw.dungeonSkills)}:{}),
       ...(raw.bot&&raw.role?{role:raw.role,home:raw.home}:{}),
       ...(raw.boss?{boss:true,footprint:{width:2,height:2},...(raw.bossKind?{bossKind:raw.bossKind}:{})}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
@@ -764,7 +845,7 @@
     return dy?{x:0,y:Math.sign(dy)}:null;
   }
   function push(s,a,target,steps,direction=pushDirection(a,target),weaponGroup=null){
-    if(!direction||target.boss&&!target.trackingAttack)return;
+    if(!direction||target.boss&&!target.trackingAttack&&!soloDungeonBeast(s,target))return;
     const route=[point(target)],{x:dx,y:dy}=direction;
     for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(!canOccupy(s,target,p))break;target.x=p.x;target.y=p.y;route.push(point(target));}
     motion(s,target,route,'push',target.name+'被擊退',weaponGroup);
@@ -1213,7 +1294,7 @@
         },
         push:(target,d,count)=>push(s,a,target,count,d,group),
         throwTo:(target,d)=>{
-          if(target.boss&&!target.trackingAttack)return true;
+          if(target.boss&&!target.trackingAttack&&!soloDungeonBeast(s,target))return true;
           const landing=offset(target,d,-2);
           if(!canOccupy(s,target,landing))return false;
           const from=point(target);Object.assign(target,landing);
@@ -1455,7 +1536,7 @@
   function monsterRoute(s,m,hero){
     // Weapon-dungeon beasts pursue even after an attack. The existing footprint
     // route handles both one-cell guards and large lords, with a one-step budget.
-    const dungeonBeast=!!s.weaponDungeon&&m.trackingAttack;
+    const dungeonBeast=soloDungeonBeast(s,m);
     if(dungeonBeast&&m.slow)return [point(m)];
     if(m.boss||dungeonBeast){
       const origin=point(m),queue=[origin],parents=new Map([[key(origin),null]]);
@@ -1541,12 +1622,12 @@
       s.objective.hazards=active&&s.turn%SEAL_TYPES.hazard.triggerEveryTurns===0?[point(hero)]:[];
     }
     for(const m of s.actors.filter(a=>a.bot&&alive(a))){
-      if(m.trackingAttack){
-        // The solo dungeon action has already selected its next warning. A
-        // player-window effect may have interrupted it in begin(); keep that state.
-        if(!preserveDungeonIntents||!s.weaponDungeon||!m.intent)m.intent=trackingIntent(s,m,hero);
+      if(soloDungeonBeast(s,m)){
+        // The preceding action (or start-of-window interruption) owns this warning.
+        if(!preserveDungeonIntents||!m.intent)m.intent=dungeonIntent(s,m,hero);
         continue;
       }
+      if(m.trackingAttack){m.intent=trackingIntent(s,m,hero);continue;}
       if(s.trial?.layoutVersion===4&&s.objective?.type==='defense'){
         const shrine=s.objective.shrine;
         const target=dist(m,hero)<=1?hero:dist(m,shrine)<=1?shrine:null;
@@ -1589,13 +1670,31 @@
     if(s.status!=='active'||!alive(m)||!alive(hero))return;
     const intent=m.intent;
     if(intent?.kind==='attack'&&(!intent.origin||key(intent.origin)===key(m))){
-      const profile=monsterProfileFor(m);
-      // Use the last published warning. Player movement updates tracking
-      // intents in apply(); do not silently re-aim at attack resolution.
-      const cells=intent.cells||[];
-      log(s,m.name+'施展「'+profile.attackName+'」','monster-attack',{actor:m.uid,animation:{kind:'cast',style:intent.shape||'blast',origin:point(m),target:intent.target||point(hero),cells,color:'#d9a080'}});
-      if(cells.some(p=>key(p)===key(hero)))damage(s,m,hero,m.atk*(intent.power||1),{skill:'monster-'+m.species});
-      else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});
+      // Resolve only the published snapshot, including legacy v2 warnings.
+      const cells=intent.cells||[],name=intent.skillName||monsterProfileFor(m).attackName;
+      log(s,m.name+'施展「'+name+'」','monster-attack',{actor:m.uid,animation:{kind:'cast',style:intent.animation||intent.shape||'blast',origin:point(m),target:intent.target||point(hero),cells,color:'#d9a080'}});
+      let hit=false;
+      const waves=intent.waves?.length?intent.waves:[{cells,layer:1}];
+      for(const wave of waves){
+        if(!alive(m)||!alive(hero)||s.status!=='active')break;
+        if(!wave.cells.some(p=>key(p)===key(hero)))continue;
+        hit=true;
+        damage(s,m,hero,m.atk*(intent.power??1),{skill:(!intent.skillId||intent.skillId==='stone-fall'||intent.skillId==='stone-lord')?'monster-'+m.species:intent.skillId});
+        checkFinished(s);
+        if(s.status!=='active'||!alive(m)||!alive(hero))break;
+        if(intent.slow){hero.slow=1;hero.slowUntil=hero.turns+1;}
+        if(intent.push)push(s,m,hero,intent.push);
+      }
+      if(!hit)log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});
+      // A saved skill route is bounded and rechecks full occupancy per step.
+      if(s.status==='active'&&alive(m)&&alive(hero)&&intent.path?.length){
+        const route=[point(m)];
+        for(const p of intent.path){
+          if(dist(m,p)!==1||!canOccupy(s,m,p))break;
+          Object.assign(m,p);route.push(point(m));
+        }
+        motion(s,m,route,'dash',m.name+'施展位移');
+      }
     }
     // Reflected damage may kill the lord during its own attack.
     checkFinished(s);
@@ -1605,10 +1704,10 @@
       Object.assign(m,end);
       log(s,m.name+'以'+monsterProfileFor(m).moveName+'移動','monster-move',{actor:m.uid,path:route,animation:{kind:'move',style:monsterProfileFor(m).move.kind}});
     }
-    m.intent=trackingIntent(s,m,hero);
+    m.intent=dungeonIntent(s,m,hero);
   }
   function monsterTurn(s,m,hero){
-    if(s.weaponDungeon&&m.trackingAttack)return weaponDungeonMonsterTurn(s,m,hero);
+    if(soloDungeonBeast(s,m))return weaponDungeonMonsterTurn(s,m,hero);
     const intent=m.trackingAttack&&m.intent?.kind==='attack'?trackingIntent(s,m,hero,true):
       m.weaponDungeonLord&&m.intent?.kind==='wait'?trackingIntent(s,m,hero):m.intent;
     if(intent?.kind==='defense-attack'){
@@ -1697,7 +1796,7 @@
     const out=gravity().trigger(s.weaponObjects,a.uid,step,{
       board:prism().boardForTrial(s),actors:s.actors,targets:s.actors.filter(t=>t.team!==a.team),alive,
       forbidden:[...(s.objective?.shrine?[s.objective.shrine]:[]),...(s.objective?.points||[]).filter(q=>!q.activated)],
-      canMove:t=>!t.boss||!!t.trackingAttack,
+      canMove:t=>!t.boss||!!t.trackingAttack||soloDungeonBeast(s,t),
       move:(t,to,from)=>{Object.assign(t,to);motion(s,t,[from,to],'push',t.name+'受到引力牽引',event.id);if(t.bot)interruptMonster(t);},
       apply:(t,power,cell)=>{const shield=t.shield;const dealt=damage(s,a,t,a.atk*power,{skill:'gravity-core',manualId:'body-gravity',weaponHit:{group:event.id,rayId:0,cell,records}});return {damage:dealt,absorbed:shield-t.shield};}
     });
@@ -1834,7 +1933,7 @@
     }else if(command.type==='guard'){
       validateAttackLimit(a);a.guard=Math.max(.4,a.guard);a.attacks++;log(s,a.name+'凝神護身，下次自身回合前減傷 40%','guard',{actor:a.uid,animation:{kind:'guard',changes:[appearance(a)]}});
     }else if(!endsTurn)fail('未知的戰場行動');
-    retargetTrackingIntents(s);
+    if(command.type!=='end')retargetTrackingIntents(s);
     a.actions++;(s.turnTimeouts||={})[uid]=0;
     // A displacement or the last hit can finish an objective before enemies act.
     if(s.mode==='pve'&&s.trial?.layoutVersion>=3)checkFinished(s);
@@ -1904,5 +2003,5 @@
     if(s.weaponObjects)s.weaponObjects=weave().finish(s.weaponObjects);
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterProfileFor,trackingCells,retargetTrackingIntents,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,previewCast,skillPreviewPlan,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({SEAL_MAX_DURABILITY,SEAL_HIT_DAMAGE,SEAL_TYPES,SEAL_KINDS,sealDefinition,sealInfo,sealInfos,sealEffectCells,LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TUTORIAL_STAGE1,MONSTERS,monsterProfile,monsterProfileFor,trackingCells,DUNGEON_ENEMY_SKILLS,dungeonSkillPlan,dungeonIntent,retargetTrackingIntents,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,swordRoute,swordMoveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,previewCast,skillPreviewPlan,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

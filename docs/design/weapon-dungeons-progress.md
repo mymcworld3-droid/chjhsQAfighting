@@ -2,7 +2,7 @@
 
 規格：[weapon-dungeons-v4.md](weapon-dungeons-v4.md)。萬獸險域尚未開放。
 
-## 第 1 階段：共通連續行動機制（程式已實作，待 CI 驗收）
+## 第 1 階段：共通連續行動機制（已驗收）
 
 - 基準 main：922a1699a6b3374a8277ebb4f0f9e3fcfb2808d5。
 - 規劃保存：074b3c4bc9dc53700f17856a1e1fd62686d4a9a2（將使用者貼上的 V4 轉為 Markdown，保留 13 章、九階段、地圖草案、提示詞及驗收清單，非逐字原始檔）。
@@ -20,3 +20,20 @@
 - 程式與回歸測試提交：[ebbf5b32519f36f5074e117c56d265deb6f4a832](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/ebbf5b32519f36f5074e117c56d265deb6f4a832)，已確認 main 指向該提交。
 - GitHub Actions 查核：Cultivation regression tests：in_progress / 未結論（46106093401）；Tactical browser acceptance：in_progress / 未結論（46106092805）；New weapon release candidate acceptance：in_progress / 未結論（46106092826）；pages build and deployment：in_progress / 未結論（46106092636）
 - 仍須在此階段完成最新 CI 及必要測試；下一次先補驗收，不直接跳到第二階段。
+
+### 第一階段結案（2026-11-28）
+
+- 最新文件提交 870e97a2f486a3dcc611d4dcb8f3a252d6aad088：完整回歸 [46106112726](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46106112726) 成功，3280 項／3279 通過／0 失敗／1 跳過；靜態版本表一致。瀏覽器 [46106112733](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46106112733) 與 Pages [46106112665](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46106112665) 均成功。
+- 程式提交 ebbf5b3 的完整回歸、瀏覽器及候選版 [46106092826](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46106092826) 成功；該提交 Pages 被後續部署取消，最新 870e97a Pages 成功。後續提交僅修改文件，未改程式。
+- 第一階段結案，開始第二階段。
+
+## 第 2 階段：共用靈獸技能架構（實作提交，待 CI）
+
+- 將單人副本連續行動入口與追蹤旗標解耦，普通、精英及 2×2 領主共用；尖峰石域仍使用既有落石/尖峰崩裂，保留原射程、倍率與移動規則。
+- server layout 可配置有順序的 dungeonSkills；技能資料包含 ID、名稱、形狀、射程、倍率、追蹤/鎖定、動畫、領主與難度限制、位移、擊退及層數。僅選擇當前能命中的合法技能。
+- 共用 blast/point/line/cone/square 幾何；直線重用 line、扇形重用 monsterCells、方形外圈重用 weapon-geometry squareRing 並以完整占位計算。v3 intent 保存技能、方向、路徑、格位及波次，鎖定預告不重算；追蹤只刷新同一技能，結算時不偷偷重瞄。舊 v2 已預告落石可直接結算。
+- 位移使用既有 canOccupy 與 push；大體型檢查完整占位，實際擊退取消預告；逐層結算依最新玩家位置，終局立即停止。
+- 新增六項確定性回歸案例（選招限制、鎖定及 JSON 恢復、追蹤不換技、2×2 幾何、位移碰撞及擊退、舊預告恢復）。未新增公開技能或萬獸險域。撞牆傷害與推動式衝撞屬第五階段，正式震波及動畫屬第六/七階段。
+- 修改：public/cultivation/tactical-rules.js、tests/weapon-dungeons.test.cjs、public/module-versions.json、本文件。
+- 測試命令：node --test tests/weapon-dungeons.test.cjs；npm run test:battle；npm test；npm run check:module-versions。待本次 CI，未確認測試全部通過。
+- 下一步：第二階段 CI 驗收及修正，通過後才實作第三階段四種劍法。

@@ -397,3 +397,71 @@ test('a lord killed by a counter ends the dungeon before it can move or the next
  assert.ok(!s.events.some(e=>e.actor==='guard'&&['monster-attack','monster-move'].includes(e.type)));
  assert.ok(!s.events.some(e=>e.actor==='beast'&&e.type==='monster-move'));
 });
+
+const enemySkill=(extra={})=>({id:'test-locked',name:'測試用靈獸技',shape:'line',range:4,power:1,warning:'locked',animation:'line',...extra});
+function configuredScene(skill,options={}){
+ const s=scene(options);
+ s.actors[1].dungeonSkills=Array.isArray(skill)?skill:[skill];
+ R.prepareIntents(s);return s;
+}
+test('configured enemy selects the first legal skill with difficulty and lord restrictions',()=>{
+ const s=configuredScene([enemySkill({id:'later',minDifficulty:1}),enemySkill({id:'lord',lordOnly:true}),enemySkill({id:'short',range:1}),enemySkill({id:'legal'})]);
+ assert.equal(s.actors[1].intent.skillId,'legal');
+ assert.equal(s.actors[1].intent.warning,'locked');
+ assert.ok(s.actors[1].intent.cells.some(p=>R.key(p)===R.key(s.actors[0])));
+});
+test('locked enemy warning survives movement and serialization; only advertised cells can hit',()=>{
+ let s=configuredScene(enemySkill());
+ const warning=JSON.parse(JSON.stringify(s.actors[1].intent));
+ s=R.apply(s,'u1',{type:'move',x:6,y:5},NOW);
+ assert.deepEqual(s.actors[1].intent,warning);
+ const restored=JSON.parse(JSON.stringify(s));
+ const next=R.apply(restored,'u1',{type:'end'},NOW);
+ assert.equal(next.actors[0].hp,10000);
+ assert.ok(next.events.some(e=>e.type==='dodge'&&e.actor==='u1'));
+ assert.deepEqual(next,R.apply(s,'u1',{type:'end'},NOW));
+});
+test('tracking enemy preserves the selected skill, even when another skill would hit',()=>{
+ let s=configuredScene([enemySkill({id:'tracking-line',warning:'tracking'}),enemySkill({id:'fallback',shape:'blast',radius:0})]);
+ assert.equal(s.actors[1].intent.skillId,'tracking-line');
+ s=R.apply(s,'u1',{type:'move',x:6,y:5},NOW);
+ assert.equal(s.actors[1].intent.skillId,'tracking-line');
+ assert.deepEqual(s.actors[1].intent.cells,[]);
+ s=R.apply(s,'u1',{type:'end'},NOW);assert.equal(s.actors[0].hp,10000);
+});
+test('2x2 enemy line and square geometry include full front edge without duplicates or blocked tiles',()=>{
+ const s=configuredScene(enemySkill(),{boss:true,enemy:{x:4,y:4},player:{x:7,y:5}});
+ const m=s.actors[1],hero=s.actors[0];
+ assert.ok(m.intent.cells.some(p=>p.x===6&&p.y===4));
+ assert.ok(m.intent.cells.some(p=>p.x===6&&p.y===5));
+ s.blocks=[{x:6,y:4}];
+ const line=R.dungeonSkillPlan(s,m,hero,enemySkill());
+ assert.ok(!line.cells.some(p=>p.y===4&&p.x>=6));
+ const square=R.dungeonSkillPlan(s,m,hero,enemySkill({shape:'square',range:2,rings:2}));
+ assert.equal(square.waves.length,2);
+ assert.equal(new Set(square.cells.map(R.key)).size,square.cells.length);
+ assert.ok(square.waves[0].cells.some(p=>p.x===6&&p.y===5));
+ assert.ok(square.waves[1].cells.some(p=>p.x===7&&p.y===5));
+ assert.ok(square.cells.every(p=>!R.blocked(s,p)&&!R.covers(m,p)));
+});
+test('configured displacement is saved and rechecks full occupancy; knockback interrupts locked warning',()=>{
+ let s=configuredScene(enemySkill({moveSteps:2}),{boss:true,enemy:{x:4,y:4},player:{x:8,y:4}});
+ assert.deepEqual(s.actors[1].intent.path,[{x:5,y:4},{x:6,y:4}]);
+ s.blocks=[{x:7,y:5}];
+ s=R.apply(s,'u1',{type:'end'},NOW);
+ assert.ok(R.footprint(s.actors[1]).every(p=>!R.blocked(s,p)&&R.key(p)!==R.key(s.actors[0])));
+ assert.ok(s.actors[1].x<=5);
+ s=configuredScene(enemySkill(),{enemy:{x:7,y:4},player:{x:6,y:4},skills:['rock-break']});
+ s=R.apply(s,'u1',{type:'manual',skillId:'rock-break',x:7,y:4},NOW);
+ assert.equal(s.actors[1].intent.kind,'stagger');
+ assert.deepEqual(s.actors[1].intent.cells,[]);
+ const hp=s.actors[0].hp;s=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(s.actors[0].hp,hp);
+});
+test('legacy v2 prepared stone warning still resolves once after reload without resetting the room',()=>{
+ let s=scene();const m=s.actors[1];
+ m.intent={version:2,kind:'attack',cells:[{x:6,y:4}],origin:{x:4,y:4},target:{x:6,y:4},shape:'blast',power:1,tracking:true,slow:false,push:0,text:'舊預告'};
+ s=R.apply(JSON.parse(JSON.stringify(s)),'u1',{type:'end'},NOW);
+ assert.equal(s.actors[0].hp,9900);assert.equal(s.actors[1].intent.version,3);
+ assert.equal(s.actors[1].intent.skillId,'stone-fall');
+});
