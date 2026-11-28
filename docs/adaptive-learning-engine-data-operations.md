@@ -32,3 +32,6 @@ V1 為初始獨立集合，不需要搬移 legacy 或 DDL。舊題僅可透過 f
 node scripts/audit-adaptive-beta-deployment.cjs --read-only
 ```
 不新增或改變正式帳務、部署、規則或資料。CLI 讀取 Firebase Rules API 的 default Firestore release 與 ruleset（官方 API：https://firebase.google.com/docs/reference/rules/rest/v1/projects.releases/get 與 https://firebase.google.com/docs/reference/rules/rest/v1/projects.rulesets/get），只回報規則 SHA-256、保留前綴集合數。D1 僅送固定 aggregate SELECT（不取得任何玩家記錄內容），先確認無 token 得 401 再進行已授權查詢。拒絕重導向與非 HTTPS，禁止將 API 憑證或規則原文貼到聊天/GitHub。缺權限或不可連線回報 unavailable；readOnlyChecksPassed 僅為有限探測成功，不代表 Firestore 規則語意完整安全（需檢查重疊 allow）、實際 Auth 刪除、回滾或正式備份保留已通過，stage2Approval 永遠 false。需另外在隔離帳號及 D1 資料庫完成具證據的測試。Render 查核目前對應服務 suspended 且為 stamina-battle，不能用其作 main 驗收；勿為繼續開發自行恢復帳務或改分支。
+
+### 指定 Render 服務的接續方式
+使用者已指定 chjhsqafighting-2 為現有後端；目前 connector 回傳清單不含此服務，不應將 chjhsQAlegend 視為其替代。請由 Render Dashboard 開啟指定服務，取得服務 URL 或 srv- ID，確認正確工作區與授權連線，核對部署 commit SHA。在可用且獲授權的 shell 中執行上述唯讀 CLI（若部署尚未包含此檔，勿擅自為驗收觸發部署或改設定）。只需提供無憑證的 JSON 報告與 commit SHA，禁止提供 API key、Firebase 私鑰、D1 token。若方案不支援 shell，可使用具同等合法憑證與隔離環境的維運端執行；不建立公開診斷端點、不將密鑰移入 GitHub。正式規則語意與隔離刪除/還原另需驗證，程式 CI 全綠不代表正式部署驗收已完成。

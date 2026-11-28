@@ -2,7 +2,7 @@
 
 規格：V1.0，`docs/adaptive-learning-engine-beta.md`（完整 324 行，Git blob `6b29dad7bd791e962718be32c08202840cd695b4`）。
 目標分支：main。基準提交：`8614dff06518962901e123a010dbfddc5d37a453`（2026-11-28）。
-階段 0｜最新 main 盤點與架構基線：**passed**。階段 1｜Beta 入口及功能開關：**passed**。階段 2A｜共用資料契約與隔離基礎：**passed**。當前階段 2B｜隱私清除、資料層及回滾：**blocked**（正式部署驗收未具備，新增唯讀工具仍待 CI）。最新通過完整階段：1。
+階段 0｜最新 main 盤點與架構基線：**passed**。階段 1｜Beta 入口及功能開關：**passed**。階段 2A｜共用資料契約與隔離基礎：**passed**。當前階段 2B｜隱私清除、資料層及回滾：**blocked**（程式 CI 全綠；使用者指定 Render 服務不在目前授權工作區，實際部署驗收未完成）。最新通過完整階段：1。
 本文件與測試修正為同一提交；提交 SHA 由 `git log -1 --format=%H -- docs/adaptive-learning-engine-progress.md` 或 GitHub 檔案歷史取得，不在提交內容內自我引用雜湊。Beta 僅完成獨立開發預覽入口；正式環境未啟用。
 
 ## 0A. 實際程式盤點與重用清單
@@ -67,7 +67,7 @@
 | 0 | passed — 124e2e2 基準 CI 全部成功 |
 | 1 | passed — 917be25 全部 23 項 CI checks 成功，四種 Chromium 尺寸通過 |
 | 2A | passed — 6017cd0 21 checks 全部成功 |
-| 2B | blocked — Render 已暫停且非 main；唯讀驗收工具待新 CI、真實 Firestore/D1 及隔離演練未驗證 |
+| 2B | blocked — 380e741 全部 22 checks 通過；指定服務 chjhsqafighting-2 未列於目前 Render 連線；真實 Firestore/D1 及隔離演練未驗證 |
 | 3–26 | not_started |
 
 接續時先讀完整規格與本文件，核對最新 main 的 CI。若仍有失敗，修正本階段阻塞，不降低驗收。若本次測試修正的 CI 通過，記錄真實 run URL、測試數與提交 SHA，再開始第 1 階段。未確認正式搜尋服務不等於現有搜尋已啟用；第 3 階段需完成真實驗證。
@@ -131,3 +131,9 @@
 - 新增 scripts/audit-adaptive-beta-deployment.cjs：必須顯式 --read-only；使用現有伺服器憑證向固定 Firebase Rules REST GET 端點取得 A 預設資料庫生效 release/ruleset，核對 project/resource 並只輸出規則內容 SHA-256 與 reserved collection 數；D1 先以無憑證固定 aggregate SELECT 驗證 401，再以服務憑證同一查詢核對 A/BD/C 筆數，不傳送 UID、讀取玩家內容或執行寫入。禁止重導向，限制 HTTP timeout。錯誤輸出僅受控狀態，不回傳私密錯誤/規則原文/密鑰。即使 readOnlyChecksPassed=true，stage2Approval 仍為 false；此工具不能替代 Rules 語意評估、Auth 外部刪除與實際隔離 restore。
 - 新增 tests/adaptive-learning-engine-beta-deployment-audit.test.cjs 四項測試：固定唯讀請求及不洩漏、未授權閘道停止、異常 namespace、錯專案/URL/無憑證。使用 synthetic fixture，不是正式驗收；測試命令 node --test tests/adaptive-learning-engine-beta-deployment-audit.test.cjs（納入完整 CI）；本次新測試尚未執行完成。
 - 目前明確阻塞：需指定實際承載 main 的後端或隔離 staging 執行環境，並有 A Rules 讀取權限及 D1 測試憑證。正式 Rules 語意、外部 Auth 刪除、D1 真實回復/備份保留仍未驗收。正式 Beta 關閉，未啟動第 3 階段。既有遊戲功能未修改，無正式玩家破壞性測試。
+
+## 第 2B 程式驗收完成、指定部署服務查核（2026-11-28）
+基準 `380e7412017a297fd2e342730cddacd53db98679`。完整回歸 [46158268594](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46158268594)：3366 tests、3365 pass、0 fail、1 skipped、0 cancelled；唯讀部署 audit 新增四項測試（TAP 48–51）全部 ok。基準 commit 22/22 check-runs completed/success；[手機/戰鬥瀏覽器 46158268606](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46158268606)、[新武器候選 46158268612](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46158268612)、[Pages 46158268521](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46158268521)、Worker check 均 success。無已知程式測試失敗。
+- 使用者指定真實 Render 服務名稱 chjhsqafighting-2；重新查已確認的 Render 工作區（含 preview），共 19 個服務，該名稱沒有出現在回傳清單，repo 相符者仍為先前舊 stamina-battle 服務 chjhsQAlegend。不能將舊服務 suspended 狀態套到指定服務。對推定公開網址 https://chjhsqafighting-2.onrender.com/api/data-config 與 /api/adaptive-learning-engine-beta/status 的唯讀存取均不可取得；不能由此判定真實服務停機。瀏覽器工具無 originating browser context，Render connector 無 server shell/exec 能力。未讀秘密或正式玩家資料，未變更部署。
+- 唯讀 audit 已通過 fixture CI，仍未在正確服務執行。解除阻塞：取得正確 Render 服務 dashboard URL / srv- ID 並確認連線帳號具有其讀取權限；或由已授權維運者在正確部署版本之 shell 執行 node scripts/audit-adaptive-beta-deployment.cjs --read-only，提供工具輸出的無密鑰 JSON 與部署 SHA。不要貼上環境變數或服務帳號憑證。之後另驗證有效 Rules 的重疊 allow 語意及隔離 Auth/D1 清除、備份回復與保留期限。唯讀輸出不是完整安全驗收。
+- 本次僅更新進度/維運文件，不修改已通過的產品程式或測試。第 2B 程式驗收完成，正式環境仍 blocked；第 3 階段尚未開始，正式 release flag 維持 false。不可為取得綠燈而縮減必要驗收。
