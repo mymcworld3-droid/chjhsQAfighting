@@ -82,3 +82,11 @@
 
 - 858b969 最新回歸 46111072913 與 f20180a 回歸 46111036378、候選版 regression 140874394638 皆出現同一失敗：四技擊退測試的穿刺案例將崩山拳目標設成距離兩格的靈獸，而非相鄰方向格；遊戲正確拒絕該指令。修正為合法相鄰方向，增加瞄準合法性與實際位移斷言，保留四技能 stagger、無傷害與既有測試。不改任何戰鬥規則。
 - 修正後須重跑完整回歸、候選版、瀏覽器及部署驗收；未全數通過前不得開始第四階段。
+
+### 第三階段修正後追加驗收（2026-11-28）
+
+- 修正提交 [e140d50f862156396c958c638500304777c9325b](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/e140d50f862156396c958c638500304777c9325b)：完整回歸 [46111230150](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111230150) 和候選版 regression job 140875000726 均為 3292 項、3291 通過、0 失敗、1 跳過，靜態資源版本一致。四技擊退測試已通過；未刪除測試。
+- [Tactical browser acceptance 46111230179](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111230179)：in_progress / 未結論；[New weapon release candidate acceptance 46111230218](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111230218)：in_progress / 未結論；[Cultivation regression tests 46111230150](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111230150)：completed / success；[pages build and deployment 46111229261](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46111229261)：completed / success。
+- 候選版工作 12/15 成功，未結論：candidate-browser (tactical)、candidate-balance (5)、candidate-balance (10)。最新已完成工作無失敗。
+- 第四階段預檢：weapon-dungeon-rules.js 的 CATALOG、progressFor/recordClear 與 layout；tactical-combat-api.cjs 的 start/weaponDungeonState 已共用原子扣券及重送憑證；weapon-dungeon-rewards.cjs 已依權威目錄限制掉落流派。須將隱藏目錄與可公開目錄分離，僅允許伺服器可信測試設定進場，禁止客戶端自行開啟。舊 peak-stone 存檔仍維持頂層 unlocked/clears，萬獸險域獨立 byDungeon。沙地圖集索引 13，石域遷移已限定 peak-stone；初步素材使用玄甲山豬 species 1、巖甲獸 species 8，領主可採現有大型巖獸，正式造型待第七階段。需修正僅對相應武器流派生效的環境倍率，避免新副本沿用舊圖騰預設 1.15。
+- 尚未寫入第四階段戰鬥或副本資料；依要求全部最新第三階段 CI 通過才開工。本次僅補記驗收證據與預檢，不公開萬獸險域。
