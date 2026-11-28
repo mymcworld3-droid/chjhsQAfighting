@@ -20,7 +20,7 @@ function key(r){return [r.weaponIds.join('+'),r.dungeonId,r.difficulty,r.seed,r.
 function run(shard,out){
  const M=require('../public/cultivation/manual-rules.js'),D=require('../public/cultivation/weapon-dungeon-rules.js'),A=require('./accept-new-weapon-balance.cjs');
  assert.equal(M.BOOKS.length,12);assert.ok(D.CATALOG.find(x=>x.id===D.WILD_ID).hidden);
- assert.equal(D.wildSkills('lord',5).find(x=>x.id==='wild-echo').power,.66);
+ assert.ok(Math.abs(D.wildSkills('lord',5).find(x=>x.id==='wild-echo').power-.66)<1e-12);
  const all=[...M.BOOKS.map(b=>[b]),...A.specialPairs.map(ids=>ids.map(id=>M.BY_BOOK[id]))];
  const configs=all.filter((_,i)=>i%12===shard);
  const report=A.runV4Shard(configs);
