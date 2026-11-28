@@ -1,8 +1,8 @@
 # 自適應學習引擎 Beta — 開發進度與架構基線
 
-規格：V1.0，`docs/adaptive-learning-engine-beta.md`（完整 324 行，Git blob `6b29dad7bd791e962718be32c08202840cd695b4`）。
+規格：V1.1，`docs/adaptive-learning-engine-beta.md`（保留 V1.0 原文，末尾附使用者授權的驗收順序修訂）。
 目標分支：main。基準提交：`8614dff06518962901e123a010dbfddc5d37a453`（2026-11-28）。
-階段 0｜最新 main 盤點與架構基線：**passed**。階段 1｜Beta 入口及功能開關：**passed**。階段 2A｜共用資料契約與隔離基礎：**passed**。當前階段 2B｜隱私清除、資料層及回滾：**blocked**（Render 服務存取已恢復；正式部署仍為第 1 階段，未具備第 2B 唯讀工具及隔離演練條件）。最新通過完整階段：1。
+階段 0｜最新 main 盤點與架構基線：**passed**。階段 1｜Beta 入口及功能開關：**passed**。階段 2A｜共用資料契約與隔離基礎：**passed**。階段 2B｜程式層級隱私清除、資料層及回滾：**passed**（正式部署驗收依使用者指示延至第 25 階段，仍未驗證）。當前第 3A 階段：**in_progress**，待新增 CI 及第 3B 真實網路驗收。最新通過完整開發階段：2（不含延後正式驗收）。
 本文件與測試修正為同一提交；提交 SHA 由 `git log -1 --format=%H -- docs/adaptive-learning-engine-progress.md` 或 GitHub 檔案歷史取得，不在提交內容內自我引用雜湊。Beta 僅完成獨立開發預覽入口；正式環境未啟用。
 
 ## 0A. 實際程式盤點與重用清單
@@ -67,8 +67,12 @@
 | 0 | passed — 124e2e2 基準 CI 全部成功 |
 | 1 | passed — 917be25 全部 23 項 CI checks 成功，四種 Chromium 尺寸通過 |
 | 2A | passed — 6017cd0 21 checks 全部成功 |
-| 2B | blocked — cf0ba58 CI 全綠；Render 存取成功但 live 917be25 尚未部署第 2 階段；真實 Firestore/D1 及隔離演練未驗證 |
-| 3–26 | not_started |
+| 2B | passed — 7ad19d3 22/22 checks 成功；程式層級驗收完成，正式 Firebase/D1/部署/隔離回滾延至第 25 階段、未驗證 |
+| 3A | in_progress — 真實搜尋介面及安全擷取、測試待 CI |
+| 3B | blocked — 真實 API 憑證/核准來源與實際網路驗收未確認 |
+| 4–24 | not_started |
+| 25 | not_started — 含延後的正式部署、安全、生命週期、備份與回滾驗收 |
+| 26 | not_started — 全部必要驗收通過後才能發布 |
 
 接續時先讀完整規格與本文件，核對最新 main 的 CI。若仍有失敗，修正本階段阻塞，不降低驗收。若本次測試修正的 CI 通過，記錄真實 run URL、測試數與提交 SHA，再開始第 1 階段。未確認正式搜尋服務不等於現有搜尋已啟用；第 3 階段需完成真實驗證。
 
@@ -148,3 +152,11 @@
 - 基準 `cf0ba581777d77cc66eba1874aade0c29bb66703` 的 6/6 checks 成功，完整回歸 [46160664029](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46160664029) 實際 TAP：3370 tests、3369 pass、0 fail、1 skipped、0 cancelled；[瀏覽器 46160663971](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46160663971)、[Pages 46160663408](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46160663408) success。上一程式提交 30c8913 的 21/21 checks 已全部成功。無已知失敗；未重跑或放寬測試。
 - 現有部署不包含 scripts/audit-adaptive-beta-deployment.cjs；目前 Render 連線沒有遠端 shell/exec 能力。已嘗試讀取確認服務 URL 的 /api/data-config、/api/adaptive-learning-engine-beta/status，工具無法取得 HTTP 回應，不能據此宣稱服務故障或 Beta 實際 HTTP 驗收成功。基準程式 RELEASE_ADAPTIVE_LEARNING_ENGINE_BETA=false；沒有改動開關或正式環境設定。此次僅有唯讀部署授權，不觸發正式部署、變更方案或環境變數、不觸碰正式資料。
 - 下一步：經使用者另行明確授權部署通過 CI 的指定 main 版本（保持 Beta 關閉），或提供具合法憑證的獨立測試環境。在可用的執行環境執行既有唯讀 CLI，另驗證實際 Firebase Rules 語意、D1 權限、隔離 Auth 帳號生命週期、備份還原及保留期限。即使部署更新，Free 方案 shell 能力仍須確認；不可假設部署即代表完成驗收。第 2B 仍 blocked，第 3 階段尚未開始。本次只更新文件，沒有新增程式測試，提交後查 CI。
+
+
+## 第 2B 程式驗收結案及第 3A 實作（2026-11-29）
+- 使用者明確取消本輪 Render 部署，正式環境必要驗收延至第 25 階段。原正式阻塞項不移除、不標記通過：實際部署 SHA 與唯讀 CLI、Firebase A 生效 Rules 語意、D1 權限、隔離真實 Auth 帳號生命週期、備份保留與實際還原、fence 保留/回收。第 26 階段發布鎖未變更。此前取得部署授權不再適用於本輪，未呼叫 Render deploy 或設定寫入。
+- `7ad19d39f96be83470317f89c247ce5cf5f41a71` 的 22/22 checks completed/success；[完整回歸 46165506515](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46165506515) TAP 3378 tests、3377 pass、0 fail、1 skipped；[瀏覽器 46165506546](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46165506546)、[合作副本 46165506452](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46165506452)、[新武器候選 46165506451](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46165506451)、[Pages 46165505424](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46165505424)、Worker 全成功。原回歸提示詞失敗已修復；第 2B 程式驗收結案。最新 main 基準 `bc1ae543d8ad42733f37870b88967b1d2b8d8321` 同時有其他聊天室提交的既有題目圖像防護改動，與 7ad19d3 相比未變更 Beta 資料契約/隔離/驗收模組；其新 CI 尚待確認，不覆蓋或重寫其他成果。
+- 新增 `adaptive-learning-engine-beta-fetch.cjs`：HTTPS only、無內嵌認證/非標準埠/數值 IP/本地網域、IPv4 非公開網段與混合 DNS 拒絕、逐次 DNS 解析固定實際 socket lookup、TLS hostname 驗證、無自動轉址、robots 每跳檢查、核准 host、拒絕含 query/編碼路徑、最多 3 次跳轉、4 MiB 文件預設上限、15 秒整體超時、MIME/PDF signature、無壓縮或截斷回應。robots 採安全保守子集，不宣稱完整 RFC 9309 支援；不支援的限制需人工核對。來源 bytes 不執行、不渲染、不寫入原題庫。
+- 新增 `adaptive-learning-engine-beta-search.cjs`：真實 Brave Web API adapter（官方文件 https://api-dashboard.search.brave.com/api-reference/web/search/get）、固定供應商端點與 token header、zh-hant/TW、安全搜尋、只允許公開教材標籤欄位、限制搜尋結果數、保留原排序、排除不安全/帶 query URL、未驗證候選；每個 discovery lease 綁 owner hash、5 分鐘有效、限 256 組；配額目前是單程序限制（每日搜尋 100、fetch HTTP 300；單 owner 10/40，每分鐘 15/30、最多 3 併發且每 owner 1），429 cooldown，不做多金鑰/自動重試繞過。每個 robots/redirect request 計費，trace ID 串接、真實文件 SHA-256、時間/MIME、來源契約 v1。供應商 key 僅 server env，預設關閉，production 不可啟用，未註冊 HTTP route。來源 usePolicy/答案/真人皆 unknown/unverified，擷取 bytes 不等於解析完整；未寫入玩家資料或共用題庫。
+- 新增 13 項測試 `tests/adaptive-learning-engine-beta-search.test.cjs`：node --test tests/adaptive-learning-engine-beta-search.test.cjs，測安全 URL/IPv4/DNS pin/TLS/憑證隔離、大小/壓縮/截斷/超時、robots、重導向、provider 結果/429/5xx、配額、owner 隔離、來源 metadata。fixture 明示非真實搜尋，CI 未驗證。`scripts/test-adaptive-beta-search-live.cjs --live` 為 opt-in 真實 provider 診斷，最多一個搜尋與兩個合法擷取嘗試，不輸出密鑰或原文；無核准網域或憑證則阻塞。新增 `.env.example` 欄位預設關閉，未改正式 env。無可證明的 Brave API key 與已授權來源配置，真實 provider 請求及實際擷取尚未執行；本聊天室外部查閱 API 文件不是遊戲服務實測。第 3A 提交待 CI，第 3B 未通過，不提前進入第 4 階段。第 25 階段正式安全驗收保留。
