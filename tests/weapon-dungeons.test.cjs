@@ -163,7 +163,7 @@ test('server victory unlocks exactly the next difficulty once and never advances
  const s=await API.start(db,'u1',input(),NOW),raw=db.records.get(API.ROOMS+'/'+s.id);
  // Guards stay alive: killing only the lord is sufficient for progression.
  const guardCount=raw.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length;
- assert(guardCount>=8);
+ assert.equal(guardCount,6);
  Object.assign(raw.actors[0],{x:6,y:3,stamina:10,answered:1,correct:1});raw.actors[1].hp=1;
  R.prepareIntents(raw);
  const command={roomId:s.id,type:'manual',skillId:'rock-fist',x:6,y:2,revision:raw.revision,requestId:'victory-cast-001'};
@@ -215,7 +215,7 @@ test('all six difficulties unlock through actual winning commands and repeat set
    const raw=db.records.get(API.ROOMS+'/'+s.id);
    // Guards stay alive: killing only the lord is sufficient for progression.
  const guardCount=raw.actors.filter(a=>a.bot&&!a.weaponDungeonLord&&a.hp>0).length;
- assert(guardCount>=8);
+ assert.equal(guardCount,6+Math.floor(difficulty/2));
    Object.assign(raw.actors[0],{x:6,y:3,stamina:10,answered:1,correct:1});raw.actors[1].hp=1;R.prepareIntents(raw);
    const command={roomId:s.id,type:'manual',skillId:'rock-fist',x:6,y:2,revision:raw.revision,requestId:'tier-win-000'+difficulty};
    const result=await API.command(db,'u1',command,now);
@@ -853,4 +853,21 @@ test('shock can push player into a later already-locked charge, without re-aim o
  assert.equal(waveHits(next,'wild-shock').length,1);assert.equal(waveHits(next,'wild-charge').length,1);
  assert.equal(next.actors[0].hp,9820);assert.equal(next.actors[0].x,6);
  assert.ok(chargeSteps(next).length<=3);assert.equal(wallHits(next).length,0);
+});
+
+test('compact Peak Stone leaves an already saved large board and its ticket receipt unchanged',async()=>{
+ const db=database();own(db);
+ const first=await API.start(db,'u1',input('legacy-large-board-001'),NOW);
+ const raw=db.records.get(API.ROOMS+'/'+first.id);
+ raw.width=13;raw.height=21;raw.ground=Array(273).fill(16);raw.blocks=[];
+ for(let y=0;y<21;y++)for(let x=0;x<13;x++)if(x===0||x===12||y===0||y===20)raw.blocks.push({x,y,kind:'rock'});
+ Object.assign(raw.actors[0],{x:6,y:19});raw.trial.layoutHash='peak-stone:v2:0:legacy';
+ R.prepareIntents(raw);
+ const snapshot=structuredClone(raw);
+ const resumed=await API.start(db,'u1',{...input('legacy-large-resume-001'),resumeRoomId:first.id},NOW);
+ assert.equal(resumed.id,first.id);assert.equal(resumed.width,13);assert.equal(resumed.height,21);
+ assert.deepEqual(resumed.ground,snapshot.ground);assert.deepEqual(resumed.blocks,snapshot.blocks);
+ assert.equal(resumed.trial.layoutHash,snapshot.trial.layoutHash);
+ assert.equal(resumed.actors[0].x,6);assert.equal(resumed.actors[0].y,19);
+ assert.equal((await API.weaponDungeonState(db,'u1',NOW)).tickets,2);
 });
