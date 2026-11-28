@@ -149,3 +149,9 @@
 - 新房間於玩家回合開始、所有敵人位移完成後，逆行動順序選擇下一次鎖定預告；金丹起優先合法震波推入後續已預告衝撞線；穩定行動順序不變。每次加入預告保留四步內至少一個不在聯集危險格的可達位置。四步是暫定體力預算，不代表任何剩餘體力或主動站位都必然安全；第八階段進行完整答題成本及實戰平衡。保留 stagger，不在玩家行動中重瞄。
 - 新增八組測試：震地單次/完整占位、四層結算和動畫、阻擋及閃避、擊退及反傷終局、六階與抵抗、連續衝撞限制、多種子安全格及實際閃避、震波衝撞配合；原階段五配置斷言更新為正式震地，保留其餘全部測試。
 - 修改 public/cultivation/weapon-dungeon-rules.js、public/cultivation/tactical-rules.js、public/cultivation/tactical-skill-effects.js、public/cultivation/tactical-combat.js、tests/weapon-dungeons.test.cjs、public/module-versions.json、本文件。待 npm test、npm run test:battle、npm run check:module-versions、瀏覽器、候選版及 Pages，最新 CI 全通過才進入第七階段。數值暫定，美術及完整平衡留後續階段。
+
+### 第六階段提交及 CI 查核
+
+- 實作提交 [acc1c8fc0ffb4e61d082ff1cb023c78a5994317d](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/acc1c8fc0ffb4e61d082ff1cb023c78a5994317d)，完整回歸 46124234668（job 140915133774）：3313 項、3312 通過、0 失敗、1 跳過，靜態資源版本一致；八組新增測試均成功。
+- [New weapon release candidate acceptance 46124234634](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46124234634)：in_progress/未結論；[Tactical browser acceptance 46124234657](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46124234657)：in_progress/未結論；[Cultivation regression tests 46124234668](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46124234668)：completed/success；[pages build and deployment 46124233974](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46124233974)：completed/success。候選版已通過 10/15，失敗 0。
+- 本地完整工作樹仍不可用，以 GitHub Actions 驗收。第七階段須先確認最新提交全部 CI、修復任何失敗，再完成入口浮空島素材、透明背景、沙塵與方形震波視覺、鎖定預告、共用名稱牌、手機平板適配；不得提前公開。
