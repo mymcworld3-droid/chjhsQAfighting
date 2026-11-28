@@ -43,3 +43,13 @@
 - 程式提交：[45e212883915ada95a967b9e96d02014dc47f886](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/45e212883915ada95a967b9e96d02014dc47f886)，已確認 main 已包含本次變更。
 - [Tactical browser acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114687)：in_progress / 未結論；[New weapon release candidate acceptance](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114726)：in_progress / 未結論；[Cultivation regression tests](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114697)：in_progress / 未結論；[pages build and deployment](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114429)：in_progress / 未結論
 - 本地 Node v22.16.0 可用，但 git ls-remote 無法解析 github.com，未能取得完整工作樹執行本地測試。等待上述 GitHub Actions 結果；第二階段尚未正式結案。
+
+### 第二階段追加驗收（2026-11-28）
+
+- 基準 main：e4b9fdb64fcf3e2d5ff25980193f9eaba4d95539，僅文件提交，程式與 45e212883915ada95a967b9e96d02014dc47f886 相同。
+- [最新完整回歸 46107146151](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107146151)：3286 項，3285 通過、0 失敗、1 跳過；module-versions.json 一致。[程式提交完整回歸 46107114697](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114697) 亦成功。
+- [候選版 46107114726](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114726) 的 candidate-regression（job 140862223822）：3286 項，3285 通過、0 失敗、1 跳過；靜態版本一致。最近一次 job 查核 12/15 成功、0 失敗，尚有 tactical browser 與兩組六階武器實戰平衡未完成。
+- [最新 Pages 46107145792](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107145792) 成功；程式提交的 Pages 46107114429 被取消，不將取消當作通過。
+- 本次最後查核：[Tactical browser acceptance 46107146152](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107146152)：in_progress / 未結論；[Tactical browser acceptance 46107114687](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114687)：in_progress / 未結論；[New weapon release candidate acceptance 46107114726](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114726)：in_progress / 未結論。
+- 已檢查第三階段可重用入口：weapon-dungeon-rules.js 副本配置、tactical-rules.js 的 dungeonSkillPlan / dungeonIntent / weaponDungeonMonsterTurn、tactical-renderer.js 的 line / cone / meteor 特效、tactical-skill-effects.js 的劍法效果。正式四技、分工、數值、舊房間相容策略及動畫驗證尚未實作；依 V4 不越過第二階段 CI 門檻。
+- 此批只更新驗收證據，不改戰鬥程式、不刪除測試。下一次先確認上述未結論 CI 及最新 main；若失敗修正後重跑，全部通過才開始第三階段。
