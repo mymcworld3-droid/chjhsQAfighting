@@ -56,6 +56,9 @@
       if(['dash','rush','push'].includes(scene.style))return 300;
       return Math.min(800,180+Math.max(...scene.moves.map(m=>m.path.length-1))*105);
     }
+    if(scene.kind==='cast'&&scene.style==='wild-charge')return 260;
+    if(scene.kind==='cast'&&scene.style==='wild-charge-wall')return 300;
+    if(scene.kind==='cast'&&['wild-shock','wild-echo'].includes(scene.skill))return scene.skill==='wild-echo'?260:360;
     if(scene.kind==='cast'&&scene.style==='fist-chain')return 380;
     if(scene.kind==='cast'&&quickSwordCast(moveFor(scene.skill)))return 500;
     if(scene.kind==='damage'&&scene.skill==='dragon-guard')return 280;
@@ -145,7 +148,7 @@
   function combineManualImpact(scenes){
     for(let i=0;i<scenes.length;i++){
       const cast=scenes[i];
-      if(cast.kind!=='cast'||cast.weaponTimeline||cast.parallelImpact||cast.style==='fist-chain'||(!manuals()?.BY_SKILL?.[cast.skill]&&!String(cast.skill||'').startsWith('peak-sword-')))continue;
+      if(cast.kind!=='cast'||cast.weaponTimeline||cast.parallelImpact||cast.style==='fist-chain'||(!manuals()?.BY_SKILL?.[cast.skill]&&!String(cast.skill||'').startsWith('peak-sword-')&&!['wild-shock','wild-echo','wild-charge-wall'].includes(cast.skill)))continue;
       let j=i+1;const hits=new Set(),numbers=[],reflections=[],strikeImpacts=[[],[]];
       for(;j<scenes.length;j++){
         const scene=scenes[j];if(scene.eventRevision!==cast.eventRevision||scene.kind!=='damage')break;
@@ -171,7 +174,7 @@
       if(!hits.size)continue;
       const separateHits=strikeImpacts.some(beat=>beat.length),move=moveFor(cast.skill);
       Object.assign(cast,{parallelImpact:true,impactStart:cast.impactStart??hitTime[move]??(cast.skill==='peak-sword-rain'?.65:.4),
-        numbers,reflections,after:scenes[j-1].after,duration:cast.throwImpact?cast.duration:flyingSwordPose(cast,0)?swordFlightDuration(cast):quickSwordCast(move)?500:separateHits?740:600,
+        numbers,reflections,after:scenes[j-1].after,duration:cast.throwImpact?cast.duration:flyingSwordPose(cast,0)?swordFlightDuration(cast):quickSwordCast(move)?500:cast.skill==='wild-echo'?340:cast.skill==='wild-shock'?460:cast.skill==='wild-charge-wall'?360:separateHits?740:600,
         ...(separateHits?{strikeImpacts}:{})});
       scenes.splice(i+1,j-i-1);
     }
@@ -269,6 +272,7 @@
   // A short contact pulse strengthens the hit without stopping the movement.
   function impactPulse(scene,progress){
     if(moveFor(scene?.skill)==='sky-cloud')return crossCutImpact(scene,progress)?.strength||0;
+    if(scene?.kind==='cast'&&scene.skill==='wild-charge-wall'){const q=(progress-(scene.impactStart??.4))/.22;return q>0&&q<1?Math.sin(Math.PI*q):0;}
     if(scene?.kind!=='cast'||!heavyMoves.has(moveFor(scene.skill)))return 0;
     const landed=scene.throwImpact&&scene.moves?.some(m=>m.timing==='manual-throw');
     if(!landed&&(!scene.parallelImpact||!scene.numbers?.some(n=>n.uid!==scene.actor&&n.damage!==undefined)))return 0;
@@ -305,6 +309,8 @@
       if(a.bot&&scene.actor===a.uid&&scene.kind==='cast'){
         const target=scene.target||a,dx=target.x-a.x,dy=target.y-a.y,length=Math.hypot(dx,dy)||1;
         a.x+=dx/length*beat*.12;a.y+=dy/length*beat*.12;a.scaleX=1+beat*.06;a.scaleY=1+beat*.06;
+        if(scene.skill==='wild-charge'){a.scaleY*=1-.23*beat;a.scaleX*=1+.13*beat;}
+        if(['wild-shock','wild-echo'].includes(scene.skill)){a.scaleY*=1-.18*beat;a.lift=.10*Math.sin(Math.PI*Math.min(1,p*2));}
         if(weight){a.scaleX*=1+weight*.10;a.scaleY*=1-weight*.08;}
       }
       const number=scene.numbers.find(n=>n.uid===a.uid);

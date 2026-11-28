@@ -93,3 +93,11 @@ test('canvas danger markings and 2 suggested landing tiles render without alteri
   Visual.drawGuidance(empty.ctx,{playerThreatened:false},v);
   assert.deepEqual(empty.log,[],'no PvP or non-threat overlays');
 });
+
+test('v3 warning marks preserve exact server geometry, charge direction and echo layer',()=>{
+ const s=state();s.actors[1].intent={version:3,kind:'attack',origin:point(3,2),cells:[point(3,3)],shape:'charge',warning:'locked',direction:point(0,1)};
+ s.actors[2].intent={version:3,kind:'attack',origin:point(5,3),cells:[point(3,3),point(4,3)],shape:'square',warning:'locked',waves:[{layer:1,cells:[point(4,3)]},{layer:2,cells:[point(3,3)]}]};
+ const before=JSON.stringify(s),p=Visual.derive(s,'u1','move',moves);
+ assert.equal(p.cells.length,3);assert.deepEqual(p.byKey['3,3'].marks,[{source:'wolf',shape:'charge',locked:true,direction:point(0,1)},{source:'boss',shape:'square',locked:true,layer:2}]);
+ assert.equal(p.byKey['4,3'].marks[0].layer,1);const m=mock();Visual.drawGround(m.ctx,p,{ox:0,oy:0,cell:36,width:7,height:7});assert.ok(m.log.includes('fillText'));assert.equal(JSON.stringify(s),before);
+});

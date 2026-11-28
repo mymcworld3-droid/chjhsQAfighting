@@ -782,8 +782,8 @@ export class TacticalRenderer{
     // The surrounding canvas stays empty for drag/zoom without fake terrain.
     for(let y=view.y;y<view.y+view.height;y++)for(let x=view.x;x<view.x+view.width;x++){
       const px=Math.round(ox+x*cell),py=Math.round(oy+y*cell),edgeX=Math.round(ox+(x+1)*cell),edgeY=Math.round(oy+(y+1)*cell),t=s.ground?.[y*s.width+x]??s.terrain;
-      if(!this.sprite('ground',t%4*128,Math.floor(t/4)*128,128,128,px,py,edgeX-px,edgeY-py)){c.fillStyle=t===16&&s.weaponDungeon&&(s.weaponDungeon.id||'peak-stone')==='peak-stone'?((x+y)%2?'#93999b':'#9da1a3'):((x+y)%2?'#5b6650':'#5f6b53');c.fillRect(px,py,edgeX-px,edgeY-py);}
-      if(s.weaponDungeon?.id==='beast-wilds'&&t===13){c.fillStyle='rgba(164,65,35,.24)';c.fillRect(px,py,edgeX-px,edgeY-py);}
+      if(!this.sprite('ground',t%4*128,Math.floor(t/4)*128,128,128,px,py,edgeX-px,edgeY-py)){c.fillStyle=s.weaponDungeon?.id==='beast-wilds'&&t===13?((x+y)%2?'#a76242':'#b8734c'):t===16&&s.weaponDungeon&&(s.weaponDungeon.id||'peak-stone')==='peak-stone'?((x+y)%2?'#93999b':'#9da1a3'):((x+y)%2?'#5b6650':'#5f6b53');c.fillRect(px,py,edgeX-px,edgeY-py);}
+      if(s.weaponDungeon?.id==='beast-wilds'&&t===13){c.fillStyle='rgba(164,65,35,.24)';c.fillRect(px,py,edgeX-px,edgeY-py);c.fillStyle='rgba(250,190,125,.17)';for(let k=0;k<3;k++){const h=(x*73+y*151+k*37)%97;c.fillRect(px+cell*(h%23)/25,py+cell*((h*7)%23)/25,Math.max(1,cell*.035),Math.max(1,cell*.018));}}
       c.strokeStyle='#10291b30';c.lineWidth=.7;c.strokeRect(px,py,edgeX-px,edgeY-py);
     }
     // Stone gate inscriptions are strictly decorative, below combat telegraphs.
@@ -922,7 +922,10 @@ export class TacticalRenderer{
         c.restore();
       }else propDrawn=this.sprite('props',(p.kind==='tree'?1:2)*128,0,128,128,x-cell*.06,y-cell*.15,cell*1.12,cell*1.12);
       if(!propDrawn){
-        c.fillStyle='#56594c';c.fillRect(x+cell*.14,y+cell*.1,cell*.72,cell*.8);
+        c.fillStyle=s.weaponDungeon?.id==='beast-wilds'?'#935437':'#56594c';c.fillRect(x+cell*.14,y+cell*.1,cell*.72,cell*.8);
+      }
+      if(s.weaponDungeon?.id==='beast-wilds'&&p.kind==='rock'){
+        c.save();c.strokeStyle='rgba(221,155,100,.6)';c.lineWidth=Math.max(1,cell*.035);c.beginPath();c.moveTo(x+cell*.24,y+cell*.68);c.lineTo(x+cell*.44,y+cell*.64);c.lineTo(x+cell*.73,y+cell*.5);c.stroke();c.restore();
       }
     }
     // Gates and current hazard marks are above terrain props but below the
@@ -1105,7 +1108,9 @@ export class TacticalRenderer{
         c.beginPath();c.ellipse(px,py+cell*.17,cell*.44*sizeFactor,cell*.27*sizeFactor,0,0,Math.PI*2);
         c.stroke();c.restore();
       }
-      const size=cell*1.18*sizeFactor,sw=size*(a.scaleX||1)*pose.sx,sh=size*(a.scaleY||1)*pose.sy;
+      const readyCharge=!animating&&s.weaponDungeon?.id==='beast-wilds'&&a.bot&&a.intent?.kind==='attack'&&a.intent.shape==='charge';
+      const crouch=readyCharge?.88:1;
+      const size=cell*1.18*sizeFactor,sw=size*(a.scaleX||1)*pose.sx*(readyCharge?1.055:1),sh=size*(a.scaleY||1)*pose.sy*crouch;
       const drawn=a.bot?this.sprite('monsters',a.species%5*128,Math.floor(a.species/5)*128,128,128,actorPx-sw/2,actorPy-sh*.7,sw,sh):
         this.sprite(a.gender,0,0,112,112,actorPx-sw/2,actorPy-sh*.76,sw,sh);
       if(!drawn){c.fillStyle=enemy?'#c57a67':'#e5cc8a';c.beginPath();c.arc(actorPx,actorPy-cell*.12,cell*.24,0,Math.PI*2);c.fill();}

@@ -22,7 +22,7 @@
     if(!player)return empty;
     const byKey=Object.create(null);
     let attackers=0;
-    const add=(p,source,boss=false)=>{
+    const add=(p,source,boss=false,intent=null)=>{
       if(!inside(state,p))return;
       const key=K(p);
       let record=byKey[key];
@@ -30,6 +30,10 @@
       if(source==='hazard')record.hazard=true;
       else if(!record.attackers.includes(source))record.attackers.push(source);
       if(boss)record.boss=true;
+      if(intent?.version===3){
+        const marks=record.marks||=[];const layer=(intent.waves||[]).find(w=>w.cells.some(q=>K(q)===key))?.layer;
+        if(!marks.some(m=>m.source===source))marks.push({source,shape:intent.shape,locked:intent.warning==='locked',...(intent.direction?{direction:{...intent.direction}}:{}),...(layer?{layer}:{})});
+      }
     };
     for(const actor of state.actors||[]){
       if(!actor.bot||!viable(actor)||!attacks.has(actor.intent?.kind))continue;
@@ -39,7 +43,7 @@
       const cells=(intent.cells||[]).filter(p=>inside(state,p));
       if(!cells.length)continue;
       attackers++;
-      for(const p of cells)add(p,String(actor.uid),!!actor.boss);
+      for(const p of cells)add(p,String(actor.uid),!!actor.boss,intent);
     }
     for(const hazard of state.objective?.hazards||[])add(hazard,'hazard');
     const cells=Object.values(byKey).sort((a,b)=>a.y-b.y||a.x-b.x);
@@ -92,6 +96,28 @@
         const o=cell*(.13+k*.075);
         ctx.beginPath();ctx.moveTo(x+o,y+cell*.07);
         ctx.lineTo(x+cell*.07,y+o);ctx.stroke();
+      }
+      // All glyphs are painted in committed server tiles, below sprites.
+      const mark=p.marks?.[0];
+      if(mark&&cell>=17){
+        const cx=x+cell*.5,cy=y+cell*.59;
+        ctx.strokeStyle=mark.locked?'#f8d18c':'#b9f0df';ctx.fillStyle=ctx.strokeStyle;
+        ctx.lineWidth=Math.max(1,cell*.035);ctx.beginPath();
+        if(mark.shape==='charge'&&mark.direction){
+          const d=mark.direction,k=cell*.17;
+          ctx.moveTo(cx-d.x*k-d.y*k,cy-d.y*k+d.x*k);
+          ctx.lineTo(cx+d.x*k,cy+d.y*k);
+          ctx.lineTo(cx-d.x*k+d.y*k,cy-d.y*k-d.x*k);ctx.stroke();
+        }else if(mark.layer){
+          ctx.font='600 '+Math.max(8,Math.min(13,cell*.25))+'px sans-serif';
+          ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(String(mark.layer),cx,cy);
+        }else if(mark.shape==='square'){
+          ctx.strokeRect(cx-cell*.12,cy-cell*.12,cell*.24,cell*.24);
+        }else if(mark.locked){
+          ctx.strokeRect(cx-cell*.09,cy-cell*.08,cell*.18,cell*.16);
+        }else{
+          ctx.beginPath();ctx.arc(cx,cy,cell*.11,0,Math.PI*2);ctx.stroke();
+        }
       }
       ctx.restore();
     }

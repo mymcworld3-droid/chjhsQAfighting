@@ -222,12 +222,18 @@
       const start=move==='wild-echo'?Math.max(0,r-1):0,reach=start+(r-start)*phase(p,.05,.82);
       const x=ox+(origin.x-reach)*size,y=oy+(origin.y-reach)*size;
       c.save();c.beginPath();for(const tile of cells)c.rect(ox+tile.x*size,oy+tile.y*size,size,size);c.clip();
-      c.globalAlpha=beat*.85;c.strokeStyle=gold;c.lineWidth=Math.max(1,size*.065);c.strokeRect(x,y,(w+2*reach)*size,(h+2*reach)*size);
+      for(const [color,width,alpha] of [['#a7582a',.16,.2],['#d9914b',.08,.75],['#ffe2aa',.022,.9]]){
+        c.globalAlpha=beat*alpha;c.strokeStyle=color;c.lineWidth=Math.max(1,size*width);c.strokeRect(x,y,(w+2*reach)*size,(h+2*reach)*size);
+      }
       for(const at of hit){circle(at,.14+.2*p,beat*.44,ember,.022);}
       c.restore();
     }else if(move==='wild-charge'||move==='wild-charge-wall'){
       const at=move==='wild-charge-wall'?to:from;
       circle(at,.18+.48*p,beat*.8,gold,.035);sparks(at,12,ember,.75);
+      if(!above&&!scene.reducedMotion)for(let i=0;i<9;i++){
+        const angle=i*2.399963,travel=size*(.12+p*.42)*(1+(i%3)*.18);
+        c.globalAlpha=beat*.17;c.fillStyle=i%2?'#d99b66':'#b67c54';c.beginPath();c.ellipse(at.x+Math.cos(angle)*travel,at.y+Math.sin(angle)*travel*.42,size*(.06+p*.1),size*(.025+p*.045),0,0,Math.PI*2);c.fill();
+      }
       if(move==='wild-charge-wall')impact(at,p,ember);
     }else if(move.startsWith('peak-sword-')){
       // Restrict horizontal sword effects to the exact committed attack tiles.
@@ -461,6 +467,13 @@
         const previous=center(route[index]),next=center(route[index+1]);
         const dx=next.x-previous.x,dy=next.y-previous.y,length=Math.hypot(dx,dy)||1;
         const forward={x:dx/length,y:dy/length},side={x:-forward.y,y:forward.x};
+        if(move==='wild-charge'&&!scene.reducedMotion){
+          c.shadowBlur=0;for(let j=0;j<8;j++){
+            const offset=(j%4-1.5)*size*.13,trail=(.18+(j%3)*.17)*size;
+            c.globalAlpha=beat*.19;c.fillStyle=j%2?'#d4a06e':'#a66d48';c.beginPath();
+            c.ellipse(current.x-forward.x*trail+side.x*offset,current.y-forward.y*trail+side.y*offset,size*(.08+.08*p),size*(.035+.045*p),0,0,Math.PI*2);c.fill();
+          }c.shadowBlur=size*.16;
+        }
         for(let i=0;i<5;i++){
           const offset=(i-2)*size*.1;
           c.globalAlpha=(1-p)*(.22+(i%2)*.18);c.lineWidth=Math.max(1,size*.02);c.beginPath();

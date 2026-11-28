@@ -141,7 +141,7 @@
 
 - 8d1253e 的回歸 46123600923、候選版 46123600950、瀏覽器 46123600978、Pages 46123600504 均成功；最新文件 7f40da4 的回歸 46123682334、瀏覽器 46123682239、Pages 46123681635 皆成功。
 
-## 第 6 階段：方形震波及靈獸 AI（程式已實作，待 CI）
+## 第 6 階段：方形震波及靈獸 AI（已驗收）
 
 - 重用鳴鐘圖騰的 squareRing/squareArea 幾何及 outward 方向規則：震地兩層聯集只命中一次，連環震地四個互斥外圈依序讀取當前玩家位置，每層最多一次傷害及一格合法擊退。2×2 領主以完整占位最短 Chebyshev 距離及占位中心向外推動，阻擋不重複命中，反傷或死亡立即停止。每層獨立實際事件及基礎方形動畫，未更動玩家鳴鐘圖騰。
 - 新房間全部正式配置：三赤鬃蠻豬衝撞、三裂地蠻牛震地（合體/渡劫另可衝撞）、領主三技能。舊測試房間保留技能快照。萬獸仍 hidden。
@@ -155,3 +155,13 @@
 - 實作提交 [acc1c8fc0ffb4e61d082ff1cb023c78a5994317d](https://github.com/mymcworld3-droid/chjhsQAfighting/commit/acc1c8fc0ffb4e61d082ff1cb023c78a5994317d)，完整回歸 46124234668（job 140915133774）：3313 項、3312 通過、0 失敗、1 跳過，靜態資源版本一致；八組新增測試均成功。
 - [New weapon release candidate acceptance 46124234634](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46124234634)：in_progress/未結論；[Tactical browser acceptance 46124234657](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46124234657)：in_progress/未結論；[Cultivation regression tests 46124234668](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46124234668)：completed/success；[pages build and deployment 46124233974](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46124233974)：completed/success。候選版已通過 10/15，失敗 0。
 - 本地完整工作樹仍不可用，以 GitHub Actions 驗收。第七階段須先確認最新提交全部 CI、修復任何失敗，再完成入口浮空島素材、透明背景、沙塵與方形震波視覺、鎖定預告、共用名稱牌、手機平板適配；不得提前公開。
+
+### 第六階段正式結案（2026-11-28）
+
+- acc1c8f 的回歸 46124234668、候選版 46124234634（15/15）、瀏覽器 46124234657、Pages 46124233974 全數成功；b547f9b 的回歸 46124329725、瀏覽器 46124329757、Pages 46124329436 全數成功。
+
+## 第 7 階段：美術及介面（部分實作，待 CI 及素材上傳）
+
+- 萬獸赤砂色調、地面砂粒及砂岩細節、低伏蓄勢、踏地沙塵、衝撞尾跡、撞牆震動、方形金銅震波；以伺服器每層事件同步傷害演出，不改戰鬥規則。預告格新增方向、方形、波次及追蹤標記，均在角色下層；新增預告回歸。
+- 浮空島已生成 1312×1199 RGBA PNG（透明 Alpha 0–255），但本地 GitHub DNS 不可用且 GitHub 連接器只接收 base64 字串、無法直接接收生成檔案，尚未提交原圖。保持既有安全 fallback，不建立破圖路徑；須補上 public/assets/dungeons/beast-wilds.png、atlasArt 對應、資源版本及原圖風格/透明度驗收才可結案。未公開萬獸險域，不提前開始第八階段。
+- 修改 public/cultivation/tactical-threat-visuals.js、public/cultivation/tactical-renderer.js、public/cultivation/tactical-animation.js、public/cultivation/tactical-skill-effects.js、tests/tactical-threat-visuals.test.cjs、靜態版本及進度文件。待 npm test、npm run test:battle、npm run check:module-versions、Chromium、候選版及 Pages。
