@@ -2,7 +2,7 @@
 
 規格：V1.0，`docs/adaptive-learning-engine-beta.md`（完整 324 行，Git blob `6b29dad7bd791e962718be32c08202840cd695b4`）。
 目標分支：main。基準提交：`8614dff06518962901e123a010dbfddc5d37a453`（2026-11-28）。
-階段 0｜最新 main 盤點與架構基線：**passed**。階段 1｜Beta 入口及功能開關：**passed**。當前階段 2A｜共用資料契約與隔離基礎：**in_progress**，待 CI 及 2B。最新通過階段：1。
+階段 0｜最新 main 盤點與架構基線：**passed**。階段 1｜Beta 入口及功能開關：**passed**。階段 2A｜共用資料契約與隔離基礎：**passed**。當前階段 2B｜隱私清除、資料層及回滾：**in_progress**，待新 CI 及部署權限查核。最新通過完整階段：1。
 本文件與測試修正為同一提交；提交 SHA 由 `git log -1 --format=%H -- docs/adaptive-learning-engine-progress.md` 或 GitHub 檔案歷史取得，不在提交內容內自我引用雜湊。Beta 僅完成獨立開發預覽入口；正式環境未啟用。
 
 ## 0A. 實際程式盤點與重用清單
@@ -66,8 +66,8 @@
 |---|---|
 | 0 | passed — 124e2e2 基準 CI 全部成功 |
 | 1 | passed — 917be25 全部 23 項 CI checks 成功，四種 Chromium 尺寸通過 |
-| 2A | in_progress — 資料契約及隔離基礎，待新 CI |
-| 2B | not_started — 隱私清除、正式資料層權限及回滾驗收 |
+| 2A | passed — 6017cd0 21 checks 全部成功 |
+| 2B | in_progress — D1 專用儲存、帳號清除、遷移防護及回滾測試；待 CI 與正式環境驗證 |
 | 3–26 | not_started |
 
 接續時先讀完整規格與本文件，核對最新 main 的 CI。若仍有失敗，修正本階段阻塞，不降低驗收。若本次測試修正的 CI 通過，記錄真實 run URL、測試數與提交 SHA，再開始第 1 階段。未確認正式搜尋服務不等於現有搜尋已啟用；第 3 階段需完成真實驗證。
@@ -103,3 +103,14 @@
 - 測試命令：node --test tests/adaptive-learning-engine-beta-contract.test.cjs（完整 CI glob 自動包含）、npm run check:module-versions、既有完整回歸及瀏覽器 workflow。本地未執行完整 checkout；新 CI 待確認。
 - 遷移/回滾：D1 使用既有 documents 通用結構，無 DDL/批次搬遷；舊 users、focusedUnits、adaptiveLearningV1、舊題庫不被重寫。未知版本拒絕並保留原資料，日後新增版本須以明確轉換及測試處理；關閉 Beta 即停止新路由，先保留合法 Beta 資料，不自動逆向覆蓋 legacy。第 2B 補可驗證的匯出、清除與回滾演練，禁止對真實玩家啟用持久寫入直至確認。
 - 阻塞與後續：專案只有 firestore-c.rules，未找到 A 專案實際生效的 Firestore Rules；不能從 D1 的 API 拒絕推斷 Firestore 亦安全。既有 public/account-delete.js 的帳號刪除沒有 Beta 集合清除。第 2B 需整合經認證的資料清除、確認 Firestore A/D1 後端隔離及保留期限/停用測試；正式搜尋服務仍屬第 3 階段。正式 Beta 保持 release-locked；本階段沒有啟用新資料路由。CI 完成後仍需先完成 2B，才能標記第 2 階段 passed。
+
+## 第 2A 階段最終驗收（2026-11-28）
+基準 `6017cd0f1332a6dc1d94850f8c65ca9baed8e63c`。完整回歸 [46155720131](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46155720131)：3347 tests、3346 pass、0 fail、1 skipped。另 [戰鬥瀏覽器](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46155720104)、[武器候選](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46155720107)、[Pages](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46155718915) 與 Worker 全部成功（21 checks）。第 2A 通過。
+
+## 第 2B 階段｜帳號清除、權限、遷移回滾
+- Firestore A 正式 Rules 未能取得，不能宣稱已驗證或直接覆寫既有 Rules。改採 D1 A 專用 Beta 儲存：production factory 必須明確 D1 + STORAGE_REQUIRED=1，底層只接受 D1Store A（唯一例外為明確標示的隔離記憶體測試 fixture）。沒有 Beta 資料讀寫 HTTP 路由；唯一新增 POST 是經身份驗證的本人清除。原有 Firestore A 遊戲資料不搬遷、不更動。若既有遊戲仍使用 Firestore，不啟用 Beta 持久化。
+- purgeOwnerBatch：先提交獨立 hashed deletion fence，全部 private read/append transaction 檢查 fence；再逐集合按 ownerId 查詢、有限批次交易清除 scope/head/job/queue/attempt/mastery/report，重試直到完整；不影響其他玩家或 shared collection。fence 僅保存 schemaVersion、blocked、complete 與雜湊鍵，不存原 UID 或學習內容；屬最小化的假名化安全標記，保留防止遲到工作復活已刪資料。尚未建立經 Auth 刪除確認後的保留期限與自動回收，後續需納入維運驗收，不宣稱所有 metadata 皆抹除。
+- delete-my-data 由已驗證 A token 推導 owner，拒絕 body UID；驗證撤銷及 account provider，已綁定要求最近 5 分鐘認證，未綁定匿名沿用原有一次確認政策。Beta 關閉時仍能清除。客戶端保留原有確認及 Google reauth，清除完成後才刪 canonical user/Auth；失敗保留帳號可重試。啟用 STORAGE_REQUIRED 後通用 D1 canonical user 刪除亦須交易核對 complete fence，包括管理員；未啟用前保留舊行為。若 D1 憑證缺失但已要求 D1，fail closed；部署前 Firestore-only 且從未允許 Beta 持久化時可以回傳 not-configured。不可在啟用後清除 STORAGE_REQUIRED 或 D1 憑證來繞過清除。
+- legacy Firestore→D1 CLI 與 admin migration 拒絕 reserved Beta 前綴來源或 snapshot；既有嚴格 final 對帳保留。禁止將未知 Firestore 文件當可信 Beta 資料匯入。新增 docs/adaptive-learning-engine-data-operations.md 說明版本、回滾及核驗流程。
+- 測試包含 D1 SQLite 實際 adapter fixture 的分頁、重送、跨帳號、舊版讀寫、rollback backend、fence、權限；前端 VM 測試保留原有刪除流程與新增失敗情境。正式資料庫未執行刪除、匯入或回滾；測試資料均 synthetic。正式 Firestore Rules、D1 部署憑證、實際資料保留/備份清除仍待核驗；直接 Firebase Auth 刪除或其他管理服務的刪除事件尚無生命週期 hook，正式持久寫入前必須補完或取得等效受控清除證據，不能以 fixture 代替正式驗收。
+- 本提交 CI 未確認；維持第 2B in_progress，不提前進入第 3 階段。正式 Beta release flag 仍 false。

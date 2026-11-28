@@ -53,7 +53,7 @@ test('legacy adapter leaves q/correct/wrong/exp intact and never imports approva
   assert.deepEqual(legacy,before);assert.equal(candidate.stem,legacy.q);assert.deepEqual(candidate.options,[legacy.correct,...legacy.wrong]);assert.equal(candidate.validationStatus,'pending');assert.equal(candidate.validatorVersion,null);
 });
 async function exercise(db){
-  const store=S.createStore({db,verify:async req=>req.authenticatedUid});
+  const store=S.createStore({db,verify:async req=>req.authenticatedUid,testFixture:!db.isD1});
   const a=await store.forRequest({authenticatedUid:'u1',body:{ownerId:'u2'}});
   const b=await store.forRequest({authenticatedUid:'u2'});
   const v1=await a.append('scope',scope);assert.deepEqual(v1,scope);

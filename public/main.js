@@ -34,7 +34,7 @@ void import('./cultivation/data/index.js').catch((error) => {
 });
 
 // 帳號刪除是登入核心旁的獨立增強；載入失敗也不能阻斷 Google 登入。
-void import('./account-delete.js?v=20261120-guest-account-delete-v1').catch((error) => {
+void import('./account-delete.js?v=20261128-adaptive-privacy-v1').catch((error) => {
   console.error('[Account Delete] failed to load account deletion controls', error);
 });
 

@@ -132,6 +132,7 @@ registerGameIssueApi(app);
 registerClassroomApi(app);
 const adaptiveLearning = registerAdaptiveLearningApi(app);
 require('./adaptive-learning-engine-beta-api.cjs').register(app);
+require('./adaptive-learning-engine-beta-privacy.cjs').register(app);
 
 // 僅回傳已配置 provider 的名稱與模型，不暴露 API key。
 app.get('/api/ai-status', (req, res) => {

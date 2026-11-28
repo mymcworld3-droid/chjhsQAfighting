@@ -3,6 +3,7 @@ const {randomUUID}=require('node:crypto');
 const {adminProject,PROJECT_IDS}=require('./firebase-admin-projects.cjs');
 const {getD1Store,Transaction,Codec}=require('./d1-store.cjs');
 const {hash}=require('./scripts/migrate-firestore-to-d1.cjs');
+const {isBetaPath}=require('./adaptive-learning-engine-beta-store.cjs');
 const ID='firestore-all-to-d1-v1',ROLES=['A','BD','C'],LEASE_MS=120000;
 const failure=(code,message=code,status=503)=>Object.assign(Error(message),{code,status});
 function autoMigrationEnabled(env=process.env){return env.D1_AUTO_MIGRATE_ON_ADMIN_LOGIN!=='0'&&!!env.D1_WORKER_URL&&String(env.D1_SERVICE_TOKEN||'').length>=32;}
@@ -45,6 +46,7 @@ function createController({env=process.env,source=role=>adminProject(role,{env:{
       const project=source(role);
       if(project.app?.options?.projectId!==PROJECT_IDS[role])throw failure('source-project-mismatch');
       const collections=await project.db.listCollections();
+      if(collections.some(c=>isBetaPath(c.path)))throw failure('RESERVED_BETA_SOURCE');
       await guarded(owner,[enqueue(role,'collection',collections.map(c=>c.path)),{
         sql:`UPDATE d1_admin_migration_jobs SET state=json_set(state,'$.roots.${role}',json('true')) WHERE id=?`,params:[ID]}]);
     }
@@ -57,6 +59,7 @@ function createController({env=process.env,source=role=>adminProject(role,{env:{
         '$.roots',json('{}'),'$.errorCode','','$.retryAfterMs',0) WHERE id=?`,params:[ID,ID]}]);
   }
   async function collectionStep(owner,task){
+    if(isBetaPath(task.path))throw failure('RESERVED_BETA_SOURCE');
     // Metadata only: listDocuments includes orphan subcollections' missing parents.
     // Player document bodies are subsequently read one at a time by documentStep.
     const refs=await source(task.namespace).db.collection(task.path).listDocuments();
@@ -68,6 +71,7 @@ function createController({env=process.env,source=role=>adminProject(role,{env:{
     await guarded(owner,[{sql:"UPDATE d1_admin_migration_tasks SET status='done' WHERE job_id=? AND namespace=? AND kind='collection' AND path=?",params:[ID,task.namespace,task.path]}]);
   }
   async function documentStep(owner,task,state){
+    if(isBetaPath(task.path))throw failure('RESERVED_BETA_SOURCE');
     const role=task.namespace,ref=source(role).db.doc(task.path);
     const snap=await ref.get();
     const children=await ref.listCollections();
@@ -138,7 +142,7 @@ function createController({env=process.env,source=role=>adminProject(role,{env:{
       }
     }catch(error){
       logger.warn('[D1 admin migration]',error.code||'unavailable');
-      const code=String(error.code||'unavailable'),blocked=['TARGET_CONFLICT','SOURCE_NOT_FROZEN','D1_ALREADY_ACTIVE','source-project-mismatch'].includes(code);
+      const code=String(error.code||'unavailable'),blocked=['TARGET_CONFLICT','SOURCE_NOT_FROZEN','D1_ALREADY_ACTIVE','source-project-mismatch','RESERVED_BETA_SOURCE'].includes(code);
       const quota=['8','resource-exhausted'].includes(code);
       const next=now()+(quota?60*60*1000:60000); // Firestore and D1 reset at different times; retry slowly without guessing.
       // A stale worker may not change the successor's progress or status.

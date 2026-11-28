@@ -4,7 +4,7 @@ const {getD1Store,Transaction,Query,Codec,validPath}=require('./d1-store.cjs');
 const {mayCommitDiscovery}=require('./refinery-discovery-commit.cjs');
 const {listed:publicDongtian}=require('./dongtian-access.cjs');
 const RealmGate=require('./realm-dungeon-gate.cjs');
-const {isBetaPath}=require('./adaptive-learning-engine-beta-store.cjs');
+const {isBetaPath,requireCleanupComplete}=require('./adaptive-learning-engine-beta-store.cjs');
 const fail=(message='無權存取這筆資料',status=403,code='permission-denied')=>Object.assign(Error(message),{status,code});
 const same=(a,b)=>JSON.stringify(Codec.encode(a??null))===JSON.stringify(Codec.encode(b??null));
 const changed=(a,b)=>[...new Set([...Object.keys(a||{}),...Object.keys(b||{})])].filter(k=>!same(a?.[k],b?.[k]));
@@ -202,6 +202,11 @@ async function executeCommit(db,input,context) {
   }
   const preview=tx.preview();
   for(const op of tx.writes)authorizeWrite({role:db.role,path:op.ref.path,before:tx.reads.get(op.ref.path).data()??null,after:preview.get(op.ref.path),operation:op,context,tx,preview});
+  // Once Beta persistence is authorized, old browser clients may not bypass
+  // the mandatory privacy cleanup by deleting a canonical player directly.
+  if(db.role==='A'&&context.betaStorageRequired===true)for(const [path,after] of preview){
+    if(after===null&&/^users\/[^/]+$/.test(path))await requireCleanupComplete(tx,db,path.slice(6));
+  }
   if(db.role==='A'&&!context.admin){
     const path='users/'+context.uid,after=preview.get(path),before=tx.reads.get(path)?.data();
     if(!before&&after?.stats&&RealmGate.needsRead({},after.stats.totalScore)){
@@ -239,7 +244,7 @@ function registerD1BrowserApi(app,{env=process.env,resolve=role=>adminProject(ro
           ?role==='A'&&target.path==='users/'+decoded.uid?ownRead:target.get():null;
         [own,initialSnapshot]=await Promise.all([ownRead,targetRead]);
       }
-      const context={uid:decoded.uid,admin:own?.data()?.isAdmin===true,decoded};
+      const context={uid:decoded.uid,admin:own?.data()?.isAdmin===true,decoded,betaStorageRequired:env.ADAPTIVE_LEARNING_ENGINE_STORAGE_REQUIRED==='1'};
       if(input.action==='commit'){
         for(let attempt=0;;attempt++){
           try{await executeCommit(db,input,context);break;}

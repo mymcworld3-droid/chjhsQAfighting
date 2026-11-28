@@ -8,10 +8,10 @@ const source = readFileSync(join(__dirname, '../public/account-delete.js'), 'utf
 const arrival = readFileSync(join(__dirname, '../public/cultivation/first-visit.js'), 'utf8');
 const legacy = readFileSync(join(__dirname, '../public/main-legacy.js'), 'utf8');
 
-function harness({ anonymous = true, linked = false, confirmations = [true, true], failDelete = false } = {}) {
+function harness({ anonymous = true, linked = false, confirmations = [true, true], failDelete = false, betaResults = [{ok:true,complete:true}] } = {}) {
   const calls = [];
   const user = { uid: 'u1', isAnonymous: anonymous,
-    providerData: linked ? [{ providerId: 'google.com' }] : [] };
+    providerData: linked ? [{ providerId: 'google.com' }] : [], getIdToken: async()=> 'fixture-token' };
   const firebase = { currentUser: user };
   const pages = Array.from({ length: 2 }, () => ({
     classList: { add(name) { calls.push(['page-hide', name]); }, remove(name) { calls.push(['page-remove', name]); } }
@@ -36,6 +36,7 @@ function harness({ anonymous = true, linked = false, confirmations = [true, true
     },
     CustomEvent: class { constructor(type, data) { this.type = type; this.detail = data.detail; } },
     console: { warn() {}, error() {} },
+    AbortSignal, fetch: async (url,init) => { calls.push(['beta-cleanup',url,init.headers.Authorization]); const data=betaResults.shift()||{ok:false,complete:false}; return {ok:data.ok===true,json:async()=>data}; },
     getApp: () => ({}), getAuth: () => firebase, getFirestore: () => ({}),
     GoogleAuthProvider: class {},
     reauthenticateWithPopup: async () => { calls.push(['reauth']); },
@@ -109,4 +110,20 @@ test('deletion explicitly resets the prior completed-arrival state and offers bo
   assert.match(arrival, /使用 Google 綁定帳號或登入/);
   assert.match(legacy, /window\.isUnboundGuestAccount = user => Boolean/);
   assert.match(legacy, /linkedGoogleIdentity\?\.uid !== user\.uid/);
+});
+
+test('account deletion waits for all Beta cleanup pages before touching canonical or Auth data', async () => {
+  const h=harness({betaResults:[{ok:true,complete:false},{ok:true,complete:true}]});
+  await h.ctx.window.deleteAccountPermanently();
+  const calls=h.calls.map(c=>c[0]);
+  assert.equal(calls.filter(c=>c==='beta-cleanup').length,2);
+  assert.ok(calls.lastIndexOf('beta-cleanup')<calls.indexOf('delete-doc'));
+  assert.ok(calls.indexOf('delete-doc')<calls.indexOf('delete-auth'));
+  assert.equal(h.calls.find(c=>c[0]==='beta-cleanup')[2],'Bearer fixture-token');
+});
+test('failed mandatory Beta cleanup preserves canonical player and Auth for retry', async () => {
+  const h=harness({betaResults:[{ok:true,complete:false},{ok:false,complete:false}]});
+  await h.ctx.window.deleteAccountPermanently();
+  assert.ok(h.calls.some(c=>c[0]==='alert'));
+  assert.ok(!h.calls.some(c=>['delete-doc','delete-auth','welcome','toast'].includes(c[0])));
 });

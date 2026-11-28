@@ -6,6 +6,7 @@ const fs=require('node:fs'),path=require('node:path'),readline=require('node:rea
 const {createHash}=require('node:crypto');
 const {adminProject,PROJECT_IDS}=require('../firebase-admin-projects.cjs');
 const {getD1Store,Codec,validPath}=require('../d1-store.cjs');
+const {isBetaPath}=require('../adaptive-learning-engine-beta-store.cjs');
 const stable=v=>Array.isArray(v)?v.map(stable):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,stable(v[k])])):v;
 const hash=v=>createHash('sha256').update(typeof v==='string'?v:JSON.stringify(stable(v))).digest('hex');
 async function exportSnapshot({directory,roles=['A','BD','C'],resolve=role=>adminProject(role,{env:{...process.env,GAME_DATA_BACKEND:'firestore'}}),log=console.log}) {
@@ -21,6 +22,7 @@ async function exportSnapshot({directory,roles=['A','BD','C'],resolve=role=>admi
       const db=resolve(role).db;
       manifest.sources.push({namespace:role,projectId:PROJECT_IDS[role]});
       async function visit(collection){
+        if(isBetaPath(collection.path))throw Error('Reserved Beta collection in Firestore; audit before migration');
         // listDocuments includes missing parent documents with live subcollections.
         const refs=await collection.listDocuments();
         let count=0;
@@ -48,7 +50,7 @@ async function exportSnapshot({directory,roles=['A','BD','C'],resolve=role=>admi
 async function* rows(directory){
   const file=path.join(directory,'snapshot.ndjson');
   const stream=readline.createInterface({input:fs.createReadStream(file),crlfDelay:Infinity});
-  try {for await(const line of stream){if(!line)continue;const row=JSON.parse(line);if(!PROJECT_IDS[row.namespace])throw Error('Invalid namespace');validPath(row.path);if(hash(row.data)!==row.sha256)throw Error('Document checksum mismatch: '+row.namespace+':'+row.path);yield row;}}
+  try {for await(const line of stream){if(!line)continue;const row=JSON.parse(line);if(!PROJECT_IDS[row.namespace])throw Error('Invalid namespace');validPath(row.path);if(isBetaPath(row.path))throw Error('Reserved Beta collection in legacy snapshot');if(hash(row.data)!==row.sha256)throw Error('Document checksum mismatch: '+row.namespace+':'+row.path);yield row;}}
   finally{stream.close();}
 }
 async function validateSnapshot(directory){

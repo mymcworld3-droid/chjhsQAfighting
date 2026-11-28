@@ -106,6 +106,27 @@ import {
     return warnings;
   }
 
+  // Mandatory server-side cleanup, including when Beta is switched off.
+  // Retry bounded pages before deleting canonical player data or Firebase Auth.
+  async function cleanupAdaptiveBeta(user) {
+    for (let page = 0; page < 30; page++) {
+      if (auth().currentUser?.uid !== user.uid) throw new Error('登入帳號已變更，請重新確認刪除。');
+      const token = await user.getIdToken(true);
+      if (auth().currentUser?.uid !== user.uid) throw new Error('登入帳號已變更，請重新確認刪除。');
+      const response = await fetch('/api/adaptive-learning-engine-beta/delete-my-data', {
+        method: 'POST', headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+        body: '{}', cache: 'no-store', signal: AbortSignal.timeout(90000)
+      });
+      const result = await response.json().catch(() => null);
+      if (auth().currentUser?.uid !== user.uid) throw new Error('登入帳號已變更，請重新確認刪除。');
+      if (!response.ok || result?.ok !== true || typeof result.complete !== 'boolean') {
+        throw new Error(result?.error || '學習資料清除失敗，請重試。');
+      }
+      if (result.complete) return;
+    }
+    throw new Error('學習資料尚未清除完畢，請再次確認刪除以續傳。');
+  }
+
   async function permanentlyDeleteAccount(button) {
     if (deleting) return;
     const user = auth().currentUser;
@@ -143,9 +164,12 @@ import {
         await reauthenticateWithPopup(user, new GoogleAuthProvider());
       }
 
+      setButtonState(button, true, '<i class="fa-solid fa-spinner fa-spin mr-2"></i> 清除學習資料中...');
+      await cleanupAdaptiveBeta(user);
       const database = db();
       setButtonState(button, true, '<i class="fa-solid fa-spinner fa-spin mr-2"></i> 清除角色資料中...');
       const warnings = await cleanupOwnedData(database, user.uid);
+      if (auth().currentUser?.uid !== user.uid) throw new Error('登入帳號已變更，請重新確認刪除。');
 
       // canonical 玩家文件必須成功刪除；失敗時不繼續刪 Auth，避免失去修復機會。
       await deleteDoc(doc(database, 'users', user.uid));
