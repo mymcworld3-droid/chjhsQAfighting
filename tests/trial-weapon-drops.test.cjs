@@ -3,7 +3,7 @@ const {test}=require('node:test'),assert=require('node:assert/strict');
 const Manuals=require('../public/cultivation/manual-rules.js');
 const {roll}=require('../manual-reward-rules.cjs');
 const room=stage=>({mode:'pve',trial:{stage,layoutVersion:4}});
-const eligible=Manuals.BOOKS.filter(b=>b.tierRealm==='煉氣'&&b.id!=='body-bell');
+const eligible=Manuals.BOOKS.filter(b=>b.tierRealm==='煉氣');
 const filled=()=>Object.fromEntries(eligible.map(b=>[b.id,{exp:70}]));
 test('ordinary trial at every stage awards missing eligible native 煉氣 weapons before any copies',()=>{
  for(const stage of [1,5,20,150,1000000]){
@@ -25,7 +25,7 @@ test('ordinary trial at every stage awards missing eligible native 煉氣 weapon
    assert.ok(eligible.some(b=>b.id===next.drop));
    assert.equal(s.manualDrops.u.duplicate,true);
    assert.equal(Manuals.refinementFor(state.books[next.drop]),1);
-   assert.equal(state.books['body-bell'],undefined);
+   assert.equal(Boolean(state.books['body-bell']),Manuals.RELEASE_NEW_WEAPONS);
   }
  }
 });
@@ -78,4 +78,16 @@ test('non-trial legacy reward pool still excludes owned weapons and may award be
  const r=roll({mode:'coop'},'u',state,()=>0);
  assert.equal(r.drop,Manuals.RELEASE_NEW_WEAPONS?'body-bell':null);
  assert.equal(roll({mode:'coop'},'u',state,()=>{throw Error('exhausted pool must not roll');}).drop,null);
+});
+
+test('released bell is awarded as the last missing native 煉氣 weapon, then can refine on repeated drops',()=>{
+ if(!Manuals.RELEASE_NEW_WEAPONS)return;
+ assert.deepEqual(eligible.map(b=>b.id).sort(),['body-bell','body-rock','sword-prism','sword-wind']);
+ const books=filled();delete books['body-bell'];
+ const state=Manuals.normalize({school:'body',books,dropMisses:3});
+ const first=room(10);assert.equal(roll(first,'u',state,()=>0).drop,'body-bell');
+ assert.equal(first.manualDrops.u.duplicate,false);assert.equal(state.dropMisses,0);
+ state.dropMisses=3;
+ const second=room(11);assert.equal(roll(second,'u',state,()=>eligible.findIndex(b=>b.id==='body-bell')).drop,'body-bell');
+ assert.equal(second.manualDrops.u.duplicate,true);assert.equal(Manuals.refinementFor(state.books['body-bell']),1);
 });

@@ -1,6 +1,5 @@
 'use strict';
 // Ordinary trials drop eligible native 煉氣 weapons, missing first, then copies.
-// 鳴鐘圖騰 is temporarily excluded from ordinary trials only; other pools stay unchanged.
 // Called only after a server-verified win, in the same A transaction as the
 // reward receipt. The returned state must be saved even when a roll misses.
 const crypto=require('node:crypto');
@@ -8,7 +7,7 @@ const Manuals=require('./public/cultivation/manual-rules.js');
 function roll(s,uid,raw,randomInt=crypto.randomInt){
   const state=raw?.version===2?raw:Manuals.normalize(raw);
   const ordinaryTrial=s?.mode==='pve'&&!!s.trial&&!s.weaponDungeon;
-  const eligible=Manuals.BOOKS.filter(book=>!ordinaryTrial||(book.tierRealm==='煉氣'&&book.id!=='body-bell'));
+  const eligible=Manuals.BOOKS.filter(book=>!ordinaryTrial||book.tierRealm==='煉氣');
   const missing=eligible.filter(book=>!state.books[book.id]);
   const duplicatePool=ordinaryTrial&&!missing.length;
   const available=duplicatePool?eligible:missing;
