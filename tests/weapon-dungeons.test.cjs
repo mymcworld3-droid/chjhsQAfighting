@@ -465,3 +465,87 @@ test('legacy v2 prepared stone warning still resolves once after reload without 
  assert.equal(s.actors[0].hp,9900);assert.equal(s.actors[1].intent.version,3);
  assert.equal(s.actors[1].intent.skillId,'stone-fall');
 });
+
+test('new Peak Stone layouts assign distinct sword techniques to guards and all four to the lord',()=>{
+ for(let difficulty=0;difficulty<6;difficulty++){
+  const s=R.create({id:'swords',players:[hero()],trial:{seed:'swords',weaponDungeon:{difficulty}},now:NOW});
+  const lord=s.actors[1],guards=s.actors.slice(2);
+  assert.deepEqual(new Set(lord.dungeonSkills.map(sk=>sk.id)),new Set(Object.values(W.PEAK_SKILLS).map(sk=>sk.id)));
+  assert.ok(guards.every(m=>m.dungeonSkills.length===2&&!m.dungeonSkills.some(sk=>sk.lordOnly)));
+  assert.ok(guards.some(m=>m.dungeonSkills.some(sk=>sk.id===W.PEAK_SKILLS.line.id)));
+  assert.ok(guards.some(m=>m.dungeonSkills.some(sk=>sk.id===W.PEAK_SKILLS.thrust.id)));
+  assert.equal(s.width,13);assert.equal(s.height,21);assert.equal(s.weaponDungeon.totemDamageMultiplier,1.15);
+ }
+});
+test('all four Peak Stone sword skills use published cells, real damage and committed animation identifiers',()=>{
+ for(const [name,sk] of Object.entries(W.PEAK_SKILLS)){
+  const options={boss:name==='rain',enemy:{x:4,y:4},player:{x:7,y:4}};
+  let s=configuredScene(sk,options);
+  const intent=s.actors[1].intent;assert.equal(intent.skillId,sk.id);
+  assert.ok(intent.cells.some(q=>R.key(q)===R.key(s.actors[0])));
+  const before=JSON.parse(JSON.stringify(s));
+  s=R.apply(s,'u1',{type:'end'},NOW);
+  assert.equal(s.actors[0].hp,9900);
+  const cast=s.events.find(ev=>ev.type==='monster-attack'&&ev.actor==='beast');
+  assert.equal(cast.skill,sk.id);assert.deepEqual(cast.animation.cells,intent.cells);
+  const animation=require('../public/cultivation/tactical-animation.js');
+  const plan=animation.plan(before,s,'u1');
+  assert.ok(plan.some(scene=>scene.skill===sk.id&&scene.kind==='cast'));
+  if(name==='thrust'){
+   const dash=s.events.find(ev=>ev.type==='displace'&&ev.actor==='beast');
+   assert.deepEqual(dash.path,[{x:4,y:4},{x:5,y:4},{x:6,y:4}]);
+   assert.equal(s.actors[1].x,6);
+  }
+ }
+});
+test('sword line tracks a new legal cardinal direction but cannot turn a corner or cross walls',()=>{
+ const sk=W.PEAK_SKILLS.line;
+ let s=configuredScene(sk,{enemy:{x:4,y:4},player:{x:7,y:4}});
+ s=R.apply(s,'u1',{type:'move',x:4,y:7},NOW);
+ assert.equal(s.actors[1].intent.skillId,sk.id);
+ assert.deepEqual(s.actors[1].intent.direction,{x:0,y:1});
+ s=R.apply(s,'u1',{type:'move',x:5,y:7},NOW);
+ assert.equal(s.actors[1].intent.cells.length,0);
+ assert.equal(R.apply(s,'u1',{type:'end'},NOW).actors[0].hp,10000);
+ s=configuredScene(sk,{enemy:{x:4,y:4},player:{x:7,y:4}});
+ s.blocks=[{x:5,y:4}];R.prepareIntents(s);
+ assert.equal(s.actors[1].intent.kind,'advance');
+});
+test('sweep follows lateral steps, lord rain is finite, and all sword warnings can be interrupted',()=>{
+ let s=configuredScene(W.PEAK_SKILLS.sweep,{enemy:{x:4,y:4},player:{x:6,y:4}});
+ s=R.apply(s,'u1',{type:'move',x:6,y:5},NOW);
+ assert.ok(s.actors[1].intent.cells.some(q=>R.key(q)===R.key(s.actors[0])));
+ const rain=configuredScene(W.PEAK_SKILLS.rain,{boss:true,enemy:{x:4,y:4},player:{x:7,y:4}});
+ assert.equal(rain.actors[1].intent.cells.length,12); // one body tile is excluded
+ for(const [name,sk] of Object.entries(W.PEAK_SKILLS)){
+  const boss=name==='rain',enemy={x:7,y:4},player={x:6,y:4};
+  // Thrust requires a free advance tile, so use a ranged knockback fixture separately.
+  if(name==='thrust')continue;
+  let st=configuredScene(sk,{boss,enemy,player,skills:['rock-break']});
+  assert.equal(st.actors[1].intent.kind,'attack');
+  st=R.apply(st,'u1',{type:'manual',skillId:'rock-break',x:7,y:4},NOW);
+  assert.equal(st.actors[1].intent.kind,'stagger');
+  assert.equal(R.apply(st,'u1',{type:'end'},NOW).actors[0].hp,10000);
+ }
+});
+test('large thrust cannot cross a blocked body lane or another beast, and saved warning resolves deterministically',()=>{
+ const sk=W.PEAK_SKILLS.thrust,options={boss:true,enemy:{x:4,y:4},player:{x:8,y:4}};
+ let s=configuredScene(sk,options);
+ assert.equal(s.actors[1].intent.path.length,2);
+ const saved=JSON.parse(JSON.stringify(s));assert.deepEqual(R.apply(saved,'u1',{type:'end'},NOW),R.apply(s,'u1',{type:'end'},NOW));
+ s.blocks=[{x:6,y:5}];R.prepareIntents(s);assert.equal(s.actors[1].intent.kind,'advance');
+ s=configuredScene(sk,options);
+ const blocker=R.actor({uid:'blocker',bot:true,team:'monster',species:8,atk:1,maxHp:1000,dungeonSkills:[]},{x:6,y:5});
+ s.actors.push(blocker);
+ const next=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(next.actors[0].hp,10000);
+ assert.ok(R.footprint(next.actors[1]).every(q=>!R.blocked(next,q)&&!R.covers(next.actors[2],q)));
+});
+test('the next legal sword rotates after a cast without changing the already announced skill',()=>{
+ const skills=[W.PEAK_SKILLS.line,W.PEAK_SKILLS.sweep];
+ let s=configuredScene(skills,{enemy:{x:4,y:4},player:{x:7,y:4}});
+ assert.equal(s.actors[1].intent.skillId,skills[0].id);
+ s=R.apply(s,'u1',{type:'end'},NOW);
+ assert.equal(s.actors[1].lastDungeonSkill,skills[0].id);
+ assert.equal(s.actors[1].intent.skillId,skills[1].id);
+});

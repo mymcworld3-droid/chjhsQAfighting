@@ -8,10 +8,21 @@
     ['foundation','築基',5],['golden','金丹',10],['nascent','元嬰',20],
     ['divine','化神',35],['unity','合體',80],['tribulation','渡劫',110]
   ].map(([id,name,stage],index)=>Object.freeze({id,name,stage,index})));
+  // Provisional ranges; damage multipliers retain the previous stone attack.
+  // All new rooms receive explicit immutable definitions, old saved rooms keep
+  // their existing skill snapshots until the next dungeon is started.
+  const PEAK_SKILLS=Object.freeze({
+    line:Object.freeze({id:'peak-sword-line',name:'直線劍氣',shape:'line',range:5,power:1,warning:'tracking',animation:'peak-sword-line'}),
+    sweep:Object.freeze({id:'peak-sword-sweep',name:'橫掃斬擊',shape:'cone',range:3,power:1,warning:'tracking',animation:'peak-sword-sweep'}),
+    thrust:Object.freeze({id:'peak-sword-thrust',name:'穿刺突進',shape:'line',range:3,moveSteps:2,requiresPath:true,power:1,warning:'tracking',animation:'peak-sword-thrust'}),
+    rain:Object.freeze({id:'peak-sword-rain',name:'劍雨',shape:'blast',range:4,radius:2,power:1,sight:true,lordOnly:true,warning:'tracking',animation:'peak-sword-rain'})
+  });
+  const peakSkills=role=>role==='lord'?[PEAK_SKILLS.rain,PEAK_SKILLS.thrust,PEAK_SKILLS.sweep,PEAK_SKILLS.line]:
+    role==='spirit'?[PEAK_SKILLS.line,PEAK_SKILLS.sweep]:role==='guard'?[PEAK_SKILLS.thrust,PEAK_SKILLS.line]:[PEAK_SKILLS.sweep,PEAK_SKILLS.thrust];
   const CATALOG=Object.freeze([Object.freeze({id:ID,name:NAME,subtitle:'群峰深處 · 重甲之試',theme:'stone',rewardWeaponType:'sword',
     description:'穿過三重石陣擊敗深處領主即可通關，沿途守衛會持續追擊。',
-    traits:['追蹤落石','重甲靈獸','領主鎮守'],bonus:'圖騰攻擊傷害 +15%',
-    tactics:['蓄勢中的落石會追蹤站位；離開射程即可閃避。','成功擊退則會打斷蓄勢，撞牆未位移不算。','領主從開戰起即可攻擊，也能直接受到傷害及擊退，不必先清除守衛。','擊敗領主立即通關，剩餘守衛不必清除。'],totemDamageMultiplier:1.15})]);
+    traits:['追蹤劍法','重甲靈獸','領主劍雨'],bonus:'圖騰攻擊傷害 +15%',
+    tactics:['蓄勢中的劍法會追蹤站位；離開合法攻擊線或射程，或利用障礙物閃避。','成功擊退則會打斷蓄勢，撞牆未位移不算。','領主從開戰起即可攻擊，也能直接受到傷害及擊退，不必先清除守衛。','擊敗領主立即通關，剩餘守衛不必清除。'],totemDamageMultiplier:1.15})]);
   const WEAPON_REALMS=Object.freeze(['煉氣',...DIFFICULTIES.map(d=>d.name),'真仙']);
   // The drop ladder follows the six dungeon difficulties, with 煉氣 below 築基.
   const lowerRealm=realm=>WEAPON_REALMS[WEAPON_REALMS.indexOf(realm)-1]||null;
@@ -65,10 +76,10 @@
     else if(h%3===1){stone(3,14);stone(9,15);}
     else {stone(1,10);stone(11,9);}
     const enemies=[{x:5,y:1,species:8,name:'尖峰石域領主',boss:true,bossKind:'rock',weaponDungeonLord:true,
-      trackingAttack:true,hpFactor:7+index*1.2,attackFactor:1+index*.12,moveSteps:1,level:definition.stage}];
+      trackingAttack:true,dungeonSkills:peakSkills('lord'),hpFactor:7+index*1.2,attackFactor:1+index*.12,moveSteps:1,level:definition.stage}];
     for(let row=0;row<4;row++)for(const x of [4,8])enemies.push({x,y:15-row*3,species:row%2?9:8,
-      name:row%2?'尖峰石靈':'重甲巖獸',trackingAttack:true,hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
-    for(let i=0;i<index;i++)enemies.push({x:i%2?10:2,y:6+i*2,species:8,name:'石域守衛',trackingAttack:true,
+      name:row%2?'尖峰石靈':'重甲巖獸',trackingAttack:true,dungeonSkills:peakSkills(row%2?'spirit':'heavy'),hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
+    for(let i=0;i<index;i++)enemies.push({x:i%2?10:2,y:6+i*2,species:8,name:'石域守衛',trackingAttack:true,dungeonSkills:peakSkills('guard'),
       hpFactor:2.5+index*.35,attackFactor:.65+index*.09,moveSteps:1,level:definition.stage});
     const occupied=new Set(enemies.flatMap(a=>Array.from({length:a.boss?4:1},(_,i)=>(a.x+(a.boss?i%2:0))+','+(a.y+(a.boss?Math.floor(i/2):0)))));
     const safeBlocks=blocks.filter(p=>!occupied.has(p.x+','+p.y));
@@ -83,5 +94,5 @@
     if(Array.isArray(room.ground)&&room.ground.includes(13))room.ground=room.ground.map(t=>t===13?STONE_TERRAIN:t);
     return room;
   }
-  return Object.freeze({ID,NAME,DAILY_TICKETS,MAX_TICKETS,STONE_TERRAIN,restoreTerrain,DIFFICULTIES,WEAPON_REALMS,CATALOG,lowerRealm,day,progress,progressFor,recordClear,catalog,selection,layout});
+  return Object.freeze({ID,NAME,DAILY_TICKETS,MAX_TICKETS,STONE_TERRAIN,PEAK_SKILLS,restoreTerrain,DIFFICULTIES,WEAPON_REALMS,CATALOG,lowerRealm,day,progress,progressFor,recordClear,catalog,selection,layout});
 });

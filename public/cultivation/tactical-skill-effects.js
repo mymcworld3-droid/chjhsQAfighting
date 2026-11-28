@@ -13,7 +13,8 @@
     ?require('./tactical-rules.js'):globalThis.QATactical;
   const moves=new Set([
     'wind-slash','wind-step','wind-thousand','flight-summon','sky-cloud','sky-sever',
-    'rock-fist','rock-quake','rock-break','dragon-guard','dragon-roar','tiger-step','tiger-throw'
+    'rock-fist','rock-quake','rock-break','dragon-guard','dragon-roar','tiger-step','tiger-throw',
+    'peak-sword-line','peak-sword-sweep','peak-sword-thrust','peak-sword-rain'
   ]);
   const heavyMoves=new Set(['rock-fist','rock-quake','rock-break','dragon-guard','tiger-step','tiger-throw','wind-thousand','sky-sever']);
   const clamp=n=>Math.max(0,Math.min(1,n));
@@ -37,7 +38,7 @@
     const target=scene.target||origin,from=center(origin),to=center(target);
     const cells=scene.cells||[],hit=cells.map(center);
     const jade='#9df8dc',white='#effff4',gold='#ffc77b',ember='#ff9563';
-    const sword=['wind-slash','wind-step','wind-thousand','flight-summon','sky-cloud','sky-sever'].includes(move);
+    const sword=move.startsWith('peak-sword-')||['wind-slash','wind-step','wind-thousand','flight-summon','sky-cloud','sky-sever'].includes(move);
     const ink=sword?jade:gold,bright=sword?white:'#fff2c9';
     const dx=to.x-from.x,dy=to.y-from.y,length=Math.hypot(dx,dy)||1;
     const axis={x:dx/length,y:dy/length},side={x:-axis.y,y:axis.x};
@@ -214,7 +215,33 @@
         circle(at,.10+beat*.22,beat*.5,white,.016);
       }
     }
-    if(move==='wind-slash'){
+    if(move.startsWith('peak-sword-')){
+      // Restrict horizontal sword effects to the exact committed attack tiles.
+      // Rain falls from above per tile rather than sweeping across the board.
+      if(move==='peak-sword-rain'){
+        for(const [i,at] of hit.entries()){
+          const q=phase(p,.06+(i%3)*.035,.68+(i%3)*.035);
+          const head={x:at.x,y:at.y-size*1.4*(1-q)};
+          stroke({x:head.x-size*.12,y:head.y-size*.48},head,jade,.07,pulse(q));
+          stroke({x:head.x-size*.12,y:head.y-size*.48},head,white,.024,pulse(q));
+          if(q>.65)circle(at,.13+.25*q,beat*.65,jade,.022);
+        }
+      }else{
+        c.save();c.beginPath();for(const tile of cells)c.rect(ox+tile.x*size,oy+tile.y*size,size,size);c.clip();
+        const d=scene.direction||{x:Math.sign(dx),y:Math.sign(dy)},angle=Math.atan2(d.y,d.x);
+        for(const at of hit){
+          const forward=(at.x-from.x)*d.x+(at.y-from.y)*d.y;
+          const q=phase(p,Math.min(.27,Math.max(0,forward/size-1)*.055),.88);
+          if(move==='peak-sword-sweep')crescent(at,angle,q,jade,1.22);
+          else {
+            const start={x:at.x-d.x*size*.53,y:at.y-d.y*size*.53};
+            const end={x:at.x+d.x*size*.53,y:at.y+d.y*size*.53};
+            beam(start,end,q,jade,move==='peak-sword-thrust'?.095:.07,pulse(q));
+          }
+        }
+        c.restore();
+      }
+    }else if(move==='wind-slash'){
       const end=hit.at(-1)||to,q=phase(p,.06,.8);
       const sweep=point(from,end,q);
       for(let i=2;i>=0;i--)crescent(point(from,end,Math.max(0,q-i*.1)),Math.atan2(dy,dx),q, jade,1-i*.13);

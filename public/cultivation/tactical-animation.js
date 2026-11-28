@@ -144,7 +144,7 @@
   function combineManualImpact(scenes){
     for(let i=0;i<scenes.length;i++){
       const cast=scenes[i];
-      if(cast.kind!=='cast'||cast.weaponTimeline||cast.parallelImpact||cast.style==='fist-chain'||!manuals()?.BY_SKILL?.[cast.skill])continue;
+      if(cast.kind!=='cast'||cast.weaponTimeline||cast.parallelImpact||cast.style==='fist-chain'||(!manuals()?.BY_SKILL?.[cast.skill]&&!String(cast.skill||'').startsWith('peak-sword-')))continue;
       let j=i+1;const hits=new Set(),numbers=[],reflections=[],strikeImpacts=[[],[]];
       for(;j<scenes.length;j++){
         const scene=scenes[j];if(scene.eventRevision!==cast.eventRevision||scene.kind!=='damage')break;
@@ -169,7 +169,7 @@
       }
       if(!hits.size)continue;
       const separateHits=strikeImpacts.some(beat=>beat.length),move=moveFor(cast.skill);
-      Object.assign(cast,{parallelImpact:true,impactStart:cast.impactStart??hitTime[move]??.4,
+      Object.assign(cast,{parallelImpact:true,impactStart:cast.impactStart??hitTime[move]??(cast.skill==='peak-sword-rain'?.65:.4),
         numbers,reflections,after:scenes[j-1].after,duration:cast.throwImpact?cast.duration:flyingSwordPose(cast,0)?swordFlightDuration(cast):quickSwordCast(move)?500:separateHits?740:600,
         ...(separateHits?{strikeImpacts}:{})});
       scenes.splice(i+1,j-i-1);

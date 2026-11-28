@@ -214,6 +214,12 @@
   function monsterProfileFor(m){
     const profile=monsterProfile(m.species);
     if(!m.trackingAttack)return profile;
+    if(Array.isArray(m.dungeonSkills)&&m.dungeonSkills.length){
+      const sk=m.dungeonSkills.find(sk=>sk.id===m.intent?.skillId)||m.dungeonSkills[0];
+      return {...profile,name:m.name,attackName:sk.name,attack:{...sk},move:{kind:'heavy',steps:1},moveName:'重步',
+        attackText:m.dungeonSkills.map(sk=>sk.name).join('、')+'；蓄勢會追蹤合法方向及射程。',
+        moveText:'普通移動最多一格；穿刺突進另有合法技能位移。',tip:'避開合法攻擊線或射程，或成功擊退打斷蓄勢。'};
+    }
     return {...profile,name:m.name,attackName:m.weaponDungeonLord?'尖峰崩裂':'追蹤落石',
       attack:{shape:'blast',range:m.weaponDungeonLord?4:3,radius:m.weaponDungeonLord?1:0,sight:false,power:1},
       move:{kind:'heavy',steps:1},moveName:'重步',
@@ -249,6 +255,22 @@
     const body=footprint(m),board={width:s.width,height:s.height,blocked:p=>blocked(s,p)};
     const cells=body.flatMap(p=>G.squareRing(board,p,r));
     return [...new Map(cells.filter(p=>Math.min(...body.map(q=>Math.max(Math.abs(p.x-q.x),Math.abs(p.y-q.y))))===r).map(p=>[key(p),p])).values()];
+  }
+  // A thrust sweeps the full leading edge during legal movement and reaches
+  // one additional tile at its stopping position. It cannot hit through an
+  // intervening unit or through a wall blocking any part of a large body.
+  function dungeonThrustCells(s,m,direction,path){
+    if(!direction||!path.length)return [];
+    const origin=point(m),cells=[];
+    for(const anchor of [origin,...path]){
+      const body=footprint({...m,...anchor}),projection=p=>p.x*direction.x+p.y*direction.y;
+      const front=Math.max(...body.map(projection));
+      for(const p of body.filter(p=>projection(p)===front)){
+        const q={x:p.x+direction.x,y:p.y+direction.y};
+        if(!blocked(s,q))cells.push(q);
+      }
+    }
+    return [...new Map(cells.filter(p=>!covers(m,p)).map(p=>[key(p),p])).values()];
   }
   function dungeonSkillPlan(s,m,hero,sk){
     const body=footprint(m),target=point(hero);
@@ -290,19 +312,26 @@
         path.push(next);p=next;
       }
     }
+    if(sk.requiresPath){
+      if(!path.length)return empty;
+      cells=dungeonThrustCells(s,m,direction,path);
+      if(!cells.some(p=>key(p)===key(hero)))return empty;
+    }
     return {cells,path,waves,direction,target};
   }
   function dungeonIntent(s,m,hero,prior=null){
     const choices=dungeonSkillSet(s,m);
     // A tracking warning can move, but may never silently switch skills.
-    const candidates=prior?[choices.find(sk=>sk.id===prior.skillId)||(!prior.skillId?choices[0]:null)].filter(Boolean):choices;
+    const last=choices.findIndex(sk=>sk.id===m.lastDungeonSkill);
+    const ordered=last<0?choices:[...choices.slice(last+1),...choices.slice(0,last+1)];
+    const candidates=prior?[choices.find(sk=>sk.id===prior.skillId)||(!prior.skillId?choices[0]:null)].filter(Boolean):ordered;
     for(const sk of candidates){
       if(!dungeonSkillAllowed(s,m,sk))continue;
       const plan=dungeonSkillPlan(s,m,hero,sk),ready=plan.cells.length>0;
       if(!ready&&!prior)continue;
       return {version:3,kind:'attack',skillId:sk.id,skillName:sk.name,origin:point(m),...plan,
         shape:sk.shape,power:sk.power,warning:sk.warning,tracking:sk.warning==='tracking',
-        animation:sk.animation||sk.shape,slow:!!sk.slow,push:sk.push||0,interruptible:true,
+        animation:sk.animation||sk.shape,requiresPath:!!sk.requiresPath,slow:!!sk.slow,push:sk.push||0,interruptible:true,
         text:ready?'下次：'+sk.name+(sk.warning==='tracking'?'（追蹤，請退出射程）':'（鎖定）'):'已離開射程，本次'+sk.name+'無法命中'};
     }
     return {version:3,kind:'advance',cells:[],origin:point(m),target:point(hero),text:'下次：重步 1 格'};
@@ -1671,15 +1700,32 @@
     const intent=m.intent;
     if(intent?.kind==='attack'&&(!intent.origin||key(intent.origin)===key(m))){
       // Resolve only the published snapshot, including legacy v2 warnings.
-      const cells=intent.cells||[],name=intent.skillName||monsterProfileFor(m).attackName;
-      log(s,m.name+'施展「'+name+'」','monster-attack',{actor:m.uid,animation:{kind:'cast',style:intent.animation||intent.shape||'blast',origin:point(m),target:intent.target||point(hero),cells,color:'#d9a080'}});
+      let cells=intent.cells||[];
+      const name=intent.skillName||monsterProfileFor(m).attackName;
+      const skillId=(!intent.skillId||intent.skillId==='stone-fall'||intent.skillId==='stone-lord')?'monster-'+m.species:intent.skillId;
+      const origin=point(m);
+      if(intent.requiresPath){
+        const route=[origin];
+        // Recheck the committed route, never extend it or aim at a new target.
+        for(const q of intent.path||[]){
+          const previous=route.at(-1);
+          if(dist(previous,q)!==1||q.x-previous.x!==intent.direction?.x||q.y-previous.y!==intent.direction?.y||!canOccupy(s,m,q))break;
+          route.push(q);
+        }
+        const legal=new Set(dungeonThrustCells(s,m,intent.direction,route.slice(1)).map(key));
+        cells=cells.filter(p=>legal.has(key(p)));
+        Object.assign(m,route.at(-1));
+        motion(s,m,route,'dash',m.name+'穿刺突進',null);
+      }
+      if(intent.skillId)m.lastDungeonSkill=intent.skillId;
+      log(s,m.name+'施展「'+name+'」','monster-attack',{actor:m.uid,skill:skillId,animation:{kind:'cast',style:intent.animation||intent.shape||'blast',origin,target:intent.target||point(hero),cells,...(intent.direction?{direction:intent.direction}:{}),color:'#d9a080'}});
       let hit=false;
       const waves=intent.waves?.length?intent.waves:[{cells,layer:1}];
       for(const wave of waves){
         if(!alive(m)||!alive(hero)||s.status!=='active')break;
         if(!wave.cells.some(p=>key(p)===key(hero)))continue;
         hit=true;
-        damage(s,m,hero,m.atk*(intent.power??1),{skill:(!intent.skillId||intent.skillId==='stone-fall'||intent.skillId==='stone-lord')?'monster-'+m.species:intent.skillId});
+        damage(s,m,hero,m.atk*(intent.power??1),{skill:skillId});
         checkFinished(s);
         if(s.status!=='active'||!alive(m)||!alive(hero))break;
         if(intent.slow){hero.slow=1;hero.slowUntil=hero.turns+1;}
@@ -1687,7 +1733,7 @@
       }
       if(!hit)log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});
       // A saved skill route is bounded and rechecks full occupancy per step.
-      if(s.status==='active'&&alive(m)&&alive(hero)&&intent.path?.length){
+      if(!intent.requiresPath&&s.status==='active'&&alive(m)&&alive(hero)&&intent.path?.length){
         const route=[point(m)];
         for(const p of intent.path){
           if(dist(m,p)!==1||!canOccupy(s,m,p))break;

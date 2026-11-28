@@ -27,7 +27,7 @@
 - 程式提交 ebbf5b3 的完整回歸、瀏覽器及候選版 [46106092826](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46106092826) 成功；該提交 Pages 被後續部署取消，最新 870e97a Pages 成功。後續提交僅修改文件，未改程式。
 - 第一階段結案，開始第二階段。
 
-## 第 2 階段：共用靈獸技能架構（實作提交，待 CI）
+## 第 2 階段：共用靈獸技能架構（已驗收）
 
 - 將單人副本連續行動入口與追蹤旗標解耦，普通、精英及 2×2 領主共用；尖峰石域仍使用既有落石/尖峰崩裂，保留原射程、倍率與移動規則。
 - server layout 可配置有順序的 dungeonSkills；技能資料包含 ID、名稱、形狀、射程、倍率、追蹤/鎖定、動畫、領主與難度限制、位移、擊退及層數。僅選擇當前能命中的合法技能。
@@ -53,3 +53,18 @@
 - 本次最後查核：[Tactical browser acceptance 46107146152](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107146152)：in_progress / 未結論；[Tactical browser acceptance 46107114687](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114687)：in_progress / 未結論；[New weapon release candidate acceptance 46107114726](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114726)：in_progress / 未結論。
 - 已檢查第三階段可重用入口：weapon-dungeon-rules.js 副本配置、tactical-rules.js 的 dungeonSkillPlan / dungeonIntent / weaponDungeonMonsterTurn、tactical-renderer.js 的 line / cone / meteor 特效、tactical-skill-effects.js 的劍法效果。正式四技、分工、數值、舊房間相容策略及動畫驗證尚未實作；依 V4 不越過第二階段 CI 門檻。
 - 此批只更新驗收證據，不改戰鬥程式、不刪除測試。下一次先確認上述未結論 CI 及最新 main；若失敗修正後重跑，全部通過才開始第三階段。
+
+### 第二階段正式結案（2026-11-28）
+
+- 基準 main 7bb78031419df2dd2e97c761bff071c031ced34d；最新完整回歸 [46107314075](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107314075)、瀏覽器 [46107314077](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107314077)、Pages [46107313121](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107313121) 均成功。程式提交 45e2128 的候選版整合驗收 [46107114726](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46107114726) 全部成功；先前未結論的兩次瀏覽器驗收亦成功。第二階段結案。
+
+## 第 3 階段：尖峰石域劍法（程式已實作，待 CI）
+
+- 新開副本配置直線劍氣（5 格）、橫掃斬擊（3 格扇區）、穿刺突進（3 格、最多 2 格技能位移）、領主劍雨（4 格瞄準、曼哈頓半徑 2）；倍率暫沿用 1，未調整血量/普通移動/基礎傷害。上述射程為暫定值，最終待第八階段平衡。
+- 巖獸使用橫掃及穿刺；石靈使用直線及橫掃；守衛使用穿刺及直線；領主四技。從上次已施展技能之後循環尋找合法選項，不改已預告的技能；不合法則正常追擊。
+- 穿刺以完整占位逐格檢查，攻擊格為合法路徑前緣及停止點前一格；結算時只可縮短既存預告，不能穿過牆、其他單位、或偷偷延長路徑。保存路徑及技能選擇。成功擊退沿用共用打斷。
+- 既有存檔未配置新技能者保留舊落石，避免更新改變既有預告或進度；新開副本使用四技。地圖、獎勵、進度及圖騰加成不改。
+- 四個獨立動畫 ID，重用既有 Canvas 劍法光束、斬擊與位移，劍雨逐格落下；傷害動畫使用實際事件及格位。入口特色文字與靈獸資料同步。
+- 新增六項回歸，涵蓋正式配置、四技能傷害及動畫事件、追蹤方向與遮蔽、扇形及劍雨、2×2 路徑碰撞、技能循環；保留既有測試。
+- 修改：public/cultivation/tactical-rules.js、public/cultivation/weapon-dungeon-rules.js、public/cultivation/tactical-skill-effects.js、public/cultivation/tactical-animation.js、tests/weapon-dungeons.test.cjs、public/module-versions.json、本文件。
+- 待 CI：npm test、npm run test:battle、npm run check:module-versions、瀏覽器及候選版驗收。未完成最新 CI 前不得宣稱第三階段正式驗收；下一階段為隱藏萬獸險域基礎建置。
