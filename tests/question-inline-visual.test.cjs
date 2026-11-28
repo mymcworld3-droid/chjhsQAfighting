@@ -2,7 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const V=require('../public/cultivation/question-visual-engine.js');
 const {questionQualityIssue,removeUnstableOptionLabels}=require('../question-quality.cjs');
-const {ANSWER_AND_EXPLANATION_RULES}=require('../quiz-answer-prompt.cjs');
+const {VISUAL_PROMPT}=require('../question-visual-prompt.cjs');
 const enc=spec=>'[[QYVISUAL:'+JSON.stringify(spec)+':QYVISUAL]]';
 const plot=enc({type:'plot',x:[-2,2],y:[0,4],layers:[{type:'function',expr:['^','x',2]}]});
 const table=enc({type:'table',headers:['x','y'],rows:[[1,1],[2,4]]});
@@ -11,4 +11,4 @@ test('inline order and plain legacy compatibility',()=>{assert.equal(V.renderInl
 test('invalid, truncated, unknown and oversized blocks rejected',()=>{for(const s of [plot.slice(0,-5),enc({type:'html',html:'<script>'}),plot.repeat(5),enc({type:'plot',x:[0,0],y:[0,1],layers:[]})]){assert.equal(V.inspectInline(s).valid,false);assert.match(V.renderInline(s),/data-qy-invalid-visual/)}assert.ok(V.questionIssue({...q,correct:plot+'x'.repeat(12000)}))});
 test('valid generated plot passes quality, absent plot still rejected',()=>{assert.equal(questionQualityIssue(q),'');assert.match(questionQualityIssue({...q,q:'依下圖判斷函數'}),/未提供/);assert.ok(questionQualityIssue({...q,q:q.q.slice(0,-3)}))});
 test('explanation cleanup preserves visual and options carry their own data',()=>{assert.ok(removeUnstableOptionLabels('選項 A 的曲線'+plot).includes(plot));assert.equal(V.questionIssue({...q,wrong:[plot,table,'文字']}),'')});
-test('one optional all-subject prompt and safe text escaping',()=>{assert.match(ANSWER_AND_EXPLANATION_RULES,/不設比例、不強制、不限科目/);assert.match(V.renderInline(enc({type:'table',headers:['<script>'],rows:[[1]]})),/&lt;script&gt;/)});
+test('one optional all-subject prompt and safe text escaping',()=>{assert.match(VISUAL_PROMPT,/不設比例、不強制、不限科目/);assert.match(V.renderInline(enc({type:'table',headers:['<script>'],rows:[[1]]})),/&lt;script&gt;/)});

@@ -883,6 +883,7 @@ async function generateQuiz(req, res) {
         [系統指令]
         你是一名 AI 教師，請生成一道「單選題」。
         ${ANSWER_AND_EXPLANATION_RULES}
+        ${VISUAL_PROMPT}
         ${subjectReliabilityPrompt(subject)}
 
         [出題規格]
