@@ -34,6 +34,7 @@ function resolveCleanupStore(env=process.env,store=getD1Store){
 function createProductionStore({env=process.env,verify,store=getD1Store}={}){
   // Do not write to Firestore A even if the old game still uses it.
   if(!betaEnabled(env)||env.GAME_DATA_BACKEND!=='d1'||env.ADAPTIVE_LEARNING_ENGINE_STORAGE_REQUIRED!=='1')throw error(503);
+  if(env.NODE_ENV==='production'&&env.ADAPTIVE_LEARNING_ENGINE_LIFECYCLE_ENABLED!=='1')throw error(503);
   const db=resolveCleanupStore(env,store);
   return createStore({db,verify});
 }

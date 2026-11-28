@@ -18,3 +18,10 @@ V1 為初始獨立集合，不需要搬移 legacy 或 DDL。舊題僅可透過 f
 2. 保留私有且加密的 D1 備份（僅管理服務可取；不提交 Git），記錄 schema/版本、集合計數、合法保留期限。真實備份與恢復只能經部署授權執行，本階段不觸碰正式資料。
 3. 如需 rollback legacy backend，維持 STORAGE_REQUIRED=1 與同一 D1 gateway，Beta 新寫入拒絕，但原 D1 清除仍可執行。切勿把 D1 帳號資料直接切回過時 Firestore；既有遊戲資料回滾依 docs/cloudflare-d1-setup.md，Beta 不授權整站資料遷移。
 4. 回到 D1 時核對原資料、已刪帳號 fence、scope revision、schema、其他帳號資料與 legacy 不變，再依正式 release gate 開放。CI fixture 演練採 SQLite D1 adapter，正式部署演練另須核實。不得藉由還原將已刪帳號復活。
+
+## 外部帳號生命週期與保留補充
+- ADAPTIVE_LEARNING_ENGINE_LIFECYCLE_ENABLED=1、STORAGE_REQUIRED=1 才運作；關閉 Beta 或 legacy rollback 不影響清除。維護期間暫停，恢復後從 D1 durable checkpoint 續跑。10 分鐘租約避免多實例同時掃描；每分鐘一個 bounded page。Firebase A Admin getUser 只有明確 auth/user-not-found 才視為外部刪除；禁用、權限錯誤、暫時斷線或限流不可視為刪除。現有 fence 是已開始清除的證據，即使 Auth 尚存亦重掃其私有資料。
+- 使用專用測試帳號及隔離 D1 演練：從 Auth 刪除測試帳號（不走遊戲 UI），等待完整掃描並核對七個集合及他人資料；停止服務再啟動驗證 checkpoint；故障注入驗證不誤刪；不得以正式玩家作測試。不允許以直接刪 canonical user 推論 Auth 已刪。外部管理工具若直接刪 Auth，對帳會處理；若只刪 legacy profile 而不刪 Auth，需由原有帳號維運流程完成，不自動推斷應刪除仍有效帳號。
+- 保留策略：學習範圍、作答、掌握度、回報保留至玩家清除或合法保留期限；尚未引入個人照片或原始上傳暫存。暫定 terminal job/queue 30 天上限，須在第 19 階段設計並驗收過期、引用、冪等 tombstone，當前尚未啟用 TTL。共同來源依授權與撤回規則，第 12 階段實作；不得包含個資。備份暫定最長 30 天、實際服務方案與法規須正式核對，不宣稱已設定。
+- 刪除 fence 僅儲存 hashed key、schemaVersion、blocked、complete。雜湊仍屬假名化資料；暫不自動刪除，因無法在缺乏備份/重放證據時安全決定回收時間。正式驗收需證明備份最大年齡、所有寫入重新驗證、工作最大有效期、UID 不重用，再制定回收條件並記錄。不得任意清除 fence。對帳 checkpoint 不儲存原始 UID（cursor 為文件雜湊鍵）。
+- 恢復時保持 maintenance，保留或重放較新的 fence，先執行完整對帳及核對刪除者資料為零，再解除維護。SQLite 測試模擬還原刪除前私有文件但保留較新 fence，證明禁止存取並重新清除；不代表正式 D1 備份已還原。若無可驗證的較新 fence 備份，不得開放恢復後的 Beta。

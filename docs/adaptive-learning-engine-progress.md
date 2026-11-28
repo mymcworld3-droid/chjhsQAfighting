@@ -67,7 +67,7 @@
 | 0 | passed — 124e2e2 基準 CI 全部成功 |
 | 1 | passed — 917be25 全部 23 項 CI checks 成功，四種 Chromium 尺寸通過 |
 | 2A | passed — 6017cd0 21 checks 全部成功 |
-| 2B | in_progress — D1 專用儲存、帳號清除、遷移防護及回滾測試；待 CI 與正式環境驗證 |
+| 2B | in_progress — 外部 Auth 刪除對帳、持久 checkpoint/lease、回滾防復活；待新 CI 與正式部署驗收 |
 | 3–26 | not_started |
 
 接續時先讀完整規格與本文件，核對最新 main 的 CI。若仍有失敗，修正本階段阻塞，不降低驗收。若本次測試修正的 CI 通過，記錄真實 run URL、測試數與提交 SHA，再開始第 1 階段。未確認正式搜尋服務不等於現有搜尋已啟用；第 3 階段需完成真實驗證。
@@ -114,3 +114,13 @@
 - legacy Firestore→D1 CLI 與 admin migration 拒絕 reserved Beta 前綴來源或 snapshot；既有嚴格 final 對帳保留。禁止將未知 Firestore 文件當可信 Beta 資料匯入。新增 docs/adaptive-learning-engine-data-operations.md 說明版本、回滾及核驗流程。
 - 測試包含 D1 SQLite 實際 adapter fixture 的分頁、重送、跨帳號、舊版讀寫、rollback backend、fence、權限；前端 VM 測試保留原有刪除流程與新增失敗情境。正式資料庫未執行刪除、匯入或回滾；測試資料均 synthetic。正式 Firestore Rules、D1 部署憑證、實際資料保留/備份清除仍待核驗；直接 Firebase Auth 刪除或其他管理服務的刪除事件尚無生命週期 hook，正式持久寫入前必須補完或取得等效受控清除證據，不能以 fixture 代替正式驗收。
 - 本提交 CI 未確認；維持第 2B in_progress，不提前進入第 3 階段。正式 Beta release flag 仍 false。
+
+## 第 2B 補強｜外部帳號生命週期與回滾（2026-11-28）
+基準 `705a243bb5f773d963858ba9f22564daa54b37bd`。已核對 [完整回歸 46157574019](https://github.com/mymcworld3-droid/chjhsQAfighting/actions/runs/46157574019)：3356 tests、3355 pass、0 fail、1 skipped。參考題稽核 46157574046、Pages 46157573388、Worker success；開始補強時 tactical 46157574009、candidate 46157574138 尚 in_progress，須再查最終狀態。
+- 新增 adaptive-learning-engine-beta-lifecycle.cjs：server-only、有持久 D1 checkpoint 與 10 分鐘 lease，每次掃描一個集合至多 10 筆（測試可調 1–20），每 60 秒續接。使用 Firebase Admin A getUser；只有明確 auth/user-not-found 或已有合法 deletion fence 才清除。禁用帳號、暫時網路、權限、配額錯誤不推斷帳號已刪；錯誤保留 checkpoint，下次重試，不記錄個資。所有七個 private collections 都輪巡。並非即時 Firebase trigger；實際清理延遲取決於資料規模、服務持續運作及配額，部署前須量測。
+- server.js 啟動 opt-in lifecycle；STORAGE_REQUIRED=1 與 LIFECYCLE_ENABLED=1 才排程，maintenance 停止；Beta release 仍鎖定、正式 flag 不改。production persistence factory 要求 lifecycle enabled；私有 repository 每次 read/append 重新驗證身份，既有 handle 不能代替重新認證。
+- fence 在恢復舊資料時仍阻止讀寫，對帳會再次清除；purge 開始時清除完成標記重設，完成後重新標記。fence 暫保留為無原 UID 的最小假名化安全標記，不能宣稱無限期保留已獲法律核准；在備份最長保留期、最大 lease/replay horizon、Auth 不重用 UID/失效條件未確認前不自動回收。補充資料保留表與恢復演練操作。未實作自動刪除學習紀錄或無條件 job TTL，避免破壞未來冪等；第 19 階段需設計 terminal job/queue 安全 TTL，正式上線前第 25 階段驗收備份和保留。
+- 新增 tests/adaptive-learning-engine-beta-lifecycle.test.cjs 六項 SQLite D1 fixture：外部 Auth 刪除、暫時故障、lease、restore replay、retained handle、開關與維護。命令 node --test tests/adaptive-learning-engine-beta-lifecycle.test.cjs tests/adaptive-learning-engine-beta-privacy.test.cjs tests/adaptive-learning-engine-beta-contract.test.cjs；完整 CI glob 自動執行。本次尚未取得新 CI 結果。
+- 部署阻塞：Render 連線可列工作區但 service 查詢明確要求使用者確認 workspace，未自行選取；Firebase A 正式 Rules 及 D1 實際部署憑證/隔離沒有可授權驗證途徑。沒有修改正式環境、刪除真實資料或執行正式 restore。需有部署授權、有效 Rules 與只讀/隔離測試環境，驗證真實 Auth deletion、D1 權限、備份與回復，才可記錄第 2 階段 passed。第 3 階段未開始。禁止用本地 fixture 或正式 flag 未開啟替代上述驗收。
+
+- 提交前重查 705a243：tactical browser 46157574009 已 success；candidate 46157574138 尚有 4 個 balance jobs 執行中，沒有已知失敗，仍待全部結束。

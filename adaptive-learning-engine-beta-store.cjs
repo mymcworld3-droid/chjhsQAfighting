@@ -37,9 +37,11 @@ function createStore({db,verify,testFixture=false}){
   async function forRequest(req){
     const owner=await verify(req);
     if(!C.isUid(owner))fail(403,'Invalid identity');
+    async function reverify(){if(await verify(req)!==owner)fail(403,'Beta identity changed');}
     // These methods are for trusted server code only, not raw client payloads.
     return Object.freeze({
       async read(kind,id){
+        await reverify();
         requireKind(privateKinds,kind,id);
         return db.runTransaction(async tx=>{
           await requirePlayer(tx,owner);
@@ -54,6 +56,7 @@ function createStore({db,verify,testFixture=false}){
         });
       },
       async append(kind,input){
+        await reverify();
         if(!privateKinds.has(kind))fail(403,'Not a private record');
         if(input?.ownerId!==owner)fail(403,'Owner mismatch');
         const value=C.validate(kind,input),id=key(kind,value);
@@ -104,7 +107,8 @@ async function purgeOwnerBatch(db,owner,{pageSize=50}={}){
   if(!C.isUid(owner)||!Number.isSafeInteger(pageSize)||pageSize<1||pageSize>100)fail(400,'Invalid cleanup request');
   const fence=fenceRef(db,owner);
   await db.runTransaction(async tx=>{
-    if(!(await tx.get(fence)).exists)tx.set(fence,{schemaVersion:C.VERSION,blocked:true,complete:false});
+    const prior=await tx.get(fence);
+    if(!prior.exists||prior.data()?.complete===true)tx.set(fence,{schemaVersion:C.VERSION,blocked:true,complete:false});
   });
   let removed=0,complete=true;
   for(const name of PRIVATE_COLLECTIONS){
@@ -126,10 +130,18 @@ async function purgeOwnerBatch(db,owner,{pageSize=50}={}){
   });
   return {complete,removed};
 }
+// An existing fence is authoritative even after an interrupted deletion or
+// restoration of old private documents. Never allow a backup to resurrect them.
+async function ownerDeletionBlocked(db,owner){
+  requireD1(db);
+  if(!C.isUid(owner))fail(400,'Invalid cleanup identity');
+  const snap=await fenceRef(db,owner).get();
+  return snap.exists;
+}
 async function requireCleanupComplete(tx,db,owner){
   requireD1(db);
   if(!C.isUid(owner))fail(400,'Invalid cleanup identity');
   const mark=(await tx.get(fenceRef(db,owner))).data();
   if(mark?.schemaVersion!==C.VERSION||mark.blocked!==true||mark.complete!==true)fail(409,'Complete Beta cleanup before deleting the player');
 }
-module.exports={createStore,isBetaPath,PREFIX,PRIVATE_COLLECTIONS,purgeOwnerBatch,requireD1,requireCleanupComplete};
+module.exports={createStore,isBetaPath,PREFIX,PRIVATE_COLLECTIONS,purgeOwnerBatch,requireD1,requireCleanupComplete,ownerDeletionBlocked};

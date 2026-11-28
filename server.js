@@ -1523,5 +1523,6 @@ app.listen(port, () => {
     // Resume only an already administrator-authorized durable job after a restart.
     void adminD1Migration.resume().catch(error => console.warn('[D1 migration resume]', error.code || 'unavailable'));
     if (process.env.GAME_DATA_MAINTENANCE !== '1') registerRaidRoomApi.startScheduler();
+    require('./adaptive-learning-engine-beta-lifecycle.cjs').startLifecycle();
     console.log(`Server is running on port ${port}`);
 });
