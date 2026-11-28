@@ -1,4 +1,6 @@
 'use strict';
+const Visual=require('./public/cultivation/question-visual-engine.js');
+
 // Stage 12: independent, server-graded dungeon questions. All learning data
 // lives in player project A. The combat room and stamina live in project C.
 const crypto=require('node:crypto');
@@ -114,7 +116,7 @@ async function prepareQuestion(dbA,dbC,uid,roomId,slot=0,now=Date.now()){
     historyMeta:[...(s.historyMeta||[]),...questions.map(q=>({...q.meta,q:q.q}))].slice(-MAX_HISTORY)};
 }
 async function commitQuestion(dbA,uid,expected,parsed,now=Date.now()){
-  const choices=[parsed?.correct,...(parsed?.wrong||[])].map(v=>String(v||'').trim().slice(0,1200));
+  const choices=[parsed?.correct,...(parsed?.wrong||[])].map(v=>Visual.transportText(v,1200));
   if(choices.length!==4||choices.some(v=>!v)||new Set(choices).size!==4||
       typeof parsed?.q!=='string'||parsed.q.trim().length<5||
       typeof parsed?.exp!=='string'||parsed.exp.trim().length<5)
@@ -127,8 +129,8 @@ async function commitQuestion(dbA,uid,expected,parsed,now=Date.now()){
     else if(answerIndex===j)answerIndex=i;
   }
   const q={
-    id:crypto.randomUUID(),q:parsed.q.slice(0,4000),opts:choices,answerIndex,
-    explanation:parsed.exp.slice(0,5000),
+    id:crypto.randomUUID(),q:Visual.transportText(parsed.q,4000),opts:choices,answerIndex,
+    explanation:Visual.transportText(parsed.exp,5000),
     subject:expected.subject||parsed.subject||'綜合',topic:expected.topic||parsed.sub_topic||'本題概念',
     learningTopic:String(parsed.sub_topic||expected.topic||'本題概念').slice(0,240),
     difficulty:parsed.adaptive?.difficulty||parsed.difficulty||expected.difficulty||'easy',

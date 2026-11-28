@@ -125,8 +125,8 @@ function createAdaptiveLearning({resolve=()=>playerRepository.resolve(),verify=v
     const key=c.scope.scopeId+':'+c.plan.version+':'+concept.id;
     if(!lessons.has(key)){
       const work=generate('你是台灣課綱教師。只講解下列已選範圍中的一個細觀念。提供短講解與一個簡單、完整可核對的示範例題（含解題過程與答案），讓學生再練另一道新情境題。不出選擇題、不跨範圍、不猜測學生錯因。數學使用成對 TeX。\n'+VISUAL_PROMPT+'\n'+JSON.stringify({scope:c.scope,concept:concept.name,methods:concept.methods.map(m=>m.name)})+'\n只回傳 JSON {"explanation":"80～250字概念講解","example":"簡單示例、步驟與答案"}。',
-        {timeoutMs:15000,validate:value=>{if(typeof value.explanation!=='string'||value.explanation.trim().length<10||typeof value.example!=='string'||value.example.trim().length<10||!Visual.inspectInline(value.explanation,1800).valid||!Visual.inspectInline(value.example,2200).valid)throw fail('觀念講解未完成或圖表無效');}})
-        .then(result=>({explanation:result.data.explanation.slice(0,1800),example:result.data.example.slice(0,2200)}));
+        {timeoutMs:15000,validate:value=>{if(typeof value.explanation!=='string'||value.explanation.trim().length<10||typeof value.example!=='string'||value.example.trim().length<10||!Visual.inspectInline(value.explanation).valid||!Visual.inspectInline(value.example).valid)throw fail('觀念講解未完成或圖表無效');}})
+        .then(result=>({explanation:Visual.transportText(result.data.explanation,1800),example:Visual.transportText(result.data.example,2200)}));
       lessons.set(key,work);work.catch(()=>lessons.delete(key));while(lessons.size>160)lessons.delete(lessons.keys().next().value);
     }
     return {...await lessons.get(key),conceptId:concept.id,concept:concept.name,scopeId:c.scope.scopeId,through:Rules.row(state.concepts[concept.id]).n};

@@ -177,7 +177,7 @@ app.post('/api/analyze-subjects', async (req, res) => {
 // ==========================================
 app.post('/api/question-helper', async (req, res) => {
     try {
-        const question = String(req.body?.question || '').trim().slice(0, 3000);
+        const question = VisualEngine.transportText(req.body?.question,3000);
         const userMessage = String(req.body?.message || '').trim().slice(0, 600);
         const answered = req.body?.answered === true;
         const intent = req.body?.intent === 'check-question' ? 'check-question' : 'discussion';
@@ -186,17 +186,17 @@ app.post('/api/question-helper', async (req, res) => {
             userMessage === '請重新檢查題目條件、選項和原題解析是否一致，並說明你的依據。');
         const subject = String(req.body?.subject || '').trim().slice(0, 40);
         // 題庫內容是可質疑的參考；作答前也需提供，才能一起檢查題目。
-        const explanation = String(req.body?.explanation || '').trim().slice(0, 3000);
-        const selectedOption = answered ? String(req.body?.selectedOption || '').trim().slice(0, 800) : '';
-        const correctOption = String(req.body?.correctOption || '').trim().slice(0, 800);
+        const explanation = VisualEngine.transportText(req.body?.explanation,3000);
+        const selectedOption = answered ? VisualEngine.transportText(req.body?.selectedOption,800) : '';
+        const correctOption = VisualEngine.transportText(req.body?.correctOption,800);
         const options = (Array.isArray(req.body?.options) ? req.body.options : [])
             .slice(0, 6)
-            .map(item => String(item || '').trim().slice(0, 800));
+            .map(item => VisualEngine.transportText(item,800));
         const history = (Array.isArray(req.body?.history) ? req.body.history : [])
             .slice(-6)
             .map(item => ({
                 role: item?.role === 'assistant' ? 'assistant' : 'user',
-                text: String(item?.text || '').trim().slice(0, 800)
+                text: VisualEngine.transportText(item?.text,800)
             }))
             .filter(item => item.text);
 
@@ -268,7 +268,7 @@ ${VISUAL_REVIEW}
 {"answer":"你的回答","knowledgePoint":"核心知識點","checkStatus":"valid|issue|uncertain","questionIssue":{"confirmed":false,"confidence":0.0,"reason":"具體錯誤依據，無確定錯誤則留空"}}
 `;
 
-        const routed = await aiRouter.generateJSON(prompt, { task:'question-helper', timeoutMs: 90000, validate:value=>{if(!VisualEngine.inspectInline(value?.answer,1800).valid)throw Error('助手圖表資料無效');} });
+        const routed = await aiRouter.generateJSON(prompt, { task:'question-helper', timeoutMs: 90000, validate:value=>{if(!VisualEngine.inspectInline(value?.answer).valid)throw Error('助手圖表資料無效');} });
         let answer = String(routed.data?.answer || '').trim();
         if (!answer && !checkOnly) throw new Error('AI 未回傳有效回答');
         const fallbackPoint = userMessage.replace(/[？?！!。,.，]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40);
@@ -1347,7 +1347,7 @@ async function generateQuiz(req, res) {
                     actionId: raidActionId,
                     questionId,
                     answerIndex,
-                    explanation: String(parsed.exp || '').slice(0, 3000)
+                    explanation: VisualEngine.transportText(parsed.exp,3000)
                 });
                 await trackDelivered();
                 return res.json({

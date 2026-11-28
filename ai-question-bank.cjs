@@ -1,4 +1,6 @@
 'use strict';
+const Visual=require('./public/cultivation/question-visual-engine.js');
+
 
 // AI-only permanent question bank, stored as one approved JSON file per question
 // in the configured Google Drive folder. Not used by custom/static banks.
@@ -359,6 +361,7 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
           const response = await driveRequest(DRIVE + '/' + encodeURIComponent(file.id) + '?alt=media');
           const data = await response.json();
           if (data?.status !== 'approved' || data?.reviewCount !== 1 || !data.question) return null;
+          if(Visual.questionIssue(data.question))return null;
           const format = inspectQuestionFormat(data.question);
           if (!format.damaged) return data;
           const safeRepair = format.question && !questionQualityIssue(format.question);
@@ -407,6 +410,7 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
     if (!enabled || review?.approved !== true) return false;
     if (!question?.q || !question?.correct || !Array.isArray(question?.wrong) ||
         question.wrong.length !== 3 || !question.exp) return false;
+    if(Visual.questionIssue(question))return false;
     const format = inspectQuestionFormat(question);
     if (!format.question || (format.damaged && questionQualityIssue(format.question))) return false;
     question = format.question;

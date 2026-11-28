@@ -9,7 +9,7 @@ const Visual=require('./public/cultivation/question-visual-engine.js');
 const LEVELS = ['國小中年級', '國小高年級', '國中一年級', '國中二年級', '國中三年級', '高中職', '大學以上'];
 const fail = (message, status = 400) => Object.assign(Error(message), { status });
 function text(value, max, label, required = true) {
-  if (typeof value !== 'string' || value.length > max || required && !value.trim()) throw fail(label + '格式錯誤');
+  if (typeof value !== 'string' || !Visual.fieldFits(value,max) || required && !value.trim()) throw fail(label + '格式錯誤');
   return value.trim();
 }
 function id(value) { if (typeof value !== 'string' || !/^[A-Za-z0-9_-]{1,160}$/.test(value)) throw fail('洞天代碼格式錯誤'); return value; }

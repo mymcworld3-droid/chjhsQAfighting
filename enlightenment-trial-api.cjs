@@ -1,4 +1,6 @@
 'use strict';
+const Visual=require('./public/cultivation/question-visual-engine.js');
+
 // 悟道試煉：所有題目簽發、答題結果和獎勵均由 Firebase A 上的伺服器事務處理。
 const crypto = require('node:crypto');
 const { playerRepository } = require('./server-repositories.cjs');
@@ -105,7 +107,7 @@ async function prepareQuestion(db,uid,now=Date.now()) {
     topic:state.topic,level:state.level,knowledgePointId:state.knowledgePointId || '',history:(state.history||[]).slice(-TOTAL),pending};
 }
 async function commitQuestion(db,uid,expected,parsed,now=Date.now()) {
-  const correct=clean(parsed?.correct,300),wrong=Array.isArray(parsed?.wrong)?parsed.wrong.map(x=>clean(x,300)):[];
+  const correct=Visual.transportText(parsed?.correct,300),wrong=Array.isArray(parsed?.wrong)?parsed.wrong.map(x=>Visual.transportText(x,300)):[];
   if(!correct||wrong.length!==3||wrong.some(x=>!x))throw error('題目選項未通過驗證');
   const opts=[correct,...wrong];
   let answerIndex=0;
@@ -115,9 +117,9 @@ async function commitQuestion(db,uid,expected,parsed,now=Date.now()) {
   }
   const id='enlightenment-'+crypto.randomUUID(),actionId=expected.index+1;
   const token=issueRaidQuestionTicket({uid,roomId:expected.runId,actionId,questionId:id,
-    answerIndex,explanation:String(parsed.exp||'').slice(0,3000)});
+    answerIndex,explanation:Visual.transportText(parsed.exp,3000)});
   const ticket=readRaidQuestionTicket(token);
-  const fresh={id,q:String(parsed.q||'').slice(0,3000),opts,ticket:token,
+  const fresh={id,q:Visual.transportText(parsed.q,3000),opts,ticket:token,
     subject:expected.subject,topic:expected.topic,level:expected.level,
     ...Knowledge.metadata(parsed, expected.subject),
     expiresAtMs:ticket.expiresAtMs};
@@ -132,7 +134,7 @@ async function commitQuestion(db,uid,expected,parsed,now=Date.now()) {
   });
 }
 async function answer(db,uid,request={},now=Date.now()) {
-  const token=clean(request.ticket,10000),choice=Number(request.choice);
+  const token=clean(request.ticket,60000),choice=Number(request.choice);
   if(!Number.isInteger(choice)||choice<0||choice>=4)throw error('請選擇正確的選項編號',400);
   const raw=readRaidQuestionTicket(token,{now});
   const answerIndex=assertRaidQuestionTicket(raw,{uid,roomId:clean(request.runId,100),

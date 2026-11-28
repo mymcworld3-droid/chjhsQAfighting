@@ -32,6 +32,9 @@ jobs:
       - name: Adaptive learning Beta preview on phone and tablet
         if: ${{ !cancelled() }}
         run: node scripts/test-adaptive-learning-engine-beta-browser.cjs
+      - name: Shared question visual zoom and answer safety on phone and tablet
+        if: ${{ !cancelled() }}
+        run: node scripts/test-question-visual-browser.cjs
       - name: Browser screenshots
         if: always()
         uses: actions/upload-artifact@v4

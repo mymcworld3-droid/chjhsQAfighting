@@ -3412,7 +3412,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
     if (quiz?.data?.q) {
         const scoreAfterAnswer = Math.max(0, Number(stats.totalScore) || 0);
         stats.lastQuizAnswer = {
-            question: String(quiz.data.q).normalize('NFC').replace(/\s+/g, ' ').trim().slice(0, 1500),
+            question: globalThis.QAQuestionVisualEngine?.has(quiz.data.q)?quiz.data.q.trim():String(quiz.data.q).normalize('NFC').replace(/\s+/g, ' ').trim().slice(0, 1500),
             isCorrect, scoreBefore: scoreBeforeAnswer, scoreAfter: scoreAfterAnswer,
             penalty: Math.max(0, scoreBeforeAnswer - scoreAfterAnswer),
             answeredAtMs: Date.now()
@@ -3828,7 +3828,7 @@ async function sendQuizHelperMessage(rawMessage, { intent = 'discussion' } = {})
 
     try {
         const interfaceState=window.getQuizInterfaceState?.();
-        const helperText=value=>window.QAMathGuard?.normalizeMathText?.(value)??value;
+        const helperText=value=>window.QAQuestionVisualEngine?.mapText(value,v=>window.QAMathGuard?.normalizeMathText?.(v)??v)??(window.QAMathGuard?.normalizeMathText?.(value)??value);
         const response = await fetch('/api/question-helper', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

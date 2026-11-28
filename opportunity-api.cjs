@@ -1,5 +1,7 @@
 const Growth = require('./public/cultivation/nascent-growth.js');
 'use strict';
+const Visual=require('./public/cultivation/question-visual-engine.js');
+
 const crypto = require('node:crypto');
 const aiRouter = require('./ai-router');
 const { playerRepository } = require('./server-repositories.cjs');
@@ -9,6 +11,7 @@ const { recordEvent } = require('./public/cultivation/quest-rules.js');
 const rules = require('./public/cultivation/opportunity-rules.js');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
 const { answerKey } = require('./question-answer-integrity.cjs');
+const {VISUAL_PROMPT,VISUAL_REVIEW}=require('./question-visual-prompt.cjs');
 const { QUESTION_PRESENTATION_RULES, QUESTION_RELIABILITY_RULES, subjectReliabilityPrompt } = require('./quiz-answer-prompt.cjs');
 const RUNS = 'opportunityRuns', STATES = 'opportunityStates', TTL = 24 * 60 * 60 * 1000;
 const fail = (message, status = 409, details = {}) => Object.assign(new Error(message), { status, publicReason:message, ...details });
@@ -67,8 +70,8 @@ function normalizePack(raw, target) {
   const questions = raw.questions.map((q,i) => {
     const id = `Q${i+1}`;
     if (q?.skill !== rules.SKILLS[i]) throw packFail('題組認知層次或題序不完整','skill-order',id);
-    const stem = clean(q.q,600), correct = clean(q.correct,350), wrong = (Array.isArray(q.wrong) ? q.wrong : []).map(v => clean(v,350));
-    const exp = removeUnstableOptionLabels(clean(q.exp,1800));
+    const stem = Visual.transportText(q.q,600), correct = Visual.transportText(q.correct,350), wrong = (Array.isArray(q.wrong) ? q.wrong : []).map(v => Visual.transportText(v,350));
+    const exp = removeUnstableOptionLabels(Visual.transportText(q.exp,1800));
     const evidence = (Array.isArray(q.evidence) ? q.evidence : []).map(e => ({paragraph:clean(e?.paragraph,4),quote:clean(e?.quote,500)}));
     const application = clean(q.application,240);
     if (stem.length < 12 || !correct || wrong.length !== 3 || wrong.some(v => !v) || exp.length < 60 || !clean(q.concept,100)) throw packFail('題目、選項或解析不完整','question-format',id);
@@ -100,8 +103,8 @@ function generationPrompt(target, history, repair = '') {
   return `你是台灣課綱素養題編寫者。生成「機緣洞天」：一篇原創、連貫、有充足資訊的長文，五題共用全文。\n` +
     `嚴格範圍=${JSON.stringify(target)}。學科、選定單元與細項是真正考點；不得只把章節名貼進一般閱讀題，不得超綱。全文只計正文，需要${limits.min}至${limits.max}${limits.unit}，寫完先自行計數。` +
     Knowledge.promptFor(target.subject) + '\n' + QUESTION_PRESENTATION_RULES + '\n' +
-    QUESTION_RELIABILITY_RULES + '\n' + subjectReliabilityPrompt(target.subject,{examples:false}) + '\n' +
-    `文章4至10段，用P1、P2依序編號，可用新聞式公共事件、文章、資料、觀察或模擬時事作為背景；不要為了拉長文章而堆字。不依賴附圖、不重複段落；未核實的最新新聞、政治人物、法律條文或統計不可杜撰為真，虛構案例需標示「假設」。修仙情境不能妨礙單元理解。` +
+    QUESTION_RELIABILITY_RULES + '\n' + VISUAL_PROMPT + '\n' + subjectReliabilityPrompt(target.subject,{examples:false}) + '\n' +
+    `文章4至10段，用P1、P2依序編號，可用新聞式公共事件、文章、資料、觀察或模擬時事作為背景；不要為了拉長文章而堆字。不依賴缺失的附圖、不重複段落；未核實的最新新聞、政治人物、法律條文或統計不可杜撰為真，虛構案例需標示「假設」。修仙情境不能妨礙單元理解。` +
     `素養題的文本只是提供事件背景及證據，真正考核的是運用所選學科課內概念。五題固定依序Q1 retrieve（辨識可供應用的情境條件）、Q2 integrate（結合資料與課內概念比較）、Q3 infer（用學科原理分析因果）、Q4 apply（運用概念解決新情境）、Q5 evaluate（依課內標準評估方案）；彼此獨立、不洩漏答案。即使Q1也不得只問誰、何時、何地、文中提到什麼；五題均不得僅問主旨、作者態度或摘錄原文。若學生不懂課內觀念仍可直接在文章找到正解，整題重寫。` +
     `每題四個不同選項、唯一正解、至少80中文字解析及有效knowledge_points與application；解析需明確說明哪項課內知識用於哪些情境資料，不可只重述文章。Q2整合比較與Q5評估判斷的evidence各至少兩筆，必須來自兩個不同段落；其他題至少一筆。` +
     `每筆evidence須含實際存在的段落ID及連續逐字quote，不加省略號、不改寫；quote至少8字元，且完整存在於該段原文。` +

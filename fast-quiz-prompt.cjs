@@ -2,6 +2,7 @@
 // Compact generation instruction. Existing server validation is always retained.
 const MODES = new Set(['raid-quick-simple', 'raid-standard', 'battle-fast', 'immortal-fast', 'immortal-avatar', 'meditation-literacy','tactical']);
 const { ANSWER_AND_EXPLANATION_RULES, subjectReliabilityPrompt } = require('./quiz-answer-prompt.cjs');
+const {VISUAL_PROMPT,COMPACT_VISUAL_PROMPT}=require('./question-visual-prompt.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
 function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previousQuestions = [],
   previousMeta = [], targetForm = '', quality = {}, retryIssue = '', randomSeed = '', knowledgePointId = '', generationTaskId = '', adaptiveFields = null } = {}) {
@@ -24,17 +25,17 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
   };
   return [
     '你是台灣國教專業教師。只出一道高品質繁體中文單選題，回傳純 JSON。',
-    ANSWER_AND_EXPLANATION_RULES,
+    ANSWER_AND_EXPLANATION_RULES.replace(VISUAL_PROMPT,COMPACT_VISUAL_PROMPT),
     subjectReliabilityPrompt(subject),
     '科目='+safe(subject,40)+'；程度='+safe(level,32)+'；指定範圍='+safe(topic,topicLimit)+'；難度='+
       (quick?'easy':safe(difficulty,16))+'；段位='+Number(rank||0)+'；隨機種子='+safe(randomSeed,24),
-    '保持指定學制與難度，禁止超綱或跨科；題目要清楚且有推理深度，勿冗長。',
+    '禁止超綱或跨科。',
     mode==='meditation-literacy' ? '素養情境可來自新聞時事、文章或數據，但必須實際運用本科已學知識；單純找文章主旨、作者態度或摘抄資訊，不可視為素養題。' : '',
     mode === 'tactical' ? '此題用於問道試煉，必須嚴格考查已儲存的指定章節、分流及核心考點；不得用同科其他章節、同年級其他單元、不同數學版本或個人預設年級代替。' : '',
     '題型='+safe(targetForm,40)+'；認知層級='+(quick?1:quality.cognitive||2)+
       '；推理步數='+(quick?1:quality.steps||2),
     !quick && quality.instruction ? '深度要求：'+safe(quality.instruction,300) : '',
-    '獨立解題、逐項核對四個選項。只能一個正解，三個錯誤選項不可與正解等價或互相同義。',
+    '獨立解題，唯一正解，三個錯誤選項互不等價。',
     Knowledge.promptFor(subject, knowledgePointId),
     '發現錯題直接重寫 q、correct、wrong、exp；數學式用 $...$。解析不留「本題有錯」「答案錯誤」「更正」等修訂註記。',
     '最近題目：'+JSON.stringify(previous),

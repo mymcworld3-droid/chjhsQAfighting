@@ -1,4 +1,6 @@
 'use strict';
+const Visual=require('./public/cultivation/question-visual-engine.js');
+
 const crypto=require('node:crypto');
 const {playerRepository}=require('./server-repositories.cjs');
 const {verifyMainIdentity}=require('./raid-question-ticket.cjs');
@@ -243,10 +245,10 @@ async function prepareQuestion(db,uid,now=Date.now()){
 }
 async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
  const clean=(v,n)=>String(v||'').trim().slice(0,n);
- const opts=[clean(parsed?.correct,500),...(Array.isArray(parsed?.wrong)?parsed.wrong.map(v=>clean(v,500)):[])];
- if(!clean(parsed?.q,3000)||opts.length!==4||opts.some(v=>!v)||new Set(opts).size!==4)throw fail('題目驗證未通過');
+ const opts=[Visual.transportText(parsed?.correct,500),...(Array.isArray(parsed?.wrong)?parsed.wrong.map(v=>Visual.transportText(v,500)):[])];
+ if(!Visual.transportText(parsed?.q,3000)||opts.length!==4||opts.some(v=>!v)||new Set(opts).size!==4)throw fail('題目驗證未通過');
  let correctIndex=0;for(let i=3;i>0;i--){const j=crypto.randomInt(i+1);[opts[i],opts[j]]=[opts[j],opts[i]];if(correctIndex===i)correctIndex=j;else if(correctIndex===j)correctIndex=i;}
- const q={id:'tower-'+crypto.randomUUID(),q:clean(parsed.q,3000),opts,correctIndex,exp:clean(parsed.exp,3000),
+ const q={id:'tower-'+crypto.randomUUID(),q:Visual.transportText(parsed.q,3000),opts,correctIndex,exp:Visual.transportText(parsed.exp,3000),
   scopeKey:expected.scopeKey,scopeUnit:expected.adaptiveScope||null,adaptive:parsed.adaptive||null,
   meta:Object.fromEntries(['question_form','concept_id','template_id','cognitive_level','reasoning_steps'].map(k=>[k,parsed[k]??null])),
   difficulty:parsed.adaptive?.difficulty||expected.difficulty,practiceId:expected.practiceId||'',recoveryOrigin:expected.recoveryOrigin||'',extendedPractice:!!expected.extendedPractice,practicePoint:expected.practicePoint||'',

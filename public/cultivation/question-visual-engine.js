@@ -94,10 +94,11 @@ function render(spec){
 }
 function inspect(spec){try{render(spec);return {valid:true}}catch(e){return {valid:false,reason:String(e.message)}}}
 function inlineAPI(render,inspect){
+ const MAX_FIELD=12000,MAX_QUESTION=36000;
  const OPEN='[[QYVISUAL:',END=':QYVISUAL]]',has=v=>typeof v==='string'&&(/\[\[QYVISUAL|QYVISUAL\]\]/.test(v));
  function parse(value){
    const s=String(value??'');if(!has(s))return [{type:'text',text:s}];
-   if(s.length>5000)throw Error('圖文欄位過長');
+   if(s.length>MAX_FIELD)throw Error('圖文欄位過長');
    let at=0,blocks=0;const out=[];
    function plain(t){if(has(t))throw Error('圖表標記不完整');if(t)out.push({type:'text',text:t})}
    while(at<s.length){
@@ -106,7 +107,7 @@ function inlineAPI(render,inspect){
      plain(s.slice(at,i));const j=s.indexOf(END,i+OPEN.length);
      if(j<0||++blocks>4)throw Error('圖表區塊不完整或過多');
      const raw=s.slice(i+OPEN.length,j);
-     if(raw.length>2000||has(raw)||/[\r\n]/.test(raw))throw Error('圖表 JSON 必須為單行且長度受限');
+     if(raw.length>10000||has(raw)||/[\r\n]/.test(raw))throw Error('圖表 JSON 必須為單行且長度受限');
      let spec;try{spec=JSON.parse(raw)}catch(_){throw Error('圖表 JSON 格式錯誤')}
      const result=inspect(spec);if(!result.valid)throw Error('圖表資料無效：'+result.reason);
      out.push({type:'visual',spec,raw:s.slice(i,j+END.length)});at=j+END.length;
@@ -114,7 +115,7 @@ function inlineAPI(render,inspect){
    if(!blocks)throw Error('圖表標記不完整');return out;
  }
  const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])).replace(/\n/g,'<br>');
- function inspectInline(value,max=5000){
+ function inspectInline(value,max=MAX_FIELD){
    if(!has(value))return {valid:true,count:0,plots:0};
    try{if(value.length>max)throw Error('圖文欄位超過相容長度');const blocks=parse(value).filter(p=>p.type==='visual');return {valid:true,count:blocks.length,plots:blocks.filter(p=>p.spec.type==='plot').length}}
    catch(e){return {valid:false,count:0,plots:0,reason:String(e.message)}}
@@ -127,11 +128,20 @@ function inlineAPI(render,inspect){
  function plainText(value){if(!has(value))return String(value??'');try{return parse(value).map(p=>p.type==='text'?p.text:' [圖表] ').join('')}catch(_){return String(value??'')}}
  function mapText(value,fn){if(!has(value))return fn(value);try{return parse(value).map(p=>p.type==='text'?fn(p.text):p.raw).join('')}catch(_){return value}}
  function questionIssue(q){
-   const entries=[[q?.q,1400],[q?.correct,280],...(Array.isArray(q?.wrong)?q.wrong.map(v=>[v,280]):[]),[q?.exp,1800]];
-   for(const [v,max] of entries){const result=inspectInline(v,max);if(!result.valid)return result.reason}return '';
+   const entries=[q?.q,q?.correct,...(Array.isArray(q?.wrong)?q.wrong:[]),q?.exp];
+   if(entries.filter(has).reduce((n,v)=>n+v.length,0)>MAX_QUESTION)return '整題圖文資料過長';
+   for(const v of entries){const result=inspectInline(v);if(!result.valid)return result.reason}return '';
  }
  function hasQuestion(q){return [q?.q,q?.correct,...(Array.isArray(q?.wrong)?q.wrong:[]),q?.exp].some(has)}
- return {has,parse,inspectInline,renderInline,plainText,mapText,questionIssue,hasQuestion};
+ function transportText(value,legacyMax=MAX_FIELD){
+   const s=String(value??'').trim();
+   if(!has(s))return s.slice(0,legacyMax);
+   if(s.length>MAX_FIELD)throw Error('圖文欄位超過安全長度，請重新產生完整題目');
+   return s;
+ }
+ function fieldFits(value,legacyMax){return has(value)?inspectInline(value).valid:String(value??'').trim().length<=legacyMax}
+ function answerIssue(stem,options){return [stem,...(Array.isArray(options)?options:[])].map(v=>inspectInline(v)).find(x=>!x.valid)?.reason||''}
+ return {MAX_FIELD,MAX_QUESTION,has,parse,inspectInline,renderInline,plainText,mapText,questionIssue,hasQuestion,transportText,fieldFits,answerIssue};
 }
 return Object.freeze({compile,render,inspect,...inlineAPI(render,inspect)});
 });

@@ -280,7 +280,7 @@ import { playerRepository } from './data/player-repository.js';
     const body = document.getElementById('fi-body');
     const q = challenge.question;
     document.getElementById('fi-streak').textContent = String(challenge.streak);
-    body.innerHTML = `<div class="fi-question"><h4>${escapeHtml(q.question)}</h4><div class="fi-options">${q.options.map((option, index) => `<button type="button" class="fi-option" data-answer="${index}"><span>${String.fromCharCode(65 + index)}</span><b>${escapeHtml(option)}</b></button>`).join('')}</div></div>`;
+    body.innerHTML = `<div class="fi-question"><h4>${(window.quizMathRichText||escapeHtml)(q.question)}</h4><div class="fi-options">${q.options.map((option, index) => `<button type="button" class="fi-option" data-answer="${index}"><span>${String.fromCharCode(65 + index)}</span><b>${(window.quizMathRichText||escapeHtml)(option)}</b></button>`).join('')}</div></div>`;
     body.querySelectorAll('[data-answer]').forEach((button) => { button.onclick = () => answerChallenge(Number(button.dataset.answer), serial); });
     try { window.MathJax?.typesetPromise?.([body]); } catch (_) {}
   }

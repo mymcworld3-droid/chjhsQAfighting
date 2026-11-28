@@ -14,7 +14,7 @@ const id = value => {
   return value;
 };
 function text(value, max, label, required = true) {
-  if (typeof value !== 'string' || value.trim().length > max || (required && !value.trim())) throw fail(label + '格式錯誤');
+  if (typeof value !== 'string' || !Visual.fieldFits(value,max) || (required && !value.trim())) throw fail(label + '格式錯誤');
   return value.trim();
 }
 function newCode() {

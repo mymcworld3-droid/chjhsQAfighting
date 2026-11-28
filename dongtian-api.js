@@ -306,10 +306,10 @@ function normalizeQuestionBatch(raw, plan, existingQuestions, startIndex, expect
   for (const item of questions) {
     if (normalized.length >= expectedCount) break;
     if (Array.isArray(item?.correct) || item?.multiple === true || item?.multiSelect === true) continue;
-    const q = cleanText(item?.q, 2500);
-    const correct = cleanText(item?.correct, 800);
-    const wrong = Array.isArray(item?.wrong) ? item.wrong.map((x) => cleanText(x, 800)).filter(Boolean) : [];
-    const exp = cleanText(item?.exp, 3500);
+    const q = Visual.transportText(item?.q,2500);
+    const correct = Visual.transportText(item?.correct,800);
+    const wrong = Array.isArray(item?.wrong) ? item.wrong.map((x) => Visual.transportText(x,800)).filter(Boolean) : [];
+    const exp = Visual.transportText(item?.exp,3500);
     if (!q || !correct || wrong.length !== 3 || !exp) continue;
     if(Visual.questionIssue({q,correct,wrong,exp}))throw Error('洞天圖表資料無效');
     if (requireDetailedExplanation) {
@@ -434,10 +434,10 @@ function normalizeResult(raw, creatorLevel) {
   const fingerprints = new Set();
 
   for (const item of questions.slice(0, MAX_QUESTIONS)) {
-    const q = cleanText(item?.q, 2500);
-    const correct = cleanText(item?.correct, 800);
-    const wrong = Array.isArray(item?.wrong) ? item.wrong.map((x) => cleanText(x, 800)).filter(Boolean) : [];
-    const exp = cleanText(item?.exp, 3500);
+    const q = Visual.transportText(item?.q,2500);
+    const correct = Visual.transportText(item?.correct,800);
+    const wrong = Array.isArray(item?.wrong) ? item.wrong.map((x) => Visual.transportText(x,800)).filter(Boolean) : [];
+    const exp = Visual.transportText(item?.exp,3500);
     if (!q || !correct || wrong.length < 3 || !exp) continue;
     if(Visual.questionIssue({q,correct,wrong,exp}))throw Error('洞天圖表資料無效');
     const uniqueWrong = [...new Set(wrong.filter((x) => x !== correct))].slice(0, 3);
@@ -608,14 +608,14 @@ async function verifyGeneratedDongtian(dongtian) {
 
 function normalizeQuestionSnapshot(input) {
   const item = input && typeof input === 'object' ? input : {};
-  const wrong = Array.isArray(item.wrong) ? item.wrong.map((x) => cleanText(x, 800)).filter(Boolean).slice(0, 3) : [];
+  const wrong = Array.isArray(item.wrong) ? item.wrong.map((x) => Visual.transportText(x,800)).filter(Boolean).slice(0, 3) : [];
   return {
     id: cleanText(item.id, 40),
     difficulty: normalizeDifficulty(item.difficulty),
-    q: cleanText(item.q, 2500),
-    correct: cleanText(item.correct, 800),
+    q: Visual.transportText(item.q,2500),
+    correct: Visual.transportText(item.correct,800),
     wrong,
-    exp: cleanText(item.exp, 3500),
+    exp: Visual.transportText(item.exp,3500),
     subject: cleanText(item.subject || '綜合', 24) || '綜合',
     ...Knowledge.metadata(item,item.subject)
   };
@@ -708,10 +708,10 @@ function normalizeReviewVerification(raw) {
 function normalizeStandaloneQuestion(raw, original) {
   const base = normalizeQuestionSnapshot(original);
   const data = raw && typeof raw === 'object' ? raw : {};
-  const q = cleanText(data.q, 2500);
-  const correct = cleanText(data.correct, 800);
-  const wrong = Array.isArray(data.wrong) ? [...new Set(data.wrong.map((x) => cleanText(x, 800)).filter(Boolean).filter((x) => x !== correct))].slice(0, 3) : [];
-  const exp = cleanText(data.exp, 3500);
+  const q = Visual.transportText(data.q,2500);
+  const correct = Visual.transportText(data.correct,800);
+  const wrong = Array.isArray(data.wrong) ? [...new Set(data.wrong.map((x) => Visual.transportText(x,800)).filter(Boolean).filter((x) => x !== correct))].slice(0, 3) : [];
+  const exp = Visual.transportText(data.exp,3500);
   if (!q || !correct || wrong.length !== 3 || !exp) throw new Error('AI 修改後的題目格式不完整');
   const integrityIssue = questionIntegrityIssue({ q, correct, wrong, exp });
   if (integrityIssue) throw new Error('修復結果不合格：' + integrityIssue);

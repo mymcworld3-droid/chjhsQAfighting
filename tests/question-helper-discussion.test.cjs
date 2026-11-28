@@ -23,6 +23,8 @@ function createRoute(generate = async () => ({ data: { answer: '核對結果', k
     const calls = [];
     let handler;
     vm.runInNewContext(routeSource, {
+        VisualEngine: require('../public/cultivation/question-visual-engine.js'),
+        ...require('../question-visual-prompt.cjs'),
         app: { post(path, fn) { assert.equal(path, '/api/question-helper'); handler = fn; } },
         aiRouter: { async generateJSON(prompt, settings) { calls.push({ prompt, settings }); return generate(prompt); } },
         console: { error() {} }

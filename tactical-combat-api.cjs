@@ -1,5 +1,7 @@
 const WeaponObjects=require('./public/cultivation/weapon-special-objects.js');
 'use strict';
+const Visual=require('./public/cultivation/question-visual-engine.js');
+
 const crypto=require('node:crypto');
 const Rules=require('./public/cultivation/tactical-rules.js');
 const Manuals=require('./public/cultivation/manual-rules.js');
@@ -792,10 +794,10 @@ async function prepareQuestion(db,uid,id,now=Date.now(),requestedSlot=0){
     pending:publicQuestion(pending)};
 }
 async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
-  const choices=[parsed.correct,...(parsed.wrong||[])].map(v=>String(v||'').trim().slice(0,1000));
+  const choices=[parsed.correct,...(parsed.wrong||[])].map(v=>Visual.transportText(v,1000));
   if(choices.length!==4||new Set(choices).size!==4||choices.some(v=>!v))throw error('題目選項未通過驗證');
   let answerIndex=0;for(let i=3;i>0;i--){const j=crypto.randomInt(i+1);[choices[i],choices[j]]=[choices[j],choices[i]];if(answerIndex===i)answerIndex=j;else if(answerIndex===j)answerIndex=i;}
-  const q={id:crypto.randomUUID(),q:String(parsed.q).slice(0,4000),opts:choices,answerIndex,explanation:String(parsed.exp||'').slice(0,5000),
+  const q={id:crypto.randomUUID(),q:Visual.transportText(parsed.q,4000),opts:choices,answerIndex,explanation:Visual.transportText(parsed.exp,5000),
     subject:expected.subject,topic:expected.topic||String(parsed.sub_topic||'').slice(0,100),
     learningTopic:String(parsed.sub_topic||expected.topic||'本題概念').slice(0,240),
     difficulty:parsed.adaptive?.difficulty||parsed.difficulty||expected.difficulty||'easy',

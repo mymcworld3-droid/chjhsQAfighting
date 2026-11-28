@@ -1,4 +1,6 @@
 'use strict';
+const Visual=require('./public/cultivation/question-visual-engine.js');
+
 
 const MathGuard = require('./public/cultivation/math-guard.js');
 const units = new Set([
@@ -14,7 +16,7 @@ function inspectQuestionFormat(question) {
   let repairable = true;
   const repair = value => {
     if (typeof value !== 'string') return value;
-    return value.replace(damagedUnit, (original, braced, bare) => {
+    return Visual.mapText(value,text=>text.replace(damagedUnit, (original, braced, bare) => {
       damaged = true;
       const unit = (braced ?? bare).replace(/\s+/g, '');
       if (!units.has(unit)) {
@@ -22,7 +24,7 @@ function inspectQuestionFormat(question) {
         return original;
       }
       return '\\text{ ' + unit.replace('^2', '²') + '}';
-    });
+    }));
   };
   const q = repair(question.q);
   const correct = repair(question.correct);
@@ -33,7 +35,7 @@ function inspectQuestionFormat(question) {
   const fields = [q, correct, ...wrong, exp];
   const choices = [correct, ...wrong].map(value =>
     MathGuard.readableMath(value).replace(/[\s\\,]/g, ''));
-  if (!repairable || fields.some(value => !MathGuard.inspect(value).valid) ||
+  if (!repairable || fields.some(value => !MathGuard.inspect(Visual.plainText(value)).valid) ||
       new Set(choices).size !== choices.length) {
     return { damaged, question: null };
   }

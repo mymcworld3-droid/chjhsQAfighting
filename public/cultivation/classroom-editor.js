@@ -12,21 +12,22 @@ export function validateClassroomDraft(editor) {
   for (let i = 0; i < editor.questions.length; i++) {
     const q = editor.questions[i];
     if (!String(q.question || '').trim()) return '第 ' + (i + 1) + ' 題的題幹尚未完成。';
-    if (String(q.question).trim().length > 4000) return '第 ' + (i + 1) + ' 題的題幹過長。';
+    if (!visualFits(q.question,4000)) return '第 ' + (i + 1) + ' 題的題幹過長。';
     if (!Array.isArray(q.options) || q.options.length !== 4 || q.options.some(v => !String(v || '').trim())) {
       return '第 ' + (i + 1) + ' 題需要四個選項。';
     }
     const options = q.options.map(v => String(v).trim());
-    if (options.some(v => v.length > 1200) || new Set(options).size !== 4) {
+    if (options.some(v => !visualFits(v,1200)) || new Set(options).size !== 4) {
       return '第 ' + (i + 1) + ' 題選項不可重複，且每項不得超過 1200 字。';
     }
     if (!Number.isInteger(q.answerIndex) || q.answerIndex < 0 || q.answerIndex > 3) {
       return '第 ' + (i + 1) + ' 題沒有有效的正確答案。';
     }
-    if (String(q.explanation || '').length > 4000) return '第 ' + (i + 1) + ' 題的解析過長。';
+    if (!visualFits(q.explanation,4000)) return '第 ' + (i + 1) + ' 題的解析過長。';
   }
   return '';
 }
+const visualFits=(value,max)=>globalThis.QAQuestionVisualEngine?.fieldFits(value,max)??String(value??'').trim().length<=max;
 export function parseClassroomAIQuestion(payload, subject, labelsOf) {
   const json = String(payload?.text || '').match(/\{[\s\S]*\}/)?.[0];
   if (!json) throw Error('AI 回傳的題目不是有效 JSON。');
@@ -37,12 +38,12 @@ export function parseClassroomAIQuestion(payload, subject, labelsOf) {
     throw Error('AI 題目缺少題幹、正解或三個干擾選項。');
   }
   const options = [raw.correct, ...raw.wrong].map(v => v.trim());
-  if (!raw.question.trim() || options.some(v => !v || v.length > 1200) ||
-      new Set(options).size !== 4 || raw.question.length > 4000) {
+  if (!raw.question.trim() || options.some(v => !v || !visualFits(v,1200)) ||
+      new Set(options).size !== 4 || !visualFits(raw.question,4000)) {
     throw Error('AI 題目為空、選項重複或文字超過上限。');
   }
   const explanation = typeof raw.explanation === 'string' ? raw.explanation : '';
-  if (explanation.length > 4000) throw Error('AI 回傳的解析過長。');
+  if (!visualFits(explanation,4000)) throw Error('AI 回傳的解析過長。');
   return { question: raw.question.trim(), options, answerIndex: 0,
     explanation, knowledge_points: labelsOf(raw, subject) };
 }

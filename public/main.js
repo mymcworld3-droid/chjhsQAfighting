@@ -1,6 +1,7 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
 import './main-legacy.js?v=20261126-curriculum-v3';
+import './cultivation/question-visual-ui.js';
 import './cultivation/spirit-stone-ui.js?v=20261125-stone-reward-icon-v2';
 import './cultivation/dongtian-entry.js';
 // Presentation only: the existing route handlers retain ownership.

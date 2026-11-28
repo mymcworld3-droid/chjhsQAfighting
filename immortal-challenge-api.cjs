@@ -1,4 +1,6 @@
 'use strict';
+const Visual=require('./public/cultivation/question-visual-engine.js');
+
 const crypto=require('node:crypto');
 const {playerRepository}=require('./server-repositories.cjs');
 const {verifyMainIdentity,issueRaidQuestionTicket,readRaidQuestionTicket,assertRaidQuestionTicket}=require('./raid-question-ticket.cjs');
@@ -88,14 +90,14 @@ async function prepareQuestion(db,uid,now=Date.now()){
     history:state.history||[],pending:state.pendingQuestion?.expiresAtMs>now?publicQuestion(state.pendingQuestion):null};
 }
 async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
-  const opts=[clean(parsed?.correct,500),...(Array.isArray(parsed?.wrong)?parsed.wrong.map(x=>clean(x,500)):[])];
-  if(!clean(parsed?.q,3000)||opts.length!==4||opts.some(x=>!x)||new Set(opts).size!==4)throw fail('題目選項驗證未通過');
+  const opts=[Visual.transportText(parsed?.correct,500),...(Array.isArray(parsed?.wrong)?parsed.wrong.map(x=>Visual.transportText(x,500)):[])];
+  if(!Visual.transportText(parsed?.q,3000)||opts.length!==4||opts.some(x=>!x)||new Set(opts).size!==4)throw fail('題目選項驗證未通過');
   let answerIndex=0;
   for(let i=3;i>0;i--){const j=crypto.randomInt(i+1);[opts[i],opts[j]]=[opts[j],opts[i]];if(answerIndex===i)answerIndex=j;else if(answerIndex===j)answerIndex=i;}
   const id='avatar-'+crypto.randomUUID();
   const ticket=issueRaidQuestionTicket({uid,roomId:expected.runId,actionId:expected.index+1,questionId:id,
-    answerIndex,explanation:clean(parsed.exp,3000)},{now});
-  const fresh={id,q:clean(parsed.q,3000),opts,ticket,subject:expected.subject,level:expected.level,
+    answerIndex,explanation:Visual.transportText(parsed.exp,3000)},{now});
+  const fresh={id,q:Visual.transportText(parsed.q,3000),opts,ticket,subject:expected.subject,level:expected.level,
     ...Knowledge.metadata(parsed,expected.subject),expiresAtMs:Math.min(readRaidQuestionTicket(ticket,{now}).expiresAtMs,now+TTL)};
   return db.runTransaction(async tx=>{
     const s=await tx.get(ref(db,uid)),state=s.exists?s.data():null;
@@ -108,7 +110,7 @@ async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
 async function answer(db,uid,body={},now=Date.now()){
   const choice=Number(body.choice),tactic=body.tactic;
   if(!Number.isInteger(choice)||choice<0||choice>3||!['assault','guard','charge'].includes(tactic))throw fail('請選擇作戰方式與答案',400);
-  const token=clean(body.ticket,12000),raw=readRaidQuestionTicket(token,{now});
+  const token=clean(body.ticket,60000),raw=readRaidQuestionTicket(token,{now});
   const verified=assertRaidQuestionTicket(raw,{uid,roomId:body.runId,actionId:Number(body.round)+1,questionId:body.questionId});
   const signature=JSON.stringify([body.questionId,choice,tactic,token]);
   return db.runTransaction(async tx=>{
@@ -123,7 +125,7 @@ async function answer(db,uid,body={},now=Date.now()){
     const correct=choice===verified.answerIndex,outcome=Combat.settle(state,correct,tactic);
     const next={...state,round:outcome.round,charge:outcome.charge,challenger:outcome.challenger,defender:outcome.defender,
       pendingQuestion:null,lastRequest:signature,history:[...state.history,q.q].slice(-MAX_ROUNDS),
-      lastReview:{questionId:q.id,correct,correctIndex:verified.answerIndex,selectedChoice:choice,explanation:clean(raw.explanation,3000),
+      lastReview:{questionId:q.id,correct,correctIndex:verified.answerIndex,selectedChoice:choice,explanation:Visual.transportText(raw.explanation,3000),
         tactic,round:outcome.round,notes:outcome.notes,logs:outcome.logs,activations:outcome.activations}};
     if(outcome.finished){
       const roleKeys=Object.keys(ROLES),seatRefs=roleKeys.map(id=>db.collection('worldImmortals').doc(seatId(state.cohort,id)));
@@ -154,7 +156,7 @@ async function answer(db,uid,body={},now=Date.now()){
     tx.set(db.collection('exam_logs').doc(logKey),{uid,email:clean(user.email,200),timestamp:new Date(now),
       mode:'immortal',topic:'Immortal',rankAtTime:'化身問鼎 · '+ROLES[state.role].name,
       question:q.q,options:q.opts,correctIdx:verified.answerIndex,userIdx:choice,isCorrect:correct,
-      explanation:clean(raw.explanation,3000),subject:ROLES[state.role].subject,subTopic:ROLES[state.role].name,
+      explanation:Visual.transportText(raw.explanation,3000),subject:ROLES[state.role].subject,subTopic:ROLES[state.role].name,
       knowledgeSubject:point?.subject||'',knowledgePointId:point?.id||'',knowledgePoint:point?.name||'',
       knowledgePoints:Knowledge.labels(q,ROLES[state.role].subject),timeTaken:0});
     if(point)tx.update(db.collection('users').doc(uid),{
